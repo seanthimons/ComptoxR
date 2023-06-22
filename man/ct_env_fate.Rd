@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_env_fate.R
 \name{ct_env_fate}
 \alias{ct_env_fate}
-\title{Retrieves Chemical Fate and Transport parameters}
+\title{Retrieve Chemical Fate and Transport parameters by DTXSID}
 \usage{
 ct_env_fate(dtxsid, server = 1, ccte_api_key = NULL)
 }
@@ -17,5 +17,5 @@ ct_env_fate(dtxsid, server = 1, ccte_api_key = NULL)
 Returns a tibble with results
 }
 \description{
-Retrieves Chemical Fate and Transport parameters
+Retrieve Chemical Fate and Transport parameters by DTXSID
 }

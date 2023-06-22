@@ -40,6 +40,8 @@ The Toxicological Priority Index (ToxPi) prioritization algorithm exists to comp
 
 ### `ct_details()`
 
+
+
 ------------------------------------------------------------------------
 
 ## Future work

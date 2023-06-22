@@ -1,4 +1,5 @@
-#' Retrieve Chemical Fate and Transport parameters by DTXSID
+#' Retrieve compound details by DTXSID
+#'
 #'
 #' @param dtxsid A single DTXSID (in quotes) or a list to be queried
 #' @param server Defaults to public API, private requires USEPA VPN
@@ -6,12 +7,11 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_env_fate <- function(dtxsid, server = 1, ccte_api_key = NULL){
+ct_details <- function(query, server = 1, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
-
   {
     #Switch for server URLS
 
@@ -24,15 +24,20 @@ ct_env_fate <- function(dtxsid, server = 1, ccte_api_key = NULL){
     }
   }
 
-  cat('\nSearching for environmetal fate and transport data...\n')
-  surl <- "chemical/fate/search/by-dtxsid/"
+  cat("Searching for compound details....\n")
+  surl <- "chemical/detail/search/by-dtxsid/"
 
-  urls <- paste0(burl, surl, dtxsid)
+  urls <- paste0(burl, surl, query)
 
   df <- map_dfr(urls, ~{
+
+    #debug
+    cat(.x,'\n')
+
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
+
 
   cat(green('\nSearch complete!\n'))
   return(df)
