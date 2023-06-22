@@ -1,12 +1,21 @@
 Package: ComptoxR
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard and Other Products
+Version: 0.0.0.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Sean", "Thimons", , "thimons.sean@epa.gov", role = c("aut", "cre"))
+Description: ComptoxR is desiged to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included. 
+License: `use_mit_license()`, `use_gpl3_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
+Depends: 
+  crayon (>= 1.5.1),
+  janitor (>= 2.1.0),
+  httr (>= 1.4.3),
+  stringr (>= 1.4.0),
+  pbapply (>= 1.5-0), 
+  dplyr (>= 1.0.9),
+  tidyr(>= 1.2.0),
+  jsonlite(>= 1.8.0), 
+  purrr (>= 0.3.4),
+  magrittr
