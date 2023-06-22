@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_hazard.R
 \name{ct_hazard}
 \alias{ct_hazard}
-\title{Search for hazard data by DTXSID}
+\title{Retrieves for hazard data by DTXSID}
 \usage{
 ct_hazard(query, server = 1, ccte_api_key = NULL)
 }
@@ -17,5 +17,5 @@ ct_hazard(query, server = 1, ccte_api_key = NULL)
 Returns a tibble with results
 }
 \description{
-Search for hazard data by DTXSID
+Retrieves for hazard data by DTXSID
 }

@@ -1,4 +1,4 @@
-#'Search for hazard data by DTXSID
+#'Retrieves for hazard data by DTXSID
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
 #' @param server Defaults to public API, private requires USEPA VPN
