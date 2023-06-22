@@ -30,11 +30,15 @@ Using one wrapper function `hcd_table()` (wraps around several helper functions 
 
 ### ToxPi Risk Characterization
 
-The Toxicological Priority Index (ToxPi) prioritization algorithm exists to compare several different endpoints for compounds to yield a single, relative risk characterization. While the `toxpiR` package exists, the `hcd_toxpi_table()` function allows for a singular experience to quickly iterate through characterization schemas. A meta-data reporting feature is also included to 
+The Toxicological Priority Index (ToxPi) prioritization algorithm exists to compare several different endpoints for compounds to yield a single, relative risk characterization. While the `toxpiR` package exists, the `hcd_toxpi_table()` function allows for a singular experience to quickly iterate through characterization schemas. A meta-data reporting feature is also included to characterize the endpoints one is using to better determine weighing schemes (see vignettes and examples).
 
 ------------------------------------------------------------------------
 
 ## Other useful functions
+
+### Synonym searching
+
+### `ct_details()`
 
 ------------------------------------------------------------------------
 
