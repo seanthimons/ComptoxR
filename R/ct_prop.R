@@ -1,5 +1,7 @@
 #' Retrieves compound physio-chem properties by DTXSID
 #'
+#' Returns both experimental and predicted results.
+#'
 #' @param query A single DTXSID (in quotes) or a list to be queried
 #' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env

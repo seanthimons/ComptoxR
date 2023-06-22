@@ -17,5 +17,5 @@ ct_prop(query, server = 1, ccte_api_key = NULL)
 Returns a tibble with results
 }
 \description{
-Retrieves compound physio-chem properties by DTXSID
+Returns both experimental and predicted results.
 }
