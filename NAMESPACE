@@ -2,3 +2,4 @@
 
 export(ct_api_key)
 export(ct_env_fate)
+export(ct_hazard)
