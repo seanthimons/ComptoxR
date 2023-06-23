@@ -1,10 +1,10 @@
 # ComptoxR
 
-# Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard and Other Products
+# Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
 
-## Version 0.0.0.1
+## Version 0.0.1
 
-ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included.
+ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemicals is also included.
 
 An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 
@@ -40,10 +40,14 @@ The Toxicological Priority Index (ToxPi) prioritization algorithm exists to comp
 
 ### `ct_details()`
 
-
-
 ------------------------------------------------------------------------
 
 ## Future work
 
 -   Implementation of bio-activity *in-vitro* data
+
+------------------------------------------------------------------------
+
+Disclaimers
+
+This resource is a proof-of-concept and is a compilation of information sourced from many databases and literature sources, including U.S. Federal and state sources and international bodies, which can save the user time by providing information in one location. The data are not fully reviewed by USEPA – the user must apply judgment in use of the information. You should consult the original scientific paper or data source if possible. Reference herein to any specific commercial products, process, or service by trade name, trademark, manufacturer, or otherwise, does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government. The views and opinions of the developers of the site expressed herein do not necessarily state or reflect those of the United States Government, and shall not be used for advertising or product endorsement purposes With respect to documents available from this server, neither the United States Government nor any of their employees, makes any warranty, express or implied, including the warranties of merchantability and fitness for a particular purpose, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.
