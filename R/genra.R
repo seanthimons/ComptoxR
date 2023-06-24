@@ -17,9 +17,9 @@ genra_engine <- function(){
 ##Neighbor----
 #' Search for nearest neighbors
 #'
-#' Search for nearest neighbors based on fingerprints and data sources.
+#' Search for nearest neighbors based on fingerprints and data sources for a single DTXSID.
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried.
+#' @param query A single DTXSID (in quotes).
 #' @param fp A fingerprint to search by. Defaults to Morgan fingerprints.
 #' @param sel_by Select compounds by data sources. Defaults to `ToxRef`database.
 #' @param n Number of nearest neighbor to search for. Defaults to 12
@@ -64,6 +64,50 @@ genra_nn <- function(query,
     return(df)
   }
 }
+
+genra_neighborhood <- function(query,
+                               fp = c("chm_mrgn",
+                                      "chm_httr", #
+                                      "chm_ct", #toxprint chemotypes
+                                      "bio_txct", #toxcast fp, toxcast + tox21
+                                      'tox_txrf' #toxref fp, from toxrefdb2.0
+                               ),
+                               sel_by = c("tox_txrf", #ToxRef in vivo data
+                                          "bio_txct", #ToxCast HTS data
+                                          "no_filter"),
+                               n = 12 #number of neighbors
+){
+
+  if(identical(fp, c("chm_mrgn", "chm_httr", "chm_ct", "bio_txct", 'tox_txrf'))){fp <- 'chm_mrgn'}else{fp}
+
+  if(identical(sel_by, c("tox_txrf", "bio_txct", "no_filter"))){sel_by <- 'tox_txrf'}else{sel_by}
+
+  base <- "https://comptox.epa.gov/genra-api/api/genra/v4/chemNN/?chem_id="
+  urls <- paste0(base,
+                 query,
+                 "&fp=",
+                 fp,
+                 "&sel_by=",
+                 sel_by)
+  # cat(url,'\n') #debug
+  response <- VERB("GET", url = urls)
+  status_code <- response$status_code
+  if (response$status_code != 200) {
+    cat("Check connection; status code:", status_code)
+  } else {
+    df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    rm(response, status_code) # removes status code debug
+    df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
+    #Sys.sleep(3) #Sleep time in-between requests
+    details <- ct_details(df$d)
+
+
+    return(df)
+  }
+}
+
+
+
 
 ##Tox info----
 
