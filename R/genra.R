@@ -57,7 +57,7 @@ genra_nn <- function(query,
   if (response$status_code != 200) {
     cat("Check connection; status code:", status_code)
   } else {
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
     df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
     #Sys.sleep(3) #Sleep time in-between requests
@@ -116,7 +116,7 @@ genra_tox <- function(query,
   if (response$status_code != 200) {
     cat("Check connection; status code:", status_code)
   } else {
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
     c_list <- df$coldef$dsstox_sid # names the outputs
     names(df$row) <- df$rowdef$row_id
@@ -380,75 +380,84 @@ genra_batch_ra <- function(query,
 
 ##Fingerprints----
 
-#' Title
+#' Function to retrieve fingerprints
 #'
-#' @param query
+#' Retrieves ToxPrint Chemotyper fingerprints by DTXSID
 #'
-#' @return
+#' @param query A DTXSID (in quotes)
+#'
+#' @return Returns a tibble with results.
 #' @export
-#'
-#' @examples
+
 genra_fp <- function(query){
-  base <- "https://ccte-api-genra-dev.epa.gov/genra-api/api/genra/v4/chemNN/?chem_id="
+  base <- "https://comptox.epa.gov/genra-api/api/genra/v4/chemNN/?chem_id="
   url <- paste0(base, query,"&fp=chm_ct","&sel_by=tox_txrf")
   #cat(url,'\n')
-  cat('\n','Parsing:',query,'\n')
+  cat('\n','Parsing:', as.character(query),'\n')
   response <- VERB("GET", url = url)
   status_code <- response$status_code
   if (response$status_code != 200) {
     cat("Check connection; status code:", status_code)
     return(NA)
   } else {
-    cat('\n','Requesting:',query,'\n')
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    cat('\n','Requesting:', as.character(query),'\n')
+    df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
-    df <- slice_head(df, n = 1) #where neighborhood cutdown occurs
-    df <- unnest(df) %>% as.data.frame() #returns a dataframe
+    if(is.null(df)){cat('\n','No fingerprint available! \n')
+      }else{
+        df <- slice_head(df, n = 1) #where neighborhood cutdown occurs
+        df <- unnest(df) %>% as.data.frame() #returns a dataframe
     #Sys.sleep(3) #Sleep time in-between requests
     cat('\n','Request complete! \n')
-    #Sys.sleep(3) #Sleep time in-between requests
-    return(df)
+    #Sys.sleep(3) #Sleep time in-between requests}
+    }
   }
+  return(df)
 }
 
-
-#' Title
+#' Function to batch search for fingerprints
 #'
-#' @param q
+#' Wrapper for batch searching for ToxPrint Chemotyper fingerprints by DTXSID
 #'
-#' @return
+#' @param query A list of DTXSIDs to search for.
+#'
+#' @return Returns a tibble with results.
 #' @export
 #'
-#' @examples
-genra_batch_fp <- function(q){
+genra_batch_fp <- function(query){
   defaultW <- getOption("warn")
   options(warn = -1)
   pboptions(type = 'timer', char = "#")
-  df <- pblapply(q, genra_fp)
-  names(df) <- q
+  df <- pblapply(query, genra_fp)
+  names(df) <- query
+  df <- compact(df)
   df <- map_dfr(df, ~unnest(.))
   options(warn = defaultW)
   return(df)
 }
 
 
-#' Title
+#' Creates a Toxprint Enrichment table
 #'
-#' @param df
+#' Recommended usage is to *not* use this function, and use the `genra_batch_toxprint_tbl()` which wraps around`genra_batch_fp()` and this function.
 #'
-#' @return
+#' @param df Takes dataframe from the output of the`genra_batch_fp()` function and creates the in-vitro enrichment table.
+#'
+#' @return Returns a tibble with results.
 #' @export
 #'
-#' @examples
 genra_toxprint_tbl <- function(df){
-  #takes a dataframe from output of batch_fp and creates table of invitro readacross
-  l <- unique(df$dsstox_sid)
+  #takes a dataframe from output of batch_fp and creates table of invitro enrichment table
+
+  if(nrow(df) == 0){
+  cat('\nNo fingerprints able to be made!\n')
+  }else{l <- unique(df$dsstox_sid)
   tbl <- vector(mode = 'list', length = length(l))
   names(tbl) <- l
   for (i in 1:length(tbl)) {
     cat('\n Creating table for:',l[i],'\n')
     comp <- filter(df, dsstox_sid == l[i])
-    tbl[[i]] <- tp %>% filter(tox_print %in% comp$fpds) %>%
+    tbl[[i]] <- toxprint_dict %>% filter(tox_print %in% comp$fpds) %>%
       group_by(category) %>%
       summarize(count = n_distinct(assay_name)) %>%
       as.data.frame()
@@ -456,7 +465,9 @@ genra_toxprint_tbl <- function(df){
   tbl <- map_dfr(tbl, ~unnest(.,keep_empty = TRUE, names_sep = "_"), .id = 'compound')
   tbl <- pivot_wider(tbl, names_from = category, values_from = count)
   cat('\n Comparison table finsihed! \n')
-  return(tbl)
+  return(tbl)}
+
+
 }
 
 
@@ -465,12 +476,13 @@ genra_toxprint_tbl <- function(df){
 #' Takes a list of DTXSIDs and creates the Toxprint Enrichment table.
 #' @param query A single DTXSID(in quotes) or a list of DTXSIDs.
 #'
-#' @return Returns a tibble with results.
+#' @return Returns a tibble with results, or lets the user know if a table is not able to be made.
 #' @export
 genra_batch_toxprint_tbl <- function(query){
   df <- genra_batch_fp(query)
   cat('\n Batch search done, creating table... \n')
   df <- genra_toxprint_tbl(df)
+  if(is.null(df)){cat('\nNo enrichment table able to be made!\n')}else{return(df)}
 }
 
 
