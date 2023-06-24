@@ -6,7 +6,7 @@
 
 ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemicals is also included.
 
-An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
+An API Key is needed to access some of these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 
 to:`ccte_api@epa.gov`
 
