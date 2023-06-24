@@ -1,4 +1,4 @@
-#' Retrieve Chemical Fate and Transport parameters by DTXSID
+#' Retrieves Chemical Fate and Transport parameters
 #'
 #' @param dtxsid A single DTXSID (in quotes) or a list to be queried
 #' @param server Defaults to public API, private requires USEPA VPN

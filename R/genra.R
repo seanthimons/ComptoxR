@@ -15,6 +15,7 @@ genra_engine <- function(){
 }
 
 ##Neighbor----
+
 #' Search for nearest neighbors
 #'
 #' Search for nearest neighbors based on fingerprints and data sources for a single DTXSID.
@@ -65,6 +66,17 @@ genra_nn <- function(query,
   }
 }
 
+#' Neighborhood expansion for a single DTXSID
+#'
+#' Performs a neighborhood expansion for a single DTXSID. Effectively a wrapper that combines `genra_nn()` + `ct_details()` and returns a cutdown table for further analysis.
+#'
+#' @param query A single DTXSID (in quotes).
+#' @param fp A fingerprint to search by. Defaults to Morgan fingerprints.
+#' @param sel_by Select compounds by data sources. Defaults to `ToxRef`database.
+#' @param n Number of nearest neighbor to search for. Defaults to 12
+#'
+#' @return Returns a tibble with results. First row is the searched compound.
+#' @export
 genra_neighborhood <- function(query,
                                fp = c("chm_mrgn",
                                       "chm_httr", #
@@ -98,9 +110,19 @@ genra_neighborhood <- function(query,
     df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
     df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
-    #Sys.sleep(3) #Sleep time in-between requests
-    details <- ct_details(df$d)
+    df <- df %>% select(jaccard:dsstox_sid, mol_weight)
 
+    details <- ct_details(df$dsstox_sid)
+    details <- details %>%
+      select(dtxsid, preferredName,-id, )
+
+    df <- left_join(df, details, by = c('dsstox_sid' = 'dtxsid'))
+
+    df <- df %>%
+      group_by(dtxsid, name, propType) %>%
+      summarize(value = mean(value)) %>%
+      arrange(factor(propType, levels = c('experimental','predicted'))) %>%
+      distinct(dtxsid, name, propType, .keep_all = T)
 
     return(df)
   }
