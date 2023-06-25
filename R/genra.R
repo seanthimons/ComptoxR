@@ -110,25 +110,19 @@ genra_neighborhood <- function(query,
     df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
     df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
-    df <- df %>% select(jaccard:dsstox_sid, mol_weight)
+    df <- genra_nn('DTXSID7024902') %>% select(jaccard:dsstox_sid,name, mol_weight) %>% rename(preferredName = name)
 
-    details <- ct_details(df$dsstox_sid)
-    details <- details %>%
-      select(dtxsid, preferredName,-id, )
+    details <- ct_prop(df$dsstox_sid) %>% select(dtxsid, propType, name, value, unit)
 
-    df <- left_join(df, details, by = c('dsstox_sid' = 'dtxsid'))
-
-    df <- df %>%
-      group_by(dtxsid, name, propType) %>%
+    df <- left_join(df, details, by = c('dsstox_sid' = 'dtxsid')) %>%
+      group_by(preferredName, dsstox_sid, name, propType) %>%
       summarize(value = mean(value)) %>%
       arrange(factor(propType, levels = c('experimental','predicted'))) %>%
-      distinct(dtxsid, name, propType, .keep_all = T)
+      distinct(dsstox_sid, name, propType, .keep_all = T)
 
     return(df)
   }
 }
-
-
 
 
 ##Tox info----
