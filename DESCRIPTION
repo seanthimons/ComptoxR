@@ -1,6 +1,6 @@
 Package: ComptoxR
 Title: Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard and Other Products
-Version: 0.0.0.1
+Version: 0.1.0
 Authors@R: 
     person("Sean", "Thimons", , "thimons.sean@epa.gov", role = c("aut", "cre"))
 Description: ComptoxR is desiged to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included. 
