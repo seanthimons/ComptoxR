@@ -37,3 +37,6 @@ rsconnect/
 global_assays.xlsx
 scratch.R
 global_assay.xlsx
+invasive_species.csv
+standard_test_species.csv
+threatened_endangered_species.csv
