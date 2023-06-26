@@ -20,6 +20,74 @@ pc_ghs <- function(query){
   return(df)
 }
 
-l1 <- split(dtx_list, ceiling(seq_along(dtx_list)/20))
 
-t1 <- pc_ghs(dtx_list)
+#GHS----
+ct_ghs <- function(x){
+
+  #takes DTX to find GHS data
+  #requires ct_details to be ran before this
+  #Requires webchem service to be available or webchem package installed
+
+  ct_df <- ct_details(x)
+  ct_df <- ct_df %>%
+    select(dtxsid, pubchemCid) %>%
+    filter(!is.na(pubchemCid)) %>%
+    rename(cid = pubchemCid)
+  library(webchem)
+  cat("\nSearching for chemical GHS details...\n")
+
+  map_df_progress <- function(.x, .f, ..., .id = NULL) {
+    .f <- purrr::as_mapper(.f, ...)
+    pb <- progress::progress_bar$new(total = length(.x), force = TRUE)
+
+    f <- function(...) {
+      pb$tick()
+      .f(...)
+    }
+    purrr::map_df(.x, f, ..., .id = .id)
+  }
+
+  ct_df2 <- map_df_progress(ct_df$cid, ~pc_sect(.,'Safety and Hazards'))
+  ct_df2$CID <- as.integer(ct_df2$CID)
+  ct_df2 <- filter(ct_df2, str_starts(ct_df2$Result, 'H')) %>%
+    rename(cid = CID)
+  ct_df2 <- left_join(ct_df, ct_df2, by = c('cid' = 'cid'))
+  ct_df2 <- rename(ct_df2, compound = dtxsid)
+  detach("package:webchem", unload = TRUE)
+  return(ct_df2)
+}
+
+ct_ghs_pcid <- function(x){
+
+  #takes DTX to find GHS data
+  #requires ct_details to be ran before this
+  #Requires webchem service to be available or webchem package installed
+
+  ct_df <- x %>%
+    select(dtxsid, pubchemCid) %>%
+    filter(!is.na(pubchemCid)) %>%
+    rename(cid = pubchemCid)
+  library(webchem)
+  cat("\nSearching for chemical GHS details...\n")
+
+  map_df_progress <- function(.x, .f, ..., .id = NULL) {
+    .f <- purrr::as_mapper(.f, ...)
+    pb <- progress::progress_bar$new(total = length(.x), force = TRUE)
+
+    f <- function(...) {
+      pb$tick()
+      .f(...)
+    }
+    purrr::map_df(.x, f, ..., .id = .id)
+  }
+
+  ct_df2 <- map_df_progress(ct_df$cid, ~pc_sect(.,'Safety and Hazards'))
+  ct_df2$CID <- as.integer(ct_df2$CID)
+  ct_df2 <- filter(ct_df2, str_starts(ct_df2$Result, 'H')) %>%
+    rename(cid = CID)
+  ct_df2 <- left_join(ct_df, ct_df2, by = c('cid' = 'cid'))
+  ct_df2 <- rename(ct_df2, compound = dtxsid)
+  detach("package:webchem", unload = TRUE)
+  return(ct_df2)
+}
+
