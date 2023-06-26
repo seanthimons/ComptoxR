@@ -75,7 +75,7 @@ ct_compound_in_list <- function(query, server = 1, ccte_api_key = NULL){
     }
   }
 
-  cat('\nSearching for lists that contain', x,'...\n')
+  cat('\nSearching for lists that contain', query,'...\n')
 
   surl <- "chemical/list/search/by-dtxsid/"
   urls <- paste0(burl, surl, query)
