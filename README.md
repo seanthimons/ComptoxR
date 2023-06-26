@@ -2,7 +2,7 @@
 
 # Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
 
-## Version 0.0.1
+## Version 1.0.0
 
 ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemicals is also included.
 
@@ -16,21 +16,39 @@ subject: API Key Request
 
 ## Initial Setup
 
-Set API key in Sys Environment to the variable `ccte_api_key`
+Set API key in Sys Environment to the variable `ccte_api_key`. 
 
 Run the `ct_api_key()` function to test to see if the token is being detected.
 
 ------------------------------------------------------------------------
 
+## Workflow
+
+
+
+------------------------------------------------------------------------
+
 ## Suggested applications
+
+### Aggregated list searching
+
+The `ct_list()` and `ct_compound_in_list()` functions are designed to allow a user to see all compounds on a given list using the list's short code (the column `name`) or see on which aggregate lists a compound may appear on. The full register of aggregate lists may be found using the `ct_list_all()` function.
+
+### Bulk data requests
+
+The `ct_` family of functions are designed to either query a single compound (typically a DTXSID) or a list of compounds. For larger requests (200+) a bulk function is included where possible.
 
 ### Hazard Comparison Table
 
-Using one wrapper function `hcd_table()` (wraps around several helper functions [`ct_hazard()`, `ct_env_fate()`, `ct_details()` ,`ct_ghs()`]), we can create a comparison table for several compounds. This may take a few minutes given the rate of the API calls (the PubChem API is rate limited), but allows for the data to be cached and then recalled at a later time for further analysis. The rules and logic of the Hazard Comparison Table are clearly laid out in the source code and are adapted from []. Numerical responses from *in-vivo* and *in-vitro* data from a number of databases are transformed and binned for human-readability. The underlying dataset can be exported or used for further examination (e.g.: leveraged for a ToxPi risk characterization).
+Using one wrapper function `hc_table()` (wraps around several helper functions [`ct_hazard()`, `ct_env_fate()`, `ct_details()` ,`ct_ghs()`]), we can create a comparison table for several compounds. This may take a few minutes given the rate of the API calls (the PubChem API is rate limited), but allows for the data to be cached and then recalled at a later time for further analysis. The rules and logic of the Hazard Comparison Table are clearly laid out in the source code and are adapted from []. Numerical responses from *in-vivo* and *in-vitro* data from a number of databases are transformed and binned for human-readability. The underlying dataset can be exported or used for further examination (e.g.: leveraged for a ToxPi risk characterization). 
 
 ### ToxPi Risk Characterization
 
-The Toxicological Priority Index (ToxPi) prioritization algorithm exists to compare several different endpoints for compounds to yield a single, relative risk characterization. While the `toxpiR` package exists, the `hcd_toxpi_table()` function allows for a singular experience to quickly iterate through characterization schemas. A meta-data reporting feature is also included to characterize the endpoints one is using to better determine weighing schemes (see vignettes and examples).
+The Toxicological Priority Index (ToxPi) prioritization algorithm exists to compare several different endpoints for compounds to yield a single, relative risk characterization. While the `toxpiR` package exists, the `hc_toxpi_table()` function allows for a singular experience to quickly iterate through characterization schemas. A meta-data reporting feature is also included to characterize the endpoints one is using to better determine weighing schemes (see vignettes and examples).
+
+### Non-Targetted Analysis
+
+
 
 ------------------------------------------------------------------------
 
@@ -45,6 +63,7 @@ The Toxicological Priority Index (ToxPi) prioritization algorithm exists to comp
 ## Future work
 
 -   Implementation of bio-activity *in-vitro* data
+-   Wrap all functions that have a bulk request
 
 ------------------------------------------------------------------------
 
