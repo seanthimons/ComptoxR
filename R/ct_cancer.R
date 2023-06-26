@@ -52,7 +52,7 @@ ct_cancer <- function(x, server = 1, ccte_api_key = NULL){
 #'
 #' @return Returns a tibble with results
 #' @export
-ct_genetox <- function(query, server = 1, ccte_api_key = NULL){
+ct_genotox <- function(query, server = 1, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()

@@ -42,3 +42,10 @@ ct_details <- function(query, server = 1, ccte_api_key = NULL){
   cat(green('\nSearch complete!\n'))
   return(df)
 }
+
+
+ct_batch_details <- function(query){
+  query <- split(query, ceiling(seq_along(query)/200))
+
+  return(df)
+}
