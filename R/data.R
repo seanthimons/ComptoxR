@@ -21,3 +21,18 @@
 #' @format `toxprint_dict`
 #'
 'toxprint_dict'
+
+#' Standard test species
+#'
+#' A table of standard test species
+'std_spec'
+
+#' Invasive species
+#'
+#' A table of invasive species
+'inv_spec'
+
+#' Threatened species
+#'
+#' A table of threatened species
+'threat_spec'
