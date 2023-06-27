@@ -12,7 +12,7 @@ ct_name(
 )
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{query}{A single query (in quotes) or a list to be queried. Currently accepts DTXSIDs, CASRNs, URL encoded chemical names, and matches of InChIKey}
 
 \item{param}{A list of options to search by, default option is to use all options which will result in a long search query.}
 

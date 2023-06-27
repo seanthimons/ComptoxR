@@ -4,12 +4,14 @@
 \alias{ct_api_key}
 \title{Retrieves CCTE API key from the Sys Environment}
 \usage{
-Use `Sys.getenv(ccte_api_key = 'TOKEN HERE')` to set it. Run the function to check to see if R has detected it. A restart of R may be needed.
+Use `Sys.getenv(ccte_api_key = 'TOKEN HERE')` to set it.
+
+Run the function to check to see if R has detected it. A restart of R may be needed.
 }
 \description{
 An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 
 to: \code{ccte_api@epa.gov}
 
-subject: 'API Key Request'
+subject: \verb{API Key Request}
 }
