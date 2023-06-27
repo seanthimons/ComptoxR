@@ -4,10 +4,14 @@ hcd_table <- function(dtx_list){
 
   #takes a hazard data and fate/transpo outputs to create table
 
-  #q <- ct_hazard(dtx_list)
-  #f <- ct_env_fate(dtx_list)
-  #t <- ct_bulk_test(dtx_list)
-  #ghs <- ct_ghs(dtx_list)
+  q <- ct_hazard(dtx_list)
+  se <-ct_skin_eye(dtx_list)
+  c <- ct_cancer(dtx_list)
+  g <- ct_genotox(dtx_list)
+  f <- ct_env_fate(dtx_list)
+  t <- ct_test(dtx_list)
+  ghs <- ct_ghs(dtx_list)
+
 
   ##Preload----
   #takes a list data frame with hazard data from API and creates comparison tables
@@ -19,6 +23,8 @@ hcd_table <- function(dtx_list){
 
   hcd_summary$Compound <- dtx_list
   hcd_summary$Compound <- as.character(hcd_summary$Compound)
+
+  h_list <- list()
 
   rm(df_length)
 

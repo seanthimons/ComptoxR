@@ -64,6 +64,7 @@ The Toxicological Priority Index (ToxPi) prioritization algorithm exists to comp
 
 -   Implementation of bio-activity *in-vitro* data
 -   Wrap all functions that have a bulk request
+-   
 
 ------------------------------------------------------------------------
 
