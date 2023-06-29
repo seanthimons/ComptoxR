@@ -200,42 +200,41 @@ rm(df_length)
 }
 ####Cancer----
 
-#Prefer the lists over the toxval table
-#Requires cancer db to be loaded!
 {
-  hcd_cancer <- cancer %>%
-    select(list, dtxsid) %>%
-    dplyr::filter(dtxsid %in% dtx_list) %>%
+  e_list$haz <- c %>%
+    dplyr::filter(dtxsid %in% query) %>%
     group_by(dtxsid) %>%
     mutate(Carcinogenicity = case_when(
-      list == 'IARC1' | list == 'IARC2A' ~ 'VH',
-      list == 'IARC2B' ~ 'H',
-      list == 'IARC3' ~ 'NA',
-      list == 'IARC4' ~ 'L'
-    )) %>%
-    rename(cancer_amount = list, compound = dtxsid) %>%
+      Result = str_detect(cancerCall,'Known Human Carcinogen|potential occupational carcinogen|Likely Human Carcinogen|Likely to be Carcinogenic to Humans|Likely to be carcinogenic to humans|Carcinogenic to humans|Known|Group 1|Group 2A|Group A|Group B|B1|B2') ~ 'VH',
+      Result = str_detect(cancerCall,'(Possible human carcinogen)|2B|Group C|Reasonably Anticipated') ~ 'H',
+      Result = str_detect(cancerCall, 'Suggestive Evidence|Suggestive evidence') ~ 'M',
+      Result = str_detect(cancerCall, 'Group 4|Group E') ~ 'L'
+      )) %>%
+    filter(!is.na(Carcinogenicity)) %>%
+    select(dtxsid, Carcinogenicity) %>%
+    rename(compound = dtxsid) %>%
     mutate(cancer_amount = case_when(
-      Carcinogenicity == 'VH' ~ 1000,
-      Carcinogenicity == 'H' ~ 100,
+      Carcinogenicity == 'VH' ~ 10000,
+      Carcinogenicity == 'H' ~ 1000,
       Carcinogenicity == 'M' ~ 10,
       Carcinogenicity == 'L' ~ 1,
     )) %>% relocate(cancer_amount, .after = compound)
 
   e_list$ghs <- ghs %>%
     group_by(compound) %>%
-    mutate(Cancer = case_when(
+    mutate(Carcinogenicity = case_when(
       Result = str_detect(Result, 'H350') ~ 'VH',
       Result = str_detect(Result, 'H351') ~ 'H'
     )) %>%
-    filter(!is.na(Cancer)) %>%
-    arrange(compound, factor(Cancer, levels = c('VH', 'H','M','L'))) %>%
-    select(compound, Cancer) %>%
+    filter(!is.na(Carcinogenicity)) %>%
+    arrange(compound, factor(Carcinogenicity, levels = c('VH', 'H','M','L'))) %>%
+    select(compound, Carcinogenicity) %>%
     distinct(compound, .keep_all = T) %>%
     mutate(cancer_amount = case_when(
-      Cancer == 'VH' ~ 0.1,
-      Cancer == 'H' ~ 1,
-      Cancer == 'M' ~ 100,
-      Cancer == 'L' ~ 1000,
+      Carcinogenicity == 'VH' ~ 10000,
+      Carcinogenicity == 'H' ~ 1000,
+      Carcinogenicity == 'M' ~ 10,
+      Carcinogenicity == 'L' ~ 1,
     ))
 
   # Disable until able to determine how to deal with category vs values
@@ -252,31 +251,49 @@ rm(df_length)
     filter(`CAS No.` %in% d$casrn) %>%
     filter(str_detect(`Reason for inclusion`, 'Carcinogenic')) %>%
     rename(reason = `Reason for inclusion`) %>%
+    left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
     select(dtxsid, reason) %>%
     group_by(dtxsid) %>%
     transmute(Carcinogenicity = case_when(
       str_detect(reason, 'Carcinogenic') ~ 'VH'
     )) %>%
     mutate(cancer_amount = case_when(
-      Carcinogenicity == 'VH' ~ 1000
+      Carcinogenicity == 'VH' ~ 10000
     )) %>%
     rename(compound = dtxsid)
+
+  h_list$cancer <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','reach','ghs'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    select(-source)
+
+  e_list <- list()
 
   cat(green('\nCancer search complete!'))
 }
 
 ####Genotoxic----
 {
-  #Waiting for ACToR to be added in
-  #2023-03-24
 
-  #hcd_geno <-
+  e_list$haz <- g %>%
+    filter(assayResult == 'positive' & assayCategory == 'in vitro' | assayCategory == 'in vivo') %>%
+    group_by(dtxsid) %>%
+    select(dtxsid, assayCategory) %>%
+    mutate(active = 1) %>%
+    pivot_wider(id_cols = dtxsid, names_from = assayCategory, values_from = active, values_fn = mean) %>%
+    mutate(Mutagenicity = case_when(
+      `in vivo` == 1 & `in vitro` == 1 ~ 'H',
+      is.na(`in vivo`) == T | is.na(`in vitro`) == 1 ~ 'M'
 
-  ##### GENO TEST----
+    )) %>%
+    select(dtxsid, Mutagenicity) %>%
+    mutate(geno_amount = case_when(
+      Mutagenicity  == 'H' ~ 500,
+      Mutagenicity  == 'M' ~ 100
+    ))
+
 
   test <- t %>%
-    #reverted %ni% to inclusive search, will use tiered approach
-    filter(compound %in% dtx_list) %>%
     filter(endpoint == 'Mutagenicity') %>%
     group_by(compound) %>%
     summarize(amount = predActive) %>%
@@ -294,7 +311,7 @@ rm(df_length)
     filter(dtxsid %in% dtx_list) %>%
     filter(str_detect(reason, 'Mutagenic')) %>%
     select(dtxsid, reason) %>%
-    group_by(dtxsid) %>%
+    group_by(dtxsid) %>% %>%
     transmute(Mutagenicity = case_when(
       str_detect(reason, 'Mutagenic') ~ 'VH'
     )) %>%
