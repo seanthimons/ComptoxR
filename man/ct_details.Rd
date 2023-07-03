@@ -4,9 +4,17 @@
 \alias{ct_details}
 \title{Retrieve compound details by DTXSID}
 \usage{
-ct_details(query, server = 1, ccte_api_key = NULL)
+ct_details(
+  query,
+  projection = c("chemicaldetailall", "chemicaldetailstandard", "chemicalidentifier",
+    "chemicalstructure", "ntatoolkit"),
+  server = 1,
+  ccte_api_key = NULL
+)
 }
 \arguments{
+\item{projection}{Subsets the returned dataframe based on desired provided results. Defaults to \code{chemicaldetailstandard}.}
+
 \item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
