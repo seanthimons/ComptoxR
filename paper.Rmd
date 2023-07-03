@@ -20,9 +20,19 @@ We developed the open-source R package `ComptoxR` that allows users to automatic
 
 ### Implementation and Design Details
 
+`ComptoxR` is written in R and relies upon several packages to function effectively. Several other packages were used to for speed purposes or because they offered time-saving implementations. Functions are grouped by .R file bearing the same name. An associated documentation file is generated when building the package that an end-user can readily access, along with several vignettes detailing suggested use-cases.
+
+Most functions that work to retrieve data on a compound are also implemented in a 'batch' function to reduce query times. Lists of compounds that number over 200 will automatically be batched to accommodate API throughput limits and seamlessly assemble the data into a single dataframe.
+
 ### Data Sources
 
+`ComptoxR` comes with several existing data sources packaged within for analysis and comparison purposes. Some are required, as they function as "dictionary" files for searchign purposes, while others (i.e.: `dtx_list`) are examples that can be used to demonstrate abilities. There are three main API endpoints that `ComptoxR` targets: Two public-facing APIs from US EPA (one for and GenRA) and one for PubChem to retrieve GHS data through the `webchem` package.
+
+The GenRA and PubChem APIs and associated functions work to retrieve data, but do not perform any analysis; all calculations are performed server-side.
+
 ### Use cases
+
+#### Querying physio-chemical properties
 
 #### Hazard Comparison
 
@@ -30,23 +40,47 @@ We developed the open-source R package `ComptoxR` that allows users to automatic
 
 #### Non-Targeted Analysis Compound Searching
 
-#### Query Identifiers
+#### Quering Names
 
 #### Toxcity of ...
 
-#### Identify common names and roles of chemicals
+#### Comparisons to other relevant R packages
 
-#### Querying Physio-chemical properties
+##### `webchem`
 
-#### Related software and comparison to other R packages
+`webchem` is a "R package to retrieve chemical information from the web..." and provides access to "a suite of web APIs to retrieve chemical information" from a variety of disparate databases. Some of the the databases (e.g.: ChemSpider) require a separate API token to access. Curation quality of these databases is not reported.
+
+Comparatively, `ComptoxR` provides a single point of access to a varity of already curated and integrated databases under the 'umbrella' of CCD. Users can query one compound and retrieve results from upwards of 30 [double check] databases and aggregate results at their leisure.
+
+Currently `ComptoxR` relies on `webchem` to pull GHS data, but aims to depreciate this dependency as internal efforts at US EPA continue to ...
+
+`standartox`
+
+##### `ECOTOXr`
+
+`ECOTOXr` allows for a local download and storage of the US EPA's 'ECOTOX' environmental database in a SQLite format for query. As of writing, ECOTOX does not have an API for querying this database.
+
+ECOTOX is covered under the CCD 'umbrella' of databases and is thus covered under this package. `ComptoxR` does not natively store data automatically, but returned queries can be saved in a variety of R storage formats and recalled later.
+
+##### `toxpiR`
+
+`toxpiR` is a native implementation of the Toxicological Priority Index (ToxPi) prioritization algorithm, and purports to offer more flexiability than the ToxPi GUI.
+
+Inherently, the math behind the ToxPi algorithm is not hard to reproduce (a min-max normalization scheme), but the `toxpiR` package utilizes the `R6` reference class and may not be as easily accessible to all users. In comparison, the `tp` function made available through `ComptoxR` takes two data frame objects (a weighing table and a table holding the parent data) and performs the normalization scheme. We also offer the ability to back-fill data gaps with the mean value of a given endpoint (as supported by a meta-analysis [citation]), and provide meta-statitics on the quality of data being analyzed.
 
 #### Open science
+
+Given the open-source nature of the
 
 #### Further Development
 
 #### Conclusions
 
 ##### Disclaimer
+
+This article was supported in part by an appointment to the Research Participation Program at the Office of Research and Development, Center for Environmental Solutions and Emergency Response, U.S. Environmental Protection Agency, administered by the Oak Ridge Institute for Science and Education through an interagency agreement between the U.S. Department of Energy and EPA.The views expressed in this article are those of the author(s) and do not necessarily represent the views or the policies of the U.S. Environmental Protection Agency. EPA is distributing this information solely as a public service.
+
+This R package is a compilation of information sourced from many databases and literature sources, including U.S. Federal and state sources and international bodies, which can save the user time by providing information in one location. The data are not fully reviewed by USEPA -- the user must apply judgment in use of the information. You should consult the original scientific paper or data source if possible. Reference herein to any specific commercial products, process, or service by trade name, trademark, manufacturer, or otherwise, does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government. The views and opinions of the developers of the site expressed herein do not necessarily state or reflect those of the United States Government, and shall not be used for advertising or product endorsement purposes With respect to documents available from this server, neither the United States Government nor any of their employees, makes any warranty, express or implied, including the warranties of merchantability and fitness for a particular purpose, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.
 
 ##### Acknowledgements
 
