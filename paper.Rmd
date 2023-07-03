@@ -1,0 +1,53 @@
+# ComptoxR: An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening
+
+Sean Thimons
+
+Asif
+
+Grace
+
+Antony Williams
+
+### Abstract
+
+The CompTox Chemical Dashboard (CCD) has gone through several improvements over the past few years, including batch downloading and inclusion of larger datasets for user analysis. However, query times for the batch download process can be long for larger volumes of compound requests. Users can also selectively request data on a very granular basis through the website, but the requesting all of an endpoint (e.g.: 'fate and transport' data) for several compounds can be time-consuming. `ComptoxR` aims to strike a balance between granular and comprehensive data harvesting.
+
+We developed the open-source R package `ComptoxR` that allows users to automatically query the underlying databases that supports CCD and other products from USEPA, extract out the data into an R object, and perform several analyses on the query. We provide several useful functions for querying specific endpoints for compounds such as physio-chemical properties, model predictions from TEST and OPERA QSAR models, hazard data. We also provide native R implementations of the Hazard Comparison and ToxPrint Chemotypes Exploring Chemical Feature Enrichments modules from USEPA's Cheminformatics and GenRA (Generalized Read-Across) tools.
+
+`ComptoxR` follows the FAIR (findability, accessibility, interoperability, and reusability) principle for the data returned from queries, aiming to facilitate rapid chemical screening for hazard, risk, and toxicological characterization for a variety of end-users. Quality-control, curation level, and citation data is also generally available for compound queries, a feature not readily available in other packages.
+
+### Introduction
+
+### Implementation and Design Details
+
+### Data Sources
+
+### Use cases
+
+#### Hazard Comparison
+
+#### Generalized Read-Across (GenRA) and ToxPrint Enrichment
+
+#### Non-Targeted Analysis Compound Searching
+
+#### Query Identifiers
+
+#### Toxcity of ...
+
+#### Identify common names and roles of chemicals
+
+#### Querying Physio-chemical properties
+
+#### Related software and comparison to other R packages
+
+#### Open science
+
+#### Further Development
+
+#### Conclusions
+
+##### Disclaimer
+
+##### Acknowledgements
+
+###### References
