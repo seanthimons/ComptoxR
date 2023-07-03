@@ -1,6 +1,5 @@
-query <- ct_list('CCL4') %>% select(dtxsid)
+query <- ct_list('CWA311HS') %>% select(dtxsid)
 query <-query$dtxsid %>% as.list()
-
 
 {
 q <- ct_hazard(query)
@@ -19,12 +18,12 @@ ghs <- ct_ghs(query)
 #takes a list data frame with hazard data from API and creates comparison tables
 
 df_length = length(query)
-hcd_summary <- data.frame(matrix(ncol = 1,nrow = df_length))
+hc_summary <- data.frame(matrix(ncol = 1,nrow = df_length))
 
-colnames(hcd_summary) <- 'Compound'
+colnames(hc_summary) <- 'Compound'
 
-hcd_summary$Compound <- query
-hcd_summary$Compound <- as.character(hcd_summary$Compound)
+hc_summary$Compound <- query
+hc_summary$Compound <- as.character(hc_summary$Compound)
 
 h_list <- list()
 e_list <- list()
@@ -107,7 +106,7 @@ rm(df_length)
 }
 ####Dermal----
 {
-  hcd_dermal <-  q %>%
+  e_list$haz <-  q %>%
     dplyr::filter(humanEcoNt == 'human health') %>%
     dplyr::filter(speciesCommon == 'rat' | speciesCommon == 'mouse' | speciesCommon == 'rabbit' | speciesCommon == 'guinea pig' | speciesCommon == 'mouse, rat') %>%
     dplyr::filter(exposureRoute == 'dermal') %>%
@@ -122,8 +121,7 @@ rm(df_length)
       amount > 2000 ~ 'L'
     )) %>% rename(dermal_amount = amount)
 
-  derm_ghs <- ghs %>%
-    filter(compound %ni% hcd_dermal$compound) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Dermal = case_when(
       Result = str_detect(Result, 'H310') ~ 'VH',
@@ -142,11 +140,13 @@ rm(df_length)
       Dermal == 'L' ~ 2000,
     ))
 
-
-  #binds two df together
-  hcd_dermal <- bind_rows(hcd_dermal, derm_ghs) %>%
+  h_list$derm <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','test'))) %>%
     distinct(compound, .keep_all = T) %>%
+    select(-source) %>%
     mutate(dermal_amount = -log10(dermal_amount)+10)
+
+  e_list <- list()
 
   cat(green('\nDermal search complete!'))
 }
@@ -154,7 +154,7 @@ rm(df_length)
 
 ####Inhalation----
 {
-  hcd_inhalation <-  q %>%
+  e_list$haz <-  q %>%
     dplyr::filter(humanEcoNt == 'human health') %>%
     dplyr::filter(speciesCommon == 'rat' | speciesCommon == 'mouse' | speciesCommon == 'rabbit' | speciesCommon == 'guinea pig' | speciesCommon == 'mouse, rat') %>%
     dplyr::filter(exposureRoute == 'inhalation') %>%
@@ -170,8 +170,7 @@ rm(df_length)
       amount > 20 ~ 'L'
     )) %>% rename(inhalation_amount = amount)
 
-  inhal_ghs <- ghs %>%
-    filter(compound %ni% hcd_inhalation$compound) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Inhalation = case_when(
       Result = str_detect(Result, 'H330') ~ 'VH',
@@ -191,15 +190,18 @@ rm(df_length)
     ))
 
   #binds two df together
-  hcd_inhalation <- bind_rows(hcd_inhalation, inhal_ghs)%>%
+
+  h_list$inhal <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','test'))) %>%
     distinct(compound, .keep_all = T) %>%
+    select(-source) %>%
     mutate(inhalation_amount = -log10(inhalation_amount)+10)
 
+  e_list <- list()
 
   cat(green('\nInhalation search complete!'))
 }
 ####Cancer----
-
 {
   e_list$haz <- c %>%
     dplyr::filter(dtxsid %in% query) %>%
@@ -237,15 +239,6 @@ rm(df_length)
       Carcinogenicity == 'L' ~ 1,
     ))
 
-  # Disable until able to determine how to deal with category vs values
-  # hcd_cancer_toxval <-  q %>%
-  #   dplyr::filter(endpoint == 'human') %>%
-  #   dplyr::filter(toxvalType == 'cancer slope factor' | toxvalType == 'cancer unit risk') %>%
-  #   group_by(compound) %>%
-  #   summarize(amount = mean(toxvalNumeric)) %>%
-  #   mutate(Cancer = case_when(
-  #     amount > 0 ~ 'VH')) %>%
-  #   rename(cancer_amount = amount)
 
   e_list$reach <- reach %>%
     filter(`CAS No.` %in% d$casrn) %>%
@@ -290,10 +283,10 @@ rm(df_length)
     mutate(geno_amount = case_when(
       Mutagenicity  == 'H' ~ 500,
       Mutagenicity  == 'M' ~ 100
-    ))
+    )) %>%
+    rename(compound = dtxsid)
 
-
-  test <- t %>%
+  e_list$test <- t %>%
     filter(endpoint == 'Mutagenicity') %>%
     group_by(compound) %>%
     summarize(amount = predActive) %>%
@@ -307,11 +300,13 @@ rm(df_length)
       geno_amount  == FALSE ~ 25
     ))
 
-  r <- reach %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(reason, 'Mutagenic')) %>%
+  e_list$reach <- reach %>%
+    filter(`CAS No.` %in% d$casrn) %>%
+    filter(str_detect(`Reason for inclusion`, 'Mutagenic')) %>%
+    rename(reason = `Reason for inclusion`) %>%
+    left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
     select(dtxsid, reason) %>%
-    group_by(dtxsid) %>% %>%
+    group_by(dtxsid) %>%
     transmute(Mutagenicity = case_when(
       str_detect(reason, 'Mutagenic') ~ 'VH'
     )) %>%
@@ -320,8 +315,7 @@ rm(df_length)
     )) %>%
     rename(compound = dtxsid)
 
-  geno_ghs <- ghs %>%
-    filter(compound %in% dtx_list) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Mutagenicity = case_when(
       Result = str_detect(Result, 'H340') ~ 'VH',
@@ -333,32 +327,26 @@ rm(df_length)
     distinct(compound, .keep_all = T) %>%
     mutate(geno_amount = case_when(
       Mutagenicity == 'VH' ~ 1000,
-      Mutagenicity == 'H' ~ 550
+      Mutagenicity == 'H' ~ 500
     ))
 
-  hcd_geno <- bind_rows(test, r, geno_ghs) %>%
-    arrange(compound,desc(geno_amount)) %>%
-    distinct(compound, .keep_all = T)
+  h_list$geno <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','reach','ghs','test'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    select(-source)
+
+  e_list <- list()
+
+  cat(green('\nMutagenic search complete!'))
+
 }
 ####Endocrine-----
 {
-  #present on TEDx list
-  #Wait until curation is done
-
-  # hcd_endo <- endo_list %>%
-  #   filter(dtxsid %in% dtx_list) %>%
-  #   select(dtxsid) %>%
-  #   mutate(Endocrine_Disruption = case_when(
-  #     is.character(dtxsid) == TRUE ~ 'H'
-  #   )) %>%
-  #   mutate(endo_amount = case_when(
-  #     Endocrine_Disruption == 'H' ~ 500
-  #   )) %>%
-  #   rename(compound = dtxsid)
-
-  r <- reach %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(reason, 'Endocrine disrupting properties')) %>%
+  e_list$reach <- reach %>%
+    filter(`CAS No.` %in% d$casrn) %>%
+    filter(str_detect(`Reason for inclusion`, 'Endocrine disrupting properties')) %>%
+    rename(reason = `Reason for inclusion`) %>%
+    left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
     select(dtxsid, reason) %>%
     group_by(dtxsid) %>%
     transmute(Endocrine_Disruption = case_when(
@@ -369,11 +357,9 @@ rm(df_length)
     )) %>%
     rename(compound = dtxsid)
 
-  #####ENDO TEST----
 
-  test <- t %>%
-    #reverted %ni% to inclusive search, will use tiered approach
-    filter(compound %in% dtx_list) %>%
+  e_list$test <- t %>%
+    filter(compound %in% query) %>%
     filter(endpoint == 'ER_Binary') %>%
     group_by(compound) %>%
     summarize(amount = predActive) %>%
@@ -387,167 +373,159 @@ rm(df_length)
       endo_amount  == FALSE ~ 25
     ))
 
-  hcd_endo <- bind_rows(
-    #hcd_endo,
-    r,
-    test) %>%
-    distinct(compound, .keep_all = T)
+  h_list$endo <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('reach','test'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    select(-source)
+
+  e_list <- list()
+
+  cat(green('\nEndocrine disruptor search complete!'))
+
 
 }
 ####Reproductive----
 {
-  hcd_repro <-  q %>%
+  e_list$haz <- q %>%
     dplyr::filter(humanEcoNt == 'human health') %>%
     dplyr::filter(speciesCommon == 'rat' | speciesCommon == 'mouse' | speciesCommon == 'rabbit' | speciesCommon == 'guinea pig' | speciesCommon == 'mouse, rat') %>%
-    dplyr::filter(exposureRoute == 'oral' | exposureRoute == 'dermal') %>%
-    dplyr::filter(toxvalType == 'NOAEL' | toxvalType == 'LOAEL') %>%
-    dplyr::filter(str_detect(riskAssessmentClass, 'reprod'))  %>%
-    dplyr::filter(toxvalUnits == 'mg/kg-day' ) %>%
-    group_by(compound) %>%
+    dplyr::filter(exposureRoute == 'oral' & toxvalUnits == 'mg/kg-day' | exposureRoute == 'dermal' & toxvalUnits == 'mg/kg-day' | exposureRoute == 'inhalation' & toxvalUnits == 'mg/L' | exposureRoute == 'inhalation' & toxvalUnits == 'mg/m3' | exposureRoute == 'inhalation' & toxvalUnits == 'ppm') %>%
+    dplyr::filter(toxvalType == 'NOAEL' | toxvalType == 'LOAEL' | toxvalType == 'LOAEC' | toxvalType == 'NOAEC') %>%
+    dplyr::filter(str_detect(studyType, 'reproduct|multigeneration'))  %>%
+    group_by(compound, exposureRoute, toxvalUnits) %>%
     summarize(amount = min(toxvalNumeric)) %>%
-    mutate(Reproductive = case_when(
-      amount < 100 ~ 'H',
-      (amount > 100 & amount <= 500)  ~ 'M',
-      amount > 500 ~ 'L'
+    mutate(amount = case_when(
+      exposureRoute == 'inhalation' & toxvalUnits == 'mg/m3' ~ amount/1000,
+      TRUE ~ amount
     )) %>%
+    mutate(Reproductive = case_when(
+      exposureRoute == 'oral' & amount < 50 | exposureRoute == 'dermal' & amount < 100 | exposureRoute == 'inhalation' & amount < 1 ~ 'H',
+      exposureRoute == 'oral' & amount >= 50 & amount <= 250 | exposureRoute == 'oral' & amount >= 100 & amount <= 500 | exposureRoute == 'inhalation' & amount >= 1 & amount <= 2.5 ~ 'M',
+      exposureRoute == 'oral' & amount > 250 | exposureRoute == 'dermal' & amount > 500 | exposureRoute == 'inhalation' & amount > 2.5 ~ 'L',
+
+    )) %>%
+    as_tibble() %>%
+    select(-toxvalUnits, -exposureRoute) %>%
+    arrange(compound, factor(Reproductive, levels = c('VH', 'H','M','L'))) %>%
+    distinct(compound, .keep_all = T) %>%
     rename(reproductive_amount = amount)
 
-  repro_ghs <- ghs %>%
-    filter(compound %ni% hcd_repro$compound) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Reproductive = case_when(
-      Result = str_detect(Result, 'H360 | H360F | H360Fd | H360FD') ~ 'H',
-      Result = str_detect(Result, 'H360Df | H361 | H361D | H361f') ~ 'M'
+      Result = str_detect(Result, 'H360|H360F|H360Fd|H360FD') ~ 'H',
+      Result = str_detect(Result, 'H360Df|H361|H361D|H361f') ~ 'M'
     )) %>%
     filter(!is.na(Reproductive)) %>%
     arrange(compound, factor(Reproductive, levels = c('VH', 'H','M','L'))) %>%
     select(compound, Reproductive) %>%
     distinct(compound, .keep_all = T) %>%
     mutate(reproductive_amount = case_when(
-      Reproductive == 'H' ~ 100,
-      Reproductive == 'M' ~ 300,
-      Reproductive == 'L' ~ 500,
+      Reproductive == 'H' ~ 1000,
+      Reproductive == 'M' ~ 10,
+      Reproductive == 'L' ~ 1,
     ))
 
-  r <- reach %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(reason, '57c')) %>%
+  e_list$reach <- reach %>%
+    filter(`CAS No.` %in% d$casrn) %>%
+    filter(str_detect(`Reason for inclusion`, 'Toxic for reproduction')) %>%
+    rename(reason = `Reason for inclusion`) %>%
+    left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
     select(dtxsid, reason) %>%
     group_by(dtxsid) %>%
     transmute(Reproductive = case_when(
-      str_detect(reason, '57c') ~ 'H'
+      str_detect(reason, 'Toxic for reproduction') ~ 'H'
     )) %>%
     mutate(reproductive_amount = case_when(
-      Reproductive == 'H' ~ 100
+      Reproductive == 'H' ~ 1000
     )) %>%
     rename(compound = dtxsid)
 
-  p <- p65 %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(tox_type, 'female|male')) %>%
-    select(dtxsid) %>%
-    group_by(dtxsid) %>%
-    transmute(Reproductive = case_when(
-      is.character(dtxsid) ~ 'H'
-    )) %>%
-    mutate(reproductive_amount = case_when(
-      Reproductive == 'H' ~ 100
-    )) %>%
-    rename(compound = dtxsid)
-
-  #binds two df together
-  hcd_repro <- bind_rows(hcd_repro, repro_ghs, r, p) %>%
-    arrange(compound,desc(reproductive_amount)) %>%
+  h_list$reprod <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','reach','ghs'))) %>%
     distinct(compound, .keep_all = T) %>%
-    mutate(reproductive_amount = -log10(reproductive_amount)+10)
+    mutate(reproductive_amount = case_when(
+      Reproductive == 'H' ~ 1000,
+      Reproductive == 'M' ~ 10,
+      Reproductive == 'L' ~ 1,
+    )) %>%
+    select(-source)
+
+  e_list <- list()
 
   cat(green('\nReproductive search complete!'))
 }
 
 ####Developmental----
 {
-  hcd_develop <- q %>%
+  e_list$haz <- q %>%
     dplyr::filter(humanEcoNt == 'human health') %>%
     dplyr::filter(speciesCommon == 'rat' | speciesCommon == 'mouse' | speciesCommon == 'rabbit' | speciesCommon == 'guinea pig' | speciesCommon == 'mouse, rat') %>%
-    dplyr::filter(exposureRoute == 'oral' | exposureRoute == 'dermal') %>%
-    dplyr::filter(toxvalType == 'NOAEL' | toxvalType == 'LOAEL') %>%
-    dplyr::filter(toxvalUnits == 'mg/kg-day') %>%
+    dplyr::filter(exposureRoute == 'oral' & toxvalUnits == 'mg/kg-day' | exposureRoute == 'dermal' & toxvalUnits == 'mg/kg-day' | exposureRoute == 'inhalation' & toxvalUnits == 'mg/L' | exposureRoute == 'inhalation' & toxvalUnits == 'mg/m3' | exposureRoute == 'inhalation' & toxvalUnits == 'ppm') %>%
+    dplyr::filter(toxvalType == 'NOAEL' | toxvalType == 'LOAEL' | toxvalType == 'LOAEC' | toxvalType == 'NOAEC') %>%
     dplyr::filter(str_detect(studyType, 'develop'))  %>%
-    dplyr::filter(!str_detect(riskAssessmentClass, 'reprod'))  %>%
-    group_by(compound, exposureRoute) %>%
+    dplyr::filter(!str_detect(studyType, 'reproduct|multigeneration'))  %>%
+    group_by(compound, exposureRoute, toxvalUnits) %>%
     summarize(amount = min(toxvalNumeric)) %>%
+    mutate(amount = case_when(
+      exposureRoute == 'inhalation' & toxvalUnits == 'mg/m3' ~ amount/1000,
+      TRUE ~ amount
+    )) %>%
     mutate(Developmental = case_when(
+      exposureRoute == 'oral' & amount < 50 | exposureRoute == 'dermal' & amount < 100 | exposureRoute == 'inhalation' & amount < 1 ~ 'H',
+      exposureRoute == 'oral' & amount >= 50 & amount <= 250 | exposureRoute == 'oral' & amount >= 100 & amount <= 500 | exposureRoute == 'inhalation' & amount >= 1 & amount <= 2.5 ~ 'M',
+      exposureRoute == 'oral' & amount > 250 | exposureRoute == 'dermal' & amount > 500 | exposureRoute == 'inhalation' & amount > 2.5 ~ 'L',
 
-      amount < 50 & exposureRoute == 'oral' ~ 'H',
-      (amount >= 50 & amount <= 250) & exposureRoute == 'oral'  ~ 'M',
-      amount > 250 & exposureRoute == 'oral'~ 'L',
-
-      amount < 100 & exposureRoute == 'dermal' ~ 'H',
-      (amount >= 100 & amount <= 500) & exposureRoute == 'dermal'  ~ 'M',
-      amount > 500 & exposureRoute == 'dermal'~ 'L',
-
-      amount < 1 & exposureRoute == 'inhalation' ~ 'H',
-      (amount >= 1 & amount <= 2.5) & exposureRoute == 'inhalation'  ~ 'M',
-      amount > 2.5 & exposureRoute == 'inhalation'~ 'L'
-    )) %>%
-    rename(develop_amount = amount) %>%
-    pivot_wider(
-      names_from = exposureRoute,
-      values_from = c(develop_amount, Developmental))
-
-  ##### DEV TEST----
-
-  test <- t %>%
-    #reverted %ni% to inclusive search, will use tiered approach
-    filter(compound %ni% hcd_develop$compound) %>%
-    filter(endpoint == 'DevTox') %>%
-    group_by(compound) %>%
-    summarize(amount = predActive) %>%
-    mutate(Developmental_oral = case_when(
-      amount == TRUE ~ 'H',
-      amount == FALSE ~ 'L'
-    )) %>%
-    rename(develop_amount_oral = amount) %>%
-    mutate(develop_amount_oral = case_when(
-      develop_amount_oral  == TRUE ~ 50,
-      develop_amount_oral  == FALSE ~ 625
+    )) %>% as_tibble() %>%
+    select(-toxvalUnits, -exposureRoute) %>%
+    arrange(compound, factor(Developmental, levels = c('VH', 'H','M','L'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    rename(developmental_amount = amount) %>%
+    mutate(developmental_amount = case_when(
+      Developmental == 'H' ~ 1000,
+      Developmental == 'M' ~ 10,
+      Developmental == 'L' ~ 1,
     ))
 
-  dev_ghs <- ghs %>%
-    filter(compound %ni% hcd_develop$compound) %>%
+
+  e_list$ghs <- ghs %>%
+    group_by(compound) %>%
     group_by(compound) %>%
     mutate(Developmental = case_when(
-      Result = str_detect(Result, 'H360 | H360Df | H360D | H360FD | H360Df | H362') ~ 'H',
-      Result = str_detect(Result, 'H36Fd | H361 | H361d | H361fd') ~ 'M'
+      Result = str_detect(Result, 'H360|H360Df|H360D|H360FD|H360Df|H362') ~ 'H',
+      Result = str_detect(Result, 'H36Fd|H361|H361d|H361fd') ~ 'M'
     )) %>%
     filter(!is.na(Developmental)) %>%
     arrange(compound, factor(Developmental, levels = c('VH', 'H','M','L'))) %>%
     select(compound, Developmental) %>%
     distinct(compound, .keep_all = T) %>%
-    mutate(develop_amount_oral = case_when(
-      Developmental == 'H' ~ 50,
-      Developmental == 'M' ~ 150,
-      Developmental == 'L' ~ 625
-    )) %>%
-    rename(Developmental_oral = Developmental)
+    mutate(developmental_amount = case_when(
+      Developmental == 'H' ~ 1000,
+      Developmental == 'M' ~ 100,
+      Developmental == 'L' ~ 10
+    ))
 
-  p <- p65 %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(tox_type, 'developmental')) %>%
-    select(dtxsid) %>%
-    group_by(dtxsid) %>%
-    transmute(Developmental_oral = case_when(
-      is.character(dtxsid) ~ 'H'
-    )) %>%
-    mutate(develop_amount_oral = case_when(
-      Developmental_oral == 'H' ~ 50
-    )) %>%
-    rename(compound = dtxsid)
 
-  hcd_develop <- bind_rows(hcd_develop, test, dev_ghs, p) %>%
-    arrange(compound,develop_amount_oral) %>%
+  e_list$test <-t %>%
+    filter(endpoint == 'DevTox') %>%
+    group_by(compound) %>%
+    summarize(amount = predActive) %>%
+    mutate(Developmental = case_when(
+      amount == TRUE ~ 'H',
+      amount == FALSE ~ 'L'
+    )) %>%
+    mutate(developmental_amount = case_when(
+      amount  == TRUE ~ 1000,
+      amount  == FALSE ~ 10
+    )) %>%
+    select(-amount)
+
+  h_list$develop <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','ghs', 'test'))) %>%
     distinct(compound, .keep_all = T) %>%
-    mutate(develop_amount_oral = -log10(develop_amount_oral)+10)
+    select(-source)
+
+  e_list <- list()
 
   cat(green('\nDevelopmental search complete!'))
 }
@@ -555,12 +533,12 @@ rm(df_length)
 ##Ecotox----
 ####Acute Aquatic Toxicity----
 {
-  hcd_acute_aqua <- q %>%
+  e_list$haz <- q %>%
     dplyr::filter(humanEcoNt == 'eco') %>%
     dplyr::filter(speciesCommon %in% std_spec$common) %>%
     dplyr::filter(studyDurationUnits == 'days') %>%
-    dplyr::filter(studyDurationValue < 6) %>%
-    dplyr::filter(toxvalUnits == 'mg/L') %>%
+    dplyr::filter(studyDurationValue <= 6) %>%
+    dplyr::filter(toxvalUnits == 'mg/L' | toxvalUnits == 'ppm') %>%
     dplyr::filter(riskAssessmentClass  == 'acute') %>%
     dplyr::filter(toxvalType == 'LC50' | toxvalType == 'EC50') %>%
     group_by(compound, toxvalType) %>%
@@ -571,15 +549,13 @@ rm(df_length)
       (amount < 1) ~ 'VH',
       (amount >= 1 & amount <= 10)  ~ 'H',
       (amount > 10 & amount <= 100)  ~ 'M',
-      (amount > 100) ~ 'L',
-
+      (amount > 100) ~ 'L'
     )) %>%
-    distinct() %>%
+    arrange(compound, factor(Acute_Aquatic_Toxicity, levels = c('VH', 'H','M','L'))) %>%
+    distinct(compound, .keep_all = T) %>%
     rename(acute_aq_amount = amount)
 
-  #####AC AQUA TEST----
-  test <- t %>%
-    filter(compound %ni% hcd_acute_aqua$compound) %>%
+ e_list$test <- t %>%
     filter(endpoint == 'LC50') %>%
     group_by(compound) %>%
     summarize(amount = as.numeric(predValMass)) %>%
@@ -588,12 +564,11 @@ rm(df_length)
       (amount < 1) ~ 'VH',
       (amount >= 1 & amount <= 10)  ~ 'H',
       (amount > 10 & amount <= 100)  ~ 'M',
-      (amount > 100) ~ 'L',
+      (amount > 100) ~ 'L'
     )) %>%
     rename(acute_aq_amount = amount)
 
-  acute_ghs <- ghs %>%
-    filter(compound %ni% hcd_acute_aqua$compound) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Acute_Aquatic_Toxicity = case_when(
       Result = str_detect(Result, 'H400') ~ 'VH',
@@ -608,20 +583,23 @@ rm(df_length)
     mutate(acute_aq_amount = case_when(
       Acute_Aquatic_Toxicity == 'VH' ~ 1,
       Acute_Aquatic_Toxicity == 'H' ~ 5,
-      Acute_Aquatic_Toxicity == 'M' ~ 55,
+      Acute_Aquatic_Toxicity == 'M' ~ 50,
       Acute_Aquatic_Toxicity == 'L' ~ 100,
     ))
 
-  hcd_acute_aqua <- bind_rows(hcd_acute_aqua,test, acute_ghs) %>%
+  h_list$ac_aqua <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','ghs', 'test'))) %>%
     distinct(compound, .keep_all = T) %>%
+    select(-source) %>%
     mutate(acute_aq_amount = -log10(acute_aq_amount)+10)
 
+  e_list <- list()
 
   cat(green('\nAcute aquatic search complete!'))
 }
 ####Chronic Aquatic Toxicity----
 {
-  hcd_chron_aqua <-  q %>%
+  e_list$chron_aqua <- q %>%
     dplyr::filter(humanEcoNt == 'eco') %>%
     dplyr::filter(speciesCommon %in% std_spec$common) %>%
     dplyr::filter(studyDurationUnits == 'days') %>%
@@ -642,15 +620,13 @@ rm(df_length)
     distinct() %>%
     rename(chronic_aq_amount = amount)
 
-  chron_ghs <- ghs %>%
-    filter(compound %ni% hcd_chron_aqua$compound) %>%
+  e_list$ghs <- ghs %>%
     group_by(compound) %>%
     mutate(Chronic_Aquatic_Toxicity = case_when(
       Result = str_detect(Result, 'H410') ~ 'VH',
       Result = str_detect(Result, 'H4411') ~ 'H',
       Result = str_detect(Result, 'H412') ~ 'M',
       Result = str_detect(Result, 'H413') ~ 'L'
-
     )) %>%
     filter(!is.na(Chronic_Aquatic_Toxicity)) %>%
     arrange(compound, factor(Chronic_Aquatic_Toxicity, levels = c('VH', 'H','M','L'))) %>%
@@ -663,12 +639,17 @@ rm(df_length)
       Chronic_Aquatic_Toxicity == 'L' ~ 10,
     ))
 
-  hcd_chron_aqua <- bind_rows(hcd_chron_aqua, chron_ghs) %>%
+  h_list$chron_aqua <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('haz','ghs'))) %>%
     distinct(compound, .keep_all = T) %>%
+    select(-source) %>%
     mutate(chronic_aq_amount = -log10(chronic_aq_amount)+10)
+
+  e_list <- list()
 
   cat(green('\nChronic aquatic search complete!'))
 }
+
 
 #Other----
 ###Ignition----
@@ -761,18 +742,17 @@ e_list <- list()
 ###Safety----
 
 
+
+
 #Fate and transport----
 
 ####Persistence----
 {
-  hcd_persist <- f %>%
+  e_list$f <- f %>%
     dplyr::filter(endpointName == 'Biodeg. Half-Life') %>%
-    dplyr::select(dtxsid, endpointName, resultValue, unit, modelSource, valueType) %>%
     arrange(dtxsid,
-            desc(resultValue),
-            factor(endpointName, levels = c('experimental',
-                                            'predicted'))
-    ) %>%
+            factor(valueType, levels = c('experimental',
+                                            'predicted'))) %>%
     distinct(dtxsid, .keep_all = T) %>%
     select(dtxsid, resultValue) %>%
     mutate('Persistence' = case_when(
@@ -783,9 +763,11 @@ e_list <- list()
     )) %>%
     rename(compound = dtxsid, persistance_amount = resultValue)
 
-  r <- reach %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(reason, '\\#PBT|\\#vPvB')) %>%
+  e_list$r <- reach %>%
+    filter(`CAS No.` %in% d$casrn) %>%
+    filter(str_detect(`Reason for inclusion`, '\\#PBT|\\#vPvB')) %>%
+    rename(reason = `Reason for inclusion`) %>%
+    left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
     select(dtxsid, reason) %>%
     group_by(dtxsid) %>%
     transmute(Persistence = case_when(
@@ -793,46 +775,49 @@ e_list <- list()
       str_detect(reason, '57d') ~ 'H' #PBT
     )) %>%
     mutate(persistance_amount = case_when(
-      Persistence == 'VH' ~ 180, #median value from dict table
-      Persistence == 'H' ~ 120
+      Persistence == 'VH' ~ 180,
+      Persistence == 'H' ~ 120 #median value from dict table
     )) %>%
     rename(compound = dtxsid)
 
-  hcd_persist <- bind_rows(hcd_persist, r) %>%
-    arrange(compound,desc(persistance_amount)) %>%
-    distinct(compound, .keep_all = T)
+  h_list$pers <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('f','r'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    select(-source)
+
+  e_list <- list()
+
 }
 ####Bioaccumulation----
 {
-  hcd_bac <- f %>%
+  e_list$f <- f %>%
     dplyr::filter(endpointName == 'Bioconcentration Factor' | endpointName == 'Bioaccumulation Factor') %>%
-    dplyr::select(dtxsid, endpointName, resultValue, unit, modelSource, valueType) %>%
     filter(!is.na(resultValue)) %>%
+    dplyr::select(dtxsid, endpointName, resultValue, unit, modelSource, valueType) %>% #TODO Account for ECOTOX that has max/min values
     arrange(dtxsid,
             desc(resultValue),
-            factor(endpointName, levels = c('Bioaccumulation Factor',
-                                            'Bioconcentration Factor')),
             factor(endpointName, levels = c('experimental',
-                                            'predicted'))
-    ) %>%
+                                            'predicted')),
+            factor(endpointName, levels = c('Bioaccumulation Factor',
+                                            'Bioconcentration Factor'))
+            ) %>%
     distinct(dtxsid, .keep_all = T) %>%
     group_by(dtxsid) %>%
     summarize(bac_amount = log10(resultValue)) %>%
     mutate('Bioaccumulation' = case_when(
-
-      (bac_amount) > 3.7 ~ 'VH',
-      (bac_amount >= 3 & bac_amount <= 3.7)  ~ 'H',
-      (bac_amount >= 2 & bac_amount < 3)  ~ 'M',
-      (bac_amount) < 2 ~ 'L',
-
-    ))%>%
+      bac_amount > 3.7 ~ 'VH',
+      bac_amount <= 3.7 & bac_amount > 3  ~ 'H',
+      bac_amount >= 3 & bac_amount < 2 ~ 'M',
+      bac_amount <= 2 ~ 'L')) %>%
     rename(compound = dtxsid)
 
-  r <- reach %>%
-    filter(dtxsid %in% dtx_list) %>%
-    filter(str_detect(reason, '\\#PBT|\\#vPvB')) %>%
-    select(dtxsid, reason) %>%
-    group_by(dtxsid) %>%
+ e_list$r <- e_list$r <- reach %>%
+   filter(`CAS No.` %in% d$casrn) %>%
+   filter(str_detect(`Reason for inclusion`, '\\#PBT|\\#vPvB')) %>%
+   rename(reason = `Reason for inclusion`) %>%
+   left_join(., select(d, casrn, dtxsid), by = c(`CAS No.` = 'casrn')) %>%
+   select(dtxsid, reason) %>%
+   group_by(dtxsid) %>%
     transmute(Bioaccumulation = case_when(
       str_detect(reason, '57e') ~ 'VH', #vPvB
       str_detect(reason, '57d') ~ 'H' #PBT
@@ -843,91 +828,34 @@ e_list <- list()
     )) %>%
     rename(compound = dtxsid)
 
-  #####BAC TEST----
-
-  test <- t %>%
-    filter(compound %ni% hcd_bac$compound) %>%
+  e_list$test <- t %>%
     filter(endpoint == 'BCF') %>%
     group_by(compound) %>%
-    summarize(bac_amount = as.numeric(predValMolarLog)) %>%
+    select(method, compound, predValMass, expValMass) %>%
+    pivot_longer(cols = predValMass:expValMass, names_to = 'model', values_to = 'bac_amount', values_drop_na = TRUE) %>%
+    arrange(factor(model, levels = c('expValMass', 'predValMass')),
+            factor(method, levels = c('consensus','hc','sm','gc','nn'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    summarize(bac_amount = as.numeric(bac_amount)) %>%
     mutate('Bioaccumulation' = case_when(
-
       (bac_amount) > 3.7 ~ 'VH',
       (bac_amount >= 3 & bac_amount <= 3.7)  ~ 'H',
       (bac_amount >= 2 & bac_amount < 3)  ~ 'M',
-      (bac_amount) < 2 ~ 'L',
+      (bac_amount) < 2 ~ 'L'))
 
-    ))
+  h_list$bio <- map_dfr(e_list, as_tibble, .id = 'source') %>%
+    arrange(factor(source, levels = c('f','r','test'))) %>%
+    distinct(compound, .keep_all = T) %>%
+    select(-source) %>%
+    mutate(bac_amount = 10^bac_amount)
 
-  hcd_bac <- bind_rows(hcd_bac, test, r) %>%
-    distinct(compound, .keep_all = T)
+    cat(green('\nBioconcentration factor search complete!'))
 
-  cat(green('\nBioconcentration factor search complete!'))
+    e_list <- list()
 }
 
-####Exposure----
-#   hcd_expo <- hcd_data$expo_pred %>%
-#     dplyr::filter(demographic == 'Total' & predictor == 'SEEM3 Consensus') %>%
-#     group_by(dtxsid)
-#
-#   hcd_expo$median <- as.numeric(hcd_expo$median)
-#
-#   hcd_expo <- hcd_expo %>%
-#     summarize(perc = min(median)) %>%
-#     mutate('Exposure'  = case_when(
-#
-#       (perc <= 1e-4) ~ 'L',
-#       (perc > 1e-4 & perc < 1e-3) ~ 'M',
-#       (perc > 1e-3 & perc < 1) ~ 'H',
-#       (perc >= 1) ~ 'VH',
-#
-#     )) %>%
-#     rename(median_expo_amount = perc, compound = dtxsid)
-#
 ##Joining----
 
-hcd_summary <- left_join(hcd_summary, hcd_oral, by = c('Compound' = 'compound'))
-cat('\nOral joined')
+hc_list <- map_dfr(h_list, as_tibble)
 
-hcd_summary <- left_join(hcd_summary, hcd_dermal, by = c('Compound' = 'compound'))
-cat('\nDermal joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_inhalation, by = c('Compound' = 'compound'))
-cat('\nInhalation joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_cancer, by = c('Compound' = 'compound'))
-cat('\nCancer joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_geno, by = c('Compound' = 'compound'))
-cat('\nGeno joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_endo, by = c('Compound' = 'compound'))
-cat('\nEndo joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_repro, by = c('Compound' = 'compound'))
-cat('\nRepro joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_develop, by = c('Compound' = 'compound'))
-cat('\nDevelop joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_acute_aqua, by = c('Compound' = 'compound'))
-cat('\nAcute Aq joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_chron_aqua, by = c('Compound' = 'compound'))
-cat('\nChron aq joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_persist, by = c('Compound' = 'compound'))
-cat('\nPersist joined')
-
-hcd_summary <- left_join(hcd_summary, hcd_bac, by = c('Compound' = 'compound'))
-cat('\nBAC joined')
-
-# hcd_summary <- left_join(hcd_summary, hcd_expo, by = c('Compound' = 'compound'))
-
-# DEBUG
-hcd_summary_bin <- hcd_summary
-
-hcd_summary_bin <- left_join(hcd_summary_bin, dsstox, by = c('Compound'='dtxsid'))
-cat('\nNames joined')
-
-hcd_summary_bin <- relocate(hcd_summary_bin, casrn, preferredName, .after = Compound)
+hc_summary <- left_join(hc_summary, hc_list, by = c('Compound' = 'compound'))
