@@ -1,7 +1,3 @@
-query_raw <- ct_list('CWA311HS') %>% select(dtxsid)
-query <- query_raw %>% slice_sample(n = 25) %>% split(., seq(nrow(.))) %>% flatten()
-
-
 hcd_toxpi_table <- function(hcd_tbl, filter_score = NA){
 
   #data coverage score
