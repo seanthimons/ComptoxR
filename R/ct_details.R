@@ -2,13 +2,12 @@
 #'
 #'
 #' @param dtxsid A single DTXSID (in quotes) or a list to be queried
-#' @param projection Subsets the returned dataframe based on desired provided results. Defaults to `chemicaldetailstandard`.
 #' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
 #' @return Returns a tibble with results
 #' @export
 
-ct_details <- function(query, projection = c('chemicaldetailall','chemicaldetailstandard','chemicalidentifier', 'chemicalstructure','ntatoolkit'), server = 1, ccte_api_key = NULL){
+ct_details <- function(query, server = 1, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -28,9 +27,7 @@ ct_details <- function(query, projection = c('chemicaldetailall','chemicaldetail
   cat("Searching for compound details....\n")
   surl <- "chemical/detail/search/by-dtxsid/"
 
-  if(identical(projection, c('chemicaldetailall','chemicaldetailstandard','chemicalidentifier', 'chemicalstructure','ntatoolkit'))){proj <- 'chemicaldetailstandard'}else{proj <- projection}
-
-  urls <- paste0(burl, surl, query,'?projection=',proj)
+  urls <- paste0(burl, surl, query)
 
   df <- map_dfr(urls, ~{
 

@@ -37,8 +37,7 @@ ct_list <- function(list_name, server = 1, ccte_api_key = NULL){
 
   df <- map_dfr(urls, ~{
 
-    #debug
-    cat(.x,'\n')
+    #cat(.x,'\n')
 
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
