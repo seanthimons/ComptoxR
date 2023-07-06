@@ -4,10 +4,10 @@
 \alias{hc_table}
 \title{Create the Hazard Comparison maxtrix.}
 \usage{
-hc_table(dtx_list)
+hc_table(query)
 }
 \arguments{
-\item{dtx_list}{Takes a list of compounds using DTXSIDs}
+\item{query}{Takes a list of compounds using DTXSIDs}
 }
 \value{
 a tibble of results
