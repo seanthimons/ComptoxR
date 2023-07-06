@@ -1,4 +1,3 @@
-
 #' Create the Hazard Comparison maxtrix.
 #'
 #'
@@ -11,12 +10,13 @@
 #' present.
 #'
 #'
-#' @param dtx_list Takes a list of compounds using DTXSIDs
+#' @param query Takes a list of compounds using DTXSIDs
 #'
 #' @return a tibble of results
 #' @export
 
-hc_table <- function(dtx_list){
+hc_table <- function(query){
+
 
   {
     q <- ct_hazard(query)
@@ -864,8 +864,7 @@ hc_table <- function(dtx_list){
 
   ##Joining----
   hc_summary <- reduce(h_list, left_join)
-
-  cat(red('\nTable made!\n'))
+  cat(red('\nTable made!'))
 
   return(hc_summary)
 
