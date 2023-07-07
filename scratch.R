@@ -36,7 +36,7 @@ bias <- bias %>%
   pivot_wider(names_from = endpoint,
               values_from = weight)
 
-tp_names <- tp_scores2[,1]
+tp_names <- tp_scores2[,ID]
 
 tp_scores2 <- data.frame(mapply('*',tp_scores2[,2:ncol(tp_scores2)], bias))
 
@@ -45,6 +45,3 @@ tp_scores2 <- cbind(tp_names, tp_scores2)
 tp_scores3 <- tp_scores2 %>%
   rowwise() %>%
   mutate(score = sum(c_across(cols = !contains(ID))))
-
-
-

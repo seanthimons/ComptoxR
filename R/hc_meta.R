@@ -63,7 +63,7 @@ hc_endpoint_coverage <- function(table, ID = NA, suffix = NA, filter = NA){
   }
 
     #debug
-    print(endpoint_score)
+    #print(endpoint_score)
 
     endpoint_filt_weight <- endpoint_score %>%
     filter(score >= filt_score) %>%
