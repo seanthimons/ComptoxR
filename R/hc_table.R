@@ -863,8 +863,9 @@ hc_table <- function(query){
   }
 
   ##Joining----
+  cat('\n')
   hc_summary <- reduce(h_list, left_join)
-  cat(red('\nTable made!'))
+  cat(red('\nTable made!\n'))
 
   return(hc_summary)
 

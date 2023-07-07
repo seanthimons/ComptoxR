@@ -76,7 +76,3 @@ tp_combined_score <- function(hc_table){
     mutate(toxpi_score = sum(c_across(cols = !contains('compound'))))
   return(tp_scores)
 }
-
-timestamp <- paste(Sys.Date(),as.integer(Sys.time()), sep = '_')
-
-
