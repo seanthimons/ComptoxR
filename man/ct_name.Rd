@@ -7,7 +7,6 @@
 ct_name(
   query,
   param = c("start-with", "equal", "contain"),
-  server = 1,
   ccte_api_key = NULL
 )
 }
@@ -15,8 +14,6 @@ ct_name(
 \item{query}{A single query (in quotes) or a list to be queried. Currently accepts DTXSIDs, CASRNs, URL encoded chemical names, and matches of InChIKey}
 
 \item{param}{A list of options to search by, default option is to use all options which will result in a long search query.}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

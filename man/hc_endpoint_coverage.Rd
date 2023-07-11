@@ -4,10 +4,10 @@
 \alias{hc_endpoint_coverage}
 \title{Per endpoint - compound availability scoring}
 \usage{
-hc_endpoint_coverage(hc_table, filter = NA)
+hc_endpoint_coverage(table, ID = NA, suffix = NA, filter = NA)
 }
 \arguments{
-\item{hc_table}{Takes a the result of a \code{hc_table()} function and returns a table of scores (0-1) on the amount of compounds by percent each endpoint has.}
+\item{table}{Takes a the result of a \code{hc_table()} function and returns a table of scores (0-1) on the amount of compounds by percent each endpoint has.}
 
 \item{filter}{A number(0-1) to cut off endpoint by for weighing. By default, sets to 0.5.}
 }

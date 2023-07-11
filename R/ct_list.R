@@ -3,12 +3,11 @@
 #' Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.
 #'
 #' @param list_name Search parameter
-#' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble with results
 #' @export
-ct_list <- function(list_name, server = 1, ccte_api_key = NULL){
+ct_list <- function(list_name,  ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -16,17 +15,7 @@ ct_list <- function(list_name, server = 1, ccte_api_key = NULL){
   #Takes single list name for searching
 
 
-  {
-    #Switch for server URLS
-
-    if(server == 1){
-      burl <- 'https://api-ccte.epa.gov/'
-      cat(green('Public API selected!\n'))
-    }else{
-      burl <- 'https://api-ccte-stg.epa.gov/'
-      cat(red('Staging API selected!\n'))
-    }
-  }
+  burl <- Sys.getenv('burl')
 
 
   cat('\nSearching for compounds on', list_name,'list ...\n')
@@ -51,29 +40,18 @@ ct_list <- function(list_name, server = 1, ccte_api_key = NULL){
 #' Returns all public lists that contain a queried compound
 #'
 #' @param query A DTXSID to search by.
-#' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble with results
 #' @export
 
-ct_compound_in_list <- function(query, server = 1, ccte_api_key = NULL){
+ct_compound_in_list <- function(query, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  {
-    #Switch for server URLS
-
-    if(server == 1){
-      burl <- 'https://api-ccte.epa.gov/'
-      cat(green('Public API selected!\n'))
-    }else{
-      burl <- 'https://api-ccte-stg.epa.gov/'
-      cat(red('Staging API selected!\n'))
-    }
-  }
+  burl <- Sys.getenv('burl')
 
   cat('\nSearching for lists that contain', query,'...\n')
 
@@ -97,28 +75,18 @@ ct_compound_in_list <- function(query, server = 1, ccte_api_key = NULL){
 #'
 #' This function has no parameters to search by.
 #'
-#' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble of results
 #' @export
 
-ct_lists_all <- function(server = 1, ccte_api_key = NULL){
+ct_lists_all <- function(ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  {
-    #Switch for server URLS
-    if(server == 1){
-      burl <- 'https://api-ccte.epa.gov/'
-      cat(green('Public API selected!\n'))
-    }else{
-      burl <- 'https://api-ccte-stg.epa.gov/'
-      cat(red('Staging API selected!\n'))
-    }
-  }
+  burl <- Sys.getenv('burl')
 
   cat('\nGrabbing all public lists...\n')
 

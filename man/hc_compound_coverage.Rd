@@ -4,10 +4,10 @@
 \alias{hc_compound_coverage}
 \title{Per compound data availability scoring}
 \usage{
-hc_compound_coverage(hc_table)
+hc_compound_coverage(table, suffix = NA)
 }
 \arguments{
-\item{hc_table}{Takes a the result of a \code{hc_table()} function and returns a table of scores (0-1) on the amount of columns by percent each compound has.}
+\item{suffix}{}
 }
 \value{
 A tibble of results

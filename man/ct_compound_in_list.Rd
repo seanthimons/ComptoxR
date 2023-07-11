@@ -4,12 +4,10 @@
 \alias{ct_compound_in_list}
 \title{Returns all public lists that contain a queried compound}
 \usage{
-ct_compound_in_list(query, server = 1, ccte_api_key = NULL)
+ct_compound_in_list(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A DTXSID to search by.}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

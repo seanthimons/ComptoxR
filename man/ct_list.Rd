@@ -4,12 +4,10 @@
 \alias{ct_list}
 \title{Returns all compounds on a given list}
 \usage{
-ct_list(list_name, server = 1, ccte_api_key = NULL)
+ct_list(list_name, ccte_api_key = NULL)
 }
 \arguments{
 \item{list_name}{Search parameter}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

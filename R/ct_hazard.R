@@ -7,22 +7,13 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_hazard <- function(query, server = 1, ccte_api_key = NULL){
+ct_hazard <- function(query, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
-  {
-    #Switch for server URLS
 
-    if(server == 1){
-      burl <- 'https://api-ccte.epa.gov/'
-      cat(green('Public API selected!\n'))
-    }else{
-      burl <- 'https://api-ccte-stg.epa.gov/'
-      cat(red('Staging API selected!\n'))
-    }
-  }
+  burl <- Sys.getenv('burl')
 
   cat("\nSearching for hazard data....\n")
   surl <- "hazard/search/by-dtxsid/"

@@ -15,7 +15,7 @@ tp_single_score <- function(x, min_fill = T){
 
 #' Title
 
-#' @param df Dataframe to analyze.
+#' @param df Data frame to analyze.
 #' @param ID ID column to ignore. Must be present to continue calculation
 #' @param ... Variable to pass in min_fill argument
 #'
@@ -25,7 +25,9 @@ tp_single_score <- function(x, min_fill = T){
 tp_combined_score <- function(df, ID = NA, bias = NA, ...){
 
   if(is.na(ID) == T){
-    cat('\nPlease specify ID column!')}
+    cat('\nPlease specify ID column!')
+
+    }
   else{
     if(is.na(bias) == T){
       #TODO make generic bias table?
