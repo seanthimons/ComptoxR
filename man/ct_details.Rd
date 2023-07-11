@@ -4,11 +4,9 @@
 \alias{ct_details}
 \title{Retrieve compound details by DTXSID}
 \usage{
-ct_details(query, server = 1, ccte_api_key = NULL)
+ct_details(query, ccte_api_key = NULL)
 }
 \arguments{
-\item{server}{Defaults to public API, private requires USEPA VPN}
-
 \item{ccte_api_key}{Checks for API key in Sys env}
 
 \item{dtxsid}{A single DTXSID (in quotes) or a list to be queried}

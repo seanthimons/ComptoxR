@@ -4,12 +4,10 @@
 \alias{ct_skin_eye}
 \title{Retrieves known hazard and risk characterizations by DTXSID for skin and eye endpoints.}
 \usage{
-ct_skin_eye(query, server = 1, ccte_api_key = NULL)
+ct_skin_eye(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

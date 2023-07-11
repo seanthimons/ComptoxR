@@ -4,12 +4,17 @@
 \alias{tp_single_score}
 \title{Title}
 \usage{
-tp_single_score(x)
+tp_single_score(x, min_fill = T)
 
-tp_single_score(x)
+tp_single_score(x, min_fill = T)
 }
 \arguments{
-\item{x}{Takes a single column for calculation a normalizatin score}
+\item{x}{Takes a single column for calculation a normalization score}
+
+\item{min_fill}{Boolean variable for adding in 50\% to lowest non-zero score. Defaults to \code{TRUE}}
+}
+\value{
+A vector
 }
 \description{
 Title

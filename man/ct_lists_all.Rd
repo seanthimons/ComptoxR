@@ -4,11 +4,9 @@
 \alias{ct_lists_all}
 \title{Grabs all public lists}
 \usage{
-ct_lists_all(server = 1, ccte_api_key = NULL)
+ct_lists_all(ccte_api_key = NULL)
 }
 \arguments{
-\item{server}{Defaults to public API, private requires USEPA VPN}
-
 \item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{

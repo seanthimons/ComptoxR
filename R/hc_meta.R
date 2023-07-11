@@ -38,13 +38,19 @@ hc_compound_coverage <- function(table, suffix = NA){
 #'
 #' @param table Takes a the result of a `hc_table()` function and returns a table of scores (0-1) on the amount of compounds by percent each endpoint has.
 #' @param filter A number(0-1) to cut off endpoint by for weighing. By default, sets to 0.5.
+#' @param ID
+#' @param suffix
 #'
 #' @return A tibble of results
 #' @export
 
 hc_endpoint_coverage <- function(table, ID = NA, suffix = NA, filter = NA){
 
-  if(is.na(filter) == T){filt_score = 0.5}else(filt_score <- filter)
+  if(is.na(filter) == T){
+    filt_score = 0.5
+    cat('\nDefaulting to 0.5 weight!\n')
+
+    }else(filt_score <- filter)
   if(is.na(suffix) == T){
     endpoint_score <- table %>%
     select(!c(ID)) %>%

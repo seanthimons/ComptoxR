@@ -11,6 +11,7 @@ test <- tribble(
 ####
 #tp <- tp[, which((names(tp) %in% endpoint_filt_weight$endpoint) == TRUE)]
 
+bias <- hc_endpoint_coverage(test, ID = 'compound', filter = 0.1)
 
 ID <- 'compound'
 tp <- test %>% select(c(ID,bias$endpoint))
@@ -38,7 +39,7 @@ bias <- bias %>%
 
 tp_names <- tp_scores2[,ID]
 
-tp_scores2 <- data.frame(mapply('*',tp_scores2[,2:ncol(tp_scores2)], bias))
+tp_scores2 <- data.frame(mapply('*',tp_scores2[,2:ncol(tp_scores2)], bias)) %>% as_tibble()
 
 tp_scores2 <- cbind(tp_names, tp_scores2)
 
