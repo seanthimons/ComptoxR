@@ -4,14 +4,12 @@
 \alias{ct_cancer}
 \title{Retrieves cancer-related hazard and risk values for a give DTXSID}
 \usage{
-ct_cancer(x, server = 1, ccte_api_key = NULL)
+ct_cancer(query, ccte_api_key = NULL)
 }
 \arguments{
-\item{server}{Defaults to public API, private requires USEPA VPN}
+\item{query}{A single DTXSID (in quotes) or a list to be queried}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
 }
 \value{
 Returns a tibble with results

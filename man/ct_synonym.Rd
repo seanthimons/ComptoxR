@@ -4,12 +4,10 @@
 \alias{ct_synonym}
 \title{Searches for listed synonyms by DTXSID}
 \usage{
-ct_synonym(query, server = 1, ccte_api_key = NULL)
+ct_synonym(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single string (in quotes) or a list of strings to be queried.}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

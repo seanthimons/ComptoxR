@@ -4,14 +4,21 @@
 \alias{tp_combined_score}
 \title{Title}
 \usage{
-tp_combined_score(x, ID = NA)
+tp_combined_score(df, ID = NA, bias = NA, ...)
 
-tp_combined_score(x, ID = NA)
+tp_combined_score(df, ID = NA, bias = NA, ...)
 }
 \arguments{
-\item{x}{}
+\item{df}{Dataframe to analyze.}
+
+\item{ID}{ID column to ignore. Must be present to continue calculation}
+
+\item{...}{Variable to pass in min_fill argument}
 
 \item{hc_table}{}
+}
+\value{
+A tibble of results
 }
 \description{
 Title

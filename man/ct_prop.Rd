@@ -4,12 +4,10 @@
 \alias{ct_prop}
 \title{Retrieves compound physio-chem properties by DTXSID}
 \usage{
-ct_prop(query, server = 1, ccte_api_key = NULL)
+ct_prop(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{server}{Defaults to public API, private requires USEPA VPN}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

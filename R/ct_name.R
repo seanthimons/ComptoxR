@@ -2,7 +2,6 @@
 #'
 #' @param query A single query (in quotes) or a list to be queried. Currently accepts DTXSIDs, CASRNs, URL encoded chemical names, and matches of InChIKey
 #' @param param A list of options to search by, default option is to use all options which will result in a long search query.
-#' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble with results
@@ -11,22 +10,13 @@ ct_name <- function(query,
                     param = c('start-with',
                               'equal',
                               'contain'),
-                    server = 1,
+
                     ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
-  {
-    #Switch for server URLS
-    if(server == 1){
-      burl <- 'https://api-ccte.epa.gov/'
-      cat(green('Public API selected!\n'))
-    }else{
-      burl <- 'https://api-ccte-stg.epa.gov/'
-      cat(red('Staging API selected!\n'))
-    }
-  }
+  burl <- Sys.getenv('burl')
 
   if(identical(c('start-with',
                  'equal',
