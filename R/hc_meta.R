@@ -48,7 +48,7 @@ hc_endpoint_coverage <- function(table, ID = NA, suffix = NA, filter = NA){
 
   if(is.na(filter) == T){
     filt_score = 0.5
-    cat('\nDefaulting to 0.5 weight!\n')
+    cat('\nDefaulting to 0.5% score for cutoff!\n')
 
     }else(filt_score <- filter)
   if(is.na(suffix) == T){
@@ -76,11 +76,4 @@ hc_endpoint_coverage <- function(table, ID = NA, suffix = NA, filter = NA){
     mutate(weight = 1)
 
   return(endpoint_filt_weight)
-}
-
-hc_bias <- function(table, bias){
-
-
-
-
 }
