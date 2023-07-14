@@ -9,6 +9,8 @@ hc_endpoint_coverage(table, ID = NA, suffix = NA, filter = NA)
 \arguments{
 \item{table}{Takes a the result of a \code{hc_table()} function and returns a table of scores (0-1) on the amount of compounds by percent each endpoint has.}
 
+\item{suffix}{}
+
 \item{filter}{A number(0-1) to cut off endpoint by for weighing. By default, sets to 0.5.}
 }
 \value{

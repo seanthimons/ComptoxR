@@ -1,48 +1,109 @@
 test <- tribble(
-~compound,~oral_amount,~dermal_amount,~bac_amount,~cancer_amount,
-'A',5,5,180,13,
-'B', 10, 1,60,12,
-'C',15,20,360,NA,
-'D', NA, NA, NA,NA,
-'E',1,1,NA,NA,
-'F',2,2,NA,NA
+~compound,~oral_amount,~dermal_amount,~bac_amount,~cancer_amount,~persist_amount,
+'A',5,5,180,13,1,
+'B', 10, 1,60,12,1,
+'C',15,20,360,NA,1,
+'D', 0, NA, NA,NA,1,
+'E',1,1,NA,NA,1,
+'F',2,2,NA,NA,1
 )
 
-####
-#tp <- tp[, which((names(tp) %in% endpoint_filt_weight$endpoint) == TRUE)]
+test <- ct_list(list_name = 'CWA311HS')
 
-bias <- hc_endpoint_coverage(test, ID = 'compound', filter = 0.1)
+t1 <- test %>% mutate(toxcastSelect = activeAssays/totalAssays) %>% arrange(desc(toxcastSelect))
 
-ID <- 'compound'
-tp <- test %>% select(c(ID,bias$endpoint))
+test <- t1 %>% slice_head( n= 25)
 
-tp_scores <- tp %>%
-  mutate(across(where(is.numeric),
-                ~ if(sd(na.omit(.)) == 0)
-                {ifelse(is.na(.), NA, 1)}
-                else {tp_single_score(.) %>%
-                    round(digits = 3)
-                }))
+t1 <- hc_table(test$dtxsid)
 
-tp_scores2 <- tp_scores %>%
-  mutate(across(where(is.numeric), ~ {
-    min_val <- min(.[-which(. == 0)], na.rm = T)
-    replace(., . == 0, 0.5 * min_val)
-  })) %>%
-  mutate(across(where(is.numeric), ~replace_na(.,0)))
+ct_test <- function(query){
+
+try()
+
+  df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
+
+  #Removes bad/ no SMILES compounds
+  cat('Removing bad/ no SMILES compounds\n')
+  df <- df_pre %>% filter(!is.na(qsarReadySmiles))
+  cat('\nDropped',nrow(df_pre)-nrow(df),'compounds.\n')
+
+  #Converts symbols
+  cat('\nConverting SMILES strings\n')
+  for (i in 1:length(df$qsarReadySmiles)) {
+    df$qsarReadySmiles[i] <-
+      str_replace_all(df$qsarReadySmiles[i],'\\[', '%5B') %>%
+      str_replace_all(., '\\]', '%5D') %>%
+      str_replace_all(., '\\@', '%40') %>%
+      str_replace_all(., '\\=', '%3D') %>%
+      str_replace_all(., '\\.', '%2E') %>%
+      str_replace_all(., '\\+', '%2B') %>%
+      str_replace_all(., '\\-', '%2D') %>%
+      str_replace_all(., '\\#', '%23')
+  }
 
 
-bias <- bias %>%
-  select(endpoint, weight) %>%
-  pivot_wider(names_from = endpoint,
-              values_from = weight)
+  url <- 'https://comptox.epa.gov/dashboard/web-test/'
 
-tp_names <- tp_scores2[,ID]
+  endpoints <- list('LC50', #96 hour fathead minnow
+                    'LC50DM', #48 hour D. magna
+                    'IGC50', #48 hour T. pyriformis
+                    'LD50', #Oral rat
+                    'BCF', #Bioconcentration factor
+                    'DevTox', #Developmental toxicity
+                    'ER_LogRBA', #Estrogen Receptor RBA
+                    'ER_Binary', #Estrogen Receptor Binding
+                    'Mutagenicity', #Ames mutagenicity
+                    'BP', #Normal boiling point,
+                    'FP' #Flashpoint
 
-tp_scores2 <- data.frame(mapply('*',tp_scores2[,2:ncol(tp_scores2)], bias)) %>% as_tibble()
+  )
 
-tp_scores2 <- cbind(tp_names, tp_scores2)
+  grid <- expand.grid(endpoints, df$qsarReadySmiles) %>% rename(end = Var1, sm = Var2)
 
-tp_scores3 <- tp_scores2 %>%
-  rowwise() %>%
-  mutate(score = sum(c_across(cols = !contains(ID))))
+  urls <- paste0(url, grid$e,'?smiles=', grid$sm)
+
+  #cat('\n', urls, '\n') #debug
+  cat('Sending T.E.S.T request\n')
+
+  df <- map_dfr(urls, ~{
+    #debug
+    cat(.x,'\n')
+    response <- VERB("GET", url = .x)
+    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
+  })
+
+  if('predictions' %in% colnames(df)){
+    df <- df %>%
+      unnest(cols = predictions, names_repair = 'universal') %>%
+      filter(is.na(errorCode)) %>%
+      filter(!is.na(preferredName)) %>%
+      select(molarLogUnits:preferredName,
+             predValMolarLog:predValMass,
+             expValMolarLog:expActive) %>%
+      filter(!is.na(predValMass) | !is.na(message)) %>%
+      arrange(dtxsid,
+              factor(endpoint,levels = endpoints),
+              factor(method, levels = c('consensus','hc','sm','gc','nn'))
+      ) %>%
+      distinct(endpoint, dtxsid, .keep_all = T) %>%
+      rename(compound = dtxsid)
+  }else{df}
+
+  cat(green('\nT.E.S.T. request complete!\n'))
+
+  return(df)
+}
+
+
+##############
+
+try(
+
+  'https://comptox.epa.gov/dashboard/web-test/'
+  response <- VERB("GET", url = .x)
+  df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
+  )
+
+class(try())
+
+if(class(try)){}

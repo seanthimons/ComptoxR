@@ -113,7 +113,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nOral search complete!'))
+    cat(green('\nOral search complete!\n'))
   }
   ####Dermal----
   {
@@ -159,7 +159,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nDermal search complete!'))
+    cat(green('\nDermal search complete!\n'))
   }
   ####Inhalation----
   {
@@ -208,7 +208,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nInhalation search complete!'))
+    cat(green('\nInhalation search complete!\n'))
   }
   ####Cancer----
   {
@@ -271,7 +271,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nCancer search complete!'))
+    cat(green('\nCancer search complete!\n'))
   }
 
   ####Genotoxic----
@@ -346,7 +346,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nMutagenic search complete!'))
+    cat(green('\nMutagenic search complete!\n'))
 
   }
   ####Endocrine-----
@@ -389,7 +389,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nEndocrine disruptor search complete!'))
+    cat(green('\nEndocrine disruptor search complete!\n'))
 
 
   }
@@ -462,7 +462,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nReproductive search complete!'))
+    cat(green('\nReproductive search complete!\n'))
   }
 
   ####Developmental----
@@ -536,7 +536,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nDevelopmental search complete!'))
+    cat(green('\nDevelopmental search complete!\n'))
   }
 
   ##Ecotox----
@@ -604,7 +604,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nAcute aquatic search complete!'))
+    cat(green('\nAcute aquatic search complete!\n'))
   }
   ####Chronic Aquatic Toxicity----
   {
@@ -656,7 +656,7 @@ hc_table <- function(query){
 
     e_list <- list()
 
-    cat(green('\nChronic aquatic search complete!'))
+    cat(green('\nChronic aquatic search complete!\n'))
   }
 
 
@@ -857,7 +857,7 @@ hc_table <- function(query){
       select(-source) %>%
       mutate(bac_amount = 10^bac_amount)
 
-    cat(green('\nBioconcentration factor search complete!'))
+    cat(green('\nBioconcentration factor search complete!\n'))
 
     e_list <- list()
   }
