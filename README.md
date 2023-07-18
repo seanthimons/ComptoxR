@@ -2,7 +2,7 @@
 
 # Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
 
-## Version 0.0.0
+## Version 1.0.0
 
 ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemicals is also included.
 
