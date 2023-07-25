@@ -2,15 +2,19 @@
 % Please edit documentation in R/hc_table.R
 \name{hc_table}
 \alias{hc_table}
-\title{Create the Hazard Comparison maxtrix.}
+\title{Create the Hazard Comparison matrix.}
 \usage{
-hc_table(query)
+hc_table(query, archive = FALSE, save = TRUE)
 }
 \arguments{
 \item{query}{Takes a list of compounds using DTXSIDs}
+
+\item{archive}{Boolean value to use archived data from a previous run to recreate table. Defaults to \code{FALSE}. File will be prefixed with \code{search_data_} and a date-time suffix.}
+
+\item{save}{Boolean value to save searched data. Highly recommended to be enabled. File will be prefixed with \code{search_data_} and a date-time suffix.}
 }
 \value{
-a tibble of results
+A tibble of results
 }
 \description{
 This involves calling several functions

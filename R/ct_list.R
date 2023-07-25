@@ -53,14 +53,14 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL){
 
   burl <- Sys.getenv('burl')
 
-  cat('\nSearching for lists that contain', query,'...\n')
-
   surl <- "chemical/list/search/by-dtxsid/"
   urls <- paste0(burl, surl, query)
 
   df <- map_dfr(urls, ~{
 
-    #debug ####
+  cat('\nSearching for lists that contain', .x,'...\n')
+
+    #debug ###
     cat(.x,'\n')
 
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))

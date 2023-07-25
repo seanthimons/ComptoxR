@@ -14,17 +14,31 @@ subject: API Key Request
 
 ------------------------------------------------------------------------
 
+## Installation
+
+``` r
+library(devtools) 
+```
+
+``` r
+install_github("sxthimons/ComptoxR")
+```
+
 ## Initial Setup
 
 ### Setting API keys
 
 Set API key in Sys Environment to the variable `ccte_api_key`.
 
-Run the `ct_api_key()` function to test to see if the token is being detected.
+```r
+Sys.setenv('ccte_api_key' = [TOKEN HERE])
+```
+
+Run the `ct_api_key()` function to test to see if the token is being detected. A restart of R may be required. 
 
 ### Setting API server paths
 
-The function `comptox_server()` will need to be ran to set the root URL path for the servers. A production server and a staging server (accessed through the EPA VPN) are provided. Setting the `server` argument to `1` will default the System Environment variable `burl` to the public root URL path. This should only need to be done once.
+The function `comptox_server()` will need to be ran to set the root URL path for the servers. A production server and a staging server (only accessed through the EPA VPN) are provided. Setting the `server` argument to `1` will default the System Environment variable `burl` to the public root URL path. This should only need to be done once.
 
 ------------------------------------------------------------------------
 

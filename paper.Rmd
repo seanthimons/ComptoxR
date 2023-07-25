@@ -64,7 +64,7 @@ ECOTOX is covered under the CCD 'umbrella' of databases and is thus covered unde
 
 ##### `toxpiR`
 
-`toxpiR` is a native implementation of the Toxicological Priority Index (ToxPi) prioritization algorithm, and purports to offer more flexiability than the ToxPi GUI.
+`toxpiR` is a native implementation of the Toxicological Priority Index (ToxPi) prioritization algorithm, and purports to offer more flexibility than the ToxPi GUI.
 
 Inherently, the math behind the ToxPi algorithm is not hard to reproduce (a min-max normalization scheme), but the `toxpiR` package utilizes the `R6` reference class and may not be as easily accessible to all users. In comparison, the `tp` function made available through `ComptoxR` takes two data frame objects (a weighing table and a table holding the parent data) and performs the normalization scheme. We also offer the ability to back-fill data gaps with the mean value of a given endpoint (as supported by a meta-analysis [citation]), and provide meta-statitics on the quality of data being analyzed.
 
