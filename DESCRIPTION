@@ -22,5 +22,6 @@ Depends:
     jsonlite (>= 1.8.0),
     purrr (>= 0.3.4),
     magrittr,
+    DT (>= 0.24),
     R (>= 2.10)
 LazyData: true

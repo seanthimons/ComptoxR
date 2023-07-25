@@ -2,6 +2,7 @@
 
 export(comptox_server)
 export(ct_api_key)
+export(ct_archive_load)
 export(ct_cancer)
 export(ct_compound_in_list)
 export(ct_details)

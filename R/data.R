@@ -14,6 +14,11 @@
 #' A tibble of possible choices for GenRA functions.
 'genra_engine'
 
+#` Table of ToxPrint Chemotypes `
+
+
+'toxprint_ID_key'
+
 #' Table of ToxPrint Enrichment table values to build against.
 #'
 #' A tibble of possible Chemotypers Toxprints that have been enriched against in-vitro assay results

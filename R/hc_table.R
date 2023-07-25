@@ -1,5 +1,4 @@
-#' Create the Hazard Comparison maxtrix.
-#'
+#' Create the Hazard Comparison matrix.
 #'
 #' This involves calling several functions
 #' other `ComptoxR` functions and processes the results. Large queries may take
@@ -11,24 +10,70 @@
 #'
 #'
 #' @param query Takes a list of compounds using DTXSIDs
+#' @param archive Boolean value to use archived data from a previous run to recreate table. Defaults to `FALSE`. File will be prefixed with `search_data_` and a date-time suffix.
+#' @param save Boolean value to save searched data. Highly recommended to be enabled. File will be prefixed with `search_data_` and a date-time suffix.
 #'
-#' @return a tibble of results
+#' @return A tibble of results
 #' @export
 
-hc_table <- function(query){
+hc_table <- function(query, archive = FALSE, save = TRUE){
 
 
-  {
-    q <- ct_hazard(query)
-    se <-ct_skin_eye(query)
-    c <- ct_cancer(query)
-    g <- ct_genotox(query)
-    f <- ct_env_fate(query)
-    p <- ct_prop(query)
-    d <- ct_details(query)
-    t <- ct_test(query)
-    ghs <- ct_ghs(query)
-  }
+if (archive == TRUE) {
+  cat('\nAttempting to load from saved data...\n')
+  foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+  if(nrow(foo) == 0){
+    cat('\nNo files found! Are you in the right working directory?\n')
+
+  }else{
+
+    cache <- rownames(foo)[which.max(foo$mtime)]
+    search_data <- readRDS(cache)
+    cat("\nFile loaded:\n", cache, "\n")
+
+    search_data$q -> q
+    search_data$se -> se
+    search_data$c -> c
+    search_data$g -> g
+    search_data$f -> f
+    search_data$p -> p
+    search_data$d -> d
+    search_data$t -> t
+    search_data$ghs -> ghs
+
+    rm(foo, cache, search_data)}
+
+}else{
+  cat('\nStarting search...\n')
+  q <- ct_hazard(query)
+  se <-ct_skin_eye(query)
+  c <- ct_cancer(query)
+  g <- ct_genotox(query)
+  f <- ct_env_fate(query)
+  p <- ct_prop(query)
+  d <- ct_details(query)
+  t <- ct_test(query)
+  ghs <- ct_ghs(query)
+}
+
+if(save == TRUE){
+    search_data <- list()
+    search_data$q <- q
+    search_data$se <- se
+    search_data$c <- c
+    search_data$g <- g
+    search_data$f <- f
+    search_data$p <- p
+    search_data$d <- d
+    search_data$t <- t
+    search_data$ghs <-ghs
+
+    saveRDS(search_data, file = paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'))
+
+    cat('\nSearch data archived: ',paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'),'\n')
+
+
+}
 
   ##Preload----
   #takes a list data frame with hazard data from API and creates comparison tables
@@ -869,4 +914,39 @@ hc_table <- function(query){
 
   return(hc_summary)
 
+}
+
+#' Function to load archived data in the working directory
+#'
+#' Helper function to debug the saved archive files. Also useful if a user would like to drill into the data.
+#'
+#' @return The files
+#' @export
+
+ct_archive_load <- function(){
+  cat('\nAttempting to load from saved data...\n')
+  foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+  if(nrow(foo) == 0){
+    cat('\nNo files found! Are you in the right working directory?\n')
+
+  }else{
+
+    cache <- rownames(foo)[which.max(foo$mtime)]
+    search_data <- readRDS(cache)
+    cat("\nFile loaded:\n", cache, "\n")
+
+
+    search_data$q -> .GlobalEnv$q
+    search_data$se -> .GlobalEnv$se
+    search_data$c -> .GlobalEnv$c
+    search_data$g -> .GlobalEnv$g
+    search_data$f -> .GlobalEnv$f
+    search_data$p -> .GlobalEnv$p
+    search_data$d -> .GlobalEnv$d
+    search_data$t -> .GlobalEnv$t
+    search_data$ghs -> .GlobalEnv$ghs
+    search_data ->.GlobalEnv$search_data
+
+    rm(foo, cache, search_data)
+    }
 }

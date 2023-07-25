@@ -12,9 +12,20 @@ test <- ct_list(list_name = 'CWA311HS')
 
 t1 <- test %>% mutate(toxcastSelect = activeAssays/totalAssays) %>% arrange(desc(toxcastSelect))
 
-test <- t1 %>% slice_head( n= 25)
+test <- t1 %>% slice_head(n= 25)
 
 t1 <- hc_table(test$dtxsid)
+
+
+tbl %>%
+  select('compound', !contains('_amount')) %>%
+  datatable(
+    options = list(
+    columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
+  formatStyle(names(tbl %>% select('compound', !contains('_amount'))),
+    backgroundColor = styleEqual(c('VH', 'H','M','L', NA), c('red', 'orange', 'yellow', 'green', 'light grey')))
+
+
 
 ct_test <- function(query){
 
@@ -107,3 +118,12 @@ try(
 class(try())
 
 if(class(try)){}
+
+
+t5 <- ct_details('DTXSID5025948')
+t5 <- t5 %>% select(descriptorStringTsv)
+t5 <- str_split(t5$descriptorStringTsv, '\t')
+t5 <- set_colnames(t5, 'tp')
+names(t5) <- 'tp'
+t5 <- bind_cols(toxprint_ID_key, t5)
+
