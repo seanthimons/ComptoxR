@@ -70,16 +70,12 @@ ct_test <- function(query){
       unnest(cols = predictions, names_repair = 'universal') %>%
       filter(is.na(errorCode)) %>%
       filter(!is.na(preferredName)) %>%
-      select(molarLogUnits:preferredName,
-             predValMolarLog:predValMass,
-             expValMolarLog:expActive) %>%
       filter(!is.na(predValMass) | !is.na(message)) %>%
       arrange(dtxsid,
-              factor(endpoint,levels = endpoints),
-              factor(method, levels = c('consensus','hc','sm','gc','nn'))
-      ) %>%
-      distinct(endpoint, dtxsid, .keep_all = T) %>%
-    rename(compound = dtxsid)
+              endpoint,
+              factor(method, levels = c('consensus','hc','sm','gc','nn'))) %>%
+    distinct(endpoint, dtxsid, .keep_all = T) %>%
+      rename(compound = dtxsid)
     }else{df}
 
   cat(green('\nT.E.S.T. request complete!\n'))
