@@ -1,3 +1,21 @@
+---
+title: "paper"
+author: "Sean Thimons"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+install.packages()
+library(ComptoxR)
+
+comptox_server(server = 1)
+
+```
+
 
 # ComptoxR: An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening
 
@@ -37,20 +55,7 @@ The GenRA and PubChem APIs and associated functions work to retrieve data, but d
 
 A common, initial step for hazard identification is screening by physio-chemical properties. The 
 
-
-```{r}
-#| label: load-packages
-#| echo: false
-#| include: false
-install.git
-library(ComptoxR)
-
-comptox_server(server = 1)
-```
-
-
-
-```{r}
+```{r Properties search, echo=TRUE}
 #| include: true
 
 ct_prop(query = dtx_list, debug = FALSE)
