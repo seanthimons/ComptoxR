@@ -1,27 +1,38 @@
 Package: ComptoxR
-Title: Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard and Other Products
+Title: Wrappers and Functions for Accessing USEPA CompTox Chemical
+    Dashboard and Other Products
 Version: 1.0.0
 Authors@R: 
-    person("Sean", "Thimons", , "thimons.sean@epa.gov", role = c("aut", "cre"))
-Description: ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included. 
+    person("Sean", "Thimons",
+    email = "thimons.sean@epa.gov",
+    role = c("aut", "cre")
+    )
+Description: ComptoxR is designed to leverage the USEPA CCTE's APIs for
+    accessing the underlying data that makes up the CompTox Chemical
+    Dashboard. It includes functions to access or recreate data from the
+    GenRA, TEST, and Cheminformatics products to inform rapid chemical
+    risk screening. A method of weighing and prioritizing a group of
+    chemical is also included.
 License: `use_mit_license()`, `use_gpl3_license()`
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
 Depends: 
-    webchem (>= 1.2.0),
-    pbapply (>= 1.5),
+    R (>= 3.5.0)
+Imports: 
     crayon (>= 1.5.1),
-    janitor (>= 2.1.0),
-    httr (>= 1.4.3),
-    stringr (>= 1.4.0),
-    pbapply (>= 1.5-0),
     dplyr (>= 1.0.9),
-    tidyr (>= 1.2.0),
-    RJSONIO (>= 1.3-1.8),
-    jsonlite (>= 1.8.0),
-    purrr (>= 0.3.4),
-    magrittr,
     DT (>= 0.24),
-    R (>= 2.10)
+    httr (>= 1.4.3),
+    janitor (>= 2.1.0),
+    jsonlite (>= 1.8.0),
+    magrittr (>= 2.0.3),
+    pbapply (>= 1.5),
+    pillar,
+    purrr (>= 0.3.4),
+    RJSONIO (>= 1.3-1.8),
+    stringr (>= 1.4.0),
+    tibble,
+    tidyr (>= 1.2.0),
+    webchem (>= 1.2.0)
+Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

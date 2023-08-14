@@ -4,10 +4,12 @@
 \alias{ct_test}
 \title{Retrieve results from TEST QSAR model.}
 \usage{
-ct_test(query)
+ct_test(query, debug = F)
 }
 \arguments{
 \item{query}{A list of DTXSIDs to be queried.}
+
+\item{debug}{Flag to show API calls}
 }
 \value{
 A tibble of results.

@@ -2,10 +2,11 @@
 #'
 #' @param query A single string (in quotes) or a list of strings to be queried.
 #' @param ccte_api_key Checks for API key in Sys env
+#' @param debug Flag to show API calls
 #'
 #' @return Returns a tibble with results
 #' @export
-ct_synonym <- function(query,  ccte_api_key = NULL){
+ct_synonym <- function(query,  ccte_api_key = NULL, debug = F){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -20,14 +21,15 @@ ct_synonym <- function(query,  ccte_api_key = NULL){
 
   df <- map(urls, ~{
 
-    #debug
-    cat(.x,'\n')
+    if (debug == TRUE) {
+      cat(.x, "\n")
+    }
 
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   })
 
-  names(df) <- x
+  names(df) <- query
 
   {
     t1 <- df %>% map(1) %>% compact() %>% map_dfr(as.data.frame, .id = 'dtxsid') %>% mutate(search = 'valid', rank = 1) #valid
@@ -38,6 +40,6 @@ ct_synonym <- function(query,  ccte_api_key = NULL){
     rm(t1, t3, t4, t5)
   }
 
-  cat(green('\nSearch complete!\n'))
+
   return(df)
 }

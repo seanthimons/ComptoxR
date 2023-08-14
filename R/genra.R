@@ -32,6 +32,7 @@ genra_nn <- function(query,
                      fp = c("chm_mrgn",
                             "chm_httr", #
                             "chm_ct", #toxprint chemotypes
+"chm_aim", # Analog identification Methodology
                             "bio_txct", #toxcast fp, toxcast + tox21
                             'tox_txrf' #toxref fp, from toxrefdb2.0
                      ),
@@ -60,7 +61,7 @@ genra_nn <- function(query,
   } else {
     df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
-    df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
+    df <- slice_head(df, n = (n+1)) %>% as_tibble()  #where neighborhood cutdown occurs
     #Sys.sleep(3) #Sleep time in-between requests
     return(df)
   }
@@ -81,6 +82,7 @@ genra_neighborhood <- function(query,
                                fp = c("chm_mrgn",
                                       "chm_httr", #
                                       "chm_ct", #toxprint chemotypes
+                                      "chm_aim", # Analog identification Methodology
                                       "bio_txct", #toxcast fp, toxcast + tox21
                                       'tox_txrf' #toxref fp, from toxrefdb2.0
                                ),
@@ -110,7 +112,7 @@ genra_neighborhood <- function(query,
     df <- jsonlite::fromJSON(content(response, as = "text", encoding = "UTF-8"))
     rm(response, status_code) # removes status code debug
     df <- slice_head(df, n = n) %>% as_tibble()  #where neighborhood cutdown occurs
-    df <- genra_nn('DTXSID7024902') %>% select(jaccard:dsstox_sid,name, mol_weight) %>% rename(preferredName = name)
+    df <- genra_nn(query) %>% select(jaccard:dsstox_sid,name, mol_weight) %>% rename(preferredName = name)
 
     details <- ct_prop(df$dsstox_sid) %>% select(dtxsid, propType, name, value, unit)
 
@@ -139,8 +141,9 @@ genra_tox <- function(query,
                       #n = 12, #suggested default
                       #s = 0.1, #suggested default to get results
                       fp = c("chm_mrgn",
-                             "chm_httr",
-                             "chm_ct",
+                             "chm_httr", #
+                             "chm_ct", #toxprint chemotypes
+                             "chm_aim", # Analog identification Methodology
                              "bio_txct", #toxcast fp, toxcast + tox21
                              'tox_txrf' #toxref fp, from toxrefdb2.0
                       ),
@@ -210,8 +213,9 @@ genra_ra <- function(query,
                      n = 12, #suggested default
                      s = 0.1, #suggested default to get results
                      fp = c("chm_mrgn",
-                            "chm_httr",
-                            "chm_ct",
+                            "chm_httr", #
+                            "chm_ct", #toxprint chemotypes
+                            "chm_aim", # Analog identification Methodology
                             "bio_txct", #toxcast fp, toxcast + tox21
                             'tox_txrf' #toxref fp, from toxrefdb2.0
                      ),
@@ -368,8 +372,9 @@ genra_batch_ra <- function(query,
                            n = 12, #suggested default
                            s = 0.1, #suggested default to get results
                            fp = c("chm_mrgn",
-                                  "chm_httr",
-                                  "chm_ct",
+                                  "chm_httr", #
+                                  "chm_ct", #toxprint chemotypes
+                                  "chm_aim", # Analog identification Methodology
                                   "bio_txct", #toxcast fp, toxcast + tox21
                                   'tox_txrf' #toxref fp, from toxrefdb2.0
                            ),
@@ -543,6 +548,11 @@ genra_batch_toxprint_tbl <- function(query){
   cat('\n Batch search done, creating table... \n')
   df <- genra_toxprint_tbl(df)
   if(is.null(df)){cat('\nNo enrichment table able to be made!\n')}else{return(df)}
+}
+
+read_across <- function(table){
+
+  return(df)
 }
 
 

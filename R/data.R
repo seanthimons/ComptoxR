@@ -2,7 +2,6 @@
 #'
 #' A list of several DTXSIDs to test functions with.
 #'
-#' @format ## `dtx_list`
 #' A list of 29 compounds
 'dtx_list'
 
@@ -10,13 +9,11 @@
 #'
 #' A tibble of possible choices for GenRA functions.
 #'
-#' @format## `genra_engine`
-#' A tibble of possible choices for GenRA functions.
 'genra_engine'
 
-#` Table of ToxPrint Chemotypes `
-
-
+#' Table of ToxPrint Chemotypes
+#'
+#'
 'toxprint_ID_key'
 
 #' Table of ToxPrint Enrichment table values to build against.

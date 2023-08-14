@@ -4,16 +4,16 @@
 \alias{ct_search_mass}
 \title{Search for compounds by mass range}
 \usage{
-ct_search_mass(start, end, server = 1, ccte_api_key = NULL)
+ct_search_mass(start, end, ccte_api_key = NULL, debug = F)
 }
 \arguments{
 \item{start}{Starting mass range}
 
 \item{end}{Ending mass range}
 
-\item{server}{Defaults to public API, private requires USEPA VPN}
-
 \item{ccte_api_key}{Checks for API key in Sys env}
+
+\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

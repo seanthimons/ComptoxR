@@ -4,10 +4,14 @@
 \alias{hc_compound_coverage}
 \title{Per compound data availability scoring}
 \usage{
-hc_compound_coverage(table, suffix = NA)
+hc_compound_coverage(table, ID = NA, suffix = NA)
 }
 \arguments{
-\item{suffix}{}
+\item{table}{Takes a table from the}
+
+\item{ID}{ID column to ignore. Must be present to continue calculation.}
+
+\item{suffix}{Suffix to subset out by}
 }
 \value{
 A tibble of results

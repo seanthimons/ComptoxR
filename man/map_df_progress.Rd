@@ -2,13 +2,22 @@
 % Please edit documentation in R/misc_functions.R
 \name{map_df_progress}
 \alias{map_df_progress}
-\title{Title}
+\title{Purrr map_df with progress bar}
 \usage{
 map_df_progress(.x, .f, ..., .id = NULL)
 }
 \arguments{
-\item{.id}{}
+\item{.x}{List to map over}
+
+\item{.f}{Function to apply}
+
+\item{...}{Passes along other function arguments}
+
+\item{.id}{ID column to be created}
+}
+\value{
+A list
 }
 \description{
-Title
+Purrr map_df with progress bar
 }

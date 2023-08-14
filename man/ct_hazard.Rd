@@ -4,14 +4,14 @@
 \alias{ct_hazard}
 \title{Retrieves for hazard data by DTXSID}
 \usage{
-ct_hazard(query, ccte_api_key = NULL)
+ct_hazard(query, ccte_api_key = NULL, debug = F)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 
-\item{server}{Defaults to public API, private requires USEPA VPN}
+\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

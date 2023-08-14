@@ -7,7 +7,14 @@
 hc_pretty_table(table, ID = NA, suffix = NA)
 }
 \arguments{
-\item{suffix}{}
+\item{table}{Table to color}
+
+\item{ID}{ID column}
+
+\item{suffix}{Suffix to subset by}
+}
+\value{
+A tibble
 }
 \description{
 Create conditionally formatted table from comparison table

@@ -2,14 +2,18 @@
 #'
 #' Will return in the console the endpoint coverage before weighing.
 #'
-#' @param table
-#' @param suffix
+#' @param table Takes a table from the
+#' @param suffix Suffix to subset out by
+#' @param ID ID column to ignore. Must be present to continue calculation.
 #'
 #' @return A tibble of results
 #' @export
 
-hc_compound_coverage <- function(table, suffix = NA){
-  if(is.na(suffix)){
+hc_compound_coverage <- function(table, ID = NA, suffix = NA){
+
+  if(missing(ID) == T){stop('Missing ID variable!')
+    }else{
+      if(is.na(suffix)){
     cat('\nMissing search parameter!\n')
     coverage_score <- table %>%
       mutate(data_coverage = (rowSums(is.na(.))))
@@ -17,21 +21,23 @@ hc_compound_coverage <- function(table, suffix = NA){
 
     coverage_score <- coverage_score %>%
       mutate(data_coverage = 1-(data_coverage/(ncol(coverage_score)-2))) %>%
-      select(compound, data_coverage)
+      select(ID, data_coverage)
 
     return(coverage_score)
-    }
-  else{
-    coverage_score <- table %>%
-      select(c(!contains(suffix))) %>%
-      mutate(data_coverage = (rowSums(is.na(.))))
+  }
+    else{
+      coverage_score <- table %>%
+        select(c(!contains(suffix))) %>%
+        mutate(data_coverage = (rowSums(is.na(.))))
 
 
-    coverage_score <- coverage_score %>%
-      mutate(data_coverage = 1-(data_coverage/(ncol(coverage_score)-2))) %>%
-      select(compound, data_coverage)
+      coverage_score <- coverage_score %>%
+        mutate(data_coverage = 1-(data_coverage/(ncol(coverage_score)-2))) %>%
+        select(ID, data_coverage)
 
-  return(coverage_score)}
+      return(coverage_score)}}
+
+
 }
 
 #' Per endpoint - compound availability scoring

@@ -1,13 +1,13 @@
 #'Retrieves for hazard data by DTXSID
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param server Defaults to public API, private requires USEPA VPN
 #' @param ccte_api_key Checks for API key in Sys env
+#' @param debug Flag to show API calls
 #'
 #' @return Returns a tibble with results
 #' @export
 
-ct_hazard <- function(query, ccte_api_key = NULL){
+ct_hazard <- function(query, ccte_api_key = NULL, debug = F){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -22,7 +22,9 @@ ct_hazard <- function(query, ccte_api_key = NULL){
 
 
   df <- map_dfr(urls, ~{
-    cat('\n',.x,'\n')
+    if (debug == TRUE) {
+      cat(.x, "\n")
+    }
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
@@ -30,6 +32,5 @@ ct_hazard <- function(query, ccte_api_key = NULL){
   df <- df %>%
     rename(compound = dtxsid)
 
-  cat(green('\nSearch complete!\n'))
   return(df)
 }

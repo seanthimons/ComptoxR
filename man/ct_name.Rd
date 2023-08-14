@@ -7,7 +7,8 @@
 ct_name(
   query,
   param = c("start-with", "equal", "contain"),
-  ccte_api_key = NULL
+  ccte_api_key = NULL,
+  debug = F
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ ct_name(
 \item{param}{A list of options to search by, default option is to use all options which will result in a long search query.}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
+
+\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

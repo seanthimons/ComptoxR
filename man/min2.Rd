@@ -2,13 +2,16 @@
 % Please edit documentation in R/misc_functions.R
 \name{min2}
 \alias{min2}
-\title{Title}
+\title{Creates a new minimum function that ignores NAs and suppresses warning}
 \usage{
 min2(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{Vector}
+}
+\value{
+A vector
 }
 \description{
-Title
+Creates a new minimum function that ignores NAs and suppresses warning
 }

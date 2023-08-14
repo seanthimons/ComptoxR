@@ -2,13 +2,18 @@
 % Please edit documentation in R/misc_functions.R
 \name{geometric.mean}
 \alias{geometric.mean}
-\title{Title}
+\title{Geometric mean function}
 \usage{
 geometric.mean(x, na.rm = TRUE)
 }
 \arguments{
-\item{na.rm}{}
+\item{x}{Vector}
+
+\item{na.rm}{Flag}
+}
+\value{
+A vector
 }
 \description{
-Title
+Geometric mean function
 }
