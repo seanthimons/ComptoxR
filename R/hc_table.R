@@ -30,7 +30,7 @@ if (archive == TRUE) {
     cache <- rownames(foo)[which.max(foo$mtime)]
     search_data <- readRDS(cache)
     cat("\nFile loaded:\n", cache, "\n")
-
+    search_data$query -> query
     search_data$q -> q
     search_data$se -> se
     search_data$c -> c
@@ -58,6 +58,7 @@ if (archive == TRUE) {
 
 if(save == TRUE){
     search_data <- list()
+    search_data$query <- query
     search_data$q <- q
     search_data$se <- se
     search_data$c <- c
@@ -158,7 +159,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nOral search complete!\n'))
+    cat('\nOral search complete!\n')
   }
   ####Dermal----
   {
@@ -204,7 +205,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nDermal search complete!\n'))
+    cat('\nDermal search complete!\n')
   }
   ####Inhalation----
   {
@@ -253,7 +254,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nInhalation search complete!\n'))
+    cat('\nInhalation search complete!\n')
   }
   ####Cancer----
   {
@@ -316,7 +317,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nCancer search complete!\n'))
+    cat('\nCancer search complete!\n')
   }
 
   ####Genotoxic----
@@ -391,7 +392,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nMutagenic search complete!\n'))
+    cat('\nMutagenic search complete!\n')
 
   }
   ####Endocrine-----
@@ -434,7 +435,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nEndocrine disruptor search complete!\n'))
+    cat('\nEndocrine disruptor search complete!\n')
 
 
   }
@@ -507,7 +508,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nReproductive search complete!\n'))
+    cat('\nReproductive search complete!\n')
   }
 
   ####Developmental----
@@ -581,7 +582,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nDevelopmental search complete!\n'))
+    cat('\nDevelopmental search complete!\n')
   }
 
   ##Ecotox----
@@ -649,7 +650,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nAcute aquatic search complete!\n'))
+    cat('\nAcute aquatic search complete!\n')
   }
   ####Chronic Aquatic Toxicity----
   {
@@ -701,7 +702,7 @@ if(save == TRUE){
 
     e_list <- list()
 
-    cat(green('\nChronic aquatic search complete!\n'))
+    cat('\nChronic aquatic search complete!\n')
   }
 
 
@@ -902,7 +903,7 @@ if(save == TRUE){
       select(-source) %>%
       mutate(bac_amount = 10^bac_amount)
 
-    cat(green('\nBioconcentration factor search complete!\n'))
+    cat('\nBioconcentration factor search complete!\n')
 
     e_list <- list()
   }
@@ -910,7 +911,7 @@ if(save == TRUE){
   ##Joining----
   cat('\n')
   hc_summary <- reduce(h_list, left_join)
-  cat(red('\nTable made!\n'))
+  cat('\nTable made!\n')
 
   return(hc_summary)
 

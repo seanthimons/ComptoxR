@@ -7,16 +7,16 @@
 #' Please refer to the TEST QSAR documentation for further details.
 #'
 #' @param query A list of DTXSIDs to be queried.
-#'
+#' @param debug Flag to show API calls
 #' @return A tibble of results.
 #' @export
 
-ct_test <- function(query){
+ct_test <- function(query, debug = F){
 
   df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
 
   #Removes bad/ no SMILES compounds
-  cat('Removing bad/ no SMILES compounds\n')
+  cat('\nRemoving bad/ no SMILES compounds\n\n')
   df <- df_pre %>% filter(!is.na(qsarReadySmiles))
   cat('\nDropped',nrow(df_pre)-nrow(df),'compounds.\n')
 
@@ -59,8 +59,11 @@ ct_test <- function(query){
   cat('Sending T.E.S.T request\n')
 
   df <- map_dfr(urls, ~{
-    #debug
-    cat(.x,'\n')
+
+    if (debug == TRUE) {
+      cat(.x, "\n")
+    }
+
     response <- VERB("GET", url = .x)
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
   })
@@ -78,7 +81,7 @@ ct_test <- function(query){
       rename(compound = dtxsid)
     }else{df}
 
-  cat(green('\nT.E.S.T. request complete!\n'))
+  cat('\nT.E.S.T. request complete!\n')
 
   return(df)
 }
@@ -129,8 +132,8 @@ ct_opera <- function(query){
   cat('Sending T.E.S.T request\n')
 
   df <- map_dfr(urls, ~{
-    #debug
-    #cat(.x,'\n')
+
+
     response <- VERB("GET", url = .x)
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
   })
@@ -154,13 +157,5 @@ ct_opera <- function(query){
 
   cat(green('\nT.E.S.T. request complete!\n'))
 
-  return(df)
-}
-
-
-ct_predict <- function(query){
-  query <-ct_details(query)
-  t <- ct_test(query)
-  o <-
   return(df)
 }
