@@ -4,14 +4,14 @@
 \alias{ct_search_formula}
 \title{Search for compounds by formula}
 \usage{
-ct_search_formula(query, server = 1, ccte_api_key = NULL)
+ct_search_formula(query, ccte_api_key = NULL, debug = F)
 }
 \arguments{
 \item{query}{A string of a generic formula to search for}
 
-\item{server}{Defaults to public API, private requires USEPA VPN}
-
 \item{ccte_api_key}{Checks for API key in Sys env}
+
+\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

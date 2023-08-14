@@ -39,7 +39,7 @@ tp_combined_score <- function(table, ID = NULL, bias = NULL, ...){
   if(is.null(bias) == TRUE){
       cat('\nNo bias table detected, defaulting to filter = 0.1!\nDid you know about `hc_endpoint_coverage()`?\n')
 
-      bias <- hc_endpoint_coverage(table, ID, filter = 0.1)
+      bias <- hc_endpoint_coverage(table, ID, suffix = '_amount', filter = 0.1)
       print(bias)
       cat('\n')
     }
@@ -55,7 +55,7 @@ tp_combined_score <- function(table, ID = NULL, bias = NULL, ...){
       mutate(across(.cols = !contains(ID),
                     ~ if(sd(na.omit(.)) == 0)
                     {ifelse(is.na(.), NA, 1)}
-                    else {tp_single_score(., ...) #%>% round(digits = 4)
+                    else {tp_single_score(., ...) %>% round(digits = 4)
                     })) %>%
       mutate(across(where(is.numeric), ~replace_na(.,0)))
 

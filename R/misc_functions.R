@@ -1,11 +1,11 @@
-#' Title
+#' Purrr map_df with progress bar
 #'
-#' @param .x
-#' @param .f
-#' @param ...
-#' @param .id
+#' @param .x List to map over
+#' @param .f Function to apply
+#' @param ... Passes along other function arguments
+#' @param .id ID column to be created
 #'
-#' @return
+#' @return A list
 
 map_df_progress <- function(.x, .f, ..., .id = NULL) {
   .f <- purrr::as_mapper(.f, ...)
@@ -19,12 +19,11 @@ map_df_progress <- function(.x, .f, ..., .id = NULL) {
 }
 
 
-#Creates a new minimum function that ignores NAs and suppresses warning
-#' Title
+#' Creates a new minimum function that ignores NAs and suppresses warning
 #'
-#' @param x
+#' @param x Vector
 #'
-#' @return
+#' @return A vector
 #' @export
 
 min2 <- function(x){
@@ -35,12 +34,12 @@ min2 <- function(x){
   return(y)
 }
 
-#' Title
+#' Geometric mean function
 #'
-#' @param x
-#' @param na.rm
+#' @param x Vector
+#' @param na.rm Flag
 #'
-#' @return
+#' @return A vector
 #' @export
 
 geometric.mean <- function(x,na.rm=TRUE)  {

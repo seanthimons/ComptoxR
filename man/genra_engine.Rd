@@ -5,10 +5,7 @@
 \alias{genra_engine}
 \title{Table of GenRA function endpoints.}
 \format{
-\subsection{\code{genra_engine}}{
-
-A tibble of possible choices for GenRA functions.
-}
+An object of class \code{function} of length 1.
 }
 \usage{
 genra_engine

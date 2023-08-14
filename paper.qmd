@@ -1,37 +1,34 @@
 ---
-title: "paper"
+title: "ComptoxR: An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening"
 author: "Sean Thimons"
 format: html
 editor: visual
+execute: 
+  keep-md: false
 ---
 
 ```{r}
 #| label: load-packages
 #| include: false
+#| eval: true
+#| echo: false
 
-install.packages()
 library(ComptoxR)
+library(dplyr)
+library(stringr)
+library(knitr)
+library(flextable)
+library(tidyr)
 
 comptox_server(server = 1)
 
 ```
 
-
-# ComptoxR: An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening
-
-Sean Thimons
-
-Asif
-
-Grace
-
-Antony Williams
-
 ### Abstract
 
 The CompTox Chemical Dashboard (CCD) has gone through several improvements over the past few years, including batch downloading and inclusion of larger datasets for user analysis. However, query times for the batch download process can be long for larger volumes of compound requests. Users can also selectively request data on a very granular basis through the website, but the requesting all of an endpoint (e.g.: 'fate and transport' data) for several compounds can be time-consuming. `ComptoxR` aims to strike a balance between granular and comprehensive data harvesting.
 
-We developed the open-source R package `ComptoxR` that allows users to automatically query the underlying databases that supports CCD and other products from USEPA, extract out the data into an R object, and perform several analyses on the query. We provide several useful functions for querying specific endpoints for compounds such as physio-chemical properties, model predictions from TEST and OPERA QSAR models, hazard data. We also provide native R implementations of the Hazard Comparison and ToxPrint Chemotypes Exploring Chemical Feature Enrichments modules from USEPA's Cheminformatics and GenRA (Generalized Read-Across) tools.
+We developed the open-source R package `ComptoxR` that allows users to automatically query the underlying databases that supports CCD and other products from USEPA, extract out the data into an R object, and perform several analyses on the query. We provide several useful functions for querying specific endpoints for compounds such as physio-chemical properties, model predictions from EPI Suite, ChemAxon, TEST, and OPERA QSAR models, hazard data. We also provide native R implementations of the Hazard Comparison and ToxPrint Chemotypes Exploring Chemical Feature Enrichments modules from USEPA's Cheminformatics and GenRA (Generalized Read-Across) tools.
 
 `ComptoxR` follows the FAIR (findability, accessibility, interoperability, and reusability) principle for the data returned from queries, aiming to facilitate rapid chemical screening for hazard, risk, and toxicological characterization for a variety of end-users. Quality-control, curation level, and citation data is also generally available for compound queries, a feature not readily available in other packages.
 
@@ -45,42 +42,301 @@ Most functions that work to retrieve data on a compound are also implemented in 
 
 ### Data Sources
 
-`ComptoxR` comes with several existing data sources packaged within for analysis and comparison purposes. Some are required, as they function as "dictionary" files for searchign purposes, while others (i.e.: `dtx_list`) are examples that can be used to demonstrate abilities. There are three main API endpoints that `ComptoxR` targets: Two public-facing APIs from US EPA (one for each CCD and GenRA) and one for PubChem to retrieve GHS data through the `webchem` package.
+`ComptoxR` comes with several existing data sources packaged within for analysis and comparison purposes. Some are required, as they function as "dictionary" files for searching purposes, while others (i.e.: `dtx_list`) are examples that can be used to demonstrate abilities. There are three main API endpoints that `ComptoxR` targets: Two public-facing APIs from US EPA (one for each CCD and GenRA) and one for PubChem to retrieve GHS data through the `webchem` package.
 
 The GenRA and PubChem APIs and associated functions work to retrieve data, but do not perform any analysis; all calculations are performed server-side.
 
 ### Use cases
 
-#### Querying physio-chemical properties
+#### Querying Names, Supported Identifiers, and Details of Compounds
 
-A common, initial step for hazard identification is screening by physio-chemical properties. The 
+Often, a user needs to find a particular compound, but may only have a portion of a name or is using an identifier such as a CAS-RN or InChIKey string. The `ct_name()` function provides several ways to search for compounds for their preferred name and DTXSID. Three search parameters ('starts-with', 'equals', 'substring') offer different ways of searching for compounds.
 
-```{r Properties search, echo=TRUE}
+```{r}
+#| label: name-search
+#| eval: true
 #| include: true
+#| column: page
 
-ct_prop(query = dtx_list, debug = FALSE)
+#String search
+ct_name('atraz', param = 'start-with') %>% select(searchName, rank, preferredName)
+
+#InChlKey search
+ct_name('MXWJVTOOROXGIU', param = 'start-with') %>% select(searchName, rank, preferredName)
+
+#CAS_RN search
+ct_name('1912-24', param = 'start-with') %>% select(searchName, rank, preferredName)
+
+```
+
+Additionally, a function to return all verified synonyms of a given compound is available. A user may find this useful, as old CAS-RNs, product names, or variations on proper names can be returned.
+
+```{r}
+#| label: syno-search
+#| eval: true
+#| include: true
+#| column: page
+
+ct_synonym(query = 'DTXSID7020182') %>% head(n = 10)
+
+```
+
+After a compound's DTXSID has been located, a user may want to inquire on various details for the compound. The `ct_details()` function provides an executive summary of a compound, with over sixty variables being available. Here, a user can easily ascertain important details about the compound in question, ranging from the quality of curation about a compound, the number of active assays in the ToxCast assay program, to knowing the monoisotopic mass, molecular formula or SMILES string.
+
+```{r}
+#| label: detail-search
+#| eval: true
+#| include: false
+#| column: page
+
+df <- ct_details(dtx_list[1])
+```
+
+```{r}
+#| label: detail-search2
+#| eval: true
+#| include: true
+#| column: page
+# A selection of the data available for the query
+
+df %>% select(dtxsid,preferredName, smiles, molFormula, monoisotopicMass,
+              toxcastSelect,octanolWaterPartition,qcLevelDesc) %>% glimpse()
+```
+
+#### Querying for physio-chemical properties and environmental fate/ transport data
+
+A common, initial step for hazard identification is screening by physio-chemical properties or potential longevity within a given environment. The function `ct_prop()` returns both experimental and predictive physical-chemical properties, with accompanying source documentation. Users can then filter or subset the data as appropriate.
+
+```{r}
+#| label: prop_search
+#| eval: true
+#| include: true
+#| column: page
+#| echo: false
+#| tbl-cap: "Physio-chemical Properties for Perfluorooctanoic acid"
+
+ct_prop(query = dtx_list[1], debug = FALSE) %>%
+  select(name, value, source, propType, unit, dtxsid) %>%
+  group_by(name, propType) %>%
+  summarize(value = round(mean(value), 3), unit) %>%
+  distinct(name, propType, value, unit) %>% 
+  pivot_wider(., id_cols = c(name, unit), names_from = propType, values_from = value) %>% flextable()
+
+```
+
+For environmental fate/ transport data, the `ct_env_fate()` function also returns experimental and predictive data where available.
+
+```{r}
+#| label: eft_search
+#| eval: true
+#| include: true
+#| column: page
+#| echo: false
+#| tbl-cap: 'Environmental Fate/ Transport Data for Perfluorooctanoic acid'
+
+ct_env_fate(query = dtx_list[1], debug = FALSE) %>% 
+  select(valueType, modelSource, unit, endpointName, resultValue) %>%
+  group_by(endpointName, valueType) %>%
+  summarize(value = round(mean(resultValue), 3), unit) %>%
+  distinct(endpointName, valueType, value, unit) %>% 
+  pivot_wider(., id_cols = c(endpointName, unit), names_from = valueType, values_from = value) %>% flextable()
 
 ```
 
 #### Hazard Comparison
 
-Following the logic outlined by \[citation\]
+Following the logic primarily outlined by @vegosen_2020, the `hc_table()` function is provided to compare a set of compounds across a multitude of endpoints.
+
+The function `hc_table()` function has a number of useful arguments that may be of interest. While the `query` argument is required, the `archive` or `save` arguments are not.
+
+```{r}
+#| label: hc_table1
+#| eval: true
+#| include: false
+#| echo: false
+df <- hc_table(query = dtx_list[c(1,7:10,29)], archive = T, save = F)
+df_names <- ct_details(dtx_list[c(1,7:10,29)]) %>% select(preferredName, dtxsid)
+df <- left_join(df, df_names, by = c("compound" = "dtxsid")) %>% relocate(preferredName, .after = compound)
+df_tbl <- df %>% select('preferredName', !contains('_amount')) %>% select(!compound)
+```
+
+```{r}
+#| label: hc_table2
+#| eval: true
+#| echo: false
+#| include: true
+#| column: page
+#| tbl-cap: 'Hazard Comparison'
+
+
+df_tbl %>% flextable() %>% 
+  align(align = 'center', part = 'all') %>% 
+  valign(j = 1, valign = 'bottom', part = 'header') %>%
+  bg(bg = scales::col_factor(palette = 'YlOrRd', levels = c('L', 'M', 'H', 'VH'))) %>% 
+  bg(j = 'preferredName', bg = 'white') %>% 
+  rotate(., j = 2:16, align = 'bottom', rotation = 'btlr', part = 'header') %>% 
+  add_header_row(., values = c(' ','Human Health Effects','Ecotoxicity','Safety','Env. Fate'), colwidths = c(1,8, 2, 3, 2)) %>% 
+  rotate(., i = 1,rotation = 'lrtb', align = 'bottom', part = 'header') 
+```
+
+Data abundance **possible change this** functions are also able to be ran to better assess the relative quality of both the compounds and endpoints being assessed.
+
+The 'compound coverage' score is an assessment of how many endpoints for each compound were able to be queried for, displayed as a fraction of 1.0 (analogus to 100%). Here, all compounds that were included in the initial query has at-least 50% of the endpoints represented (n = 11)
+
+```{r}
+#| label: tbl-hc-compound-coverage
+#| eval: true
+#| include: true
+#| column: page
+#| tbl-cap: 'Compound Coverage Score'
+hc_compound_coverage(table = df, ID = 'preferredName', suffix = '_amount')
+
+```
+
+Conversely, the 'endpoint coverage' score returns the percentage of compounds being available per each endpoint. This table is critical to the ToxPi calculation, as it is responsible for the weighting parameter. By default, the weighting per each endpoint is defaulted to a '1.0' (i.e.: equal). We recommend that a user run this function with an explicitly declared filter parameter for the score set to '0' to see all relative responses before selecting an appropriate cutoff value. Failing to explicitly specify a filter cutoff will default the value to '0.5'.
+
+```{r}
+#| label: hc-meta2
+#| eval: true
+#| include: true
+hc_endpoint_coverage(table = df, ID = 'preferredName', suffix = '_amount', filter = 0)
+
+```
+
+```{r}
+#| label: bias
+#| include: false
+#| eval: true
+#| echo: false
+
+bias <- hc_endpoint_coverage(table = df, ID = 'preferredName', suffix = '_amount')
+bias
+```
+
+After assessing the quality of data, a user may manually adjust the weight response per each endpoint via manual subsetting.
+
+##### ToxPi Ranking
+
+For each endpoint from the hazard comparison table, the responses are scaled through a min-max normalization \[0-1\] (Eq 1). The score for each endpoint is then summed per compound, yielding a unit-less score, where the higher score indicates higher, relative hazard and risk (Eq 2).
+
+Eq. 1: $$x' =  \frac{x - min(x)}{max(x)- min(x)}$$
+
+Eq. 2: $$ToxPi =\sum_{1}^{I}*endpoint_i*weight_i + ... + \sum_{1}^{N}*endpoint_n*weight_n $$
+
+It should be noted that low performing (or compounds with a score of zero) compounds do **not** indicate a *lack* of associate hazard or risk, but rather a lack of information regarding these compounds.
+
+Eq. 1 is detailed in the function `tp_single_score()`, where a single vector (e.g.: a single column from a dataframe) is evaluated. An additional parameter (disabled by default) is also included, which 'backfills' the lowest performing compound (which may evaluate to a score of zero) with 50% of the score of the next-lowest compound. We feel this is an important option that should be used with care, as it could adversely affect the conclusions a user may draw.
+
+Eq. 2 is detailed in the function `tp_combined_score()`. Once a hazard comparison table has been generated, a user can request a relative prioritization based on the bias table. Should no bias table be specified, the function will proactively call the `hc_endpoint_coverage()` function with filter cutoff parameter specified to 0.1. The ellipse argument allows for the `min_fill` argument to be specified from the `tp_single_score()` function.
+
+As an example, a subset from an included dataset from the package (`dtx_list` ) An analysis of this suggests that along the endpoints we have selected for (n = 11), benzene shows the highest relative risk, with (Z)-1,2-Dichloroethylene showing the lowest relative risk, when comparing along similar exposure amounts. This scoring is partially due to the amount of data being returned by each compound, with benzene having \~81% of the endpoints documented, and (Z)-1,2-Dichloroethylene having \~56% (see @tbl-hc-compound-coverage)
+
+```{r}
+#| label: tp
+#| eval: true
+#| include: true
+#| tbl-cap: 'ToxPi ranking'
+df_tp <- tp_combined_score(table = df, ID = 'preferredName', bias = bias, min_fill = T)
+df_tp %>% select(preferredName, score) %>% arrange(desc(score)) %>% flextable()
+
+```
+
+If we were to re-run the analysis to *only* examine endpoints that all shared inclusive coverage of all of the compounds, the results are detailed below. Interestingly, Tamoxifen and Dazomet trade places within the list, indicating some overlapping parameter that may be of interest in the right context. While we recognize that this subset of compounds is not a realistic comparison, it still outlines the useful and subjectiveness of using the ToxPi approach for prioritization.
+
+```{r}
+#| label: tp2
+#| eval: true
+#| include: true
+#| tbl-cap: 'Adjusted ToxPi ranking'
+#| echo: false
+
+bias2 <- hc_endpoint_coverage(table = df, ID = 'preferredName', suffix = '_amount')
+bias2$weight[c(2,4,6:8, 9:10)] <- 0
+
+df_tp2 <- tp_combined_score(table = df, ID = 'preferredName', bias = bias2, min_fill = T)
+df_tp2 %>% select(preferredName, score) %>% arrange(desc(score)) %>% flextable()
+
+```
 
 #### Generalized Read-Across (GenRA) and ToxPrint Enrichment
 
+##### GenRA
+
+Read-Across is an approach thoroughly documented in the literature (\@patlewicz_2023) for extrapolating from data-rich 'community' to data-poor 'individual' for predictive purposes. We offer the functionality available to the public found at <https://comptox.epa.gov/genra/> through this package for both single compound and batch-search functionality. We demonstrate here a typical workflow for using GenRA functions that would be analogous to the website experience.
+
+##### Basic functionality
+
+Like nearly all of the functions in this package, the starting point is a DTXSID for referencing a compound. Here, the DTXSID of Trimethylene glycol diacrylate is used. The other arguments are the fingerprint to find analogues by (Morgan \[default\], Torsion, ToxPrints, ToxCast, or ToxRef), filters to select the analogues by (compounds with or without data) and the number of analogs to return. In the example, we've used the ToxPrint, and requested 20 analogs. The first row is our searched compound, with the most similar compounds following, as described by the Jaccard similarity metric.
+
+```{r}
+nn <- genra_nn(query = 'DTXSID2026107', fp = 'chm_mrgn', sel_by = 'tox_txrf', n = 10) %>% select(jaccard, name, dsstox_sid, casrn, mol_weight)
+nn
+```
+
+We then request the read-across using the next function, with similar arguments. A subset of the output is displayed below. GenRA returns data that belongs to either the ToxCast database or the ToxRef database, where it is grouped by study outcomes. The groups are chronic toxicity (CHR), developmental toxicity (DEV), developmental neurotoxicity (DNT), multigenerational toxicity (MGR), neurotoxicity (NEU), reproductive toxicity (REP), acute toxicity (ACU), subacute toxicity (SAC), subchronic toxicity (SUB), and other (OTH) toxicity testing studies. The column 'observation' details the queried compound's experimental results for that study design (if available), while the 'pred resp' is a predicted response (operating in a binary outcome).
+
+```{r}
+#| echo: false
+#| label: genra-ra
+ra <- genra_ra(query = 'DTXSID2026107', fp = 'chm_mrgn', sel_by = 'tox_txrf', n = 10)
+ra %>% select(name, effect_desc, observation, `pred resp`) %>% flextable()
+```
+
+Should a user desire it, a generic read-across function `read_across` is provided to generate a prediction based on other data (e.g.: LD50) leveraging the GenRA's ability to fingerprint and find similar compounds.
+
+##### ToxPrint Enrichment
+
+```{r}
+
+tp <- genra_batch_toxprint_tbl(query = dtx_list[c(1,7:10,29)])
+
+```
+
+```{r}
+
+#tp <- left_join(tp, df_names, by = c('compound' = "preferredName")) %>% select(-compound)
+
+max_num <- max(tp[,2:19], na.rm = T) 
+
+tp %>% flextable() %>% 
+  align(align = 'center', part = 'all') %>% 
+  valign(j = 1, valign = 'bottom', part = 'header') %>%
+  bg(j = 2:ncol(tp), bg = scales::col_numeric(palette = 'YlOrRd', domain = c(0,max_num)), part = 'body') %>% 
+  bg(j = 'compound', bg = 'white')
+```
+
+
 #### Non-Targeted Analysis Compound Searching
 
-#### Querying Names and Supported Identifiers
+To better assist in the hazard and risk management space, several functions are suggested for use. For searching by mass range or by a generic formula, the functions `ct_search_mass()` and `ct_search_formula()` are able to be leveraged.
 
-#### Comparisons to other relevant R packages
+```{r}
+#| label: nta-search
+#| eval: true
+#| include: true
+#| column: page
+ct_search_mass(start = 413.9, end = 414) %>% select(dtxsid, preferredName, casrn, molFormula)
+
+ct_search_formula(query = 'C10H19O6PS2') %>% select(dtxsid, preferredName, casrn, averageMass, sourcesCount, toxcastSelect, qcLevel) %>% arrange(desc(sourcesCount))
+```
+
+### Case study implementation of package
+
+To demonstrate the potential workflow of this package, we offer two hypothetical situations. In the first, risk assessors would be interested in the prioritization of sites that contain tanks of compounds. The hypothetical situation would revolve around selecting for highest threats to human and ecosystem, while taking into account site-specific volumes. For this, the risk assessors will incorporate various endpoints, including physio-chemical and environmental fate/ transport parameters to assess the potential if a tank were to be ruptured. The second scenario would examine an industrial waste stream being discharged into a river system. Risk assessors would examine two paradigms, one focused on acute threats to both human and ecosystem, the other on a long-term site surveillance for compounds known to be persistent, bioaccumulative, and have potential for chronic exposures.
+
+#### Scenario 1: Storage tank prioritization
+
+#### Scenario 2: River exposure to industrial waste stream
+
+### Comparisons to other relevant R packages
 
 ##### `webchem`
 
 `webchem` is a "R package to retrieve chemical information from the web..." and provides access to "a suite of web APIs to retrieve chemical information" from a variety of disparate databases. Some of the the databases (e.g.: ChemSpider) require a separate API token to access. Curation quality of these databases is not reported.
 
-Comparatively, `ComptoxR` provides a single point of access to a varity of already curated and integrated databases under the 'umbrella' of CCD. Users can query one compound and retrieve results from upwards of 30 \[double check\] databases and aggregate results at their leisure.
+Comparatively, `ComptoxR` provides a single point of access to a varity of already curated and integrated databases under the 'umbrella' of CCD. Users can query one compound and retrieve results from upwards of 30 **double check** databases and aggregate results at their leisure.
 
-Currently `ComptoxR` relies on `webchem` to pull GHS data, but aims to depreciate this dependency as internal efforts at US EPA continue to ...
+Currently `ComptoxR` relies on `webchem` to pull GHS data, but aims to depreciate this dependency as internal efforts at US EPA continue to work towards hosting and curating GHS data.
 
 `standartox`
 
@@ -94,7 +350,7 @@ ECOTOX is covered under the CCD 'umbrella' of databases and is thus covered unde
 
 `toxpiR` is a native implementation of the Toxicological Priority Index (ToxPi) prioritization algorithm, and purports to offer more flexibility than the ToxPi GUI.
 
-Inherently, the math behind the ToxPi algorithm is not hard to reproduce (a min-max normalization scheme), but the `toxpiR` package utilizes the `R6` reference class and may not be as easily accessible to all users. In comparison, the `tp` function made available through `ComptoxR` takes two data frame objects (a weighing table and a table holding the parent data) and performs the normalization scheme. We also offer the ability to back-fill data gaps with the mean value of a given endpoint (as supported by a meta-analysis \[citation\]), and provide meta-statistics on the quality of data being analyzed.
+Inherently, the math behind the ToxPi algorithm is not hard to reproduce (a min-max normalization scheme), but the `toxpiR` package utilizes the `R6` reference class and may not be as easily accessible to all users. In comparison, the `tp` function made available through `ComptoxR` takes two data frame objects (a weighing table and a table holding the parent data) and performs the normalization scheme. We also offer the ability to back-fill data gaps with the mean value of a given endpoint (as supported by a meta-analysis @to_2018), and provide meta-statistics on the quality of data being analyzed.
 
 #### Open science
 

@@ -5,15 +5,15 @@
 \alias{dtx_list}
 \title{List of DTXSIDs to test things with.}
 \format{
-\subsection{\code{dtx_list}}{
-
-A list of 29 compounds
-}
+An object of class \code{list} of length 29.
 }
 \usage{
 dtx_list
 }
 \description{
 A list of several DTXSIDs to test functions with.
+}
+\details{
+A list of 29 compounds
 }
 \keyword{datasets}

@@ -1,2 +1,6 @@
 ^ComptoxR\.Rproj$
 ^\.Rproj\.user$
+^paper_files$
+^paper\.Rmd$
+^paper\.qmd$
+[.]html$
