@@ -32,7 +32,7 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
 
-  cat(green('\nSearch complete!\n',nrow(df),'compounds found!\n'))
+  cat('\nSearch complete!\n',nrow(df),'compounds found!\n')
   return(df)
 }
 
@@ -67,7 +67,7 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL){
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
 
-  cat(green('\nSearch complete!\n'))
+  cat('\nSearch complete!\n')
   return(df)
 }
 
@@ -106,7 +106,7 @@ ct_lists_all <- function(ccte_api_key = NULL){
   #
   #Remove duplicates from lists
 
-  cat(green('\nSearch complete!\n'))
+  cat('\nSearch complete!\n')
   return(df)
 
 }

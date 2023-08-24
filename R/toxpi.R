@@ -15,8 +15,6 @@ tp_single_score <- function(x, min_fill = T){
   return(df)
 }
 
-
-
 #' ToxPi Combined Score Table
 #'
 #' Takes a user-supplied table (with a column that provides identification), and optionally a bias table from [hc_endpoint_coverage()] with user-supplied weights. The function will perform a min-max normalization per each endpoint (i.e.: every other column that is not an identifier), then sums up the scores on a per-row basis.
@@ -37,7 +35,7 @@ tp_combined_score <- function(table, ID = NULL, bias = NULL, ...){
     cat(cat('\nDefaulting to first column for ID: '),ID,'\n')
     }
   if(is.null(bias) == TRUE){
-      cat('\nNo bias table detected, defaulting to filter = 0.1!\nDid you know about `hc_endpoint_coverage()`?\n')
+      cat(colorize('\nNo bias table detected, defaulting to filter = 0.1!\nDid you know about `hc_endpoint_coverage()`?\n', fg ='yellow'))
 
       bias <- hc_endpoint_coverage(table, ID, suffix = '_amount', filter = 0.1)
       print(bias)

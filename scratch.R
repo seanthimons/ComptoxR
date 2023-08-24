@@ -127,3 +127,13 @@ t5 <- set_colnames(t5, 'tp')
 names(t5) <- 'tp'
 t5 <- bind_cols(toxprint_ID_key, t5)
 
+testing <- function(query){
+if(length(query) > 1){
+  cat('\nOver\n')
+  length(query)
+}else{
+    cat('\nEqual\n')
+  length(query)
+  }
+}
+

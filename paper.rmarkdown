@@ -24,6 +24,7 @@ comptox_server(server = 1)
 
 ```
 
+
 ### Abstract
 
 The CompTox Chemical Dashboard (CCD) has gone through several improvements over the past few years, including batch downloading and inclusion of larger data sets for user analysis. However, query times for the batch download process can be long for larger volumes of compound requests. Users can also selectively request data on a very granular basis through the website, but the requesting all of an endpoint (e.g.: 'fate and transport' data) for several compounds can be time-consuming. `ComptoxR` aims to strike a balance between granular and comprehensive data harvesting.
@@ -52,6 +53,7 @@ When possible, the data returned is returned as-is from the API. We feel this an
 
 Often, a user needs to find a particular compound, but may only have a portion of a name or is using an identifier such as a CAS-RN or InChIKey string. The `ct_name()` function provides several ways to search for compounds for their preferred name and DTXSID. Three search parameters ('starts-with', 'equals', 'substring') offer different ways of searching for compounds.
 
+
 ```{r}
 #| label: name-search
 #| eval: true
@@ -69,7 +71,9 @@ ct_name('1912-24', param = 'contain') %>% select(searchValue, preferredName, cas
 
 ```
 
+
 Additionally, a function to return all verified synonyms of a given compound is available. A user may find this useful, as old CAS-RNs, product names, or variations on proper names can be returned.
+
 
 ```{r}
 #| label: syno-search
@@ -81,7 +85,9 @@ ct_synonym(query = 'DTXSID7020182') %>% head(n = 10)
 
 ```
 
+
 After a compound's DTXSID has been located, a user may want to inquire on various details for the compound. The `ct_details()` function provides an executive summary of a compound, with over sixty variables being available. Here, a user can easily ascertain important details about the compound in question, ranging from the quality of curation about a compound, the number of active assays in the ToxCast assay program, to knowing the monoisotopic mass, molecular formula or SMILES string.
+
 
 ```{r}
 #| label: detail-search
@@ -103,9 +109,11 @@ df %>% select(dtxsid,preferredName, smiles, molFormula, monoisotopicMass,
               toxcastSelect,octanolWaterPartition,qcLevelDesc) %>% glimpse()
 ```
 
+
 #### Querying for physio-chemical properties and environmental fate/ transport data
 
 A common, initial step for hazard identification is screening by physio-chemical properties or potential longevity within a given environment. The function `ct_prop()` returns both experimental and predictive physical-chemical properties, with accompanying source documentation. Users can then filter or subset the data as appropriate.
+
 
 ```{r}
 #| label: prop_search
@@ -124,7 +132,9 @@ ct_prop(query = dtx_list[1], debug = FALSE) %>%
 
 ```
 
+
 For environmental fate/ transport data, the `ct_env_fate()` function also returns experimental and predictive data where available.
+
 
 ```{r}
 #| label: eft_search
@@ -143,11 +153,13 @@ ct_env_fate(query = dtx_list[1], debug = FALSE) %>%
 
 ```
 
+
 #### Hazard Comparison
 
 Following the logic primarily outlined by @vegosen_2020, the `hc_table()` function is provided to compare a set of compounds across a multitude of endpoints.
 
 The function `hc_table()` function has a number of useful arguments that may be of interest. While the `query` argument is required for live searching, the `archive` or `save` arguments are not. If on an initial query the 'save' argument is set to `TRUE`, the underlying data that is generated is saved in the local directory as an .Rds file. The helper `ct_archive` function can be ran to load the data easily into local working memory for closer examination. If the such a file exists AND the 'archive' flag is set to true, the function uses the data to recreate the table, saving query request time.
+
 
 ```{r}
 #| label: hc_table1
@@ -179,9 +191,11 @@ df_tbl %>% flextable() %>%
   rotate(., i = 1,rotation = 'lrtb', align = 'bottom', part = 'header') 
 ```
 
+
 Data completeness functions are also able to be ran to better assess the relative quality of both the compounds and endpoints being assessed.
 
 The 'compound coverage' score is an assessment of how many endpoints for each compound were able to be queried for, displayed as a fraction of 1.0 (analogous to 100%). Here, all compounds that were included in the initial query has at-least 50% of the endpoints represented (12 out of 16).
+
 
 ```{r}
 #| label: tbl-hc-compound-coverage
@@ -193,7 +207,9 @@ hc_compound_coverage(table = df, ID = 'preferredName', suffix = '_amount')
 
 ```
 
+
 Conversely, the 'endpoint coverage' score returns the percentage of compounds being available per each endpoint. This table is critical to the ToxPi calculation, as it is responsible for the weighting parameter. By default, the weighting per each endpoint is defaulted to a '1.0' (i.e.: equal). We recommend that a user run this function with an explicitly declared filter parameter for the score set to '0' to see all relative responses before selecting an appropriate cutoff value. Failing to explicitly specify a filter cutoff will default the value to '0.5'.
+
 
 ```{r}
 #| label: hc-meta2
@@ -214,6 +230,7 @@ bias <- hc_endpoint_coverage(table = df, ID = 'preferredName', suffix = '_amount
 bias
 ```
 
+
 After assessing the quality of data, a user may manually adjust the weight response per each endpoint via manual subsetting.
 
 ##### ToxPi Ranking
@@ -232,6 +249,7 @@ Eq. 2 is detailed in the function `tp_combined_score()`. Once a hazard compariso
 
 As an example, a subset from an included data set from the package (the object `dtx_list` ) was used. An analysis of this suggests that along the endpoints we have selected for (n = 12), Dazomet shows the highest relative risk, with (Z)-1,2-Dichloroethylene showing the lowest relative risk, when comparing along similar exposure amounts. This scoring is partially due to the amount of data being returned by each compound, with benzene having \~76% of the endpoints documented, and (Z)-1,2-Dichloroethylene having \~56% (see @tbl-hc-compound-coverage)
 
+
 ```{r}
 #| label: tp
 #| eval: true
@@ -242,7 +260,9 @@ df_tp %>% select(preferredName, score) %>% arrange(desc(score)) %>% flextable()
 
 ```
 
+
 If we were to re-run the analysis to *only* examine endpoints that all shared inclusive coverage of all of the compounds, the results are detailed below. Interestingly, PFOA and BPA are raised in ranking while Benzene is dropped in ranking within the list, indicating some overlapping parameter that may be of interest in the right context. While we recognize that this subset of compounds is not a realistic comparison, it still outlines the useful and subjectiveness of using the ToxPi approach for prioritization.
+
 
 ```{r}
 #| label: tp2
@@ -260,6 +280,7 @@ df_tp2 %>% select(preferredName, score) %>% arrange(desc(score)) %>% flextable()
 
 ```
 
+
 #### Generalized Read-Across (GenRA) and ToxPrint Enrichment
 
 ##### GenRA
@@ -269,6 +290,7 @@ Read-Across is an approach thoroughly documented in the literature (@patlewicz_2
 ##### Basic functionality
 
 Like nearly all of the functions in this package, the starting point is a DTXSID for referencing a compound. Here, the DTXSID of Trimethylene glycol diacrylate is used. The other arguments are the fingerprint to find analogues by (Morgan \[default\], Torsion, ToxPrints, ToxCast, or ToxRef), filters to select the analogues by (compounds with or without data) and the number of analogs to return. In the example, we've used the ToxPrint, and requested 10 analogs. The first row is our searched compound, with the most similar compounds following, as described by the Jaccard similarity metric.
+
 
 ```{r}
 #| label: genra-nn1
@@ -280,7 +302,9 @@ nn <- genra_nn(query = 'DTXSID2026107', fp = 'chm_mrgn', sel_by = 'tox_txrf', n 
 nn
 ```
 
+
 We then request the read-across using the next function, with similar arguments. A subset of the output is displayed below. GenRA returns data that belongs to either the ToxCast database or the ToxRef database, where it is grouped by study outcomes. The groups are chronic toxicity (CHR), developmental toxicity (DEV), developmental neurotoxicity (DNT), multigenerational toxicity (MGR), neurotoxicity (NEU), reproductive toxicity (REP), acute toxicity (ACU), subacute toxicity (SAC), subchronic toxicity (SUB), and other (OTH) toxicity testing studies. The column 'observation' details the queried compound's experimental results for that study design (if available), while the 'pred resp' is a predicted response (operating in a binary outcome).
+
 
 ```{r}
 #| label: genra-ra
@@ -293,11 +317,15 @@ ra <- genra_ra(query = 'DTXSID2026107', fp = 'chm_mrgn', sel_by = 'tox_txrf', n 
 ra %>% select(name, effect_desc, observation, `pred resp`) %>% head(n = 4) %>% flextable()
 ```
 
+
 Should a user desire it, a generic read-across function `read_across` is provided to generate a prediction based on other data (e.g.: LD50) leveraging the GenRA's ability to fingerprint and find similar compounds, but currently relies on a user to provide the data.
 
 ##### ToxPrint Enrichment
 
-Accurate depiction of chemicals is an important when operating in the cheminformatic space. As such, through both the CCD and GenRA, the ability to generate molecular fingerprints are provided. These fingerprints provide ways of describing complex 3D molecular features into a machine-readable format. One such method is the open-source XML-based 'Chemical Subgraphs and Reactions Markup Language (CSRML)' . As detailed by @yang_2015, these predefined molecular descriptors describe not only atom, bonds, electron systems, and molecules, but can also address issues such as topology or complex connectivity. Part of this novel method of describing compounds can be extended to
+Accurate depiction of chemicals is an important when operating in the cheminformatic space. As such, through both the CCD and GenRA, the ability to generate molecular fingerprints are provided. These fingerprints provide ways of describing complex 3D molecular features into a machine-readable format. One such method is the open-source XML-based 'Chemical Subgraphs and Reactions Markup Language (CSRML)' . As detailed by
+
+atom, bond, electron system, molecule
+
 
 ```{r}
 #| label: toxprint1
@@ -326,9 +354,11 @@ tp2 %>% flextable() %>%
   bg(j = 'preferredName', bg = 'white')
 ```
 
+
 #### Non-Targeted Analysis Compound Searching
 
 To better assist in the hazard and risk management space, several functions are suggested for use. For searching by mass range or by a generic formula, the functions `ct_search_mass()` and `ct_search_formula()` are able to be leveraged.
+
 
 ```{r}
 #| label: nta-search
@@ -342,6 +372,7 @@ ct_search_mass(start = 413.9, end = 414) %>% select(dtxsid, preferredName, casrn
 ct_search_formula(query = 'C10H19O6PS2') %>% select(dtxsid, preferredName, casrn, averageMass, sourcesCount, toxcastSelect, qcLevel) %>% arrange(desc(sourcesCount))
 ```
 
+
 ### Case study implementation of package
 
 To demonstrate the potential workflow of this package, we offer two hypothetical situations. In the first, risk assessors would be interested in the prioritization of sites that contain tanks of compounds. The hypothetical situation would revolve around selecting for highest threats to human and ecosystem, while taking into account site-specific volumes. For this, the risk assessors will incorporate various endpoints, including physio-chemical and environmental fate/ transport parameters to assess the potential if a tank were to be ruptured. The second scenario would examine an industrial waste stream being discharged into a river system. Risk assessors would examine two paradigms, one focused on acute threats to both human and ecosystem, the other on a long-term site surveillance for compounds known to be persistent, bioaccumulative, and have potential for chronic exposures.
@@ -351,6 +382,7 @@ To demonstrate the potential workflow of this package, we offer two hypothetical
 In scenario 1, a regulatory permit writer is looking to prioritize sites for enhanced risk management planning. A data set of the current listed compounds is assembled. Using data provided by each site, the two can be joined by a common data identifier.
 
 Next, the permit writer can utilize the `hc_table()` function and pass the list into it. A bias table for weighing is created to work with the prioritization function. While this satisfies the selection of which chemicals to focus on, it does not address the issue of site selection as it was not evaluated/ present in the query. However, if a data set existed that contained site locations and volumes present within each site for each compound, it would be trivial to run an analysis of those factors and join them against the chemical data. This could provide both chemical and site prioritization options.
+
 
 ```{r}
 
@@ -369,9 +401,11 @@ hs311_tp <- tp_combined_score(table = hs311_tbl, ID = 'compound', bias = bias, m
 
 ```
 
+
 #### Scenario 2: River exposure to industrial waste stream
 
 In scenario 2, a regulatory authority is taking samples from a river system that had been exposed to a inadvertent discharge of an industrial waste water. Similar to scenario 1, the source data contains individual sites with several compounds detected at each site in varying concentrations, along with distances from the discharge point and survey dates. Of interest is what is the immediate, acute threat, and what is the threat to long-term health for both the ecosystem and human health.
+
 
 ```{r}
 sc2 <- rio::import(file = 'sc2.csv')
@@ -390,6 +424,7 @@ sc2_tp_chronic <- tp_combined_score(table = sc2_chem, ID = 'compound', bias = sc
 
 
 ```
+
 
 ### Comparisons to other relevant R packages
 
@@ -434,3 +469,4 @@ This R package is a compilation of information sourced from many databases and l
 ##### Acknowledgements
 
 ###### References
+

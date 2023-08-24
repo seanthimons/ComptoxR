@@ -3,9 +3,9 @@
 #' This involves calling several functions
 #' other `ComptoxR` functions and processes the results. Large queries may take
 #' some time to request. Returns a table with the available endpoints in a
-#' binned format ('VH', 'H', 'M', 'L') as well as a numerical response. Some of
+#' binned format ('VH', 'H', 'M', 'L', 'NA') as well as a numerical response. Some of
 #' the endpoints have been transformed to better allow for a relative risk
-#' characterization. Where responses are not availabel, a 'NA' response will be
+#' characterization. Where responses are not available, a 'NA' response will be
 #' present.
 #'
 #'
@@ -44,6 +44,10 @@ if (archive == TRUE) {
     rm(foo, cache, search_data)}
 
 }else{
+
+  if(missing(query) == T){stop('No query list found!')}
+
+
   cat('\nStarting search...\n')
   q <- ct_hazard(query)
   se <-ct_skin_eye(query)
@@ -56,25 +60,7 @@ if (archive == TRUE) {
   ghs <- ct_ghs(query)
 }
 
-if(save == TRUE){
-    search_data <- list()
-    search_data$query <- query
-    search_data$q <- q
-    search_data$se <- se
-    search_data$c <- c
-    search_data$g <- g
-    search_data$f <- f
-    search_data$p <- p
-    search_data$d <- d
-    search_data$t <- t
-    search_data$ghs <-ghs
 
-    saveRDS(search_data, file = paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'))
-
-    cat('\nSearch data archived: ',paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'),'\n')
-
-
-}
 
   ##Preload----
   #takes a list data frame with hazard data from API and creates comparison tables
@@ -293,7 +279,6 @@ if(save == TRUE){
         Carcinogenicity == 'M' ~ 10,
         Carcinogenicity == 'L' ~ 1,
       ))
-
 
     e_list$reach <- reach %>%
       dplyr::filter(`CAS No.` %in% d$casrn) %>%
@@ -796,7 +781,6 @@ if(save == TRUE){
 
     e_list <- list()
   }
-  ###Safety----
 
   #Fate and transport----
 
@@ -906,6 +890,53 @@ if(save == TRUE){
     cat('\nBioconcentration factor search complete!\n')
 
     e_list <- list()
+  }
+
+  ###Mobile----
+  {
+    e_list$m <- p %>%
+      dplyr::filter(propertyId == 'logkow-octanol-water') %>%
+      select(value, propType, unit, propertyId, dtxsid) %>%
+      summarise(mobile_amount = mean(value), .by = c(dtxsid, propertyId, propType)) %>%
+      arrange(dtxsid, propertyId, factor(propType, levels = c('experimental', 'predicted'))) %>%
+      distinct(dtxsid, propertyId, .keep_all = T) %>%
+      mutate(Mobility = case_when(
+        #taken from vPvM definitions from REACH Art 57 (f)
+        mobile_amount <= 3 ~ 'VH',
+        mobile_amount < 4 ~ 'M',
+        mobile_amount >= 4 ~ 'L'
+
+      )) %>%
+      select(-c(propertyId,propType)) %>%
+      rename(compound = dtxsid)
+
+    h_list$mobile <- map_dfr(e_list, as_tibble) %>%
+      mutate(mobile_amount = 1/(mobile_amount^2))
+
+
+    e_list <- list()
+    cat('\nLogKow search complete!\n')
+  }
+
+  #Saving----
+  if(save == TRUE){
+    search_data <- list()
+    search_data$query <- query
+    search_data$q <- q
+    search_data$se <- se
+    search_data$c <- c
+    search_data$g <- g
+    search_data$f <- f
+    search_data$p <- p
+    search_data$d <- d
+    search_data$t <- t
+    search_data$ghs <-ghs
+
+    saveRDS(search_data, file = paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'))
+
+    cat('\nSearch data archived: ',paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'),'\n')
+
+
   }
 
   ##Joining----
