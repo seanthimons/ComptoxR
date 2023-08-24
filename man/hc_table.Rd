@@ -20,8 +20,8 @@ A tibble of results
 This involves calling several functions
 other \code{ComptoxR} functions and processes the results. Large queries may take
 some time to request. Returns a table with the available endpoints in a
-binned format ('VH', 'H', 'M', 'L') as well as a numerical response. Some of
+binned format ('VH', 'H', 'M', 'L', 'NA') as well as a numerical response. Some of
 the endpoints have been transformed to better allow for a relative risk
-characterization. Where responses are not availabel, a 'NA' response will be
+characterization. Where responses are not available, a 'NA' response will be
 present.
 }

@@ -6,7 +6,7 @@
 \usage{
 genra_nn(
   query,
-  fp = c("chm_mrgn", "chm_httr", "chm_ct", "bio_txct", "tox_txrf"),
+  fp = c("chm_mrgn", "chm_httr", "chm_ct", "chm_aim", "bio_txct", "tox_txrf"),
   sel_by = c("tox_txrf", "bio_txct", "no_filter"),
   n = 12
 )
