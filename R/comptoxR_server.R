@@ -10,7 +10,9 @@ comptox_server <- function(server = 1){
   if(isTRUE(server == 1) == TRUE){Sys.setenv('burl' = 'https://api-ccte.epa.gov/')}
   else{
     if(isTRUE(server == 2) == TRUE){Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/')}
-    else{Sys.setenv("burl" = NA)}}
+    else{
+      cat('\nServer URL reset!\n')
+      Sys.setenv("burl" = NA)}}
 
   Sys.getenv('burl')
 }

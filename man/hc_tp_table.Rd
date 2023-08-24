@@ -9,6 +9,9 @@ hc_tp_table(hcd_tbl, filter_score = NA)
 \arguments{
 \item{filter_score}{}
 }
+\value{
+tbl
+}
 \description{
 Title
 }

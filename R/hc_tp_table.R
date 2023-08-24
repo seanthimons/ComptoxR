@@ -1,12 +1,4 @@
-#' Title
-#'
-#' @param hcd_tbl
-#' @param filter_score
-#'
-#' @return
-#' @export
-#'
-#' @examples
+
 hc_tp_table <- function(hcd_tbl, filter_score = NA){
 
   #data coverage score

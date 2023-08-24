@@ -8,7 +8,7 @@ genra_ra(
   query,
   n = 12,
   s = 0.1,
-  fp = c("chm_mrgn", "chm_httr", "chm_ct", "bio_txct", "tox_txrf"),
+  fp = c("chm_mrgn", "chm_httr", "chm_ct", "chm_aim", "bio_txct", "tox_txrf"),
   sel_by = c("tox_txrf", "bio_txct", "no_filter"),
   summ = c(NULL, "tox_txrf", "bio_txct", "tox_txrf_dosage")
 )

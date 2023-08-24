@@ -9,10 +9,9 @@
 
 hc_pretty_table <- function(table, ID = NA, suffix = NA){
 
-df <- table %>%
-  select(ID, !contains(suffix))
+df <- select(table, ID, !contains(suffix))
 
-df %>%  datatable(
+df <- df %>% datatable(
       options = list(
         columnDefs = list(list(className = 'dt-center', targets = '_all')))) %>%
     formatStyle(names(tbl %>% select('compound', !contains('_amount'))),
