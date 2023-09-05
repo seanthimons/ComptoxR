@@ -4,7 +4,13 @@
 \alias{hc_table}
 \title{Create the Hazard Comparison matrix.}
 \usage{
-hc_table(query, archive = FALSE, save = TRUE)
+hc_table(
+  query,
+  archive = FALSE,
+  save = TRUE,
+  archive_string = NA,
+  save_string = NA
+)
 }
 \arguments{
 \item{query}{Takes a list of compounds using DTXSIDs}
@@ -12,6 +18,10 @@ hc_table(query, archive = FALSE, save = TRUE)
 \item{archive}{Boolean value to use archived data from a previous run to recreate table. Defaults to \code{FALSE}. File will be prefixed with \code{search_data_} and a date-time suffix.}
 
 \item{save}{Boolean value to save searched data. Highly recommended to be enabled. File will be prefixed with \code{search_data_} and a date-time suffix.}
+
+\item{archive_string}{A string to search for}
+
+\item{save_string}{A string to save by}
 }
 \value{
 A tibble of results
