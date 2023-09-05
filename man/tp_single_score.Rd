@@ -4,16 +4,19 @@
 \alias{tp_single_score}
 \title{ToxPi Single Endpoint score calculation}
 \usage{
-tp_single_score(x, min_fill = T)
+tp_single_score(x, back_fill)
 }
 \arguments{
 \item{x}{Takes a single column for calculation a normalization score}
 
-\item{min_fill}{Boolean variable for adding in 50\% to lowest non-zero score. Defaults to \code{TRUE}}
+\item{back_fill}{Argument to specify for back-filling missing data}
 }
 \value{
 A vector
 }
 \description{
 ToxPi Single Endpoint score calculation
+}
+\details{
+The back_fill argument is used to specify how to handle missing and zero-ed out data.
 }

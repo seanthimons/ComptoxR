@@ -4,7 +4,10 @@
 \alias{ct_archive_load}
 \title{Function to load archived data in the working directory}
 \usage{
-ct_archive_load()
+ct_archive_load(search_string = NA)
+}
+\arguments{
+\item{search_string}{String to search by. If left blank, will default to 'search_'}
 }
 \value{
 The files
