@@ -137,3 +137,106 @@ if(length(query) > 1){
   }
 }
 
+#Production volumes----
+ct_production_vol <- function(query){
+
+ urls <- paste0('https://comptox.epa.gov/dashboard-api/ccdapp2/production-volume/search/by-dtxsid?id=', query)
+
+ df <- map_dfr(urls, ~{
+   cat('\n',.x,'\n')
+   response <- VERB("GET", url = .x)
+   df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+     keep(names(.) == 'dtxsid' | names(.) == 'data')
+})
+ df <- df %>% unpack(cols = 'data')
+return(df)
+}
+
+#test <- ct_production_vol('DTXSID1029706')
+
+prod_volume <- ct_production_vol(hs311$dtxsid)
+
+prod_volume <- prod_volume %>% distinct(., dtxsid, .keep_all = T) %>%
+  select(dtxsid, amount)
+
+ranged_vol <- prod_volume %>%
+  filter(str_detect(amount, '-')) %>%
+  separate_wider_delim(amount, delim = '-', names = c('low', 'high')) %>%
+  mutate(high = str_remove_all(high, '<| |,')%>% as.numeric,
+         low = str_remove_all(low, '<| |,') %>% as.numeric ,
+         amount = rowMeans(across(low:high))
+         ) %>%
+  select(dtxsid, amount)
+
+singed_vol <- prod_volume %>% filter(!str_detect(amount, '-')) %>%
+  mutate(amount = str_remove_all(amount, '<| |,') %>% as.numeric)
+
+prod_volume <- bind_rows(ranged_vol, singed_vol)
+
+
+#####################
+
+
+tp_test <- function(table, ID = NULL, bias = NULL, ...){
+
+  if(is.null(ID) == TRUE){
+    ID <- colnames(table[1,1])
+    cat(cat('\nDefaulting to first column for ID: '),ID,'\n')
+  }
+  if(is.null(bias) == TRUE){
+    cat(colorize('\nNo bias table detected, defaulting to filter = 0.1!\nDid you know about `hc_endpoint_coverage()`?\n', fg ='yellow'))
+
+    bias <- hc_endpoint_coverage(table, ID, suffix = '_amount', filter = 0.1)
+    print(bias)
+    cat('\n')
+  }
+
+  tp <- table %>% select(c(ID,bias$endpoint))
+
+  bias <- bias %>%
+    select(endpoint, weight) %>%
+    pivot_wider(names_from = endpoint,
+                values_from = weight)
+
+  tp_scores <- tp %>%
+    #removes INF
+    mutate(across(.cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))) %>%
+    #tie breaking logic needed here....
+    mutate(across(.cols = !contains(ID),
+                  ~{if(length(na.omit(.)) == 1){
+                    ifelse(is.na(.x) == TRUE, 0, 1)
+                    }else{
+                      if(sd(na.omit(.)) == 0){
+                        ifelse(is.na(.), NA, 1)
+                      }else{tp_single_score(., ...) %>% round(digits = 4)}
+
+                  }})) %>%
+    mutate(across(where(is.numeric), ~replace_na(.,0)))
+
+  tp_names <- tp_scores[,ID]
+
+  tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>% as_tibble()
+
+  tp_scores <- cbind(tp_names, tp_scores)
+
+  tp_scores <- tp_scores %>%
+    rowwise() %>%
+    mutate(score = sum(c_across(cols = !contains(ID))))
+
+  return(tp_scores)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

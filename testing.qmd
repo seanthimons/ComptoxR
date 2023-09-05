@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: tbl-cars
+#| tbl-cap: "Head of cars data"
+
+
+library(knitr)
+kable(head(cars))
+
+```
+```{r}
+#| label: tbl-pressure
+#| tbl-cap: "Head of aqi data"
+
+kable(head(pressure))
+
+```
+
+Look at @tbl-cars
+
+Look at @tbl-pressure

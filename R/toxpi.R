@@ -1,17 +1,39 @@
 #' ToxPi Single Endpoint score calculation
 #'
-#' @param x Takes a single column for calculation a normalization score
-#' @param min_fill Boolean variable for adding in 50% to lowest non-zero score. Defaults to `TRUE`
+#' @details The back_fill argument is used to specify how to handle missing and zero-ed out data.
 #'
+#' @param x Takes a single column for calculation a normalization score
+#' @param back_fill Argument to specify for back-filling missing data
+
 #' @return A vector
 #' @export
 
-tp_single_score <- function(x, min_fill = T){
+tp_single_score <- function(x, back_fill){
+
 
   df <- (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
-  if(min_fill == T)
-    {df[df == 0] <- min(df[df > 0], na.rm = T)*0.5}
-  else{}
+
+  if(!missing(back_fill)){
+    back_fill <- match.arg(back_fill, c('min', 'mean', 'max', 'half_min'))
+
+    if(back_fill == 'min'){
+      df[df == 0] <- min(df[df > 0], na.rm = T)
+    }else{
+      if(back_fill == 'mean'){
+        df[df == 0] <- mean(df[df > 0], na.rm = T)
+      }else{
+        if(back_fill == 'max'){
+          df[df == 0] <- max(df[df > 0], na.rm = T)
+        }else{
+          if(back_fill == 'half_min'){
+            df[df == 0] <- min(df[df > 0], na.rm = T)*0.5
+          }
+        }
+      }
+    }
+  }else{}
+
+
   return(df)
 }
 
@@ -50,11 +72,18 @@ tp_combined_score <- function(table, ID = NULL, bias = NULL, ...){
                   values_from = weight)
 
     tp_scores <- tp %>%
+      #removes INF
+      mutate(across(.cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))) %>%
+      #tie breaking logic needed here....
       mutate(across(.cols = !contains(ID),
-                    ~ if(sd(na.omit(.)) == 0)
-                    {ifelse(is.na(.), NA, 1)}
-                    else {tp_single_score(., ...) %>% round(digits = 4)
-                    })) %>%
+                    ~{if(length(na.omit(.)) == 1){
+                      ifelse(is.na(.x) == TRUE, 0, 1)
+                    }else{
+                      if(sd(na.omit(.)) == 0){
+                        ifelse(is.na(.), NA, 1)
+                      }else{tp_single_score(., ...) %>% round(digits = 4)}
+
+                    }})) %>%
       mutate(across(where(is.numeric), ~replace_na(.,0)))
 
     tp_names <- tp_scores[,ID]

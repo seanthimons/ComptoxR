@@ -12,16 +12,22 @@
 #' @param query Takes a list of compounds using DTXSIDs
 #' @param archive Boolean value to use archived data from a previous run to recreate table. Defaults to `FALSE`. File will be prefixed with `search_data_` and a date-time suffix.
 #' @param save Boolean value to save searched data. Highly recommended to be enabled. File will be prefixed with `search_data_` and a date-time suffix.
+#' @param archive_string A string to search for
+#' @param save_string A string to save by
 #'
 #' @return A tibble of results
 #' @export
 
-hc_table <- function(query, archive = FALSE, save = TRUE){
+hc_table <- function(query, archive = FALSE, save = TRUE, archive_string = NA, save_string = NA){
 
 
 if (archive == TRUE) {
   cat('\nAttempting to load from saved data...\n')
-  foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+  if(!is.na(archive_string) == TRUE){
+    foo <- file.info(list.files(path = ".", pattern = paste0("^",archive_string)))
+  }else{
+    foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+  }
   if(nrow(foo) == 0){
     cat('\nNo files found! Are you in the right working directory?\n')
 
@@ -892,7 +898,7 @@ if (archive == TRUE) {
     e_list <- list()
   }
 
-  ###Mobile----
+  ###Mobility----
   {
     e_list$m <- p %>%
       dplyr::filter(propertyId == 'logkow-octanol-water') %>%
@@ -932,12 +938,13 @@ if (archive == TRUE) {
     search_data$t <- t
     search_data$ghs <-ghs
 
-    saveRDS(search_data, file = paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'))
+    saveRDS(search_data, file = paste0(save_string,format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'))
 
-    cat('\nSearch data archived: ',paste0('search_data_',format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'),'\n')
+    cat('\nSearch data archived: ',paste0(save_string,format(Sys.time(), "%Y-%m-%d_%H.%M.%S"),'.Rds'),'\n')
 
-
-  }
+  }else(
+    cat('\nNot saving your work? Bummer!\n')
+  )
 
   ##Joining----
   cat('\n')
@@ -952,12 +959,18 @@ if (archive == TRUE) {
 #'
 #' Helper function to debug the saved archive files. Also useful if a user would like to drill into the data.
 #'
+#' @param search_string String to search by. If left blank, will default to 'search_'
+#'
 #' @return The files
 #' @export
 
-ct_archive_load <- function(){
+ct_archive_load <- function(search_string = NA){
   cat('\nAttempting to load from saved data...\n')
-  foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+  if(!is.na(search_string)){
+    foo <- file.info(list.files(path = ".", pattern = paste0('^',search_string)))
+
+  }else{foo <- file.info(list.files(path = ".", pattern = "^search_data_"))
+}
   if(nrow(foo) == 0){
     cat('\nNo files found! Are you in the right working directory?\n')
 

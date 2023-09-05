@@ -31,7 +31,9 @@ install_github("sxthimons/ComptoxR")
 Set API key in Sys Environment to the variable `ccte_api_key`.
 
 ```r
+
 Sys.setenv('ccte_api_key' = [TOKEN HERE])
+
 ```
 
 Run the `ct_api_key()` function to test to see if the token is being detected. A restart of R may be required. 
