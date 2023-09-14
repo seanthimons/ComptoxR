@@ -1,8 +1,45 @@
 ---
 title: "ComptoxR: An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening"
-author: "Sean Thimons, Antony Williams"
+
+authors:
+  - name: Sean Thimons
+    affiliations: 
+    - ref: orise
+    orcid: 0000-0002-3736-2529
+    corresponding: true
+    email: thimons.sean@epa.gov
+  - name: Grace Patlewicz
+    affiliations: 
+    - ref: epa
+    orcid: 0000-0003-3863-9689
+  - name: Antony Williams
+    affiliations: 
+    - ref: epa
+    orcid: 0000-0002-2668-4821
+  
+affiliations:
+  - id: orise
+    name: Oak Ridge Institute for Science Education
+    city: Oak Ridge
+    state: TN
+    country: USA
+  - id: epa
+    name: U.S. Environmental Protection Agency, Office of Research & Development, Center for Computational Toxicology & Exposure (CCTE)
+    city: Research Triangle Park
+    state: NC 
+    country: USA
+
+filters:
+  - authors-block
+        
 prefer-html: true
-format: docx
+
+format:
+  #native: default
+  docx: default
+  html: default
+  pdf:
+    keep-tex: true
   
 editor: visual
 execute: 
@@ -12,8 +49,9 @@ execute:
   message: false
   cache: true
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
+
 
 ```{r}
 #| label: load-packages
@@ -60,7 +98,7 @@ When possible, the data returned is returned as-is from the API. We feel this an
 
 ## Installation and initial setup
 
-The CCD API requires an API token for authentication. After requesting one, create an environmental variable as detailed below. A user can test if their key is present by running the `ct_api_key()` function. A restart of the R session may be needed. Upon loading the package, a user must set the server pathway using the `comptox_server()` function. This is designed to accomodate upstream shifts in server URLS, or allow access to private servers when available. When running the function, the base URL of the request will be output to the console.
+The CCD API requires an API token for authentication. After requesting one, create an environmental variable as detailed below. A user can test if their key is present by running the `ct_api_key()` function. A restart of the R session may be needed. Upon loading the package, a user must set the server pathway using the `comptox_server()` function. This is designed to accommodate upstream shifts in server URLS, or allow access to private servers when available. When running the function, the base URL of the request will be output to the console.
 
 ```{r}
 #| label: installation
@@ -157,6 +195,7 @@ A common, initial step for hazard identification is screening by physio-chemical
 df <- ct_prop(query = dtx_list[1], debug = FALSE) 
 
 ```
+
 ```{r}
 #| label: tbl-prop_search
 #| eval: true
@@ -230,12 +269,14 @@ df <- hc_table(query = dtx_list[c(1,7:10,29)], archive = T, save = F, save_strin
 #| include: true
 #| label: tbl-hc-table2
 
-df_names <- ct_details(query = dtx_list[c(1,7:10,29)]) %>% select(dtxsid, preferredName)
+df_names <- ct_details(query = dtx_list[c(1,7:10,29)]) %>%
+  select(dtxsid, preferredName)
 
 df <- left_join(df, df_names, by = c("compound" = "dtxsid")) %>%
   relocate(preferredName, .after = compound)
 
-df_tbl <- df %>% select('preferredName', !contains('_amount')) %>% select(!compound)
+df_tbl <- df %>% select('preferredName', !contains('_amount')) %>% 
+  select(!compound)
 
 ```
 
@@ -496,13 +537,21 @@ tp <- genra_batch_toxprint_tbl(query = dtx_list[c(1,7:10,29)])
 
 tp2 <- left_join(tp, df_names, by = c('compound' = "dtxsid")) %>% select(-compound) %>% relocate(preferredName, .before = 'background control')
 
-max_num <- max(tp2[,2:19], na.rm = T) 
+max_num <- max(tp2[,2:length(tp2)], na.rm = T) 
+min_num <- min(tp2[,2:length(tp2)], na.rm = T) 
 
-tp2 %>% flextable() %>% 
-  align(align = 'center', part = 'all') %>% 
-  valign(j = 1, valign = 'bottom', part = 'header') %>%
-  bg(j = 2:ncol(tp), bg = scales::col_numeric(palette = 'YlOrRd', domain = c(0,max_num)), part = 'body') %>% 
-  bg(j = 'preferredName', bg = 'white')
+
+tp2 %>% 
+  kable() %>% 
+  kable_styling(position = "center", full_width = TRUE) %>%
+  column_spec(2:length(tp2), 
+              color = spec_color(min_num:max_num, 
+                                 #end = 0.7,
+                                 direction = -1, 
+                                 option  = 'B'))
+  
+
+ 
 ```
 
 ### Non-Targeted Analysis Compound Searching
