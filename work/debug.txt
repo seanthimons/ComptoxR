@@ -1,0 +1,225 @@
+base
+compiler
+datasets
+graphics
+grDevices
+grid
+methods
+parallel
+splines
+stats
+stats4
+tcltk
+tools
+utils
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+C:/Program Files/R/R-4.3.2/library
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+base
+base
+base
+base
+base
+base
+base
+base
+base
+base
+base
+base
+base
+base
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+grDevices
+NA
+grDevices, utils
+utils, stats
+tools, compiler
+graphics, stats
+utils, grDevices, graphics
+graphics, methods, stats
+utils
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+methods
+NA
+NA
+NA
+KernSmooth
+NA
+codetools
+methods
+Matrix, methods
+MASS, Matrix, SuppDists, methods, stats4
+NA
+NA
+codetools, methods, xml2, curl, commonmark, knitr, xfun,
+mathjaxr, V8
+methods, xml2, commonmark, knitr
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+snow, Rmpi
+NA
+NA
+NA
+NA
+NA
+NA
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+Part of R 4.3.2
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+NA
+yes
+yes
+yes
+yes
+yes
+yes
+yes
+NA
+yes
+yes
+yes
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2
+4.3.2

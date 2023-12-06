@@ -1,0 +1,284 @@
+---
+title: "ComptoxR"
+subtitle: "An R Package to Retrieve Compound Information from US EPA Products and APIs for Rapid Chemical Hazard, Risk, Toxicological Evaluation and Screening"
+format: revealjs
+author: Sean Thimons, ORISE-CESER/WID/BCB
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+#| eval: true
+#| echo: false
+
+library(ComptoxR)
+library(dplyr)
+library(stringr)
+library(knitr)
+library(kableExtra)
+library(flextable)
+library(tidyr)
+library(purrr)
+
+comptox_server(server = 1)
+
+prod_volume <- readRDS('prod_volume.Rds')
+
+```
+
+# Introduction
+
+## Why was it made
+
+- Need for large, tailored data requests
+
+- Bulk data requests from CCD weren't available or took a long time
+
+- Needed a solution for working with large datasets; Excel spreadsheets wouldn't work.
+
+## Implementation and Design Details
+
+- Most functions that work to retrieve data on a compound are also implemented in a 'batch' function to reduce query times. 
+
+- Typically, any function will use a RESTful GET request for a single compound, and a POST request for everything else.
+
+- Most functions require API token from EPA (no cost!)
+
+--------
+
+## Implementation and Design Details
+
+- When possible, the data returned is returned as-is from the API. 
+
+- Some functions (e.g.: `ct_details()` offer different subsets of data from the endpoint. Where this is an option, the default option is specified to the user, with optional arguments detailed in the appropriate help file.
+
+# Use cases
+
+## Name searching
+
+- Searching by string
+
+```{r}
+#| label: name-search1
+#| eval: true
+#| include: true
+#| echo: true
+#| output-location: slide
+
+#String search
+ct_name('atraz', param = 'start-with') %>%
+  select(searchName, rank, preferredName) %>%
+  head(n = 10)
+```
+
+- Seaching by InChlKey search
+
+```{r}
+#| eval: true
+#| include: true
+#| label: name-search2
+#| echo: true
+#| output-location: slide
+
+#InChlKey search
+ct_name('MXWJVTOOROXGIU', param = 'start-with') %>%
+  select(searchValue, rank, preferredName) %>%
+  head(n = 10)
+```
+
+- Seach by CAS-RN
+```{r}
+#| label: name-search3
+#| eval: true
+#| include: true
+#| echo: true
+#| output-location: slide
+
+#CAS_RN search
+ct_name('1912-24', param = 'contain') %>%
+  select(searchValue, preferredName, casrn)
+```
+
+## Synonymn searching
+
+```{r}
+#| label: syno-search
+#| eval: true
+#| include: true
+#| echo: true
+#| output-location: slide
+
+ct_synonym(query = 'DTXSID7020182') %>%
+  head(n = 10)
+```
+
+## Compound details
+
+- Seaching for compound details
+
+```{r}
+#| label: detail-search
+#| eval: true
+#| include: true
+#| echo: true
+#| output-location: slide
+
+df <- ct_details(dtx_list[1])
+
+# A selection of the data available for the query
+
+df %>%
+  select(dtxsid,preferredName, smiles, molFormula, monoisotopicMass,toxcastSelect,octanolWaterPartition,qcLevelDesc) %>%
+  glimpse()
+```
+
+## Querying for physio-chemical properties 
+
+### ...for Perfluorooctanoic acid
+
+```{r}
+#| label: prop_search
+#| eval: true
+#| include: true
+#| echo: true
+df <- ct_prop(query = dtx_list[1], debug = FALSE)
+
+```
+
+----
+
+```{r}
+#| label: prop_table
+#| eval: true
+#| echo: false
+#| output-location: slide
+df %>%
+  select(name, value, source, propType, unit, dtxsid) %>% 
+  group_by(name, propType) %>% 
+  reframe(value = round(mean(value), 3), unit) %>%
+  distinct(name, propType, value, unit) %>% 
+  pivot_wider(., id_cols = c(name, unit), names_from = propType, values_from = value)
+```
+
+## ...and environmental fate & transport data
+
+```{r}
+#| label: eft-search
+#| eval: true
+#| include: true
+#| echo: true
+
+df <- ct_env_fate(query = dtx_list[1], debug = FALSE)
+
+```
+----
+```{r}
+#| label: eft_table
+#| eval: true
+#| echo: false
+#| output-location: slide
+
+df %>% 
+  select(valueType, modelSource, unit, endpointName, resultValue) %>%
+  group_by(endpointName, valueType) %>%
+  summarize(value = round(mean(resultValue), 3), unit) %>%
+  distinct(endpointName, valueType, value, unit) %>% 
+  pivot_wider(., id_cols = c(endpointName, unit), names_from = valueType, values_from = value) 
+```
+
+## Non-Targeted Analysis Compound Searching
+    
+To better assist in the hazard and risk management space, several functions are suggested for use. 
+
+- Searching by mass range: 
+
+```{r}
+#| label: nta-search1
+#| eval: true
+#| echo: true
+#| include: true
+#| output-location: slide
+
+
+#Searching by mass range
+    ct_search_mass(start = 413.9, end = 414) %>%
+      select(dtxsid, preferredName, casrn, molFormula)
+```    
+
+----
+    
+- Searching by formula: 
+```{r}
+#| label: nta-search2
+#| eval: true
+#| echo: true
+#| include: true
+#| output-location: slide
+
+#Searching by molecular formula
+    ct_search_formula(query = 'C10H19O6PS2') %>%
+      select(dtxsid, preferredName, casrn, averageMass, sourcesCount, toxcastSelect, qcLevel) %>%
+      arrange(desc(sourcesCount))
+```
+
+## Searching for hazard records
+
+```{r}
+#| label: hazard
+#| eval: true
+#| echo: true
+
+df <- ct_hazard(query = 'DTXSID4020375')
+
+
+```
+```{r}
+#| label: hazard2
+#| eval: true
+#| echo: false
+#| output-location: slide
+
+df %>% group_by(riskAssessmentClass, supercategory, toxvalUnits) %>% summarize(toxvalNumeric = mean(toxvalNumeric))
+```
+
+
+## Searching for presence on aggregate lists
+
+- Three functions for aggregate lists
+  + Retrieve all public lists
+  + Retrieve all compounds on a given list
+  + Retrieve all public lists a compound is on
+
+```{r}
+#| label: lists_all
+#| echo: true
+#| output-location: slide
+ct_lists_all() %>% select(name, type, label, longDescription)
+```
+----
+```{r}
+#| label: list_search1
+#| echo: true
+#| output-location: slide
+
+ct_list('PRODWATER') %>%
+  select(preferredName, casrn, smiles)
+```
+
+# Other functions of interest
+
+## Other functions
+
+- Hazard queries for GHS, skin/eye, genotoxicity, cancer records
+- Queries for TEST and OPERA QSAR models
+- Queries for [GenRA Generalized Read-Across]
+- Hazard comparison table from Cheminformatics
+
+# Remaining work
+
+## Remaining work
+
+- Bioactivity, in-vitro records not currently implemented
+- Better error handling
+- Compound structure picture retrieval
