@@ -17,6 +17,7 @@ License: `use_mit_license()`, `use_gpl3_license()`
 Depends: 
     R (>= 3.5.0)
 Imports: 
+    cli,
     crayon (>= 1.5.1),
     dplyr (>= 1.0.9),
     DT (>= 0.24),

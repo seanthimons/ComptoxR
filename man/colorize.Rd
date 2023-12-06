@@ -4,7 +4,7 @@
 \alias{colorize}
 \title{Colorize text for display in the terminal.}
 \usage{
-colorize(text, fg = "black", bg = NULL)
+colorize(text, fg = "white", bg = NULL)
 }
 \arguments{
 \item{text}{character vector}
@@ -14,11 +14,11 @@ colorize(text, fg = "black", bg = NULL)
 \item{bg}{background color, defaults to transparent}
 }
 \description{
-If R is not currently running in a system that supports terminal colours
+If R is not currently running in a system that supports terminal colors
 the text will be returned unchanged.
 }
 \details{
-Allowed colours are: black, blue, brown, cyan, dark gray, green, light
+Allowed colors are: black, blue, brown, cyan, dark gray, green, light
 blue, light cyan, light gray, light green, light purple, light red,
 purple, red, white, yellow
 
