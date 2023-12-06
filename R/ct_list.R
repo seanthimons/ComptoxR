@@ -56,18 +56,18 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL){
   surl <- "chemical/list/search/by-dtxsid/"
   urls <- paste0(burl, surl, query)
 
-  df <- map_dfr(urls, ~{
+  df <- map(urls, ~{
 
-  cat('\nSearching for lists that contain', .x,'...\n')
+  #cat('\nSearching for lists that contain', .x,'...\n')
 
     #debug ###
     cat(.x,'\n')
 
     response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }) %>% as_tibble()
+  }) #%>% as_tibble()
 
-  cat('\nSearch complete!\n')
+  #cat('\nSearch complete!\n')
   return(df)
 }
 

@@ -7,6 +7,8 @@
 #' @import purrr
 #' @import stringr
 #' @import tidyr
+#' @importFrom cli cli_alert_info
+#' @importFrom cli cli_alert_success
 #' @importFrom DT datatable
 #' @importFrom DT formatStyle
 #' @importFrom DT styleEqual
@@ -17,6 +19,7 @@
 #' @importFrom pbapply pboptions
 #' @importFrom pillar glimpse
 #' @importFrom tibble as_tibble
+#' @importFrom webchem as.cas
 #' @importFrom webchem pc_sect
 ## usethis namespace: end
 NULL
