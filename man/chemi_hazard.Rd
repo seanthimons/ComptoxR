@@ -4,20 +4,28 @@
 \alias{chemi_hazard}
 \title{Hazard Comparison}
 \usage{
-chemi_hazard(query)
+chemi_hazard(
+  query,
+  cts_generations = c(1, 2, 3, 4),
+  analogs = c("SUBSTRUCTURE", "SIMILAR", "TOXPRINT"),
+  min_sim = NULL,
+  coerce = TRUE
+)
 }
 \arguments{
 \item{query}{A list of DTXSIDS to search for.}
 
-\item{cts}{String of of number of generations of chemical transformation to look for, ranging from 1-4. Compounds that are predicted from this will be tagged in a separate column with the likelihood of observance.}
+\item{cts_generations}{A number of metabolite generations to predict for. Maximum of \code{4} allowed.}
 
-\item{min_sim}{String of analogs to search for. Defaults to 0.49 when active.}
+\item{analogs}{String of variables to search for. Defaults to no analogs to look for.}
 
-\item{analogs}{String of}
+\item{min_sim}{Tanimoto simularity coeffecient to search for analogs by. Defaults to \code{0.49} if an analog is specified.}
+
+\item{coerce}{Boolean variable to coerce the data to a numerical equivalent. Defaults to \code{TRUE}.}
 }
 \value{
-A data frame
+A data frame or list, depending on \code{coerce}
 }
 \description{
-Hazard Comparison
+Retrieves records for queried compounds. When the parameter \code{coerce} is set to \code{TRUE}, a list containing four data frames will be created; if set to \code{FALSE} the raw data from the query will be returned.
 }

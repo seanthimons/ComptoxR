@@ -139,23 +139,16 @@ if(length(query) > 1){
 }
 
 #Production volumes----
-ct_production_vol <- function(query){
 
- urls <- paste0('https=//comptox.epa.gov/dashboard-api/ccdapp2/production-volume/search/by-dtxsid?id=', query)
 
- df <- map_dfr(urls, ~{
-   cat('\n',.x,'\n')
-   response <- VERB("GET", url = .x)
-   df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-     keep(names(.) == 'dtxsid' | names(.) == 'data')
-})
- df <- df %>% unpack(cols = 'data')
-return(df)
-}
-
-#test <- ct_production_vol('DTXSID1029706')
+ ct_production_vol('DTXSID1029706')
 
 prod_volume <- ct_production_vol(hs311$dtxsid)
+
+
+#####################
+
+prod_volume <- ct_production_vol(data$headers$dtxsid)
 
 prod_volume <- prod_volume %>% distinct(., dtxsid, .keep_all = T) %>%
   select(dtxsid, amount)
@@ -165,8 +158,8 @@ ranged_vol <- prod_volume %>%
   separate_wider_delim(amount, delim = '-', names = c('low', 'high')) %>%
   mutate(high = str_remove_all(high, '<| |,')%>% as.numeric,
          low = str_remove_all(low, '<| |,') %>% as.numeric ,
-         amount = rowMeans(across(low=high))
-         ) %>%
+         amount = rowMeans(across(low:high))
+  ) %>%
   select(dtxsid, amount)
 
 singed_vol <- prod_volume %>% filter(!str_detect(amount, '-')) %>%
@@ -174,155 +167,27 @@ singed_vol <- prod_volume %>% filter(!str_detect(amount, '-')) %>%
 
 prod_volume <- bind_rows(ranged_vol, singed_vol)
 
+bias <- hc_endpoint_coverage(data$records, id = 'dtxsid')
 
-#####################
+test <- list(score = NULL, tbl = NULL)
 
+test$score <- tp_combined_score(data$records, id = 'dtxsid', bias = bias)
 
-tp_test <- function(table, ID = NULL, bias = NULL, ...){
+compound_coverage <- hc_compound_coverage(data$records, id = 'dtxsid')
 
-  if(is.null(ID) == TRUE){
-    ID <- colnames(table[1,1])
-    cat(cat('\nDefaulting to first column for ID= '),ID,'\n')
-  }
-  if(is.null(bias) == TRUE){
-    cat(colorize('\nNo bias table detected, defaulting to filter = 0.1!\nDid you know about `hc_endpoint_coverage()`?\n', fg ='yellow'))
+test$score <- reduce(list(test$score, prod_volume, compound_coverage), left_join)
 
-    bias <- hc_endpoint_coverage(table, ID, suffix = '_amount', filter = 0.1)
-    print(bias)
-    cat('\n')
-  }
-
-  tp <- table %>% select(c(ID,bias$endpoint))
-
-  bias <- bias %>%
-    select(endpoint, weight) %>%
-    pivot_wider(names_from = endpoint,
-                values_from = weight)
-
-  tp_scores <- tp %>%
-    #removes INF
-    mutate(across(.cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))) %>%
-    #tie breaking logic needed here....
-    mutate(across(.cols = !contains(ID),
-                  ~{if(length(na.omit(.)) == 1){
-                    ifelse(is.na(.x) == TRUE, 0, 1)
-                    }else{
-                      if(sd(na.omit(.)) == 0){
-                        ifelse(is.na(.), NA, 1)
-                      }else{tp_single_score(., ...) %>% round(digits = 4)}
-
-                  }})) %>%
-    mutate(across(where(is.numeric), ~replace_na(.,0)))
-
-  tp_names <- tp_scores[,ID]
-
-  tp_scores <- data.frame(mapply('*',tp_scores[,2=ncol(tp_scores)], bias)) %>% as_tibble()
-
-  tp_scores <- cbind(tp_names, tp_scores)
-
-  tp_scores <- tp_scores %>%
-    rowwise() %>%
-    mutate(score = sum(c_across(cols = !contains(ID))))
-
-  return(tp_scores)
-}
+test$score %>%
+  arrange((score)) %>%
+  mutate(dtxsid = forcats::fct_reorder(dtxsid, score)) %>%
+  ggplot(., aes(x = dtxsid, y = score)) +
+  geom_point(shape = "circle", size = 1.5, colour = "black") +
+  coord_flip() +
+  theme_minimal()
 
 
 
 ######
-{
-library(ComptoxR)
-library(tidyverse)
-library(httr2)
-}
-test <- ct_list('CWA311HS')
-
-split_set <- split(test$dtxsid, ceiling(seq_along(test$dtxsid)/20)) %>%
-  purrr==map(., as.list)
-
-search <-split_set[[7]]
-
-#####
-query = q1
-
-chemicals <- vector(mode = 'list', length = length(query))
-
-chemicals <- map2(chemicals,query,
-                  ~{.x <- list(chemical = list(
-                    .y
-                    )
-                  )
-                })
-
-chemicals <-
-  list(
-    list(
-      chemical = list(
-        "id" = "20446",
-        "cid"= "DTXCID00446",
-        "sid"= "DTXSID0020446",
-        "casrn"= "330-54-1",
-        "name"= "Diuron",
-        "smiles"= "ClC1C=C(NC(N(C)C)=O)C=CC=1Cl",
-        "canonicalSmiles"= "CN(C)C(=O)NC1=CC(Cl)=C(Cl)C=C1",
-        "inchi"= "InChI=1S/C9H10Cl2N2O/c1-13(2)9(14)12-6-3-4-7(10)8(11)5-6/h3-5H,1-2H3,(H,12,14)",
-        "inchiKey" = "XMTQQYYKAHVGBJ-UHFFFAOYSA-N",
-        "checked"= TRUE
-    )
-  )
-)
-
-chemicals <-
-  list(
-    list(
-      "chemical" = list(
-        "id"= "20446",
-        "cid"= "DTXCID00446",
-        "sid"= "DTXSID0020446",
-        "casrn"= "330-54-1",
-        "name"= "Diuron",
-        "smiles"= "ClC1C=C(NC(N(C)C)=O)C=CC=1Cl",
-        "canonicalSmiles"= "CN(C)C(=O)NC1=CC(Cl)=C(Cl)C=C1",
-        "inchi"= "InChI=1S/C9H10Cl2N2O/c1-13(2)9(14)12-6-3-4-7(10)8(11)5-6/h3-5H,1-2H3,(H,12,14)",
-        "inchiKey"= "XMTQQYYKAHVGBJ-UHFFFAOYSA-N",
-        "checked"= TRUE
-      )
-    ),
-    list(
-      "chemical"= list(
-        "id"= "20182",
-        "cid"= "DTXCID30182",
-        "sid"= "DTXSID7020182",
-        "casrn"= "80-05-7",
-        "name"= "Bisphenol A",
-        "smiles"= "C(C)(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1",
-        "canonicalSmiles"= "CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1",
-        "inchi"= "InChI=1S/C15H16O2/c1-15(2,11-3-7-13(16)8-4-11)12-5-9-14(17)10-6-12/h3-10,16-17H,1-2H3",
-        "inchiKey"= "IISBACLAFKSPIT-UHFFFAOYSA-N",
-        "checked"= TRUE
-    )
-  )
-)
-
-payload <- list(
-  'chemicals' = NULL,
-  'options' = list(
-    cts = "1",
-    minSimilarity = '0.49',
-    analogSearchType = NULL))
-
-payload$chemicals <- chemicals
-
-response <- POST(
-  url = "https://hcd.rtpnc.epa.gov/api/hazard",
-  body = rjson::toJSON(payload),
-  content_type("application/json"),
-  accept("application/json, text/plain, */*"),
-  encode = 'json'
-)
-
-df <- content(response, "text", encoding = 'UTF-8') %>%
-  jsonlite::fromJSON(simplifyVector = FALSE)
 
 
 ####
@@ -332,12 +197,3 @@ df <- content(response, "text", encoding = 'UTF-8') %>%
 # Executive summary
 'https://comptox.epa.gov/dashboard-api/ccdapp2/executive-summary-links/search/by-dtxsid?id=DTXSID7020182'
 
-####
-
-debug <- function(query){
-  if(typeof(query) == 'list'){'list'
-  }else{
-      if(length(query) > 1){'char > 1'}else{'char = 1'}
-    }
-#return(query)
-}
