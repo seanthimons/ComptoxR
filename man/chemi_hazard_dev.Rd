@@ -4,16 +4,10 @@
 \alias{chemi_hazard_dev}
 \title{Hazard Comparison}
 \usage{
-chemi_hazard_dev(query, cts_pred = NULL)
+chemi_hazard_dev(query)
 }
 \arguments{
 \item{query}{A list of DTXSIDS to search for.}
-
-\item{cts_pred}{String of of number of generations of chemical transformation to look for, ranging from 1-4. Compounds that are predicted from this will be tagged in a separate column with the likelihood of observance.}
-
-\item{min_sim}{String of analogs to search for. Defaults to 0.49 when active.}
-
-\item{analogs}{String of}
 }
 \value{
 A data frame

@@ -18,7 +18,6 @@ Depends:
     R (>= 3.5.0)
 Imports: 
     cli,
-    crayon (>= 1.5.1),
     dplyr (>= 1.0.9),
     DT (>= 0.24),
     httr (>= 1.4.3),
@@ -32,8 +31,7 @@ Imports:
     stringr (>= 1.4.0),
     testthat,
     tibble,
-    tidyr (>= 1.2.0),
-    webchem (>= 1.2.0)
+    tidyr (>= 1.2.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

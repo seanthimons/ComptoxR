@@ -7,7 +7,7 @@
 tp_single_score(x, back_fill)
 }
 \arguments{
-\item{x}{Takes a single column for calculation a normalization score}
+\item{x}{Takes a single column for calculation of a normalization score}
 
 \item{back_fill}{Argument to specify for back-filling missing data}
 }
@@ -18,5 +18,5 @@ A vector
 ToxPi Single Endpoint score calculation
 }
 \details{
-The back_fill argument is used to specify how to handle missing and zero-ed out data.
+The back_fill argument is used to specify how to handle missing, \code{NA}, and zero-ed out data.
 }
