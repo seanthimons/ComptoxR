@@ -1,15 +1,11 @@
 #' Hazard Comparison
 #'
 #' @param query A list of DTXSIDS to search for.
-#' @param cts_pred String of of number of generations of chemical transformation to look for, ranging from 1-4. Compounds that are predicted from this will be tagged in a separate column with the likelihood of observance.
-#' @param min_sim String of analogs to search for. Defaults to 0.49 when active.
-#' @param analogs String of
 #'
 #' @return A data frame
-#' @export
 #'
-chemi_hazard_dev <- function(query,
-                         cts_pred = NULL){
+chemi_hazard_dev <- function(query
+                         ){
 
   url <- "https://hcd.rtpnc.epa.gov/api/hazard"
 
@@ -28,8 +24,6 @@ chemi_hazard_dev <- function(query,
   )
 
   payload$chemicals <- chemicals
-
-  payload <- payload
 
   response <- POST(
     url = url,
