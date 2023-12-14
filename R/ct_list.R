@@ -17,8 +17,7 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
 
   burl <- Sys.getenv('burl')
 
-
-  cat('\nSearching for compounds on', list_name,'list ...\n')
+  cli_alert_info('\nSearching for compounds on {list_name} list ...\n')
 
   surl <- "chemical/list/chemicals/search/by-listname/"
 
@@ -26,13 +25,13 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
 
   df <- map_dfr(urls, ~{
 
-    #cat(.x,'\n')
+    cat('\n')
 
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+    response <- VERB("GET", url = .x, add_headers("x-api-key" = token), progress())
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
 
-  cat('\nSearch complete!\n',nrow(df),'compounds found!\n')
+  cli_alert_success('\n{nrow(df)} compounds found!\n')
   return(df)
 }
 

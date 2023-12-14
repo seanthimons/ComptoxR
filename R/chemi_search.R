@@ -8,24 +8,11 @@
 #' @return A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
 #' @export
 
-chemi_search <- function(query, coerce = FALSE){
+chemi_search <- function(query, coerce = FALSE, ...){
 
   url <- "https://hcd.rtpnc.epa.gov/api/resolver/lookup"
 
-  if(typeof(query) == 'list'){
-    payload <- list(
-      ids = vector(mode = 'list', length = length(query))
-    )
-  }else{
-    if(typeof(query) == 'character'){
-      query <- as.list(query)
-
-      payload <- list(
-        ids = vector(mode = 'list', length = length(query))
-      )
-
-    }else{stop('Check query type!')}
-  }
+  payload <- query_typeof(query)
 
   payload$ids <- query
 

@@ -4,3 +4,4 @@
 ^paper\.Rmd$
 ^paper\.qmd$
 [.]html$
+^work$
