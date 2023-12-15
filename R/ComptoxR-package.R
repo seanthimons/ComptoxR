@@ -3,13 +3,11 @@
 
 ## usethis namespace: start
 #' @import dplyr
+#' @import cli
 #' @import httr
 #' @import purrr
 #' @import stringr
 #' @import tidyr
-#' @importFrom cli cli_alert_info
-#' @importFrom cli cli_alert_success
-#' @importFrom cli cli_alert_warning
 #' @importFrom DT datatable
 #' @importFrom DT formatStyle
 #' @importFrom DT styleEqual

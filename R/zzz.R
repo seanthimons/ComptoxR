@@ -1,5 +1,6 @@
 .onAttach <- function(libname, ComptoxR) {
 
+  cli::cli_rule()
 #packageStartupMessage(
   cli::cli_alert_success(
     c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR
@@ -20,5 +21,5 @@
 #   '\nAttempting ping test....\n')
 #   )
 #   ping_ccte()
-
+  cli::cli_rule()
 }

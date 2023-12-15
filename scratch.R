@@ -138,61 +138,8 @@ if(length(query) > 1){
   }
 }
 
-#Production volumes----
-
-
- ct_production_vol('DTXSID1029706')
-
-prod_volume <- ct_production_vol(hs311$dtxsid)
-
-
-#####################
-
-prod_volume <- ct_production_vol(data$headers$dtxsid)
-
-prod_volume <- prod_volume %>% distinct(., dtxsid, .keep_all = T) %>%
-  select(dtxsid, amount)
-
-ranged_vol <- prod_volume %>%
-  filter(str_detect(amount, '-')) %>%
-  separate_wider_delim(amount, delim = '-', names = c('low', 'high')) %>%
-  mutate(high = str_remove_all(high, '<| |,')%>% as.numeric,
-         low = str_remove_all(low, '<| |,') %>% as.numeric ,
-         amount = rowMeans(across(low:high))
-  ) %>%
-  select(dtxsid, amount)
-
-singed_vol <- prod_volume %>% filter(!str_detect(amount, '-')) %>%
-  mutate(amount = str_remove_all(amount, '<| |,') %>% as.numeric)
-
-prod_volume <- bind_rows(ranged_vol, singed_vol)
-
-bias <- hc_endpoint_coverage(data$records, id = 'dtxsid')
-
-test <- list(score = NULL, tbl = NULL)
-
-test$score <- tp_combined_score(data$records, id = 'dtxsid', bias = bias)
-
-compound_coverage <- hc_compound_coverage(data$records, id = 'dtxsid')
-
-test$score <- reduce(list(test$score, prod_volume, compound_coverage), left_join)
-
-test$score %>%
-  arrange((score)) %>%
-  mutate(dtxsid = forcats::fct_reorder(dtxsid, score)) %>%
-  ggplot(., aes(x = dtxsid, y = score)) +
-  geom_point(shape = "circle", size = 1.5, colour = "black") +
-  coord_flip() +
-  theme_minimal()
-
-
-
 ######
 
-
-####
-#Chem func use
-'https://comptox.epa.gov/dashboard-api/ccdapp2/exposure-chemical-func-use/search/by-dtxsid?id=DTXSID7020182'
 
 # Executive summary
 'https://comptox.epa.gov/dashboard-api/ccdapp2/executive-summary-links/search/by-dtxsid?id=DTXSID7020182'

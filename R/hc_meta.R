@@ -14,7 +14,7 @@ tp_variable_coverage <- function(table, id = NA, suffix = NA){
   if(missing(id) == T){cli_abort('Missing id variable!')
     }else{
       if(is.na(suffix) == TRUE){
-    cli_alert_warning('Missing search parameter!')
+    # cli_alert_warning('Missing search parameter!')
     coverage_score <- table %>%
       mutate(data_coverage = (rowSums(is.na(.))))
 
