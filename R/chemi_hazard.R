@@ -23,7 +23,7 @@ chemi_hazard <- function(query,
     stop('Only one CTS option method allowed')}else{
       if(!missing(cts_generations) & length(cts_generations) == 1){
         cts_generations <- match.arg(as.character(cts_generations), choices = c('1', '2', '3', '4'))
-      }else{cts_generations <- NULL}
+        }else{cts_generations <- NULL}
     }
 
 
@@ -40,12 +40,11 @@ chemi_hazard <- function(query,
 
   ##Min similarity----
 
-  ###TODO----
-  ###FIX THIS SECTION------
-  if(length(analogs) == 1 & !is.null(min_sim)){
+  if(!is.null(analogs) & !is.null(min_sim)){
     min_sim <- as.character(min_sim)
   }else{
-      cli_abort('Something went wrong with the analog search...')
+    min_sim <- NULL
+    # cli_abort('Something went wrong with the analog search...')
     }
 
   #Payload generation----
@@ -53,18 +52,32 @@ chemi_hazard <- function(query,
 
   chemicals <- map2(chemicals,query,
                     ~{.x <- list(chemical = list(
-                      sid = .y
+                      sid = .y))}
                     )
-                    )
-                    })
 
 
   payload <- list(
     'chemicals' = chemicals,
     'options' = list(
-      cts = NULL,
-      minSimilarity = NULL,
-      analogSearchType = NULL))
+      cts = cts_generations,
+      minSimilarity = min_sim,
+      analogSearchType = analogs))
+
+
+
+  ##Payload output----
+  if(is.null(cts_generations)){cts_generations_payload <- 'NULL'}else{cts_generations_payload <- cts_generations}
+  if(is.null(analogs)){analogs_payload <- 'NULL'}else{analogs_payload <- analogs}
+  if(is.null(min_sim)){min_sim_payload <- 'NULL'}else{min_sim_payload <- min_sim}
+
+  cli_rule(left = 'Payload options')
+  cli_dl(
+    c('CTS generations' = '{cts_generations_payload}',
+      'Analog search pattern' = '{analogs_payload}',
+      'Minimum simularity' = '{min_sim_payload}'
+    )
+  )
+  cli_rule()
 
   response <- POST(
     url = "https://hcd.rtpnc.epa.gov/api/hazard",

@@ -58,39 +58,69 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
 
   if(missing(table)) cli_abort('No table present!')
 
+  cat_line()
+  cli_rule(left = 'ID variable')
+
   if(is.null(id) == TRUE){
     id <- colnames(table[1,1])
 
-    cli_alert_warning(cat(col_yellow('Defaulting to first column for id: {id}')))
+    cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
 
-    }
+  }
+
+  cat_line()
+
+  tp_list <- list(tp_scores = NULL, bias = NULL, variable_coverage = NULL)
+
+  #Bias table----
+  cli_rule(left = 'Bias table')
+  cat_line()
+
   if(is.null(bias) == TRUE){
-
-
     cli_alert_warning(
         col_yellow('WARNING:
                    No bias table detected, defaulting to filter = 0.5!
-                   Did you know about `hc_endpoint_coverage()`?'
+                   Did you know about `tp_endpoint_coverage()`?
+                   '
           ))
 
       bias <- tp_endpoint_coverage(table, id, suffix = NA, filter = 0.5)
-      print(bias)
-      cat('\n')
+      bias %>% print(n = Inf)
+    tp_list$bias <- bias
+  }else{
+    bias %>% print(n = Inf)
+    tp_list$bias <- bias
     }
 
-    tp <- table %>% select(c(id,bias$endpoint))
+  cat_line()
 
-    bias <- bias %>%
+  tp <- table %>% select(c(id,bias$endpoint))
+
+  bias <- bias %>%
       select(endpoint, weight) %>%
       pivot_wider(names_from = endpoint,
                   values_from = weight)
+
+  #Variable coverage----
+
+  cli_rule(left = 'Variable data coverage')
+  tp_list$variable_coverage <- tp_variable_coverage(table = table, id = id )
+  tp_list$variable_coverage %>% print(n = Inf)
+
+  cat_line()
+  cli_rule()
+
+
+  #Backfilling----
 
     if(missing(back_fill) == TRUE){cli_alert_warning('No back filling option specified!')
       back_fill <- NULL
       }else{
       cli_alert_warning('Back filling option selected: {back_fill}')
-    }
+      }
+    cat_line()
 
+#TP scores----
     tp_scores <- tp %>%
       #removes INF
       mutate(across(.cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))) %>%
@@ -116,10 +146,44 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
       rowwise() %>%
       mutate(score = sum(c_across(cols = !contains(id)))) %>%
       relocate(score, .after = id) %>%
-      arrange(desc(score))
+      arrange(desc(score)) %>%
+      ungroup()
 
-  return(tp_scores)
+
+    tp_list$tp_scores <- tp_scores
+
+  return(tp_list)
 }
 
+#' ToxPi scatterplot
+#'
+#' @param toxpi_list
+#'
+#' @return A plot
+#' @export
 
+tp_plot <- function(toxpi_list){
+
+  var <- toxpi_list$toxpi$variable_coverage
+  tp <- toxpi_list$toxpi$tp_scores
+
+  plot <- tp %>%
+    arrange(score) %>%
+    left_join(., var, by = 'dtxsid') %>%
+    select(dtxsid, score, data_coverage) %>%
+    mutate(dtxsid = forcats::fct_reorder(dtxsid, score)) %>%
+    ggplot(mapping = aes(
+      x = dtxsid,
+      y = score,
+      color = data_coverage
+    )) +
+    geom_point(
+      size = 1.5
+    ) +
+    scale_color_continuous(type = "viridis") +
+    coord_flip() +
+    t
+
+ return(plot)
+}
 
