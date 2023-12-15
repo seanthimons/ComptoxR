@@ -4,14 +4,19 @@
 \alias{ct_production_vol}
 \title{Compound Production Volumes}
 \usage{
-ct_production_vol(query)
+ct_production_vol(query, clean = TRUE)
 }
 \arguments{
 \item{query}{A list of DTXSIDs to search by}
+
+\item{clean}{Boolean to clean data or to return native data}
 }
 \value{
 A tibble with associated data, where available
 }
 \description{
 Function to scrape the Comptox Chemistry Dashboard. Not guaranteed to work or remain in the package.
+The Production Volume data is sourced from the Chemical Data Reporting (2020) (CDR) data submitted to US-EPA. The Chemical Data Reporting (CDR) Rule, issued under the Toxic Substances Control Act (TSCA), requires manufacturers (including importers) to give EPA information on the chemicals they produce domestically or import into the United States. EPA uses the data to help assess the potential human health and environmental effects of these chemicals and makes the non-confidential business information it receives available to the public.
+Data is reported in pounds.
+When the data is cleaned, the \code{amount} will return an average volume for ranged values, and the upper limit for single volumes.
 }
