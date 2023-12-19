@@ -4,7 +4,7 @@
 \alias{tp_plot}
 \title{ToxPi scatterplot}
 \usage{
-tp_plot(toxpi_list)
+tp_plot(toxpi_list, ...)
 }
 \arguments{
 \item{toxpi_list}{}

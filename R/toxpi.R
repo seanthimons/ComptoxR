@@ -66,6 +66,8 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
 
     cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
 
+  }else{
+    cli_alert_success('ID column: {id}')
   }
 
   cat_line()
@@ -160,9 +162,8 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
 #' @param toxpi_list
 #'
 #' @return A plot
-#' @export
 
-tp_plot <- function(toxpi_list){
+tp_plot <- function(toxpi_list, ...){
 
   var <- toxpi_list$toxpi$variable_coverage
   tp <- toxpi_list$toxpi$tp_scores
