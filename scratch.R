@@ -9,14 +9,6 @@ test <- tribble(
 'F',2,2,NA,NA,1
 )
 
-test <- ct_list(list_name = 'CWA311HS')
-
-t1 <- test %>% mutate(toxcastSelect = activeAssays/totalAssays) %>% arrange(desc(toxcastSelect))
-
-test <- t1 %>% slice_head(n= 25)
-
-t1 <- hc_table(test$dtxsid)
-
 
 tbl %>%
   select('compound', !contains('_amount')) %>%
@@ -106,39 +98,6 @@ try()
   return(df)
 }
 
-
-##############
-
-try(
-
-  'https=//comptox.epa.gov/dashboard/web-test/'
-  response <- VERB("GET", url = .x)
-  df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
-  )
-
-class(try())
-
-if(class(try)){}
-
-
-t5 <- ct_details('DTXSID5025948')
-t5 <- t5 %>% select(descriptorStringTsv)
-t5 <- str_split(t5$descriptorStringTsv, '\t')
-t5 <- set_colnames(t5, 'tp')
-names(t5) <- 'tp'
-t5 <- bind_cols(toxprint_ID_key, t5)
-
-testing <- function(query){
-if(length(query) > 1){
-  cat('\nOver\n')
-  length(query)
-}else{
-    cat('\nEqual\n')
-  length(query)
-  }
-}
-
-######
 
 
 # Executive summary
