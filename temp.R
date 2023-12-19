@@ -17,3 +17,10 @@ tp %>%
   scale_color_continuous(type = "viridis") +
   coord_flip() +
   theme_light()
+
+
+
+df <- t1 %>%
+  map(., ~pluck(., 'rqCode')) %>%
+  compact() %>%
+  map_dfr(., as_tibble)
