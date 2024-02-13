@@ -5,3 +5,4 @@
 ^paper\.qmd$
 [.]html$
 ^work$
+^.RData

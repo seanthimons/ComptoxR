@@ -34,6 +34,7 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .Rproj.user
+
 global_assays.xlsx
 global_assay.xlsx
 invasive_species.csv
@@ -43,6 +44,6 @@ candidate-list-of-svhc-for-authorisation-export.xlsx
 paper.html
 search_data_2023-07-18_12.50.53.Rds
 ComptoxR_1.0.0.zip
-~$*
+~$paper.docx
 temp.R
 output
