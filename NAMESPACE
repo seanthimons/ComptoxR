@@ -2,6 +2,7 @@
 
 export("%>%")
 export(chemi_hazard)
+export(chemi_rq)
 export(chemi_safety)
 export(chemi_search)
 export(colorize)
