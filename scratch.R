@@ -98,8 +98,97 @@ try()
   return(df)
 }
 
-
-
 # Executive summary
 'https://comptox.epa.gov/dashboard-api/ccdapp2/executive-summary-links/search/by-dtxsid?id=DTXSID7020182'
+
+###
+
+
+#######TODO-----
+
+tp_list <- list(tp_scores = NULL, bias = NULL, variable_coverage = NULL)
+
+tp <- test %>%
+  select(c('compound',bias$endpoint))
+
+bias <- bias %>%
+  select(endpoint, weight) %>%
+  pivot_wider(names_from = endpoint,
+              values_from = weight)
+
+#Variable coverage----
+
+cli_rule(left = 'Variable data coverage')
+
+tp_list$variable_coverage <- tp_variable_coverage(table = test, id = 'name')
+print(head(tp_list$variable_coverage, n = nrow(tp_list$variable_coverage)))
+
+cat_line()
+cli_rule()
+
+
+#Backfilling----
+
+if(missing(back_fill) == TRUE){cli_alert_warning('No back filling option specified!')
+  back_fill <- NULL
+}else{
+  cli_alert_warning('Back filling option selected: {back_fill}')
+}
+cat_line()
+
+#TP scores----
+tp_scores <- tp %>%
+  #removes INF
+  mutate(
+    across(
+      .cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))
+  ) %>%
+  #tie breaking logic needed here....
+  mutate(
+    across(
+      .cols = !contains('name'),
+      ~{if(length(na.omit(.)) == 1){
+        ifelse(is.na(.x) == TRUE, 0, 1)
+      }else{
+        if(sd(na.omit(.)) == 0){
+          ifelse(is.na(.), NA, 1)
+        }else{tp_single_score(., back_fill= NULL) %>%
+            round(digits = 4)}
+
+      }}
+    )
+  ) %>%
+  mutate(
+    across(
+      where(is.numeric), ~replace_na(.,0))
+  )
+
+tp_names <- tp_scores[,'name'] %>%
+  as_tibble() %>%
+  rename('name' = value)
+
+tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>%
+  as_tibble()
+
+tp_scores <- cbind(tp_names, tp_scores)
+
+tp_scores1 <- tp_scores %>%
+  rowwise() %>%
+  mutate(score = sum(
+    across(!contains('name')))) %>%
+  relocate(score, .after = 'name') %>%
+  arrange(desc(score)) %>%
+  ungroup()
+
+tp_list$tp_scores <- tp_scores
+###############
+
+'DTXSID3020465'
+
+
+
+af <- ct_list('WIKIANTIFUNGALS')
+
+cli_alert_warning('Large request detected!\nRequest may time out!\nRecommend to change search parameters or break up requests!\n')
+
 
