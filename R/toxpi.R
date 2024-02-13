@@ -96,7 +96,9 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
 
   cat_line()
 
-  tp <- table %>% select(c(id,bias$endpoint))
+  #TODO-----
+  tp <- table %>%
+    select(c(id,bias$endpoint))
 
   bias <- bias %>%
       select(endpoint, weight) %>%
@@ -106,8 +108,9 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
   #Variable coverage----
 
   cli_rule(left = 'Variable data coverage')
-  tp_list$variable_coverage <- tp_variable_coverage(table = table, id = id )
-  tp_list$variable_coverage %>% print(n = Inf)
+
+  tp_list$variable_coverage <- tp_variable_coverage(table = table, id = id)
+  print(head(tp_list$variable_coverage, n = nrow(tp_list$variable_coverage)))
 
   cat_line()
   cli_rule()
@@ -125,32 +128,48 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
 #TP scores----
     tp_scores <- tp %>%
       #removes INF
-      mutate(across(.cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))) %>%
+      mutate(
+        across(
+          .cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))
+        ) %>%
       #tie breaking logic needed here....
-      mutate(across(.cols = !contains(id),
+      mutate(
+        across(
+          .cols = !contains(id),
                     ~{if(length(na.omit(.)) == 1){
                       ifelse(is.na(.x) == TRUE, 0, 1)
                     }else{
                       if(sd(na.omit(.)) == 0){
                         ifelse(is.na(.), NA, 1)
-                      }else{tp_single_score(., back_fill) %>% round(digits = 4)}
+                      }else{tp_single_score(., back_fill) %>%
+                          round(digits = 4)}
 
-                    }})) %>%
-      mutate(across(where(is.numeric), ~replace_na(.,0)))
+                    }}
+          )
+        ) %>%
+      mutate(
+        across(
+          where(is.numeric), ~replace_na(.,0))
+        )
 
-    tp_names <- tp_scores[,id]
+    tp_names <- tp_scores[,id] %>%
+      as_tibble() %>%
+      rename(id = value)
 
-    tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>% as_tibble()
+    tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>%
+      as_tibble()
 
     tp_scores <- cbind(tp_names, tp_scores)
 
     tp_scores <- tp_scores %>%
       rowwise() %>%
-      mutate(score = sum(c_across(cols = !contains(id)))) %>%
+      mutate(score =
+        rowSums(across(where(is.numeric))
+        )
+      ) %>%
       relocate(score, .after = id) %>%
       arrange(desc(score)) %>%
       ungroup()
-
 
     tp_list$tp_scores <- tp_scores
 

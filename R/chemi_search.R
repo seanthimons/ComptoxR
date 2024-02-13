@@ -14,7 +14,10 @@ chemi_search <- function(query, coerce = FALSE, ...){
 
   payload <- query_typeof(query)
 
-  payload$ids <- query
+  if(typeof(query) == 'character'){
+    payload$ids <- as.list(query)
+  }else{
+    payload$ids <- query}
 
   response <- POST(
     url = url,
