@@ -24,8 +24,10 @@ ct_name <- function(query,
   if(identical(c('start-with',
                  'equal',
                  'contain'),param)){
-    cli_alert_warning('\n/!\\ WARNING!/!\\\nLarge request detected!\nRequest may time out!\nRecommend to change search parameters or break up requests!\n')
-  }else{cat('\nParameter(s) declared:',param)}
+    cli_alert_warning('Large request detected!')
+    cli_alert_warning('Request may time out!')
+    cli_alert_warning('Recommend to change search parameters or break up requests!\n')
+    }else{cat('\nParameter(s) declared:',param)}
 
   cat("\nRequesting valid names by provided search parameters....\n\n")
 

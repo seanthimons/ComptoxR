@@ -6,9 +6,13 @@
 #' @param coerce Boolean variable to coerce list to a data.frame. Defaults to `FALSE`.
 #'
 #' @return A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
-#' @export
 
-chemi_search <- function(query, coerce = FALSE, ...){
+
+chemi_search <- function(query,
+                         searchType = c(),
+                         inputType = c(),
+
+                         coerce = FALSE, ...){
 
   url <- "https://hcd.rtpnc.epa.gov/api/resolver/lookup"
 

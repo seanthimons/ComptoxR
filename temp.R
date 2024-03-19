@@ -1,16 +1,8 @@
+?remotes::install_github()
 
-data(txp_example_input, package = "toxpiR")
+library(ComptoxR)
 
-test <- txp_example_input %>%
-  select(., name, metric1:metric3) %>%
-  rowwise() %>%
-  mutate(metric2 = metric2^2) %>%
-  mutate(metric2 = sum(
-    c(metric2,metric3),
-    na.rm = F)
-         ) %>%
-  ungroup() %>%
-  select(-metric3)
+
 
 bias_table <- tp_endpoint_coverage(test, id = 'name', filter = '0.1')
 bias_table$weight[1] <- 2
@@ -48,3 +40,39 @@ f.results <- txpCalculateScores(model = f.model,
                                 input = txp_example_input,
                                 id.var = 'name' )
 #txpSliceScores(f.results)
+
+
+  sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
+  sublists <- map(sublists, as.list)
+
+  df <- map(sublists, ~{
+
+    token <- ct_api_key()
+
+    burl <- Sys.getenv("burl")
+
+    surl <- "chemical/detail/search/by-dtxsid/"
+
+    urls <- paste0(burl, surl, "?projection=chemicalidentifier")
+
+    headers <- c(
+      `x-api-key` = token
+    )
+
+
+    .x <- POST(
+      url = urls,
+      body = rjson::toJSON(.x),
+      add_headers(.headers = headers),
+      content_type("application/json"),
+      accept("application/json, text/plain, */*"),
+      encode = "json",
+      progress() # progress bar
+    )
+
+    .x <- content(.x, "text", encoding = "UTF-8") %>%
+      jsonlite::fromJSON(simplifyVector = TRUE)
+
+}) %>% list_rbind()
+
+

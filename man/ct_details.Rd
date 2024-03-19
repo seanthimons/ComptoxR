@@ -4,17 +4,21 @@
 \alias{ct_details}
 \title{Retrieve compound details by DTXSID}
 \usage{
-ct_details(query, ccte_api_key = NULL, debug = F)
+ct_details(
+  query,
+  projection = c("all", "standard", "id", "structure", "nta"),
+  ccte_api_key = NULL
+)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{projection}{A subset of date to be returned. By default returns a minimal set of common identifiers.}
 
-\item{debug}{Flag to show API calls}
+\item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{
-Returns a tibble with results
+a data frame
 }
 \description{
 Retrieve compound details by DTXSID

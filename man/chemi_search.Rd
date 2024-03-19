@@ -4,7 +4,7 @@
 \alias{chemi_search}
 \title{Cheminformatics Search}
 \usage{
-chemi_search(query, coerce = FALSE, ...)
+chemi_search(query, searchType = c(), inputType = c(), coerce = FALSE, ...)
 }
 \arguments{
 \item{query}{Takes a list of variables (such as DTXSIDs, CASRN, names, etc.) to search by.}
