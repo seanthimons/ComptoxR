@@ -5,7 +5,7 @@
 #' @param query A list of DTXSIDS to search for.
 #' @param cts_generations A number of metabolite generations to predict for. Maximum of `4` allowed.
 #' @param analogs String of variables to search for. Defaults to no analogs to look for.
-#' @param min_sim  Tanimoto simularity coeffecient to search for analogs by. Defaults to `0.49` if an analog is specified.
+#' @param min_sim  Tanimoto similarity coefficient to search for analogs by. Defaults to `0.49` if an analog is specified.
 #' @param coerce Boolean variable to coerce the data to a numerical equivalent. Defaults to `TRUE`.
 #'
 #' @return A data frame or list, depending on `coerce`
@@ -44,7 +44,7 @@ chemi_hazard <- function(query,
     min_sim <- as.character(min_sim)
   }else{
     min_sim <- NULL
-    # cli_abort('Something went wrong with the analog search...')
+    cli_abort('Something went wrong with the analog search...')
     }
 
   #Payload generation----
