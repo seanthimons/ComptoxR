@@ -7,6 +7,7 @@
 #'
 #' @return Returns a tibble with results
 #' @export
+
 ct_list <- function(list_name,  ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
@@ -19,7 +20,7 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
 
   cli_alert_info('\nSearching for compounds on {list_name} list ...\n')
 
-  surl <- "chemical/list/chemicals/search/by-listname/"
+  surl <- "chemical/list/search/by-listname/name"
 
   urls <- paste0(burl, surl, list_name)
 
@@ -31,8 +32,10 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
 
-  cli_alert_success('\n{nrow(df)} compounds found!\n')
-  return(df)
+  if(df$status == '404'){cli_abort('FAILED')}else{
+    cli_alert_success('\n{df$chemicalCount} compounds found!\n')
+    return(df)
+  }
 }
 
 

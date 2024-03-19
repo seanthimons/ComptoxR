@@ -19,7 +19,7 @@ chemi_hazard(
 
 \item{analogs}{String of variables to search for. Defaults to no analogs to look for.}
 
-\item{min_sim}{Tanimoto simularity coeffecient to search for analogs by. Defaults to \code{0.49} if an analog is specified.}
+\item{min_sim}{Tanimoto similarity coefficient to search for analogs by. Defaults to \code{0.49} if an analog is specified.}
 
 \item{coerce}{Boolean variable to coerce the data to a numerical equivalent. Defaults to \code{TRUE}.}
 }
