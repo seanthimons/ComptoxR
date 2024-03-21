@@ -34,7 +34,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .Rproj.user
-
 global_assays.xlsx
 global_assay.xlsx
 invasive_species.csv
@@ -47,3 +46,4 @@ ComptoxR_1.0.0.zip
 ~$paper.docx
 temp.R
 output
+source_info 2023-02-15.xlsx

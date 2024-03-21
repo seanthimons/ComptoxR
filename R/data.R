@@ -49,3 +49,7 @@
 #' The Clean Water Act (CWA) Section 311(b)(2)(A) requires EPA to compile a list of hazardous substances which, when discharged to navigable waters or adjoining shorelines, present an imminent and substantial danger to the public health or welfare. This includes danger to fish, shellfish, wildlife, and beaches. CWA 311-HS: includes 40 CFR parts 116 and 117 Part 116-Designation of Hazardous Substances Part 117-Determination of Reportable Quantities of Hazardous Substances
 'cwa311hs'
 
+#' ToxValDB Source Dictionary
+#'
+#' Used to rank data sources. From ToxValDB 9.4
+'toxvaldb_sourcedict'
