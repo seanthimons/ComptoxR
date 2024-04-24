@@ -78,7 +78,8 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
 
     }) %>% list_rbind()
 
-  }else{payload <- query
+  }else{
+    payload <- as.list(query)
 
   response <- POST(
     url = urls,
@@ -96,6 +97,6 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
   #df <- map(df, \(x) as.data.frame(x)) %>% list_rbind()
   }
 
-
+  cli::cli_text()
   return(df)
 }

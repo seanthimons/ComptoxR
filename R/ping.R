@@ -4,16 +4,24 @@
 #'
 ping_ccte <- function(){
 
+  cli::cli_rule()
+  cli_alert_warning(
+    '\nAttempting ping test....\n')
+
 ping_list <- list(
-  'api-ccte.epa.gov',
-  'hcd.rtpnc.epa.gov'
+
+  'https://api-ccte.epa.gov/exposure/health',
+  'https://api-ccte.epa.gov/hazard/health',
+  'https://api-ccte.epa.gov/bioactivity/health',
+  'https://api-ccte.epa.gov/chemical/health',
+
+  'https://hcd.rtpnc.epa.gov/api/search/metadata', #prod
+  'https://hazard-dev.sciencedataexperts.com/api/search/version' #dev
   )
 
-cat('\n Pinging APIs...\n')
-map(
-  ping_list, ~{
-  cat('\n',.,'\n')
-  pingr::ping(., count = 4L) %>% cat('\n',.,'\n','------','\n')
-  })
-
+for (url in ping_list) {
+  response <- GET(url)
+  status <- status_code(response)
+  cat(url, "Status Code:", status, "\n")
+  }
 }

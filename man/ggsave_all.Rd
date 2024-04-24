@@ -17,7 +17,11 @@ ggsave_all(
 
 \item{plot}{GGplot variable or the last plot generated}
 
-\item{...}{}
+\item{specs}{Dimension}
+
+\item{path}{Path to file}
+
+\item{...}{Other args}
 }
 \value{
 A set of end-use plots at the proper resolution

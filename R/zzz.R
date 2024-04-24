@@ -1,25 +1,31 @@
 .onAttach <- function(libname, ComptoxR) {
 
-  cli::cli_rule()
-#packageStartupMessage(
-  cli::cli_alert_success(
-    c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR
-      \n")
+  if(Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == ""){
+    comptox_server()
+    chemi_server()
+  }
 
-    )
- # )
+  packageStartupMessage(
+    .header()
+  )
+}
 
-#packageStartupMessage(
-  cli::cli_alert_info(
-    c("\nAPI endpoint selected:\n",
-      {comptox_server()})
-    )
-#)
+.header <- function(){
 
-# packageStartupMessage(
-#   cli_alert_warning(
-#   '\nAttempting ping test....\n')
-#   )
-#   ping_ccte()
-  cli::cli_rule()
+  cli::cli({
+    cli::cli_rule()
+
+    cli::cli_alert_success(
+      c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR
+          \n"))
+
+    cli::cli_alert_info('Available API endpoints:')
+    cli::cli_dl(c(
+      'CompTox' = '{Sys.getenv("burl")}',
+      'Cheminformatics' =  '{Sys.getenv("chemi_burl")}'
+    ))
+  })
+
+  #ping_ccte()
+
 }
