@@ -43,8 +43,9 @@ chemi_hazard <- function(query,
   if(!is.null(analogs) & !is.null(min_sim)){
     min_sim <- as.character(min_sim)
   }else{
+    #TO DO------
     min_sim <- NULL
-    cli_abort('Something went wrong with the analog search...')
+    #cli_abort('Something went wrong with the analog search...')
     }
 
   #Payload generation----
