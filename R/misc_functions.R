@@ -49,9 +49,9 @@ geometric.mean <- function(x,na.rm=TRUE)  {
 #'
 #' @param filename Filename to save under
 #' @param plot GGplot variable or the last plot generated
-#' @param specs
-#' @param path
-#' @param ...
+#' @param specs Dimension
+#' @param path Path to file
+#' @param ... Other args
 #'
 #' @return A set of end-use plots at the proper resolution
 #' @export
@@ -93,11 +93,4 @@ ggsave_all <- function(filename, plot = ggplot2::last_plot(), specs = NULL, path
     })
   )
 }
-
-library(ggplot2)
-
-theme_set(
-  theme_bw(base_family = "sans", base_size = 10) +
-    theme(legend.position = "bottom")
-)
 

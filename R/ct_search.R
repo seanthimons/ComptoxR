@@ -1,79 +1,200 @@
-#' Search for compounds by mass range
+#' Searching by string, mass, or chemical formula
 #'
-#' Search for any MS-ready compounds that are between the queried mass range. Also removes multicomponent compounds.
+#' @details
 #'
-#' @param start Starting mass range
-#' @param end Ending mass range
+#' Search type options:
+#' \itemize{
+#' \item `string`: Currently accepts:
+#'  \itemize{
+#'  \item DTXSIDs
+#'  \item CASRNs
+#'  \item Chemical names
+#'  \item InChIKey
+#'  }
+#' \item `mass`: Search for any MS-ready compounds that are between the queried mass range. Removes multicomponent compounds.
+#' \item `formula`: Search for any MS-ready compounds by a generic chemical formula. Removes multicomponent compounds.
+#'}
+#' Additional search parameters:
+#' \itemize{
+#'
+#'\item For searching by mass, a single value +/- the mass query to search by
+#'
+#'\item For searching by string:
+#'  \itemize{
+#'    \item `exact`: Default searching method
+#'    \item `start-with`: Substring search
+#'    \item `contains`: Substring search
+#'  }
+#'}
+#'
+#' @param type Type of search parameter. Required parameter.
+#' @param query Either a vector or a string.
+#' @param search_param Additional parameters to modify search by.
 #' @param ccte_api_key Checks for API key in Sys env
-#' @param debug Flag to show API calls
-#' @return Returns a tibble with results
+#'
+#' @return A data frame
 #' @export
 
-
-ct_search_mass <- function(start, end, ccte_api_key = NULL, debug = F){
+ct_search <- function(type = c(
+                            'string',
+                            'mass'
+                            #,'formula'
+                            ),
+                          query,
+                          search_param,
+                          ccte_api_key = NULL
+                          ){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
+  {
   burl <- Sys.getenv('burl')
-  surl <- "chemical/msready/search/by-mass/"
-  start_mass <- start
-  end_mass <- end
-  urls <- paste0(burl, surl, start_mass, '/', end_mass)
+  string_url <- 'chemical/search/equal/'
+  formula_url <- 'chemical/msready/search/by-formula/'
+  mass_url <- 'chemical/msready/search/by-mass/'
+  }
 
-  df <- map_dfr(urls, ~{
+  if(missing(type)){cli::cli_abort('Missing type search')}
 
-    if (debug == TRUE) {
-      cat(.x, "\n")
+  if(type == 'mass' & missing(search_param)){
+    cli::cli_abort('Missing mass range!')
+  }
+
+  if(type == 'mass' & !missing(search_param)){
+
+      if(!is.numeric(query)){
+        query <- as.numeric(query)
+      }
+
+      if(!is.numeric(search_param)){
+        search_param <- as.numeric(search_param)
+      }
+
+      payload <- list(
+        masses = query,
+        error = search_param
+      )
+
+      cli::cli_rule(left = 'Mass Payload options')
+      cli::cli_dl(c(
+        'Masses' = '{query}',
+        'Error' = '{search_param}'))
+
+      df <- POST(
+        url = paste0(burl, mass_url),
+        body =  jsonlite::toJSON(payload, auto_unbox = T),
+        add_headers(`x-api-key` = token),
+        content_type("application/json"),
+        accept("application/json"),
+        encode = "json",
+        progress() # progress bar
+      )
+
+      df <- content(df, "text", encoding = "UTF-8") %>%
+        jsonlite::fromJSON(simplifyVector = FALSE)
+
+  return(df)
+  }
+
+  if(type == 'string' & missing(search_param)){
+
+    cli::cli_alert_warning('Defaulting to exact search!')
+    cli::cli_alert_warning('Did you forget to specify which `search_param`?')
+
+    search_param <- 'exact'
+
+    df <- .string_search(query, search_param = 'exact')
+
+    return(df)
+
+  }else{
+
+    df <- .string_search(query, search_param = search_param)
+
+    return(df)
+
+  }
+
+}
+
+.string_search <- function(query, search_param){
+
+  burl <- Sys.getenv('burl')
+
+  cli::cli_rule(left = 'String Payload options')
+  cli::cli_dl(c(
+    'Compound count' = '{length(query)}',
+    'Search type' = '{search_param}'))
+
+  if(search_param == 'exact'){
+
+    string_url <- 'chemical/search/equal/'
+
+    if(length(query) > 200){
+
+      cli::cli_alert_warning('Large request detected!')
+
+      sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
+      sublists <- map(sublists, as.list)
+
+      df <- map(sublists, ~{
+
+        .x <- paste0(.x, '\n')
+
+        .x <- POST(
+          url = pasteo(burl, string_url),
+          body = .x,
+          add_headers(.headers = headers),
+          content_type("application/json"),
+          accept("application/json"),
+          encode = "json",
+          progress() # progress bar
+        )
+
+        .x <- content(.x, "text", encoding = "UTF-8") %>%
+          jsonlite::fromJSON(simplifyVector = TRUE)
+
+      }) %>% list_rbind()
+
+    }else{
+
+      response <- POST(
+        url = paste0(burl, string_url),
+        body = query,
+        content_type("application/json"),
+        accept("application/json"),
+        encode = 'json',
+        add_headers(`x-api-key` = ct_api_key()),
+        progress() #progress bar
+      )
+
+      df <- content(response, "text", encoding = 'UTF-8') %>%
+        jsonlite::fromJSON(simplifyVector = FALSE)
     }
 
-
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% as_tibble()
-  })
-
-  df <- ct_details(df$value) %>%
-    filter(multicomponent != 1) %>%
-    filter(monoisotopicMass >= start_mass & monoisotopicMass <= end_mass)
-
-  return(df)
-}
-
-
-#' Search for compounds by formula
-#'
-#' Search for any MS-ready compounds by a generic chemical formula. Will not return any compound that is classified as multicomponent.
-#'
-#' @param query A string of a generic formula to search for
-#' @param ccte_api_key Checks for API key in Sys env
-#' @param debug Flag to show API calls
-#' @return Returns a tibble with results
-#' @export
-
-ct_search_formula <- function(query, ccte_api_key = NULL, debug = F){
-
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
   }
+  if(search_param %in% c('start-with', 'substring')){
 
-  burl <- Sys.getenv('burl')
-  surl <- "chemical/msready/search/by-formula/"
+    surl <- "chemical/search/"
 
-  urls <- paste0(burl, surl, query)
+    urls <- do.call(paste0, expand.grid(burl,surl,search_param,'/',query))
 
-  df <- map_dfr(urls, ~{
+    df <- map(urls, possibly(~{
 
-    if (debug == TRUE) {
-      cat(.x, "\n")
+      response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+
+    }, otherwise = NULL)) %>%
+      compact %>%
+      map_dfr(as.data.frame)
+
+    df <- if('rank' %in% colnames(df)){arrange(df,rank)}else{df}
+    df <-df %>% as_tibble()
+    return(df)
+
+  }else{
+    cli::cli_abort('Search parameter for `string` search failed!')
+  }
 }
-
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% as_tibble()
-  })
-
-  df <- ct_details(df$value) %>% filter(multicomponent != 1)
-
-  return(df)
-}
-

@@ -11,7 +11,9 @@
 tp_single_score <- function(x, back_fill){
 
 
-  df <- (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
+  #df <- (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
+
+  df <- scales::rescale(x, na.rm = TRUE)
 
   if(is.null(back_fill)){
     #Catches from tp_combined_score
@@ -153,8 +155,7 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
         )
 
     tp_names <- tp_scores[,id] %>%
-      as_tibble() %>%
-      rename(id = value)
+      as.data.frame() #%>% dplyr::rename(id = dtxsid)
 
     tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>%
       as_tibble()
@@ -201,9 +202,14 @@ tp_plot <- function(toxpi_list, ...){
       size = 1.5
     ) +
     scale_color_continuous(type = "viridis") +
-    coord_flip() +
+    coord_flip()+
     t
 
  return(plot)
+}
+
+
+tp_polar_plot <- function(toxpi_list, ...){
+
 }
 

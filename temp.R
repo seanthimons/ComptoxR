@@ -76,3 +76,134 @@ f.results <- txpCalculateScores(model = f.model,
 }) %>% list_rbind()
 
 
+######################################
+
+tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
+
+    if(missing(table)) cli_abort('No table present!')
+
+    cat_line()
+    cli_rule(left = 'ID variable')
+
+    if(is.null(id) == TRUE){
+      id <- colnames(table[1,1])
+
+      cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
+
+    }else{
+      cli_alert_success('ID column: {id}')
+    }
+
+    cat_line()
+
+    tp_list <- list(tp_scores = NULL, bias = NULL, variable_coverage = NULL)
+
+    #Bias table----
+    cli_rule(left = 'Bias table')
+    cat_line()
+
+    if(is.null(bias) == TRUE){
+      cli_alert_warning(
+        col_yellow('WARNING:
+                   No bias table detected, defaulting to filter = 0.5!
+                   Did you know about `tp_endpoint_coverage()`?
+                   '
+        ))
+
+      bias <- tp_endpoint_coverage(table, id, suffix = NA, filter = 0.5)
+      bias %>% print(n = Inf)
+      tp_list$bias <- bias
+    }else{
+      bias %>% print(n = Inf)
+      tp_list$bias <- bias
+    }
+
+    cat_line()
+
+    #TODO-----
+    tp <- table %>%
+      select(c(id,bias$endpoint))
+
+    bias <- bias %>%
+      select(endpoint, weight) %>%
+      pivot_wider(names_from = endpoint,
+                  values_from = weight)
+
+    #Variable coverage----
+
+    cli_rule(left = 'Variable data coverage')
+
+    tp_list$variable_coverage <- tp_variable_coverage(table = table, id = id)
+    print(head(tp_list$variable_coverage, n = nrow(tp_list$variable_coverage)))
+
+    cat_line()
+    cli_rule()
+
+
+    #Backfilling----
+
+    if(missing(back_fill) == TRUE){cli_alert_warning('No back filling option specified!')
+      back_fill <- NULL
+    }else{
+      cli_alert_warning('Back filling option selected: {back_fill}')
+    }
+    cat_line()
+
+    #TP scores----
+    tp_scores <- q1$records %>%
+      #removes INF
+      mutate(
+        across(
+          .cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))
+      ) %>%
+      #tie breaking logic needed here....
+      mutate(
+        across(
+          .cols = !contains(id),
+          ~{if(length(na.omit(.)) == 1){
+            ifelse(is.na(.x) == TRUE, 0, 1)
+          }else{
+            if(sd(na.omit(.)) == 0){
+              ifelse(is.na(.), NA, 1)
+            }else{tp_single_score(., back_fill = NULL) %>%
+                round(digits = 4)}
+
+          }}
+        )
+      ) %>%
+      mutate(
+        across(
+          where(is.numeric), ~replace_na(.,0))
+      )
+
+    tp_names <- tp_scores[,id] %>%
+      as.data.frame()
+
+    tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>%
+      as_tibble()
+
+    tp_scores <- cbind(tp_names, tp_scores)
+
+    tp_scores <- tp_scores %>%
+      rowwise() %>%
+      mutate(score =
+               rowSums(across(where(is.numeric))
+               )
+      ) %>%
+      relocate(score, .after = id) %>%
+      arrange(desc(score)) %>%
+      ungroup()
+
+    tp_list$tp_scores <- tp_scores
+
+    return(tp_list)
+  }
+
+######
+
+
+  tp_names <- q2$tp_scores[,id] %>%
+    as.data.frame()
+    dplyr::rename(id = dtxsid)
+
+
