@@ -1,4 +1,4 @@
-# ComptoxR (development version)
+# ComptoxR 1.2.1
 
 # ComptoxR 1.2.0
 
