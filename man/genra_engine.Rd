@@ -5,7 +5,7 @@
 \alias{genra_engine}
 \title{Table of GenRA function endpoints.}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 5 rows and 4 columns.
+An object of class \code{function} of length 1.
 }
 \usage{
 genra_engine

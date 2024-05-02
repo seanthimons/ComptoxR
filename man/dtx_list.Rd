@@ -3,17 +3,17 @@
 \docType{data}
 \name{dtx_list}
 \alias{dtx_list}
-\title{List of DTXSIDs to test things with.}
+\title{Data frame of DTXSIDs to test things with.}
 \format{
-An object of class \code{list} of length 29.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 29 rows and 6 columns.
 }
 \usage{
 dtx_list
 }
 \description{
-A list of several DTXSIDs to test functions with.
+A data frame of several DTXSIDs to test functions with.
 }
 \details{
-A list of 29 compounds
+A data frame of 29 compounds
 }
 \keyword{datasets}

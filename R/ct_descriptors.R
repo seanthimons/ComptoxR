@@ -1,10 +1,10 @@
 #' MOL file request
 #'
-#' @param query
-#' @param ccte_api_key
-#' @param debug
+#' @param query string
+#' @param ccte_api_key string
+#' @param debug string
 #'
-#' @return
+#' @return df
 
 ct_mol <- function(query,
                    #ccte_api_key = NULL,
@@ -46,7 +46,7 @@ if(response$status_code == 200){
 #' @param coerce string
 #' @param debug string
 #'
-#' @return
+#' @return df
 
 ct_descriptors <- function(query,
                            type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),

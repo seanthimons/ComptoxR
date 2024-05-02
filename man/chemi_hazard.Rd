@@ -7,7 +7,7 @@
 chemi_hazard(
   query,
   cts_generations = c(1, 2, 3, 4),
-  analogs = c("SUBSTRUCTURE", "SIMILAR", "TOXPRINT"),
+  analogs = c("substructure", "similar", "toxprint"),
   min_sim = NULL,
   coerce = TRUE
 )
@@ -17,9 +17,9 @@ chemi_hazard(
 
 \item{cts_generations}{A number of metabolite generations to predict for. Maximum of \code{4} allowed.}
 
-\item{analogs}{String of variables to search for. Defaults to no analogs to look for.}
+\item{analogs}{String of variables to search for. Defaults to no analogs to look for if not specified.}
 
-\item{min_sim}{Tanimoto similarity coefficient to search for analogs by. Defaults to \code{0.49} if an analog is specified.}
+\item{min_sim}{Tanimoto similarity coefficient to search for analogs by. Defaults to \code{0.8} if an analog option and no variable is specified .}
 
 \item{coerce}{Boolean variable to coerce the data to a numerical equivalent. Defaults to \code{TRUE}.}
 }

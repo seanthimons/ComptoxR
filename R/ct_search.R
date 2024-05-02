@@ -103,15 +103,13 @@ ct_search <- function(type = c(
     cli::cli_alert_warning('Defaulting to exact search!')
     cli::cli_alert_warning('Did you forget to specify which `search_param`?')
 
-    search_param <- 'exact'
-
-    df <- .string_search(query, search_param = 'exact')
+    df <- .string_search(query, sp = 'exact')
 
     return(df)
 
   }else{
 
-    df <- .string_search(query, search_param = search_param)
+    df <- .string_search(query, sp = search_param)
 
     return(df)
 
@@ -119,16 +117,20 @@ ct_search <- function(type = c(
 
 }
 
-.string_search <- function(query, search_param){
+.string_search <- function(query, sp){
+
+  headers <- c(
+    `x-api-key` = ct_api_key()
+  )
 
   burl <- Sys.getenv('burl')
 
   cli::cli_rule(left = 'String Payload options')
   cli::cli_dl(c(
     'Compound count' = '{length(query)}',
-    'Search type' = '{search_param}'))
+    'Search type' = '{sp}'))
 
-  if(search_param == 'exact'){
+  if(sp == 'exact'){
 
     string_url <- 'chemical/search/equal/'
 
@@ -144,7 +146,7 @@ ct_search <- function(type = c(
         .x <- paste0(.x, '\n')
 
         .x <- POST(
-          url = pasteo(burl, string_url),
+          url = paste0(burl, string_url),
           body = .x,
           add_headers(.headers = headers),
           content_type("application/json"),
@@ -174,8 +176,9 @@ ct_search <- function(type = c(
         jsonlite::fromJSON(simplifyVector = FALSE)
     }
 
-  }
-  if(search_param %in% c('start-with', 'substring')){
+  }else{
+
+  if(sp %in% c('start-with', 'substring')){
 
     surl <- "chemical/search/"
 
@@ -196,5 +199,6 @@ ct_search <- function(type = c(
 
   }else{
     cli::cli_abort('Search parameter for `string` search failed!')
+  }
   }
 }
