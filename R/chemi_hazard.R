@@ -70,12 +70,14 @@ chemi_hazard <- function(query,
 
   cli_rule(left = 'Hazard payload options')
   cli_dl(
-    c('CTS generations' = '{cts_generations_payload}',
+    c('Number of compounds' = '{length(query)}',
+      'CTS generations' = '{cts_generations_payload}',
       'Analog search pattern' = '{analogs_payload}',
       'Minimum simularity' = '{min_sim_payload}'
     )
   )
   cli_rule()
+  cli_end()
 
   response <- POST(
     url = "https://hcd.rtpnc.epa.gov/api/hazard",
