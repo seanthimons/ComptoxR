@@ -15,6 +15,6 @@ jobs:
       uses: andstor/copycat-action@v3
       with:
         personal_token: ${{ secrets.PAT_TO_PRIVATE }}
-        src_path: /.
+        src_path: .
         dst_owner: seanthimons
         dst_repo_name: ComptoxR
