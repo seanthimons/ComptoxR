@@ -13,19 +13,19 @@
 #' @export
 
 ct_api_key <- function() {
-  ccte_api_key <- Sys.getenv("ccte_api_key", "")
-  if (ccte_api_key == "") {
-    ccte_api_key <- getOption("ccte_api_key", "")
-  }
-  if (ccte_api_key == ""){
-    stop("No API key saved. Set it in Sys.env")}else {return(ccte_api_key)}
+
+  ccte_api_key <- Sys.getenv("ccte_api_key")
+
+  if(ccte_api_key == ""){
+    stop("No API key saved. Sys.setenv(ccte_api_key = 'TOKEN HERE')")
+  }else{return(ccte_api_key)}
 
   check_burl <- Sys.getenv('burl')
   if(is.na(check_burl) == T || isTRUE(check_burl == "") == T || isTRUE(check_burl == "NA") == T){
     comptox_server(server = 1)
     rm(check_burl)
     }else{rm(check_burl)}
-
 }
+
 
 

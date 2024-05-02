@@ -13,29 +13,37 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
-  #Takes single list name for searching
 
+  df <- map(list_name, possibly(~{
 
-  burl <- Sys.getenv('burl')
+    cli::cli_text()
+    cli::cli_alert_info('\nSearching for compounds on {(.x)} list...\n')
 
-  cli_alert_info('\nSearching for compounds on {list_name} list ...\n')
+    burl <- Sys.getenv('burl')
+    surl <- "chemical/list/search/by-name/"
 
-  surl <- "chemical/list/search/by-listname/name"
+    urls <- paste0(burl, surl, stringr::str_to_upper(.x),'?projection=chemicallistwithdtxsids')
 
-  urls <- paste0(burl, surl, list_name)
+    response <- GET(url = urls, add_headers("x-api-key" = ct_api_key()), progress())
 
-  df <- map_dfr(urls, ~{
+    if(response$status != 200){
 
-    cat('\n')
+      cli::cli_alert_warning('Request failed on {(.x)}')
+      cli::cli_end()
+      return(NULL)
 
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token), progress())
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }) %>% as_tibble()
+    }else{
 
-  if(df$status == '404'){cli_abort('FAILED')}else{
-    cli_alert_success('\n{df$chemicalCount} compounds found!\n')
-    return(df)
-  }
+      .x <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+
+      cli_alert_success('\n{(.x$chemicalCount)} compounds found!\n')
+      cli::cli_end()
+
+      .x$dtxsids <- stringr::str_split(.x$dtxsids, pattern = ',') %>% pluck(1)
+
+      return(.x)
+    }
+  }, NULL)) %>% set_names(., list_name) %>% compact()
 }
 
 
@@ -53,24 +61,37 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL){
     token <- ct_api_key()
   }
 
-  burl <- Sys.getenv('burl')
+  df <- map(query, possibly(~{
 
-  surl <- "chemical/list/search/by-dtxsid/"
-  urls <- paste0(burl, surl, query)
+    cli::cli_alert_info('Searching for lists that contain {(.x)}')
+    cli::cli_end()
 
-  df <- map(urls, ~{
+    burl <- Sys.getenv('burl')
+    surl <- "chemical/list/search/by-dtxsid/"
+    urls <- paste0(burl, surl, .x, '?projection=chemicallistname')
 
-  #cat('\nSearching for lists that contain', .x,'...\n')
+    response <- GET(url = urls, add_headers("x-api-key" = ct_api_key()), progress())
 
-    #debug ###
-    cat(.x,'\n')
+    if(response$status != 200){
 
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }) #%>% as_tibble()
+      cli::cli_alert_warning('Request failed on {(.x)}')
+      cli::cli_end()
+      return(NULL)
 
-  #cat('\nSearch complete!\n')
-  return(df)
+    }else{
+
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+
+      df <- as.list(df) %>% pluck(1)
+
+      cli::cli_alert_success('{length(df)} lists found!')
+      cli::cli_end()
+      return(df)
+
+    }
+  }, NULL)) %>% set_names(., query) %>% compact()
+
+
 }
 
 #' Grabs all public lists
@@ -78,36 +99,64 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL){
 #' This function has no parameters to search by.
 #'
 #' @param ccte_api_key Checks for API key in Sys env
+#' @param return_dtxsid Boolean; Return all DTXSIDs contained within each list
+#' @param coerce Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.
 #'
 #' @return Returns a tibble of results
 #' @export
 
-ct_lists_all <- function(ccte_api_key = NULL){
+ct_lists_all <- function(return_dtxsid = FALSE,
+                         coerce = FALSE,
+                         ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  burl <- Sys.getenv('burl')
+  cli::cli_alert_info('Grabbing all public lists...')
 
-  cat('\nGrabbing all public lists...\n')
+  if(return_dtxsid == FALSE){
+    urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistall"
+  }else{
+    urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistwithdtxsids"
+  }
 
-  urls <- 'https://api-ccte.epa.gov/chemical/list/?projection=chemicallistall'
+  df <-
+    response <- GET(url = urls, add_headers("x-api-key" = token), progress())
 
-  df <- map_dfr(urls, ~{
+  if(response$status != 200){
 
-    #debug ####
-    cat(.x,'\n')
+    cli::cli_abort('Request failed!')
+    cli::cli_alert_danger('Reason: {response$status}')
 
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token), progress())
+    }else{
+
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }) %>% as_tibble()
 
-  #TODO
-  #
-  #Remove duplicates from lists
+    cli::cli_alert_success('{nrow(df)} lists found!')
+    }
 
-  cat('\nSearch complete!\n')
-  return(df)
+  if(return_dtxsid == TRUE & coerce == TRUE){
 
+  cli::cli_alert_warning('Coerceing DTXSID strings per list to list-column!')
+
+  df <- df %>%
+    split(.$listName) %>%
+    map(., as.list) %>%
+    map(., ~{
+      .x$dtxsids <- stringr::str_split(.x$dtxsids, pattern = ',') %>% pluck(1)
+      .x
+    })
+
+  }else{
+    if(return_dtxsid == FALSE & coerce == TRUE){
+    cli::cli_alert_warning('You need to request DTXSIDs...')
+    cli::cli_end()
+
+    df
+
+    }else(
+     df
+    )
+  }
 }
