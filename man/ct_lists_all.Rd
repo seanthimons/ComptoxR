@@ -4,9 +4,13 @@
 \alias{ct_lists_all}
 \title{Grabs all public lists}
 \usage{
-ct_lists_all(ccte_api_key = NULL)
+ct_lists_all(return_dtxsid = FALSE, coerce = FALSE, ccte_api_key = NULL)
 }
 \arguments{
+\item{return_dtxsid}{Boolean; Return all DTXSIDs contained within each list}
+
+\item{coerce}{Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.}
+
 \item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{
