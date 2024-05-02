@@ -11,19 +11,17 @@
 #' @param min_toxicity string
 #' @param min_auth string
 #' @param hazard_name string
-#' @param filter_results string
-#' @param filter_inc string
-#' @param element_inc string
-#' @param element_exc string
+#' @param filter_results Boolean to restrict the data returned.
+#' @param filter_inc A list of feature subtypes to include. Searches by
+#' @param element_inc A vector of elements to include.
+#' @param element_exc A vector of elements to exclude, or the option of `ALL` to exclude every element EXCEPT the searched elements.
 #' @param mass_type string
 #' @param min_mass string
 #' @param max_mass string
 #' @param debug string
-#' @param verbose string
 #' @param ... string
 #'
 #' @return A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
-
 
 chemi_search <- function(query,
                          searchType = c(
@@ -78,9 +76,7 @@ chemi_search <- function(query,
                          mass_type = c("mono", "mw", "abu"),
                          min_mass = NULL,
                          max_mass = NULL,
-                         coerce = F,
                          debug = F,
-                         verbose = F,
                          ...) {
   # searchType --------------------------------------------------------------
 
@@ -107,13 +103,11 @@ chemi_search <- function(query,
   if (searchType %in% c("MASS")) {
       query <- NULL
     } else {
-      if (verbose == T) {
         cli_alert_info("Grabbing MOL file...\n")
       }
       query <- ct_mol(query)
       mass_type <- "mono" # seems to be always needed?
     }
-  }
 
   # records -----------------------------------------------------------------
 
@@ -212,12 +206,15 @@ chemi_search <- function(query,
 
   if(searchType == 'FEATURES' & filter_results == FALSE){
     cli_alert_warning('WARNING: Missing feature filters!')
+    filt_list <- list(NULL)
+
   }
 
   if (filter_results == FALSE & searchType != 'FEATURES') {
     # cli_alert('No filter')
     filt_list <- list(NULL)
   } else {
+    if(searchType == 'FEATURES' & filter_results == TRUE){
     # cli_alert('Filtering')
     filt_list <- list(
       "charged",
@@ -233,7 +230,40 @@ chemi_search <- function(query,
 
     filt_list <- map(filter_inc, ~ is.element(., filt_list)) %>%
       set_names(., ~ paste0("filter-", filter_inc))
-  }
+  }}
+
+
+  # elements ----------------------------------------------------------------
+  ## include ----------------------------------------------------------------
+
+  if(!is.null(element_inc)){
+    element_inc_orig <- element_inc
+    element_inc <- paste(element_inc, collapse = ",")
+    }
+  ## exclude ----------------------------------------------------------------
+
+  if(is.null(element_exc)){
+    #print('No exlusion')
+    element_exc  <- NULL
+  }else{
+
+  if(is.character(element_exc) & element_exc != 'ALL'){
+     # print(element_exc)
+      element_exc <- paste(element_exc, collapse = " ,")
+
+      }else{
+
+  if(element_exc == 'ALL'){
+      #print("Exlude all")
+    element_exc <- ComptoxR::pt %>% filter(., !c(symbol %in% element_inc_orig) & number <= 103) %>%
+        select(symbol) %>%
+        unique() %>%
+        unlist() %>%
+        sort() %>%
+        paste0(., collapse = ", ")
+  #print(element_exc)
+      }}}
+
 
   # payload -----------------------------------------------------------------
 
@@ -262,7 +292,6 @@ chemi_search <- function(query,
 
   # payload alert -----------------------------------------------------------
 
-  if (verbose == T) {
     cli_text('\n')
     cli_rule(left = "Payload options")
     cli_dl(
@@ -275,7 +304,7 @@ chemi_search <- function(query,
       )
     )
     cli_rule()
-  }
+
 
 
   # request -----------------------------------------------------------------
@@ -284,7 +313,7 @@ chemi_search <- function(query,
 
   response <- POST(
     url = burl,
-    body = rjson::toJSON(payload),
+    body = payload,
     content_type("application/json"),
     accept("*/*"),
     encode = "json",
@@ -294,18 +323,18 @@ chemi_search <- function(query,
   if (response$status_code == 200) {
     df <- content(response, "text", encoding = "UTF-8") %>%
       fromJSON(simplifyVector = FALSE)
+
+    trc <- df$totalRecordsCount
+
+    df <- df %>%
+      pluck(., 'records') %>%
+      map(., as_tibble) %>%
+      list_rbind()
+
+  cli_alert_success('{trc} compounds found!')
+
   } else {
     cli_alert_danger("\nBad request!")
-  }
-
-  # coerce ------------------------------------------------------------------
-
-  if (coerce == TRUE) {
-
-    df <- map_dfr(df, \(x) as_tibble(x))
-
-  } else {
-    df
   }
 
   # debug -------------------------------------------------------------------

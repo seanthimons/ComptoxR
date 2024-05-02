@@ -1,8 +1,8 @@
-#' List of DTXSIDs to test things with.
+#' Data frame of DTXSIDs to test things with.
 #'
-#' A list of several DTXSIDs to test functions with.
+#' A data frame of several DTXSIDs to test functions with.
 #'
-#' A list of 29 compounds
+#' A data frame of 29 compounds
 'dtx_list'
 
 #' Table of GenRA function endpoints.
@@ -53,3 +53,11 @@
 #'
 #' Used to rank data sources. From ToxValDB 9.4
 'toxvaldb_sourcedict'
+
+#' Periodic table
+#'
+#' List of elements with symbol and atomic number, oxidation state, and a search term for lookup.
+#'
+#' Ripped and curated from https://en.wikipedia.org/wiki/Oxidation_state
+#'
+'pt'

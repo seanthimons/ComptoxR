@@ -4,8 +4,8 @@
 #'
 #' @param query A list of DTXSIDS to search for.
 #' @param cts_generations A number of metabolite generations to predict for. Maximum of `4` allowed.
-#' @param analogs String of variables to search for. Defaults to no analogs to look for.
-#' @param min_sim  Tanimoto similarity coefficient to search for analogs by. Defaults to `0.49` if an analog is specified.
+#' @param analogs String of variables to search for. Defaults to no analogs to look for if not specified.
+#' @param min_sim Tanimoto similarity coefficient to search for analogs by. Defaults to `0.8` if an analog option and no variable is specified .
 #' @param coerce Boolean variable to coerce the data to a numerical equivalent. Defaults to `TRUE`.
 #'
 #' @return A data frame or list, depending on `coerce`
@@ -13,7 +13,7 @@
 #'
 chemi_hazard <- function(query,
                          cts_generations = c(1, 2, 3, 4),
-                         analogs = c('SUBSTRUCTURE', 'SIMILAR', 'TOXPRINT'),
+                         analogs = c('substructure', 'similar', 'toxprint'),
                          min_sim = NULL,
                          coerce = TRUE
                          ){
@@ -26,16 +26,16 @@ chemi_hazard <- function(query,
         }else{cts_generations <- NULL}
     }
 
-
   ##Analogs----
   if(missing(analogs)){
     analogs <- NULL}else{
     if(!missing(analogs) & length(analogs) >1){
-      stop('Only one analog method allowed')}else{
-        if(!missing(analogs) & length(analogs) == 1){
-          analogs <- match.arg(analogs, choices = c('SUBSTRUCTURE', 'SIMILAR', 'TOXPRINT'))
-        }
+      cli_abort('Only one analog method allowed')}else{
+        if(!c(analogs %in% c('substructure', 'similar', 'toxprint'))){
+      cli_abort('Analog parameter not allowed!')}else{
+      analogs <- stringr::str_to_upper(analogs)
       }
+    }
   }
 
   ##Min similarity----
@@ -43,8 +43,8 @@ chemi_hazard <- function(query,
   if(!is.null(analogs) & !is.null(min_sim)){
     min_sim <- as.character(min_sim)
   }else{
-    #TO DO------
-    min_sim <- NULL
+
+    min_sim <- '0.8'
     #cli_abort('Something went wrong with the analog search...')
     }
 
@@ -56,7 +56,6 @@ chemi_hazard <- function(query,
                       sid = .y))}
                     )
 
-
   payload <- list(
     'chemicals' = chemicals,
     'options' = list(
@@ -64,14 +63,12 @@ chemi_hazard <- function(query,
       minSimilarity = min_sim,
       analogSearchType = analogs))
 
-
-
   ##Payload output----
   if(is.null(cts_generations)){cts_generations_payload <- 'NULL'}else{cts_generations_payload <- cts_generations}
   if(is.null(analogs)){analogs_payload <- 'NULL'}else{analogs_payload <- analogs}
   if(is.null(min_sim)){min_sim_payload <- 'NULL'}else{min_sim_payload <- min_sim}
 
-  cli_rule(left = 'Payload options')
+  cli_rule(left = 'Hazard payload options')
   cli_dl(
     c('CTS generations' = '{cts_generations_payload}',
       'Analog search pattern' = '{analogs_payload}',
@@ -484,3 +481,5 @@ if(coerce == TRUE){
 
   return(df)
 }
+
+

@@ -46,7 +46,7 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
       'Number of compounds'= '{length(query)}'
     )
   )
-  cli_rule()
+  #cli_rule()
 
   surl <- "chemical/detail/search/by-dtxsid/"
 
@@ -60,12 +60,13 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
 
     sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
     sublists <- map(sublists, as.list)
+   # cli::cli_alert_warning("{length(sublists)} request needed...")
 
     df <- map(sublists, ~{
 
     .x <- POST(
       url = urls,
-      body = rjson::toJSON(.x),
+      body = .x,
       add_headers(.headers = headers),
       content_type("application/json"),
       accept("application/json, text/plain, */*"),

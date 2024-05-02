@@ -103,7 +103,6 @@ ct_lists_all <- function(ccte_api_key = NULL){
     df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   }) %>% as_tibble()
 
-
   #TODO
   #
   #Remove duplicates from lists

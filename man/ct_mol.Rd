@@ -7,7 +7,14 @@
 ct_mol(query, debug = F)
 }
 \arguments{
-\item{debug}{}
+\item{query}{string}
+
+\item{debug}{string}
+
+\item{ccte_api_key}{string}
+}
+\value{
+df
 }
 \description{
 MOL file request
