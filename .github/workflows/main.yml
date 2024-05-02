@@ -1,0 +1,19 @@
+name: Clone Github Repo Action
+
+on:
+  schedule:
+  - cron: "0 2 * * 1-5"
+
+ jobs:
+    
+  job-public-repo-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Clone sxthimons/ComptoxR PRIVATE repository
+        uses: GuillaumeFalourd/clone-github-repo-action@main
+        with:
+          owner: 'sxthimons'
+          repository: 'ComptoxR'
+          access-token: ${{ secrets.PAT_TO_PRIVATE }}
+ 
