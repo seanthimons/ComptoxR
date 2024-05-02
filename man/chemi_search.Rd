@@ -23,9 +23,7 @@ chemi_search(
   mass_type = c("mono", "mw", "abu"),
   min_mass = NULL,
   max_mass = NULL,
-  coerce = F,
   debug = F,
-  verbose = F,
   ...
 )
 }
@@ -46,13 +44,13 @@ chemi_search(
 
 \item{hazard_name}{string}
 
-\item{filter_results}{string}
+\item{filter_results}{Boolean to restrict the data returned.}
 
-\item{filter_inc}{string}
+\item{filter_inc}{A list of feature subtypes to include. Searches by}
 
-\item{element_inc}{string}
+\item{element_inc}{A vector of elements to include.}
 
-\item{element_exc}{string}
+\item{element_exc}{A vector of elements to exclude, or the option of \code{ALL} to exclude every element EXCEPT the searched elements.}
 
 \item{mass_type}{string}
 
@@ -60,13 +58,11 @@ chemi_search(
 
 \item{max_mass}{string}
 
-\item{coerce}{Boolean variable to coerce list to a data.frame. Defaults to \code{FALSE}.}
-
 \item{debug}{string}
 
-\item{verbose}{string}
-
 \item{...}{string}
+
+\item{coerce}{Boolean variable to coerce list to a data.frame. Defaults to \code{FALSE}.}
 }
 \value{
 A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
