@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 6 * * *'
-  pull_request:
-  push:
-  
+ 
 jobs:
   copy:
     runs-on: ubuntu-latest
@@ -18,3 +16,4 @@ jobs:
         src_path: .
         dst_owner: seanthimons
         dst_repo_name: ComptoxR
+        src_branch: main
