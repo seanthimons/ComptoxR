@@ -77,7 +77,9 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
     .x <- content(.x, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = TRUE)
 
-    }) %>% list_rbind()
+    }) %>%
+      list_rbind() %>%
+      split(.$propertyId)
 
   }else{
     payload <- as.list(query)
@@ -96,7 +98,9 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
     jsonlite::fromJSON(simplifyVector = TRUE)
 
   #df <- map(df, \(x) as.data.frame(x)) %>% list_rbind()
-  }
+  } %>%
+    list_rbind() %>%
+    split(.$propertyId)
 
   cli::cli_text()
   return(df)

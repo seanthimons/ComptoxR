@@ -217,3 +217,33 @@ df <- chemi_search(
   min_similarity = 0.8,
   min_toxicity = 'A')
 
+
+
+
+query <- prodwater$dtxsid
+burl <- Sys.getenv('burl')
+surl <- "chemical/property/search/by-dtxsid/"
+urls <- paste0(burl, surl)
+
+  sublists <- split(query, rep(1:ceiling(length(query)/1000), each = 1000, length.out = length(query)))
+  sublists <- map(sublists, as.list)
+
+  df <- map(sublists, ~{
+
+    .x <- POST(
+      url = urls,
+      body = .x,
+      add_headers(.headers = headers),
+      content_type("application/json"),
+      accept("application/json, text/plain, */*"),
+      encode = "json",
+      progress() # progress bar
+    )
+
+    .x <- content(.x, "text", encoding = "UTF-8") %>%
+      jsonlite::fromJSON(simplifyVector = TRUE)
+
+  }) %>%
+    list_rbind() %>%
+    split(.$propertyId)
+
