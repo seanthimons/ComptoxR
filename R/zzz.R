@@ -16,8 +16,7 @@
     cli::cli_rule()
 
     cli::cli_alert_success(
-      c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR
-          \n"))
+      c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR"))
 
     cli::cli_alert_info('Available API endpoints:')
     cli::cli_dl(c(
@@ -26,6 +25,6 @@
     ))
   })
 
-  #ping_ccte()
+  run_setup()
 
 }

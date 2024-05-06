@@ -2,6 +2,9 @@
 #'
 #' Returns both experimental and predicted results.
 #'
+#' @details
+#' For a full list of properties that can be searched for, load the data set `property_ids` and use the `propertyId` field for the `query` field.
+#'
 #' @param search_param Search for `compound` or `property` to look for.
 #' @param query A list of DTXSIDs or a property to be queries against. See details for full list of properties available.
 #' @param range A lower and upper range of values to search for if a property was specified for.
@@ -124,3 +127,29 @@ ct_properties <- function(search_param,
 
   }
 }
+
+#' Get property IDs for property searching
+#'
+#' @return A list of IDs
+
+.prop_ids <- function(){
+
+  headers = c(
+    `accept` = "application/json",
+    `x-api-key` = ct_api_key()
+  )
+
+  pred <- GET(url = "https://api-ccte.epa.gov/chemical/property/predicted/name", add_headers(.headers=headers))
+  pred <- fromJSON(content(pred, as = "text", encoding = "UTF-8"))
+
+  exp <- GET(url = "https://api-ccte.epa.gov/chemical/property/experimental/name", add_headers(.headers=headers))
+  exp <- fromJSON(content(exp, as = "text", encoding = "UTF-8"))
+
+  df <- bind_rows(pred, exp) %>% distinct(name, propertyId)
+
+ return(df)
+}
+
+
+
+
