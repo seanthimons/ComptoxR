@@ -61,3 +61,9 @@
 #' Ripped and curated from https://en.wikipedia.org/wiki/Oxidation_state
 #'
 'pt'
+
+#' Property IDs for `ct_property` searching
+#'
+#' List of property IDs that can be searched for.
+#'
+'property_ids'

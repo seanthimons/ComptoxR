@@ -4,7 +4,7 @@
 \alias{ct_env_fate}
 \title{Retrieves Chemical Fate and Transport parameters}
 \usage{
-ct_env_fate(query, ccte_api_key = NULL, debug = F)
+ct_env_fate(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
