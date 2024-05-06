@@ -218,32 +218,14 @@ df <- chemi_search(
   min_toxicity = 'A')
 
 
+library(rvest)
 
+# Read the HTML content of the website
+webpage <- read_html("https://rais.ornl.gov/tools/eco_search.php?select=chem")
 
-query <- prodwater$dtxsid
-burl <- Sys.getenv('burl')
-surl <- "chemical/property/search/by-dtxsid/"
-urls <- paste0(burl, surl)
+# Select the table using CSS selector
+options <- html_nodes(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% html_text()
 
-  sublists <- split(query, rep(1:ceiling(length(query)/1000), each = 1000, length.out = length(query)))
-  sublists <- map(sublists, as.list)
-
-  df <- map(sublists, ~{
-
-    .x <- POST(
-      url = urls,
-      body = .x,
-      add_headers(.headers = headers),
-      content_type("application/json"),
-      accept("application/json, text/plain, */*"),
-      encode = "json",
-      progress() # progress bar
-    )
-
-    .x <- content(.x, "text", encoding = "UTF-8") %>%
-      jsonlite::fromJSON(simplifyVector = TRUE)
-
-  }) %>%
-    list_rbind() %>%
-    split(.$propertyId)
+# Extract the table content
+val <- html_elements(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% html_attrs() %>% unlist()
 

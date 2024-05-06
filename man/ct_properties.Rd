@@ -23,3 +23,6 @@ A list or dataframe
 \description{
 Returns both experimental and predicted results.
 }
+\details{
+For a full list of properties that can be searched for, load the data set \code{property_ids} and use the \code{propertyId} field for the \code{query} field.
+}

@@ -7,28 +7,21 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_env_fate <- function(query, ccte_api_key = NULL, debug = F){
+ct_env_fate <- function(query, ccte_api_key = NULL){
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
   burl <- Sys.getenv('burl')
-
-  cat('\nSearching for environmetal fate and transport data...\n')
   surl <- "chemical/fate/search/by-dtxsid/"
 
-  urls <- paste0(burl, surl, query)
+  urls <- paste0(burl, surl)
+  df <- map(urls, ~{
 
-  df <- map_dfr(urls, ~{
-
-    if (debug == TRUE) {
-      cat(.x, "\n")
-    }
-
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }) %>% as_tibble()
+    df <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+    df <- fromJSON(content(df, as = "text", encoding = "UTF-8"))
+  })
 
   return(df)
 }
