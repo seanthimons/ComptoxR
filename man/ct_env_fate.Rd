@@ -4,14 +4,14 @@
 \alias{ct_env_fate}
 \title{Retrieves Chemical Fate and Transport parameters}
 \usage{
-ct_env_fate(query, ccte_api_key = NULL)
+ct_env_fate(query, coerce = TRUE, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{coerce}{Boolean to split returned data into a list by endpoint type.}
 
-\item{debug}{Flag to show API calls}
+\item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{
 Returns a tibble with results
