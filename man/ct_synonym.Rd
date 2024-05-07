@@ -4,14 +4,12 @@
 \alias{ct_synonym}
 \title{Searches for listed synonyms by DTXSID}
 \usage{
-ct_synonym(query, ccte_api_key = NULL, debug = F)
+ct_synonym(query, ccte_api_key = NULL)
 }
 \arguments{
 \item{query}{A single string (in quotes) or a list of strings to be queried.}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

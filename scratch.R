@@ -229,3 +229,24 @@ options <- html_nodes(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% 
 # Extract the table content
 val <- html_elements(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% html_attrs() %>% unlist()
 
+######
+query <- prodwater$dtxsid[1:10]
+
+burl <- Sys.getenv('burl')
+
+surl <- "chemical/synonym/search/by-dtxsid/"
+
+urls <- paste0(burl, surl, query)
+
+df <- map(urls, ~{
+
+  response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+  df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+}, progress())
+
+names(df) <- query
+
+
+  t1 <-
+
+
