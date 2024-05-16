@@ -218,17 +218,6 @@ df <- chemi_search(
   min_toxicity = 'A')
 
 
-library(rvest)
-
-# Read the HTML content of the website
-webpage <- read_html("https://rais.ornl.gov/tools/eco_search.php?select=chem")
-
-# Select the table using CSS selector
-options <- html_nodes(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% html_text()
-
-# Extract the table content
-val <- html_elements(webpage, xpath = '//*[@id="analysis-0-from"]/option') %>% html_attrs() %>% unlist()
-
 ######
 query <- prodwater$dtxsid[1:10]
 
@@ -248,5 +237,4 @@ names(df) <- query
 
 
   t1 <-
-
 
