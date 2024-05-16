@@ -5,7 +5,7 @@
 #' @return Should return the Sys Env variable 'burl'
 #' @export
 
-comptox_server <- function(server = 1){
+ct_server <- function(server = 1){
 
   if(isTRUE(server == 1) == TRUE){Sys.setenv('burl' = 'https://api-ccte.epa.gov/')}
   else{

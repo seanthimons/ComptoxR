@@ -1,7 +1,7 @@
 .onAttach <- function(libname, ComptoxR) {
 
   if(Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == ""){
-    comptox_server()
+    ct_server()
     chemi_server()
   }
 
