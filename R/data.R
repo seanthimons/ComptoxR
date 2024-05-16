@@ -67,3 +67,9 @@
 #' List of property IDs that can be searched for.
 #'
 'property_ids'
+
+#' Custom list of color palettes
+#'
+#' Generated using https://medialab.github.io/iwanthue/; 25 soft (k-means), colorblind friendly (1-10)
+#'
+'cust_pal'
