@@ -5,7 +5,7 @@
 ping_ccte <- function(){
 
   cli::cli_rule()
-  cli_alert_warning(
+  cli::cli_alert_warning(
     '\nAttempting ping test....\n')
 
 ping_list <- list(
@@ -20,8 +20,8 @@ ping_list <- list(
   )
 
 for (url in ping_list) {
-  response <- GET(url)
-  status <- status_code(response)
+  response <- httr::GET(url)
+  status <- httr::status_code(response)
   cat(url, "Status Code:", status, "\n")
   }
 }
