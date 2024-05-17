@@ -198,7 +198,7 @@ df$data$`functional-use/search` %>%
   facet_wrap(vars(dtxsid))
 
 
-#######
+#testing ----
 
 df <- chemi_search(
   searchType = 'features',
@@ -218,6 +218,8 @@ df <- chemi_search(
   min_toxicity = 'A')
 
 
+
+
 ######
 query <- prodwater$dtxsid[1:10]
 
@@ -235,6 +237,127 @@ df <- map(urls, ~{
 
 names(df) <- query
 
+####
 
-  t1 <-
+headers <- c(
+  `x-api-key` = ct_api_key()
+)
 
+burl <- Sys.getenv('burl')
+
+#string_url <- 'chemical/search/equal/'
+string_url <- '/chemical/search/equal/'
+
+  query <- unique(pt$symbol)
+#
+#   sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
+#   sublists <- map(sublists, as.list)
+
+  df <- map(query, ~{
+
+    #.x <- paste0(.x)
+
+    .x <- GET(
+      url = paste0(burl, string_url, .x),
+      #body = .x,
+      add_headers(.headers = headers)
+      #content_type("application/json"),
+      #accept("application/json"),
+      #encode = "json",
+      #progress() # progress bar
+    )
+
+    .x <- content(.x, "text", encoding = "UTF-8") %>%
+      jsonlite::fromJSON(simplifyVector = TRUE) #%>%
+      # discard(., is_list) %>%
+      # distinct(.keep_all = T) %>%
+      # filter(!is.na(rank))
+
+  }, .progress = T) #%>% list_rbind()
+
+
+  ############################
+
+  ct_descriptors <- function(query,
+                             type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
+                             coerce = T,
+                             ccte_api_key = NULL,
+                             debug = F){
+    if (is.null(ccte_api_key)) {
+      token <- ct_api_key()
+    }
+
+    if(missing(type) | is.null(type)){cli_abort('Missing search parameter!')}
+
+    type_option <-
+      if(type == 'smiles'){
+        'to-smiles'
+      }else{
+        if(type == 'canonical_smiles'){
+          'to-canonicalsmiles'
+        }else{
+          if(type == 'mol2000'){
+            'to-mol2000'
+          }else{
+            if(type == 'mol3000'){
+              'to-mol3000'
+            }else{
+              if(type == 'inchi'){
+                'to-inchi'
+              }
+            }
+          }
+        }
+      }
+
+    # payload -----------------------------------------------------------------
+
+    payload <- as.list(query)
+
+    # request -----------------------------------------------------------------
+
+    burl <- Sys.getenv('burl')
+
+    cli::cli_rule(left = 'Indigo service payload')
+    cli::cli_dl(
+      c(
+      'Number of compounds' = '{length(query)}',
+      'Type' = '{type}'
+    )
+    )
+
+    response <- POST(
+      url <- paste0(burl, 'chemical/indigo/', type_option),
+      body = payload,
+      content_type("application/json"),
+      accept("application/json"),
+      encode = "json",
+      add_headers(`x-api-key` = token),
+      progress()
+    )
+
+    if(response$status_code == 200){
+
+      df <- content(response, "text", encoding = "UTF-8") %>%
+        fromJSON(simplifyVector = FALSE)
+
+      # Coerce----
+
+      if (coerce == TRUE) {
+        df <- map(df, as_tibble) %>% list_rbind()
+      } else {
+        df
+      }
+
+      # debug -------------------------------------------------------------------
+
+      if(debug == TRUE){
+        data <- list()
+        data$payload <- payload
+        data$response <- response
+        data$content <- df
+        return(data)}else{
+          return(df)
+        }
+    }else{cli_abort('Bad request!')}
+  }

@@ -6,3 +6,5 @@
 [.]html$
 ^work$
 ^.RData
+^R\.curation.R
+^R\.deprec.R
