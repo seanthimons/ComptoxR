@@ -40,9 +40,13 @@ ct_search <- function(type = c(
                             'mass'
                             #,'formula'
                             ),
-                          query,
-                          search_param,
-                          ccte_api_key = NULL
+                      search_param = c(
+                        'exact',
+                        'start-with',
+                        'substring'
+                        ),
+                      query,
+                      ccte_api_key = NULL
                           ){
 
   if (is.null(ccte_api_key)) {
@@ -103,11 +107,15 @@ ct_search <- function(type = c(
     cli::cli_alert_warning('Defaulting to exact search!')
     cli::cli_alert_warning('Did you forget to specify which `search_param`?')
 
-    df <- .string_search(query, sp = 'exact')
+    search_param <- match.arg(search_param, c('exact', 'start-with', 'substring'))
+
+    df <- .string_search(query, sp = search_param)
 
     return(df)
-
+v
   }else{
+
+    search_param <- match.arg(search_param, c('exact', 'start-with', 'substring'))
 
     df <- .string_search(query, sp = search_param)
 
@@ -143,7 +151,7 @@ ct_search <- function(type = c(
 
       df <- map(sublists, ~{
 
-        .x <- paste0(.x, '\n')
+        .x <- paste0(.x)
 
         .x <- POST(
           url = paste0(burl, string_url),
@@ -173,12 +181,11 @@ ct_search <- function(type = c(
       )
 
       df <- content(response, "text", encoding = 'UTF-8') %>%
-        jsonlite::fromJSON(simplifyVector = FALSE)
+        jsonlite::fromJSON(simplifyVector = TRUE)
     }
 
   }else{
-
-  if(sp %in% c('start-with', 'substring')){
+    if(sp %in% c('start-with', 'substring')){
 
     surl <- "chemical/search/"
 
@@ -199,6 +206,6 @@ ct_search <- function(type = c(
 
   }else{
     cli::cli_abort('Search parameter for `string` search failed!')
-  }
+    }
   }
 }

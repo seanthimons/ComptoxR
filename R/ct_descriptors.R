@@ -90,7 +90,7 @@ ct_descriptors <- function(query,
 
   response <- POST(
     url <- paste0(burl, 'chemical/indigo/', type_option),
-    body = rjson::toJSON(payload),
+    body = payload,
     content_type("application/json"),
     accept("application/json"),
     encode = "json",
