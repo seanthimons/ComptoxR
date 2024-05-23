@@ -41,7 +41,7 @@ ct_search <- function(type = c(
                             #,'formula'
                             ),
                       search_param = c(
-                        'exact',
+                        'equal',
                         'start-with',
                         'substring'
                         ),
@@ -61,6 +61,9 @@ ct_search <- function(type = c(
   }
 
   if(missing(type)){cli::cli_abort('Missing type search')}
+
+# Mass --------------------------------------------------------------------
+
 
   if(type == 'mass' & missing(search_param)){
     cli::cli_abort('Missing mass range!')
@@ -102,20 +105,22 @@ ct_search <- function(type = c(
   return(df)
   }
 
+# String ------------------------------------------------------------------
+
+
   if(type == 'string' & missing(search_param)){
 
     cli::cli_alert_warning('Defaulting to exact search!')
     cli::cli_alert_warning('Did you forget to specify which `search_param`?')
 
-    search_param <- match.arg(search_param, c('exact', 'start-with', 'substring'))
+    search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
     df <- .string_search(query, sp = search_param)
 
     return(df)
-v
   }else{
 
-    search_param <- match.arg(search_param, c('exact', 'start-with', 'substring'))
+    search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
     df <- .string_search(query, sp = search_param)
 
@@ -138,53 +143,75 @@ v
     'Compound count' = '{length(query)}',
     'Search type' = '{sp}'))
 
-  if(sp == 'exact'){
+# Exact -------------------------------------------------------------------
 
-    string_url <- 'chemical/search/equal/'
+  if(sp == 'equal'){
 
-    if(length(query) > 200){
+    surl <- "chemical/search/"
 
-      cli::cli_alert_warning('Large request detected!')
+    urls <- do.call(paste0, expand.grid(burl,surl,sp,'/',query))
 
-      sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
-      sublists <- map(sublists, as.list)
+    df <- map(urls, possibly(~{
 
-      df <- map(sublists, ~{
+      response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
 
-        .x <- paste0(.x)
+    }, otherwise = NULL)) %>%
+      compact %>%
+      map(., as_tibble) %>%
+      list_rbind()
 
-        .x <- POST(
-          url = paste0(burl, string_url),
-          body = .x,
-          add_headers(.headers = headers),
-          content_type("application/json"),
-          accept("application/json"),
-          encode = "json",
-          progress() # progress bar
-        )
+    df <- if('rank' %in% colnames(df)){arrange(df,rank)}else{df}
+    df <- df %>% as_tibble()
 
-        .x <- content(.x, "text", encoding = "UTF-8") %>%
-          jsonlite::fromJSON(simplifyVector = TRUE)
 
-      }) %>% list_rbind()
-
+    # string_url <- 'chemical/search/equal/'
+    #
+    # if(length(query) > 200){
+    #
+    #   cli::cli_alert_warning('Large request detected!')
+    #
+    #   sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
+    #   sublists <- map(sublists, as.list)
+    #
+    #   df <- map(sublists, ~{
+    #
+    #     .x <- paste0(.x)
+    #
+    #     .x <- POST(
+    #       url = paste0(burl, string_url),
+    #       body = .x,
+    #       add_headers(.headers = headers),
+    #       content_type("application/json"),
+    #       accept("application/json"),
+    #       encode = "json",
+    #       progress() # progress bar
+    #     )
+    #
+    #     .x <- content(.x, "text", encoding = "UTF-8") %>%
+    #       jsonlite::fromJSON(simplifyVector = TRUE)
+    #
+    #   }) %>% list_rbind()
+    #
+    # }else{
+    #
+    #   response <- POST(
+    #     url = paste0(burl, string_url),
+    #     body = query,
+    #     content_type("application/json"),
+    #     accept("application/json"),
+    #     encode = 'json',
+    #     add_headers(`x-api-key` = ct_api_key()),
+    #     progress() #progress bar
+    #   )
+    #
+    #   df <- content(response, "text", encoding = 'UTF-8') %>%
+    #     jsonlite::fromJSON(simplifyVector = TRUE)
     }else{
 
-      response <- POST(
-        url = paste0(burl, string_url),
-        body = query,
-        content_type("application/json"),
-        accept("application/json"),
-        encode = 'json',
-        add_headers(`x-api-key` = ct_api_key()),
-        progress() #progress bar
-      )
+# Substring ---------------------------------------------------------------
 
-      df <- content(response, "text", encoding = 'UTF-8') %>%
-        jsonlite::fromJSON(simplifyVector = TRUE)
-    }
 
-  }else{
     if(sp %in% c('start-with', 'substring')){
 
     surl <- "chemical/search/"
@@ -206,6 +233,5 @@ v
 
   }else{
     cli::cli_abort('Search parameter for `string` search failed!')
-    }
   }
-}
+}}
