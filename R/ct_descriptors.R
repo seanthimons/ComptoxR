@@ -1,58 +1,18 @@
-#' MOL file request
+#' INDIGO conversion service
 #'
-#' @param query string
-#' @param ccte_api_key string
-#' @param debug string
+#' Takes SMILES or MOL array for input to convert a single comopund.
 #'
-#' @return df
-
-ct_mol <- function(query,
-                   #ccte_api_key = NULL,
-                   debug = F
-                   ){
-
-burl <- Sys.getenv('burl')
-
-response <- GET(
-  url <- paste0(burl, 'chemical-file/mol/search/by-dtxsid/', query),
-  accept("application/hal+json"),
-  progress()
-)
-
-if(response$status_code == 200){
-
-
-  df <- content(response, "text", encoding = "UTF-8")
-
-  # debug -------------------------------------------------------------------
-
-  if(debug == TRUE){
-    data <- list()
-    data$response <- response
-    data$content <- df
-    return(data)}else{
-      return(df)
-    }
-}else{cli_abort('Bad request!')}
-
-}
-
-
-
-#' Descriptors
+#' @param query SMILES or MOL array
+#' @param type Search type
 #'
-#' @param query string
-#' @param type string
-#' @param coerce string
-#' @param debug string
-#'
-#' @return df
+#' @return A string
 
 ct_descriptors <- function(query,
                            type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
-                           coerce = T,
-                           ccte_api_key = NULL,
-                           debug = F){
+                           #coerce = T,
+                           ccte_api_key = NULL
+                           #debug = F
+                           ){
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -82,7 +42,7 @@ ct_descriptors <- function(query,
 
 # payload -----------------------------------------------------------------
 
-  payload <- as.list(query)
+  payload <- query
 
 # request -----------------------------------------------------------------
 
@@ -91,37 +51,18 @@ ct_descriptors <- function(query,
   response <- POST(
     url <- paste0(burl, 'chemical/indigo/', type_option),
     body = payload,
-    content_type("application/json"),
-    accept("application/json"),
-    encode = "json",
+    content_type("text/plain"),
+    #content_type("application/json"),
+    #accept("application/json"),
+    #encode = "json",
     add_headers(`x-api-key` = token),
     progress()
   )
 
   if(response$status_code == 200){
 
+    df <- content(response, "text", encoding = "UTF-8")
 
-    df <- content(response, "text", encoding = "UTF-8") %>%
-      fromJSON(simplifyVector = FALSE)
-
-    # Coerce----
-
-    if (coerce == TRUE) {
-      df <- map_dfr(df, \(x) as_tibble(x))
-    } else {
-      df
-    }
-
-
-    # debug -------------------------------------------------------------------
-
-    if(debug == TRUE){
-      data <- list()
-      data$payload <- payload
-      data$response <- response
-      data$content <- df
-      return(data)}else{
-        return(df)
-      }
-  }else{cli_abort('Bad request!')}
+  }else{
+    cli::cli_abort('Bad request!')}
 }
