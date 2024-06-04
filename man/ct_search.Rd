@@ -4,14 +4,19 @@
 \alias{ct_search}
 \title{Searching by string, mass, or chemical formula}
 \usage{
-ct_search(type = c("string", "mass"), query, search_param, ccte_api_key = NULL)
+ct_search(
+  type = c("string", "mass"),
+  search_param = c("equal", "start-with", "substring"),
+  query,
+  ccte_api_key = NULL
+)
 }
 \arguments{
 \item{type}{Type of search parameter. Required parameter.}
 
-\item{query}{Either a vector or a string.}
-
 \item{search_param}{Additional parameters to modify search by.}
+
+\item{query}{Either a vector or a string.}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }

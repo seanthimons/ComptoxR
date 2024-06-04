@@ -217,7 +217,24 @@ df <- chemi_search(
   min_similarity = 0.8,
   min_toxicity = 'A')
 
+df <- chemi_search(
+  searchType = 'features',
+  filter_results = T,
+  filter_inc = c('isotopes','charged'),
+  element_inc = 'Cr',
+  element_exc = 'ALL',
+  min_toxicity = 'A')
 
+
+df <- pt$oxidation_state %>%
+  #filter(element == 'arsenic') %>%
+  select(search)
+
+df <- ct_search(type = 'string', search_param = 'equal', query = df$search)
+df <- df %>%
+  filter(!is.na(dtxsid)) %>%
+  mutate(dim = nchar(smiles)) %>%
+  filter(dim <= 7)
 
 
 ######
@@ -276,88 +293,4 @@ string_url <- '/chemical/search/equal/'
   }, .progress = T) #%>% list_rbind()
 
 
-  ############################
 
-  ct_descriptors <- function(query,
-                             type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
-                             coerce = T,
-                             ccte_api_key = NULL,
-                             debug = F){
-    if (is.null(ccte_api_key)) {
-      token <- ct_api_key()
-    }
-
-    if(missing(type) | is.null(type)){cli_abort('Missing search parameter!')}
-
-    type_option <-
-      if(type == 'smiles'){
-        'to-smiles'
-      }else{
-        if(type == 'canonical_smiles'){
-          'to-canonicalsmiles'
-        }else{
-          if(type == 'mol2000'){
-            'to-mol2000'
-          }else{
-            if(type == 'mol3000'){
-              'to-mol3000'
-            }else{
-              if(type == 'inchi'){
-                'to-inchi'
-              }
-            }
-          }
-        }
-      }
-
-    # payload -----------------------------------------------------------------
-
-    payload <- as.list(query)
-
-    # request -----------------------------------------------------------------
-
-    burl <- Sys.getenv('burl')
-
-    cli::cli_rule(left = 'Indigo service payload')
-    cli::cli_dl(
-      c(
-      'Number of compounds' = '{length(query)}',
-      'Type' = '{type}'
-    )
-    )
-
-    response <- POST(
-      url <- paste0(burl, 'chemical/indigo/', type_option),
-      body = payload,
-      content_type("application/json"),
-      accept("application/json"),
-      encode = "json",
-      add_headers(`x-api-key` = token),
-      progress()
-    )
-
-    if(response$status_code == 200){
-
-      df <- content(response, "text", encoding = "UTF-8") %>%
-        fromJSON(simplifyVector = FALSE)
-
-      # Coerce----
-
-      if (coerce == TRUE) {
-        df <- map(df, as_tibble) %>% list_rbind()
-      } else {
-        df
-      }
-
-      # debug -------------------------------------------------------------------
-
-      if(debug == TRUE){
-        data <- list()
-        data$payload <- payload
-        data$response <- response
-        data$content <- df
-        return(data)}else{
-          return(df)
-        }
-    }else{cli_abort('Bad request!')}
-  }
