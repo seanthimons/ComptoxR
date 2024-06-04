@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9002
+
+- Same as previous version.
+
+
 # ComptoxR 1.2.2.9001
 
 - Same as previous version.
