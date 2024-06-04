@@ -56,9 +56,14 @@
 
 #' Periodic table
 #'
-#' List of elements with symbol and atomic number, oxidation state, and a search term for lookup.
+#' List of elements with symbol and atomic number, oxidation state, and a list of isotopes and nuclides
 #'
-#' Ripped and curated from https://en.wikipedia.org/wiki/Oxidation_state
+#' Ripped and curated from:
+#'  https://en.wikipedia.org/wiki/Oxidation_state,
+#'  https://en.wikipedia.org/wiki/List_of_chemical_elements#'
+#'  https://en.wikipedia.org/wiki/List_of_radioactive_nuclides_by_half-life#
+#'  https://en.wikipedia.org/wiki/List_of_nuclides#
+#'
 #'
 'pt'
 

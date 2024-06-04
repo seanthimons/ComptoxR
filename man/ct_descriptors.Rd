@@ -2,28 +2,22 @@
 % Please edit documentation in R/ct_descriptors.R
 \name{ct_descriptors}
 \alias{ct_descriptors}
-\title{Descriptors}
+\title{INDIGO conversion service}
 \usage{
 ct_descriptors(
   query,
   type = c("smiles", "canonical_smiles", "mol2000", "mol3000", "inchi"),
-  coerce = T,
-  ccte_api_key = NULL,
-  debug = F
+  ccte_api_key = NULL
 )
 }
 \arguments{
-\item{query}{string}
+\item{query}{SMILES or MOL array}
 
-\item{type}{string}
-
-\item{coerce}{string}
-
-\item{debug}{string}
+\item{type}{Search type}
 }
 \value{
-df
+A string
 }
 \description{
-Descriptors
+Takes SMILES or MOL array for input to convert a single comopund.
 }
