@@ -156,7 +156,7 @@ ct_search <- function(type = c(
       response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
       df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
 
-    }, otherwise = NULL)) %>%
+    }, otherwise = NULL), .progress = T) %>%
       compact %>%
       map(., as_tibble) %>%
       list_rbind()
@@ -223,7 +223,7 @@ ct_search <- function(type = c(
       response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
       df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
 
-    }, otherwise = NULL)) %>%
+    }, otherwise = NULL), .progress = T) %>%
       compact %>%
       map_dfr(as.data.frame)
 
