@@ -60,48 +60,22 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
 
     sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
     sublists <- map(sublists, as.list)
-   # cli::cli_alert_warning("{length(sublists)} request needed...")
+  }else{
+    sublists <- vector(mode = 'list', length = 1L)
+    sublists[[1]] <- query %>% as.list()
+  }
 
-    df <- map(sublists, ~{
+  df <- map(sublists, ~{
 
-    .x <- POST(
+    response <- POST(
       url = urls,
       body = .x,
-      add_headers(.headers = headers),
-      content_type("application/json"),
-      accept("application/json, text/plain, */*"),
-      encode = "json",
-      progress() # progress bar
-      )
-
-    .x <- content(.x, "text", encoding = "UTF-8") %>%
-        jsonlite::fromJSON(simplifyVector = TRUE)
-
-    }) %>%
-      list_rbind() %>%
-      split(.$propertyId)
-
-  }else{
-
-  payload <- as.list(query)
-
-  response <- POST(
-    url = urls,
-    body = payload,
-    add_headers(.headers = headers),
-    content_type("application/json"),
-    accept("application/json, text/plain, */*"),
-    encode = "json",
-    progress() # progress bar
-  )
-
-  df <- content(response, "text", encoding = "UTF-8") %>%
-    jsonlite::fromJSON(simplifyVector = TRUE)
-
-  #df <- map(df, \(x) as.data.frame(x)) %>% list_rbind()
-  } #%>%
-    #list_rbind() %>%
-    #split(.$propertyId)
+      add_headers("x-api-key" = token),
+      encode = 'json',
+      progress()
+    )
+    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+  }, .progress = T) %>% list_rbind()
 
   cli::cli_text()
   return(df)
