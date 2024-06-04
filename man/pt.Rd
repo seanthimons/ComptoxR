@@ -5,15 +5,19 @@
 \alias{pt}
 \title{Periodic table}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 583 rows and 6 columns.
+An object of class \code{list} of length 3.
 }
 \usage{
 pt
 }
 \description{
-List of elements with symbol and atomic number, oxidation state, and a search term for lookup.
+List of elements with symbol and atomic number, oxidation state, and a list of isotopes and nuclides
 }
 \details{
-Ripped and curated from https://en.wikipedia.org/wiki/Oxidation_state
+Ripped and curated from:
+https://en.wikipedia.org/wiki/Oxidation_state,
+https://en.wikipedia.org/wiki/List_of_chemical_elements#'
+https://en.wikipedia.org/wiki/List_of_radioactive_nuclides_by_half-life#
+https://en.wikipedia.org/wiki/List_of_nuclides#
 }
 \keyword{datasets}

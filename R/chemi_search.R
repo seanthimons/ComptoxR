@@ -255,8 +255,10 @@ chemi_search <- function(query,
 
   if(element_exc == 'ALL'){
       #print("Exlude all")
-    element_exc <- ComptoxR::pt %>% filter(., !c(symbol %in% element_inc_orig) & number <= 103) %>%
-        select(symbol) %>%
+    element_exc <- ComptoxR::pt$elements %>%
+      filter(., !c(Symbol %in% element_inc_orig)) %>%
+      filter(.,  as.numeric(Number) <= 103) %>%
+        select(Symbol) %>%
         unique() %>%
         unlist() %>%
         sort() %>%
