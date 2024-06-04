@@ -1,7 +1,7 @@
 Package: ComptoxR
 Title: Wrappers and Functions for Accessing USEPA CompTox Chemical
     Dashboard and Other Products
-Version: 1.2.2.9001
+Version: 1.2.2.9002
 Authors@R: 
     person("Sean", "Thimons",
     email = "thimons.sean@epa.gov",
