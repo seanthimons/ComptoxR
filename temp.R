@@ -207,3 +207,6 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
     dplyr::rename(id = dtxsid)
 
 
+
+
+
