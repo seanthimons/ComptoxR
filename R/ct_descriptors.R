@@ -1,6 +1,6 @@
 #' INDIGO conversion service
 #'
-#' Takes SMILES or MOL array for input to convert a single comopund.
+#' Takes SMILES or MOL array for input to convert a single compound.
 #'
 #' @param query SMILES or MOL array
 #' @param type Search type
@@ -13,6 +13,7 @@ ct_descriptors <- function(query,
                            ccte_api_key = NULL
                            #debug = F
                            ){
+
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -63,6 +64,9 @@ ct_descriptors <- function(query,
 
     df <- content(response, "text", encoding = "UTF-8")
 
+    return(df)
+
   }else{
     cli::cli_abort('Bad request!')}
+
 }
