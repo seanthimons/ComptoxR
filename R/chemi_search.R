@@ -5,14 +5,13 @@
 #' @param query Takes a list of variables (such as DTXSIDs, CASRN, names, etc.) to search by.
 #' @param coerce Boolean variable to coerce list to a data.frame. Defaults to `FALSE`.
 #' @param searchType string
-#' @param records string
 #' @param similarity_type string
 #' @param min_similarity string
 #' @param min_toxicity string
 #' @param min_auth string
 #' @param hazard_name string
 #' @param filter_results Boolean to restrict the data returned.
-#' @param filter_inc A list of feature subtypes to include. Searches by
+#' @param filter_inc A list of feature subtypes to include. Searches by `AND` operation
 #' @param element_inc A vector of elements to include.
 #' @param element_exc A vector of elements to exclude, or the option of `ALL` to exclude every element EXCEPT the searched elements.
 #' @param mass_type string
@@ -21,7 +20,7 @@
 #' @param debug string
 #' @param ... string
 #'
-#' @return A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
+#' @return A dataframe
 
 chemi_search <- function(query,
                          searchType = c(
@@ -32,7 +31,6 @@ chemi_search <- function(query,
                            "hazard",
                            "features"
                          ),
-                         records = NULL,
                          similarity_type = c("tanimoto", "euclid", "tversky"),
                          min_similarity = NULL,
                          min_toxicity = c("VH", "H", "M", "L", "A"),
@@ -85,16 +83,22 @@ chemi_search <- function(query,
   } else {
     searchType <- case_when(
       searchType == "exact" ~ "EXACT",
-      searchType == "substructure" ~"SUBSTRUCTURE",
-      searchType == "similar" ~"SIMILAR",
+      searchType == "substructure" ~ "SUBSTRUCTURE",
+      searchType == "similar" ~ "SIMILAR",
       searchType == "toxprints" ~ "TOXPRINTS",
-      searchType == "hazard" ~"HAZARD",
-      searchType == "mass" ~"MASS",
+      searchType == "hazard" ~ "HAZARD",
+      searchType == "mass" ~ "MASS",
       searchType == "features" ~ "FEATURES"
     )
   }
 
   # query -------------------------------------------------------------------
+
+  if(missing(query) == TRUE){
+    query <- NULL
+  }
+
+  query_string <- query
 
   if (searchType %in% c("HAZARD", "FEATURES")) {
     mass_type <- "mono" # seems to be always needed?
@@ -104,18 +108,15 @@ chemi_search <- function(query,
       query <- NULL
     } else {
         cli_alert_info("Grabbing MOL file...\n")
-      }
-      query <- ct_mol(query)
+    }
+      q_smiles <- ct_details(query, projection = 'structure')
+      query <- ct_descriptors(q_smiles$smiles, type = 'mol3000')
       mass_type <- "mono" # seems to be always needed?
     }
 
   # records -----------------------------------------------------------------
 
-  limit <- if (is.null(records)) {
-    51L
-  } else {
-    as.numeric(records) + 1L
-  }
+  records <- 51L
 
   # similarity --------------------------------------------------------------
 
@@ -332,6 +333,14 @@ chemi_search <- function(query,
       pluck(., 'records') %>%
       map(., as_tibble) %>%
       list_rbind()
+
+    if('similarity' %in% colnames(df)){
+      df <- df %>%
+        mutate(relationship = case_when(
+          sid == query_string ~ 'parent',
+          .default = 'child'
+        ))
+    }else{df}
 
   cli_alert_success('{trc} compounds found!')
 
