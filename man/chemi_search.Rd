@@ -7,7 +7,6 @@
 chemi_search(
   query,
   searchType = c("exact", "substruture", "similar", "mass", "hazard", "features"),
-  records = NULL,
   similarity_type = c("tanimoto", "euclid", "tversky"),
   min_similarity = NULL,
   min_toxicity = c("VH", "H", "M", "L", "A"),
@@ -32,8 +31,6 @@ chemi_search(
 
 \item{searchType}{string}
 
-\item{records}{string}
-
 \item{similarity_type}{string}
 
 \item{min_similarity}{string}
@@ -46,7 +43,7 @@ chemi_search(
 
 \item{filter_results}{Boolean to restrict the data returned.}
 
-\item{filter_inc}{A list of feature subtypes to include. Searches by}
+\item{filter_inc}{A list of feature subtypes to include. Searches by \code{AND} operation}
 
 \item{element_inc}{A vector of elements to include.}
 
@@ -65,7 +62,7 @@ chemi_search(
 \item{coerce}{Boolean variable to coerce list to a data.frame. Defaults to \code{FALSE}.}
 }
 \value{
-A list of results with multiple parameters, which can then be fed into other Cheminformatic functions.
+A dataframe
 Params' = '{params}'
 }
 \description{

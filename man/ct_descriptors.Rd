@@ -19,5 +19,5 @@ ct_descriptors(
 A string
 }
 \description{
-Takes SMILES or MOL array for input to convert a single comopund.
+Takes SMILES or MOL array for input to convert a single compound.
 }
