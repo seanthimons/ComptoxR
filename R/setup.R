@@ -1,12 +1,15 @@
-#' Ping test for servers
+#' First time setup for functions
 #'
+#' Tests to see if APIs are up and tokens are present.
+#'
+#' @return Ping tests and API tokens.
 #' @export
-#'
-ping_ccte <- function(){
+
+run_setup <- function(){
 
   cli::cli_rule()
   cli::cli_alert_warning(
-    '\nAttempting ping test....\n')
+    '\nAttempting ping test...')
   cli::cli_text()
 
   ping_list <-
@@ -21,14 +24,14 @@ ping_ccte <- function(){
       'https://hcd.rtpnc.epa.gov/api/search/metadata', #prod
       'https://hazard-dev.sciencedataexperts.com/api/search/version' #dev
 
-      )
+    )
 
 
   check_url <- function(url) {
     tryCatch({
       response <- GET(url, timeout(5))
       status_code <- status_code(response)
-      return(paste(url, "- Status Code:", status_code))
+      return(paste(url, ": ", status_code))
     }, error = function(e) {
       if (grepl("Could not resolve host", e$message)) {
         return(paste(url, "- Error: Could not resolve host"))
@@ -44,19 +47,6 @@ ping_ccte <- function(){
 
   cli::cli_li(items = results)
   cli::cli_end()
-
-}
-
-#' First time setup for functions
-#'
-#' Tests to see if APIs are up and tokens are present.
-#'
-#' @return Ping tests and API tokens.
-#' @export
-#'
-run_setup <- function(){
-
-  ping_ccte()
 
   cli::cli_rule()
   cli::cli_alert_warning('Looking for API tokens...')
