@@ -10,8 +10,6 @@ ct_hazard(query, ccte_api_key = NULL, debug = F)
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results

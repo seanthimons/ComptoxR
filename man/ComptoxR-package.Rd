@@ -6,7 +6,7 @@
 \alias{ComptoxR-package}
 \title{ComptoxR: Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard and Other Products}
 \description{
-ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included.
+ComptoxR is designed to leverage the USEPA CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the Dashboard and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemical is also included.
 }
 \author{
 \strong{Maintainer}: Sean Thimons \email{thimons.sean@epa.gov}
