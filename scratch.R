@@ -1,4 +1,4 @@
-groq <- function(query){
+.groq <- function(query){
 
   GROQ_API_KEY <- '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'
 
@@ -54,10 +54,54 @@ df <- chemi_search(
 
 df <- ct_details(query = df$sid, projection = 'structure')
 
-list("Search type" = "{searchType}",
-     "Similarity type" = "{similarity_type}",
-     "Minimum simularity" = "{min_sim}",
-     "Minimum toxicity" = "{min_toxicity}")
-cli::cli_dl()
+###########################
 
+query <- as.list(dtx_list$dtxsid[1:5])
 
+burl <- paste0(Sys.getenv("chemi_burl"), "api/toxprints/calculate")
+
+options <- list(
+  'OR' = 3L,
+  'PV1' = 0.05,
+  'TP' = 3)
+
+chemicals <- vector(mode = 'list', length = length(query))
+
+chemicals <- map(query, ~{
+  list(
+  sid = .x
+  )
+})
+
+{
+chemicals <- list(
+  list(
+      #"id"= "34187",
+      #"cid"= "DTXCID9014187",
+      "sid"= "DTXSID1034187",
+      #"casrn"= "10540-29-1",
+      #"name"= "Tamoxifen",
+      "smiles"= "C(/C1C=CC=CC=1)(\\C1=CC=C(C=C1)OCCN(C)C)=C(/CC)\\C1=CC=CC=C1"
+      #"canonicalSmiles"= "CC/C(=C(\\C1C=CC=CC=1)/C1C=CC(=CC=1)OCCN(C)C)/C1C=CC=CC=1",
+      #"inchi"= "InChI=1S/C26H29NO/c1-4-25(21-11-7-5-8-12-21)26(22-13-9-6-10-14-22)23-15-17-24(18-16-23)28-20-19-27(2)3/h5-18H,4,19-20H2,1-3H3/b26-25-",
+      #"inchiKey"= "NKANXQFJJICGDU-QPLCGJKRSA-N",
+      #"checked"= 'true'
+  )
+)
+
+payload = list(
+  "chemicals" = chemicals,
+  "options" = options
+) %>%
+  jsonlite::toJSON(., auto_unbox = T)
+
+df <- POST(
+  url = burl,
+  body = payload,
+  content_type("application/json"),
+  encode = 'json',
+  progress()
+) %>%
+content(., "text", encoding = "UTF-8") %>%
+  fromJSON(simplifyVector = TRUE)
+}

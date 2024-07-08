@@ -55,16 +55,7 @@ ct_search_formula <- function(query, ccte_api_key = NULL, debug = F){
   return(df)
 }
 
-#' Searches for compound  by string
-#'
-#' @param query A single query (in quotes) or a list to be queried. Currently accepts DTXSIDs, CASRNs, URL encoded chemical names, and matches of InChIKey
-#' @param param A list of options to search by, default option is to use all options which will result in a long search query.
-#' @param ccte_api_key Checks for API key in Sys env
-#' @param debug Flag to show API calls
 
-#'
-#' @return Returns a tibble with results
-#' @export
 ct_name <- function(query,
                     param = c('start-with',
                               'equal',
@@ -110,22 +101,6 @@ ct_name <- function(query,
   return(df)
 }
 
-#' Colorize text for display in the terminal.
-#'
-#' If R is not currently running in a system that supports terminal colors
-#' the text will be returned unchanged.
-#'
-#' Allowed colors are: black, blue, brown, cyan, dark gray, green, light
-#' blue, light cyan, light gray, light green, light purple, light red,
-#' purple, red, white, yellow
-#'
-#' Taken from `testthat` package `@0e70997`
-
-#'
-#' @param text character vector
-#' @param fg foreground color, defaults to white
-#' @param bg background color, defaults to transparent
-#' @export
 
 colorize <- function(text, fg = "white", bg = NULL) {
 
