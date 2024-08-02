@@ -31,8 +31,9 @@
 #' @param query Either a vector or a string.
 #' @param search_param Additional parameters to modify search by.
 #' @param ccte_api_key Checks for API key in Sys env
+#' @param suggestions Boolean to return suggestions if a record is not found. Defaults to `TRUE`
 #'
-#' @return A data frame
+#' @return A tibble
 #' @export
 
 ct_search <- function(type = c(
@@ -46,6 +47,7 @@ ct_search <- function(type = c(
                         'substring'
                         ),
                       query,
+                      suggestions = TRUE,
                       ccte_api_key = NULL
                           ){
 
@@ -107,30 +109,43 @@ ct_search <- function(type = c(
 
 # String ------------------------------------------------------------------
 
+  if(missing(suggestions)){
+    cli::cli_alert_warning('Defaulting to including suggestions!')
+    cli::cli_alert_warning('Did you forget to specify `suggestions`?')
+    cli::cli_text('')
+
+    suggestions  <- TRUE
+
+  }
 
   if(type == 'string' & missing(search_param)){
 
     cli::cli_alert_warning('Defaulting to exact search!')
     cli::cli_alert_warning('Did you forget to specify which `search_param`?')
 
-    search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
+    #search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
-    df <- .string_search(query, sp = search_param)
+    df <- .string_search(query, sp = 'equal', sugs = suggestions)
 
-    return(df)
   }else{
 
     search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
-    df <- .string_search(query, sp = search_param)
+    df <- .string_search(query, sp = search_param, sugs = suggestions)
 
+  }
+
+  if(suggestions == FALSE){
+    df <- df %>%
+      filter(!is.na(rank)) %>%
+      select(!(contains('suggestion_')))
+  }else{
     return(df)
-
   }
 
 }
 
-.string_search <- function(query, sp){
+.string_search <- function(query, sp, sugs){
 
   headers <- c(
     `x-api-key` = ct_api_key()
@@ -141,7 +156,11 @@ ct_search <- function(type = c(
   cli::cli_rule(left = 'String Payload options')
   cli::cli_dl(c(
     'Compound count' = '{length(query)}',
-    'Search type' = '{sp}'))
+    'Search type' = '{sp}',
+    'Suggestions' = '{sugs}'))
+
+  query_search <- query %>%
+    str_replace_all(., pattern = ' ', replacement = '%20')
 
 # Exact -------------------------------------------------------------------
 
@@ -149,7 +168,7 @@ ct_search <- function(type = c(
 
     surl <- "chemical/search/"
 
-    urls <- do.call(paste0, expand.grid(burl,surl,sp,'/',query))
+    urls <- do.call(paste0, expand.grid(burl,surl,sp,'/',query_search))
 
     df <- map(urls, possibly(~{
 
@@ -158,12 +177,23 @@ ct_search <- function(type = c(
 
     }, otherwise = NULL), .progress = T) %>%
       compact %>%
-      map(., as_tibble) %>%
-      list_rbind()
+      set_names(., query) %>%
+      map_if(., .p = is.data.frame, ~{
 
-    df <- if('rank' %in% colnames(df)){arrange(df,rank)}else{df}
-    df <- df %>% as_tibble()
+        select(., -searchValue)
 
+      },
+
+      .else = ~{
+
+        pluck(., 'suggestions') %>%
+          as_tibble() %>%
+          mutate(idx = 1:n(), .before = value) %>%
+          pivot_wider(., names_prefix = 'suggestion_', names_from = idx)
+
+      }
+      ) %>%
+      list_rbind(., names_to = 'searchValue')
 
     # string_url <- 'chemical/search/equal/'
     #
@@ -216,7 +246,7 @@ ct_search <- function(type = c(
 
     surl <- "chemical/search/"
 
-    urls <- do.call(paste0, expand.grid(burl,surl,search_param,'/',query))
+    urls <- do.call(paste0, expand.grid(burl,surl,search_param,'/',query_search))
 
     df <- map(urls, possibly(~{
 
@@ -225,11 +255,23 @@ ct_search <- function(type = c(
 
     }, otherwise = NULL), .progress = T) %>%
       compact %>%
-      map_dfr(as.data.frame)
+      set_names(., query) %>%
+      map_if(., .p = is.data.frame, ~{
 
-    df <- if('rank' %in% colnames(df)){arrange(df,rank)}else{df}
-    df <-df %>% as_tibble()
-    return(df)
+        select(., -searchValue)
+
+      },
+
+      .else = ~{
+
+        pluck(., 'suggestions') %>%
+          as_tibble() %>%
+          mutate(idx = 1:n(), .before = value) %>%
+          pivot_wider(., names_prefix = 'suggestion_', names_from = idx)
+
+      }
+      ) %>%
+      list_rbind(., names_to = 'searchValue')
 
   }else{
     cli::cli_abort('Search parameter for `string` search failed!')

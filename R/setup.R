@@ -50,6 +50,7 @@ run_setup <- function(){
 
   cli::cli_rule()
   cli::cli_alert_warning('Looking for API tokens...')
+
   cli::cli_text('CCD token: {ct_api_key()}')
   #cli::cli_end()
 
