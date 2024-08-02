@@ -1,4 +1,4 @@
-.groq <- function(query){
+groq <- function(query){
 
   GROQ_API_KEY <- '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'
 
@@ -32,6 +32,8 @@
 }
 
 #testing ----
+
+df <- chemi_predict(query = 'DTXSID1034187')
 
 df <- chemi_search(
   query = 'DTXSID9025114',
@@ -105,3 +107,5 @@ df <- POST(
 content(., "text", encoding = "UTF-8") %>%
   fromJSON(simplifyVector = TRUE)
 }
+
+# ct_search ---------------------------------------------------------------
