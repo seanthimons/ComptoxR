@@ -8,6 +8,7 @@ ct_search(
   type = c("string", "mass"),
   search_param = c("equal", "start-with", "substring"),
   query,
+  suggestions = TRUE,
   ccte_api_key = NULL
 )
 }
@@ -18,10 +19,12 @@ ct_search(
 
 \item{query}{Either a vector or a string.}
 
+\item{suggestions}{Boolean to return suggestions if a record is not found. Defaults to \code{TRUE}}
+
 \item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{
-A data frame
+A tibble
 }
 \description{
 Searching by string, mass, or chemical formula
