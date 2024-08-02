@@ -33,7 +33,7 @@ chemi_predict <- function(query){
 
   df <- df %>%
     pluck('chemicals', 'endpoints') %>%
-    set_names(., test)
+    set_names(., query)
 
   endpoints <- df %>%
     map(., pluck('endpoint')) %>%

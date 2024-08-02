@@ -2,8 +2,8 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @import dplyr
 #' @import cli
+#' @import dplyr
 #' @import httr
 #' @import purrr
 #' @import stringr
@@ -19,6 +19,7 @@
 #' @importFrom pillar glimpse
 #' @importFrom tibble as_tibble
 #' @importFrom webchem as.cas
+#' @importFrom webchem is.cas
 #' @importFrom webchem pc_sect
 ## usethis namespace: end
 NULL
