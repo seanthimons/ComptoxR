@@ -1,5 +1,14 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9003
+
+- Updated ct_search to return suggestions
+- Fixed chemi_search
+- Clean up of ct_descriptors
+- Added chemi_predict for TEST and OPERA results. Currently just a table, without organization.
+- Updated setup and ping requests for timeout.
+
+
 - Same as previous version.
 
 
