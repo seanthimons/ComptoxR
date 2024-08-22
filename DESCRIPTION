@@ -15,19 +15,20 @@ Description: ComptoxR is designed to leverage the USEPA CCTE's APIs for
     chemical is also included.
 License: `use_mit_license()`, `use_gpl3_license()`
 Depends: 
-    R (>= 3.5.0)
+    R (>= 3.5.0),
 Imports: 
     cli,
-    dplyr (>= 1.0.9),
-    httr (>= 1.4.3),
+    dplyr (>= 1.1.4),
+    ggplot2,
+    httr (>= 1.4.7),
     janitor (>= 2.1.0),
-    jsonlite (>= 1.8.0),
+    jsonlite (>= 1.8.8),
     magrittr (>= 2.0.3),
-    purrr (>= 0.3.4),
-    stringr (>= 1.4.0),
+    purrr (>= 1.0.2),
+    stringr (>= 1.5.1),
     testthat,
     tibble,
-    tidyr (>= 1.2.0),
+    tidyr (>= 1.3.1),
     webchem
 Encoding: UTF-8
 LazyData: true

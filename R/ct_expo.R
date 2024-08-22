@@ -101,4 +101,5 @@ ct_exposure <- function(query, param = c('func_use', 'product_data', 'list'), cc
     records = cat_surl
   )
 
+  return(df)
 }
