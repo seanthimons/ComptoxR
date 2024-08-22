@@ -135,14 +135,6 @@ ct_search <- function(type = c(
 
   }
 
-  if(suggestions == FALSE){
-    df <- df %>%
-      filter(!is.na(rank)) %>%
-      select(!(contains('suggestion_')))
-  }else{
-    return(df)
-  }
-
 }
 
 .string_search <- function(query, sp, sugs){
@@ -153,127 +145,103 @@ ct_search <- function(type = c(
 
   burl <- Sys.getenv('burl')
 
+  string_url = case_when(
+    sp == 'equal' ~ 'chemical/search/equal/',
+    sp == 'start-with' ~ 'chemical/search/start-with/',
+    sp == 'substring' ~  'chemical/search/contain/',
+  #  .default = 'chemical/search/equal/'
+  )
+
   cli::cli_rule(left = 'String Payload options')
   cli::cli_dl(c(
     'Compound count' = '{length(query)}',
     'Search type' = '{sp}',
+  #  'Search type' = '{string_url}',
     'Suggestions' = '{sugs}'))
+  cli::cli_text("")
 
-  query_search <- query %>%
-    str_replace_all(., pattern = ' ', replacement = '%20')
+  query = enframe(query, name = 'idx', value = 'raw_search') %>%
+    mutate(
+      cas_chk = str_remove(raw_search, "^0+") %>%
+        as.cas(.),
+
+      searchValue  = str_to_upper(raw_search) %>%
+        str_replace_all(., c('-' = ' ', '\\u00b4' = "'")),
+
+      searchValue = case_when(
+        !is.na(cas_chk) ~ cas_chk,
+        .default = searchValue
+      )
+    ) %>%
+    select(-cas_chk)
 
 # Exact -------------------------------------------------------------------
 
   if(sp == 'equal'){
 
-    surl <- "chemical/search/"
+    sublists <- split(query, rep(1:ceiling(nrow(query)/200), each = 200, length.out = nrow(query)))
 
-    urls <- do.call(paste0, expand.grid(burl,surl,sp,'/',query_search))
+    df <- map(sublists, ~{
 
-    df <- map(urls, possibly(~{
+      df <- POST(
+        url = paste0(burl, string_url),
+        body = .x$searchValue,
+        add_headers(.headers = headers),
+        content_type("application/json"),
+        accept("application/json"),
+        encode = "json",
+        progress() # progress bar
+      )
 
-      response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+      df <- content(df, "text", encoding = "UTF-8") %>%
+        jsonlite::fromJSON(simplifyVector = TRUE)
 
-    }, otherwise = NULL), .progress = T) %>%
-      compact %>%
-      set_names(., query) %>%
-      map_if(., .p = is.data.frame, ~{
+      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
 
-        select(., -searchValue)
+    }) %>%
+      list_rbind() %>%
+      select(-idx) %>%
+      distinct(raw_search, searchValue, dtxsid, .keep_all = T)
 
-      },
-
-      .else = ~{
-
-        pluck(., 'suggestions') %>%
-          as_tibble() %>%
-          mutate(idx = 1:n(), .before = value) %>%
-          pivot_wider(., names_prefix = 'suggestion_', names_from = idx)
-
-      }
-      ) %>%
-      list_rbind(., names_to = 'searchValue')
-
-    # string_url <- 'chemical/search/equal/'
-    #
-    # if(length(query) > 200){
-    #
-    #   cli::cli_alert_warning('Large request detected!')
-    #
-    #   sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
-    #   sublists <- map(sublists, as.list)
-    #
-    #   df <- map(sublists, ~{
-    #
-    #     .x <- paste0(.x)
-    #
-    #     .x <- POST(
-    #       url = paste0(burl, string_url),
-    #       body = .x,
-    #       add_headers(.headers = headers),
-    #       content_type("application/json"),
-    #       accept("application/json"),
-    #       encode = "json",
-    #       progress() # progress bar
-    #     )
-    #
-    #     .x <- content(.x, "text", encoding = "UTF-8") %>%
-    #       jsonlite::fromJSON(simplifyVector = TRUE)
-    #
-    #   }) %>% list_rbind()
-    #
-    # }else{
-    #
-    #   response <- POST(
-    #     url = paste0(burl, string_url),
-    #     body = query,
-    #     content_type("application/json"),
-    #     accept("application/json"),
-    #     encode = 'json',
-    #     add_headers(`x-api-key` = ct_api_key()),
-    #     progress() #progress bar
-    #   )
-    #
-    #   df <- content(response, "text", encoding = 'UTF-8') %>%
-    #     jsonlite::fromJSON(simplifyVector = TRUE)
+    if(sugs == FALSE){
+      df <- df %>%
+        select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
+        return(df)
     }else{
+      return(df)
+    }
+
+  }else{
 
 # Substring ---------------------------------------------------------------
 
+  if(sp %in% c('start-with', 'substring')){
 
-    if(sp %in% c('start-with', 'substring')){
+    query <- query %>%
+      select(-searchValue, -idx) %>%
+      mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
+      split(., .$raw_search)
 
-    surl <- "chemical/search/"
+    df <- map(query, possibly(~{
 
-    urls <- do.call(paste0, expand.grid(burl,surl,search_param,'/',query_search))
+      cli::cli_text(.x$raw_search, '\n')
+      response <- GET(url = .x$url, add_headers(.headers = headers))
 
-    df <- map(urls, possibly(~{
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+        as_tibble()
 
-      response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
 
-    }, otherwise = NULL), .progress = T) %>%
-      compact %>%
-      set_names(., query) %>%
-      map_if(., .p = is.data.frame, ~{
+    if(sugs == FALSE){
+      df <- df %>%
+        select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
+      return(df)
+    }else{
+      return(df)
+    }
 
-        select(., -searchValue)
-
-      },
-
-      .else = ~{
-
-        pluck(., 'suggestions') %>%
-          as_tibble() %>%
-          mutate(idx = 1:n(), .before = value) %>%
-          pivot_wider(., names_prefix = 'suggestion_', names_from = idx)
-
-      }
-      ) %>%
-      list_rbind(., names_to = 'searchValue')
-
-  }else{
+    }else{
     cli::cli_abort('Search parameter for `string` search failed!')
   }
-}}
+  }
+}
