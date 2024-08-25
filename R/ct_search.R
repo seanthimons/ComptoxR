@@ -57,7 +57,6 @@ ct_search <- function(type = c(
 
   {
   burl <- Sys.getenv('burl')
-  string_url <- 'chemical/search/equal/'
   formula_url <- 'chemical/msready/search/by-formula/'
   mass_url <- 'chemical/msready/search/by-mass/'
   }
@@ -135,6 +134,7 @@ ct_search <- function(type = c(
 
   }
 
+  return(df)
 }
 
 .string_search <- function(query, sp, sugs){
@@ -160,6 +160,7 @@ ct_search <- function(type = c(
     'Suggestions' = '{sugs}'))
   cli::cli_text("")
 
+  query = as.vector(query)
   query = enframe(query, name = 'idx', value = 'raw_search') %>%
     mutate(
       cas_chk = str_remove(raw_search, "^0+") %>%
@@ -179,13 +180,13 @@ ct_search <- function(type = c(
 
   if(sp == 'equal'){
 
-    sublists <- split(query, rep(1:ceiling(nrow(query)/200), each = 200, length.out = nrow(query)))
+    sublists <- split(query, rep(1:ceiling(nrow(query)/75), each = 75, length.out = nrow(query)))
 
     df <- map(sublists, ~{
 
       df <- POST(
         url = paste0(burl, string_url),
-        body = .x$searchValue,
+        body = as.vector(.x$raw_search),
         add_headers(.headers = headers),
         content_type("application/json"),
         accept("application/json"),
@@ -196,13 +197,13 @@ ct_search <- function(type = c(
       df <- content(df, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = TRUE)
 
-      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
+      .x <- left_join(.x, df, join_by(searchValue)
+                      ,relationship = 'many-to-many'
+      )
 
     }) %>%
       list_rbind() %>%
-      select(-idx) %>%
-      distinct(raw_search, searchValue, dtxsid, .keep_all = T)
-
+      select(-c(idx, searchValue))
     if(sugs == FALSE){
       df <- df %>%
         select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
