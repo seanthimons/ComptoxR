@@ -117,24 +117,155 @@ chemicals <- map(query, ~ {
     fromJSON(simplifyVector = TRUE)
 }
 
+# ct_search ---------------------------------------------------------------
 
-cas_list <- rio::import('cas_list.csv') %>%
-  select(analyte, cas_number)
+string_search <- function(query, sp = 'equal', sugs = T){
 
-comp <- ct_search(type = 'string', search_param = 'equal', query = cas_list$analyte, suggestions = T) %>%
-  select(raw_search, dtxsid, preferredName) %>%
-  rename(dtxsid_name = dtxsid,
-         prefname_name = preferredName)
+  headers <- c(
+    `x-api-key` = ct_api_key()
+  )
 
-cas <- ct_search(type = 'string', search_param = 'equal', query = cas_list$cas_number, suggestions = T) %>%
-  select(raw_search, dtxsid, preferredName) %>%
-  rename(dtxsid_cas = dtxsid,
-        prefname_cas = preferredName)
+  burl <- Sys.getenv('burl')
 
-cas_cur <- left_join(cas_list, comp, join_by(analyte == raw_search)) %>%
+  string_url = case_when(
+    sp == 'equal' ~ 'chemical/search/equal/',
+    sp == 'start-with' ~ 'chemical/search/start-with/',
+    sp == 'substring' ~  'chemical/search/contain/',
+    #  .default = 'chemical/search/equal/'
+  )
+
+  cli::cli_rule(left = 'String Payload options')
+  cli::cli_dl(c(
+    'Compound count' = '{length(query)}',
+    'Search type' = '{sp}',
+    #  'Search type' = '{string_url}',
+    'Suggestions' = '{sugs}'))
+  cli::cli_text("")
+
+  query = as.vector(query)
+  query = enframe(query, name = 'idx', value = 'raw_search') %>%
+    mutate(
+      cas_chk = str_remove(raw_search, "^0+") %>%
+        as.cas(.),
+
+      searchValue  = str_to_upper(raw_search) %>%
+        str_replace_all(., c('-' = ' ', '\\u00b4' = "'")),
+
+      searchValue = case_when(
+        !is.na(cas_chk) ~ cas_chk,
+        .default = searchValue
+      )
+    ) %>%
+    select(-cas_chk)
+
+  # Exact -------------------------------------------------------------------
+
+  if(sp == 'equal'){
+
+    sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
+
+    df <- map(sublists, ~{
+
+      df <- POST(
+        url = paste0(burl, string_url),
+        body = .x$searchValue,
+        add_headers(.headers = headers),
+        content_type("application/json"),
+        accept("application/json"),
+        encode = "json",
+        progress() # progress bar
+      )
+
+      df <- content(df, "text", encoding = "UTF-8") %>%
+        jsonlite::fromJSON(simplifyVector = TRUE)
+
+      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
+
+    }) %>%
+      list_rbind() %>%
+      select(-c(idx, searchValue)) #%>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
+
+    if(sugs == FALSE){
+      df <- df %>%
+        select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
+      return(df)
+    }else{
+      return(df)
+    }
+
+  }else{
+
+    # Substring ---------------------------------------------------------------
+
+    if(sp %in% c('start-with', 'substring')){
+
+      query <- query %>%
+        select(-searchValue, -idx) %>%
+        mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
+        split(., .$raw_search)
+
+      df <- map(query, possibly(~{
+
+        cli::cli_text(.x$raw_search, '\n')
+        response <- GET(url = .x$url, add_headers(.headers = headers))
+
+        df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+          as_tibble()
+
+      }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
+
+      if(sugs == FALSE){
+        df <- df %>%
+          select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
+        return(df)
+      }else{
+        return(df)
+      }
+
+    }else{
+      cli::cli_abort('Search parameter for `string` search failed!')
+    }
+  }
+}
+
+search_list <- rio::import('cas_list.csv') %>%
+  select(analyte, cas_number) #%>% .[110:120,]
+
+# temp <- '2,4-Dinitrophenol'
+# temp <- c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol')
+# temp <- search_list$analyte
+#
+# ctxR::chemical_equal_batch(word = c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol'))
+# ctxR::chemical_equal_batch(word = temp) %>% select(searchValue, preferredName)
+#   print(n = Inf)
+#
+# string_search(query = temp) %>%
+#   select(raw_search, preferredName) %>%
+#   print(n = Inf)
+#
+# ct_search(type = 'string', search_param = 'equal', query = temp) %>% select(raw_search, preferredName)
+# ct_search(type = 'string', search_param = 'equal', query = as.vector(search_list$analyte)) %>% select(raw_search, preferredName)
+#
+# rm(comp)
+# comp <- ct_search(type = 'string', search_param = 'equal', query = as.vector(search_list$analyte)) %>%
+#   select(raw_search, preferredName) %>%
+#   print(n = Inf)
+
+
+# curation ----------------------------------------------------------------
+
+#comp <- ctxR::chemical_equal_batch(word = search_list$analyte) %>% select(preferredName)
+
+comp <- ct_search(type = 'string', search_param = 'equal', query = search_list$analyte) %>%
+  rename_with(., ~paste0('compound_', .x, recycle0 = T), !raw_search)
+
+cas <- ct_search(type = 'string', search_param = 'equal', query = search_list$cas_number, suggestions = T) %>%
+  rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
+
+search_cur <- left_join(search_list, comp, join_by(analyte == raw_search)) %>%
   left_join(., cas, join_by(cas_number == raw_search)) %>%
-  mutate(auth = if_else(dtxsid_cas == dtxsid_name, T, F))
-
+  select(contains(c('analyte', 'cas_number')),ends_with(c('_dtxsid', '_rank', '_preferredName'))) %>%
+  mutate(auth = if_else(cas_dtxsid == compound_dtxsid, T, F))
 
 
 
