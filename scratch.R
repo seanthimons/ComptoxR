@@ -119,7 +119,7 @@ chemicals <- map(query, ~ {
 
 # ct_search ---------------------------------------------------------------
 
-string_search <- function(query, sp = 'equal', sugs = T){
+.string_search <- function(query, sp = 'equal', sugs = T){
 
   headers <- c(
     `x-api-key` = ct_api_key()
@@ -183,7 +183,7 @@ string_search <- function(query, sp = 'equal', sugs = T){
 
     }) %>%
       list_rbind() %>%
-      select(-c(idx, searchValue)) #%>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
+      select(-c(idx)) %>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
 
     if(sugs == FALSE){
       df <- df %>%
@@ -228,16 +228,19 @@ string_search <- function(query, sp = 'equal', sugs = T){
   }
 }
 
-search_list <- rio::import('cas_list.csv') %>%
-  select(analyte, cas_number) #%>% .[110:120,]
+search_list <- rio::import('cas_list.csv', na.strings = "") %>%
+  select(analyte, cas_number)
 
-# temp <- '2,4-Dinitrophenol'
-# temp <- c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol')
-# temp <- search_list$analyte
-#
-# ctxR::chemical_equal_batch(word = c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol'))
-# ctxR::chemical_equal_batch(word = temp) %>% select(searchValue, preferredName)
-#   print(n = Inf)
+# # temp <- '2,4-Dinitrophenol'
+# # temp <- c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol')
+# #
+#  ctxR::chemical_equal_batch(word = c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol', '13-Docosenamide, (Z)-')) %>% select(searchValue, preferredName)
+#  ctxR::chemical_equal_batch(word = '13-Docosenamide, (Z)-') %>%
+#    select(searchValue, preferredName)
+#  ctxR::chemical_starts_with(word = '13-Docosenamide, (Z)-') %>%
+#    select(searchValue, preferredName)
+
+ctxR::chemical_equal_batch(word = search_list$analyte) %>% View()
 #
 # string_search(query = temp) %>%
 #   select(raw_search, preferredName) %>%
@@ -249,15 +252,25 @@ search_list <- rio::import('cas_list.csv') %>%
 # rm(comp)
 # comp <- ct_search(type = 'string', search_param = 'equal', query = as.vector(search_list$analyte)) %>%
 #   select(raw_search, preferredName) %>%
-#   print(n = Inf)
+#
+#
+# cas <- .string_search(query = search_list$cas_number) %>%
+#   rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
 
 
 # curation ----------------------------------------------------------------
 
-#comp <- ctxR::chemical_equal_batch(word = search_list$analyte) %>% select(preferredName)
-
 comp <- ct_search(type = 'string', search_param = 'equal', query = search_list$analyte) %>%
   rename_with(., ~paste0('compound_', .x, recycle0 = T), !raw_search)
+
+comp %>% filter(raw_search == '2,4-Dinitrophenol')
+
+# comp_sw <- comp %>%
+#   filter(is.na(compound_dtxsid)) %>%
+#   select(raw_search) %>%
+#   ct_search(type = 'string', search_param = 'start-with', query = .$raw_search, suggestions = T) %>%
+#   rename_with(., ~paste0('compound_sw_', .x, recycle0 = T), !raw_search)
+
 
 cas <- ct_search(type = 'string', search_param = 'equal', query = search_list$cas_number, suggestions = T) %>%
   rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
@@ -265,7 +278,21 @@ cas <- ct_search(type = 'string', search_param = 'equal', query = search_list$ca
 search_cur <- left_join(search_list, comp, join_by(analyte == raw_search)) %>%
   left_join(., cas, join_by(cas_number == raw_search)) %>%
   select(contains(c('analyte', 'cas_number')),ends_with(c('_dtxsid', '_rank', '_preferredName'))) %>%
-  mutate(auth = if_else(cas_dtxsid == compound_dtxsid, T, F))
-
+  mutate(auth = case_when(
+    cas_dtxsid == compound_dtxsid ~ 'TRUE',
+    cas_dtxsid != compound_dtxsid ~ 'FALSE',
+    is.na(cas_dtxsid) & is.na(compound_dtxsid) ~ 'NA'),
+         final_dtx = case_when(
+          # auth == FALSE ~ NA,
+           auth == TRUE ~ compound_dtxsid,
+           as.numeric(cas_rank) < as.numeric(compound_rank) ~ cas_dtxsid,
+           is.na(compound_rank) & !is.na(cas_rank) ~ cas_dtxsid,
+           as.numeric(cas_rank) > as.numeric(compound_rank) ~ compound_dtxsid,
+           !is.na(compound_rank) & is.na(cas_rank) ~ compound_dtxsid,
+           .default = NA
+         ),
+         auth = forcats::fct_relevel(auth, c('TRUE', 'FALSE'))
+       ) %>%
+  arrange(auth)
 
 

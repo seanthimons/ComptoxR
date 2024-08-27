@@ -137,6 +137,14 @@ ct_search <- function(type = c(
   return(df)
 }
 
+#' Helper function for string searches
+#'
+#' @param query A list of items to search
+#' @param sp Search parameter
+#' @param sugs Boolean to return suggestions
+#'
+#' @return A tibble
+
 .string_search <- function(query, sp, sugs){
 
   headers <- c(
@@ -149,22 +157,24 @@ ct_search <- function(type = c(
     sp == 'equal' ~ 'chemical/search/equal/',
     sp == 'start-with' ~ 'chemical/search/start-with/',
     sp == 'substring' ~  'chemical/search/contain/',
-  #  .default = 'chemical/search/equal/'
+    #  .default = 'chemical/search/equal/'
   )
 
   cli::cli_rule(left = 'String Payload options')
-  cli::cli_dl(c(
-    'Compound count' = '{length(query)}',
-    'Search type' = '{sp}',
-  #  'Search type' = '{string_url}',
-    'Suggestions' = '{sugs}'))
+  cli::cli_dl()
+  cli::cli_li(c('Compound count' = "{length(query)}"))
+  cli::cli_li(c('Batch iterations' = "{ceiling(length(query)/50L)}"))
+  cli::cli_li(c('Search type' = "{sp}"))
+  cli::cli_li(c('Suggestions' = "{sugs}"))
+  cli::cli_end()
   cli::cli_text("")
 
-  query = as.vector(query)
+  query = unique(as.vector(query))
   query = enframe(query, name = 'idx', value = 'raw_search') %>%
     mutate(
-      cas_chk = str_remove(raw_search, "^0+") %>%
-        as.cas(.),
+      cas_chk = str_remove(raw_search, "^0+"),
+      cas_chk = str_remove_all(cas_chk, "-"),
+      cas_chk = as.cas(cas_chk),
 
       searchValue  = str_to_upper(raw_search) %>%
         str_replace_all(., c('-' = ' ', '\\u00b4' = "'")),
@@ -174,19 +184,20 @@ ct_search <- function(type = c(
         .default = searchValue
       )
     ) %>%
-    select(-cas_chk)
+    select(-cas_chk) %>%
+    filter(!is.na(searchValue))
 
-# Exact -------------------------------------------------------------------
+  # Exact -------------------------------------------------------------------
 
   if(sp == 'equal'){
 
-    sublists <- split(query, rep(1:ceiling(nrow(query)/75), each = 75, length.out = nrow(query)))
+    sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
 
     df <- map(sublists, ~{
 
       df <- POST(
         url = paste0(burl, string_url),
-        body = as.vector(.x$raw_search),
+        body = .x$searchValue,
         add_headers(.headers = headers),
         content_type("application/json"),
         accept("application/json"),
@@ -197,52 +208,51 @@ ct_search <- function(type = c(
       df <- content(df, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = TRUE)
 
-      .x <- left_join(.x, df, join_by(searchValue)
-                      ,relationship = 'many-to-many'
-      )
+      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
 
     }) %>%
       list_rbind() %>%
-      select(-c(idx, searchValue))
+      select(-c(idx)) %>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
+
     if(sugs == FALSE){
       df <- df %>%
         select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
-        return(df)
+      return(df)
     }else{
       return(df)
     }
 
   }else{
 
-# Substring ---------------------------------------------------------------
+    # Substring ---------------------------------------------------------------
 
-  if(sp %in% c('start-with', 'substring')){
+    if(sp %in% c('start-with', 'substring')){
 
-    query <- query %>%
-      select(-searchValue, -idx) %>%
-      mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
-      split(., .$raw_search)
+      query <- query %>%
+        select(-searchValue, -idx) %>%
+        mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
+        split(., .$raw_search)
 
-    df <- map(query, possibly(~{
+      df <- map(query, possibly(~{
 
-      cli::cli_text(.x$raw_search, '\n')
-      response <- GET(url = .x$url, add_headers(.headers = headers))
+        cli::cli_text(.x$raw_search, '\n')
+        response <- GET(url = .x$url, add_headers(.headers = headers))
 
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-        as_tibble()
+        df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+          as_tibble()
 
-    }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
+      }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
 
-    if(sugs == FALSE){
-      df <- df %>%
-        select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
-      return(df)
+      if(sugs == FALSE){
+        df <- df %>%
+          select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
+        return(df)
+      }else{
+        return(df)
+      }
+
     }else{
-      return(df)
+      cli::cli_abort('Search parameter for `string` search failed!')
     }
-
-    }else{
-    cli::cli_abort('Search parameter for `string` search failed!')
-  }
   }
 }
