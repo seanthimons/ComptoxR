@@ -141,6 +141,7 @@ chemi_hazard <- function(query,
                  col = 'records' ,
                  names_sep = '_'
     ) %>%
+    #here
     select(-records_hazardName) %>%
     rename_with(~str_remove(., "records_"), everything()) %>%
     rename(note1 = `1`)
