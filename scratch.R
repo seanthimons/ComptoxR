@@ -271,7 +271,6 @@ comp %>% filter(raw_search == '2,4-Dinitrophenol')
 #   ct_search(type = 'string', search_param = 'start-with', query = .$raw_search, suggestions = T) %>%
 #   rename_with(., ~paste0('compound_sw_', .x, recycle0 = T), !raw_search)
 
-
 cas <- ct_search(type = 'string', search_param = 'equal', query = search_list$cas_number, suggestions = T) %>%
   rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
 
@@ -294,5 +293,3 @@ search_cur <- left_join(search_list, comp, join_by(analyte == raw_search)) %>%
          auth = forcats::fct_relevel(auth, c('TRUE', 'FALSE'))
        ) %>%
   arrange(auth)
-
-

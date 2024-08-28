@@ -107,10 +107,9 @@ chemi_search <- function(query,
   if (searchType %in% c("MASS")) {
       query <- NULL
     } else {
-        cli_alert_info("Grabbing MOL file...\n")
+        cli_alert_info(paste0("Grabbing MOL file for {query}"))
     }
-      q_smiles <- ct_details(query, projection = 'structure')
-      query <- ct_descriptors(q_smiles$smiles, type = 'mol3000')
+      query <- ct_file(query = query)
       mass_type <- "mono" # seems to be always needed?
     }
 
@@ -312,13 +311,11 @@ chemi_search <- function(query,
 
   # request -----------------------------------------------------------------
 
-  burl <- paste0(Sys.getenv("chemi_burl"), "api/search")
-
   response <- POST(
-    url = burl,
+    url =  paste0(Sys.getenv("chemi_burl"), "api/search"),
     body = payload,
     content_type("application/json"),
-    accept("*/*"),
+    #accept("*/*"),
     encode = "json",
     progress()
   )
@@ -345,7 +342,7 @@ chemi_search <- function(query,
   cli_alert_success('{trc} compounds found!')
 
   } else {
-    cli_alert_danger("\nBad request!")
+    cli_alert_danger("\nBad request at search!")
   }
 
   # debug -------------------------------------------------------------------
