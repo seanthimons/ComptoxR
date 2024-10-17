@@ -3,7 +3,6 @@
 #' Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.
 #'
 #' @param list_name Search parameter
-#' @param name description
 #' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble with results
