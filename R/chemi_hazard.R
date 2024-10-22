@@ -1,6 +1,35 @@
 #' Hazard Comparison
 #'
-#' Retrieves records for queried compounds. When the parameter `coerce` is set to `TRUE`, a list containing four data frames will be created; if set to `FALSE` the raw data from the query will be returned.
+#' @description
+#'
+#'   Retrieves records for queried compounds.Generates a list:
+#'    \itemize{
+#'     \item `headers`: DTXSID and preferred name
+#'     \item `data`: longform table of DTXSIDs, name, and data needed to create a HTML table with formatting
+#'     \item `score` table with raw binned values
+#'     \item `records` table with converted values from `score`, changes based on `coerce` arguement. Used for ToxPi calculations
+#'  }
+#'
+#' @details
+#' The `coerce` option will greatly change how the final numerical outputs of the function work:
+#' \itemize{
+#'   \item `simple`: Currently changes the lettered bins with *no* respect to the final authority level of the source:
+#'    \itemize{
+#'      \item 'VH' = `5`
+#'      \item 'H' = `4`
+#'      \item 'M' = `3`
+#'      \item 'L' = `2`
+#'      \item 'I' = `1`
+#'      \item 'ND or NA' = `NA`
+#'  }
+#'    \item `bin`: Currently changes the lettered bins *with* respect to the final authority level of the source:
+#'    \itemize{
+#'      \item 'Authorative' = No change
+#'      \item 'Screening' = -1/3 score penalty
+#'      \item 'QSAR model' = -2/3 score penalty
+#'  }
+#'    \item `numerical`: Generates opinionated numerical equivalents (for GHS codes) or retrieves experimental endpoint data. Inverts data to better be used for ToxPi analysis.
+#' }
 #'
 #' @param query A list of DTXSIDS to search for.
 #' @param cts_generations A number of metabolite generations to predict for. Maximum of `4` allowed.
@@ -9,15 +38,14 @@
 #' @param enhance Enhance responses with subjective endpoint definitions.
 #' @param coerce Boolean variable to coerce the data to a numerical equivalent. Defaults to `TRUE`.
 #'
-#' @return A data frame or list, depending on `coerce`
+#' @return A lists of dataframes
 #' @export
 
 chemi_hazard <- function(query,
                            # cts_generations = c(1, 2, 3, 4),
                            analogs = c('substructure', 'similar', 'toxprint'),
-                           min_sim = NULL
-                           #,enhance = FALSE
-                           ,coerce = TRUE
+                           min_sim = NULL,
+                           coerce = c('simple', 'bin', 'numerical')
 ){
   #Arguments----
   ##CTS generations----
@@ -177,343 +205,395 @@ chemi_hazard <- function(query,
     mutate(data_id = 1:n()) %>%
     relocate(., data_id, .before = dtxsid)
 
+  data <- list(
+    headers = NULL,
+    data = NULL,
+    score = NULL,
+    display_table = NULL,
+    records = NULL
+  )
+
+  data$headers = df %>%
+    select(dtxsid, name) %>%
+    distinct()
+
+  data$data = df %>%
+    select(data_id,
+           dtxsid:hazardId,
+           finalAuthority,
+           finalScore,
+    ) %>%
+    arrange(
+      factor(hazardId, levels = c(
+        "acuteMammalianOral",
+        "acuteMammalianDermal",
+        "acuteMammalianInhalation",
+        "developmental",
+        "reproductive",
+        "endocrine",
+        "genotoxicity",
+        "carcinogenicity",
+        "neurotoxicitySingle",
+        "neurotoxicityRepeat",
+        "systemicToxicitySingle",
+        "systemicToxicityRepeat",
+        "eyeIrritation",
+        "skinIrritation",
+        "skinSensitization",
+        "acuteAquatic",
+        "chronicAquatic",
+        "persistence",
+        "bioaccumulation",
+        "exposure"
+      )),
+      factor(finalScore, levels = c(
+        'VH',
+        'H',
+        'M',
+        'L',
+        'I',
+        'ND',
+        NA)),
+      factor(finalAuthority, levels = c(
+        'Authoritative',
+        'Screening',
+        'QSAR Model',
+        NA))) %>%
+    distinct(.,
+             dtxsid,
+             hazardId,
+             .keep_all = T) %>%
+    mutate(display_score = case_when(
+      finalAuthority == 'Authoritative' ~ paste0('<b>', finalScore, '</b>'),
+      finalAuthority == 'QSAR Model' ~ paste0('<i>', finalScore, '</i>'),
+      .default = finalScore
+    ))
+
+  data$score = data$data %>%
+    pivot_wider(.,
+                id_cols = dtxsid,
+                names_from = hazardId,
+                values_from = finalScore)
+
+  data$display_table = data$data %>%
+    pivot_wider(.,
+                id_cols = dtxsid,
+                names_from = hazardId,
+                values_from = display_score)
+
+  data$records = NULL
+
   #Coercing-----
-  if(coerce == TRUE){
+  if(missing(coerce)){
+    coerce <- 'simple'
+  }
 
-    data <- list(
-      headers = NULL,
-      data = NULL,
-      score = NULL,
-      records = NULL)
+  # Coerce switch -----------------------------------------------------------
 
-    ##Headers----
+  {
+    cli_rule(left = 'Hazard coercion options')
+    cli_dl(
+      c('Method' = '{coerce}')
+    )
+    cli_rule()
+    cli_end()
+  }
 
-    data$headers <- df %>%
-      select(dtxsid, name) %>%
-      distinct()
+  switch(coerce,
+         simple = {
+           ## Simple----
+           data$records <- data$data %>%
+             mutate(amount = case_when(
 
-    ##Data----
-    data$data <- df %>%
-      select(data_id,
-             dtxsid:hazardId,
-             finalAuthority,
-             finalScore,
-      ) %>%
-      arrange(
-        factor(hazardId, levels = c(
-          "acuteMammalianOral",
-          "acuteMammalianDermal",
-          "acuteMammalianInhalation",
-          "developmental",
-          "reproductive",
-          "endocrine",
-          "genotoxicity",
-          "carcinogenicity",
-          "neurotoxicitySingle",
-          "neurotoxicityRepeat",
-          "systemicToxicitySingle",
-          "systemicToxicityRepeat",
-          "eyeIrritation",
-          "skinIrritation",
-          "skinSensitization",
-          "acuteAquatic",
-          "chronicAquatic",
-          "persistence",
-          "bioaccumulation",
-          "exposure"
-        )),
-        factor(finalScore, levels = c(
-          'VH',
-          'H',
-          'M',
-          'L',
-          'I',
-          'ND',
-          NA)),
-        factor(finalAuthority, levels = c(
-          'Authoritative',
-          'Screening',
-          'QSAR Model',
-          NA))) %>%
-      distinct(.,
-               dtxsid,
-               hazardId,
-               .keep_all = T) %>%
-      mutate(display_score = case_when(
-        finalAuthority == 'Authoritative' ~ paste0('<b>', finalScore, '</b>'),
-        finalAuthority == 'QSAR Model' ~ paste0('<i>', finalScore, '</i>'),
-        .default = finalScore
-      ))
-    ##Score----
-    data$score <- data$data %>%
-      pivot_wider(.,
-                  id_cols = dtxsid,
-                  names_from = hazardId,
-                  values_from = finalScore)
-    ##Display table----
-    data$display_table <- data$data %>%
-      pivot_wider(.,
-                  id_cols = dtxsid,
-                  names_from = hazardId,
-                  values_from = display_score)
+               finalScore == 'VH' ~ 5,
+               finalScore == 'H' ~ 4,
+               finalScore == 'M' ~ 3,
+               finalScore == 'L' ~ 2,
+               finalScore == 'I' ~ 1,
+               .default = NA_real_)) %>%
+             pivot_wider(.,
+                         id_cols = dtxsid,
+                         names_from = hazardId,
+                         values_from = amount)
+         },
+         bin = {
+           ## Bin ----
+           data$records <- data$data %>%
+             mutate(
+               auth_val = case_when(
+                 finalAuthority == 'Authoritative' ~ 0,
+                 finalAuthority == 'Screening' ~ 1/3,
+                 finalAuthority == 'QSAR Model' ~ 2/3,
+                 .default = 0),
+               score_val = case_when(
+                 finalScore == 'VH' ~ 5,
+                 finalScore == 'H' ~ 4,
+                 finalScore == 'M' ~ 3,
+                 finalScore == 'L' ~ 2,
+                 finalScore == 'I' ~ 1,
+                 .default = NA_real_),
+               amount = score_val - auth_val) %>%
+             pivot_wider(.,
+                         id_cols = dtxsid,
+                         names_from = hazardId,
+                         values_from = amount)
+         },
+         num = {
+           ## Numerical----
+           {
+             #actual data
+             temp_r <- df %>%
+               select(1,9:ncol(df))
 
-    ##Records----
-    {
-      temp_r <- df %>%
-        select(1,9:ncol(df))
+             #headers
+             temp_d <- data$data %>%
+               select(1,2,5,6)
 
-      temp_d <- data$data %>%
-        select(1,2,5,6)
+             records <- list('hcodes' = NULL, 'cat' = NULL, 'num' = NULL, 'nd' = NULL)
 
-      records <- list('hcodes' = NULL, 'cat' = NULL, 'num' = NULL, 'nd' = NULL)
+             temp_df <- left_join(temp_d, temp_r, by = 'data_id') %>%
+               mutate(hazardCode = str_replace_all(hazardCode, '-', NA_character_),
+                      valueMass = case_when(
+                        #TEST predictions
+                        str_detect(source, 'T.E.S.T.') & str_detect(rationale, 'Positive for|Negative for') ~ NA_integer_,
+                        #Cancer slope values
+                        str_detect(source, 'mid-Atlantic') & str_detect(rationale, 'SFO') ~ NA_integer_,
+                        .default = valueMass))
 
-      temp_df <- left_join(temp_d, temp_r, by = 'data_id') %>%
-        mutate(hazardCode = str_replace_all(hazardCode, '-', NA_character_),
-               valueMass = case_when(
-                 #TEST predictions
-                 str_detect(source, 'T.E.S.T.') & str_detect(rationale, 'Positive for|Negative for') ~ NA_integer_,
-                 #Cancer slope values
-                 str_detect(source, 'mid-Atlantic') & str_detect(rationale, 'SFO') ~ NA_integer_,
-                 .default = valueMass
+             ###check list----
+             records_check <- left_join(temp_d, temp_r, by = 'data_id') %>% select(data_id)
 
-               ))
+             ###Hcodes----
+             records$hcodes <- temp_df %>%
+               filter(!is.na(hazardCode)) %>%
+               select(data_id, endpoint, finalScore, hazardCode) %>%
+               mutate(amount = case_when(
 
-      ###check list----
-      records_check <- left_join(temp_d, temp_r, by = 'data_id') %>% select(data_id)
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'VH' ~ 50,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'H' ~ 175,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'M' ~ 1150,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'L' ~ 2000,
 
-      ###Hcodes----
-      records$hcodes <- temp_df %>%
-        filter(!is.na(hazardCode)) %>%
-        select(data_id, endpoint, finalScore, hazardCode) %>%
-        mutate(amount = case_when(
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'VH' ~ 200,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'H' ~ 600,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'M' ~ 1500,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'L' ~ 2000,
 
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'VH' ~ 50,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'H' ~ 175,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'M' ~ 1150,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'L' ~ 2000,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'VH' ~ 2,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'H' ~ 6,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'M' ~ 15,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'L' ~ 20,
 
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'VH' ~ 200,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'H' ~ 600,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'M' ~ 1500,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'L' ~ 2000,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'VH' ~ 10000,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'VH' ~ 2,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'H' ~ 6,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'M' ~ 15,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'L' ~ 20,
+                 str_detect(endpoint, 'genotoxicity') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'genotoxicity') & finalScore == 'H' ~ 500,
 
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'VH' ~ 10000,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'genotoxicity') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'genotoxicity') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'developmental') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'developmental') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'developmental') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'reproductive') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'reproductive') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'reproductive') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'developmental') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'developmental') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'developmental') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'M' ~ 100,
+                 str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'M' ~ 100,
+                 str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'M' ~ 100,
+                 str_detect(endpoint, 'skinSensitization') & finalScore == 'H' ~ 100,
 
-          str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'M' ~ 100,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'skinSensitization') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'M' ~ 10,
 
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'VH' ~ 1,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'H' ~ 5,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'M' ~ 50,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'L' ~ 100,
 
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'VH' ~ 0.1,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'H' ~ 0.55,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'M' ~ 5.5,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'L' ~ 10,
 
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'VH' ~ 1,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'H' ~ 5,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'M' ~ 50,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'L' ~ 100,
+                 .default = NA_real_
+               ),
+               invert_flag = case_when(
+                 str_detect(endpoint, 'acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
+                 .default = FALSE
+               )) %>% select(data_id, endpoint, amount, invert_flag)
 
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'VH' ~ 0.1,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'H' ~ 0.55,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'M' ~ 5.5,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'L' ~ 10,
+             ###Numerical----
+             records$num <- temp_df %>%
+               filter(finalScore != 'ND' & finalScore != 'I' & !is.na(valueMass)) %>%
+               #filter(!str_detect(rationale,'Score of|Positive for |Negative for ')) %>%
+               select(data_id, endpoint, valueMass
+                      # ,valueMassUnits,
+                      # rationale,
+                      # finalScore
+               ) %>%
+               rename(amount = valueMass) %>%
+               mutate(invert_flag = case_when(
+                 str_detect(endpoint, 'persistence|acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
+                 .default = NA))
 
-          .default = NA_real_
-        ),
-        invert_flag = case_when(
-          str_detect(endpoint, 'acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
-          .default = FALSE
-        )) %>% select(data_id, endpoint, amount, invert_flag)
-
-      ###Numerical----
-      records$num <- temp_df %>%
-        filter(finalScore != 'ND' & finalScore != 'I' & !is.na(valueMass)) %>%
-        #filter(!str_detect(rationale,'Score of|Positive for |Negative for ')) %>%
-        select(data_id, endpoint, valueMass
-               # ,valueMassUnits,
-               # rationale,
-               # finalScore
-        ) %>%
-        rename(amount = valueMass) %>%
-        mutate(invert_flag = case_when(
-          str_detect(endpoint, 'persistence|acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
-          .default = NA_real_))
-
-      ###Category----
-      records$cat <- temp_df %>%
-        filter(finalScore != 'ND' & finalScore != 'I') %>%
-        filter(is.na(hazardCode) & is.na(valueMass)) %>%
-        select(
-          data_id,
-          dtxsid,
-          endpoint,
-          finalScore,
-          hazardStatement,
-          rationale,
-          category) %>%
-        #filter(str_detect(rationale,'Score of|Positive for|Negative for|Chemical appears in|Score was assigned|Positive prediction|Prediction of')) %>%
-        mutate(amount = case_when(
+             ###Category----
+             records$cat <- temp_df %>%
+               filter(finalScore != 'ND' & finalScore != 'I') %>%
+               filter(is.na(hazardCode) & is.na(valueMass)) %>%
+               select(
+                 data_id,
+                 dtxsid,
+                 endpoint,
+                 finalScore,
+                 hazardStatement,
+                 rationale,
+                 category) %>%
+               #filter(str_detect(rationale,'Score of|Positive for|Negative for|Chemical appears in|Score was assigned|Positive prediction|Prediction of')) %>%
+               mutate(amount = case_when(
 
 
-          ##### Filters start----
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'VH' ~ 50,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'H' ~ 175,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'M' ~ 1150,
-          str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'L' ~ 2000,
+                 ##### Filters start----
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'VH' ~ 50,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'H' ~ 175,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'M' ~ 1150,
+                 str_detect(endpoint, 'acuteMammalianOral') & finalScore == 'L' ~ 2000,
 
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'VH' ~ 200,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'H' ~ 600,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'M' ~ 1500,
-          str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'L' ~ 2000,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'VH' ~ 200,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'H' ~ 600,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'M' ~ 1500,
+                 str_detect(endpoint, 'acuteMammalianDermal') & finalScore == 'L' ~ 2000,
 
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'VH' ~ 2,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'H' ~ 6,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'M' ~ 15,
-          str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'L' ~ 20,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'VH' ~ 2,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'H' ~ 6,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'M' ~ 15,
+                 str_detect(endpoint, 'acuteMammalianInhalation') & finalScore == 'L' ~ 20,
 
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'VH' ~ 10000,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'carcinogenicity') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'VH' ~ 10000,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'carcinogenicity') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'genotoxicity') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'genotoxicity') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'genotoxicity') & finalScore == 'L' ~ 1,
-
-
-          str_detect(endpoint, 'endocrine') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'endocrine') & finalScore == 'L' ~ 1,
-
-          str_detect(endpoint, 'reproductive') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'reproductive') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'reproductive') & finalScore == 'L' ~ 1,
-
-          str_detect(endpoint, 'developmental') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'developmental') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'developmental') & finalScore == 'L' ~ 1,
-
-          str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'M' ~ 100,
-
-          str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'M' ~ 100,
-
-          str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'M' ~ 100,
-
-          str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'H' ~ 500,
-          str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'M' ~ 100,
-
-          str_detect(endpoint, 'skinSensitization') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'skinSensitization') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'genotoxicity') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'genotoxicity') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'genotoxicity') & finalScore == 'L' ~ 1,
 
 
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'skinIrritation') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'endocrine') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'endocrine') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'eyeIrritation') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'reproductive') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'VH' ~ 1,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'H' ~ 5,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'M' ~ 50,
-          str_detect(endpoint, 'acuteAquatic') & finalScore == 'L' ~ 100,
+                 str_detect(endpoint, 'developmental') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'developmental') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'developmental') & finalScore == 'L' ~ 1,
 
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'VH' ~ 0.1,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'H' ~ 0.55,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'M' ~ 5.5,
-          str_detect(endpoint, 'chronicAquatic') & finalScore == 'L' ~ 10,
+                 str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'neurotoxicitySingle') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'persistence') & finalScore == 'VH' ~ 1000,
-          str_detect(endpoint, 'persistence') & finalScore == 'H' ~ 100,
-          str_detect(endpoint, 'persistence') & finalScore == 'M' ~ 10,
-          str_detect(endpoint, 'persistence') & finalScore == 'L' ~ 1,
+                 str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'neurotoxicityRepeat') & finalScore == 'M' ~ 100,
 
-          str_detect(endpoint, 'bioaccumulation') & finalScore == 'H' ~ 1000,
-          str_detect(endpoint, 'bioaccumulation') & finalScore == 'L' ~ 1,
-          ##### Filters end----
+                 str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'systemicToxicitySingle') & finalScore == 'M' ~ 100,
 
-          .default = NA_real_
-        ),
-        invert_flag = case_when(
-          str_detect(endpoint, 'acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
-          .default = FALSE
-        )) %>% #filter(is.na(amount))
-        select(data_id, endpoint, amount, invert_flag)
+                 str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'H' ~ 500,
+                 str_detect(endpoint, 'systemicToxicityRepeat') & finalScore == 'M' ~ 100,
 
-      ###ND or I data ----
-      records$nd <- temp_df %>%
-        filter(finalScore == 'ND' | finalScore == 'I') %>%
-        mutate(amount = NA_real_,
-               invert_flag = FALSE) %>%
-        select(data_id, endpoint, amount, invert_flag)
+                 str_detect(endpoint, 'skinSensitization') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'skinSensitization') & finalScore == 'L' ~ 1,
 
-      ##Merging----
-      records <- map_dfr(records, ~.x
-                         # , .id = 'source'
-      ) %>%
-        mutate(amount = case_when(
-          invert_flag == TRUE ~ 1/amount,
-          .default = amount
-        )) %>%
-        select(-invert_flag)
 
-      ##Missing----
-      records_temp <- anti_join(records_check, records, by = 'data_id')
-      records_temp <- temp_df %>%
-        filter(., data_id %in% records_temp$data_id)
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'skinIrritation') & finalScore == 'L' ~ 1,
 
-      if(nrow(records_temp)> 0 ) cli_abort('Filters failed!\nFile a bug report with reprex!')
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'eyeIrritation') & finalScore == 'M' ~ 10,
 
-      ##Records spreading----
-      data$records <- left_join(select(data$data, data_id:name), records, by = 'data_id') %>%
-        select(-data_id) %>%
-        pivot_wider(.,
-                    id_cols = dtxsid,
-                    names_from = endpoint,
-                    values_from = amount)
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'VH' ~ 1,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'H' ~ 5,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'M' ~ 50,
+                 str_detect(endpoint, 'acuteAquatic') & finalScore == 'L' ~ 100,
 
-    }
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'VH' ~ 0.1,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'H' ~ 0.55,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'M' ~ 5.5,
+                 str_detect(endpoint, 'chronicAquatic') & finalScore == 'L' ~ 10,
 
-    df <- data
+                 str_detect(endpoint, 'persistence') & finalScore == 'VH' ~ 1000,
+                 str_detect(endpoint, 'persistence') & finalScore == 'H' ~ 100,
+                 str_detect(endpoint, 'persistence') & finalScore == 'M' ~ 10,
+                 str_detect(endpoint, 'persistence') & finalScore == 'L' ~ 1,
 
-  }else{df}
+                 str_detect(endpoint, 'bioaccumulation') & finalScore == 'H' ~ 1000,
+                 str_detect(endpoint, 'bioaccumulation') & finalScore == 'L' ~ 1,
+                 ##### Filters end----
 
-  return(df)
+                 .default = NA_real_
+               ),
+               invert_flag = case_when(
+                 str_detect(endpoint, 'acuteMammalianOral|acuteMammalianDermal|acuteMammalianInhalation|acuteAquatic|chronicAquatic') ~ TRUE,
+                 .default = FALSE
+               )) %>% #filter(is.na(amount))
+               select(data_id, endpoint, amount, invert_flag)
+
+             ###ND or I data ----
+             records$nd <- temp_df %>%
+               filter(finalScore == 'ND' | finalScore == 'I') %>%
+               mutate(amount = NA_real_,
+                      invert_flag = FALSE) %>%
+               select(data_id, endpoint, amount, invert_flag)
+
+             ##Merging----
+             records <- map(records, ~.x
+                            # , .id = 'source'
+             ) %>%
+               list_rbind() %>%
+               mutate(amount = case_when(
+                 invert_flag == TRUE ~ 1/amount,
+                 .default = amount
+               )) %>%
+               select(-invert_flag)
+
+             ##Missing----
+             records_temp <- anti_join(records_check, records, by = 'data_id')
+             records_temp <- temp_df %>%
+               filter(., data_id %in% records_temp$data_id)
+
+             if(nrow(records_temp)> 0 ) cli_abort('Filters failed!\nFile a bug report with reprex!')
+
+             ##Records spreading----
+             data$records <- left_join(select(data$data, data_id:name), records, by = 'data_id') %>%
+               select(-data_id) %>%
+               pivot_wider(.,
+                           id_cols = dtxsid,
+                           names_from = endpoint,
+                           values_from = amount)
+           }
+         }
+  )
+
+  return(data)
 }

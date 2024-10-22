@@ -1,43 +1,119 @@
+#' Per variable data availability scoring
+#'
+#' Will return in the console the endpoint coverage before weighing.
+#'
+#' @param table Takes a table of data with raw numerical data
+#' @param id id column to ignore. Must be present to continue calculation.
+#'
+#' @return A tibble of results
+#' @export
+
+tp_variable_coverage <- function(table, id = NA){
+
+  if(missing(id) == T){
+    cli::cli_abort('Missing id variable!')
+  }else{
+
+      coverage_score <- table %>%
+        mutate(data_coverage = (rowSums(is.na(.))))
+
+      coverage_score <- coverage_score %>%
+        mutate(data_coverage = 1-(data_coverage/(ncol(coverage_score)-2))) %>%
+        select(id, data_coverage)
+
+      return(coverage_score)
+    }
+}
+
+#' Per endpoint - compound availability scoring
+#'
+#' @description
+#' Takes a table of data with raw numerical dataand returns a table of scores (0-1) on the amount of compounds by percent each endpoint has. Also adds in a column for a weight-bias and grouping column.
+#'
+#'
+#' @param table Takes a table of data with raw numerical data
+#' @param filter A number (0-1) to cut off endpoint by for weighing. By default, sets to 0.5.
+#' @param id id column to ignore. Must be present to continue calculation.
+#' @param suffix A string to filter columns by. Useful if you are using the [hc_table()] function which outuputs a binned variable and a numerical value.
+#'
+#' @return A tibble of results
+#' @export
+
+tp_endpoint_coverage <- function(table, id = NA, suffix = NA, filter = NA){
+
+  if(missing(id) == T){
+    cli::cli_abort('Missing id variable!')
+  }
+
+  if(is.na(filter) == T){
+    filt_score = 0.5
+    cli::cli_alert_warning('Defaulting to 0.5% score for cutoff!')
+
+  }else{filt_score <- as.numeric(filter)}
+
+  if(is.na(suffix) == T){
+    endpoint_score <- table %>%
+      select(!c(id)) %>%
+      map( ~sum(is.na(.))) %>%
+      as.data.frame() %>%
+      mutate(across(everything(), ~ 1-(.x/nrow(table)))) %>%
+      pivot_longer(everything(), names_to = 'endpoint', values_to = 'score')
+  }else{
+    endpoint_score <- table %>%
+      select(!c(id)) %>%
+      select(c(contains(suffix))) %>%
+      map( ~sum(is.na(.))) %>%
+      as.data.frame() %>%
+      mutate(across(everything(), ~ 1-(.x/nrow(table)))) %>%
+      pivot_longer(everything(), names_to = 'endpoint', values_to = 'score')
+  }
+
+  endpoint_filt_weight <-
+    endpoint_score %>%
+    filter(
+      score >= filt_score) %>%
+    mutate(
+      weight = 1,
+      group = 0
+      )
+
+  return(endpoint_filt_weight)
+}
+
+
 #' ToxPi Single Endpoint score calculation
 #'
-#' @details The back_fill argument is used to specify how to handle missing, `NA`, and zero-ed out data.
+#' @details The `zero_fill` and `na_fill` argument is used to specify how to handle missing, `NA`, and zero-ed out data.
 #'
 #' @param x Takes a single column for calculation of a normalization score
-#' @param back_fill Argument to specify for back-filling missing data
-
+#' @param zero_fill Argument to specify for back-filling zero or lowest data, defaults to `NA`.
+#' @param na_fill Argument to specify for back-filling missing data, defaults to `NA`.
+#'
 #' @return A vector
 #' @export
 
-tp_single_score <- function(x, back_fill){
+tp_single_score <- function(x, zero_fill = NA, na_fill = NA){
 
 
   #df <- (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
 
   df <- scales::rescale(x, na.rm = TRUE)
 
-  if(is.null(back_fill)){
-    #Catches from tp_combined_score
-  }else{
-  if(!missing(back_fill)){
-    back_fill <- match.arg(back_fill, c('min', 'mean', 'max', 'half_min'))
+  df[df == 0] <- case_when(
+   zero_fill == 'min' ~ min(df[df > 0], na.rm = T),
+   zero_fill == 'mean' ~ mean(df[df > 0], na.rm = T),
+   zero_fill == 'max' ~ max(df[df > 0], na.rm = T),
+   zero_fill == 'half_min' ~ min(df[df > 0], na.rm = T)*0.5,
+    is.null(zero_fill) | is.na(zero_fill) ~ 0,
+    .default = 0)
 
-    if(back_fill == 'min'){
-      df[df == 0] <- min(df[df > 0], na.rm = T)
-    }else{
-      if(back_fill == 'mean'){
-        df[df == 0] <- mean(df[df > 0], na.rm = T)
-      }else{
-        if(back_fill == 'max'){
-          df[df == 0] <- max(df[df > 0], na.rm = T)
-        }else{
-          if(back_fill == 'half_min'){
-            df[df == 0] <- min(df[df > 0], na.rm = T)*0.5
-          }
-        }
-      }
-    }
-  }
-}
+  df[is.na(df)] <- case_when(
+    na_fill == 'min' ~ min(df[df > 0], na.rm = T),
+    na_fill == 'mean' ~ mean(df[df > 0], na.rm = T),
+    na_fill == 'max' ~ max(df[df > 0], na.rm = T),
+    na_fill == 'half_min' ~ min(df[df > 0], na.rm = T)*0.5,
+    is.null(na_fill) | is.na(na_fill) ~ 0,
+    .default = 0)
 
   return(df)
 }
@@ -49,36 +125,36 @@ tp_single_score <- function(x, back_fill){
 #'
 #' @param table A table that contains an id column and endpoints to weigh against.
 #' @param id id column to ignore. Must be present to continue calculation.
+#' @param zero_fill TEMP
+#' @param na_fill TEMP
 #' @param bias A table generated by the user using the [tp_endpoint_coverage()] function. Required for calculation.
-#' @param back_fill Variable to pass along to [tp_single_score()]
-
 #'
 #' @return A tibble of results
 #' @export
 
-tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
+tp_combined_score <- function(table, id = NULL, bias = NULL, zero_fill, na_fill){
 
-  if(missing(table)) cli_abort('No table present!')
+  if(missing(table)) cli::cli_abort('No table present!')
 
-  cat_line()
-  cli_rule(left = 'ID variable')
+  cli::cat_line()
+  cli::cli_rule(left = 'ID variable')
 
   if(is.null(id) == TRUE){
     id <- colnames(table[1,1])
 
-    cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
+    cli::cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
 
   }else{
-    cli_alert_success('ID column: {id}')
+    cli::cli_alert_success('ID column: {id}')
   }
 
-  cat_line()
+  cli::cat_line()
 
   tp_list <- list(tp_scores = NULL, bias = NULL, variable_coverage = NULL)
 
   #Bias table----
-  cli_rule(left = 'Bias table')
-  cat_line()
+  cli::cli_rule(left = 'Bias table')
+  cli::cat_line()
 
   if(is.null(bias) == TRUE){
     cli_alert_warning(
@@ -144,7 +220,7 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, back_fill){
                       if(sd(na.omit(.)) == 0){
                         ifelse(is.na(.), NA, 1)
                       }else{tp_single_score(., back_fill) %>%
-                          round(digits = 4)}
+                          round(digits = 5)}
 
                     }}
           )

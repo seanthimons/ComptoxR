@@ -10,8 +10,6 @@ ct_list(list_name, ccte_api_key = NULL)
 \item{list_name}{Search parameter}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{name}{description}
 }
 \value{
 Returns a tibble with results
