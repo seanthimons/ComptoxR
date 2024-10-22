@@ -117,153 +117,29 @@ chemicals <- map(query, ~ {
     fromJSON(simplifyVector = TRUE)
 }
 
-# ct_search ---------------------------------------------------------------
 
-.string_search <- function(query, sp = 'equal', sugs = T){
-
-  headers <- c(
-    `x-api-key` = ct_api_key()
-  )
-
-  burl <- Sys.getenv('burl')
-
-  string_url = case_when(
-    sp == 'equal' ~ 'chemical/search/equal/',
-    sp == 'start-with' ~ 'chemical/search/start-with/',
-    sp == 'substring' ~  'chemical/search/contain/',
-    #  .default = 'chemical/search/equal/'
-  )
-
-  cli::cli_rule(left = 'String Payload options')
-  cli::cli_dl(c(
-    'Compound count' = '{length(query)}',
-    'Search type' = '{sp}',
-    #  'Search type' = '{string_url}',
-    'Suggestions' = '{sugs}'))
-  cli::cli_text("")
-
-  query = as.vector(query)
-  query = enframe(query, name = 'idx', value = 'raw_search') %>%
-    mutate(
-      cas_chk = str_remove(raw_search, "^0+") %>%
-        as.cas(.),
-
-      searchValue  = str_to_upper(raw_search) %>%
-        str_replace_all(., c('-' = ' ', '\\u00b4' = "'")),
-
-      searchValue = case_when(
-        !is.na(cas_chk) ~ cas_chk,
-        .default = searchValue
-      )
-    ) %>%
-    select(-cas_chk)
-
-  # Exact -------------------------------------------------------------------
-
-  if(sp == 'equal'){
-
-    sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
-
-    df <- map(sublists, ~{
-
-      df <- POST(
-        url = paste0(burl, string_url),
-        body = .x$searchValue,
-        add_headers(.headers = headers),
-        content_type("application/json"),
-        accept("application/json"),
-        encode = "json",
-        progress() # progress bar
-      )
-
-      df <- content(df, "text", encoding = "UTF-8") %>%
-        jsonlite::fromJSON(simplifyVector = TRUE)
-
-      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
-
-    }) %>%
-      list_rbind() %>%
-      select(-c(idx)) %>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
-
-    if(sugs == FALSE){
-      df <- df %>%
-        select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
-      return(df)
-    }else{
-      return(df)
-    }
-
-  }else{
-
-    # Substring ---------------------------------------------------------------
-
-    if(sp %in% c('start-with', 'substring')){
-
-      query <- query %>%
-        select(-searchValue, -idx) %>%
-        mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
-        split(., .$raw_search)
-
-      df <- map(query, possibly(~{
-
-        cli::cli_text(.x$raw_search, '\n')
-        response <- GET(url = .x$url, add_headers(.headers = headers))
-
-        df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-          as_tibble()
-
-      }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
-
-      if(sugs == FALSE){
-        df <- df %>%
-          select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
-        return(df)
-      }else{
-        return(df)
-      }
-
-    }else{
-      cli::cli_abort('Search parameter for `string` search failed!')
-    }
-  }
-}
+# Curation ----------------------------------------------------------------
+{
+isotopes <- ComptoxR::pt$isotopes %>%
+  select(-isotope_mass_symbol) %>%
+  mutate(isotope_symbol = str_remove_all(isotope_symbol, "-"))
 
 search_list <- rio::import('cas_list.csv', na.strings = "") %>%
-  select(analyte, cas_number)
+  select(analyte, cas_number) %>%
+  mutate(raw_analyte = analyte) %>%
+  left_join(., isotopes, join_by(analyte == isotope_symbol)) %>%
+  mutate(analyte = case_when(
+    !is.na(isotopes) ~ isotopes,
+    .default = analyte
+  )) %>%
+  select(-isotopes)
 
-# # temp <- '2,4-Dinitrophenol'
-# # temp <- c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol')
-# #
-#  ctxR::chemical_equal_batch(word = c('Glycerol 1,2-diacetate', '2,4-Dinitrophenol', '13-Docosenamide, (Z)-')) %>% select(searchValue, preferredName)
-#  ctxR::chemical_equal_batch(word = '13-Docosenamide, (Z)-') %>%
-#    select(searchValue, preferredName)
-#  ctxR::chemical_starts_with(word = '13-Docosenamide, (Z)-') %>%
-#    select(searchValue, preferredName)
+rm(isotopes)
+}
 
-ctxR::chemical_equal_batch(word = search_list$analyte) %>% View()
-#
-# string_search(query = temp) %>%
-#   select(raw_search, preferredName) %>%
-#   print(n = Inf)
-#
-# ct_search(type = 'string', search_param = 'equal', query = temp) %>% select(raw_search, preferredName)
-# ct_search(type = 'string', search_param = 'equal', query = as.vector(search_list$analyte)) %>% select(raw_search, preferredName)
-#
-# rm(comp)
-# comp <- ct_search(type = 'string', search_param = 'equal', query = as.vector(search_list$analyte)) %>%
-#   select(raw_search, preferredName) %>%
-#
-#
-# cas <- .string_search(query = search_list$cas_number) %>%
-#   rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
-
-
-# curation ----------------------------------------------------------------
-
+{
 comp <- ct_search(type = 'string', search_param = 'equal', query = search_list$analyte) %>%
   rename_with(., ~paste0('compound_', .x, recycle0 = T), !raw_search)
-
-comp %>% filter(raw_search == '2,4-Dinitrophenol')
 
 # comp_sw <- comp %>%
 #   filter(is.na(compound_dtxsid)) %>%
@@ -273,23 +149,268 @@ comp %>% filter(raw_search == '2,4-Dinitrophenol')
 
 cas <- ct_search(type = 'string', search_param = 'equal', query = search_list$cas_number, suggestions = T) %>%
   rename_with(., ~paste0('cas_', .x, recycle0 = T), !raw_search)
+}
 
 search_cur <- left_join(search_list, comp, join_by(analyte == raw_search)) %>%
   left_join(., cas, join_by(cas_number == raw_search)) %>%
-  select(contains(c('analyte', 'cas_number')),ends_with(c('_dtxsid', '_rank', '_preferredName'))) %>%
-  mutate(auth = case_when(
-    cas_dtxsid == compound_dtxsid ~ 'TRUE',
-    cas_dtxsid != compound_dtxsid ~ 'FALSE',
-    is.na(cas_dtxsid) & is.na(compound_dtxsid) ~ 'NA'),
-         final_dtx = case_when(
-          # auth == FALSE ~ NA,
-           auth == TRUE ~ compound_dtxsid,
-           as.numeric(cas_rank) < as.numeric(compound_rank) ~ cas_dtxsid,
-           is.na(compound_rank) & !is.na(cas_rank) ~ cas_dtxsid,
-           as.numeric(cas_rank) > as.numeric(compound_rank) ~ compound_dtxsid,
-           !is.na(compound_rank) & is.na(cas_rank) ~ compound_dtxsid,
-           .default = NA
-         ),
-         auth = forcats::fct_relevel(auth, c('TRUE', 'FALSE'))
-       ) %>%
-  arrange(auth)
+  select(contains(c("analyte", "cas_number")), ends_with(c("_dtxsid", "_rank", "_preferredName"))) %>%
+  mutate(
+    across(ends_with('_dtxsid'), ~if_else(is.na(.x), "NA", .x)),
+    auth = case_when(
+      cas_dtxsid == "NA" & compound_dtxsid == "NA" ~ "MISS",
+      cas_dtxsid == compound_dtxsid ~ "TRUE",
+      cas_dtxsid != compound_dtxsid ~ "FALSE",
+      compound_dtxsid != cas_dtxsid ~ "FALSE"
+    ),
+    final_dtx = case_when(
+      # auth == FALSE ~ NA,
+      auth == TRUE ~ compound_dtxsid,
+      as.numeric(cas_rank) < as.numeric(compound_rank) ~ cas_dtxsid,
+      is.na(compound_rank) & !is.na(cas_rank) ~ cas_dtxsid,
+      as.numeric(cas_rank) > as.numeric(compound_rank) ~ compound_dtxsid,
+      !is.na(compound_rank) & is.na(cas_rank) ~ compound_dtxsid,
+      .default = NA
+    ),
+    auth = forcats::fct_relevel(auth, c("TRUE", "FALSE", 'MISS'))
+  ) %>%
+  arrange(auth) %>%
+  select(-analyte) %>%
+  rename(analyte = raw_analyte)
+
+
+
+# toxpi -------------------------------------------------------------------
+
+temp <- chemi_hazard(testing_chemicals$dtxsid)
+
+library(toxpiR)
+
+data(txp_example_input, package = 'toxpiR')
+
+temp2 <- txp_example_input %>%
+  as_tibble() %>%
+  select(name, metric1:metric3) %>%
+  mutate(across(matches('metric2'), function(x){x^2}))
+
+g_list <- temp %>%
+  colnames(.) %>%
+  str_subset(., pattern = 'name', negate = T) %>%
+  enframe(name = 'group', value = 'endpoint') %>%
+  mutate(group = case_when(
+    str_detect(endpoint, pattern = '2|3') ~ 'Slice2',
+    .default = 'Slice1'
+  )) %>%
+  split(.$group) %>%
+  map(., ~select(., endpoint)) %>%
+  map(., pluck(1))
+
+slice_list <- TxpSliceList()
+
+slice_list <- map2(g_list, names(g_list), function(x, y){
+  y = TxpSlice(x)
+})
+
+trans_list <- list(f1 = NULL, f2 = function(x) log10(x))
+weightslist <- c(2, 1)
+
+model <- TxpModel(txpSlices = slice_list,
+         txpWeights = weightslist,
+         txpTransFuncs = trans_list)
+
+result <- txpCalculateScores(model = model,
+                   input = temp,
+                   id.var = 'name')
+
+
+# tp2 ---------------------------------------------------------------------
+
+temp <- chemi_hazard(testing_chemicals$dtxsid)
+temp <- temp$records
+
+ec <- tp_endpoint_coverage(table = temp, id = 'dtxsid', filter = 0.5) %>%
+  mutate(endpoint = forcats::fct(endpoint))
+
+g_list <- temp %>%
+  select(ec$endpoint) %>%
+  colnames(.) %>%
+  enframe(name = 'group', value = 'endpoint') %>%
+  #mutate(group = paste0('Slice', group)) %>%
+  #split(.$group) %>%
+  split(.$endpoint) %>%
+  .[order(match(names(.), ec$endpoint))] %>%
+  map(., ~select(., endpoint)) %>%
+  map(., pluck(1))
+
+slice_list <- TxpSliceList()
+
+slice_list <- map2(g_list, names(g_list), function(x, y){
+  y = TxpSlice(x)
+})
+
+model <- TxpModel(txpSlices = slice_list
+                 # ,txpWeights = weightslist
+                 # ,txpTransFuncs = trans_list
+                 )
+
+result <- txpCalculateScores(model = model,
+                             input = temp,
+                             id.var = 'dtxsid')
+
+top <- tibble(dtxsid = result@txpIDs, score =result@txpScores) %>%
+  arrange(desc(score)) %>%
+  #left_join(., temp$headers) %>%
+  filter(score > 0.15) %>%
+  slice_sample(n = 10)
+
+bind_cols(dtxsid = result@txpIDs, result@txpSliceScores) %>%
+  #left_join(df$headers, .) %>%
+  filter(dtxsid %in% top$dtxsid)
+
+p1 <- plot(
+  #result['DTXSID9032537'],
+  result[result@txpIDs %in% top$dtxsid],
+  #result,
+  package = 'gg',
+  fills = ComptoxR::cust_pal,
+  bgColor  = NULL,
+  borderColor = "black",
+  sliceBorderColor = NULL,
+  sliceLineColor = "black",
+  sliceValueColor = "black",
+  showCenter = FALSE,
+  ncol = 5,
+  showMissing = TRUE
+  )
+
+ep_spill <- c(
+'POLYPROPYLENE',
+'POLYETHYLENE',
+'VINYL CHLORIDE',
+'DIPROPYLENE GLYCOL',
+'PROPYLENE GLYCOL',
+'DIETHYLENE GLYCOL',
+'ETHYLENE GLYCOL MONOBUTYL ETHER',
+'ETHYLHEXYL ACRYLATE',
+'POLYVINYL',
+'PETROLEUM LUBE OIL',
+'POLYPROPYL GLYCOL',
+'ISOBUTYLENE',
+'BUTYL ACRYLATES, STABILIZED',
+'BENZENE',
+'PARAFFIN WAX'
+  )
+
+ep_dat <- ct_search(type = 'string', search_param = 'equal', query = ep_spill, suggestions = F)
+
+ep_dat <- ep_dat %>% filter(!is.na(dtxsid))
+
+ep_dat <- chemi_hazard(ep_dat$dtxsid)
+
+temp <- ep_dat$records
+
+ec <- tp_endpoint_coverage(table = temp, id = 'dtxsid', filter = 0) %>%
+  mutate(endpoint = forcats::fct(endpoint))
+
+{
+  endpoints_list <- list(
+      'Full' = list(
+        "acuteMammalianOral",
+        "acuteMammalianDermal",
+        "acuteMammalianInhalation",
+        "developmental",
+        "reproductive",
+        "endocrine",
+        "genotoxicity",
+        "carcinogenicity",
+        "neurotoxicitySingle",
+        "neurotoxicityRepeat",
+        "systemicToxicitySingle",
+        "systemicToxicityRepeat",
+        "eyeIrritation",
+        "skinIrritation",
+        "skinSensitization",
+        "acuteAquatic",
+        "chronicAquatic",
+        "persistence",
+        "bioaccumulation",
+        "exposure"
+      ),
+      "Emergency Response" = list(
+        "acuteMammalianOral",
+        "acuteMammalianDermal",
+        "acuteMammalianInhalation",
+        "genotoxicity",
+        "neurotoxicitySingle",
+        "systemicToxicitySingle",
+        "eyeIrritation",
+        "skinIrritation",
+        "skinSensitization",
+        "acuteAquatic"
+      ),
+      "Site-Specific" = list(
+        "developmental",
+        "reproductive",
+        "endocrine",
+        "genotoxicity",
+        "carcinogenicity",
+        "neurotoxicityRepeat",
+        "systemicToxicityRepeat",
+        "chronicAquatic",
+        "persistence",
+        "bioaccumulation"
+      )
+    )}
+
+ec <- ec %>%
+  filter(endpoint %in% endpoints_list$`Emergency Response`)
+
+g_list <- temp %>%
+  select(ec$endpoint) %>%
+  colnames(.) %>%
+  enframe(name = 'group', value = 'endpoint') %>%
+  #mutate(group = paste0('Slice', group)) %>%
+  #split(.$group) %>%
+  split(.$endpoint) %>%
+  .[order(match(names(.), ec$endpoint))] %>%
+  map(., ~select(., endpoint)) %>%
+  map(., pluck(1))
+
+slice_list <- TxpSliceList()
+
+slice_list <- map2(g_list, names(g_list), function(x, y){
+  y = TxpSlice(x)
+})
+
+model <- TxpModel(txpSlices = slice_list
+                  # ,txpWeights = weightslist
+                  # ,txpTransFuncs = trans_list
+)
+
+result <- txpCalculateScores(model = model,
+                             input = temp,
+                             id.var = 'dtxsid')
+
+top <- tibble(dtxsid = result@txpIDs, score =result@txpScores) %>%
+  arrange(desc(score)) %>%
+  left_join(., ep_dat$headers)
+
+plot(
+  #result['DTXSID9032537'],
+  #result,
+  #result[result@txpIDs %in% top$dtxsid],
+  result[result@txpIDs %in% top$dtxsid] %>% .[order(txpRanks(result)[1:length(result)])],
+  package = 'gg',
+  fills = ComptoxR::cust_pal,
+  bgColor  = NULL,
+  borderColor = "black",
+  sliceBorderColor = NULL,
+  sliceLineColor = "black",
+  sliceValueColor = "black",
+  showCenter = FALSE,
+  ncol = 3,
+  showMissing = FALSE
+)
+
+
+
+

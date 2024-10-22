@@ -4,12 +4,14 @@
 \alias{tp_single_score}
 \title{ToxPi Single Endpoint score calculation}
 \usage{
-tp_single_score(x, back_fill)
+tp_single_score(x, zero_fill = NA, na_fill = NA)
 }
 \arguments{
 \item{x}{Takes a single column for calculation of a normalization score}
 
-\item{back_fill}{Argument to specify for back-filling missing data}
+\item{zero_fill}{Argument to specify for back-filling zero or lowest data, defaults to \code{NA}.}
+
+\item{na_fill}{Argument to specify for back-filling missing data, defaults to \code{NA}.}
 }
 \value{
 A vector
@@ -18,5 +20,5 @@ A vector
 ToxPi Single Endpoint score calculation
 }
 \details{
-The back_fill argument is used to specify how to handle missing, \code{NA}, and zero-ed out data.
+The \code{zero_fill} and \code{na_fill} argument is used to specify how to handle missing, \code{NA}, and zero-ed out data.
 }

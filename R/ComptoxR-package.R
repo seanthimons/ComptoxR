@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom scales rescale
 ## usethis namespace: end
 NULL
 
