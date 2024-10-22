@@ -67,8 +67,6 @@ library(flextable)
 library(tidyr)
 library(purrr)
 
-comptox_server(server = 1)
-
 prod_volume <- readRDS('prod_volume.Rds')
 
 ```

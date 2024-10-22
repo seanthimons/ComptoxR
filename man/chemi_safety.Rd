@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_safety.R
 \name{chemi_safety}
 \alias{chemi_safety}
-\title{GHS Safety comparison}
+\title{Safety + GHS data from Cheminformatics}
 \usage{
 chemi_safety(query)
 }
@@ -13,5 +13,5 @@ chemi_safety(query)
 A list of data
 }
 \description{
-GHS Safety comparison
+Returns a data frame that contains a binned comparison table generated from the GHS codes and the NFPA 704 'safety diamond'
 }

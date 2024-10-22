@@ -18,6 +18,10 @@ ct_descriptors <- function(query,
     token <- ct_api_key()
   }
 
+  if(grepl(pattern = 'DTX', x = query)){
+    cli::cli_abort('DTXSID string detected! Use a SMILES or MOL!')
+  }
+
   if(missing(type) | is.null(type)){cli_abort('Missing search parameter!')}
 
   type_option <-
