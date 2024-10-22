@@ -94,3 +94,36 @@ ggsave_all <- function(filename, plot = ggplot2::last_plot(), specs = NULL, path
   )
 }
 
+#' Pretty list
+#'
+#' @param x list
+#'
+#' @return list
+#'
+
+pretty_list <- function(x) {
+  #x <- colnames(x)
+  cat(paste0("'", x, "',", "\n"))
+}
+
+#' Pretty print list
+#'
+#' @param x list
+#'
+#' @return list
+
+pretty_print <- function(x){
+  cat(paste0(x, "\n"))
+}
+
+#' Pretty re-name
+#'
+#' @param x list
+#'
+#' @return list
+
+pretty_rename <- function(x) {
+  #x <- colnames(x)
+  cat(paste0("'' = '", x, "',", "\n"))
+}
+

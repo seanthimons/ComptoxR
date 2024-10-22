@@ -18,8 +18,7 @@ ct_properties <- function(search_param,
                           query,
                           range,
                           coerce = TRUE,
-                          ccte_api_key = NULL){
-
+                          ccte_api_key = NULL) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -28,19 +27,20 @@ ct_properties <- function(search_param,
     `x-api-key` = token
   )
 
-  if(missing(search_param)){cli::cli_abort('Missing search type!')}
+  if (missing(search_param)) {
+    cli::cli_abort("Missing search type!")
+  }
 
-  burl <- Sys.getenv('burl')
+  burl <- Sys.getenv("burl")
 
 
-  if(search_param == 'compound'){
-
-    cli_rule(left = 'Phys-chem properties payload options')
+  if (search_param == "compound") {
+    cli_rule(left = "Phys-chem properties payload options")
     cli_dl(
       c(
-        'Search type' = '{search_param}',
-        'Number of compounds' = '{length(query)}',
-        'Coerce' = '{coerce}'
+        "Search type" = "{search_param}",
+        "Number of compounds" = "{length(query)}",
+        "Coerce" = "{coerce}"
       )
     )
     cli::cli_text()
@@ -49,16 +49,30 @@ ct_properties <- function(search_param,
     surl <- "chemical/property/search/by-dtxsid/"
     urls <- paste0(burl, surl)
 
-    if(length(query) > 1000){
+    if (length(query) > 1000) {
+      sublists <- split(query, rep(1:ceiling(length(query) / 1000), each = 1000, length.out = length(query)))
+      sublists <- map(sublists, as.list)
 
-    sublists <- split(query, rep(1:ceiling(length(query)/1000), each = 1000, length.out = length(query)))
-    sublists <- map(sublists, as.list)
+      df <- map(sublists, ~ {
+        .x <- POST(
+          url = urls,
+          body = .x,
+          add_headers(.headers = headers),
+          content_type("application/json"),
+          accept("application/json, text/plain, */*"),
+          encode = "json",
+          progress() # progress bar
+        )
 
-    df <- map(sublists, ~{
+        .x <- content(.x, "text", encoding = "UTF-8") %>%
+          jsonlite::fromJSON(simplifyVector = TRUE)
+      }) %>% list_rbind()
+    } else {
+      payload <- as.list(query)
 
-      .x <- POST(
+      response <- POST(
         url = urls,
-        body = .x,
+        body = payload,
         add_headers(.headers = headers),
         content_type("application/json"),
         accept("application/json, text/plain, */*"),
@@ -66,51 +80,27 @@ ct_properties <- function(search_param,
         progress() # progress bar
       )
 
-      .x <- content(.x, "text", encoding = "UTF-8") %>%
+      df <- content(response, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = TRUE)
+    }
 
-    }) %>% list_rbind()
-
-  }else{
-    payload <- as.list(query)
-
-    response <- POST(
-      url = urls,
-      body = payload,
-      add_headers(.headers = headers),
-      content_type("application/json"),
-      accept("application/json, text/plain, */*"),
-      encode = "json",
-      progress() # progress bar
-    )
-
-    df <- content(response, "text", encoding = "UTF-8") %>%
-      jsonlite::fromJSON(simplifyVector = TRUE)
-
-  }
-
-    if(coerce == TRUE){
-
+    if (coerce == TRUE) {
       df <- df %>%
         split(.$propertyId)
-
-      return(df)
-}
-
+    }
   }
 
-  if(search_param == 'property'){
-    if(!missing(range) & length(range) == 2){
-
+  if (search_param == "property") {
+    if (!missing(range) & length(range) == 2) {
       range <- as.numeric(range)
 
-      cli_rule(left = 'Phys-chem properties payload options')
+      cli_rule(left = "Phys-chem properties payload options")
       cli_dl(
         c(
-          'Search type' = '{search_param}',
-          'Property' = '{query}',
-          'Range' = '{range}',
-          'Coerce' = '{coerce}'
+          "Search type" = "{search_param}",
+          "Property" = "{query}",
+          "Range" = "{range}",
+          "Coerce" = "{coerce}"
         )
       )
       cli::cli_text()
@@ -120,36 +110,31 @@ ct_properties <- function(search_param,
       urls <- paste0(burl, surl, query, "/", range[1], "/", range[2])
 
       df <- GET(urls, progress(), add_headers(.headers = headers))
-
-    }else{
-      cli::cli_abort('Missing range for property search!')
+    } else {
+      cli::cli_abort("Missing range for property search!")
     }
-
   }
+
+  return(df)
 }
 
 #' Get property IDs for property searching
 #'
 #' @return A list of IDs
 
-.prop_ids <- function(){
-
-  headers = c(
+.prop_ids <- function() {
+  headers <- c(
     `accept` = "application/json",
     `x-api-key` = ct_api_key()
   )
 
-  pred <- GET(url = "https://api-ccte.epa.gov/chemical/property/predicted/name", add_headers(.headers=headers))
+  pred <- GET(url = "https://api-ccte.epa.gov/chemical/property/predicted/name", add_headers(.headers = headers))
   pred <- fromJSON(content(pred, as = "text", encoding = "UTF-8"))
 
-  exp <- GET(url = "https://api-ccte.epa.gov/chemical/property/experimental/name", add_headers(.headers=headers))
+  exp <- GET(url = "https://api-ccte.epa.gov/chemical/property/experimental/name", add_headers(.headers = headers))
   exp <- fromJSON(content(exp, as = "text", encoding = "UTF-8"))
 
   df <- bind_rows(pred, exp) %>% distinct(name, propertyId)
 
- return(df)
+  return(df)
 }
-
-
-
-
