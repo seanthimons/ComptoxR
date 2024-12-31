@@ -33,13 +33,14 @@ chemi_toxprint <- function(query,
   chemicals <- vector(mode = 'list', length = length(query))
 
   chemicals <- map(query, ~{
-    sid <- .x
+    list(sid = .x)
   })
 
   payload = list(
-    chemicals,
-    options
+    'chemicals' = chemicals,
+    'options' = options
   )
+
 
   burl <- paste0(Sys.getenv("chemi_burl"), "api/toxprints/calculate")
 
@@ -56,7 +57,7 @@ chemi_toxprint <- function(query,
       fromJSON(simplifyVector = FALSE)
 
   } else {
-    cli::cli_alert_danger("\nBad request!")
+    cli::cli_abort("\nBad request!")
   }
 
 }
