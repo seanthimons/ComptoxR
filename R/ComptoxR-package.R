@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom scales rescale
+#' @importFrom tibble enframe
 ## usethis namespace: end
 NULL
 
@@ -19,4 +20,6 @@ NULL
 #' @import tidyr
 NULL
 #' @import jsonlite
+NULL
+#' @import toxpiR
 NULL
