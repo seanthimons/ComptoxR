@@ -127,3 +127,7 @@ pretty_rename <- function(x) {
   cat(paste0("'' = '", x, "',", "\n"))
 }
 
+#' Not-in
+#'
+#' @return Opposite of %in%
+`%ni%` <- Negate(`%in%`)

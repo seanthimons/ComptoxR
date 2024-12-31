@@ -106,8 +106,8 @@ chemi_hazard <- function(query,
       'Minimum simularity' = '{min_sim_payload}'
     )
   )
-  cli_rule()
-  cli_end()
+  cli::cli_rule()
+  cli::cli_end()
 
   response <- POST(
     url = "https://hcd.rtpnc.epa.gov/api/hazard",
@@ -117,7 +117,8 @@ chemi_hazard <- function(query,
     encode = 'json',
     progress() #progress bar
   )
-  cli_rule()
+  cli::cat_line()
+  cli::cli_rule()
 
   if(response$status != 200){cli_abort('Bad request for compound!')}
 

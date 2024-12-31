@@ -99,6 +99,7 @@ ct_search <- function(type = c(
         encode = "json",
         progress() # progress bar
       )
+      cli::cat_line()
 
       df <- content(df, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = FALSE)
@@ -111,7 +112,7 @@ ct_search <- function(type = c(
   if(missing(suggestions)){
     cli::cli_alert_warning('Defaulting to including suggestions!')
     cli::cli_alert_warning('Did you forget to specify `suggestions`?')
-    cli::cli_text('')
+    cli::cat_line()
 
     suggestions  <- TRUE
 
@@ -167,7 +168,7 @@ ct_search <- function(type = c(
   cli::cli_li(c('Search type' = "{sp}"))
   cli::cli_li(c('Suggestions' = "{sugs}"))
   cli::cli_end()
-  cli::cli_text("")
+  cli::cat_line()
 
   query = unique(as.vector(query))
   query = enframe(query, name = 'idx', value = 'raw_search') %>%
@@ -204,6 +205,8 @@ ct_search <- function(type = c(
         encode = "json",
         progress() # progress bar
       )
+
+  cat_line()
 
       df <- content(df, "text", encoding = "UTF-8") %>%
         jsonlite::fromJSON(simplifyVector = TRUE)
