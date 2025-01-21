@@ -26,7 +26,7 @@ chemi_rq <- function(query){
 
   response <- POST(
     url = url,
-    body = rjson::toJSON(payload),
+    body = payload,
     content_type("application/json"),
     accept("application/json, text/plain, */*"),
     encode = "json",

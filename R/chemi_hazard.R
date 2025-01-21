@@ -108,10 +108,10 @@ chemi_hazard <- function(query,
   )
   cli::cli_rule()
   cli::cli_end()
-#TODO FIX THE RJSON DEPENDANCY!
+
   response <- POST(
     url = "https://hcd.rtpnc.epa.gov/api/hazard",
-    body = rjson::toJSON(payload),
+    body = payload,
     content_type("application/json"),
     accept("application/json, text/plain, */*"),
     encode = 'json',
