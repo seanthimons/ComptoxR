@@ -30,6 +30,7 @@
 #' @param type Type of search parameter. Required parameter.
 #' @param query Either a vector or a string.
 #' @param search_param Additional parameters to modify search by.
+#' @param method Search by POST or GET requests, defaults to GET (which will take longer, but return better results).
 #' @param ccte_api_key Checks for API key in Sys env
 #' @param suggestions Boolean to return suggestions if a record is not found. Defaults to `TRUE`
 #'
@@ -48,6 +49,7 @@ ct_search <- function(type = c(
                         ),
                       query,
                       suggestions = TRUE,
+                      method = NULL,
                       ccte_api_key = NULL
                           ){
 
@@ -118,6 +120,14 @@ ct_search <- function(type = c(
 
   }
 
+  if(missing(method)){
+
+    method <- 'get'
+
+  }
+
+  method <- match.arg(method, choices = c('post', 'get'))
+
   if(type == 'string' & missing(search_param)){
 
     cli::cli_alert_warning('Defaulting to exact search!')
@@ -125,13 +135,13 @@ ct_search <- function(type = c(
 
     #search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
-    df <- .string_search(query, sp = 'equal', sugs = suggestions)
+    df <- .string_search(query, sp = 'equal', sugs = suggestions, meth = method)
 
   }else{
 
     search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
 
-    df <- .string_search(query, sp = search_param, sugs = suggestions)
+    df <- .string_search(query, sp = search_param, sugs = suggestions, meth = method)
 
   }
 
@@ -143,10 +153,11 @@ ct_search <- function(type = c(
 #' @param query A list of items to search
 #' @param sp Search parameter
 #' @param sugs Boolean to return suggestions
+#' @param meth GET or POST requests
 #'
 #' @return A tibble
 
-.string_search <- function(query, sp, sugs){
+.string_search <- function(query, sp, sugs, meth){
 
   headers <- c(
     `x-api-key` = ct_api_key()
@@ -161,6 +172,7 @@ ct_search <- function(type = c(
     #  .default = 'chemical/search/equal/'
   )
 
+  {
   cli::cli_rule(left = 'String Payload options')
   cli::cli_dl()
   cli::cli_li(c('Compound count' = "{length(query)}"))
@@ -169,6 +181,7 @@ ct_search <- function(type = c(
   cli::cli_li(c('Suggestions' = "{sugs}"))
   cli::cli_end()
   cli::cat_line()
+  }
 
   query = unique(as.vector(query))
   query = enframe(query, name = 'idx', value = 'raw_search') %>%
@@ -188,74 +201,100 @@ ct_search <- function(type = c(
     select(-cas_chk) %>%
     filter(!is.na(searchValue))
 
-  # Exact -------------------------------------------------------------------
 
-  if(sp == 'equal'){
+  if(meth == 'get'){
 
-    sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
+    # GET ---------------------------------------------------------------------
+    if(sp == 'equal'){
 
-    df <- map(sublists, ~{
+      ## Exact -------------------------------------------------------------------
+      df <- map(query$searchValue, ~possibly({
 
-      df <- POST(
-        url = paste0(burl, string_url),
-        body = .x$searchValue,
-        add_headers(.headers = headers),
-        content_type("application/json"),
-        accept("application/json"),
-        encode = "json",
-        progress() # progress bar
-      )
+        df <- GET(
+          url = paste0(burl, string_url, .x),
+          add_headers("x-api-key" = ct_api_key())
+          )
 
-  cat_line()
+      }, paste0('Failed request:', .x)), .progress = T)
 
-      df <- content(df, "text", encoding = "UTF-8") %>%
-        jsonlite::fromJSON(simplifyVector = TRUE)
-
-      .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
-
-    }) %>%
-      list_rbind() %>%
-      select(-c(idx)) %>% distinct(raw_search, searchValue, dtxsid, .keep_all = T)
-
-    if(sugs == FALSE){
-      df <- df %>%
-        select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
-      return(df)
     }else{
-      return(df)
+
+      ## Substring ---------------------------------------------------------------
+
     }
-
   }else{
+    # POST --------------------------------------------------------------------
 
-    # Substring ---------------------------------------------------------------
+    ## Exact -------------------------------------------------------------------
 
-    if(sp %in% c('start-with', 'substring')){
+    if(sp == 'equal'){
 
-      query <- query %>%
-        select(-searchValue, -idx) %>%
-        mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
-        split(., .$raw_search)
+      sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
 
-      df <- map(query, possibly(~{
+      df <- map(sublists, ~{
 
-        cli::cli_text(.x$raw_search, '\n')
-        response <- GET(url = .x$url, add_headers(.headers = headers))
+        df <- POST(
+          url = paste0(burl, string_url),
+          body = .x$searchValue,
+          add_headers(.headers = headers),
+          content_type("application/json"),
+          accept("application/json"),
+          encode = "json",
+          progress() # progress bar
+        )
 
-        df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-          as_tibble()
+        cat_line()
 
-      }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
+        df <- content(df, "text", encoding = "UTF-8") %>%
+          jsonlite::fromJSON(simplifyVector = TRUE)
+
+        .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
+
+      }) %>%
+        list_rbind() %>%
+        select(-c(idx)) %>%
+        distinct(raw_search, searchValue, dtxsid, .keep_all = T)
 
       if(sugs == FALSE){
         df <- df %>%
-          select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
+          select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
         return(df)
       }else{
         return(df)
       }
 
     }else{
-      cli::cli_abort('Search parameter for `string` search failed!')
+
+      ## Substring ---------------------------------------------------------------
+
+      if(sp %in% c('start-with', 'substring')){
+
+        query <- query %>%
+          select(-searchValue, -idx) %>%
+          mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
+          split(., .$raw_search)
+
+        df <- map(query, possibly(~{
+
+          cli::cli_text(.x$raw_search, '\n')
+          response <- GET(url = .x$url, add_headers(.headers = headers))
+
+          df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+            as_tibble()
+
+        }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
+
+        if(sugs == FALSE){
+          df <- df %>%
+            select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
+          return(df)
+        }else{
+          return(df)
+        }
+
+      }else{
+        cli::cli_abort('Search parameter for `string` search failed!')
+      }
     }
   }
 }
