@@ -99,7 +99,7 @@ ggsave_all <- function(filename, plot = ggplot2::last_plot(), specs = NULL, path
 #' @param x list
 #'
 #' @return list
-#'
+#' @export
 
 pretty_list <- function(x) {
   #x <- colnames(x)
@@ -111,6 +111,7 @@ pretty_list <- function(x) {
 #' @param x list
 #'
 #' @return list
+#' @export
 
 pretty_print <- function(x){
   cat(paste0(x, "\n"))
@@ -121,6 +122,7 @@ pretty_print <- function(x){
 #' @param x list
 #'
 #' @return list
+#' @export
 
 pretty_rename <- function(x) {
   #x <- colnames(x)
@@ -130,4 +132,5 @@ pretty_rename <- function(x) {
 #' Not-in
 #'
 #' @return Opposite of %in%
+#' @export
 `%ni%` <- Negate(`%in%`)

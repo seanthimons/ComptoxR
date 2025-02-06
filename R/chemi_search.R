@@ -21,6 +21,7 @@
 #' @param ... string
 #'
 #' @return A dataframe
+#' @export
 
 chemi_search <- function(query,
                          searchType = c(

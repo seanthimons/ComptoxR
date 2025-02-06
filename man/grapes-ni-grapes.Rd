@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc_functions.R
 \name{\%ni\%}
 \alias{\%ni\%}
-\title{Negated \%in\%}
+\title{Not-in}
 \usage{
 ... \%ni\% NA
 }
@@ -10,5 +10,5 @@
 Opposite of \%in\%
 }
 \description{
-Negated \%in\%
+Not-in
 }
