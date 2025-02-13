@@ -8,7 +8,13 @@
 #' @return a data frame
 #' @export
 
-ct_details <- function(query, projection = c("all", "standard", "id", "structure", "nta"), ccte_api_key = NULL) {
+ct_details <- function(query, projection = c(
+  "all",
+  "standard",
+  "id",
+  "structure",
+  "nta",
+  'compact'), ccte_api_key = NULL) {
 
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -16,29 +22,20 @@ ct_details <- function(query, projection = c("all", "standard", "id", "structure
 
   burl <- Sys.getenv("burl")
 
-  if (missing(projection)) {
-    proj <- "chemicalidentifier"
-  } else {
-    if (projection == "all") {
-      proj <- "chemicaldetailall"
-    } else {
-      if (projection == "standard") {
-        proj <- "chemicaldetailstandard"
-      } else {
-        if (projection == "id") {
-          proj <- "chemicalidentifier"
-        } else {
-          if (projection == "structure") {
-            proj <- "chemicalstructure"
-          } else {
-            if (projection == "nta") {
-              proj <- "ntatoolkit"
-            }
-          }
-        }
-      }
-    }
+  if(missing(projection)){
+    projection <- 'compact'
   }
+
+  proj <- case_when(
+    projection == "all" ~ "chemicaldetailall",
+    projection == "standard" ~ "chemicaldetailstandard",
+    projection == "id" ~ "chemicalidentifier",
+    projection == "structure" ~ "chemicalstructure",
+    projection == "nta" ~ "ntatoolkit",
+
+    projection == 'compact' ~ 'compact',
+    TRUE ~ NA_character_
+  )
 
   cli_rule(left = 'Payload options')
   cli_dl(

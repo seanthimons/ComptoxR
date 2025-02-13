@@ -303,7 +303,7 @@ chemi_search <- function(query,
         "Similarity type" = "{similarity_type}",
         "Minimum simularity" = "{min_sim}",
         "Minimum toxicity" = "{min_toxicity}"
-        #' Params' = '{params}'
+        # "Params" = "{params}"
       )
     )
     cli_rule()
