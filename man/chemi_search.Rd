@@ -63,7 +63,6 @@ chemi_search(
 }
 \value{
 A dataframe
-Params' = '{params}'
 }
 \description{
 Searching function that interfaces with the Cheminformatics API. Sends POST request.

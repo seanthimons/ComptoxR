@@ -4,7 +4,7 @@
 \alias{.string_search}
 \title{Helper function for string searches}
 \usage{
-.string_search(query, sp, sugs)
+.string_search(query, sp, sugs, meth)
 }
 \arguments{
 \item{query}{A list of items to search}
@@ -12,6 +12,8 @@
 \item{sp}{Search parameter}
 
 \item{sugs}{Boolean to return suggestions}
+
+\item{meth}{GET or POST requests}
 }
 \value{
 A tibble

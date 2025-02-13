@@ -9,6 +9,7 @@ ct_search(
   search_param = c("equal", "start-with", "substring"),
   query,
   suggestions = TRUE,
+  method = NULL,
   ccte_api_key = NULL
 )
 }
@@ -20,6 +21,8 @@ ct_search(
 \item{query}{Either a vector or a string.}
 
 \item{suggestions}{Boolean to return suggestions if a record is not found. Defaults to \code{TRUE}}
+
+\item{method}{Search by POST or GET requests, defaults to GET (which will take longer, but return better results).}
 
 \item{ccte_api_key}{Checks for API key in Sys env}
 }
