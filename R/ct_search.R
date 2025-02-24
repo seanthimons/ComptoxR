@@ -1,187 +1,83 @@
-#' Searching by string, mass, or chemical formula
+
+#' Search by string
 #'
-#' @details
+#' @param query Vector of strings
+#' @param request_method String: 'GET' or 'POST'
+#' @param search_method 'equal', 'starts', or 'contains'
+#' @param dry_run Boolean to debug, defaults to FALSE
 #'
-#' Search type options:
-#' \itemize{
-#' \item `string`: Currently accepts:
-#'  \itemize{
-#'  \item DTXSIDs
-#'  \item CASRNs
-#'  \item Chemical names
-#'  \item InChIKey
-#'  }
-#' \item `mass`: Search for any MS-ready compounds that are between the queried mass range. Removes multicomponent compounds.
-#' \item `formula`: Search for any MS-ready compounds by a generic chemical formula. Removes multicomponent compounds.
-#'}
-#' Additional search parameters:
-#' \itemize{
-#'
-#'\item For searching by mass, a single value +/- the mass query to search by
-#'
-#'\item For searching by string:
-#'  \itemize{
-#'    \item `exact`: Default searching method
-#'    \item `start-with`: Substring search
-#'    \item `contains`: Substring search
-#'  }
-#'}
-#'
-#' @param type Type of search parameter. Required parameter.
-#' @param query Either a vector or a string.
-#' @param search_param Additional parameters to modify search by.
-#' @param method Search by POST or GET requests, defaults to GET (which will take longer, but return better results).
-#' @param ccte_api_key Checks for API key in Sys env
-#' @param suggestions Boolean to return suggestions if a record is not found. Defaults to `TRUE`
-#'
-#' @return A tibble
+#' @returns dataframe
 #' @export
 
-ct_search <- function(type = c(
-                            'string',
-                            'mass'
-                            #,'formula'
-                            ),
-                      search_param = c(
-                        'equal',
-                        'start-with',
-                        'substring'
-                        ),
-                      query,
-                      suggestions = TRUE,
-                      method = NULL,
-                      ccte_api_key = NULL
-                          ){
+ct_search <- function(query,
+                      request_method,
+                      search_method,
+                      dry_run){
 
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+  query_list <- unique(as.vector(query)) %>%
+    as.list() %>%
+    set_names(., unique(as.vector(query)))
 
   {
-  burl <- Sys.getenv('burl')
-  formula_url <- 'chemical/msready/search/by-formula/'
-  mass_url <- 'chemical/msready/search/by-mass/'
-  }
-
-  if(missing(type)){cli::cli_abort('Missing type search')}
-
-# Mass --------------------------------------------------------------------
-
-
-  if(type == 'mass' & missing(search_param)){
-    cli::cli_abort('Missing mass range!')
-  }
-
-  if(type == 'mass' & !missing(search_param)){
-
-      if(!is.numeric(query)){
-        query <- as.numeric(query)
-      }
-
-      if(!is.numeric(search_param)){
-        search_param <- as.numeric(search_param)
-      }
-
-      payload <- list(
-        masses = query,
-        error = search_param
-      )
-
-      cli::cli_rule(left = 'Mass Payload options')
-      cli::cli_dl(c(
-        'Masses' = '{query}',
-        'Error' = '{search_param}'))
-
-      df <- POST(
-        url = paste0(burl, mass_url),
-        body =  jsonlite::toJSON(payload, auto_unbox = T),
-        add_headers(`x-api-key` = token),
-        content_type("application/json"),
-        accept("application/json"),
-        encode = "json",
-        progress() # progress bar
-      )
-      cli::cat_line()
-
-      df <- content(df, "text", encoding = "UTF-8") %>%
-        jsonlite::fromJSON(simplifyVector = FALSE)
-
-  return(df)
-  }
-
-# String ------------------------------------------------------------------
-
-  if(missing(suggestions)){
-    cli::cli_alert_warning('Defaulting to including suggestions!')
-    cli::cli_alert_warning('Did you forget to specify `suggestions`?')
+    cli::cli_rule(left = 'String search options')
+    cli::cli_dl()
+    cli::cli_li(c('Compound count' = "{length(query_list)}"))
+    #cli::cli_li(c('Batch iterations' = "{ceiling(length(query)/50L)}"))
+    cli::cli_li(c('Search type' = "{search_method}"))
+    #cli::cli_li(c('Suggestions' = "{sugs}"))
+    cli::cli_end()
     cli::cat_line()
+    }
 
-    suggestions  <- TRUE
 
-  }
 
-  if(missing(method)){
+  df <- map(query_list, ~make_request(query = .x,
+                                      rq_method = request_method,
+                                      sch_method = search_method
+                                      ), .progress = T) %>%
+    compact() %>%
+    list_rbind(names_to = 'raw_search')
 
-    method <- 'get'
-
-  }
-
-  method <- match.arg(method, choices = c('post', 'get'))
-
-  if(type == 'string' & missing(search_param)){
-
-    cli::cli_alert_warning('Defaulting to exact search!')
-    cli::cli_alert_warning('Did you forget to specify which `search_param`?')
-
-    #search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
-
-    df <- .string_search(query, sp = 'equal', sugs = suggestions, meth = method)
-
-  }else{
-
-    search_param <- match.arg(search_param, c('equal', 'start-with', 'substring'))
-
-    df <- .string_search(query, sp = search_param, sugs = suggestions, meth = method)
-
-  }
-
-  return(df)
 }
 
-#' Helper function for string searches
+
+#' Make requests
 #'
-#' @param query A list of items to search
-#' @param sp Search parameter
-#' @param sugs Boolean to return suggestions
-#' @param meth GET or POST requests
+#' @param query Vector
+#' @param request_method String
+#' @param search_method String
+#' @param dry_run Boolean
 #'
-#' @return A tibble
+#' @returns List
+#' @export
+make_request <- function(
+    query,
+    rq_method,
+    sch_method,
+    dry_run
+) {
 
-.string_search <- function(query, sp, sugs, meth){
-
-  headers <- c(
-    `x-api-key` = ct_api_key()
-  )
-
-  burl <- Sys.getenv('burl')
-
-  string_url = case_when(
-    sp == 'equal' ~ 'chemical/search/equal/',
-    sp == 'start-with' ~ 'chemical/search/start-with/',
-    sp == 'substring' ~  'chemical/search/contain/',
-    #  .default = 'chemical/search/equal/'
-  )
-
-  {
-  cli::cli_rule(left = 'String Payload options')
-  cli::cli_dl()
-  cli::cli_li(c('Compound count' = "{length(query)}"))
-  cli::cli_li(c('Batch iterations' = "{ceiling(length(query)/50L)}"))
-  cli::cli_li(c('Search type' = "{sp}"))
-  cli::cli_li(c('Suggestions' = "{sugs}"))
-  cli::cli_end()
-  cli::cat_line()
+  if(is_missing(sch_method)){
+    cli::cli_alert_warning('Missing search method, defaulting to `equal`')
+    sch_method <- 'equal'
   }
+
+  sch_method <- arg_match(sch_method, values = c('equal', 'starts', 'contains'))
+
+  path <- switch(
+    sch_method,
+    "equal" = "chemical/search/equal/",
+    "starts" = "chemical/search/start-with/",
+    "contains" = "chemical/search/contain/",
+    cli_abort("Invalid path modification")
+  )
+
+  req <- request(Sys.getenv('burl')) %>%
+    req_headers(
+      accept = "application/json",
+      `x-api-key` = ct_api_key()
+    ) %>%
+    req_url_path_append(path)
 
   query = unique(as.vector(query))
   query = enframe(query, name = 'idx', value = 'raw_search') %>%
@@ -201,100 +97,69 @@ ct_search <- function(type = c(
     select(-cas_chk) %>%
     filter(!is.na(searchValue))
 
+  #req %>% req_dry_run()
 
-  if(meth == 'get'){
+  # HACK Until POSTs work
 
-    # GET ---------------------------------------------------------------------
-    if(sp == 'equal'){
-
-      ## Exact -------------------------------------------------------------------
-      df <- map(query$searchValue, ~possibly({
-
-        df <- GET(
-          url = paste0(burl, string_url, .x),
-          add_headers("x-api-key" = ct_api_key())
-          )
-
-      }, paste0('Failed request:', .x)), .progress = T)
-
-    }else{
-
-      ## Substring ---------------------------------------------------------------
-
-    }
+  if(missing(rq_method)){
+    cli::cli_alert_warning('Missing method, defaulting to GET request')
+    rq_method <- 'GET'
   }else{
-    # POST --------------------------------------------------------------------
+    rq_method <- arg_match(rq_method, values = c('GET', 'POST'))
+  }
 
-    ## Exact -------------------------------------------------------------------
+  req <- switch(
+    rq_method,
+    "GET" = req %>% req_method("GET"),
+    "POST" = req %>% req_method("POST"),
+    cli::cli_abort("Invalid method")
+  )
 
-    if(sp == 'equal'){
+  if (rq_method == 'GET'){
+    req <- map(query$searchValue, ~ {
+      req <-  req %>%
+        req_url_path_append(., URLencode(.x))
 
-      sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
+      req <- switch(
+        sch_method,
+        "equal" = req,
+        #TODO Could expose this as an new arguement
+        "starts" = req %>% req_url_query(., top = '500'),
+        "contains" = req %>% req_url_query(., top = '500'),
+        cli_abort("Invalid path modification")
+      )
+    })
+  }
 
-      df <- map(sublists, ~{
+  if (rq_method == 'POST'){
+    cli::cli_abort('POST requests not allowed at this time!')
 
-        df <- POST(
-          url = paste0(burl, string_url),
-          body = .x$searchValue,
-          add_headers(.headers = headers),
-          content_type("application/json"),
-          accept("application/json"),
-          encode = "json",
-          progress() # progress bar
-        )
+    #   sublists <- split(query, rep(1:ceiling(nrow(query)/50), each = 50, length.out = nrow(query)))
+    #
+    #   req <- map(sublists, ~ {
+    #     req %>%
+    #       req_body_json(., .x$searchValue, type = "application/json")
+    #   })
+    #
+  }
 
-        cat_line()
+  if(missing(dry_run)){
+    dry_run <- FALSE
+  }
 
-        df <- content(df, "text", encoding = "UTF-8") %>%
-          jsonlite::fromJSON(simplifyVector = TRUE)
+  if (dry_run) {
 
-        .x <- left_join(.x, df, join_by(searchValue), relationship = 'many-to-many')
+    map(req, req_dry_run)
 
-      }) %>%
-        list_rbind() %>%
-        select(-c(idx)) %>%
-        distinct(raw_search, searchValue, dtxsid, .keep_all = T)
+  }else{
 
-      if(sugs == FALSE){
-        df <- df %>%
-          select(!c('searchMsgs', 'suggestions', 'isDuplicate'))
-        return(df)
-      }else{
-        return(df)
-      }
+    resps <- req %>% req_perform_sequential(., on_error = 'continue', progress = TRUE)
 
-    }else{
+    resps %>%
+      resps_successes() %>%
+      resps_data(\(resp) resp_body_json(resp)) %>%
+      map(., ~map(.x, ~if(is.null(.x)){NA}else{.x}) %>% as_tibble) %>%
+      list_rbind()
 
-      ## Substring ---------------------------------------------------------------
-
-      if(sp %in% c('start-with', 'substring')){
-
-        query <- query %>%
-          select(-searchValue, -idx) %>%
-          mutate(url = paste0(burl, string_url, utils::URLencode(raw_search, reserved = T),'?top=500')) %>%
-          split(., .$raw_search)
-
-        df <- map(query, possibly(~{
-
-          cli::cli_text(.x$raw_search, '\n')
-          response <- GET(url = .x$url, add_headers(.headers = headers))
-
-          df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-            as_tibble()
-
-        }, otherwise = NULL), .progress = T) %>% list_rbind(., names_to = 'raw_search')
-
-        if(sugs == FALSE){
-          df <- df %>%
-            select(!c('type', 'title', 'status', 'detail', 'instance', 'suggestions'))
-          return(df)
-        }else{
-          return(df)
-        }
-
-      }else{
-        cli::cli_abort('Search parameter for `string` search failed!')
-      }
-    }
   }
 }
