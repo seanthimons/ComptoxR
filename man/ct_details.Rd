@@ -6,7 +6,7 @@
 \usage{
 ct_details(
   query,
-  projection = c("all", "standard", "id", "structure", "nta"),
+  projection = c("all", "standard", "id", "structure", "nta", "compact"),
   ccte_api_key = NULL
 )
 }
