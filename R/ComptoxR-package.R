@@ -2,6 +2,9 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom rlang arg_match
+#' @importFrom rlang is_missing
+#' @importFrom rlang maybe_missing
 #' @importFrom scales rescale
 #' @importFrom tibble enframe
 ## usethis namespace: end
@@ -10,6 +13,8 @@ NULL
 #' @import dplyr
 NULL
 #' @import httr
+NULL
+#' @import httr2
 NULL
 #' @import cli
 NULL

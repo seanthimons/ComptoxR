@@ -2,59 +2,22 @@
 % Please edit documentation in R/ct_search.R
 \name{ct_search}
 \alias{ct_search}
-\title{Searching by string, mass, or chemical formula}
+\title{Search by string}
 \usage{
-ct_search(
-  type = c("string", "mass"),
-  search_param = c("equal", "start-with", "substring"),
-  query,
-  suggestions = TRUE,
-  method = NULL,
-  ccte_api_key = NULL
-)
+ct_search(query, request_method, search_method, dry_run)
 }
 \arguments{
-\item{type}{Type of search parameter. Required parameter.}
+\item{query}{Vector of strings}
 
-\item{search_param}{Additional parameters to modify search by.}
+\item{request_method}{String: 'GET' or 'POST'}
 
-\item{query}{Either a vector or a string.}
+\item{search_method}{'equal', 'starts', or 'contains'}
 
-\item{suggestions}{Boolean to return suggestions if a record is not found. Defaults to \code{TRUE}}
-
-\item{method}{Search by POST or GET requests, defaults to GET (which will take longer, but return better results).}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{dry_run}{Boolean to debug, defaults to FALSE}
 }
 \value{
-A tibble
+dataframe
 }
 \description{
-Searching by string, mass, or chemical formula
-}
-\details{
-Search type options:
-\itemize{
-\item \code{string}: Currently accepts:
-\itemize{
-\item DTXSIDs
-\item CASRNs
-\item Chemical names
-\item InChIKey
-}
-\item \code{mass}: Search for any MS-ready compounds that are between the queried mass range. Removes multicomponent compounds.
-\item \code{formula}: Search for any MS-ready compounds by a generic chemical formula. Removes multicomponent compounds.
-}
-Additional search parameters:
-\itemize{
-
-\item For searching by mass, a single value +/- the mass query to search by
-
-\item For searching by string:
-\itemize{
-\item \code{exact}: Default searching method
-\item \code{start-with}: Substring search
-\item \code{contains}: Substring search
-}
-}
+Search by string
 }
