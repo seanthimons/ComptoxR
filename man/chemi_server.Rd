@@ -4,7 +4,7 @@
 \alias{chemi_server}
 \title{Set API endpoints for Cheminformatics API endpoints}
 \usage{
-chemi_server(server = 1)
+chemi_server(server = NULL)
 }
 \arguments{
 \item{server}{Defines what server to target}
