@@ -5,18 +5,28 @@
 #' @return Should return the Sys Env variable 'burl'
 #' @export
 
-ct_server <- function(server = 1){
+ct_server <- function(server = NULL){
+  if (is.null(server)) {
+    {
+      cli::cli_alert_danger("Server URL reset!")
+      Sys.setenv("burl" = "")
+    }
 
-  if(isTRUE(server == 1) == TRUE){Sys.setenv('burl' = 'https://api-ccte.epa.gov/')}
-  else{
-    if(isTRUE(server == 2) == TRUE){Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/')}
-    else{
-      cat('\nServer URL reset!\n')
-      Sys.setenv("burl" = NA)}}
+  } else {
+
+  switch(
+    as.character(server),
+    "1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
+    "2" = Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/'),
+    {
+      cli::cli_alert_warning("\nServer URL reset!\n")
+      Sys.setenv("burl" = "")
+    }
+  )
 
   Sys.getenv('burl')
+  }
 }
-
 
 #' Set API endpoints for Cheminformatics API endpoints
 #'
@@ -25,14 +35,28 @@ ct_server <- function(server = 1){
 #' @return Should return the Sys Env variable `chemi_burl`
 #' @export
 
-chemi_server <- function(server = 1){
+chemi_server <- function(server = NULL){
 
-  if(isTRUE(server == 1) == TRUE){Sys.setenv('chemi_burl' = 'https://hcd.rtpnc.epa.gov/')}
-  else{
-    if(isTRUE(server == 2) == TRUE){Sys.setenv('chemi_burl' = 'https://hazard-dev.sciencedataexperts.com/')}
-    else{
-      cat('\nServer URL reset!\n')
-      Sys.setenv("burl" = NA)}}
+  if (is.null(server)) {
 
-  Sys.getenv('chemi_burl')
+    {
+      cli::cli_alert_danger("Server URL reset!")
+      Sys.setenv("chemi_burl" = "NA")
+    }
+
+  } else {
+
+  switch(
+    as.character(server),
+    "1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/"),
+    "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"),
+    "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"),
+    {
+      cli::cli_alert_warning("\nServer URL reset!\n")
+      Sys.setenv("chemi_burl" = NA)
+    }
+  )
+
+  Sys.getenv("chemi_burl")
+  }
 }
