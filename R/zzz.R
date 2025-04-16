@@ -10,7 +10,7 @@ run_setup <- function(){
   cli::cli_rule()
   cli::cli_alert_warning(
     '\nAttempting ping test...')
-  cli::cli_text()
+  #cli::cli_text()
 
   ping_list <-
     list(
@@ -19,10 +19,8 @@ run_setup <- function(){
       'https://api-ccte.epa.gov/bioactivity/health',
       'https://api-ccte.epa.gov/chemical/health',
 
-      # "https://www.nonexistentwebsite123456.com", #TESTING
-
-      'https://hcd.rtpnc.epa.gov/api/search/metadata', #prod
-      'https://hazard-dev.sciencedataexperts.com/api/search/version' #dev
+      'https://hcd.rtpnc.epa.gov/#/', #prod
+      'https://hazard-dev.sciencedataexperts.com/#/' #dev
 
     )
 
@@ -58,8 +56,8 @@ run_setup <- function(){
 .onAttach <- function(libname, ComptoxR) {
 
   if(Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == ""){
-    ct_server()
-    chemi_server()
+    ct_server(server = 1)
+    chemi_server(server = 1)
   }
 
   packageStartupMessage(
@@ -86,7 +84,7 @@ run_setup <- function(){
     cli::cli_rule()
     cli::cli_alert_warning('Available API endpoints:')
     cli::cli_dl(c(
-      'CompTox' = '{Sys.getenv("burl")}',
+      'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
       'Cheminformatics' =  '{Sys.getenv("chemi_burl")}'
     ))
   })
