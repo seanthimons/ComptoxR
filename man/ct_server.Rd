@@ -4,7 +4,7 @@
 \alias{ct_server}
 \title{Set API endpoints for Comptox API endpoints}
 \usage{
-ct_server(server = 1)
+ct_server(server = NULL)
 }
 \arguments{
 \item{server}{Defines what server to target}
