@@ -11,7 +11,7 @@ ct_search(query, request_method, search_method, dry_run)
 
 \item{request_method}{String: 'GET' or 'POST'}
 
-\item{search_method}{'equal', 'starts', or 'contains'}
+\item{search_method}{'exact', 'starts', or 'contains'}
 
 \item{dry_run}{Boolean to debug, defaults to FALSE}
 }
