@@ -57,7 +57,11 @@ epi_suite_analysis <- function(query){
 
   #Chose to have the data be pulled as a tibble rather than a list for diagnositic purposes
 
-  query_list <- epi_suite_search(query_list) %>%
+  query_list <- epi_suite_search(query_list)
+
+  query_dict <- query_list
+
+  query_list <- query_list %>%
     map(., ~pull(.x, 'cas'))
 
   req_list <- map(query_list, ~{
@@ -73,6 +77,19 @@ epi_suite_analysis <- function(query){
     set_names(query_list) %>%
     resps_successes() %>%
     map(., ~resp_body_json(.x))
+
+  {
+    cli::cli_rule(left = 'EPI Suite analysis request')
+    cli::cli_dl()
+    cli::cli_li(
+      c('Compounds requested' = "{length(query_list)}"))
+    cli::cli_li(
+      c('Compounds found' = "{length(df)}"))
+    cli::cli_end()
+    cli::cat_line()
+    }
+
+# df <- list(dict = query_dict, data = df)
 
   return(df)
 }
@@ -114,7 +131,36 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
     'fate' = {
       epi_obj %>%
         map(., ~{
-          keep(., names(.x) %in% c(""))
+          keep(., names(.x) %in% c("biodegradationRate")) %>%
+          pluck(., "biodegradationRate", "models") %>%
+          map(., ~discard_at(.x, 'factors')) %>%
+          map(., as_tibble) %>%
+          list_rbind() %>%
+          mutate(
+            result = case_when(
+              str_detect(name, pattern = 'MITI Linear Model Prediction|MITI Non-Linear Model Prediction') & value >= 0.5 ~ 'degradable',
+              str_detect(name, pattern = 'MITI Linear Model Prediction|MITI Non-Linear Model Prediction') & value < 0.5 ~ 'not degradable',
+              str_detect(name, pattern = 'Linear Model Prediction|Non-Linear Model Prediction') & value >= 0.5 ~ 'fast',
+              str_detect(name, pattern = 'Linear Model Prediction|Non-Linear Model Prediction') & value < 0.5 ~ 'not fast',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & between(value, 4, 5)  ~ 'hour-days',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & between(value, 3, 4)  ~ 'days-weeks',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & between(value, 2, 3)  ~ 'weeks-months',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & between(value, 1, 2)  ~ 'months-longer',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & value < 1  ~ 'longer',
+              str_detect(name, pattern = 'Ultimate Biodegradation Timeframe|Primary Biodegradation Timeframe') & value > 5  ~ 'hours',
+              str_detect(name, pattern = 'Anaerobic Model Prediction') & value >= 0.5 ~ 'fast',
+              str_detect(name, pattern = 'Anaerobic Model Prediction') & value < 0.5 ~ 'not fast',
+              .default = NA),
+            ) %>%
+            add_row(name = 'Readily Biodegradable?', value = NA, result = NA) %>%
+            mutate(result = case_when(
+              (name == "Ultimate Biodegradation Timeframe" & value >= 3) & (name == "MITI Linear Model Prediction" & value >= 0.5) ~ 'yes',
+              .default = 'no'
+            ))
+
+          #flatten() %>%
+          #keep_at(., 'models') %>%
+          #flatten()
         })
     },
     'transport' = {
@@ -132,8 +178,9 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
 
       epi_obj %>%
         map(., ~{
-          keep(., names(.x) %in% c("analogs"))
-        })
+          keep(., names(.x) %in% c("analogs")) %>% flatten() %>% unname()
+        }) %>%
+        compact()
     },
     'water' = {
 
@@ -155,4 +202,3 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
   return(df)
 }
 
-q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'eco')
