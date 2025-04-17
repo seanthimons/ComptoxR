@@ -113,7 +113,7 @@ make_request <- function(
 
     map(req, req_dry_run)
 
-  }else{ 
+  }else{
 
     resps <- req %>% req_perform_sequential(., on_error = 'continue', progress = TRUE)
 
@@ -190,3 +190,115 @@ q6 <- q2 %>%
         split(.$class)
 
 #TODO
+
+
+#q1 <- testing_chemicals %>% pull(casrn) %>% sample(5)
+
+q1 <- ct_details(query = ComptoxR::testing_chemicals$dtxsid, projection = 'all') %>%
+  select(molFormula, preferredName, dtxsid, casrn, smiles, isMarkush, inchiString) %>%
+  mutate(
+    inchiString = str_replace(inchiString, ".*?/", ""),
+    class = case_when(
+        str_detect(molFormula, organic_final_regex) ~'ORG',
+      # str_detect(molFormula, "\\[") ~ "INORG", #NUC
+      # str_detect(molFormula, "^C[a-z]") ~ 'INORG',
+      # str_detect(molFormula, "^C[0-9]*H?[0-9]*") ~ "ORG",
+      #
+      # str_detect(inchiString, "^C[0-9]*H?[0-9]*") ~"ORG",
+      #
+      # str_detect(smiles, "\\*") ~ "ORG",
+      #
+      # is.na(molFormula) ~ 'INORG', #TODO figure out if this will crash on other things than quartz
+      #
+      # isMarkush == TRUE ~ "ORG",
+
+      .default = "INORG")) %>%
+  split(.$class)
+
+
+# Define the regex pattern for elements commonly found in organic compounds
+organic_element_pattern <- paste0(
+  "(C|H|N|O|S|F|Cl|Br|I)"
+)
+
+# Define the regex pattern for numbers (subscripts)
+num_pattern <- "(?:[1-9]\\d*)?"
+
+# Define the regex pattern for element groups
+organic_element_group_pattern <- paste0(
+  "(?:", organic_element_pattern, num_pattern, ")+"
+)
+
+# Define the regex pattern for parentheses groups
+organic_element_parentheses_group_pattern <- paste0(
+  "\\(", organic_element_group_pattern, "\\)", num_pattern
+)
+
+# Define the regex pattern for square bracket groups
+organic_element_square_bracket_group_pattern <- paste0(
+  "\\[(?:", organic_element_group_pattern, "|", organic_element_parentheses_group_pattern, ")+\\]", num_pattern
+)
+
+# Combine all patterns into the final regex for organic compounds
+organic_final_regex <- paste0(
+  "^(", organic_element_square_bracket_group_pattern, "|", organic_element_parentheses_group_pattern, "|", organic_element_group_pattern, ")+$"
+)
+
+# Example usage in R
+stringr::str_detect("C6H12O6", organic_final_regex)
+
+# Define the regex pattern for elements less common in organic compounds
+inorganic_element_pattern <- paste0(
+  "(Li|Be|Na|Mg|Al|Si|P|K|Ca|Sc|Ti|V|Cr|Mn|Fe|Co|Ni|Cu|Zn|Ga|Ge|As|Se|Kr|Rb|Sr|Y|Zr|Nb|Mo|Tc|Ru|Rh|Pd|Ag|Cd|In|Sn|Sb|Te|Xe|Cs|Ba|La|Ce|Pr|Nd|Pm|Sm|Eu|Gd|Tb|Dy|Ho|Er|Tm|Yb|Lu|Hf|Ta|W|Re|Os|Ir|Pt|Au|Hg|Tl|Pb|Bi|Po|At|Rn|Fr|Ra|Ac|Th|Pa|U|Np|Pu|Am|Cm|Bk|Cf|Es|Fm|Md|No|Lr|Rf|Db|Sg|Bh|Hs|Mt|Ds|Rg|Cn|Nh|Fl|Mc|Lv|Ts|Og)"
+)
+
+# Define the regex pattern for numbers (subscripts)
+num_pattern <- "(?:[1-9]\\d*)?"
+
+# Define the regex pattern for element groups
+inorganic_element_group_pattern <- paste0(
+  "(?:", inorganic_element_pattern, num_pattern, ")+"
+)
+
+# Define the regex pattern for parentheses groups
+inorganic_element_parentheses_group_pattern <- paste0(
+  "\\(", inorganic_element_group_pattern, "\\)", num_pattern
+)
+
+# Define the regex pattern for square bracket groups
+inorganic_element_square_bracket_group_pattern <- paste0(
+  "\\[(?:", inorganic_element_group_pattern, "|", inorganic_element_parentheses_group_pattern, ")+\\]", num_pattern
+)
+
+# Combine all patterns into the final regex for inorganic compounds
+inorganic_final_regex <- paste0(
+  "^(", inorganic_element_square_bracket_group_pattern, "|", inorganic_element_parentheses_group_pattern, "|", inorganic_element_group_pattern, ")+$"
+)
+
+# Example usage in R
+stringr::str_detect("NaCl", inorganic_final_regex)
+
+
+q11 <- q1$ORG %>% pull(casrn) %>% sample(10)
+
+q2 <- epi_suite_analysis(query = q11)
+
+epi_names <- q2$`000533-74-4` %>% names()
+
+q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'eco')
+q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'analogs')
+
+q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'fate')
+
+
+
+
+
+
+
+
+
+
+
+
+
