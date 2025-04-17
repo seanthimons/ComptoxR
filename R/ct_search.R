@@ -3,7 +3,7 @@
 #'
 #' @param query Vector of strings
 #' @param request_method String: 'GET' or 'POST'
-#' @param search_method 'equal', 'starts', or 'contains'
+#' @param search_method 'exact', 'starts', or 'contains'
 #' @param dry_run Boolean to debug, defaults to FALSE
 #'
 #' @returns dataframe
@@ -18,6 +18,10 @@ ct_search <- function(query,
     as.list() %>%
     set_names(., unique(as.vector(query)))
 
+  if(missing(request_method)){request_method <- "GET"}
+  if(missing(search_method)){search_method <- "exact"}
+  if(missing(dry_run)){dry_run <- FALSE}
+
   {
     cli::cli_rule(left = 'String search options')
     cli::cli_dl()
@@ -27,17 +31,22 @@ ct_search <- function(query,
     #cli::cli_li(c('Suggestions' = "{sugs}"))
     cli::cli_end()
     cli::cat_line()
-    }
+  }
 
 
 
-  df <- map(query_list, ~make_request(query = .x,
-                                      rq_method = request_method,
-                                      sch_method = search_method
-                                      ), .progress = T) %>%
-    compact() %>%
-    list_rbind(names_to = 'raw_search')
+  df <- map(query_list,
+            ~make_request(query = .x,
+                          rq_method = request_method,
+                          sch_method = search_method,
+                          dry_run = dry_run
+            ), .progress = T)
 
+  if(dry_run == FALSE){
+  df <- df %>%
+    compact() %>% list_rbind(names_to = 'raw_search')
+  return(df)
+  }
 }
 
 
@@ -59,17 +68,17 @@ make_request <- function(
 
   if(is_missing(sch_method)){
     cli::cli_alert_warning('Missing search method, defaulting to `equal`')
-    sch_method <- 'equal'
+    sch_method <- 'exact'
   }
 
-  sch_method <- arg_match(sch_method, values = c('equal', 'starts', 'contains'))
+  sch_method <- arg_match(sch_method, values = c('exact', 'starts', 'contains'))
 
   path <- switch(
     sch_method,
-    "equal" = "chemical/search/equal/",
+    "exact" = "chemical/search/equal/",
     "starts" = "chemical/search/start-with/",
     "contains" = "chemical/search/contain/",
-    cli_abort("Invalid path modification")
+    cli_abort("Invalid path modification for search method")
   )
 
   req <- request(Sys.getenv('burl')) %>%
@@ -112,7 +121,7 @@ make_request <- function(
     rq_method,
     "GET" = req %>% req_method("GET"),
     "POST" = req %>% req_method("POST"),
-    cli::cli_abort("Invalid method")
+    cli::cli_abort("Invalid request method")
   )
 
   if (rq_method == 'GET'){
@@ -122,11 +131,10 @@ make_request <- function(
 
       req <- switch(
         sch_method,
-        "equal" = req,
+        "exact" = req,
         #TODO Could expose this as an new arguement
         "starts" = req %>% req_url_query(., top = '500'),
-        "contains" = req %>% req_url_query(., top = '500'),
-        cli_abort("Invalid path modification")
+        "contains" = req %>% req_url_query(., top = '500')
       )
     })
   }
@@ -143,10 +151,6 @@ make_request <- function(
     #
   }
 
-  if(missing(dry_run)){
-    dry_run <- FALSE
-  }
-
   if (dry_run) {
 
     map(req, req_dry_run)
@@ -158,8 +162,9 @@ make_request <- function(
     resps %>%
       resps_successes() %>%
       resps_data(\(resp) resp_body_json(resp)) %>%
-      map(., ~map(.x, ~if(is.null(.x)){NA}else{.x}) %>% as_tibble) %>%
-      list_rbind()
-
+      map(.,
+          ~map(.x,
+                ~if(is.null(.x)){NA}else{.x}) %>%
+          as_tibble) %>% list_rbind()
   }
 }
