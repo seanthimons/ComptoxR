@@ -281,6 +281,20 @@ stringr::str_detect("NaCl", inorganic_final_regex)
 
 q11 <- q1$ORG %>% pull(casrn) %>% sample(10)
 
+q11 <- c(
+  '533-74-4',
+  '70-16-6',
+  '29767-20-2',
+  '7783-44-0',
+  '121-29-9',
+  '804-36-4',
+  '67-56-1',
+  '156-59-2',
+  '64-17-5',
+  '54-11-5',
+  '205-99-2'
+)
+
 q2 <- epi_suite_analysis(query = q11)
 
 epi_names <- q2$`000533-74-4` %>% names()
@@ -290,6 +304,32 @@ q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'analogs')
 
 q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'fate')
 
+q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'transport')
+
+# 'parameters',
+# 'chemicalProperties',
+# 'logKow',
+# 'meltingPoint',
+# 'boilingPoint',
+# 'vaporPressure',
+# 'waterSolubilityFromLogKow',
+# 'waterSolubilityFromWaterNt',
+# 'henrysLawConstant',
+# 'logKoa',
+# 'biodegradationRate',
+#'hydrocarbonBiodegradationRate',
+#'aerosolAdsorptionFraction',
+#'atmosphericHalfLife',
+#'logKoc',
+#'hydrolysis',
+#'bioconcentration',
+'waterVolatilization',
+'sewageTreatmentModel',
+#'fugacityModel',
+'dermalPermeability',
+#'ecosar',
+#'logKowAnalogs',
+#'analogs',
 
 
 
