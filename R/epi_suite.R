@@ -136,6 +136,7 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
           map(., ~discard_at(.x, 'factors')) %>%
           map(., as_tibble) %>%
           list_rbind() %>%
+          add_row(name = 'Readily Biodegradable?') %>%
           mutate(
             result = case_when(
               str_detect(name, pattern = 'MITI Linear Model Prediction|MITI Non-Linear Model Prediction') & value >= 0.5 ~ 'degradable',
@@ -151,22 +152,39 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
               str_detect(name, pattern = 'Anaerobic Model Prediction') & value >= 0.5 ~ 'fast',
               str_detect(name, pattern = 'Anaerobic Model Prediction') & value < 0.5 ~ 'not fast',
               .default = NA),
+            final = case_when(
+              name == "Ultimate Biodegradation Timeframe" & value >= 3 ~ TRUE,
+              name == "Ultimate Biodegradation Timeframe" & value < 3 ~ FALSE,
+              name == "MITI Linear Model Prediction" & value < 0.5 ~ FALSE,
+              name == "MITI Linear Model Prediction" & value >= 0.5 ~ TRUE,
+              .default = NA),
+            result = case_when(
+              name == 'Readily Biodegradable?' & sum(final == TRUE, na.rm = TRUE) == 2 ~ 'yes',
+              name == 'Readily Biodegradable?' & sum(final == TRUE, na.rm = TRUE) != 2 ~ 'no',
+              .default = result)
             ) %>%
-            add_row(name = 'Readily Biodegradable?', value = NA, result = NA) %>%
-            mutate(result = case_when(
-              (name == "Ultimate Biodegradation Timeframe" & value >= 3) & (name == "MITI Linear Model Prediction" & value >= 0.5) ~ 'yes',
-              .default = 'no'
-            ))
-
-          #flatten() %>%
-          #keep_at(., 'models') %>%
-          #flatten()
+            select(-final)
         })
     },
     'transport' = {
       epi_obj %>%
         map(., ~{
-          keep(., names(.x) %in% c(""))
+          keep(., names(.x) %in% c("fugacityModel")) %>%
+          map(., ~{
+            pluck(., 'model')
+            }) %>%
+          map(., ~keep(., names(.x) %in% c(
+            "Air",
+            "Water",
+            "Soil",
+            "Sediment",
+            "Persistence"))) %>%
+          flatten() %>%
+          map_at(., .at = c(
+            "Air",
+            "Water",
+            "Soil",
+            "Sediment"), .f = ~{pluck(., 1, 'MassAmount')})
         })},
     'treatment' = {
       epi_obj %>%
