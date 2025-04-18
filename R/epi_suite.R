@@ -70,6 +70,8 @@ epi_suite_analysis <- function(query){
       req_url_query(cas =  .x)
   })
 
+  cli::cli_alert_warning('Sending requests for analysis...')
+
   resps <- req_list %>%
     req_perform_sequential(., on_error = 'continue', progress = TRUE)
 
@@ -79,7 +81,7 @@ epi_suite_analysis <- function(query){
     map(., ~resp_body_json(.x))
 
   {
-    cli::cli_rule(left = 'EPI Suite analysis request')
+    cli::cli_rule(left = 'EPI Suite analysis results')
     cli::cli_dl()
     cli::cli_li(
       c('Compounds requested' = "{length(query_list)}"))
@@ -129,7 +131,8 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
         list_rbind(names_to = 'raw_search')
     },
     'fate' = {
-      epi_obj %>%
+      # biodegradationRate
+      biodegrade <- epi_obj %>%
         map(., ~{
           keep(., names(.x) %in% c("biodegradationRate")) %>%
           pluck(., "biodegradationRate", "models") %>%
@@ -164,7 +167,35 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
               .default = result)
             ) %>%
             select(-final)
-        })
+        }) %>%
+        list_rbind(names_to = 'raw_search')
+
+      hydrocarbon_biodegrade <- epi_obj %>%
+        map(., ~{
+            keep(., names(.x) %in% c("hydrocarbonBiodegradationRate")) %>%
+            pluck(., "hydrocarbonBiodegradationRate", 'selectedValue') #%>% flatten()
+        }) %>%
+        map(., ~modify_at(., 'value', ~if(is.null(.x)) NA else .x)) %>%
+        map(., as_tibble) %>%
+        list_rbind(names_to = 'raw_search') %>%
+        filter(!is.na(value))
+
+      bioconc <- epi_obj %>%
+        map(., ~{
+          keep(., names(.x) %in% c("bioconcentration")) %>%
+          pluck(., 'bioconcentration')
+        }) %>%
+        map(.,
+            ~keep(., names(.x) %in% c('logBioconcentrationFactor', 'logBioaccumulationFactor')) %>%
+              as_tibble()
+          ) %>%
+        list_rbind(names_to = 'raw_search')
+
+      list(
+        bioconc = bioconc,
+        biodegrade = biodegrade,
+        hydrocarbon_biodegrade = hydrocarbon_biodegrade
+        )
     },
     'transport' = {
       epi_obj %>%
@@ -184,13 +215,28 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
             "Air",
             "Water",
             "Soil",
-            "Sediment"), .f = ~{pluck(., 1, 'MassAmount')})
+            "Sediment"), .f = ~{pluck(., 1, 'MassAmount')}) %>%
+          map(., ~enframe(.x, name = 'name', value = 'value')) %>%
+          list_rbind(names_to = 'parameter') %>%
+          select(-name)
         })},
     'treatment' = {
       epi_obj %>%
         map(., ~{
-          keep(., names(.x) %in% c(""))
-        })
+          keep(., names(.x) %in% c("sewageTreatmentModel")) %>%
+          pluck(., 'sewageTreatmentModel', 'model') %>%
+          keep(., names(.) %in% c(
+            'TotalAir',
+            'TotalSludge',
+            'TotalBiodeg',
+            'FinalEffluent',
+            'TotalRemoval'
+          )) %>%
+          map(., ~pluck(., 'Percent')) %>%
+          flatten() %>%
+          as_tibble()
+        }) %>%
+        list_rbind(names_to = 'raw_search')
     },
     'analogs' = {
 
@@ -204,17 +250,13 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
 
       epi_obj %>%
         map(., ~{
-          keep(., names(.x) %in% c(""))
-        })
-    },
-    'air' = {
-
-      epi_obj %>%
-        map(., ~{
-          keep(., names(.x) %in% c(""))
-        })
+          keep(., names(.x) %in% c("waterVolatilization")) %>%
+            pluck(., 1) %>%
+            discard_at(., 'parameters') %>%
+            as_tibble()
+        }) %>%
+        list_rbind(names_to = 'raw_search')
     }
-
   )
 
   return(df)
