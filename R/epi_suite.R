@@ -96,12 +96,12 @@ epi_suite_analysis <- function(query){
   return(df)
 }
 
-#' Title
+#' Pull data from EPI Suite query object
 #'
 #' @param response
 #' @param endpoints
 #'
-#' @returns
+#' @returns list or dataframe
 #' @export
 
 epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
@@ -256,7 +256,8 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
             as_tibble()
         }) %>%
         list_rbind(names_to = 'raw_search')
-    }
+    },
+    cli::cli_abort('Incorrect endpoint selection')
   )
 
   return(df)
