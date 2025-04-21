@@ -16,7 +16,6 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
 
   df <- map(list_name, possibly(~{
 
-    cli::cli_text()
     cli::cli_alert_info('\nSearching for compounds on {(.x)} list...\n')
 
     burl <- Sys.getenv('burl')
@@ -44,6 +43,9 @@ ct_list <- function(list_name,  ccte_api_key = NULL){
       return(.x)
     }
   }, NULL)) %>% set_names(., list_name) %>% compact()
+
+  if(length(list_name) == 1){df %>% pluck(., 1)}
+  return(df)
 }
 
 
