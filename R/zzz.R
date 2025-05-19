@@ -89,6 +89,7 @@ run_setup <- function(){
     )
     cli::cli_rule()
     cli::cli_alert_warning('Available API endpoints:')
+    cli::cli_alert_warning('You can change these using the *_server() function!')
     cli::cli_dl(c(
       'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
       'Cheminformatics' =  '{Sys.getenv("chemi_burl")}',
