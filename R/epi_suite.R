@@ -155,5 +155,5 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL){
   return(df)
 }
 
-q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'eco')
-q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'analogs')
+#q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'eco')
+#q3 <- epi_suite_pull_data(epi_obj = q2, endpoints = 'analogs')
