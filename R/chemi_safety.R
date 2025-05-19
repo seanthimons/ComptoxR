@@ -219,6 +219,29 @@ chemi_safety <- function(query) {
   return(df)
 }
 
+chemi_safety_section <- function(query, section = NULL){
+
+  chemicals <- vector(mode = "list", length = length(query))
+
+  chemicals <- map2(
+    chemicals, query,
+    \(x, y) x <- list(
+      sid = y
+    )
+  )
+
+  payload <- chemicals
+
+  cli_rule(left = "Safety payload options")
+  cli_dl(
+    c(
+      "Number of compounds" = "{length(query)}"
+    )
+  )
+  cli_rule()
+  cli_end()
+
+}
 
 #' Creates a GHS table with risk bins into the Global Environment.
 #'
@@ -327,44 +350,3 @@ ghs_create_tbl <- function() {
 
   return(df)
 }
-
-
-# Not run -----------------------------------------------------------------
-
-# Used to create the case_when formula programatically
-
-# ghs_tbl %>%
-#   select(h_code, bin, hazard_class) %>%
-#   split(.$hazard_class) %>%
-#   map(.,
-#       ~pmap(., function(h_code, bin, hazard_class){
-#     cat(
-#       paste0('`H-Code` == "', h_code, '" ~ ', bin, ",", '  #', hazard_class,  '\n'))
-#   }))
-
-
-
-# Used to create the pretty table
-
-# df %>%
-#   DT::datatable(.) %>%
-#   formatStyle(names(temp),
-#               textAlign = "center"
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("VH", "#f5c6cb")
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("H", "#ff8c0066")
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("M", "#ffeeba")
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("L", "#c3e6cb")
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("I", "#d6d8db")
-#   ) %>%
-#   formatStyle(names(temp),
-#               backgroundColor = styleEqual("ND", "SlateGray")
