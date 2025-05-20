@@ -5,7 +5,6 @@
 \alias{reexports}
 \alias{as.cas}
 \alias{is.cas}
-\alias{pc_sect}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -13,6 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{webchem}{\code{\link[webchem]{as.cas}}, \code{\link[webchem]{is.cas}}, \code{\link[webchem]{pc_sect}}}
+  \item{webchem}{\code{\link[webchem]{as.cas}}, \code{\link[webchem]{is.cas}}}
 }}
 
