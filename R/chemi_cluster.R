@@ -14,9 +14,7 @@ chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
     cli::cli_abort('Missing sort!')
   }
 
-  body_data <- list(
-    chemicals = map(chemicals, ~ list(sid = .x))
-  )
+  chemicals <- chemi_resolver(chemicals)
 
   cli_rule(left = "Similarity payload options")
   cli_dl(
@@ -38,7 +36,11 @@ chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
       req_headers(
         accept = "application/json, text/plain, */*"
       ) |>
-      req_body_json(body_data)
+      req_body_json(
+        list(
+          'chemicals' = chemicals
+        )
+      )
 
     return(list(payload = body_data, request = req))
   }
@@ -52,11 +54,22 @@ chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
     req_headers(
       accept = "application/json, text/plain, */*"
     ) |>
-    req_body_json(body_data) |>
+    req_body_json(
+      list(
+        'chemicals' = chemicals
+      )
+    ) |>
     req_perform()
 
   parsed_resp <- resp |>
     resp_body_json()
 
-  return(parsed_resp)
+  # Check if any data was found.
+  if (length(parsed_resp) > 0) {
+    return(parsed_resp) # Return the extracted data.
+  } else {
+    cli::cli_alert_danger('No data found!') # Display an error message if no data was found.
+    return(NULL) # Return NULL if no data was found.
+  }
+
 }
