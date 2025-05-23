@@ -12,7 +12,8 @@ chemi_resolver(query)
 \value{
 A list containing the resolved chemical names. Each element of the list
 corresponds to an identifier in the input \code{query}.  Returns an empty list if the
-API returns no results for a given query.
+API returns no results for a given query. If \code{dry_run} is TRUE, returns the constructed
+request object.
 }
 \description{
 This function takes a vector of chemical identifiers as input and uses an external API
@@ -29,5 +30,9 @@ print(resolved_name)
 # Example usage with multiple identifiers:
 resolved_names <- chemi_resolver(c("aspirin", "ibuprofen", "water"))
 print(resolved_names)
+
+# Example usage with dry_run:
+request_obj <- chemi_resolver(c("aspirin"), dry_run = TRUE)
+print(request_obj)
 }
 }
