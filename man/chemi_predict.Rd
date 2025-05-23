@@ -2,16 +2,35 @@
 % Please edit documentation in R/chemi_predict.R
 \name{chemi_predict}
 \alias{chemi_predict}
-\title{Cheminformatics Predictions}
+\title{Predict properties of chemical compounds using an external API.}
 \usage{
-chemi_predict(query)
+chemi_predict(query, report = "JSON")
 }
 \arguments{
-\item{query}{A list of DTXSIDs}
+\item{query}{A character vector of chemical identifiers to predict properties for.}
+
+\item{report}{A character string specifying the report format. Must be one of
+"UNKNOWN", "SDF", "SMI", "MOL", "CSV", "TSV", "JSON", "XLSX", "PDF", "HTML",
+"XML", or "DOCX". Defaults to "JSON".}
 }
 \value{
-A dataframe of results
+A list containing the API response.  Returns NULL if the
+API returns no results for a given query.
 }
 \description{
-Cheminformatics Predictions
+This function takes a vector of chemical identifiers as input, resolves them
+using \code{chemi_resolver}, and then uses an external API to predict their properties.
+It sends a POST request to the API endpoint, passing the resolved chemical names
+in the request body.
+}
+\examples{
+\dontrun{
+# Example usage with a single identifier:
+predicted_properties <- chemi_predict(c("aspirin"))
+print(predicted_properties)
+
+# Example usage with multiple identifiers:
+predicted_properties <- chemi_predict(c("aspirin", "ibuprofen", "water"))
+print(predicted_properties)
+}
 }
