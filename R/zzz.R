@@ -5,11 +5,11 @@
 #' @return Ping tests and API tokens.
 #' @export
 
-run_setup <- function(){
-
+run_setup <- function() {
   cli::cli_rule()
   cli::cli_alert_warning(
-    '\nAttempting ping test...')
+    '\nAttempting ping test...'
+  )
   #cli::cli_text()
 
   ping_list <-
@@ -24,24 +24,25 @@ run_setup <- function(){
 
       'https://episuite.dev/EpiWebSuite/#/',
       "https://cfpub.epa.gov/ecotox/index.cfm"
-
     )
 
-
   check_url <- function(url) {
-    tryCatch({
-      response <- httr::GET(url, httr::timeout(5))
-      status_code <- httr::status_code(response)
-      return(paste(url, ": ", status_code))
-    }, error = function(e) {
-      if (grepl("Could not resolve host", e$message)) {
-        return(paste(url, "- Error: Could not resolve host"))
-      } else if (grepl("Timeout", e$message)) {
-        return(paste(url, "- Error: Request timed out"))
-      } else {
-        return(paste(url, "- Error:", e$message))
+    tryCatch(
+      {
+        response <- httr::GET(url, httr::timeout(5))
+        status_code <- httr::status_code(response)
+        return(paste(url, ": ", status_code))
+      },
+      error = function(e) {
+        if (grepl("Could not resolve host", e$message)) {
+          return(paste(url, "- Error: Could not resolve host"))
+        } else if (grepl("Timeout", e$message)) {
+          return(paste(url, "- Error: Request timed out"))
+        } else {
+          return(paste(url, "- Error:", e$message))
+        }
       }
-    })
+    )
   }
 
   results <- lapply(ping_list, check_url)
@@ -53,17 +54,14 @@ run_setup <- function(){
   cli::cli_alert_warning('Looking for API tokens...')
 
   cli::cli_text('CCD token: {ct_api_key()}')
-
 }
 
 .onAttach <- function(libname, ComptoxR) {
-
-  if(Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == ""){
+  if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
     ct_server(server = 1)
     chemi_server(server = 1)
     epi_server(server = 1)
     eco_server(server = 1)
-
   }
 
   packageStartupMessage(
@@ -71,11 +69,10 @@ run_setup <- function(){
   )
 }
 
-.header <- function(){
-
-  if(is.na(build_date <- utils::packageDate('ComptoxR'))){
+.header <- function() {
+  if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
     build_date <- as.character(Sys.Date())
-  }else{
+  } else {
     build_date <- as.character(utils::packageDate('ComptoxR'))
   }
 
@@ -83,23 +80,33 @@ run_setup <- function(){
     cli::cli_rule()
 
     cli::cli_alert_success(
-      c("This is version ", {as.character(utils::packageVersion('ComptoxR'))}," of ComptoxR"))
+      c(
+        "This is version ",
+        {
+          as.character(utils::packageVersion('ComptoxR'))
+        },
+        " of ComptoxR"
+      )
+    )
     cli::cli_alert_success(
-      c('Built on: ', {build_date})
+      c('Built on: ', {
+        build_date
+      })
     )
     cli::cli_rule()
     cli::cli_alert_warning('Available API endpoints:')
-    cli::cli_alert_warning('You can change these using the *_server() function!')
+    cli::cli_alert_warning(
+      'You can change these using the *_server() function!'
+    )
     cli::cli_dl(c(
       'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
-      'Cheminformatics' =  '{Sys.getenv("chemi_burl")}',
+      'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
       'ECOTOX' = '{Sys.getenv("eco_burl")}',
       'EPI Suite' = '{Sys.getenv("epi_burl")}'
     ))
   })
 
   run_setup()
-
 }
 
 #' Set API endpoints for Comptox API endpoints
@@ -109,21 +116,21 @@ run_setup <- function(){
 #' @return Should return the Sys Env variable 'burl'
 #' @export
 
-ct_server <- function(server = NULL){
+ct_server <- function(server = NULL) {
   if (is.null(server)) {
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("burl" = "")
     }
-
   } else {
-
     switch(
       as.character(server),
       "1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
       "2" = Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/'),
       {
-        cli::cli_alert_warning("\nServer URL reset!\n")
+        cli::cli_alert_warning("\nInvalid server option selected!\n")
+        cli::cli_alert_info("Valid options are 1 (Production) and 2 (Staging).")
+        cli::cli_alert_warning("Server URL reset!")
         Sys.setenv("burl" = "")
       }
     )
@@ -139,24 +146,28 @@ ct_server <- function(server = NULL){
 #' @return Should return the Sys Env variable `chemi_burl`
 #' @export
 
-chemi_server <- function(server = NULL){
-
+chemi_server <- function(server = NULL) {
   if (is.null(server)) {
-
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("chemi_burl" = "")
     }
-
   } else {
-
     switch(
       as.character(server),
       "1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/"),
-      "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"),
-      "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"),
+      "2" = Sys.setenv(
+        "chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"
+      ),
+      "3" = Sys.setenv(
+        "chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"
+      ),
       {
-        cli::cli_alert_warning("\nServer URL reset!\n")
+        cli::cli_alert_warning("\nInvalid server option selected!\n")
+        cli::cli_alert_info(
+          "Valid options are 1 (Production), 2 (Development), and 3 (Internal)."
+        )
+        cli::cli_alert_warning("Server URL reset!")
         Sys.setenv("chemi_burl" = "")
       }
     )
@@ -172,22 +183,20 @@ chemi_server <- function(server = NULL){
 #' @return Should return the Sys Env variable `epi_burl`
 #' @export
 
-epi_server <- function(server = NULL){
-
+epi_server <- function(server = NULL) {
   if (is.null(server)) {
-
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("epi_burl" = "")
     }
-
   } else {
-
     switch(
       as.character(server),
       "1" = Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api"),
       {
-        cli::cli_alert_warning("\nServer URL reset!\n")
+        cli::cli_alert_warning("\nInvalid server option selected!\n")
+        cli::cli_alert_info("Valid option is 1 (Production).")
+        cli::cli_alert_warning("Server URL reset!")
         Sys.setenv("epi_burl" = "")
       }
     )
@@ -203,23 +212,21 @@ epi_server <- function(server = NULL){
 #' @return Should return the Sys Env variable `eco_burl`
 #' @export
 
-eco_server <- function(server = NULL){
-
+eco_server <- function(server = NULL) {
   if (is.null(server)) {
-
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("eco_burl" = "")
     }
-
   } else {
-
     switch(
       as.character(server),
       "2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
       "1" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
       {
-        cli::cli_alert_warning("\nServer URL reset!\n")
+        cli::cli_alert_warning("\nInvalid server option selected!\n")
+        cli::cli_alert_info("Valid options are 1 (Local) and 2 (Production).")
+        cli::cli_alert_warning("Server URL reset!")
         Sys.setenv("eco_burl" = "")
       }
     )
@@ -230,11 +237,9 @@ eco_server <- function(server = NULL){
 
 #' Reset all servers
 
-reset_servers <- function(){
-
+reset_servers <- function() {
   ct_server()
   chemi_server()
   epi_server()
   eco_server()
-
 }
