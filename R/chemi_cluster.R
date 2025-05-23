@@ -66,10 +66,43 @@ chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
 
   # Check if any data was found.
   if (length(parsed_resp) > 0) {
-    return(parsed_resp) # Return the extracted data.
   } else {
     cli::cli_alert_danger('No data found!') # Display an error message if no data was found.
     return(NULL) # Return NULL if no data was found.
   }
 
+  mol_names <- parsed_resp %>%
+    pluck(., 'order') %>%
+    map(., ~ pluck(.x, 'chemical')) %>%
+    map(., ~ keep(.x, names(.x) %in% c('sid', 'name'))) %>%
+    map(., as_tibble) %>%
+    list_rbind()
+
+  similarity <- parsed_resp %>%
+    pluck(., 'similarity') %>%
+    map(
+      .,
+      ~ map(., ~ discard_at(.x, 'cl')) %>%
+        list_flatten() %>%
+        unname() %>%
+        list_c() %>%
+        replace(., . == 0, 1)
+    )
+  
+    hc <- matrix(unlist(similarity), nrow = length(similarity), byrow = TRUE)  %>% 
+      `colnames<-`(mol_names$name) %>% 
+      `row.names<-`(mol_names$name)  %>%
+      # Creates Tanimoto matrix
+        {
+          1 - .
+        } %>%
+      as.dist(.) %>% 
+      hclust(.)
+  
+  
+  list(
+    mol_names = mol_names, 
+    similarity = similarity, 
+    hc = hc
+  )
 }
