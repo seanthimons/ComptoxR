@@ -4,12 +4,18 @@
 #' @param chemicals vector of chemical names
 #' @param sort boolean to sort or not
 #' @param dry_run boolean to return the payload instead of sending the request
+#' @param hclust_method character string indicating which clustering method to use in `hclust`.
+#'   Defaults to "complete". See `?hclust` for available methods.
 #'
-#' @return
+#' @return List
 #' @export
-#'
-#' @examples
-chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
+
+chemi_cluster <- function(
+  chemicals,
+  sort = TRUE,
+  dry_run = FALSE,
+  hclust_method = "complete"
+) {
   if (is.null(sort) | missing(sort)) {
     cli::cli_abort('Missing sort!')
   }
@@ -88,21 +94,19 @@ chemi_cluster <- function(chemicals, sort = TRUE, dry_run = FALSE) {
         list_c() %>%
         replace(., . == 0, 1)
     )
-  
-    hc <- matrix(unlist(similarity), nrow = length(similarity), byrow = TRUE)  %>% 
-      `colnames<-`(mol_names$name) %>% 
-      `row.names<-`(mol_names$name)  %>%
-      # Creates Tanimoto matrix
-        {
-          1 - .
-        } %>%
-      as.dist(.) %>% 
-      hclust(.)
-  
-  
+
+  hc <- matrix(unlist(similarity), nrow = length(similarity), byrow = TRUE) %>%
+    `colnames<-`(mol_names$name) %>%
+    `row.names<-`(mol_names$name) %>%
+    # Creates Tanimoto matrix
+    {
+      1 - .
+    } %>%
+    as.dist(.) %>%
+    hclust(method = hclust_method)
   list(
-    mol_names = mol_names, 
-    similarity = similarity, 
+    mol_names = mol_names,
+    similarity = similarity,
     hc = hc
   )
 }
