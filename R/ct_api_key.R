@@ -20,12 +20,6 @@ ct_api_key <- function() {
     ccte_api_key <- "No API key saved. Sys.setenv(ccte_api_key = 'TOKEN HERE')"
     return(ccte_api_key)
   }else{return(ccte_api_key)}
-
-  check_burl <- Sys.getenv('burl')
-  if(is.na(check_burl) == T || isTRUE(check_burl == "") == T || isTRUE(check_burl == "NA") == T){
-    comptox_server(server = 1)
-    rm(check_burl)
-    }else{rm(check_burl)}
 }
 
 
