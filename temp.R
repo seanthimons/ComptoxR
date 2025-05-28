@@ -170,7 +170,8 @@ smiles_is_likely_inorganic <- function(s) {
     if (grepl("C", part)) {
       # If carbon is present in this part
       # Check if it's a known simple inorganic carbon form
-      is_simple_inorg_C_part <- part == "O=C=O" ||
+      is_simple_inorg_C_part <- 
+        part == "O=C=O" ||
         part == "C" ||
         part == "[C]" ||
         part == "[CH4]" ||
@@ -240,5 +241,6 @@ q2 <- ct_details(query = temp, projection = 'all') %>%
   select(-class_stage1) %>%
   split(.$class)
 
-# --- Print Results for Review ---
-print(q3_final)
+
+q2$UNKNOWN_FINAL %>%
+  select(-is_isotope_formula, -isMarkush, -class)
