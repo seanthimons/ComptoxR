@@ -1,83 +1,72 @@
-#' Get ClassyFire Classification for DTXSID
+# R/chemi_amos.R
+#' Get Classyfire classificaton for DTXSID
 #'
-#' This function retrieves the ClassyFire classification for a given DTXSID using the CCTE-CCED cheminformatics API.
+#' This function retrieves Classyfire classificatons for a given DTXSID using the EPA's cheminformatics API.
 #'
 #' @param query A character vector of DTXSIDs to query.
 #'
-#' @return A list of ClassyFire classifications, one for each DTXSID in the input `query`.
-#'         Returns `NULL` if there is an error or no data is found.
-#'
-#' @examples
-#' \dontrun{
-#'   # Get the ClassyFire classification for a single DTXSID
-#'   result <- chemi_classyfire(query = "DTXSID6029626")
-#'   print(result)
-#'
-#'   # Get the AMOS classification for multiple DTXSIDs
-#'   results <- chemi_classyfire(query = c("DTXSID6029626", "DTXSID5029625"))
-#'   print(results)
-#' }
-#'
-#' @importFrom tidyverse purrr map
-#' @importFrom httr2 request req_headers req_perform resp_body_json
-#' @importFrom cli cli_alert_success cli_alert_warning cli_alert_danger
+#' @return A list of Classyfire classificatons corresponding to the input DTXSIDs.
+#'  Returns NA if the request fails for a given DTXSID.
 #' @export
 chemi_classyfire <- function(query) {
-  if (!is.character(query)) {
-    cli::cli_alert_danger("The `query` parameter must be a character vector.")
-    return(NULL)
-  }
+  # Display debugging information before the request
+  cli::cli_rule(left = "Classyfire classification payload options")
+  cli::cli_dl(c("Number of compounds" = "{length(query)}"))
+  cli::cli_rule()
+  cli::cli_end()
 
-  fetch_data <- function(dtxsid) {
-    
-    cli::cli_alert_info("Making request for {.val {dtxsid}}")
-    req <- httr2::request(Sys.getenv('chemi')) |>
-      httr2::req_url_path_append(., 'api/amos/get_classification_for_dtxsid/')
-      httr2::req_headers(accept = "application/json")
+  safe_req_perform <- purrr::safely(httr2::req_perform)
 
-    resp <- tryCatch(
-      httr2::req_perform(req),
-      error = function(e) {
-        cli::cli_alert_danger(
-          "Request failed for {.val {dtxsid}}: {.val {e$message}}"
-        )
-        return(NULL)
-      }
-    )
-
-    if (is.null(resp)) {
-      return(NULL)
-    }
-
-    if (httr2::resp_status(resp) != 200) {
-      cli::cli_alert_warning(
-        "Request for {.val {dtxsid}} failed with status {.val {httr2::resp_status(resp)}}"
+  results <- query |>
+    purrr::map(.f = function(q) {
+      #cli::cli_alert_info("Querying DTXSID: {.val {q}}")
+      request <- tryCatch(
+        {
+          httr2::request(glue::glue(
+            "https://ccte-cced-cheminformatics.epa.gov/api/amos/get_classification_for_dtxsid/{q}"
+          ))
+        },
+        error = function(e) {
+          cli::cli_abort(
+            "Error creating request for DTXSID {.val {q}}: {e$message}"
+          )
+          return(NULL)
+        }
       )
-      return(NULL)
-    }
 
-    tryCatch(
-      httr2::resp_body_json(resp),
-      error = function(e) {
-        cli::cli_alert_danger(
-          "Failed to parse JSON for {.val {dtxsid}}: {.val {e$message}}"
-        )
-        return(NULL)
+      if (is.null(request)) {
+        return(NA) # Return NA if the request object is NULL
       }
-    )
-  }
 
-  if (length(query) > 1) {
-    results <- purrr::map(query, fetch_data)
-  } else {
-    results <- list(fetch_data(query))
-  }
+      response <- safe_req_perform(request)
 
-  if (all(purrr::map_lgl(results, is.null))) {
-    cli::cli_alert_danger("No data found for any of the DTXSIDs.")
-    return(NULL)
-  } else {
-    cli::cli_alert_success("Successfully retrieved AMOS classifications.")
-    return(results)
-  }
+      if (!is.null(response$error)) {
+        cli::cli_alert_danger(
+          "Request failed for DTXSID {.val {q}}: {response$error$message}"
+        )
+        return(NA) # Return NA if the request failed
+      }
+
+      if (httr2::resp_status(response$result) != 200) {
+        cli::cli_alert_warning(
+          "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {q}}"
+        )
+        return(NA) # Return NA for non-200 status codes
+      }
+
+      tryCatch(
+        {
+          httr2::resp_body_json(response$result)
+        },
+        error = function(e) {
+          cli::cli_alert_danger(
+            "Failed to parse JSON response for DTXSID {.val {q}}: {e$message}"
+          )
+          return(NA) # Return NA if JSON parsing fails
+        }
+      )
+    }, .progress = TRUE)
+  
+  results <- set_names(results, query)
+  return(results)
 }
