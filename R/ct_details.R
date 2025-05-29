@@ -8,21 +8,25 @@
 #' @return a data frame
 #' @export
 
-ct_details <- function(query, projection = c(
-  "all",
-  "standard",
-  "id",
-  "structure",
-  "nta",
-  'compact'), ccte_api_key = NULL) {
-
+ct_details <- function(
+  query,
+  projection = c(
+    "all",
+    "standard",
+    "id",
+    "structure",
+    "nta",
+    'compact'
+  ),
+  ccte_api_key = NULL
+) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
   burl <- Sys.getenv("burl")
 
-  if(missing(projection)){
+  if (missing(projection)) {
     projection <- 'compact'
   }
 
@@ -39,11 +43,9 @@ ct_details <- function(query, projection = c(
 
   cli_rule(left = 'Payload options')
   cli_dl(
-    c('Projection' = '{proj}',
-      'Number of compounds'= '{length(query)}'
-    )
+    c('Projection' = '{proj}', 'Number of compounds' = '{length(query)}')
   )
-  #cli_rule()
+  cli_rule()
 
   surl <- "chemical/detail/search/by-dtxsid/"
 
@@ -53,26 +55,37 @@ ct_details <- function(query, projection = c(
     `x-api-key` = token
   )
 
-  if(length(query) > 200){
-
-    sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
+  if (length(query) > 200) {
+    sublists <- split(
+      query,
+      rep(
+        1:ceiling(length(query) / 200),
+        each = 200,
+        length.out = length(query)
+      )
+    )
     sublists <- map(sublists, as.list)
-  }else{
+  } else {
     sublists <- vector(mode = 'list', length = 1L)
     sublists[[1]] <- query %>% as.list()
   }
 
-  df <- map(sublists, ~{
-
-    response <- POST(
-      url = urls,
-      body = .x,
-      add_headers("x-api-key" = token),
-      encode = 'json',
-      progress()
-    )
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }, .progress = T) %>% list_rbind()
+  df <- map(
+    sublists,
+    ~ {
+      response <- POST(
+        url = urls,
+        body = .x,
+        add_headers("x-api-key" = token),
+        encode = 'json',
+        progress()
+      )
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    },
+    .progress = T
+  ) %>%
+    #TODO Probably needs to be validated for missing or NULL values
+    list_rbind()
 
   cli::cli_text()
   return(df)
