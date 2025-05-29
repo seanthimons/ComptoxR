@@ -36,6 +36,11 @@
 #' # classified_df <- classify_compounds(df_example)
 #' # print(classified_df)
 classify_compounds <- function(df) {
+  # Load necessary packages if not already loaded (for string manipulation)
+  # Using :: to explicitly call functions, assuming dplyr and stringr are installed.
+  # library(dplyr)
+  # library(stringr)
+
   # --- Define Regex Patterns for FORMULAS ---
 
   # Organic elements for FORMULA regex
@@ -134,53 +139,53 @@ classify_compounds <- function(df) {
     "((?<![A-Za-z])T(?![a-z]))" # T (Tritium)
   )
 
-  # --- SMILES Classification Helper Functions (Refined from 5-06/claude.txt) ---
+  # --- SMILES Classification Helper Functions (Refined) ---
 
   smiles_is_likely_organic_refined <- function(s) {
     if (is.na(s) || s == "") return(FALSE)
 
-    s_parts <- str_split(s, "\\.")[[1]] # Split SMILES by '.' for multi-component structures
+    s_parts <- stringr::str_split(s, "\\.")[[1]] # Split SMILES by '.' for multi-component structures
     is_complex_organic_found <- FALSE
 
     for (part in s_parts) {
       # Skip purely ionic non-carbon parts like [Na+]
       if (
-        grepl("^\\[[A-Za-z]{1,2}[0-9]*[+\\-]+[0-9]*\\]$", part, perl = TRUE) &&
-          !grepl("C", part, ignore.case = TRUE)
+        stringr::str_detect(part, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]+[0-9]*\\]$") &&
+          !stringr::str_detect(part, "C") # Keep this specific non-C check here
       )
         next
 
       # Exclude specific simple C-containing SMILES often considered inorganic OR specific borderline cases
       if (
-        part == "O=C=O" ||
-          part == "C" ||
-          part == "[C]" ||
-          part == "[CH4]" ||
-          part == "C#N" ||
-          part == "N#C" ||
-          part == "[C-]#N" ||
-          part == "N#[C+]" || # Cyanide
-          grepl("^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$", part, perl = TRUE) || # Carbonate
-          grepl("^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$", part, perl = TRUE) || # Another carbonate form
-          (grepl("CO3", part, perl = TRUE) &&
-            grepl("\\[", part, perl = TRUE)) || # General carbonate ion
-          part == "[C-]#[C-]" # Treat acetylide ion as non-complex-organic for this function
+        part == "O=C=O" || # Carbon Dioxide
+          part == "C" || # Carbon atom (often graphite/diamond representation)
+          part == "[C]" || # Carbon atom
+          part == "[CH4]" || # Methane (simplest organic, often border)
+          part == "C#N" || # Hydrogen cyanide
+          part == "N#C" || # Isocyanide
+          part == "[C-]#N" || # Cyanide anion
+          part == "N#[C+]" || # Isocyanide cation
+          stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") || # Carbonate ion
+          stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") || # Another carbonate ion form
+          (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\[")) || # General carbonate ion with brackets
+          part == "[C-]#[C-]" # Acetylide ion
       ) {
         next
       }
 
       # Handle simple C-ions like [C-], [CH3+].
       # If it's acetylide [C-]#[C-], it was handled above.
-      if (grepl("^\\[C[H0-4]?[0-9]*[+\\-]*[0-9]*\\]$", part, perl = TRUE)) {
+      if (stringr::str_detect(part, "^\\[C[H0-4]?[0-9]*[+\\-]*[0-9]*\\]$")) {
         next
       }
 
       # Look for aromatic carbon 'c' OR aliphatic 'C' involved in typical organic bonding.
+      # This pattern captures C-C, C=C, C#C, C attached to branches/rings/heteroatoms.
       organic_bond_pattern <- "CC|C=C|C#C|C\\(|C[1-9]|C@|C[NOSPSiBFClBrI]|[NOSPSiBFClBrI]C"
       if (
-        grepl("c", part, perl = TRUE) || # Aromatic carbon
-          (grepl("C", part, perl = TRUE) && # Aliphatic carbon is present AND...
-            (grepl(organic_bond_pattern, part, perl = TRUE))) # Typical organic structures or C-heteroatom bonds
+        stringr::str_detect(part, "c") || # Aromatic carbon
+          (stringr::str_detect(part, "C") && # Aliphatic carbon is present AND...
+            stringr::str_detect(part, organic_bond_pattern)) # Typical organic structures or C-heteroatom bonds
       ) {
         is_complex_organic_found <- TRUE
         break
@@ -192,14 +197,25 @@ classify_compounds <- function(df) {
   smiles_is_likely_inorganic <- function(s) {
     if (is.na(s) || s == "") return(FALSE)
 
-    # No aromatic carbon 'c' (a strong indicator of organic)
-    if (grepl("c", s, perl = TRUE)) return(FALSE)
+    # --- NEW / ENHANCED RULE: Directly classify simple inorganic elements/molecules ---
+    # This specifically catches pure elemental SMILES (charged or uncharged) and simple diatomics
+    # e.g., [Cm], [Ca], [Cd], [Co], [Cr], [Cs], ClCl, O=O, N#N, S=S
+    # Removed the check `!stringr::str_detect(s, "C")` here to allow C-containing element symbols
+    if (
+        stringr::str_detect(s, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") || # e.g., [Na], [Cu], [Al+3], [O-2], [Cm]
+        stringr::str_detect(s, "^[A-Z][a-z]?[=]?([A-Z][a-z]?)$") # e.g., ClCl, O=O, N#N, S=S (simple diatomic elements)
+    ) {
+        return(TRUE)
+    }
 
-    s_parts <- str_split(s, "\\.")[[1]]
+    # No aromatic carbon 'c' (a strong indicator of organic)
+    if (stringr::str_detect(s, "c")) return(FALSE)
+
+    s_parts <- stringr::str_split(s, "\\.")[[1]]
     all_parts_inorganic_or_simple_C <- TRUE
 
     for (part in s_parts) {
-      if (grepl("C", part, perl = TRUE)) {
+      if (stringr::str_detect(part, "C")) {
         # If carbon is present in this part, check if it's a known simple inorganic carbon form
         is_simple_inorg_C_part <-
           part == "O=C=O" ||
@@ -210,18 +226,18 @@ classify_compounds <- function(df) {
           part == "N#C" ||
           part == "[C-]#N" ||
           part == "N#[C+]" ||
-          grepl("^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$", part, perl = TRUE) ||
-          grepl("^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$", part, perl = TRUE) ||
-          (grepl("CO3", part, perl = TRUE) &&
-            grepl("\\[", part, perl = TRUE)) ||
-          part == "[C-]#[C-]" # Acetylide treated as simple inorganic C here
+          stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") ||
+          stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") ||
+          (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\[")) ||
+          part == "[C-]#[C-]"
 
         if (!is_simple_inorg_C_part) {
           all_parts_inorganic_or_simple_C <- FALSE
           break
         }
       } else {
-        # No carbon in this part, assume it's inorganic (e.g., [Na+], O=[Si]=O)
+        # No carbon in this part, assume it's inorganic (e.g., [Na+], O=[Si]=O, etc.)
+        # This is the general catch-all for non-carbon components of inorganic compounds.
       }
     }
     return(all_parts_inorganic_or_simple_C)
@@ -229,69 +245,57 @@ classify_compounds <- function(df) {
 
   # --- Classification Logic (Enhanced) ---
   df_classified <- df %>%
-    mutate(
+    dplyr::mutate(
       # Clean InChIString - keeping as a new column to preserve original
-      inchiString_processed = str_replace(inchiString, ".*?/", ""),
-      is_isotope_formula = grepl(
-        isotope_regex_pattern,
+      inchiString_processed = stringr::str_replace(inchiString, ".*?/", ""),
+      is_isotope_formula = stringr::str_detect(
         molFormula,
-        perl = TRUE
+        isotope_regex_pattern
       ),
 
       # Stage 1 Classification: Formula-based (more nuanced for C-containing inorganic compounds)
-      class_stage1 = case_when(
+      class_stage1 = dplyr::case_when(
         isMarkush == TRUE ~ "MARKUSH",
         is_isotope_formula == TRUE ~ "ISOTOPE",
 
-        # --- NEW RULE: Handle single elements (charged or uncharged) specifically ---
-        # This will catch [Cu], [Na+], [O-2], and also simple "Cu"
-        # It should come before other inorganic rules to catch simple cases quickly.
-        (grepl(
-          "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$",
-          molFormula,
-          perl = TRUE
-        ) | # Matches [Cu], [Na+], [O-2]
-          grepl("^[A-Z][a-z]?[0-9]*$", molFormula, perl = TRUE)) & # Matches Cu, O, Fe2, H2 (single element or simple diatomic/monoatomic with num)
-          !str_detect(molFormula, "C") & # Exclude C-only formulas that might be caught by the general regex (like C or CH4)
-          str_detect(molFormula, inorganic_element_pattern) ~
-          'INORG_FORMULA', # Ensure the element is known inorganic
-
-        # Specific inorganic carbon compounds (ordered from most specific patterns)
+        # 1. Specific inorganic carbon compounds (highest priority for C-containing inorganics)
         molFormula %in% c("C", "CO", "CO2", "CH4") ~ 'INORG_FORMULA', # Methane, Carbon, CO, CO2
-        (grepl("CO3", molFormula, ignore.case = TRUE) |
-          grepl("HCO3", molFormula, ignore.case = TRUE)) &
-          str_detect(molFormula, metal_pattern_string) ~
+        (stringr::str_detect(molFormula, "CO3") | # Removed ignore.case as `CO3` is specific
+          stringr::str_detect(molFormula, "HCO3")) & # Removed ignore.case as `HCO3` is specific
+          stringr::str_detect(molFormula, metal_pattern_string) ~
           'INORG_FORMULA', # Carbonates/Bicarbonates with metals
-        grepl("C2(Ca|Mg|Na2|K2)", molFormula) ~ 'INORG_FORMULA', # Simple Carbides like CaC2, K2C2
-        grepl("CN(Na|K|Ag|Pb|Hg)?", molFormula) ~ 'INORG_FORMULA', # Simple Cyanides, e.g., NaCN, KCN, AgCN
-        grepl("SCN(Na|K|Ag|Pb|Hg)?", molFormula) ~ 'INORG_FORMULA', # Simple Thiocyanates, e.g., NaSCN, KSCN
+        stringr::str_detect(molFormula, "C2(Ca|Mg|Na2|K2)") ~ 'INORG_FORMULA', # Simple Carbides like CaC2, K2C2
+        stringr::str_detect(molFormula, "CN(Na|K|Ag|Pb|Hg)?") ~ 'INORG_FORMULA', # Simple Cyanides, e.g., NaCN, KCN, AgCN
+        stringr::str_detect(molFormula, "SCN(Na|K|Ag|Pb|Hg)?") ~ 'INORG_FORMULA', # Simple Thiocyanates, e.g., NaSCN, KSCN
         molFormula %in% c("CCl4", "CF4", "CBr4", "CI4", "CS2") ~
           'INORG_FORMULA', # Simple carbon halides/sulfides
 
-        # General Organic Formulas (contains Carbon and Hydrogen - this is a strong organic indicator)
-        str_detect(molFormula, "C") & str_detect(molFormula, "H") ~
-          'ORG_FORMULA',
-
-        # Purely inorganic formulas (no Carbon) - This covers more complex inorganic compounds without C.
-        # It's here *after* the specific single-element rule to avoid redundant checks.
-        !str_detect(molFormula, "C") &
-          str_detect(molFormula, inorganic_final_regex) ~ # Added perl=TRUE for consistency
+        # 2. Pure elements or simple diatomic/monoatomic inorganic compounds (molFormula perspective)
+        # This now correctly allows elements whose symbols contain 'C' (like Cm, Co, Ca) to be caught,
+        # as they are not caught by the specific carbon rules above.
+        (stringr::str_detect(molFormula, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") | # Matches [Cu], [Na+], [O-2], [Cm]
+          stringr::str_detect(molFormula, "^[A-Z][a-z]?[0-9]*$")) & # Matches Cu, O, Fe2, H2, Cl2 (for diatomic)
+          stringr::str_detect(molFormula, inorganic_element_pattern) ~ # Still ensure the element symbol is a known inorganic one
           'INORG_FORMULA',
 
-        # Fallback for remaining C-containing formulas.
-        # If they reach here, it means:
-        # 1. They are NOT Markush/Isotope.
-        # 2. They are NOT any of the *specific* inorganic C forms listed above.
-        # 3. They do NOT contain Hydrogen (so they didn't match the ORG_FORMULA C+H rule).
-        # These compounds (like C2Cl4 from previous example) are best decided by SMILES rules,
-        # so classify as UNKNOWN_FORMULA here to force the fallthrough to the SMILES stage.
-        str_detect(molFormula, "C") ~ 'UNKNOWN_FORMULA', # This was the critical change for C2Cl4
+        # 3. General Organic Formulas (contains Carbon and Hydrogen) - After specific inorganics with C
+        stringr::str_detect(molFormula, "C") & stringr::str_detect(molFormula, "H") ~
+          'ORG_FORMULA',
 
-        .default = 'UNKNOWN_FORMULA' # Should be rare with these rules
+        # 4. Purely inorganic formulas (no Carbon at all) - For more complex non-carbon inorganics like H2SO4
+        !stringr::str_detect(molFormula, "C") &
+          stringr::str_detect(molFormula, inorganic_final_regex) ~
+          'INORG_FORMULA',
+
+        # 5. Fallback for remaining C-containing formulas that didn't match specific inorganic C rules
+        # or the C+H organic rule. These are typically complex enough that SMILES can help.
+        stringr::str_detect(molFormula, "C") ~ 'UNKNOWN_FORMULA',
+
+        .default = 'UNKNOWN_FORMULA' # Catch any cases not yet classified
       ),
 
       # Final Classification: Prioritize stage1, then fall back to SMILES
-      class = case_when(
+      class = dplyr::case_when(
         class_stage1 != "UNKNOWN_FORMULA" ~ class_stage1,
         sapply(smiles, smiles_is_likely_organic_refined) ~ "ORG_SMILES",
         sapply(smiles, smiles_is_likely_inorganic) ~ "INORG_SMILES",
@@ -299,21 +303,24 @@ classify_compounds <- function(df) {
       ),
 
       # New Super Category Column
-      super_class = case_when(
+      super_class = dplyr::case_when(
         class == "MARKUSH" ~ "Markush",
         class == "ISOTOPE" ~ "Isotope",
-        class %in% c("ORG_FORMULA", "ORG_SMILES") ~ "Organic",
-        class %in% c("INORG_FORMULA", "INORG_SMILES") ~ "Inorganic",
+        class %in% c("ORG_FORMULA", "ORG_SMILES") ~ "Organic compounds",
+        class %in% c("INORG_FORMULA", "INORG_SMILES") ~ "Inorganic compounds",
         .default = "Unknown" # For any remaining UNKNOWN_FINAL
       )
     ) %>%
-    select(-class_stage1) # Remove intermediate stage
+    dplyr::select(-class_stage1) # Remove intermediate stage
 
   return(df_classified)
 }
 
+
+
 # --- Analysis here ---
-# DO NOT RUN
+#CHECKING WORK HERE
+# DO NOT RUN, DO NOT PARSE
 
 temp <- ct_list(
   list_name = c(
@@ -328,44 +335,46 @@ temp <- ct_list(
   list_c() %>%
   unique()
 
-q2 <- ct_details(query = pt$elements$dtxsid, projection = 'all') %>%
+#q2 <- ct_details(query = pt$elements$dtxsid, projection = 'all') %>%
   select(molFormula, preferredName, dtxsid, smiles, isMarkush, inchiString)
 
 q2 <- ct_details(query = temp, projection = 'all') %>%
   select(molFormula, preferredName, dtxsid, smiles, isMarkush, inchiString)
 
+
 {
   q1 <- q2 %>%
-    slice_sample(n = 100)
+    slice_sample(n = 10000)
 
   q3 <- classify_compounds(q1) %>%
     filter(isMarkush == FALSE) %>%
-    select(dtxsid, smiles, super_class)
+    select(dtxsid, smiles, super_class) #%>% filter(super_class != 'Inorganic')
 
-  # q4 <- q1 %>%
-  #   pull(dtxsid) %>%
-  #   chemi_classyfire(query = .)
+  q4 <- q1 %>%
+    pull(dtxsid) %>%
+    chemi_classyfire(query = .)
 
-  # q5 <- q4 %>%
-  #   discard(., is.logical) %>%
-  #   map(., function(inner_list) {
-  #     map(inner_list, function(x) {
-  #       if (is.null(x)) {
-  #         NA # Convert NULL to NA
-  #       } else {
-  #         x # Otherwise return the original value
-  #       }
-  #     })
-  #   }) %>%
-  #   map(., as_tibble) %>%
-  #   list_rbind(names_to = 'dtxsid')
+  q5 <- q4 %>%
+    discard(., is.logical) %>%
+    map(., function(inner_list) {
+      map(inner_list, function(x) {
+        if (is.null(x)) {
+          NA # Convert NULL to NA
+        } else {
+          x # Otherwise return the original value
+        }
+      })
+    }) %>%
+    map(., as_tibble) %>%
+    list_rbind(names_to = 'dtxsid')
 
-  # q6 <- left_join(q3, q5) %>%
-  #   mutate(
-  #     agree = case_when(
-  #       super_class == kingdom ~ TRUE,
-  #       .default = FALSE
-  #     ),
-  #     .after = smiles
-  #   ) #%>% filter(!is.na(kingdom), agree == FALSE) %>% select(-agree)
+  q6 <- left_join(q3, q5) %>%
+    #select(-kingdom)
+    mutate(
+      agree = case_when(
+        super_class == kingdom ~ TRUE,
+        .default = FALSE
+      ),
+      .after = smiles
+    ) #%>% filter(!is.na(kingdom), agree == FALSE) %>% select(-agree)
 }
