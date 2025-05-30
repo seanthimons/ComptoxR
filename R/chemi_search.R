@@ -23,60 +23,62 @@
 #' @return A dataframe
 #' @export
 
-chemi_search <- function(query,
-                         searchType = c(
-                           "exact",
-                           "substruture",
-                           "similar",
-                           "mass",
-                           "hazard",
-                           "features"
-                         ),
-                         similarity_type = c("tanimoto", "euclid", "tversky"),
-                         min_similarity = NULL,
-                         min_toxicity = c("VH", "H", "M", "L", "A"),
-                         min_auth = c("auth", "screen", "qsar"),
-                         hazard_name = c(
-                           "acute_oral",
-                           "acute_inhal",
-                           "acute_dermal",
-                           "cancer",
-                           "geno",
-                           "endo",
-                           "reprod",
-                           "develop",
-                           "neuro_single",
-                           "neuro_repeat",
-                           "sys_single",
-                           "sys_repeat",
-                           "skin_sens",
-                           "skin_irr",
-                           "eye",
-                           "aq_acute",
-                           "aq_chron",
-                           "persis",
-                           "bioacc",
-                           "expo"
-                         ),
-                         filter_results = FALSE,
-                         filter_inc = list(
-                           "stereo",
-                           "chiral",
-                           "isotopes",
-                           "charged",
-                           "multicomponent",
-                           "radicals",
-                           "salts",
-                           "polymers",
-                           "sgroups"
-                         ),
-                         element_inc = NULL,
-                         element_exc = NULL,
-                         mass_type = c("mono", "mw", "abu"),
-                         min_mass = NULL,
-                         max_mass = NULL,
-                         debug = F,
-                         ...) {
+chemi_search <- function(
+  query,
+  searchType = c(
+    "exact",
+    "substruture",
+    "similar",
+    "mass",
+    "hazard",
+    "features"
+  ),
+  similarity_type = c("tanimoto", "euclid", "tversky"),
+  min_similarity = NULL,
+  min_toxicity = c("VH", "H", "M", "L", "A"),
+  min_auth = c("auth", "screen", "qsar"),
+  hazard_name = c(
+    "acute_oral",
+    "acute_inhal",
+    "acute_dermal",
+    "cancer",
+    "geno",
+    "endo",
+    "reprod",
+    "develop",
+    "neuro_single",
+    "neuro_repeat",
+    "sys_single",
+    "sys_repeat",
+    "skin_sens",
+    "skin_irr",
+    "eye",
+    "aq_acute",
+    "aq_chron",
+    "persis",
+    "bioacc",
+    "expo"
+  ),
+  filter_results = FALSE,
+  filter_inc = list(
+    "stereo",
+    "chiral",
+    "isotopes",
+    "charged",
+    "multicomponent",
+    "radicals",
+    "salts",
+    "polymers",
+    "sgroups"
+  ),
+  element_inc = NULL,
+  element_exc = NULL,
+  mass_type = c("mono", "mw", "abu"),
+  min_mass = NULL,
+  max_mass = NULL,
+  debug = F,
+  ...
+) {
   # searchType --------------------------------------------------------------
 
   if (missing(searchType) | is.null(searchType) | length(searchType) > 1) {
@@ -95,7 +97,7 @@ chemi_search <- function(query,
 
   # query -------------------------------------------------------------------
 
-  if(missing(query) == TRUE){
+  if (missing(query) == TRUE) {
     query <- NULL
   }
 
@@ -104,15 +106,15 @@ chemi_search <- function(query,
   if (searchType %in% c("HAZARD", "FEATURES")) {
     mass_type <- "mono" # seems to be always needed?
     query <- "\n  Ketcher  4112412132D 1   1.00000     0.00000     0\n\n  0  0  0     0  0            999 V2000\nM  END\n"
-    }else {
-  if (searchType %in% c("MASS")) {
+  } else {
+    if (searchType %in% c("MASS")) {
       query <- NULL
     } else {
-        cli_alert_info(paste0("Grabbing MOL file for {query}"))
+      cli_alert_info(paste0("Grabbing MOL file for {query}"))
     }
-      query <- ct_file(query = query)
-      mass_type <- "mono" # seems to be always needed?
-    }
+    query <- ct_file(query = query)
+    mass_type <- "mono" # seems to be always needed?
+  }
 
   # records -----------------------------------------------------------------
 
@@ -137,7 +139,6 @@ chemi_search <- function(query,
     as.numeric(min_similarity)
   }
 
-
   # mass --------------------------------------------------------------------
 
   if (searchType == "mass" & length(mass_type) > 1) {
@@ -159,7 +160,6 @@ chemi_search <- function(query,
       match.arg(min_toxicity, c("VH", "H", "M", "L", "A"))
     }
 
-
   # auth --------------------------------------------------------------------
 
   if (length(min_auth) > 1) {
@@ -171,7 +171,6 @@ chemi_search <- function(query,
       min_auth == "qsar" ~ "QSAR"
     )
   }
-
 
   # hazard endpoint ---------------------------------------------------------
 
@@ -205,68 +204,65 @@ chemi_search <- function(query,
 
   # features -----------------------------------------------------------------
 
-  if(searchType == 'FEATURES' & filter_results == FALSE){
+  if (searchType == 'FEATURES' & filter_results == FALSE) {
     cli_alert_warning('WARNING: Missing feature filters!')
     filt_list <- list(NULL)
-
   }
 
   if (filter_results == FALSE & searchType != 'FEATURES') {
     # cli_alert('No filter')
     filt_list <- list(NULL)
   } else {
-    if(searchType == 'FEATURES' & filter_results == TRUE){
-    # cli_alert('Filtering')
-    filt_list <- list(
-      "charged",
-      "chiral",
-      "isotopes",
-      "multicomponent",
-      "polymers",
-      "radicals",
-      "salts",
-      "sgroups",
-      "stereo"
-    )
+    if (searchType == 'FEATURES' & filter_results == TRUE) {
+      # cli_alert('Filtering')
+      filt_list <- list(
+        "charged",
+        "chiral",
+        "isotopes",
+        "multicomponent",
+        "polymers",
+        "radicals",
+        "salts",
+        "sgroups",
+        "stereo"
+      )
 
-    filt_list <- map(filter_inc, ~ is.element(., filt_list)) %>%
-      set_names(., ~ paste0("filter-", filter_inc))
-  }}
-
+      filt_list <- map(filter_inc, ~ is.element(., filt_list)) %>%
+        set_names(., ~ paste0("filter-", filter_inc))
+    }
+  }
 
   # elements ----------------------------------------------------------------
   ## include ----------------------------------------------------------------
 
-  if(!is.null(element_inc)){
+  if (!is.null(element_inc)) {
     element_inc_orig <- element_inc
     element_inc <- paste(element_inc, collapse = ",")
-    }
+  }
   ## exclude ----------------------------------------------------------------
 
-  if(is.null(element_exc)){
+  if (is.null(element_exc)) {
     #print('No exlusion')
-    element_exc  <- NULL
-  }else{
-
-  if(is.character(element_exc) & element_exc != 'ALL'){
-     # print(element_exc)
+    element_exc <- NULL
+  } else {
+    if (is.character(element_exc) & element_exc != 'ALL') {
+      # print(element_exc)
       element_exc <- paste(element_exc, collapse = " ,")
-
-      }else{
-
-  if(element_exc == 'ALL'){
-      #print("Exlude all")
-    element_exc <- ComptoxR::pt$elements %>%
-      filter(., !c(Symbol %in% element_inc_orig)) %>%
-      filter(.,  as.numeric(Number) <= 103) %>%
-        select(Symbol) %>%
-        unique() %>%
-        unlist() %>%
-        sort() %>%
-        paste0(., collapse = ", ")
-  #print(element_exc)
-      }}}
-
+    } else {
+      if (element_exc == 'ALL') {
+        #print("Exlude all")
+        element_exc <- ComptoxR::pt$elements %>%
+          filter(., !c(Symbol %in% element_inc_orig)) %>%
+          filter(., as.numeric(Number) <= 103) %>%
+          select(Symbol) %>%
+          unique() %>%
+          unlist() %>%
+          sort() %>%
+          paste0(., collapse = ", ")
+        #print(element_exc)
+      }
+    }
+  }
 
   # payload -----------------------------------------------------------------
 
@@ -291,29 +287,28 @@ chemi_search <- function(query,
     "searchType" = searchType,
     "params" = params,
     "query" = query
-  ) %>% compact()
+  ) %>%
+    compact()
 
   # payload alert -----------------------------------------------------------
 
-    cli_text('\n')
-    cli_rule(left = "Payload options")
-    cli_dl(
-      c(
-        "Search type" = "{searchType}",
-        "Similarity type" = "{similarity_type}",
-        "Minimum simularity" = "{min_sim}",
-        "Minimum toxicity" = "{min_toxicity}"
-        # "Params" = "{params}"
-      )
+  cli_text('\n')
+  cli_rule(left = "Payload options")
+  cli_dl(
+    c(
+      "Search type" = "{searchType}",
+      "Similarity type" = "{similarity_type}",
+      "Minimum simularity" = "{min_sim}",
+      "Minimum toxicity" = "{min_toxicity}"
+      # "Params" = "{params}"
     )
-    cli_rule()
-
-
+  )
+  cli_rule()
 
   # request -----------------------------------------------------------------
 
   response <- POST(
-    url =  paste0(Sys.getenv("chemi_burl"), "api/search"),
+    url = paste0(Sys.getenv("chemi_burl"), "api/search"),
     body = payload,
     content_type("application/json"),
     #accept("*/*"),
@@ -332,16 +327,19 @@ chemi_search <- function(query,
       map(., as_tibble) %>%
       list_rbind()
 
-    if('similarity' %in% colnames(df)){
+    if ('similarity' %in% colnames(df)) {
       df <- df %>%
-        mutate(relationship = case_when(
-          sid == query_string ~ 'parent',
-          .default = 'child'
-        ))
-    }else{df}
+        mutate(
+          relationship = case_when(
+            sid == query_string ~ 'parent',
+            .default = 'child'
+          )
+        )
+    } else {
+      df
+    }
 
-  cli_alert_success('{trc} compounds found!')
-
+    cli_alert_success('{trc} compounds found!')
   } else {
     cli_alert_danger("\nBad request at search!")
   }
@@ -357,5 +355,4 @@ chemi_search <- function(query,
   } else {
     return(df)
   }
-
 }

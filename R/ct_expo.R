@@ -16,8 +16,11 @@
 #' @return A list of data frames
 #' @export
 
-ct_exposure <- function(query, param = c('func_use', 'product_data', 'list'), ccte_api_key = NULL){
-
+ct_exposure <- function(
+  query,
+  param = c('func_use', 'product_data', 'list'),
+  ccte_api_key = NULL
+) {
   burl <- Sys.getenv('burl')
 
   if (is.null(ccte_api_key)) {
@@ -27,7 +30,8 @@ ct_exposure <- function(query, param = c('func_use', 'product_data', 'list'), cc
   cli::cli_rule(left = 'Exposure payload options')
   cli::cli_dl(c(
     'Compound count' = '{length(query)}',
-    'Search param' = '{param}'))
+    'Search param' = '{param}'
+  ))
 
   surl_list <- list(
     func_use = list(
@@ -56,45 +60,59 @@ ct_exposure <- function(query, param = c('func_use', 'product_data', 'list'), cc
     unnest(surl) %>%
     rowwise() %>%
     mutate(
-      url = paste0(Sys.getenv('burl'), surl, query), .keep = 'all',
-      surl = str_remove_all(surl, 'exposure/|/by-dtxsid/')) %>%
+      url = paste0(Sys.getenv('burl'), surl, query),
+      .keep = 'all',
+      surl = str_remove_all(surl, 'exposure/|/by-dtxsid/')
+    ) %>%
     ungroup() %>%
     split(.$surl) %>%
-    map(., ~discard_at(., c('surl'))) %>%
-    map(., ~modify_in(., c('url'), as.list)) %>%
+    map(., ~ discard_at(., c('surl'))) %>%
+    map(., ~ modify_in(., c('url'), as.list)) %>%
     map(., as.list) %>%
-    map(., ~map_at(., .at = 'query', .f = ~setNames(., query)))
+    map(., ~ map_at(., .at = 'query', .f = ~ setNames(., query)))
 
-  surl <- map(search, ~{
+  surl <- map(
+    search,
+    ~ {
+      .x <- map2(
+        .x = .x$query,
+        .y = .x$url,
+        ~ {
+          .x <- VERB("GET", url = .y, add_headers("x-api-key" = ct_api_key()))
 
-    .x <- map2(.x =.x$query, .y = .x$url, ~{
-
-      .x  <- VERB("GET", url = .y, add_headers("x-api-key" = ct_api_key()))
-
-      if(.x$status_code != 200){
-        .x <- NULL
-      }else{
-        .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8"))
-      }
-
-    }, .progress = T) %>%
-      compact() %>%
-      list_rbind(., names_to = 'dtxsid') %>%
-      as_tibble()
-  }, .progress = T)
-
-  cat_surl <- map(cat_surl, ~{
-
-    .x <- VERB("GET", url = paste0(burl, .x), add_headers("x-api-key" = ct_api_key()))
-
-    if(.x$status_code != 200){
-      .x <- NULL
-    }else{
-      .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8")) %>%
+          if (.x$status_code != 200) {
+            .x <- NULL
+          } else {
+            .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8"))
+          }
+        },
+        .progress = T
+      ) %>%
+        compact() %>%
+        list_rbind(., names_to = 'dtxsid') %>%
         as_tibble()
-    }
+    },
+    .progress = T
+  )
 
-  }, .progress = T)
+  cat_surl <- map(
+    cat_surl,
+    ~ {
+      .x <- VERB(
+        "GET",
+        url = paste0(burl, .x),
+        add_headers("x-api-key" = ct_api_key())
+      )
+
+      if (.x$status_code != 200) {
+        .x <- NULL
+      } else {
+        .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8")) %>%
+          as_tibble()
+      }
+    },
+    .progress = T
+  )
 
   df <- list(
     data = surl,

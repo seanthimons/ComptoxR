@@ -8,8 +8,7 @@
 #' @return A tibble of results
 #' @export
 
-ct_ghs <- function(query){
-
+ct_ghs <- function(query) {
   ct_df <- ct_details(query)
   ct_df <- ct_df %>%
     select(dtxsid, pubchemCid) %>%
@@ -29,7 +28,7 @@ ct_ghs <- function(query){
     purrr::map_df(.x, f, ..., .id = .id)
   }
 
-  ct_df2 <- map_df_progress(ct_df$cid, ~pc_sect(.,'Safety and Hazards'))
+  ct_df2 <- map_df_progress(ct_df$cid, ~ pc_sect(., 'Safety and Hazards'))
   ct_df2$CID <- as.integer(ct_df2$CID)
   ct_df2 <- filter(ct_df2, str_starts(ct_df2$Result, 'H')) %>%
     rename(cid = CID)

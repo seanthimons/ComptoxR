@@ -8,21 +8,21 @@
 #' @return A tibble of results
 #' @export
 
-tp_variable_coverage <- function(table, id = NA){
-
-  if(missing(id) == T){
+tp_variable_coverage <- function(table, id = NA) {
+  if (missing(id) == T) {
     cli::cli_abort('Missing id variable!')
-  }else{
+  } else {
+    coverage_score <- table %>%
+      mutate(data_coverage = (rowSums(is.na(.))))
 
-      coverage_score <- table %>%
-        mutate(data_coverage = (rowSums(is.na(.))))
+    coverage_score <- coverage_score %>%
+      mutate(
+        data_coverage = 1 - (data_coverage / (ncol(coverage_score) - 2))
+      ) %>%
+      select(id, data_coverage)
 
-      coverage_score <- coverage_score %>%
-        mutate(data_coverage = 1-(data_coverage/(ncol(coverage_score)-2))) %>%
-        select(id, data_coverage)
-
-      return(coverage_score)
-    }
+    return(coverage_score)
+  }
 }
 
 #' Per endpoint - compound availability scoring
@@ -39,43 +39,44 @@ tp_variable_coverage <- function(table, id = NA){
 #' @return A tibble of results
 #' @export
 
-tp_endpoint_coverage <- function(table, id = NA, suffix = NA, filter = NA){
-
-  if(missing(id) == T){
+tp_endpoint_coverage <- function(table, id = NA, suffix = NA, filter = NA) {
+  if (missing(id) == T) {
     cli::cli_abort('Missing id variable!')
   }
 
-  if(is.na(filter) == T){
+  if (is.na(filter) == T) {
     filt_score = 0.5
     cli::cli_alert_warning('Defaulting to 0.5% score for cutoff!')
+  } else {
+    filt_score <- as.numeric(filter)
+  }
 
-  }else{filt_score <- as.numeric(filter)}
-
-  if(is.na(suffix) == T){
+  if (is.na(suffix) == T) {
     endpoint_score <- table %>%
       select(!c(id)) %>%
-      map( ~sum(is.na(.))) %>%
+      map(~ sum(is.na(.))) %>%
       as.data.frame() %>%
-      mutate(across(everything(), ~ 1-(.x/nrow(table)))) %>%
+      mutate(across(everything(), ~ 1 - (.x / nrow(table)))) %>%
       pivot_longer(everything(), names_to = 'endpoint', values_to = 'score')
-  }else{
+  } else {
     endpoint_score <- table %>%
       select(!c(id)) %>%
       select(c(contains(suffix))) %>%
-      map( ~sum(is.na(.))) %>%
+      map(~ sum(is.na(.))) %>%
       as.data.frame() %>%
-      mutate(across(everything(), ~ 1-(.x/nrow(table)))) %>%
+      mutate(across(everything(), ~ 1 - (.x / nrow(table)))) %>%
       pivot_longer(everything(), names_to = 'endpoint', values_to = 'score')
   }
 
   endpoint_filt_weight <-
     endpoint_score %>%
     filter(
-      score >= filt_score) %>%
+      score >= filt_score
+    ) %>%
     mutate(
       weight = 1,
       group = 0
-      )
+    )
 
   return(endpoint_filt_weight)
 }
@@ -92,28 +93,28 @@ tp_endpoint_coverage <- function(table, id = NA, suffix = NA, filter = NA){
 #' @return A vector
 #' @export
 
-tp_single_score <- function(x, zero_fill = NA, na_fill = NA){
-
-
+tp_single_score <- function(x, zero_fill = NA, na_fill = NA) {
   #df <- (x - min(x, na.rm = TRUE))/diff(range(x, na.rm = TRUE))
 
   df <- scales::rescale(x, na.rm = TRUE)
 
   df[df == 0] <- case_when(
-   zero_fill == 'min' ~ min(df[df > 0], na.rm = T),
-   zero_fill == 'mean' ~ mean(df[df > 0], na.rm = T),
-   zero_fill == 'max' ~ max(df[df > 0], na.rm = T),
-   zero_fill == 'half_min' ~ min(df[df > 0], na.rm = T)*0.5,
+    zero_fill == 'min' ~ min(df[df > 0], na.rm = T),
+    zero_fill == 'mean' ~ mean(df[df > 0], na.rm = T),
+    zero_fill == 'max' ~ max(df[df > 0], na.rm = T),
+    zero_fill == 'half_min' ~ min(df[df > 0], na.rm = T) * 0.5,
     is.null(zero_fill) | is.na(zero_fill) ~ 0,
-    .default = 0)
+    .default = 0
+  )
 
   df[is.na(df)] <- case_when(
     na_fill == 'min' ~ min(df[df > 0], na.rm = T),
     na_fill == 'mean' ~ mean(df[df > 0], na.rm = T),
     na_fill == 'max' ~ max(df[df > 0], na.rm = T),
-    na_fill == 'half_min' ~ min(df[df > 0], na.rm = T)*0.5,
+    na_fill == 'half_min' ~ min(df[df > 0], na.rm = T) * 0.5,
     is.null(na_fill) | is.na(na_fill) ~ 0,
-    .default = 0)
+    .default = 0
+  )
 
   return(df)
 }
@@ -132,19 +133,25 @@ tp_single_score <- function(x, zero_fill = NA, na_fill = NA){
 #' @return A tibble of results
 #' @export
 
-tp_combined_score <- function(table, id = NULL, bias = NULL, zero_fill, na_fill){
-
-  if(missing(table)) cli::cli_abort('No table present!')
+tp_combined_score <- function(
+  table,
+  id = NULL,
+  bias = NULL,
+  zero_fill,
+  na_fill
+) {
+  if (missing(table)) cli::cli_abort('No table present!')
 
   cli::cat_line()
   cli::cli_rule(left = 'ID variable')
 
-  if(is.null(id) == TRUE){
-    id <- colnames(table[1,1])
+  if (is.null(id) == TRUE) {
+    id <- colnames(table[1, 1])
 
-    cli::cli_alert_warning((col_yellow('Defaulting to first column for id: {id}')))
-
-  }else{
+    cli::cli_alert_warning(
+      (col_yellow('Defaulting to first column for id: {id}'))
+    )
+  } else {
     cli::cli_alert_success('ID column: {id}')
   }
 
@@ -156,32 +163,33 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, zero_fill, na_fill)
   cli::cli_rule(left = 'Bias table')
   cli::cat_line()
 
-  if(is.null(bias) == TRUE){
+  if (is.null(bias) == TRUE) {
     cli_alert_warning(
-        col_yellow('WARNING:
+      col_yellow(
+        'WARNING:
                    No bias table detected, defaulting to filter = 0.5!
                    Did you know about `tp_endpoint_coverage()`?
                    '
-          ))
+      )
+    )
 
-      bias <- tp_endpoint_coverage(table, id, suffix = NA, filter = 0.5)
-      bias %>% print(n = Inf)
-    tp_list$bias <- bias
-  }else{
+    bias <- tp_endpoint_coverage(table, id, suffix = NA, filter = 0.5)
     bias %>% print(n = Inf)
     tp_list$bias <- bias
-    }
+  } else {
+    bias %>% print(n = Inf)
+    tp_list$bias <- bias
+  }
 
   cat_line()
 
   #TODO-----
   tp <- table %>%
-    select(c(id,bias$endpoint))
+    select(c(id, bias$endpoint))
 
   bias <- bias %>%
-      select(endpoint, weight) %>%
-      pivot_wider(names_from = endpoint,
-                  values_from = weight)
+    select(endpoint, weight) %>%
+    pivot_wider(names_from = endpoint, values_from = weight)
 
   #Variable coverage----
 
@@ -193,62 +201,66 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, zero_fill, na_fill)
   cat_line()
   cli_rule()
 
-
   #Backfilling----
 
-    if(missing(back_fill) == TRUE){cli_alert_warning('No back filling option specified!')
-      back_fill <- NULL
-      }else{
-      cli_alert_warning('Back filling option selected: {back_fill}')
-      }
-    cat_line()
+  if (missing(back_fill) == TRUE) {
+    cli_alert_warning('No back filling option specified!')
+    back_fill <- NULL
+  } else {
+    cli_alert_warning('Back filling option selected: {back_fill}')
+  }
+  cat_line()
 
-#TP scores----
-    tp_scores <- tp %>%
-      #removes INF
-      mutate(
-        across(
-          .cols = everything(), ~ ifelse(is.infinite(.x), 0, .x))
-        ) %>%
-      #tie breaking logic needed here....
-      mutate(
-        across(
-          .cols = !contains(id),
-                    ~{if(length(na.omit(.)) == 1){
-                      ifelse(is.na(.x) == TRUE, 0, 1)
-                    }else{
-                      if(sd(na.omit(.)) == 0){
-                        ifelse(is.na(.), NA, 1)
-                      }else{tp_single_score(., back_fill) %>%
-                          round(digits = 5)}
+  #TP scores----
+  tp_scores <- tp %>%
+    #removes INF
+    mutate(
+      across(
+        .cols = everything(),
+        ~ ifelse(is.infinite(.x), 0, .x)
+      )
+    ) %>%
+    #tie breaking logic needed here....
+    mutate(
+      across(
+        .cols = !contains(id),
+        ~ {
+          if (length(na.omit(.)) == 1) {
+            ifelse(is.na(.x) == TRUE, 0, 1)
+          } else {
+            if (sd(na.omit(.)) == 0) {
+              ifelse(is.na(.), NA, 1)
+            } else {
+              tp_single_score(., back_fill) %>%
+                round(digits = 5)
+            }
+          }
+        }
+      )
+    ) %>%
+    mutate(
+      across(
+        where(is.numeric),
+        ~ replace_na(., 0)
+      )
+    )
 
-                    }}
-          )
-        ) %>%
-      mutate(
-        across(
-          where(is.numeric), ~replace_na(.,0))
-        )
+  tp_names <- tp_scores[, id] %>%
+    as.data.frame() #%>% dplyr::rename(id = dtxsid)
 
-    tp_names <- tp_scores[,id] %>%
-      as.data.frame() #%>% dplyr::rename(id = dtxsid)
+  tp_scores <- data.frame(mapply('*', tp_scores[, 2:ncol(tp_scores)], bias)) %>%
+    as_tibble()
 
-    tp_scores <- data.frame(mapply('*',tp_scores[,2:ncol(tp_scores)], bias)) %>%
-      as_tibble()
+  tp_scores <- cbind(tp_names, tp_scores)
 
-    tp_scores <- cbind(tp_names, tp_scores)
+  tp_scores <- tp_scores %>%
+    rowwise() %>%
+    mutate(score = rowSums(across(where(is.numeric)))) %>%
+    relocate(score, .after = id) %>%
+    arrange(desc(score)) %>%
+    ungroup()
 
-    tp_scores <- tp_scores %>%
-      rowwise() %>%
-      mutate(score =
-        rowSums(across(where(is.numeric))
-        )
-      ) %>%
-      relocate(score, .after = id) %>%
-      arrange(desc(score)) %>%
-      ungroup()
-
-    tp_list$tp_scores <- tp_scores
+  tp_list$tp_scores <- tp_scores
 
   return(tp_list)
 }
@@ -259,8 +271,7 @@ tp_combined_score <- function(table, id = NULL, bias = NULL, zero_fill, na_fill)
 #'
 #' @return A plot
 
-tp_plot <- function(toxpi_list, ...){
-
+tp_plot <- function(toxpi_list, ...) {
   var <- toxpi_list$toxpi$variable_coverage
   tp <- toxpi_list$toxpi$tp_scores
 
@@ -269,23 +280,23 @@ tp_plot <- function(toxpi_list, ...){
     left_join(., var, by = 'dtxsid') %>%
     select(dtxsid, score, data_coverage) %>%
     mutate(dtxsid = forcats::fct_reorder(dtxsid, score)) %>%
-    ggplot(mapping = aes(
-      x = dtxsid,
-      y = score,
-      color = data_coverage
-    )) +
+    ggplot(
+      mapping = aes(
+        x = dtxsid,
+        y = score,
+        color = data_coverage
+      )
+    ) +
     geom_point(
       size = 1.5
     ) +
     scale_color_continuous(type = "viridis") +
-    coord_flip()+
+    coord_flip() +
     t
 
- return(plot)
+  return(plot)
 }
 
 
-tp_polar_plot <- function(toxpi_list, ...){
-
+tp_polar_plot <- function(toxpi_list, ...) {
 }
-

@@ -14,11 +14,13 @@
 #' @return A list or dataframe
 #' @export
 
-ct_properties <- function(search_param,
-                          query,
-                          range,
-                          coerce = TRUE,
-                          ccte_api_key = NULL) {
+ct_properties <- function(
+  search_param,
+  query,
+  range,
+  coerce = TRUE,
+  ccte_api_key = NULL
+) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -32,7 +34,6 @@ ct_properties <- function(search_param,
   }
 
   burl <- Sys.getenv("burl")
-
 
   if (search_param == "compound") {
     cli_rule(left = "Phys-chem properties payload options")
@@ -50,23 +51,34 @@ ct_properties <- function(search_param,
     urls <- paste0(burl, surl)
 
     if (length(query) > 1000) {
-      sublists <- split(query, rep(1:ceiling(length(query) / 1000), each = 1000, length.out = length(query)))
+      sublists <- split(
+        query,
+        rep(
+          1:ceiling(length(query) / 1000),
+          each = 1000,
+          length.out = length(query)
+        )
+      )
       sublists <- map(sublists, as.list)
 
-      df <- map(sublists, ~ {
-        .x <- POST(
-          url = urls,
-          body = .x,
-          add_headers(.headers = headers),
-          content_type("application/json"),
-          accept("application/json, text/plain, */*"),
-          encode = "json",
-          progress() # progress bar
-        )
+      df <- map(
+        sublists,
+        ~ {
+          .x <- POST(
+            url = urls,
+            body = .x,
+            add_headers(.headers = headers),
+            content_type("application/json"),
+            accept("application/json, text/plain, */*"),
+            encode = "json",
+            progress() # progress bar
+          )
 
-        .x <- content(.x, "text", encoding = "UTF-8") %>%
-          jsonlite::fromJSON(simplifyVector = TRUE)
-      }) %>% list_rbind()
+          .x <- content(.x, "text", encoding = "UTF-8") %>%
+            jsonlite::fromJSON(simplifyVector = TRUE)
+        }
+      ) %>%
+        list_rbind()
     } else {
       payload <- as.list(query)
 
@@ -128,10 +140,16 @@ ct_properties <- function(search_param,
     `x-api-key` = ct_api_key()
   )
 
-  pred <- GET(url = "https://api-ccte.epa.gov/chemical/property/predicted/name", add_headers(.headers = headers))
+  pred <- GET(
+    url = "https://api-ccte.epa.gov/chemical/property/predicted/name",
+    add_headers(.headers = headers)
+  )
   pred <- fromJSON(content(pred, as = "text", encoding = "UTF-8"))
 
-  exp <- GET(url = "https://api-ccte.epa.gov/chemical/property/experimental/name", add_headers(.headers = headers))
+  exp <- GET(
+    url = "https://api-ccte.epa.gov/chemical/property/experimental/name",
+    add_headers(.headers = headers)
+  )
   exp <- fromJSON(content(exp, as = "text", encoding = "UTF-8"))
 
   df <- bind_rows(pred, exp) %>% distinct(name, propertyId)

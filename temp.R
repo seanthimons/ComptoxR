@@ -344,7 +344,11 @@ q2 <- ct_details(query = temp, projection = 'all') %>%
 
 {
   q1 <- q2 %>%
-    slice_sample(n = 10000)
+    slice_sample(n = 10)
+
+  q1 %>% 
+    pull('dtxsid') %>% 
+    pretty_print(.)
 
   q3 <- classify_compounds(q1) %>%
     filter(isMarkush == FALSE) %>%
@@ -378,3 +382,8 @@ q2 <- ct_details(query = temp, projection = 'all') %>%
       .after = smiles
     ) #%>% filter(!is.na(kingdom), agree == FALSE) %>% select(-agree)
 }
+
+
+q0 <- chemi_resolver(query = q1$dtxsid) %>% set_names(., 'chemical')
+
+q0 <- chemi_hazard(query = q1$dtxsid, analogs = 'substructure', min_sim = 0.85)

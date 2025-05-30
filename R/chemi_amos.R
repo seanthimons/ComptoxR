@@ -18,55 +18,58 @@ chemi_classyfire <- function(query) {
   safe_req_perform <- purrr::safely(httr2::req_perform)
 
   results <- query |>
-    purrr::map(.f = function(q) {
-      #cli::cli_alert_info("Querying DTXSID: {.val {q}}")
-      request <- tryCatch(
-        {
-          httr2::request(glue::glue(
-            "https://ccte-cced-cheminformatics.epa.gov/api/amos/get_classification_for_dtxsid/{q}"
-          ))
-        },
-        error = function(e) {
-          cli::cli_abort(
-            "Error creating request for DTXSID {.val {q}}: {e$message}"
-          )
-          return(NULL)
+    purrr::map(
+      .f = function(q) {
+        #cli::cli_alert_info("Querying DTXSID: {.val {q}}")
+        request <- tryCatch(
+          {
+            httr2::request(glue::glue(
+              "https://ccte-cced-cheminformatics.epa.gov/api/amos/get_classification_for_dtxsid/{q}"
+            ))
+          },
+          error = function(e) {
+            cli::cli_abort(
+              "Error creating request for DTXSID {.val {q}}: {e$message}"
+            )
+            return(NULL)
+          }
+        )
+
+        if (is.null(request)) {
+          return(NA) # Return NA if the request object is NULL
         }
-      )
 
-      if (is.null(request)) {
-        return(NA) # Return NA if the request object is NULL
-      }
+        response <- safe_req_perform(request)
 
-      response <- safe_req_perform(request)
-
-      if (!is.null(response$error)) {
-        cli::cli_alert_danger(
-          "Request failed for DTXSID {.val {q}}: {response$error$message}"
-        )
-        return(NA) # Return NA if the request failed
-      }
-
-      if (httr2::resp_status(response$result) != 200) {
-        cli::cli_alert_warning(
-          "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {q}}"
-        )
-        return(NA) # Return NA for non-200 status codes
-      }
-
-      tryCatch(
-        {
-          httr2::resp_body_json(response$result)
-        },
-        error = function(e) {
+        if (!is.null(response$error)) {
           cli::cli_alert_danger(
-            "Failed to parse JSON response for DTXSID {.val {q}}: {e$message}"
+            "Request failed for DTXSID {.val {q}}: {response$error$message}"
           )
-          return(NA) # Return NA if JSON parsing fails
+          return(NA) # Return NA if the request failed
         }
-      )
-    }, .progress = TRUE)
-  
+
+        if (httr2::resp_status(response$result) != 200) {
+          cli::cli_alert_warning(
+            "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {q}}"
+          )
+          return(NA) # Return NA for non-200 status codes
+        }
+
+        tryCatch(
+          {
+            httr2::resp_body_json(response$result)
+          },
+          error = function(e) {
+            cli::cli_alert_danger(
+              "Failed to parse JSON response for DTXSID {.val {q}}: {e$message}"
+            )
+            return(NA) # Return NA if JSON parsing fails
+          }
+        )
+      },
+      .progress = TRUE
+    )
+
   results <- set_names(results, query)
   return(results)
 }

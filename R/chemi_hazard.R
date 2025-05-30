@@ -96,6 +96,8 @@ chemi_hazard <- function(
     }
   )
 
+  # chemicals <- chemi_resolver(query = query) %>% set_names(., 'chemical')
+
   payload <- list(
     'chemicals' = chemicals,
     'options' = list(

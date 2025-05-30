@@ -1,5 +1,4 @@
-ct_file <- function(query, ccte_api_key = NULL){
-
+ct_file <- function(query, ccte_api_key = NULL) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -25,14 +24,15 @@ ct_file <- function(query, ccte_api_key = NULL){
   #
   # return(df)
 
-    response <- GET(
-      url = paste0(burl, 'chemical-file/mol/search/by-dtxsid/', query),
-      add_headers(`x-api-key` = token)
-    )
+  response <- GET(
+    url = paste0(burl, 'chemical-file/mol/search/by-dtxsid/', query),
+    add_headers(`x-api-key` = token)
+  )
 
-    if(response$status_code == 200){
-      df <- content(response, "text", encoding = "UTF-8")
-      return(df)
-    }else{paste0('Bad file request: ', x)}
-
+  if (response$status_code == 200) {
+    df <- content(response, "text", encoding = "UTF-8")
+    return(df)
+  } else {
+    paste0('Bad file request: ', x)
+  }
 }

@@ -12,38 +12,44 @@
 #' @return A tibble with associated data, where available
 #' @export
 
-ct_production_vol <- function(query, clean = TRUE){
+ct_production_vol <- function(query, clean = TRUE) {
+  urls <- paste0(
+    'https://comptox.epa.gov/dashboard-api/ccdapp2/production-volume/search/by-dtxsid?id=',
+    query
+  )
 
-  urls <- paste0('https://comptox.epa.gov/dashboard-api/ccdapp2/production-volume/search/by-dtxsid?id=', query)
-
-  df <- map2_dfr(urls,query, ~{
-
-    response <- VERB("GET", url = .x, progress())
-    cli_alert('\n{.y}\n')
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-      keep(names(.) %in% c('dtxsid','data'))
-
-  }) %>%
+  df <- map2_dfr(
+    urls,
+    query,
+    ~ {
+      response <- VERB("GET", url = .x, progress())
+      cli_alert('\n{.y}\n')
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+        keep(names(.) %in% c('dtxsid', 'data'))
+    }
+  ) %>%
     compact() %>%
     unpack(cols = 'data') %>%
     select(dtxsid, name, amount)
 
-  if(clean == TRUE){
-
+  if (clean == TRUE) {
     ranged_vol <- df %>%
       filter(str_detect(amount, '-')) %>%
       separate_wider_delim(amount, delim = '-', names = c('low', 'high')) %>%
-      mutate(high = str_remove_all(high, '<| |,') %>% as.numeric,
-             low = str_remove_all(low, '<| |,') %>% as.numeric ,
-             amount = rowMeans(across(low:high))
+      mutate(
+        high = str_remove_all(high, '<| |,') %>% as.numeric,
+        low = str_remove_all(low, '<| |,') %>% as.numeric,
+        amount = rowMeans(across(low:high))
       )
 
-    singled_vol <- df %>% filter(!str_detect(amount, '-')) %>%
+    singled_vol <- df %>%
+      filter(!str_detect(amount, '-')) %>%
       mutate(amount = str_remove_all(amount, '<| |,') %>% as.numeric)
 
     df <- bind_rows(ranged_vol, singled_vol)
-
-  }else{df}
+  } else {
+    df
+  }
 
   return(df)
 }
@@ -57,47 +63,55 @@ ct_production_vol <- function(query, clean = TRUE){
 #' @return A tibble with associated data, where available
 #' @export
 
+ct_functional_use <- function(query) {
+  urls <- paste0(
+    'https://comptox.epa.gov/dashboard-api/ccdapp2/exposure-chemical-func-use/search/by-dtxsid?id=',
+    query
+  )
 
-ct_functional_use <- function(query){
-  urls <- paste0('https://comptox.epa.gov/dashboard-api/ccdapp2/exposure-chemical-func-use/search/by-dtxsid?id=', query)
-
-  df <- map2(urls,query, ~{
-
-    response <- VERB("GET", url = .x, progress())
-    cli_alert('\n{.y}\n')
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  })
+  df <- map2(
+    urls,
+    query,
+    ~ {
+      response <- VERB("GET", url = .x, progress())
+      cli_alert('\n{.y}\n')
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    }
+  )
 
   df <- df %>%
-    map(., ~keep(., names(.x) %in% c('dtxsid', 'reportedFunctionalUse', 'predictedFunctionalUse')))
+    map(
+      .,
+      ~ keep(
+        .,
+        names(.x) %in%
+          c('dtxsid', 'reportedFunctionalUse', 'predictedFunctionalUse')
+      )
+    )
 
   data <- list(
     reported = NULL,
     predicted = NULL
-    )
+  )
 
   data$reported <- df %>%
-    map(., ~pluck(., 2, .default = NULL))
+    map(., ~ pluck(., 2, .default = NULL))
 
   names(data$reported) <- df %>%
-    map(., ~pluck(., 'dtxsid'))
+    map(., ~ pluck(., 'dtxsid'))
 
   data$reported <- data$reported %>%
     map_dfr(., as_tibble, .id = 'dtxsid') %>%
     distinct(., dtxsid, harmonizedFunctionalUse)
 
   data$predicted <- df %>%
-    map(., ~pluck(., 3, .default = NULL))
+    map(., ~ pluck(., 3, .default = NULL))
 
   names(data$predicted) <- df %>%
-    map(., ~pluck(., 'dtxsid'))
+    map(., ~ pluck(., 'dtxsid'))
 
   data$predicted <- data$predicted %>%
     map_dfr(., as_tibble, .id = 'dtxsid')
 
   return(data)
 }
-
-
-
-

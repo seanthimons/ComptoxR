@@ -13,14 +13,12 @@
 #' @export
 
 ct_api_key <- function() {
-
   ccte_api_key <- Sys.getenv("ccte_api_key")
 
-  if(ccte_api_key == ""){
+  if (ccte_api_key == "") {
     ccte_api_key <- "No API key saved. Sys.setenv(ccte_api_key = 'TOKEN HERE')"
     return(ccte_api_key)
-  }else{return(ccte_api_key)}
+  } else {
+    return(ccte_api_key)
+  }
 }
-
-
-

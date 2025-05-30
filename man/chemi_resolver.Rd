@@ -4,10 +4,12 @@
 \alias{chemi_resolver}
 \title{Resolve chemical identifiers using an external API.}
 \usage{
-chemi_resolver(query)
+chemi_resolver(query, mol = FALSE)
 }
 \arguments{
 \item{query}{A character vector of chemical identifiers to resolve.}
+
+\item{mol}{Boolean to return mol section.}
 }
 \value{
 A list containing the resolved chemical names. Each element of the list
@@ -30,9 +32,5 @@ print(resolved_name)
 # Example usage with multiple identifiers:
 resolved_names <- chemi_resolver(c("aspirin", "ibuprofen", "water"))
 print(resolved_names)
-
-# Example usage with dry_run:
-request_obj <- chemi_resolver(c("aspirin"), dry_run = TRUE)
-print(request_obj)
 }
 }

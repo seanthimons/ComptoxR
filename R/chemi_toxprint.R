@@ -8,23 +8,18 @@
 #' @return A dataframe
 #' @export
 
-chemi_toxprint <- function(query,
-                           odds_ratio,
-                           p_val,
-                           true_pos
-                           ){
-
-  if(missing(query) == TRUE){
+chemi_toxprint <- function(query, odds_ratio, p_val, true_pos) {
+  if (missing(query) == TRUE) {
     cli::cli_abort('Missing query!')
-  }else{
+  } else {
     query <- as.list(query)
   }
 
   options <- list(
-    'OR' = ifelse(missing(odds_ratio), 3L , as.numeric(odds_ratio)),
-    'PV1' = ifelse(missing(p_val), 0.05 , as.numeric(p_val)),
-    'TP' = ifelse(missing(true_pos), 3 , as.numeric(true_pos))
-    )
+    'OR' = ifelse(missing(odds_ratio), 3L, as.numeric(odds_ratio)),
+    'PV1' = ifelse(missing(p_val), 0.05, as.numeric(p_val)),
+    'TP' = ifelse(missing(true_pos), 3, as.numeric(true_pos))
+  )
 
   cli::cli_rule(left = 'Payload options')
   cli::cli_dl(options)
@@ -32,15 +27,17 @@ chemi_toxprint <- function(query,
 
   chemicals <- vector(mode = 'list', length = length(query))
 
-  chemicals <- map(query, ~{
-    list(sid = .x)
-  })
+  chemicals <- map(
+    query,
+    ~ {
+      list(sid = .x)
+    }
+  )
 
   payload = list(
     'chemicals' = chemicals,
     'options' = options
   )
-
 
   burl <- paste0(Sys.getenv("chemi_burl"), "api/toxprints/calculate")
 
@@ -55,9 +52,7 @@ chemi_toxprint <- function(query,
   if (response$status_code == 200) {
     df <- content(response, "text", encoding = "UTF-8") %>%
       fromJSON(simplifyVector = FALSE)
-
   } else {
     cli::cli_abort("\nBad request!")
   }
-
 }
