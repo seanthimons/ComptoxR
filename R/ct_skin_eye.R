@@ -7,8 +7,7 @@
 #'
 #' @return Returns a tibble with results
 #' @export
-ct_skin_eye <- function(query, ccte_api_key = NULL,debug = F){
-
+ct_skin_eye <- function(query, ccte_api_key = NULL, debug = F) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -20,15 +19,17 @@ ct_skin_eye <- function(query, ccte_api_key = NULL,debug = F){
 
   urls <- paste0(burl, surl, query)
 
-  df <- map_dfr(urls, ~{
+  df <- map_dfr(
+    urls,
+    ~ {
+      if (debug == TRUE) {
+        cat(.x, "\n")
+      }
 
-    if (debug == TRUE) {
-      cat(.x, "\n")
+      response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
     }
-
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  })
+  )
 
   return(df)
 }

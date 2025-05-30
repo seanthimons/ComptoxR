@@ -11,20 +11,19 @@
 #' @return A tibble of results.
 #' @export
 
-ct_test <- function(query, debug = F){
-
+ct_test <- function(query, debug = F) {
   df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
 
   #Removes bad/ no SMILES compounds
   cat('\nRemoving bad/ no SMILES compounds\n\n')
   df <- df_pre %>% filter(!is.na(qsarReadySmiles))
-  cat('\nDropped',nrow(df_pre)-nrow(df),'compounds.\n')
+  cat('\nDropped', nrow(df_pre) - nrow(df), 'compounds.\n')
 
   #Converts symbols
   cat('\nConverting SMILES strings\n')
   for (i in 1:length(df$qsarReadySmiles)) {
     df$qsarReadySmiles[i] <-
-      str_replace_all(df$qsarReadySmiles[i],'\\[', '%5B') %>%
+      str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
       str_replace_all(., '\\]', '%5D') %>%
       str_replace_all(., '\\@', '%40') %>%
       str_replace_all(., '\\=', '%3D') %>%
@@ -34,52 +33,59 @@ ct_test <- function(query, debug = F){
       str_replace_all(., '\\#', '%23')
   }
 
-
   url <- 'https://comptox.epa.gov/dashboard/web-test/'
 
-  endpoints <- list('LC50', #96 hour fathead minnow
-                    'LC50DM', #48 hour D. magna
-                    'IGC50', #48 hour T. pyriformis
-                    'LD50', #Oral rat
-                    'BCF', #Bioconcentration factor
-                    'DevTox', #Developmental toxicity
-                    'ER_LogRBA', #Estrogen Receptor RBA
-                    'ER_Binary', #Estrogen Receptor Binding
-                    'Mutagenicity', #Ames mutagenicity
-                    'BP', #Normal boiling point,
-                    'FP' #Flashpoint
-
+  endpoints <- list(
+    'LC50', #96 hour fathead minnow
+    'LC50DM', #48 hour D. magna
+    'IGC50', #48 hour T. pyriformis
+    'LD50', #Oral rat
+    'BCF', #Bioconcentration factor
+    'DevTox', #Developmental toxicity
+    'ER_LogRBA', #Estrogen Receptor RBA
+    'ER_Binary', #Estrogen Receptor Binding
+    'Mutagenicity', #Ames mutagenicity
+    'BP', #Normal boiling point,
+    'FP' #Flashpoint
   )
 
-  grid <- expand.grid(endpoints, df$qsarReadySmiles) %>% rename(end = Var1, sm = Var2)
+  grid <- expand.grid(endpoints, df$qsarReadySmiles) %>%
+    rename(end = Var1, sm = Var2)
 
-  urls <- paste0(url, grid$e,'?smiles=', grid$sm)
+  urls <- paste0(url, grid$e, '?smiles=', grid$sm)
 
   #cat('\n', urls, '\n') #debug
   cat('Sending T.E.S.T request\n')
 
-  df <- map_dfr(urls, ~{
+  df <- map_dfr(
+    urls,
+    ~ {
+      if (debug == TRUE) {
+        cat(.x, "\n")
+      }
 
-    if (debug == TRUE) {
-      cat(.x, "\n")
+      response <- VERB("GET", url = .x)
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+        compact()
     }
+  )
 
-    response <- VERB("GET", url = .x)
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
-  })
-
-  if('predictions' %in% colnames(df)){
+  if ('predictions' %in% colnames(df)) {
     df <- df %>%
       unnest(cols = predictions, names_repair = 'universal') %>%
       filter(is.na(errorCode)) %>%
       filter(!is.na(preferredName)) %>%
       filter(!is.na(predValMass) | !is.na(message)) %>%
-      arrange(dtxsid,
-              endpoint,
-              factor(method, levels = c('consensus','hc','sm','gc','nn'))) %>%
-    distinct(endpoint, dtxsid, .keep_all = T) %>%
+      arrange(
+        dtxsid,
+        endpoint,
+        factor(method, levels = c('consensus', 'hc', 'sm', 'gc', 'nn'))
+      ) %>%
+      distinct(endpoint, dtxsid, .keep_all = T) %>%
       rename(compound = dtxsid)
-    }else{df}
+  } else {
+    df
+  }
 
   cat('\nT.E.S.T. request complete!\n')
 
@@ -87,20 +93,19 @@ ct_test <- function(query, debug = F){
 }
 
 
-ct_opera <- function(query){
-
+ct_opera <- function(query) {
   df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
 
   #Removes bad/ no SMILES compounds
   cat('Removing bad/ no SMILES compounds\n')
   df <- df_pre %>% filter(!is.na(qsarReadySmiles))
-  cat('\nDropped',nrow(df_pre)-nrow(df),'compounds.\n')
+  cat('\nDropped', nrow(df_pre) - nrow(df), 'compounds.\n')
 
   #Converts symbols
   cat('\nConverting SMILES strings\n')
   for (i in 1:length(df$qsarReadySmiles)) {
     df$qsarReadySmiles[i] <-
-      str_replace_all(df$qsarReadySmiles[i],'\\[', '%5B') %>%
+      str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
       str_replace_all(., '\\]', '%5D') %>%
       str_replace_all(., '\\@', '%40') %>%
       str_replace_all(., '\\=', '%3D') %>%
@@ -110,50 +115,58 @@ ct_opera <- function(query){
       str_replace_all(., '\\#', '%23')
   }
 
-
   url <- 'https://comptox.epa.gov/dashboard/web-test/'
 
-  endpoints <- list('LC50', #96 hour fathead minnow
-                    'LC50DM', #48 hour D. magna
-                    'IGC50', #48 hour T. pyriformis
-                    'LD50', #Oral rat
-                    'BCF', #Bioconcentration factor
-                    'DevTox', #Developmental toxicity
-                    'ER_LogRBA', #Estrogen Receptor RBA
-                    'ER_Binary', #Estrogen Receptor Binding
-                    'Mutagenicity' #Ames mutagenicity
+  endpoints <- list(
+    'LC50', #96 hour fathead minnow
+    'LC50DM', #48 hour D. magna
+    'IGC50', #48 hour T. pyriformis
+    'LD50', #Oral rat
+    'BCF', #Bioconcentration factor
+    'DevTox', #Developmental toxicity
+    'ER_LogRBA', #Estrogen Receptor RBA
+    'ER_Binary', #Estrogen Receptor Binding
+    'Mutagenicity' #Ames mutagenicity
   )
 
-  grid <- expand.grid(endpoints, df$qsarReadySmiles) %>% rename(end = Var1, sm = Var2)
+  grid <- expand.grid(endpoints, df$qsarReadySmiles) %>%
+    rename(end = Var1, sm = Var2)
 
-  urls <- paste0(url, grid$e,'?smiles=', grid$sm)
+  urls <- paste0(url, grid$e, '?smiles=', grid$sm)
 
   #cat('\n', urls, '\n') #debug
   cat('Sending T.E.S.T request\n')
 
-  df <- map_dfr(urls, ~{
+  df <- map_dfr(
+    urls,
+    ~ {
+      response <- VERB("GET", url = .x)
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
+        compact()
+    }
+  )
 
-
-    response <- VERB("GET", url = .x)
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>% compact()
-  })
-
-  if('predictions' %in% colnames(df)){
+  if ('predictions' %in% colnames(df)) {
     df <- df %>%
       unnest(cols = predictions, names_repair = 'universal') %>%
       filter(is.na(errorCode)) %>%
       filter(!is.na(preferredName)) %>%
-      select(molarLogUnits:preferredName,
-             predValMolarLog:predValMass,
-             expValMolarLog:expActive) %>%
+      select(
+        molarLogUnits:preferredName,
+        predValMolarLog:predValMass,
+        expValMolarLog:expActive
+      ) %>%
       filter(!is.na(predValMass) | !is.na(message)) %>%
-      arrange(dtxsid,
-              factor(endpoint,levels = endpoints),
-              factor(method, levels = c('consensus','hc','sm','gc','nn'))
+      arrange(
+        dtxsid,
+        factor(endpoint, levels = endpoints),
+        factor(method, levels = c('consensus', 'hc', 'sm', 'gc', 'nn'))
       ) %>%
       distinct(endpoint, dtxsid, .keep_all = T) %>%
-    rename(compound = dtxsid)
-  }else{df}
+      rename(compound = dtxsid)
+  } else {
+    df
+  }
 
   cat(green('\nT.E.S.T. request complete!\n'))
 

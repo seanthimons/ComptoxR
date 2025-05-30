@@ -8,28 +8,35 @@
 #' @return A data frame
 #' @export
 
-ct_bioactivity <- function(search_type, query, annotate = FALSE, ccte_api_key = NULL){
-
+ct_bioactivity <- function(
+  search_type,
+  query,
+  annotate = FALSE,
+  ccte_api_key = NULL
+) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
   burl <- Sys.getenv("burl")
 
-  if(missing(query) == TRUE){
+  if (missing(query) == TRUE) {
     cli::cli_abort('Missing query!')
   }
 
-  if(missing(search_type)){
-    cli::cli_alert_warning('No parameter specified for search type, defaulting to DTXSID!')
+  if (missing(search_type)) {
+    cli::cli_alert_warning(
+      'No parameter specified for search type, defaulting to DTXSID!'
+    )
 
     search_type <- 'by-dtxsid'
 
     search_payload <- 'DTXSID'
-
-  }else{
-
-    search_type <- match.arg(search_type, choices = c('dtxsid', 'aeid', 'spid', 'm4id'))
+  } else {
+    search_type <- match.arg(
+      search_type,
+      choices = c('dtxsid', 'aeid', 'spid', 'm4id')
+    )
 
     search_payload <- search_type
 
@@ -47,33 +54,36 @@ ct_bioactivity <- function(search_type, query, annotate = FALSE, ccte_api_key = 
   cli::cli_rule(left = 'Payload options')
   cli::cli_dl(c(
     'Search type' = '{search_payload}',
-    'Assay annotation' = '{annotate}'))
+    'Assay annotation' = '{annotate}'
+  ))
   cli::cli_end()
 
-  urls <- paste0(burl, 'bioactivity/data/search/', search_type,'/', query)
+  urls <- paste0(burl, 'bioactivity/data/search/', search_type, '/', query)
 
-  df <- map(urls, ~{
+  df <- map(
+    urls,
+    ~ {
+      response <- GET(
+        url = .x,
+        add_headers("x-api-key" = token),
+        encode = 'json',
+        progress()
+      )
 
-    response <- GET(
-      url = .x,
-      add_headers("x-api-key" = token),
-      encode = 'json',
-      progress()
-    )
-
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }, .progress = T)
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    },
+    .progress = T
+  )
 
   df <- set_names(df, query) %>% compact() %>% list_rbind()
 
-  if(annotate == TRUE){
-
+  if (annotate == TRUE) {
     bioassay_all <- ct_bio_assay_all()
 
     df <- left_join(df, bioassay_all, join_by('aeid'))
-
-  }else{df}
-
+  } else {
+    df
+  }
 }
 
 #' Gets all bioassays
@@ -82,8 +92,7 @@ ct_bioactivity <- function(search_type, query, annotate = FALSE, ccte_api_key = 
 #'
 #' @return Data frame
 
-ct_bio_assay_all <- function(){
-
+ct_bio_assay_all <- function() {
   token <- ct_api_key()
 
   burl <- Sys.getenv("burl")
@@ -96,4 +105,3 @@ ct_bio_assay_all <- function(){
 
   df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
 }
-

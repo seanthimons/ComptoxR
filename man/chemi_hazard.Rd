@@ -18,7 +18,7 @@ chemi_hazard(
 
 \item{min_sim}{Tanimoto similarity coefficient to search for analogs by. Defaults to \code{0.8} if an analog option and no variable is specified .}
 
-\item{coerce}{Boolean variable to coerce the data to a numerical equivalent. Defaults to \code{TRUE}.}
+\item{coerce}{Choice of \code{simple}, \code{bin}, or \code{numerical}.}
 
 \item{cts_generations}{A number of metabolite generations to predict for. Maximum of \code{4} allowed.}
 

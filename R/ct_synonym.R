@@ -6,8 +6,7 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_synonym <- function(query, ccte_api_key = NULL){
-
+ct_synonym <- function(query, ccte_api_key = NULL) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -18,18 +17,19 @@ ct_synonym <- function(query, ccte_api_key = NULL){
 
   urls <- paste0(burl, surl, query)
 
-  df <- map(urls, ~{
-
-
-    response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  })
+  df <- map(
+    urls,
+    ~ {
+      response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    }
+  )
 
   names(df) <- query
 
   df <- df %>%
     map(., compact) %>%
-    map(., ~discard_at(., 'dtxsid'))
+    map(., ~ discard_at(., 'dtxsid'))
 
   return(df)
 }

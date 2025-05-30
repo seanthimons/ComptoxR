@@ -89,4 +89,3 @@ chemi_predict <- function(query, report = "JSON") {
 
   resp_body_json(resp)
 }
-

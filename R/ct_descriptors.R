@@ -7,49 +7,51 @@
 #'
 #' @return A string
 
-ct_descriptors <- function(query,
-                           type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
-                           #coerce = T,
-                           ccte_api_key = NULL
-                           #debug = F
-                           ){
-
+ct_descriptors <- function(
+  query,
+  type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
+  #coerce = T,
+  ccte_api_key = NULL
+  #debug = F
+) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  if(grepl(pattern = 'DTX', x = query)){
+  if (grepl(pattern = 'DTX', x = query)) {
     cli::cli_abort('DTXSID string detected! Use a SMILES or MOL!')
   }
 
-  if(missing(type) | is.null(type)){cli_abort('Missing search parameter!')}
+  if (missing(type) | is.null(type)) {
+    cli_abort('Missing search parameter!')
+  }
 
   type_option <-
-    if(type == 'smiles'){
+    if (type == 'smiles') {
       'to-smiles'
-  }else{
-    if(type == 'canonical_smiles'){
-      'to-canonicalsmiles'
-    }else{
-      if(type == 'mol2000'){
-        'to-mol2000'
-      }else{
-        if(type == 'mol3000'){
-          'to-mol3000'
-        }else{
-          if(type == 'inchi'){
-            'to-inchi'
+    } else {
+      if (type == 'canonical_smiles') {
+        'to-canonicalsmiles'
+      } else {
+        if (type == 'mol2000') {
+          'to-mol2000'
+        } else {
+          if (type == 'mol3000') {
+            'to-mol3000'
+          } else {
+            if (type == 'inchi') {
+              'to-inchi'
+            }
           }
         }
       }
     }
-  }
 
-# payload -----------------------------------------------------------------
+  # payload -----------------------------------------------------------------
 
   payload <- query
 
-# request -----------------------------------------------------------------
+  # request -----------------------------------------------------------------
 
   burl <- Sys.getenv('burl')
 
@@ -64,13 +66,11 @@ ct_descriptors <- function(query,
     progress()
   )
 
-  if(response$status_code == 200){
-
+  if (response$status_code == 200) {
     df <- content(response, "text", encoding = "UTF-8")
 
     return(df)
-
-  }else{
-    cli::cli_abort('Bad request!')}
-
+  } else {
+    cli::cli_abort('Bad request!')
+  }
 }

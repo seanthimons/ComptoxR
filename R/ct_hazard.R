@@ -6,8 +6,7 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_hazard <- function(query, ccte_api_key = NULL, debug = F){
-
+ct_hazard <- function(query, ccte_api_key = NULL, debug = F) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -21,29 +20,39 @@ ct_hazard <- function(query, ccte_api_key = NULL, debug = F){
   cli::cli_dl(
     c(
       'Number of compounds: ' = '{length(payload)}'
+    )
+  )
 
-  ))
-
-  if(length(query) > 200){
-
-    sublists <- split(query, rep(1:ceiling(length(query)/200), each = 200, length.out = length(query)))
-    sublists <- map(sublists, as.list)
-    }else{
-      sublists <- vector(mode = 'list', length = 1L)
-      sublists[[1]] <- query %>% as.list()
-    }
-
-  df <- map(sublists, ~{
-
-    response <- POST(
-      url = paste0(burl, surl),
-      body = .x,
-      add_headers("x-api-key" = token),
-      encode = 'json',
-      progress()
+  if (length(query) > 200) {
+    sublists <- split(
+      query,
+      rep(
+        1:ceiling(length(query) / 200),
+        each = 200,
+        length.out = length(query)
       )
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-  }, .progress = T) %>% list_rbind()
+    )
+    sublists <- map(sublists, as.list)
+  } else {
+    sublists <- vector(mode = 'list', length = 1L)
+    sublists[[1]] <- query %>% as.list()
+  }
+
+  df <- map(
+    sublists,
+    ~ {
+      response <- POST(
+        url = paste0(burl, surl),
+        body = .x,
+        add_headers("x-api-key" = token),
+        encode = 'json',
+        progress()
+      )
+      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+    },
+    .progress = T
+  ) %>%
+    list_rbind()
 
   return(df)
 }

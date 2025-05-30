@@ -1,4 +1,3 @@
-
 #' Reportable quantity limits
 #'
 #' Returns the RQs for compounds with their hazard class and numeric limits in pounds and kilograms.
@@ -9,17 +8,18 @@
 #' @export
 #'
 
-chemi_rq <- function(query){
-
+chemi_rq <- function(query) {
   url <- 'https://hazard-dev.sciencedataexperts.com/api/safety/rqcodes'
 
   chemicals <- vector(mode = "list", length = length(query))
 
   chemicals <- map2(
-    chemicals, query,
-    \(x, y) x <- list(
-      sid = y
-    )
+    chemicals,
+    query,
+    \(x, y)
+      x <- list(
+        sid = y
+      )
   )
 
   payload <- chemicals
@@ -37,13 +37,14 @@ chemi_rq <- function(query){
     jsonlite::fromJSON(simplifyVector = FALSE)
 
   df <- df %>%
-    map(., ~pluck(., 'rqCode')) %>%
+    map(., ~ pluck(., 'rqCode')) %>%
     compact() %>%
     map_dfr(., as_tibble) %>%
     separate_wider_delim(rq, ' ', names = c('rq_lbs', 'rq_kgs')) %>%
     mutate(
       rq_lbs = as.numeric(str_remove_all(rq_lbs, '\\(|\\)|\\,')),
-      rq_kgs = as.numeric(str_remove_all(rq_kgs, '\\(|\\)|\\,')))
+      rq_kgs = as.numeric(str_remove_all(rq_kgs, '\\(|\\)|\\,'))
+    )
 
   return(df)
 }
