@@ -24,6 +24,7 @@ Imports:
     httr2,
     janitor (>= 2.1.0),
     jsonlite (>= 1.8.8),
+    lifecycle,
     magrittr (>= 2.0.3),
     purrr (>= 1.0.2),
     rlang,

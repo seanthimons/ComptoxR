@@ -62,6 +62,7 @@ run_setup <- function() {
     chemi_server(server = 1)
     epi_server(server = 1)
     eco_server(server = 1)
+    run_debug(debug == FALSE)
   }
 
   packageStartupMessage(
@@ -127,6 +128,7 @@ ct_server <- function(server = NULL) {
       as.character(server),
       "1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
       "2" = Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/'),
+      "3" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
       {
         cli::cli_alert_warning("\nInvalid server option selected!\n")
         cli::cli_alert_info("Valid options are 1 (Production) and 2 (Staging).")
@@ -242,4 +244,25 @@ reset_servers <- function() {
   chemi_server()
   epi_server()
   eco_server()
+}
+
+#' Set debug mode
+#'
+#' @param debug A logical value to enable or disable debug mode.
+#'
+#' @return Should return the Sys Env variable `run_debug`
+#' @export
+run_debug <- function(debug = FALSE) {
+  if (is.logical(debug)) {
+    Sys.setenv("run_debug" = as.character(debug))
+  } else {
+    cli::cli_alert_warning(
+      "\nInvalid debug option selected!\n"
+    )
+    cli::cli_alert_info("Valid options are TRUE or FALSE.")
+    cli::cli_alert_warning("Debug mode set to FALSE.")
+    Sys.setenv("run_debug" = "FALSE")
+  }
+
+  Sys.getenv("run_debug")
 }

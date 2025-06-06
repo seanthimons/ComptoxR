@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom lifecycle deprecated
 #' @importFrom rlang arg_match
 #' @importFrom rlang is_missing
 #' @importFrom rlang maybe_missing
