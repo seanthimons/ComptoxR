@@ -1,6 +1,6 @@
 #' EPI Suite searching for Analysis function
 #'
-#' @param query A vector
+#' @param query A vector of CASRN numbers
 #'
 #' @returns tibble
 

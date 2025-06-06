@@ -1,4 +1,3 @@
-library(toxpiR)
 
 chems <- ct_list('CWA311HS') %>%
   map(., ~ pluck(., 'dtxsids')) %>%

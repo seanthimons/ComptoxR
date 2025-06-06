@@ -7,7 +7,7 @@
 epi_suite_search(query)
 }
 \arguments{
-\item{query}{A vector}
+\item{query}{A vector of CASRN numbers}
 }
 \value{
 tibble
