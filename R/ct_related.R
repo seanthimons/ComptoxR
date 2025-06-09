@@ -1,7 +1,9 @@
 # R/ct_related.R
 
 #' Get related substances from the EPA CompTox dashboard.
-
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' @param query A character vector of DTXSIDs to query.
 #'
@@ -10,9 +12,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' get_related_substances(query = "DTXSID0024842")
+#' ct_related(query = "DTXSID0024842")
 #' }
-#' `r lifecycle::badge("experimental")`
+#'
 
 ct_related <- function(query) {
   # Check if query is valid
@@ -31,19 +33,19 @@ ct_related <- function(query) {
 
   # Helper function to fetch data safely
   safe_fetch <- purrr::safely(function(id) {
-    cli::cli_inform(c("v" = "Fetching related substances for DTXSID: {id}"))
+    #cli::cli_inform(c("v" = "Fetching related substances for DTXSID: {id}"))
 
     # Make the request
-    req <- httr2::request(
-      Sys.getenv('ct_burl')
-    ) %>%
+    req <- request(base_url = Sys.getenv('burl')) %>%
       req_url_path_append('related-substances/search/by-dtxsid') %>%
       req_url_query('id' = id)
-    
+
     # Dry run option
     if (Sys.getenv("run_debug") == "TRUE") {
+      cli::cli_alert_info('DEBUGGING REQUEST')
+
       print(req)
-      return(NULL)
+      #return(NULL)
     }
 
     resp <- httr2::req_perform(req)
@@ -62,10 +64,23 @@ ct_related <- function(query) {
 
   # Fetch data for all IDs sequentially with a progress bar
   results <- query %>%
-    purrr::map(safe_fetch)
+    purrr::map(safe_fetch, .progress = TRUE) %>%
+    set_names(query)
 
   # Extract the results and errors
-  data <- purrr::map(results, "result")
+  data <- purrr::map(results, "result") %>%
+    map(., ~ pluck(., "data")) %>%
+    map(
+      .,
+      ~ map(
+        .,
+        ~ keep(.x, names(.x) %in% c("dtxsid", "relationship")) %>% as_tibble()
+      ) %>%
+        list_rbind()
+    ) %>%
+    list_rbind(names_to = "query") %>%
+    filter(query != dtxsid)
+  
   errors <- purrr::map(results, "error")
 
   # Handle errors
