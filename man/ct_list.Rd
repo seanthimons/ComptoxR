@@ -4,16 +4,21 @@
 \alias{ct_list}
 \title{Returns all compounds on a given list}
 \usage{
-ct_list(list_name, ccte_api_key = NULL)
+ct_list(list_name, extract_dtxsids = TRUE)
 }
 \arguments{
 \item{list_name}{Search parameter}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{extract_dtxsids}{Boolean to pluck out just the DTXSIDs.}
 }
 \value{
 Returns a tibble with results
 }
 \description{
 Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.
+}
+\examples{
+\dontrun{
+ ct_list(list_name = c("PRODWATER", "CWA311HS"), extract_dtxsids = TRUE)
+}
 }
