@@ -12,6 +12,8 @@ run_setup <- function() {
   )
   #cli::cli_text()
 
+  # Ping -------------------------------------------------------------------
+
   ping_list <-
     list(
       'https://api-ccte.epa.gov/exposure/health',
@@ -25,6 +27,8 @@ run_setup <- function() {
       'https://episuite.dev/EpiWebSuite/#/',
       "https://cfpub.epa.gov/ecotox/index.cfm"
     )
+
+  # Ping results -----------------------------------------------------------
 
   check_url <- function(url) {
     tryCatch(
@@ -50,10 +54,11 @@ run_setup <- function() {
   cli::cli_li(items = results)
   cli::cli_end()
 
+  # Token check ------------------------------------------------------------
+
   cli::cli_rule()
   cli::cli_alert_warning('Looking for API tokens...')
-
-  cli::cli_text('CCD token: {ct_api_key()}')
+  cli::cli_text('{ct_api_key()}')
 }
 
 .onAttach <- function(libname, ComptoxR) {
@@ -62,7 +67,8 @@ run_setup <- function() {
     chemi_server(server = 1)
     epi_server(server = 1)
     eco_server(server = 1)
-    run_debug(debug == FALSE)
+    run_debug(debug = FALSE)
+    set_verbose(verbose = TRUE)
   }
 
   packageStartupMessage(
@@ -72,7 +78,10 @@ run_setup <- function() {
 
 .header <- function() {
   if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
-    build_date <- as.character(Sys.Date())
+    build_date <- paste0(
+      as.character(Sys.Date()),
+      cli::style_bold(cli::col_red(" DEV"))
+    )
   } else {
     build_date <- as.character(utils::packageDate('ComptoxR'))
   }
@@ -128,7 +137,9 @@ ct_server <- function(server = NULL) {
       as.character(server),
       "1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
       "2" = Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/'),
-      "3" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
+      "3" = Sys.setenv(
+        'burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'
+      ),
       {
         cli::cli_alert_warning("\nInvalid server option selected!\n")
         cli::cli_alert_info("Valid options are 1 (Production) and 2 (Staging).")
@@ -263,6 +274,44 @@ run_debug <- function(debug = FALSE) {
     cli::cli_alert_warning("Debug mode set to FALSE.")
     Sys.setenv("run_debug" = "FALSE")
   }
+}
 
-  Sys.getenv("run_debug")
+#' Set verbose mode
+#'
+#' Sets the verbosity of the execution.
+#'
+#' @param verbose A logical value indicating whether verbose mode should be enabled.
+#'   Defaults to `FALSE`. If a non-logical value is provided, a warning is issued,
+#'   and verbose mode is set to `FALSE`.
+#'
+#' @details
+#' This function sets the `"run_verbose"` environment variable based on the
+#' `verbose` argument. If `verbose` is `TRUE`, the environment variable is set
+#' to `"TRUE"`. Otherwise, it is set to `"FALSE"`. If an invalid value is
+#' provided for `verbose`, a warning message is displayed, and the environment
+#' variable is set to `"FALSE"`.
+#'
+#' @examples
+#' \dontrun{
+#' # Enable verbose mode
+#' set_verbose(TRUE)
+#'
+#' # Disable verbose mode
+#' set_verbose(FALSE)
+#'
+#' # Attempt to set verbose mode with an invalid value
+#' set_verbose("hello")
+#' }
+#' @export
+set_verbose <- function(verbose = FALSE) {
+  if (is.logical(verbose)) {
+    Sys.setenv("run_verbose" = as.character(verbose))
+  } else {
+    cli::cli_alert_warning(
+      "\nInvalid verbose option selected!\n"
+    )
+    cli::cli_alert_info("Valid options are TRUE or FALSE.")
+    cli::cli_alert_warning("Verbose mode set to FALSE.")
+    Sys.setenv("run_verbose" = "FALSE")
+  }
 }

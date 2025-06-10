@@ -2,8 +2,7 @@
 % Please edit documentation in R/ct_related.R
 \name{ct_related}
 \alias{ct_related}
-\title{Get related substances from the EPA CompTox dashboard.
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}}
+\title{Get related substances from the EPA CompTox dashboard.}
 \usage{
 ct_related(query)
 }
@@ -14,7 +13,6 @@ ct_related(query)
 A list of data frames containing related substances.
 }
 \description{
-Get related substances from the EPA CompTox dashboard.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
