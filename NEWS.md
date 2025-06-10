@@ -1,5 +1,9 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9004
+
+- Updated ct_list to be default extract out DTXSIDs
+- Added ct_related to find related substances. Subject to depreciation.
 - Minor update to data files and ct_details.
 - Added chemi_classyfire function for classification
 - Added hclust_method parameter for chemi_cluster
@@ -10,7 +14,17 @@
 - Updated ct_search to remove mass + formula searching, rewrote backend with new helper function.
 - Updated docuemenation for ct_search
 - Adjustment to searching functions
-- Update files
+- Updated two functions to remove rjson dependency.
+- Minor update to data files and ct_details.
+- Added chemi_classyfire function for classification
+- Added hclust_method parameter for chemi_cluster
+- Added informative error messages to all *_server functions to indicate valid server options.
+- Added chemi_safety_sections; retrieves PubChem datasheets.
+- Added epi_suite functions to pull and search data
+- Added new logic for servers and API endpoints
+- Updated ct_search to remove mass + formula searching, rewrote backend with new helper function.
+- Updated docuemenation for ct_search
+- Adjustment to searching functions
 - Updated two functions to remove rjson dependency.
 
 
