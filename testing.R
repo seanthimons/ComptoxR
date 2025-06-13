@@ -1,4 +1,3 @@
-
 chems <- ct_list('CWA311HS') %>%
   map(., ~ pluck(., 'dtxsids')) %>%
   list_c() %>%
@@ -104,3 +103,7 @@ ranked %>%
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()
   )
+
+
+# list ----------------------------------------------------------------
+

@@ -23,7 +23,7 @@ library(devtools)
 ```
 
 ``` r
-install_github("sxthimons/ComptoxR")
+install_github("seanthimons/ComptoxR")
 ```
 
 ## Initial Setup
