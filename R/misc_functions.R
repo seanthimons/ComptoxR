@@ -56,7 +56,6 @@ geometric.mean <- function(x, na.rm = TRUE) {
 #'
 #' @return A set of end-use plots at the proper resolution
 #' @export
-
 ggsave_all <- function(
   filename,
   plot = ggplot2::last_plot(),
@@ -64,57 +63,96 @@ ggsave_all <- function(
   path = "output",
   ...
 ) {
-  specs <- if (!is.null(specs)) specs else {
-    # Create default outputs data.frame rowwise using only base R
-    specs <- rbind(
-      c("_quart_portrait", "png", 1, (8.5 - 2) / 2, (11 - 2) / 2, "in", 300), # doc > layout > margins
-      c("_half_portrait", "png", 1, 8.5 - 2, (11 - 2) / 2, "in", 300),
-      c("_full_portrait", "png", 1, 8.5 - 2, (11 - 2), "in", 300),
-      c("_full_landscape", "png", 1, 11 - 2, 8.5 - 2, "in", 300),
-      c("_ppt_title_content", "png", 1, 11.5, 4.76, "in", 300), # ppt > format pane > size
-      c("_ppt_full_screen", "png", 1, 13.33, 7.5, "in", 300), # ppt > design > slide size
-      c("_ppt_two_content", "png", 1, 5.76, 4.76, "in", 300) # ppt > format pane > size
-    )
+  default_specs <- tibble::tribble(
+    ~suffix,
+    ~device,
+    ~scale,
+    ~width,
+    ~height,
+    ~units,
+    ~dpi,
+    "_quart_portrait",
+    "png",
+    1,
+    (8.5 - 2) / 2,
+    (11 - 2) / 2,
+    "in",
+    300,
+    "_half_portrait",
+    "png",
+    1,
+    8.5 - 2,
+    (11 - 2) / 2,
+    "in",
+    300,
+    "_full_portrait",
+    "png",
+    1,
+    8.5 - 2,
+    (11 - 2),
+    "in",
+    300,
+    "_full_landscape",
+    "png",
+    1,
+    11 - 2,
+    8.5 - 2,
+    "in",
+    300,
+    "_ppt_title_content",
+    "png",
+    1,
+    11.5,
+    4.76,
+    "in",
+    300,
+    "_ppt_full_screen",
+    "png",
+    1,
+    13.33,
+    7.5,
+    "in",
+    300,
+    "_ppt_two_content",
+    "png",
+    1,
+    5.76,
+    4.76,
+    "in",
+    300
+  )
 
-    colnames(specs) <- c(
-      "suffix",
-      "device",
-      "scale",
-      "width",
-      "height",
-      "units",
-      "dpi"
-    )
-    specs <- as.data.frame(specs)
+  specs <- if (is.null(specs)) {
+    default_specs
+  } else {
+    specs
   }
 
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
 
-  invisible(
-    apply(specs, MARGIN = 1, function(...) {
-      args <- list(...)[[1]]
-      filename <- file.path(paste0(
-        filename,
-        args['suffix'],
-        ".",
-        args['device']
-      ))
-      message("Saving: ", file.path(path, filename))
-
-      ggplot2::ggsave(
-        filename = filename,
-        plot = ggplot2::last_plot(),
-        path = path,
-        device = args['device'],
-        width = as.numeric(args['width']),
-        height = as.numeric(args['height']),
-        units = args['units'],
-        dpi = if (is.na(as.numeric(args['dpi']))) args['dpi'] else
-          as.numeric(args['dpi']),
-        bg = 'white'
+  specs %>%
+    dplyr::mutate(
+      filename = file.path(
+        path,
+        paste0(filename, suffix, ".", device)
       )
-    })
-  )
+    ) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      dpi = if (is.na(as.numeric(dpi))) {
+        dpi
+      } else {
+        as.numeric(dpi)
+      }
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(filename, device, width, height, units, dpi) %>%
+    purrr::pwalk(
+      ggplot2::ggsave,
+      plot = plot,
+      bg = "white",
+      ...
+    )
 }
 
 #' Pretty list
@@ -150,6 +188,17 @@ pretty_print <- function(x) {
 pretty_rename <- function(x) {
   #x <- colnames(x)
   message(paste0("'' = '", x, "',", "\n"))
+}
+
+#' Pretty Case When
+#'
+#' @param var Variable
+#' @param x Case
+#'
+#' @return list
+#' @export
+pretty_casewhen <- function(var, x) {
+  message(paste0(var, " == ", x, " ~ '',\n"))
 }
 
 #' Not-in
