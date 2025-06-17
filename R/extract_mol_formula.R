@@ -57,5 +57,5 @@ create_formula_extractor_final <- function() {
 #' extract_formulas(texts)
 extract_formulas <- function(text_vector) {
   # This function simply calls the pre-built, optimized extractor.
-  .extractor(text_vector)
+  ComptoxR:::.extractor(text_vector)
 }
