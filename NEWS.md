@@ -1,5 +1,12 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9005
+
+- Added ct_functional_use; pulls reported and predicted usage from CCD dashboard.
+- Added utility function for CASRN strings
+- Added function to extract out molecular formulas
+
+
 # ComptoxR 1.2.2.9004
 
 - Updated ct_list to be default extract out DTXSIDs
