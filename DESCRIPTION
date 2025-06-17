@@ -20,6 +20,7 @@ Imports:
     cli,
     dplyr (>= 1.1.4),
     ggplot2,
+    glue,
     httr (>= 1.4.7),
     httr2,
     janitor (>= 2.1.0),

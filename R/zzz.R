@@ -61,21 +61,6 @@ run_setup <- function() {
   cli::cli_text('{ct_api_key()}')
 }
 
-.onAttach <- function(libname, ComptoxR) {
-  if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
-    ct_server(server = 1)
-    chemi_server(server = 1)
-    epi_server(server = 1)
-    eco_server(server = 1)
-    run_debug(debug = FALSE)
-    set_verbose(verbose = TRUE)
-  }
-
-  packageStartupMessage(
-    .header()
-  )
-}
-
 .header <- function() {
   if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
     build_date <- paste0(
@@ -314,4 +299,42 @@ set_verbose <- function(verbose = FALSE) {
     cli::cli_alert_warning("Verbose mode set to FALSE.")
     Sys.setenv("run_verbose" = "FALSE")
   }
+}
+
+# Attach -----------------------------------------------------------------
+
+
+.onAttach <- function(libname, pkgname) {
+  if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
+    ct_server(server = 1)
+    chemi_server(server = 1)
+    epi_server(server = 1)
+    eco_server(server = 1)
+    run_debug(debug = FALSE)
+    set_verbose(verbose = TRUE)
+  }
+
+  packageStartupMessage(
+    .header()
+  )
+}
+
+# Load -------------------------------------------------------------------
+
+.extractor <- NULL
+
+# .onLoad is a special function that R runs when a package is loaded.
+.onLoad <- function(libname, pkgname) {
+  # Call the factory ONCE and assign the result to our placeholder.
+  # The "super-assignment" operator (<<-) ensures we modify the .extractor
+  # in the package's namespace, not just a local copy.
+  .extractor <<- create_formula_extractor_final()
+}
+
+.classifier <- NULL
+
+# This function runs when the package is loaded.
+.onLoad <- function(libname, pkgname) {
+  # Call the factory to pre-build the classifier and store it.
+  .classifier <<- create_compound_classifier()
 }
