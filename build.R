@@ -1,8 +1,12 @@
+#Checks documentation
 devtools::document()
 
+#Adds NEWS
 fledge::bump_version(which = 'dev')
 fledge::update_news()
 
-devtools::build()
+#Builds Windows ZIP
+devtools::build(binary = TRUE)
 
-devtools::install()
+#Clean, build, and install, reload
+devtools::install(pkg = ".", dependencies = TRUE, reload = TRUE)

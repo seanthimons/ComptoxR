@@ -303,7 +303,6 @@ set_verbose <- function(verbose = FALSE) {
 
 # Attach -----------------------------------------------------------------
 
-
 .onAttach <- function(libname, pkgname) {
   if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
     ct_server(server = 1)
@@ -322,6 +321,7 @@ set_verbose <- function(verbose = FALSE) {
 # Load -------------------------------------------------------------------
 
 .extractor <- NULL
+.classifier <- NULL
 
 # .onLoad is a special function that R runs when a package is loaded.
 .onLoad <- function(libname, pkgname) {
@@ -329,12 +329,7 @@ set_verbose <- function(verbose = FALSE) {
   # The "super-assignment" operator (<<-) ensures we modify the .extractor
   # in the package's namespace, not just a local copy.
   .extractor <<- create_formula_extractor_final()
-}
-
-.classifier <- NULL
-
-# This function runs when the package is loaded.
-.onLoad <- function(libname, pkgname) {
-  # Call the factory to pre-build the classifier and store it.
   .classifier <<- create_compound_classifier()
+  #message("Is .extractor a function? ", is.function(.extractor))
+  #message("Is .classifier a function? ", is.function(.classifier))
 }
