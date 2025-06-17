@@ -8,8 +8,6 @@ ct_functional_use(query, path)
 }
 \arguments{
 \item{query}{A character vector of DTXSIDs to query.}
-
-\item{path}{The endpoint path relative to the base URL.}
 }
 \value{
 A list or tibble containing the functional use probability data.
