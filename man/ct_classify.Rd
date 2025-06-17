@@ -2,29 +2,24 @@
 % Please edit documentation in R/ct_classify.R
 \name{ct_classify}
 \alias{ct_classify}
-\title{Classifies chemical compounds as Organic, Inorganic, Isotope, or Markush
-based on molecular formula and SMILES strings.}
+\title{Classifies chemical compounds}
 \usage{
 ct_classify(df)
 }
 \arguments{
 \item{df}{A dataframe containing chemical compound information.
-Must include the following columns:
-\itemize{
-\item \code{molFormula}: Molecular formula (e.g., "C6H12O6", "H2SO4").
-\item \code{preferredName}: Preferred name of the compound.
-\item \code{dtxsid}: DSSTox Substance ID.
-\item \code{smiles}: SMILES string representation (e.g., "CCO", "O=C=O").
-\item \code{isMarkush}: Logical indicating if it's a Markush structure.
-\item \code{isotope}: Integer (1 for TRUE, 0 for FALSE) indicating if it's an isotope.
-\item \code{multicomponent}: Integer (1 for TRUE, 0 for FALSE) indicating if it's a multi-component substance.
-\item \code{inchiString}: InChI string (e.g., "InChI=1S/C6H12O6/c...").
-}}
+Must include the following columns: \code{molFormula}, \code{preferredName},
+\code{dtxsid}, \code{smiles}, \code{isMarkush}, \code{isotope}, \code{multicomponent}, \code{inchiString}.}
 }
 \value{
-A dataframe with the original columns plus 'class', 'super_class', and 'composition'.
+A dataframe with the original columns plus 'class', 'super_class',
+and 'composition'.
 }
 \description{
+Classifies chemical compounds as Organic, Inorganic, Isotope, or Markush
+based on molecular formula and SMILES strings.
+}
+\details{
 This function takes a dataframe of chemical compounds and adds three new
 columns: 'class' for detailed classification, 'super_class' for
 broader categorization, and 'composition' to identify mixtures.
@@ -32,14 +27,14 @@ broader categorization, and 'composition' to identify mixtures.
 \examples{
 # Example usage with dummy data:
 # df_example <- tibble::tribble(
-#   ~molFormula, ~preferredName, ~dtxsid, ~smiles, ~isMarkush, ~isotope, ~multicomponent, ~inchiString,
-#   "CHNaO2", "Sodium formate", "DTXSID2027090", "[Na+].[O-]C=O", FALSE, 0L, 1L, "InChI...",
-#   "C6H12O6", "Glucose", "DTXSID12345", "OC[C@H](O)...", FALSE, 0L, 0L, "InChI...",
-#   "Fe2O3", "Iron(III) oxide", "DTXSID67890", "[O-2].[O-2]...", FALSE, 0L, 1L, "InChI...",
-#   "[89Sr]", "Strontium-89", "DTXSID54321", "[89Sr]", FALSE, 1L, 0L, "InChI...",
-#   "C2H4", "Polyethylene", "DTXSID98765", "*CC*", TRUE, 0L, 0L, "InChI...",
-#   "Cl2Sn", "Stannous chloride", "DTXSID8021351", "[Cl-].[Cl-].[Sn++]", FALSE, 0L, 1L, "InChI...",
-#   NA, "Some Markush", "DTXSID9028831", NA, TRUE, 0L, 0L, NA
+#   ~molFormula, ~preferredName, ~dtxsid, ~smiles, ~isMarkush, ~isotope, ~multicomponent,
+#   "CHNaO2", "Sodium formate", "DTXSID2027090", "[Na+].[O-]C=O", FALSE, 0L, 1L,
+#   "C6H12O6", "Glucose", "DTXSID12345", "OC[C@H](O)...", FALSE, 0L, 0L,
+#   "Fe2O3", "Iron(III) oxide", "DTXSID67890", "[O-2].[O-2]...", FALSE, 0L, 1L,
+#   "[89Sr]", "Strontium-89", "DTXSID54321", "[89Sr]", FALSE, 1L, 0L,
+#   "C2H4", "Polyethylene", "DTXSID98765", "*CC*", TRUE, 0L, 0L,
+#   "Cl2Sn", "Stannous chloride", "DTXSID8021351", "[Cl-].[Cl-].[Sn++]", FALSE, 0L, 1L,
+#   NA, "Some Markush", "DTXSID9028831", NA, TRUE, 0L, 0L
 # )
 # classified_df <- ct_classify(df_example)
 # print(classified_df)
