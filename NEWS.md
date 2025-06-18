@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9006
+
+- Same as previous version.
+
+
 # ComptoxR 1.2.2.9005
 
 - Added ct_functional_use; pulls reported and predicted usage from CCD dashboard.
