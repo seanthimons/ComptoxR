@@ -4,20 +4,23 @@
 \alias{ct_search}
 \title{Search by string}
 \usage{
-ct_search(query, request_method, search_method, dry_run)
+ct_search(query, request_method = "GET", search_method = "exact")
 }
 \arguments{
 \item{query}{Vector of strings}
 
-\item{request_method}{String: 'GET' or 'POST'}
+\item{request_method}{String: 'GET' or 'POST'. Defaults to 'GET'.}
 
-\item{search_method}{'exact', 'starts', or 'contains'}
-
-\item{dry_run}{Boolean to debug, defaults to FALSE}
+\item{search_method}{'exact', 'starts', or 'contains'. Defaults to 'exact'.}
 }
 \value{
-dataframe
+A data frame of search results.
 }
 \description{
 Search by string
+}
+\details{
+This function checks the \code{run_debug} environment variable, which can be
+set with \code{run_debug()}. If \code{TRUE}, it will perform a dry run and return the
+request objects instead of executing them.
 }
