@@ -9,4 +9,5 @@ fledge::update_news()
 devtools::build(binary = TRUE)
 
 #Clean, build, and install, reload
+#Cntrl + Shift + B
 devtools::install(pkg = ".", dependencies = TRUE, reload = TRUE)

@@ -304,6 +304,7 @@ set_verbose <- function(verbose = FALSE) {
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
+
   if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
     ct_server(server = 1)
     chemi_server(server = 1)
@@ -313,9 +314,13 @@ set_verbose <- function(verbose = FALSE) {
     set_verbose(verbose = TRUE)
   }
 
-  packageStartupMessage(
-    .header()
-  )
+# Conditionally display startup message based on verbosity
+  if (Sys.getenv("set_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
+    packageStartupMessage(
+      .header()
+    )
+  }
+
 }
 
 # Load -------------------------------------------------------------------
