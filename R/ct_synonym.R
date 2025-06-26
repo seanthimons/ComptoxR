@@ -6,11 +6,8 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_synonym <- function(query, ccte_api_key = NULL) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
-
+ct_synonym <- function(query) {
+  
   burl <- Sys.getenv('burl')
 
   surl <- "chemical/synonym/search/by-dtxsid/"
@@ -20,7 +17,7 @@ ct_synonym <- function(query, ccte_api_key = NULL) {
   df <- map(
     urls,
     ~ {
-      response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
+      response <- VERB("GET", url = .x, add_headers("x-api-key" = ct_api_key()))
       df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
     }
   )
