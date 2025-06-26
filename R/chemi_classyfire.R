@@ -90,9 +90,10 @@ chemi_classyfire <- function(query, verbose = FALSE) {
       ~ {
         list(
           kingdom = NA,
+          superklass = NA,
           klass = NA,
-          subklass = NA,
-          superklass = NA
+          subklass = NA
+          
         )
       }
     ) %>%
@@ -106,7 +107,14 @@ chemi_classyfire <- function(query, verbose = FALSE) {
       })
     }) %>%
     map(., as_tibble) %>%
-    list_rbind(names_to = 'dtxsid')
+    list_rbind(names_to = 'dtxsid') %>% 
+    select(
+      dtxsid,
+      kingdom,
+      superclass = superklass,
+      class = klass,
+      subclass = subklass
+    )
 
   return(results)
 }
