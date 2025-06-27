@@ -25,7 +25,9 @@ run_setup <- function() {
       'https://hazard-dev.sciencedataexperts.com/#/', #dev
 
       'https://episuite.dev/EpiWebSuite/#/',
-      "https://cfpub.epa.gov/ecotox/index.cfm"
+      "https://cfpub.epa.gov/ecotox/index.cfm",
+
+      "https://app.naturalproducts.net/home"
     )
 
   # Ping results -----------------------------------------------------------
@@ -65,7 +67,7 @@ run_setup <- function() {
   if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
     build_date <- paste0(
       as.character(Sys.Date()),
-      cli::style_bold(cli::col_red(" DEV"))
+      cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
     )
   } else {
     build_date <- as.character(utils::packageDate('ComptoxR'))
@@ -97,7 +99,9 @@ run_setup <- function() {
       'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
       'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
       'ECOTOX' = '{Sys.getenv("eco_burl")}',
-      'EPI Suite' = '{Sys.getenv("epi_burl")}'
+      'EPI Suite' = '{Sys.getenv("epi_burl")}',
+      'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
+
     ))
   })
 
@@ -233,6 +237,29 @@ eco_server <- function(server = NULL) {
   }
 }
 
+np_server <- function(server = NULL){
+  if (is.null(server)) {
+    {
+      cli::cli_alert_danger("Server URL reset!")
+      Sys.setenv("np_burl" = "")
+    }
+  } else {
+    switch(
+      as.character(server),
+      "1" = Sys.setenv("np_burl" = "https://api.naturalproducts.net/latest/"),
+      {
+        cli::cli_alert_warning("\nInvalid server option selected!\n")
+        cli::cli_alert_info("Valid options are 1 (Production).")
+        cli::cli_alert_warning("Server URL reset!")
+        Sys.setenv("np_burl" = "")
+      }
+    )
+
+    Sys.getenv("np_burl")
+  }
+}
+
+
 #' Reset all servers
 
 reset_servers <- function() {
@@ -240,6 +267,7 @@ reset_servers <- function() {
   chemi_server()
   epi_server()
   eco_server()
+  np_server()
 }
 
 #' Set debug mode
@@ -310,6 +338,7 @@ set_verbose <- function(verbose = FALSE) {
     chemi_server(server = 1)
     epi_server(server = 1)
     eco_server(server = 1)
+    np_server(server = 1)
     run_debug(debug = FALSE)
     set_verbose(verbose = TRUE)
   }

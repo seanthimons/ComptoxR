@@ -1,5 +1,3 @@
-# In file: R/api.R (or another appropriate file)
-
 #' Classifies chemical compounds
 #'
 #' Classifies chemical compounds as Organic, Inorganic, Isotope, or Markush
@@ -151,7 +149,9 @@ create_compound_classifier <- function() {
           .default = "Unknown"
         ),
         composition = dplyr::case_when(
+          stringr::str_detect(preferredName, "\\(\\d+:\\d+\\)") ~ "MIXTURE", # Classify as MIXTURE if preferredName contains a ratio (e.g., (2:1))
           multicomponent == 1L ~ "MIXTURE",
+          super_class == 'Unknown' ~ "UNKNOWN",
           .default = "SINGLE SUBSTANCE"
         )
       ) %>%

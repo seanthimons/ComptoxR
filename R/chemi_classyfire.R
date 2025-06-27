@@ -13,8 +13,7 @@ chemi_classyfire <- function(query, verbose = FALSE) {
   cli::cli_rule(left = "Classyfire classification payload options")
   cli::cli_dl(
     c(
-      "Number of compounds" = "{length(query)}",
-      "Verbose output" = "{verbose}"
+      "Number of compounds" = "{length(query)}"
     )
   )
   cli::cli_rule()
@@ -25,7 +24,7 @@ chemi_classyfire <- function(query, verbose = FALSE) {
   results <- query |>
     purrr::map(
       .f = function(q) {
-        if (verbose) {
+        if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
           cli::cli_alert_info("Querying DTXSID: {.val {q}}")
         }
         request <- tryCatch(
@@ -49,7 +48,7 @@ chemi_classyfire <- function(query, verbose = FALSE) {
         response <- safe_req_perform(request)
 
         if (!is.null(response$error)) {
-          if (verbose) {
+          if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
             cli::cli_alert_danger(
               "Request failed for DTXSID {.val {q}}: {response$error$message}"
             )
@@ -58,7 +57,7 @@ chemi_classyfire <- function(query, verbose = FALSE) {
         }
 
         if (!(httr2::resp_status(response$result) %in% 200:299)) {
-          if (verbose) {
+          if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
             cli::cli_alert_warning(
               "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {q}}"
             )
@@ -71,7 +70,7 @@ chemi_classyfire <- function(query, verbose = FALSE) {
             httr2::resp_body_json(response$result)
           },
           error = function(e) {
-            if (verbose) {
+            if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
               cli::cli_alert_danger(
                 "Failed to parse JSON response for DTXSID {.val {q}}: {e$message}"
               )
