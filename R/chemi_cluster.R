@@ -104,6 +104,10 @@ chemi_cluster <- function(
     } %>%
     as.dist(.) %>%
     hclust(method = hclust_method)
+
+# Final output -----------------------------------------------------------
+
+
   list(
     mol_names = mol_names,
     similarity = similarity,
