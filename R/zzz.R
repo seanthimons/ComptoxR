@@ -263,10 +263,15 @@ np_server <- function(server = NULL){
 #' Reset all servers
 
 reset_servers <- function() {
+  # Reset CompTox Chemistry Dashboard server URL
   ct_server()
+  # Reset Cheminformatics server URL
   chemi_server()
+  # Reset EPI Suite server URL
   epi_server()
+  # Reset ECOTOX server URL
   eco_server()
+  # Reset Natural Products server URL
   np_server()
 }
 
