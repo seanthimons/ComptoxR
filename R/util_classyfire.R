@@ -9,7 +9,7 @@
 #' util_classyfire(query = "OC(=O)C1=C(C(O)=O)C(C(O)=O)=C(C(O)=O)C(C(O)=O)=C1C(O)=O")
 #' }
 #' @export
-util_classyfire <- function(query, path = "/chem/classyfire/classify") {
+util_classyfire <- function(query) {
   # ---------------------------------------------------------------------------
   # --- Error handling
   # ---------------------------------------------------------------------------
@@ -62,8 +62,8 @@ util_classyfire <- function(query, path = "/chem/classyfire/classify") {
     # --- Build request
       # ---------------------------------------------------------------------------
     request <-
-      httr2::request(burl) %>%
-      httr2::req_url_path_append(path) %>%
+      httr2::request(Sys.getenv('np_burl')) %>%
+      httr2::req_url_path_append(path = "/chem/classyfire/classify") %>%
         httr2::req_headers(
           "accept" = "application/json"
           #"x-api-key" = ct_api_key()
