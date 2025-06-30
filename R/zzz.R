@@ -284,6 +284,11 @@ reset_servers <- function() {
 run_debug <- function(debug = FALSE) {
   if (is.logical(debug)) {
     Sys.setenv("run_debug" = as.character(debug))
+    if (isTRUE(debug)) {
+      cli::cli_alert_info("Debug mode is now ON.")
+    } else {
+      cli::cli_alert_info("Debug mode is now OFF.")
+    }
   } else {
     cli::cli_alert_warning(
       "\nInvalid debug option selected!\n"
@@ -324,6 +329,11 @@ run_debug <- function(debug = FALSE) {
 set_verbose <- function(verbose = FALSE) {
   if (is.logical(verbose)) {
     Sys.setenv("run_verbose" = as.character(verbose))
+    if (isTRUE(verbose)) {
+      cli::cli_alert_info("Verbose mode is now ON.")
+    } else {
+      cli::cli_alert_info("Verbose mode is now OFF.")
+    }
   } else {
     cli::cli_alert_warning(
       "\nInvalid verbose option selected!\n"
