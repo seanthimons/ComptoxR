@@ -326,7 +326,7 @@ run_debug <- function(debug = FALSE) {
 #' set_verbose("hello")
 #' }
 #' @export
-set_verbose <- function(verbose = FALSE) {
+run_verbose <- function(verbose = FALSE) {
   if (is.logical(verbose)) {
     Sys.setenv("run_verbose" = as.character(verbose))
     if (isTRUE(verbose)) {

@@ -2,18 +2,21 @@
 % Please edit documentation in R/ct_synonym.R
 \name{ct_synonym}
 \alias{ct_synonym}
-\title{Searches for listed synonyms by DTXSID}
+\title{Search for synonyms by DTXSID}
 \usage{
-ct_synonym(query, ccte_api_key = NULL)
+ct_synonym(query)
 }
 \arguments{
-\item{query}{A single string (in quotes) or a list of strings to be queried.}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{query}{Vector of DTXSIDs (strings).}
 }
 \value{
-Returns a tibble with results
+A data frame of synonym results.
 }
 \description{
-Searches for listed synonyms by DTXSID
+Search for synonyms by DTXSID
+}
+\details{
+This function checks the \code{run_debug} environment variable, which can be
+set with \code{run_debug()}. If \code{TRUE}, it will perform a dry run and return the
+request objects instead of executing them.
 }
