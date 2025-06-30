@@ -54,39 +54,41 @@ util_classyfire <- function(query) {
       # ---------------------------------------------------------------------------
     # --- Verbose output
       # ---------------------------------------------------------------------------
-    if (run_verbose) {
+    if (isTRUE(as.logical(Sys.getenv('set_verbose')))) {
       cli::cli_alert_info("Processing query {current_index} of {total_queries}: item_id = {current_query}")
     }
 
-      # ---------------------------------------------------------------------------
-    # --- Build request
-      # ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # --- Build request
+  # ---------------------------------------------------------------------------
     request <-
       httr2::request(Sys.getenv('np_burl')) %>%
       httr2::req_url_path_append(path = "/chem/classyfire/classify") %>%
         httr2::req_headers(
           "accept" = "application/json"
-          #"x-api-key" = ct_api_key()
         ) %>%
       httr2::req_url_query(smiles = current_query) %>%
-      httr2::req_timeout(5)
+      httr2::req_timeout(5) %>% 
+      httr2::req_retry(max_tries = 3)
 
-      # ---------------------------------------------------------------------------
-    # --- Dry run or execute request
-      # ---------------------------------------------------------------------------
-    if (run_debug) {
+  # ---------------------------------------------------------------------------
+  # --- Dry run or execute request
+  # ---------------------------------------------------------------------------
+    if (isTRUE(as.logical(Sys.getenv('run_debug')))) {
       return(httr2::req_dry_run(request))
     } else {
       response <- httr2::req_perform(request)
 
-      # -----------------------------------------------------------------------
-      # --- Check for errors
-      # -----------------------------------------------------------------------
+  # -----------------------------------------------------------------------
+  # --- Check for errors
+  # -----------------------------------------------------------------------
       if (httr2::resp_is_error(response)) {
         cli::cli_alert_danger("HTTP error {response$status_code} for query {current_query}")
         return(NULL)
       } else {
-        cli::cli_alert_success("Successfully classified query {current_query}")
+
+        if (isTRUE(as.logical(Sys.getenv('set_verbose')))){
+        cli::cli_alert_success("Successfully classified query {current_query}")}
       }
 
       # -----------------------------------------------------------------------
@@ -96,7 +98,7 @@ util_classyfire <- function(query) {
       return(result)
     }
     },
-    otherwise = NULL
+    otherwise = NA
   )
 
   # ---------------------------------------------------------------------------
@@ -106,7 +108,8 @@ util_classyfire <- function(query) {
     .x = query,
     .f = safe_classify,
     current_index = seq_along(query),
-    total_queries = length(query)
+    total_queries = length(query),
+    .progress = TRUE
   )
 
   return(results)
