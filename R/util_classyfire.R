@@ -1,8 +1,7 @@
 #' @title Use the ClassyFire API to classify a chemical structure
-#' @description This function takes a SMILES string as input and returns the
-#'   ClassyFire classification for that structure.
+#' @description This function takes a SMILES string as input, submits it to
+#'   ClassyFire, polls for the result, and returns the classification.
 #' @param query A character vector of SMILES strings to classify.
-#' @param path The API endpoint path.
 #' @returns A list containing the ClassyFire classification results.
 #' @examples
 #' \dontrun{
@@ -27,9 +26,13 @@ util_classyfire <- function(query) {
   # ---------------------------------------------------------------------------
   # --- Get environment variables
   # ---------------------------------------------------------------------------
-  burl <- Sys.getenv("burl", unset = NA)
+  burl <- Sys.getenv("np_burl", unset = NA)
   run_debug <- as.logical(Sys.getenv("run_debug", unset = "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", unset = "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("set_verbose", unset = "FALSE"))
+
+  if (is.na(burl)) {
+    cli::cli_abort("The `np_burl` environment variable is not set. Please set it to the base API URL.")
+  }
 
   # ---------------------------------------------------------------------------
   # --- Debugging information
@@ -47,66 +50,99 @@ util_classyfire <- function(query) {
   }
 
   # ---------------------------------------------------------------------------
-  # --- Create the request
+  # --- Create the request wrapper
   # ---------------------------------------------------------------------------
-  safe_classify <- purrr::possibly(
+  safe_classify_and_get_result <- purrr::possibly(
     .f = function(current_query, current_index, total_queries) {
-      # ---------------------------------------------------------------------------
-    # --- Verbose output
-      # ---------------------------------------------------------------------------
-    if (isTRUE(as.logical(Sys.getenv('set_verbose')))) {
-      cli::cli_alert_info("Processing query {current_index} of {total_queries}: item_id = {current_query}")
-    }
-
-  # ---------------------------------------------------------------------------
-  # --- Build request
-  # ---------------------------------------------------------------------------
-    request <-
-      httr2::request(Sys.getenv('np_burl')) %>%
-      httr2::req_url_path_append(path = "/chem/classyfire/classify") %>%
-        httr2::req_headers(
-          "accept" = "application/json"
-        ) %>%
-      httr2::req_url_query(smiles = current_query) %>%
-      httr2::req_timeout(5) %>% 
-      httr2::req_retry(max_tries = 3)
-
-  # ---------------------------------------------------------------------------
-  # --- Dry run or execute request
-  # ---------------------------------------------------------------------------
-    if (isTRUE(as.logical(Sys.getenv('run_debug')))) {
-      return(httr2::req_dry_run(request))
-    } else {
-      response <- httr2::req_perform(request)
-
-  # -----------------------------------------------------------------------
-  # --- Check for errors
-  # -----------------------------------------------------------------------
-      if (httr2::resp_is_error(response)) {
-        cli::cli_alert_danger("HTTP error {response$status_code} for query {current_query}")
-        return(NULL)
-      } else {
-
-        if (isTRUE(as.logical(Sys.getenv('set_verbose')))){
-        cli::cli_alert_success("Successfully classified query {current_query}")}
+      if (run_verbose) {
+        cli::cli_alert_info("({current_index}/{total_queries}) Submitting SMILES for classification: {current_query}")
       }
 
-      # -----------------------------------------------------------------------
-      # --- Parse response
-      # -----------------------------------------------------------------------
-      result <- httr2::resp_body_json(response)
-      return(result)
-    }
+      # --- Build submission request ---
+      req_classify <-
+        httr2::request(burl) %>%
+        httr2::req_url_path_append(path = "/chem/classyfire/classify") %>%
+        httr2::req_headers("accept" = "application/json") %>%
+        httr2::req_url_query(smiles = current_query) %>%
+        httr2::req_timeout(5) %>%
+        httr2::req_retry(max_tries = 10)
+
+      # --- Handle debug mode (dry run) ---
+      if (run_debug) {
+        cli::cli_alert_info("Dry run for submission request:")
+        httr2::req_dry_run(req_classify)
+
+        cli::cli_alert_info("Dry run for result request (using placeholder job_id '12345'):")
+        req_result_dryrun <-
+          httr2::request(burl) %>%
+          httr2::req_url_path_append(path = "/chem/classyfire/12345/result") %>%
+          httr2::req_headers("accept" = "application/json")
+        httr2::req_dry_run(req_result_dryrun)
+
+        return("Dry run complete")
+      }
+
+      # --- Perform submission ---
+      resp_classify <- httr2::req_perform(req_classify)
+
+      if (httr2::resp_is_error(resp_classify)) {
+        cli::cli_alert_danger("HTTP error {httr2::resp_status(resp_classify)} during submission for SMILES: {current_query}")
+        return(NULL)
+      }
+
+      job_id <- httr2::resp_body_json(resp_classify)$id
+
+      if (is.null(job_id)) {
+        cli::cli_alert_danger("Could not find job ID in submission response for SMILES: {current_query}")
+        return(NULL)
+      }
+
+      if (run_verbose) {
+        cli::cli_alert_success("({current_index}/{total_queries}) Submission successful. Job ID: {job_id}")
+        cli::cli_alert_info("({current_index}/{total_queries}) Polling for results for job ID: {job_id}")
+      }
+
+      # --- Poll for results ---
+      max_polls <- 20
+      poll_interval <- 3
+
+      for (i in seq_len(max_polls)) {
+        req_result <-
+          httr2::request(burl) %>%
+          httr2::req_url_path_append(path = glue::glue("latest/chem/classyfire/{job_id}/result")) %>%
+          httr2::req_headers("accept" = "application/json") %>%
+          httr2::req_timeout(5) %>%
+          httr2::req_retry(max_tries = 3)
+
+        resp_result <- httr2::req_perform(req_result)
+        status_code <- httr2::resp_status(resp_result)
+
+        if (status_code == 200) {
+          if (run_verbose) {
+            cli::cli_alert_success("({current_index}/{total_queries}) Successfully retrieved result for job ID {job_id}")
+          }
+          return(httr2::resp_body_json(resp_result))
+        } else if (status_code == 202) {
+          if (run_verbose) {
+            cli::cli_alert_info(".. result not ready, waiting {poll_interval}s (Attempt {i}/{max_polls})")
+          }
+          Sys.sleep(poll_interval)
+        } else {
+          cli::cli_alert_danger("HTTP error {status_code} when retrieving result for job ID {job_id}")
+          return(NULL)
+        }
+      }
+
+      cli::cli_alert_warning("Polling timed out after {max_polls} attempts for job ID {job_id}")
+      return(NULL)
     },
     otherwise = NA
   )
 
-  # ---------------------------------------------------------------------------
-  # --- Map over the query
-  # ---------------------------------------------------------------------------
+  # --- Map over the query ---
   results <- purrr::map(
     .x = query,
-    .f = safe_classify,
+    .f = safe_classify_and_get_result,
     current_index = seq_along(query),
     total_queries = length(query),
     .progress = TRUE
@@ -114,4 +150,3 @@ util_classyfire <- function(query) {
 
   return(results)
 }
-
