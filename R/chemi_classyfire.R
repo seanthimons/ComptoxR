@@ -8,7 +8,7 @@
 #' @return A list of Classyfire classificatons corresponding to the input DTXSIDs.
 #'  Returns NA if the request fails for a given DTXSID.
 #' @export
-chemi_classyfire <- function(query, verbose = FALSE) {
+chemi_classyfire <- function(query) {
   # Display debugging information before the request
   cli::cli_rule(left = "Classyfire classification payload options")
   cli::cli_dl(
