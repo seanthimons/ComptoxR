@@ -317,13 +317,13 @@ run_debug <- function(debug = FALSE) {
 #' @examples
 #' \dontrun{
 #' # Enable verbose mode
-#' set_verbose(TRUE)
+#' run_verbose(TRUE)
 #'
 #' # Disable verbose mode
-#' set_verbose(FALSE)
+#' run_verbose(FALSE)
 #'
 #' # Attempt to set verbose mode with an invalid value
-#' set_verbose("hello")
+#' run_verbose("hello")
 #' }
 #' @export
 run_verbose <- function(verbose = FALSE) {
@@ -355,11 +355,11 @@ run_verbose <- function(verbose = FALSE) {
     eco_server(server = 1)
     np_server(server = 1)
     run_debug(debug = FALSE)
-    set_verbose(verbose = TRUE)
+    run_debug(verbose = TRUE)
   }
 
 # Conditionally display startup message based on verbosity
-  if (Sys.getenv("set_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
+  if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
     packageStartupMessage(
       .header()
     )
