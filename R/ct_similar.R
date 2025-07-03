@@ -1,13 +1,19 @@
 #' @title Get Similar Compounds by DTXSID
 #' 
+#' @param query A character vector of DTXSIDs.
+#' @param similarity The similarity threshold, a numeric value between 0 and 1. Optional, defaults to 0.8.
+#'
+#' @returns A tibble of similar compounds, or an empty tibble if no similar compounds are found.
+#' @export
 ct_similar <- function(query, similarity = 0.8) {
-  # Determine if debug mode is active from environment variable
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  # Determine if verbose mode is active from environment variable
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
-  # Get base URL from environment variable
 
-  # Validate similarity threshold
+  #burl <- Sys.getenv('burl')
+  # ! NOTE: The burl variable is hardcoded here until API is stable and has the endpoint. 
+  
+  burl <- 'https://comptox.epa.gov/dashboard-api/'
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  
   if (similarity < 0 || similarity > 1) {
     cli::cli_abort("Similarity threshold must be between 0 and 1.")
   }
@@ -16,7 +22,6 @@ ct_similar <- function(query, similarity = 0.8) {
     cli::cli_abort("Similarity threshold must be a numeric value.")
   }
 
-  # Display debugging information about the query payload
   cli::cli_rule(left = "Similar compounds payload options")
   cli::cli_dl(c(
     "Number of queries" = "{length(query)}",
@@ -25,22 +30,16 @@ ct_similar <- function(query, similarity = 0.8) {
   cli::cli_rule()
   cli::cli_end()
 
-  # Inform user if debug mode is active
   if (run_debug) {
     cli::cli_alert_info("Debug/dry-run mode is active. No actual HTTP requests will be made.")
   }
 
-#Maps over the query list to construct the request for each query
 req_list <- map(query, ~{
-
-  # Construct the HTTP request object
-    
-  req <- request('https://comptox.epa.gov/dashboard-api/') %>%
+  req <- request(burl) %>%
       req_url_path_append('similar-compound/by-dtxsid/') %>%
       req_url_path_append(.x) %>%
       req_url_path_append(similarity)
   
-# If in debug mode, return a dry-run of the request
   if (run_debug) {
       return(req_dry_run(req))
     }
@@ -55,13 +54,14 @@ results <- resp %>%
   map(., ~{
     if (is.null(.x)) {
       return(tibble())
-    }else{
+      } else {
       resp_body_json(.x) %>% 
         map(., as_tibble) %>% 
         list_rbind()
     }
-    
-  }) %>% list_rbind(names_to = 'query')
+    }) %>%
+    list_rbind(names_to = 'query')
 
   return(results)
 }
+
