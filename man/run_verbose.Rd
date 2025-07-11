@@ -24,12 +24,12 @@ variable is set to \code{"FALSE"}.
 \examples{
 \dontrun{
 # Enable verbose mode
-set_verbose(TRUE)
+run_verbose(TRUE)
 
 # Disable verbose mode
-set_verbose(FALSE)
+run_verbose(FALSE)
 
 # Attempt to set verbose mode with an invalid value
-set_verbose("hello")
+run_verbose("hello")
 }
 }
