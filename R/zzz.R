@@ -356,7 +356,7 @@ reset_servers <- function() {
     eco_server(server = 1)
     np_server(server = 1)
     run_debug(debug = FALSE)
-    run_verbose(verbose = TRUE)
+    run_verbose(verbose = FALSE)
   }
 
 # Conditionally display startup message based on verbosity
