@@ -1,3 +1,9 @@
+#Adding new testing chemicals
+
+build_testing_chemicals(chems = c(
+
+))
+
 #Checks documentation
 devtools::document()
 
