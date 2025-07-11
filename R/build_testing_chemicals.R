@@ -28,14 +28,31 @@ build_testing_chemicals <- function(chems = character(0)) {
 		cli::cli_bullets(c("*" = unique(failed_chems)))
 	}
 
-	new_chems <- candidates %>%
+	# Isolate new chemicals to be added
+	new_dtxsids <- candidates %>%
 		dplyr::filter(!is.na(.data$dtxsid)) %>%
 		dplyr::filter(.data$dtxsid %ni% ComptoxR::testing_chemicals$dtxsid) %>%
-		pull(dtxsid) %>%
-		ct_details(query = ., projection = 'id') %>%
-		bind_rows(., ComptoxR::testing_chemicals) %>%
-		distinct() %>%
-		select(
+		dplyr::pull(.data$dtxsid) %>%
+		unique()
+
+	if (length(new_dtxsids) == 0) {
+		cli::cli_alert_info("All chemicals found are already in the testing dataset.")
+		return(invisible(NULL))
+	}
+
+	chems_to_add <- ct_details(query = new_dtxsids, projection = 'id')
+
+	# Display the chemicals that will be added and ask for confirmation
+	cli::cli_h2("New chemicals to be added")
+	print(chems_to_add %>% dplyr::select(preferredName, casrn, dtxsid))
+
+	# usethis::ui_yeah() will abort if the user answers 'no'.
+	usethis::ui_yeah("Do you want to proceed and add these {length(new_dtxsids)} chemical{?s}?")
+
+	# Combine new chemicals with existing data
+	updated_chems <- dplyr::bind_rows(chems_to_add, ComptoxR::testing_chemicals) %>%
+		dplyr::distinct() %>%
+		dplyr::select(
 			'preferredName',
 			'casrn',
 			'dtxsid',
@@ -43,13 +60,14 @@ build_testing_chemicals <- function(chems = character(0)) {
 			'inchikey'
 		)
 
-	if (nrow(new_chems) < nrow(ComptoxR::testing_chemicals)) {
+	if (nrow(updated_chems) < nrow(ComptoxR::testing_chemicals)) {
 		cli::cli_abort('Something failed with updating the testing chemicals.')
 	} else {
 		cli::cli_alert_info("Updating `testing_chemicals.rda` data file.")
 
-		testing_chemicals <- new_chems
+		testing_chemicals <- updated_chems
 
 		usethis::use_data(testing_chemicals, overwrite = TRUE)
+		devtools::load_all()
 	}
 }

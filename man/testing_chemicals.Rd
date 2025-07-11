@@ -13,7 +13,4 @@ testing_chemicals
 \description{
 A data frame of several DTXSIDs to test functions with.
 }
-\details{
-A data frame of 46 compounds
-}
 \keyword{datasets}
