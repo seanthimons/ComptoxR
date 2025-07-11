@@ -4,7 +4,7 @@
 \alias{chemi_classyfire}
 \title{Get Classyfire classificaton for DTXSID}
 \usage{
-chemi_classyfire(query, verbose = FALSE)
+chemi_classyfire(query)
 }
 \arguments{
 \item{query}{A character vector of DTXSIDs to query.}
