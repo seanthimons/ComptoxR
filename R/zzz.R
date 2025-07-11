@@ -63,51 +63,6 @@ run_setup <- function() {
   cli::cli_text('{ct_api_key()}')
 }
 
-.header <- function() {
-  if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
-    build_date <- paste0(
-      as.character(Sys.Date()),
-      cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
-    )
-  } else {
-    build_date <- as.character(utils::packageDate('ComptoxR'))
-  }
-
-  cli::cli({
-    cli::cli_rule()
-
-    cli::cli_alert_success(
-      c(
-        "This is version ",
-        {
-          as.character(utils::packageVersion('ComptoxR'))
-        },
-        " of ComptoxR"
-      )
-    )
-    cli::cli_alert_success(
-      c('Built on: ', {
-        build_date
-      })
-    )
-    cli::cli_rule()
-    cli::cli_alert_warning('Available API endpoints:')
-    cli::cli_alert_warning(
-      'You can change these using the *_server() function!'
-    )
-    cli::cli_dl(c(
-      'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
-      'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
-      'ECOTOX' = '{Sys.getenv("eco_burl")}',
-      'EPI Suite' = '{Sys.getenv("epi_burl")}',
-      'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
-
-    ))
-  })
-
-  run_setup()
-}
-
 #' Set API endpoints for Comptox API endpoints
 #'
 #' @param server Defines what server to target
@@ -259,22 +214,6 @@ np_server <- function(server = NULL){
   }
 }
 
-
-#' Reset all servers
-
-reset_servers <- function() {
-  # Reset CompTox Chemistry Dashboard server URL
-  ct_server()
-  # Reset Cheminformatics server URL
-  chemi_server()
-  # Reset EPI Suite server URL
-  epi_server()
-  # Reset ECOTOX server URL
-  eco_server()
-  # Reset Natural Products server URL
-  np_server()
-}
-
 #' Set debug mode
 #'
 #' @param debug A logical value to enable or disable debug mode.
@@ -344,6 +283,68 @@ run_verbose <- function(verbose = FALSE) {
   }
 }
 
+#' Reset all servers
+
+reset_servers <- function() {
+  # Reset CompTox Chemistry Dashboard server URL
+  ct_server()
+  # Reset Cheminformatics server URL
+  chemi_server()
+  # Reset EPI Suite server URL
+  epi_server()
+  # Reset ECOTOX server URL
+  eco_server()
+  # Reset Natural Products server URL
+  np_server()
+}
+
+# Header -----------------------------------------------------------------
+
+.header <- function() {
+  if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
+    build_date <- paste0(
+      as.character(Sys.Date()),
+      cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
+    )
+  } else {
+    build_date <- as.character(utils::packageDate('ComptoxR'))
+  }
+
+  cli::cli({
+    cli::cli_rule()
+
+    cli::cli_alert_success(
+      c(
+        "This is version ",
+        {
+          as.character(utils::packageVersion('ComptoxR'))
+        },
+        " of ComptoxR"
+      )
+    )
+    cli::cli_alert_success(
+      c('Built on: ', {
+        build_date
+      })
+    )
+    cli::cli_rule()
+    cli::cli_alert_warning('Available API endpoints:')
+    cli::cli_alert_warning(
+      'You can change these using the *_server() function!'
+    )
+    cli::cli_dl(c(
+      'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
+      'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
+      'ECOTOX' = '{Sys.getenv("eco_burl")}',
+      'EPI Suite' = '{Sys.getenv("epi_burl")}',
+      'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
+
+    ))
+  })
+
+  run_setup()
+}
+
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
@@ -355,7 +356,7 @@ run_verbose <- function(verbose = FALSE) {
     eco_server(server = 1)
     np_server(server = 1)
     run_debug(debug = FALSE)
-    run_debug(verbose = TRUE)
+    run_verbose(verbose = TRUE)
   }
 
 # Conditionally display startup message based on verbosity
