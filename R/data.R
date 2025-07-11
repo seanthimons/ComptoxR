@@ -1,8 +1,6 @@
 #' Data frame of DTXSIDs to test things with.
 #'
 #' A data frame of several DTXSIDs to test functions with.
-#'
-#' A data frame of 46 compounds
 'testing_chemicals'
 
 #' Table of GenRA function endpoints.
