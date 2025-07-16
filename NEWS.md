@@ -1,5 +1,21 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9007
+
+- Enhanced the run_debug() and set_verbose() functions to display informative alerts when debug or verbose modes are toggled, providing clearer feedback to users.
+- Introduces util_classyfire.R for ClassyFire API classification of SMILES strings.
+- Refactors ct_synonym() for improved error handling, debugging, and response parsing.
+- Updates chemi_classyfire() to use environment variable for verbosity.
+- Adds support for natural products server in zzz.R.
+- Updates ct_classify() to better handle mixtures and unknowns.
+- Minor improvements and code cleanup in chemi_cluster.R.
+- Adds 'webchem' to DESCRIPTION suggests.
+- chemi_classyfire now returns proper order for taxonomy.
+- Added extract_mol_formula function to assist in curation
+- Updated NAMESPACE, build schedule, and Helpers for intial loading.
+- Updated ct_search to handle suggestions.
+
+
 # ComptoxR 1.2.2.9006
 
 - Same as previous version.
