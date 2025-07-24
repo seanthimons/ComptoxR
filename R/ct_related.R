@@ -29,7 +29,7 @@ ct_related <- function(query) {
   cli::cli_end()
 
   #TODO Remove after API endpoint comes up
-  ct_server(server = 3)
+  ct_server(server = 9)
 
   # Helper function to fetch data safely
   safe_fetch <- purrr::safely(function(id) {
