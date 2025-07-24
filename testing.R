@@ -107,3 +107,34 @@ ranked %>%
 
 # list ----------------------------------------------------------------
 
+
+
+q1 <- ct_search(query = c(
+  'Acetone Peroxide',
+  'HMTD',
+  'Mercury(II) Fulminate',
+  'Nitroglycerin',
+  'PLX',
+  'Trinitrotoluene',
+  'RDX',
+  'HMX',
+  'Ammonium Nitrate',
+  'Picric Acid'
+),
+request_method = 'POST'
+)
+
+q1 <- ct_search(query = c(
+'Hydrogen-3',        
+'Cobalt-60',
+'Strontium-90',
+'Caesium-137',
+'Radium-226',
+'Radium-228',
+'Uranium-233',
+'Thorium-232',
+'Uranium-234',
+'Uranium-235'
+),
+request_method = 'POST'
+)
