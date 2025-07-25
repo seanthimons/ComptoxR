@@ -17,21 +17,19 @@ ct_synonym <- function(query, request_method = "GET") {
   # Informative CLI output
   cli::cli_rule(left = 'Synonym search options')
   cli::cli_dl(items = c(
-    'DTXSID count' = "{length(query_vector)}",
+    'Compound count' = "{length(query_vector)}",
     'Request method' = "{request_method}"
   ))
   cli::cli_end()
   cli::cat_line()
   
-  # 2. Prepare requests
-  path_prefix <- "chemical/synonym/search/by-dtxsid/"
-  
+	# 2. Build requests
   base_req <- httr2::request(Sys.getenv('burl')) %>%
     httr2::req_headers(
       accept = "application/json",
       `x-api-key` = ct_api_key()
     ) %>%
-    httr2::req_url_path_append(path_prefix)
+    httr2::req_url_path_append("/chemical/synonym/search/by-dtxsid/")
   
   # Build list of requests
   reqs <- list()
@@ -42,7 +40,7 @@ ct_synonym <- function(query, request_method = "GET") {
     stats::setNames(query_vector, query_vector),
     function(dtxsid) {
       base_req %>%
-        httr2::req_url_path_append(URLencode(dtxsid))
+        httr2::req_url_path_append(dtxsid)
     }
   )
   }
