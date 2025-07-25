@@ -6,11 +6,7 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule()
-  cli::cli_alert_warning(
-    '\nAttempting ping test...'
-  )
-  #cli::cli_text()
+  cli::cli_rule(left = 'Ping test')
 
   # Ping -------------------------------------------------------------------
 
@@ -58,8 +54,7 @@ run_setup <- function() {
 
   # Token check ------------------------------------------------------------
 
-  cli::cli_rule()
-  cli::cli_alert_warning('Looking for API tokens...')
+  cli::cli_rule(left = 'API tokens...')
   cli::cli_text('{ct_api_key()}')
 }
 
@@ -80,13 +75,12 @@ ct_server <- function(server = NULL) {
     switch(
       as.character(server),
       "1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
-      "2" = Sys.setenv('burl' = 'https://api-ccte-stg.epa.gov/'),
-      "3" = Sys.setenv(
-        'burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'
-      ),
+      "2" = Sys.setenv('burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
+			"3" = Sys.setenv('burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
+      "9" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
       {
         cli::cli_alert_warning("\nInvalid server option selected!\n")
-        cli::cli_alert_info("Valid options are 1 (Production) and 2 (Staging).")
+        cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Developement), and 9 (Scraping).")
         cli::cli_alert_warning("Server URL reset!")
         Sys.setenv("burl" = "")
       }
@@ -327,8 +321,7 @@ reset_servers <- function() {
         build_date
       })
     )
-    cli::cli_rule()
-    cli::cli_alert_warning('Available API endpoints:')
+    cli::cli_rule(left = 'Available API endpoints:')
     cli::cli_alert_warning(
       'You can change these using the *_server() function!'
     )
@@ -340,6 +333,11 @@ reset_servers <- function() {
       'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
 
     ))
+		cli::cli_rule(left = 'Run settings')
+		cli::cli_dl(c(
+			'Debug' = '{Sys.getenv("run_debug")}',
+			'Verbose' = '{Sys.getenv("run_verbose")}'
+		))
   })
 
   run_setup()
