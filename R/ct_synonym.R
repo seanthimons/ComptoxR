@@ -58,7 +58,7 @@ ct_synonym <- function(query, request_method = "GET") {
 		reqs <- purrr::map(query_chunks, function(chunk) {
 			base_req %>%
 				httr2::req_method("POST") %>%
-				httr2::req_body_json(data = (chunk), auto_unbox = TRUE)
+				httr2::req_body_json(data = chunk, auto_unbox = TRUE)
 		})
 	}
 
@@ -115,12 +115,11 @@ ct_synonym <- function(query, request_method = "GET") {
 								#inner list parsing
 								purrr::map_if(.x, is.null, ~NA_character_)
 							}
-						)  %>%
+						) %>%
 						compact() %>%
 						map(., list_c) %>%
 						map(., as_tibble) %>%
 						list_rbind(names_to = 'quality')
-						
 				)
 			}
 
@@ -160,84 +159,25 @@ ct_synonym <- function(query, request_method = "GET") {
 					message = paste("HTTP status", status)
 				))
 			}
-		}) %>% purrr::list_rbind(names_to = "query")
+		}) %>%
+			purrr::list_rbind(names_to = "query")
 	}
 
 	# POST response parsing ----
 	if (request_method == "POST") {
-		# Re-create the chunks to map responses back to their original queries
-		query_chunks <- split(
-			query_vector,
-			ceiling(seq_along(query_vector) / 200)
-		)
-
 		# Process responses chunk by chunk, creating a list of tibbles
-		results <- purrr::map2(resps, query_chunks, function(resp, chunk) {
-			if (inherits(resp, "httr2_error")) {
-				resp <- resp$resp
-			}
-
-			if (!inherits(resp, "httr2_response")) {
-				msg <- if (is.null(resp)) {
-					"No response received from server."
-				} else {
-					as.character(resp)
-				}
-				cli::cli_warn("A request chunk failed: {msg}")
-				return(tibble::tibble(
-					raw_query = chunk,
-					error = "Request failed",
-					message = msg
-				))
-			}
-
-			status <- httr2::resp_status(resp)
-
-			# For any non-successful status, apply an error to all queries in the chunk
-			if (status >= 300) {
-				msg <- httr2::resp_status_desc(resp)
-				cli::cli_warn("Query chunk failed with status {status}: {msg}")
-				return(tibble::tibble(
-					raw_query = chunk,
-					error = msg,
-					message = paste("HTTP status", status)
-				))
-			}
-
-			# On success (2xx), parse the body.
+		results <- map2(resps, query_chunks, function(resp, chunk) {
 			body <- httr2::resp_body_json(resp)
-			if (length(body) == 0) {
-				return(tibble::tibble()) # No results for this chunk
-			}
-
-			if (length(body) != length(chunk)) {
-				cli::cli_warn(
-					"POST response length ({length(body)}) does not match query chunk size ({length(chunk)}). Results for this chunk are being discarded."
-				)
-				return(tibble::tibble(
-					raw_query = chunk,
-					error = "Response/Query mismatch",
-					message = "Inconsistent number of results in response body."
-				))
-			}
-
-			names(body) <- chunk
 
 			body %>%
-				purrr::map(function(result_for_one_dtxsid) {
-					if (length(result_for_one_dtxsid) == 0) {
-						return(NULL)
-					}
-					result_for_one_dtxsid %>%
-						purrr::discard(., names(.) %in% c('pcCode', 'dtxsid')) %>%
-						purrr::map(~ purrr::map_if(.x, is.null, ~NA_character_)) %>%
-						dplyr::bind_rows()
-				}) %>%
-				purrr::list_rbind(names_to = "raw_query")
-		}) %>%
-			# Row-bind the list of tibbles from each chunk into a single final tibble
-			purrr::list_rbind()
+				set_names(chunk) %>% 
+				map(., compact) %>%
+				map(., ~ purrr::discard(.x, names(.) %in% c('pcCode', 'dtxsid'))) %>%
+				map(., ~ map(., list_c)) %>%
+				map(., ~ map(., as_tibble)) %>%
+				map(., ~ list_rbind(.x, names_to = 'quality')) %>%
+				list_rbind(., names_to = 'query')
+		}) %>% list_rbind()
+		return(results)
 	}
-
-	return(results)
 }
