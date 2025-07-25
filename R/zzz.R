@@ -6,11 +6,7 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule()
-  cli::cli_alert_warning(
-    '\nAttempting ping test...'
-  )
-  #cli::cli_text()
+  cli::cli_rule(left = 'Ping test')
 
   # Ping -------------------------------------------------------------------
 
@@ -58,8 +54,7 @@ run_setup <- function() {
 
   # Token check ------------------------------------------------------------
 
-  cli::cli_rule()
-  cli::cli_alert_warning('Looking for API tokens...')
+  cli::cli_rule(left = 'API tokens...')
   cli::cli_text('{ct_api_key()}')
 }
 
@@ -326,8 +321,7 @@ reset_servers <- function() {
         build_date
       })
     )
-    cli::cli_rule()
-    cli::cli_alert_warning('Available API endpoints:')
+    cli::cli_rule(left = 'Available API endpoints:')
     cli::cli_alert_warning(
       'You can change these using the *_server() function!'
     )
@@ -339,6 +333,11 @@ reset_servers <- function() {
       'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
 
     ))
+		cli::cli_rule(left = 'Run settings')
+		cli::cli_dl(c(
+			'Debug' = '{Sys.getenv("run_debug")}',
+			'Verbose' = '{Sys.getenv("run_verbose")}'
+		))
   })
 
   run_setup()
