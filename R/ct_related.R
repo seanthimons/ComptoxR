@@ -6,7 +6,9 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param query A character vector of DTXSIDs to query.
-#'
+#' @param inclusive Boolean to only return results within all of the queried compounds. Valid for over one compound.
+#' @export
+#' 
 #' @return A list of data frames containing related substances.
 #' @export
 #'
@@ -16,15 +18,26 @@
 #' }
 #'
 
-ct_related <- function(query) {
+ct_related <- function(query, inclusive = FALSE) {
   # Check if query is valid
   if (length(query) == 0) {
     cli::cli_abort("Query must be a character vector of DTXSIDs.")
   }
 
+	# Check if query is valid for inclusion
+
+	if (inclusive == TRUE & length(query) == 1) {
+		cli::cli_abort("Inclusive option only valid for multiple compounds")
+	}
+
   # Display debugging information
   cli::cli_rule(left = "Related substances payload options")
-  cli::cli_dl(c("Number of compounds" = "{length(query)}"))
+  cli::cli_dl(
+		c(
+			"Number of compounds" = "{length(query)}",
+			"Inclusive" = "{inclusive}"
+		)
+	)
   cli::cli_rule()
   cli::cli_end()
 
@@ -79,7 +92,9 @@ ct_related <- function(query) {
         list_rbind()
     ) %>%
     list_rbind(names_to = "query") %>%
-    filter(query != dtxsid)
+		rename(child = dtxsid) %>% 
+		#Removes parent searched compound
+    filter(child != query)
   
   errors <- purrr::map(results, "error")
 
@@ -91,6 +106,13 @@ ct_related <- function(query) {
     ))
   }
   ct_server(server = 1)
+
+if(inclusive == TRUE){
+
+data <- data %>% 
+	filter(query %in% query & child %in% query)
+}	
+
   # Return the data
   return(data)
 }
