@@ -3,7 +3,6 @@
 #'
 #' @param chemicals vector of chemical names
 #' @param sort boolean to sort or not
-#' @param dry_run boolean to return the payload instead of sending the request
 #' @param hclust_method character string indicating which clustering method to use in `hclust`.
 #'   Defaults to "complete". See `?hclust` for available methods.
 #'
@@ -13,7 +12,6 @@
 chemi_cluster <- function(
   chemicals,
   sort = TRUE,
-  dry_run = FALSE,
   hclust_method = "complete"
 ) {
   if (is.null(sort) | missing(sort)) {
@@ -32,49 +30,39 @@ chemi_cluster <- function(
   cli_rule()
   cli_end()
 
-  if (dry_run) {
     req <- request(
       Sys.getenv('chemi_burl')
-    ) |>
-      req_method("POST") |>
-      req_url_path_append("api/resolver/getsimilaritymap") |>
-      req_url_query(sort = tolower(as.character(sort))) |>
+    ) %>%
+      req_method("POST") %>%
+      req_url_path_append("api/resolver/getsimilaritymap") %>%
+      req_url_query(sort = tolower(as.character(sort))) %>%
       req_headers(
         accept = "application/json, text/plain, */*"
-      ) |>
+      ) %>%
       req_body_json(
         list(
           'chemicals' = chemicals
         )
       )
 
-    return(list(payload = body_data, request = req))
+  if (Sys.getenv("run_debug") == "TRUE") {
+    cli::cli_alert_info('DEBUGGING REQUEST')
+    print(req)
   }
 
-  resp <- request(
-    Sys.getenv('chemi_burl')
-  ) |>
-    req_method("POST") |>
-    req_url_path_append("api/resolver/getsimilaritymap") |>
-    req_url_query(sort = tolower(as.character(sort))) |>
-    req_headers(
-      accept = "application/json, text/plain, */*"
-    ) |>
-    req_body_json(
-      list(
-        'chemicals' = chemicals
-      )
-    ) |>
+  resp <- req %>% 
+		req_retry(max_tries = 3, is_transient = \(resp) resp_status(resp) %in% c(429, 500, 502, 503, 504)) %>% 
     req_perform()
-
-  parsed_resp <- resp |>
+		
+	
+  parsed_resp <- resp %>%
     resp_body_json()
 
   # Check if any data was found.
   if (length(parsed_resp) > 0) {
   } else {
-    cli::cli_alert_danger('No data found!') # Display an error message if no data was found.
-    return(NULL) # Return NULL if no data was found.
+    cli::cli_alert_danger('No data found!')
+    return(NULL)
   }
 
   mol_names <- parsed_resp %>%
@@ -82,8 +70,11 @@ chemi_cluster <- function(
     map(., ~ pluck(.x, 'chemical')) %>%
     map(., ~ keep(.x, names(.x) %in% c('sid', 'name'))) %>%
     map(., as_tibble) %>%
-    list_rbind()
+    list_rbind() %>% 
+		select(dtxsid = sid, name = name)
 
+
+	# Is there a way to fix this locally by altering the lists when there is no color, which indicates perfect similarity?
   similarity <- parsed_resp %>%
     pluck(., 'similarity') %>%
     map(
@@ -91,10 +82,11 @@ chemi_cluster <- function(
       ~ map(., ~ discard_at(.x, 'cl')) %>%
         list_flatten() %>%
         unname() %>%
-        list_c() %>%
-        replace(., . == 0, 1)
+        list_c()
     )
 
+	# ! NOTE removed the %>% replace(., . == 0, 1), as that was giving false positives.
+	
   hc <- matrix(unlist(similarity), nrow = length(similarity), byrow = TRUE) %>%
     `colnames<-`(mol_names$name) %>%
     `row.names<-`(mol_names$name) %>%
@@ -113,4 +105,42 @@ chemi_cluster <- function(
     similarity = similarity,
     hc = hc
   )
+}
+
+#' Create a similarity list from chemical cluster data
+#'
+#' @description Converts a similarity matrix into a long-format data frame.
+#'
+#' @param chemi_cluster_data A list object containing chemical cluster data, including `mol_names` and a `similarity` matrix.
+#'
+#' @returns A tibble with columns for parent and child chemical identifiers, their names, and the similarity value between them. The function will error if `chemi_cluster_data` is `NULL` or missing.
+#'
+#' @export
+chemi_cluster_sim_list <- function(chemi_cluster_data) {
+  
+	if (missing(chemi_cluster_data) || is.null(chemi_cluster_data)) {
+    cli::cli_abort("Missing chemi_cluster_data!")
+  }
+
+	mol_names <- chemi_cluster_data$mol_names
+	similarity <- chemi_cluster_data$similarity
+	
+	sim_list <- similarity %>% 
+		set_names(., mol_names$dtxsid) %>% 
+		map(., ~set_names(.x, mol_names$dtxsid)) %>% 
+		map(., ~enframe(.x, name = 'child', value = 'value')) %>% 
+		list_rbind(., names_to = 'parent') %>% 
+		filter(parent != child) %>% 
+		left_join(., mol_names, join_by('parent' == 'dtxsid')) %>% 
+		left_join(., mol_names, join_by('child' == 'dtxsid'))  %>% 
+		select(
+			parent, 
+			parent_name = name.x, 
+			child, 
+			child_name = name.y, 
+			value
+		)
+	
+	return(sim_list)
+
 }
