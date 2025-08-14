@@ -5,13 +5,19 @@
 \title{Set API endpoints for Cheminformatics API endpoints}
 \usage{
 chemi_server(server = NULL)
+
+chemi_server(server = NULL)
 }
 \arguments{
 \item{server}{Defines what server to target}
 }
 \value{
 Should return the Sys Env variable \code{chemi_burl}
+
+Should return the Sys Env variable \code{chemi_burl}
 }
 \description{
-Set API endpoints for Cheminformatics API endpoints
+This function sets the API endpoint for the Cheminformatics API based on the
+specified server. If no server is specified, the function resets the API
+endpoint to an empty string.
 }

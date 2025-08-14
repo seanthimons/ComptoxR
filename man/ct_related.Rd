@@ -4,10 +4,12 @@
 \alias{ct_related}
 \title{Get related substances from the EPA CompTox dashboard.}
 \usage{
-ct_related(query)
+ct_related(query, inclusive = FALSE)
 }
 \arguments{
 \item{query}{A character vector of DTXSIDs to query.}
+
+\item{inclusive}{Boolean to only return results within all of the queried compounds. Valid for over one compound.}
 }
 \value{
 A list of data frames containing related substances.

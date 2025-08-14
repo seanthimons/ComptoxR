@@ -5,13 +5,19 @@
 \title{Set debug mode}
 \usage{
 run_debug(debug = FALSE)
+
+run_debug(debug = FALSE)
 }
 \arguments{
 \item{debug}{A logical value to enable or disable debug mode.}
 }
 \value{
 Should return the Sys Env variable \code{run_debug}
+
+Should return the Sys Env variable \code{run_debug}
 }
 \description{
+Set debug mode
+
 Set debug mode
 }
