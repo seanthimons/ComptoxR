@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9008
+
+- Added inclusive searching feature for ct_related
+
+
 # ComptoxR 1.2.2.9007
 
 - Enhanced the run_debug() and set_verbose() functions to display informative alerts when debug or verbose modes are toggled, providing clearer feedback to users.
