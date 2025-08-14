@@ -60,7 +60,7 @@ get_ct_image <- function(query, download_dir = tempdir()) {
   # Function to safely fetch and download image
   safe_download <- purrr::safely(function(dtxsid) {
     req <-
-      httr2::request(paste0(base_url, dtxsid)) |>
+      httr2::request(paste0(base_url, dtxsid)) %>%
       httr2::req_headers(accept = "application/hal+json")
     resp <- httr2::req_perform(req)
 

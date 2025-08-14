@@ -197,6 +197,7 @@ pretty_rename <- function(x) {
 #'
 #' @return list
 #' @export
+
 pretty_casewhen <- function(var, x) {
   message(paste0(var, " == ", x, " ~ '',\n"))
 }
