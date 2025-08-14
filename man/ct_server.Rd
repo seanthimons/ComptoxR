@@ -7,7 +7,14 @@
 ct_server(server = NULL)
 }
 \arguments{
-\item{server}{Defines what server to target}
+\item{server}{Defines what server to target. If \code{NULL} the server URL is
+reset. Valid options are:
+\itemize{
+\item \code{1}: Production
+\item \code{2}: Staging
+\item \code{3}: Development
+\item \code{9}: Scraping
+}}
 }
 \value{
 Should return the Sys Env variable 'burl'

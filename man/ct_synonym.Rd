@@ -4,10 +4,12 @@
 \alias{ct_synonym}
 \title{Search for synonyms by DTXSID}
 \usage{
-ct_synonym(query)
+ct_synonym(query, request_method = "GET")
 }
 \arguments{
 \item{query}{Vector of DTXSIDs (strings).}
+
+\item{request_method}{String: 'GET' or 'POST'. Defaults to 'GET'.}
 }
 \value{
 A data frame of synonym results.

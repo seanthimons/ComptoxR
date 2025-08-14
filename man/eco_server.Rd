@@ -5,13 +5,19 @@
 \title{Set API endpoints for ECOTOX API endpoints}
 \usage{
 eco_server(server = NULL)
+
+eco_server(server = NULL)
 }
 \arguments{
 \item{server}{Defines what server to target}
 }
 \value{
 Should return the Sys Env variable \code{eco_burl}
+
+Should return the Sys Env variable \code{eco_burl}
 }
 \description{
+Set API endpoints for ECOTOX API endpoints
+
 Set API endpoints for ECOTOX API endpoints
 }

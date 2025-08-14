@@ -4,19 +4,12 @@
 \alias{chemi_cluster}
 \title{Get chemical similarity map}
 \usage{
-chemi_cluster(
-  chemicals,
-  sort = TRUE,
-  dry_run = FALSE,
-  hclust_method = "complete"
-)
+chemi_cluster(chemicals, sort = TRUE, hclust_method = "complete")
 }
 \arguments{
 \item{chemicals}{vector of chemical names}
 
 \item{sort}{boolean to sort or not}
-
-\item{dry_run}{boolean to return the payload instead of sending the request}
 
 \item{hclust_method}{character string indicating which clustering method to use in \code{hclust}.
 Defaults to "complete". See \code{?hclust} for available methods.}

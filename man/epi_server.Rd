@@ -5,13 +5,19 @@
 \title{Set API endpoints for EPI Suite API endpoints}
 \usage{
 epi_server(server = NULL)
+
+epi_server(server = NULL)
 }
 \arguments{
 \item{server}{Defines what server to target}
 }
 \value{
 Should return the Sys Env variable \code{epi_burl}
+
+Should return the Sys Env variable \code{epi_burl}
 }
 \description{
+Set API endpoints for EPI Suite API endpoints
+
 Set API endpoints for EPI Suite API endpoints
 }
