@@ -21,7 +21,7 @@ chemi_classyfire <- function(query) {
 
   safe_req_perform <- purrr::safely(httr2::req_perform)
 
-  results <- query |>
+  results <- query %>%
     purrr::map(
       .f = function(q) {
         if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {

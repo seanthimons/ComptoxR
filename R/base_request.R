@@ -17,7 +17,7 @@ base_request <- function(
 
   safe_req_perform <- purrr::safely(httr2::req_perform)
 
-  results <- query_list |>
+  results <- query_list %>%
     purrr::map(
       .f = function(q) {
         if (Sys.getenv('run_verbose')) {
