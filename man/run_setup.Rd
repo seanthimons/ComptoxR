@@ -5,10 +5,16 @@
 \title{First time setup for functions}
 \usage{
 run_setup()
+
+run_setup()
 }
 \value{
 Ping tests and API tokens.
+
+Ping tests and API tokens.
 }
 \description{
+Tests to see if APIs are up and tokens are present.
+
 Tests to see if APIs are up and tokens are present.
 }
