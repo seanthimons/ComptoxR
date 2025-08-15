@@ -58,65 +58,6 @@ run_setup <- function() {
   cli::cli_text('{ct_api_key()}')
 }
 
-#' First time setup for functions
-#'
-#' Tests to see if APIs are up and tokens are present.
-#'
-#' @return Ping tests and API tokens.
-#' @export
-
-run_setup <- function() {
-	cli::cli_rule(left = 'Ping test')
-
-	# Ping -------------------------------------------------------------------
-
-	ping_list <-
-		list(
-			'https://api-ccte.epa.gov/exposure/health',
-			'https://api-ccte.epa.gov/hazard/health',
-			'https://api-ccte.epa.gov/bioactivity/health',
-			'https://api-ccte.epa.gov/chemical/health',
-
-			'https://hcd.rtpnc.epa.gov/#/', #prod
-			'https://hazard-dev.sciencedataexperts.com/#/', #dev
-
-			'https://episuite.dev/EpiWebSuite/#/',
-			"https://cfpub.epa.gov/ecotox/index.cfm",
-
-			"https://app.naturalproducts.net/home"
-		)
-
-	# Ping results -----------------------------------------------------------
-
-	check_url <- function(url) {
-		tryCatch(
-			{
-				response <- httr::GET(url, httr::timeout(5))
-				status_code <- httr::status_code(response)
-				return(paste(url, ": ", status_code))
-			},
-			error = function(e) {
-				if (grepl("Could not resolve host", e$message)) {
-					return(paste(url, "- Error: Could not resolve host"))
-				} else if (grepl("Timeout", e)) {
-					return(paste(url, "- Error: Request timed out"))
-				} else {
-					return(paste(url, "- Error:", e))
-				}
-			}
-		)
-	}
-
-	results <- lapply(ping_list, check_url)
-
-	cli::cli_li(items = results)
-	cli::cli_end()
-
-	# Token check ------------------------------------------------------------
-
-	cli::cli_rule(left = 'API tokens...')
-	cli::cli_text('{ct_api_key()}')
-}
 
 #' Set API endpoints for Comptox API endpoints
 #'
@@ -169,6 +110,9 @@ ct_server <- function(server = NULL) {
 #'     \item `1`: Production
 #'     \item `2`: Development
 #'     \item `3`: Internal
+#'     \item `4`: Bleeding-edge
+#' 
+#'
 #'   }
 #'
 #' @return Should return the Sys Env variable `chemi_burl`
@@ -183,16 +127,13 @@ chemi_server <- function(server = NULL) {
 		switch(
 			as.character(server),
 			"1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/"),
-			"2" = Sys.setenv(
-				"chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"
-			),
-			"3" = Sys.setenv(
-				"chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"
-			),
+			"2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"),
+			"3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"),
+			"4" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api/"),
 			{
-				cli::cli_alert_warning("\nInvalid server option selected!\n")
+				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
-					"Valid options are 1 (Production), 2 (Development), and 3 (Internal)."
+					"Valid options are 1 (Production), 2 (Development), 3 (Internal), 4 (Bleeding-edge)."
 				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("chemi_burl" = "")
