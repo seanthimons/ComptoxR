@@ -6,56 +6,74 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule(left = 'Ping test')
+  cli::cli_rule(left = 'Ping Test for Configured Endpoints')
 
-  # Ping -------------------------------------------------------------------
+  # Dynamically get the list of configured server URLs
+  server_urls <- c(
+		"CompTox Dashboard API" = paste0(Sys.getenv("burl"), 'chemical/health'),
+    "Cheminformatics UI" = paste0(Sys.getenv("chemi_burl"), "#"),
+    "ECOTOX" = Sys.getenv("eco_burl"),
+    "EPI Suite UI" = 'https://episuite.dev/EpiWebSuite/#/',
+    "Natural Products API" = 'https://app.naturalproducts.net/home'
+  )
 
-  ping_list <-
-    list(
-      'https://api-ccte.epa.gov/exposure/health',
-      'https://api-ccte.epa.gov/hazard/health',
-      'https://api-ccte.epa.gov/bioactivity/health',
-      'https://api-ccte.epa.gov/chemical/health',
+  # Filter out any empty/unset URLs and remove duplicates
+  ping_list <- unique(server_urls[server_urls != ""])
 
-      'https://hcd.rtpnc.epa.gov/#/', #prod
-      'https://hazard-dev.sciencedataexperts.com/#/', #dev
-
-      'https://episuite.dev/EpiWebSuite/#/',
-      "https://cfpub.epa.gov/ecotox/index.cfm",
-
-      "https://app.naturalproducts.net/home"
-    )
-
-  # Ping results -----------------------------------------------------------
-
-  check_url <- function(url) {
-    tryCatch(
-      {
-        response <- httr::GET(url, httr::timeout(5))
-        status_code <- httr::status_code(response)
-        return(paste(url, ": ", status_code))
-      },
-      error = function(e) {
-        if (grepl("Could not resolve host", e$message)) {
-          return(paste(url, "- Error: Could not resolve host"))
-        } else if (grepl("Timeout", e$message)) {
-          return(paste(url, "- Error: Request timed out"))
-        } else {
-          return(paste(url, "- Error:", e$message))
+  if (length(ping_list) == 0) {
+    cli::cli_alert_info("No server endpoints are configured to ping.")
+    cli::cli_end()
+  } else {
+    # A more informative and visually appealing check function
+    check_url <- function(url) {
+      tryCatch(
+        {
+          # Use HEAD request for efficiency; we just want to check connectivity
+          req <- httr2::request(url) |>
+            httr2::req_method("HEAD") |>
+            httr2::req_timeout(5) |>
+            # Don't error on HTTP status, we check it manually
+            httr2::req_error(is_error = \(resp) FALSE)
+          
+          resp <- httr2::req_perform(req)
+          status <- httr2::resp_status(resp)
+          
+          # Use cli for styled output. 3xx redirects are not considered errors.
+          if (status >= 200 && status < 400) {
+            cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
+          } else {
+            cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
+          }
+        },
+        error = function(e) {
+          # Catch httr2-specific errors for more robust error messages
+          error_msg <- if (inherits(e, "httr2_timeout")) {
+            "Request timed out"
+          } else if (inherits(e, "httr2_connect_error")) {
+            "Connection failed"
+          } else {
+            "Request failed" # Fallback for other errors
+          }
+          cli::format_inline("{.strong {name}}: {cli::col_red('ERROR (', error_msg, ')')}")
         }
-      }
-    )
+      )
+    }
+
+    results <- purrr::imap(ping_list, check_url)
+
+    cli::cli_li(items = results)
+    cli::cli_end()
   }
 
-  results <- lapply(ping_list, check_url)
-
-  cli::cli_li(items = results)
-  cli::cli_end()
-
-  # Token check ------------------------------------------------------------
-
-  cli::cli_rule(left = 'API tokens...')
-  cli::cli_text('{ct_api_key()}')
+  # More informative token check
+  cli::cli_rule(left = 'API Token Status')
+  # Assuming ct_api_key() is defined elsewhere and returns the key or ""
+  api_key <- ct_api_key()
+  if (is.null(api_key) || api_key == "") {
+    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.fn set_ct_api_key} to set it.")
+  } else {
+    cli::cli_alert_success("CompTox API Key: {.strong SET}.")
+  }
 }
 
 
@@ -189,11 +207,12 @@ eco_server <- function(server = NULL) {
 	} else {
 		switch(
 			as.character(server),
+			"1" = Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm"),
 			"2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
-			"1" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
+			"3" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
 			{
 				cli::cli_alert_warning("\nInvalid server option selected!\n")
-				cli::cli_alert_info("Valid options are 1 (Local) and 2 (Production).")
+				cli::cli_alert_info("Valid options are 1 (Dashboard), 2 (Production), 3 (Local).")
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("eco_burl" = "")
 			}
@@ -309,57 +328,6 @@ reset_servers <- function() {
 	np_server()
 }
 
-# Header -----------------------------------------------------------------
-
-.header <- function() {
-	if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
-		build_date <- paste0(
-			as.character(Sys.Date()),
-			cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
-		)
-	} else {
-		build_date <- as.character(utils::packageDate('ComptoxR'))
-	}
-
-	cli::cli({
-		cli::cli_rule()
-
-		cli::cli_alert_success(
-			c(
-				"This is version ",
-				{
-					as.character(utils::packageVersion('ComptoxR'))
-				},
-				" of ComptoxR"
-			)
-		)
-		cli::cli_alert_success(
-			c('Built on: ', {
-				build_date
-			})
-		)
-		cli::cli_rule(left = 'Available API endpoints:')
-		cli::cli_alert_warning(
-			'You can change these using the *_server() function!'
-		)
-		cli::cli_dl(c(
-			'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
-			'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
-			'ECOTOX' = '{Sys.getenv("eco_burl")}',
-			'EPI Suite' = '{Sys.getenv("epi_burl")}',
-			'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
-
-		))
-		cli::cli_rule(left = 'Run settings')
-		cli::cli_dl(c(
-			'Debug' = '{Sys.getenv("run_debug")}',
-			'Verbose' = '{Sys.getenv("run_verbose")}'
-		))
-	})
-
-	run_setup()
-}
-
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
@@ -371,7 +339,7 @@ reset_servers <- function() {
 		eco_server(server = 1)
 		np_server(server = 1)
 		run_debug(debug = FALSE)
-		run_verbose(verbose = FALSE)
+		run_verbose(verbose = TRUE)
 	}
 
 # Conditionally display startup message based on verbosity
@@ -651,43 +619,4 @@ reset_servers <- function() {
   })
 
   run_setup()
-}
-
-# Attach -----------------------------------------------------------------
-
-.onAttach <- function(libname, pkgname) {
-
-  if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
-    ct_server(server = 1)
-    chemi_server(server = 1)
-    epi_server(server = 1)
-    eco_server(server = 1)
-    np_server(server = 1)
-    run_debug(debug = FALSE)
-    run_verbose(verbose = FALSE)
-  }
-
-# Conditionally display startup message based on verbosity
-  if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
-    packageStartupMessage(
-      .header()
-    )
-  }
-
-}
-
-# Load -------------------------------------------------------------------
-
-.extractor <- NULL
-.classifier <- NULL
-
-# .onLoad is a special function that R runs when a package is loaded.
-.onLoad <- function(libname, pkgname) {
-  # Call the factory ONCE and assign the result to our placeholder.
-  # The "super-assignment" operator (<<-) ensures we modify the .extractor
-  # in the package's namespace, not just a local copy.
-  .extractor <<- create_formula_extractor_final()
-  .classifier <<- create_compound_classifier()
-  #message("Is .extractor a function? ", is.function(.extractor))
-  #message("Is .classifier a function? ", is.function(.classifier))
 }
