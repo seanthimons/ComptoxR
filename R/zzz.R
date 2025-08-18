@@ -7,25 +7,28 @@
 
 run_setup <- function() {
   cli::cli_rule(left = 'Ping Test for Configured Endpoints')
-
-  # Dynamically get the list of configured server URLs
-  server_urls <- c(
+	
+	server_urls <- c(
+  # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
 		"CompTox Dashboard API" = paste0(Sys.getenv("burl"), 'chemical/health'),
-    "Cheminformatics UI" = paste0(Sys.getenv("chemi_burl"), "#"),
+    "Cheminformatics API" = paste0(Sys.getenv("chemi_burl"), "#"),
     "ECOTOX" = Sys.getenv("eco_burl"),
-    "EPI Suite UI" = 'https://episuite.dev/EpiWebSuite/#/',
+    "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/',
     "Natural Products API" = 'https://app.naturalproducts.net/home'
   )
 
-  # Filter out any empty/unset URLs and remove duplicates
-  ping_list <- unique(server_urls[server_urls != ""])
+  # Filter out any endpoints with empty/unset URLs
+  active_endpoints <- server_urls[server_urls != "" & !is.na(server_urls)]
+  
+  # Remove entries with duplicate URLs, keeping the first name. Using `unique()` would strip the names.
+  ping_list <- active_endpoints[!duplicated(active_endpoints)]
 
   if (length(ping_list) == 0) {
     cli::cli_alert_info("No server endpoints are configured to ping.")
     cli::cli_end()
   } else {
     # A more informative and visually appealing check function
-    check_url <- function(url) {
+    check_url <- function(url, name) {
       tryCatch(
         {
           # Use HEAD request for efficiency; we just want to check connectivity
@@ -40,16 +43,16 @@ run_setup <- function() {
           
           # Use cli for styled output. 3xx redirects are not considered errors.
           if (status >= 200 && status < 400) {
-            cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
           } else {
-            cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
           }
         },
         error = function(e) {
           # Catch httr2-specific errors for more robust error messages
           error_msg <- if (inherits(e, "httr2_timeout")) {
             "Request timed out"
-          } else if (inherits(e, "httr2_connect_error")) {
+          } else if (inherits(e, "httr2_connect_error")){
             "Connection failed"
           } else {
             "Request failed" # Fallback for other errors
@@ -59,10 +62,11 @@ run_setup <- function() {
       )
     }
 
-    results <- purrr::imap(ping_list, check_url)
+		results <- purrr::imap_chr(ping_list, check_url)
 
     cli::cli_li(items = results)
     cli::cli_end()
+		
   }
 
   # More informative token check
@@ -74,6 +78,8 @@ run_setup <- function() {
   } else {
     cli::cli_alert_success("CompTox API Key: {.strong SET}.")
   }
+  
+  invisible(NULL)
 }
 
 
@@ -332,7 +338,7 @@ reset_servers <- function() {
 
 .onAttach <- function(libname, pkgname) {
 
-	if (Sys.getenv('burl') == "" | Sys.getenv("chemi_burl") == "") {
+	if (Sys.getenv('burl') == "" || Sys.getenv("chemi_burl") == "") {
 		ct_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
