@@ -37,6 +37,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.RELEASE_PAT }} # Use the secret here
           tag_name: v${{ env.PACKAGE_VERSION }}
           name: Release v${{ env.PACKAGE_VERSION }}
           body: |
