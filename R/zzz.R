@@ -74,7 +74,7 @@ run_setup <- function() {
   # Assuming ct_api_key() is defined elsewhere and returns the key or ""
   api_key <- ct_api_key()
   if (is.null(api_key) || api_key == "") {
-    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.fn set_ct_api_key} to set it.")
+    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.fn ct_api_key} to set it.")
   } else {
     cli::cli_alert_success("CompTox API Key: {.strong SET}.")
   }
@@ -94,7 +94,7 @@ run_setup <- function() {
 #'     \item `9`: Scraping
 #'   }
 #'
-#' @return Should return the Sys Env variable 'burl'
+#' @return Should return the Sys Env variable `burl`.
 #' @export
 
 ct_server <- function(server = NULL) {
@@ -135,8 +135,6 @@ ct_server <- function(server = NULL) {
 #'     \item `2`: Development
 #'     \item `3`: Internal
 #'     \item `4`: Bleeding-edge
-#' 
-#'
 #'   }
 #'
 #' @return Should return the Sys Env variable `chemi_burl`
@@ -186,7 +184,7 @@ epi_server <- function(server = NULL) {
 			as.character(server),
 			"1" = Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api"),
 			{
-				cli::cli_alert_warning("\nInvalid server option selected!\n")
+				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info("Valid option is 1 (Production).")
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("epi_burl" = "")
@@ -217,7 +215,7 @@ eco_server <- function(server = NULL) {
 			"2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
 			"3" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
 			{
-				cli::cli_alert_warning("\nInvalid server option selected!\n")
+				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info("Valid options are 1 (Dashboard), 2 (Production), 3 (Local).")
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("eco_burl" = "")
@@ -239,7 +237,7 @@ np_server <- function(server = NULL){
 			as.character(server),
 			"1" = Sys.setenv("np_burl" = "https://api.naturalproducts.net/latest/"),
 			{
-				cli::cli_alert_warning("\nInvalid server option selected!\n")
+				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info("Valid options are 1 (Production).")
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("np_burl" = "")
@@ -266,7 +264,7 @@ run_debug <- function(debug = FALSE) {
 		}
 	} else {
 		cli::cli_alert_warning(
-			"\nInvalid debug option selected!\n"
+			"Invalid debug option selected!"
 		)
 		cli::cli_alert_info("Valid options are TRUE or FALSE.")
 		cli::cli_alert_warning("Debug mode set to FALSE.")
@@ -311,7 +309,7 @@ run_verbose <- function(verbose = FALSE) {
 		}
 	} else {
 		cli::cli_alert_warning(
-			"\nInvalid verbose option selected!\n"
+			"Invalid verbose option selected!"
 		)
 		cli::cli_alert_info("Valid options are TRUE or FALSE.")
 		cli::cli_alert_warning("Verbose mode set to FALSE.")
@@ -338,7 +336,7 @@ reset_servers <- function() {
 
 .onAttach <- function(libname, pkgname) {
 
-	if (Sys.getenv('burl') == "" || Sys.getenv("chemi_burl") == "") {
+	if (Sys.getenv('burl') == "") {
 		ct_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
@@ -371,209 +369,6 @@ reset_servers <- function() {
 	.classifier <<- create_compound_classifier()
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
-}
-
-
-#' Set API endpoints for Cheminformatics API endpoints
-#'
-#' @param server Defines what server to target
-#'
-#' @return Should return the Sys Env variable `chemi_burl`
-#' @export
-
-chemi_server <- function(server = NULL) {
-  if (is.null(server)) {
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("chemi_burl" = "")
-    }
-  } else {
-    switch(
-      as.character(server),
-      "1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/"),
-      "2" = Sys.setenv(
-        "chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"
-      ),
-      "3" = Sys.setenv(
-        "chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"
-      ),
-      {
-        cli::cli_alert_warning("\nInvalid server option selected!\n")
-        cli::cli_alert_info(
-          "Valid options are 1 (Production), 2 (Development), and 3 (Internal)."
-        )
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("chemi_burl" = "")
-      }
-    )
-
-    Sys.getenv("chemi_burl")
-  }
-}
-
-#' Set API endpoints for EPI Suite API endpoints
-#'
-#' @param server Defines what server to target
-#'
-#' @return Should return the Sys Env variable `epi_burl`
-#' @export
-
-epi_server <- function(server = NULL) {
-  if (is.null(server)) {
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("epi_burl" = "")
-    }
-  } else {
-    switch(
-      as.character(server),
-      "1" = Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api"),
-      {
-        cli::cli_alert_warning("\nInvalid server option selected!\n")
-        cli::cli_alert_info("Valid option is 1 (Production).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("epi_burl" = "")
-      }
-    )
-
-    Sys.getenv("epi_burl")
-  }
-}
-
-#' Set API endpoints for ECOTOX API endpoints
-#'
-#' @param server Defines what server to target
-#'
-#' @return Should return the Sys Env variable `eco_burl`
-#' @export
-
-eco_server <- function(server = NULL) {
-  if (is.null(server)) {
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("eco_burl" = "")
-    }
-  } else {
-    switch(
-      as.character(server),
-      "2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
-      "1" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
-      {
-        cli::cli_alert_warning("\nInvalid server option selected!\n")
-        cli::cli_alert_info("Valid options are 1 (Local) and 2 (Production).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("eco_burl" = "")
-      }
-    )
-
-    Sys.getenv("eco_burl")
-  }
-}
-
-np_server <- function(server = NULL){
-  if (is.null(server)) {
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("np_burl" = "")
-    }
-  } else {
-    switch(
-      as.character(server),
-      "1" = Sys.setenv("np_burl" = "https://api.naturalproducts.net/latest/"),
-      {
-        cli::cli_alert_warning("\nInvalid server option selected!\n")
-        cli::cli_alert_info("Valid options are 1 (Production).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("np_burl" = "")
-      }
-    )
-
-    Sys.getenv("np_burl")
-  }
-}
-
-#' Set debug mode
-#'
-#' @param debug A logical value to enable or disable debug mode.
-#'
-#' @return Should return the Sys Env variable `run_debug`
-#' @export
-run_debug <- function(debug = FALSE) {
-  if (is.logical(debug)) {
-    Sys.setenv("run_debug" = as.character(debug))
-    if (isTRUE(debug)) {
-      cli::cli_alert_info("Debug mode is now ON.")
-    } else {
-      cli::cli_alert_info("Debug mode is now OFF.")
-    }
-  } else {
-    cli::cli_alert_warning(
-      "\nInvalid debug option selected!\n"
-    )
-    cli::cli_alert_info("Valid options are TRUE or FALSE.")
-    cli::cli_alert_warning("Debug mode set to FALSE.")
-    Sys.setenv("run_debug" = "FALSE")
-  }
-}
-
-#' Set verbose mode
-#'
-#' Sets the verbosity of the execution.
-#'
-#' @param verbose A logical value indicating whether verbose mode should be enabled.
-#'   Defaults to `FALSE`. If a non-logical value is provided, a warning is issued,
-#'   and verbose mode is set to `FALSE`.
-#'
-#' @details
-#' This function sets the `"run_verbose"` environment variable based on the
-#' `verbose` argument. If `verbose` is `TRUE`, the environment variable is set
-#' to `"TRUE"`. Otherwise, it is set to `"FALSE"`. If an invalid value is
-#' provided for `verbose`, a warning message is displayed, and the environment
-#' variable is set to `"FALSE"`.
-#'
-#' @examples
-#' \dontrun{
-#' # Enable verbose mode
-#' run_verbose(TRUE)
-#'
-#' # Disable verbose mode
-#' run_verbose(FALSE)
-#'
-#' # Attempt to set verbose mode with an invalid value
-#' run_verbose("hello")
-#' }
-#' @export
-run_verbose <- function(verbose = FALSE) {
-  if (is.logical(verbose)) {
-    Sys.setenv("run_verbose" = as.character(verbose))
-    if (isTRUE(verbose)) {
-      cli::cli_alert_info("Verbose mode is now ON.")
-    } else {
-      cli::cli_alert_info("Verbose mode is now OFF.")
-    }
-  } else {
-    cli::cli_alert_warning(
-      "\nInvalid verbose option selected!\n"
-    )
-    cli::cli_alert_info("Valid options are TRUE or FALSE.")
-    cli::cli_alert_warning("Verbose mode set to FALSE.")
-    Sys.setenv("run_verbose" = "FALSE")
-  }
-}
-
-#' Reset all servers
-
-reset_servers <- function() {
-  # Reset CompTox Chemistry Dashboard server URL
-  ct_server()
-  # Reset Cheminformatics server URL
-  chemi_server()
-  # Reset EPI Suite server URL
-  epi_server()
-  # Reset ECOTOX server URL
-  eco_server()
-  # Reset Natural Products server URL
-  np_server()
 }
 
 # Header -----------------------------------------------------------------
