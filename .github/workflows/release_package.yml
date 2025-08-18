@@ -33,8 +33,7 @@ jobs:
       - name: Build R package
         run: R CMD build .
 
-      # Add this step for debugging to see the file structure
-      - name: List files to find package
+      - name: List files for debugging
         run: ls -R ..
 
       - name: Get package version
@@ -43,15 +42,18 @@ jobs:
           VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
           echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
 
-      # New step to find the exact path of the built package
-      - name: Find built package
+      - name: Get Package Path and Filename
         id: find_package
         run: |
-          # The find command searches one level up for the tar.gz file
-          # and saves the full path to an environment variable.
-          PACKAGE_PATH=$(find .. -name "*.tar.gz" -type f)
+          # Find the full path to the built tarball in the parent directory
+          PACKAGE_PATH=$(find .. -maxdepth 1 -name "*.tar.gz" -type f)
           echo "PACKAGE_PATH=$PACKAGE_PATH" >> $GITHUB_ENV
           echo "Found package at: $PACKAGE_PATH"
+          
+          # Use the basename shell command to extract just the filename
+          PACKAGE_FILENAME=$(basename "$PACKAGE_PATH")
+          echo "PACKAGE_FILENAME=$PACKAGE_FILENAME" >> $GITHUB_ENV
+          echo "Package filename is: $PACKAGE_FILENAME"
 
       - name: Create Release
         id: create_release
@@ -66,13 +68,12 @@ jobs:
           draft: false
           prerelease: false
 
-      # Corrected upload step using the path we found
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Use the exact path found in the previous step
+          # Use the full path for the asset_path
           asset_path: ${{ env.PACKAGE_PATH }}
-          # Use the basename of the path for the asset name
-          asset_name: ${{ basename(env.PACKAGE_PATH) }}
+          # Use the extracted filename for the asset_name
+          asset_name: ${{ env.PACKAGE_FILENAME }}
           asset_content_type: application/gzip
