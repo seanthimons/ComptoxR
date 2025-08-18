@@ -33,19 +33,25 @@ jobs:
       - name: Build R package
         run: R CMD build .
 
-      # Optional: Add this step to see where files are located for debugging
-      - name: List files in parent directory
-        run: ls -R ../
+      # Add this step for debugging to see the file structure
+      - name: List files to find package
+        run: ls -R ..
 
-      - name: Get package info
-        id: get_info
+      - name: Get package version
+        id: get_version
         run: |
-          PACKAGE_NAME=$(grep -m 1 '^Package:' DESCRIPTION | cut -d ' ' -f 2)
-          PACKAGE_VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
-          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
-          echo "Package name: $PACKAGE_NAME"
-          echo "Package version: $PACKAGE_VERSION"
+          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+
+      # New step to find the exact path of the built package
+      - name: Find built package
+        id: find_package
+        run: |
+          # The find command searches one level up for the tar.gz file
+          # and saves the full path to an environment variable.
+          PACKAGE_PATH=$(find .. -name "*.tar.gz" -type f)
+          echo "PACKAGE_PATH=$PACKAGE_PATH" >> $GITHUB_ENV
+          echo "Found package at: $PACKAGE_PATH"
 
       - name: Create Release
         id: create_release
@@ -60,11 +66,13 @@ jobs:
           draft: false
           prerelease: false
 
+      # Corrected upload step using the path we found
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Corrected Path: Look in the parent directory (../) for the tarball
-          asset_path: ../${{ env.PACKAGE_NAME }}_${{ env.PACKAGE_VERSION }}.tar.gz
-          asset_name: ${{ env.PACKAGE_NAME }}_${{ env.PACKAGE_VERSION }}.tar.gz
+          # Use the exact path found in the previous step
+          asset_path: ${{ env.PACKAGE_PATH }}
+          # Use the basename of the path for the asset name
+          asset_name: ${{ basename(env.PACKAGE_PATH) }}
           asset_content_type: application/gzip
