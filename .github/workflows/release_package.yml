@@ -50,6 +50,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/ComptoxR_*.tar.gz
+          asset_path: ${{ github.workspace }}/*.tar.gz
           asset_name: ComptoxR_${{ env.PACKAGE_VERSION }}.tar.gz
           asset_content_type: application/gzip
