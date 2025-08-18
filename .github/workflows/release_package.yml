@@ -41,32 +41,23 @@ jobs:
           VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
           echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
 
-      # --- Start of Corrected Section ---
-      - name: Find and Prepare Package Asset
+      - name: Find Package Asset
         id: find_package
         run: |
-          # Search for the tarball in the current directory and its parent
+          # Find the full path to the built tarball
           PACKAGE_PATH=$(find . -maxdepth 2 -name "*.tar.gz" -type f | head -n 1)
-
-          # Check if the file was found. If not, exit with an error.
           if [[ -z "$PACKAGE_PATH" ]]; then
             echo "Error: R package tarball (*.tar.gz) not found."
             exit 1
           fi
-          
-          PACKAGE_FILENAME=$(basename "$PACKAGE_PATH")
-          
           echo "PACKAGE_PATH=$PACKAGE_PATH" >> $GITHUB_ENV
-          echo "PACKAGE_FILENAME=$PACKAGE_FILENAME" >> $GITHUB_ENV
-          
           echo "Found package at: $PACKAGE_PATH"
-          echo "Package filename is: $PACKAGE_FILENAME"
-      # --- End of Corrected Section ---
 
-      - name: Create Release
-        id: create_release
+      # --- This single step now creates the release AND uploads the asset ---
+      - name: Create Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
+          # This token MUST be a Personal Access Token with the 'repo' scope
           token: ${{ secrets.RELEASE_PAT }}
           tag_name: v${{ env.PACKAGE_VERSION }}
           name: Release v${{ env.PACKAGE_VERSION }}
@@ -75,11 +66,7 @@ jobs:
             Version: ${{ env.PACKAGE_VERSION }}
           draft: false
           prerelease: false
+          # The 'files' parameter tells the action to upload the asset at this path
+          files: ${{ env.PACKAGE_PATH }}
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.PACKAGE_PATH }}
-          asset_name: ${{ env.PACKAGE_FILENAME }}
-          asset_content_type: application/gzip
+      # The separate 'actions/upload-release-asset' step has been removed.
