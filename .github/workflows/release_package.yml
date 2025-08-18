@@ -34,26 +34,34 @@ jobs:
         run: R CMD build .
 
       - name: List files for debugging
-        run: ls -R ..
+        run: ls -R
 
       - name: Get package version
-        id: get_version
         run: |
           VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
           echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Get Package Path and Filename
+      # --- Start of Corrected Section ---
+      - name: Find and Prepare Package Asset
         id: find_package
         run: |
-          # Find the full path to the built tarball in the parent directory
-          PACKAGE_PATH=$(find .. -maxdepth 1 -name "*.tar.gz" -type f)
-          echo "PACKAGE_PATH=$PACKAGE_PATH" >> $GITHUB_ENV
-          echo "Found package at: $PACKAGE_PATH"
+          # Search for the tarball in the current directory and its parent
+          PACKAGE_PATH=$(find . -maxdepth 2 -name "*.tar.gz" -type f | head -n 1)
+
+          # Check if the file was found. If not, exit with an error.
+          if [[ -z "$PACKAGE_PATH" ]]; then
+            echo "Error: R package tarball (*.tar.gz) not found."
+            exit 1
+          fi
           
-          # Use the basename shell command to extract just the filename
           PACKAGE_FILENAME=$(basename "$PACKAGE_PATH")
+          
+          echo "PACKAGE_PATH=$PACKAGE_PATH" >> $GITHUB_ENV
           echo "PACKAGE_FILENAME=$PACKAGE_FILENAME" >> $GITHUB_ENV
+          
+          echo "Found package at: $PACKAGE_PATH"
           echo "Package filename is: $PACKAGE_FILENAME"
+      # --- End of Corrected Section ---
 
       - name: Create Release
         id: create_release
@@ -72,8 +80,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Use the full path for the asset_path
           asset_path: ${{ env.PACKAGE_PATH }}
-          # Use the extracted filename for the asset_name
           asset_name: ${{ env.PACKAGE_FILENAME }}
           asset_content_type: application/gzip
