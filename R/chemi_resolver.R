@@ -10,24 +10,19 @@
 #' @param mol Boolean to return mol section.
 #' @return A list containing the resolved chemical names. Each element of the list
 #'   corresponds to an identifier in the input `query`.  Returns an empty list if the
-#'   API returns no results for a given query. If `dry_run` is TRUE, returns the constructed
-#'   request object.
+#'   API returns no results for a given query.
 #'
-#' @examples
-#' \dontrun{
-#' # Example usage with a single identifier:
-#' resolved_name <- chemi_resolver(c("aspirin"))
-#' print(resolved_name)
-#'
-#' # Example usage with multiple identifiers:
-#' resolved_names <- chemi_resolver(c("aspirin", "ibuprofen", "water"))
-#' print(resolved_names)
-#' }
 #' @export
 chemi_resolver <- function(query, mol = FALSE) {
+
+	# NOTE creates simple list if the length is 1, otherwise allows for boxed list
+	if(length(query) == 1){
+		query <- list(query)
+	}
+
   req <- request(Sys.getenv('chemi_burl')) %>%
     req_method("POST") %>%
-    req_url_path_append("api/resolver/lookup") %>%
+    req_url_path_append("resolver/lookup") %>%
     req_headers(Accept = "application/json, text/plain, */*") %>%
     req_body_json(
       list(
@@ -39,6 +34,12 @@ chemi_resolver <- function(query, mol = FALSE) {
       auto_unbox = TRUE
     )
 
+	if(as.logical(Sys.getenv('run_debug'))){
+
+		return(req %>% req_dry_run())
+		
+	}
+	
   resp <- req %>%
     req_perform()
 
