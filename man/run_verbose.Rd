@@ -5,8 +5,6 @@
 \title{Set verbose mode}
 \usage{
 run_verbose(verbose = FALSE)
-
-run_verbose(verbose = FALSE)
 }
 \arguments{
 \item{verbose}{A logical value indicating whether verbose mode should be enabled.
@@ -15,8 +13,6 @@ and verbose mode is set to \code{FALSE}.}
 }
 \description{
 Sets the verbosity of the execution.
-
-Sets the verbosity of the execution.
 }
 \details{
 This function sets the \code{"run_verbose"} environment variable based on the
@@ -24,24 +20,8 @@ This function sets the \code{"run_verbose"} environment variable based on the
 to \code{"TRUE"}. Otherwise, it is set to \code{"FALSE"}. If an invalid value is
 provided for \code{verbose}, a warning message is displayed, and the environment
 variable is set to \code{"FALSE"}.
-
-This function sets the \code{"run_verbose"} environment variable based on the
-\code{verbose} argument. If \code{verbose} is \code{TRUE}, the environment variable is set
-to \code{"TRUE"}. Otherwise, it is set to \code{"FALSE"}. If an invalid value is
-provided for \code{verbose}, a warning message is displayed, and the environment
-variable is set to \code{"FALSE"}.
 }
 \examples{
-\dontrun{
-# Enable verbose mode
-run_verbose(TRUE)
-
-# Disable verbose mode
-run_verbose(FALSE)
-
-# Attempt to set verbose mode with an invalid value
-run_verbose("hello")
-}
 \dontrun{
 # Enable verbose mode
 run_verbose(TRUE)

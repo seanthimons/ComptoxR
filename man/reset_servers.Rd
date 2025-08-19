@@ -5,11 +5,7 @@
 \title{Reset all servers}
 \usage{
 reset_servers()
-
-reset_servers()
 }
 \description{
-Reset all servers
-
 Reset all servers
 }
