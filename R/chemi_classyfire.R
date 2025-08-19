@@ -1,4 +1,3 @@
-# R/chemi_amos.R
 #' Get Classyfire classificaton for DTXSID
 #'
 #' This function retrieves Classyfire classificatons for a given DTXSID using the EPA's cheminformatics API.
