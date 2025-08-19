@@ -5,15 +5,18 @@
 \title{Set API endpoints for Cheminformatics API endpoints}
 \usage{
 chemi_server(server = NULL)
-
-chemi_server(server = NULL)
 }
 \arguments{
-\item{server}{Defines what server to target}
+\item{server}{Defines what server to target. If \code{NULL}, the server URL is
+reset. Valid options are:
+\itemize{
+\item \code{1}: Production
+\item \code{2}: Development
+\item \code{3}: Internal
+\item \code{4}: Bleeding-edge
+}}
 }
 \value{
-Should return the Sys Env variable \code{chemi_burl}
-
 Should return the Sys Env variable \code{chemi_burl}
 }
 \description{
