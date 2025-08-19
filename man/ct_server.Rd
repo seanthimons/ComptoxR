@@ -17,7 +17,7 @@ reset. Valid options are:
 }}
 }
 \value{
-Should return the Sys Env variable 'burl'
+Should return the Sys Env variable \code{burl}.
 }
 \description{
 Set API endpoints for Comptox API endpoints
