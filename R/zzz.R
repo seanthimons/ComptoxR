@@ -148,9 +148,9 @@ chemi_server <- function(server = NULL) {
 	} else {
 		switch(
 			as.character(server),
-			"1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/"),
-			"2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/"),
-			"3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/"),
+			"1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api"),
+			"2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
+			"3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
 			"4" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api/"),
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
