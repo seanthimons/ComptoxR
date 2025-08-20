@@ -38,15 +38,17 @@ chemi_functional_use <- function(query) {
 		req_perform_sequential(on_error = 'continue', progress = TRUE) %>% 
 		set_names(query)
 
-	# TODO the map is not quite perfect. 
 	result <- resp_list %>% 
 		resps_successes() %>% 
     map(.,
-			~ resp_body_json(.x) %>% as_tibble() %>% unnest('functional_classes')
+			~ resp_body_json(.x) %>% flatten()
 			) %>%
+		compact() %>% 
+		map(., ~list_c(.x) %>% tibble::as_tibble_col('functional_classes')) %>% 
 		list_rbind(names_to = 'dtxsid')
 
 
 	return(result)  
 }
+
 
