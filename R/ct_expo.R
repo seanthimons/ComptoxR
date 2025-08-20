@@ -16,16 +16,13 @@
 #' @return A list of data frames
 #' @export
 
-ct_exposure <- function(
+ct_functional_use <- function(
   query,
-  param = c('func_use', 'product_data', 'list'),
-  ccte_api_key = NULL
+  param = c('func_use', 'product_data', 'list')
 ) {
   burl <- Sys.getenv('burl')
 
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+
 
   cli::cli_rule(left = 'Exposure payload options')
   cli::cli_dl(c(
@@ -120,4 +117,13 @@ ct_exposure <- function(
   )
 
   return(df)
+}
+
+
+ct_demo_exposure <- function(query) {
+
+		
+
+
+
 }
