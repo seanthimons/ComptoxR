@@ -10,9 +10,9 @@
 #' @export
 
 chemi_safety <- function(query) {
-  # url <- "https://hcd.rtpnc.epa.gov/api/safety"
-  url <- "https://ccte-cced-cheminformatics.epa.gov/api/resolver/safety-flags"
+  
 
+	
   chemicals <- vector(mode = "list", length = length(query))
 
   chemicals <- map2(
