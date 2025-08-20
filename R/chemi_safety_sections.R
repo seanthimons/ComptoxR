@@ -87,7 +87,7 @@ chemi_safety_section <- function(query, section = NULL) {
       request(
         base_url = Sys.getenv('chemi_burl') # Get the base URL from the environment variable.
       ) %>%
-        req_url_path_append("api/resolver/pubchem-section") %>% # Append the API endpoint.
+        req_url_path_append("resolver/pubchem-section") %>% # Append the API endpoint.
         req_url_query(query = .x) %>% # Add the DTXSID as a query parameter.
         req_url_query(idType = 'DTXSID') %>% # Specify the ID type as DTXSID.
         req_url_query(section = section) # Add the requested section as a query parameter.

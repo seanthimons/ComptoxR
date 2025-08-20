@@ -145,7 +145,7 @@ chemi_hazard <- function(
   # request ----------------------------------------------------------------
 
   response <- POST(
-    url = "https://hcd.rtpnc.epa.gov/api/hazard",
+    url = "https://hcd.rtpnc.epa.gov/hazard",
     body = payload,
     content_type("application/json"),
     accept("application/json, text/plain, */*"),

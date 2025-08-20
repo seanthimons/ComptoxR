@@ -75,7 +75,7 @@ chemi_predict <- function(query, report = "JSON") {
 
   resp <- request(Sys.getenv('chemi_burl')) %>%
     req_method("POST") %>%
-    req_url_path_append("api/webtest/predict") %>%
+    req_url_path_append("webtest/predict") %>%
     req_headers(Accept = "application/json, text/plain, */*") %>%
     req_body_json(
       list(structures = resolved_chemicals, report = report),
