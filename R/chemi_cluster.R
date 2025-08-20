@@ -34,7 +34,7 @@ chemi_cluster <- function(
 		Sys.getenv('chemi_burl')
 	) %>%
 		req_method("POST") %>%
-		req_url_path_append("api/resolver/getsimilaritymap") %>%
+		req_url_path_append("resolver/getsimilaritymap") %>%
 		req_url_query(sort = tolower(as.character(sort))) %>%
 		req_headers(
 			accept = "application/json, text/plain, */*"
