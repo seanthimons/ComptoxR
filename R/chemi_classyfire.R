@@ -1,4 +1,3 @@
-# R/chemi_amos.R
 #' Get Classyfire classificaton for DTXSID
 #'
 #' This function retrieves Classyfire classificatons for a given DTXSID using the EPA's cheminformatics API.
@@ -23,15 +22,16 @@ chemi_classyfire <- function(query) {
 
   results <- query %>%
     purrr::map(
-      .f = function(q) {
+      .f = function(dtxsid) {
         if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
-          cli::cli_alert_info("Querying DTXSID: {.val {q}}")
+          cli::cli_alert_info("Querying DTXSID: {.val {dtxsid}}")
         }
         request <- tryCatch(
           {
-            httr2::request(stringr::str_glue(
-              "{Sys.getenv('chemi_burl')}api/amos/get_classification_for_dtxsid/{q}"
-            ))
+						# Not the best
+            httr2::request(Sys.getenv('chemi_burl')) %>% 
+							req_url_path_append("amos/get_classification_for_dtxsid/") %>% 
+							req_url_path_append(dtxsid)
           },
           error = function(e) {
             cli::cli_abort(

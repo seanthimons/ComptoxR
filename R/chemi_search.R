@@ -250,6 +250,9 @@ chemi_search <- function(
       element_exc <- paste(element_exc, collapse = " ,")
     } else {
       if (element_exc == 'ALL') {
+				
+				# ! TODO Re-add the elements; seems to be broken here. Validate the upper limit for the elements
+
         #print("Exlude all")
         element_exc <- ComptoxR::pt$elements %>%
           filter(., !c(Symbol %in% element_inc_orig)) %>%
@@ -308,7 +311,7 @@ chemi_search <- function(
   # request -----------------------------------------------------------------
 
   response <- POST(
-    url = paste0(Sys.getenv("chemi_burl"), "api/search"),
+    url = paste0(Sys.getenv("chemi_burl"), "search"),
     body = payload,
     content_type("application/json"),
     #accept("*/*"),

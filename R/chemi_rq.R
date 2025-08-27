@@ -9,8 +9,7 @@
 #'
 
 chemi_rq <- function(query) {
-  url <- 'https://hazard-dev.sciencedataexperts.com/api/safety/rqcodes'
-
+  
   chemicals <- vector(mode = "list", length = length(query))
 
   chemicals <- map2(
