@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ComptoxR 1.2.2.9009
+
+- Same as previous version.
+
+
 # ComptoxR 1.2.2.9008
 
 - Added inclusive searching feature for ct_related
