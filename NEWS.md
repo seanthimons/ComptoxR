@@ -1,129 +1,95 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
-
-# ComptoxR 1.2.2.9009
-
-- Same as previous version.
 
 
-# ComptoxR 1.2.2.9008
+# ComptoxR NEWS
 
-- Added inclusive searching feature for ct_related
+## v1.2.2.9009 (2025-08-27)
 
+#### New features
 
-# ComptoxR 1.2.2.9007
+-   remove exposure and production volume endpoints
+    ([6d1e946](https://github.com/seanthimons/ComptoxR/tree/6d1e94673ee21e279d922bcdf08cb61c2c5381f8))
+-   reduce POST request chunk size and standardize pipe operators
+    ([e0ef96f](https://github.com/seanthimons/ComptoxR/tree/e0ef96fc051a1a6545075b5ef7ea1b10c1748a4e))
+-   add base request class implementation
+    ([6ce800f](https://github.com/seanthimons/ComptoxR/tree/6ce800f01e3cce6ebd17cff51fa26281eed0b595))
 
-- Enhanced the run_debug() and set_verbose() functions to display informative alerts when debug or verbose modes are toggled, providing clearer feedback to users.
-- Introduces util_classyfire.R for ClassyFire API classification of SMILES strings.
-- Refactors ct_synonym() for improved error handling, debugging, and response parsing.
-- Updates chemi_classyfire() to use environment variable for verbosity.
-- Adds support for natural products server in zzz.R.
-- Updates ct_classify() to better handle mixtures and unknowns.
-- Minor improvements and code cleanup in chemi_cluster.R.
-- Adds 'webchem' to DESCRIPTION suggests.
-- chemi_classyfire now returns proper order for taxonomy.
-- Added extract_mol_formula function to assist in curation
-- Updated NAMESPACE, build schedule, and Helpers for intial loading.
-- Updated ct_search to handle suggestions.
+#### Bug fixes
 
+-   clean up server setup and error messages
+    ([ca5b04d](https://github.com/seanthimons/ComptoxR/tree/ca5b04d447f69f09c91279f82c1d419b03445ae1))
 
-# ComptoxR 1.2.2.9006
+#### Other changes
 
-- Same as previous version.
+-   remove unused/ old R functions, now available through stable/
+    staging documentation.
+    ([09526ef](https://github.com/seanthimons/ComptoxR/tree/09526ef49ebbcb5d1383aaf224f3a57d8a19aff6))
+-   update GitHub Actions workflow with changelog builder
+    ([bd86b4f](https://github.com/seanthimons/ComptoxR/tree/bd86b4f8cc2b12bee69e9d6477f62bd6cdca5fb3))
 
+Full set of changes:
+[`v1.2.2.9008...v1.2.2.9009`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9008...v1.2.2.9009)
 
-# ComptoxR 1.2.2.9005
+## v1.2.2.9008 (2025-08-18)
 
-- Added ct_functional_use; pulls reported and predicted usage from CCD dashboard.
-- Added utility function for CASRN strings
-- Added function to extract out molecular formulas
+#### Style
 
+-   replace pipe operator |\> with %\>% for consistency
+    ([577d215](https://github.com/seanthimons/ComptoxR/tree/577d215c4d1565d9f58b986c5afe3cdd6eaa7833))
 
-# ComptoxR 1.2.2.9004
+Full set of changes:
+[`v1.2.2.9007...v1.2.2.9008`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9007...v1.2.2.9008)
 
-- Updated ct_list to be default extract out DTXSIDs
-- Added ct_related to find related substances. Subject to depreciation.
-- Minor update to data files and ct_details.
-- Added chemi_classyfire function for classification
-- Added hclust_method parameter for chemi_cluster
-- Added informative error messages to all *_server functions to indicate valid server options.
-- Added chemi_safety_sections; retrieves PubChem datasheets.
-- Added epi_suite functions to pull and search data
-- Added new logic for servers and API endpoints
-- Updated ct_search to remove mass + formula searching, rewrote backend with new helper function.
-- Updated docuemenation for ct_search
-- Adjustment to searching functions
-- Updated two functions to remove rjson dependency.
-- Minor update to data files and ct_details.
-- Added chemi_classyfire function for classification
-- Added hclust_method parameter for chemi_cluster
-- Added informative error messages to all *_server functions to indicate valid server options.
-- Added chemi_safety_sections; retrieves PubChem datasheets.
-- Added epi_suite functions to pull and search data
-- Added new logic for servers and API endpoints
-- Updated ct_search to remove mass + formula searching, rewrote backend with new helper function.
-- Updated docuemenation for ct_search
-- Adjustment to searching functions
-- Updated two functions to remove rjson dependency.
+## v1.2.2.9007 (2025-07-16)
 
+Full set of changes:
+[`v1.2.2.9006...v1.2.2.9007`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9006...v1.2.2.9007)
 
-# ComptoxR 1.2.2.9003
+## v1.2.2.9006 (2025-06-18)
 
-- Updated ct_search to return suggestions
-- Fixed chemi_search
-- Clean up of ct_descriptors
-- Added chemi_predict for TEST and OPERA results. Currently just a table, without organization.
-- Updated setup and ping requests for timeout.
+Full set of changes:
+[`v1.2.2.9005...v1.2.2.9006`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9005...v1.2.2.9006)
 
+## v1.2.2.9005 (2025-06-17)
 
-- Same as previous version.
+Full set of changes:
+[`v1.2.2.9004...v1.2.2.9005`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9004...v1.2.2.9005)
 
+## v1.2.2.9004 (2025-06-10)
 
-# ComptoxR 1.2.2.9002
+Full set of changes:
+[`v1.2.2.9003...v1.2.2.9004`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9003...v1.2.2.9004)
 
-- Same as previous version.
+## v1.2.2.9003 (2024-08-21)
 
+Full set of changes:
+[`v1.2.2.9002...v1.2.2.9003`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9002...v1.2.2.9003)
 
-# ComptoxR 1.2.2.9001
+## v1.2.2.9002 (2024-06-04)
 
-- Same as previous version.
+Full set of changes:
+[`v1.2.2.9001...v1.2.2.9002`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9001...v1.2.2.9002)
 
+## v1.2.2.9001 (2024-05-23)
 
-# ComptoxR 1.2.2.9000
+Full set of changes:
+[`v1.2.2.9000...v1.2.2.9001`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9000...v1.2.2.9001)
 
-- Same as previous version.
+## v1.2.2.9000 (2024-05-14)
 
+Full set of changes:
+[`v1.2.0...v1.2.2.9000`](https://github.com/seanthimons/ComptoxR/compare/v1.2.0...v1.2.2.9000)
 
-# ComptoxR 1.2.2
+## v1.2.0 (2023-12-19)
 
-# ComptoxR 1.2.1
+Full set of changes:
+[`v1.1.0...v1.2.0`](https://github.com/seanthimons/ComptoxR/compare/v1.1.0...v1.2.0)
 
-# ComptoxR 1.2.0
+## v1.1.0 (2023-12-06)
 
-Install via:
-`devtools::install_local(path = '[LOCALPATH HERE]/ComptoxR_1.2.0.tar.gz')`
-Load via: `library(ComptoxR)` You should expect to see:
+Full set of changes:
+[`v1.0.0...v1.1.0`](https://github.com/seanthimons/ComptoxR/compare/v1.0.0...v1.1.0)
 
-```         
-✔ This is version 1.2.0 of ComptoxR
-ℹ API endpoint selected:
-https://api-ccte.epa.gov/
-```
+## v1.0.0 (2023-07-18)
 
-Changelog:
-
--   Added Cheminformatics access, no API token needed. Can be accessed
-    with `chemi_` headers for functions.
-    
--   Added webchem::as.cas() function for CASRN checking
-
--   Removed some bloat that was not supposed to be there
-
--    Also added in cli package for messaging rather than a home-grown
-    function.
-
--   Batch mode road-mapped for other CompTox functions (available in ver
-    1.3)
-
--   ChemExpo road-mapped for documentation (Available in ver 1.3 or 1.4)
-
--   Added PRODWATER and CWA311HS datasets.
+Full set of changes:
+[`9a3b104...v1.0.0`](https://github.com/seanthimons/ComptoxR/compare/9a3b104...v1.0.0)
