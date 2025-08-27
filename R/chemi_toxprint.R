@@ -39,7 +39,7 @@ chemi_toxprint <- function(query, odds_ratio, p_val, true_pos) {
     'options' = options
   )
 
-  burl <- paste0(Sys.getenv("chemi_burl"), "api/toxprints/calculate")
+  burl <- paste0(Sys.getenv("chemi_burl"), "toxprints/calculate")
 
   response <- POST(
     url = burl,

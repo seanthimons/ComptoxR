@@ -62,7 +62,7 @@ ct_search <- function(query, request_method = "GET", search_method = "exact") {
 			cas_chk = as_cas(.data$cas_chk),
 			searchValue = stringr::str_to_upper(.data$raw_search) %>%
 				# ! NOTE Swaps out apostrophes to single quotes; seems to be best practice
-				# TODO Perhaps expand the unicode list for other wild examples
+				# ! TODO Perhaps expand the unicode list for other wild examples
 				stringr::str_replace_all(., c('-' = ' ', '\\u00b4' = "'")),
 			searchValue = dplyr::case_when(
 				!is.na(.data$cas_chk) ~ .data$cas_chk,
@@ -109,11 +109,11 @@ ct_search <- function(query, request_method = "GET", search_method = "exact") {
 
 		
 	if (request_method == 'POST') {
-		# For POST requests, split queries into chunks of 200 to avoid overly large requests.
+		# For POST requests, split queries into chunks of 100 to avoid overly large requests.
 		# Each chunk will be a separate POST request with a JSON body.
 		search_chunks <- split(
 			search_values_df,
-			ceiling(seq_len(nrow(search_values_df)) / 200)
+			ceiling(seq_len(nrow(search_values_df)) / 100)
 		)
 
 		reqs <- purrr::map(search_chunks, function(chunk) {
@@ -319,7 +319,7 @@ ct_search <- function(query, request_method = "GET", search_method = "exact") {
 							dplyr::across(dplyr::where(is.numeric), as.character),
 							dplyr::across(dplyr::where(is.logical), as.character)
 						)
-				}) %>% purrr::list_rbind()
+				},.progress = TRUE) %>% purrr::list_rbind()
 		}) %>%
 		# Row-bind the list of tibbles from each chunk into a single final tibble
 		purrr::list_rbind()
