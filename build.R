@@ -13,12 +13,22 @@ run_verbose(TRUE)
 #Checks documentation
 devtools::document()
 
-#Adds NEWS
-fledge::bump_version(which = 'dev')
-fledge::update_news()
+library(autonewsmd)
+
+an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = here::here())
+an$generate()
+
+# an$repo_list <- an$repo_list %>% 
+# 	map(., 'commits') %>%
+# 	map(., function(df){
+# 		df %>% mutate(across(c(summary, message), ~str_replace(.x, pattern = "^-", replacement = "") %>% str_squish()))
+# })
+	
+an$write(force = TRUE)
 
 #Builds Windows ZIP
 devtools::build(binary = TRUE)
+
 
 #Clean, build, and install, reload
 #Cntrl + Shift + B
