@@ -32,9 +32,9 @@ run_setup <- function() {
       tryCatch(
         {
           # Use HEAD request for efficiency; we just want to check connectivity
-          req <- httr2::request(url) |>
-            httr2::req_method("HEAD") |>
-            httr2::req_timeout(5) |>
+          req <- httr2::request(url) %>%
+            httr2::req_method("HEAD") %>%
+            httr2::req_timeout(5) %>%
             # Don't error on HTTP status, we check it manually
             httr2::req_error(is_error = \(resp) FALSE)
           
