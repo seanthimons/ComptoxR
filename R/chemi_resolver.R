@@ -24,6 +24,9 @@
 chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, mol = FALSE) {
 
 	# NOTE creates simple list if the length is 1, otherwise allows for boxed list
+
+	# TODO Prep for batched queries
+
 	if(length(query) == 1){
 		query <- list(query)
 	}
