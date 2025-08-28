@@ -7,7 +7,7 @@
 #' from each returned object.
 #'
 #' @param query A character vector of chemical identifiers to resolve.
-#' @param mol Boolean to return mol section.
+#' @param mol Boolean to return a V3000 mol array section.
 #' @return A list containing the resolved chemical names. Each element of the list
 #'   corresponds to an identifier in the input `query`.  Returns an empty list if the
 #'   API returns no results for a given query.
@@ -20,16 +20,40 @@ chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, 
 		query <- list(query)
 	}
 
+	# Check if the id_type argument is provided.
+	# If not, stop execution and inform the user.
 	if(missing(id_type) || is.null(id_type)){
-		cli::cli_abort('Missing ID type!')
+		cli::cli_alert_danger('Missing ID type, defaulting to {cli::col_red("AnyID")}')
+		id_type <- 'AnyId'
 	}
 
-	id_type <- match.arg(id_type, choices = c('DTXSID', 'DTXCID', 'SMILES', 'MOL', 'CAS', 'Name', 'InChI', 'InChIKey', 'InChIKey_1', 'AnyId'))
+	# Validate the provided id_type against a predefined list of allowed values.
+	# match.arg will throw an error if the user's input is not one of the choices.
+	id_type <- rlang::arg_match(id_type, values = c('DTXSID', 'DTXCID', 'SMILES', 'MOL', 'CAS', 'Name', 'InChI', 'InChIKey', 'InChIKey_1', 'AnyId'))
 
-	if(is_fuzzy & (missing(fuzzy_type) || is.null(fuzzy_type))){
-		cli::cli_abort('Missing Fuzzy search type!')
+	# If fuzzy search is disabled, set the type to "Not". This ensures a
+	# valid default is passed to arg_match, as fuzzy_type lacks a default.
+	if (!is_fuzzy) {
+		fuzzy_type <- "Not"
+	# If fuzzy search is enabled, a `fuzzy_type` becomes mandatory.
+	} else if (missing(fuzzy_type) || is.null(fuzzy_type)) {
+		cli::cli_abort("When `is_fuzzy` is TRUE, a `fuzzy_type` must be provided.")
 	}
+	# Validate the provided fuzzy_type against a predefined list of allowed values.
+	# match.arg will throw an error if the user's input is not one of the choices.
+	fuzzy_type <- rlang::arg_match(fuzzy_type, values = c("Not", "Anywhere", "Start", "Word", "CloseSyntactic", "CloseSemantic"))
 
+
+	# Returns the V3000 mol array
+	# Checks for parameter validity 
+	if(!is.logical(mol) || missing(mol) || is.null(mol)){
+		if(as.logical(Sys.getenv('run_verbose'))){
+			cli::cli_alert_warning('Mol parameter requires BOOLEAN value! Defaulting to {cli::col_red("FALSE")}.')
+		}
+		mol <- FALSE
+	}else{
+		mol <- as.logical(mol)
+	}
 	
 
   req <- request(Sys.getenv('chemi_burl')) %>%
@@ -71,7 +95,10 @@ chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, 
     c(
       'Number of compounds requested' = '{length(query)}',
       'Number of compounds found' = '{length(body)}',
-			'ID Type' = '{id_type}'
+			'ID Type' = '{id_type}',
+			'Fuzzy Search' = '{is_fuzzy}',
+			'Fuzzy Type' = '{fuzzy_type}',
+			'Mol' = '{mol}'
     )
   )
   cli::cli_rule()
