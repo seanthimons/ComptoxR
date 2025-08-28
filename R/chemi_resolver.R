@@ -1,4 +1,4 @@
-#' Resolve chemical identifiers using an external API.
+#' Resolve chemical identifiers using an external API
 
 #'
 #' This function takes a vector of chemical identifiers as input and uses an external API
@@ -6,13 +6,21 @@
 #' in the request body. The API response is then parsed to extract the 'chemical' field
 #' from each returned object.
 #'
-#' @param query A character vector of chemical identifiers to resolve.
-#' @param mol Boolean to return a V3000 mol array section.
-#' @return A list containing the resolved chemical names. Each element of the list
-#'   corresponds to an identifier in the input `query`.  Returns an empty list if the
-#'   API returns no results for a given query.
+#' @param query A character vector of chemical identifiers.
+#' @param id_type A single string; one of `"DTXSID"`, `"DTXCID"`, `"SMILES"`,
+#'   `"MOL"`, `"CAS"`, `"Name"`, `"InChI"`, `"InChIKey"`, `"InChIKey_1"`, or
+#'   `"AnyId"`. Optional.
+#' @param is_fuzzy A single logical value. Optional.
+#' @param fuzzy_type A single string; one of `"Not"`, `"Anywhere"`, `"Start"`,
+#'   `"Word"`, `"CloseSyntactic"`, or `"CloseSemantic"`. Required when
+#'   `is_fuzzy` is `TRUE`.
+#' @param mol A single logical value. If `TRUE`, returns a V3000 mol array.
+#'   Optional.
 #'
-#' @export
+#' @return A list of resolved chemical information. Returns an empty list if no
+#'   results are found. Errors if the API request fails.
+#'
+#' @export List of lists
 chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, mol = FALSE) {
 
 	# NOTE creates simple list if the length is 1, otherwise allows for boxed list
@@ -106,3 +114,4 @@ chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, 
 
   map(body, ~ pluck(.x, 'chemical'))
 }
+
