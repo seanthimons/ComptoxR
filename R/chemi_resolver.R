@@ -13,12 +13,24 @@
 #'   API returns no results for a given query.
 #'
 #' @export
-chemi_resolver <- function(query, mol = FALSE) {
+chemi_resolver <- function(query, id_type = NULL, is_fuzzy = FALSE, fuzzy_type, mol = FALSE) {
 
 	# NOTE creates simple list if the length is 1, otherwise allows for boxed list
 	if(length(query) == 1){
 		query <- list(query)
 	}
+
+	if(missing(id_type) || is.null(id_type)){
+		cli::cli_abort('Missing ID type!')
+	}
+
+	id_type <- match.arg(id_type, choices = c('DTXSID', 'DTXCID', 'SMILES', 'MOL', 'CAS', 'Name', 'InChI', 'InChIKey', 'InChIKey_1', 'AnyId'))
+
+	if(is_fuzzy & (missing(fuzzy_type) || is.null(fuzzy_type))){
+		cli::cli_abort('Missing Fuzzy search type!')
+	}
+
+	
 
   req <- request(Sys.getenv('chemi_burl')) %>%
     req_method("POST") %>%
@@ -26,9 +38,9 @@ chemi_resolver <- function(query, mol = FALSE) {
     req_headers(Accept = "application/json, text/plain, */*") %>%
     req_body_json(
       list(
-        fuzzy = "Not",
+        fuzzy = fuzzy_type,
         ids = query,
-        idsType = "DTXSID",
+        idsType = id_type,
         mol = mol
       ),
       auto_unbox = TRUE
@@ -58,7 +70,8 @@ chemi_resolver <- function(query, mol = FALSE) {
   cli_dl(
     c(
       'Number of compounds requested' = '{length(query)}',
-      'Number of compounds found' = '{length(body)}'
+      'Number of compounds found' = '{length(body)}',
+			'ID Type' = '{id_type}'
     )
   )
   cli::cli_rule()
