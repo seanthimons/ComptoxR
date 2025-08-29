@@ -30,27 +30,19 @@ chemi_resolver <- function(
 ) {
 	# NOTE creates simple list if the length is 1, otherwise allows for boxed list
 
+	query = as.list(query)
+
 	init_query <- length(query)
+	mult_count <- ceiling(length(query) / 200)
+	mult_request <- mult_count > 1
 
 	if (length(query) > 200) {
-		mult_request <- TRUE
-		mult_count = ceiling(length(query) / 200)
-		query <- split(
+		query_list <- split(
 			query,
-			rep(
-				1:ceiling(length(query) / 200),
-				each = 200,
-				length.out = length(query)
-			)
+			rep(1:mult_count, each = 200, length.out = length(query))
 		)
 	} else {
-		mult_request <- FALSE
-		mult_count = 1L
-		if (length(query) == 1) {
-			query <- list(query)
-		} else {
-			as.list(query)
-		}
+		query_list <- list(query)
 	}
 
 	# Check if the id_type argument is provided.
@@ -115,40 +107,23 @@ chemi_resolver <- function(
 		mol <- as.logical(mol)
 	}
 
-	if (mult_request) {
-		req_list <- map(
-			query,
-			function(query_part) {
-				req <- request(Sys.getenv('chemi_burl')) %>%
-					req_method("POST") %>%
-					req_url_path_append("resolver/lookup") %>%
-					req_headers(Accept = "application/json, text/plain, */*") %>%
-					req_body_json(
-						list(
-							fuzzy = fuzzy_type,
-							ids = query_part,
-							idsType = id_type,
-							mol = mol
-						),
-						auto_unbox = TRUE
-					)
-			}
-		)
-	} else {
-		req_list <- request(Sys.getenv('chemi_burl')) %>%
+	req_list <- map(
+		query_list,
+		function(query_part) {
+			request(Sys.getenv('chemi_burl')) %>%
 			req_method("POST") %>%
 			req_url_path_append("resolver/lookup") %>%
 			req_headers(Accept = "application/json, text/plain, */*") %>%
 			req_body_json(
 				list(
-					fuzzy = fuzzy_type,
-					ids = query,
-					idsType = id_type,
-					mol = mol
-				),
-				auto_unbox = TRUE
+					fuzzy = unbox(fuzzy_type),
+					ids = query_part,
+					idsType = unbox(id_type),
+					mol = unbox(mol)
+				)
 			)
-	}
+		}
+	)
 
 	if (as.logical(Sys.getenv('run_debug'))) {
 		return(req_list %>% pluck(.,1) %>% req_dry_run())
@@ -158,8 +133,7 @@ chemi_resolver <- function(
 		resp_list <- req_list %>%
 		req_perform_sequential(., on_error = 'continue')
 	}else{
-		resp_list <- req_list %>%
-		req_perform()
+		resp_list <- list(req_perform(req_list[[1]]))
 	}
 
 	body_list <- resp_list %>%
@@ -177,12 +151,13 @@ chemi_resolver <- function(
 				cli::cli_alert_warning("No results found for the given query.")
 				return(list())
 			}
+			return(body)
 		}) %>% list_c()
 
 	cli_rule(left = 'Resolver results')
 	cli_dl(
 		c(
-			'Number of compounds requested' = '{length(init_query)}',
+			'Number of compounds requested' = '{init_query}',
 			'Number of batches' = '{mult_count}',
 			'Number of compounds found' = '{length(body_list)}',
 			'ID Type' = '{id_type}',
@@ -193,6 +168,8 @@ chemi_resolver <- function(
 	)
 	cli::cli_rule()
 	cli::cli_end()
+
+	return(body_list)
 
 	# map(body, ~ pluck(.x, 'chemical'))
 }
