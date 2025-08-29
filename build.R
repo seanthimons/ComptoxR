@@ -5,13 +5,18 @@ build_testing_chemicals(chems = c(
 ))
 
 #Load latest data 
-pt <- readRDS("C:\\Users\\STHIMONS\\Documents\\curation\\final\\pt.RDS")
-usethis::use_data(pt, overwrite = TRUE)
+#pt <- readRDS("C:\\Users\\STHIMONS\\Documents\\curation\\final\\pt.RDS")
+#usethis::use_data(pt, overwrite = TRUE)
 
 run_verbose(TRUE)
 
 #Checks documentation
 devtools::document()
+
+usethis::use_version(
+	which = 'minor',
+	push = FALSE
+)
 
 library(autonewsmd)
 
