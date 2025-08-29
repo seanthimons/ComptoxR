@@ -111,28 +111,28 @@ chemi_resolver <- function(
 		query_list,
 		function(query_part) {
 			request(Sys.getenv('chemi_burl')) %>%
-			req_method("POST") %>%
-			req_url_path_append("resolver/lookup") %>%
-			req_headers(Accept = "application/json, text/plain, */*") %>%
-			req_body_json(
-				list(
-					fuzzy = unbox(fuzzy_type),
-					ids = query_part,
-					idsType = unbox(id_type),
-					mol = unbox(mol)
+				req_method("POST") %>%
+				req_url_path_append("resolver/lookup") %>%
+				req_headers(Accept = "application/json, text/plain, */*") %>%
+				req_body_json(
+					list(
+						fuzzy = unbox(fuzzy_type),
+						ids = query_part,
+						idsType = unbox(id_type),
+						mol = unbox(mol)
+					)
 				)
-			)
 		}
 	)
 
 	if (as.logical(Sys.getenv('run_debug'))) {
-		return(req_list %>% pluck(.,1) %>% req_dry_run())
+		return(req_list %>% pluck(., 1) %>% req_dry_run())
 	}
 
-	if(mult_request){
+	if (mult_request) {
 		resp_list <- req_list %>%
-		req_perform_sequential(., on_error = 'continue')
-	}else{
+			req_perform_sequential(., on_error = 'continue')
+	} else {
 		resp_list <- list(req_perform(req_list[[1]]))
 	}
 
@@ -152,7 +152,8 @@ chemi_resolver <- function(
 				return(list())
 			}
 			return(body)
-		}) %>% list_c()
+		}) %>%
+		list_c()
 
 	cli_rule(left = 'Resolver results')
 	cli_dl(
@@ -169,7 +170,17 @@ chemi_resolver <- function(
 	cli::cli_rule()
 	cli::cli_end()
 
-	return(body_list)
+	return(
+		body_list %>%
+			map(., ~ list_flatten(.x, name_spec = '{inner}') %>% as_tibble()) %>%
+			list_rbind() %>%
+			select(-chemId) %>%
+			rename(
+				raw_query = query,
+				dtxsid = sid,
+				dtxcid = cid,
+			) %>% 
+			dplyr::relocate(raw_query, .before = dtxcid)
+	)
 
-	# map(body, ~ pluck(.x, 'chemical'))
 }
