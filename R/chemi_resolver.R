@@ -175,12 +175,11 @@ chemi_resolver <- function(
 			map(., ~ list_flatten(.x, name_spec = '{inner}') %>% as_tibble()) %>%
 			list_rbind() %>%
 			select(-chemId) %>%
-			rename(
-				raw_query = query,
-				dtxsid = sid,
-				dtxcid = cid,
+			rename_with(
+				~ c(query = "raw_query", sid = "dtxsid", cid = "dtxcid")[.x],
+				.cols = any_of(c("query", "sid", "cid"))
 			) %>% 
-			dplyr::relocate(raw_query, .before = dtxcid)
+			dplyr::relocate(any_of("raw_query"), .before = any_of("dtxcid"))
 	)
 
 }
