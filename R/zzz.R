@@ -106,13 +106,15 @@ ct_server <- function(server = NULL) {
 	} else {
 		switch(
 			as.character(server),
-			"1" = Sys.setenv('burl' = 'https://api-ccte.epa.gov/'),
+			"1" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
 			"2" = Sys.setenv('burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
 			"3" = Sys.setenv('burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
+			"4" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
+			"5" = Sys.setenv('burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
 			"9" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
 			{
 				cli::cli_alert_warning("\nInvalid server option selected!\n")
-				cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
+				#cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("burl" = "")
 			}
