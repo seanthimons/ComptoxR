@@ -2,6 +2,8 @@
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
 #' @param ccte_api_key Checks for API key in Sys env
+#' @param request_method Character. Either 'GET' or 'POST'. Default is 'GET'.
+#' @param ... Additional arguments
 #'
 #' @return Returns a tibble with results
 #' @export
@@ -11,6 +13,14 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 	query_vector <- unique(as.vector(query))
 
 	request_method <- rlang::arg_match(request_method, values = c('GET', 'POST'))
+
+	extra_args <- rlang::dots_list(..., .named = TRUE)
+	
+	if('request_amount' %in% names(extra_args)) {
+		request_amount <- extra_args$request_amount %>% as.numeric()
+	}else{
+		request_amount <- 100
+	}
 
   cli::cli_rule(left = 'Hazard payload options')
   cli::cli_dl(
@@ -50,9 +60,9 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 	if (request_method == 'POST') {
 		# For POST requests, split queries into chunks of 100 to avoid overly large requests.
 		# Each chunk will be a separate POST request with a JSON body.
-		search_chunks <- split(
+		search_chunks <- split( # 'chunk' will be a vector of DTXSIDs
 			query_vector,
-			ceiling(seq_len(nrow(query_vector)) / 200)
+			ceiling(seq_len(length(query_vector)) / request_amount)
 		)
 
 		reqs <- purrr::map(search_chunks, function(chunk) {
@@ -60,8 +70,7 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 				# ! NOTE DOCUMENTATION FROM SITE: Maximum 200 DTXSIDs per request
 				# The body is a JSON array of the search values for the current chunk.
 				httr2::req_body_json(
-					body = list(chunk),
-					type = "text/plain"
+					data = (chunk)
 				)
 		})
 	}
@@ -147,13 +156,9 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 					# If body is valid and not empty, process it like a 2xx success.
 					# No warning here, as it's treated as a successful data retrieval.
 					return(
-						body %>%
-							purrr::compact() %>%
-							purrr::map(~ purrr::map_if(.x, is.null, ~NA_character_)) %>%
-							# ! NOTE Discards other list-elements aside from suggestions
-							purrr::keep_at(., 'suggestions') %>%
-							tibble::as_tibble() %>%
-							tidyr::unnest_longer(., col = suggestions)
+						body %>% # Assuming 400 with body means it's a valid (but perhaps partial) result
+						purrr::map_if(is.null, ~NA_character_) %>%
+						tibble::as_tibble()
 					)
 				}
 			}
@@ -177,11 +182,12 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 	}
 ## POST response ----------------------------------------------------------
 
-	if (request_method == "POST") {
-		# Re-create the chunks to map responses back to their original queries
-		search_chunks <- split(
-			search_values_df,
-			ceiling(seq_len(nrow(search_values_df)) / 100)
+	if (request_method == 'POST') {
+		# For POST requests, split queries into chunks of 100 to avoid overly large requests.
+		# Each chunk will be a separate POST request with a JSON body.
+		search_chunks <- split( # 'chunk' will be a vector of DTXSIDs
+			query_vector,
+			ceiling(seq_len(length(query_vector)) / request_amount)
 		)
 
 		# Process responses chunk by chunk, creating a list of tibbles
@@ -201,7 +207,7 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 				}
 				cli::cli_warn("A request chunk failed: {msg}")
 				return(tibble::tibble(
-					raw_search = chunk$raw_search,
+					dtxsid = search_chunks, # Use 'dtxsid' as column name
 					error = "Request failed",
 					message = msg
 				))
@@ -214,51 +220,35 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 				msg <- httr2::resp_status_desc(resp)
 				cli::cli_warn("Query chunk failed with status {status}: {msg}")
 				return(tibble::tibble(
-					raw_search = chunk$raw_search,
+					dtxsid = search_chunks, # Use 'dtxsid' as column name
 					error = msg,
 					message = paste("HTTP status", status)
 				))
 			}
 
 			# On success (2xx), parse the body.
-			# The body is expected to be a list where each element contains the result(s)
-			# for the corresponding query sent in the POST body.
+			# The body is expected to be a list of ToxValDb objects.
 			body <- httr2::resp_body_json(resp)
 			if (length(body) == 0) {
-				return(tibble::tibble()) # No results for this chunk
+				# If the body is empty, it means no results for this chunk.
+				# Return a tibble with the original DTXSIDs and NAs for data columns.
+				return(tibble::tibble(dtxsid = search_chunks))
 			}
 
-			# The API should return one result list-element for each query sent.
-			# If not, we cannot reliably map results back to queries.
-			# if (length(body) != nrow(chunk)) {
-			#   cli::cli_warn("POST response length ({length(body)}) does not match query chunk size ({nrow(chunk)}). Results for this chunk are being discarded.")
-			#   return(tibble::tibble(raw_search = chunk$raw_search, error = "Response/Query mismatch", message = "Inconsistent number of results in response body."))
-			# }
+			# Process the list of ToxValDb objects into a single tibble for the chunk.
+			processed_chunk_results <- purrr::map(body, function(result_item) {
+				result_item %>%
+					purrr::map_if(is.null, ~NA_character_) %>%
+					tibble::as_tibble()
+			}, .progress = FALSE) %>% # Use .progress = FALSE as outer map has progress
+			purrr::list_rbind()
 
-			# Name the list of results with the original `raw_search` values.
-			# This assumes the API preserves the order of queries in its response.
-			#names(body) <- chunk$raw_search
-
-			# Process the named list of results into a single tibble for the chunk.
-			body %>% # purrr::discard(is.null) # Discard queries that returned null; shouldn't be needed as the API returns for all.
-				purrr::map(., function(result_for_one_query) {
-					#   # This inner block processes the result for a single query, which might
-					#   # itself be a list of multiple matches (e.g., for 'contains' search).
-					#   if (length(result_for_one_query) == 0) return(NULL)
-
-					result_for_one_query %>%
-						purrr::map_if(., is.null, ~NA_character_) %>%
-						tibble::as_tibble() %>%
-						tidyr::unnest_longer(., col = suggestions) %>%
-						select(-searchMsgs) %>%
-						dplyr::mutate(
-							dplyr::across(dplyr::where(is.numeric), as.character),
-							dplyr::across(dplyr::where(is.logical), as.character)
-						)
-				},.progress = TRUE) %>% purrr::list_rbind()
+			# Ensure all original DTXSIDs from the chunk are represented, even if no data was returned.
+			original_dtxsids_df <- tibble::tibble(dtxsid = chunk)
+			dplyr::left_join(original_dtxsids_df, processed_chunk_results, by = "dtxsid")
 		}) %>%
 		# Row-bind the list of tibbles from each chunk into a single final tibble
-		purrr::list_rbind()
+		purrr::list_rbind() 
 	}
 	return(results)
 }
