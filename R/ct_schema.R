@@ -27,6 +27,29 @@ ct_schema <- function(){
 		,'exposure'
 	)
 
+    ping_url <- function(url) {
+        req <- httr2::request(url) %>%
+        httr2::req_method("HEAD") %>%
+        httr2::req_timeout(5) %>%
+        httr2::req_error(is_error = \(resp) FALSE)
+        
+        resp <- try(httr2::req_perform(req), silent = TRUE)
+        
+        if (inherits(resp, "try-error")) {
+            cli::cli_alert_warning("URL is not reachable, skipping download: {url}")
+            return(FALSE)
+        }
+        
+        status <- httr2::resp_status(resp)
+        
+        if (status >= 200 && status < 400) {
+            return(TRUE)
+        } else {
+            cli::cli_alert_warning("URL returned status {status}, skipping download: {url}")
+            return(FALSE)
+        }
+    }
+
 	map(ct_endpoints, function(endpoint){
 
 		imap(serv, function(idx, server){
@@ -34,10 +57,14 @@ ct_schema <- function(){
 			# Sets the path
 				ct_server(idx)
 
-				download.file(
-				url = paste0(Sys.getenv('burl'), 'docs/', endpoint, '.json'), 
-				destfile = here::here('schema', paste0(endpoint,'_',server,'.json'))
-				)
+                url_to_check <- paste0(Sys.getenv('burl'), 'docs/', endpoint, '.json')
+
+                if (ping_url(url_to_check)) {
+									download.file(
+										url = url_to_check, 
+										destfile = here::here('schema', paste0(endpoint,'_',server,'.json'))
+									)
+                }
 			
 			})
 		}, .progress = TRUE)
