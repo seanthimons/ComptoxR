@@ -311,7 +311,7 @@ chemi_search <- function(
   # request -----------------------------------------------------------------
 
   response <- POST(
-    url = paste0(Sys.getenv("chemi_burl"), "search"),
+    url = paste0(Sys.getenv("chemi_burl"), "/search"),
     body = payload,
     content_type("application/json"),
     #accept("*/*"),
@@ -319,6 +319,17 @@ chemi_search <- function(
     progress()
   )
 
+# debug -------------------------------------------------------------------
+
+if (as.logical(Sys.getenv('run_debug'))) {
+    data <- list()
+    data$payload <- payload
+    data$response <- response
+    data$content <- df
+
+    return(data)
+}	
+	
   if (response$status_code == 200) {
     df <- content(response, "text", encoding = "UTF-8") %>%
       fromJSON(simplifyVector = FALSE)
@@ -343,19 +354,11 @@ chemi_search <- function(
     }
 
     cli_alert_success('{trc} compounds found!')
+		return(df)
+		
   } else {
     cli_alert_danger("\nBad request at search!")
   }
 
-  # debug -------------------------------------------------------------------
-
-  if (debug == TRUE) {
-    data <- list()
-    data$payload <- payload
-    data$response <- response
-    data$content <- df
-    return(data)
-  } else {
-    return(df)
-  }
 }
+

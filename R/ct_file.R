@@ -25,7 +25,7 @@ ct_file <- function(query, ccte_api_key = NULL) {
   # return(df)
 
   response <- GET(
-    url = paste0(burl, 'chemical-file/mol/search/by-dtxsid/', query),
+    url = paste0(burl, 'chemical/file/mol/search/by-dtxsid/', query),
     add_headers(`x-api-key` = token)
   )
 
@@ -33,6 +33,6 @@ ct_file <- function(query, ccte_api_key = NULL) {
     df <- content(response, "text", encoding = "UTF-8")
     return(df)
   } else {
-    paste0('Bad file request: ', x)
+    paste0('Bad file request: ', query)
   }
 }
