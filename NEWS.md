@@ -1,3 +1,5 @@
+# ComptoxR 1.3.0
+
 
 
 # ComptoxR NEWS
@@ -6,6 +8,8 @@
 
 #### New features
 
+-   updated NEWS.md
+    ([967e114](https://github.com/seanthimons/ComptoxR/tree/967e1143125dcf2651e5d768b21a6eba135afa22))
 -   update input component styles and add new features
     ([3076ce7](https://github.com/seanthimons/ComptoxR/tree/3076ce7f89cd939d0c89c856fc5a47d203f4556c))
 -   updated ct_hazard to new endpoints and added GET / POST methods.
@@ -50,7 +54,7 @@
     ([0a5aabc](https://github.com/seanthimons/ComptoxR/tree/0a5aabc9e7a50ac031d72a8e8534275980e0f199))
 
 Full set of changes:
-[`v1.2.2.9009...680c04d`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9009...680c04d)
+[`v1.2.2.9009...8b5df40`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9009...8b5df40)
 
 ## v1.2.2.9009 (2025-08-27)
 
