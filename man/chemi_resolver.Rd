@@ -2,19 +2,35 @@
 % Please edit documentation in R/chemi_resolver.R
 \name{chemi_resolver}
 \alias{chemi_resolver}
-\title{Resolve chemical identifiers using an external API.}
+\title{Resolve chemical identifiers using an external API}
 \usage{
-chemi_resolver(query, mol = FALSE)
+chemi_resolver(
+  query,
+  id_type = NULL,
+  is_fuzzy = FALSE,
+  fuzzy_type,
+  mol = FALSE
+)
 }
 \arguments{
-\item{query}{A character vector of chemical identifiers to resolve.}
+\item{query}{A character vector of chemical identifiers.}
 
-\item{mol}{Boolean to return mol section.}
+\item{id_type}{A single string; one of \code{"DTXSID"}, \code{"DTXCID"}, \code{"SMILES"},
+\code{"MOL"}, \code{"CAS"}, \code{"Name"}, \code{"InChI"}, \code{"InChIKey"}, \code{"InChIKey_1"}, or
+\code{"AnyId"}. Optional.}
+
+\item{is_fuzzy}{A single logical value. Optional.}
+
+\item{fuzzy_type}{A single string; one of \code{"Not"}, \code{"Anywhere"}, \code{"Start"},
+\code{"Word"}, \code{"CloseSyntactic"}, or \code{"CloseSemantic"}. Required when
+\code{is_fuzzy} is \code{TRUE}.}
+
+\item{mol}{A single logical value. If \code{TRUE}, returns a V3000 mol array.
+Optional.}
 }
 \value{
-A list containing the resolved chemical names. Each element of the list
-corresponds to an identifier in the input \code{query}.  Returns an empty list if the
-API returns no results for a given query.
+A list of resolved chemical information. Returns an empty list if no
+results are found. Errors if the API request fails.
 }
 \description{
 This function takes a vector of chemical identifiers as input and uses an external API
