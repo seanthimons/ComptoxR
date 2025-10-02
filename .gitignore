@@ -40,10 +40,6 @@ invasive_species.csv
 standard_test_species.csv
 threatened_endangered_species.csv
 candidate-list-of-svhc-for-authorisation-export.xlsx
-paper.html
-search_data_2023-07-18_12.50.53.Rds
-ComptoxR_1.0.0.zip
-~$paper.docx
 temp.R
 output
 source_info 2023-02-15.xlsx
@@ -56,3 +52,4 @@ temp.txt
 temp.R
 
 /.quarto/
+/schema/*

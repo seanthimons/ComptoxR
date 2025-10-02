@@ -138,3 +138,6 @@ q1 <- ct_search(query = c(
 ),
 request_method = 'POST'
 )
+
+
+chemi_resolver(query = c(testing_chemicals$casrn, testing_chemicals$casrn))
