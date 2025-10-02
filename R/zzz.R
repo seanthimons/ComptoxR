@@ -11,7 +11,7 @@ run_setup <- function() {
 	server_urls <- c(
   # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
 		"CompTox Dashboard API" = paste0(Sys.getenv("burl"), 'chemical/health'),
-    "Cheminformatics API" = paste0(Sys.getenv("chemi_burl"), "#"),
+    "Cheminformatics API" = paste0(Sys.getenv("chemi_burl"), "/#"),
     "ECOTOX" = Sys.getenv("eco_burl"),
     "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/',
     "Natural Products API" = 'https://app.naturalproducts.net/home'
