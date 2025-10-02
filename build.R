@@ -13,6 +13,12 @@ run_verbose(TRUE)
 #Checks documentation
 devtools::document()
 
+#Merge branches here! 
+
+usethis::use_version(
+	which = 'minor',
+	push = FALSE
+)
 
 library(autonewsmd)
 
@@ -27,10 +33,9 @@ an$generate()
 	
 an$write(force = TRUE)
 
-usethis::use_version(
-	which = 'minor',
-	push = FALSE
-)
+rm(an)
+
+
 
 #Builds Windows ZIP
 devtools::build(binary = TRUE)
