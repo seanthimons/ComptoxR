@@ -1,5 +1,3 @@
-# ComptoxR 1.3.0
-
 
 
 # ComptoxR NEWS
@@ -54,7 +52,7 @@
     ([0a5aabc](https://github.com/seanthimons/ComptoxR/tree/0a5aabc9e7a50ac031d72a8e8534275980e0f199))
 
 Full set of changes:
-[`v1.2.2.9009...8b5df40`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9009...8b5df40)
+[`v1.2.2.9009...12daa3d`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9009...12daa3d)
 
 ## v1.2.2.9009 (2025-08-27)
 
