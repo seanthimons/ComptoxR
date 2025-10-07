@@ -40,7 +40,6 @@ ct_related <- function(query, inclusive = FALSE) {
 	)
   cli::cli_rule()
   cli::cli_end()
-
   #TODO Remove after API endpoint comes up
   ct_server(server = 9)
 
