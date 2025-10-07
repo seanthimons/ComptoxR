@@ -35,7 +35,7 @@ chemi_classyfire <- function(query) {
           },
           error = function(e) {
             cli::cli_abort(
-              "Error creating request for DTXSID {.val {q}}: {e$message}"
+              "Error creating request for DTXSID {.val {dtxsid}}: {e$message}"
             )
             return(NULL)
           }
@@ -50,7 +50,7 @@ chemi_classyfire <- function(query) {
         if (!is.null(response$error)) {
           if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
             cli::cli_alert_danger(
-              "Request failed for DTXSID {.val {q}}: {response$error$message}"
+              "Request failed for DTXSID {.val {dtxsid}}: {response$error$message}"
             )
           }
           return(NA) # Return NA if the request failed
@@ -59,7 +59,7 @@ chemi_classyfire <- function(query) {
         if (!(httr2::resp_status(response$result) %in% 200:299)) {
           if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
             cli::cli_alert_warning(
-              "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {q}}"
+              "Unexpected status code {.val {httr2::resp_status(response$result)}} for DTXSID {.val {dtxsid}}"
             )
           }
           return(NA) # Return NA for non-200 status codes
@@ -72,7 +72,7 @@ chemi_classyfire <- function(query) {
           error = function(e) {
             if (isTRUE(as.logical(Sys.getenv('run_verbose')))) {
               cli::cli_alert_danger(
-                "Failed to parse JSON response for DTXSID {.val {q}}: {e$message}"
+                "Failed to parse JSON response for DTXSID {.val {dtxsid}}: {e$message}"
               )
             }
             return(NA) # Return NA if JSON parsing fails
