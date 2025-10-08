@@ -174,7 +174,7 @@ chemi_resolver <- function(
 		body_list %>%
 			map(., ~ list_flatten(.x, name_spec = '{inner}') %>% as_tibble()) %>%
 			list_rbind() %>%
-			select(-chemId) %>%
+			#select(-chemId) %>%
 			rename_with(
 				~ c(query = "raw_query", sid = "dtxsid", cid = "dtxcid")[.x],
 				.cols = any_of(c("query", "sid", "cid"))
