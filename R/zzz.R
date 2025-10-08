@@ -136,7 +136,6 @@ ct_server <- function(server = NULL) {
 #'     \item `1`: Production
 #'     \item `2`: Development
 #'     \item `3`: Internal
-#'     \item `4`: Bleeding-edge
 #'   }
 #'
 #' @return Should return the Sys Env variable `chemi_burl`
@@ -151,9 +150,10 @@ chemi_server <- function(server = NULL) {
 		switch(
 			as.character(server),
 			"1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api"),
-			"2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
-			"3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
-			"4" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api/"),
+			# "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
+			# "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
+			"2" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api"),
+			"3" = Sys.setenv("chemi_burl" = "https://cim-dev.sciencedataexperts.com/api"), 
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
