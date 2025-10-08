@@ -50,6 +50,7 @@ cas_list.csv
 scratch.R
 temp.txt
 temp.R
+*.xlsx
 
 /.quarto/
 /schema/*
