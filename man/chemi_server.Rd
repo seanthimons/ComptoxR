@@ -13,7 +13,6 @@ reset. Valid options are:
 \item \code{1}: Production
 \item \code{2}: Development
 \item \code{3}: Internal
-\item \code{4}: Bleeding-edge
 }}
 }
 \value{
