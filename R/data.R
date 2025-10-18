@@ -66,3 +66,9 @@
 #' Generated using https://medialab.github.io/iwanthue/; 25 soft (k-means), colorblind friendly (1-10)
 #'
 'cust_pal'
+
+#' Cheminformatics hazard comparison palette
+#' 
+#' Five colors from website
+#' 
+'cheminformatics_hazard_pal'
