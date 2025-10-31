@@ -16,9 +16,13 @@ ct_api_key <- function() {
   ccte_api_key <- Sys.getenv("ccte_api_key")
 
   if (ccte_api_key == "") {
-    ccte_api_key <- "No API key saved. Sys.setenv(ccte_api_key = 'TOKEN HERE')"
-		return(cli::col_red(ccte_api_key))
-  }else{
-		return(ccte_api_key)	
-	}
+    cli::cli_abort(
+      c(
+        "x" = "No CCTE API key found.",
+        "i" = "Please set it using {.run Sys.setenv(ccte_api_key = 'YOUR_KEY_HERE')}.",
+        "i" = "You may need to restart your R session after setting it."
+      )
+    )
+  }
+  return(ccte_api_key)
 }
