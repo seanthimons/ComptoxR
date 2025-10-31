@@ -3,6 +3,7 @@
 export("%>%")
 export("%ni%")
 export(as_cas)
+export(batch_limit)
 export(chemi_classyfire)
 export(chemi_cluster)
 export(chemi_cluster_sim_list)
