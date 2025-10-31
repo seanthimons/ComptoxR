@@ -319,6 +319,30 @@ run_verbose <- function(verbose = FALSE) {
 	}
 }
 
+#' Set batch limit for POST requests
+#'
+#' Sets the global batch limit for POST requests. Defaults to 200. 
+#' @param limit Numeric number
+#' @export
+
+batch_limit <- function(limit = 200){
+
+	# Initial setting if not detected
+
+	if (is.null(Sys.getenv("batch_limit")) || Sys.getenv("batch_limit") == ""){
+		Sys.setenv("batch_limit" = "200")
+	}
+
+	if (is.numeric(limit)) {
+		Sys.setenv("batch_limit" = as.character(limit))
+
+	}else{
+		cli::cli_alert_warning(
+			"Invalid limit option selected!"
+		)
+	}
+}
+
 #' Reset all servers
 
 reset_servers <- function() {
@@ -346,6 +370,7 @@ reset_servers <- function() {
 		np_server(server = 1)
 		run_debug(debug = FALSE)
 		run_verbose(verbose = TRUE)
+		batch_limit(limit = 200)
 	}
 
 # Conditionally display startup message based on verbosity
@@ -417,9 +442,11 @@ reset_servers <- function() {
 		cli::cli_rule(left = 'Run settings')
 		cli::cli_dl(c(
 			'Debug' = '{Sys.getenv("run_debug")}',
-			'Verbose' = '{Sys.getenv("run_verbose")}'
+			'Verbose' = '{Sys.getenv("run_verbose")}',
+			'Batch limit' = '{Sys.getenv("batch_limit")}'
 		))
   })
 
   run_setup()
 }
+	
