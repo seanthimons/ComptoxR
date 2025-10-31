@@ -71,12 +71,12 @@ run_setup <- function() {
 
   # More informative token check
   cli::cli_rule(left = 'API Token Status')
-  # Assuming ct_api_key() is defined elsewhere and returns the key or ""
-  api_key <- ct_api_key()
-  if (is.null(api_key) || api_key == "") {
-    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.fn ct_api_key} to set it.")
+  # Directly check the environment variable to avoid aborting during package load
+  api_key <- Sys.getenv("ccte_api_key")
+  if (api_key == "") {
+    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ccte_api_key = 'YOUR_KEY_HERE')} to set it.")
   } else {
-    cli::cli_alert_success("CompTox API Key: {.strong SET}.")
+    cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
   }
   
   invisible(NULL)

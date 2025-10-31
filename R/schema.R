@@ -13,6 +13,12 @@
 #'  ct_schema()
 #' }
 ct_schema <- function() {
+	# Create schema directory if it doesn't exist
+	schema_dir <- here::here('schema')
+	if (!dir.exists(schema_dir)) {
+		dir.create(schema_dir, recursive = TRUE)
+	}
+
 	serv = list(
 		'prod' = 1,
 		'staging' = 2,
@@ -92,6 +98,12 @@ ct_schema <- function() {
 #'  chemi_schema()
 #' }
 chemi_schema <- function() {
+	# Create schema directory if it doesn't exist
+	schema_dir <- here::here('schema')
+	if (!dir.exists(schema_dir)) {
+		dir.create(schema_dir, recursive = TRUE)
+	}
+
 	serv = list(
 		'prod' = 1,
 		'staging' = 2,
