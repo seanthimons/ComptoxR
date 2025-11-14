@@ -1,0 +1,1 @@
+git ls-files '*.R' | xargs -I {} sh -c 'echo "$(git log --reverse --format=%aI -- {} | head -n 1) {}"' | sort
