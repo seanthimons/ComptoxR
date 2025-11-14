@@ -1,81 +1,98 @@
 #' Retrieves Chemical Fate and Transport parameters
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param coerce Boolean to split returned data into a list by endpoint type.
-#' @param ccte_api_key Checks for API key in Sys env
 #'
 #' @return Returns a tibble with results
 #' @export
 
-ct_env_fate <- function(query, coerce = TRUE, ccte_api_key = NULL) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+ct_env_fate <- function(query) {
+	if (length(query) == 0) {
+		cli::cli_abort("Query must be a character vector of DTXSIDs.")
+	}
 
-  burl <- Sys.getenv('burl')
-  surl <- "chemical/fate/search/by-dtxsid/"
-  urls <- paste0(burl, surl)
+	init_query <- length(query)
+	batch_limit <- as.numeric(Sys.getenv("batch_limit"))
+	mult_count <- ceiling(length(query) / batch_limit)
+	mult_request <- mult_count > 1
 
-  cli_rule(left = 'Fate and transport payload options')
-  cli_dl(
-    c(
-      'Number of compounds' = '{length(query)}',
-      'Coerce' = '{coerce}'
-    )
-  )
-  cli::cli_text()
-  cli::cli_end()
+	if (length(query) > batch_limit) {
+		query_list <- split(
+			query,
+			rep(1:mult_count, each = batch_limit, length.out = length(query))
+		)
+	} else {
+		query_list <- list(query)
+	}
 
-  if (length(query) > 1000) {
-    sublists <- split(
-      query,
-      rep(
-        1:ceiling(length(query) / 1000),
-        each = 1000,
-        length.out = length(query)
-      )
-    )
-    sublists <- map(sublists, as.list)
+	run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+	run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
-    df <- map(
-      sublists,
-      ~ {
-        .x <- POST(
-          url = urls,
-          body = .x,
-          add_headers(`x-api-key` = token),
-          content_type("application/json"),
-          accept("application/json, text/plain, */*"),
-          encode = "json",
-          progress() # progress bar
-        )
+	if (run_verbose) {
+		cli_rule(left = 'Fate and transport payload options')
+		cli_dl(
+			c(
+				'Number of compounds' = '{length(query)}',
+				'Number of batches' = '{mult_count}'
+			)
+		)
+		cli::cli_rule()
+		cli::cli_end()
+	}
 
-        .x <- content(.x, "text", encoding = "UTF-8") %>%
-          jsonlite::fromJSON(simplifyVector = TRUE)
-      }
-    ) %>%
-      list_rbind()
-  } else {
-    payload <- as.list(query)
+	req_list <- map(
+		query_list,
+		function(query_part) {
+			request(Sys.getenv('burl')) %>%
+				req_method("POST") %>%
+				req_url_path_append("chemical/fate/search/by-dtxsid/") %>%
+				req_headers(
+					Accept = "application/json",
+					`x-api-key` = ct_api_key()
+				) %>%
+				req_body_json(
+					query_part
+				)
+		}
+	)
 
-    response <- POST(
-      url = urls,
-      body = payload,
-      add_headers(.headers = headers),
-      content_type("application/json"),
-      accept("application/json, text/plain, */*"),
-      encode = "json",
-      progress() # progress bar
-    )
+	if (as.logical(Sys.getenv('run_debug'))) {
+		return(req_list %>% pluck(., 1) %>% req_dry_run())
+	}
 
-    df <- content(response, "text", encoding = "UTF-8") %>%
-      jsonlite::fromJSON(simplifyVector = TRUE)
-  }
+	if (mult_request) {
+		resp_list <- req_list %>%
+			req_perform_sequential(., on_error = 'continue')
+	} else {
+		resp_list <- list(req_perform(req_list[[1]]))
+	}
 
-  if (coerce == TRUE) {
-    df <- df %>%
-      split(.$endpointName)
+	body_list <- resp_list %>%
+		map(., function(r) {
+			if (resp_status(r) < 200 || resp_status(r) >= 300) {
+				cli::cli_abort(paste(
+					"API request failed with status",
+					resp_status(r)
+				))
+			}
 
-    return(df)
-  }
+			body <- resp_body_json(r)
+
+			if (length(body) == 0) {
+				cli::cli_alert_warning("No results found for the given query.")
+				return(list())
+			}
+			return(body)
+		}) %>%
+		list_c()
+
+	return(
+		body_list %>% 
+			map(., ~ 
+				
+				as_tibble(.x)
+			) %>%
+			list_rbind()
+	)
+	
+	
 }
