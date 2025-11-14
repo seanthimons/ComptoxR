@@ -157,7 +157,7 @@ chemi_server <- function(server = NULL) {
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
-					"Valid options are 1 (Production), 2 (Development), 3 (Internal), 4 (Bleeding-edge)."
+					"Valid options are 1 (Production), 2 (Development), 3 (Bleeding-edge)."
 				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("chemi_burl" = "")
