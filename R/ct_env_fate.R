@@ -87,12 +87,10 @@ ct_env_fate <- function(query) {
 
 	return(
 		body_list %>% 
-			map(., ~ 
-				
-				as_tibble(.x)
-			) %>%
+			map(., function(x) {
+				x[purrr::map_lgl(x, is.null)] <- NA
+				as_tibble(x)
+			}) %>%
 			list_rbind()
 	)
-	
-	
 }
