@@ -110,15 +110,6 @@ chemi_schema <- function() {
 		'dev' = 3
 	)
 
-	
-	endpoints <- request(paste0(chemi_server(server = last(serv)),'/services/cim_component_info')) %>%
-		req_perform() %>%
-		resp_body_json() %>%
-		map(., ~ as_tibble(.x)) %>%
-		list_rbind() %>% 
-		pull(name)
-	
-
 	ping_url <- function(url) {
 		req <- httr2::request(url) %>%
 			httr2::req_method("HEAD") %>%
@@ -145,19 +136,58 @@ chemi_schema <- function() {
 		}
 	}
 
-	map(
-		endpoints,
-		function(endpoint) {
-			imap(serv, function(idx, server) {
-				# Sets the path
-				chemi_server(idx)
+	imap(
+		serv,
+		function(idx, server) {
+			# Sets the path
+			chemi_server(idx)
 
-				url_to_check <- paste0(
-					Sys.getenv('chemi_burl'),
-					"/",
-					endpoint,
-					'/api-docs'
+			endpoints <-
+				try(
+					request(paste0(
+						Sys.getenv('chemi_burl'),
+						'/services/cim_component_info'
+					)) %>%
+						req_perform() %>%
+						resp_body_json() %>%
+						map(., ~ as_tibble(.x)) %>%
+						list_rbind() %>%
+						pull(name),
+					silent = TRUE
 				)
+
+			if (inherits(endpoints, "try-error")) {
+				cli::cli_alert_warning("Could not retrieve endpoints for {server} server. Attempting to use development server as a fallback.")
+				
+				# Set server to last in list (dev) and try again
+				chemi_server(last(serv))
+				
+				endpoints <-
+					try(
+						request(paste0(
+							Sys.getenv('chemi_burl'),
+							'/services/cim_component_info'
+						)) %>%
+							req_perform() %>%
+							resp_body_json() %>%
+							map(., ~ as_tibble(.x)) %>%
+							list_rbind() %>%
+							pull(name),
+						silent = TRUE
+					)
+				
+				# Set server back to original for downloads
+				chemi_server(idx)
+				
+				if (inherits(endpoints, "try-error")) {
+					cli::cli_alert_danger("Fallback failed. Could not retrieve any endpoints for {server} server.")
+					return()
+				}
+			}
+
+			map(endpoints, function(endpoint) {
+				url_to_check <-
+					paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/api-docs')
 
 				if (ping_url(url_to_check)) {
 					download.file(
