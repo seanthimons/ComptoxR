@@ -110,28 +110,14 @@ chemi_schema <- function() {
 		'dev' = 3
 	)
 
-	endpoints <- c(
-		# Modules ----
-		'hazard',
-		'safety',
-		'amos',
-		'alerts',
-		'webtest', # Predict v1
-		'predictor', # Predict v2
-		'search',
-		'stdizer',
-		'toxprints',
-		'utilities',
-		# Tools ----
-		'descriptors',
-		'resolver',
-		'services', # AUX
-		# Models -----
-		'arn_cats',
-		'pfas_cats',
-		'ncc_cats',
-		'pfas_atlas'
-	)
+	
+	endpoints <- request(paste0(chemi_server(server = last(serv)),'/services/cim_component_info')) %>%
+		req_perform() %>%
+		resp_body_json() %>%
+		map(., ~ as_tibble(.x)) %>%
+		list_rbind() %>% 
+		pull(name)
+	
 
 	ping_url <- function(url) {
 		req <- httr2::request(url) %>%
