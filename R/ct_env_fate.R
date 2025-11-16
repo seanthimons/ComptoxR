@@ -6,6 +6,9 @@
 #' @export
 
 ct_env_fate <- function(query) {
+
+	query <- unique(as.vector(query))
+
 	if (length(query) == 0) {
 		cli::cli_abort("Query must be a character vector of DTXSIDs.")
 	}
@@ -50,7 +53,8 @@ ct_env_fate <- function(query) {
 					`x-api-key` = ct_api_key()
 				) %>%
 				req_body_json(
-					query_part
+					query_part,
+					auto_unbox = FALSE
 				)
 		}
 	)
