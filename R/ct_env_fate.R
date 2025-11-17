@@ -45,7 +45,7 @@ ct_env_fate <- function(query) {
 	req_list <- map(
 		query_list,
 		function(query_part) {
-			request(Sys.getenv('burl')) %>%
+			request(Sys.getenv('ctx_burl')) %>%
 				req_method("POST") %>%
 				req_url_path_append("chemical/fate/search/by-dtxsid/") %>%
 				req_headers(
@@ -90,11 +90,11 @@ ct_env_fate <- function(query) {
 		list_c()
 
 	return(
-		body_list %>% 
-			map(., function(x) {
-				x[purrr::map_lgl(x, is.null)] <- NA
-				as_tibble(x)
-			}) %>%
-			list_rbind()
+		body_list #%>% 
+			# map(., function(x) {
+			# 	x[purrr::map_lgl(x, is.null)] <- NA
+			# 	as_tibble(x)
+			# }) %>%
+			# list_rbind()
 	)
 }

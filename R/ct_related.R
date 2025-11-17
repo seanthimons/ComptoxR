@@ -41,14 +41,14 @@ ct_related <- function(query, inclusive = FALSE) {
   cli::cli_rule()
   cli::cli_end()
   #TODO Remove after API endpoint comes up
-  ct_server(server = 9)
+  ctx_server(server = 9)
 
   # Helper function to fetch data safely
   safe_fetch <- purrr::safely(function(id) {
     #cli::cli_inform(c("v" = "Fetching related substances for DTXSID: {id}"))
 
     # Make the request
-    req <- request(base_url = Sys.getenv('burl')) %>%
+    req <- request(base_url = Sys.getenv('ctx_burl')) %>%
       req_url_path_append('related-substances/search/by-dtxsid') %>%
       req_url_query('id' = id)
 
@@ -104,7 +104,7 @@ ct_related <- function(query, inclusive = FALSE) {
       "i" = "{sum(!purrr::map_lgl(errors, is.null))} DTXSIDs had errors."
     ))
   }
-  ct_server(server = 1)
+  ctx_server(server = 1)
 
 if(inclusive == TRUE){
 

@@ -62,9 +62,9 @@ ct_schema <- function() {
 		function(endpoint) {
 			imap(serv, function(idx, server) {
 				# Sets the path
-				ct_server(idx)
+				ctx_server(idx)
 
-				url_to_check <- paste0(Sys.getenv('burl'), 'docs/', endpoint, '.json')
+				url_to_check <- paste0(Sys.getenv('ctx_burl'), 'docs/', endpoint, '.json')
 
 				if (ping_url(url_to_check)) {
 					download.file(
@@ -80,7 +80,7 @@ ct_schema <- function() {
 		.progress = TRUE
 	)
 
-	invisible(ct_server(1))
+	invisible(ctx_server(1))
 }
 
 #' Download API schemas

@@ -1,21 +1,21 @@
 #' Retrieves data on known or predicted genotoxic effects by DTXSID
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #' @param debug Flag to show API calls
 #' @return Returns a tibble with results
 #' @export
-ct_genotox <- function(query, ccte_api_key = NULL, debug = F) {
+ct_genotox <- function(query, ctx_api_key= NULL, debug = F) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  burl <- Sys.getenv('burl')
+  ctx_burl <- Sys.getenv('ctx_burl')
 
   cat('\nSearching for genetox data...\n')
   surl <- "hazard/genetox/details/search/by-dtxsid/"
 
-  urls <- paste0(burl, surl, query)
+  urls <- paste0(ctx_burl, surl, query)
 
   df <- map_dfr(
     urls,

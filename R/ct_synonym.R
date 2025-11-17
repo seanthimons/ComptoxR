@@ -26,7 +26,7 @@ ct_synonym <- function(query, request_method = "GET") {
 
 	# Build list of requests -----------------------------------------------------------------
 
-	base_req <- httr2::request(Sys.getenv('burl')) %>%
+	base_req <- httr2::request(Sys.getenv('ctx_burl')) %>%
 		httr2::req_headers(
 			accept = "application/json",
 			`x-api-key` = ct_api_key()

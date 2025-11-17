@@ -17,7 +17,7 @@ ct_bioactivity_models <- function(query) {
 
 	req_list <- query %>%
 		map(., function(dtxsid) {
-			httr2::request(Sys.getenv('burl')) %>%
+			httr2::request(Sys.getenv('ctx_burl')) %>%
 				httr2::req_headers(
 					accept = "application/json",
 					`x-api-key` = ct_api_key()

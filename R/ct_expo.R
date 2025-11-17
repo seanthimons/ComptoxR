@@ -11,7 +11,7 @@
 #'
 #' @param query A list of DTXSIDs
 #' @param param Search parameter to look for.
-#' @param ccte_api_key CCTE API token.
+#' @param ctx_api_keyCCTE API token.
 #'
 #' @return A list of data frames
 #' @export
@@ -20,7 +20,7 @@ ct_functional_use <- function(
   query,
   param = c('func_use', 'product_data', 'list')
 ) {
-  burl <- Sys.getenv('burl')
+  ctx_burl <- Sys.getenv('ctx_burl')
 
 
 
@@ -57,7 +57,7 @@ ct_functional_use <- function(
     unnest(surl) %>%
     rowwise() %>%
     mutate(
-      url = paste0(Sys.getenv('burl'), surl, query),
+      url = paste0(Sys.getenv('ctx_burl'), surl, query),
       .keep = 'all',
       surl = str_remove_all(surl, 'exposure/|/by-dtxsid/')
     ) %>%
@@ -97,7 +97,7 @@ ct_functional_use <- function(
     ~ {
       .x <- VERB(
         "GET",
-        url = paste0(burl, .x),
+        url = paste0(ctx_burl, .x),
         add_headers("x-api-key" = ct_api_key())
       )
 

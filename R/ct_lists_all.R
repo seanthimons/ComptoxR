@@ -2,7 +2,7 @@
 #'
 #' This function has no parameters to search by.
 #'
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #' @param return_dtxsid Boolean; Return all DTXSIDs contained within each list
 #' @param coerce Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.
 #'
@@ -12,7 +12,7 @@
 ct_lists_all <- function(
   return_dtxsid = FALSE,
   coerce = FALSE,
-  ccte_api_key = NULL
+  ctx_api_key= NULL
 ) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()

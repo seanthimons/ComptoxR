@@ -7,7 +7,7 @@
 ct_descriptors(
   query,
   type = c("smiles", "canonical_smiles", "mol2000", "mol3000", "inchi"),
-  ccte_api_key = NULL
+  ctx_api_key = NULL
 )
 }
 \arguments{

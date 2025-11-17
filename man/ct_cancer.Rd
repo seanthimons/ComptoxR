@@ -4,14 +4,14 @@
 \alias{ct_cancer}
 \title{Retrieves cancer-related hazard and risk values for a give DTXSID}
 \usage{
-ct_cancer(query, ccte_api_key = NULL, debug = F)
+ct_cancer(query, ctx_api_key = NULL, debug = F)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
-
 \item{debug}{Flag to show API calls}
+
+\item{ctx_api_keyChecks}{for API key in Sys env}
 }
 \value{
 Returns a tibble with results

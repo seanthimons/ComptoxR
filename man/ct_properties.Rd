@@ -4,7 +4,7 @@
 \alias{ct_properties}
 \title{Retrieves compound physio-chem properties by DTXSID}
 \usage{
-ct_properties(search_param, query, range, coerce = TRUE, ccte_api_key = NULL)
+ct_properties(search_param, query, range, coerce = TRUE, ctx_api_key = NULL)
 }
 \arguments{
 \item{search_param}{Search for \code{compound} or \code{property} to look for.}
@@ -15,7 +15,7 @@ ct_properties(search_param, query, range, coerce = TRUE, ccte_api_key = NULL)
 
 \item{coerce}{Boolean to coerce data to a list of data frames}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{ctx_api_keyChecks}{for API key in Sys env}
 }
 \value{
 A list or dataframe

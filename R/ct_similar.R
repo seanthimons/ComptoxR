@@ -7,10 +7,10 @@
 #' @export
 ct_similar <- function(query, similarity = 0.8) {
 
-  #burl <- Sys.getenv('burl')
-  # ! NOTE: The burl variable is hardcoded here until API is stable and has the endpoint. 
+  #ctx_burl <- Sys.getenv('ctx_burl')
+  # ! NOTE: The ctx_burl variable is hardcoded here until API is stable and has the endpoint. 
   
-  burl <- 'https://comptox.epa.gov/dashboard-api/'
+  ctx_burl <- 'https://comptox.epa.gov/dashboard-api/'
   run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
   
@@ -35,7 +35,7 @@ ct_similar <- function(query, similarity = 0.8) {
   }
 
 req_list <- map(query, ~{
-  req <- request(burl) %>%
+  req <- request(ctx_burl) %>%
       req_url_path_append('similar-compound/by-dtxsid/') %>%
       req_url_path_append(.x) %>%
       req_url_path_append(similarity)

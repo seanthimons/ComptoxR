@@ -141,3 +141,12 @@ request_method = 'POST'
 
 
 chemi_resolver(query = c(testing_chemicals$casrn, testing_chemicals$casrn))
+
+
+
+ct_similar(query = 'DTXSID3021774')
+	
+
+ct_hazard(query = 'DTXSID3021774')
+
+ct_env_fate(query = 'DTXSID3021774')
