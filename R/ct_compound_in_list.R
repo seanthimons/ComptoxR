@@ -1,12 +1,12 @@
 #' Returns all public lists that contain a queried compound
 #'
 #' @param query A DTXSID to search by.
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #'
 #' @return Returns a tibble with results
 #' @export
 
-ct_compound_in_list <- function(query, ccte_api_key = NULL) {
+ct_compound_in_list <- function(query, ctx_api_key= NULL) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
@@ -18,9 +18,9 @@ ct_compound_in_list <- function(query, ccte_api_key = NULL) {
         cli::cli_alert_info('Searching for lists that contain {(.x)}')
         cli::cli_end()
 
-        burl <- Sys.getenv('burl')
+        ctx_burl <- Sys.getenv('ctx_burl')
         surl <- "chemical/list/search/by-dtxsid/"
-        urls <- paste0(burl, surl, .x, '?projection=chemicallistname')
+        urls <- paste0(ctx_burl, surl, .x, '?projection=chemicallistname')
 
         response <- GET(
           url = urls,

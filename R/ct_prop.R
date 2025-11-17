@@ -8,7 +8,7 @@
 #' @param search_param Search for `compound` or `property` to look for.
 #' @param query A list of DTXSIDs or a property to be queries against. See details for full list of properties available.
 #' @param range A lower and upper range of values to search for if a property was specified for.
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #' @param coerce Boolean to coerce data to a list of data frames
 #'
 #' @return A list or dataframe
@@ -19,7 +19,7 @@ ct_properties <- function(
   query,
   range,
   coerce = TRUE,
-  ccte_api_key = NULL
+  ctx_api_key= NULL
 ) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
@@ -33,7 +33,7 @@ ct_properties <- function(
     cli::cli_abort("Missing search type!")
   }
 
-  burl <- Sys.getenv("burl")
+  ctx_burl <- Sys.getenv("ctx_burl")
 
   if (search_param == "compound") {
     cli_rule(left = "Phys-chem properties payload options")
@@ -48,7 +48,7 @@ ct_properties <- function(
     cli::cli_end()
 
     surl <- "chemical/property/search/by-dtxsid/"
-    urls <- paste0(burl, surl)
+    urls <- paste0(ctx_burl, surl)
 
     if (length(query) > 1000) {
       sublists <- split(
@@ -119,7 +119,7 @@ ct_properties <- function(
       cli::cli_end()
 
       surl <- "chemical/property/search/by-range/"
-      urls <- paste0(burl, surl, query, "/", range[1], "/", range[2])
+      urls <- paste0(ctx_burl, surl, query, "/", range[1], "/", range[2])
 
       df <- GET(urls, progress(), add_headers(.headers = headers))
     } else {

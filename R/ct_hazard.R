@@ -5,7 +5,8 @@
 #' @return Returns a tibble with results
 #' @export
 
-ct_hazard <- function(query, request_method = "GET", ...) {
+ct_hazard <- function(query) {
+	
 	query <- unique(as.vector(query))
 
 	if (length(query) == 0) {
@@ -33,7 +34,7 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 		cli::cli_rule(left = 'Hazard payload options')
 		cli::cli_dl(
 			c(
-				'Number of compounds: ' = '{length(query)}',
+				'Number of compounds' = '{length(query)}',
 				'Number of batches' = '{mult_count}'
 			)
 		)
@@ -44,7 +45,7 @@ ct_hazard <- function(query, request_method = "GET", ...) {
 	req_list <- map(
 		query_list,
 		function(query_part) {
-			request(Sys.getenv('burl')) %>%
+			request(Sys.getenv('ctx_burl')) %>%
 				req_method("POST") %>%
 				req_url_path_append("hazard/toxval/search/by-dtxsid/") %>%
 				req_headers(

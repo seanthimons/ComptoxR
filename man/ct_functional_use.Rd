@@ -11,7 +11,7 @@ ct_functional_use(query, param = c("func_use", "product_data", "list"))
 
 \item{param}{Search parameter to look for.}
 
-\item{ccte_api_key}{CCTE API token.}
+\item{ctx_api_keyCCTE}{API token.}
 }
 \value{
 A list of data frames

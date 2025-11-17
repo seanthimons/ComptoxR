@@ -42,7 +42,7 @@ ct_search <- function(query, request_method = "GET", search_method = "exact") {
 	)
 
 	# Base request object
-	base_req <- httr2::request(Sys.getenv('burl')) %>%
+	base_req <- httr2::request(Sys.getenv('ctx_burl')) %>%
 		httr2::req_headers(
 			accept = "application/json",
 			`x-api-key` = ct_api_key()

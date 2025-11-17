@@ -17,7 +17,7 @@ ct_list <- function(list_name, extract_dtxsids = TRUE) {
     list_name,
     ~ {
       #cli::cli_alert_info('Searching for compounds on {(.x)} list...')
-      req <- request(Sys.getenv('burl')) %>%
+      req <- request(Sys.getenv('ctx_burl')) %>%
         req_url_path("chemical/list/search/by-name/") %>%
         req_url_path_append(stringr::str_to_upper(.x)) %>%
         req_url_query('projection' = 'chemicallistwithdtxsids') %>%

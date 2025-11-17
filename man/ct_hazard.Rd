@@ -4,16 +4,10 @@
 \alias{ct_hazard}
 \title{Retrieves for hazard data by DTXSID}
 \usage{
-ct_hazard(query, request_method = "GET", ...)
+ct_hazard(query)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{request_method}{Character. Either 'GET' or 'POST'. Default is 'GET'.}
-
-\item{...}{Additional arguments}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
 }
 \value{
 Returns a tibble with results

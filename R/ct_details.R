@@ -3,7 +3,7 @@
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
 #' @param projection A subset of date to be returned. By default returns a minimal set of common identifiers.
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #'
 #' @return a data frame
 #' @export
@@ -18,13 +18,13 @@ ct_details <- function(
     "nta",
     'compact'
   ),
-  ccte_api_key = NULL
+  ctx_api_key= NULL
 ) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  burl <- Sys.getenv("burl")
+  ctx_burl <- Sys.getenv("ctx_burl")
 
   if (missing(projection)) {
     projection <- 'compact'
@@ -49,7 +49,7 @@ ct_details <- function(
 
   surl <- "chemical/detail/search/by-dtxsid/"
 
-  urls <- paste0(burl, surl, "?projection=", proj)
+  urls <- paste0(ctx_burl, surl, "?projection=", proj)
 
   headers <- c(
     `x-api-key` = token

@@ -39,10 +39,10 @@ chemi_toxprint <- function(query, odds_ratio, p_val, true_pos) {
     'options' = options
   )
 
-  burl <- paste0(Sys.getenv("chemi_burl"), "toxprints/calculate")
+  ctx_burl <- paste0(Sys.getenv("chemi_burl"), "toxprints/calculate")
 
   response <- POST(
-    url = burl,
+    url = ctx_burl,
     body = jsonlite::toJSON(payload),
     content_type("application/json"),
     accept("*/*"),
