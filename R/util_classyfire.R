@@ -26,11 +26,11 @@ util_classyfire <- function(query) {
   # ---------------------------------------------------------------------------
   # --- Get environment variables
   # ---------------------------------------------------------------------------
-  burl <- Sys.getenv("np_burl", unset = NA)
+  ctx_burl <- Sys.getenv("np_burl", unset = NA)
   run_debug <- as.logical(Sys.getenv("run_debug", unset = "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", unset = "FALSE"))
 
-  if (is.na(burl)) {
+  if (is.na(ctx_burl)) {
     cli::cli_abort("The `np_burl` environment variable is not set. Please set it to the base API URL.")
   }
 
@@ -40,7 +40,7 @@ util_classyfire <- function(query) {
   cli::cli_rule(left = "ClassyFire payload options")
   cli::cli_dl(c(
     "Number of compounds" = "{length(query)}"
-    # ,"Base URL (burl)" = "{burl}",
+    # ,"Base URL (ctx_burl)" = "{ctx_burl}",
     # "Debug mode (run_debug)" = "{run_debug}",
     # "Verbose mode (run_verbose)" = "{run_verbose}"
   ))
@@ -58,7 +58,7 @@ util_classyfire <- function(query) {
 
       # --- Build submission request ---
       req_classify <-
-        httr2::request(burl) %>%
+        httr2::request(ctx_burl) %>%
         httr2::req_url_path_append(path = "/chem/classyfire/classify") %>%
         httr2::req_headers("accept" = "application/json") %>%
         httr2::req_url_query(smiles = current_query) %>%
@@ -75,7 +75,7 @@ util_classyfire <- function(query) {
 
         cli::cli_alert_info("Dry run for result request (using placeholder job_id '12345'):")
         req_result_dryrun <-
-          httr2::request(burl) %>%
+          httr2::request(ctx_burl) %>%
           httr2::req_url_path_append(path = "/chem/classyfire/12345/result") %>%
           httr2::req_headers("accept" = "application/json")
         httr2::req_dry_run(req_result_dryrun)
@@ -118,7 +118,7 @@ util_classyfire <- function(query) {
           cli::cli_alert("({current_index}/{total_queries}) Polling for results for job ID: {job_id} (Attempt {i}/{max_polls})")
           }
         req_result <-
-          httr2::request(burl) %>%
+          httr2::request(ctx_burl) %>%
           httr2::req_url_path_append(path = glue::glue("chem/classyfire/{job_id}/result")) %>%
           httr2::req_headers("accept" = "application/json") %>%
           httr2::req_timeout(5) %>%

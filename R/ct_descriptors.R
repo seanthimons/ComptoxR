@@ -11,7 +11,7 @@ ct_descriptors <- function(
   query,
   type = c('smiles', 'canonical_smiles', 'mol2000', 'mol3000', 'inchi'),
   #coerce = T,
-  ccte_api_key = NULL
+  ctx_api_key= NULL
   #debug = F
 ) {
   if (is.null(ccte_api_key)) {
@@ -53,10 +53,10 @@ ct_descriptors <- function(
 
   # request -----------------------------------------------------------------
 
-  burl <- Sys.getenv('burl')
+  ctx_burl <- Sys.getenv('ctx_burl')
 
   response <- POST(
-    url <- paste0(burl, 'chemical/indigo/', type_option),
+    url <- paste0(ctx_burl, 'chemical/indigo/', type_option),
     body = payload,
     content_type("text/plain"),
     #content_type("application/json"),

@@ -3,7 +3,7 @@
 #' @param search_type Choose from `aeid`, `spid`, `m4id`, and `dtxsid`. Defaults to `dtxsid` if not specified.
 #' @param query List of variables to be queried.
 #' @param annotate Boolean, if `TRUE` will perform a secondary request to join the the assay details against the assay IDs.
-#' @param ccte_api_key Checks for API key in Sys env
+#' @param ctx_api_keyChecks for API key in Sys env
 #'
 #' @return A data frame
 #' @export
@@ -12,13 +12,13 @@ ct_bioactivity <- function(
   search_type,
   query,
   annotate = FALSE,
-  ccte_api_key = NULL
+  ctx_api_key= NULL
 ) {
   if (is.null(ccte_api_key)) {
     token <- ct_api_key()
   }
 
-  burl <- Sys.getenv("burl")
+  ctx_burl <- Sys.getenv("ctx_burl")
 
   if (missing(query) == TRUE) {
     cli::cli_abort('Missing query!')
@@ -58,7 +58,7 @@ ct_bioactivity <- function(
   ))
   cli::cli_end()
 
-  urls <- paste0(burl, 'bioactivity/data/search/', search_type, '/', query)
+  urls <- paste0(ctx_burl, 'bioactivity/data/search/', search_type, '/', query)
 
   df <- map(
     urls,
@@ -95,10 +95,10 @@ ct_bioactivity <- function(
 ct_bio_assay_all <- function() {
   token <- ct_api_key()
 
-  burl <- Sys.getenv("burl")
+  ctx_burl <- Sys.getenv("ctx_burl")
 
   response <- GET(
-    url = paste0(Sys.getenv('burl'), 'bioactivity/assay/'),
+    url = paste0(Sys.getenv('ctx_burl'), 'bioactivity/assay/'),
     add_headers("x-api-key" = token),
     accept('application/hal+json')
   )

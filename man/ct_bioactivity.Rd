@@ -4,7 +4,7 @@
 \alias{ct_bioactivity}
 \title{Requests bioactivity assay data}
 \usage{
-ct_bioactivity(search_type, query, annotate = FALSE, ccte_api_key = NULL)
+ct_bioactivity(search_type, query, annotate = FALSE, ctx_api_key = NULL)
 }
 \arguments{
 \item{search_type}{Choose from \code{aeid}, \code{spid}, \code{m4id}, and \code{dtxsid}. Defaults to \code{dtxsid} if not specified.}
@@ -13,7 +13,7 @@ ct_bioactivity(search_type, query, annotate = FALSE, ccte_api_key = NULL)
 
 \item{annotate}{Boolean, if \code{TRUE} will perform a secondary request to join the the assay details against the assay IDs.}
 
-\item{ccte_api_key}{Checks for API key in Sys env}
+\item{ctx_api_keyChecks}{for API key in Sys env}
 }
 \value{
 A data frame

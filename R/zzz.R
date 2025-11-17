@@ -10,11 +10,10 @@ run_setup <- function() {
 	
 	server_urls <- c(
   # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
-		"CompTox Dashboard API" = paste0(Sys.getenv("burl"), 'chemical/health'),
-    "Cheminformatics API" = paste0(Sys.getenv("chemi_burl"), "/#"),
+		"CompTox Dashboard API" = paste0(Sys.getenv("ctx_burl"), 'chemical/health'),
     "ECOTOX" = Sys.getenv("eco_burl"),
-    "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/',
-    "Natural Products API" = 'https://app.naturalproducts.net/home'
+    "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/'
+    #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
 
   # Filter out any endpoints with empty/unset URLs
@@ -64,17 +63,38 @@ run_setup <- function() {
 
 		results <- purrr::imap_chr(ping_list, check_url)
 
+    # Check for active Cheminformatics endpoints ----
+    tryCatch({
+      endpoints <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+        httr2::req_perform() %>%
+        httr2::resp_body_json() %>%
+        purrr::map(., ~ tibble::as_tibble(.x)) %>%
+        purrr::list_rbind() %>% 
+				dplyr::filter(!is.na(is_available))
+      
+      active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
+      total_chemi_endpoints <- nrow(endpoints)
+      
+      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')}")
+      results <- c(results, chemi_status)
+      
+    }, error = function(e) {
+      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_red('ERROR (Failed to get endpoints)')}")
+      results <<- c(results, chemi_status)
+    })
+    
     cli::cli_li(items = results)
     cli::cli_end()
 		
   }
 
-  # More informative token check
+
+  # Token check ----
   cli::cli_rule(left = 'API Token Status')
   # Directly check the environment variable to avoid aborting during package load
-  api_key <- Sys.getenv("ccte_api_key")
+  api_key <- Sys.getenv("ctx_api_key")
   if (api_key == "") {
-    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ccte_api_key = 'YOUR_KEY_HERE')} to set it.")
+    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ctx_api_key= 'YOUR_KEY_HERE')} to set it.")
   } else {
     cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
   }
@@ -88,39 +108,38 @@ run_setup <- function() {
 #' @param server Defines what server to target. If `NULL` the server URL is
 #'   reset. Valid options are:
 #'   \itemize{
-#'     \item `1`: Production
-#'     \item `2`: Staging
-#'     \item `3`: Development
-#'     \item `9`: Scraping
+#'     \item Production: 1
+#'     \item Staging: 2
+#'     \item Development: 3
+#'     \item Scraping: 9
 #'   }
 #'
-#' @return Should return the Sys Env variable `burl`.
+#' @return Should return the Sys Env variable `ctx_burl`.
 #' @export
 
-ct_server <- function(server = NULL) {
+ctx_server <- function(server = NULL) {
 	if (is.null(server)) {
 		{
 			cli::cli_alert_danger("Server URL reset!")
-			Sys.setenv("burl" = "")
+			Sys.setenv("ctx_burl" = "")
 		}
 	} else {
 		switch(
 			as.character(server),
-			"1" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
-			"2" = Sys.setenv('burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
-			"3" = Sys.setenv('burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
-			"4" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
-			"5" = Sys.setenv('burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
-			"9" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
+			"1" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/ctx-api/'),
+			"2" = Sys.setenv('ctx_burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
+			"3" = Sys.setenv('ctx_burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
+			"5" = Sys.setenv('ctx_burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
+			"9" = Sys.setenv('bctx_burlurl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
 			{
 				cli::cli_alert_warning("\nInvalid server option selected!\n")
 				#cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
 				cli::cli_alert_warning("Server URL reset!")
-				Sys.setenv("burl" = "")
+				Sys.setenv("ctx_burl" = "")
 			}
 		)
 
-		Sys.getenv('burl')
+		Sys.getenv('ctx_burl')
 	}
 }
 
@@ -133,9 +152,9 @@ ct_server <- function(server = NULL) {
 #' @param server Defines what server to target. If `NULL`, the server URL is
 #'   reset. Valid options are:
 #'   \itemize{
-#'     \item `1`: Production
-#'     \item `2`: Development
-#'     \item `3`: Internal
+#'     \item Production: 1
+#'     \item Staging: 2
+#'     \item Development: 3
 #'   }
 #'
 #' @return Should return the Sys Env variable `chemi_burl`
@@ -157,7 +176,7 @@ chemi_server <- function(server = NULL) {
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
-					"Valid options are 1 (Production), 2 (Development), 3 (Bleeding-edge)."
+					"Valid options are 1 (Production), 2 (Staging), 3 (Development)."
 				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("chemi_burl" = "")
@@ -347,7 +366,7 @@ batch_limit <- function(limit = 200){
 
 reset_servers <- function() {
 	# Reset CompTox Chemistry Dashboard server URL
-	ct_server()
+	ctx_server()
 	# Reset Cheminformatics server URL
 	chemi_server()
 	# Reset EPI Suite server URL
@@ -362,8 +381,8 @@ reset_servers <- function() {
 
 .onAttach <- function(libname, pkgname) {
 
-	if (Sys.getenv('burl') == "") {
-		ct_server(server = 1)
+	if (Sys.getenv('ctx_burl') == "") {
+		ctx_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
 		eco_server(server = 1)
@@ -432,7 +451,7 @@ reset_servers <- function() {
       'You can change these using the *_server() function!'
     )
     cli::cli_dl(c(
-      'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
+      'CompTox Chemistry Dashboard' = '{Sys.getenv("ctx_burl")}',
       'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
       'ECOTOX' = '{Sys.getenv("eco_burl")}',
       'EPI Suite' = '{Sys.getenv("epi_burl")}',
