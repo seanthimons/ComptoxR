@@ -38,14 +38,14 @@ ct_env_fate <- function(query) {
 		# At depth 3, replace any NULL elements within sublists with NA.
 		map_depth(., 3, ~ purrr::modify_if(.x, is.null, ~NA))
 
-	# Sublist data names
-	sublist_names <- cleaned_body %>%
-		# Grabs sublist names
-		map_depth(., 2, ~ pluck(.x, 'propName')) %>%
-		unname(.) %>%
-		# Coerces to a list of vectors per DTXSID
-		map(., ~ list_c(.x)) %>%
-		set_names(query_names)
+	# # Sublist data names
+	# sublist_names <- cleaned_body %>%
+	# 	# Grabs sublist names
+	# 	map_depth(., 2, ~ pluck(.x, 'propName')) %>%
+	# 	unname(.) %>%
+	# 	# Coerces to a list of vectors per DTXSID
+	# 	map(., ~ list_c(.x)) %>%
+	# 	set_names(query_names)
 
 	# Final data merging
 	result <- map2(cleaned_body, sublist_names, ~ set_names(.x, .y)) %>%
