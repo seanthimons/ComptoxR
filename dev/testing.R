@@ -149,4 +149,35 @@ ct_similar(query = 'DTXSID3021774')
 
 ct_hazard(query = 'DTXSID3021774')
 
-ct_env_fate(query = 'DTXSID3021774')
+temp <- testing_chemicals %>% slice_sample(n = 10) %>% select(dtxsid, preferredName)
+
+q1 <- ct_env_fate(query = temp$dtxsid)
+
+q1 <- ct_env_fate(query = 'DTXSID3021774')
+
+#gets names
+query_names <- q1 %>% 
+	map(., 
+		~pluck(., 'dtxsid')
+) %>% 
+	list_c()
+
+#gets properties
+q3 <- q1 %>% 
+	map(., 
+		~pluck(., 'properties')
+) %>% 
+	set_names(query_names) %>% 
+	# Process sublists for each chemical, going 3 levels deep
+	map_depth(., 3, ~{
+		# If the element is a list, replace any NULL elements within it with NA
+		if (is.list(.x)) {
+			map(.x, ~if (is.null(.)) NA else .) %>% pluck(., 1)
+			# If the element itself is NULL or an empty list, replace it with NA
+		} else if (is.null(.x) || length(.x) == 0) {
+			NA
+			# Otherwise, keep the element as is
+		} else {
+			.x
+		}
+	})
