@@ -1,7 +1,7 @@
 #Adding new testing chemicals
 
 build_testing_chemicals(chems = c(
-
+	'DTXSID401337424'
 ))
 
 #Load latest data 

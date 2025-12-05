@@ -6,16 +6,13 @@
 \usage{
 ct_details(
   query,
-  projection = c("all", "standard", "id", "structure", "nta", "compact"),
-  ctx_api_key = NULL
+  projection = c("all", "standard", "id", "structure", "nta", "compact")
 )
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
 
 \item{projection}{A subset of date to be returned. By default returns a minimal set of common identifiers.}
-
-\item{ctx_api_keyChecks}{for API key in Sys env}
 }
 \value{
 a data frame
