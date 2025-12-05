@@ -19,7 +19,7 @@ ct_schema <- function() {
 		dir.create(schema_dir, recursive = TRUE)
 	}
 
-	serv = list(
+	serv <- list(
 		'prod' = 1,
 		'staging' = 2,
 		'dev' = 3
@@ -72,7 +72,8 @@ ct_schema <- function() {
 						destfile = here::here(
 							'schema',
 							paste0("ctx_", endpoint, '_', server, '.json')
-						)
+						),
+						mode = 'wb'
 					)
 				}
 			})
@@ -104,7 +105,7 @@ chemi_schema <- function() {
 		dir.create(schema_dir, recursive = TRUE)
 	}
 
-	serv = list(
+	serv <- list(
 		'prod' = 1,
 		'staging' = 2,
 		'dev' = 3
@@ -195,7 +196,8 @@ chemi_schema <- function() {
 						destfile = here::here(
 							'schema',
 							paste0("chemi_", endpoint, '_', server, '.json')
-						)
+						),
+						mode = 'wb'
 					)
 				} else {
 					# TODO remove when harmonized
@@ -214,7 +216,8 @@ chemi_schema <- function() {
 							destfile = here::here(
 								'schema',
 								paste0("chemi_", endpoint, '_', server, '.json')
-							)
+							),
+							mode = 'wb'
 						)
 					}
 				}

@@ -392,6 +392,19 @@ reset_servers <- function() {
 		batch_limit(limit = 200)
 	}
 
+	# Conditionally swap to DEV / STAG environments if in the DEV version
+
+	if (is.na(utils::packageDate('ComptoxR'))) {
+		ctx_server(server = 2)
+		chemi_server(server = 3)
+		epi_server(server = 1)
+		eco_server(server = 3)
+		np_server(server = 1)
+		run_debug(debug = FALSE)
+		run_verbose(verbose = TRUE)
+		batch_limit(limit = 200)
+	}
+
 # Conditionally display startup message based on verbosity
 	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
 		packageStartupMessage(
@@ -420,7 +433,7 @@ reset_servers <- function() {
 # Header -----------------------------------------------------------------
 
 .header <- function() {
-  if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
+  if (is.na(utils::packageDate('ComptoxR'))) {
     build_date <- paste0(
       as.character(Sys.Date()),
       cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
