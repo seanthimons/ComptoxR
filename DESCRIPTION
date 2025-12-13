@@ -7,12 +7,17 @@ Authors@R:
     email = "thimons.sean@epa.gov",
     role = c("aut", "cre")
     )
-Description: ComptoxR is designed to leverage the USEPA CCTE's APIs for
-    accessing the underlying data that makes up the CompTox Chemical
-    Dashboard. It includes functions to access or recreate data from the
-    Dashboard and Cheminformatics products to inform rapid chemical
-    risk screening. A method of weighing and prioritizing a group of
-    chemical is also included.
+Description: ComptoxR provides access to the US EPA's CompTox Chemical
+    Dashboard APIs and related products for chemical risk screening and
+    prioritization. The package enables chemical identification and search
+    through multiple identifier types (DTXSID, CAS, SMILES, InChI, names),
+    hazard and safety assessment (including GHS codes, NFPA safety information,
+    cancer, genotoxicity data), bioactivity and toxicity screening from multiple
+    databases (GenRA, TEST, ECOTOX), chemical properties and molecular
+    descriptors, environmental fate and exposure data, and risk prioritization
+    with regulatory list associations. It supports batch processing for large
+    queries and integrates data from CompTox Chemistry Dashboard, GenRA Engine,
+    Toxicity Estimation Software Tool (TEST), ECOTOX, and EPI Suite.
 License: `use_mit_license()`, `use_gpl3_license()`
 Depends: 
     R (>= 3.5.0)
