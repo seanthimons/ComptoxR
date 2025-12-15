@@ -2,7 +2,6 @@
 #'
 #' This function has no parameters to search by.
 #'
-#' @param ctx_api_keyChecks for API key in Sys env
 #' @param return_dtxsid Boolean; Return all DTXSIDs contained within each list
 #' @param coerce Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.
 #'
@@ -11,23 +10,19 @@
 
 ct_lists_all <- function(
   return_dtxsid = FALSE,
-  coerce = FALSE,
-  ctx_api_key= NULL
+  coerce = FALSE
 ) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
 
   cli::cli_alert_info('Grabbing all public lists...')
 
-  if (return_dtxsid == FALSE) {
+  if (!return_dtxsid) {
     urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistall"
   } else {
     urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistwithdtxsids"
   }
 
   df <-
-    response <- GET(url = urls, add_headers("x-api-key" = token), progress())
+    response <- GET(url = urls, add_headers("x-api-key" = ct_api_key(), progress()))
 
   if (response$status != 200) {
     cli::cli_abort('Request failed!')
@@ -38,7 +33,7 @@ ct_lists_all <- function(
     cli::cli_alert_success('{nrow(df)} lists found!')
   }
 
-  if (return_dtxsid == TRUE & coerce == TRUE) {
+  if (return_dtxsid & coerce) {
     cli::cli_alert_warning('Coerceing DTXSID strings per list to list-column!')
 
     df <- df %>%
@@ -53,7 +48,7 @@ ct_lists_all <- function(
         }
       )
   } else {
-    if (return_dtxsid == FALSE & coerce == TRUE) {
+    if (!return_dtxsid & coerce) {
       cli::cli_alert_warning('You need to request DTXSIDs...')
       cli::cli_end()
 
