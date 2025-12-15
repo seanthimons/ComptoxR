@@ -14,14 +14,10 @@ ct_bioactivity <- function(
   annotate = FALSE,
   ctx_api_key= NULL
 ) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+  query <- unique(as.vector(query))
 
-  ctx_burl <- Sys.getenv("ctx_burl")
-
-  if (missing(query) == TRUE) {
-    cli::cli_abort('Missing query!')
+  if (length(query) == 0) {
+    cli::cli_abort('Query must be a character vector.')
   }
 
   if (missing(search_type)) {
@@ -30,7 +26,6 @@ ct_bioactivity <- function(
     )
 
     search_type <- 'by-dtxsid'
-
     search_payload <- 'DTXSID'
   } else {
     search_type <- match.arg(
@@ -49,41 +44,82 @@ ct_bioactivity <- function(
       )
   }
 
-  payload <- list(search_payload)
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
-  cli::cli_rule(left = 'Payload options')
-  cli::cli_dl(c(
-    'Search type' = '{search_payload}',
-    'Assay annotation' = '{annotate}'
-  ))
-  cli::cli_end()
+  if (run_verbose) {
+    cli::cli_rule(left = 'Bioactivity payload options')
+    cli::cli_dl(c(
+      'Number of items' = '{length(query)}',
+      'Search type' = '{search_payload}',
+      'Assay annotation' = '{annotate}'
+    ))
+    cli::cli_rule()
+    cli::cli_end()
+  }
 
-  urls <- paste0(ctx_burl, 'bioactivity/data/search/', search_type, '/', query)
-
-  df <- map(
-    urls,
-    ~ {
-      response <- GET(
-        url = .x,
-        add_headers("x-api-key" = token),
-        encode = 'json',
-        progress()
-      )
-
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-    },
-    .progress = T
+  # Build requests
+  req_list <- map(
+    query,
+    function(query_item) {
+      request(Sys.getenv('ctx_burl')) %>%
+        req_method("GET") %>%
+        req_url_path_append("bioactivity/data/search/") %>%
+        req_url_path_append(search_type) %>%
+        req_url_path_append(query_item) %>%
+        req_headers(
+          Accept = "application/json",
+          `x-api-key` = ct_api_key()
+        )
+    }
   )
 
-  df <- set_names(df, query) %>% compact() %>% list_rbind()
+  if (run_debug) {
+    return(req_list %>% pluck(., 1) %>% req_dry_run())
+  }
+
+  # Perform requests
+  resp_list <- req_perform_sequential(req_list, on_error = 'continue', progress = TRUE)
+
+  # Process responses
+  body_list <- map2(
+    resp_list,
+    query,
+    function(r, query_item) {
+      if (inherits(r, "httr2_error")) {
+        r <- r$resp
+      }
+
+      if (!inherits(r, "httr2_response")) {
+        cli::cli_warn("Request failed for {query_item}")
+        return(list())
+      }
+
+      if (resp_status(r) < 200 || resp_status(r) >= 300) {
+        cli::cli_warn("API request failed for {query_item} with status {resp_status(r)}")
+        return(list())
+      }
+
+      body <- resp_body_json(r)
+
+      if (length(body) == 0) {
+        return(list())
+      }
+      return(body)
+    }
+  )
+
+  df <- body_list %>%
+    set_names(query) %>%
+    compact() %>%
+    list_rbind(names_to = "query_id")
 
   if (annotate == TRUE) {
     bioassay_all <- ct_bio_assay_all()
-
     df <- left_join(df, bioassay_all, join_by('aeid'))
-  } else {
-    df
   }
+
+  return(df)
 }
 
 #' Gets all bioassays
@@ -93,15 +129,20 @@ ct_bioactivity <- function(
 #' @return Data frame
 
 ct_bio_assay_all <- function() {
-  token <- ct_api_key()
+  req <- request(Sys.getenv('ctx_burl')) %>%
+    req_method("GET") %>%
+    req_url_path_append("bioactivity/assay/") %>%
+    req_headers(
+      Accept = "application/hal+json",
+      `x-api-key` = ct_api_key()
+    )
 
-  ctx_burl <- Sys.getenv("ctx_burl")
+  resp <- req_perform(req)
 
-  response <- GET(
-    url = paste0(Sys.getenv('ctx_burl'), 'bioactivity/assay/'),
-    add_headers("x-api-key" = token),
-    accept('application/hal+json')
-  )
+  if (resp_status(resp) < 200 || resp_status(resp) >= 300) {
+    cli::cli_abort(paste("API request failed with status", resp_status(resp)))
+  }
 
-  df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+  df <- resp_body_json(resp)
+  return(df)
 }
