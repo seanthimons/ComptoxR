@@ -11,7 +11,6 @@
 #'
 #' @param query A list of DTXSIDs
 #' @param param Search parameter to look for.
-#' @param ctx_api_keyCCTE API token.
 #'
 #' @return A list of data frames
 #' @export
@@ -20,15 +19,24 @@ ct_functional_use <- function(
   query,
   param = c('func_use', 'product_data', 'list')
 ) {
-  ctx_burl <- Sys.getenv('ctx_burl')
+  query <- unique(as.vector(query))
 
+  if (length(query) == 0) {
+    cli::cli_abort("Query must be a character vector of DTXSIDs.")
+  }
 
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
-  cli::cli_rule(left = 'Exposure payload options')
-  cli::cli_dl(c(
-    'Compound count' = '{length(query)}',
-    'Search param' = '{param}'
-  ))
+  if (run_verbose) {
+    cli::cli_rule(left = 'Exposure payload options')
+    cli::cli_dl(c(
+      'Compound count' = '{length(query)}',
+      'Search param' = '{param}'
+    ))
+    cli::cli_rule()
+    cli::cli_end()
+  }
 
   surl_list <- list(
     func_use = list(
@@ -57,69 +65,113 @@ ct_functional_use <- function(
     unnest(surl) %>%
     rowwise() %>%
     mutate(
-      url = paste0(Sys.getenv('ctx_burl'), surl, query),
+      endpoint = surl,
       .keep = 'all',
       surl = str_remove_all(surl, 'exposure/|/by-dtxsid/')
     ) %>%
     ungroup() %>%
-    split(.$surl) %>%
-    map(., ~ discard_at(., c('surl'))) %>%
-    map(., ~ modify_in(., c('url'), as.list)) %>%
-    map(., as.list) %>%
-    map(., ~ map_at(., .at = 'query', .f = ~ setNames(., query)))
+    split(.$surl)
 
-  surl <- map(
+  # Build and execute requests for each endpoint
+  surl_results <- map(
     search,
     ~ {
-      .x <- map2(
-        .x = .x$query,
-        .y = .x$url,
-        ~ {
-          .x <- VERB("GET", url = .y, add_headers("x-api-key" = ct_api_key()))
-
-          if (.x$status_code != 200) {
-            .x <- NULL
-          } else {
-            .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8"))
-          }
-        },
-        .progress = T
-      ) %>%
-        compact() %>%
-        list_rbind(., names_to = 'dtxsid') %>%
-        as_tibble()
-    },
-    .progress = T
-  )
-
-  cat_surl <- map(
-    cat_surl,
-    ~ {
-      .x <- VERB(
-        "GET",
-        url = paste0(ctx_burl, .x),
-        add_headers("x-api-key" = ct_api_key())
+      endpoint_data <- .x
+      req_list <- map2(
+        endpoint_data$endpoint,
+        endpoint_data$query,
+        function(endpoint, query_item) {
+          request(Sys.getenv('ctx_burl')) %>%
+            req_method("GET") %>%
+            req_url_path_append(endpoint) %>%
+            req_url_path_append(query_item) %>%
+            req_headers(
+              Accept = "application/json",
+              `x-api-key` = ct_api_key()
+            )
+        }
       )
 
-      if (.x$status_code != 200) {
-        .x <- NULL
-      } else {
-        .x <- fromJSON(content(.x, as = "text", encoding = "UTF-8")) %>%
-          as_tibble()
+      if (run_debug) {
+        return(req_list %>% pluck(., 1) %>% req_dry_run())
       }
+
+      resp_list <- req_perform_sequential(req_list, on_error = 'continue', progress = TRUE)
+
+      body_list <- map2(
+        resp_list,
+        endpoint_data$query,
+        function(r, query_item) {
+          if (inherits(r, "httr2_error")) {
+            r <- r$resp
+          }
+
+          if (!inherits(r, "httr2_response")) {
+            return(NULL)
+          }
+
+          if (resp_status(r) < 200 || resp_status(r) >= 300) {
+            return(NULL)
+          }
+
+          body <- resp_body_json(r)
+          if (length(body) == 0) {
+            return(NULL)
+          }
+          return(body)
+        }
+      )
+
+      body_list %>%
+        set_names(endpoint_data$query) %>%
+        compact() %>%
+        list_rbind(names_to = 'dtxsid') %>%
+        as_tibble()
     },
-    .progress = T
+    .progress = TRUE
+  )
+
+  # Fetch category data
+  cat_surl_results <- map(
+    cat_surl,
+    ~ {
+      req <- request(Sys.getenv('ctx_burl')) %>%
+        req_method("GET") %>%
+        req_url_path_append(.x) %>%
+        req_headers(
+          Accept = "application/json",
+          `x-api-key` = ct_api_key()
+        )
+
+      if (run_debug) {
+        return(req_dry_run(req))
+      }
+
+      resp <- req_perform(req)
+
+      if (resp_status(resp) < 200 || resp_status(resp) >= 300) {
+        return(NULL)
+      }
+
+      body <- resp_body_json(resp)
+      if (length(body) == 0) {
+        return(NULL)
+      }
+
+      body %>% as_tibble()
+    },
+    .progress = TRUE
   )
 
   df <- list(
-    data = surl,
-    records = cat_surl
+    data = surl_results,
+    records = cat_surl_results
   )
 
   return(df)
 }
 
-
+# TODO : implement ct_demo_exposure
 ct_demo_exposure <- function(query) {
 
 		
