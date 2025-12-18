@@ -1,35 +1,99 @@
 #' Retrieves known hazard and risk characterizations by DTXSID for skin and eye endpoints.
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param ctx_api_keyChecks for API key in Sys env
-#' @param debug Flag to show API calls
 
 #'
 #' @return Returns a tibble with results
 #' @export
-ct_skin_eye <- function(query, ctx_api_key= NULL, debug = F) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
+ct_skin_eye <- function(query) {
+  query <- unique(as.vector(query))
+
+  if (length(query) == 0) {
+    cli::cli_abort("Query must be a character vector of DTXSIDs.")
   }
 
-  ctx_burl <- Sys.getenv('ctx_burl')
+  init_query <- length(query)
+  batch_limit <- as.numeric(Sys.getenv("batch_limit"))
+  mult_count <- ceiling(length(query) / batch_limit)
+  mult_request <- mult_count > 1
 
-  cat('\nSearching for skin and eye resources...\n')
-  surl <- "hazard/skin-eye/search/by-dtxsid/"
+  if (length(query) > batch_limit) {
+    query_list <- split(
+      query,
+      rep(1:mult_count, each = batch_limit, length.out = length(query))
+    )
+  } else {
+    query_list <- list(query)
+  }
 
-  urls <- paste0(ctx_burl, surl, query)
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
-  df <- map_dfr(
-    urls,
-    ~ {
-      if (debug == TRUE) {
-        cat(.x, "\n")
-      }
+  if (run_verbose) {
+    cli::cli_rule(left = 'Skin and eye data payload options')
+    cli::cli_dl(c(
+      'Number of compounds' = '{length(query)}',
+      'Number of batches' = '{mult_count}'
+    ))
+    cli::cli_rule()
+    cli::cli_end()
+  }
 
-      response <- VERB("GET", url = .x, add_headers("x-api-key" = token))
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+  # Build requests
+  req_list <- map(
+    query_list,
+    function(query_part) {
+      request(Sys.getenv('ctx_burl')) %>%
+        req_method("POST") %>%
+        req_url_path_append("hazard/skin-eye/search/by-dtxsid/") %>%
+        req_headers(
+          Accept = "application/json",
+          `x-api-key` = ct_api_key()
+        ) %>%
+        req_body_json(
+          query_part,
+          auto_unbox = FALSE
+        )
     }
   )
 
-  return(df)
+  if (run_debug) {
+    return(req_list %>% pluck(., 1) %>% req_dry_run())
+  }
+
+  # Perform requests
+  if (mult_request) {
+    resp_list <- req_perform_sequential(req_list, on_error = 'continue', progress = TRUE)
+  } else {
+    resp_list <- list(req_perform(req_list[[1]]))
+  }
+
+  # Process responses
+  body_list <- resp_list %>%
+    map(., function(r) {
+      if (resp_status(r) < 200 || resp_status(r) >= 300) {
+        cli::cli_abort(paste(
+          "API request failed with status",
+          resp_status(r)
+        ))
+      }
+
+      body <- resp_body_json(r)
+
+      if (length(body) == 0) {
+        cli::cli_alert_warning("No results found for the given query.")
+        return(list())
+      }
+      return(body)
+    }) %>%
+    list_c()
+
+  return(
+    body_list %>%
+      map(., function(x) {
+        x[purrr::map_lgl(x, is.null)] <- NA
+        as_tibble(x)
+      }) %>%
+      list_rbind()
+  )
 }
