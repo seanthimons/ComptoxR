@@ -130,7 +130,7 @@ ctx_server <- function(server = NULL) {
 			"2" = Sys.setenv('ctx_burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
 			"3" = Sys.setenv('ctx_burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
 			"5" = Sys.setenv('ctx_burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
-			"9" = Sys.setenv('bctx_burlurl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
+			"9" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
 			{
 				cli::cli_alert_warning("\nInvalid server option selected!\n")
 				#cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
