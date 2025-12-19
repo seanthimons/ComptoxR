@@ -46,3 +46,5 @@ RoxygenNote: 7.3.3
 Suggests: 
     ctxR (>= 1.0),
     webchem (>= 1.3.1)
+Config/testthat/edition: 3
+Config/testthat/parallel: true
