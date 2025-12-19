@@ -34,6 +34,9 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .Rproj.user
+
+.*/
+
 global_assays.xlsx
 global_assay.xlsx
 invasive_species.csv

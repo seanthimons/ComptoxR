@@ -1,0 +1,27 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://comptox.epa.gov/ctx-api/chemical/fate/search/by-dtxsid/
+    body:
+      raw_gzip: eJwBEwDs/1tbIkRUWFNJRDcwMjAxODIiXV0zQATp
+  response:
+    status: 400
+    headers:
+      Date: Fri, 19 Dec 2025 00:00:19 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      nnCoection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxNjDEOwjAQBPu84uQa5BRUKSl4AD8424dywjjgO0tEiL/HsZt0q52d/Q0ARtc3GZjAoFuK
+        Ti5iepp
+        TI6yxoysGuNOnkGhHoqhFdnYZx9YEUuTY1rcaKIAukKmK+Shyqmry/db6mV7sMdoH
+        KlkhzH62bj0H/Q
+        oHa4b/Bhg5MTg=
+  recorded_at: 2025-12-19 00:00:19
+recorded_with: VCR-vcr/2.1.0
