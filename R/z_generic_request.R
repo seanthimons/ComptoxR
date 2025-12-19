@@ -1,13 +1,18 @@
 #' Generic API Request Function
 #'
 #' @param query A single item (in quotes) or a list to be queried
-#' @param endpoint The API endpoint to query
 #'
 #' @return Returns a tibble with results
 #' @export
 
-generic_request <- function(query, endpoint) {
+generic_request <- function(query) {
 
+	# Check if query is a list (and not a dataframe) to flatten it
+	if(is.list(query) && !is.data.frame(query)) {
+    query <- as.character(unlist(query, use.names = FALSE))
+  }
+
+	# Ensure query is a vector and remove duplicates
 	query <- unique(as.vector(query))
 
 	if (length(query) == 0) {
