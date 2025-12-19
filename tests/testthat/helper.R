@@ -39,9 +39,9 @@ skip_if_not_ci <- function() {
 #' @return character vector of test DTXSIDs
 get_test_dtxsids <- function() {
   c(
-    "DTXSID7020182", # Benzene
-    "DTXSID2020232", # Caffeine
-    "DTXSID5020406", # Chloroform
-    "DTXSID3021781"  # Ethanol
+		'DTXSID1024122', # Glyphosate
+		'DTXSID4020533', # 1,4-Dioxane
+		'DTXSID7020182', # Bisphenol A
+		'DTXSID7024902' # Dazomet
   )
 }
