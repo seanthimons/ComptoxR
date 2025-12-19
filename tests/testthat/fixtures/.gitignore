@@ -1,0 +1,6 @@
+# vcr cassette files should be committed, but may contain sensitive data
+# Review cassettes before committing to ensure no API keys are exposed
+# The setup.R file should filter sensitive data, but double-check
+
+# Uncomment the line below if you want to ignore all cassettes
+# *.yml
