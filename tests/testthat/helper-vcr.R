@@ -11,7 +11,7 @@
 #' devtools::test()
 #' }
 delete_all_cassettes <- function(confirm = FALSE) {
-  cassette_dir <- "tests/testthat/fixtures"
+  cassette_dir <- here('tests', 'testthat', 'fixtures')
   cassettes <- list.files(cassette_dir, pattern = "\\.yml$", full.names = TRUE)
 
   if (length(cassettes) == 0) {
@@ -48,7 +48,7 @@ delete_all_cassettes <- function(confirm = FALSE) {
 #' delete_cassettes("ct_env_fate")
 #' }
 delete_cassettes <- function(pattern, confirm = FALSE) {
-  cassette_dir <- "tests/testthat/fixtures"
+  cassette_dir <- here('tests', 'testthat', 'fixtures')
   all_cassettes <- list.files(cassette_dir, pattern = "\\.yml$", full.names = TRUE)
   matching <- grep(pattern, all_cassettes, value = TRUE)
 
@@ -79,7 +79,7 @@ delete_cassettes <- function(pattern, confirm = FALSE) {
 #'
 #' @return Character vector of cassette file names
 list_cassettes <- function() {
-  cassette_dir <- "tests/testthat/fixtures"
+  cassette_dir <- here('tests', 'testthat', 'fixtures')
   cassettes <- list.files(cassette_dir, pattern = "\\.yml$")
 
   if (length(cassettes) == 0) {
@@ -101,7 +101,7 @@ check_cassette_safety <- function(cassette_name) {
     cassette_name <- paste0(cassette_name, ".yml")
   }
 
-  cassette_path <- file.path("tests/testthat/fixtures", cassette_name)
+  cassette_path <- file.path(here('tests', 'testhat', 'fixtures'), cassette_name)
 
   if (!file.exists(cassette_path)) {
     stop(sprintf("Cassette not found: %s", cassette_path))
