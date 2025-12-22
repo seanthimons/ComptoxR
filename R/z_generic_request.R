@@ -15,6 +15,9 @@ generic_request <- function(query) {
 	# Ensure query is a vector and remove duplicates
 	query <- unique(as.vector(query))
 
+	# Remove empty strings from the query
+	query <- query[!is.na(query) & query != ""]
+
 	if (length(query) == 0) {
 		cli::cli_abort("Query must be a character vector.")
 	}
