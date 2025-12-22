@@ -142,29 +142,25 @@ chemi_hazard <- function(
   cli::cli_rule()
   cli::cli_end()
 
-  # request ----------------------------------------------------------------
-
-  response <- POST(
-    url = "https://hcd.rtpnc.epa.gov/hazard",
-    body = payload,
-    content_type("application/json"),
-    accept("application/json, text/plain, */*"),
-    encode = 'json',
-    progress() #progress bar
+  # Request standardized via generic_chemi_request
+  # We use tidy = FALSE to maintain the nested list structure required for complex cleaning logic below.
+  df <- generic_chemi_request(
+    query = query,
+    endpoint = "hazard",
+    options = list(
+      minSimilarity = min_sim,
+      analogSearchType = analogs
+    ),
+    server = "chemi_burl",
+    tidy = FALSE
   )
-  cli::cat_line()
-  cli::cli_rule()
 
-  if (response$status != 200) {
-    cli_abort('Bad request for compound!')
-  }
-
-  df <- content(response, "text", encoding = 'UTF-8') %>%
-    jsonlite::fromJSON(simplifyVector = FALSE)
+  if (is.null(df) || length(df) == 0) return(invisible(NULL))
 
   #Cleaning----
   df <- df %>%
-    pluck('hazardChemicals') %>%
+    purrr::pluck('hazardChemicals') %>%
+
     map(., ~ discard(.x, names(.x) == 'requestChemical')) %>%
     map(., ~ discard(.x, names(.x) == 'chemicalId'))
 
