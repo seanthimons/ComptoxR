@@ -1,4 +1,8 @@
+# Internal package environment for session-level caching
+.ComptoxREnv <- new.env(parent = emptyenv())
+
 #' First time setup for functions
+
 #'
 #' Tests to see if APIs are up and tokens are present.
 #'
