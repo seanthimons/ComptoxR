@@ -12,7 +12,6 @@
 #'
 #' @return A list or dataframe
 #' @export
-
 ct_properties <- function(
   search_param,
   query,
@@ -23,105 +22,15 @@ ct_properties <- function(
     cli::cli_abort("Missing search type!")
   }
 
-  query <- unique(as.vector(query))
-
-  if (length(query) == 0) {
-    cli::cli_abort("Query must be a character vector.")
-  }
-
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
-
   if (search_param == "compound") {
-    if (run_verbose) {
-      cli::cli_rule(left = "Phys-chem properties payload options")
-      cli::cli_dl(
-        c(
-          "Search type" = "{search_param}",
-          "Number of compounds" = "{length(query)}",
-          "Coerce" = "{coerce}"
-        )
-      )
-      cli::cli_rule()
-      cli::cli_end()
-    }
-
-    batch_limit <- 200
-    mult_count <- ceiling(length(query) / batch_limit)
-
-    if (length(query) > batch_limit) {
-      query_list <- split(
-        query,
-        rep(1:mult_count, each = batch_limit, length.out = length(query))
-      )
-    } else {
-      query_list <- list(query)
-    }
-
-    # Build requests
-    req_list <- map(
-      query_list,
-      function(query_part) {
-        request(Sys.getenv('ctx_burl')) %>%
-          req_method("POST") %>%
-          req_url_path_append("chemical/property/search/by-dtxsid/") %>%
-          req_headers(
-            Accept = "application/json, text/plain, */*",
-            `Content-Type` = "application/json",
-            `x-api-key` = ct_api_key()
-          ) %>%
-          req_body_json(
-            as.list(query_part),
-            auto_unbox = FALSE
-          )
-      }
+    df <- generic_request(
+      query = query,
+      endpoint = "chemical/property/search/by-dtxsid/",
+      method = "POST",
+      batch_limit = 200
     )
 
-    if (run_debug) {
-      return(req_list %>% pluck(., 1) %>% req_dry_run())
-    }
-
-    # Perform requests
-    if (length(req_list) > 1) {
-      resp_list <- req_perform_sequential(req_list, on_error = 'continue', progress = TRUE)
-    } else {
-      resp_list <- list(req_perform(req_list[[1]]))
-    }
-
-    # Process responses
-    body_list <- map(
-      resp_list,
-      function(r) {
-        if (inherits(r, "httr2_error")) {
-          r <- r$resp
-        }
-
-        if (!inherits(r, "httr2_response")) {
-          cli::cli_warn("Request failed")
-          return(tibble())
-        }
-
-        if (resp_status(r) < 200 || resp_status(r) >= 300) {
-          cli::cli_warn("API request failed with status {resp_status(r)}")
-          return(tibble())
-        }
-
-        body <- resp_body_json(r)
-
-        if (length(body) == 0) {
-          return(tibble())
-        }
-
-        body %>%
-          map(~ map_if(.x, is.null, ~NA_character_)) %>%
-          as_tibble()
-      }
-    ) %>%
-      list_rbind()
-
-    df <- body_list
-
-    if (coerce == TRUE) {
+    if (coerce == TRUE && nrow(df) > 0) {
       df <- df %>%
         split(.$propertyId)
     }
@@ -135,6 +44,8 @@ ct_properties <- function(
     }
 
     range <- as.numeric(range)
+    run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+    run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
     if (run_verbose) {
       cli::cli_rule(left = "Phys-chem properties payload options")
@@ -150,7 +61,7 @@ ct_properties <- function(
       cli::cli_end()
     }
 
-    # Build request
+    # Build request for range search
     req <- request(Sys.getenv('ctx_burl')) %>%
       req_method("GET") %>%
       req_url_path_append("chemical/property/search/by-range/") %>%
@@ -191,7 +102,6 @@ ct_properties <- function(
 #' Get property IDs for property searching
 #'
 #' @return A list of IDs
-
 .prop_ids <- function() {
   # Predicted properties
   req_pred <- request("https://api-ccte.epa.gov") %>%
