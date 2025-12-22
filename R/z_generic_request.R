@@ -10,6 +10,7 @@
 #' @param server Either a Global environment variable name (e.g., 'ctx_burl') or a direct URL string.
 #' @param batch_limit The number of items to send per request. Bulk POSTs usually use 100-1000.
 #'        If set to 1, GET requests will append the query item directly to the URL path.
+#' @param auth Boolean; whether to include the API key header. Defaults to TRUE.
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
 #'        - If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments; 
@@ -18,7 +19,7 @@
 #'
 #' @return A tidy tibble. If no results are found, returns an empty tibble.
 #' @export
-generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, ...) {
+generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -79,9 +80,12 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       req <- httr2::request(base_url) %>%
         httr2::req_url_path_append(endpoint) %>%
         httr2::req_headers(
-          Accept = "application/json",
-          `x-api-key` = ct_api_key()
+          Accept = "application/json"
         )
+      
+      if (auth) {
+        req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+      }
 
       # Implementation for POST requests (Typically bulk searches)
       if (toupper(method) == "POST") {
@@ -153,7 +157,15 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         return(NULL)
       }
 
-      return(httr2::resp_body_json(r))
+      body <- httr2::resp_body_json(r)
+      
+      # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
+      if (length(qp) == 1 && is.list(body)) {
+         # We add the query as a named attribute so it can be picked up during flattening
+         attr(body, "query") <- qp[1]
+      }
+      
+      return(body)
     }) %>%
     # Flatten the list of responses (one list of data per batch) into one single list
     purrr::list_flatten()
@@ -167,18 +179,158 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   # Convert the parsed JSON (list of lists) into a tidy tibble.
   res <- body_list %>%
     purrr::map(function(x) {
+      q_attr <- attr(x, "query")
       if (is.list(x) && length(x) > 0) {
         # Replace NULLs with NA so they don't disappear during tibble conversion
         x[purrr::map_lgl(x, is.null)] <- NA
-        return(tibble::as_tibble(x))
+        row <- tibble::as_tibble(x)
+        if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+        return(row)
       } else if (is.null(x) || length(x) == 0) {
         return(NULL)
       } else {
         # Primitive values (strings/numbers) are wrapped into a 'value' column
-        return(tibble::tibble(value = x))
+        row <- tibble::tibble(value = x)
+        if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+        return(row)
       }
     }) %>%
     purrr::list_rbind()
+
+  return(res)
+}
+
+#' Generic Cheminformatics API Request Function
+#'
+#' This specialized template handles the nested payload structure common to the
+#' EPA cheminformatics microservices: {"chemicals": [{"sid": "ID1"}], "options": {...}}
+#'
+#' @param query A character vector of identifiers (DTXSIDs, etc.)
+#' @param endpoint The specific sub-path (e.g., "toxprints/calculate")
+#' @param options A named list of parameters to be placed in the 'options' JSON field.
+#' @param sid_label The key used for identifiers in the JSON body (usually "sid").
+#' @param server Global environment variable name for the base URL (default: 'chemi_burl').
+#' @param auth Boolean; whether to include the API key header. Defaults to FALSE.
+#' @param pluck_res Optional character; the name of the field to extract from the JSON response.
+#' @param wrap Boolean; whether to wrap the query in a {"chemicals": [...], "options": ...} structure.
+#'        Defaults to TRUE. If FALSE, sends a JSON array of objects like [{"sid": "ID1"}, ...].
+#' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
+#' @param ... Additional arguments passed to httr2.
+#'
+#' @return A tidy tibble (if tidy=TRUE) or a raw list.
+#' @export
+generic_chemi_request <- function(query, endpoint, options = list(), sid_label = "sid", 
+                                  server = "chemi_burl", auth = FALSE, pluck_res = NULL, 
+                                  wrap = TRUE, tidy = TRUE, ...) {
+  
+  # 1. Base URL Resolution
+  base_url <- Sys.getenv(server, unset = server)
+  if (base_url == "") base_url <- server
+
+  # 2. Input Normalization
+  query <- unique(as.vector(query))
+  query <- query[!is.na(query) & query != ""]
+  if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
+
+  # 3. Payload Construction
+  chemicals <- purrr::map(query, ~ set_names(list(.x), sid_label))
+  
+  if (wrap) {
+    payload <- list(
+      chemicals = chemicals,
+      options = options
+    )
+  } else {
+    payload <- chemicals
+  }
+
+  # Check environment flags
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste('Generic Chemi Request:', endpoint))
+    cli::cli_dl(c('Number of items' = '{length(query)}'))
+    cli::cli_rule()
+    cli::cli_end()
+  }
+
+  # 4. Request building
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_method("POST") %>%
+    httr2::req_body_json(payload) %>%
+    httr2::req_headers(Accept = "application/json")
+
+  if (auth) {
+    req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+  }
+
+  # 5. Debugging
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  # 6. Execution
+  resp <- httr2::req_perform(req)
+
+  # 7. Response Processing
+  if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
+    cli::cli_abort("Chemi API request to {.val {endpoint}} failed with status {httr2::resp_status(resp)}")
+  }
+
+  body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+  
+  if (!is.null(pluck_res)) {
+    body <- purrr::pluck(body, pluck_res)
+  }
+
+  if (length(body) == 0) {
+    if (tidy) return(tibble::tibble()) else return(list())
+  }
+
+  if (!tidy) return(body)
+
+  # 8. Tidy Conversion
+  if (!tidy) return(body)
+
+  # Handle cases where body is a named list of results (keyed by query)
+  if (!is.null(names(body)) && !is.data.frame(body)) {
+      res <- body %>%
+        purrr::map(function(x) {
+          if (is.list(x) && length(x) > 0) {
+            x[purrr::map_lgl(x, is.null)] <- NA
+            return(tibble::as_tibble(x))
+          } else {
+            return(tibble::tibble(value = x))
+          }
+        }) %>%
+        purrr::list_rbind(names_to = "query_id")
+  } else {
+      # If body is an unnamed list, we attempt to match it back to the query 
+      # if the counts match exactly, otherwise we just bind.
+      res <- body %>%
+        purrr::map(function(x) {
+          if (is.list(x) && length(x) > 0) {
+            # Check for name collisions or nested lists
+            x[purrr::map_lgl(x, is.null)] <- NA
+            # We use try as some deeply nested chemi-results might fail direct as_tibble
+            t_res <- try(tibble::as_tibble(x), silent = TRUE)
+            if (inherits(t_res, "try-error")) return(tibble::tibble(data = list(x)))
+            return(t_res)
+          } else if (is.null(x) || length(x) == 0) {
+            return(NULL)
+          } else {
+            return(tibble::tibble(value = x))
+          }
+        }) %>%
+        purrr::list_rbind()
+      
+      # If the results match the query length, add the query column
+      if (nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
+         res <- dplyr::bind_cols(dtxsid = query, res)
+      }
+  }
 
   return(res)
 }
