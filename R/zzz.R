@@ -41,14 +41,20 @@ run_setup <- function() {
             # Don't error on HTTP status, we check it manually
             httr2::req_error(is_error = \(resp) FALSE)
           
+          start_time <- Sys.time()
           resp <- httr2::req_perform(req)
+          end_time <- Sys.time()
+          
+          latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+          latency_fmt <- paste0(round(latency * 1000), "ms")
+          
           status <- httr2::resp_status(resp)
           
           # Use cli for styled output. 3xx redirects are not considered errors.
           if (status >= 200 && status < 400) {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')} [{latency_fmt}]")
           } else {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')} [{latency_fmt}]")
           }
         },
         error = function(e) {
@@ -69,8 +75,15 @@ run_setup <- function() {
 
     # Check for active Cheminformatics endpoints ----
     tryCatch({
-      endpoints <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
-        httr2::req_perform() %>%
+      start_time <- Sys.time()
+      resp <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+        httr2::req_perform()
+      end_time <- Sys.time()
+      
+      latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      latency_fmt <- paste0(round(latency * 1000), "ms")
+
+      endpoints <- resp %>%
         httr2::resp_body_json() %>%
         purrr::map(., ~ tibble::as_tibble(.x)) %>%
         purrr::list_rbind() %>% 
@@ -79,7 +92,7 @@ run_setup <- function() {
       active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
       total_chemi_endpoints <- nrow(endpoints)
       
-      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')}")
+      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')} [{latency_fmt}]")
       results <- c(results, chemi_status)
       
     }, error = function(e) {
