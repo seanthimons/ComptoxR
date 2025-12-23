@@ -391,8 +391,8 @@ reset_servers <- function() {
 		epi_server(server = 1)
 		eco_server(server = 1)
 		np_server(server = 1)
-		run_debug(debug = FALSE)
-		run_verbose(verbose = TRUE)
+		suppressMessages(run_debug(debug = FALSE))
+		suppressMessages(run_verbose(verbose = TRUE))
 		batch_limit(limit = 200)
 	}
 
@@ -404,8 +404,8 @@ reset_servers <- function() {
 		epi_server(server = 1)
 		eco_server(server = 3)
 		np_server(server = 1)
-		run_debug(debug = FALSE)
-		run_verbose(verbose = TRUE)
+		suppressMessages(run_debug(debug = FALSE))
+		suppressMessages(run_verbose(verbose = TRUE))
 		batch_limit(limit = 200)
 	}
 
@@ -420,19 +420,22 @@ reset_servers <- function() {
 
 # Load -------------------------------------------------------------------
 
-.extractor <- NULL
-.classifier <- NULL
+# .extractor <- NULL
+# .classifier <- NULL
 
 # .onLoad is a special function that R runs when a package is loaded.
 .onLoad <- function(libname, pkgname) {
 	# Call the factory ONCE and assign the result to our placeholder.
-	# The "super-assignment" operator (<<-) ensures we modify the .extractor
-	# in the package's namespace, not just a local copy.
-	.extractor <<- create_formula_extractor_final()
-	.classifier <<- create_compound_classifier()
+
+  .ComptoxREnv$extractor <- create_formula_extractor_final()
+	.ComptoxREnv$classifier <- create_compound_classifier()
+	
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
 }
+
+	# (Optional) Silence R CMD check "no visible binding" notes
+	utils::globalVariables(c(".ComptoxREnv"))
 
 # Header -----------------------------------------------------------------
 
