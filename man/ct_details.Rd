@@ -20,3 +20,8 @@ a data frame
 \description{
 Retrieve compound details by DTXSID
 }
+\examples{
+\dontrun{
+ct_details(query = "DTXSID7020182")
+}
+}

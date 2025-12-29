@@ -15,3 +15,8 @@ A list of data
 \description{
 Returns a data frame that contains a binned comparison table generated from the GHS codes and the NFPA 704 'safety diamond'
 }
+\examples{
+\dontrun{
+chemi_safety(query = "DTXSID7020182")
+}
+}

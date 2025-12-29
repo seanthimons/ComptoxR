@@ -10,8 +10,6 @@ ct_functional_use(query, param = c("func_use", "product_data", "list"))
 \item{query}{A list of DTXSIDs}
 
 \item{param}{Search parameter to look for.}
-
-\item{ctx_api_keyCCTE}{API token.}
 }
 \value{
 A list of data frames

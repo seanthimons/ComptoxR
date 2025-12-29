@@ -15,3 +15,8 @@ Returns a tibble with results
 \description{
 Retrieves Chemical Fate and Transport parameters
 }
+\examples{
+\dontrun{
+ct_env_fate(query = "DTXSID7020182")
+}
+}
