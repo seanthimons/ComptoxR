@@ -8,348 +8,170 @@
 #'
 #' @return A list of data
 #' @export
-
+#'
+#' @examples
+#' \dontrun{
+#' chemi_safety(query = "DTXSID7020182")
+#' }
 chemi_safety <- function(query) {
   
+  # Request standardized via generic_chemi_request
+  df_raw <- generic_chemi_request(
+    query = query,
+    endpoint = "safety",
+    server = 'chemi_burl',
+    wrap = FALSE
+  )
+  
+  if (nrow(df_raw) == 0) return(invisible(NULL))
 
-	
-  chemicals <- vector(mode = "list", length = length(query))
+  # Tidy up headers early using vectorized logic
+  headers <- df_raw %>%
+    dplyr::filter(!purrr::map_lgl(chemical, is.null)) %>%
+    dplyr::select(dtxsid = sid, chemical) %>%
+    tidyr::unnest_wider(chemical) %>%
+    dplyr::select(dplyr::any_of(c("name", "dtxsid")))
 
-  chemicals <- map2(
-    chemicals,
-    query,
-    \(x, y)
-      x <- list(
-        sid = y
+  # Extract flags into a long-format dataframe for cleaner processing
+  flags_long <- df_raw %>%
+    dplyr::select(dtxsid, flags) %>%
+    tidyr::unnest_wider(flags)
+
+  # --- Optimized NFPA Decoding ---
+  nfpa <- NULL
+  if ("NFPA" %in% colnames(flags_long)) {
+    # Static mapping for NFPA codes to bins
+    nfpa_bin_map <- c("1" = "L", "2" = "M", "3" = "H", "4" = "VH", "0" = "I")
+    
+    nfpa <- flags_long %>%
+      dplyr::select(dtxsid, NFPA) %>%
+      tidyr::unnest(NFPA) %>%
+      tidyr::unnest(NFPA) %>%
+      dplyr::mutate(
+        nfpa_health = stringr::str_sub(NFPA, 1, 1),
+        nfpa_fire = stringr::str_sub(NFPA, 2, 2),
+        nfpa_stability = stringr::str_sub(NFPA, 3, 3),
+        nfpa_special = stringr::str_sub(NFPA, 4, -1),
+        # Vectorized lookup instead of case_when
+        health_bin = nfpa_bin_map[nfpa_health],
+        fire_bin = nfpa_bin_map[nfpa_fire],
+        stability_bin = nfpa_bin_map[nfpa_stability],
+        special_bin = dplyr::if_else(!stringr::str_detect(nfpa_special, "\\S"), NA_character_, nfpa_special)
+      ) %>%
+      dplyr::select(-NFPA, -dplyr::starts_with("nfpa_")) %>%
+      tidyr::pivot_longer(
+        cols = health_bin:special_bin,
+        values_to = "bin",
+        names_to = "hazard_class",
+        values_drop_na = TRUE
+      ) %>%
+      dplyr::mutate(
+        # Handle special VH overrides for oxidizing/water-reactive
+        bin = dplyr::case_when(
+          bin %in% c("OX", "W") ~ "VH",
+          .default = bin
+        )
       )
-  )
+  }
 
-  payload <- chemicals
+  # --- Optimized GHS Mapping ---
+  ghs_codes <- NULL
+  if ("GHS Codes" %in% colnames(flags_long)) {
+    ghs_tbl <- ghs_create_tbl() # Uses session cache internally
+    
+    ghs_codes <- flags_long %>%
+      dplyr::select(dtxsid, `GHS Codes`) %>%
+      tidyr::unnest_longer(`GHS Codes`) %>%
+      dplyr::rename(h_code = `GHS Codes`) %>%
+      # Fast join against the GHS dictionary
+      dplyr::inner_join(ghs_tbl, by = "h_code")
+  }
 
-  cli_rule(left = "Safety payload options")
-  cli_dl(
-    c(
-      "Number of compounds" = "{length(query)}"
-    )
-  )
-  cli_rule()
-  cli_end()
-
-  response <- POST(
-    url = url,
-    body = payload,
-    content_type("application/json"),
-    accept("application/json, text/plain, */*"),
-    encode = "json",
-    progress()
-  )
-  cli_rule()
-
-  df <- content(response, "text", encoding = "UTF-8") %>%
-    jsonlite::fromJSON(simplifyVector = FALSE)
-
-  df <- pluck(df, "flags") %>%
-    set_names(., query)
-
-  data <- list(
-    headers = NULL,
-    # rqcode = NULL,
-    # reg_info = NULL,
-    # handling = NULL,
-    # accident_release = NULL,
-    nfpa = NULL,
-    ghs = NULL,
-    ghs_codes = NULL
-  )
-
-  # Headers----
-  data$headers <- df %>%
-    map_dfr(., ~ pluck(., "chemical")) %>%
-    rename(dtxsid = sid) %>%
-    select(., name, dtxsid)
-
-  # NFPA --------------------------------------------------------------------
-
-  data$nfpa <- df %>%
-    map(., ~ pluck(., "flags", "NFPA")) %>%
-    compact() %>%
-    # list_flatten() %>% #more trouble than needed, swapped to double unnest
-    enframe(., name = "dtxsid", value = "val") %>%
-    unnest(., cols = val) %>%
-    unnest(., cols = val) %>%
-    mutate(
-      nfpa_health = str_sub(val, 1, 1),
-      nfpa_fire = str_sub(val, 2, 2),
-      nfpa_stability = str_sub(val, 3, 3),
-      nfpa_special = str_sub(val, 4, -1),
-      health_bin = case_when(
-        nfpa_health == 1 ~ "L",
-        nfpa_health == 2 ~ "M",
-        nfpa_health == 3 ~ "H",
-        nfpa_health == 4 ~ "VH",
-        nfpa_health == 0 ~ "I",
-        .default = NA
-      ),
-      fire_bin = case_when(
-        nfpa_fire == 1 ~ "L",
-        nfpa_fire == 2 ~ "M",
-        nfpa_fire == 3 ~ "H",
-        nfpa_fire == 4 ~ "VH",
-        nfpa_fire == 0 ~ "I",
-        .default = NA
-      ),
-      stability_bin = case_when(
-        nfpa_stability == 1 ~ "L",
-        nfpa_stability == 2 ~ "M",
-        nfpa_stability == 3 ~ "H",
-        nfpa_stability == 4 ~ "VH",
-        nfpa_stability == 0 ~ "I",
-        .default = NA
-      ),
-      special_bin = if_else(
-        !str_detect(nfpa_special, "\\S"),
-        NA_character_,
-        nfpa_special
-      )
-    ) %>%
-    select(
-      -val,
-      -starts_with("nfpa_")
-    ) %>%
-    pivot_longer(
-      .,
-      cols = health_bin:special_bin,
-      values_to = "bin",
-      names_to = "hazard_class",
-      values_drop_na = T
-    ) %>%
-    mutate(
-      val = case_when(
-        bin == "OX" ~ "OX",
-        bin == "W" ~ "W",
-        .default = NA_character_
-      ),
-      bin = case_when(
-        !is.na(val) ~ "VH",
-        .default = bin
-      )
-    )
-
-  # GHS----
-
-  data$ghs <- df %>%
-    map(., ~ pluck(., "flags", "GHS")) %>%
-    compact() %>%
-    enframe(., name = "dtxsid", value = "val") %>%
-    unnest_longer(., col = val)
-
-  # GHS codes----
-
-  data$ghs_codes <- df %>%
-    map(., ~ pluck(., "flags", "GHS Codes")) %>%
-    enframe(., name = "dtxsid", value = "val") %>%
-    unnest_longer(., col = val)
-
-  # Dictionary-----
-
-  ghs_tbl <- ghs_create_tbl()
-
-  colnames(ghs_tbl) <- c(
-    "h_code",
-    "hazard_statement",
-    "hazard_class",
-    "hazard_category",
-    "un_model_regulations_class_or_division",
-    "ghs_pictogram",
-    "ghs_signal_word",
-    "bin"
-  )
-
-  ghs_tbl <- filter(ghs_tbl, bin != "MISSING") %>%
-    distinct(h_code, bin, .keep_all = T) %>%
-    select(h_code, hazard_class, bin)
-
-  # Physical Hazards --------------------------------------------------------
-
-  df <- inner_join(data$ghs_codes, ghs_tbl, join_by("val" == "h_code")) %>%
-    bind_rows(data$nfpa, .) %>%
-    filter(hazard_class != "health_bin") %>%
-    mutate(
-      class = case_when(
-        hazard_class %in%
-          c(
-            "stability_bin",
-            "Desensitized explosives",
-            "Explosives"
-          ) ~
-          "Explosives",
-        hazard_class %in%
-          c(
-            "fire_bin",
-            "Flammable gases",
-            "Flammable gases ",
-            "Flammable liquids",
-            "Flammable solids",
-            "Pyrophoric solids",
-            "Pyrophoric liquids",
-            "Substances and mixtures which in contact with water, emit flammable gases",
-            "Self-heating substances and mixtures"
-          ) ~
-          "Flammable",
-        hazard_class == "special_bin" & val == "W" ~ "Flammable",
-        hazard_class %in%
-          c(
-            "Oxidizing gases",
-            "Oxidizing liquids; Oxidizing solids",
-            "Self-reactive substances and mixtures; Organic peroxides"
-          ) ~
-          "Oxidizers/ Self-Rxn",
-        hazard_class == "special_bin" & val == "OX" ~ "Oxidizers/ Self-Rxn",
-        hazard_class %in%
-          c(
-            "Gases under pressure",
-            "Chemicals under pressure",
-            "Aerosols"
-          ) ~
-          "Pressurized chemicals",
-        hazard_class %in%
-          c(
-            "Corrosive to Metals",
-            "Skin corrosion/irritation and serious eye damage/eye irritation",
-            "Skin corrosion/irritation",
-            "Serious eye damage/eye irritation"
-          ) ~
-          "Corrosive",
-        hazard_class %in% c("Hazardous to the ozone layer") ~ "Ozone-depleting", # may not be needed
+  # --- Physical Hazards Summary Merging ---
+  final_df <- dplyr::bind_rows(nfpa, ghs_codes) %>%
+    dplyr::filter(hazard_class != "health_bin") %>%
+    dplyr::mutate(
+      # Grouping endpoints into logical classes
+      class = dplyr::case_when(
+        hazard_class %in% c("stability_bin", "Desensitized explosives", "Explosives") ~ "Explosives",
+        hazard_class %in% c(
+          "fire_bin", "Flammable gases", "Flammable liquids", "Flammable solids", 
+          "Pyrophoric solids", "Pyrophoric liquids", "Substances and mixtures which in contact with water, emit flammable gases",
+          "Self-heating substances and mixtures"
+        ) ~ "Flammable",
+        hazard_class %in% c(
+          "Oxidizing gases", "Oxidizing liquids; Oxidizing solids", "Self-reactive substances and mixtures; Organic peroxides"
+        ) ~ "Oxidizers/ Self-Rxn",
+        hazard_class %in% c("Gases under pressure", "Chemicals under pressure", "Aerosols") ~ "Pressurized chemicals",
+        hazard_class %in% c(
+          "Corrosive to Metals", "Skin corrosion/irritation and serious eye damage/eye irritation", 
+          "Skin corrosion/irritation", "Serious eye damage/eye irritation"
+        ) ~ "Corrosive",
+        hazard_class == "Hazardous to the ozone layer" ~ "Ozone-depleting",
         .default = hazard_class
       ),
       bin = factor(bin, levels = c("VH", "H", "M", "L", "I", "ND", NA)),
     ) %>%
-    arrange(bin) %>%
-    distinct(., dtxsid, class, .keep_all = T) %>%
-    pivot_wider(
-      .,
+    dplyr::arrange(bin) %>%
+    dplyr::distinct(dtxsid, class, .keep_all = TRUE) %>%
+    tidyr::pivot_wider(
       id_cols = dtxsid,
       names_from = class,
       values_from = bin,
       values_fill = NA
-    ) %>%
-    rowwise() %>%
-    mutate(n = sum(!is.na(c_across(!dtxsid)))) %>%
-    arrange(desc(n)) %>%
-    ungroup() %>%
-    inner_join(data$headers, ., join_by(dtxsid))
+    )
 
-  return(df)
+  # Final summary counts using rowSums (vectorized) instead of rowwise()
+  final_df <- final_df %>%
+    dplyr::mutate(n = rowSums(!is.na(dplyr::across(-dtxsid)))) %>%
+    dplyr::arrange(dplyr::desc(n)) %>%
+    dplyr::inner_join(headers, by = "dtxsid") %>%
+    dplyr::relocate(name, .before = dtxsid)
+
+  return(final_df)
 }
 
 
-#' Creates a GHS table with risk bins into the Global Environment.
-#'
+#' Optimized GHS Table Creation with Session Caching
 #'
 #' @return Data frame
-
 ghs_create_tbl <- function() {
+  # Check if table is already in session cache
+  if (!is.null(.ComptoxREnv$ghs_table)) {
+    return(.ComptoxREnv$ghs_table)
+  }
+
   url <- "https://pubchem.ncbi.nlm.nih.gov/ghs/ghscode_10.txt"
-  lines <- readLines(url, warn = FALSE)
+  lines <- tryCatch(readLines(url, warn = FALSE), error = function(e) return(NULL))
+  
+  if (is.null(lines)) return(tibble::tibble())
 
-  # Split the lines by tab
-  split_lines <- map(strsplit(lines, "\t"), ~ .x[-8])
+  split_lines <- purrr::map(strsplit(lines, "\t"), ~ .x[-8])
+  # Header is actually H-Code, Statement, Class, Category, UN, Pictogram, Signal
+  # We only need H-Code and the bin logic.
+  df <- as.data.frame(do.call(rbind, split_lines[-1]), stringsAsFactors = FALSE)
+  colnames(df) <- split_lines[[1]]
 
-  # Get the header
-  header <- split_lines[[1]]
-
-  # Get the data
-  data <- split_lines[-1]
-
-  # Create a data frame
-  df <- as.data.frame(do.call(rbind, data), stringsAsFactors = FALSE)
-
-  # Set column names
-  colnames(df) <- header
-
-  df <- df %>%
-    filter(., str_detect(`H-Code`, pattern = "H")) %>%
-    mutate(
-      bin = case_when(
-        `H-Code` == "H222" ~ "VH", # Aerosols
-        `H-Code` == "H223" ~ "H", # Aerosols
-        `H-Code` == "H229" ~ "VH", # Aerosols
-
-        `H-Code` == "H304" ~ "VH", # Aspiration hazard
-        `H-Code` == "H305" ~ "H", # Aspiration hazard
-
-        `H-Code` == "H282" ~ "VH", # Chemicals under pressure
-        `H-Code` == "H283" ~ "H", # Chemicals under pressure
-        `H-Code` == "H284" ~ "H", # Chemicals under pressure
-
-        `H-Code` == "H290" ~ "H", # Corrosive to Metals
-
-        `H-Code` == "H314" ~ "VH", # Skin corrosion/irritation
-        `H-Code` == "H315" ~ "M", # Skin corrosion/irritation
-        `H-Code` == "H316" ~ "L", # Skin corrosion/irritation
-
-        `H-Code` == "H318" ~ "VH", # Eye corrosion/irritation
-        `H-Code` == "H319" ~ "M", # Eye corrosion/irritation
-        `H-Code` == "H320" ~ "L", # Eye corrosion/irritation
-
-        `H-Code` == "H315+H320" ~ "VH", # Skin corrosion/irritation and serious eye damage/eye irritation
-
-        `H-Code` == "H200" ~ "VH", # Explosives, old; difficult to bin due to legacy category
-        `H-Code` == "H201" ~ "VH", # Explosives, old
-        `H-Code` == "H202" ~ "VH", # Explosives, old
-        `H-Code` == "H203" ~ "VH", # Explosives, old
-        `H-Code` == "H205" ~ "VH", # Explosives, old; keyword is 'may', falls under VH due to div class
-
-        `H-Code` == "H209" ~ "VH", # Explosives
-        `H-Code` == "H210" ~ "VH", # Explosives
-        `H-Code` == "H211" ~ "VH", # Explosives
-        `H-Code` == "H204" ~ "H", # Explosives
-
-        `H-Code` == "H206" ~ "VH", # Desensitized explosives
-        `H-Code` == "H207" ~ "VH", # Desensitized explosives
-        `H-Code` == "H208" ~ "H", # Desensitized explosives
-
-        `H-Code` == "H220" ~ "VH", # Flammable gases
-        `H-Code` == "H221" ~ "VH", # Flammable gases
-        `H-Code` == "H230" ~ "VH", # Flammable gases
-        `H-Code` == "H231" ~ "VH", # Flammable gases
-        `H-Code` == "H232" ~ "VH", # Flammable gases
-
-        `H-Code` == "H224" ~ "VH", # Flammable liquids
-        `H-Code` == "H225" ~ "VH", # Flammable liquids
-        `H-Code` == "H226" ~ "H", # Flammable liquids
-        `H-Code` == "H227" ~ "H", # Flammable liquids
-
-        `H-Code` == "H228" ~ "VH", # Flammable solids
-
-        `H-Code` == "H280" ~ "H", # Gases under pressure
-        `H-Code` == "H281" ~ "H", # Gases under pressure
-
-        `H-Code` == "H420" ~ "H", # Hazardous to the ozone layer
-
-        `H-Code` == "H270" ~ "VH", # Oxidizing gases
-
-        `H-Code` == "H271" ~ "VH", # Oxidizing liquids; Oxidizing solids
-        `H-Code` == "H272" ~ "VH", # Oxidizing liquids; Oxidizing solids
-
-        `H-Code` == "H250" ~ "VH", # Pyrophoric solids
-
-        `H-Code` == "H251" ~ "VH", # Self-heating substances and mixtures
-        `H-Code` == "H252" ~ "H", # Self-heating substances and mixtures
-
-        `H-Code` == "H240" ~ "VH", # Self-reactive substances and mixtures; Organic peroxides
-        `H-Code` == "H241" ~ "VH", # Self-reactive substances and mixtures; Organic peroxides
-        `H-Code` == "H242" ~ "VH", # Self-reactive substances and mixtures; Organic peroxides
-
-        `H-Code` == "H260" ~ "VH", # Substances and mixtures which in contact with water, emit flammable gases
-        `H-Code` == "H261" ~ "VH", # Substances and mixtures which in contact with water, emit flammable gases
-
-        `H-Code` == "-" ~ "I", # Self-reactive substances and mixtures, Organic peroxides, explosives
-
-        .default = "MISSING" # should just be health and enviromental endpoints
+  # Unified binning logic
+  res <- df %>%
+    dplyr::filter(stringr::str_detect(`H-Code`, pattern = "H")) %>%
+    dplyr::mutate(
+      bin = dplyr::case_when(
+        `H-Code` %in% c("H222", "H229", "H304", "H282", "H314", "H318", "H315+H320", "H220", "H221", "H230", "H231", "H232", "H224", "H225", "H228", "H270", "H271", "H272", "H250", "H251") ~ "VH",
+        `H-Code` %in% c("H240", "H241", "H242", "H260", "H261", "H200", "H201", "H202", "H203", "H205", "H209", "H210", "H211", "H206", "H207") ~ "VH",
+        `H-Code` %in% c("H223", "H305", "H283", "H284", "H290", "H204", "H208", "H226", "H227", "H280", "H281", "H420", "H252") ~ "H",
+        `H-Code` %in% c("H315", "H319") ~ "M",
+        `H-Code` %in% c("H316", "H320") ~ "L",
+        `H-Code` == "-" ~ "I",
+        .default = "MISSING"
       )
-    )
+    ) %>%
+    dplyr::filter(bin != "MISSING") %>%
+    dplyr::select(h_code = `H-Code`, hazard_class = `Hazard Class`, bin) %>%
+    dplyr::distinct(h_code, bin, .keep_all = TRUE)
 
-  return(df)
+  # Cache the result for the remainder of the session
+  .ComptoxREnv$ghs_table <- res
+  
+  return(res)
 }

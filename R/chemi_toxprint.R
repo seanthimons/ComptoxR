@@ -7,52 +7,19 @@
 #'
 #' @return A dataframe
 #' @export
-
-chemi_toxprint <- function(query, odds_ratio, p_val, true_pos) {
-  if (missing(query) == TRUE) {
-    cli::cli_abort('Missing query!')
-  } else {
-    query <- as.list(query)
-  }
-
-  options <- list(
-    'OR' = ifelse(missing(odds_ratio), 3L, as.numeric(odds_ratio)),
-    'PV1' = ifelse(missing(p_val), 0.05, as.numeric(p_val)),
-    'TP' = ifelse(missing(true_pos), 3, as.numeric(true_pos))
+#'
+#' @examples
+#' \dontrun{
+#' chemi_toxprint(query = "DTXSID7020182")
+#' }
+chemi_toxprint <- function(query, odds_ratio = 3L, p_val = 0.05, true_pos = 3) {
+  generic_chemi_request(
+    query = query,
+    endpoint = "toxprints/calculate",
+    options = list(
+      OR = odds_ratio,
+      PV1 = p_val,
+      TP = true_pos
+    )
   )
-
-  cli::cli_rule(left = 'Payload options')
-  cli::cli_dl(options)
-  cli::cli_end()
-
-  chemicals <- vector(mode = 'list', length = length(query))
-
-  chemicals <- map(
-    query,
-    ~ {
-      list(sid = .x)
-    }
-  )
-
-  payload = list(
-    'chemicals' = chemicals,
-    'options' = options
-  )
-
-  ctx_burl <- paste0(Sys.getenv("chemi_burl"), "toxprints/calculate")
-
-  response <- POST(
-    url = ctx_burl,
-    body = jsonlite::toJSON(payload),
-    content_type("application/json"),
-    accept("*/*"),
-    progress()
-  )
-
-  if (response$status_code == 200) {
-    df <- content(response, "text", encoding = "UTF-8") %>%
-      fromJSON(simplifyVector = FALSE)
-  } else {
-    cli::cli_abort("\nBad request!")
-  }
 }
