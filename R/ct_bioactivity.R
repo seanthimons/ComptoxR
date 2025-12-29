@@ -3,7 +3,6 @@
 #' @param search_type Choose from `aeid`, `spid`, `m4id`, and `dtxsid`. Defaults to `dtxsid` if not specified.
 #' @param query List of variables to be queried.
 #' @param annotate Boolean, if `TRUE` will perform a secondary request to join the the assay details against the assay IDs.
-#' @param ctx_api_keyChecks for API key in Sys env
 #'
 #' @return A data frame
 #' @export
@@ -11,8 +10,7 @@
 ct_bioactivity <- function(
   search_type,
   query,
-  annotate = FALSE,
-  ctx_api_key= NULL
+  annotate = FALSE
 ) {
   query <- unique(as.vector(query))
 
