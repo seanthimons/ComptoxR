@@ -13,7 +13,7 @@ ct_lists_all <- function(
   coerce = FALSE
 ) {
 
-  cli::cli_alert_info('Grabbing all public lists...')
+  #cli::cli_alert_info('Grabbing all public lists...')
 
   # Determine projection
   projection <- if (!return_dtxsid) {
@@ -25,7 +25,7 @@ ct_lists_all <- function(
   # Use generic_request with batch_limit=0 for static endpoint
   df <- generic_request(
     query = NULL,  # No query needed for static endpoint
-    endpoint = "chemical/list/",
+    endpoint = "chemical/list/all",
     method = "GET",
     batch_limit = 0,  # Static endpoint flag
     tidy = TRUE,
