@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_safety.R
 \name{ghs_create_tbl}
 \alias{ghs_create_tbl}
-\title{Creates a GHS table with risk bins into the Global Environment.}
+\title{Optimized GHS Table Creation with Session Caching}
 \usage{
 ghs_create_tbl()
 }
@@ -10,5 +10,5 @@ ghs_create_tbl()
 Data frame
 }
 \description{
-Creates a GHS table with risk bins into the Global Environment.
+Optimized GHS Table Creation with Session Caching
 }

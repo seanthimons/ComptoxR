@@ -4,7 +4,7 @@
 \alias{chemi_toxprint}
 \title{ToxPrint Chemotyper}
 \usage{
-chemi_toxprint(query, odds_ratio, p_val, true_pos)
+chemi_toxprint(query, odds_ratio = 3L, p_val = 0.05, true_pos = 3)
 }
 \arguments{
 \item{query}{A list of DTXSIDs}
@@ -20,4 +20,9 @@ A dataframe
 }
 \description{
 ToxPrint Chemotyper
+}
+\examples{
+\dontrun{
+chemi_toxprint(query = "DTXSID7020182")
+}
 }

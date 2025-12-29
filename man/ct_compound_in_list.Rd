@@ -4,15 +4,13 @@
 \alias{ct_compound_in_list}
 \title{Returns all public lists that contain a queried compound}
 \usage{
-ct_compound_in_list(query, ctx_api_key = NULL)
+ct_compound_in_list(query)
 }
 \arguments{
 \item{query}{A DTXSID to search by.}
-
-\item{ctx_api_keyChecks}{for API key in Sys env}
 }
 \value{
-Returns a tibble with results
+Returns a named list with results
 }
 \description{
 Returns all public lists that contain a queried compound

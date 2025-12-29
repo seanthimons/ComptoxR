@@ -15,3 +15,8 @@ A tibble
 \description{
 Return ToxCast models for given dtxsid
 }
+\examples{
+\dontrun{
+ct_bioactivity_models(query = "DTXSID7020182")
+}
+}

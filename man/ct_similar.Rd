@@ -17,3 +17,8 @@ A tibble of similar compounds, or an empty tibble if no similar compounds are fo
 \description{
 Get Similar Compounds by DTXSID
 }
+\examples{
+\dontrun{
+ct_similar(query = "DTXSID7020182", similarity = 0.8)
+}
+}
