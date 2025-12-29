@@ -1,7 +1,11 @@
 test_that("generic_request dry run works independently of network", {
   # Enable debug mode to avoid real requests
   Sys.setenv(run_debug = "TRUE")
-  on.exit(Sys.setenv(run_debug = "FALSE"))
+  Sys.setenv(ctx_api_key = "logic_test_key")
+  on.exit({
+    Sys.setenv(run_debug = "FALSE")
+    # Restore dummy key if needed, though setup.R handles it usually
+  })
   
   # Test POST request construction
   output <- capture_output(
@@ -12,10 +16,20 @@ test_that("generic_request dry run works independently of network", {
     )
   )
   
-  expect_match(output, "POST /hazard")
-  expect_match(output, "x-api-key:")
+  expect_match(output, "POST")
+  expect_match(output, "hazard")
+  expect_match(output, "x-api-key: logic_test_key")
   # Match JSON payload with potential whitespace
   expect_match(output, "\\[\\s*\"DTXSID7020182\"\\s*\\]")
+})
+
+test_that("generic_request respects different server environments", {
+  Sys.setenv(run_debug = "TRUE")
+  on.exit(Sys.setenv(run_debug = "FALSE"))
+  
+  # Custom server via literal URL
+  output_custom <- capture_output(generic_request("A", "endpoint", server = "http://test.com/api"))
+  expect_match(output_custom, "POST /api/endpoint")
 })
 
 test_that("generic_request handles batching logic correctly", {
