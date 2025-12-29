@@ -2,10 +2,10 @@
 #'
 #' Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.
 #'
-#' @param list_name Search parameter
+#' @param list_name Search parameter (list name or vector of list names)
 #' @param extract_dtxsids Boolean to pluck out just the DTXSIDs.
 #'
-#' @return Returns a tibble with results
+#' @return Returns a character vector (if extract_dtxsids=TRUE) or list of results (if FALSE)
 #' @export
 #'
 #' @examples
@@ -13,43 +13,30 @@
 #'  ct_list(list_name = c("PRODWATER", "CWA311HS"), extract_dtxsids = TRUE)
 #' }
 ct_list <- function(list_name, extract_dtxsids = TRUE) {
-  req_list <- map(
-    list_name,
-    ~ {
-      #cli::cli_alert_info('Searching for compounds on {(.x)} list...')
-      req <- request(Sys.getenv('ctx_burl')) %>%
-        req_url_path("chemical/list/search/by-name/") %>%
-        req_url_path_append(stringr::str_to_upper(.x)) %>%
-        req_url_query('projection' = 'chemicallistwithdtxsids') %>%
-        req_headers("x-api-key" = ct_api_key())
-    }
+
+  # Uppercase list names (API expects uppercase)
+  list_name_upper <- stringr::str_to_upper(list_name)
+
+  # Use generic_request with tidy=FALSE to get list output
+  dat <- generic_request(
+    query = list_name_upper,
+    endpoint = "chemical/list/search/by-name/",
+    method = "GET",
+    batch_limit = 1,
+    tidy = FALSE,
+    projection = 'chemicallistwithdtxsids'
   )
 
-  if (Sys.getenv("run_debug") == "TRUE") {
-    cli::cli_alert_warning('DEBUGGING REQUEST')
-
-    map(req_list, req_dry_run)
-  } else {
-    response <- req_perform_sequential(
-      reqs = req_list,
-      on_error = 'continue',
-      progress = TRUE
-    )
-
-    dat <- response %>%
-      resps_successes() %>%
-      map(., ~ resp_body_json(.x))
-
-    if (extract_dtxsids) {
-      dat <- dat %>%
-        map(
-          .,
-          ~ pluck(., 'dtxsids') %>% stringr::str_split(., pattern = ',')
-        ) %>%
-        unlist() %>%
-        unique()
-    }
-
-    return(dat)
+  if (extract_dtxsids) {
+    # Extract and flatten DTXSIDs from all lists
+    dat <- dat %>%
+      purrr::map(
+        ~ purrr::pluck(., 'dtxsids') %>%
+          stringr::str_split(., pattern = ',')
+      ) %>%
+      unlist() %>%
+      unique()
   }
+
+  return(dat)
 }

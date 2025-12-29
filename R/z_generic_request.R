@@ -5,21 +5,26 @@
 #' error handling, and data tidying.
 #'
 #' @param query A character vector or list of items to be queried (e.g., DTXSIDs, CASRNs).
+#'        For static endpoints (batch_limit=0), pass NULL or a placeholder value.
 #' @param endpoint The API endpoint path (e.g., "hazard", "chemical/fate").
 #' @param method The HTTP method to use: "POST" (default for bulk searches) or "GET".
 #' @param server Either a Global environment variable name (e.g., 'ctx_burl') or a direct URL string.
 #' @param batch_limit The number of items to send per request. Bulk POSTs usually use 100-1000.
 #'        If set to 1, GET requests will append the query item directly to the URL path.
+#'        If set to 0, treats as static endpoint (no query appending).
 #' @param auth Boolean; whether to include the API key header. Defaults to TRUE.
+#' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
+#'        If FALSE, returns a cleaned list structure.
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
-#'        - If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments; 
+#'        - If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments;
 #'          named arguments are added as query parameters.
 #'        - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
 #'
-#' @return A tidy tibble. If no results are found, returns an empty tibble.
+#' @return A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+#'         If no results are found, returns an empty tibble or empty list.
 #' @export
-generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, ...) {
+generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -29,30 +34,39 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 
   # --- 2. Input Normalization ---
   # Ensure the query is a unique character vector without NAs or empty strings.
-  if(purrr::is_list(query) && !is.data.frame(query)) {
-    query <- as.character(unlist(query, use.names = FALSE))
-  }
-  query <- unique(as.vector(query))
-  query <- query[!is.na(query) & query != ""]
-
-  if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
-
-  # --- 3. Batching Preparation ---
-  # API endpoints often have limits (e.g., 200 or 1000 items per POST).
-  # We split the query into chunks based on the batch_limit.
+  # Special case: if batch_limit is 0, this is a static endpoint (no query needed)
   if (is.null(batch_limit)) {
     batch_limit <- as.numeric(Sys.getenv("batch_limit", "1000"))
   }
-  
-  mult_count <- ceiling(length(query) / batch_limit)
-  
-  if (length(query) > batch_limit) {
-    query_list <- split(
-      query,
-      rep(1:mult_count, each = batch_limit, length.out = length(query))
-    )
-  } else {
+
+  if (batch_limit == 0) {
+    # Static endpoint: no query validation needed
+    query <- c("_static_")
     query_list <- list(query)
+    mult_count <- 1
+  } else {
+    # Standard query handling
+    if(purrr::is_list(query) && !is.data.frame(query)) {
+      query <- as.character(unlist(query, use.names = FALSE))
+    }
+    query <- unique(as.vector(query))
+    query <- query[!is.na(query) & query != ""]
+
+    if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
+
+    # --- 3. Batching Preparation ---
+    # API endpoints often have limits (e.g., 200 or 1000 items per POST).
+    # We split the query into chunks based on the batch_limit.
+    mult_count <- ceiling(length(query) / batch_limit)
+
+    if (length(query) > batch_limit) {
+      query_list <- split(
+        query,
+        rep(1:mult_count, each = batch_limit, length.out = length(query))
+      )
+    } else {
+      query_list <- list(query)
+    }
   }
 
   # Check environment flags for logging/debugging
@@ -98,15 +112,20 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       # Implementation for GET requests
       else {
         req <- req %>% httr2::req_method("GET")
-        
-        # Scenario A: Path-based GET (one item at a time, e.g., /assay/ID)
-        if (batch_limit == 1) {
+
+        # Scenario A: Static endpoint (no query appending)
+        if (batch_limit == 0) {
+          # Only add named arguments as query parameters
+          req <- req %>% httr2::req_url_query(...)
+        }
+        # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
+        else if (batch_limit == 1) {
           req <- req %>% httr2::req_url_path_append(as.character(query_part))
-          
+
           # Separate named vs unnamed ellipsis arguments
           args <- list(...)
           named_indices <- names(args) != "" & !is.null(names(args))
-          
+
           # Append unnamed args to the URL path (e.g., /assay/ID/similarity)
           if (any(!named_indices)) {
             for (val in args[!named_indices]) {
@@ -117,8 +136,8 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
           if (any(named_indices)) {
             req <- req %>% httr2::req_url_query(!!!args[named_indices])
           }
-        } 
-        # Scenario B: Parameter-based GET (bulk fetch via query string)
+        }
+        # Scenario C: Parameter-based GET (bulk fetch via query string)
         else {
           req <- req %>% httr2::req_url_query(search = paste(query_part, collapse = ","), ...)
         }
@@ -172,10 +191,28 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 
   if (length(body_list) == 0) {
     cli::cli_alert_warning("No results found for the given query in {.val {endpoint}}.")
-    return(tibble::tibble())
+    if (tidy) {
+      return(tibble::tibble())
+    } else {
+      return(list())
+    }
   }
 
-  # --- 8. Tidy Conversion ---
+  # --- 8. Output Formatting ---
+  # Return as-is if tidy=FALSE (cleaned list structure)
+  if (!tidy) {
+    # Basic cleanup: replace NULLs with NA in list elements
+    res <- body_list %>%
+      purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) {
+          x[purrr::map_lgl(x, is.null)] <- NA
+        }
+        return(x)
+      })
+    return(res)
+  }
+
+  # --- 9. Tidy Conversion ---
   # Convert the parsed JSON (list of lists) into a tidy tibble.
   res <- body_list %>%
     purrr::map(function(x) {

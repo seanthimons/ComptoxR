@@ -1,38 +1,25 @@
-ct_file <- function(query, ctx_api_key= NULL) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+#' Get MOL file for a compound
+#'
+#' @param query A single DTXSID to retrieve MOL file for
+#'
+#' @return Returns a string containing the MOL file content
+#' @export
+ct_file <- function(query) {
+  # Build request
+  req <- httr2::request(Sys.getenv('ctx_burl')) %>%
+    httr2::req_url_path_append('chemical/file/mol/search/by-dtxsid/') %>%
+    httr2::req_url_path_append(query) %>%
+    httr2::req_headers(`x-api-key` = ct_api_key()) %>%
+    httr2::req_method("GET")
 
-  # request -----------------------------------------------------------------
+  # Perform request
+  resp <- httr2::req_perform(req)
 
-  ctx_burl <- Sys.getenv('ctx_burl')
-
-  # df <- map(query, function(x){
-  #
-  # #cat(x, '\n')
-  #
-  # response <- GET(
-  #     url = paste0(ctx_burl, 'chemical-file/mol/search/by-dtxsid/', x),
-  #     add_headers(`x-api-key` = token)
-  # )
-  #
-  # if(response$status_code == 200){
-  #   df <- content(response, "text", encoding = "UTF-8")
-  # }else{paste0('Bad file request: ', x)}
-  #
-  # }, .progress = T)
-  #
-  # return(df)
-
-  response <- GET(
-    url = paste0(ctx_burl, 'chemical/file/mol/search/by-dtxsid/', query),
-    add_headers(`x-api-key` = token)
-  )
-
-  if (response$status_code == 200) {
-    df <- content(response, "text", encoding = "UTF-8")
-    return(df)
+  # Check status and return
+  if (httr2::resp_status(resp) == 200) {
+    return(httr2::resp_body_string(resp))
   } else {
-    paste0('Bad file request: ', query)
+    cli::cli_warn("Bad file request for {query} (status: {httr2::resp_status(resp)})")
+    return(NULL)
   }
 }
