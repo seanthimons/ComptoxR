@@ -28,14 +28,21 @@ ct_list <- function(list_name, extract_dtxsids = TRUE) {
   )
 
   if (extract_dtxsids) {
-    # Extract and flatten DTXSIDs from all lists
-    dat <- dat %>%
-      purrr::map(
-        ~ purrr::pluck(., 'dtxsids') %>%
-          stringr::str_split(., pattern = ',')
-      ) %>%
-      unlist() %>%
-      unique()
+    # Check if dat has duplicate names (multiple results concatenated)
+    if (anyDuplicated(names(dat)) > 0) {
+      # Multiple results - extract all dtxsids fields
+      dtxsid_indices <- which(names(dat) == "dtxsids")
+      dat <- dat[dtxsid_indices] %>%
+        purrr::map(~ stringr::str_split(.x, pattern = ',')) %>%
+        unlist() %>%
+        unique()
+    } else {
+      # Single result - extract and split directly
+      dat <- dat$dtxsids %>%
+        stringr::str_split(pattern = ',') %>%
+        unlist() %>%
+        unique()
+    }
   }
 
   return(dat)
