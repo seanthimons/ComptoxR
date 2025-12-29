@@ -1,4 +1,8 @@
+# Internal package environment for session-level caching
+.ComptoxREnv <- new.env(parent = emptyenv())
+
 #' First time setup for functions
+
 #'
 #' Tests to see if APIs are up and tokens are present.
 #'
@@ -37,14 +41,20 @@ run_setup <- function() {
             # Don't error on HTTP status, we check it manually
             httr2::req_error(is_error = \(resp) FALSE)
           
+          start_time <- Sys.time()
           resp <- httr2::req_perform(req)
+          end_time <- Sys.time()
+          
+          latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+          latency_fmt <- paste0(round(latency * 1000), "ms")
+          
           status <- httr2::resp_status(resp)
           
           # Use cli for styled output. 3xx redirects are not considered errors.
           if (status >= 200 && status < 400) {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')} [{latency_fmt}]")
           } else {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
+            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')} [{latency_fmt}]")
           }
         },
         error = function(e) {
@@ -65,8 +75,15 @@ run_setup <- function() {
 
     # Check for active Cheminformatics endpoints ----
     tryCatch({
-      endpoints <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
-        httr2::req_perform() %>%
+      start_time <- Sys.time()
+      resp <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+        httr2::req_perform()
+      end_time <- Sys.time()
+      
+      latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      latency_fmt <- paste0(round(latency * 1000), "ms")
+
+      endpoints <- resp %>%
         httr2::resp_body_json() %>%
         purrr::map(., ~ tibble::as_tibble(.x)) %>%
         purrr::list_rbind() %>% 
@@ -75,7 +92,7 @@ run_setup <- function() {
       active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
       total_chemi_endpoints <- nrow(endpoints)
       
-      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')}")
+      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')} [{latency_fmt}]")
       results <- c(results, chemi_status)
       
     }, error = function(e) {
@@ -381,27 +398,40 @@ reset_servers <- function() {
 
 .onAttach <- function(libname, pkgname) {
 
-	if (Sys.getenv('ctx_burl') == "") {
+	# Conditionally swap to DEV / STAG environments if in the DEV version
+	# Only set default servers if they haven't been explicitly configured
+	if (is.na(utils::packageDate('ComptoxR'))) {
+		# DEV version defaults (only if not already set)
+		if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
+		if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
+		if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
+		if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
+		if (Sys.getenv("np_burl") == "") np_server(server = 1)
+		# Only set verbose if not already configured
+		if (Sys.getenv("run_verbose") == "") {
+			run_verbose(verbose = FALSE)
+		}
+    if (Sys.getenv("run_debug") == "") {
+			run_verbose(verbose = FALSE)
+		}
+		batch_limit(limit = 200)
+
+	} else if (Sys.getenv('ctx_burl') == "") {
+		# Production version defaults (only if not already set)
 		ctx_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
 		eco_server(server = 1)
 		np_server(server = 1)
-		run_debug(debug = FALSE)
-		run_verbose(verbose = TRUE)
-		batch_limit(limit = 200)
-	}
+		# Only set verbose if not already configured
+		if (Sys.getenv("run_verbose") == "") {
+			run_verbose(verbose = FALSE)
+		}
+    if (Sys.getenv("run_debug") == "") {
+			run_verbose(verbose = FALSE)
+		}
 
-	# Conditionally swap to DEV / STAG environments if in the DEV version
 
-	if (is.na(utils::packageDate('ComptoxR'))) {
-		ctx_server(server = 2)
-		chemi_server(server = 3)
-		epi_server(server = 1)
-		eco_server(server = 3)
-		np_server(server = 1)
-		run_debug(debug = FALSE)
-		run_verbose(verbose = TRUE)
 		batch_limit(limit = 200)
 	}
 
@@ -416,19 +446,22 @@ reset_servers <- function() {
 
 # Load -------------------------------------------------------------------
 
-.extractor <- NULL
-.classifier <- NULL
+# .extractor <- NULL
+# .classifier <- NULL
 
 # .onLoad is a special function that R runs when a package is loaded.
 .onLoad <- function(libname, pkgname) {
 	# Call the factory ONCE and assign the result to our placeholder.
-	# The "super-assignment" operator (<<-) ensures we modify the .extractor
-	# in the package's namespace, not just a local copy.
-	.extractor <<- create_formula_extractor_final()
-	.classifier <<- create_compound_classifier()
+
+  .ComptoxREnv$extractor <- create_formula_extractor_final()
+	.ComptoxREnv$classifier <- create_compound_classifier()
+	
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
 }
+
+	# (Optional) Silence R CMD check "no visible binding" notes
+	utils::globalVariables(c(".ComptoxREnv"))
 
 # Header -----------------------------------------------------------------
 

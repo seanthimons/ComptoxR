@@ -21,22 +21,22 @@
 #'   "A name with extra spaces ( 2 : 1 )",
 #'   "A name with decimals (1.5:1)",
 #'   "1,2-Dichlorobenzene", # Should be FALSE
+#'  "Mixture (3:1 w/w)",
 #'   NA
 #' )
 #' extract_mixture(names)
 #' test_names %>% enframe(., name = 'idx', value = 'name') %>% mutate(bool_mix = extract_mixture(name))
 #' # Expected output: TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, NA
 extract_mixture <- function(name_vector) {
-  # This regex looks for a pattern like (number:number).
-  # - \\( and \\) match literal parentheses.
-  # - \\s* matches zero or more whitespace characters.
-  # - \\d+ matches one or more digits.
-  # - (?:\\.\\d+)? is an optional non-capturing group for a decimal part.
-  #
-  # The factory pattern is not needed here because the regex is simple and
-  # its creation cost is virtually zero.
-  ratio_pattern <- "\\(\\s*\\d+(?:\\.\\d+)?\\s*:\\s*\\d+(?:\\.\\d+)?\\s*\\)"
+  stopifnot(is.character(name_vector))
 
-  # str_detect is already vectorized and returns a logical vector.
-  stringr::str_detect(name_vector, ratio_pattern)
+  # Core ratio like "2:1", "1.5/1", "3-2"
+  ratio_core <- "\\d+(?:\\.\\d+)?\\s*[:/\\-]\\s*\\d+(?:\\.\\d+)?"
+  # Optional units after ratio
+  units_opt <- "(?:\\s*(?:w/w|v/v|wt%|vol%))?"
+
+  # Allow ratios with or without surrounding () or []
+  pattern <- paste0("(?:\\(|\\[)?\\s*", ratio_core, units_opt, "\\s*(?:\\)|\\])?")
+
+  stringr::str_detect(name_vector, pattern)
 }
