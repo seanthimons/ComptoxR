@@ -1,5 +1,6 @@
 test_that("generic_chemi_request construction is correct", {
   Sys.setenv(run_debug = "TRUE")
+  Sys.setenv(ctx_api_key = "logic_test_key")
   on.exit(Sys.setenv(run_debug = "FALSE"))
   
   # Test the nested chemicals/options structure
@@ -7,12 +8,14 @@ test_that("generic_chemi_request construction is correct", {
     dry_run <- generic_chemi_request(
       query = "DTXSID7020182",
       endpoint = "toxprints/calculate",
-      options = list(standardize = TRUE)
+      options = list(standardize = TRUE),
+      auth = TRUE
     )
   )
   
   expect_match(output, "POST")
   expect_match(output, "toxprints/calculate")
+  expect_match(output, "x-api-key: logic_test_key")
   expect_match(output, "\"chemicals\"")
   expect_match(output, "\"sid\"\\s*:\\s*\"DTXSID7020182\"")
   expect_match(output, "\"options\"\\s*:\\s*\\{\\s*\"standardize\"\\s*:\\s*true\\s*\\}")
