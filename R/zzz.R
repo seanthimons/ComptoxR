@@ -399,12 +399,14 @@ reset_servers <- function() {
 .onAttach <- function(libname, pkgname) {
 
 	# Conditionally swap to DEV / STAG environments if in the DEV version
+	# Only set default servers if they haven't been explicitly configured
 	if (is.na(utils::packageDate('ComptoxR'))) {
-		ctx_server(server = 2)
-		chemi_server(server = 3)
-		epi_server(server = 1)
-		eco_server(server = 3)
-		np_server(server = 1)
+		# DEV version defaults (only if not already set)
+		if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
+		if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
+		if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
+		if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
+		if (Sys.getenv("np_burl") == "") np_server(server = 1)
 		# Only set verbose if not already configured
 		if (Sys.getenv("run_verbose") == "") {
 			run_verbose(verbose = FALSE)
@@ -413,8 +415,9 @@ reset_servers <- function() {
 			run_verbose(verbose = FALSE)
 		}
 		batch_limit(limit = 200)
-    
+
 	} else if (Sys.getenv('ctx_burl') == "") {
+		# Production version defaults (only if not already set)
 		ctx_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
@@ -428,7 +431,7 @@ reset_servers <- function() {
 			run_verbose(verbose = FALSE)
 		}
 
-    
+
 		batch_limit(limit = 200)
 	}
 

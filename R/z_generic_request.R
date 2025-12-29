@@ -87,6 +87,9 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   }
 
   # --- 4. Request Construction ---
+  # Capture ellipsis arguments before purrr::map to preserve them in the function scope
+  ellipsis_args <- list(...)
+
   # Create a list of httr2 request objects, one for each batch.
   req_list <- purrr::map(
     query_list,
@@ -96,19 +99,19 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         httr2::req_headers(
           Accept = "application/json"
         )
-      
+
       if (auth) {
         req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
       }
 
       # Implementation for POST requests (Typically bulk searches)
       if (toupper(method) == "POST") {
-        req <- req %>% 
+        req <- req %>%
           httr2::req_method("POST") %>%
           httr2::req_body_json(query_part, auto_unbox = FALSE) %>%
           # Add ellipsis arguments as query params (e.g., projection="all")
-          httr2::req_url_query(...)
-      } 
+          httr2::req_url_query(!!!ellipsis_args)
+      }
       # Implementation for GET requests
       else {
         req <- req %>% httr2::req_method("GET")
@@ -116,33 +119,32 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         # Scenario A: Static endpoint (no query appending)
         if (batch_limit == 0) {
           # Only add named arguments as query parameters
-          req <- req %>% httr2::req_url_query(...)
+          req <- req %>% httr2::req_url_query(!!!ellipsis_args)
         }
         # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
         else if (batch_limit == 1) {
           req <- req %>% httr2::req_url_path_append(as.character(query_part))
 
           # Separate named vs unnamed ellipsis arguments
-          args <- list(...)
-          named_indices <- names(args) != "" & !is.null(names(args))
+          named_indices <- !is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0 && names(ellipsis_args) != ""
 
           # Append unnamed args to the URL path (e.g., /assay/ID/similarity)
           if (any(!named_indices)) {
-            for (val in args[!named_indices]) {
+            for (val in ellipsis_args[!named_indices]) {
               req <- req %>% httr2::req_url_path_append(as.character(val))
             }
           }
           # Add named args as query parameters (e.g., ?top=500)
           if (any(named_indices)) {
-            req <- req %>% httr2::req_url_query(!!!args[named_indices])
+            req <- req %>% httr2::req_url_query(!!!ellipsis_args[named_indices])
           }
         }
         # Scenario C: Parameter-based GET (bulk fetch via query string)
         else {
-          req <- req %>% httr2::req_url_query(search = paste(query_part, collapse = ","), ...)
+          req <- req %>% httr2::req_url_query(search = paste(query_part, collapse = ","), !!!ellipsis_args)
         }
       }
-      
+
       return(req)
     }
   )
@@ -190,7 +192,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
     purrr::list_flatten()
 
   if (length(body_list) == 0) {
-    cli::cli_alert_warning("No results found for the given query in {.val {endpoint}}.")
+    cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
     if (tidy) {
       return(tibble::tibble())
     } else {
