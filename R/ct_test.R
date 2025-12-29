@@ -11,26 +11,26 @@
 #' @return A tibble of results.
 #' @export
 
-ct_test <- function(query, debug = F) {
-  df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
+ct_test <- function(query, debug = FALSE) {
+  df_pre <- ct_details(query) %>% dplyr::select(dtxsid, qsarReadySmiles)
 
-  #Removes bad/ no SMILES compounds
+  # Removes bad/ no SMILES compounds
   cat('\nRemoving bad/ no SMILES compounds\n\n')
-  df <- df_pre %>% filter(!is.na(qsarReadySmiles))
+  df <- df_pre %>% dplyr::filter(!is.na(qsarReadySmiles))
   cat('\nDropped', nrow(df_pre) - nrow(df), 'compounds.\n')
 
-  #Converts symbols
+  # Converts symbols (URL encoding for SMILES)
   cat('\nConverting SMILES strings\n')
   for (i in 1:length(df$qsarReadySmiles)) {
     df$qsarReadySmiles[i] <-
-      str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
-      str_replace_all(., '\\]', '%5D') %>%
-      str_replace_all(., '\\@', '%40') %>%
-      str_replace_all(., '\\=', '%3D') %>%
-      str_replace_all(., '\\.', '%2E') %>%
-      str_replace_all(., '\\+', '%2B') %>%
-      str_replace_all(., '\\-', '%2D') %>%
-      str_replace_all(., '\\#', '%23')
+      stringr::str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
+      stringr::str_replace_all(., '\\]', '%5D') %>%
+      stringr::str_replace_all(., '\\@', '%40') %>%
+      stringr::str_replace_all(., '\\=', '%3D') %>%
+      stringr::str_replace_all(., '\\.', '%2E') %>%
+      stringr::str_replace_all(., '\\+', '%2B') %>%
+      stringr::str_replace_all(., '\\-', '%2D') %>%
+      stringr::str_replace_all(., '\\#', '%23')
   }
 
   url <- 'https://comptox.epa.gov/dashboard/web-test/'
@@ -50,39 +50,44 @@ ct_test <- function(query, debug = F) {
   )
 
   grid <- expand.grid(endpoints, df$qsarReadySmiles) %>%
-    rename(end = Var1, sm = Var2)
+    dplyr::rename(end = Var1, sm = Var2)
 
-  urls <- paste0(url, grid$e, '?smiles=', grid$sm)
+  urls <- paste0(url, grid$end, '?smiles=', grid$sm)
 
-  #cat('\n', urls, '\n') #debug
   cat('Sending T.E.S.T request\n')
 
-  df <- map_dfr(
+  df <- purrr::map_dfr(
     urls,
     ~ {
       if (debug == TRUE) {
         cat(.x, "\n")
       }
 
-      response <- VERB("GET", url = .x)
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-        compact()
+      # Build and perform request
+      req <- httr2::request(.x) %>%
+        httr2::req_method("GET")
+
+      resp <- httr2::req_perform(req)
+
+      # Parse JSON response
+      body <- httr2::resp_body_json(resp, simplifyVector = TRUE)
+      purrr::compact(body)
     }
   )
 
   if ('predictions' %in% colnames(df)) {
     df <- df %>%
-      unnest(cols = predictions, names_repair = 'universal') %>%
-      filter(is.na(errorCode)) %>%
-      filter(!is.na(preferredName)) %>%
-      filter(!is.na(predValMass) | !is.na(message)) %>%
-      arrange(
+      tidyr::unnest(cols = predictions, names_repair = 'universal') %>%
+      dplyr::filter(is.na(errorCode)) %>%
+      dplyr::filter(!is.na(preferredName)) %>%
+      dplyr::filter(!is.na(predValMass) | !is.na(message)) %>%
+      dplyr::arrange(
         dtxsid,
         endpoint,
         factor(method, levels = c('consensus', 'hc', 'sm', 'gc', 'nn'))
       ) %>%
-      distinct(endpoint, dtxsid, .keep_all = T) %>%
-      rename(compound = dtxsid)
+      dplyr::distinct(endpoint, dtxsid, .keep_all = TRUE) %>%
+      dplyr::rename(compound = dtxsid)
   } else {
     df
   }
@@ -93,26 +98,33 @@ ct_test <- function(query, debug = F) {
 }
 
 
+#' Retrieve results from OPERA QSAR model (legacy)
+#'
+#' Similar to ct_test but with different endpoint selection.
+#'
+#' @param query A list of DTXSIDs to be queried.
+#' @return A tibble of results.
+#' @export
 ct_opera <- function(query) {
-  df_pre <- ct_details(query) %>% select(dtxsid, qsarReadySmiles)
+  df_pre <- ct_details(query) %>% dplyr::select(dtxsid, qsarReadySmiles)
 
-  #Removes bad/ no SMILES compounds
+  # Removes bad/ no SMILES compounds
   cat('Removing bad/ no SMILES compounds\n')
-  df <- df_pre %>% filter(!is.na(qsarReadySmiles))
+  df <- df_pre %>% dplyr::filter(!is.na(qsarReadySmiles))
   cat('\nDropped', nrow(df_pre) - nrow(df), 'compounds.\n')
 
-  #Converts symbols
+  # Converts symbols (URL encoding for SMILES)
   cat('\nConverting SMILES strings\n')
   for (i in 1:length(df$qsarReadySmiles)) {
     df$qsarReadySmiles[i] <-
-      str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
-      str_replace_all(., '\\]', '%5D') %>%
-      str_replace_all(., '\\@', '%40') %>%
-      str_replace_all(., '\\=', '%3D') %>%
-      str_replace_all(., '\\.', '%2E') %>%
-      str_replace_all(., '\\+', '%2B') %>%
-      str_replace_all(., '\\-', '%2D') %>%
-      str_replace_all(., '\\#', '%23')
+      stringr::str_replace_all(df$qsarReadySmiles[i], '\\[', '%5B') %>%
+      stringr::str_replace_all(., '\\]', '%5D') %>%
+      stringr::str_replace_all(., '\\@', '%40') %>%
+      stringr::str_replace_all(., '\\=', '%3D') %>%
+      stringr::str_replace_all(., '\\.', '%2E') %>%
+      stringr::str_replace_all(., '\\+', '%2B') %>%
+      stringr::str_replace_all(., '\\-', '%2D') %>%
+      stringr::str_replace_all(., '\\#', '%23')
   }
 
   url <- 'https://comptox.epa.gov/dashboard/web-test/'
@@ -130,45 +142,50 @@ ct_opera <- function(query) {
   )
 
   grid <- expand.grid(endpoints, df$qsarReadySmiles) %>%
-    rename(end = Var1, sm = Var2)
+    dplyr::rename(end = Var1, sm = Var2)
 
-  urls <- paste0(url, grid$e, '?smiles=', grid$sm)
+  urls <- paste0(url, grid$end, '?smiles=', grid$sm)
 
-  #cat('\n', urls, '\n') #debug
   cat('Sending T.E.S.T request\n')
 
-  df <- map_dfr(
+  df <- purrr::map_dfr(
     urls,
     ~ {
-      response <- VERB("GET", url = .x)
-      df <- fromJSON(content(response, as = "text", encoding = "UTF-8")) %>%
-        compact()
+      # Build and perform request
+      req <- httr2::request(.x) %>%
+        httr2::req_method("GET")
+
+      resp <- httr2::req_perform(req)
+
+      # Parse JSON response
+      body <- httr2::resp_body_json(resp, simplifyVector = TRUE)
+      purrr::compact(body)
     }
   )
 
   if ('predictions' %in% colnames(df)) {
     df <- df %>%
-      unnest(cols = predictions, names_repair = 'universal') %>%
-      filter(is.na(errorCode)) %>%
-      filter(!is.na(preferredName)) %>%
-      select(
+      tidyr::unnest(cols = predictions, names_repair = 'universal') %>%
+      dplyr::filter(is.na(errorCode)) %>%
+      dplyr::filter(!is.na(preferredName)) %>%
+      dplyr::select(
         molarLogUnits:preferredName,
         predValMolarLog:predValMass,
         expValMolarLog:expActive
       ) %>%
-      filter(!is.na(predValMass) | !is.na(message)) %>%
-      arrange(
+      dplyr::filter(!is.na(predValMass) | !is.na(message)) %>%
+      dplyr::arrange(
         dtxsid,
         factor(endpoint, levels = endpoints),
         factor(method, levels = c('consensus', 'hc', 'sm', 'gc', 'nn'))
       ) %>%
-      distinct(endpoint, dtxsid, .keep_all = T) %>%
-      rename(compound = dtxsid)
+      dplyr::distinct(endpoint, dtxsid, .keep_all = TRUE) %>%
+      dplyr::rename(compound = dtxsid)
   } else {
     df
   }
 
-  cat(green('\nT.E.S.T. request complete!\n'))
+  cat('\nT.E.S.T. request complete!\n')
 
   return(df)
 }
