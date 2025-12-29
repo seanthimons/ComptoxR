@@ -10,6 +10,12 @@
 #' @returns A data frame of search results.
 #' @export
 ct_search <- function(query, request_method = "GET", search_method = "exact") {
+
+	# Check if query is a list (and not a dataframe) to flatten it
+	if(is.list(query) && !is.data.frame(query)) {
+    query <- as.character(unlist(query, use.names = FALSE))
+  }
+	
 	# 1. Input validation and setup
 	query_vector <- unique(as.vector(query))
 
