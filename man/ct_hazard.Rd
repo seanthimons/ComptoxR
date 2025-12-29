@@ -15,3 +15,8 @@ Returns a tibble with results
 \description{
 Retrieves for hazard data by DTXSID
 }
+\examples{
+\dontrun{
+ct_hazard(query = "DTXSID7020182")
+}
+}

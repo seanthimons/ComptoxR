@@ -6,17 +6,16 @@
 \usage{
 ct_descriptors(
   query,
-  type = c("smiles", "canonical_smiles", "mol2000", "mol3000", "inchi"),
-  ctx_api_key = NULL
+  type = c("smiles", "canonical_smiles", "mol2000", "mol3000", "inchi")
 )
 }
 \arguments{
 \item{query}{SMILES or MOL array}
 
-\item{type}{Search type}
+\item{type}{Search type: 'smiles', 'canonical_smiles', 'mol2000', 'mol3000', or 'inchi'}
 }
 \value{
-A string
+A string with the converted structure
 }
 \description{
 Takes SMILES or MOL array for input to convert a single compound.

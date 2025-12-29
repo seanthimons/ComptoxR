@@ -4,7 +4,7 @@
 \alias{ct_test}
 \title{Retrieve results from TEST QSAR model.}
 \usage{
-ct_test(query, debug = F)
+ct_test(query, debug = FALSE)
 }
 \arguments{
 \item{query}{A list of DTXSIDs to be queried.}

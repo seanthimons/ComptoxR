@@ -15,3 +15,8 @@ A tibble of results.
 \description{
 Returns the RQs for compounds with their hazard class and numeric limits in pounds and kilograms.
 }
+\examples{
+\dontrun{
+chemi_rq(query = "DTXSID7020182")
+}
+}
