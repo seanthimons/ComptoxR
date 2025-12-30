@@ -1,1 +1,16 @@
+# finds files by date
 git ls-files '*.R' | xargs -I {} sh -c 'echo "$(git log --reverse --format=%aI -- {} | head -n 1) {}"' | sort
+
+# date diff
+git ls-files '*.R' |
+xargs -I{} sh -c '
+  f="$1"
+  # Earliest commit that touched the path (follow renames)
+  first=$(git log --follow --format=%at -- "$f" | tail -n 1) || exit
+  # Most recent commit that touched the path
+  last=$(git log -1 --format=%at -- "$f") || exit
+  [ -n "$first" ] && [ -n "$last" ] || exit
+  diff=$((last - first))
+  days=$((diff / 86400))
+  echo "$days $f"
+' _ {} | sort -n

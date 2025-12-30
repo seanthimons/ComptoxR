@@ -1,7 +1,7 @@
 Package: ComptoxR
 Title: Wrappers and Functions for Accessing USEPA CompTox Chemical
     Dashboard and Other Products
-Version: 1.3.0.9000
+Version: 1.3.0.9001
 Authors@R: 
     person("Sean", "Thimons",
     email = "thimons.sean@epa.gov",
@@ -26,7 +26,6 @@ Imports:
     dplyr (>= 1.1.4),
     ggplot2,
     glue,
-    httr (>= 1.4.7),
     httr2,
     janitor (>= 2.1.0),
     jsonlite (>= 1.8.8),
