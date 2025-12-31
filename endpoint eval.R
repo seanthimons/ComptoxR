@@ -168,21 +168,14 @@ find_endpoint_usages_base <- function(
   list(hits = hits, summary = summary)
 }
 
-#' Convert an OpenAPI (3.x) list to a tibble of files + text stubs
-#' Requires: purrr, tibble, stringr, glue
-#' Convert an OpenAPI (3.x) list to a tibble of operation metadata (no text)
-#' Returns a tibble with columns: file, fn, operationId, route, method, summary,
-#' base_url, has_body, path_params, query_params
-openapi_to_spec <- function(openapi, default_base_url = NULL, name_strategy = c("operationId", "method_path")) {
-  if (!requireNamespace("purrr", quietly = TRUE)) {
-    stop("Package 'purrr' is required.")
-  }
-  if (!requireNamespace("tibble", quietly = TRUE)) {
-    stop("Package 'tibble' is required.")
-  }
-  if (!requireNamespace("stringr", quietly = TRUE)) {
-    stop("Package 'stringr' is required.")
-  }
+openapi_to_spec <- function(
+  openapi,
+  default_base_url = NULL,
+  name_strategy = c("operationId", "method_path")
+) {
+  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
+  if (!requireNamespace("tibble", quietly = TRUE)) stop("Package 'tibble' is required.")
+  if (!requireNamespace("stringr", quietly = TRUE)) stop("Package 'stringr' is required.")
 
   name_strategy <- match.arg(name_strategy)
   `%||%` <- function(a, b) if (is.null(a)) b else a
@@ -193,38 +186,46 @@ openapi_to_spec <- function(openapi, default_base_url = NULL, name_strategy = c(
     x <- stringr::str_trim(x)
     x
   }
-
   method_path_name <- function(route, method) {
     p <- gsub("^/|/$", "", route)
-    p <- gsub("\\{([^}]+)\\}", "by_\\1", p) # turn {id} into by_id
+    p <- gsub("\\{([^}]+)\\}", "by_\\1", p)
     p <- gsub("[^A-Za-z0-9]+", "_", p)
     p <- gsub("_+", "_", p)
     tolower(paste0(method, "_", p))
   }
-
   dedup_params <- function(params) {
-    if (!length(params)) {
-      return(list())
-    }
+    if (!length(params)) return(list())
     keys <- purrr::map_chr(params, ~ paste(.x[["name"]] %||% "", .x[["in"]] %||% "", sep = "@"))
     params[!duplicated(keys)]
   }
-
-  base_url <- default_base_url %||%
-    {
-      srv <- openapi$servers
-      if (is.list(srv) && length(srv) && !is.null(srv[[1]]$url)) srv[[1]]$url else "https://example.com"
+  param_names <- function(params, where) {
+    purrr::map_chr(
+      purrr::keep(params, ~ identical(.x[["in"]], where)),
+      ~ .x[["name"]] %||% ""
+    ) -> nm
+    nm[nzchar(nm)]
+  }
+  order_path_by_route <- function(path_names, route) {
+    if (!length(path_names)) return(character(0))
+    m <- stringr::str_match_all(route, "\\{([^}]+)\\}")
+    if (length(m) >= 1 && length(m[[1]]) && nrow(m[[1]]) > 0) {
+      in_route <- m[[1]][, 2]
+      unique(c(in_route[in_route %in% path_names], setdiff(path_names, in_route)))
+    } else {
+      unique(path_names)
     }
-
-  paths <- openapi$paths
-  if (!is.list(paths) || !length(paths)) {
-    stop("OpenAPI object has no 'paths'.")
   }
 
+  base_url <- default_base_url %||% {
+    srv <- openapi$servers
+    if (is.list(srv) && length(srv) && !is.null(srv[[1]]$url)) srv[[1]]$url else "https://example.com"
+  }
+
+  paths <- openapi$paths
+  if (!is.list(paths) || !length(paths)) stop("OpenAPI object has no 'paths'.")
+
   purrr::imap_dfr(paths, function(path_item, route) {
-    # Path-item level parameters
     path_level_params <- path_item$parameters %||% list()
-    # Only iterate over HTTP method keys
     meths <- intersect(names(path_item), c("get", "post", "put", "patch", "delete", "head", "options", "trace"))
 
     purrr::map_dfr(meths, function(method) {
@@ -232,27 +233,29 @@ openapi_to_spec <- function(openapi, default_base_url = NULL, name_strategy = c(
       op_params <- op$parameters %||% list()
       parameters <- dedup_params(c(path_level_params, op_params))
 
-      path_params <- purrr::keep(parameters, function(p) identical(p[["in"]], "path"))
-      query_params <- purrr::keep(parameters, function(p) identical(p[["in"]], "query"))
-      has_body <- !is.null(op$requestBody)
+      path_names  <- order_path_by_route(param_names(parameters, "path"), route)
+      query_names <- param_names(parameters, "query")  # keep declared order
 
+      # Drop only the first path param for GET, if any; otherwise do nothing
+      if (identical(toupper(method), "GET") && length(path_names) > 0) {
+        combined <- c(path_names, query_names)
+				combined <- combined[-1]
+      }
+
+      combined <- c(path_names, query_names)
+
+      has_body <- !is.null(op$requestBody)
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
 
-      fn <- if (name_strategy == "operationId") {
-        sanitize_name(operationId)
-      } else {
-        sanitize_name(method_path_name(route, method))
-      }
-
-      #file <- file.path("R", paste0(fn, ".R"))
+      fn <- if (name_strategy == "operationId") sanitize_name(operationId) else sanitize_name(method_path_name(route, method))
 
       tibble::tibble(
-        # fn = fn,
-        # operationId = operationId,
         route = route,
         method = toupper(method),
         summary = summary,
+        has_body = has_body,
+        params = list(combined)
       )
     })
   })
@@ -448,8 +451,8 @@ endpoints <- map(
     dat <- openapi_to_spec(openapi)
   },
   .progress = TRUE
-) %>%
-  list_rbind() %>%
+) %>% 
+  list_rbind()
   mutate(
     route = strip_curly_params(route, leading_slash = 'remove'),
 		domain = route %>% 
@@ -457,7 +460,7 @@ endpoints <- map(
     file = route %>%
   # 1) Remove tokens with optional left separator, only when delimited on the right
   str_remove_all(
-    regex("(?i)(?:^|[/_-])(?:hazards?|chemicals?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
+    regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
   ) %>%
 	str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>% 
   # 2) Collapse any remaining separators to spaces
@@ -485,7 +488,7 @@ endpoints_to_build <- endpoints %>%
 	filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
 spec_with_text <- render_stubs(
-  endpoints_to_build[1:3,],
+  endpoints_to_build[27:28,],
   example_query = "DTXSID7020182"
 )
 
