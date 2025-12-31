@@ -35,7 +35,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   # --- 2. Input Normalization ---
   # Ensure the query is a unique character vector without NAs or empty strings.
   # Special case: if batch_limit is 0, this is a static endpoint (no query needed)
-  if (is.null(batch_limit)) {
+  if (is.null(batch_limit)|| batch_limit == "NA") {
     batch_limit <- as.numeric(Sys.getenv("batch_limit", "1000"))
   }
 
