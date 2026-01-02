@@ -303,11 +303,11 @@ chemi_stub_template <- '
 #\' {fn}(query = "{example_query}")
 #\' }}
 {fn} <- function({fn_signature}) {{
-{extra_params_code}  generic_chemi_request(
+{extra_params_code}	generic_chemi_request(
     query = query,
     endpoint = "{endpoint}",
-    server = "chemi_burl",
-    auth = FALSE{extra_params_call}
+    method = "{method}",
+    batch_limit = {batch_limit}{extra_params_call}
   )
 }}
 
