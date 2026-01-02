@@ -1,4 +1,4 @@
-# Install/load required packages and define helper utilities for endpoint analysis
+# Install/load required packages and define helper utilities for chemi endpoint analysis
 
 library(jsonlite)
 library(tidyverse)
@@ -15,7 +15,7 @@ library(tidyverse)
 #' @param leading_slash Character, one of "keep", "ensure", "remove" to control the leading slash.
 #' @return A character vector of cleaned endpoint paths.
 #' @examples
-#' strip_curly_params(c("/hazard/{id}/"))
+#' strip_curly_params(c("/api/toxprints/{id}/"))
 #' @export
 strip_curly_params <- function(paths, keep_trailing_slash = TRUE, leading_slash = c("keep", "ensure", "remove")) {
   leading_slash <- match.arg(leading_slash)
@@ -42,18 +42,6 @@ strip_curly_params <- function(paths, keep_trailing_slash = TRUE, leading_slash 
   out
 }
 
-# Examples
-# endpoints <- c(
-#   "/hazard/toxval/search/by-dtxsid/{dtxsid}",
-#   "/hazard/iris/{id}/details",
-#   "hazard/hawc/study/{study_id}/metrics/"
-# )
-
-#strip_curly_params(endpoints, leading_slash = 'remove')
-# [1] "/hazard/toxval/search/by-dtxsid/"
-# [2] "/hazard/iris/details"
-# [3] "/hazard/hawc/study/metrics/"
-
 #' Find usages of API endpoints in the package source
 #'
 #' Scans R source files for occurrences of given endpoint paths.
@@ -78,7 +66,7 @@ find_endpoint_usages_base <- function(
 
   base_paths <- strip_curly_params(endpoints, keep_trailing_slash = keep_trailing_slash, leading_slash = 'remove')
 
-  # Include variants without a leading slash to catch code that stores paths “bare”
+  # Include variants without a leading slash to catch code that stores paths "bare"
   patterns <- unique(c(base_paths, if (include_no_leading_slash) str_remove(base_paths, "^/")))
 
   files <- list.files(pkg_dir, pattern = files_regex, recursive = TRUE, full.names = TRUE)
@@ -293,14 +281,13 @@ openapi_to_spec <- function(
   })
 }
 
-#' Template for generating a standard API wrapper function stub
+#' Template for generating a chemi API wrapper function stub
 #'
-#' This string is used with `glue` to create R source files for endpoint wrappers.
-#' Placeholders include `{title}`, `{fn}`, `{example_query}`, `{endpoint}`, `{method}`, `{batch_limit}`,
+#' This string is used with `glue` to create R source files for chemi endpoint wrappers.
+#' Placeholders include `{title}`, `{fn}`, `{example_query}`, `{endpoint}`, `{method}`,
 #' `{fn_signature}`, `{param_docs}`, and `{extra_params_code}`.
 #' @format A character string containing a roxygen template.
-#' @usage Not intended for direct use; passed to `render_stubs`.
-default_stub_template <- '
+chemi_stub_template <- '
 #\' {title}
 #\'
 #\' @description
@@ -316,59 +303,37 @@ default_stub_template <- '
 #\' {fn}(query = "{example_query}")
 #\' }}
 {fn} <- function({fn_signature}) {{
-{extra_params_code}  generic_request(
+{extra_params_code}  generic_chemi_request(
     query = query,
     endpoint = "{endpoint}",
-    method = "{method}",
-		batch_limit = {batch_limit}{extra_params_call}
+    server = "chemi_burl",
+    auth = FALSE{extra_params_call}
   )
 }}
 
 
 '
 
-#' Template for generating a custom API wrapper function stub (simpler version)
-#'
-#' Similar to `default_stub_template` but with a different parameter signature.
-#' @format A character string used by `render_stubs`.
-custom_template <- '
-#\' {title}
-#\'
-#\' @param dtxsid One DTXSID or a character vector of DTXSIDs
-#\'
-#\' @return A tibble
-#\' @export
-#\' @examples
-#\' \\dontrun{{ {fn}(dtxsid = "{example_query}") }}
-{fn} <- function(dtxsid) {{
-  generic_request(
-    query    = dtxsid,
-    endpoint = "{endpoint}",
-    method   = "{method}"
-  )
-}}
-'
-
-#' Render R function stubs from an endpoint specification
+#' Render R function stubs from an endpoint specification (chemi version)
 #'
 #' Takes a tibble of endpoint specifications and generates R source code strings using a template.
 #' @param spec Data frame produced by `openapi_to_spec` containing endpoint metadata (must include `params` column).
-#' @param template Character string template for generating the stub; defaults to `default_stub_template`.
+#' @param template Character string template for generating the stub; defaults to `chemi_stub_template`.
 #' @param example_query Example query value used in the @examples section of generated docs.
 #' @param title_fallback Fallback title for functions lacking a summary.
 #' @param fn_transform Function to derive the R function name from the source file name; defaults to sanitising the file name.
 #' @return The original `spec` tibble with additional columns `fn`, `endpoint`, `title`, and `text` (the rendered R code).
 #' @export
-render_stubs <- function(spec,
-                         template = default_stub_template,
-                         example_query = "DTXSID7020182",
-                         title_fallback = "API wrapper",
-                         fn_transform = function(x) {
-                           # default: derive fn from file name and make it R-safe
-                           nm <- tools::file_path_sans_ext(basename(x))
-                           nm <- gsub("-", "_", nm, fixed = TRUE)
-                           nm
-                         }) {
+render_chemi_stubs <- function(spec,
+                               template = chemi_stub_template,
+                               example_query = "DTXSID7020182",
+                               title_fallback = "Chemi API wrapper",
+                               fn_transform = function(x) {
+                                 # default: derive fn from file name and make it R-safe
+                                 nm <- tools::file_path_sans_ext(basename(x))
+                                 nm <- gsub("-", "_", nm, fixed = TRUE)
+                                 nm
+                               }) {
   stopifnot(is.data.frame(spec))
   if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
   if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
@@ -405,29 +370,16 @@ render_stubs <- function(spec,
     # Generate @param documentation lines
     param_docs <- paste0("#' @param ", param_vec, " Optional parameter\n", collapse = "")
 
-    # Generate code to collect non-NULL params into a list for do.call
+    # Generate code to collect non-NULL params into options list for generic_chemi_request
     extra_params_code <- paste0(
       "  # Collect optional parameters\n",
-      "  extra_params <- list()\n",
-      paste0("  if (!is.null(", param_vec, ")) extra_params$", param_vec, " <- ", param_vec, "\n", collapse = ""),
+      "  options <- list()\n",
+      paste0("  if (!is.null(", param_vec, ")) options$", param_vec, " <- ", param_vec, "\n", collapse = ""),
       "\n  "
     )
 
-    # Modify the call to use do.call with extra_params
-    extra_params_call <- paste0(
-      "\n\n  do.call(\n",
-      "    generic_request,\n",
-      "    c(\n",
-      "      list(\n",
-      "        query = query,\n",
-      "        endpoint = \"{endpoint}\",\n",
-      "        method = \"{method}\",\n",
-      "        batch_limit = \"{batch_limit}\"\n",
-      "      ),\n",
-      "      extra_params\n",
-      "    )\n",
-      "  )"
-    )
+    # Pass options to generic_chemi_request
+    extra_params_call <- ",\n    options = options"
 
     list(
       fn_signature = fn_signature,
@@ -456,16 +408,12 @@ render_stubs <- function(spec,
           endpoint = endpoint,
           method = method,
           title = title,
-          batch_limit = batch_limit,
           param_info = param_info
         ),
-        function(fn, endpoint, method, title, batch_limit, param_info) {
-          # Format batch_limit for code generation (handle NULL properly)
-          batch_limit_code <- if (is.null(batch_limit)) "NULL" else as.character(batch_limit)
-
-          # If there are no extra params, use simple template; otherwise use do.call approach
+        function(fn, endpoint, method, title, param_info) {
+          # If there are extra params, use options approach
           if (isTRUE(param_info$has_params)) {
-            # Build the full function with do.call
+            # Build the full function with options list
             stub_text <- glue::glue('
 #\' {title}
 #\'
@@ -482,29 +430,22 @@ render_stubs <- function(spec,
 #\' {fn}(query = "{example_query}")
 #\' }}
 {fn} <- function({param_info$fn_signature}) {{
-{param_info$extra_params_code}do.call(
-    generic_request,
-    c(
-      list(
-        query = query,
-        endpoint = "{endpoint}",
-        method = "{method}",
-		batch_limit = {batch_limit_code}
-      ),
-      extra_params
-    )
+{param_info$extra_params_code}generic_chemi_request(
+    query = query,
+    endpoint = "{endpoint}",
+    server = "chemi_burl",
+    auth = FALSE{param_info$extra_params_call}
   )
 }}
 ')
           } else {
-            # Use original simple template
+            # Use simple template without options
             stub_text <- glue::glue(template,
               fn            = fn,
               endpoint      = endpoint,
               method        = method,
               title         = title,
               example_query = example_query,
-              batch_limit   = batch_limit_code,
               fn_signature  = "query",
               param_docs    = "",
               extra_params_code = "",
@@ -622,62 +563,63 @@ scaffold_files <- function(
   purrr::pmap_dfr(jobs, write_one)
 }
 
-# Load the OpenAPI schema files and generate endpoint specifications
+# Load the chemi OpenAPI schema files and generate endpoint specifications
 
-# Find all ctx production schema files
-ctx_schema_files <- list.files(
+# Find all chemi production schema files
+chemi_schema_files <- list.files(
   path = here::here('schema'),
-  pattern = "^ctx_.*_prod\\.json$",
+  pattern = "^chemi_.*_prod\\.json$",
   full.names = FALSE
 )
 
-endpoints <- map(
-  ctx_schema_files,
+chemi_endpoints <- map(
+  chemi_schema_files,
   ~ {
     openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
     dat <- openapi_to_spec(openapi)
   },
   .progress = TRUE
-) %>% 
-  list_rbind() %>% 
+) %>%
+  list_rbind() %>%
+	filter(!str_detect(method, 'PATCH|DELETE'), !str_detect(route, 'render')) %>% 
   mutate(
     route = strip_curly_params(route, leading_slash = 'remove'),
-		domain = route %>% 
-			stringr::str_extract(., "^[^/]+"),
+    domain = route %>%
+      stringr::str_extract(., "^api/([^/]+)") %>%
+      stringr::str_remove("^api/"),
     file = route %>%
-  # 1) Remove tokens with optional left separator, only when delimited on the right
-  str_remove_all(
-    regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
+      # Remove common prefixes and /api/
+      str_remove_all(regex("^api/")) %>%
+      str_remove_all(
+        regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
+      ) %>%
+      str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
+      # Collapse any remaining separators to spaces
+      str_replace_all("[/]+", " ") %>%
+      # Trim and normalize whitespace
+      str_squish() %>%
+      # Replace spaces with underscores
+      str_replace_all(., pattern = "\\s", replacement = "_"),
+    file = paste0("chemi_", domain, "_", file, ".R")
   ) %>%
-	str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>% 
-  # 2) Collapse any remaining separators to spaces
-	str_replace_all("[/]+", " ") %>%
-  # 3) Trim and normalize whitespace
-  str_squish() %>% 
-	# 4)
-	str_replace_all(., pattern = "\\s", replacement = "_"),
-	file = paste0("ct_", domain,"_", file, ".R"),
-	batch_limit = case_when(
-		method == 'GET' ~ 1,
-		.default = NULL
-	)
-) %>% 
-	arrange(
-		forcats::fct_inorder(domain), 
-		route, 
-		factor(method, levels = c('POST', 'GET'))
-	) %>% 
-	distinct(route, .keep_all = TRUE)
+  arrange(
+    forcats::fct_inorder(domain),
+    route,
+    factor(method, levels = c('POST', 'GET'))
+  ) %>%
+  distinct(route, .keep_all = TRUE) %>% 
+	filter(!str_detect(params, 'files'))
 
-res <- find_endpoint_usages_base(endpoints$route, pkg_dir = here::here("R"))
+res_chemi <- find_endpoint_usages_base(chemi_endpoints$route, pkg_dir = here::here("R"))
 
-endpoints_to_build <- endpoints %>% 
-	filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+chemi_endpoints_to_build <- chemi_endpoints %>%
+  filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
-spec_with_text <- render_stubs(
-  endpoints_to_build,
+chemi_spec_with_text <- render_chemi_stubs(
+  chemi_endpoints_to_build,
   example_query = "DTXSID7020182"
 )
 
 # ! BUILD ----
-scaffold_files(spec_with_text, base_dir = "R", overwrite = TRUE, append = TRUE)
+# Uncomment to generate files:
+scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = TRUE, append = FALSE)
