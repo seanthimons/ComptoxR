@@ -327,28 +327,6 @@ default_stub_template <- '
 
 '
 
-#' Template for generating a custom API wrapper function stub (simpler version)
-#'
-#' Similar to `default_stub_template` but with a different parameter signature.
-#' @format A character string used by `render_stubs`.
-custom_template <- '
-#\' {title}
-#\'
-#\' @param dtxsid One DTXSID or a character vector of DTXSIDs
-#\'
-#\' @return A tibble
-#\' @export
-#\' @examples
-#\' \\dontrun{{ {fn}(dtxsid = "{example_query}") }}
-{fn} <- function(dtxsid) {{
-  generic_request(
-    query    = dtxsid,
-    endpoint = "{endpoint}",
-    method   = "{method}"
-  )
-}}
-'
-
 #' Render R function stubs from an endpoint specification
 #'
 #' Takes a tibble of endpoint specifications and generates R source code strings using a template.
