@@ -1,6 +1,6 @@
 # Global test configuration
 library(testthat)
-library(ComptoxR)
+if (nzchar(Sys.getenv("GITHUB_ACTIONS"))) { devtools::load_all() } else { library(ComptoxR) }
 
 # Set up dummy environment variables for tests
 # This ensures tests can run even if the user hasn't set up their keys locally

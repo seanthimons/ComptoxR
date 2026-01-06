@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "testthat", "vcr", "covr"))
+          install.packages(c("devtools", "remotes", "testthat", "vcr", "covr"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
