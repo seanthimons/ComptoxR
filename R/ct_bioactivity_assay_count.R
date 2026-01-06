@@ -3,8 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -17,7 +15,7 @@ ct_bioactivity_assay_count <- function(query) {
     query = query,
     endpoint = "bioactivity/assay/count",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

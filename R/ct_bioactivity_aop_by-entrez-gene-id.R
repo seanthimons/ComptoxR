@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param entrezGeneId Entrez Gene Id
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_aop_by_entrez_gene_id(query = "DTXSID7020182")
+#' ct_bioactivity_aop_by_entrez_gene_id(entrezGeneId = "196")
 #' }
-ct_bioactivity_aop_by_entrez_gene_id <- function(query) {
+ct_bioactivity_aop_by_entrez_gene_id <- function(entrezGeneId) {
   generic_request(
-    query = query,
+    query = entrezGeneId,
     endpoint = "bioactivity/aop/search/by-entrez-gene-id/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

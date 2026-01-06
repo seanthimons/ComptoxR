@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_analyticalqc}
 \title{Get analytical QC data by DTXSID}
 \usage{
-ct_bioactivity_analyticalqc(query)
+ct_bioactivity_analyticalqc(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{Primary query parameter}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_analyticalqc(query = "DTXSID7020182")
+ct_bioactivity_analyticalqc(dtxsid = "DTXSID7020182")
 }
 }

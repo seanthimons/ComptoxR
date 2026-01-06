@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxref_effects_by_study_type}
 \title{Get effects data by Study Type}
 \usage{
-ct_hazard_toxref_effects_by_study_type(query, pageNumber = NULL)
+ct_hazard_toxref_effects_by_study_type(studyType, pageNumber = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{studyType}{Study Type}
 
 \item{pageNumber}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxref_effects_by_study_type(query = "DTXSID7020182")
+ct_hazard_toxref_effects_by_study_type(studyType = "DEV")
 }
 }

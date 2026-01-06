@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param toxcastAeid ToxCast AEID
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_aop_by_toxcast_aeid(query = "DTXSID7020182")
+#' ct_bioactivity_aop_by_toxcast_aeid(toxcastAeid = "63")
 #' }
-ct_bioactivity_aop_by_toxcast_aeid <- function(query) {
+ct_bioactivity_aop_by_toxcast_aeid <- function(toxcastAeid) {
   generic_request(
-    query = query,
+    query = toxcastAeid,
     endpoint = "bioactivity/aop/search/by-toxcast-aeid/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

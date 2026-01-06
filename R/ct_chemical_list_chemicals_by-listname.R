@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param list Primary query parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_list_chemicals_by_listname(query = "DTXSID7020182")
+#' ct_chemical_list_chemicals_by_listname(list = "40CFR1164")
 #' }
-ct_chemical_list_chemicals_by_listname <- function(query) {
+ct_chemical_list_chemicals_by_listname <- function(list) {
   generic_request(
-    query = query,
+    query = list,
     endpoint = "chemical/list/chemicals/search/by-listname/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

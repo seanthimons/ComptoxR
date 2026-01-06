@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param value Exact match of search value
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_equal(query = "DTXSID7020182")
+#' ct_bioactivity_equal(value = "DTXSID7020182")
 #' }
-ct_bioactivity_equal <- function(query) {
+ct_bioactivity_equal <- function(value) {
   generic_request(
-    query = query,
+    query = value,
     endpoint = "bioactivity/search/equal/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

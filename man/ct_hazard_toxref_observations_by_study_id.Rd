@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxref_observations_by_study_id}
 \title{Get observations by Study ID}
 \usage{
-ct_hazard_toxref_observations_by_study_id(query)
+ct_hazard_toxref_observations_by_study_id(studyId)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{studyId}{Study ID}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxref_observations_by_study_id(query = "DTXSID7020182")
+ct_hazard_toxref_observations_by_study_id(studyId = "63")
 }
 }

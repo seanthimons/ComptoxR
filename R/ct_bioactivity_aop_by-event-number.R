@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param eventNumber Key Event Number
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_aop_by_event_number(query = "DTXSID7020182")
+#' ct_bioactivity_aop_by_event_number(eventNumber = "18")
 #' }
-ct_bioactivity_aop_by_event_number <- function(query) {
+ct_bioactivity_aop_by_event_number <- function(eventNumber) {
   generic_request(
-    query = query,
+    query = eventNumber,
     endpoint = "bioactivity/aop/search/by-event-number/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

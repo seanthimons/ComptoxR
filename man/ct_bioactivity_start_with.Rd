@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_start_with}
 \title{Search by starting value}
 \usage{
-ct_bioactivity_start_with(query, top = NULL)
+ct_bioactivity_start_with(value, top = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{value}{Starting characters for search value}
 
 \item{top}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_start_with(query = "DTXSID7020182")
+ct_bioactivity_start_with(value = "DTXSID7020182")
 }
 }

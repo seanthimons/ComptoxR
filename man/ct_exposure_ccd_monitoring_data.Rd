@@ -4,12 +4,12 @@
 \alias{ct_exposure_ccd_monitoring_data}
 \title{Get Biomonitoring data by DTXSID with CCD projection}
 \usage{
-ct_exposure_ccd_monitoring_data(query, projection = NULL)
+ct_exposure_ccd_monitoring_data(dtxsid, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 
-\item{projection}{Optional parameter}
+\item{projection}{Specifies if projection is used. Option: ccd-biomonitoring, If omitted, the default CCDBiomonitoring data is returned.}
 }
 \value{
 Returns a tibble with results
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_exposure_ccd_monitoring_data(query = "DTXSID7020182")
+ct_exposure_ccd_monitoring_data(dtxsid = "DTXSID7020182")
 }
 }

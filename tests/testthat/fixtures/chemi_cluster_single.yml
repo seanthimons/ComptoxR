@@ -1,0 +1,46 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/lookup
+    body:
+      string: '{"fuzzy":"Not","ids":["benzene"],"idsType":"DTXSID","mol":false}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:32 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"chemical":{"chemId":"DTXSID3039242","cid":"DTXCID20135","sid":"DTXSID3039242","casrn":"71-43-2","name":"Benzene","smiles":"C1C=CC=CC=1","canonicalSmiles":"C1C=CC=CC=1","inchi":"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H","inchiKey":"UHOVQNZJYSORNB-UHFFFAOYSA-N"},"resolvedBy":"Name","confidence":0.9,"result":"FOUND","query":"benzene","message":"prod_dsstox_10272022","source":"DTX"}]'
+  recorded_at: 2026-01-05 04:07:32
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/getsimilaritymap?sort=true
+    body:
+      string: '{"chemicals":[{"chemId":"DTXSID3039242","raw_query":"benzene","dtxcid":"DTXCID20135","dtxsid":"DTXSID3039242","casrn":"71-43-2","name":"Benzene","smiles":"C1C=CC=CC=1","canonicalSmiles":"C1C=CC=CC=1","inchi":"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H","inchiKey":"UHOVQNZJYSORNB-UHFFFAOYSA-N","resolvedBy":"Name","confidence":0.90000000000000002,"result":"FOUND","message":"prod_dsstox_10272022","source":"DTX"}]}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:32 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"similarity":[[{"sim":0.0}]],"order":[{"chemical":{"chemId":"71-43-2","casrn":"71-43-2","name":"Benzene","smiles":"C1C=CC=CC=1","canonicalSmiles":"C1C=CC=CC=1","inchi":"InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H","inchiKey":"UHOVQNZJYSORNB-UHFFFAOYSA-N"},"max":0.0,"similarity":{"sim":0.0}}]}'
+  recorded_at: 2026-01-05 04:07:32
+recorded_with: VCR-vcr/2.1.0

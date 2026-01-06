@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxref_effects}
 \title{Get effects data by DTXSID}
 \usage{
-ct_hazard_toxref_effects(query)
+ct_hazard_toxref_effects(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{dtxsid}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxref_effects(query = "DTXSID7020182")
+ct_hazard_toxref_effects(dtxsid = "DTXSID1037806")
 }
 }

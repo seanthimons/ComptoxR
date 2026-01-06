@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param gsid Generic Substance Id
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_file_image_by_gsid(query = "DTXSID7020182")
+#' ct_chemical_file_image_by_gsid(gsid = "20182")
 #' }
-ct_chemical_file_image_by_gsid <- function(query) {
+ct_chemical_file_image_by_gsid <- function(gsid) {
   generic_request(
-    query = query,
+    query = gsid,
     endpoint = "chemical/file/image/search/by-gsid/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param formula Chemical formula
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_by_exact_formula(query = "DTXSID7020182")
+#' ct_chemical_by_exact_formula(formula = "C15H16O2")
 #' }
-ct_chemical_by_exact_formula <- function(query) {
+ct_chemical_by_exact_formula <- function(formula) {
   generic_request(
-    query = query,
+    query = formula,
     endpoint = "chemical/search/by-exact-formula/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

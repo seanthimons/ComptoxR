@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_equal}
 \title{Search by exact value}
 \usage{
-ct_bioactivity_equal(query)
+ct_bioactivity_equal(value)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{value}{Exact match of search value}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_equal(query = "DTXSID7020182")
+ct_bioactivity_equal(value = "DTXSID7020182")
 }
 }

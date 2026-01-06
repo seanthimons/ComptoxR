@@ -15,16 +15,19 @@
 #' @param auth Boolean; whether to include the API key header. Defaults to TRUE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 #'        If FALSE, returns a cleaned list structure.
+#' @param path_params Optional vector or list of additional path parameters to append to the endpoint URL.
+#'        Used for endpoints with multiple path parameters (e.g., property range searches).
+#'        These are appended after the primary query parameter in the order provided.
+#'        Cannot be used with batching (batch_limit > 1).
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
-#'        - If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments;
-#'          named arguments are added as query parameters.
+#'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
 #'        - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
 #'         If no results are found, returns an empty tibble or empty list.
 #' @export
-generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, ...) {
+generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -69,6 +72,16 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
     }
   }
 
+  # --- 3.5. Validate path_params Usage ---
+  # Path parameters cannot be used with batching
+  if (!is.null(path_params) && length(path_params) > 0) {
+    if (batch_limit > 1 || (length(query) > 1 && batch_limit != 0)) {
+      cli::cli_abort(
+        "Cannot use path_params with batching. Path parameter endpoints do not support batch queries."
+      )
+    }
+  }
+
   # Check environment flags for logging/debugging
   run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
@@ -108,9 +121,17 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       if (toupper(method) == "POST") {
         req <- req %>%
           httr2::req_method("POST") %>%
-          httr2::req_body_json(query_part, auto_unbox = FALSE) %>%
-          # Add ellipsis arguments as query params (e.g., projection="all")
-          httr2::req_url_query(!!!ellipsis_args)
+          httr2::req_body_json(query_part, auto_unbox = FALSE)
+
+        # Append additional path parameters if provided
+        if (!is.null(path_params) && length(path_params) > 0) {
+          for (pp in path_params) {
+            req <- req %>% httr2::req_url_path_append(as.character(pp))
+          }
+        }
+
+        # Add ellipsis arguments as query params (e.g., projection="all")
+        req <- req %>% httr2::req_url_query(!!!ellipsis_args)
       }
       # Implementation for GET requests
       else {
@@ -124,6 +145,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
         else if (batch_limit == 1) {
           req <- req %>% httr2::req_url_path_append(as.character(query_part))
+
+          # Append additional path parameters if provided
+          if (!is.null(path_params) && length(path_params) > 0) {
+            for (pp in path_params) {
+              req <- req %>% httr2::req_url_path_append(as.character(pp))
+            }
+          }
 
           # Separate named vs unnamed ellipsis arguments
           named_indices <- !is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0 && names(ellipsis_args) != ""
