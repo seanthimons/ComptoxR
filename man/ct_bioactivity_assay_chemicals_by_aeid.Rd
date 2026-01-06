@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_assay_chemicals_by_aeid}
 \title{Get DTXSID list by AEID}
 \usage{
-ct_bioactivity_assay_chemicals_by_aeid(query, projection = NULL)
+ct_bioactivity_assay_chemicals_by_aeid(aeid, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{aeid}{ToxCast assay component endpoint ID}
 
 \item{projection}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_assay_chemicals_by_aeid(query = "DTXSID7020182")
+ct_bioactivity_assay_chemicals_by_aeid(aeid = "3032")
 }
 }

@@ -3,9 +3,8 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param tissue Optional parameter
-
+#' @param dtxsid DSSTox Substance Identifier
+#' @param tissue assay format's tissue of origin
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -13,21 +12,14 @@
 #' \dontrun{
 #' ct_bioactivity_data_by_tissue(query = "DTXSID7020182")
 #' }
-ct_bioactivity_data_by_tissue <- function(query, tissue = NULL) {
-  # Collect optional parameters
-  extra_params <- list()
-  if (!is.null(tissue)) extra_params$tissue <- tissue
-
-  do.call(
-    generic_request,
-    c(
-      list(
-        query = query,
-        endpoint = "bioactivity/data/summary/search/by-tissue/",
-        method = "GET",
-		batch_limit = 1
-      ),
-      extra_params
-    )
+ct_bioactivity_data_by_tissue <- function(query, dtxsid = NULL, tissue = NULL) {
+  generic_request(
+    query = query,
+    endpoint = "bioactivity/data/summary/search/by-tissue/",
+    method = "GET",
+    batch_limit = 1,
+    dtxsid = dtxsid,
+    tissue = tissue
   )
 }
+

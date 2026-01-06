@@ -3,8 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -17,7 +15,7 @@ ct_chemical_by_msready_formula <- function(query) {
     query = query,
     endpoint = "chemical/search/by-msready-formula/",
     method = "POST",
-		batch_limit = NA
+    batch_limit = NULL
   )
 }
 

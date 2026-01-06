@@ -6,9 +6,6 @@
 \usage{
 ct_chemical_msready_by_mass(query)
 }
-\arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
-}
 \value{
 Returns a tibble with results
 }

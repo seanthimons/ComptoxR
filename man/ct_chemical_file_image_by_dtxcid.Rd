@@ -4,10 +4,10 @@
 \alias{ct_chemical_file_image_by_dtxcid}
 \title{Get structure image by DTXCID}
 \usage{
-ct_chemical_file_image_by_dtxcid(query)
+ct_chemical_file_image_by_dtxcid(dtxcid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxcid}{DSSTox Compound Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_file_image_by_dtxcid(query = "DTXSID7020182")
+ct_chemical_file_image_by_dtxcid(dtxcid = "DTXCID505")
 }
 }

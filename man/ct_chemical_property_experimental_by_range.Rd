@@ -4,10 +4,14 @@
 \alias{ct_chemical_property_experimental_by_range}
 \title{Get experimental properties by property and range}
 \usage{
-ct_chemical_property_experimental_by_range(query, start = NULL, end = NULL)
+ct_chemical_property_experimental_by_range(
+  propertyName,
+  start = NULL,
+  end = NULL
+)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{propertyName}{Primary query parameter}
 
 \item{start}{Optional parameter}
 
@@ -21,6 +25,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_property_experimental_by_range(query = "DTXSID7020182")
+ct_chemical_property_experimental_by_range(propertyName = "DTXSID7020182")
 }
 }

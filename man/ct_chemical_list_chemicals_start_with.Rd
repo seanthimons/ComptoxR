@@ -4,12 +4,12 @@
 \alias{ct_chemical_list_chemicals_start_with}
 \title{Get DTXSIDs for list and containing starting string in chemical name}
 \usage{
-ct_chemical_list_chemicals_start_with(query, word = NULL)
+ct_chemical_list_chemicals_start_with(list, word = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{list}{List Name}
 
-\item{word}{Optional parameter}
+\item{word}{Chemical Name}
 }
 \value{
 Returns a tibble with results
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_list_chemicals_start_with(query = "DTXSID7020182")
+ct_chemical_list_chemicals_start_with(list = "40CFR1164")
 }
 }

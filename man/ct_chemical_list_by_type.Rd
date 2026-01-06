@@ -4,10 +4,10 @@
 \alias{ct_chemical_list_by_type}
 \title{Get lists by list type}
 \usage{
-ct_chemical_list_by_type(query, projection = NULL)
+ct_chemical_list_by_type(type, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{type}{Chemical List Type}
 
 \item{projection}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_list_by_type(query = "DTXSID7020182")
+ct_chemical_list_by_type(type = "other")
 }
 }

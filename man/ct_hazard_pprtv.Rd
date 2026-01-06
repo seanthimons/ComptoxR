@@ -4,10 +4,10 @@
 \alias{ct_hazard_pprtv}
 \title{Get PPRTV data by DTXSID}
 \usage{
-ct_hazard_pprtv(query)
+ct_hazard_pprtv(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_pprtv(query = "DTXSID7020182")
+ct_hazard_pprtv(dtxsid = "DTXSID2040282")
 }
 }

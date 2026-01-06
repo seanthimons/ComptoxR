@@ -130,7 +130,11 @@ spec_with_text <- render_endpoint_stubs(
 
 # ! BUILD ----
 # Uncomment to generate files:
-# scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+
+# Inspect results (which files were created/skipped/errored):
+scaffold_result %>% filter(action == "skipped")  # Files that already existed
+scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 # ==============================================================================
 # Cleanup

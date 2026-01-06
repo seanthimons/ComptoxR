@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param dtxsid dtxsid
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_toxref_observations(query = "DTXSID7020182")
+#' ct_hazard_toxref_observations(dtxsid = "DTXSID1037806")
 #' }
-ct_hazard_toxref_observations <- function(query) {
+ct_hazard_toxref_observations <- function(dtxsid) {
   generic_request(
-    query = query,
+    query = dtxsid,
     endpoint = "hazard/toxref/observations/search/by-dtxsid/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

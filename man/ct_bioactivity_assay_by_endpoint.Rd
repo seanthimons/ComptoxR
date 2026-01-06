@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_assay_by_endpoint}
 \title{Get AEID by assay component endpoint name}
 \usage{
-ct_bioactivity_assay_by_endpoint(query)
+ct_bioactivity_assay_by_endpoint(query, endpoint = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{endpoint}{Optional parameter}
 }
 \value{
 Returns a tibble with results

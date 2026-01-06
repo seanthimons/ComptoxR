@@ -6,9 +6,6 @@
 \usage{
 ct_bioactivity_assay_by_aeid(query)
 }
-\arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
-}
 \value{
 Returns a tibble with results
 }

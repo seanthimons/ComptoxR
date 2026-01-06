@@ -3,8 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -17,7 +15,7 @@ ct_exposure_list_presence <- function(query) {
     query = query,
     endpoint = "exposure/list-presence/search/by-dtxsid/",
     method = "POST",
-		batch_limit = NA
+    batch_limit = NULL
   )
 }
 

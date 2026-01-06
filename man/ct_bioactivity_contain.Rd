@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_contain}
 \title{Search by substring value}
 \usage{
-ct_bioactivity_contain(query, top = NULL)
+ct_bioactivity_contain(value, top = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{value}{Substring of search word}
 
 \item{top}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_contain(query = "DTXSID7020182")
+ct_bioactivity_contain(value = "DTXSID7020182")
 }
 }

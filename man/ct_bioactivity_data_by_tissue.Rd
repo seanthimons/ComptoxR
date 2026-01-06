@@ -4,12 +4,12 @@
 \alias{ct_bioactivity_data_by_tissue}
 \title{Get summary data by DTXSID and assay tissue origin}
 \usage{
-ct_bioactivity_data_by_tissue(query, tissue = NULL)
+ct_bioactivity_data_by_tissue(query, dtxsid = NULL, tissue = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 
-\item{tissue}{Optional parameter}
+\item{tissue}{assay format's tissue of origin}
 }
 \value{
 Returns a tibble with results

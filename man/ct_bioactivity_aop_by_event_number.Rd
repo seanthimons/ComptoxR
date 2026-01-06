@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_aop_by_event_number}
 \title{Get AOP data by Key Event}
 \usage{
-ct_bioactivity_aop_by_event_number(query)
+ct_bioactivity_aop_by_event_number(eventNumber)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{eventNumber}{Key Event Number}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_aop_by_event_number(query = "DTXSID7020182")
+ct_bioactivity_aop_by_event_number(eventNumber = "18")
 }
 }

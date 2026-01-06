@@ -4,10 +4,10 @@
 \alias{ct_chemical_property_predicted_by_range}
 \title{Get predicted properties by property and range}
 \usage{
-ct_chemical_property_predicted_by_range(query, start = NULL, end = NULL)
+ct_chemical_property_predicted_by_range(propertyId, start = NULL, end = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{propertyId}{Primary query parameter}
 
 \item{start}{Optional parameter}
 
@@ -21,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_property_predicted_by_range(query = "DTXSID7020182")
+ct_chemical_property_predicted_by_range(propertyId = "DTXSID7020182")
 }
 }

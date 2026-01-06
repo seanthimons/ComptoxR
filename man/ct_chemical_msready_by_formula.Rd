@@ -4,10 +4,10 @@
 \alias{ct_chemical_msready_by_formula}
 \title{Get MS-ready chemicals by formula}
 \usage{
-ct_chemical_msready_by_formula(query)
+ct_chemical_msready_by_formula(formula)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{formula}{Chemical formula}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_msready_by_formula(query = "DTXSID7020182")
+ct_chemical_msready_by_formula(formula = "C16H24N2O5S")
 }
 }

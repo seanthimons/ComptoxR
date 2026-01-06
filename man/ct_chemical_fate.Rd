@@ -4,29 +4,20 @@
 \alias{ct_chemical_fate}
 \title{Get fate summary by DTXSID and property}
 \usage{
-ct_chemical_fate(query)
-
-ct_chemical_fate(query)
+ct_chemical_fate(query, dtxsid = NULL, propName = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{Optional parameter}
 
 \item{propName}{Optional parameter}
 }
 \value{
 Returns a tibble with results
-
-Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\dontrun{
-ct_chemical_fate(query = "DTXSID7020182")
-}
 \dontrun{
 ct_chemical_fate(query = "DTXSID7020182")
 }

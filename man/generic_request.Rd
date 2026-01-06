@@ -12,6 +12,7 @@ generic_request(
   batch_limit = NULL,
   auth = TRUE,
   tidy = TRUE,
+  path_params = NULL,
   ...
 )
 }
@@ -34,10 +35,14 @@ If set to 0, treats as static endpoint (no query appending).}
 \item{tidy}{Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 If FALSE, returns a cleaned list structure.}
 
+\item{path_params}{Optional vector or list of additional path parameters to append to the endpoint URL.
+Used for endpoints with multiple path parameters (e.g., property range searches).
+These are appended after the primary query parameter in the order provided.
+Cannot be used with batching (batch_limit > 1).}
+
 \item{...}{Additional parameters:
 - If method is "POST": Added as query parameters to the URL.
-- If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments;
-named arguments are added as query parameters.
+- If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
 - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.}
 }
 \value{

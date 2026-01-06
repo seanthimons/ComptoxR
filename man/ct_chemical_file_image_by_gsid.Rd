@@ -4,10 +4,10 @@
 \alias{ct_chemical_file_image_by_gsid}
 \title{Get structure image by GSID}
 \usage{
-ct_chemical_file_image_by_gsid(query)
+ct_chemical_file_image_by_gsid(gsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{gsid}{Generic Substance Id}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_file_image_by_gsid(query = "DTXSID7020182")
+ct_chemical_file_image_by_gsid(gsid = "20182")
 }
 }

@@ -7,8 +7,6 @@
 ct_chemical_detail_by_dtxcid(query, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
-
 \item{projection}{Optional parameter}
 }
 \value{
