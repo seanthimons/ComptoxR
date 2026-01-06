@@ -4,10 +4,10 @@
 \alias{ct_chemical_list_chemicals_by_listname}
 \title{Get DTXSIDs by list}
 \usage{
-ct_chemical_list_chemicals_by_listname(query)
+ct_chemical_list_chemicals_by_listname(list)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{list}{Primary query parameter}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_list_chemicals_by_listname(query = "DTXSID7020182")
+ct_chemical_list_chemicals_by_listname(list = "40CFR1164")
 }
 }

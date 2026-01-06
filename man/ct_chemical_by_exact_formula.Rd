@@ -4,10 +4,10 @@
 \alias{ct_chemical_by_exact_formula}
 \title{Get chemicals by exact formula}
 \usage{
-ct_chemical_by_exact_formula(query)
+ct_chemical_by_exact_formula(formula)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{formula}{Chemical formula}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_by_exact_formula(query = "DTXSID7020182")
+ct_chemical_by_exact_formula(formula = "C15H16O2")
 }
 }

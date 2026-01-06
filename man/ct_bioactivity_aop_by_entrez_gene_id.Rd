@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_aop_by_entrez_gene_id}
 \title{Get AOP data by Entrez Gene ID}
 \usage{
-ct_bioactivity_aop_by_entrez_gene_id(query)
+ct_bioactivity_aop_by_entrez_gene_id(entrezGeneId)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{entrezGeneId}{Entrez Gene Id}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_aop_by_entrez_gene_id(query = "DTXSID7020182")
+ct_bioactivity_aop_by_entrez_gene_id(entrezGeneId = "196")
 }
 }

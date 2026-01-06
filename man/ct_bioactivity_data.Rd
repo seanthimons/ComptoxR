@@ -5,26 +5,14 @@
 \title{Get bioactivity data for a batch of DTXSIDs}
 \usage{
 ct_bioactivity_data(query)
-
-ct_bioactivity_data(query)
-}
-\arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
 }
 \value{
-Returns a tibble with results
-
 Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\dontrun{
-ct_bioactivity_data(query = "DTXSID7020182")
-}
 \dontrun{
 ct_bioactivity_data(query = "DTXSID7020182")
 }

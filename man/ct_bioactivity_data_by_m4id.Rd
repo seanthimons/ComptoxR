@@ -6,9 +6,6 @@
 \usage{
 ct_bioactivity_data_by_m4id(query)
 }
-\arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
-}
 \value{
 Returns a tibble with results
 }

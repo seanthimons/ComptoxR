@@ -4,12 +4,12 @@
 \alias{ct_hazard_adme_ivive}
 \title{Get ADME data for IVIVE by DTXSID with CCD projection}
 \usage{
-ct_hazard_adme_ivive(query, projection = NULL)
+ct_hazard_adme_ivive(dtxsid, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 
-\item{projection}{Optional parameter}
+\item{projection}{Specifies if projection is used. Option: ccd-adme-data. If omitted, the default ADME-IVIVE projection is returned.}
 }
 \value{
 Returns a tibble with results
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_adme_ivive(query = "DTXSID7020182")
+ct_hazard_adme_ivive(dtxsid = "DTXSID7020182")
 }
 }

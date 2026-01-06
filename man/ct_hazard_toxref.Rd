@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxref}
 \title{Get summary data by DTXSID}
 \usage{
-ct_hazard_toxref(query)
+ct_hazard_toxref(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{dtxsid}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxref(query = "DTXSID7020182")
+ct_hazard_toxref(dtxsid = "DTXSID1037806")
 }
 }

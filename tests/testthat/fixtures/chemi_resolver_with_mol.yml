@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/lookup
+    body:
+      string: '{"fuzzy":"Not","ids":["benzene"],"idsType":"DTXSID","mol":true}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:33 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"result":"NOT_RESOLVED","query":"benzene","message":"Not found"}]'
+  recorded_at: 2026-01-05 04:07:33
+recorded_with: VCR-vcr/2.1.0

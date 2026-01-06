@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_assay_by_gene}
 \title{Get assay summary by gene symbol}
 \usage{
-ct_bioactivity_assay_by_gene(query)
+ct_bioactivity_assay_by_gene(geneSymbol)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{geneSymbol}{Gene Symbol}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_assay_by_gene(query = "DTXSID7020182")
+ct_bioactivity_assay_by_gene(geneSymbol = "TUBA1A")
 }
 }

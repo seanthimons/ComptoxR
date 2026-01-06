@@ -4,10 +4,10 @@
 \alias{ct_exposure_mmdb_aggregate_by_medium}
 \title{Get Aggregate data by Medium}
 \usage{
-ct_exposure_mmdb_aggregate_by_medium(query, pageNumber = NULL)
+ct_exposure_mmdb_aggregate_by_medium(query, medium = NULL, pageNumber = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{medium}{harmonized medium}
 
 \item{pageNumber}{Optional parameter}
 }

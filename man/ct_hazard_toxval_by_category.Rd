@@ -4,10 +4,10 @@
 \alias{ct_hazard_toxval_by_category}
 \title{Get all data by dtxsid and category}
 \usage{
-ct_hazard_toxval_by_category(query, category = NULL)
+ct_hazard_toxval_by_category(dtxsid, category = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 
 \item{category}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_by_category(query = "DTXSID7020182")
+ct_hazard_toxval_by_category(dtxsid = "DTXSID0021125")
 }
 }

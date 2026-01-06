@@ -4,10 +4,10 @@
 \alias{ct_exposure_ccd_puc}
 \title{Get Product Use Category data by DTXSID}
 \usage{
-ct_exposure_ccd_puc(query)
+ct_exposure_ccd_puc(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_exposure_ccd_puc(query = "DTXSID7020182")
+ct_exposure_ccd_puc(dtxsid = "DTXSID0020232")
 }
 }

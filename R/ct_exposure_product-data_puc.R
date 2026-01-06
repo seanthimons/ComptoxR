@@ -3,8 +3,6 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -17,7 +15,7 @@ ct_exposure_product_data_puc <- function(query) {
     query = query,
     endpoint = "exposure/product-data/puc",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

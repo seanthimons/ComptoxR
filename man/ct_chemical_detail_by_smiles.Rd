@@ -4,10 +4,10 @@
 \alias{ct_chemical_detail_by_smiles}
 \title{Get data by SMILES}
 \usage{
-ct_chemical_detail_by_smiles(query)
+ct_chemical_detail_by_smiles(query, smiles = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{smiles}{SMILES String}
 }
 \value{
 Returns a tibble with results

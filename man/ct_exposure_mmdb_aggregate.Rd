@@ -4,10 +4,10 @@
 \alias{ct_exposure_mmdb_aggregate}
 \title{Get Aggregate data by DTXSID}
 \usage{
-ct_exposure_mmdb_aggregate(query)
+ct_exposure_mmdb_aggregate(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_exposure_mmdb_aggregate(query = "DTXSID7020182")
+ct_exposure_mmdb_aggregate(dtxsid = "DTXSID7020182")
 }
 }

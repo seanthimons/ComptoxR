@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param dtxsid DSSTox Substance Identifier
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_ccd_chem_weight_fractions(query = "DTXSID7020182")
+#' ct_exposure_ccd_chem_weight_fractions(dtxsid = "DTXSID0020232")
 #' }
-ct_exposure_ccd_chem_weight_fractions <- function(query) {
+ct_exposure_ccd_chem_weight_fractions <- function(dtxsid) {
   generic_request(
-    query = query,
+    query = dtxsid,
     endpoint = "exposure/ccd/chem-weight-fractions/search/by-dtxsid/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

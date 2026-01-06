@@ -4,10 +4,10 @@
 \alias{ct_exposure_mmdb_single_sample}
 \title{Get Single Sample data by DTXSID}
 \usage{
-ct_exposure_mmdb_single_sample(query)
+ct_exposure_mmdb_single_sample(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_exposure_mmdb_single_sample(query = "DTXSID7020182")
+ct_exposure_mmdb_single_sample(dtxsid = "DTXSID7020182")
 }
 }

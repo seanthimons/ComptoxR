@@ -3,21 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-
+#' @param dtxsid Primary query parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_analyticalqc(query = "DTXSID7020182")
+#' ct_bioactivity_analyticalqc(dtxsid = "DTXSID7020182")
 #' }
-ct_bioactivity_analyticalqc <- function(query) {
+ct_bioactivity_analyticalqc <- function(dtxsid) {
   generic_request(
-    query = query,
+    query = dtxsid,
     endpoint = "bioactivity/analyticalqc/search/by-dtxsid/",
     method = "GET",
-		batch_limit = 1
+    batch_limit = 1
   )
 }
 

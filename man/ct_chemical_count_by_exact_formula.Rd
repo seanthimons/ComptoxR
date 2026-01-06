@@ -4,10 +4,10 @@
 \alias{ct_chemical_count_by_exact_formula}
 \title{Get chemical count by exact formula}
 \usage{
-ct_chemical_count_by_exact_formula(query, projection = NULL)
+ct_chemical_count_by_exact_formula(formula, projection = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{formula}{Chemical formula}
 
 \item{projection}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_count_by_exact_formula(query = "DTXSID7020182")
+ct_chemical_count_by_exact_formula(formula = "C15H16O2")
 }
 }

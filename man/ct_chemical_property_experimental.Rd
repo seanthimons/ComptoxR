@@ -4,29 +4,15 @@
 \alias{ct_chemical_property_experimental}
 \title{Get experimental properties for a batch of DTXSIDs}
 \usage{
-ct_chemical_property_experimental(query, propName = NULL)
-
-ct_chemical_property_experimental(query, propName = NULL)
-}
-\arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{propName}{Optional parameter}
+ct_chemical_property_experimental(query)
 }
 \value{
-Returns a tibble with results
-
 Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\dontrun{
-ct_chemical_property_experimental(query = "DTXSID7020182")
-}
 \dontrun{
 ct_chemical_property_experimental(query = "DTXSID7020182")
 }

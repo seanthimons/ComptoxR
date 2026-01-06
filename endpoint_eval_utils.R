@@ -260,6 +260,27 @@ openapi_to_spec <- function(
     ) -> nm
     nm[nzchar(nm)]
   }
+
+  # Extract parameter metadata (examples and descriptions)
+  param_metadata <- function(params, where) {
+    relevant_params <- purrr::keep(params, ~ identical(.x[["in"]], where))
+    if (length(relevant_params) == 0) return(list())
+
+    metadata <- purrr::map(relevant_params, function(p) {
+      list(
+        name = p[["name"]] %||% "",
+        example = p[["example"]] %||% NA,
+        description = p[["description"]] %||% ""
+      )
+    })
+
+    # Filter out params with no name
+    metadata <- purrr::keep(metadata, ~ nzchar(.x$name))
+
+    # Convert to named list for easier lookup
+    names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+    metadata
+  }
   order_path_by_route <- function(path_names, route) {
     if (!length(path_names)) return(character(0))
     m <- stringr::str_match_all(route, "\\{([^}]+)\\}")
@@ -291,6 +312,10 @@ openapi_to_spec <- function(
       path_names  <- order_path_by_route(param_names(parameters, "path"), route)
       query_names <- param_names(parameters, "query")  # keep declared order
 
+      # Extract parameter metadata (examples and descriptions)
+      path_meta  <- param_metadata(parameters, "path")
+      query_meta <- param_metadata(parameters, "query")
+
       # Combine all parameters (path parameters first, then query parameters)
       combined <- c(path_names, query_names)
 
@@ -305,7 +330,14 @@ openapi_to_spec <- function(
         method = toupper(method),
         summary = summary,
         has_body = has_body,
-        params = if (length(combined) > 0) paste(combined, collapse = ",") else ""
+        params = if (length(combined) > 0) paste(combined, collapse = ",") else "",
+        # Separate path and query parameters for flexible stub generation
+        path_params = if (length(path_names) > 0) paste(path_names, collapse = ",") else "",
+        query_params = if (length(query_names) > 0) paste(query_names, collapse = ",") else "",
+        num_path_params = length(path_names),
+        # NEW: Parameter metadata with examples and descriptions
+        path_param_metadata = list(path_meta),
+        query_param_metadata = list(query_meta)
       )
     })
   })
@@ -318,6 +350,8 @@ openapi_to_spec <- function(
 #' Write generated files to disk based on a specification tibble
 #'
 #' Creates or updates files according to a data frame describing file paths and their content.
+#' The result tibble is returned invisibly, allowing you to capture it for inspection.
+#'
 #' @param data Data frame or tibble with at least columns for file paths and text.
 #' @param path_col Name of the column containing file paths; default "file".
 #' @param text_col Name of the column containing the file content; default "text".
@@ -325,7 +359,21 @@ openapi_to_spec <- function(
 #' @param overwrite If TRUE, existing files will be overwritten; otherwise they are skipped.
 #' @param append If TRUE, text is appended to existing files.
 #' @param quiet If FALSE, progress messages are printed.
-#' @return A tibble summarising each write operation (path, action, etc.).
+#' @return A tibble summarising each write operation with columns:
+#'   - path: Full file path
+#'   - action: What happened (created, skipped, overwritten, appended, error)
+#'   - existed: Whether file existed before operation
+#'   - written: Whether write succeeded
+#'   - size_bytes: File size after operation
+#'
+#' @examples
+#' \dontrun{
+#' # Capture result to inspect which files weren't created
+#' result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE)
+#'
+#' # Check for skipped or failed files
+#' result %>% filter(action %in% c("skipped", "error"))
+#' }
 #' @export
 scaffold_files <- function(
   data,
@@ -405,7 +453,11 @@ scaffold_files <- function(
   }
 
   `%||%` <- function(a, b) if (is.null(a)) b else a
-  purrr::pmap_dfr(jobs, write_one)
+  result <- purrr::pmap_dfr(jobs, write_one)
+  print(result, n = Inf)
+
+  # Return result invisibly so users can inspect which files were/weren't created
+  invisible(result)
 }
 
 # ==============================================================================
@@ -419,9 +471,10 @@ scaffold_files <- function(
 #' @param params_str Comma-separated string of parameter names, or empty/NA.
 #' @param strategy Parameter handling strategy: "extra_params" (for do.call with generic_request)
 #'   or "options" (for options list with generic_chemi_request).
+#' @param metadata Named list mapping parameter names to list(example, description).
 #' @return A list with: fn_signature, param_docs, params_code, params_call, has_params.
 #' @export
-parse_function_params <- function(params_str, strategy = c("extra_params", "options")) {
+parse_function_params <- function(params_str, strategy = c("extra_params", "options"), metadata = list()) {
   strategy <- match.arg(strategy)
 
   # Handle empty/NA params
@@ -453,8 +506,16 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   # Generate function signature: query, param1 = NULL, param2 = NULL, ...
   fn_signature <- paste0("query, ", paste(param_vec, "= NULL", collapse = ", "))
 
-  # Generate @param documentation lines
-  param_docs <- paste0("#' @param ", param_vec, " Optional parameter\n", collapse = "")
+  # Generate @param documentation lines using metadata if available
+  doc_lines <- character(0)
+  for (p in param_vec) {
+    if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
+      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+    } else {
+      doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
+    }
+  }
+  param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
 
   # Strategy-specific code generation
   if (strategy == "extra_params") {
@@ -484,6 +545,127 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   )
 }
 
+#' Parse path parameters distinguishing primary from additional
+#'
+#' This function handles path parameters from OpenAPI specifications, treating
+#' the first path parameter as the primary parameter (mapped to 'query' in
+#' generic_request) and any additional path parameters as the path_params argument.
+#'
+#' @param path_params_str Comma-separated path parameter names from OpenAPI spec.
+#' @param strategy Parameter strategy ("extra_params" or "options").
+#' @param metadata Named list mapping parameter names to list(example, description).
+#' @return List with function signature and path_params call components:
+#'   \itemize{
+#'     \item fn_signature: Function parameters string (e.g., "propertyName, start = NULL, end = NULL")
+#'     \item path_params_call: Code string for path_params argument (e.g., ",\n    path_params = c(start = start, end = end)")
+#'     \item has_path_params: Boolean indicating if additional path params exist
+#'     \item param_docs: Roxygen @param documentation strings
+#'     \item primary_param: Name of the primary parameter
+#'     \item primary_example: Example value for primary parameter (or NA)
+#'   }
+#' @export
+parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list()) {
+  strategy <- match.arg(strategy)
+
+  # Handle empty path params
+  if (is.na(path_params_str) || path_params_str == "" || nchar(trimws(path_params_str)) == 0) {
+    return(list(
+      fn_signature = "query",
+      path_params_call = "",
+      has_path_params = FALSE,
+      param_docs = "",
+      primary_param = "query",
+      primary_example = NA
+    ))
+  }
+
+  # Split into individual parameters
+  param_vec <- strsplit(path_params_str, ",")[[1]]
+  param_vec <- trimws(param_vec)
+  param_vec <- param_vec[nzchar(param_vec)]
+
+  if (length(param_vec) == 0) {
+    return(list(
+      fn_signature = "query",
+      path_params_call = "",
+      has_path_params = FALSE,
+      param_docs = "",
+      primary_param = "query",
+      primary_example = NA
+    ))
+  }
+
+  # First parameter becomes 'query', rest are path_params
+  primary_param <- param_vec[1]
+  additional_params <- if (length(param_vec) > 1) param_vec[-1] else character(0)
+
+  # Build function signature
+  if (length(additional_params) > 0) {
+    fn_signature <- paste0(
+      primary_param, ", ",
+      paste(additional_params, "= NULL", collapse = ", ")
+    )
+  } else {
+    fn_signature <- primary_param
+  }
+
+  # Extract primary parameter example
+  primary_example <- NA
+  if (!is.null(metadata[[primary_param]]) && !is.null(metadata[[primary_param]]$example)) {
+    primary_example <- metadata[[primary_param]]$example
+  }
+
+  # Build param_docs from metadata
+  param_docs <- ""
+  all_params <- c(primary_param, additional_params)
+  doc_lines <- character(0)
+  for (p in all_params) {
+    if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
+      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+    } else {
+      # Generic description if none provided
+      if (p == primary_param) {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Primary query parameter"))
+      } else {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
+      }
+    }
+  }
+  if (length(doc_lines) > 0) {
+    param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
+  }
+
+  # Build path_params call
+  if (length(additional_params) > 0) {
+    if (strategy == "extra_params") {
+      # For generic_request
+      path_params_call <- paste0(
+        ",\n    path_params = c(",
+        paste(additional_params, "=", additional_params, collapse = ", "),
+        ")"
+      )
+    } else {
+      # For generic_chemi_request (doesn't support path_params yet, but keeping consistent)
+      path_params_call <- paste0(
+        ",\n    path_params = c(",
+        paste(additional_params, "=", additional_params, collapse = ", "),
+        ")"
+      )
+    }
+  } else {
+    path_params_call <- ""
+  }
+
+  list(
+    fn_signature = fn_signature,
+    path_params_call = path_params_call,
+    has_path_params = length(additional_params) > 0,
+    param_docs = param_docs,
+    primary_param = primary_param,
+    primary_example = primary_example
+  )
+}
+
 #' Build a single function stub from components
 #'
 #' Generates R function source code with roxygen documentation using configuration.
@@ -492,11 +674,12 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 #' @param method HTTP method (GET, POST, etc.).
 #' @param title Function title for documentation.
 #' @param batch_limit Batching configuration (NULL, 0, 1, or integer).
-#' @param param_info List from parse_function_params().
+#' @param path_param_info List from parse_path_parameters() containing primary and additional path params.
+#' @param query_param_info List from parse_function_params() containing query string parameters.
 #' @param config Configuration list specifying template behavior.
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, param_info, config) {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, config) {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -507,43 +690,84 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, param_
   example_query <- config$example_query %||% "DTXSID7020182"
   lifecycle_badge <- config$lifecycle_badge %||% "experimental"
 
-  # Build roxygen header
+  # Determine the primary parameter name from path_param_info
+  primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
+  primary_param <- trimws(primary_param)
+
+  # Build combined function signature
+  # Start with path parameters (which includes the primary param)
+  fn_signature <- path_param_info$fn_signature
+
+  # Add query parameters if they exist
+  if (isTRUE(query_param_info$has_params)) {
+    # Remove "query" from query_param_info signature since path params already provide parameters
+    query_sig <- query_param_info$fn_signature
+    # Remove leading "query, " if present
+    query_sig <- sub("^query,\\s*", "", query_sig)
+    if (nzchar(query_sig)) {
+      fn_signature <- paste0(fn_signature, ", ", query_sig)
+    }
+  }
+
+  # Build combined parameter calls
+  combined_calls <- ""
+  if (isTRUE(path_param_info$has_path_params)) {
+    combined_calls <- paste0(combined_calls, path_param_info$path_params_call)
+  }
+  if (isTRUE(query_param_info$has_params)) {
+    combined_calls <- paste0(combined_calls, query_param_info$params_call)
+  }
+
+  # Determine example value to use in documentation
+  # Prefer actual example from schema, fall back to config default
+  example_value <- example_query  # default from config
+  if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
+    # Format example value appropriately (add quotes for strings)
+    if (is.character(path_param_info$primary_example)) {
+      example_value <- path_param_info$primary_example
+    } else {
+      example_value <- as.character(path_param_info$primary_example)
+    }
+  }
+
+  # Build roxygen header with parameter descriptions from metadata
   roxygen_header <- glue::glue('
 #\' {title}
 #\'
 #\' @description
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
-#\' @param query A single DTXSID (in quotes) or a list to be queried
-{param_info$param_docs}#\' @return Returns a tibble with results
+{path_param_info$param_docs}{query_param_info$param_docs}#\' @return Returns a tibble with results
 #\' @export
 #\'
 #\' @examples
 #\' \\dontrun{{
-#\' {fn}(query = "{example_query}")
+#\' {fn}({primary_param} = "{example_value}")
 #\' }}')
 
-  # Build function body based on whether we have params
-  if (isTRUE(param_info$has_params)) {
+  # Build function body based on whether we have additional params
+  has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
+
+  if (has_additional_params) {
     # Strategy-specific body construction
     if (wrapper_fn == "generic_request") {
       # CT style: pass parameters directly via ellipsis
       fn_body <- glue::glue('
-{fn} <- function({param_info$fn_signature}) {{
+{fn} <- function({fn_signature}) {{
   generic_request(
-    query = query,
+    query = {primary_param},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{param_info$params_call}
+    batch_limit = {batch_limit_code}{combined_calls}
   )
 }}')
     } else if (wrapper_fn == "generic_chemi_request") {
       # Chemi style: use options list
       fn_body <- glue::glue('
-{fn} <- function({param_info$fn_signature}) {{
-{param_info$params_code}generic_chemi_request(
-    query = query,
-    endpoint = "{endpoint}"{param_info$params_call}
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}generic_chemi_request(
+    query = {primary_param},
+    endpoint = "{endpoint}"{combined_calls}
   )
 }}')
     } else {
@@ -553,9 +777,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, param_
     # No extra params: simple call
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
-{fn} <- function(query) {{
+{fn} <- function({primary_param}) {{
   generic_request(
-    query = query,
+    query = {primary_param},
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {batch_limit_code}
@@ -563,9 +787,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, param_
 }}')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
-{fn} <- function(query) {{
+{fn} <- function({primary_param}) {{
   generic_chemi_request(
-    query = query,
+    query = {primary_param},
     endpoint = "{endpoint}",
     server = "chemi_burl",
     auth = FALSE
@@ -577,7 +801,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, param_
   }
 
   # Combine header and body
-  paste0(roxygen_header, fn_body, "\n\n")
+  paste0(roxygen_header,"\n", fn_body, "\n\n")
 }
 
 #' Render R function stubs from endpoint specification
@@ -615,9 +839,18 @@ render_endpoint_stubs <- function(spec,
     ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      param_info = list(parse_function_params(
-        if ("params" %in% names(.)) params else "",
-        strategy = param_strategy
+      # Parse path parameters (primary param + additional path params)
+      # Note: In rowwise context, list columns are already unwrapped, so access directly
+      path_param_info = list(parse_path_parameters(
+        if ("path_params" %in% names(.)) path_params else "",
+        strategy = param_strategy,
+        metadata = if ("path_param_metadata" %in% names(.) && is.list(path_param_metadata)) path_param_metadata else list()
+      )),
+      # Parse query parameters (optional query string params)
+      query_param_info = list(parse_function_params(
+        if ("query_params" %in% names(.)) query_params else "",
+        strategy = param_strategy,
+        metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list()
       ))
     ) %>%
     dplyr::ungroup() %>%
@@ -629,20 +862,21 @@ render_endpoint_stubs <- function(spec,
           method = method,
           title = title,
           batch_limit = batch_limit,
-          param_info = param_info
+          path_param_info = path_param_info,
+          query_param_info = query_param_info
         ),
-        function(fn, endpoint, method, title, batch_limit, param_info) {
+        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info) {
           build_function_stub(
             fn = fn,
             endpoint = endpoint,
             method = method,
             title = title,
             batch_limit = batch_limit,
-            param_info = param_info,
+            path_param_info = path_param_info,
+            query_param_info = query_param_info,
             config = config
           )
         }
       )
-    ) %>%
-    dplyr::select(-param_info)  # Remove temporary column
+    )
 }

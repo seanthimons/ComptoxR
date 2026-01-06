@@ -85,7 +85,10 @@ chemi_endpoints <- map(
       str_replace_all(., pattern = "\\s", replacement = "_"),
 
     # Build full file name with prefix
-    file = paste0("chemi_", domain, "_", file, ".R")
+    file = paste0("chemi_", domain, "_", file, ".R"),
+
+    # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
+    batch_limit = NULL
   ) %>%
   # Sort by domain, route, method (POST before GET)
   arrange(
@@ -130,7 +133,11 @@ chemi_spec_with_text <- render_endpoint_stubs(
 
 # ! BUILD ----
 # Uncomment to generate files:
-# scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+scaffold_result <- scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+
+# Inspect results (which files were created/skipped/errored):
+scaffold_result %>% filter(action == "skipped")  # Files that already existed
+scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 # ==============================================================================
 # Cleanup

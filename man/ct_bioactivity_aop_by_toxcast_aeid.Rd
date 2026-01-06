@@ -4,10 +4,10 @@
 \alias{ct_bioactivity_aop_by_toxcast_aeid}
 \title{Get AOP data by ToxCast AEID}
 \usage{
-ct_bioactivity_aop_by_toxcast_aeid(query)
+ct_bioactivity_aop_by_toxcast_aeid(toxcastAeid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{toxcastAeid}{ToxCast AEID}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_bioactivity_aop_by_toxcast_aeid(query = "DTXSID7020182")
+ct_bioactivity_aop_by_toxcast_aeid(toxcastAeid = "63")
 }
 }

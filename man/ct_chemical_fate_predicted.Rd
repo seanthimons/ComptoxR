@@ -4,10 +4,10 @@
 \alias{ct_chemical_fate_predicted}
 \title{Get predicted fate summary by DTXSID and property}
 \usage{
-ct_chemical_fate_predicted(query, propName = NULL)
+ct_chemical_fate_predicted(query, dtxsid = NULL, propName = NULL)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{Optional parameter}
 
 \item{propName}{Optional parameter}
 }

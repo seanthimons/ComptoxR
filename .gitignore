@@ -36,6 +36,7 @@ rsconnect/
 .Rproj.user
 
 .*/
+lib/
 
 global_assays.xlsx
 global_assay.xlsx

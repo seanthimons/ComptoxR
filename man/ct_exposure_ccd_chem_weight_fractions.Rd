@@ -4,10 +4,10 @@
 \alias{ct_exposure_ccd_chem_weight_fractions}
 \title{Get Chemical Weight Fractions data by DTXSID}
 \usage{
-ct_exposure_ccd_chem_weight_fractions(query)
+ct_exposure_ccd_chem_weight_fractions(dtxsid)
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{dtxsid}{DSSTox Substance Identifier}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_exposure_ccd_chem_weight_fractions(query = "DTXSID7020182")
+ct_exposure_ccd_chem_weight_fractions(dtxsid = "DTXSID0020232")
 }
 }
