@@ -10,7 +10,7 @@ ct_chemical_file_image_by_dtxcid(dtxcid)
 \item{dtxcid}{DSSTox Compound Identifier}
 }
 \value{
-Returns a tibble with results
+Returns image data (raw bytes or magick image object)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

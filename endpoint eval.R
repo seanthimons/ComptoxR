@@ -83,9 +83,13 @@ endpoints <- map(
     # Build full file name with prefix
     file = paste0("ct_", domain, "_", file, ".R"),
 
-    # Set batch_limit: 1 for GET (single item), NULL for POST (bulk)
+    # Set batch_limit:
+    # - GET with path params: 1 (single item appended to path)
+    # - GET without path params: 0 (static endpoint, params go in query string)
+    # - POST: NULL (bulk, uses default batching)
     batch_limit = case_when(
-      method == 'GET' ~ 1,
+      method == 'GET' & num_path_params > 0 ~ 1,
+      method == 'GET' & num_path_params == 0 ~ 0,
       .default = NULL
     )
   ) %>%

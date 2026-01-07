@@ -3,21 +3,21 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param dtxsid Optional parameter
+#' @param dtxsid Required parameter
 #' @param propName Optional parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_property(query = "DTXSID7020182")
+#' ct_chemical_property(dtxsid = "DTXSID7020182")
 #' }
-ct_chemical_property <- function(query, dtxsid = NULL, propName = NULL) {
+ct_chemical_property <- function(dtxsid, propName = NULL) {
   generic_request(
-    query = query,
+    query = NULL,
     endpoint = "chemical/property/summary/search/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = 0,
     dtxsid = dtxsid,
     propName = propName
   )

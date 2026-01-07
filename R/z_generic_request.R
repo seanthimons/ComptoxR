@@ -474,3 +474,89 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
 
   return(res)
 }
+
+#' Generic Search API Request Function
+#'
+#' Specialized template for the cheminformatics search endpoint which uses a
+#' different payload structure: \code{{"inputType", "searchType", "params", "query"}}
+#'
+#' @param search_type The search type (e.g., "EXACT", "SIMILAR", "MASS", "HAZARD", "FEATURES").
+#' @param input_type The input format type. Defaults to "MOL".
+#' @param query The query string (typically a MOL file string). Can be NULL for mass searches.
+#' @param params A named list of additional search parameters.
+#' @param endpoint The API endpoint path. Defaults to "search".
+#' @param server Environment variable name for base URL. Defaults to "chemi_burl".
+#' @param tidy Boolean; whether to return raw response body or just pass through. Defaults to TRUE.
+#'
+#' @return The parsed JSON response body (list structure).
+#' @keywords internal
+generic_search_request <- function(
+    search_type,
+    input_type = "MOL",
+    query = NULL,
+    params = list(),
+    endpoint = "search",
+    server = "chemi_burl",
+    tidy = TRUE
+) {
+  # 1. Base URL Resolution
+  base_url <- Sys.getenv(server, unset = server)
+  if (base_url == "") base_url <- server
+
+  # 2. Payload Construction
+  payload <- list(
+    inputType = input_type,
+    searchType = search_type,
+    params = params
+  )
+
+  # Only include query if not NULL
+  if (!is.null(query)) {
+    payload$query <- query
+  }
+
+  # Remove NULL params
+  payload$params <- purrr::compact(payload$params)
+
+  # Check environment flags
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste("Generic Search Request:", search_type))
+    cli::cli_dl(c(
+      "Input type" = input_type,
+      "Search type" = search_type,
+      "Params count" = length(payload$params)
+    ))
+    cli::cli_rule()
+  }
+
+  # 3. Request building
+  req <- httr2::request(base_url) |>
+    httr2::req_url_path_append(endpoint) |>
+    httr2::req_method("POST") |>
+    httr2::req_body_json(payload) |>
+    httr2::req_headers(
+      Accept = "application/json",
+      `Content-Type` = "application/json"
+    )
+
+  # 4. Debugging
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  # 5. Execution
+  resp <- httr2::req_perform(req)
+
+  # 6. Response Processing
+  status <- httr2::resp_status(resp)
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("Search API request failed with status {status}")
+  }
+
+  body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  return(body)
+}
