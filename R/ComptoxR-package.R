@@ -13,8 +13,6 @@ NULL
 
 #' @import dplyr
 NULL
-#' @import httr
-NULL
 #' @import httr2
 NULL
 #' @import cli

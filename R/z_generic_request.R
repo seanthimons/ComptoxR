@@ -19,15 +19,23 @@
 #'        Used for endpoints with multiple path parameters (e.g., property range searches).
 #'        These are appended after the primary query parameter in the order provided.
 #'        Cannot be used with batching (batch_limit > 1).
+#' @param content_type Expected response content type. Defaults to "application/json".
+#'        Supported types:
+#'        - "application/json": Parses response as JSON (default behavior)
+#'        - "text/plain": Returns response as character string
+#'        - "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
 #'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
 #'        - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
 #'
-#' @return A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
-#'         If no results are found, returns an empty tibble or empty list.
+#' @return Depends on content_type:
+#'         - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+#'         - text/plain: A character string.
+#'         - image/*: Raw bytes, or a magick image object if the magick package is available.
+#'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
-generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, ...) {
+generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -110,7 +118,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       req <- httr2::request(base_url) %>%
         httr2::req_url_path_append(endpoint) %>%
         httr2::req_headers(
-          Accept = "application/json"
+          Accept = content_type
         )
 
       if (auth) {
@@ -193,13 +201,78 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   }
 
   # --- 7. Response Processing ---
-  # Extract JSON bodies and handle HTTP errors gracefully.
+
+  # Determine response type from content_type parameter
+
+  is_image <- grepl("^image/", content_type)
+  is_text <- grepl("^text/plain", content_type)
+  is_json <- !is_image && !is_text
+
+  # For non-JSON content types, we handle responses differently
+
+  if (is_image) {
+    # Image responses: return raw bytes or magick image
+    body_list <- resp_list %>%
+      purrr::map2(query_list, function(r, qp) {
+        if (inherits(r, "httr2_error")) r <- r$resp
+        if (!inherits(r, "httr2_response")) return(NULL)
+
+        status <- httr2::resp_status(r)
+        if (status < 200 || status >= 300) {
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          return(NULL)
+        }
+
+        raw_bytes <- httr2::resp_body_raw(r)
+
+        # Try to convert to magick image if package is available
+        if (requireNamespace("magick", quietly = TRUE)) {
+          tryCatch(
+            magick::image_read(raw_bytes),
+            error = function(e) raw_bytes
+          )
+        } else {
+          raw_bytes
+        }
+      })
+
+    # For single query, return the image directly (not as a list)
+    if (length(body_list) == 1) {
+      return(body_list[[1]])
+    }
+    return(body_list)
+  }
+
+  if (is_text) {
+    # Text responses: return as character string
+    body_list <- resp_list %>%
+      purrr::map2(query_list, function(r, qp) {
+        if (inherits(r, "httr2_error")) r <- r$resp
+        if (!inherits(r, "httr2_response")) return(NULL)
+
+        status <- httr2::resp_status(r)
+        if (status < 200 || status >= 300) {
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          return(NULL)
+        }
+
+        httr2::resp_body_string(r)
+      })
+
+    # For single query, return the string directly
+    if (length(body_list) == 1) {
+      return(body_list[[1]])
+    }
+    return(body_list)
+  }
+
+  # JSON responses (default): Extract JSON bodies and handle HTTP errors gracefully.
   body_list <- resp_list %>%
     purrr::map2(query_list, function(r, qp) {
       # Handle potential httr2 error objects
       if (inherits(r, "httr2_error")) r <- r$resp
       if (!inherits(r, "httr2_response")) return(NULL)
-      
+
       status <- httr2::resp_status(r)
       if (status < 200 || status >= 300) {
         cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
@@ -207,13 +280,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       }
 
       body <- httr2::resp_body_json(r)
-      
+
       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
       if (length(qp) == 1 && is.list(body)) {
          # We add the query as a named attribute so it can be picked up during flattening
          attr(body, "query") <- qp[1]
       }
-      
+
       return(body)
     }) %>%
     # Flatten the list of responses (one list of data per batch) into one single list
