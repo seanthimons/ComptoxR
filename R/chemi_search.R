@@ -1,365 +1,180 @@
 #' Cheminformatics Search
 #'
-#' Searching function that interfaces with the Cheminformatics API. Sends POST request.
+#' Search the cheminformatics database using various search types including
+#' exact structure, substructure, similarity, mass, hazard, and feature searches.
 #'
-#' @param query Takes a list of variables (such as DTXSIDs, CASRN, names, etc.) to search by.
-#' @param coerce Boolean variable to coerce list to a data.frame. Defaults to `FALSE`.
-#' @param searchType string
-#' @param similarity_type string
-#' @param min_similarity string
-#' @param min_toxicity string
-#' @param min_auth string
-#' @param hazard_name string
-#' @param filter_results Boolean to restrict the data returned.
-#' @param filter_inc A list of feature subtypes to include. Searches by `AND` operation
-#' @param element_inc A vector of elements to include.
-#' @param element_exc A vector of elements to exclude, or the option of `ALL` to exclude every element EXCEPT the searched elements.
-#' @param mass_type string
-#' @param min_mass string
-#' @param max_mass string
-#' @param debug string
-#' @param ... string
+#' @param query Chemical identifier (DTXSID), SMILES string, or MOL file string.
+#'   Required for exact, substructure, and similar searches. Can be NULL for
+#'   mass, hazard, and features searches.
+#' @param search_type Type of search to perform. One of:
+#'   \itemize{
+#'     \item \code{"exact"} - Exact structure match
+#'     \item \code{"substructure"} - Substructure search
+#'     \item \code{"similar"} - Similarity search
+#'     \item \code{"mass"} - Mass-based search
+#'     \item \code{"hazard"} - Hazard-based search
+#'     \item \code{"features"} - Feature-based search
+#'   }
+#' @param similarity_type Similarity metric for similar searches. One of
+#'   \code{"tanimoto"} (default), \code{"euclid"}, or \code{"tversky"}.
+#' @param min_similarity Minimum similarity threshold (0-1). Defaults to 0.85.
+#' @param hazard_name Hazard endpoint name for hazard searches. Use short names:
+#'   \code{"acute_oral"}, \code{"acute_inhal"}, \code{"acute_dermal"},
+#'   \code{"cancer"}, \code{"geno"}, \code{"endo"}, \code{"reprod"},
+#'   \code{"develop"}, \code{"neuro_single"}, \code{"neuro_repeat"},
+#'   \code{"sys_single"}, \code{"sys_repeat"}, \code{"skin_sens"},
+#'   \code{"skin_irr"}, \code{"eye"}, \code{"aq_acute"}, \code{"aq_chron"},
+#'   \code{"persis"}, \code{"bioacc"}, \code{"expo"}.
+#' @param min_toxicity Minimum toxicity level for hazard searches.
+#'   One of \code{"VH"} (Very High), \code{"H"} (High), \code{"M"} (Medium),
+#'   \code{"L"} (Low), or \code{"A"} (Any).
+#' @param min_authority Minimum data authority level for hazard searches.
+#'   One of \code{"auth"} (Authoritative), \code{"screen"} (Screening),
+#'   or \code{"qsar"} (QSAR).
+#' @param mass_type Type of mass for mass searches. One of \code{"mono"}
+#'   (monoisotopic mass), \code{"mw"} (molecular weight), or \code{"abu"}
+#'   (most abundant mass).
+#' @param min_mass Minimum mass value for mass searches.
+#' @param max_mass Maximum mass value for mass searches.
+#' @param filter_features Logical; whether to apply feature filters. Defaults to FALSE.
+#' @param feature_filters Named logical vector of feature filters to apply when
+#'   \code{filter_features = TRUE}. Valid filter names: \code{"stereo"},
+#'   \code{"chiral"}, \code{"isotopes"}, \code{"charged"}, \code{"multicomponent"},
+#'   \code{"radicals"}, \code{"salts"}, \code{"polymers"}, \code{"sgroups"}.
+#' @param element_include Character vector of element symbols to include in results.
+#' @param element_exclude Character vector of element symbols to exclude from results.
+#' @param exclude_all_others Logical; if TRUE, excludes all elements except those
+#'   in \code{element_include}. Defaults to FALSE.
+#' @param limit Maximum number of results to return. Defaults to 50.
 #'
-#' @return A dataframe
+#' @return A tibble containing search results with columns depending on search type.
+#'   For similarity searches, includes a \code{relationship} column indicating
+#'   \code{"parent"} (query compound) or \code{"child"} (similar compound).
+#'
 #' @export
-
+#'
+#' @examples
+#' \dontrun{
+#' # Exact search by DTXSID
+#' chemi_search("DTXSID7020182", "exact")
+#'
+#' # Similarity search with custom threshold
+#' chemi_search("DTXSID7020182", "similar", min_similarity = 0.9)
+#'
+#' # Mass range search
+#' chemi_search(
+#'   query = NULL,
+#'   search_type = "mass",
+#'   mass_type = "mono",
+#'   min_mass = 100,
+#'   max_mass = 200
+#' )
+#'
+#' # Hazard search for carcinogenicity
+#' chemi_search(
+#'   query = NULL,
+#'   search_type = "hazard",
+#'   hazard_name = "cancer",
+#'   min_toxicity = "H",
+#'   min_authority = "auth"
+#' )
+#'
+#' # Feature search with element filtering
+#' chemi_search(
+#'   query = NULL,
+#'   search_type = "features",
+#'   element_include = c("C", "N", "O"),
+#'   exclude_all_others = TRUE,
+#'   limit = 100
+#' )
+#' }
 chemi_search <- function(
-	query,
-	searchType = c(
-		"exact",
-		"substruture",
-		"similar",
-		"mass",
-		"hazard",
-		"features"
-	),
-	similarity_type = c("tanimoto", "euclid", "tversky"),
-	min_similarity = NULL,
-	min_toxicity = c("VH", "H", "M", "L", "A"),
-	min_auth = c("auth", "screen", "qsar"),
-	hazard_name = c(
-		"acute_oral",
-		"acute_inhal",
-		"acute_dermal",
-		"cancer",
-		"geno",
-		"endo",
-		"reprod",
-		"develop",
-		"neuro_single",
-		"neuro_repeat",
-		"sys_single",
-		"sys_repeat",
-		"skin_sens",
-		"skin_irr",
-		"eye",
-		"aq_acute",
-		"aq_chron",
-		"persis",
-		"bioacc",
-		"expo"
-	),
-	filter_results = FALSE,
-	filter_inc = list(
-		"stereo",
-		"chiral",
-		"isotopes",
-		"charged",
-		"multicomponent",
-		"radicals",
-		"salts",
-		"polymers",
-		"sgroups"
-	),
-	element_inc = NULL,
-	element_exc = NULL,
-	mass_type = c("mono", "mw", "abu"),
-	min_mass = NULL,
-	max_mass = NULL,
-	debug = F,
-	...
+    query = NULL,
+    search_type = c("exact", "substructure", "similar", "mass", "hazard", "features"),
+    similarity_type = c("tanimoto", "euclid", "tversky"),
+    min_similarity = 0.85,
+    hazard_name = NULL,
+    min_toxicity = c("VH", "H", "M", "L", "A"),
+    min_authority = c("auth", "screen", "qsar"),
+    mass_type = c("mono", "mw", "abu"),
+    min_mass = NULL,
+    max_mass = NULL,
+    filter_features = FALSE,
+    feature_filters = NULL,
+    element_include = NULL,
+    element_exclude = NULL,
+    exclude_all_others = FALSE,
+    limit = 50
 ) {
-	# searchType --------------------------------------------------------------
+  # 1. Match and validate arguments
+  search_type <- match.arg(search_type)
+  similarity_type <- match.arg(similarity_type)
 
-	if (missing(searchType) | is.null(searchType) | length(searchType) > 1) {
-		cli_abort("Invalid searchType!")
-	} else {
-		searchType <- case_when(
-			searchType == "exact" ~ "EXACT",
-			searchType == "substructure" ~ "SUBSTRUCTURE",
-			searchType == "similar" ~ "SIMILAR",
-			searchType == "toxprints" ~ "TOXPRINTS",
-			searchType == "hazard" ~ "HAZARD",
-			searchType == "mass" ~ "MASS",
-			searchType == "features" ~ "FEATURES"
-		)
-	}
+  # Only match these if they're single values (not using defaults)
+  if (!missing(min_toxicity) && length(min_toxicity) == 1) {
+    min_toxicity <- match.arg(min_toxicity)
+  } else {
+    min_toxicity <- NULL
+  }
 
-	# query -------------------------------------------------------------------
+  if (!missing(min_authority) && length(min_authority) == 1) {
+    min_authority <- match.arg(min_authority)
+  } else {
+    min_authority <- NULL
+  }
 
-	if (missing(query) == TRUE) {
-		query <- NULL
-	}
+  if (!missing(mass_type) && length(mass_type) == 1) {
+    mass_type <- match.arg(mass_type)
+  } else {
+    mass_type <- NULL
+  }
 
-	query_string <- query
+  # 2. Validate inputs
+  validate_search_inputs(
+    search_type = search_type,
+    query = query,
+    hazard_name = hazard_name,
+    min_similarity = min_similarity
+  )
 
-	if (searchType %in% c("HAZARD", "FEATURES")) {
-		mass_type <- "mono" # seems to be always needed?
-		query <- "\n  Ketcher  4112412132D 1   1.00000     0.00000     0\n\n  0  0  0     0  0            999 V2000\nM  END\n"
-	} else {
-		if (searchType %in% c("MASS")) {
-			query <- NULL
-		} else {
-				if(as.logical(Sys.getenv('run_verbose'))){
-					cli_alert_info(paste0("Grabbing MOL file for {query}"))
-				}
-		}
-		query <- ct_file(query = query)
-		#mass_type <- "mono" # seems to be always needed?
-		mass_type <- NULL
-	}
+  # 3. Get MOL representation for the query
+  mol_query <- get_mol_for_search(query, search_type)
 
-	# records -----------------------------------------------------------------
+  # 4. Build search parameters
+  params <- build_search_params(
+    search_type = search_type,
+    similarity_type = similarity_type,
+    min_similarity = min_similarity,
+    hazard_name = hazard_name,
+    min_toxicity = min_toxicity,
+    min_authority = min_authority,
+    mass_type = mass_type,
+    min_mass = min_mass,
+    max_mass = max_mass,
+    filter_features = filter_features,
+    feature_filters = feature_filters,
+    element_include = element_include,
+    element_exclude = element_exclude,
+    exclude_all_others = exclude_all_others,
+    limit = limit
+  )
 
-	records <- 51L
+  # 5. Verbose payload display
+  if (as.logical(Sys.getenv("run_verbose", "FALSE"))) {
+    cli::cli_text("\n")
+    cli::cli_rule(left = "Payload options")
+    cli::cli_dl(c(list("Search type" = search_type), params))
+    cli::cli_rule()
+  }
 
-	# similarity --------------------------------------------------------------
+  # 6. Make the API request
+  response <- generic_search_request(
+    search_type = .search_type_map[search_type],
+    input_type = "MOL",
+    query = mol_query,
+    params = params
+  )
 
-	if (missing(similarity_type)) {
-		similarity_type <- "tanimoto"
-	}
-
-	similarity_type <-
-		case_when(
-			similarity_type == "tanimoto" ~ "tanimoto",
-			similarity_type == "euclid" ~ "euclid-sub",
-			similarity_type == "tversky" ~ "tversky",
-		)
-
-	min_sim <- if (is.null(min_similarity)) {
-		0.85
-	} else {
-		min_sim <- as.numeric(min_similarity)
-		if(min_sim < 0 | min_sim > 1) {
-			cli_abort("Minimum similarity must be between 0 and 1!")
-		} else {
-			min_sim
-		}
-	}
-
-	# mass --------------------------------------------------------------------
-
-	if (searchType == "mass" & length(mass_type) > 1) {
-		cli_abort("Missing mass search type!")
-	} else {
-		mass_type <- case_when(
-			mass_type == "mono" ~ "monoisotopic-mass",
-			mass_type == "mw" ~ "moleculuar-weight",
-			mass_type == "abu" ~ "most-abundant-mass",
-			.default = NULL
-		)
-	}
-
-	# toxicity ----------------------------------------------------------------
-
-	min_toxicity <-
-		if (missing(min_toxicity) | is.null(min_toxicity)) {
-			NULL
-		} else {
-			match.arg(min_toxicity, c("VH", "H", "M", "L", "A"))
-		}
-
-	# auth --------------------------------------------------------------------
-
-	if (length(min_auth) > 1) {
-		min_auth <- NULL
-	} else {
-		min_auth <- case_when(
-			min_auth == "auth" ~ "Authoritative",
-			min_auth == "screen" ~ "Screening",
-			min_auth == "qsar" ~ "QSAR"
-		)
-	}
-
-	# hazard endpoint ---------------------------------------------------------
-
-	if (missing(hazard_name)) {
-		hazard_name <- NULL
-	}
-
-	hazard_name <-
-		case_when(
-			hazard_name == "acute_oral" ~ "Acute Mammalian Toxicity Oral",
-			hazard_name == "acute_inhal" ~ "Acute Mammalian Toxicity Inhalation",
-			hazard_name == "acute_dermal" ~ "Acute Mammalian Toxicity Dermal",
-			hazard_name == "cancer" ~ "Carcinogenicity",
-			hazard_name == "geno" ~ "Genotoxicity Mutagenicity",
-			hazard_name == "endo" ~ "Endocrine Disruption",
-			hazard_name == "reprod" ~ "Reproductive",
-			hazard_name == "develop" ~ "Developmental",
-			hazard_name == "neuro_single" ~ "Neurotoxicity	",
-			hazard_name == "neuro_repeat" ~ "Neurotoxicity Repeat Exposure",
-			hazard_name == "sys_single" ~ "Systemic Toxicity Single Exposure",
-			hazard_name == "sys_repeat" ~ "Systemic Toxicity Repeat Exposure",
-			hazard_name == "skin_sens" ~ "Skin Sensitization",
-			hazard_name == "skin_irr" ~ "Skin Irritation",
-			hazard_name == "eye" ~ "Eye Irritation",
-			hazard_name == "aq_acute" ~ "Acute Aquatic Toxicity",
-			hazard_name == "aq_chron" ~ "Chronic Aquatic Toxicity",
-			hazard_name == "persis" ~ "Persistence",
-			hazard_name == "bioacc" ~ "Bioaccumulation",
-			hazard_name == "expo" ~ "Exposure"
-		)
-
-	# features -----------------------------------------------------------------
-
-	if (searchType == 'FEATURES' & filter_results == FALSE) {
-		cli_alert_warning('WARNING: Missing feature filters!')
-		filt_list <- list(NULL)
-	}
-
-	if (filter_results == FALSE & searchType != 'FEATURES') {
-		# cli_alert('No filter')
-		filt_list <- list(NULL)
-	} else {
-		if (searchType == 'FEATURES' & filter_results == TRUE) {
-			# cli_alert('Filtering')
-			filt_list <- list(
-				"charged",
-				"chiral",
-				"isotopes",
-				"multicomponent",
-				"polymers",
-				"radicals",
-				"salts",
-				"sgroups",
-				"stereo"
-			)
-
-			filt_list <- map(filter_inc, ~ is.element(., filt_list)) %>%
-				set_names(., ~ paste0("filter-", filter_inc))
-		}
-	}
-
-	# elements ----------------------------------------------------------------
-	## include ----------------------------------------------------------------
-
-	if (!is.null(element_inc)) {
-		element_inc_orig <- element_inc
-		element_inc <- paste(element_inc, collapse = ",")
-	}
-	## exclude ----------------------------------------------------------------
-
-	if (is.null(element_exc)) {
-		#print('No exlusion')
-		element_exc <- NULL
-	} else {
-		if (is.character(element_exc) & element_exc != 'ALL') {
-			# print(element_exc)
-			element_exc <- paste(element_exc, collapse = " ,")
-		} else {
-			if (element_exc == 'ALL') {
-				# ! TODO Re-add the elements; seems to be broken here. Validate the upper limit for the elements
-
-				#print("Exlude all")
-				element_exc <- ComptoxR::pt$elements %>%
-					filter(., !c(Symbol %in% element_inc_orig)) %>%
-					filter(., as.numeric(Number) <= 103) %>%
-					select(Symbol) %>%
-					unique() %>%
-					unlist() %>%
-					sort() %>%
-					paste0(., collapse = ", ")
-				#print(element_exc)
-			}
-		}
-	}
-
-	# payload -----------------------------------------------------------------
-
-	params <- list(
-		`limit` = 50,
-		`similarity-type` = similarity_type,
-		`min-similarity` = min_sim,
-		`min-toxicity` = min_toxicity,
-		`min-authority` = min_auth,
-		`hazard-name` = hazard_name,
-		`include-elements` = element_inc,
-		`exclude-elements` = element_exc,
-		`mass-type` = mass_type,
-		`min-mass` = min_mass,
-		`max-mass` = max_mass
-	) %>%
-		append(filt_list) %>%
-		compact()
-
-	payload <- list(
-		"inputType" = "MOL",
-		"searchType" = searchType,
-		"params" = params,
-		"query" = query
-	) %>%
-		compact()
-
-	# payload alert -----------------------------------------------------------
-
-	if (as.logical(Sys.getenv('run_verbose'))) {
-		cli_text('\n')
-		cli_rule(left = "Payload options")
-		# Display a formatted list of all search parameters by combining
-		# the searchType with the contents of the params list.
-		cli_dl(c(list("Search type" = searchType), params))
-		cli_rule()
-	}
-
-	# request -----------------------------------------------------------------
-
-	response <- POST(
-		url = paste0(Sys.getenv("chemi_burl"), "/search"),
-		body = payload,
-		content_type("application/json"),
-		#accept("*/*"),
-		encode = "json",
-		progress()
-	)
-
-	# debug -------------------------------------------------------------------
-
-	if (as.logical(Sys.getenv('run_debug'))) {
-		data <- list()
-		data$payload <- payload
-		data$response <- response
-		data$content <- df
-
-		return(data)
-	}
-
-	if (response$status_code == 200) {
-		df <- content(response, "text", encoding = "UTF-8") %>%
-			fromJSON(simplifyVector = FALSE)
-
-		trc <- df$totalRecordsCount
-
-		df <- df %>%
-			pluck(., 'records') %>%
-			map(., as_tibble) %>%
-			list_rbind()
-
-		if ('similarity' %in% colnames(df)) {
-			df <- df %>%
-				mutate(
-					relationship = case_when(
-						sid == query_string ~ 'parent',
-						.default = 'child'
-					)
-				)
-		} else {
-			df
-		}
-
-		cli_alert_success('{trc} compounds found!')
-		return(df)
-	} else {
-		cli_alert_danger("\nBad request at search!")
-	}
+  # 7. Process and return results
+  process_search_response(response, query)
 }

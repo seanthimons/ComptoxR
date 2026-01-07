@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param gsid Generic Substance Id
-#' @return Returns a tibble with results
+#' @return Returns image data (raw bytes or magick image object)
 #' @export
 #'
 #' @examples
@@ -16,7 +16,8 @@ ct_chemical_file_image_by_gsid <- function(gsid) {
     query = gsid,
     endpoint = "chemical/file/image/search/by-gsid/",
     method = "GET",
-    batch_limit = 1
+    batch_limit = 1,
+    content_type = "image/png"
   )
 }
 

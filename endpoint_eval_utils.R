@@ -493,19 +493,24 @@ scaffold_files <- function(
 #' @param strategy Parameter handling strategy: "extra_params" (for do.call with generic_request)
 #'   or "options" (for options list with generic_chemi_request).
 #' @param metadata Named list mapping parameter names to list(example, description).
-#' @return A list with: fn_signature, param_docs, params_code, params_call, has_params.
+#' @param has_path_params Logical; whether the endpoint has path parameters. If FALSE and
+#'   query params exist, the first query param becomes the primary parameter.
+#' @return A list with: fn_signature, param_docs, params_code, params_call, has_params,
+#'   primary_param (when query params are used as primary).
 #' @export
-parse_function_params <- function(params_str, strategy = c("extra_params", "options"), metadata = list()) {
+parse_function_params <- function(params_str, strategy = c("extra_params", "options"), metadata = list(), has_path_params = TRUE) {
   strategy <- match.arg(strategy)
 
   # Handle empty/NA params
   if (is.na(params_str) || params_str == "" || nchar(trimws(params_str)) == 0) {
     return(list(
-      fn_signature = "query",
+      fn_signature = "",
       param_docs = "",
       params_code = "",
       params_call = "",
-      has_params = FALSE
+      has_params = FALSE,
+      primary_param = NULL,
+      primary_example = NA
     ))
   }
 
@@ -516,16 +521,65 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 
   if (length(param_vec) == 0) {
     return(list(
-      fn_signature = "query",
+      fn_signature = "",
       param_docs = "",
       params_code = "",
       params_call = "",
-      has_params = FALSE
+      has_params = FALSE,
+      primary_param = NULL,
+      primary_example = NA
     ))
   }
 
-  # Generate function signature: query, param1 = NULL, param2 = NULL, ...
-  fn_signature <- paste0("query, ", paste(param_vec, "= NULL", collapse = ", "))
+  # When no path params, first query param becomes the primary (required) parameter
+  # Remaining query params are optional
+  if (!has_path_params) {
+    primary_param <- param_vec[1]
+    optional_params <- if (length(param_vec) > 1) param_vec[-1] else character(0)
+
+    # Extract primary parameter example from metadata
+    primary_example <- NA
+    if (!is.null(metadata[[primary_param]]) && !is.null(metadata[[primary_param]]$example)) {
+      primary_example <- metadata[[primary_param]]$example
+    }
+
+    # Build function signature: primary, optional1 = NULL, optional2 = NULL, ...
+    if (length(optional_params) > 0) {
+      fn_signature <- paste0(primary_param, ", ", paste(optional_params, "= NULL", collapse = ", "))
+    } else {
+      fn_signature <- primary_param
+    }
+
+    # Generate @param documentation
+    doc_lines <- character(0)
+    for (p in param_vec) {
+      if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+      } else if (p == primary_param) {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Required parameter"))
+      } else {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
+      }
+    }
+    param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
+
+    # Build params_call - all params go via ellipsis
+    params_call <- paste0(",\n    ", paste(param_vec, "=", param_vec, collapse = ",\n    "))
+
+    return(list(
+      fn_signature = fn_signature,
+      param_docs = param_docs,
+      params_code = "",
+      params_call = params_call,
+      has_params = TRUE,
+      primary_param = primary_param,
+      primary_example = primary_example
+    ))
+  }
+
+  # Standard case: path params exist, query params are all optional
+  # Generate function signature: param1 = NULL, param2 = NULL, ... (no "query" prefix)
+  fn_signature <- paste(param_vec, "= NULL", collapse = ", ")
 
   # Generate @param documentation lines using metadata if available
   doc_lines <- character(0)
@@ -588,14 +642,15 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list()) {
   strategy <- match.arg(strategy)
 
-  # Handle empty path params
+  # Handle empty path params - return empty signature
+  # Query params will drive the function signature when no path params exist
   if (is.na(path_params_str) || path_params_str == "" || nchar(trimws(path_params_str)) == 0) {
     return(list(
-      fn_signature = "query",
+      fn_signature = "",
       path_params_call = "",
       has_path_params = FALSE,
       param_docs = "",
-      primary_param = "query",
+      primary_param = NULL,
       primary_example = NA
     ))
   }
@@ -730,42 +785,54 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   example_query <- config$example_query %||% "DTXSID7020182"
   lifecycle_badge <- config$lifecycle_badge %||% "experimental"
 
-  # Determine the primary parameter name from path_param_info
-  primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
-  primary_param <- trimws(primary_param)
+  # Check if this is a query-only endpoint (no path params, batch_limit = 0)
+  is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
+                    isTRUE(query_param_info$has_params) &&
+                    !is.null(query_param_info$primary_param))
 
-  # Build combined function signature
-  # Start with path parameters (which includes the primary param)
-  fn_signature <- path_param_info$fn_signature
+  if (is_query_only) {
+    # Query-only endpoint: primary param comes from query params
+    primary_param <- query_param_info$primary_param
+    fn_signature <- query_param_info$fn_signature
+    combined_calls <- query_param_info$params_call
+    param_docs <- query_param_info$param_docs
 
-  # Add query parameters if they exist
-  if (isTRUE(query_param_info$has_params)) {
-    # Remove "query" from query_param_info signature since path params already provide parameters
-    query_sig <- query_param_info$fn_signature
-    # Remove leading "query, " if present
-    query_sig <- sub("^query,\\s*", "", query_sig)
-    if (nzchar(query_sig)) {
-      fn_signature <- paste0(fn_signature, ", ", query_sig)
+    # Example value from query param metadata
+    example_value <- example_query
+    if (!is.null(query_param_info$primary_example) && !is.na(query_param_info$primary_example)) {
+      example_value <- as.character(query_param_info$primary_example)
     }
-  }
+  } else {
+    # Standard case: primary param comes from path params
+    primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
+    primary_param <- trimws(primary_param)
 
-  # Build combined parameter calls
-  combined_calls <- ""
-  if (isTRUE(path_param_info$has_path_params)) {
-    combined_calls <- paste0(combined_calls, path_param_info$path_params_call)
-  }
-  if (isTRUE(query_param_info$has_params)) {
-    combined_calls <- paste0(combined_calls, query_param_info$params_call)
-  }
+    # Build combined function signature
+    # Start with path parameters (which includes the primary param)
+    fn_signature <- path_param_info$fn_signature
 
-  # Determine example value to use in documentation
-  # Prefer actual example from schema, fall back to config default
-  example_value <- example_query  # default from config
-  if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
-    # Format example value appropriately (add quotes for strings)
-    if (is.character(path_param_info$primary_example)) {
-      example_value <- path_param_info$primary_example
-    } else {
+    # Add query parameters if they exist
+    if (isTRUE(query_param_info$has_params)) {
+      query_sig <- query_param_info$fn_signature
+      if (nzchar(query_sig)) {
+        fn_signature <- paste0(fn_signature, ", ", query_sig)
+      }
+    }
+
+    # Build combined parameter calls
+    combined_calls <- ""
+    if (isTRUE(path_param_info$has_path_params)) {
+      combined_calls <- paste0(combined_calls, path_param_info$path_params_call)
+    }
+    if (isTRUE(query_param_info$has_params)) {
+      combined_calls <- paste0(combined_calls, query_param_info$params_call)
+    }
+
+    param_docs <- paste0(path_param_info$param_docs, query_param_info$param_docs)
+
+    # Determine example value from path param metadata
+    example_value <- example_query
+    if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
       example_value <- as.character(path_param_info$primary_example)
     }
   }
@@ -777,7 +844,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @description
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
-{path_param_info$param_docs}{query_param_info$param_docs}#\' @return {return_doc}
+{param_docs}#\' @return {return_doc}
 #\' @export
 #\'
 #\' @examples
@@ -785,13 +852,35 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' {fn}({primary_param} = "{example_value}")
 #\' }}')
 
-  # Build function body based on whether we have additional params
+  # Build function body based on endpoint type
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
 
-  if (has_additional_params) {
-    # Strategy-specific body construction
+  if (is_query_only) {
+    # Query-only endpoint: pass query = NULL, all params via ellipsis
     if (wrapper_fn == "generic_request") {
-      # CT style: pass parameters directly via ellipsis
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+  generic_request(
+    query = NULL,
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
+  )
+}}')
+    } else if (wrapper_fn == "generic_chemi_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}generic_chemi_request(
+    query = NULL,
+    endpoint = "{endpoint}"{combined_calls}
+  )
+}}')
+    } else {
+      stop("Unknown wrapper function: ", wrapper_fn)
+    }
+  } else if (has_additional_params) {
+    # Standard endpoint with path params and optional query params
+    if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
   generic_request(
@@ -802,7 +891,6 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   )
 }}')
     } else if (wrapper_fn == "generic_chemi_request") {
-      # Chemi style: use options list
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}generic_chemi_request(
@@ -814,7 +902,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       stop("Unknown wrapper function: ", wrapper_fn)
     }
   } else {
-    # No extra params: simple call
+    # No extra params: simple call with just primary param
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({primary_param}) {{
@@ -886,11 +974,13 @@ render_endpoint_stubs <- function(spec,
         strategy = param_strategy,
         metadata = if ("path_param_metadata" %in% names(.) && is.list(path_param_metadata)) path_param_metadata else list()
       )),
-      # Parse query parameters (optional query string params)
+      # Parse query parameters
+      # When no path params exist, first query param becomes the primary parameter
       query_param_info = list(parse_function_params(
         if ("query_params" %in% names(.)) query_params else "",
         strategy = param_strategy,
-        metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list()
+        metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list(),
+        has_path_params = (num_path_params > 0)
       ))
     ) %>%
     dplyr::ungroup() %>%
