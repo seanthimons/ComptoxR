@@ -13,6 +13,7 @@ generic_request(
   auth = TRUE,
   tidy = TRUE,
   path_params = NULL,
+  content_type = "application/json",
   ...
 )
 }
@@ -40,14 +41,23 @@ Used for endpoints with multiple path parameters (e.g., property range searches)
 These are appended after the primary query parameter in the order provided.
 Cannot be used with batching (batch_limit > 1).}
 
+\item{content_type}{Expected response content type. Defaults to "application/json".
+Supported types:
+- "application/json": Parses response as JSON (default behavior)
+- "text/plain": Returns response as character string
+- "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image}
+
 \item{...}{Additional parameters:
 - If method is "POST": Added as query parameters to the URL.
 - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
 - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.}
 }
 \value{
-A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
-If no results are found, returns an empty tibble or empty list.
+Depends on content_type:
+- JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+- text/plain: A character string.
+- image/*: Raw bytes, or a magick image object if the magick package is available.
+If no results are found, returns an empty tibble, empty list, or NULL.
 }
 \description{
 This is a centralized template function used by nearly all \verb{ct_*} functions

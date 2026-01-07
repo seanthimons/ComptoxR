@@ -323,6 +323,25 @@ openapi_to_spec <- function(
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
 
+      # Extract response content types
+      response_content_types <- character(0)
+      if (!is.null(op$responses)) {
+        # Look for successful responses (200, 201, etc.)
+        success_codes <- intersect(names(op$responses), c("200", "201", "202", "204", "default"))
+        for (code in success_codes) {
+          resp <- op$responses[[code]]
+          if (!is.null(resp$content) && is.list(resp$content)) {
+            response_content_types <- c(response_content_types, names(resp$content))
+          }
+        }
+      }
+      response_content_types <- unique(response_content_types)
+      content_type <- if (length(response_content_types) > 0) {
+        paste(response_content_types, collapse = ", ")
+      } else {
+        ""
+      }
+
       fn <- if (name_strategy == "operationId") sanitize_name(operationId) else sanitize_name(method_path_name(route, method))
 
       tibble::tibble(
@@ -337,7 +356,9 @@ openapi_to_spec <- function(
         num_path_params = length(path_names),
         # NEW: Parameter metadata with examples and descriptions
         path_param_metadata = list(path_meta),
-        query_param_metadata = list(query_meta)
+        query_param_metadata = list(query_meta),
+        # NEW: Response content type(s)
+        content_type = content_type
       )
     })
   })
@@ -676,14 +697,33 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 #' @param batch_limit Batching configuration (NULL, 0, 1, or integer).
 #' @param path_param_info List from parse_path_parameters() containing primary and additional path params.
 #' @param query_param_info List from parse_function_params() containing query string parameters.
+#' @param content_type Response content type(s) from OpenAPI spec (e.g., "application/json", "image/png").
 #' @param config Configuration list specifying template behavior.
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, config) {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, content_type, config) {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
   batch_limit_code <- if (is.null(batch_limit) || is.na(batch_limit)) "NULL" else as.character(batch_limit)
+
+  # Determine response type and return documentation based on content_type
+  content_type <- content_type %||% ""
+  is_image <- grepl("image/", content_type, fixed = TRUE)
+  is_text <- grepl("text/plain", content_type, fixed = TRUE)
+  is_json <- content_type == "" || grepl("application/json", content_type, fixed = TRUE)
+
+  # Set return type documentation
+  if (is_image) {
+    return_doc <- "Returns image data (raw bytes or magick image object)"
+    content_type_call <- paste0(',\n    content_type = "', content_type, '"')
+  } else if (is_text) {
+    return_doc <- "Returns a character string"
+    content_type_call <- ',\n    content_type = "text/plain"'
+  } else {
+    return_doc <- "Returns a tibble with results"
+    content_type_call <- ""
+  }
 
   # Extract config values
   wrapper_fn <- config$wrapper_function
@@ -737,7 +777,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @description
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
-{path_param_info$param_docs}{query_param_info$param_docs}#\' @return Returns a tibble with results
+{path_param_info$param_docs}{query_param_info$param_docs}#\' @return {return_doc}
 #\' @export
 #\'
 #\' @examples
@@ -758,7 +798,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {primary_param},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{combined_calls}
+    batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
   )
 }}')
     } else if (wrapper_fn == "generic_chemi_request") {
@@ -782,7 +822,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {primary_param},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}
+    batch_limit = {batch_limit_code}{content_type_call}
   )
 }}')
     } else if (wrapper_fn == "generic_chemi_request") {
@@ -863,9 +903,10 @@ render_endpoint_stubs <- function(spec,
           title = title,
           batch_limit = batch_limit,
           path_param_info = path_param_info,
-          query_param_info = query_param_info
+          query_param_info = query_param_info,
+          content_type = if ("content_type" %in% names(.)) content_type else ""
         ),
-        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info) {
+        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, content_type) {
           build_function_stub(
             fn = fn,
             endpoint = endpoint,
@@ -874,6 +915,7 @@ render_endpoint_stubs <- function(spec,
             batch_limit = batch_limit,
             path_param_info = path_param_info,
             query_param_info = query_param_info,
+            content_type = content_type,
             config = config
           )
         }
