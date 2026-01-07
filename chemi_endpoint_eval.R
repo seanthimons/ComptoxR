@@ -56,9 +56,11 @@ chemi_endpoints <- map(
   },
   .progress = TRUE
 ) %>%
-  list_rbind() %>%
+  list_rbind() %>% 
   # Filter out PATCH, DELETE methods and render endpoints
-  filter(!str_detect(method, 'PATCH|DELETE'), !str_detect(route, 'render')) %>%
+  filter(
+		str_detect(method, 'GET|POST'),
+		!str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download')) %>% 
   mutate(
     # Clean route: remove {param} placeholders, leading slashes
     route = strip_curly_params(route, leading_slash = 'remove'),
@@ -85,11 +87,11 @@ chemi_endpoints <- map(
       str_replace_all(., pattern = "\\s", replacement = "_"),
 
     # Build full file name with prefix
-    file = paste0("chemi_", domain, "_", file, ".R"),
+    file = paste0("chemi_", file, ".R"),
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
-    batch_limit = NULL
-  ) %>%
+    batch_limit = NA_integer_
+  ) %>% 
   # Sort by domain, route, method (POST before GET)
   arrange(
     forcats::fct_inorder(domain),
@@ -136,7 +138,7 @@ chemi_spec_with_text <- render_endpoint_stubs(
 scaffold_result <- scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
 
 # Inspect results (which files were created/skipped/errored):
-scaffold_result %>% filter(action == "skipped")  # Files that already existed
+scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed
 scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 # ==============================================================================
@@ -144,4 +146,10 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # ==============================================================================
 
 # Remove intermediate variables (keep chemi_spec_with_text for inspection)
-rm(chemi_config, chemi_schema_files, chemi_endpoints, res_chemi, chemi_endpoints_to_build)
+rm(
+	chemi_config, 
+	chemi_schema_files, 
+	#chemi_endpoints, 
+	res_chemi
+	#chemi_endpoints_to_build
+)

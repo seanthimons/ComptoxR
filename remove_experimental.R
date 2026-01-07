@@ -31,7 +31,8 @@ experimental_pattern <- '`r lifecycle::badge\\("experimental"\\)`'
 cat("Searching for files with experimental lifecycle badge...\n\n")
 
 # Get all R files
-r_files <- list.files(target_dir, pattern = "\\.R$", full.names = TRUE)
+r_files <- list.files(target_dir, pattern = "\\.R$", full.names = TRUE) %>% 
+	.[grep('chemi_', ., invert = F)]
 
 # Check each file for experimental badge
 experimental_files <- character()
