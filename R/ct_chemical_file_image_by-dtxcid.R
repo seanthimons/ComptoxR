@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param dtxcid DSSTox Compound Identifier
-#' @return Returns a tibble with results
+#' @return Returns image data (raw bytes or magick image object)
 #' @export
 #'
 #' @examples
@@ -16,7 +16,8 @@ ct_chemical_file_image_by_dtxcid <- function(dtxcid) {
     query = dtxcid,
     endpoint = "chemical/file/image/search/by-dtxcid/",
     method = "GET",
-    batch_limit = 1
+    batch_limit = 1,
+    content_type = "image/png"
   )
 }
 

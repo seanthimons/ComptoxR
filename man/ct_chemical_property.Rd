@@ -4,10 +4,10 @@
 \alias{ct_chemical_property}
 \title{Get summary by DTXSID and property}
 \usage{
-ct_chemical_property(query, dtxsid = NULL, propName = NULL)
+ct_chemical_property(dtxsid, propName = NULL)
 }
 \arguments{
-\item{dtxsid}{Optional parameter}
+\item{dtxsid}{Required parameter}
 
 \item{propName}{Optional parameter}
 }
@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-ct_chemical_property(query = "DTXSID7020182")
+ct_chemical_property(dtxsid = "DTXSID7020182")
 }
 }

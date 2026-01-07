@@ -16,6 +16,7 @@ ct_chemical_file_mol_by_dtxcid <- function(dtxcid) {
     query = dtxcid,
     endpoint = "chemical/file/mol/search/by-dtxcid/",
     method = "GET",
+    content_type = "text/plain",
     batch_limit = 1
   )
 }
