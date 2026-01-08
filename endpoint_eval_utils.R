@@ -1062,7 +1062,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     endpoint = "{endpoint}",
     body = body
   )
-}}')
+}}
+			
+')
     } else if (wrapper_fn == "generic_request") {
       # Similar logic for generic_request
       param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
@@ -1100,7 +1102,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     batch_limit = {batch_limit_code},
     body = body{content_type_call}
   )
-}}')
+}}
+
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1115,7 +1119,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     method = "{method}",
     batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
   )
-}}')
+}}
+			
+')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
@@ -1123,7 +1129,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = NULL,
     endpoint = "{endpoint}"{combined_calls}
   )
-}}')
+}}
+			
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1138,7 +1146,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     method = "{method}",
     batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
   )
-}}')
+}}
+			
+')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
@@ -1146,7 +1156,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls}
   )
-}}')
+}}
+	
+			')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1161,7 +1173,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     method = "{method}",
     batch_limit = {batch_limit_code}{content_type_call}
   )
-}}')
+}}
+	
+')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({primary_param}) {{
@@ -1171,7 +1185,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     server = "chemi_burl",
     auth = FALSE
   )
-}}')
+}}
+			
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }

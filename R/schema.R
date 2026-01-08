@@ -71,7 +71,7 @@ ct_schema <- function() {
 						url = url_to_check,
 						destfile = here::here(
 							'schema',
-							paste0("ctx_", endpoint, '_', server, '.json')
+							paste0("ctx-", endpoint, '-', server, '.json')
 						),
 						mode = 'wb'
 					)
@@ -195,7 +195,7 @@ chemi_schema <- function() {
 						url = url_to_check,
 						destfile = here::here(
 							'schema',
-							paste0("chemi_", endpoint, '_', server, '.json')
+							paste0("chemi-", endpoint, '-', server, '.json')
 						),
 						mode = 'wb'
 					)
@@ -215,7 +215,7 @@ chemi_schema <- function() {
 							url = url_to_check,
 							destfile = here::here(
 								'schema',
-								paste0("chemi_", endpoint, '_', server, '.json')
+								paste0("chemi-", endpoint, '-', server, '.json')
 							),
 							mode = 'wb'
 						)
