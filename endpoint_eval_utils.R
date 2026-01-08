@@ -261,16 +261,22 @@ openapi_to_spec <- function(
     nm[nzchar(nm)]
   }
 
-  # Extract parameter metadata (examples and descriptions)
+  # Extract parameter metadata (examples, descriptions, defaults, enums, types, required status)
   param_metadata <- function(params, where) {
     relevant_params <- purrr::keep(params, ~ identical(.x[["in"]], where))
     if (length(relevant_params) == 0) return(list())
 
     metadata <- purrr::map(relevant_params, function(p) {
+      schema <- p[["schema"]] %||% list()
+
       list(
         name = p[["name"]] %||% "",
-        example = p[["example"]] %||% NA,
-        description = p[["description"]] %||% ""
+        example = p[["example"]] %||% schema[["default"]] %||% NA,  # Fallback to default
+        description = p[["description"]] %||% schema[["description"]] %||% "",  # Check schema too
+        default = schema[["default"]] %||% NA,  # Explicit default field
+        enum = schema[["enum"]] %||% NULL,  # Allowed values
+        type = schema[["type"]] %||% NA,  # Data type
+        required = p[["required"]] %||% FALSE  # Required status
       )
     })
 
@@ -281,6 +287,59 @@ openapi_to_spec <- function(
     names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
     metadata
   }
+
+  # Extract metadata from request body schema reference
+  # Parses POST endpoint request bodies that reference schemas in #/components/schemas
+  extract_body_schema_metadata <- function(request_body, openapi_spec) {
+    if (is.null(request_body) || !is.list(request_body)) return(list())
+
+    # Navigate: requestBody -> content -> application/json -> schema -> $ref
+    content <- request_body[["content"]] %||% list()
+    json_schema <- content[["application/json"]][["schema"]] %||% list()
+
+    # Check if this is a schema reference
+    ref <- json_schema[["$ref"]]
+    if (is.null(ref) || !nzchar(ref)) return(list())
+
+    # Parse the reference (e.g., "#/components/schemas/LookupRequest")
+    # Format: #/components/schemas/{SchemaName}
+    ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
+    if (length(ref_parts) < 4 || ref_parts[2] != "components" || ref_parts[3] != "schemas") {
+      return(list())
+    }
+
+    schema_name <- ref_parts[4]
+
+    # Resolve the schema from components
+    components <- openapi_spec[["components"]] %||% list()
+    schemas <- components[["schemas"]] %||% list()
+    schema_def <- schemas[[schema_name]]
+
+    if (is.null(schema_def) || !is.list(schema_def)) return(list())
+
+    # Extract properties
+    properties <- schema_def[["properties"]] %||% list()
+    required_fields <- schema_def[["required"]] %||% character(0)
+
+    # Build metadata for each property
+    metadata <- purrr::imap(properties, function(prop, prop_name) {
+      list(
+        name = prop_name,
+        description = prop[["description"]] %||% "",
+        type = prop[["type"]] %||% NA,
+        enum = prop[["enum"]] %||% NULL,
+        default = prop[["default"]] %||% NA,
+        required = prop_name %in% required_fields,
+        example = prop[["example"]] %||% prop[["default"]] %||% NA
+      )
+    })
+
+    # Filter and return as named list
+    metadata <- purrr::keep(metadata, ~ nzchar(.x$name))
+    names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+    metadata
+  }
+
   order_path_by_route <- function(path_names, route) {
     if (!length(path_names)) return(character(0))
     m <- stringr::str_match_all(route, "\\{([^}]+)\\}")
@@ -315,6 +374,23 @@ openapi_to_spec <- function(
       # Extract parameter metadata (examples and descriptions)
       path_meta  <- param_metadata(parameters, "path")
       query_meta <- param_metadata(parameters, "query")
+
+      # Extract request body schema metadata for POST/PUT/PATCH
+      body_meta <- if (method %in% c("post", "put", "patch")) {
+        extract_body_schema_metadata(op$requestBody, openapi)
+      } else {
+        list()
+      }
+
+      # Extract body parameter names (ordered by required first, then alphabetically)
+      body_names <- if (length(body_meta) > 0) {
+        # Split into required and optional
+        required_names <- names(purrr::keep(body_meta, ~ .x$required))
+        optional_names <- names(purrr::keep(body_meta, ~ !.x$required))
+        c(required_names, optional_names)
+      } else {
+        character(0)
+      }
 
       # Combine all parameters (path parameters first, then query parameters)
       combined <- c(path_names, query_names)
@@ -353,10 +429,13 @@ openapi_to_spec <- function(
         # Separate path and query parameters for flexible stub generation
         path_params = if (length(path_names) > 0) paste(path_names, collapse = ",") else "",
         query_params = if (length(query_names) > 0) paste(query_names, collapse = ",") else "",
+        body_params = if (length(body_names) > 0) paste(body_names, collapse = ",") else "",
         num_path_params = length(path_names),
+        num_body_params = length(body_names),
         # NEW: Parameter metadata with examples and descriptions
         path_param_metadata = list(path_meta),
         query_param_metadata = list(query_meta),
+        body_param_metadata = list(body_meta),
         # NEW: Response content type(s)
         content_type = content_type
       )
@@ -550,11 +629,35 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
       fn_signature <- primary_param
     }
 
-    # Generate @param documentation
+    # Generate @param documentation with enhanced metadata
     doc_lines <- character(0)
     for (p in param_vec) {
-      if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
-        doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+      if (!is.null(metadata[[p]])) {
+        desc <- metadata[[p]]$description
+        enum_vals <- metadata[[p]]$enum
+        default_val <- metadata[[p]]$default
+
+        # Start with description or generic fallback
+        if (nzchar(desc)) {
+          param_desc <- desc
+        } else if (p == primary_param) {
+          param_desc <- "Required parameter"
+        } else {
+          param_desc <- "Optional parameter"
+        }
+
+        # Append enum values if available
+        if (!is.null(enum_vals) && length(enum_vals) > 0) {
+          enum_str <- paste(enum_vals, collapse = ", ")
+          param_desc <- paste0(param_desc, ". Options: ", enum_str)
+        }
+
+        # Append default value if available
+        if (!is.na(default_val)) {
+          param_desc <- paste0(param_desc, " (default: ", default_val, ")")
+        }
+
+        doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))
       } else if (p == primary_param) {
         doc_lines <- c(doc_lines, paste0("#' @param ", p, " Required parameter"))
       } else {
@@ -581,11 +684,33 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   # Generate function signature: param1 = NULL, param2 = NULL, ... (no "query" prefix)
   fn_signature <- paste(param_vec, "= NULL", collapse = ", ")
 
-  # Generate @param documentation lines using metadata if available
+  # Generate @param documentation lines with enhanced metadata
   doc_lines <- character(0)
   for (p in param_vec) {
-    if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
-      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+    if (!is.null(metadata[[p]])) {
+      desc <- metadata[[p]]$description
+      enum_vals <- metadata[[p]]$enum
+      default_val <- metadata[[p]]$default
+
+      # Start with description or generic fallback
+      if (nzchar(desc)) {
+        param_desc <- desc
+      } else {
+        param_desc <- "Optional parameter"
+      }
+
+      # Append enum values if available
+      if (!is.null(enum_vals) && length(enum_vals) > 0) {
+        enum_str <- paste(enum_vals, collapse = ", ")
+        param_desc <- paste0(param_desc, ". Options: ", enum_str)
+      }
+
+      # Append default value if available
+      if (!is.na(default_val)) {
+        param_desc <- paste0(param_desc, " (default: ", default_val, ")")
+      }
+
+      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))
     } else {
       doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
     }
@@ -691,13 +816,37 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
     primary_example <- metadata[[primary_param]]$example
   }
 
-  # Build param_docs from metadata
+  # Build param_docs from metadata with enhanced information
   param_docs <- ""
   all_params <- c(primary_param, additional_params)
   doc_lines <- character(0)
   for (p in all_params) {
-    if (!is.null(metadata[[p]]) && nzchar(metadata[[p]]$description)) {
-      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", metadata[[p]]$description))
+    if (!is.null(metadata[[p]])) {
+      desc <- metadata[[p]]$description
+      enum_vals <- metadata[[p]]$enum
+      default_val <- metadata[[p]]$default
+
+      # Start with description or generic fallback
+      if (nzchar(desc)) {
+        param_desc <- desc
+      } else if (p == primary_param) {
+        param_desc <- "Primary query parameter"
+      } else {
+        param_desc <- "Optional parameter"
+      }
+
+      # Append enum values if available
+      if (!is.null(enum_vals) && length(enum_vals) > 0) {
+        enum_str <- paste(enum_vals, collapse = ", ")
+        param_desc <- paste0(param_desc, ". Options: ", enum_str)
+      }
+
+      # Append default value if available
+      if (!is.na(default_val)) {
+        param_desc <- paste0(param_desc, " (default: ", default_val, ")")
+      }
+
+      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))
     } else {
       # Generic description if none provided
       if (p == primary_param) {
@@ -752,11 +901,12 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 #' @param batch_limit Batching configuration (NULL, 0, 1, or integer).
 #' @param path_param_info List from parse_path_parameters() containing primary and additional path params.
 #' @param query_param_info List from parse_function_params() containing query string parameters.
+#' @param body_param_info List from parse_function_params() containing request body parameters.
 #' @param content_type Response content type(s) from OpenAPI spec (e.g., "application/json", "image/png").
 #' @param config Configuration list specifying template behavior.
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, content_type, config) {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config) {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -785,12 +935,28 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   example_query <- config$example_query %||% "DTXSID7020182"
   lifecycle_badge <- config$lifecycle_badge %||% "experimental"
 
-  # Check if this is a query-only endpoint (no path params, batch_limit = 0)
+  # Check endpoint type
   is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
                     isTRUE(query_param_info$has_params) &&
                     !is.null(query_param_info$primary_param))
 
-  if (is_query_only) {
+  is_body_only <- (isTRUE(body_param_info$has_params) &&
+                   !isTRUE(path_param_info$has_path_params) &&
+                   nchar(path_param_info$fn_signature) == 0)
+
+  if (is_body_only) {
+    # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
+    primary_param <- body_param_info$primary_param %||% "data"
+    fn_signature <- body_param_info$fn_signature
+    combined_calls <- ""  # Body params handled differently
+    param_docs <- body_param_info$param_docs
+
+    # Example value from body param metadata
+    example_value <- example_query
+    if (!is.null(body_param_info$primary_example) && !is.na(body_param_info$primary_example)) {
+      example_value <- as.character(body_param_info$primary_example)
+    }
+  } else if (is_query_only) {
     # Query-only endpoint: primary param comes from query params
     primary_param <- query_param_info$primary_param
     fn_signature <- query_param_info$fn_signature
@@ -855,7 +1021,90 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build function body based on endpoint type
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
 
-  if (is_query_only) {
+  if (is_body_only) {
+    # Body-only endpoint (POST/PUT/PATCH with body params): build request body
+    if (wrapper_fn == "generic_chemi_request") {
+      # Extract parameter info from body_param_info
+      param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      param_vec <- trimws(param_vec)
+      param_vec <- gsub("\\s*=\\s*NULL$", "", param_vec)  # Remove " = NULL" suffix
+
+      # Identify required params (no "= NULL" in signature)
+      sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      sig_parts <- trimws(sig_parts)
+      required_params <- sig_parts[!grepl("=", sig_parts)]
+      optional_params <- param_vec[!param_vec %in% required_params]
+
+      # Build body assembly code
+      body_code_lines <- c(
+        "  # Build request body",
+        "  body <- list()"
+      )
+
+      # Add required params
+      for (p in required_params) {
+        body_code_lines <- c(body_code_lines, paste0("  body$", p, " <- ", p))
+      }
+
+      # Add optional params with NULL checks
+      for (p in optional_params) {
+        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) body$", p, " <- ", p))
+      }
+
+      body_assembly <- paste(body_code_lines, collapse = "\n")
+
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{body_assembly}
+
+  generic_chemi_request(
+    query = NULL,
+    endpoint = "{endpoint}",
+    body = body
+  )
+}}')
+    } else if (wrapper_fn == "generic_request") {
+      # Similar logic for generic_request
+      param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      param_vec <- trimws(param_vec)
+      param_vec <- gsub("\\s*=\\s*NULL$", "", param_vec)
+
+      sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      sig_parts <- trimws(sig_parts)
+      required_params <- sig_parts[!grepl("=", sig_parts)]
+      optional_params <- param_vec[!param_vec %in% required_params]
+
+      body_code_lines <- c(
+        "  # Build request body",
+        "  body <- list()"
+      )
+
+      for (p in required_params) {
+        body_code_lines <- c(body_code_lines, paste0("  body$", p, " <- ", p))
+      }
+
+      for (p in optional_params) {
+        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) body$", p, " <- ", p))
+      }
+
+      body_assembly <- paste(body_code_lines, collapse = "\n")
+
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{body_assembly}
+
+  generic_request(
+    query = NULL,
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = {batch_limit_code},
+    body = body{content_type_call}
+  )
+}}')
+    } else {
+      stop("Unknown wrapper function: ", wrapper_fn)
+    }
+  } else if (is_query_only) {
     # Query-only endpoint: pass query = NULL, all params via ellipsis
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
@@ -981,6 +1230,14 @@ render_endpoint_stubs <- function(spec,
         strategy = param_strategy,
         metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list(),
         has_path_params = (num_path_params > 0)
+      )),
+      # Parse body parameters (for POST/PUT/PATCH endpoints)
+      # When no path params exist, first body param becomes the primary parameter
+      body_param_info = list(parse_function_params(
+        if ("body_params" %in% names(.)) body_params else "",
+        strategy = param_strategy,
+        metadata = if ("body_param_metadata" %in% names(.) && is.list(body_param_metadata)) body_param_metadata else list(),
+        has_path_params = (num_path_params > 0)
       ))
     ) %>%
     dplyr::ungroup() %>%
@@ -994,9 +1251,10 @@ render_endpoint_stubs <- function(spec,
           batch_limit = batch_limit,
           path_param_info = path_param_info,
           query_param_info = query_param_info,
+          body_param_info = body_param_info,
           content_type = if ("content_type" %in% names(.)) content_type else ""
         ),
-        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, content_type) {
+        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type) {
           build_function_stub(
             fn = fn,
             endpoint = endpoint,
@@ -1005,6 +1263,7 @@ render_endpoint_stubs <- function(spec,
             batch_limit = batch_limit,
             path_param_info = path_param_info,
             query_param_info = query_param_info,
+            body_param_info = body_param_info,
             content_type = content_type,
             config = config
           )
