@@ -43,9 +43,27 @@ chemi_config <- list(
 # Find all chemi production schema files
 chemi_schema_files <- list.files(
   path = here::here('schema'),
-  pattern = "^chemi_.*_prod\\.json$",
+	pattern = "^chemi-.*\\.json$",
   full.names = FALSE
-)
+) %>% 
+	.[grep('ui', ., invert = TRUE)] %>% 
+	as_tibble_col(., column_name = 'file') %>% 
+	separate_wider_delim(., cols = file, delim = '-', names = c('origin', 'domain', 'stage'), cols_remove = FALSE) %>% 
+	mutate(
+		stage = str_remove(stage, pattern = ".json"),
+		stage = factor(stage, levels = c('prod', 'staging', 'dev')),
+		# TODO See if server can be passed through to generic function for schema-stubbing purposes.
+		# server = case_when(
+		# 	stage == 'prod' ~ 1,
+		# 	stage == 'staging' ~ 2,
+		# 	stage == 'dev' ~ 3
+		# )
+	) %>% 
+	group_by(file) %>% 
+	arrange(stage, file) %>% 
+	ungroup() %>% 
+	distinct(domain, .keep_all = TRUE) %>% 
+	pull(file)
 
 # Parse all schemas and combine into single endpoint specification
 chemi_endpoints <- map(
@@ -55,12 +73,12 @@ chemi_endpoints <- map(
     dat <- openapi_to_spec(openapi)
   },
   .progress = TRUE
-) %>%
+) %>% 
   list_rbind() %>% 
   # Filter out PATCH, DELETE methods and render endpoints
   filter(
 		str_detect(method, 'GET|POST'),
-		!str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download')) %>% 
+		!str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download|export|protocols')) %>% 
   mutate(
     # Clean route: remove {param} placeholders, leading slashes
     route = strip_curly_params(route, leading_slash = 'remove'),
@@ -72,9 +90,9 @@ chemi_endpoints <- map(
 
     # Generate file name from route
     # Remove common prefixes/suffixes, collapse to clean identifier
-    file = route %>%
+    name = route %>%
       # Remove /api/ prefix and common tokens
-      str_remove_all(regex("^api/")) %>%
+      str_remove_all(string = ., pattern = "^api/") %>%
       str_remove_all(
         regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
       ) %>%
@@ -86,29 +104,44 @@ chemi_endpoints <- map(
       # Replace spaces with underscores
       str_replace_all(., pattern = "\\s", replacement = "_"),
 
-    # Build full file name with prefix
-    file = paste0("chemi_", file, ".R"),
+		#Build full file name with prefix
+		file = case_when(
+			nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
+			str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
+			.default = paste0("chemi_", domain, "_", name, ".R")
+		),
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
-    batch_limit = NA_integer_
-  ) %>% 
-  # Sort by domain, route, method (POST before GET)
-  arrange(
-    forcats::fct_inorder(domain),
-    route,
-    factor(method, levels = c('POST', 'GET'))
-  ) %>%
-  # Remove duplicates (prefer first occurrence per route)
-  distinct(route, .keep_all = TRUE) %>%
+    batch_limit = NA_integer_,
+		route = str_remove_all(string = route, pattern = "^api/")
+  )
+  # Sort by domain, route, method
+  # arrange(
+  #   forcats::fct_inorder(domain),
+  #   route,
+  #   #factor(method, levels = c('POST', 'GET'))
+	# 	factor(method, levels = c('GET', 'POST'))
+  # ) %>%
+  # # Remove duplicates (prefer first occurrence per route)
+  # distinct(route, .keep_all = TRUE) %>% 
   # Filter out endpoints with file upload params
-  filter(!str_detect(params, 'files'))
+  filter(query_params != 'files[]') %>% 
+	mutate(
+		params = str_remove_all(params, "files\\[\\],") %>% str_squish(),
+		query_params = str_remove_all(query_params, "files\\[\\],") %>% str_squish(),
+		query_param_metadata = map(query_param_metadata, ~discard_at(.x, 'files[]'))
+	)
 
 # ==============================================================================
 # Find Missing Endpoints
 # ==============================================================================
 
 # Search R/ directory for existing endpoint implementations
-res_chemi <- find_endpoint_usages_base(chemi_endpoints$route, pkg_dir = here::here("R"))
+res_chemi <- find_endpoint_usages_base(
+	chemi_endpoints$route, 
+	pkg_dir = here::here("R"), 
+	files_regex = "^chemi_.*\\.(R|Rmd|qmd|Rnw|Rd|md)$",
+)
 
 # Filter to endpoints with no hits (not yet implemented)
 chemi_endpoints_to_build <- chemi_endpoints %>%
@@ -120,9 +153,10 @@ chemi_endpoints_to_build <- chemi_endpoints %>%
 
 # Render R function source code using unified template
 chemi_spec_with_text <- render_endpoint_stubs(
-  chemi_endpoints_to_build,
+  # chemi_endpoints_to_build %>% filter(route == 'resolver/lookup'),
+	chemi_endpoints %>% filter(route == 'resolver/lookup'),
   config = chemi_config
-)
+) 
 
 # ==============================================================================
 # Write Files to Disk
@@ -146,10 +180,10 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # ==============================================================================
 
 # Remove intermediate variables (keep chemi_spec_with_text for inspection)
-rm(
-	chemi_config, 
-	chemi_schema_files, 
-	#chemi_endpoints, 
-	res_chemi
-	#chemi_endpoints_to_build
-)
+# rm(
+# 	chemi_config, 
+# 	chemi_schema_files, 
+# 	#chemi_endpoints, 
+# 	res_chemi
+# 	#chemi_endpoints_to_build
+# )
