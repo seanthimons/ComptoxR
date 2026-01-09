@@ -253,17 +253,19 @@ openapi_to_spec <- function(
     keys <- purrr::map_chr(params, ~ paste(.x[["name"]] %||% "", .x[["in"]] %||% "", sep = "@"))
     params[!duplicated(keys)]
   }
-  param_names <- function(params, where) {
+  param_names <- function(params, where, exclude_pattern = "^files\\[\\]$") {
     purrr::map_chr(
-      purrr::keep(params, ~ identical(.x[["in"]], where)),
+      purrr::keep(params, ~ identical(.x[["in"]], where) &&
+                           !grepl(exclude_pattern, .x[["name"]] %||% "")),
       ~ .x[["name"]] %||% ""
     ) -> nm
     nm[nzchar(nm)]
   }
 
   # Extract parameter metadata (examples, descriptions, defaults, enums, types, required status)
-  param_metadata <- function(params, where) {
-    relevant_params <- purrr::keep(params, ~ identical(.x[["in"]], where))
+  param_metadata <- function(params, where, exclude_pattern = "^files\\[\\]$") {
+    relevant_params <- purrr::keep(params, ~ identical(.x[["in"]], where) &&
+                                              !grepl(exclude_pattern, .x[["name"]] %||% ""))
     if (length(relevant_params) == 0) return(list())
 
     metadata <- purrr::map(relevant_params, function(p) {
@@ -577,6 +579,49 @@ scaffold_files <- function(
 #' @return A list with: fn_signature, param_docs, params_code, params_call, has_params,
 #'   primary_param (when query params are used as primary).
 #' @export
+
+# Helper function to build parameter default value based on schema metadata
+build_param_default <- function(param_name, metadata, is_primary = FALSE) {
+  # If parameter is primary (required), no default
+  if (is_primary) {
+    return("")
+  }
+
+  # If no metadata, fall back to NULL
+  if (is.null(metadata[[param_name]])) {
+    return("= NULL")
+  }
+
+  metadata_entry <- metadata[[param_name]]
+
+  # Check if parameter is required
+  if (isTRUE(metadata_entry$required)) {
+    return("")  # No default for required params
+  }
+
+  # Check for default value in schema
+  default_val <- metadata_entry$default
+  if (is.na(default_val) || is.null(default_val)) {
+    return("= NULL")
+  }
+
+  # Format based on type
+  param_type <- metadata_entry$type %||% NA
+
+  if (!is.na(param_type)) {
+    if (param_type == "string") {
+      return(paste0('= "', default_val, '"'))
+    } else if (param_type == "boolean") {
+      return(paste0("= ", toupper(as.character(default_val))))
+    } else if (param_type %in% c("integer", "number")) {
+      return(paste0("= ", default_val))
+    }
+  }
+
+  # Safe fallback using deparse
+  return(paste0("= ", deparse(default_val)))
+}
+
 parse_function_params <- function(params_str, strategy = c("extra_params", "options"), metadata = list(), has_path_params = TRUE) {
   strategy <- match.arg(strategy)
 
@@ -622,9 +667,10 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
       primary_example <- metadata[[primary_param]]$example
     }
 
-    # Build function signature: primary, optional1 = NULL, optional2 = NULL, ...
+    # Build function signature: primary, optional1 = default1, optional2 = default2, ...
     if (length(optional_params) > 0) {
-      fn_signature <- paste0(primary_param, ", ", paste(optional_params, "= NULL", collapse = ", "))
+      optional_defaults <- sapply(optional_params, function(p) build_param_default(p, metadata, is_primary = FALSE))
+      fn_signature <- paste0(primary_param, ", ", paste(optional_params, optional_defaults, collapse = ", "))
     } else {
       fn_signature <- primary_param
     }
@@ -685,8 +731,9 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   }
 
   # Standard case: path params exist, query params are all optional
-  # Generate function signature: param1 = NULL, param2 = NULL, ... (no "query" prefix)
-  fn_signature <- paste(param_vec, "= NULL", collapse = ", ")
+  # Generate function signature: param1 = default1, param2 = default2, ... (no "query" prefix)
+  param_defaults <- sapply(param_vec, function(p) build_param_default(p, metadata, is_primary = FALSE))
+  fn_signature <- paste(param_vec, param_defaults, collapse = ", ")
 
   # Generate @param documentation lines with enhanced metadata
   doc_lines <- character(0)
