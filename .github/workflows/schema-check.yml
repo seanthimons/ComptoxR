@@ -42,7 +42,10 @@ jobs:
             ${{ runner.os }}-r-schema-
       - name: Install dependencies
         run: |
-          install.packages(c("devtools", "remotes", "httr2", "here", "purrr", "cli", "dplyr", "tibble", "tools"))
+          install.packages(
+            c("devtools", "remotes", "httr2", "here", "purrr", "cli", "dplyr", "tibble", "tools"), 
+            repos = "https://cran.r-project.org"
+          )
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
