@@ -52,10 +52,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 
   if (batch_limit == 0) {
     # Static endpoint: no query validation needed
+    # Save original query value before overwriting (for adding to query string)
+    original_query <- query
     query <- c("_static_")
     query_list <- list(query)
     mult_count <- 1
   } else {
+    original_query <- NULL
     # Standard query handling
     if(purrr::is_list(query) && !is.data.frame(query)) {
       query <- as.character(unlist(query, use.names = FALSE))
@@ -147,6 +150,10 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 
         # Scenario A: Static endpoint (no query appending)
         if (batch_limit == 0) {
+          # Add original query value to query parameters if provided
+          if (!is.null(original_query) && !is.null(query_part) && query_part != "_static_") {
+            ellipsis_args <- c(list(query = original_query), ellipsis_args)
+          }
           # Only add named arguments as query parameters
           req <- req %>% httr2::req_url_query(!!!ellipsis_args)
         }
@@ -162,7 +169,12 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
           }
 
           # Separate named vs unnamed ellipsis arguments
-          named_indices <- !is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0 && names(ellipsis_args) != ""
+          # nzchar() vectorizes properly, unlike != ""
+          named_indices <- if (!is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0) {
+            nzchar(names(ellipsis_args))
+          } else {
+            rep(FALSE, length(ellipsis_args))
+          }
 
           # Append unnamed args to the URL path (e.g., /assay/ID/similarity)
           if (any(!named_indices)) {

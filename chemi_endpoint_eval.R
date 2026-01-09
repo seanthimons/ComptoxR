@@ -113,8 +113,9 @@ chemi_endpoints <- map(
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
     batch_limit = NA_integer_,
+		# Seems to be needed to be at the end for this mutate to work properly
 		route = str_remove_all(string = route, pattern = "^api/")
-  )
+  ) %>%
   # Sort by domain, route, method
   # arrange(
   #   forcats::fct_inorder(domain),
@@ -125,12 +126,26 @@ chemi_endpoints <- map(
   # # Remove duplicates (prefer first occurrence per route)
   # distinct(route, .keep_all = TRUE) %>% 
   # Filter out endpoints with file upload params
-  filter(query_params != 'files[]') %>% 
+  filter(query_params != 'files[]') %>%
 	mutate(
 		params = str_remove_all(params, "files\\[\\],") %>% str_squish(),
 		query_params = str_remove_all(query_params, "files\\[\\],") %>% str_squish(),
 		query_param_metadata = map(query_param_metadata, ~discard_at(.x, 'files[]'))
-	)
+	) %>%
+	# Detect GET/POST collisions on same route and generate unique function names
+	group_by(file) %>%
+	mutate(
+		method_count = n(),
+		# Generate function name: append _post for POST when collision exists
+		fn = case_when(
+			method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
+			method == "GET" ~ tools::file_path_sans_ext(basename(file)),
+			method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
+			.default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+		)
+	) %>%
+	ungroup() %>%
+	select(-method_count)
 
 # ==============================================================================
 # Find Missing Endpoints
@@ -169,7 +184,7 @@ chemi_spec_with_text <- render_endpoint_stubs(
 
 # ! BUILD ----
 # Uncomment to generate files:
-scaffold_result <- scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+scaffold_result <- scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed
