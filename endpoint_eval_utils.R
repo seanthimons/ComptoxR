@@ -666,8 +666,12 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     }
     param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
 
-    # Build params_call - all params go via ellipsis
-    params_call <- paste0(",\n    ", paste(param_vec, "=", param_vec, collapse = ",\n    "))
+    # Build params_call - only optional params (primary is passed separately as query)
+    params_call <- if (length(optional_params) > 0) {
+      paste0(",\n    ", paste(optional_params, "=", optional_params, collapse = ",\n    "))
+    } else {
+      ""
+    }
 
     return(list(
       fn_signature = fn_signature,
@@ -935,6 +939,17 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   example_query <- config$example_query %||% "DTXSID7020182"
   lifecycle_badge <- config$lifecycle_badge %||% "experimental"
 
+  # For GET endpoints, use generic_request even if config specifies generic_chemi_request
+  # generic_chemi_request is designed for POST with JSON payloads only
+  is_chemi_get <- FALSE
+  if (toupper(method) == "GET" && wrapper_fn == "generic_chemi_request") {
+    wrapper_fn <- "generic_request"
+    is_chemi_get <- TRUE  # Track this to set correct server/auth
+  }
+
+  # Build server and auth params for chemi GET endpoints
+  chemi_server_params <- if (is_chemi_get) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
+
   # Check endpoint type
   is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
                     isTRUE(query_param_info$has_params) &&
@@ -970,7 +985,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
   } else {
     # Standard case: primary param comes from path params
-    primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
+    primary_param <- "NULL"
+    if (nzchar(path_param_info$fn_signature)) {
+      primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
+    } else if (isTRUE(query_param_info$has_params)) {
+      primary_param <- query_param_info$primary_param
+    }
     primary_param <- trimws(primary_param)
 
     # Build combined function signature
@@ -981,7 +1001,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (isTRUE(query_param_info$has_params)) {
       query_sig <- query_param_info$fn_signature
       if (nzchar(query_sig)) {
-        fn_signature <- paste0(fn_signature, ", ", query_sig)
+        if (nzchar(fn_signature)) {
+          fn_signature <- paste0(fn_signature, ", ", query_sig)
+        } else {
+          fn_signature <- query_sig
+        }
       }
     }
 
@@ -1117,10 +1141,10 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
+    batch_limit = {batch_limit_code}{chemi_server_params}{content_type_call}{combined_calls}
   )
 }}
-			
+
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
@@ -1138,16 +1162,34 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   } else if (has_additional_params) {
     # Standard endpoint with path params and optional query params
     if (wrapper_fn == "generic_request") {
+      # For chemi GET endpoints, determine batch_limit based on path params
+      if (is_chemi_get) {
+        if (isTRUE(path_param_info$has_path_params)) {
+          # Has path params: append to URL path
+          effective_batch_limit <- "1"
+          effective_query <- primary_param
+        } else {
+          # No path params: use query parameters
+          effective_batch_limit <- "0"
+          effective_query <- primary_param
+          # Don't add primary param to combined_calls - it goes to the formal parameter
+          # and generic_request will handle it when batch_limit = 0
+        }
+      } else {
+        effective_batch_limit <- batch_limit_code
+        effective_query <- primary_param
+      }
+
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
   generic_request(
-    query = {primary_param},
+    query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{content_type_call}{combined_calls}
   )
 }}
-			
+
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
@@ -1165,16 +1207,37 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   } else {
     # No extra params: simple call with just primary param
     if (wrapper_fn == "generic_request") {
+      # For chemi GET endpoints, determine batch_limit based on path params
+      if (is_chemi_get) {
+        if (isTRUE(path_param_info$has_path_params)) {
+          # Has path params: append to URL path
+          effective_batch_limit <- "1"
+          effective_query <- primary_param
+          extra_params <- ""
+        } else {
+          # No path params: use query parameters
+          effective_batch_limit <- "0"
+          effective_query <- primary_param
+          # Don't add primary param to extra_params - it goes to the formal parameter
+          # and generic_request will handle it when batch_limit = 0
+          extra_params <- ""
+        }
+      } else {
+        effective_batch_limit <- batch_limit_code
+        effective_query <- primary_param
+        extra_params <- ""
+      }
+
       fn_body <- glue::glue('
 {fn} <- function({primary_param}) {{
   generic_request(
-    query = {primary_param},
+    query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{content_type_call}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{content_type_call}{extra_params}
   )
 }}
-	
+
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
@@ -1226,9 +1289,18 @@ render_endpoint_stubs <- function(spec,
   # Process spec: add derived columns and parse parameters
   spec %>%
     dplyr::mutate(
-      fn       = purrr::map_chr(file, fn_transform),
+      # Respect existing fn column if present, otherwise derive from file
+      fn       = dplyr::coalesce(
+        if ("fn" %in% names(.)) fn else NA_character_,
+        purrr::map_chr(file, fn_transform)
+      ),
       endpoint = route,
-      title    = dplyr::coalesce(summary, "API wrapper")
+      # Generate title from route if summary is empty
+      title    = dplyr::if_else(
+        nzchar(summary),
+        summary,
+        tools::toTitleCase(gsub("[/_-]", " ", route))
+      )
     ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(

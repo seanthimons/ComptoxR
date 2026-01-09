@@ -55,9 +55,10 @@ temp.R
 *.xlsx
 *.csv
 
+/roadmap/
 
 /.quarto/
-/schema/*
+# /schema/*
 
 .*
 !.github
