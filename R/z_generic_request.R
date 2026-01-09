@@ -151,7 +151,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         # Scenario A: Static endpoint (no query appending)
         if (batch_limit == 0) {
           # Add original query value to query parameters if provided
-          if (!is.null(original_query) && !is.null(query_part) && query_part != "_static_") {
+          if (!is.null(original_query) && query_part == "_static_") {
             ellipsis_args <- c(list(query = original_query), ellipsis_args)
           }
           # Only add named arguments as query parameters

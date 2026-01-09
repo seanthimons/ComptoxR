@@ -997,6 +997,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build server and auth params for chemi GET endpoints
   chemi_server_params <- if (is_chemi_get) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
 
+  # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
+  chemi_tidy_param <- if (is_chemi_get) ',\n    tidy = FALSE' else ""
+
   # Check endpoint type
   is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
                     isTRUE(query_param_info$has_params) &&
@@ -1131,10 +1134,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   generic_chemi_request(
     query = NULL,
     endpoint = "{endpoint}",
-    body = body
+    body = body,
+    tidy = FALSE
   )
 }}
-			
+
 ')
     } else if (wrapper_fn == "generic_request") {
       # Similar logic for generic_request
@@ -1188,7 +1192,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{chemi_server_params}{content_type_call}{combined_calls}
+    batch_limit = {batch_limit_code}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
   )
 }}
 
@@ -1198,10 +1202,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}generic_chemi_request(
     query = NULL,
-    endpoint = "{endpoint}"{combined_calls}
+    endpoint = "{endpoint}"{combined_calls},
+    tidy = FALSE
   )
 }}
-			
+
 ')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
@@ -1233,7 +1238,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
   )
 }}
 
@@ -1243,11 +1248,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}generic_chemi_request(
     query = {primary_param},
-    endpoint = "{endpoint}"{combined_calls}
+    endpoint = "{endpoint}"{combined_calls},
+    tidy = FALSE
   )
 }}
-	
-			')
+
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1281,7 +1287,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{content_type_call}{extra_params}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{extra_params}
   )
 }}
 
@@ -1293,10 +1299,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {primary_param},
     endpoint = "{endpoint}",
     server = "chemi_burl",
-    auth = FALSE
+    auth = FALSE,
+    tidy = FALSE
   )
 }}
-			
+
 ')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
