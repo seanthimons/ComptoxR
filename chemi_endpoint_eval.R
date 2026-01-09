@@ -125,14 +125,7 @@ chemi_endpoints <- map(
   # ) %>%
   # # Remove duplicates (prefer first occurrence per route)
   # distinct(route, .keep_all = TRUE) %>% 
-  # Filter out endpoints with file upload params
-  filter(query_params != 'files[]') %>%
-	mutate(
-		params = str_remove_all(params, "files\\[\\],") %>% str_squish(),
-		query_params = str_remove_all(query_params, "files\\[\\],") %>% str_squish(),
-		query_param_metadata = map(query_param_metadata, ~discard_at(.x, 'files[]'))
-	) %>%
-	# Detect GET/POST collisions on same route and generate unique function names
+  # Detect GET/POST collisions on same route and generate unique function names
 	group_by(file) %>%
 	mutate(
 		method_count = n(),
