@@ -15,16 +15,27 @@
 #' @param auth Boolean; whether to include the API key header. Defaults to TRUE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 #'        If FALSE, returns a cleaned list structure.
+#' @param path_params Optional vector or list of additional path parameters to append to the endpoint URL.
+#'        Used for endpoints with multiple path parameters (e.g., property range searches).
+#'        These are appended after the primary query parameter in the order provided.
+#'        Cannot be used with batching (batch_limit > 1).
+#' @param content_type Expected response content type. Defaults to "application/json".
+#'        Supported types:
+#'        - "application/json": Parses response as JSON (default behavior)
+#'        - "text/plain": Returns response as character string
+#'        - "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
-#'        - If method is "GET" and batch_limit is 1: Unnamed arguments are appended as path fragments;
-#'          named arguments are added as query parameters.
+#'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
 #'        - If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
 #'
-#' @return A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
-#'         If no results are found, returns an empty tibble or empty list.
+#' @return Depends on content_type:
+#'         - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
+#'         - text/plain: A character string.
+#'         - image/*: Raw bytes, or a magick image object if the magick package is available.
+#'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
-generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, ...) {
+generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -35,16 +46,19 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   # --- 2. Input Normalization ---
   # Ensure the query is a unique character vector without NAs or empty strings.
   # Special case: if batch_limit is 0, this is a static endpoint (no query needed)
-  if (is.null(batch_limit)) {
+  if (is.null(batch_limit)|| batch_limit == "NA") {
     batch_limit <- as.numeric(Sys.getenv("batch_limit", "1000"))
   }
 
   if (batch_limit == 0) {
     # Static endpoint: no query validation needed
+    # Save original query value before overwriting (for adding to query string)
+    original_query <- query
     query <- c("_static_")
     query_list <- list(query)
     mult_count <- 1
   } else {
+    original_query <- NULL
     # Standard query handling
     if(purrr::is_list(query) && !is.data.frame(query)) {
       query <- as.character(unlist(query, use.names = FALSE))
@@ -69,6 +83,16 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
     }
   }
 
+  # --- 3.5. Validate path_params Usage ---
+  # Path parameters cannot be used with batching
+  if (!is.null(path_params) && length(path_params) > 0) {
+    if (batch_limit > 1 || (length(query) > 1 && batch_limit != 0)) {
+      cli::cli_abort(
+        "Cannot use path_params with batching. Path parameter endpoints do not support batch queries."
+      )
+    }
+  }
+
   # Check environment flags for logging/debugging
   run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
@@ -90,6 +114,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   # Capture ellipsis arguments before purrr::map to preserve them in the function scope
   ellipsis_args <- list(...)
 
+  # Flatten 'options' list if present (common pattern in chemi wrappers generated code)
+  if ("options" %in% names(ellipsis_args) && is.list(ellipsis_args$options)) {
+    opts <- ellipsis_args$options
+    ellipsis_args$options <- NULL
+    ellipsis_args <- c(ellipsis_args, opts)
+  }
+
   # Create a list of httr2 request objects, one for each batch.
   req_list <- purrr::map(
     query_list,
@@ -97,7 +128,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       req <- httr2::request(base_url) %>%
         httr2::req_url_path_append(endpoint) %>%
         httr2::req_headers(
-          Accept = "application/json"
+          Accept = content_type
         )
 
       if (auth) {
@@ -108,9 +139,17 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       if (toupper(method) == "POST") {
         req <- req %>%
           httr2::req_method("POST") %>%
-          httr2::req_body_json(query_part, auto_unbox = FALSE) %>%
-          # Add ellipsis arguments as query params (e.g., projection="all")
-          httr2::req_url_query(!!!ellipsis_args)
+          httr2::req_body_json(query_part, auto_unbox = FALSE)
+
+        # Append additional path parameters if provided
+        if (!is.null(path_params) && length(path_params) > 0) {
+          for (pp in path_params) {
+            req <- req %>% httr2::req_url_path_append(as.character(pp))
+          }
+        }
+
+        # Add ellipsis arguments as query params (e.g., projection="all")
+        req <- req %>% httr2::req_url_query(!!!ellipsis_args)
       }
       # Implementation for GET requests
       else {
@@ -118,6 +157,10 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 
         # Scenario A: Static endpoint (no query appending)
         if (batch_limit == 0) {
+          # Add original query value to query parameters if provided
+          if (!is.null(original_query) && query_part == "_static_") {
+            ellipsis_args <- c(list(query = original_query), ellipsis_args)
+          }
           # Only add named arguments as query parameters
           req <- req %>% httr2::req_url_query(!!!ellipsis_args)
         }
@@ -125,8 +168,20 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
         else if (batch_limit == 1) {
           req <- req %>% httr2::req_url_path_append(as.character(query_part))
 
+          # Append additional path parameters if provided
+          if (!is.null(path_params) && length(path_params) > 0) {
+            for (pp in path_params) {
+              req <- req %>% httr2::req_url_path_append(as.character(pp))
+            }
+          }
+
           # Separate named vs unnamed ellipsis arguments
-          named_indices <- !is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0 && names(ellipsis_args) != ""
+          # nzchar() vectorizes properly, unlike != ""
+          named_indices <- if (!is.null(names(ellipsis_args)) && length(names(ellipsis_args)) > 0) {
+            nzchar(names(ellipsis_args))
+          } else {
+            rep(FALSE, length(ellipsis_args))
+          }
 
           # Append unnamed args to the URL path (e.g., /assay/ID/similarity)
           if (any(!named_indices)) {
@@ -165,13 +220,78 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   }
 
   # --- 7. Response Processing ---
-  # Extract JSON bodies and handle HTTP errors gracefully.
+
+  # Determine response type from content_type parameter
+
+  is_image <- grepl("^image/", content_type)
+  is_text <- grepl("^text/plain", content_type)
+  is_json <- !is_image && !is_text
+
+  # For non-JSON content types, we handle responses differently
+
+  if (is_image) {
+    # Image responses: return raw bytes or magick image
+    body_list <- resp_list %>%
+      purrr::map2(query_list, function(r, qp) {
+        if (inherits(r, "httr2_error")) r <- r$resp
+        if (!inherits(r, "httr2_response")) return(NULL)
+
+        status <- httr2::resp_status(r)
+        if (status < 200 || status >= 300) {
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          return(NULL)
+        }
+
+        raw_bytes <- httr2::resp_body_raw(r)
+
+        # Try to convert to magick image if package is available
+        if (requireNamespace("magick", quietly = TRUE)) {
+          tryCatch(
+            magick::image_read(raw_bytes),
+            error = function(e) raw_bytes
+          )
+        } else {
+          raw_bytes
+        }
+      })
+
+    # For single query, return the image directly (not as a list)
+    if (length(body_list) == 1) {
+      return(body_list[[1]])
+    }
+    return(body_list)
+  }
+
+  if (is_text) {
+    # Text responses: return as character string
+    body_list <- resp_list %>%
+      purrr::map2(query_list, function(r, qp) {
+        if (inherits(r, "httr2_error")) r <- r$resp
+        if (!inherits(r, "httr2_response")) return(NULL)
+
+        status <- httr2::resp_status(r)
+        if (status < 200 || status >= 300) {
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          return(NULL)
+        }
+
+        httr2::resp_body_string(r)
+      })
+
+    # For single query, return the string directly
+    if (length(body_list) == 1) {
+      return(body_list[[1]])
+    }
+    return(body_list)
+  }
+
+  # JSON responses (default): Extract JSON bodies and handle HTTP errors gracefully.
   body_list <- resp_list %>%
     purrr::map2(query_list, function(r, qp) {
       # Handle potential httr2 error objects
       if (inherits(r, "httr2_error")) r <- r$resp
       if (!inherits(r, "httr2_response")) return(NULL)
-      
+
       status <- httr2::resp_status(r)
       if (status < 200 || status >= 300) {
         cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
@@ -179,13 +299,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
       }
 
       body <- httr2::resp_body_json(r)
-      
+
       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
       if (length(qp) == 1 && is.list(body)) {
          # We add the query as a named attribute so it can be picked up during flattening
          attr(body, "query") <- qp[1]
       }
-      
+
       return(body)
     }) %>%
     # Flatten the list of responses (one list of data per batch) into one single list
@@ -372,4 +492,90 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   }
 
   return(res)
+}
+
+#' Generic Search API Request Function
+#'
+#' Specialized template for the cheminformatics search endpoint which uses a
+#' different payload structure: \code{{"inputType", "searchType", "params", "query"}}
+#'
+#' @param search_type The search type (e.g., "EXACT", "SIMILAR", "MASS", "HAZARD", "FEATURES").
+#' @param input_type The input format type. Defaults to "MOL".
+#' @param query The query string (typically a MOL file string). Can be NULL for mass searches.
+#' @param params A named list of additional search parameters.
+#' @param endpoint The API endpoint path. Defaults to "search".
+#' @param server Environment variable name for base URL. Defaults to "chemi_burl".
+#' @param tidy Boolean; whether to return raw response body or just pass through. Defaults to TRUE.
+#'
+#' @return The parsed JSON response body (list structure).
+#' @keywords internal
+generic_search_request <- function(
+    search_type,
+    input_type = "MOL",
+    query = NULL,
+    params = list(),
+    endpoint = "search",
+    server = "chemi_burl",
+    tidy = TRUE
+) {
+  # 1. Base URL Resolution
+  base_url <- Sys.getenv(server, unset = server)
+  if (base_url == "") base_url <- server
+
+  # 2. Payload Construction
+  payload <- list(
+    inputType = input_type,
+    searchType = search_type,
+    params = params
+  )
+
+  # Only include query if not NULL
+  if (!is.null(query)) {
+    payload$query <- query
+  }
+
+  # Remove NULL params
+  payload$params <- purrr::compact(payload$params)
+
+  # Check environment flags
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste("Generic Search Request:", search_type))
+    cli::cli_dl(c(
+      "Input type" = input_type,
+      "Search type" = search_type,
+      "Params count" = length(payload$params)
+    ))
+    cli::cli_rule()
+  }
+
+  # 3. Request building
+  req <- httr2::request(base_url) |>
+    httr2::req_url_path_append(endpoint) |>
+    httr2::req_method("POST") |>
+    httr2::req_body_json(payload) |>
+    httr2::req_headers(
+      Accept = "application/json",
+      `Content-Type` = "application/json"
+    )
+
+  # 4. Debugging
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  # 5. Execution
+  resp <- httr2::req_perform(req)
+
+  # 6. Response Processing
+  status <- httr2::resp_status(resp)
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("Search API request failed with status {status}")
+  }
+
+  body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  return(body)
 }

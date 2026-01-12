@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/lookup
+    body:
+      string: '{"fuzzy":"Not","ids":["50-00-0"],"idsType":"DTXSID","mol":false}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:33 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"chemical":{"chemId":"DTXSID7020637","cid":"DTXCID30637","sid":"DTXSID7020637","casrn":"50-00-0","name":"Formaldehyde","smiles":"C=O","canonicalSmiles":"C=O","inchi":"InChI=1S/CH2O/c1-2/h1H2","inchiKey":"WSFSSNUMVMOOMR-UHFFFAOYSA-N"},"resolvedBy":"CAS","confidence":1.0,"result":"FOUND","query":"50-00-0","message":"prod_dsstox_10272022","source":"DTX"}]'
+  recorded_at: 2026-01-05 04:07:33
+recorded_with: VCR-vcr/2.1.0

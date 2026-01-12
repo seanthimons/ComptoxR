@@ -412,7 +412,7 @@ reset_servers <- function() {
 			run_verbose(verbose = FALSE)
 		}
     if (Sys.getenv("run_debug") == "") {
-			run_verbose(verbose = FALSE)
+			run_debug(debug = FALSE)
 		}
 		batch_limit(limit = 200)
 
@@ -428,7 +428,7 @@ reset_servers <- function() {
 			run_verbose(verbose = FALSE)
 		}
     if (Sys.getenv("run_debug") == "") {
-			run_verbose(verbose = FALSE)
+			run_debug(debug = FALSE)
 		}
 
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-863CWMVR21"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-863CWMVR21');
+    </script>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/amos/vite.svg"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Analytical Methods & Open Spectra</title>
+  <script type="module" crossorigin src="/amos/assets/index-BerFpOre.js"></script>
+  <link rel="stylesheet" crossorigin href="/amos/assets/index-D4qyc_HC.css">
+</head>
+<body>
+<div id="app"></div>
+</body>
+</html>

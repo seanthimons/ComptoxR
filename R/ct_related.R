@@ -3,7 +3,7 @@
 #' Get related substances from the EPA CompTox dashboard.
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("questioning")`
 #'
 #' @param query A character vector of DTXSIDs to query.
 #' @param inclusive Boolean to only return results within all of the queried compounds. Valid for over one compound.
