@@ -491,6 +491,7 @@ parse_chemi_schemas <- function(
   stage_order = c("prod", "staging", "dev")
 ) {
   if (!requireNamespace("here", quietly = TRUE)) stop("Package 'here' is required.")
+  if (!requireNamespace("jsonlite", quietly = TRUE)) stop("Package 'jsonlite' is required.")
   if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
   if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
   if (!requireNamespace("tidyr", quietly = TRUE)) stop("Package 'tidyr' is required.")
@@ -498,7 +499,6 @@ parse_chemi_schemas <- function(
   if (!requireNamespace("tibble", quietly = TRUE)) stop("Package 'tibble' is required.")
 
   # Default to here::here('schema') if not specified
-
   if (is.null(schema_dir)) {
     schema_dir <- here::here("schema")
   }
