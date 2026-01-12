@@ -123,9 +123,8 @@ res_chemi <- find_endpoint_usages_base(
 )
 
 # Filter to endpoints with no hits (not yet implemented)
-# chemi_endpoints_to_build <- chemi_endpoints %>%
-#   filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
-chemi_endpoints_to_build <- chemi_endpoints
+chemi_endpoints_to_build <- chemi_endpoints %>%
+  filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
 # ==============================================================================
 # Generate Function Stubs
@@ -152,7 +151,7 @@ chemi_spec_aggregated <- chemi_spec_with_text %>%
   group_by(file) %>%
   summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
 
-scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = FALSE)
+scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed
@@ -170,3 +169,9 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # 	res_chemi
 # 	#chemi_endpoints_to_build
 # )
+
+# ==============================================================================
+# Test loading
+# ==============================================================================
+
+devtools::load_all()

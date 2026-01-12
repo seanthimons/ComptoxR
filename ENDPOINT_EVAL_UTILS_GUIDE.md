@@ -6,43 +6,43 @@ The `endpoint_eval_utils.R` script is a code generation utility that parses Open
 
 ## Table of Contents
 
-1. [Architecture Overview](#architecture-overview)
-2. [Schema Parsing Flow](#schema-parsing-flow)
-3. [Parameter Assignment Logic](#parameter-assignment-logic)
-4. [The `wrap` and `tidy` Parameters](#the-wrap-and-tidy-parameters)
-5. [Function Generation Pipeline](#function-generation-pipeline)
-6. [Flowchart](#flowchart)
+1.  [Architecture Overview](#architecture-overview)
+2.  [Schema Parsing Flow](#schema-parsing-flow)
+3.  [Parameter Assignment Logic](#parameter-assignment-logic)
+4.  [The `wrap` and `tidy` Parameters](#the-wrap-and-tidy-parameters)
+5.  [Function Generation Pipeline](#function-generation-pipeline)
+6.  [Flowchart](#flowchart)
 
----
+------------------------------------------------------------------------
 
-## Architecture Overview
+## Architecture Overview {#architecture-overview}
 
 The utility provides four main capabilities:
 
-1. **OpenAPI Parsing** (`openapi_to_spec`) - Converts OpenAPI JSON to a tidy specification tibble
-2. **Codebase Analysis** (`find_endpoint_usages_base`) - Searches for existing endpoint implementations
-3. **Parameter Parsing** (`parse_path_parameters`, `parse_function_params`) - Extracts and organizes function parameters
-4. **Code Generation** (`build_function_stub`, `render_endpoint_stubs`) - Generates R function source code
+1.  **OpenAPI Parsing** (`openapi_to_spec`) - Converts OpenAPI JSON to a tidy specification tibble
+2.  **Codebase Analysis** (`find_endpoint_usages_base`) - Searches for existing endpoint implementations
+3.  **Parameter Parsing** (`parse_path_parameters`, `parse_function_params`) - Extracts and organizes function parameters
+4.  **Code Generation** (`build_function_stub`, `render_endpoint_stubs`) - Generates R function source code
 
----
+------------------------------------------------------------------------
 
-## Schema Parsing Flow
+## Schema Parsing Flow {#schema-parsing-flow}
 
 ### Step 1: Load OpenAPI Schemas
 
 The `parse_chemi_schemas()` function:
 
-1. Lists all schema files matching pattern `^chemi-.*\.json$`
-2. Filters out UI schemas (excluded by pattern)
-3. Parses filenames to extract: `origin`, `domain`, `stage`
-4. For each domain, selects the best available stage (priority: prod > staging > dev)
-5. Parses each selected schema using `openapi_to_spec()`
+1.  Lists all schema files matching pattern `^chemi-.*\.json$`
+2.  Filters out UI schemas (excluded by pattern)
+3.  Parses filenames to extract: `origin`, `domain`, `stage`
+4.  For each domain, selects the best available stage (priority: prod \> staging \> dev)
+5.  Parses each selected schema using `openapi_to_spec()`
 
 ### Step 2: Extract Endpoint Specifications
 
 The `openapi_to_spec()` function processes each OpenAPI path:
 
-```
+```         
 For each route in openapi$paths:
     For each HTTP method (GET, POST, PUT, PATCH, DELETE):
         1. Merge path-level and operation-level parameters
@@ -59,7 +59,7 @@ For each route in openapi$paths:
 For each parameter, the following metadata is extracted:
 
 | Field | Source | Description |
-|-------|--------|-------------|
+|------------------|---------------------|---------------------------------|
 | `name` | `parameter.name` | Parameter name |
 | `example` | `parameter.example` or `schema.default` | Example value for documentation |
 | `description` | `parameter.description` or `schema.description` | Parameter description |
@@ -68,48 +68,46 @@ For each parameter, the following metadata is extracted:
 | `type` | `schema.type` | Data type (string, boolean, integer, etc.) |
 | `required` | `parameter.required` | Whether parameter is required |
 
----
+------------------------------------------------------------------------
 
-## Parameter Assignment Logic
+## Parameter Assignment Logic {#parameter-assignment-logic}
 
 ### Path Parameters
 
 Path parameters are extracted from URL placeholders like `/endpoint/{dtxsid}`:
 
-1. **Primary Parameter**: The first path parameter becomes the `query` argument
-2. **Additional Path Parameters**: Remaining path parameters go into `path_params`
+1.  **Primary Parameter**: The first path parameter becomes the `query` argument
+2.  **Additional Path Parameters**: Remaining path parameters go into `path_params`
 
-Example:
-- Route: `/property/{propertyName}/{start}/{end}`
-- Function signature: `ct_chemical_property_predicted_by_range(propertyName, start = NULL, end = NULL)`
+Example: - Route: `/property/{propertyName}/{start}/{end}` - Function signature: `ct_chemical_property_predicted_by_range(propertyName, start = NULL, end = NULL)`
 
 ### Query Parameters
 
 Query parameters are URL query string parameters (e.g., `?projection=all`):
 
-1. If no path parameters exist, the first query parameter becomes the primary parameter
-2. All query parameters are passed through the ellipsis (`...`) mechanism
+1.  If no path parameters exist, the first query parameter becomes the primary parameter
+2.  All query parameters are passed through the ellipsis (`...`) mechanism
 
 ### Body Parameters
 
 For POST/PUT/PATCH endpoints, body parameters come from request body schemas:
 
-1. Schema references (`$ref`) are resolved from `#/components/schemas/`
-2. Properties are extracted with their types, defaults, and required status
-3. Required parameters come first in the function signature, then optional with defaults
+1.  Schema references (`$ref`) are resolved from `#/components/schemas/`
+2.  Properties are extracted with their types, defaults, and required status
+3.  Required parameters come first in the function signature, then optional with defaults
 
 ### Parameter Strategy
 
 Two strategies are supported:
 
 | Strategy | Usage | Implementation |
-|----------|-------|----------------|
+|---------------------|------------------|----------------------------------|
 | `extra_params` | `generic_request` | Parameters passed via `...` to `httr2::req_url_query()` |
 | `options` | `generic_chemi_request` | Parameters collected into an `options` list |
 
----
+------------------------------------------------------------------------
 
-## The `wrap` and `tidy` Parameters
+## The `wrap` and `tidy` Parameters {#the-wrap-and-tidy-parameters}
 
 ### The `wrap` Parameter
 
@@ -119,7 +117,7 @@ The `wrap` parameter in `generic_chemi_request` controls the JSON payload struct
 
 Sends a wrapped payload with `chemicals` and `options` fields:
 
-```json
+``` json
 {
   "chemicals": [{"sid": "DTXSID7020182"}, {"sid": "DTXSID1020461"}],
   "options": {"fingerprint": "toxprints", "normalize": true}
@@ -132,7 +130,7 @@ Sends a wrapped payload with `chemicals` and `options` fields:
 
 Sends an unwrapped array of chemical objects:
 
-```json
+``` json
 [{"sid": "DTXSID7020182"}, {"sid": "DTXSID1020461"}]
 ```
 
@@ -142,7 +140,7 @@ Sends an unwrapped array of chemical objects:
 
 In `build_function_stub()`, the `wrap` parameter is determined as follows:
 
-```r
+``` r
 # From body_param_info, parameters are split:
 # - query_param: the first body parameter (becomes the 'query' argument)
 # - other_required: additional required body parameters
@@ -157,34 +155,26 @@ wrap_param <- if (has_no_additional_params) {
 }
 ```
 
-**Decision flow:**
-1. Parse body parameters from OpenAPI schema
-2. Identify the first parameter as the `query` (typically `chemicals` or `dtxsids`)
-3. Check for additional required or optional parameters
-4. If no additional parameters exist → `wrap = FALSE`
-5. If additional parameters exist → `wrap = TRUE` (default)
+**Decision flow:** 1. Parse body parameters from OpenAPI schema 2. Identify the first parameter as the `query` (typically `chemicals` or `dtxsids`) 3. Check for additional required or optional parameters 4. If no additional parameters exist → `wrap = FALSE` 5. If additional parameters exist → `wrap = TRUE` (default)
 
 ### The `tidy` Parameter
 
 The `tidy` parameter controls the output format:
 
 | Value | Output Format | Use Case |
-|-------|---------------|----------|
+|------------------|---------------------------------|----------------------|
 | `TRUE` (default) | Tidy tibble with columns for each field | Most R workflows |
 | `FALSE` | Raw list structure from JSON | Nested data, custom processing |
 
-In generated stubs, `tidy = FALSE` is explicitly set because:
-1. Cheminformatics responses often have complex nested structures
-2. Allows users to decide how to flatten/process the data
-3. Provides access to all response data without loss
+In generated stubs, `tidy = FALSE` is explicitly set because: 1. Cheminformatics responses often have complex nested structures 2. Allows users to decide how to flatten/process the data 3. Provides access to all response data without loss
 
----
+------------------------------------------------------------------------
 
-## Function Generation Pipeline
+## Function Generation Pipeline {#function-generation-pipeline}
 
 ### Configuration
 
-```r
+``` r
 chemi_config <- list(
   wrapper_function = "generic_chemi_request",  # or "generic_request"
   param_strategy = "options",                   # or "extra_params"
@@ -195,34 +185,30 @@ chemi_config <- list(
 
 ### Pipeline Steps
 
-1. **Parse Path Parameters** (`parse_path_parameters`)
-   - Input: `path_params` string, metadata
-   - Output: Function signature, path_params call, primary param
+1.  **Parse Path Parameters** (`parse_path_parameters`)
+    -   Input: `path_params` string, metadata
+    -   Output: Function signature, path_params call, primary param
+2.  **Parse Query Parameters** (`parse_function_params`)
+    -   Input: `query_params` string, metadata, `has_path_params` flag
+    -   Output: Function signature, param docs, params code, params call
+3.  **Parse Body Parameters** (`parse_function_params`)
+    -   Input: `body_params` string, metadata, `has_path_params` flag
+    -   Output: Same as query params
+4.  **Build Function Stub** (`build_function_stub`)
+    -   Combines all parameter info
+    -   Generates roxygen documentation
+    -   Generates function body with appropriate wrapper call
+5.  **Scaffold Files** (`scaffold_files`)
+    -   Writes generated code to R/ directory
+    -   Handles overwrite/append logic
 
-2. **Parse Query Parameters** (`parse_function_params`)
-   - Input: `query_params` string, metadata, `has_path_params` flag
-   - Output: Function signature, param docs, params code, params call
+------------------------------------------------------------------------
 
-3. **Parse Body Parameters** (`parse_function_params`)
-   - Input: `body_params` string, metadata, `has_path_params` flag
-   - Output: Same as query params
-
-4. **Build Function Stub** (`build_function_stub`)
-   - Combines all parameter info
-   - Generates roxygen documentation
-   - Generates function body with appropriate wrapper call
-
-5. **Scaffold Files** (`scaffold_files`)
-   - Writes generated code to R/ directory
-   - Handles overwrite/append logic
-
----
-
-## Flowchart
+## Flowchart {#flowchart}
 
 ### Main Processing Flow
 
-```mermaid
+``` mermaid
 flowchart TB
     subgraph "Schema Loading"
         A[Load OpenAPI JSON] --> B[parse_chemi_schemas]
@@ -288,7 +274,7 @@ flowchart TB
 
 ### Parameter Flow Detail
 
-```mermaid
+``` mermaid
 flowchart LR
     subgraph "Input"
         A[OpenAPI Schema]
@@ -331,7 +317,7 @@ flowchart LR
 
 ### Wrap Decision Flow
 
-```mermaid
+``` mermaid
 flowchart TD
     A[Body Parameters Parsed] --> B{Any body params?}
     B -->|No| C[wrap = TRUE default]
@@ -348,14 +334,15 @@ flowchart TD
     C --> L[Default behavior]
 ```
 
----
+------------------------------------------------------------------------
 
 ## Example: Generated Function
 
 For an endpoint with body parameters `dtxsids` (required) and `fingerprint` (optional):
 
 **Schema:**
-```json
+
+``` json
 {
   "requestBody": {
     "content": {
@@ -370,7 +357,8 @@ For an endpoint with body parameters `dtxsids` (required) and `fingerprint` (opt
 ```
 
 **Generated Code:**
-```r
+
+``` r
 #' Calculate Toxprints
 #'
 #' @description
@@ -401,7 +389,7 @@ chemi_toxprint <- function(dtxsids, fingerprint = NULL) {
 
 For a simpler endpoint with only `dtxsids`:
 
-```r
+``` r
 chemi_resolve <- function(dtxsids) {
   generic_chemi_request(
     query = dtxsids,
@@ -412,12 +400,12 @@ chemi_resolve <- function(dtxsids) {
 }
 ```
 
----
+------------------------------------------------------------------------
 
 ## Key Functions Reference
 
 | Function | Purpose | Input | Output |
-|----------|---------|-------|--------|
+|--------------------|------------------|-----------------|-----------------|
 | `parse_chemi_schemas()` | Load and merge OpenAPI schemas | Schema directory | Unified spec tibble |
 | `openapi_to_spec()` | Parse single OpenAPI to spec | OpenAPI list | Spec tibble |
 | `parse_path_parameters()` | Parse path params | Param string, metadata | Signature, calls, docs |
@@ -426,30 +414,34 @@ chemi_resolve <- function(dtxsids) {
 | `render_endpoint_stubs()` | Process spec to code | Spec tibble, config | Spec with `text` column |
 | `scaffold_files()` | Write files to disk | Spec with text | Write result tibble |
 
----
+------------------------------------------------------------------------
 
 ## Debugging Tips
 
-1. **Inspect parsed schema:**
-   ```r
-   spec <- openapi_to_spec(jsonlite::fromJSON("schema/chemi-hazard-prod.json"))
-   View(spec)
-   ```
+1.  **Inspect parsed schema:**
 
-2. **Check parameter metadata:**
-   ```r
-   spec$body_param_metadata[[1]]  # First endpoint's body params
-   ```
+    ``` r
+    spec <- openapi_to_spec(jsonlite::fromJSON("schema/chemi-hazard-prod.json"))
+    View(spec)
+    ```
 
-3. **Test stub generation:**
-   ```r
-   stub <- build_function_stub(fn, endpoint, method, title, batch_limit, 
-                                path_info, query_info, body_info, content_type, config)
-   cat(stub)
-   ```
+2.  **Check parameter metadata:**
 
-4. **Enable verbose output:**
-   ```r
-   Sys.setenv(run_verbose = "TRUE")
-   Sys.setenv(run_debug = "TRUE")
-   ```
+    ``` r
+    spec$body_param_metadata[[1]]  # First endpoint's body params
+    ```
+
+3.  **Test stub generation:**
+
+    ``` r
+    stub <- build_function_stub(fn, endpoint, method, title, batch_limit, 
+                                 path_info, query_info, body_info, content_type, config)
+    cat(stub)
+    ```
+
+4.  **Enable verbose output:**
+
+    ``` r
+    Sys.setenv(run_verbose = "TRUE")
+    Sys.setenv(run_debug = "TRUE")
+    ```
