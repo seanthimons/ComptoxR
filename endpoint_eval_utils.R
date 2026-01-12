@@ -1171,7 +1171,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Determine if we need wrap = FALSE based on whether there are options
       # If there are no options, use wrap = FALSE to send just the array of chemicals
       # If there are options, use default wrap = TRUE to send {"chemicals": [...], "options": {...}}
-      wrap_param <- if (length(other_required) == 0 && length(optional_params) == 0) {
+      has_no_additional_params <- length(other_required) == 0 && length(optional_params) == 0
+      wrap_param <- if (has_no_additional_params) {
         ",\n    wrap = FALSE"
       } else {
         ""
