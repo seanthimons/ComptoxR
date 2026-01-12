@@ -5,65 +5,126 @@
 \title{Cheminformatics Search}
 \usage{
 chemi_search(
-  query,
-  searchType = c("exact", "substruture", "similar", "mass", "hazard", "features"),
+  query = NULL,
+  search_type = c("exact", "substructure", "similar", "mass", "hazard", "features"),
   similarity_type = c("tanimoto", "euclid", "tversky"),
-  min_similarity = NULL,
+  min_similarity = 0.85,
+  hazard_name = NULL,
   min_toxicity = c("VH", "H", "M", "L", "A"),
-  min_auth = c("auth", "screen", "qsar"),
-  hazard_name = c("acute_oral", "acute_inhal", "acute_dermal", "cancer", "geno", "endo",
-    "reprod", "develop", "neuro_single", "neuro_repeat", "sys_single", "sys_repeat",
-    "skin_sens", "skin_irr", "eye", "aq_acute", "aq_chron", "persis", "bioacc", "expo"),
-  filter_results = FALSE,
-  filter_inc = list("stereo", "chiral", "isotopes", "charged", "multicomponent",
-    "radicals", "salts", "polymers", "sgroups"),
-  element_inc = NULL,
-  element_exc = NULL,
+  min_authority = c("auth", "screen", "qsar"),
   mass_type = c("mono", "mw", "abu"),
   min_mass = NULL,
   max_mass = NULL,
-  debug = F,
-  ...
+  filter_features = FALSE,
+  feature_filters = NULL,
+  element_include = NULL,
+  element_exclude = NULL,
+  exclude_all_others = FALSE,
+  limit = 50
 )
 }
 \arguments{
-\item{query}{Takes a list of variables (such as DTXSIDs, CASRN, names, etc.) to search by.}
+\item{query}{Chemical identifier (DTXSID), SMILES string, or MOL file string.
+Required for exact, substructure, and similar searches. Can be NULL for
+mass, hazard, and features searches.}
 
-\item{searchType}{string}
+\item{search_type}{Type of search to perform. One of:
+\itemize{
+\item \code{"exact"} - Exact structure match
+\item \code{"substructure"} - Substructure search
+\item \code{"similar"} - Similarity search
+\item \code{"mass"} - Mass-based search
+\item \code{"hazard"} - Hazard-based search
+\item \code{"features"} - Feature-based search
+}}
 
-\item{similarity_type}{string}
+\item{similarity_type}{Similarity metric for similar searches. One of
+\code{"tanimoto"} (default), \code{"euclid"}, or \code{"tversky"}.}
 
-\item{min_similarity}{string}
+\item{min_similarity}{Minimum similarity threshold (0-1). Defaults to 0.85.}
 
-\item{min_toxicity}{string}
+\item{hazard_name}{Hazard endpoint name for hazard searches. Use short names:
+\code{"acute_oral"}, \code{"acute_inhal"}, \code{"acute_dermal"},
+\code{"cancer"}, \code{"geno"}, \code{"endo"}, \code{"reprod"},
+\code{"develop"}, \code{"neuro_single"}, \code{"neuro_repeat"},
+\code{"sys_single"}, \code{"sys_repeat"}, \code{"skin_sens"},
+\code{"skin_irr"}, \code{"eye"}, \code{"aq_acute"}, \code{"aq_chron"},
+\code{"persis"}, \code{"bioacc"}, \code{"expo"}.}
 
-\item{min_auth}{string}
+\item{min_toxicity}{Minimum toxicity level for hazard searches.
+One of \code{"VH"} (Very High), \code{"H"} (High), \code{"M"} (Medium),
+\code{"L"} (Low), or \code{"A"} (Any).}
 
-\item{hazard_name}{string}
+\item{min_authority}{Minimum data authority level for hazard searches.
+One of \code{"auth"} (Authoritative), \code{"screen"} (Screening),
+or \code{"qsar"} (QSAR).}
 
-\item{filter_results}{Boolean to restrict the data returned.}
+\item{mass_type}{Type of mass for mass searches. One of \code{"mono"}
+(monoisotopic mass), \code{"mw"} (molecular weight), or \code{"abu"}
+(most abundant mass).}
 
-\item{filter_inc}{A list of feature subtypes to include. Searches by \code{AND} operation}
+\item{min_mass}{Minimum mass value for mass searches.}
 
-\item{element_inc}{A vector of elements to include.}
+\item{max_mass}{Maximum mass value for mass searches.}
 
-\item{element_exc}{A vector of elements to exclude, or the option of \code{ALL} to exclude every element EXCEPT the searched elements.}
+\item{filter_features}{Logical; whether to apply feature filters. Defaults to FALSE.}
 
-\item{mass_type}{string}
+\item{feature_filters}{Named logical vector of feature filters to apply when
+\code{filter_features = TRUE}. Valid filter names: \code{"stereo"},
+\code{"chiral"}, \code{"isotopes"}, \code{"charged"}, \code{"multicomponent"},
+\code{"radicals"}, \code{"salts"}, \code{"polymers"}, \code{"sgroups"}.}
 
-\item{min_mass}{string}
+\item{element_include}{Character vector of element symbols to include in results.}
 
-\item{max_mass}{string}
+\item{element_exclude}{Character vector of element symbols to exclude from results.}
 
-\item{debug}{string}
+\item{exclude_all_others}{Logical; if TRUE, excludes all elements except those
+in \code{element_include}. Defaults to FALSE.}
 
-\item{...}{string}
-
-\item{coerce}{Boolean variable to coerce list to a data.frame. Defaults to \code{FALSE}.}
+\item{limit}{Maximum number of results to return. Defaults to 50.}
 }
 \value{
-A dataframe
+A tibble containing search results with columns depending on search type.
+For similarity searches, includes a \code{relationship} column indicating
+\code{"parent"} (query compound) or \code{"child"} (similar compound).
 }
 \description{
-Searching function that interfaces with the Cheminformatics API. Sends POST request.
+Search the cheminformatics database using various search types including
+exact structure, substructure, similarity, mass, hazard, and feature searches.
+}
+\examples{
+\dontrun{
+# Exact search by DTXSID
+chemi_search("DTXSID7020182", "exact")
+
+# Similarity search with custom threshold
+chemi_search("DTXSID7020182", "similar", min_similarity = 0.9)
+
+# Mass range search
+chemi_search(
+  query = NULL,
+  search_type = "mass",
+  mass_type = "mono",
+  min_mass = 100,
+  max_mass = 200
+)
+
+# Hazard search for carcinogenicity
+chemi_search(
+  query = NULL,
+  search_type = "hazard",
+  hazard_name = "cancer",
+  min_toxicity = "H",
+  min_authority = "auth"
+)
+
+# Feature search with element filtering
+chemi_search(
+  query = NULL,
+  search_type = "features",
+  element_include = c("C", "N", "O"),
+  exclude_all_others = TRUE,
+  limit = 100
+)
+}
 }
