@@ -102,7 +102,9 @@ chemi_endpoints <- map(
       # Trim and normalize whitespace
       str_squish() %>%
       # Replace spaces with underscores
-      str_replace_all(., pattern = "\\s", replacement = "_"),
+      str_replace_all(., pattern = "\\s", replacement = "_") %>% 
+      # Replace hyphens with underscores
+      str_replace_all(., pattern = "-", replacement = "_"),
 
 		#Build full file name with prefix
 		file = case_when(
@@ -148,12 +150,13 @@ chemi_endpoints <- map(
 res_chemi <- find_endpoint_usages_base(
 	chemi_endpoints$route, 
 	pkg_dir = here::here("R"), 
-	files_regex = "^chemi_.*\\.(R|Rmd|qmd|Rnw|Rd|md)$",
+	files_regex = "^chemi_.*\\.R$",
 )
 
 # Filter to endpoints with no hits (not yet implemented)
-chemi_endpoints_to_build <- chemi_endpoints %>%
-  filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+# chemi_endpoints_to_build <- chemi_endpoints %>%
+#   filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+chemi_endpoints_to_build <- chemi_endpoints
 
 # ==============================================================================
 # Generate Function Stubs
@@ -161,8 +164,7 @@ chemi_endpoints_to_build <- chemi_endpoints %>%
 
 # Render R function source code using unified template
 chemi_spec_with_text <- render_endpoint_stubs(
-  # chemi_endpoints_to_build %>% filter(route == 'resolver/lookup'),
-	chemi_endpoints %>% filter(route == 'resolver/lookup'),
+  chemi_endpoints_to_build,
   config = chemi_config
 ) 
 
@@ -177,7 +179,11 @@ chemi_spec_with_text <- render_endpoint_stubs(
 
 # ! BUILD ----
 # Uncomment to generate files:
-scaffold_result <- scaffold_files(chemi_spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE)
+chemi_spec_aggregated <- chemi_spec_with_text %>%
+  group_by(file) %>%
+  summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
+
+scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = FALSE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed

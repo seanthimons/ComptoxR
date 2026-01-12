@@ -114,6 +114,13 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
   # Capture ellipsis arguments before purrr::map to preserve them in the function scope
   ellipsis_args <- list(...)
 
+  # Flatten 'options' list if present (common pattern in chemi wrappers generated code)
+  if ("options" %in% names(ellipsis_args) && is.list(ellipsis_args$options)) {
+    opts <- ellipsis_args$options
+    ellipsis_args$options <- NULL
+    ellipsis_args <- c(ellipsis_args, opts)
+  }
+
   # Create a list of httr2 request objects, one for each batch.
   req_list <- purrr::map(
     query_list,
