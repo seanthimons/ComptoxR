@@ -1168,12 +1168,21 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         options_call <- ""
       }
 
+      # Determine if we need wrap = FALSE based on whether there are options
+      # If there are no options, use wrap = FALSE to send just the array of chemicals
+      # If there are options, use default wrap = TRUE to send {"chemicals": [...], "options": {...}}
+      wrap_param <- if (length(other_required) == 0 && length(optional_params) == 0) {
+        ",\n    wrap = FALSE"
+      } else {
+        ""
+      }
+
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {options_assembly}
   generic_chemi_request(
     query = {query_param},
-    endpoint = "{endpoint}"{options_call},
+    endpoint = "{endpoint}"{options_call}{wrap_param},
     tidy = FALSE
   )
 }}
