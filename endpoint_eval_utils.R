@@ -445,6 +445,139 @@ openapi_to_spec <- function(
   })
 }
 
+#' Parse and merge chemi schema files into a unified super schema
+#'
+#' Reads all chemi-*.json schema files from the specified directory, selects the
+#' best available version for each endpoint domain (prioritizing prod > staging > dev),
+#' parses each selected schema using `openapi_to_spec()`, and merges them into a
+#' single tibble.
+#'
+#' @param schema_dir Path to the directory containing schema files. Defaults to
+#'   the 'schema' directory at the project root (using `here::here('schema')`).
+#' @param pattern Regex pattern for matching schema files. Defaults to "^chemi-.*\\.json$".
+#' @param exclude_pattern Regex pattern for excluding schema files (e.g., UI schemas).
+#'   Defaults to "ui" (case-insensitive).
+#' @param stage_order Character vector specifying the priority order for stages.
+#'   Defaults to c("prod", "staging", "dev").
+#' @return A tibble containing all parsed endpoint specifications from the selected
+#'   schema files, with columns from `openapi_to_spec()` plus a `source_file` column
+#'   indicating which schema file each row came from.
+#'
+#' @details
+#' The function works by:
+#' 1. Listing all files matching the pattern in the schema directory
+#' 2. Filtering out files matching the exclude pattern
+#' 3. Parsing filenames to extract origin, domain, and stage
+#' 4. For each domain, selecting the first available stage based on stage_order
+#' 5. Parsing each selected schema file with `openapi_to_spec()`
+#' 6. Combining all parsed schemas into a single tibble
+#'
+#' @examples
+#' \dontrun{
+#' # Parse all chemi schemas using defaults
+#' super_schema <- parse_chemi_schemas()
+#'
+#' # Parse with custom schema directory
+#' super_schema <- parse_chemi_schemas(schema_dir = "my/schema/path")
+#'
+#' # View domains represented in the super schema
+#' table(super_schema$source_file)
+#' }
+#' @export
+parse_chemi_schemas <- function(
+  schema_dir = NULL,
+  pattern = "^chemi-.*\\.json$",
+  exclude_pattern = "ui",
+  stage_order = c("prod", "staging", "dev")
+) {
+  if (!requireNamespace("here", quietly = TRUE)) stop("Package 'here' is required.")
+  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
+  if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
+  if (!requireNamespace("tidyr", quietly = TRUE)) stop("Package 'tidyr' is required.")
+  if (!requireNamespace("stringr", quietly = TRUE)) stop("Package 'stringr' is required.")
+  if (!requireNamespace("tibble", quietly = TRUE)) stop("Package 'tibble' is required.")
+
+  # Default to here::here('schema') if not specified
+
+  if (is.null(schema_dir)) {
+    schema_dir <- here::here("schema")
+  }
+
+  # Verify schema directory exists
+  if (!dir.exists(schema_dir)) {
+    stop("Schema directory does not exist: ", schema_dir)
+  }
+
+  # List all matching schema files
+  all_files <- list.files(
+    path = schema_dir,
+    pattern = pattern,
+    full.names = FALSE
+  )
+
+  if (length(all_files) == 0) {
+    warning("No schema files found matching pattern '", pattern, "' in ", schema_dir)
+    return(tibble::tibble())
+  }
+
+  # Filter out excluded files (e.g., UI schemas)
+  if (!is.null(exclude_pattern) && nzchar(exclude_pattern)) {
+    files_filtered <- all_files[!grepl(exclude_pattern, all_files, ignore.case = TRUE)]
+  } else {
+    files_filtered <- all_files
+  }
+
+  if (length(files_filtered) == 0) {
+    warning("All schema files were excluded by pattern '", exclude_pattern, "'")
+    return(tibble::tibble())
+  }
+
+  # Parse filenames to extract origin, domain, and stage
+  # Expected format: chemi-{domain}-{stage}.json
+  schema_meta <- tibble::tibble(file = files_filtered) %>%
+    tidyr::separate_wider_delim(
+      cols = file,
+      delim = "-",
+      names = c("origin", "domain", "stage"),
+      cols_remove = FALSE
+    ) %>%
+    dplyr::mutate(
+      # Remove .json extension from stage
+      stage = stringr::str_remove(stage, pattern = "\\.json$"),
+      # Convert stage to factor with specified priority order
+      stage = factor(stage, levels = stage_order)
+    )
+
+  # For each domain, select the best available stage (first in order)
+  selected_files <- schema_meta %>%
+    dplyr::group_by(domain) %>%
+    dplyr::arrange(stage, .by_group = TRUE) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup() %>%
+    dplyr::pull(file)
+
+  if (length(selected_files) == 0) {
+    warning("No schema files selected after filtering by stage")
+    return(tibble::tibble())
+  }
+
+  # Parse each selected schema file and combine
+  super_schema <- purrr::map(
+    selected_files,
+    function(schema_file) {
+      schema_path <- file.path(schema_dir, schema_file)
+      openapi <- jsonlite::fromJSON(schema_path, simplifyVector = FALSE)
+      spec <- openapi_to_spec(openapi)
+      # Add source file column for traceability
+      spec$source_file <- schema_file
+      spec
+    }
+  ) %>%
+    purrr::list_rbind()
+
+  super_schema
+}
+
 # ==============================================================================
 # File Scaffolding
 # ==============================================================================
