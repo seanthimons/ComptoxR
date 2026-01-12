@@ -40,41 +40,10 @@ chemi_config <- list(
 # Load and Parse OpenAPI Schemas
 # ==============================================================================
 
-# Find all chemi production schema files
-chemi_schema_files <- list.files(
-  path = here::here('schema'),
-	pattern = "^chemi-.*\\.json$",
-  full.names = FALSE
-) %>% 
-	.[grep('ui', ., invert = TRUE)] %>% 
-	as_tibble_col(., column_name = 'file') %>% 
-	separate_wider_delim(., cols = file, delim = '-', names = c('origin', 'domain', 'stage'), cols_remove = FALSE) %>% 
-	mutate(
-		stage = str_remove(stage, pattern = ".json"),
-		stage = factor(stage, levels = c('prod', 'staging', 'dev')),
-		# TODO See if server can be passed through to generic function for schema-stubbing purposes.
-		# server = case_when(
-		# 	stage == 'prod' ~ 1,
-		# 	stage == 'staging' ~ 2,
-		# 	stage == 'dev' ~ 3
-		# )
-	) %>% 
-	group_by(file) %>% 
-	arrange(stage, file) %>% 
-	ungroup() %>% 
-	distinct(domain, .keep_all = TRUE) %>% 
-	pull(file)
-
-# Parse all schemas and combine into single endpoint specification
-chemi_endpoints <- map(
-  chemi_schema_files,
-  ~ {
-    openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
-    dat <- openapi_to_spec(openapi)
-  },
-  .progress = TRUE
-) %>% 
-  list_rbind() %>% 
+# Parse all chemi schemas into a unified super schema using the utility function
+# This automatically selects the best available version for each endpoint domain
+# (prioritizing prod > staging > dev) and merges them into a single tibble
+chemi_endpoints <- parse_chemi_schemas() %>%
   # Filter out PATCH, DELETE methods and render endpoints
   filter(
 		str_detect(method, 'GET|POST'),
