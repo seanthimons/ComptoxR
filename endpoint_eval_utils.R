@@ -1140,6 +1140,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   wrapper_fn <- config$wrapper_function
   example_query <- config$example_query %||% "DTXSID7020182"
   lifecycle_badge <- config$lifecycle_badge %||% "experimental"
+  default_query_doc <- config$default_query_doc %||% "#' @param query A list of DTXSIDs to search for\n"
 
   # For GET endpoints, use generic_request even if config specifies generic_chemi_request
   # generic_chemi_request is designed for POST with JSON payloads only
@@ -1219,7 +1220,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (primary_param == "NULL" && wrapper_fn == "generic_chemi_request") {
       primary_param <- "query"
       fn_signature <- "query"
-      param_docs <- "#' @param query A list of DTXSIDs to search for\n"
+      param_docs <- default_query_doc
     } else {
       param_docs <- paste0(path_param_info$param_docs, query_param_info$param_docs)
     }
