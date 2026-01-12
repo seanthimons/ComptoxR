@@ -639,11 +639,11 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   }
 
   # Split and clean parameter names
-  param_vec <- strsplit(params_str, ",")[[1]]
-  param_vec <- trimws(param_vec)
-  param_vec <- param_vec[nzchar(param_vec)]
+  param_vec_orig <- strsplit(params_str, ",")[[1]]
+  param_vec_orig <- trimws(param_vec_orig)
+  param_vec_orig <- param_vec_orig[nzchar(param_vec_orig)]
 
-  if (length(param_vec) == 0) {
+  if (length(param_vec_orig) == 0) {
     return(list(
       fn_signature = "",
       param_docs = "",
@@ -655,97 +655,97 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     ))
   }
 
-  # When no path params, first query param becomes the primary (required) parameter
-  # Remaining query params are optional
-  if (!has_path_params) {
-    primary_param <- param_vec[1]
-    optional_params <- if (length(param_vec) > 1) param_vec[-1] else character(0)
-
-    # Extract primary parameter example from metadata
-    primary_example <- NA
-    if (!is.null(metadata[[primary_param]]) && !is.null(metadata[[primary_param]]$example)) {
-      primary_example <- metadata[[primary_param]]$example
-    }
-
-    # Build function signature: primary, optional1 = default1, optional2 = default2, ...
-    if (length(optional_params) > 0) {
-      optional_defaults <- sapply(optional_params, function(p) build_param_default(p, metadata, is_primary = FALSE))
-      fn_signature <- paste0(primary_param, ", ", paste(optional_params, optional_defaults, collapse = ", "))
+  # Helper to sanitize parameter names (e.g. "2d" -> "x2d")
+  sanitize_param <- function(x) {
+    # If starts with digit, prefix with x
+    if (grepl("^[0-9]", x)) {
+      paste0("x", x)
     } else {
-      fn_signature <- primary_param
+      make.names(x) # standard R sanitization for other chars if needed
     }
-
-    # Generate @param documentation with enhanced metadata
-    doc_lines <- character(0)
-    for (p in param_vec) {
-      if (!is.null(metadata[[p]])) {
-        desc <- metadata[[p]]$description
-        enum_vals <- metadata[[p]]$enum
-        default_val <- metadata[[p]]$default
-
-        # Start with description or generic fallback
-        if (nzchar(desc)) {
-          param_desc <- desc
-        } else if (p == primary_param) {
-          param_desc <- "Required parameter"
-        } else {
-          param_desc <- "Optional parameter"
-        }
-
-        # Append enum values if available
-        if (!is.null(enum_vals) && length(enum_vals) > 0) {
-          enum_str <- paste(enum_vals, collapse = ", ")
-          param_desc <- paste0(param_desc, ". Options: ", enum_str)
-        }
-
-        # Append default value if available
-        if (!is.na(default_val)) {
-          param_desc <- paste0(param_desc, " (default: ", default_val, ")")
-        }
-
-        doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))
-      } else if (p == primary_param) {
-        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Required parameter"))
-      } else {
-        doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
-      }
-    }
-    param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
-
-    # Build params_call - only optional params (primary is passed separately as query)
-    params_call <- if (length(optional_params) > 0) {
-      paste0(",\n    ", paste(optional_params, "=", optional_params, collapse = ",\n    "))
-    } else {
-      ""
-    }
-
-    return(list(
-      fn_signature = fn_signature,
-      param_docs = param_docs,
-      params_code = "",
-      params_call = params_call,
-      has_params = TRUE,
-      primary_param = primary_param,
-      primary_example = primary_example
-    ))
   }
 
-  # Standard case: path params exist, query params are all optional
-  # Generate function signature: param1 = default1, param2 = default2, ... (no "query" prefix)
-  param_defaults <- sapply(param_vec, function(p) build_param_default(p, metadata, is_primary = FALSE))
-  fn_signature <- paste(param_vec, param_defaults, collapse = ", ")
+  param_vec_sanitized <- sapply(param_vec_orig, sanitize_param)
+  names(param_vec_sanitized) <- param_vec_orig
+  
+  # Identify required vs optional parameters
+  required_params <- character(0)
+  optional_params <- character(0)
+  primary_param <- NULL
+  
+  if (!has_path_params) {
+    # If no path params, the first parameter is the primary one and is implicitly required
+    primary_param <- param_vec_sanitized[1]
+  }
 
-  # Generate @param documentation lines with enhanced metadata
+  for (i in seq_along(param_vec_orig)) {
+    p_orig <- param_vec_orig[i]
+    p_san <- param_vec_sanitized[i]
+    is_required <- FALSE
+    
+    # Check metadata for required status
+    if (!is.null(metadata[[p_orig]]) && isTRUE(metadata[[p_orig]]$required)) {
+      is_required <- TRUE
+    }
+    
+    # Primary param is always required
+    if (!is.null(primary_param) && p_san == primary_param) {
+      is_required <- TRUE
+    }
+    
+    if (is_required) {
+      required_params <- c(required_params, p_san)
+    } else {
+      optional_params <- c(optional_params, p_san)
+    }
+  }
+  
+  # Build function signature: required (no default), then optional (with defaults)
+  sig_parts <- character(0)
+  
+  if (length(required_params) > 0) {
+    sig_parts <- c(sig_parts, paste(required_params, collapse = ", "))
+  }
+  
+  if (length(optional_params) > 0) {
+    optional_defaults <- sapply(optional_params, function(p_san) {
+      p_orig <- param_vec_orig[which(param_vec_sanitized == p_san)]
+      build_param_default(p_orig, metadata, is_primary = FALSE)
+    })
+    sig_parts <- c(sig_parts, paste(optional_params, optional_defaults, collapse = ", "))
+  }
+  
+  fn_signature <- paste(sig_parts, collapse = ", ")
+  
+  # Extract primary example if available
+  primary_example <- NA
+  if (!is.null(primary_param)) {
+    primary_orig <- param_vec_orig[which(param_vec_sanitized == primary_param)]
+    if (!is.null(metadata[[primary_orig]]) && !is.null(metadata[[primary_orig]]$example)) {
+      primary_example <- metadata[[primary_orig]]$example
+    }
+  }
+
+  # Generate @param documentation
   doc_lines <- character(0)
-  for (p in param_vec) {
-    if (!is.null(metadata[[p]])) {
-      desc <- metadata[[p]]$description
-      enum_vals <- metadata[[p]]$enum
-      default_val <- metadata[[p]]$default
+  
+  # Process all parameters in original order for documentation
+  for (i in seq_along(param_vec_orig)) {
+    p_orig <- param_vec_orig[i]
+    p_san <- param_vec_sanitized[i]
+    
+    if (!is.null(metadata[[p_orig]])) {
+      desc <- metadata[[p_orig]]$description
+      if (is.null(desc)) desc <- ""
+      enum_vals <- metadata[[p_orig]]$enum
+      default_val <- metadata[[p_orig]]$default
+      is_required <- p_san %in% required_params
 
       # Start with description or generic fallback
       if (nzchar(desc)) {
         param_desc <- desc
+      } else if (is_required) {
+        param_desc <- "Required parameter"
       } else {
         param_desc <- "Optional parameter"
       }
@@ -757,13 +757,17 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
       }
 
       # Append default value if available
-      if (!is.na(default_val)) {
+      if (!is.null(default_val) && !is.na(default_val)) {
         param_desc <- paste0(param_desc, " (default: ", default_val, ")")
       }
 
-      doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))
+      doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " ", param_desc))
     } else {
-      doc_lines <- c(doc_lines, paste0("#' @param ", p, " Optional parameter"))
+       if (p_san %in% required_params) {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " Required parameter"))
+      } else {
+        doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " Optional parameter"))
+      }
     }
   }
   param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
@@ -771,19 +775,31 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   # Strategy-specific code generation
   if (strategy == "extra_params") {
     # For generic_request: pass parameters directly via ellipsis
-    # httr2::req_url_query() automatically filters NULL values
     params_code <- ""
-    params_call <- paste0(",\n    ", paste(param_vec, "=", param_vec, collapse = ",\n    "))
+    
+    # We pass all params (required + optional) to the generic request
+    # Use backticks for original param names if they are weird, but here we are mapping args
+    # e.g. `2d` = x2d
+    
+    args_list <- paste(paste0("`", param_vec_orig, "` = ", param_vec_sanitized), collapse = ",\n    ")
+    params_call <- paste0(",\n    ", args_list)
 
   } else if (strategy == "options") {
     # For generic_chemi_request: use options list
-    params_code <- paste0(
-      "  # Collect optional parameters\n",
-      "  options <- list()\n",
-      paste0("  if (!is.null(", param_vec, ")) options$", param_vec, " <- ", param_vec, "\n", collapse = ""),
-      "\n  "
-    )
-
+    # Code generation needs to map sanitized variable to original key
+    
+    lines <- character(0)
+    lines <- c(lines, "  # Collect optional parameters")
+    lines <- c(lines, "  options <- list()")
+    
+    for (i in seq_along(param_vec_orig)) {
+      p_orig <- param_vec_orig[i]
+      p_san <- param_vec_sanitized[i]
+      # quote string key
+      lines <- c(lines, paste0("  if (!is.null(", p_san, ")) options[['", p_orig, "']] <- ", p_san))
+    }
+    
+    params_code <- paste0(paste(lines, collapse = "\n"), "\n  ")
     params_call <- ",\n    options = options"
   }
 
@@ -792,7 +808,9 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     param_docs = param_docs,
     params_code = params_code,
     params_call = params_call,
-    has_params = TRUE
+    has_params = TRUE,
+    primary_param = primary_param,
+    primary_example = primary_example
   )
 }
 
@@ -827,7 +845,8 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
       has_path_params = FALSE,
       param_docs = "",
       primary_param = NULL,
-      primary_example = NA
+      primary_example = NA,
+      has_any_path_params = FALSE
     ))
   }
 
@@ -843,7 +862,8 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
       has_path_params = FALSE,
       param_docs = "",
       primary_param = "query",
-      primary_example = NA
+      primary_example = NA,
+      has_any_path_params = FALSE
     ))
   }
 
@@ -874,6 +894,7 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   for (p in all_params) {
     if (!is.null(metadata[[p]])) {
       desc <- metadata[[p]]$description
+      if (is.null(desc)) desc <- ""
       enum_vals <- metadata[[p]]$enum
       default_val <- metadata[[p]]$default
 
@@ -893,7 +914,7 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
       }
 
       # Append default value if available
-      if (!is.na(default_val)) {
+      if (!is.null(default_val) && !is.na(default_val)) {
         param_desc <- paste0(param_desc, " (default: ", default_val, ")")
       }
 
@@ -938,7 +959,8 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
     has_path_params = length(additional_params) > 0,
     param_docs = param_docs,
     primary_param = primary_param,
-    primary_example = primary_example
+    primary_example = primary_example,
+    has_any_path_params = length(param_vec) > 0
   )
 }
 
@@ -1188,7 +1210,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-  generic_request(
+{query_param_info$params_code}  generic_request(
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
@@ -1216,25 +1238,50 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (wrapper_fn == "generic_request") {
       # For chemi GET endpoints, determine batch_limit based on path params
       if (is_chemi_get) {
-        if (isTRUE(path_param_info$has_path_params)) {
+        # Only use batch_limit = 1 for endpoints with PATH parameters
+        if (isTRUE(path_param_info$has_any_path_params)) {
           # Has path params: append to URL path
           effective_batch_limit <- "1"
           effective_query <- primary_param
         } else {
-          # No path params: use query parameters
+          # Query-only or static endpoints: batch_limit = 0, query = NULL
           effective_batch_limit <- "0"
-          effective_query <- primary_param
-          # Don't add primary param to combined_calls - it goes to the formal parameter
-          # and generic_request will handle it when batch_limit = 0
+          effective_query <- "NULL"
         }
       } else {
         effective_batch_limit <- batch_limit_code
         effective_query <- primary_param
       }
 
-      fn_body <- glue::glue('
+      # Special handling for chemi GET query-only endpoints
+      if (is_chemi_get && !isTRUE(path_param_info$has_any_path_params) && isTRUE(query_param_info$has_params)) {
+        # Query-only chemi GET: pass parameters directly without options pattern
+        # Extract parameter names from function signature
+        sig_parts <- strsplit(fn_signature, ",")[[1]]
+        param_names <- gsub("\\s*=.*$", "", trimws(sig_parts))
+
+        # Build direct parameter passing
+        direct_params <- paste0(
+          ",\n    ",
+          paste(param_names, "=", param_names, collapse = ",\n    ")
+        )
+
+        # For query-only endpoints, don't include query as formal param - all params via ellipsis
+        fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
   generic_request(
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}
+  )
+}}
+
+')
+      } else {
+        # Standard generation with existing logic
+        fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}  generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
@@ -1243,6 +1290,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 }}
 
 ')
+      }
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
@@ -1259,20 +1307,21 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
   } else {
     # No extra params: simple call with just primary param
+    fn_arg <- if (primary_param == "NULL") "" else primary_param
+    
     if (wrapper_fn == "generic_request") {
       # For chemi GET endpoints, determine batch_limit based on path params
       if (is_chemi_get) {
-        if (isTRUE(path_param_info$has_path_params)) {
+        # Only use batch_limit = 1 for endpoints with PATH parameters
+        if (isTRUE(path_param_info$has_any_path_params)) {
           # Has path params: append to URL path
           effective_batch_limit <- "1"
           effective_query <- primary_param
           extra_params <- ""
         } else {
-          # No path params: use query parameters
+          # Query-only or static endpoints: batch_limit = 0, query = NULL
           effective_batch_limit <- "0"
-          effective_query <- primary_param
-          # Don't add primary param to extra_params - it goes to the formal parameter
-          # and generic_request will handle it when batch_limit = 0
+          effective_query <- "NULL"
           extra_params <- ""
         }
       } else {
@@ -1282,7 +1331,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       }
 
       fn_body <- glue::glue('
-{fn} <- function({primary_param}) {{
+{fn} <- function({fn_arg}) {{
   generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
@@ -1294,7 +1343,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
-{fn} <- function({primary_param}) {{
+{fn} <- function({fn_arg}) {{
   generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}",
