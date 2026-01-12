@@ -1214,6 +1214,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       }
     }
 
+    # For generic_chemi_request endpoints without any params, add a 'query' parameter
+    # since generic_chemi_request requires a query to send to the API
+    if (primary_param == "NULL" && wrapper_fn == "generic_chemi_request") {
+      primary_param <- "query"
+      fn_signature <- "query"
+      param_docs <- "#' @param query A list of DTXSIDs to search for\n"
+    } else {
+      param_docs <- paste0(path_param_info$param_docs, query_param_info$param_docs)
+    }
+
     # Build combined parameter calls
     combined_calls <- ""
     if (isTRUE(path_param_info$has_path_params)) {
@@ -1223,13 +1233,18 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       combined_calls <- paste0(combined_calls, query_param_info$params_call)
     }
 
-    param_docs <- paste0(path_param_info$param_docs, query_param_info$param_docs)
-
     # Determine example value from path param metadata
     example_value <- example_query
     if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
       example_value <- as.character(path_param_info$primary_example)
     }
+  }
+
+  # Build example call string - handle case where there are no parameters
+  example_call <- if (primary_param == "NULL" || primary_param == "" || nchar(fn_signature) == 0) {
+    paste0(fn, "()")
+  } else {
+    paste0(fn, "(", primary_param, ' = "', example_value, '")')
   }
 
   # Build roxygen header with parameter descriptions from metadata
@@ -1244,7 +1259,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\'
 #\' @examples
 #\' \\dontrun{{
-#\' {fn}({primary_param} = "{example_value}")
+#\' {example_call}
 #\' }}')
 
   # Build function body based on endpoint type
