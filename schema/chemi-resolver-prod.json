@@ -1,0 +1,2984 @@
+{
+	"components": {
+		"schemas": {
+			"CcteList": {
+				"properties": {
+					"chemicalCount": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"createdAt": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"id": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"label": {
+						"type": "string"
+					},
+					"listName": {
+						"type": "string"
+					},
+					"longDescription": {
+						"type": "string"
+					},
+					"shortDescription": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"visibility": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"Chemical": {
+				"properties": {
+					"averageMass": {
+						"format": "double",
+						"type": "number"
+					},
+					"canonicalSmiles": {
+						"type": "string"
+					},
+					"casrn": {
+						"type": "string"
+					},
+					"chemId": {
+						"type": "string"
+					},
+					"cid": {
+						"type": "string"
+					},
+					"image": {
+						"type": "string"
+					},
+					"inchi": {
+						"type": "string"
+					},
+					"inchiKey": {
+						"type": "string"
+					},
+					"mol": {
+						"type": "string"
+					},
+					"molFormula": {
+						"type": "string"
+					},
+					"monoisotopicMass": {
+						"format": "double",
+						"type": "number"
+					},
+					"name": {
+						"type": "string"
+					},
+					"sid": {
+						"type": "string"
+					},
+					"smiles": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"ClassyfireRecord": {
+				"properties": {
+					"alternativeParents": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"directParent": {
+						"type": "string"
+					},
+					"geometricDescriptor": {
+						"type": "string"
+					},
+					"kingdom": {
+						"type": "string"
+					},
+					"klass": {
+						"type": "string"
+					},
+					"sid": {
+						"type": "string"
+					},
+					"smiles": {
+						"type": "string"
+					},
+					"subklass": {
+						"type": "string"
+					},
+					"substituents": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"superklass": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"ColumnsFromNamedLists": {
+				"properties": {
+					"Name": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"UseNamesAsColumnHeadings": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"CreateTable": {
+				"properties": {
+					"ColumnContents": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"ColumnHeadings": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"ColumnsFromNamedLists": {
+						"$ref": "#/components/schemas/ColumnsFromNamedLists"
+					},
+					"FromInformationIn": {
+						"type": "string"
+					},
+					"NumberOfColumns": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"type": "object"
+			},
+			"DataSource": {
+				"properties": {
+					"annotationCount": {
+						"type": "string"
+					},
+					"annotations": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"name": {
+						"type": "string"
+					},
+					"substanceCount": {
+						"type": "string"
+					},
+					"uploading": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"DisplayControls": {
+				"properties": {
+					"CreateTable": {
+						"$ref": "#/components/schemas/CreateTable"
+					},
+					"HideThisSection": {
+						"type": "boolean"
+					},
+					"ListType": {
+						"type": "string"
+					},
+					"MoveToTop": {
+						"type": "boolean"
+					},
+					"ShowAtMost": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"type": "object"
+			},
+			"ExportRequest": {
+				"properties": {
+					"format": {
+						"enum": [
+							"UNKNOWN",
+							"SDF",
+							"SMI",
+							"MOL",
+							"CSV",
+							"TSV",
+							"JSON",
+							"XLSX",
+							"PDF",
+							"HTML",
+							"XML",
+							"DOCX"
+						],
+						"type": "string"
+					},
+					"records": {
+						"items": {
+							"$ref": "#/components/schemas/ResolvedChemical"
+						},
+						"type": "array"
+					},
+					"selectedForSimilarity": {
+						"$ref": "#/components/schemas/Chemical"
+					}
+				},
+				"type": "object"
+			},
+			"ExportSectionRequest": {
+				"properties": {
+					"chemicals": {
+						"items": {
+							"$ref": "#/components/schemas/Chemical"
+						},
+						"type": "array"
+					},
+					"outputFormat": {
+						"enum": [
+							"UNKNOWN",
+							"SDF",
+							"SMI",
+							"MOL",
+							"CSV",
+							"TSV",
+							"JSON",
+							"XLSX",
+							"PDF",
+							"HTML",
+							"XML",
+							"DOCX"
+						],
+						"type": "string"
+					},
+					"sections": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"FilesUploadRequest": {
+				"properties": {
+					"filesInfo": {
+						"items": {
+							"$ref": "#/components/schemas/FileUploadInfo"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"FileUploadInfo": {
+				"properties": {
+					"actField": {
+						"type": "string"
+					},
+					"fileName": {
+						"type": "string"
+					},
+					"idField": {
+						"type": "string"
+					},
+					"strField": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"Information": {
+				"properties": {
+					"Description": {
+						"type": "string"
+					},
+					"LicenseNote": {
+						"type": "string"
+					},
+					"LicenseURL": {
+						"type": "string"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"Reference": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"ReferenceNumber": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"URL": {
+						"type": "string"
+					},
+					"Value": {
+						"$ref": "#/components/schemas/Value"
+					}
+				},
+				"type": "object"
+			},
+			"Link": {
+				"properties": {
+					"link": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"LookupRequest": {
+				"properties": {
+					"filters": {
+						"additionalProperties": {
+							"type": "boolean"
+						},
+						"type": "object"
+					},
+					"format": {
+						"enum": [
+							"UNKNOWN",
+							"SDF",
+							"SMI",
+							"MOL",
+							"CSV",
+							"TSV",
+							"JSON",
+							"XLSX",
+							"PDF",
+							"HTML",
+							"XML",
+							"DOCX"
+						],
+						"type": "string"
+					},
+					"fuzzy": {
+						"description": "If set to true fuzzy lookup result is returned which usually means a substring search",
+						"enum": [
+							"Not",
+							"Anywhere",
+							"Start",
+							"Word",
+							"CloseSyntactic",
+							"CloseSemantic"
+						],
+						"type": "string"
+					},
+					"ids": {
+						"description": "List of chemical identifiers to look up. All identifiers must be of the same type or type should be Any.",
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"idsType": {
+						"description": "Chemical identifier type",
+						"enum": [
+							"DTXSID",
+							"DTXCID",
+							"SMILES",
+							"MOL",
+							"CAS",
+							"Name",
+							"InChI",
+							"InChIKey",
+							"InChIKey_1",
+							"AnyId"
+						],
+						"type": "string"
+					},
+					"mol": {
+						"description": "If set to true then MOL is requested as a result",
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"ids"
+				],
+				"type": "object"
+			},
+			"Markup": {
+				"properties": {
+					"Extra": {
+						"type": "string"
+					},
+					"Length": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"Start": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"Type": {
+						"type": "string"
+					},
+					"URL": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"OrderSimilarityRequest": {
+				"properties": {
+					"chemicals": {
+						"items": {
+							"$ref": "#/components/schemas/ResolvedChemical"
+						},
+						"type": "array"
+					},
+					"fingerprintName": {
+						"type": "string"
+					},
+					"get_chemicals": {
+						"items": {
+							"$ref": "#/components/schemas/Chemical"
+						},
+						"type": "array"
+					},
+					"main": {
+						"$ref": "#/components/schemas/Chemical"
+					},
+					"padelCompute2D": {
+						"type": "boolean"
+					},
+					"padelCompute3D": {
+						"type": "boolean"
+					},
+					"padelComputeFingerprints": {
+						"type": "boolean"
+					},
+					"rdkitBits": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"rdkitRadius": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"rdkitType": {
+						"type": "string"
+					},
+					"scoreName": {
+						"type": "string"
+					},
+					"toxprintsProfile": {
+						"type": "string"
+					},
+					"tverskyI": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"type": "object"
+			},
+			"PageableObject": {
+				"properties": {
+					"offset": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"paged": {
+						"type": "boolean"
+					},
+					"pageNumber": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"pageSize": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/SortObject"
+					},
+					"unpaged": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"PageClassyfireRecord": {
+				"properties": {
+					"content": {
+						"items": {
+							"$ref": "#/components/schemas/ClassyfireRecord"
+						},
+						"type": "array"
+					},
+					"empty": {
+						"type": "boolean"
+					},
+					"first": {
+						"type": "boolean"
+					},
+					"last": {
+						"type": "boolean"
+					},
+					"number": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"numberOfElements": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"pageable": {
+						"$ref": "#/components/schemas/PageableObject"
+					},
+					"size": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"sort": {
+						"$ref": "#/components/schemas/SortObject"
+					},
+					"totalElements": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"totalPages": {
+						"format": "int32",
+						"type": "integer"
+					}
+				},
+				"type": "object"
+			},
+			"PubchemRequest": {
+				"properties": {
+					"chemicals": {
+						"items": {
+							"$ref": "#/components/schemas/Chemical"
+						},
+						"type": "array"
+					},
+					"section": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"PubchemResult": {
+				"properties": {
+					"chemical": {
+						"$ref": "#/components/schemas/Chemical"
+					},
+					"swr": {
+						"items": {
+							"$ref": "#/components/schemas/SectionWithReferences"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"Query": {
+				"properties": {
+					"chemId": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					},
+					"idType": {
+						"enum": [
+							"DTXSID",
+							"DTXCID",
+							"SMILES",
+							"MOL",
+							"CAS",
+							"Name",
+							"InChI",
+							"InChIKey",
+							"InChIKey_1",
+							"AnyId"
+						],
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"RecordLinks": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"links": {
+						"items": {
+							"$ref": "#/components/schemas/Link"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"Reference": {
+				"properties": {
+					"ANID": {
+						"format": "int64",
+						"type": "integer"
+					},
+					"Description": {
+						"type": "string"
+					},
+					"IsToxnet": {
+						"type": "boolean"
+					},
+					"LicenseNote": {
+						"type": "string"
+					},
+					"LicenseURL": {
+						"type": "string"
+					},
+					"Name": {
+						"type": "string"
+					},
+					"ReferenceNumber": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"SourceID": {
+						"type": "string"
+					},
+					"SourceName": {
+						"type": "string"
+					},
+					"URL": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"Report": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"reportItems": {
+						"items": {
+							"$ref": "#/components/schemas/ReportItem"
+						},
+						"type": "array"
+					},
+					"title": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"ReportItem": {
+				"properties": {
+					"casrns": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"dtxsids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"pubchemcids": {
+						"items": {
+							"format": "int32",
+							"type": "integer"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"ResolvedChemical": {
+				"properties": {
+					"chemical": {
+						"$ref": "#/components/schemas/Chemical"
+					},
+					"confidence": {
+						"format": "float",
+						"type": "number"
+					},
+					"message": {
+						"type": "string"
+					},
+					"query": {
+						"type": "string"
+					},
+					"resolvedBy": {
+						"enum": [
+							"DTXSID",
+							"DTXCID",
+							"SMILES",
+							"MOL",
+							"CAS",
+							"Name",
+							"InChI",
+							"InChIKey",
+							"InChIKey_1",
+							"AnyId"
+						],
+						"type": "string"
+					},
+					"result": {
+						"enum": [
+							"NOT_RESOLVED",
+							"FOUND",
+							"CONVERTED",
+							"MALFORMED",
+							"DUPLICATE"
+						],
+						"type": "string"
+					},
+					"similarity": {
+						"format": "float",
+						"type": "number"
+					},
+					"source": {
+						"enum": [
+							"DTX",
+							"COMMONCHEMISTRY",
+							"PUBCHEM"
+						],
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"ResolveRequest": {
+				"properties": {
+					"mol": {
+						"type": "boolean"
+					},
+					"queries": {
+						"items": {
+							"$ref": "#/components/schemas/Query"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"ResolveResponse": {
+				"properties": {
+					"result": {
+						"additionalProperties": {
+							"$ref": "#/components/schemas/ResolvedChemical"
+						},
+						"type": "object"
+					}
+				},
+				"type": "object"
+			},
+			"Row": {
+				"properties": {
+					"chemical": {
+						"$ref": "#/components/schemas/Chemical"
+					},
+					"max": {
+						"format": "double",
+						"type": "number"
+					},
+					"similarity": {
+						"$ref": "#/components/schemas/Similarity"
+					}
+				},
+				"type": "object"
+			},
+			"SafetyDataFlags": {
+				"properties": {
+					"chemical": {
+						"$ref": "#/components/schemas/Chemical"
+					},
+					"exp": {
+						"type": "boolean"
+					},
+					"flags": {
+						"additionalProperties": {
+							"type": "object"
+						},
+						"type": "object"
+					},
+					"rqCode": {
+						"additionalProperties": {
+							"type": "object"
+						},
+						"type": "object"
+					},
+					"sah": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"SafetyExportRequest": {
+				"properties": {
+					"flags": {
+						"items": {
+							"$ref": "#/components/schemas/SafetyDataFlags"
+						},
+						"type": "array"
+					},
+					"outputFormat": {
+						"enum": [
+							"UNKNOWN",
+							"SDF",
+							"SMI",
+							"MOL",
+							"CSV",
+							"TSV",
+							"JSON",
+							"XLSX",
+							"PDF",
+							"HTML",
+							"XML",
+							"DOCX"
+						],
+						"type": "string"
+					},
+					"showImages": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"SafetyFlagsWithSections": {
+				"properties": {
+					"flags": {
+						"items": {
+							"$ref": "#/components/schemas/SafetyDataFlags"
+						},
+						"type": "array"
+					},
+					"sections": {
+						"items": {
+							"$ref": "#/components/schemas/SectionInfo"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"Section": {
+				"properties": {
+					"Description": {
+						"type": "string"
+					},
+					"DisplayControls": {
+						"$ref": "#/components/schemas/DisplayControls"
+					},
+					"Information": {
+						"items": {
+							"$ref": "#/components/schemas/Information"
+						},
+						"type": "array"
+					},
+					"Section": {
+						"items": {
+							"$ref": "#/components/schemas/Section"
+						},
+						"type": "array"
+					},
+					"TOCHeading": {
+						"type": "string"
+					},
+					"TOCID": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"URL": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"SectionInfo": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"SectionWithReferences": {
+				"properties": {
+					"cid": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"references": {
+						"items": {
+							"$ref": "#/components/schemas/Reference"
+						},
+						"type": "array"
+					},
+					"section": {
+						"$ref": "#/components/schemas/Section"
+					}
+				},
+				"type": "object"
+			},
+			"Similarity": {
+				"properties": {
+					"cl": {
+						"type": "string"
+					},
+					"sim": {
+						"format": "float",
+						"type": "number"
+					}
+				},
+				"type": "object"
+			},
+			"SimilarityResponse": {
+				"properties": {
+					"order": {
+						"items": {
+							"$ref": "#/components/schemas/Row"
+						},
+						"type": "array"
+					},
+					"similarity": {
+						"items": {
+							"items": {
+								"$ref": "#/components/schemas/Similarity"
+							},
+							"type": "array"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object"
+			},
+			"SortObject": {
+				"properties": {
+					"empty": {
+						"type": "boolean"
+					},
+					"sorted": {
+						"type": "boolean"
+					},
+					"unsorted": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"StringWithMarkup": {
+				"properties": {
+					"Markup": {
+						"items": {
+							"$ref": "#/components/schemas/Markup"
+						},
+						"type": "array"
+					},
+					"String": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"UniversalHarvestInfo": {
+				"properties": {
+					"cc_headers": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object"
+					},
+					"deepSearch": {
+						"type": "boolean"
+					},
+					"keyChemIdType": {
+						"enum": [
+							"DTXSID",
+							"DTXCID",
+							"SMILES",
+							"MOL",
+							"CAS",
+							"Name",
+							"InChI",
+							"InChIKey",
+							"InChIKey_1",
+							"AnyId"
+						],
+						"type": "string"
+					},
+					"keyName": {
+						"type": "string"
+					},
+					"keyType": {
+						"type": "string"
+					},
+					"loadCASRNs": {
+						"type": "boolean"
+					},
+					"loadDeletedCASRNs": {
+						"type": "boolean"
+					},
+					"loadDTXSIDs": {
+						"type": "boolean"
+					},
+					"loadInChIKeys": {
+						"type": "boolean"
+					},
+					"loadNames": {
+						"type": "boolean"
+					},
+					"loadSMILESs": {
+						"type": "boolean"
+					},
+					"loadTotals": {
+						"type": "boolean"
+					},
+					"loadVendors": {
+						"type": "boolean"
+					},
+					"pubchem_headers": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object"
+					},
+					"resolver_headers": {
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object"
+					},
+					"useCommonchemistry": {
+						"type": "boolean"
+					},
+					"usePubchem": {
+						"type": "boolean"
+					},
+					"useResolver": {
+						"type": "boolean"
+					}
+				},
+				"type": "object"
+			},
+			"UniversalHarvestRequest": {
+				"properties": {
+					"chemicals": {
+						"items": {
+							"$ref": "#/components/schemas/Chemical"
+						},
+						"type": "array"
+					},
+					"info": {
+						"$ref": "#/components/schemas/UniversalHarvestInfo"
+					}
+				},
+				"type": "object"
+			},
+			"Value": {
+				"properties": {
+					"Binary": {
+						"items": {
+							"format": "byte",
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"BinaryToStore": {
+						"items": {
+							"format": "byte",
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"Boolean": {
+						"items": {
+							"type": "boolean"
+						},
+						"type": "array"
+					},
+					"DateISO8601": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"ExternalDataURL": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"ExternalTableName": {
+						"type": "string"
+					},
+					"ExternalTableNumRows": {
+						"format": "int32",
+						"type": "integer"
+					},
+					"MimeType": {
+						"type": "string"
+					},
+					"Number": {
+						"items": {
+							"format": "double",
+							"type": "number"
+						},
+						"type": "array"
+					},
+					"StringWithMarkup": {
+						"items": {
+							"$ref": "#/components/schemas/StringWithMarkup"
+						},
+						"type": "array"
+					},
+					"Unit": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"VersionInfo": {
+				"properties": {
+					"category": {
+						"type": "string"
+					},
+					"compiled": {
+						"format": "date-time",
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			}
+		}
+	},
+	"info": {
+		"title": "Resolver Module",
+		"version": "1.0.0"
+	},
+	"openapi": "3.1.0",
+	"paths": {
+		"/api/resolver/casharvest": {
+			"post": {
+				"operationId": "postMultipartCASHarvest",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "files[]",
+						"required": true,
+						"schema": {
+							"items": {
+								"format": "binary",
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					{
+						"in": "query",
+						"name": "request",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/FilesUploadRequest"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/ccte-list": {
+			"get": {
+				"operationId": "ccteListGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResolvedChemical"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/ccte-lists": {
+			"get": {
+				"operationId": "ccteListsGet",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CcteList"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/classyfire": {
+			"get": {
+				"operationId": "lookupGet_3",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fuzzy",
+						"required": false,
+						"schema": {
+							"default": "Not",
+							"enum": [
+								"Not",
+								"Anywhere",
+								"Start",
+								"Word",
+								"CloseSyntactic",
+								"CloseSemantic"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "kingdom",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "superklass",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "klass",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "subklass",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "directParent",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "geometricDescriptor",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "alternativeParent",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "substituent",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "int32",
+							"type": "integer"
+						}
+					},
+					{
+						"in": "query",
+						"name": "size",
+						"required": false,
+						"schema": {
+							"default": 1000,
+							"format": "int32",
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PageClassyfireRecord"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/export": {
+			"get": {
+				"operationId": "safetyExportGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "outputFormat",
+						"required": false,
+						"schema": {
+							"default": "PDF",
+							"enum": [
+								"UNKNOWN",
+								"SDF",
+								"SMI",
+								"MOL",
+								"CSV",
+								"TSV",
+								"JSON",
+								"XLSX",
+								"PDF",
+								"HTML",
+								"XML",
+								"DOCX"
+							],
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			},
+			"post": {
+				"operationId": "safetyDataFlagsExport",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SafetyExportRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/export-append": {
+			"post": {
+				"operationId": "exportAppendSafetyReportFromChemicals",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"properties": {
+									"chemicals": {
+										"items": {
+											"$ref": "#/components/schemas/Chemical"
+										},
+										"type": "array"
+									},
+									"file": {
+										"format": "binary",
+										"type": "string"
+									}
+								},
+								"required": [
+									"chemicals"
+								],
+								"type": "object"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/export-records": {
+			"post": {
+				"operationId": "exportPost",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ExportRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/export-section": {
+			"get": {
+				"operationId": "sectionExportGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "sid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "section",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "outputFormat",
+						"required": false,
+						"schema": {
+							"enum": [
+								"UNKNOWN",
+								"SDF",
+								"SMI",
+								"MOL",
+								"CSV",
+								"TSV",
+								"JSON",
+								"XLSX",
+								"PDF",
+								"HTML",
+								"XML",
+								"DOCX"
+							],
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			},
+			"post": {
+				"operationId": "sectionExportPost",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ExportSectionRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/exportpubchemlist": {
+			"post": {
+				"operationId": "exportPubchemList",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "search",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "linkBy",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "report",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PubchemRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/exportsimilaritylist": {
+			"post": {
+				"operationId": "exportsimilaritylist",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "format",
+						"required": true,
+						"schema": {
+							"enum": [
+								"UNKNOWN",
+								"SDF",
+								"SMI",
+								"MOL",
+								"CSV",
+								"TSV",
+								"JSON",
+								"XLSX",
+								"PDF",
+								"HTML",
+								"XML",
+								"DOCX"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "showImage",
+						"required": false,
+						"schema": {
+							"default": true,
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": "All",
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/OrderSimilarityRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/exportsimilaritymap": {
+			"post": {
+				"operationId": "exportSimilarityMap",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "format",
+						"required": true,
+						"schema": {
+							"enum": [
+								"UNKNOWN",
+								"SDF",
+								"SMI",
+								"MOL",
+								"CSV",
+								"TSV",
+								"JSON",
+								"XLSX",
+								"PDF",
+								"HTML",
+								"XML",
+								"DOCX"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": true,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "showImage",
+						"required": true,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PubchemRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getallannotations": {
+			"get": {
+				"operationId": "getAllAnnotations",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/DataSource"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getannotation": {
+			"get": {
+				"operationId": "getAnnotationForDatasSourceAndHeading",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getannotationslist": {
+			"get": {
+				"operationId": "getAnnotationsList",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getdatasources": {
+			"get": {
+				"operationId": "getDatasSources",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/DataSource"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getintegrityreports": {
+			"get": {
+				"operationId": "getintegretyreports",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Report"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getpubchemlist": {
+			"post": {
+				"operationId": "getPubchemList",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": true,
+						"schema": {
+							"format": "int32",
+							"type": "integer"
+						}
+					},
+					{
+						"in": "query",
+						"name": "itemsPerPage",
+						"required": true,
+						"schema": {
+							"format": "int32",
+							"type": "integer"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "linkBy",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "report",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PubchemRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"additionalProperties": {
+										"type": "object"
+									},
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getsimilaritylist": {
+			"post": {
+				"operationId": "getSimilarityList",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/OrderSimilarityRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Row"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getsimilaritymap": {
+			"post": {
+				"operationId": "getSimilarityMap",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "sort",
+						"required": true,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PubchemRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SimilarityResponse"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/getsubstance": {
+			"get": {
+				"operationId": "getSubstanceForDatasSource",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "name",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/links": {
+			"get": {
+				"operationId": "lookupGet_2",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fuzzy",
+						"required": false,
+						"schema": {
+							"default": "Not",
+							"enum": [
+								"Not",
+								"Anywhere",
+								"Start",
+								"Word",
+								"CloseSyntactic",
+								"CloseSemantic"
+							],
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/RecordLinks"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/lookup": {
+			"get": {
+				"operationId": "lookupGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fuzzy",
+						"required": false,
+						"schema": {
+							"default": "Not",
+							"enum": [
+								"Not",
+								"Anywhere",
+								"Start",
+								"Word",
+								"CloseSyntactic",
+								"CloseSemantic"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "mol",
+						"required": false,
+						"schema": {
+							"default": false,
+							"type": "boolean"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResolvedChemical"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			},
+			"post": {
+				"operationId": "lookupPost",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LookupRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/lookupCASRN": {
+			"get": {
+				"operationId": "lookupCASRN",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/mesh": {
+			"get": {
+				"operationId": "lookupGet_1",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fuzzy",
+						"required": false,
+						"schema": {
+							"default": "Not",
+							"enum": [
+								"Not",
+								"Anywhere",
+								"Start",
+								"Word",
+								"CloseSyntactic",
+								"CloseSemantic"
+							],
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/RecordLinks"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/metadata": {
+			"get": {
+				"operationId": "metadataGet",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"additionalProperties": {
+										"type": "object"
+									},
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/orderBySimilarity": {
+			"post": {
+				"operationId": "orderBySimilarity",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/OrderSimilarityRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResolvedChemical"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/pubchem-section": {
+			"get": {
+				"operationId": "pubchemSectionGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "section",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PubchemResult"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			},
+			"post": {
+				"operationId": "pubchemSectionPost",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PubchemRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PubchemResult"
+									},
+									"type": "array"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/render": {
+			"get": {
+				"operationId": "render",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "smiles",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "smirks",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "format",
+						"required": false,
+						"schema": {
+							"default": "SVG",
+							"enum": [
+								"PNG",
+								"SVG"
+							],
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "width",
+						"required": false,
+						"schema": {
+							"format": "int32",
+							"type": "integer"
+						}
+					},
+					{
+						"in": "query",
+						"name": "height",
+						"required": false,
+						"schema": {
+							"format": "int32",
+							"type": "integer"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"image/png": {
+								"schema": {
+									"format": "byte",
+									"type": "string"
+								}
+							},
+							"image/svg+xml": {
+								"schema": {
+									"format": "byte",
+									"type": "string"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					"render-controller"
+				]
+			}
+		},
+		"/api/resolver/resolve": {
+			"post": {
+				"operationId": "resolvePost",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ResolveRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResolveResponse"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/safety-flags": {
+			"get": {
+				"operationId": "safetyDataFlagsGet",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "idType",
+						"required": false,
+						"schema": {
+							"default": "AnyId",
+							"enum": [
+								"DTXSID",
+								"DTXCID",
+								"SMILES",
+								"MOL",
+								"CAS",
+								"Name",
+								"InChI",
+								"InChIKey",
+								"InChIKey_1",
+								"AnyId"
+							],
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SafetyFlagsWithSections"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			},
+			"post": {
+				"operationId": "safetyDataFlagsGet_1",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "files[]",
+						"required": true,
+						"schema": {
+							"items": {
+								"format": "binary",
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					{
+						"in": "query",
+						"name": "request",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/FilesUploadRequest"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"items": {
+									"$ref": "#/components/schemas/Chemical"
+								},
+								"type": "array"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SafetyFlagsWithSections"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/universalharvest": {
+			"post": {
+				"operationId": "postMultipartUniversalHarvest",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "files[]",
+						"required": false,
+						"schema": {
+							"items": {
+								"format": "binary",
+								"type": "string"
+							},
+							"type": "array"
+						}
+					},
+					{
+						"in": "query",
+						"name": "request",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UniversalHarvestRequest"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/universalharvest_cart": {
+			"post": {
+				"operationId": "postMultipartUniversalCartHarvest",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UniversalHarvestRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		},
+		"/api/resolver/version": {
+			"get": {
+				"operationId": "versionGet",
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VersionInfo"
+								}
+							}
+						},
+						"description": "OK"
+					}
+				},
+				"tags": [
+					""
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"description": "Default Server URL",
+			"url": "/"
+		}
+	]
+}
