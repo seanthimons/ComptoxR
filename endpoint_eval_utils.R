@@ -1131,32 +1131,49 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       required_params <- sig_parts[!grepl("=", sig_parts)]
       optional_params <- param_vec[!param_vec %in% required_params]
 
-      # Build body assembly code
-      body_code_lines <- c(
-        "  # Build request body",
-        "  body <- list()"
-      )
-
-      # Add required params
-      for (p in required_params) {
-        body_code_lines <- c(body_code_lines, paste0("  body$", p, " <- ", p))
+      # For generic_chemi_request, the first parameter is the 'query' (DTXSIDs)
+      # and all other parameters go into the 'options' list
+      if (length(required_params) > 0) {
+        query_param <- required_params[1]
+        other_required <- if (length(required_params) > 1) required_params[-1] else character(0)
+      } else if (length(optional_params) > 0) {
+        query_param <- optional_params[1]
+        optional_params <- optional_params[-1]
+        other_required <- character(0)
+      } else {
+        stop("Body-only endpoint must have at least one parameter")
       }
 
-      # Add optional params with NULL checks
-      for (p in optional_params) {
-        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) body$", p, " <- ", p))
-      }
+      # Build options assembly code
+      if (length(other_required) > 0 || length(optional_params) > 0) {
+        options_code_lines <- c(
+          "  # Build options list for additional parameters",
+          "  options <- list()"
+        )
 
-      body_assembly <- paste(body_code_lines, collapse = "\n")
+        # Add other required params to options
+        for (p in other_required) {
+          options_code_lines <- c(options_code_lines, paste0("  options$", p, " <- ", p))
+        }
+
+        # Add optional params with NULL checks
+        for (p in optional_params) {
+          options_code_lines <- c(options_code_lines, paste0("  if (!is.null(", p, ")) options$", p, " <- ", p))
+        }
+
+        options_assembly <- paste(options_code_lines, collapse = "\n")
+        options_call <- ",\n    options = options"
+      } else {
+        options_assembly <- ""
+        options_call <- ""
+      }
 
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{body_assembly}
-
+{options_assembly}
   generic_chemi_request(
-    query = NULL,
-    endpoint = "{endpoint}",
-    body = body,
+    query = {query_param},
+    endpoint = "{endpoint}"{options_call},
     tidy = FALSE
   )
 }}
