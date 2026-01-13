@@ -61,8 +61,6 @@ For each route in openapi$paths:
 
 For each parameter, the following metadata is extracted:
 
-| Field | Source | Description |
-|------------------|---------------------|---------------------------------|
 | `name` | `parameter.name` | Parameter name |
 | `example` | `parameter.example` or `schema.default` | Example value for documentation |
 | `description` | `parameter.description` or `schema.description` | Parameter description |
@@ -70,6 +68,102 @@ For each parameter, the following metadata is extracted:
 | `enum` | `schema.enum` | Allowed values (for enums) |
 | `type` | `schema.type` | Data type (string, boolean, integer, etc.) |
 | `required` | `parameter.required` | Whether parameter is required |
+
+### Step 4: Endpoint Metadata Extraction
+
+In addition to parameters, the following endpoint-level metadata is extracted:
+
+| Field | Source | Description |
+|------------------|---------------------|-------------------------------------|
+| `deprecated` | `operation.deprecated` | Whether endpoint is deprecated |
+| `description` | `operation.description` | Detailed endpoint description |
+| `response_schema_type` | Detected from `responses` | Response type classification (array/object/scalar/binary/unknown) |
+
+**Deprecated Detection:**
+
+```r
+# Extract deprecated status (defaults to FALSE if not specified)
+deprecated <- op$deprecated %||% FALSE
+```
+
+When `deprecated = TRUE`, the generated function will use `lifecycle::badge("deprecated")` instead of the configured badge (typically "experimental").
+
+**Response Schema Type Detection:**
+
+The `get_response_schema_type()` function analyzes successful response schemas (200, 201, 202, 204) to classify the return type:
+
+| Type | Description | Schema Example | Generated @return |
+|------|-------------|----------------|-------------------|
+| `"array"` | Array of objects | `{"type": "array"}` | "Returns a tibble with results (array of objects)" |
+| `"object"` | Single object | `{"type": "object"}` | "Returns a list with result object" |
+| `"scalar"` | Primitive value | `{"type": "string"}` | "Returns a scalar value" |
+| `"binary"` | Binary/image data | Content-Type: image/* | "Returns binary data" |
+| `"unknown"` | Undetected | No schema | "Returns a tibble with results" (default) |
+
+**Detection Process:**
+
+1. Look for successful response codes (200, 201, 202, 204, default)
+2. Check content types (binary/image detection)
+3. Extract schema from `application/json` content type
+4. Resolve `$ref` references to component schemas
+5. Classify based on schema `type` field
+
+**Benefits:**
+
+- More accurate `@return` documentation in roxygen2
+- Better user expectations about return types
+- Clearer documentation for deprecated endpoints
+
+------------------------------------------------------------------------
+
+## Function Generation Pipeline
+
+6.  **Return stubs**: Return tibble with `text` column containing complete function definitions
+
+------------------------------------------------------------------------
+
+## POST Example Generation
+
+### Dynamic Example Data
+
+POST request examples use random DTXSIDs from the `testing_chemicals` dataset instead of hardcoded values.
+
+**Implementation:**
+
+The `sample_test_dtxsids()` helper function (lines 1308-1352 in `endpoint_eval_utils.R`) samples DTXSIDs for examples:
+
+```r
+sample_test_dtxsids(n = 3, custom_list = NULL)
+```
+
+**Loading strategy:**
+1.  Try to access `testing_chemicals` from package namespace
+2.  Fall back to loading from `data/testing_chemicals.rda`
+3.  Sample `n` random DTXSIDs from the `dtxsid` column
+4.  Fall back to `"DTXSID7020182"` if unavailable
+
+**Example output comparison:**
+
+| Method | Example Value |
+|--------|---------------|
+| GET | `query = "DTXSID7020182"` (single value) |
+| POST | `query = c("DTXSID7020182", "DTXSID5020406", "DTXSID0020573")` (vector of 3) |
+
+### Custom DTXSID Lists
+
+Optionally provide custom DTXSIDs in the config:
+
+```r
+chemi_config <- list(
+  wrapper_function = "generic_chemi_request",
+  param_strategy = "options",
+  example_query = "DTXSID7020182",
+  lifecycle_badge = "experimental",
+  example_dtxsids = c("DTXSID1234567", "DTXSID2345678", "DTXSID3456789")
+)
+```
+
+The custom list takes precedence over `testing_chemicals`.
 
 ------------------------------------------------------------------------
 
