@@ -174,4 +174,5 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # Test loading
 # ==============================================================================
 
-devtools::load_all()
+devtools::document()
+#devtools::load_all()
