@@ -2051,14 +2051,14 @@ render_endpoint_stubs <- function(spec,
       path_param_info = list(parse_path_parameters(
         if ("path_params" %in% names(.)) path_params else "",
         strategy = param_strategy,
-        metadata = if ("path_param_metadata" %in% names(.) && is.list(path_param_metadata)) path_param_metadata else list()
+        metadata = if ("path_param_metadata" %in% names(.) && !is.null(path_param_metadata) && isTRUE(is.list(path_param_metadata))) path_param_metadata else list()
       )),
       # Parse query parameters
       # When no path params exist, first query param becomes the primary parameter
       query_param_info = list(parse_function_params(
         if ("query_params" %in% names(.)) query_params else "",
         strategy = param_strategy,
-        metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list(),
+        metadata = if ("query_param_metadata" %in% names(.) && !is.null(query_param_metadata) && isTRUE(is.list(query_param_metadata))) query_param_metadata else list(),
         has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else FALSE
       )),
       # Parse body parameters (for POST/PUT/PATCH endpoints)
@@ -2066,7 +2066,7 @@ render_endpoint_stubs <- function(spec,
       body_param_info = list(parse_function_params(
         if ("body_params" %in% names(.)) body_params else "",
         strategy = param_strategy,
-        metadata = if ("body_param_metadata" %in% names(.) && is.list(body_param_metadata)) body_param_metadata else list(),
+        metadata = if ("body_param_metadata" %in% names(.) && !is.null(body_param_metadata) && isTRUE(is.list(body_param_metadata))) body_param_metadata else list(),
         has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else FALSE
       ))
     ) %>%
