@@ -1,11 +1,22 @@
 #!/usr/bin/env Rscript
 # Quick-start script to generate test files for all wrapper functions
 #
+# This script provides two modes for test generation:
+#   1. Schema-driven discovery (NEW): Automatically discovers functions from R/
+#      and infers test case types from parameter names
+#   2. Manual mapping (LEGACY): Uses hardcoded function_signatures list
+#
 # Usage:
 #   Rscript generate_tests.R
 #
 # Or from R console:
 #   source("generate_tests.R")
+#
+# Preferred method (schema-driven):
+#   generate_tests_from_schema()
+#
+# Legacy method (manual mapping):
+#   generate_tests()
 
 library(ComptoxR)
 
@@ -14,6 +25,64 @@ source("tests/testthat/helper-test-generator.R")
 
 # Configuration
 TEST_DIR <- "tests/testthat"
+R_DIR <- "R"
+
+# ==============================================================================
+# Schema-Driven Test Generation (Recommended)
+# ==============================================================================
+
+#' Generate tests by discovering wrapper functions from the R/ directory
+#'
+#' This is the preferred method for generating tests. It automatically:
+#' - Discovers all ct_* and chemi_* wrapper functions from R/ source files
+#' - Infers parameter types from the first parameter name (e.g., "query" -> dtxsid)
+#' - Selects appropriate test case templates based on inferred types
+#' - Generates test files for functions that don't have tests yet
+#'
+#' When new functions are generated from OpenAPI schemas, simply run this
+#' function to automatically generate tests for them.
+#'
+#' @param overwrite If TRUE, regenerate all test files even if they exist.
+#' @param dry_run If TRUE, only report what would be generated without creating files.
+#' @return A list with elements: created, skipped, failed (character vectors of function names).
+#' @export
+#' @examples
+#' \dontrun{
+#' # See what new tests would be generated
+#' generate_tests_from_schema(dry_run = TRUE)
+#'
+#' # Generate tests for all new/untested functions
+#' generate_tests_from_schema()
+#'
+#' # Regenerate all tests
+#' generate_tests_from_schema(overwrite = TRUE)
+#' }
+generate_tests_from_schema <- function(overwrite = FALSE, dry_run = FALSE) {
+  cat("═══════════════════════════════════════════════\n")
+  cat("Schema-Driven Test Generation\n")
+  cat("═══════════════════════════════════════════════\n\n")
+
+  result <- generate_schema_discovered_tests(
+    r_dir = R_DIR,
+    test_dir = TEST_DIR,
+    overwrite = overwrite,
+    dry_run = dry_run
+  )
+
+  if (length(result$created) > 0) {
+    cat("\nNext steps:\n")
+    cat("1. Set API key: Sys.setenv(ctx_api_key = 'YOUR_KEY')\n")
+    cat("2. Run tests to record cassettes: devtools::test()\n")
+    cat("3. Check coverage: covr::package_coverage()\n")
+    cat("4. Review and commit cassettes\n")
+  }
+
+  invisible(result)
+}
+
+# ==============================================================================
+# Legacy Test Generation (Manual Mapping)
+# ==============================================================================
 
 # Standard test cases for different function signatures
 test_cases <- list(
@@ -46,8 +115,9 @@ test_cases <- list(
   )
 )
 
-# Function signature mapping
+# Function signature mapping (LEGACY)
 # Maps function names to their expected parameter types
+# NOTE: For new functions, consider using generate_tests_from_schema() instead
 function_signatures <- list(
   # DTXSID-based functions
   ct_hazard = "dtxsid_single",
@@ -76,7 +146,16 @@ function_signatures <- list(
   chemi_predict = "dtxsid_single"
 )
 
-# Main test generation function
+#' Generate tests using manual function signature mapping (Legacy)
+#'
+#' This is the legacy method that uses a hardcoded list of function signatures.
+#' For new development, prefer generate_tests_from_schema() which automatically
+#' discovers functions and infers their parameter types.
+#'
+#' @param functions_to_test Character vector of function names. If NULL, uses all ct_* and chemi_* functions.
+#' @param overwrite If TRUE, overwrite existing test files.
+#' @return A list with elements: created, skipped, failed (character vectors of function names).
+#' @export
 generate_tests <- function(functions_to_test = NULL, overwrite = FALSE) {
 
   if (is.null(functions_to_test)) {
@@ -156,15 +235,31 @@ generate_tests <- function(functions_to_test = NULL, overwrite = FALSE) {
   invisible(results)
 }
 
-# Run if executed as script
+# ==============================================================================
+# Script Execution
+# ==============================================================================
+
+# Run if executed as script (use schema-driven by default)
 if (!interactive()) {
-  generate_tests()
+  generate_tests_from_schema()
 }
 
 # Example usage for interactive sessions:
 if (interactive()) {
   cat("\nTest generator loaded!\n\n")
-  cat("To generate all tests:\n")
+  cat("═══════════════════════════════════════════════\n")
+  cat("RECOMMENDED: Schema-driven test generation\n")
+  cat("═══════════════════════════════════════════════\n\n")
+  cat("To see what tests would be generated (dry run):\n")
+  cat("  generate_tests_from_schema(dry_run = TRUE)\n\n")
+  cat("To generate tests for new functions:\n")
+  cat("  generate_tests_from_schema()\n\n")
+  cat("To regenerate all tests:\n")
+  cat("  generate_tests_from_schema(overwrite = TRUE)\n\n")
+  cat("═══════════════════════════════════════════════\n")
+  cat("LEGACY: Manual function mapping\n")
+  cat("═══════════════════════════════════════════════\n\n")
+  cat("To generate tests using manual mapping:\n")
   cat("  generate_tests()\n\n")
   cat("To generate tests for specific functions:\n")
   cat("  generate_tests(c('ct_hazard', 'ct_cancer'))\n\n")
