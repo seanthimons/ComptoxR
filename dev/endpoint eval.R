@@ -88,8 +88,8 @@ endpoints <- map(
     # - GET without path params: 0 (static endpoint, params go in query string)
     # - POST: NULL (bulk, uses default batching)
     batch_limit = case_when(
-      method == 'GET' & num_path_params > 0 ~ 1,
-      method == 'GET' & num_path_params == 0 ~ 0,
+      method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+      method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
       .default = NULL
     )
   ) %>%
