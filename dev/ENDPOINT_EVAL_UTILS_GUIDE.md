@@ -86,7 +86,7 @@ In addition to parameters, the following endpoint-level metadata is extracted:
 deprecated <- op$deprecated %||% FALSE
 ```
 
-When `deprecated = TRUE`, the generated function will use `lifecycle::badge("deprecated")` instead of the configured badge (typically "experimental").
+When `isTRUE(deprecated)` is TRUE, the generated function will use `lifecycle::badge("deprecated")` instead of the configured badge (typically "experimental").
 
 **Response Schema Type Detection:**
 
@@ -997,6 +997,29 @@ wrap_param <- if (has_no_additional_params) {
 - First parameter incorrectly identified as additional param
 - Schema has nested objects that aren't parsed correctly
 
+### Problem 6: Error "missing value where TRUE/FALSE needed"
+
+**Symptoms:** The script fails during `dplyr::mutate()` or `purrr::pmap_chr()` with `! missing value where TRUE/FALSE needed`.
+
+**Understanding the Issue:**
+This is a standard R error that occurs when an `if` statement receives an `NA` value. In these utilities, it usually happens because a column in the specification tibble (like `deprecated`, `needs_resolver`, or `batch_limit`) contains `NA` for certain endpoints.
+
+**Debugging Workflow:**
+
+1. **Check for NA values in the spec:**
+   ```r
+   eps %>% filter(is.na(deprecated) | is.na(needs_resolver))
+   ```
+
+2. **Verify defensive guarding:**
+   - Always use `isTRUE(var)` instead of `if (var)` when `var` comes from the schema spec.
+   - Use `dplyr::coalesce(var, default)` in `render_endpoint_stubs()` to clean data before processing.
+
+**Common Causes:**
+- New columns added to `openapi_to_spec()` without providing a default value.
+- Endpoints with unusual or incomplete OpenAPI definitions.
+- Manual modifications to the spec tibble that introduce `NA`.
+
 ### Debugging Workflow Summary
 
 ```mermaid
@@ -1044,15 +1067,15 @@ flowchart TD
 
 ### Quick Reference: Where to Look
 
-| Issue | File | Lines | Function |
-|-------|------|-------|----------|
-| Schema not loading | `chemi_endpoint_eval.R` | 46-50 | Filtering logic |
-| batch_limit wrong | `endpoint eval.R` | 90-94 | batch_limit assignment |
-| Parameter sanitization | `endpoint_eval_utils.R` | 938-946 | `sanitize_param()` |
-| Wrapper selection | `endpoint_eval_utils.R` | 1296-1300 | GET override |
-| wrap logic | `endpoint_eval_utils.R` | 1599-1607 | `has_no_additional_params` |
-| Resolver detection | `endpoint_eval_utils.R` | 314-369 | `uses_chemical_schema()` |
-| Function naming | `chemi_endpoint_eval.R` | 100-112 | fn generation |
+| Issue | File | Function |
+|-------|------|----------|
+| Schema not loading | `chemi_endpoint_eval.R` | Filtering logic |
+| batch_limit wrong | `endpoint eval.R` | batch_limit assignment |
+| Parameter sanitization | `endpoint_eval_utils.R` | `sanitize_param()` |
+| Wrapper selection | `endpoint_eval_utils.R` | GET override logic |
+| wrap logic | `endpoint_eval_utils.R` | `has_no_additional_params` |
+| Resolver detection | `endpoint_eval_utils.R` | `uses_chemical_schema()` |
+| Function naming | `chemi_endpoint_eval.R` | fn generation |
 
 ### Tips for Senior Developers
 

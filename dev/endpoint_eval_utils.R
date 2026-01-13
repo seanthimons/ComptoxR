@@ -47,7 +47,28 @@ CHEMICAL_SCHEMA_PATTERNS <- c(
 )
 
 # Helper: NULL-coalesce
-`%||%` <- function(x, y) if (is.null(x)) y else x
+`%||%` <- function(x, y) {
+  if (is.null(x)) return(y)
+  if (length(x) == 1 && is.na(x)) return(y)
+  x
+}
+
+# Helper: ensure columns exist in data frame
+ensure_cols <- function(df, cols_with_defaults) {
+  nr <- nrow(df)
+  for (col in names(cols_with_defaults)) {
+    if (!(col %in% names(df))) {
+      val <- cols_with_defaults[[col]]
+      if (is.list(val) && length(val) == 1) {
+        # Handle list-column defaults
+        df[[col]] <- replicate(nr, val[[1]], simplify = FALSE)
+      } else {
+        df[[col]] <- rep(val, length.out = nr)
+      }
+    }
+  }
+  df
+}
 
 # ==============================================================================
 # Path Manipulation
@@ -113,8 +134,6 @@ find_endpoint_usages_base <- function(
   include_no_leading_slash = TRUE,
   keep_trailing_slash = TRUE
 ) {
-  `%||%` <- function(x, y) if (is.null(x)) y else x
-
   base_paths <- strip_curly_params(endpoints, keep_trailing_slash = keep_trailing_slash, leading_slash = 'remove')
 
   # Include variants without a leading slash to catch code that stores paths "bare"
@@ -252,7 +271,6 @@ openapi_to_spec <- function(
   if (!requireNamespace("stringr", quietly = TRUE)) stop("Package 'stringr' is required.")
 
   name_strategy <- match.arg(name_strategy)
-  `%||%` <- function(a, b) if (is.null(a)) b else a
 
   sanitize_name <- function(x) {
     x <- stringr::str_replace_all(x, "[^A-Za-z0-9_]", "_")
@@ -895,7 +913,13 @@ scaffold_files <- function(
     }
   }
 
-  `%||%` <- function(a, b) if (is.null(a)) b else a
+  if (nrow(jobs) == 0) {
+    return(dplyr::tibble(
+      index = integer(), path = character(), action = character(),
+      existed = logical(), written = logical(), size_bytes = numeric()
+    ))
+  }
+
   result <- purrr::pmap_dfr(jobs, write_one)
   print(result, n = Inf)
 
@@ -924,16 +948,17 @@ scaffold_files <- function(
 # Helper function to build parameter default value based on schema metadata
 build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   # If parameter is primary (required), no default
-  if (is_primary) {
+  if (isTRUE(is_primary)) {
     return("")
   }
 
   # If no metadata, fall back to NULL
-  if (is.null(metadata[[param_name]])) {
+  if (is.null(metadata) || is.na(param_name) || is.null(metadata[[param_name]])) {
     return("= NULL")
   }
 
   metadata_entry <- metadata[[param_name]]
+  if (!is.list(metadata_entry)) return("= NULL")
 
   # Check if parameter is required
   if (isTRUE(metadata_entry$required)) {
@@ -942,7 +967,7 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
 
   # Check for default value in schema
   default_val <- metadata_entry$default
-  if (is.na(default_val) || is.null(default_val)) {
+  if (is.null(default_val) || (length(default_val) == 1 && is.na(default_val))) {
     return("= NULL")
   }
 
@@ -967,7 +992,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   strategy <- match.arg(strategy)
 
   # Handle empty/NA params
-  if (is.null(params_str) || is.na(params_str) || params_str == "" || nchar(trimws(params_str)) == 0) {
+  if (is.null(params_str) || length(params_str) == 0 || is.na(params_str[1]) || !nzchar(trimws(params_str[1]))) {
     return(list(
       fn_signature = "",
       param_docs = "",
@@ -982,7 +1007,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   # Split and clean parameter names
   param_vec_orig <- strsplit(params_str, ",")[[1]]
   param_vec_orig <- trimws(param_vec_orig)
-  param_vec_orig <- param_vec_orig[nzchar(param_vec_orig)]
+  param_vec_orig <- param_vec_orig[nzchar(param_vec_orig) & !is.na(param_vec_orig)]
 
   if (length(param_vec_orig) == 0) {
     return(list(
@@ -996,17 +1021,17 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     ))
   }
 
-  # Helper to sanitize parameter names (e.g. "2d" -> "x2d")
+  # Helper to sanitize parameter names
   sanitize_param <- function(x) {
-    # If starts with digit, prefix with x
+    if (is.na(x) || !nzchar(x)) return("param")
     if (grepl("^[0-9]", x)) {
       paste0("x", x)
     } else {
-      make.names(x) # standard R sanitization for other chars if needed
+      make.names(x)
     }
   }
 
-  param_vec_sanitized <- sapply(param_vec_orig, sanitize_param)
+  param_vec_sanitized <- vapply(param_vec_orig, sanitize_param, character(1))
   names(param_vec_sanitized) <- param_vec_orig
   
   # Identify required vs optional parameters
@@ -1014,22 +1039,20 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   optional_params <- character(0)
   primary_param <- NULL
   
-  if (!has_path_params) {
-    # If no path params, the first parameter is the primary one and is implicitly required
+  if (!isTRUE(has_path_params)) {
     primary_param <- param_vec_sanitized[1]
   }
 
   for (i in seq_along(param_vec_orig)) {
     p_orig <- param_vec_orig[i]
     p_san <- param_vec_sanitized[i]
-    is_required <- FALSE
+    entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
     
-    # Check metadata for required status
-    if (!is.null(metadata[[p_orig]]) && isTRUE(metadata[[p_orig]]$required)) {
+    is_required <- FALSE
+    if (is.list(entry) && isTRUE(entry$required)) {
       is_required <- TRUE
     }
     
-    # Primary param is always required
     if (!is.null(primary_param) && p_san == primary_param) {
       is_required <- TRUE
     }
@@ -1041,105 +1064,81 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     }
   }
   
-  # Build function signature: required (no default), then optional (with defaults)
+  # Build function signature
   sig_parts <- character(0)
-  
   if (length(required_params) > 0) {
     sig_parts <- c(sig_parts, paste(required_params, collapse = ", "))
   }
   
   if (length(optional_params) > 0) {
-    optional_defaults <- sapply(optional_params, function(p_san) {
-      p_orig <- param_vec_orig[which(param_vec_sanitized == p_san)]
+    optional_defaults <- vapply(optional_params, function(p_san) {
+      p_orig <- param_vec_orig[which(param_vec_sanitized == p_san)[1]]
+      entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
       build_param_default(p_orig, metadata, is_primary = FALSE)
-    })
+    }, character(1))
     sig_parts <- c(sig_parts, paste(optional_params, optional_defaults, collapse = ", "))
   }
   
   fn_signature <- paste(sig_parts, collapse = ", ")
   
-  # Extract primary example if available
+  # Extract primary example safely
   primary_example <- NA
   if (!is.null(primary_param)) {
-    primary_orig <- param_vec_orig[which(param_vec_sanitized == primary_param)]
-    if (!is.null(metadata[[primary_orig]]) && !is.null(metadata[[primary_orig]]$example)) {
-      primary_example <- metadata[[primary_orig]]$example
+    primary_orig <- param_vec_orig[which(param_vec_sanitized == primary_param)[1]]
+    entry <- if (!is.null(metadata) && !is.na(primary_orig)) metadata[[primary_orig]] else NULL
+    if (is.list(entry)) {
+      primary_example <- entry$example %||% NA
     }
   }
 
   # Generate @param documentation
   doc_lines <- character(0)
-  
-  # Process all parameters in original order for documentation
   for (i in seq_along(param_vec_orig)) {
     p_orig <- param_vec_orig[i]
     p_san <- param_vec_sanitized[i]
+    entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
     
-    if (!is.null(metadata[[p_orig]])) {
-      desc <- metadata[[p_orig]]$description
-      if (is.null(desc)) desc <- ""
-      enum_vals <- metadata[[p_orig]]$enum
-      default_val <- metadata[[p_orig]]$default
-      is_required <- p_san %in% required_params
+    if (is.list(entry)) {
+      desc <- entry$description %||% ""
+      enum_vals <- entry$enum %||% NULL
+      default_val <- entry$default %||% NA
+      is_req <- p_san %in% required_params
 
-      # Start with description or generic fallback
       if (nzchar(desc)) {
         param_desc <- desc
-      } else if (is_required) {
+      } else if (is_req) {
         param_desc <- "Required parameter"
       } else {
         param_desc <- "Optional parameter"
       }
 
-      # Append enum values if available
-      if (!is.null(enum_vals) && length(enum_vals) > 0) {
-        enum_str <- paste(enum_vals, collapse = ", ")
-        param_desc <- paste0(param_desc, ". Options: ", enum_str)
+      if (length(enum_vals) > 0) {
+        param_desc <- paste0(param_desc, ". Options: ", paste(enum_vals, collapse = ", "))
       }
 
-      # Append default value if available
-      if (!is.null(default_val) && !is.na(default_val)) {
+      if (!is.na(default_val)) {
         param_desc <- paste0(param_desc, " (default: ", default_val, ")")
       }
 
       doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " ", param_desc))
     } else {
-       if (p_san %in% required_params) {
-        doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " Required parameter"))
-      } else {
-        doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " Optional parameter"))
-      }
+       doc_lines <- c(doc_lines, paste0("#' @param ", p_san, if (p_san %in% required_params) " Required parameter" else " Optional parameter"))
     }
   }
   param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
 
   # Strategy-specific code generation
   if (strategy == "extra_params") {
-    # For generic_request: pass parameters directly via ellipsis
-    params_code <- ""
-    
-    # We pass all params (required + optional) to the generic request
-    # Use backticks for original param names if they are weird, but here we are mapping args
-    # e.g. `2d` = x2d
-    
     args_list <- paste(paste0("`", param_vec_orig, "` = ", param_vec_sanitized), collapse = ",\n    ")
     params_call <- paste0(",\n    ", args_list)
-
-  } else if (strategy == "options") {
-    # For generic_chemi_request: use options list
-    # Code generation needs to map sanitized variable to original key
-    
-    lines <- character(0)
-    lines <- c(lines, "  # Collect optional parameters")
-    lines <- c(lines, "  options <- list()")
-    
+    params_code <- ""
+  } else {
+    lines <- c("  # Collect optional parameters", "  options <- list()")
     for (i in seq_along(param_vec_orig)) {
       p_orig <- param_vec_orig[i]
       p_san <- param_vec_sanitized[i]
-      # quote string key
       lines <- c(lines, paste0("  if (!is.null(", p_san, ")) options[['", p_orig, "']] <- ", p_san))
     }
-    
     params_code <- paste0(paste(lines, collapse = "\n"), "\n  ")
     params_call <- ",\n    options = options"
   }
@@ -1177,9 +1176,8 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list()) {
   strategy <- match.arg(strategy)
 
-  # Handle empty path params - return empty signature
-  # Query params will drive the function signature when no path params exist
-  if (is.null(path_params_str) || is.na(path_params_str) || path_params_str == "" || nchar(trimws(path_params_str)) == 0) {
+  # Handle empty/NA path params
+  if (is.null(path_params_str) || length(path_params_str) == 0 || is.na(path_params_str[1]) || !nzchar(trimws(path_params_str[1]))) {
     return(list(
       fn_signature = "",
       path_params_call = "",
@@ -1194,7 +1192,7 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   # Split into individual parameters
   param_vec <- strsplit(path_params_str, ",")[[1]]
   param_vec <- trimws(param_vec)
-  param_vec <- param_vec[nzchar(param_vec)]
+  param_vec <- param_vec[nzchar(param_vec) & !is.na(param_vec)]
 
   if (length(param_vec) == 0) {
     return(list(
@@ -1222,10 +1220,13 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
     fn_signature <- primary_param
   }
 
-  # Extract primary parameter example
+  # Extract primary parameter example safely
   primary_example <- NA
-  if (!is.null(metadata[[primary_param]]) && !is.null(metadata[[primary_param]]$example)) {
-    primary_example <- metadata[[primary_param]]$example
+  if (!is.null(metadata) && !is.na(primary_param) && !is.null(metadata[[primary_param]])) {
+    entry <- metadata[[primary_param]]
+    if (is.list(entry)) {
+      primary_example <- entry$example %||% NA
+    }
   }
 
   # Build param_docs from metadata with enhanced information
@@ -1233,11 +1234,12 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   all_params <- c(primary_param, additional_params)
   doc_lines <- character(0)
   for (p in all_params) {
-    if (!is.null(metadata[[p]])) {
-      desc <- metadata[[p]]$description
-      if (is.null(desc)) desc <- ""
-      enum_vals <- metadata[[p]]$enum
-      default_val <- metadata[[p]]$default
+    entry <- if (!is.null(metadata) && !is.na(p)) metadata[[p]] else NULL
+    
+    if (is.list(entry)) {
+      desc <- entry$description %||% ""
+      enum_vals <- entry$enum %||% NULL
+      default_val <- entry$default %||% NA
 
       # Start with description or generic fallback
       if (nzchar(desc)) {
@@ -1249,13 +1251,13 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
       }
 
       # Append enum values if available
-      if (!is.null(enum_vals) && length(enum_vals) > 0) {
+      if (length(enum_vals) > 0) {
         enum_str <- paste(enum_vals, collapse = ", ")
         param_desc <- paste0(param_desc, ". Options: ", enum_str)
       }
 
       # Append default value if available
-      if (!is.null(default_val) && !is.na(default_val)) {
+      if (!is.na(default_val)) {
         param_desc <- paste0(param_desc, " (default: ", default_val, ")")
       }
 
@@ -1275,21 +1277,11 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 
   # Build path_params call
   if (length(additional_params) > 0) {
-    if (strategy == "extra_params") {
-      # For generic_request
-      path_params_call <- paste0(
-        ",\n    path_params = c(",
-        paste(additional_params, "=", additional_params, collapse = ", "),
-        ")"
-      )
-    } else {
-      # For generic_chemi_request (doesn't support path_params yet, but keeping consistent)
-      path_params_call <- paste0(
-        ",\n    path_params = c(",
-        paste(additional_params, "=", additional_params, collapse = ", "),
-        ")"
-      )
-    }
+    path_params_call <- paste0(
+      ",\n    path_params = c(",
+      paste(additional_params, "=", additional_params, collapse = ", "),
+      ")"
+    )
   } else {
     path_params_call <- ""
   }
@@ -1404,7 +1396,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   wrapper_fn <- config$wrapper_function
   example_query <- config$example_query %||% "DTXSID7020182"
   # Use deprecated badge if endpoint is deprecated, otherwise use config badge
-  lifecycle_badge <- if (deprecated) {
+  lifecycle_badge <- if (isTRUE(deprecated)) {
     "deprecated"
   } else {
     config$lifecycle_badge %||% "experimental"
@@ -1414,7 +1406,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # For GET endpoints, use generic_request even if config specifies generic_chemi_request
   # generic_chemi_request is designed for POST with JSON payloads only
   is_chemi_get <- FALSE
-  if (toupper(method) == "GET" && wrapper_fn == "generic_chemi_request") {
+  if (isTRUE(toupper(method) == "GET") && wrapper_fn == "generic_chemi_request") {
     wrapper_fn <- "generic_request"
     is_chemi_get <- TRUE  # Track this to set correct server/auth
   }
@@ -1434,7 +1426,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
                    !isTRUE(path_param_info$has_path_params) &&
                    nchar(path_param_info$fn_signature) == 0)
 
-  if (is_body_only) {
+  if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
     primary_param <- body_param_info$primary_param %||% "data"
     fn_signature <- body_param_info$fn_signature
@@ -1448,7 +1440,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
     
     # Build example_value_vec for example call generation
-    if (method == "POST") {
+    if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
       if (length(dtxsids) > 1) {
         example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
@@ -1458,7 +1450,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else {
       example_value_vec <- paste0('"', example_value, '"')
     }
-  } else if (is_query_only) {
+  } else if (isTRUE(is_query_only)) {
     # Query-only endpoint: primary param comes from query params
     primary_param <- query_param_info$primary_param
     fn_signature <- query_param_info$fn_signature
@@ -1526,7 +1518,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
     
     # For POST requests, use sample from testing_chemicals
-    if (method == "POST") {
+    if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
       if (length(dtxsids) > 1) {
         example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
@@ -1564,7 +1556,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
 
   # Special handling for endpoints that need resolver pre-processing
-  if (needs_resolver && body_schema_type == "chemical_array") {
+  if (isTRUE(needs_resolver) && body_schema_type == "chemical_array") {
     # Generate resolver-wrapped stub
     # These endpoints expect full Chemical objects (with sid, smiles, casrn, inchi, etc.)
     # We first resolve identifiers via chemi_resolver, then send to the endpoint
@@ -1852,11 +1844,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
-  } else if (has_additional_params) {
+  } else if (isTRUE(has_additional_params)) {
     # Standard endpoint with path params and optional query params
     if (wrapper_fn == "generic_request") {
       # For chemi GET endpoints, determine batch_limit based on path params
-      if (is_chemi_get) {
+      if (isTRUE(is_chemi_get)) {
         # Only use batch_limit = 1 for endpoints with PATH parameters
         if (isTRUE(path_param_info$has_any_path_params)) {
           # Has path params: append to URL path
@@ -1873,7 +1865,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       }
 
       # Special handling for chemi GET query-only endpoints
-      if (is_chemi_get && !isTRUE(path_param_info$has_any_path_params) && isTRUE(query_param_info$has_params)) {
+      if (isTRUE(is_chemi_get) && !isTRUE(path_param_info$has_any_path_params) && isTRUE(query_param_info$has_params)) {
         # Query-only chemi GET: pass parameters directly without options pattern
         # Extract parameter names from function signature
         sig_parts <- strsplit(fn_signature, ",")[[1]]
@@ -1942,7 +1934,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     
     if (wrapper_fn == "generic_request") {
       # For chemi GET endpoints, determine batch_limit based on path params
-      if (is_chemi_get) {
+      if (isTRUE(is_chemi_get)) {
         # Only use batch_limit = 1 for endpoints with PATH parameters
         if (isTRUE(path_param_info$has_any_path_params)) {
           # Has path params: append to URL path
@@ -2028,84 +2020,102 @@ render_endpoint_stubs <- function(spec,
   # Extract strategy from config
   param_strategy <- config$param_strategy %||% "extra_params"
 
-  # Process spec: add derived columns and parse parameters
-  spec %>%
+  # Ensure all necessary columns exist with defaults
+  spec <- ensure_cols(spec, list(
+    fn = NA_character_,
+    file = "unknown.R",
+    route = "/unknown",
+    summary = "",
+    method = "GET",
+    batch_limit = NA_integer_,
+    path_params = "",
+    query_params = "",
+    body_params = "",
+    num_path_params = 0L,
+    num_body_params = 0L,
+    path_param_metadata = list(NULL),
+    query_param_metadata = list(NULL),
+    body_param_metadata = list(NULL),
+    content_type = "",
+    needs_resolver = FALSE,
+    body_schema_type = "unknown",
+    deprecated = FALSE,
+    response_schema_type = "unknown"
+  ))
+
+  # Pre-process some columns
+  spec <- spec %>%
     dplyr::mutate(
-      # Respect existing fn column if present, otherwise derive from file
-      fn       = dplyr::coalesce(
-        if ("fn" %in% names(.)) fn else NA_character_,
-        purrr::map_chr(file, fn_transform)
-      ),
+      fn = dplyr::coalesce(fn, vapply(file, fn_transform, character(1))),
       endpoint = route,
-      # Generate title from route if summary is empty
-      title    = dplyr::if_else(
-        nzchar(summary),
+      title = dplyr::if_else(
+        nzchar(summary %||% ""),
         summary,
         tools::toTitleCase(gsub("[/_-]", " ", route))
       )
-    ) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      # Parse path parameters (primary param + additional path params)
-      # Note: In rowwise context, list columns are already unwrapped, so access directly
-      path_param_info = list(parse_path_parameters(
-        if ("path_params" %in% names(.)) path_params else "",
-        strategy = param_strategy,
-        metadata = if ("path_param_metadata" %in% names(.) && !is.null(path_param_metadata) && isTRUE(is.list(path_param_metadata))) path_param_metadata else list()
-      )),
-      # Parse query parameters
-      # When no path params exist, first query param becomes the primary parameter
-      query_param_info = list(parse_function_params(
-        if ("query_params" %in% names(.)) query_params else "",
-        strategy = param_strategy,
-        metadata = if ("query_param_metadata" %in% names(.) && !is.null(query_param_metadata) && isTRUE(is.list(query_param_metadata))) query_param_metadata else list(),
-        has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else FALSE
-      )),
-      # Parse body parameters (for POST/PUT/PATCH endpoints)
-      # When no path params exist, first body param becomes the primary parameter
-      body_param_info = list(parse_function_params(
-        if ("body_params" %in% names(.)) body_params else "",
-        strategy = param_strategy,
-        metadata = if ("body_param_metadata" %in% names(.) && !is.null(body_param_metadata) && isTRUE(is.list(body_param_metadata))) body_param_metadata else list(),
-        has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else FALSE
-      ))
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      text = purrr::pmap_chr(
-        list(
-          fn = fn,
-          endpoint = endpoint,
-          method = method,
-          title = title,
-          batch_limit = batch_limit,
-          path_param_info = path_param_info,
-          query_param_info = query_param_info,
-          body_param_info = body_param_info,
-          content_type = if ("content_type" %in% names(.)) content_type else "",
-          needs_resolver = if ("needs_resolver" %in% names(.)) needs_resolver else FALSE,
-          body_schema_type = if ("body_schema_type" %in% names(.)) body_schema_type else "unknown",
-          deprecated = if ("deprecated" %in% names(.)) deprecated else FALSE,
-          response_schema_type = if ("response_schema_type" %in% names(.)) response_schema_type else "unknown"
-        ),
-        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type) {
-          build_function_stub(
-            fn = fn,
-            endpoint = endpoint,
-            method = method,
-            title = title,
-            batch_limit = batch_limit,
-            path_param_info = path_param_info,
-            query_param_info = query_param_info,
-            body_param_info = body_param_info,
-            content_type = content_type,
-            config = config,
-            needs_resolver = needs_resolver,
-            body_schema_type = body_schema_type,
-            deprecated = deprecated,
-            response_schema_type = response_schema_type
-          )
-        }
-      )
     )
+
+  # Parse parameters row by row
+  # We use pmap to avoid rowwise() issues
+  parsed_params <- purrr::pmap(
+    list(
+      spec$path_params,
+      spec$query_params,
+      spec$body_params,
+      spec$num_path_params,
+      spec$path_param_metadata,
+      spec$query_param_metadata,
+      spec$body_param_metadata
+    ),
+    function(pp, qp, bp, npp, ppm, qpm, bpm) {
+      list(
+        path_info = parse_path_parameters(pp, strategy = param_strategy, metadata = ppm %||% list()),
+        query_info = parse_function_params(qp, strategy = param_strategy, metadata = qpm %||% list(), has_path_params = (npp %||% 0 > 0)),
+        body_info = parse_function_params(bp, strategy = param_strategy, metadata = bpm %||% list(), has_path_params = (npp %||% 0 > 0))
+      )
+    }
+  )
+
+  spec$path_param_info  <- purrr::map(parsed_params, "path_info")
+  spec$query_param_info <- purrr::map(parsed_params, "query_info")
+  spec$body_param_info  <- purrr::map(parsed_params, "body_info")
+
+  # Generate text row by row
+  spec$text <- purrr::pmap_chr(
+    list(
+      fn = spec$fn,
+      endpoint = spec$endpoint,
+      method = spec$method,
+      title = spec$title,
+      batch_limit = spec$batch_limit,
+      path_param_info = spec$path_param_info,
+      query_param_info = spec$query_param_info,
+      body_param_info = spec$body_param_info,
+      content_type = spec$content_type,
+      needs_resolver = spec$needs_resolver,
+      body_schema_type = spec$body_schema_type,
+      deprecated = spec$deprecated,
+      response_schema_type = spec$response_schema_type
+    ),
+    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type) {
+      build_function_stub(
+        fn = fn,
+        endpoint = endpoint,
+        method = method,
+        title = title,
+        batch_limit = batch_limit,
+        path_param_info = path_param_info,
+        query_param_info = query_param_info,
+        body_param_info = body_param_info,
+        content_type = content_type %||% "",
+        config = config,
+        needs_resolver = isTRUE(as.logical(needs_resolver %||% FALSE)),
+        body_schema_type = body_schema_type %||% "unknown",
+        deprecated = isTRUE(as.logical(deprecated %||% FALSE)),
+        response_schema_type = response_schema_type %||% "unknown"
+      )
+    }
+  )
+
+  spec
 }

@@ -18,7 +18,7 @@
 # ==============================================================================
 
 # Load shared utilities
-source("endpoint_eval_utils.R")
+source(here::here("dev", "endpoint_eval_utils.R"))
 
 # Load required packages
 library(jsonlite)
