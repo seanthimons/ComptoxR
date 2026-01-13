@@ -1446,6 +1446,18 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (!is.null(body_param_info$primary_example) && !is.na(body_param_info$primary_example)) {
       example_value <- as.character(body_param_info$primary_example)
     }
+    
+    # Build example_value_vec for example call generation
+    if (method == "POST") {
+      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      if (length(dtxsids) > 1) {
+        example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
+      } else {
+        example_value_vec <- paste0('"', dtxsids, '"')
+      }
+    } else {
+      example_value_vec <- paste0('"', example_value, '"')
+    }
   } else if (is_query_only) {
     # Query-only endpoint: primary param comes from query params
     primary_param <- query_param_info$primary_param
@@ -1458,6 +1470,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (!is.null(query_param_info$primary_example) && !is.na(query_param_info$primary_example)) {
       example_value <- as.character(query_param_info$primary_example)
     }
+    
+    # Build example_value_vec for example call generation
+    example_value_vec <- paste0('"', example_value, '"')
   } else {
     # Standard case: primary param comes from path params
     primary_param <- "NULL"
