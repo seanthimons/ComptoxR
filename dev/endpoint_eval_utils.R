@@ -967,7 +967,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   strategy <- match.arg(strategy)
 
   # Handle empty/NA params
-  if (is.na(params_str) || params_str == "" || nchar(trimws(params_str)) == 0) {
+  if (is.null(params_str) || is.na(params_str) || params_str == "" || nchar(trimws(params_str)) == 0) {
     return(list(
       fn_signature = "",
       param_docs = "",
@@ -1179,7 +1179,7 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 
   # Handle empty path params - return empty signature
   # Query params will drive the function signature when no path params exist
-  if (is.na(path_params_str) || path_params_str == "" || nchar(trimws(path_params_str)) == 0) {
+  if (is.null(path_params_str) || is.na(path_params_str) || path_params_str == "" || nchar(trimws(path_params_str)) == 0) {
     return(list(
       fn_signature = "",
       path_params_call = "",
