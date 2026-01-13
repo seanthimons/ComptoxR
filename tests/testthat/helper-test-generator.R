@@ -3,6 +3,11 @@
 # This helper provides utilities to generate standardized tests for API wrapper functions.
 # Most wrapper functions follow similar patterns, so we can use template-based testing.
 
+# Null-coalesce operator (define early to avoid load-order issues)
+if (!exists("%||%")) {
+  `%||%` <- function(x, y) if (is.null(x)) y else x
+}
+
 #' Generate a standard test for a simple wrapper function
 #'
 #' @param fn_name Function name (e.g., "ct_hazard")
@@ -266,7 +271,7 @@ discover_wrapper_functions <- function(
       text <- paste(lines, collapse = "\n")
 
       # Extract function name using regex
-      # Pattern matches: fn_name <- function(
+      # Pattern matches: fn_name <- function( or fn_name = function(
       fn_match <- regmatches(
         text,
         regexpr("(ct_|chemi_)[a-z0-9_]+(?=\\s*(<-|=)\\s*function)", text, perl = TRUE)
@@ -544,6 +549,3 @@ generate_schema_discovered_tests <- function(
 
   invisible(results)
 }
-
-# Null-coalesce operator (if not already defined)
-`%||%` <- function(x, y) if (is.null(x)) y else x

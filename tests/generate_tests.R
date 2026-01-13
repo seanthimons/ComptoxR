@@ -117,7 +117,9 @@ test_cases <- list(
 
 # Function signature mapping (LEGACY)
 # Maps function names to their expected parameter types
-# NOTE: For new functions, consider using generate_tests_from_schema() instead
+# NOTE: This legacy approach is maintained for backward compatibility.
+# New development should use generate_tests_from_schema() which automatically
+# discovers functions from R/ source files and infers their parameter types.
 function_signatures <- list(
   # DTXSID-based functions
   ct_hazard = "dtxsid_single",
