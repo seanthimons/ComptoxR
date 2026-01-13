@@ -2059,7 +2059,7 @@ render_endpoint_stubs <- function(spec,
         if ("query_params" %in% names(.)) query_params else "",
         strategy = param_strategy,
         metadata = if ("query_param_metadata" %in% names(.) && is.list(query_param_metadata)) query_param_metadata else list(),
-        has_path_params = (num_path_params > 0)
+        has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else TRUE
       )),
       # Parse body parameters (for POST/PUT/PATCH endpoints)
       # When no path params exist, first body param becomes the primary parameter
@@ -2067,7 +2067,7 @@ render_endpoint_stubs <- function(spec,
         if ("body_params" %in% names(.)) body_params else "",
         strategy = param_strategy,
         metadata = if ("body_param_metadata" %in% names(.) && is.list(body_param_metadata)) body_param_metadata else list(),
-        has_path_params = (num_path_params > 0)
+        has_path_params = if ("num_path_params" %in% names(.) && !is.na(num_path_params)) (num_path_params > 0) else TRUE
       ))
     ) %>%
     dplyr::ungroup() %>%
