@@ -420,6 +420,53 @@ openapi_to_spec <- function(
     return("simple_object")
   }
 
+  # Determine the response schema type for code generation
+  # Returns: "array", "object", "scalar", "binary", or "unknown"
+  get_response_schema_type <- function(responses, openapi_spec) {
+    if (is.null(responses) || !is.list(responses)) return("unknown")
+    
+    # Look for successful response codes
+    success_codes <- intersect(names(responses), c("200", "201", "202", "204", "default"))
+    if (length(success_codes) == 0) return("unknown")
+    
+    # Check first successful response
+    resp <- responses[[success_codes[1]]]
+    content <- resp$content %||% list()
+    
+    # Check for binary/image content types first
+    if (any(grepl("^image/", names(content))) || any(grepl("octet-stream", names(content)))) {
+      return("binary")
+    }
+    
+    # Check application/json response
+    json_schema <- content[["application/json"]]$schema %||% list()
+    
+    # If no JSON schema, return unknown
+    if (length(json_schema) == 0) return("unknown")
+    
+    # Check for $ref - need to resolve it
+    if (!is.null(json_schema[["$ref"]])) {
+      ref <- json_schema[["$ref"]]
+      ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
+      if (length(ref_parts) >= 4 && ref_parts[2] == "components" && ref_parts[3] == "schemas") {
+        schema_name <- ref_parts[4]
+        components <- openapi_spec[["components"]] %||% list()
+        schemas <- components[["schemas"]] %||% list()
+        json_schema <- schemas[[schema_name]] %||% list()
+      }
+    }
+    
+    # Determine type from schema
+    schema_type <- json_schema[["type"]] %||% ""
+    
+    if (schema_type == "array") return("array")
+    if (schema_type == "object") return("object")
+    if (schema_type %in% c("string", "number", "integer", "boolean")) return("scalar")
+    
+    # Default to unknown
+    return("unknown")
+  }
+
   # Extract metadata from request body schema reference
   # Parses POST endpoint request bodies that reference schemas in #/components/schemas
   extract_body_schema_metadata <- function(request_body, openapi_spec) {
@@ -530,6 +577,12 @@ openapi_to_spec <- function(
       has_body <- !is.null(op$requestBody)
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
+      
+      # Extract deprecated status
+      deprecated <- op$deprecated %||% FALSE
+      
+      # Extract description for enhanced documentation
+      description <- op$description %||% ""
 
       # Detect if the request body uses the Chemical schema (needs resolver)
       needs_resolver <- if (method %in% c("post", "put", "patch") && has_body) {
@@ -544,6 +597,9 @@ openapi_to_spec <- function(
       } else {
         "unknown"
       }
+      
+      # Detect response schema type for enhanced documentation
+      response_schema_type <- get_response_schema_type(op$responses, openapi)
 
       # Extract response content types
       response_content_types <- character(0)
@@ -586,7 +642,12 @@ openapi_to_spec <- function(
         content_type = content_type,
         # NEW: Chemical schema detection for resolver wrapping
         needs_resolver = needs_resolver,
-        body_schema_type = body_schema_type
+        body_schema_type = body_schema_type,
+        # NEW: Deprecated status and description
+        deprecated = deprecated,
+        description = description,
+        # NEW: Response schema type for enhanced documentation
+        response_schema_type = response_schema_type
       )
     })
   })
@@ -1244,6 +1305,51 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   )
 }
 
+
+#' Sample random DTXSIDs for examples
+#' 
+#' Samples random DTXSIDs from the testing_chemicals dataset for use in
+#' example code generation. Falls back to a default DTXSID if the dataset
+#' is unavailable.
+#' 
+#' @param n Number of DTXSIDs to sample (default 3)
+#' @param custom_list Optional custom vector of DTXSIDs to sample from
+#' @return Character vector of DTXSIDs
+sample_test_dtxsids <- function(n = 3, custom_list = NULL) {
+  # If custom list provided, use it
+  if (!is.null(custom_list) && length(custom_list) >= n) {
+    return(sample(custom_list, size = n))
+  }
+  
+  default_dtxsid <- "DTXSID7020182"
+  
+  tryCatch({
+    # Try to load testing_chemicals from package data
+    chems <- NULL
+    if (requireNamespace("ComptoxR", quietly = TRUE)) {
+      if (exists("testing_chemicals", envir = asNamespace("ComptoxR"))) {
+        chems <- get("testing_chemicals", envir = asNamespace("ComptoxR"))
+      }
+    }
+    
+    # Fallback: try to load from data/ directory
+    if (is.null(chems)) {
+      data_path <- "data/testing_chemicals.rda"
+      if (file.exists(data_path)) {
+        load(data_path)
+      }
+    }
+    
+    if (!is.null(chems) && "dtxsid" %in% names(chems) && nrow(chems) >= n) {
+      sample(chems$dtxsid, size = n)
+    } else {
+      default_dtxsid
+    }
+  }, error = function(e) {
+    default_dtxsid  # fallback to default
+  })
+}
+
 #' Build a single function stub from components
 #'
 #' Generates R function source code with roxygen documentation using configuration.
@@ -1259,9 +1365,11 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 #' @param config Configuration list specifying template behavior.
 #' @param needs_resolver Boolean; whether this endpoint needs resolver pre-processing.
 #' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "simple_object", "unknown").
+#' @param deprecated Boolean; whether endpoint is deprecated in OpenAPI spec.
+#' @param response_schema_type Character; type of response schema ("array", "object", "scalar", "binary", "unknown").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown") {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown") {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -1273,7 +1381,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   is_text <- grepl("text/plain", content_type, fixed = TRUE)
   is_json <- content_type == "" || grepl("application/json", content_type, fixed = TRUE)
 
-  # Set return type documentation
+  # Set return type documentation based on response schema
   if (is_image) {
     return_doc <- "Returns image data (raw bytes or magick image object)"
     content_type_call <- paste0(',\n    content_type = "', content_type, '"')
@@ -1281,14 +1389,26 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return_doc <- "Returns a character string"
     content_type_call <- ',\n    content_type = "text/plain"'
   } else {
-    return_doc <- "Returns a tibble with results"
+    # Enhance based on response_schema_type
+    return_doc <- switch(response_schema_type,
+      "array" = "Returns a tibble with results (array of objects)",
+      "object" = "Returns a list with result object",
+      "scalar" = "Returns a scalar value",
+      "binary" = "Returns binary data",
+      "Returns a tibble with results"  # default
+    )
     content_type_call <- ""
   }
 
   # Extract config values
   wrapper_fn <- config$wrapper_function
   example_query <- config$example_query %||% "DTXSID7020182"
-  lifecycle_badge <- config$lifecycle_badge %||% "experimental"
+  # Use deprecated badge if endpoint is deprecated, otherwise use config badge
+  lifecycle_badge <- if (deprecated) {
+    "deprecated"
+  } else {
+    config$lifecycle_badge %||% "experimental"
+  }
   default_query_doc <- config$default_query_doc %||% "#' @param query A list of DTXSIDs to search for\n"
 
   # For GET endpoints, use generic_request even if config specifies generic_chemi_request
@@ -1383,10 +1503,23 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       combined_calls <- paste0(combined_calls, query_param_info$params_call)
     }
 
+
     # Determine example value from path param metadata
     example_value <- example_query
     if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
       example_value <- as.character(path_param_info$primary_example)
+    }
+    
+    # For POST requests, use sample from testing_chemicals
+    if (method == "POST") {
+      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      if (length(dtxsids) > 1) {
+        example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
+      } else {
+        example_value_vec <- paste0('"', dtxsids, '"')
+      }
+    } else {
+      example_value_vec <- paste0('"', example_value, '"')
     }
   }
 
@@ -1394,7 +1527,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   example_call <- if (primary_param == "NULL" || primary_param == "" || nchar(fn_signature) == 0) {
     paste0(fn, "()")
   } else {
-    paste0(fn, "(", primary_param, ' = "', example_value, '")')
+    paste0(fn, "(", primary_param, ' = ', example_value_vec, ')')
   }
 
   # Build roxygen header with parameter descriptions from metadata
@@ -1936,9 +2069,11 @@ render_endpoint_stubs <- function(spec,
           body_param_info = body_param_info,
           content_type = if ("content_type" %in% names(.)) content_type else "",
           needs_resolver = if ("needs_resolver" %in% names(.)) needs_resolver else FALSE,
-          body_schema_type = if ("body_schema_type" %in% names(.)) body_schema_type else "unknown"
+          body_schema_type = if ("body_schema_type" %in% names(.)) body_schema_type else "unknown",
+          deprecated = if ("deprecated" %in% names(.)) deprecated else FALSE,
+          response_schema_type = if ("response_schema_type" %in% names(.)) response_schema_type else "unknown"
         ),
-        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type) {
+        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type) {
           build_function_stub(
             fn = fn,
             endpoint = endpoint,
@@ -1951,7 +2086,9 @@ render_endpoint_stubs <- function(spec,
             content_type = content_type,
             config = config,
             needs_resolver = needs_resolver,
-            body_schema_type = body_schema_type
+            body_schema_type = body_schema_type,
+            deprecated = deprecated,
+            response_schema_type = response_schema_type
           )
         }
       )
