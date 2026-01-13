@@ -27,6 +27,25 @@
 library(jsonlite)
 library(tidyverse)
 
+# ==============================================================================
+# Configuration: Schema Patterns that Require Resolver Wrapping
+# ==============================================================================
+#
+# These OpenAPI schema references indicate endpoints that accept full Chemical
+# objects. Functions for these endpoints will first call chemi_resolver() to
+# convert identifiers (DTXSID, CAS, SMILES, etc.) to complete Chemical objects.
+#
+# To add new schemas that need resolver wrapping, add them to this vector.
+# Format: "#/components/schemas/SchemaName"
+#
+CHEMICAL_SCHEMA_PATTERNS <- c(
+  "#/components/schemas/Chemical",
+  "#/components/schemas/ChemicalRecord",
+  "#/components/schemas/ResolvedChemical",
+  "#/components/schemas/DSSToxRecord",
+  "#/components/schemas/DSSToxRecord2"
+)
+
 # Helper: NULL-coalesce
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
@@ -290,6 +309,117 @@ openapi_to_spec <- function(
     metadata
   }
 
+  # Check if a request body uses the Chemical schema pattern
+  # Returns TRUE if the request body contains Chemical objects that should be resolved first
+  uses_chemical_schema <- function(request_body, openapi_spec) {
+    if (is.null(request_body) || !is.list(request_body)) return(FALSE)
+
+    # Navigate: requestBody -> content -> application/json -> schema -> $ref
+    content <- request_body[["content"]] %||% list()
+    json_schema <- content[["application/json"]][["schema"]] %||% list()
+
+    # Get the schema reference
+    ref <- json_schema[["$ref"]]
+    if (is.null(ref) || !nzchar(ref)) return(FALSE)
+
+    # Parse the reference
+    ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
+    if (length(ref_parts) < 4 || ref_parts[2] != "components" || ref_parts[3] != "schemas") {
+      return(FALSE)
+    }
+
+    schema_name <- ref_parts[4]
+
+    # Resolve the schema from components
+    components <- openapi_spec[["components"]] %||% list()
+    schemas <- components[["schemas"]] %||% list()
+    schema_def <- schemas[[schema_name]]
+
+    if (is.null(schema_def) || !is.list(schema_def)) return(FALSE)
+
+    # Check if the schema has a 'chemicals' property that references Chemical, ChemicalRecord, or ResolvedChemical
+    properties <- schema_def[["properties"]] %||% list()
+
+    # Check 'chemicals' property specifically
+    chemicals_prop <- properties[["chemicals"]]
+    if (!is.null(chemicals_prop)) {
+      # Check if it's an array of Chemical-like objects
+      items <- chemicals_prop[["items"]] %||% list()
+      item_ref <- items[["$ref"]] %||% ""
+
+      # Check if the array items reference a Chemical-like schema
+      # Uses the CHEMICAL_SCHEMA_PATTERNS constant defined at module level
+      if (any(item_ref %in% CHEMICAL_SCHEMA_PATTERNS)) {
+        return(TRUE)
+      }
+    }
+
+    # Also check for 'main', 'selectedForSimilarity' or other single Chemical references
+    for (prop_name in c("main", "selectedForSimilarity", "chemical")) {
+      prop <- properties[[prop_name]]
+      if (!is.null(prop)) {
+        prop_ref <- prop[["$ref"]] %||% ""
+        if (grepl("#/components/schemas/Chemical", prop_ref, fixed = TRUE)) {
+          return(TRUE)
+        }
+      }
+    }
+
+    return(FALSE)
+  }
+
+  # Determine the body schema type for code generation
+  # Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "simple_object", or "unknown"
+  get_body_schema_type <- function(request_body, openapi_spec) {
+    if (is.null(request_body) || !is.list(request_body)) return("unknown")
+
+    # Navigate: requestBody -> content -> application/json -> schema -> $ref
+    content <- request_body[["content"]] %||% list()
+    json_schema <- content[["application/json"]][["schema"]] %||% list()
+
+    # Get the schema reference
+    ref <- json_schema[["$ref"]]
+    if (is.null(ref) || !nzchar(ref)) return("unknown")
+
+    # Parse the reference
+    ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
+    if (length(ref_parts) < 4 || ref_parts[2] != "components" || ref_parts[3] != "schemas") {
+      return("unknown")
+    }
+
+    schema_name <- ref_parts[4]
+
+    # Resolve the schema from components
+    components <- openapi_spec[["components"]] %||% list()
+    schemas <- components[["schemas"]] %||% list()
+    schema_def <- schemas[[schema_name]]
+
+    if (is.null(schema_def) || !is.list(schema_def)) return("unknown")
+
+    # Check 'chemicals' property
+    properties <- schema_def[["properties"]] %||% list()
+    chemicals_prop <- properties[["chemicals"]]
+
+    if (!is.null(chemicals_prop)) {
+      items <- chemicals_prop[["items"]] %||% list()
+      item_ref <- items[["$ref"]] %||% ""
+      item_type <- items[["type"]] %||% ""
+
+      # Check if the array items reference a Chemical-like schema
+      # Uses the CHEMICAL_SCHEMA_PATTERNS constant defined at module level
+      if (any(item_ref %in% CHEMICAL_SCHEMA_PATTERNS)) {
+        return("chemical_array")
+      }
+
+      # String array (SMILES) - doesn't need resolver
+      if (item_type == "string") {
+        return("string_array")
+      }
+    }
+
+    return("simple_object")
+  }
+
   # Extract metadata from request body schema reference
   # Parses POST endpoint request bodies that reference schemas in #/components/schemas
   extract_body_schema_metadata <- function(request_body, openapi_spec) {
@@ -401,6 +531,20 @@ openapi_to_spec <- function(
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
 
+      # Detect if the request body uses the Chemical schema (needs resolver)
+      needs_resolver <- if (method %in% c("post", "put", "patch") && has_body) {
+        uses_chemical_schema(op$requestBody, openapi)
+      } else {
+        FALSE
+      }
+
+      # Get body schema type for more specific code generation
+      body_schema_type <- if (method %in% c("post", "put", "patch") && has_body) {
+        get_body_schema_type(op$requestBody, openapi)
+      } else {
+        "unknown"
+      }
+
       # Extract response content types
       response_content_types <- character(0)
       if (!is.null(op$responses)) {
@@ -439,7 +583,10 @@ openapi_to_spec <- function(
         query_param_metadata = list(query_meta),
         body_param_metadata = list(body_meta),
         # NEW: Response content type(s)
-        content_type = content_type
+        content_type = content_type,
+        # NEW: Chemical schema detection for resolver wrapping
+        needs_resolver = needs_resolver,
+        body_schema_type = body_schema_type
       )
     })
   })
@@ -1110,9 +1257,11 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 #' @param body_param_info List from parse_function_params() containing request body parameters.
 #' @param content_type Response content type(s) from OpenAPI spec (e.g., "application/json", "image/png").
 #' @param config Configuration list specifying template behavior.
+#' @param needs_resolver Boolean; whether this endpoint needs resolver pre-processing.
+#' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "simple_object", "unknown").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config) {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown") {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -1266,6 +1415,136 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build function body based on endpoint type
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
 
+  # Special handling for endpoints that need resolver pre-processing
+  if (needs_resolver && body_schema_type == "chemical_array") {
+    # Generate resolver-wrapped stub
+    # These endpoints expect full Chemical objects (with sid, smiles, casrn, inchi, etc.)
+    # We first resolve identifiers via chemi_resolver, then send to the endpoint
+
+    # Build additional parameters from body_param_info (excluding 'chemicals')
+    body_params_vec <- if (isTRUE(body_param_info$has_params)) {
+      params <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      params <- trimws(params)
+      params <- gsub("\\s*=\\s*NULL$", "", params)
+      # Filter out 'chemicals' as we'll handle that via resolver
+      params[!params %in% c("chemicals")]
+    } else {
+      character(0)
+    }
+
+    # Build function signature: query, id_type, plus any additional body params
+    additional_sig <- if (length(body_params_vec) > 0) {
+      paste0(", ", paste(body_params_vec, "= NULL", collapse = ", "))
+    } else {
+      ""
+    }
+
+    fn_signature_resolver <- paste0('query, id_type = "AnyId"', additional_sig)
+
+    # Build options list from additional body params
+    options_assembly <- if (length(body_params_vec) > 0) {
+      lines <- c("  # Build options from additional parameters", "  extra_options <- list()")
+      for (p in body_params_vec) {
+        lines <- c(lines, paste0("  if (!is.null(", p, ")) extra_options$", p, " <- ", p))
+      }
+      paste(lines, collapse = "\n")
+    } else {
+      "  extra_options <- list()"
+    }
+
+    # Build the param docs for resolver wrapper
+    resolver_param_docs <- paste0(
+      "#' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)\n",
+      "#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)\n"
+    )
+    if (length(body_params_vec) > 0) {
+      for (p in body_params_vec) {
+        resolver_param_docs <- paste0(resolver_param_docs, "#' @param ", p, " Optional parameter\n")
+      }
+    }
+
+    # Update roxygen header with resolver-specific docs
+    roxygen_header <- glue::glue('
+#\' {title}
+#\'
+#\' @description
+#\' `r lifecycle::badge("{lifecycle_badge}")`
+#\'
+#\' This function first resolves chemical identifiers using `chemi_resolver`,
+#\' then sends the resolved Chemical objects to the API endpoint.
+#\'
+{resolver_param_docs}#\' @return {return_doc}
+#\' @export
+#\'
+#\' @examples
+#\' \\dontrun{{
+#\' {fn}(query = c("50-00-0", "DTXSID7020182"))
+#\' }}')
+
+    # Generate resolver-wrapped function body
+    fn_body <- glue::glue('
+{fn} <- function({fn_signature_resolver}) {{
+  # Resolve identifiers to Chemical objects
+  resolved <- chemi_resolver(query = query, id_type = id_type)
+
+  if (nrow(resolved) == 0) {{
+    cli::cli_warn("No chemicals could be resolved from the provided identifiers")
+    return(NULL)
+  }}
+
+  # Transform resolved tibble to Chemical object format
+  # Map column names: dtxsid -> sid, etc.
+  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {{
+    row <- resolved[i, ]
+    list(
+      sid = row$dtxsid,
+      smiles = row$smiles,
+      casrn = row$casrn,
+      inchi = row$inchi,
+      inchiKey = row$inchiKey,
+      name = row$name,
+      mol = row$mol
+    )
+  }})
+
+{options_assembly}
+
+  # Build and send request
+  base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
+  if (base_url == "") base_url <- "chemi_burl"
+
+  payload <- list(chemicals = chemicals)
+  if (length(extra_options) > 0) payload$options <- extra_options
+
+  req <- httr2::request(base_url) |>
+    httr2::req_url_path_append("{endpoint}") |>
+    httr2::req_method("POST") |>
+    httr2::req_body_json(payload) |>
+    httr2::req_headers(Accept = "application/json")
+
+  if (as.logical(Sys.getenv("run_debug", "FALSE"))) {{
+    return(httr2::req_dry_run(req))
+  }}
+
+  resp <- httr2::req_perform(req)
+
+  if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {{
+    cli::cli_abort("API request to {{.val {endpoint}}} failed with status {{httr2::resp_status(resp)}}")
+  }}
+
+  result <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  # Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
+
+    # Combine header and body and return
+    return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
+  }
+
   if (is_body_only) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
@@ -1330,11 +1609,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {options_assembly}
-  generic_chemi_request(
+  result <- generic_chemi_request(
     query = {query_param},
     endpoint = "{endpoint}"{options_call}{wrap_param},
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1368,13 +1651,17 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature}) {{
 {body_assembly}
 
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {batch_limit_code},
     body = body{content_type_call}
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1386,23 +1673,31 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  generic_request(
+{query_param_info$params_code}  result <- generic_request(
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {batch_limit_code}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}generic_chemi_request(
+{query_param_info$params_code}  result <- generic_chemi_request(
     query = NULL,
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1445,11 +1740,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         # For query-only endpoints, don't include query as formal param - all params via ellipsis
         fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-  generic_request(
+  result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1457,12 +1756,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         # Standard generation with existing logic
         fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  generic_request(
+{query_param_info$params_code}  result <- generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1470,11 +1773,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}generic_chemi_request(
+{query_param_info$params_code}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1508,25 +1815,33 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
       fn_body <- glue::glue('
 {fn} <- function({fn_arg}) {{
-  generic_request(
+  result <- generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{extra_params}
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_arg}) {{
-  generic_chemi_request(
+  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}",
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }}
 
 ')
@@ -1619,9 +1934,11 @@ render_endpoint_stubs <- function(spec,
           path_param_info = path_param_info,
           query_param_info = query_param_info,
           body_param_info = body_param_info,
-          content_type = if ("content_type" %in% names(.)) content_type else ""
+          content_type = if ("content_type" %in% names(.)) content_type else "",
+          needs_resolver = if ("needs_resolver" %in% names(.)) needs_resolver else FALSE,
+          body_schema_type = if ("body_schema_type" %in% names(.)) body_schema_type else "unknown"
         ),
-        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type) {
+        function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type) {
           build_function_stub(
             fn = fn,
             endpoint = endpoint,
@@ -1632,7 +1949,9 @@ render_endpoint_stubs <- function(spec,
             query_param_info = query_param_info,
             body_param_info = body_param_info,
             content_type = content_type,
-            config = config
+            config = config,
+            needs_resolver = needs_resolver,
+            body_schema_type = body_schema_type
           )
         }
       )
