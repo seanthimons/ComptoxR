@@ -5,28 +5,51 @@
 \title{Cheminformatics Search}
 \usage{
 chemi_search(
+  searchType,
+  inputType = NULL,
   query = NULL,
-  search_type = c("exact", "substructure", "similar", "mass", "hazard", "features"),
-  similarity_type = c("tanimoto", "euclid", "tversky"),
-  min_similarity = 0.85,
-  hazard_name = NULL,
-  min_toxicity = c("VH", "H", "M", "L", "A"),
-  min_authority = c("auth", "screen", "qsar"),
-  mass_type = c("mono", "mw", "abu"),
-  min_mass = NULL,
-  max_mass = NULL,
-  filter_features = FALSE,
-  feature_filters = NULL,
-  element_include = NULL,
-  element_exclude = NULL,
-  exclude_all_others = FALSE,
-  limit = 50
+  smiles = NULL,
+  querySmiles = NULL,
+  offset = NULL,
+  limit = NULL,
+  sortBy = NULL,
+  sortDirection = NULL,
+  params = NULL
+)
+
+chemi_search(
+  searchType,
+  inputType = NULL,
+  query = NULL,
+  smiles = NULL,
+  querySmiles = NULL,
+  offset = NULL,
+  limit = NULL,
+  sortBy = NULL,
+  sortDirection = NULL,
+  params = NULL
 )
 }
 \arguments{
-\item{query}{Chemical identifier (DTXSID), SMILES string, or MOL file string.
-Required for exact, substructure, and similar searches. Can be NULL for
-mass, hazard, and features searches.}
+\item{searchType}{Required parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+
+\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
+
+\item{query}{Optional parameter}
+
+\item{smiles}{Optional parameter}
+
+\item{querySmiles}{Optional parameter}
+
+\item{offset}{Optional parameter}
+
+\item{limit}{Optional parameter}
+
+\item{sortBy}{Optional parameter}
+
+\item{sortDirection}{Optional parameter}
+
+\item{params}{Optional parameter}
 
 \item{search_type}{Type of search to perform. One of:
 \itemize{
@@ -80,17 +103,19 @@ or \code{"qsar"} (QSAR).}
 
 \item{exclude_all_others}{Logical; if TRUE, excludes all elements except those
 in \code{element_include}. Defaults to FALSE.}
-
-\item{limit}{Maximum number of results to return. Defaults to 50.}
 }
 \value{
 A tibble containing search results with columns depending on search type.
 For similarity searches, includes a \code{relationship} column indicating
 \code{"parent"} (query compound) or \code{"child"} (similar compound).
+
+Returns a tibble with results
 }
 \description{
 Search the cheminformatics database using various search types including
 exact structure, substructure, similarity, mass, hazard, and feature searches.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
@@ -126,5 +151,8 @@ chemi_search(
   exclude_all_others = TRUE,
   limit = 100
 )
+}
+\dontrun{
+chemi_search(searchType = c("DTXSID70198443", "DTXSID80161401", "DTXSID2023270"))
 }
 }
