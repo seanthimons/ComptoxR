@@ -116,12 +116,17 @@ strip_curly_params <- function(paths, keep_trailing_slash = TRUE, leading_slash 
 
 #' Find usages of API endpoints in the package source
 #'
-#' Scans R source files for occurrences of given endpoint paths.
+#' Scans R source files for endpoint assignments matching the pattern `endpoint = "path"`.
+#' This function searches for specific endpoint path values in code where they are
+#' assigned to a variable named "endpoint".
+#'
 #' @param endpoints Character vector of endpoint strings (may contain `{}` placeholders).
 #' @param pkg_dir Directory of the package to scan; defaults to current directory.
 #' @param ignore_case Logical, whether the search is case‑insensitive.
 #' @param files_regex Regex for file extensions to include (e.g., "\\.(R|Rmd|qmd|Rnw|Rd|md)$").
-#' @param include_no_leading_slash Logical, also search for paths without a leading slash.
+#' @param include_no_leading_slash Logical, also search for path variants without a leading slash
+#'   (e.g., both "/alerts" and "alerts"). This helps catch endpoints that may be stored
+#'   with or without a leading slash in the code.
 #' @param keep_trailing_slash Logical, retain trailing slash in base paths.
 #' @return A list with two elements:
 #'   \describe{\item{hits}{data.frame of each match with file, line, text, etc.}\item{summary}{summary data.frame per endpoint.}}
@@ -136,9 +141,6 @@ find_endpoint_usages_base <- function(
 ) {
   base_paths <- strip_curly_params(endpoints, keep_trailing_slash = keep_trailing_slash, leading_slash = 'remove')
 
-  # Include variants without a leading slash to catch code that stores paths "bare"
-  patterns <- unique(c(base_paths, if (include_no_leading_slash) str_remove(base_paths, "^/")))
-
   files <- list.files(pkg_dir, pattern = files_regex, recursive = TRUE, full.names = TRUE)
 
   scan_file <- function(f, pat) {
@@ -146,8 +148,10 @@ find_endpoint_usages_base <- function(
     if (!length(lines)) {
       return(NULL)
     }
-    # fixed() does literal matching with optional ignore_case
-    hits <- which(str_detect(lines, fixed(pat, ignore_case = ignore_case)))
+    # Search for "endpoint = " prefix followed by the pattern
+    # This makes the search more specific to endpoint assignments
+    search_pattern <- paste0('endpoint\\s*=\\s*"', pat, '"')
+    hits <- which(str_detect(lines, regex(search_pattern, ignore_case = ignore_case)))
     if (!length(hits)) {
       return(NULL)
     }
@@ -163,6 +167,7 @@ find_endpoint_usages_base <- function(
   for (i in seq_along(endpoints)) {
     ep <- endpoints[i]
     bp <- base_paths[i]
+    # Create pattern variations: with and without leading slash
     pat_set <- unique(c(bp, if (include_no_leading_slash) str_remove(bp, "^/")))
     for (pat in pat_set) {
       for (f in files) {
