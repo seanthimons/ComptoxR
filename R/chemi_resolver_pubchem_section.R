@@ -1,44 +1,40 @@
-#' Hazard
+#' Resolver Pubchem Section
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param query Required parameter
-#' @param full Optional parameter (default: TRUE)
-#' @return Returns a tibble with results
+#' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
+#' @param section Optional parameter
+#' @return Returns a tibble with results (array of objects)
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_hazard(query = "DTXSID7020182")
+#' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
-chemi_hazard <- function(query, full = TRUE) {
+chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
   result <- generic_request(
-    endpoint = "hazard",
+    endpoint = "resolver/pubchem-section",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
     query = query,
-    full = full
+    idType = idType,
+    section = section
   )
 
   # Additional post-processing can be added here
-
-	result <- result %>% 
-		pluck('hazardChemicals', 1, 'scores') %>% 
-		map(., as_tibble) %>% 
-		list_rbind() %>% 
-		mutate(query = query) %>% 
-		relocate(query, .before = 'hazardId') %>% 
-		unnest_wider(., 'records', names_sep = '_')
 
   return(result)
 }
 
 
-#' Hazard
+
+
+#' Resolver Pubchem Section
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -48,16 +44,15 @@ chemi_hazard <- function(query, full = TRUE) {
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
-#' @param empty Optional parameter
-#' @param options Optional parameter
-#' @return Returns a tibble with results
+#' @param section Optional parameter
+#' @return Returns a tibble with results (array of objects)
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
+#' chemi_resolver_pubchem_section_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = NULL) {
+chemi_resolver_pubchem_section_bulk <- function(query, id_type = "AnyId", section = NULL) {
   # Resolve identifiers to Chemical objects
   resolved <- chemi_resolver(query = query, id_type = id_type)
 
@@ -83,8 +78,7 @@ chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = 
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(empty)) extra_options$empty <- empty
-  if (!is.null(options)) extra_options$options <- options
+  if (!is.null(section)) extra_options$section <- section
 
   # Build and send request
   base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
@@ -94,7 +88,7 @@ chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = 
   if (length(extra_options) > 0) payload$options <- extra_options
 
   req <- httr2::request(base_url) |>
-    httr2::req_url_path_append("hazard") |>
+    httr2::req_url_path_append("resolver/pubchem-section") |>
     httr2::req_method("POST") |>
     httr2::req_body_json(payload) |>
     httr2::req_headers(Accept = "application/json")
@@ -106,7 +100,7 @@ chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = 
   resp <- httr2::req_perform(req)
 
   if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
-    cli::cli_abort("API request to {.val hazard} failed with status {httr2::resp_status(resp)}")
+    cli::cli_abort("API request to {.val resolver/pubchem-section} failed with status {httr2::resp_status(resp)}")
   }
 
   result <- httr2::resp_body_json(resp, simplifyVector = FALSE)

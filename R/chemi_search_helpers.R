@@ -19,7 +19,7 @@ get_mol_for_search <- function(query, search_type) {
   }
 
   # If query is NULL or empty, abort
- if (is.null(query) || length(query) == 0 || query == "") {
+	if (is.null(query) || length(query) == 0 || query == "") {
     cli::cli_abort("Query is required for {search_type} searches")
   }
 
