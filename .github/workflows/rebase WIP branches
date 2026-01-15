@@ -1,0 +1,80 @@
+name: Rebase branches on PR approval
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  rebase-branches:
+    # Only run when PR is approved and targets the integration branch
+    if: |
+      github.event. review.state == 'approved' &&
+      github.event.pull_request.base.ref == 'integration'
+    
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Find and rebase branches
+        run: |
+          # Fetch all branches
+          git fetch --all
+          
+          # Get the integration branch latest commit
+          git checkout integration
+          git pull origin integration
+          
+          # Find all branches with specified prefixes
+          branches=$(git branch -r | grep -E 'origin/(develop-|dev-|feature-|feat-|bugfix-)' | sed 's|origin/||' | tr -d ' ')
+          
+          echo "Found branches to rebase:"
+          echo "$branches"
+          
+          # Rebase each branch
+          for branch in $branches; do
+            echo "Processing branch: $branch"
+            
+            # Checkout the branch
+            git checkout "$branch"
+            git pull origin "$branch" || true
+            
+            # Try to rebase onto integration
+            if git rebase integration; then
+              echo "✅ Successfully rebased $branch"
+              
+              # Push the rebased branch
+              # Use --force-with-lease for safety
+              if git push origin "$branch" --force-with-lease; then
+                echo "✅ Successfully pushed $branch"
+              else
+                echo "❌ Failed to push $branch"
+              fi
+            else
+              echo "❌ Rebase failed for $branch (likely has conflicts)"
+              echo "Aborting rebase for $branch"
+              git rebase --abort
+              
+              # Optionally create an issue or comment about the conflict
+              echo "Branch $branch has conflicts and needs manual intervention" >> rebase_failures.txt
+            fi
+          done
+          
+          # Report any failures
+          if [ -f rebase_failures.txt ]; then
+            echo ":: warning::Some branches failed to rebase:"
+            cat rebase_failures.txt
+          fi
