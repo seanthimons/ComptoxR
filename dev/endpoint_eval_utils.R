@@ -70,6 +70,218 @@ ensure_cols <- function(df, cols_with_defaults) {
   df
 }
 
+# Endpoint exclusion patterns - these endpoints are removed during preprocessing
+ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols"
+
+# ==============================================================================
+# Schema Preprocessing & Resolution
+# ==============================================================================
+
+# Track circular references during resolution
+resolve_stack <- new.env(hash = TRUE)
+
+# Extract all schema references from paths
+extract_referenced_schemas <- function(paths) {
+  refs <- character(0)
+  
+  for (route in names(paths)) {
+    path_item <- paths[[route]]
+    
+    for (method in intersect(names(path_item), c("get", "post", "put", "patch", "delete", "head", "options", "trace"))) {
+      op <- path_item[[method]]
+      
+      # Extract from requestBody
+      if (!is.null(op$requestBody) && is.list(op$requestBody)) {
+        content <- op$requestBody[["content"]] %||% list()
+        json_schema <- content[["application/json"]][["schema"]] %||% list()
+        if (!is.null(json_schema[["$ref"]])) {
+          ref <- json_schema[["$ref"]]
+          schema_name <- stringr::str_replace(ref, "#/components/schemas/", "")
+          refs <- c(refs, schema_name)
+        }
+      }
+    }
+  }
+  
+  unique(refs)
+}
+
+# Filter components to keep only referenced schemas
+filter_components_by_refs <- function(components, refs) {
+  schemas <- components[["schemas"]] %||% list()
+  
+  # Keep only schemas that match refs
+  keep_schemas <- intersect(names(schemas), refs)
+  
+  # Update components
+  components$schemas <- schemas[keep_schemas]
+  components
+}
+
+# Preprocess OpenAPI schema
+preprocess_schema <- function(schema_file, exclude_endpoints = ENDPOINT_PATTERNS_TO_EXCLUDE) {
+  # Load schema
+  openapi <- jsonlite::fromJSON(schema_file, simplifyVector = FALSE)
+  
+  # Filter out unwanted endpoints
+  paths <- openapi$paths
+  if (!is.null(paths) && length(paths) > 0) {
+    keep_paths <- names(paths)[!stringr::str_detect(names(paths), exclude_endpoints)]
+    openapi$paths <- paths[keep_paths]
+  }
+  
+  # Extract all referenced schemas
+  refs <- extract_referenced_schemas(openapi$paths)
+  
+  # Filter components to keep only referenced schemas
+  components <- openapi[["components"]] %||% list()
+  if (length(components) > 0) {
+    openapi$components <- filter_components_by_refs(components, refs)
+  }
+  
+  openapi
+}
+
+# Resolve schema reference to actual schema definition
+resolve_schema_ref <- function(schema_ref, components, max_depth = 5, depth = 0) {
+  # Check depth limit
+  if (depth > max_depth) {
+    stop("Schema reference depth exceeded max_depth = ", max_depth, ". Possible circular reference or overly complex schema.")
+  }
+  
+  # Handle circular reference detection
+  ref_key <- if (is.character(schema_ref)) schema_ref else "inline"
+  if (exists(ref_key, envir = resolve_stack)) {
+    stop("Circular reference detected for schema: ", ref_key)
+  }
+  
+  # If schema_ref is actual schema (not a reference), just return it
+  if (!is.character(schema_ref)) {
+    return(schema_ref)
+  }
+  
+  # Parse reference
+  ref_parts <- strsplit(schema_ref, "/", fixed = TRUE)[[1]]
+  if (length(ref_parts) < 4 || ref_parts[2] != "components" || ref_parts[3] != "schemas") {
+    return(list(type = "unknown"))
+  }
+  
+  schema_name <- ref_parts[4]
+  
+  # Track reference for circular detection and cleanup on exit
+  assign(ref_key, TRUE, envir = resolve_stack)
+  on.exit({
+    if (exists(ref_key, envir = resolve_stack)) {
+      rm(ref_key, envir = resolve_stack)
+    }
+  }, add = TRUE)
+  }
+  
+  # Look up schema
+  schemas <- components[["schemas"]] %||% list()
+  schema_def <- schemas[[schema_name]]
+  
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    return(list(type = "unknown"))
+  }
+  
+  # Handle schema composition (allOf, oneOf, anyOf)
+  if (!is.null(schema_def[["allOf"]])) {
+    return(resolve_schema_ref(schema_def[["allOf"]][[1]], components, max_depth, depth + 1))
+  }
+  
+  # Return resolved schema
+  schema_def
+}
+
+# Extract body properties from request body
+extract_body_properties <- function(request_body, components) {
+  if (is.null(request_body) || !is.list(request_body)) return(list())
+  
+  # Navigate: requestBody -> content -> application/json -> schema
+  content <- request_body[["content"]] %||% list()
+  json_schema <- content[["application/json"]][["schema"]] %||% list()
+  
+  if (length(json_schema) == 0) return(list())
+  
+  # Resolve reference if present
+  if (!is.null(json_schema[["$ref"]])) {
+    json_schema <- resolve_schema_ref(json_schema[["$ref"]], components, max_depth = 5)
+  }
+  
+  # Check schema type
+  type <- json_schema[["type"]] %||% NA
+  
+  # If array, extract item type
+  if (type == "array" && !is.null(json_schema[["items"]])) {
+    items <- json_schema[["items"]]
+    
+    # If items is a reference, resolve it
+    if (!is.null(items[["$ref"]])) {
+      resolved <- resolve_schema_ref(items[["$ref"]], components, max_depth = 5)
+      
+      # If resolved is object with properties, extract them
+      if (!is.null(resolved[["properties"]])) {
+        required_fields <- resolved[["required"]] %||% character(0)
+        metadata <- purrr::imap(resolved[["properties"]], function(prop, prop_name) {
+          list(
+            name = prop_name,
+            type = prop[["type"]] %||% NA,
+            format = prop[["format"]] %||% NA,
+            description = prop[["description"]] %||% "",
+            enum = prop[["enum"]] %||% NULL,
+            default = prop[["default"]] %||% NA,
+            required = prop_name %in% required_fields,
+            example = prop[["example"]] %||% prop[["default"]] %||% NA
+          )
+        })
+        names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+        return(list(
+          type = "array",
+          item_schema = list(
+            ref_type = stringr::str_replace(items[["$ref"]], "#/components/schemas/", ""),
+            properties = metadata
+          )
+        ))
+      }
+    }
+    
+    # Simple array (e.g., string array)
+    return(list(
+      type = "array",
+      item_type = items[["type"]] %||% NA,
+      properties = list()
+    ))
+  }
+  
+  # If object, extract properties
+  if (type == "object" && !is.null(json_schema[["properties"]])) {
+    required_fields <- json_schema[["required"]] %||% character(0)
+    
+    metadata <- purrr::imap(json_schema[["properties"]], function(prop, prop_name) {
+      list(
+        name = prop_name,
+        type = prop[["type"]] %||% NA,
+        format = prop[["format"]] %||% NA,
+        description = prop[["description"]] %||% "",
+        enum = prop[["enum"]] %||% NULL,
+        default = prop[["default"]] %||% NA,
+        required = prop_name %in% required_fields,
+        example = prop[["example"]] %||% prop[["default"]] %||% NA
+      )
+    })
+    
+    names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+    return(list(
+      type = "object",
+      properties = metadata
+    ))
+  }
+  
+  # Unknown schema type
+  list(type = "unknown", properties = list())
+}
+
 # ==============================================================================
 # Path Manipulation
 # ==============================================================================
@@ -269,13 +481,19 @@ find_endpoint_usages_base <- function(
 openapi_to_spec <- function(
   openapi,
   default_base_url = NULL,
-  name_strategy = c("operationId", "method_path")
+  name_strategy = c("operationId", "method_path"),
+  preprocess = TRUE
 ) {
   if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
   if (!requireNamespace("tibble", quietly = TRUE)) stop("Package 'tibble' is required.")
   if (!requireNamespace("stringr", quietly = TRUE)) stop("Package 'stringr' is required.")
 
   name_strategy <- match.arg(name_strategy)
+  
+  # Preprocess schema if requested
+  if (preprocess && is.character(openapi) && file.exists(openapi)) {
+    openapi <- preprocess_schema(openapi)
+  }
 
   sanitize_name <- function(x) {
     x <- stringr::str_replace_all(x, "[^A-Za-z0-9_]", "_")
@@ -578,21 +796,48 @@ openapi_to_spec <- function(
       query_meta <- param_metadata(parameters, "query")
 
       # Extract request body schema metadata for POST/PUT/PATCH
-      body_meta <- if (method %in% c("post", "put", "patch")) {
-        extract_body_schema_metadata(op$requestBody, openapi)
+      components <- openapi[["components"]] %||% list()
+      body_props <- if (method %in% c("post", "put", "patch")) {
+        extract_body_properties(op$requestBody, components)
       } else {
-        list()
+        list(type = "unknown", properties = list())
       }
 
       # Extract body parameter names (ordered by required first, then alphabetically)
-      body_names <- if (length(body_meta) > 0) {
-        # Split into required and optional
-        required_names <- names(purrr::keep(body_meta, ~ .x$required))
-        optional_names <- names(purrr::keep(body_meta, ~ !.x$required))
+      body_names <- if (body_props$type == "object" && length(body_props$properties) > 0) {
+        required_names <- names(purrr::keep(body_props$properties, ~ .x$required))
+        optional_names <- names(purrr::keep(body_props$properties, ~ !.x$required))
         c(required_names, optional_names)
+      } else if (body_props$type == "array" && !is.null(body_props$item_schema)) {
+        # For array bodies with object items, extract object properties
+        item_properties <- body_props$item_schema$properties
+        if (length(item_properties) > 0) {
+          required_names <- names(purrr::keep(item_properties, ~ .x$required))
+          optional_names <- names(purrr::keep(item_properties, ~ !.x$required))
+          c(required_names, optional_names)
+        } else {
+          character(0)
+        }
       } else {
         character(0)
       }
+
+      # Create simplified body_meta for backward compatibility
+      body_meta <- if (length(body_names) > 0) {
+        purrr::map(body_names, function(name) {
+          if (body_props$type == "object") {
+            body_props$properties[[name]]
+          } else if (body_props$type == "array" && !is.null(body_props$item_schema)) {
+            body_props$item_schema$properties[[name]]
+          } else {
+            list(name = name, type = NA, description = "", enum = NULL, default = NA, required = FALSE, example = NA)
+          }
+        })
+      } else {
+        list()
+      }
+      names(body_meta) <- body_names
+
 
       # Combine all parameters (path parameters first, then query parameters)
       combined <- c(path_names, query_names)
@@ -657,20 +902,36 @@ openapi_to_spec <- function(
         body_params = if (length(body_names) > 0) paste(body_names, collapse = ",") else "",
         num_path_params = length(path_names),
         num_body_params = length(body_names),
-        # NEW: Parameter metadata with examples and descriptions
+        # Parameter metadata with examples and descriptions
         path_param_metadata = list(path_meta),
         query_param_metadata = list(query_meta),
         body_param_metadata = list(body_meta),
-        # NEW: Response content type(s)
+        # Response content type(s)
         content_type = content_type,
-        # NEW: Chemical schema detection for resolver wrapping
+        # Chemical schema detection for resolver wrapping
         needs_resolver = needs_resolver,
         body_schema_type = body_schema_type,
-        # NEW: Deprecated status and description
+        # Deprecated status and description
         deprecated = deprecated,
         description = description,
-        # NEW: Response schema type for enhanced documentation
-        response_schema_type = response_schema_type
+        # Response schema type for enhanced documentation
+        response_schema_type = response_schema_type,
+        # NEW: Schema type classification
+        request_type = if (method %in% c("post", "put", "patch") && has_body) {
+          "json"
+        } else {
+          "query_only"
+        },
+        # NEW: Body schema full information
+        body_schema_full = list(body_props),
+        # NEW: Body item type for array schemas
+        body_item_type = if (!is.null(body_props$item_type)) {
+          body_props$item_type
+        } else if (!is.null(body_props$item_schema)) {
+          body_props$item_schema$ref_type
+        } else {
+          NA
+        }
       )
     })
   })
