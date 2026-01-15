@@ -48,7 +48,7 @@ temp.R
 output
 testing_chems.RDS
 pt.RDS
-scratch.R
+# scratch.R
 temp.txt
 temp.R
 
