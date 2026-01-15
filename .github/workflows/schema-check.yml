@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgload, any::cli
+          extra-packages: any::pkgload, any::cli, any::here
           needs: check
 
       - name: Download schemas
