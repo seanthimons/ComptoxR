@@ -1,0 +1,3205 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Computational Toxicology and Exposure (CTX) APIs - CTX Bioactivity API",
+        "description": "The CTX Bioactivity API is part of US EPA's Computational Toxicology and Exposure APIs. The CTX Bioactivity API provides programmtic access to bioactivity data through a set of endpoints.",
+        "version": "1.1.1"
+    },
+    "servers": [
+        {
+            "url": "https://comptox.epa.gov/ctx-api",
+            "description": "Production Environment"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Bioactivity Assay Resource",
+            "description": "Collection of endpoints for assay annotations. Annotations describe who conducted the assay, what platform was used, what was being measured (raw readout), and how the measurement was interpreted (normalized component data). Assay annotations facilitate data interpretation by allowing users to flexibly aggregate and differentiate processed data. These curated data sourced from US EPA's Toxicity Forecaster (ToxCast) invitrodb."
+        },
+        {
+            "name": "Bioactivity Data Resource",
+            "description": "Collection of endpoints with multiple-concentration targeted bioactivity screening data. These curated data sourced from US EPA's Toxicity Forecaster (ToxCast) invitrodb."
+        },
+        {
+            "name": "Bioactivity Model Resource",
+            "description": "Collection of endpoints for prediction results from ToxCast bioactivity models. The publications associated with the ToxCast Pathway Models are: 1) ESTROGEN: As described in Browne, et al (2015) DOI: 10.1021/acs.est.5b02641 and presented to December 2014 FIFRA SAP under EPA-HQ-OPP-2014-0614. 2) ANDROGEN: As described in Kleinstreuer et al (2017) 10.1021/acs.chemrestox.6b00347 and presented to November 2017 FIFRA SAP under EPA-HQ-OPP-2017-0214."
+        },
+        {
+            "name": "Analytical QC Resource",
+            "description": "Endpoint for Analytical QC data to inform the chemical's applicability domain for in vitro screening at the sample and substance level. These curated data sourced from US EPA's Toxicity Forecaster (ToxCast) invitrodb."
+        },
+        {
+            "name": "Assay Name Search Resource",
+            "description": "Collection of endpoints for searching by assay name. Search string options include starts-with, exact, or contains."
+        },
+        {
+            "name": "CCD AOP Data Resource",
+            "description": "Collection of endpoints used to populate CompTox Chemicals Dashboard (CCD) Adverse Outcome Pathway (AOP) and Key Event (KE) links within the ToxCast Summary Grid. Curated mappings of AOPs and KEs for individual ToxCast assay endpoints are made available in ToxCast's invitrodb."
+        }
+    ],
+    "paths": {
+        "/bioactivity/data/search/by-spid/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data for a batch of SPIDs",
+                "description": "return data for requested sample IDs (SPIDs)",
+                "operationId": "batchSearchDataBySpid",
+                "requestBody": {
+                    "description": "JSON array of SPIDs",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"EPAPLT0232A03\",\"TP0000311A04\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/BioactivityDataAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-m4id/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data for a batch of M4IDs",
+                "description": "return data for requested Level 4 IDs (M4IDs), corresponding to the individual modeled endpoint-sample concentration-responses",
+                "operationId": "batchSearchDataByM4id",
+                "requestBody": {
+                    "description": "JSON array of M4IDs",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"7826737\",\"7834113\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/BioactivityDataAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-dtxsid/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get bioactivity data for a batch of DTXSIDs",
+                "description": "return data for requested DTXSIDs.",
+                "operationId": "batchSearchDataByDtxsid",
+                "requestBody": {
+                    "description": "JSON array of DSSTox Substance Identifiers",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"DTXSID9026974\",\"DTXSID9020112\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/BioactivityDataAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-aeid/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data for a batch of AEIDs",
+                "description": "return data for requested ToxCast assay component endpoint IDs (AEIDs)",
+                "operationId": "batchSearchDataByAeid",
+                "requestBody": {
+                    "description": "JSON array of ToxCast assay component endpoint IDs (AEIDs)",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"3032\",\"755\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/BioactivityDataAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/aed/search/by-dtxsid/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get AED data for a batch of DTXSIDs",
+                "description": "return administered equivalent dose (AED) data derived from ToxCast in vitro bioactivity data for given DTXSIDs",
+                "operationId": "getAedDataForBatchDtxsids",
+                "requestBody": {
+                    "description": "JSON array of DSSTox Substance Identifiers",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"DTXSID7020182\",\"DTXSID9020112\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AedData"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/search/by-aeid/": {
+            "post": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get assay annotations for a batch of AEIDs",
+                "description": "return assay annotations for requested ToxCast assay component endpoint IDs (AEIDs)",
+                "operationId": "batchSearchAssayByAeid",
+                "requestBody": {
+                    "description": "JSON array of DSSTox Substance Identifiers",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": "[\"111\",\"3032\"]"
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AssayAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/search/start-with/{value}": {
+            "get": {
+                "tags": [
+                    "Assay Name Search Resource"
+                ],
+                "summary": "Search by starting value",
+                "description": "NOTE: Search value needs to be URL encoded for synonyms",
+                "operationId": "assayStartWith",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "in": "path",
+                        "description": "Starting characters for search value",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Search Value": {
+                                "description": "Search Value",
+                                "value": "ATG_S"
+                            }
+                        }
+                    },
+                    {
+                        "name": "top",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 500
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SearchAssay"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No data found",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/search/equal/{value}": {
+            "get": {
+                "tags": [
+                    "Assay Name Search Resource"
+                ],
+                "summary": "Search by exact value",
+                "description": "NOTE: Search value needs to be URL encoded for synonyms",
+                "operationId": "assayEqual",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "in": "path",
+                        "description": "Exact match of search value",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Search Value": {
+                                "description": "Search Value",
+                                "value": "ATG_STAT3_CIS"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SearchAssay"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No data found",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/search/contain/{value}": {
+            "get": {
+                "tags": [
+                    "Assay Name Search Resource"
+                ],
+                "summary": "Search by substring value",
+                "description": "NOTE: Search value needs to be URL encoded for synonyms",
+                "operationId": "assayContain",
+                "parameters": [
+                    {
+                        "name": "value",
+                        "in": "path",
+                        "description": "Substring of search word",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Search Value": {
+                                "description": "Search Value",
+                                "value": "AT3_CIS"
+                            },
+                            "Synonym": {
+                                "description": "Synonym",
+                                "value": "razine"
+                            }
+                        }
+                    },
+                    {
+                        "name": "top",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SearchAssay"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No data found",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/models/search/by-dtxsid/{dtxsid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Model Resource"
+                ],
+                "summary": "Get predictions by DTXSID",
+                "description": "return ToxCast model predictions for a given DTXSID",
+                "operationId": "getBioactivityModelByDtxsid",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "path",
+                        "description": "dtxsid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID7020182"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BioactivityModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/models/search/": {
+            "get": {
+                "tags": [
+                    "Bioactivity Model Resource"
+                ],
+                "summary": "Get predictions by DTXSID and model",
+                "description": "return ToxCast model predictions for given a DTXSID and model type. Model type options include: 'CERAPP Potency Level (Consensus)', 'CERAPP Potency Level (From Literature)', 'COMPARA (Consensus)', and 'ToxCast Pathway Model (AUC)'",
+                "operationId": "getBioactivityModelByDtxsidAndModel",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "query",
+                        "description": "dtxsid",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID7020182"
+                    },
+                    {
+                        "name": "model",
+                        "in": "query",
+                        "description": "model",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "CERAPP "
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BioactivityModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/summary/search/by-tissue/": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get summary data by DTXSID and assay tissue origin",
+                "description": "return summary data for given DTXSID and the assay format's tissue origin",
+                "operationId": "summaryByDtxsidAndTissue",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "query",
+                        "description": "DSSTox Substance Identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID7024241"
+                    },
+                    {
+                        "name": "tissue",
+                        "in": "query",
+                        "description": "assay format's tissue of origin",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "liver"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/SummaryByTissue"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/summary/search/by-dtxsid/{dtxsid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get summary data by DTXSID",
+                "description": "return summary of active hits and total multi- and single-concentration assays tested for given DTXSID",
+                "operationId": "summaryByDtxsid",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "path",
+                        "description": "DSSTox Substance Identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID9026974"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ChemicalAgg"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/summary/search/by-aeid/{aeid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get summary data by AEID",
+                "description": "return summary of active hits and total multi- and single-concentration chemicals tested for given ToxCast assay component endpoint ID (AEID)",
+                "operationId": "summaryByAeid",
+                "parameters": [
+                    {
+                        "name": "aeid",
+                        "in": "path",
+                        "description": "ToxCast assay component endpoint ID (AEID)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 3032
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AssayAgg"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-spid/{spid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data by SPID",
+                "description": "return data for given sample ID (SPID)",
+                "operationId": "dataBySpid",
+                "parameters": [
+                    {
+                        "name": "spid",
+                        "in": "path",
+                        "description": "sample ID (SPID)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "EPAPLT0232A03"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BioactivityDataAll"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-m4id/{m4id}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data by M4ID",
+                "description": "return data for given Level 4 ID (M4ID), corresponding to the individual modeled endpoint-sample concentration-response",
+                "operationId": "dataByM4Id",
+                "parameters": [
+                    {
+                        "name": "m4id",
+                        "in": "path",
+                        "description": "M4ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 7826737
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/BioactivityDataAll"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-dtxsid/{dtxsid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data by DTXSID",
+                "description": "Return data for a given DTXSID. There is an available projection aligned with what's available on the CCD ToxCast Summary plot: toxcast-summary-plot. If no projection is specified, a default BioactivityDataAll projection will be returned.",
+                "operationId": "dataByDtxsid",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "path",
+                        "description": "DSSTox Substance Identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID7020182"
+                    },
+                    {
+                        "name": "projection",
+                        "in": "query",
+                        "description": "Specifies if projection is used. Option: toxcast-summary-plot. If omitted, the default BioactivityDataAll data is returned.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "oneOf": [
+                                            {
+                                                "$ref": "#/components/schemas/BioactivityDataAll"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/search/by-aeid/{aeid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get data by AEID",
+                "description": "Return data by ToxCast assay component endpoint ID (AEID)",
+                "operationId": "dataByAeid",
+                "parameters": [
+                    {
+                        "name": "aeid",
+                        "in": "path",
+                        "description": "ToxCast assay component endpoint ID (AEID)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 3032
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BioactivityDataAll"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/data/aed/search/by-dtxsid/{dtxsid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Data Resource"
+                ],
+                "summary": "Get AED data by DTXSID",
+                "description": "return administered equivalent dose (AED) data derived from ToxCast in vitro bioactivity data for given DTXSID",
+                "operationId": "getAedDataByDtxsid",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "DTXSID5021209"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AedData"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/single-conc/search/by-aeid/{aeid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get single conc data by AEID",
+                "description": "return single concentration screening data for requested ToxCast assay component endpoint ID (AEID)",
+                "operationId": "singleConcDataByAeid",
+                "parameters": [
+                    {
+                        "name": "aeid",
+                        "in": "path",
+                        "description": "ToxCast assay component endpoint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 3032
+                    },
+                    {
+                        "name": "projection",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "single-conc"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/CcdSingleConcData"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/search/by-gene/{geneSymbol}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get assay summary by gene symbol",
+                "description": "Return assay summary data, including percentage of single and multiple-concentration screening actives, for applicable assays for requested offical gene symbol.",
+                "operationId": "assayEndpointsListByGene",
+                "parameters": [
+                    {
+                        "name": "geneSymbol",
+                        "in": "path",
+                        "description": "Gene Symbol",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "TUBA1A"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AssayEndpointsList"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/search/by-endpoint/": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get AEID by assay component endpoint name",
+                "operationId": "aeidByAssayEndpointName",
+                "parameters": [
+                    {
+                        "name": "endpoint",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/search/by-aeid/{aeid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get assay annotations by AEID",
+                "description": "return assay annotations by ToxCast assay component endpoint ID (AEID) based on the specified projection. Available projections: ccd-assay-annotation, ccd-assay-gene, ccd-assay-citations, ccd-assay-tcpl, ccd-assay-reagents, assay-all. If no projection is specified, the full view of assay annotations will be returned by default.",
+                "operationId": "assayByAeid",
+                "parameters": [
+                    {
+                        "name": "aeid",
+                        "in": "path",
+                        "description": "ToxCast assay component endpoint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 3032
+                    },
+                    {
+                        "name": "projection",
+                        "in": "query",
+                        "description": "Specifies which projection to use. Options: ccd-assay-annotation, ccd-assay-gene, ccd-assay-citations, ccd-assay-tcpl, ccd-assay-reagents, assay-all. If omitted, the full assay data is returned.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AssayAnnotation"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CcDAssayAnnotation"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CcdAssayGene"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CcdAssayCitation"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CcdTcplData"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/CcdReagents"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid projection type",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No data found for the given AEID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/count": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get total assay count",
+                "operationId": "assayCount",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int64"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/chemicals/search/by-aeid/{aeid}": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get DTXSID list by AEID",
+                "description": "return list of chemicals (DTXSIDs) tested by ToxCast assay component endpoint ID (AEID).",
+                "operationId": "chemicalsByAeid",
+                "parameters": [
+                    {
+                        "name": "aeid",
+                        "in": "path",
+                        "description": "ToxCast assay component endpoint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 3032
+                    },
+                    {
+                        "name": "projection",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "dtxsidsonly"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/assay/": {
+            "get": {
+                "tags": [
+                    "Bioactivity Assay Resource"
+                ],
+                "summary": "Get all assay annotations",
+                "operationId": "allAssays",
+                "parameters": [
+                    {
+                        "name": "projection",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "assay-all"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AssayAnnotation"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}": {
+            "get": {
+                "tags": [
+                    "CCD AOP Data Resource"
+                ],
+                "summary": "Get AOP data by ToxCast AEID",
+                "description": "Return ToxCast-mapped AOP data for a given ToxCast assay component endpoint ID (AEID)",
+                "operationId": "dataByToxcastAeid",
+                "parameters": [
+                    {
+                        "name": "toxcastAeid",
+                        "in": "path",
+                        "description": "ToxCast AEID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 63
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AOP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/aop/search/by-event-number/{eventNumber}": {
+            "get": {
+                "tags": [
+                    "CCD AOP Data Resource"
+                ],
+                "summary": "Get AOP data by Key Event",
+                "description": "Return ToxCast-mapped AOP data for a given Key Event (KE) number",
+                "operationId": "dataByEventNumber",
+                "parameters": [
+                    {
+                        "name": "eventNumber",
+                        "in": "path",
+                        "description": "Key Event Number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 18
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AOP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}": {
+            "get": {
+                "tags": [
+                    "CCD AOP Data Resource"
+                ],
+                "summary": "Get AOP data by Entrez Gene ID",
+                "description": "Return ToxCast-mapped AOP data for a given Entrez Gene ID",
+                "operationId": "dataByEntrezGeneId",
+                "parameters": [
+                    {
+                        "name": "entrezGeneId",
+                        "in": "path",
+                        "description": "Entrez Gene Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "example": 196
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AOP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}": {
+            "get": {
+                "tags": [
+                    "Analytical QC Resource"
+                ],
+                "summary": "Get analytical QC data by DTXSID",
+                "description": "return analytical QC data for requested DTXSID",
+                "operationId": "findByDsstoxSubstanceId",
+                "parameters": [
+                    {
+                        "name": "dtxsid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/AnalyticalQC"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ProblemDetail"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BioactivityDataAll": {
+                "type": "object",
+                "properties": {
+                    "chnm": {
+                        "type": "string"
+                    },
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "spid": {
+                        "type": "string"
+                    },
+                    "stkc": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "respMin": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "maxMean": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "nrep": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "nconc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "fitc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "actp": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "m4id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "concMin": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "bmad": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "npts": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "chid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "casn": {
+                        "type": "string"
+                    },
+                    "maxMed": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "chidRep": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "hitc": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "concMax": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "modl": {
+                        "type": "string"
+                    },
+                    "coff": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "respMax": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "m5id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "maxMeanConc": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "maxMedConc": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "nmedGtblPos": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "nmedGtblNeg": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "modelType": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mc4Param": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "number"
+                        }
+                    },
+                    "stkcUnit": {
+                        "type": "string"
+                    },
+                    "mc6Param": {
+                        "$ref": "#/components/schemas/Mc6Param"
+                    },
+                    "mc5Param": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "number"
+                        }
+                    },
+                    "mc3Param": {
+                        "$ref": "#/components/schemas/Mc3Param"
+                    },
+                    "testedConcUnit": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Mc3Param": {
+                "type": "object",
+                "properties": {
+                    "conc": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    },
+                    "resp": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    }
+                }
+            },
+            "Mc6Param": {
+                "type": "object",
+                "properties": {
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "mc6MthdId": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            },
+            "AedData": {
+                "type": "object",
+                "properties": {
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "preferredName": {
+                        "type": "string"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "aenm": {
+                        "type": "string"
+                    },
+                    "aedVal": {
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    },
+                    "aedType": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "httkModel": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "aedValUnit": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "httkVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "potencyValType": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "invitrodbVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "interindividualVarPerc": {
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    }
+                }
+            },
+            "AssayAll": {
+                "type": "object",
+                "properties": {
+                    "assayDescs": {
+                        "writeOnly": true
+                    },
+                    "assayname": {
+                        "writeOnly": true
+                    },
+                    "asid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "aid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "acid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "gene": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Gene"
+                        }
+                    },
+                    "tissue": {
+                        "type": "string"
+                    },
+                    "assayComponentName": {
+                        "type": "string"
+                    },
+                    "assayFormatTypeSub": {
+                        "type": "string"
+                    },
+                    "cellViabilityAssay": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "keyPositiveControl": {
+                        "type": "string"
+                    },
+                    "assayFunctionType": {
+                        "type": "string"
+                    },
+                    "assayComponentDesc": {
+                        "type": "string"
+                    },
+                    "cellFreeComponentSource": {
+                        "type": "string"
+                    },
+                    "intendedTargetTypeSub": {
+                        "type": "string"
+                    },
+                    "intendedTargetFamily": {
+                        "type": "string"
+                    },
+                    "parameterReadoutType": {
+                        "type": "string"
+                    },
+                    "contentReadoutType": {
+                        "type": "string"
+                    },
+                    "technologicalTargetType": {
+                        "type": "string"
+                    },
+                    "intendedTargetFamilySub": {
+                        "type": "string"
+                    },
+                    "biologicalProcessTarget": {
+                        "type": "string"
+                    },
+                    "detectionTechnology": {
+                        "type": "string"
+                    },
+                    "assayDesignTypeSub": {
+                        "type": "string"
+                    },
+                    "intendedTargetType": {
+                        "type": "string"
+                    },
+                    "detectionTechnologyType": {
+                        "type": "string"
+                    },
+                    "keyAssayReagentType": {
+                        "type": "string"
+                    },
+                    "normalizedDataType": {
+                        "type": "string"
+                    },
+                    "assaySourceLongName": {
+                        "type": "string"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assayComponentEndpointDesc": {
+                        "type": "string"
+                    },
+                    "assayComponentEndpointName": {
+                        "type": "string"
+                    },
+                    "organismId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "organism": {
+                        "type": "string"
+                    },
+                    "burstAssay": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "signalDirection": {
+                        "type": "string"
+                    },
+                    "assayDesignType": {
+                        "type": "string"
+                    },
+                    "keyAssayReagent": {
+                        "type": "string"
+                    },
+                    "timepointHr": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "assayDesc": {
+                        "type": "string"
+                    },
+                    "cellGrowthMode": {
+                        "type": "string"
+                    },
+                    "assayFootprint": {
+                        "type": "string"
+                    },
+                    "dilutionSolvent": {
+                        "type": "string"
+                    },
+                    "assayList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AssayList"
+                        }
+                    },
+                    "citations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Citation"
+                        }
+                    },
+                    "cellFormat": {
+                        "type": "string"
+                    },
+                    "assaySourceName": {
+                        "type": "string"
+                    },
+                    "assaySourceDesc": {
+                        "type": "string"
+                    },
+                    "assayFormatType": {
+                        "type": "string"
+                    },
+                    "cellShortName": {
+                        "type": "string"
+                    },
+                    "assayName": {
+                        "type": "string"
+                    },
+                    "assayComponentTargetDesc": {
+                        "type": "string"
+                    },
+                    "detectionTechnologyTypeSub": {
+                        "type": "string"
+                    },
+                    "technologicalTargetTypeSub": {
+                        "type": "string"
+                    },
+                    "dilutionSolventPercentMax": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "technologicalTargetTypes": {
+                        "writeOnly": true
+                    }
+                }
+            },
+            "AssayList": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Citation": {
+                "type": "object",
+                "properties": {
+                    "doi": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "pmid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "citation": {
+                        "type": "string"
+                    },
+                    "otherId": {
+                        "type": "string"
+                    },
+                    "citationId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "otherSource": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Gene": {
+                "type": "object",
+                "properties": {
+                    "geneId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "geneName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "geneSymbol": {
+                        "type": "string"
+                    },
+                    "organismId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "trackStatus": {
+                        "type": "string"
+                    },
+                    "entrezGeneId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "officialSymbol": {
+                        "type": "string"
+                    },
+                    "officialFullName": {
+                        "type": "string"
+                    },
+                    "uniprotAccessionNumber": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SearchAssay": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "searchName": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "searchValue": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "minLength": 0
+                    },
+                    "searchValueDesc": {
+                        "type": "string"
+                    },
+                    "modifiedValue": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "aeid",
+                    "id"
+                ]
+            },
+            "ProblemDetail": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "detail": {
+                        "type": "string"
+                    },
+                    "instance": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "properties": {
+                        "type": "object",
+                        "additionalProperties": {}
+                    }
+                }
+            },
+            "BioactivityModel": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "model": {
+                        "type": "string"
+                    },
+                    "receptor": {
+                        "type": "string"
+                    },
+                    "agonist": {
+                        "type": "string"
+                    },
+                    "antagonist": {
+                        "type": "string"
+                    },
+                    "binding": {
+                        "type": "string"
+                    },
+                    "modelDesc": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SummaryByTissue": {
+                "type": "object",
+                "properties": {
+                    "chemicalName": {
+                        "type": "string"
+                    },
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "tissue": {
+                        "type": "string"
+                    },
+                    "intendedTargetFamily": {
+                        "type": "string"
+                    },
+                    "hitCall": {
+                        "type": "string"
+                    },
+                    "ac50": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "logAC50": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cutOff": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "acc": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "maxMedConc": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "continuousHitCall": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "ChemicalAgg": {
+                "type": "object",
+                "properties": {
+                    "dtxsid": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "activeMc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalMc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "activeSc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalSc": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "cytotoxMedianRaw": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cytotoxMad": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "globalMad": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cytotoxMedianLog": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cytotoxMedianUm": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cytotoxLowerUm": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "cytotoxLowerLog": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "ntested": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "nhit": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                }
+            },
+            "AssayAgg": {
+                "type": "object",
+                "properties": {
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Assay component endpoint ID"
+                    },
+                    "activeMc": {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 23,
+                        "minimum": 0
+                    },
+                    "totalMc": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "activeSc": {
+                        "type": "integer",
+                        "format": "int32",
+                        "maximum": 23,
+                        "minimum": 0
+                    },
+                    "totalSc": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "CcdSingleConcData": {
+                "type": "object",
+                "properties": {
+                    "endpointName": {
+                        "type": "string"
+                    },
+                    "maxMedVal": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "bmad": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "casn": {
+                        "type": "string"
+                    },
+                    "hitc": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "coff": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "s2id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "preferredName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AssayEndpointsList": {
+                "type": "object",
+                "properties": {
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assayComponentEndpointDesc": {
+                        "type": "string"
+                    },
+                    "assayComponentEndpointName": {
+                        "type": "string"
+                    },
+                    "geneSymbol": {
+                        "type": "string"
+                    },
+                    "singleConcActive": {
+                        "type": "string"
+                    },
+                    "multiConcActives": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AssayAnnotation": {
+                "type": "object",
+                "description": "US EPA's Toxicity Forecaster (ToxCast) program makes invitro medium- and high-throughput screening assay data publicly available for prioritization and hazard characterization. Given ToxCast includes a heterogeneous set of assays across a diverse biological space, annotations in the database help flexibly aggregate and differentiate processed data. The definition of an “assay” is, in ToxCast, broken into 4 assay elements: assay source: the vendor/origination of the data, assay: the procedure to generate the component data, assay component: the raw data readout(s), assay component endpoint: the normalized component data. The assay element annotations are often short in a standardized format or use a controlled term list. Assay” resource endpoints provide assay metadata for specific or all invitrodb ‘aeids’ (assay endpoint ids). These include annotations from invitrodb’s assay, assay_component, assay_component_endpoint, assay_list, assay_source, and gene tables, all returned in a by-aeid format. Regular ToxCast/invitrodb users may find it easier to use the tcpl R package, which has integrated to make API data retrievable in a familiar format. See the tcpl vignette regarding data retrieval via API for more information.",
+                "properties": {
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Assay component endpoint ID"
+                    },
+                    "assayComponentEndpointName": {
+                        "type": "string",
+                        "description": "Assay component endpoint name (abbreviated 'aenm' within the package)",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayComponentEndpointDesc": {
+                        "type": "string",
+                        "description": "Assay component endpoint description"
+                    },
+                    "assayFunctionType": {
+                        "type": "string",
+                        "description": "Description of targeted mechanism and the purpose of the analyzed readout in relation to others from the same assay",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "normalizedDataType": {
+                        "type": "string",
+                        "description": "Normalization approach for which the data is displayed",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "burstAssay": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Indicator if endpoint is included in the burst distribution (1) or not (0); Burst phenomenon can describe confounding activity, such as cytotoxicity due to non-specific activation of many targets at certain concentrations"
+                    },
+                    "keyPositiveControl": {
+                        "type": "string",
+                        "description": "Tested chemical sample expected to produce activity; Used to assess assay validity",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "signalDirection": {
+                        "type": "string",
+                        "description": "Directionality of raw data signals from assay (gain or loss); Defines analysis direction",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "intendedTargetType": {
+                        "type": "string",
+                        "description": "General group of intended targets measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "intendedTargetTypeSub": {
+                        "type": "string",
+                        "description": "Specific subgroup of intended targets measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "intendedTargetFamily": {
+                        "type": "string",
+                        "description": "Family of intended target measured; Populated on ToxCast chemical activity plot within CompTox dashboard",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "intendedTargetFamilySub": {
+                        "type": "string",
+                        "description": "Specific subfamily of intended target measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "cellViabilityAssay": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Indicator of the impact of cytotoxicity in confounding (1) or no cytotoxic impact (0)"
+                    },
+                    "acid": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Assay component ID"
+                    },
+                    "assayComponentName": {
+                        "type": "string",
+                        "description": "Assay component name (abbreviated 'acnm' within the package)",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayComponentDesc": {
+                        "type": "string",
+                        "description": "Assay component description"
+                    },
+                    "assayComponentTargetDesc": {
+                        "type": "string",
+                        "description": "Assay component target description. Generally includes information about mechanism of action with assay target, how disruption is detected, or significance of target disruption."
+                    },
+                    "parameterReadoutType": {
+                        "type": "string",
+                        "description": "Description of parameters measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayDesignType": {
+                        "type": "string",
+                        "description": "General description of the biological or physical process is translated into a detectable signal by assay mechanism",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayDesignTypeSub": {
+                        "type": "string",
+                        "description": "Specific description of method through which a biological or physical process is translated into a detectable signal measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "biologicalProcessTarget": {
+                        "type": "string",
+                        "description": "General biological process being chemically disrupted",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "detectionTechnologyType": {
+                        "type": "string",
+                        "description": "General description of assay platform or detection signals measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "detectionTechnologyTypeSub": {
+                        "type": "string",
+                        "description": "Description of signals measured in assay platform",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "detectionTechnology": {
+                        "type": "string",
+                        "description": "Specific description of assay platform used",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "keyAssayReagentType": {
+                        "type": "string",
+                        "description": "Type of critical reactant being measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "keyAssayReagent": {
+                        "type": "string",
+                        "description": "Critical reactant measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "technologicalTargetType": {
+                        "type": "string",
+                        "description": "General description of technological target measured in assay platform",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "technologicalTargetTypeSub": {
+                        "type": "string",
+                        "description": "Specific description of technological target measured in assay platform",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "aid": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Assay ID"
+                    },
+                    "assayName": {
+                        "type": "string",
+                        "description": "Assay name (abbreviated 'anm' within the package)",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayDesc": {
+                        "type": "string",
+                        "description": "Assay description"
+                    },
+                    "timepointHr": {
+                        "type": "number",
+                        "format": "double",
+                        "description": "Treatment duration in hours"
+                    },
+                    "organismId": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "NCBI taxonomic identifier, available here https://www.ncbi.nlm.nih.gov/taxonomy"
+                    },
+                    "organism": {
+                        "type": "string",
+                        "description": "Organism of origin",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "ncbiTaxonId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "taxonName": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "commonName": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "lineage": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "tissue": {
+                        "type": "string",
+                        "description": "Tissue of origin",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "cellFormat": {
+                        "type": "string",
+                        "description": "Description of cell format",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "cellFreeComponentSource": {
+                        "type": "string",
+                        "description": "Description of source for targeted cell-free components",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "cellShortName": {
+                        "type": "string",
+                        "description": "Abbreviation of cell line",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "cellGrowthMode": {
+                        "type": "string",
+                        "description": "Cell growth modality",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayFootprint": {
+                        "type": "string",
+                        "description": "Microtiter plate size",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayFormatType": {
+                        "type": "string",
+                        "description": "General description of assay format",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assayFormatTypeSub": {
+                        "type": "string",
+                        "description": "Specific description of assay format",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "contentReadoutType": {
+                        "type": "string",
+                        "description": "Description of well characteristics being measured",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "dilutionSolvent": {
+                        "type": "string",
+                        "description": "Solvent used in sample dilution",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "dilutionSolventPercentMax": {
+                        "type": "number",
+                        "format": "double",
+                        "description": "Maximum percent of dilution solvent used, from 0 to 1."
+                    },
+                    "asid": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Assay source ID"
+                    },
+                    "assaySourceName": {
+                        "type": "string",
+                        "description": "Assay source name (typically an abbreviation of the assay_source_long_name, abbreviated 'asnm' within the package)",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assaySourceLongName": {
+                        "type": "string",
+                        "description": "Full assay source name",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "assaySourceDesc": {
+                        "type": "string",
+                        "description": "Assay source description",
+                        "maxLength": 255,
+                        "minLength": 0
+                    },
+                    "gene": {
+                        "type": "array",
+                        "description": "JSON object containing gene mappings",
+                        "items": {
+                            "$ref": "#/components/schemas/Gene"
+                        }
+                    },
+                    "assayList": {
+                        "type": "array",
+                        "description": "JSON object containing curated groupings of endpoints anchored by use in CCTE publications and/or projects",
+                        "items": {
+                            "$ref": "#/components/schemas/AssayList"
+                        }
+                    },
+                    "citations": {
+                        "type": "array",
+                        "description": "JSON object containing references to assay-specific publications describing assay design or results",
+                        "items": {
+                            "$ref": "#/components/schemas/Citation"
+                        }
+                    },
+                    "mc2Methods": {
+                        "type": "array",
+                        "description": "JSON object containing Level 2 Multi-concentration (MC2)",
+                        "items": {
+                            "$ref": "#/components/schemas/Mc2Method"
+                        }
+                    },
+                    "mc3Methods": {
+                        "type": "array",
+                        "description": "JSON object containing Level 3 Multi-concentration (MC3) normalized concentration-response data",
+                        "items": {
+                            "$ref": "#/components/schemas/Mc3Method"
+                        }
+                    },
+                    "mc4Methods": {
+                        "type": "array",
+                        "description": "JSON object containing Level 4 Multi-concentration (MC4) All Models Fitting Parameters",
+                        "items": {
+                            "$ref": "#/components/schemas/Mc4Method"
+                        }
+                    },
+                    "mc5Methods": {
+                        "type": "array",
+                        "description": "JSON object containing Level 5 Multi-concentration (MC5) Winning Model Fitting Parameters",
+                        "items": {
+                            "$ref": "#/components/schemas/Mc5Method"
+                        }
+                    },
+                    "mc6Methods": {
+                        "type": "array",
+                        "description": "JSON object containing Level 6 Multi-concentration (MC6) Flags",
+                        "items": {
+                            "$ref": "#/components/schemas/Mc6Method"
+                        }
+                    },
+                    "sc1Methods": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Sc1Method"
+                        }
+                    },
+                    "sc2Methods": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Sc2Method"
+                        }
+                    }
+                }
+            },
+            "Mc2Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "mc2_mthd": {
+                        "type": "string"
+                    },
+                    "exec_ordr": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "mc2_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Mc3Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "mc3_mthd": {
+                        "type": "string"
+                    },
+                    "mc3_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Mc4Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "mc4_mthd": {
+                        "type": "string"
+                    },
+                    "mc4_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Mc5Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "mc5_mthd": {
+                        "type": "string"
+                    },
+                    "mc5_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Mc6Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "mc6_mthd": {
+                        "type": "string"
+                    },
+                    "mc6_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Sc1Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "sc1_mthd": {
+                        "type": "string"
+                    },
+                    "sc1_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Sc2Method": {
+                "type": "object",
+                "properties": {
+                    "desc": {
+                        "type": "string"
+                    },
+                    "sc2_mthd": {
+                        "type": "string"
+                    },
+                    "sc2_mthd_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CcDAssayAnnotation": {
+                "type": "object",
+                "properties": {
+                    "assayDescs": {
+                        "writeOnly": true
+                    },
+                    "assayname": {
+                        "writeOnly": true
+                    },
+                    "tissue": {
+                        "type": "string"
+                    },
+                    "assayComponentName": {
+                        "type": "string"
+                    },
+                    "assayFormatTypeSub": {
+                        "type": "string"
+                    },
+                    "keyPositiveControl": {
+                        "type": "string"
+                    },
+                    "assayFunctionType": {
+                        "type": "string"
+                    },
+                    "assayComponentDesc": {
+                        "type": "string"
+                    },
+                    "cellFreeComponentSource": {
+                        "type": "string"
+                    },
+                    "intendedTargetTypeSub": {
+                        "type": "string"
+                    },
+                    "intendedTargetFamily": {
+                        "type": "string"
+                    },
+                    "parameterReadoutType": {
+                        "type": "string"
+                    },
+                    "contentReadoutType": {
+                        "type": "string"
+                    },
+                    "technologicalTargetType": {
+                        "type": "string"
+                    },
+                    "intendedTargetFamilySub": {
+                        "type": "string"
+                    },
+                    "biologicalProcessTarget": {
+                        "type": "string"
+                    },
+                    "detectionTechnology": {
+                        "type": "string"
+                    },
+                    "assayDesignTypeSub": {
+                        "type": "string"
+                    },
+                    "intendedTargetType": {
+                        "type": "string"
+                    },
+                    "detectionTechnologyType": {
+                        "type": "string"
+                    },
+                    "keyAssayReagentType": {
+                        "type": "string"
+                    },
+                    "normalizedDataType": {
+                        "type": "string"
+                    },
+                    "assaySourceLongName": {
+                        "type": "string"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assayComponentEndpointDesc": {
+                        "type": "string"
+                    },
+                    "assayComponentEndpointName": {
+                        "type": "string"
+                    },
+                    "organism": {
+                        "type": "string"
+                    },
+                    "burstAssay": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "signalDirection": {
+                        "type": "string"
+                    },
+                    "assayDesignType": {
+                        "type": "string"
+                    },
+                    "keyAssayReagent": {
+                        "type": "string"
+                    },
+                    "timepointHr": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "assayDesc": {
+                        "type": "string"
+                    },
+                    "cellGrowthMode": {
+                        "type": "string"
+                    },
+                    "assayFootprint": {
+                        "type": "string"
+                    },
+                    "dilutionSolvent": {
+                        "type": "string"
+                    },
+                    "cellFormat": {
+                        "type": "string"
+                    },
+                    "assaySourceName": {
+                        "type": "string"
+                    },
+                    "assaySourceDesc": {
+                        "type": "string"
+                    },
+                    "assayFormatType": {
+                        "type": "string"
+                    },
+                    "cellShortName": {
+                        "type": "string"
+                    },
+                    "assayName": {
+                        "type": "string"
+                    },
+                    "assayComponentTargetDesc": {
+                        "type": "string"
+                    },
+                    "detectionTechnologyTypeSub": {
+                        "type": "string"
+                    },
+                    "technologicalTargetTypeSub": {
+                        "type": "string"
+                    },
+                    "dilutionSolventPercentMax": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "toxCastAssayDescription": {
+                        "type": "string"
+                    },
+                    "technologicalTargetTypes": {
+                        "writeOnly": true
+                    }
+                }
+            },
+            "CcdAssayGene": {
+                "type": "object",
+                "properties": {
+                    "entrezGeneId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "geneSymbol": {
+                        "type": "string"
+                    },
+                    "geneName": {
+                        "type": "string"
+                    },
+                    "serviceEntrezGeneId": {
+                        "writeOnly": true
+                    }
+                }
+            },
+            "CcdAssayCitation": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "aeid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "assayComponentEndpointName": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "citation": {
+                        "type": "string"
+                    },
+                    "otherSource": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "otherId": {
+                        "type": "string"
+                    },
+                    "doi": {
+                        "type": "string"
+                    },
+                    "pmid": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CcdTcplData": {
+                "type": "object",
+                "properties": {
+                    "methodName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "assayRunType": {
+                        "type": "string"
+                    },
+                    "levelApplied": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CcdReagents": {
+                "type": "object",
+                "properties": {
+                    "cultureOrAssay": {
+                        "type": "string"
+                    },
+                    "reagentType": {
+                        "type": "string"
+                    },
+                    "reagentValue": {
+                        "type": "string"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "AOP": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "toxcastAeid": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "entrezGeneId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "eventNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "eventLink": {
+                        "type": "string"
+                    },
+                    "aopNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "aopLink": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AnalyticalQC": {
+                "type": "object",
+                "properties": {
+                    "analyticalQcId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dtxsid": {
+                        "type": "string"
+                    },
+                    "chnm": {
+                        "type": "string"
+                    },
+                    "spid": {
+                        "type": "string"
+                    },
+                    "qcLevel": {
+                        "type": "string"
+                    },
+                    "t0": {
+                        "type": "string"
+                    },
+                    "t4": {
+                        "type": "string"
+                    },
+                    "call": {
+                        "type": "string"
+                    },
+                    "annotation": {
+                        "type": "string"
+                    },
+                    "flags": {
+                        "type": "string"
+                    },
+                    "averageMass": {
+                        "type": "string"
+                    },
+                    "log10VaporPressureOperaPred": {
+                        "type": "string"
+                    },
+                    "logkowOctanolWaterOperaPred": {
+                        "type": "string"
+                    },
+                    "exportDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dataVersion": {
+                        "type": "string"
+                    },
+                    "porCaution": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Link": {
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "templated": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Links": {
+                "type": "object",
+                "additionalProperties": {
+                    "$ref": "#/components/schemas/Link"
+                }
+            }
+        },
+        "securitySchemes": {
+            "api_key": {
+                "type": "apiKey",
+                "description": "Each API request requires an api_key. Contact the CTX API Admin to request an API Key.",
+                "name": "x-api-key",
+                "in": "header"
+            }
+        }
+    }
+}
