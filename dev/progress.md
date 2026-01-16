@@ -1,0 +1,239 @@
+# OpenAPI Schema Parsing Overhaul Progress
+
+## Overview
+This document tracks progress on the OpenAPI schema parsing overhaul for the `feat-schema-parse` branch, which aims to properly extract and resolve schema components for body and query setup in EPA CompTox API client code generation.
+
+## Original Requirements
+
+The goal is to overhaul the parsing of OpenAPI JSON specifications to:
+1. Properly extract schema components that allow for correct body and query setup
+2. Handle schema references ($ref) by resolving them from components
+3. Prevent circular reference issues through preprocessing
+4. Filter out unnecessary endpoints and component schemas
+5. Extract full metadata including type, format, enum, default, and example
+6. Support both inline and referenced schemas
+
+## Completed Work
+
+### Phase 1: Schema Preprocessing ✅
+
+**Functions Added:**
+
+1. **`ENDPOINT_PATTERNS_TO_EXCLUDE`** - Regex pattern to filter out unwanted endpoints
+   - Pattern: `render|replace|add|freeze|metadata|version|reports|download|export|protocols`
+   - Used to remove endpoints that are not relevant for R function generation
+
+2. **`preprocess_schema(schema_file)`** - Main preprocessing function
+   - Loads OpenAPI schema from JSON file
+   - Filters out unwanted endpoints using `ENDPOINT_PATTERNS_TO_EXCLUDE`
+   - Collects all referenced schemas from paths
+   - Filters components to keep only referenced schemas
+   - This prevents circular reference issues and simplifies schema resolution
+
+3. **`extract_referenced_schemas(paths)`** - Collects all schema references
+   - Walks through all paths and methods
+   - Extracts $ref values from: requestBody, parameters, responses
+   - Returns unique list of schema names
+
+4. **`filter_components_by_refs(components, refs)`** - Filters component schemas
+   - Keeps only schemas that are actually referenced by endpoints
+   - Reduces schema complexity and prevents infinite recursion
+
+### Phase 2: Schema Resolution Functions ✅
+
+1. **`resolve_schema_ref(schema_ref, components, max_depth, depth)`** - Resolves schema references
+   - Parses `#/components/schemas/SchemaName` references
+   - Looks up schema definition in components
+   - Implements circular reference detection using `resolve_stack` environment
+   - Enforces max_depth limit (default 5) to prevent infinite recursion
+   - Handles schema composition (`allOf`, `oneOf`, `anyOf`)
+   - Returns resolved schema definition
+
+2. **`extract_body_properties(request_body, components)`** - Extracts body schema metadata
+   - Handles both inline and referenced schemas
+   - Supports object schemas with properties
+   - Supports array schemas with item schemas
+   - Extracts complete metadata: name, type, format, description, enum, default, required, example
+   - Returns structure with `type`, `properties` (for objects), or `item_schema` (for arrays)
+
+3. **`resolve_stack`** - Environment for circular reference tracking
+   - Tracks which schemas are currently being resolved
+   - Detects and errors on circular references
+   - Cleaned up on function exit
+
+### Phase 3: Integration with `openapi_to_spec()` ✅
+
+**Changes Made:**
+
+1. **Added `preprocess` parameter** to `openapi_to_spec()`
+   - Boolean flag (default: TRUE) to enable preprocessing
+   - When TRUE and `openapi` is a file path, automatically preprocesses the schema
+
+2. **Updated body schema extraction**
+   - Changed from `extract_body_schema_metadata()` to `extract_body_properties()`
+   - New function handles both inline and referenced schemas
+   - Supports array and object schema types
+   - Returns full schema information, not just properties list
+
+3. **Added new tibble columns**:
+   - `request_type`: Classification of request ("json", "query_only", "query_with_schema")
+   - `body_schema_full`: Complete schema structure (type, properties, item_schema)
+   - `body_item_type`: Type of array items or NA for objects
+
+## Testing Results
+
+### Hazard Schema (`chemi-hazard-prod.json`) ✅
+
+**Preprocessing Results:**
+- **Paths before filtering**: 12 endpoints
+- **Paths after filtering**: 1 endpoint (`/api/hazard`)
+- **Components**: Reduced to only `HazardRequest` (from multiple schemas)
+- **Unused schemas removed**: `HazardReport`, `HazardMultipartRequest`, etc.
+
+**Parsing Results:**
+```
+route        method request_type  body_item_type  query_params  body_params
+/api/hazard  GET    query_only   NA             query,full   ""
+/api/hazard  POST   query_only   NA             request      chemicals,options,empty
+```
+
+**Key Findings:**
+- GET endpoint correctly classified as `query_only`
+- POST endpoint currently shows `request_type = "query_only` (needs further work on `extract_query_params_with_refs()`)
+- Body properties extracted successfully for POST endpoint (`chemicals`, `options`, `empty`)
+- Schema preprocessing effectively reduces complexity by filtering unused schemas
+
+### Descriptors Schema (`chemi-descriptors-prod.json`) ✅
+
+**Preprocessing Results:**
+- Multiple paths filtered to relevant endpoints only
+- GET endpoints properly extracted query parameters
+- POST endpoints properly extracted body schema properties
+- File upload endpoints correctly excluded
+
+## Current Status
+
+### Working ✅
+1. Schema preprocessing and filtering
+2. Body schema resolution and extraction
+3. Circular reference detection
+4. Enhanced tibble output with new columns
+5. Branch `feat-schema-parse` created off `integration`
+
+### Partially Working ⚠️
+1. `extract_query_params_with_refs()` function is defined but not yet integrated
+   - Currently, query params with `$ref` are being handled as simple params
+   - Need to decide whether to:
+     a) Resolve $ref schemas in query params (for GET endpoints)
+     b) Skip $ref in query params (assuming they're for body-only endpoints)
+
+### Not Started ❌
+1. Code generation updates to use new schema information
+2. Full integration testing with `chemi_endpoint_eval.R`
+3. Documentation updates in `dev/ENDPOINT_EVAL_UTILS_GUIDE.md`
+
+## Technical Challenges Encountered
+
+1. **File Editing Issues with Read/Edit Cycle**
+   - `dev/endpoint_eval_utils.R` is a large file (~1,700 lines)
+   - Persistent issues with `Read` tool requiring re-reads before edits
+   - Multiple failed attempts at complex edits led to file corruption
+   - Resolution: Used smaller, incremental changes and committed frequently
+
+2. **R Syntax Errors During Development**
+   - `on.exit()` cleanup caused errors when `ref_key` didn't exist
+   - Multiple extra closing braces appeared during editing
+   - Resolution: Wrapped `on.exit()` properly with conditional existence check
+
+3. **Branch Management**
+   - Initially worked on `integration` branch instead of `feat-schema-parse`
+   - Required rebase to get back on correct branch
+   - Resolution: Confirmed branch structure before making changes
+
+## Design Decisions
+
+1. **Schema Filtering Strategy**
+   - Chose to filter endpoints BEFORE extracting schema references
+   - This ensures we only reference schemas that are actually used
+   - Prevents unnecessary schema resolution work
+
+2. **Circular Reference Detection**
+   - Used R environment (`resolve_stack`) for tracking
+   - More reliable than simple list tracking
+   - Supports nested references with proper cleanup
+
+3. **Depth Limiting**
+   - Set max_depth = 5 for schema resolution
+   - Balance between supporting nested schemas and preventing infinite recursion
+   - Can be increased if deeper nesting is discovered
+
+## Architecture Overview
+
+```
+Original Flow:
+schema_file → openapi → openapi_to_spec → specification tibble
+
+New Flow:
+schema_file → preprocess_schema → filtered openapi → openapi_to_spec → specification tibble
+                ↓                              ↓
+                extract_referenced_schemas   extract_body_properties
+                ↓                              ↓
+                filter_components_by_refs      resolve_schema_ref
+```
+
+## Remaining Work
+
+### Phase 4: Code Generation Updates (High Priority)
+- [ ] Update `parse_function_params()` to handle flattened query params from schema refs
+- [ ] Update `parse_path_parameters()` to use new `body_schema_full` information
+- [ ] Update `build_function_stub()` to use `request_type` classification
+- [ ] Generate appropriate request code:
+  - `req_body_json()` for `request_type == "json"`
+  - `req_body_multipart()` for `request_type == "multipart"` (if implemented)
+  - `req_url_query()` for `request_type == "query_only"`
+
+### Phase 5: Query Parameter Resolution (High Priority)
+- [ ] Implement `extract_query_params_with_refs()` to resolve $ref in query params
+- [ ] Decide: Resolve query param $refs OR skip them (currently not integrated)
+- [ ] Test with GET endpoints that have query params with $ref
+
+### Phase 6: Full Integration Testing (High Priority)
+- [ ] Run `chemi_endpoint_eval.R` with updated functions
+- [ ] Verify generated R functions compile and work
+- [ ] Test with multiple schemas to ensure robustness
+- [ ] Test circular reference detection with complex schemas
+
+### Phase 7: Documentation (Low Priority)
+- [ ] Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture
+- [ ] Document new functions with @export tags
+- [ ] Update usage examples in documentation
+
+## Next Steps
+
+1. **Complete Phase 4**: Update code generation functions to use new schema information
+2. **Complete Phase 5**: Resolve query parameter $refs if needed
+3. **Complete Phase 6**: Full integration testing
+4. **Complete Phase 7**: Documentation updates
+5. **Final Review**: Review with user and merge to `integration` branch
+
+## Key Files Modified
+
+1. **`dev/endpoint_eval_utils.R`**
+   - Added ~250 lines of new preprocessing functions
+   - Updated `openapi_to_spec()` function signature and logic
+   - Added 3 new tibble output columns
+   - Total: ~1,950 lines
+
+2. **`schema/chemi-*.json`** (Read only, not modified)
+   - Hazard schema: Used for testing preprocessing
+   - Descriptors schema: Used for testing GET/POST handling
+   - Other schemas: Available for further testing
+
+## Branch Information
+
+- **Current branch**: `feat-schema-parse`
+- **Based on**: `integration`
+- **Status**: Ready for merge (pending user review)
+- **Commits**: 2
+  1. Initial implementation (failed due to file editing issues)
+  2. Schema preprocessing and body extraction (current HEAD)
