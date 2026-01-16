@@ -1,7 +1,7 @@
 #' Safety Rqcodes
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query A list of DTXSIDs to search for
 #' @return Returns a tibble with results (array of objects)
