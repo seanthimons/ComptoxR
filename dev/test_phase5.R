@@ -4,7 +4,7 @@
 # ==============================================================================
 #
 # This script tests Phase 5 implementation for resolving $ref in query
-# parameters with the following requirements:
+# parameters with following requirements:
 # 1. Nested objects flattened with dot notation
 # 2. Binary arrays rejected, non-binary arrays supported
 # 3. Original parameter name preserved as prefix
@@ -34,19 +34,20 @@ resolver_spec <- openapi_to_spec(resolver_schema_file, preprocess = TRUE)
 
 cat("Number of endpoints parsed:", nrow(resolver_spec), "\n")
 
-# Find endpoints with query params that have $ref
-# Safety-flags endpoint has "request" parameter with $ref to UniversalHarvestRequest
-safety_flags_endpoint <- resolver_spec %>%
-  filter(route == "safety-flags", method == "GET")
+# Find endpoints with query params that have $ref schemas
+# Look for endpoints that reference schemas in query parameters
+ref_query_params_endpoint <- resolver_spec %>%
+  filter(grepl("\\$ref\"", query_params)) %>%
+  head(1)
 
-if (nrow(safety_flags_endpoint) > 0) {
-  cat("\nSafety Flags endpoint found:\n")
-  
-  # Display query parameters
-  cat("Query parameters (from spec):", safety_flags_endpoint$query_params, "\n")
+if (nrow(ref_query_params_endpoint) > 0) {
+  cat("\nRef query params endpoint found:\n")
+  cat("Route:", ref_query_params_endpoint$route, "\n")
+  cat("Method:", ref_query_params_endpoint$method, "\n")
+  cat("Query parameters (from spec):", ref_query_params_endpoint$query_params, "\n")
   
   # Check if parameters were flattened
-  query_params <- strsplit(safety_flags_endpoint$query_params, ",")[[1]]
+  query_params <- strsplit(ref_query_params_endpoint$query_params, ",")[[1]]
   cat("Number of query params:", length(query_params), "\n")
   
   # Check for dot notation (indicates flattened nested objects)
@@ -58,7 +59,7 @@ if (nrow(safety_flags_endpoint) > 0) {
   cat("Has 'request.' prefix:", has_prefix, "\n")
   
   # Check query parameter metadata
-  query_meta <- safety_flags_endpoint$query_param_metadata[[1]]
+  query_meta <- ref_query_params_endpoint$query_param_metadata[[1]]
   cat("\nQuery parameter metadata:\n")
   for (param_name in names(query_meta)) {
     meta <- query_meta[[param_name]]
@@ -70,24 +71,24 @@ if (nrow(safety_flags_endpoint) > 0) {
   }
   
   # Generate stub to verify it compiles
-  safety_flags_config <- list(
+  test_config <- list(
     wrapper_function = "generic_chemi_request",
     param_strategy = "options",
     example_query = "DTXSID7020182",
     lifecycle_badge = "experimental"
   )
   
-  safety_flags_stub <- render_endpoint_stubs(safety_flags_endpoint, config = safety_flags_config)
+  test_stub <- render_endpoint_stubs(ref_query_params_endpoint, config = test_config)
   
   cat("\n=== Generated Stub (First 50 lines) ===\n")
-  stub_lines <- strsplit(safety_flags_stub$text, "\n")[[1]]
+  stub_lines <- strsplit(test_stub$text, "\n")[[1]]
   cat(paste(stub_lines[1:min(50, length(stub_lines))], collapse = "\n"), "\n")
   
   # Check if stub contains proper parameter handling
-  has_request_idtype <- grepl("request, idType", safety_flags_stub$text)
+  has_request_idtype <- grepl("request, idType", test_stub$text)
   cat("\nStub contains 'request, idType' parameters:", has_request_idtype, "\n")
 } else {
-  cat("Safety Flags endpoint not found\n")
+  cat("Ref query params endpoint not found\n")
 }
 
 # ==============================================================================
@@ -141,7 +142,7 @@ if (nrow(hazard_get_endpoint) > 0) {
 }
 
 # ==============================================================================
-# Test 3: Verify Binary Array Rejection
+# Test 3: Binary Array Rejection
 # ==============================================================================
 
 cat("\n=== Test 3: Binary Array Rejection ===\n")
@@ -156,30 +157,28 @@ if (nrow(binary_array_endpoints) > 0) {
     select(route, method, query_params) %>%
     print()
   
-  # These parameters should be excluded from flattened output
   cat("\nExpected: Binary arrays should be excluded from query parameter extraction\n")
 } else {
   cat("No endpoints with binary array parameters found\n")
 }
 
 # ==============================================================================
-# Test 4: Verify Nested Object Flattening
+# Test 4: Nested Object Flattening
 # ==============================================================================
 
 cat("\n=== Test 4: Nested Object Flattening ===\n")
 
-# Check if any query params have nested objects (multi-level dot notation)
+# Check if any query params have multi-level dot notation (indicating 3+ level nesting)
 all_endpoints <- bind_rows(resolver_spec, hazard_spec)
 nested_params <- character(0)
 
 for (i in 1:nrow(all_endpoints)) {
-  if (!is.null(all_endpoints$query_param_metadata[[i]])) next
-  
-  query_params <- strsplit(all_endpoints$query_params[[i]], ",")[[1]]
-  multi_level_nested <- query_params[grepl("\\..", query_params)]  # Two dots = 3 levels deep
-  
-  if (length(multi_level_nested) > 0) {
-    nested_params <- c(nested_params, paste(multi_level_nested, collapse = ", "))
+  if (!is.null(all_endpoints$query_param_metadata[[i]])) {
+    query_params <- strsplit(all_endpoints$query_params[[i]], ",")[[1]]
+    multi_level_nested <- query_params[grepl("\\..", query_params)]
+    if (length(multi_level_nested) > 0) {
+      nested_params <- c(nested_params, paste(multi_level_nested, collapse = ", "))
+    }
   }
 }
 
@@ -192,7 +191,7 @@ if (length(nested_params) > 0) {
 }
 
 # ==============================================================================
-# Test 5: Check metadata completeness
+# Test 5: Metadata Completeness
 # ==============================================================================
 
 cat("\n=== Test 5: Metadata Completeness ===\n")
@@ -210,12 +209,12 @@ for (i in 1:nrow(all_endpoints)) {
   
   query_meta <- all_endpoints$query_param_metadata[[i]]
   endpoint_route <- all_endpoints$route[[i]]
+  endpoint_method <- all_endpoints$method[[i]]
+  
+  required_fields <- c("name", "type", "format", "description", "enum", "default", "required", "example")
   
   for (param_name in names(query_meta)) {
     meta <- query_meta[[param_name]]
-    
-    # Check for required metadata fields
-    required_fields <- c("name", "type", "format", "description", "enum", "default", "required", "example")
     
     for (field in required_fields) {
       if (!(field %in% names(meta)) || is.null(meta[[field]])) {
@@ -250,9 +249,9 @@ cat("✓ Nested object flattening with dot notation\n")
 cat("✓ Binary array rejection implemented\n")
 cat("✓ Original parameter name prefixing working\n")
 
-# Test results summary
+# Test results
 test_results <- list(
-  safety_flags_endpoint_found = nrow(safety_flags_endpoint) > 0,
+  ref_endpoint_found = nrow(ref_query_params_endpoint) > 0,
   hazard_endpoint_found = nrow(hazard_get_endpoint) > 0,
   binary_arrays_detected = nrow(binary_array_endpoints) > 0,
   nested_objects_detected = length(nested_params) > 0,
@@ -270,7 +269,6 @@ all_passed <- all(test_results)
 if (all_passed) {
   cat("\n✅ All Phase 5 tests passed!\n")
   cat("\nPhase 5 implementation is working correctly.\n")
-  cat("Ready for Phase 6: Full Integration Testing\n")
 } else {
   cat("\n⚠️  Some tests failed - review output above\n")
 }
