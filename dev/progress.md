@@ -257,9 +257,21 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
 1. **Phase 4 (COMPLETED)**: ✅ Code generation functions updated to use new schema information
    - Changes tested with hazard and resolver schemas
    - Backward compatibility maintained
-2. **Complete Phase 5**: Implement query parameter $ref resolution
+2. **Phase 5 (COMPLETED)**: ✅ Query parameter $ref resolution implemented
+   - extract_query_params_with_refs() function created and integrated
+   - Nested object flattening with dot notation
+   - Binary array rejection, non-binary array support
+   - Original parameter name preservation
+   - Testing script created (dev/test_phase5.R)
 3. **Complete Phase 6**: Full integration testing
+   - Run chemi_endpoint_eval.R with updated functions
+   - Verify generated R functions compile and work
+   - Test with multiple schemas to ensure robustness
+   - Test circular reference detection with complex schemas
 4. **Complete Phase 7**: Documentation updates
+   - Update dev/ENDPOINT_EVAL_UTILS_GUIDE.md with new architecture
+   - Document new functions with @export tags
+   - Update usage examples in documentation
 5. **Final Review**: Review with user and merge to `integration` branch
 
 ## Key Files Modified
