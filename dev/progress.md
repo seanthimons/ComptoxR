@@ -260,11 +260,32 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
   - Testing script: dev/test_phase5.R
   - Focus on resolver and hazard schemas
 
-### Phase 6: Full Integration Testing (High Priority) - NOT STARTED
-- [ ] Run `chemi_endpoint_eval.R` with updated functions
+### Phase 6: Full Integration Testing (High Priority) - IN PROGRESS
+- [x] Run `chemi_endpoint_eval.R` with updated functions
+- [x] Verify schema parsing works (hazard: 2 endpoints, resolver: 25 endpoints)
+- [x] Test Phase 4 (request_type) integration - Working correctly
+- [x] Test Phase 5 (query $ref) integration - Function working, params extracted
+- [ ] **CRITICAL ISSUE**: Generated stubs don't include flattened query parameters
+  - `extract_query_params_with_refs()` correctly resolves and flattens schemas
+  - Debug output confirms flattened parameters are extracted
+  - But `build_function_stub()` doesn't use them in generated code
+  - Root cause: `generic_chemi_request` wrapper doesn't use `params_code`
 - [ ] Verify generated R functions compile and work
 - [ ] Test with multiple schemas to ensure robustness (focus on hazard and resolver schemas)
 - [ ] Test circular reference detection with complex schemas
+
+**Phase 6 Testing Summary**:
+- Schema parsing: ✅ Working
+- Phase 4 integration: ✅ Working
+- Phase 5 function: ✅ Working
+- **Stub generation with Phase 5 params**: ❌ NOT WORKING
+
+**Issues Documented**:
+1. `extract_query_params_with_refs()` correctly resolves $ref schemas and flattens parameters
+2. `parse_function_params()` generates correct `params_code` for strategy == "options"
+3. `build_function_stub()` doesn't use `params_code` for `generic_chemi_request` wrapper
+4. Generated stubs only use `primary_param`, missing flattened parameters
+5. See `dev/phase6_testing_summary.md` for detailed analysis
 
 ### Phase 7: Documentation (Low Priority) - NOT STARTED
 - [ ] Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture

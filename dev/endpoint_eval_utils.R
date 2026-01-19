@@ -947,6 +947,12 @@ openapi_to_spec <- function(
       query_result <- extract_query_params_with_refs(parameters, components)
       query_names <- query_result$names  # Use resolved/flattened parameter names
       query_meta <- query_result$metadata  # Use enhanced metadata from resolved schemas
+      
+      # DEBUG: Print query parameter extraction results
+      if (length(query_names) > 0) {
+        message("DEBUG: query_names = ", paste(query_names, collapse = ", "))
+        message("DEBUG: query_meta names = ", paste(names(query_meta), collapse = ", "))
+      }
 
       # Extract parameter metadata (examples and descriptions)
       path_meta  <- param_metadata(parameters, "path")
