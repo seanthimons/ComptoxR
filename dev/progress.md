@@ -298,21 +298,37 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
    - Changes tested with hazard and resolver schemas
    - Backward compatibility maintained
 2. **Phase 5 (COMPLETED)**: ✅ Query parameter $ref resolution implemented
-   - extract_query_params_with_refs() function created and integrated
-   - Nested object flattening with dot notation
-   - Binary array rejection, non-binary array support
-   - Original parameter name preservation
+   - extract_query_params_with_refs() function works correctly
+   - Nested object flattening with dot notation working
+   - Binary array rejection working
+   - Original parameter name prefixing working
    - Testing script created (dev/test_phase5.R)
-3. **Complete Phase 6**: Full integration testing
-   - Run chemi_endpoint_eval.R with updated functions
-   - Verify generated R functions compile and work
-   - Test with multiple schemas to ensure robustness
-   - Test circular reference detection with complex schemas
-4. **Complete Phase 7**: Documentation updates
-   - Update dev/ENDPOINT_EVAL_UTILS_GUIDE.md with new architecture
+   - All Phase 5 features tested and working
+3. **Phase 6 (IN PROGRESS)**: ⚠️ Integration testing with critical issue found
+   - Schema parsing: ✅ Working correctly
+   - Phase 4 integration: ✅ Working correctly
+   - Phase 5 function: ✅ Working correctly
+   - ❌ **CRITICAL ISSUE**: Generated stubs don't include flattened query parameters
+     - `extract_query_params_with_refs()` correctly resolves and flattens schemas
+     - But `build_function_stub()` doesn't use flattened params in generated code
+     - Root cause: `generic_chemi_request` wrapper doesn't use `params_code`
+     - Generated stubs only show primary_param, missing flattened parameters
+     - See `dev/phase6_testing_summary.md` for detailed analysis
+4. **CRITICAL ISSUE TO FIX**: `build_function_stub()` needs to use `query_param_info$params_code`
+   - When using `generic_chemi_request` wrapper, must include flattened query parameters
+   - Currently only uses `primary_param` and `combined_calls`
+   - Flattened parameters (e.g., `request.filesInfo`, `request.options`) are lost
+5. **Phase 7**: Documentation updates (PENDING)
+   - Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture
    - Document new functions with @export tags
    - Update usage examples in documentation
-5. **Final Review**: Review with user and merge to `integration` branch
+
+**Blocking Issue**: Cannot complete Phase 6 until stub generation issue is fixed.
+
+**Next Actions**:
+1. Fix `build_function_stub()` to use flattened query parameters
+2. Re-run Phase 6 testing to verify stubs work correctly
+3. Complete Phase 7 documentation
 
 ## Key Files Modified
 
