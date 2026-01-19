@@ -168,15 +168,27 @@ resolve_schema_ref <- function(schema_ref, components, max_depth = 5, depth = 0)
   
   schema_name <- ref_parts[4]
   
-  # Track reference for circular detection and cleanup on exit
-  assign(ref_key, TRUE, envir = resolve_stack)
-  on.exit({
-    if (exists(ref_key, envir = resolve_stack)) {
-      rm(ref_key, envir = resolve_stack)
+  # Sanitize ref_key for use as variable name in R environment
+  # Replace problematic characters with underscores
+  sanitized_key <- gsub("[^a-zA-Z0-9]", "_", ref_key)
+  
+  # Check for circular reference - only error if we're going DEEPER
+  # (same reference at same depth is OK - just multiple references)
+  if (exists(sanitized_key, envir = resolve_stack)) {
+    existing_depth <- get(sanitized_key, envir = resolve_stack)
+    if (depth > existing_depth) {
+      stop("Circular reference detected for schema: ", ref_key, ". Current depth: ", depth, ", Previous depth: ", existing_depth)
     }
-  }, add = TRUE)
   }
   
+  # Track reference for cleanup on exit (overwrite with new depth if exists)
+  assign(sanitized_key, depth, envir = resolve_stack)
+  on.exit({
+    if (exists(sanitized_key, envir = resolve_stack)) {
+      rm(sanitized_key, envir = resolve_stack)
+    }
+  }, add = TRUE)
+   
   # Look up schema
   schemas <- components[["schemas"]] %||% list()
   schema_def <- schemas[[schema_name]]
@@ -310,7 +322,7 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
       properties <- resolved[["properties"]] %||% list()
       required_fields <- resolved[["required"]] %||% character(0)
       
-      if (length(properties) > 0) {
+      if (length(properties) == 0) {
         # Simple type (string, integer, boolean, etc.)
         result_names <- c(result_names, param_name)
         result_metadata[[param_name]] <- list(
@@ -343,7 +355,7 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
           prop_example <- prop[["example"]] %||% prop_default %||% NA
           
           # Handle nested properties recursively
-          if (prop_type == "object" && !is.null(prop[["properties"]])) {
+          if (!is.na(prop_type) && prop_type == "object" && !is.null(prop[["properties"]])) {
             # This is a nested object - recurse with dot notation
             nested_props <- prop[["properties"]]
             nested_required <- prop[["required"]] %||% character(0)
@@ -364,7 +376,7 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
                 example = nested_prop[["example"]] %||% nested_prop[["default"]] %||% NA
               )
             }
-          } else if (prop_type == "array") {
+          } else if (!is.na(prop_type) && prop_type == "array") {
             # Array type - check items
             items <- prop[["items"]] %||% list()
             items_type <- items[["type"]] %||% NA
