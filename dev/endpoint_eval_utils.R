@@ -1429,6 +1429,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 #' @param path_params_str Comma-separated path parameter names from OpenAPI spec.
 #' @param strategy Parameter strategy ("extra_params" or "options").
 #' @param metadata Named list mapping parameter names to list(example, description).
+#' @param body_schema_full Optional; full body schema structure for enhanced documentation.
 #' @return List with function signature and path_params call components:
 #'   \itemize{
 #'     \item fn_signature: Function parameters string (e.g., "propertyName, start = NULL, end = NULL")
@@ -1439,7 +1440,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 #'     \item primary_example: Example value for primary parameter (or NA)
 #'   }
 #' @export
-parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list()) {
+parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list(), body_schema_full = NULL) {
   strategy <- match.arg(strategy)
 
   # Handle empty/NA path params
@@ -1506,6 +1507,8 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
       desc <- entry$description %||% ""
       enum_vals <- entry$enum %||% NULL
       default_val <- entry$default %||% NA
+      param_type <- entry$type %||% NA
+      param_format <- entry$format %||% NA
 
       # Start with description or generic fallback
       if (nzchar(desc)) {
@@ -1514,6 +1517,14 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
         param_desc <- "Primary query parameter"
       } else {
         param_desc <- "Optional parameter"
+      }
+
+      # Add type information if available
+      if (!is.na(param_type) && nzchar(param_type)) {
+        param_desc <- paste0(param_desc, ". Type: ", param_type)
+        if (!is.na(param_format) && nzchar(param_format)) {
+          param_desc <- paste0(param_desc, " (", param_format, ")")
+        }
       }
 
       # Append enum values if available
@@ -1625,9 +1636,10 @@ sample_test_dtxsids <- function(n = 3, custom_list = NULL) {
 #' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "simple_object", "unknown").
 #' @param deprecated Boolean; whether endpoint is deprecated in OpenAPI spec.
 #' @param response_schema_type Character; type of response schema ("array", "object", "scalar", "binary", "unknown").
+#' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown") {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown", request_type = NULL) {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -1683,14 +1695,21 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
   chemi_tidy_param <- if (is_chemi_get) ',\n    tidy = FALSE' else ""
 
-  # Check endpoint type
-  is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
-                    isTRUE(query_param_info$has_params) &&
-                    !is.null(query_param_info$primary_param))
+  # Check endpoint type using request_type if available, otherwise use legacy detection
+  # This provides cleaner, more explicit endpoint classification
+  if (!is.null(request_type) && nzchar(request_type)) {
+    is_body_only <- request_type == "json"
+    is_query_only <- request_type == "query_only"
+  } else {
+    # Legacy detection for backward compatibility
+    is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
+                      isTRUE(query_param_info$has_params) &&
+                      !is.null(query_param_info$primary_param))
 
-  is_body_only <- (isTRUE(body_param_info$has_params) &&
-                   !isTRUE(path_param_info$has_path_params) &&
-                   nchar(path_param_info$fn_signature) == 0)
+    is_body_only <- (isTRUE(body_param_info$has_params) &&
+                     !isTRUE(path_param_info$has_path_params) &&
+                     nchar(path_param_info$fn_signature) == 0)
+  }
 
   if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
@@ -2306,7 +2325,10 @@ render_endpoint_stubs <- function(spec,
     needs_resolver = FALSE,
     body_schema_type = "unknown",
     deprecated = FALSE,
-    response_schema_type = "unknown"
+    response_schema_type = "unknown",
+    request_type = NA_character_,
+    body_schema_full = list(list()),
+    body_item_type = NA_character_
   ))
 
   # Pre-process some columns
@@ -2361,9 +2383,10 @@ render_endpoint_stubs <- function(spec,
       needs_resolver = spec$needs_resolver,
       body_schema_type = spec$body_schema_type,
       deprecated = spec$deprecated,
-      response_schema_type = spec$response_schema_type
+      response_schema_type = spec$response_schema_type,
+      request_type = spec$request_type
     ),
-    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type) {
+    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type, request_type) {
       build_function_stub(
         fn = fn,
         endpoint = endpoint,
@@ -2378,7 +2401,8 @@ render_endpoint_stubs <- function(spec,
         needs_resolver = isTRUE(as.logical(needs_resolver %||% FALSE)),
         body_schema_type = body_schema_type %||% "unknown",
         deprecated = isTRUE(as.logical(deprecated %||% FALSE)),
-        response_schema_type = response_schema_type %||% "unknown"
+        response_schema_type = response_schema_type %||% "unknown",
+        request_type = request_type
       )
     }
   )

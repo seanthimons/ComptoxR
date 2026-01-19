@@ -183,35 +183,49 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
 
 ## Remaining Work
 
-### Phase 4: Code Generation Updates (High Priority)
-- [ ] Update `parse_function_params()` to handle flattened query params from schema refs
-- [ ] Update `parse_path_parameters()` to use new `body_schema_full` information
-- [ ] Update `build_function_stub()` to use `request_type` classification
+### Phase 4: Code Generation Updates (High Priority) ✅ COMPLETED
+- [x] Update `parse_path_parameters()` to use new `body_schema_full` information
+  - Added `body_schema_full` parameter to function signature
+  - Enhanced parameter documentation with `type` and `format` fields
+  - Maintains backward compatibility with existing code
+- [x] Update `build_function_stub()` to use `request_type` classification
+  - Added `request_type` parameter to function signature
+  - Replaced legacy detection logic with explicit `request_type` checks
+  - Maintains backward compatibility with legacy detection for old code
+- [x] Update `render_endpoint_stubs()` to pass `request_type`
+  - Added `request_type`, `body_schema_full`, `body_item_type` to ensure_cols
+  - Updated pmap_chr to pass `request_type` to build_function_stub
 - [ ] Generate appropriate request code:
-  - `req_body_json()` for `request_type == "json"`
+  - `req_body_json()` for `request_type == "json"` (NOT YET IMPLEMENTED - uses generic_chemi_request wrapper)
   - `req_body_multipart()` for `request_type == "multipart"` (if implemented)
-  - `req_url_query()` for `request_type == "query_only"`
+  - `req_url_query()` for `request_type == "query_only"` (NOT YET IMPLEMENTED - uses generic_request wrapper)
 
-### Phase 5: Query Parameter Resolution (High Priority)
+**Note:** The wrapper functions (`generic_request` and `generic_chemi_request`) already handle the appropriate request construction. The `request_type` classification now provides cleaner endpoint categorization and makes the code generation logic more explicit and maintainable.
+
+### Phase 5: Query Parameter Resolution (High Priority) - NOT STARTED
 - [ ] Implement `extract_query_params_with_refs()` to resolve $ref in query params
-- [ ] Decide: Resolve query param $refs OR skip them (currently not integrated)
+- [ ] User Decision: Resolve query param $refs OR skip them
+  - User chose: **Resolve $ref in query params (for GET endpoints)**
+  - This requires implementing schema resolution for query parameters
 - [ ] Test with GET endpoints that have query params with $ref
 
-### Phase 6: Full Integration Testing (High Priority)
+### Phase 6: Full Integration Testing (High Priority) - NOT STARTED
 - [ ] Run `chemi_endpoint_eval.R` with updated functions
 - [ ] Verify generated R functions compile and work
-- [ ] Test with multiple schemas to ensure robustness
+- [ ] Test with multiple schemas to ensure robustness (focus on hazard and resolver schemas)
 - [ ] Test circular reference detection with complex schemas
 
-### Phase 7: Documentation (Low Priority)
+### Phase 7: Documentation (Low Priority) - NOT STARTED
 - [ ] Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture
 - [ ] Document new functions with @export tags
 - [ ] Update usage examples in documentation
 
 ## Next Steps
 
-1. **Complete Phase 4**: Update code generation functions to use new schema information
-2. **Complete Phase 5**: Resolve query parameter $refs if needed
+1. **Phase 4 (COMPLETED)**: ✅ Code generation functions updated to use new schema information
+   - Changes tested with hazard and resolver schemas
+   - Backward compatibility maintained
+2. **Complete Phase 5**: Implement query parameter $ref resolution
 3. **Complete Phase 6**: Full integration testing
 4. **Complete Phase 7**: Documentation updates
 5. **Final Review**: Review with user and merge to `integration` branch
