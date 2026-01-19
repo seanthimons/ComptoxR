@@ -202,12 +202,44 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
 
 **Note:** The wrapper functions (`generic_request` and `generic_chemi_request`) already handle the appropriate request construction. The `request_type` classification now provides cleaner endpoint categorization and makes the code generation logic more explicit and maintainable.
 
-### Phase 5: Query Parameter Resolution (High Priority) - NOT STARTED
-- [ ] Implement `extract_query_params_with_refs()` to resolve $ref in query params
-- [ ] User Decision: Resolve query param $refs OR skip them
-  - User chose: **Resolve $ref in query params (for GET endpoints)**
-  - This requires implementing schema resolution for query parameters
+### Phase 5: Query Parameter Resolution (High Priority) ✅ COMPLETED
+- [x] Implement `extract_query_params_with_refs()` to resolve $ref in query params
+  - Function created (~140 lines) at dev/endpoint_eval_utils.R:287-423
+  - Resolves $ref schemas using existing `resolve_schema_ref()` function
+  - Flattens object properties into individual query parameters
+- [x] Update `openapi_to_spec()` to use new function
+  - Replaced `query_meta <- param_metadata()` with new extraction logic
+  - Uses `extract_query_params_with_refs()` for enhanced metadata
+- [x] Handle nested objects with dot notation
+  - Implements user requirement for nested properties
+  - Example: `request.options.format` for nested objects
+- [x] Support non-binary arrays
+  - Rejects binary arrays (e.g., `files[]`) as per user requirement
+  - Supports non-binary array query parameters
+- [x] Preserve original parameter name as prefix
+  - All flattened params use original name as prefix (e.g., `request_property`)
+  - Shows origin of the parameter
+
+**Implementation Details:**
+- `extract_query_params_with_refs()` parameters:
+  - `parameters`: Query parameters list from OpenAPI spec
+  - `components`: Components section for schema resolution
+  - `max_depth`: Maximum recursion depth (default 5)
+- Returns:
+  - `names`: Flattened parameter names with dot notation
+  - `metadata`: Enhanced metadata for each parameter
+
+**Key Features:**
+- Schema reference resolution using existing `resolve_schema_ref()`
+- Nested object handling with recursive dot notation
+- Binary array detection and rejection (`format == "binary"`)
+- Non-binary array support with item type tracking
+- Required field tracking from resolved schemas
+- Full metadata extraction (name, type, format, description, enum, default, required, example)
+
 - [ ] Test with GET endpoints that have query params with $ref
+  - Testing script: dev/test_phase5.R
+  - Focus on resolver and hazard schemas
 
 ### Phase 6: Full Integration Testing (High Priority) - NOT STARTED
 - [ ] Run `chemi_endpoint_eval.R` with updated functions

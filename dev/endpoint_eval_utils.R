@@ -282,6 +282,146 @@ extract_body_properties <- function(request_body, components) {
   list(type = "unknown", properties = list())
 }
 
+# Extract query parameters with schema reference resolution
+# Flattens referenced schemas into individual query parameters
+extract_query_params_with_refs <- function(parameters, components, max_depth = 5) {
+  result_names <- character(0)
+  result_metadata <- list()
+  
+  for (param in parameters) {
+    if (is.null(param) || !is.list(param)) next
+    
+    param_name <- param[["name"]] %||% ""
+    param_in <- param[["in"]] %||% ""
+    
+    # Only process query parameters
+    if (param_in != "query") next
+    
+    schema <- param[["schema"]] %||% list()
+    
+    # Check if parameter has $ref
+    schema_ref <- schema[["$ref"]]
+    
+    if (!is.null(schema_ref) && nzchar(schema_ref)) {
+      # Resolve the schema reference
+      resolved <- resolve_schema_ref(schema_ref, components, max_depth, depth = 0)
+      
+      # Check if resolved schema has properties (object)
+      properties <- resolved[["properties"]] %||% list()
+      required_fields <- resolved[["required"]] %||% character(0)
+      
+      if (length(properties) > 0) {
+        # Simple type (string, integer, boolean, etc.)
+        result_names <- c(result_names, param_name)
+        result_metadata[[param_name]] <- list(
+          name = param_name,
+          type = schema[["type"]] %||% resolved[["type"]] %||% NA,
+          format = schema[["format"]] %||% resolved[["format"]] %||% NA,
+          description = param[["description"]] %||% resolved[["description"]] %||% "",
+          enum = schema[["enum"]] %||% resolved[["enum"]] %||% NULL,
+          default = schema[["default"]] %||% resolved[["default"]] %||% NA,
+          required = param[["required"]] %||% FALSE,
+          example = param[["example"]] %||% schema[["default"]] %||% NA
+        )
+      } else {
+        # Object with properties - flatten into individual params
+        # Use dot notation for nested properties
+        for (prop_name in names(properties)) {
+          prop <- properties[[prop_name]]
+          
+          # Handle nested objects with dot notation
+          flat_name <- paste0(param_name, ".", prop_name)
+          result_names <- c(result_names, flat_name)
+          
+          # Extract property metadata
+          prop_type <- prop[["type"]] %||% NA
+          prop_format <- prop[["format"]] %||% NA
+          prop_desc <- prop[["description"]] %||% ""
+          prop_enum <- prop[["enum"]] %||% NULL
+          prop_default <- prop[["default"]] %||% NA
+          prop_required <- prop_name %in% required_fields
+          prop_example <- prop[["example"]] %||% prop_default %||% NA
+          
+          # Handle nested properties recursively
+          if (prop_type == "object" && !is.null(prop[["properties"]])) {
+            # This is a nested object - recurse with dot notation
+            nested_props <- prop[["properties"]]
+            nested_required <- prop[["required"]] %||% character(0)
+            
+            for (nested_name in names(nested_props)) {
+              nested_prop <- nested_props[[nested_name]]
+              nested_flat_name <- paste0(param_name, ".", prop_name, ".", nested_name)
+              result_names <- c(result_names, nested_flat_name)
+              
+              result_metadata[[nested_flat_name]] <- list(
+                name = nested_flat_name,
+                type = nested_prop[["type"]] %||% NA,
+                format = nested_prop[["format"]] %||% NA,
+                description = nested_prop[["description"]] %||% "",
+                enum = nested_prop[["enum"]] %||% NULL,
+                default = nested_prop[["default"]] %||% NA,
+                required = nested_name %in% nested_required,
+                example = nested_prop[["example"]] %||% nested_prop[["default"]] %||% NA
+              )
+            }
+          } else if (prop_type == "array") {
+            # Array type - check items
+            items <- prop[["items"]] %||% list()
+            items_type <- items[["type"]] %||% NA
+            items_format <- items[["format"]] %||% NA
+            
+            # REJECT binary arrays (e.g., files[])
+            if (!is.na(items_format) && items_format == "binary") {
+              # Skip binary arrays - don't include in query params
+              next
+            }
+            
+            # Support non-binary arrays
+            result_metadata[[flat_name]] <- list(
+              name = flat_name,
+              type = "array",
+              item_type = items_type,
+              format = prop_format,
+              description = prop_desc,
+              enum = prop_enum,
+              default = prop_default,
+              required = prop_required,
+              example = prop_example
+            )
+          } else {
+            # Simple property
+            result_metadata[[flat_name]] <- list(
+              name = flat_name,
+              type = prop_type,
+              format = prop_format,
+              description = prop_desc,
+              enum = prop_enum,
+              default = prop_default,
+              required = prop_required,
+              example = prop_example
+            )
+          }
+        }
+      }
+    } else {
+      # No $ref - simple parameter with inline schema
+      result_names <- c(result_names, param_name)
+      result_metadata[[param_name]] <- list(
+        name = param_name,
+        type = schema[["type"]] %||% NA,
+        format = schema[["format"]] %||% NA,
+        description = param[["description"]] %||% "",
+        enum = schema[["enum"]] %||% NULL,
+        default = schema[["default"]] %||% NA,
+        required = param[["required"]] %||% FALSE,
+        example = param[["example"]] %||% schema[["default"]] %||% NA
+      )
+    }
+  }
+  
+  list(names = result_names, metadata = result_metadata)
+}
+
 # ==============================================================================
 # Path Manipulation
 # ==============================================================================
@@ -789,11 +929,15 @@ openapi_to_spec <- function(
       parameters <- dedup_params(c(path_level_params, op_params))
 
       path_names  <- order_path_by_route(param_names(parameters, "path"), route)
-      query_names <- param_names(parameters, "query")  # keep declared order
+      
+      # Extract query parameters with $ref resolution
+      components <- openapi[["components"]] %||% list()
+      query_result <- extract_query_params_with_refs(parameters, components)
+      query_names <- query_result$names  # Use resolved/flattened parameter names
+      query_meta <- query_result$metadata  # Use enhanced metadata from resolved schemas
 
       # Extract parameter metadata (examples and descriptions)
       path_meta  <- param_metadata(parameters, "path")
-      query_meta <- param_metadata(parameters, "query")
 
       # Extract request body schema metadata for POST/PUT/PATCH
       components <- openapi[["components"]] %||% list()
