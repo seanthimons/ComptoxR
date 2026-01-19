@@ -151,7 +151,7 @@ chemi_spec_aggregated <- chemi_spec_with_text %>%
   group_by(file) %>%
   summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
 
-scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE)
+scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = FALSE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed
