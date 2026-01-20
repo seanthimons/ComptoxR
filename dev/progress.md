@@ -260,32 +260,31 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
   - Testing script: dev/test_phase5.R
   - Focus on resolver and hazard schemas
 
-### Phase 6: Full Integration Testing (High Priority) - IN PROGRESS
+### Phase 6: Full Integration Testing (High Priority) ✅ COMPLETED
 - [x] Run `chemi_endpoint_eval.R` with updated functions
 - [x] Verify schema parsing works (hazard: 2 endpoints, resolver: 25 endpoints)
 - [x] Test Phase 4 (request_type) integration - Working correctly
 - [x] Test Phase 5 (query $ref) integration - Function working, params extracted
-- [ ] **CRITICAL ISSUE**: Generated stubs don't include flattened query parameters
-  - `extract_query_params_with_refs()` correctly resolves and flattens schemas
-  - Debug output confirms flattened parameters are extracted
-  - But `build_function_stub()` doesn't use them in generated code
-  - Root cause: `generic_chemi_request` wrapper doesn't use `params_code`
-- [ ] Verify generated R functions compile and work
-- [ ] Test with multiple schemas to ensure robustness (focus on hazard and resolver schemas)
-- [ ] Test circular reference detection with complex schemas
+- [x] **RESOLVED**: Generated stubs now include flattened query parameters
+  - Fixed binary array filtering for non-$ref parameters
+  - Fixed nested $ref resolution in property flattening
+  - Fixed parent objects included with nested properties
+  - Fixed tibble creation variable reference
+- [x] Verify generated R functions compile and work - 117 stubs generated successfully
+- [x] Test with multiple schemas to ensure robustness - All chemi schemas working
+- [x] Test circular reference detection with complex schemas - Working
 
-**Phase 6 Testing Summary**:
+**Final Testing Results**:
 - Schema parsing: ✅ Working
 - Phase 4 integration: ✅ Working
 - Phase 5 function: ✅ Working
-- **Stub generation with Phase 5 params**: ❌ NOT WORKING
+- **Stub generation with Phase 5 params**: ✅ WORKING
 
-**Issues Documented**:
-1. `extract_query_params_with_refs()` correctly resolves $ref schemas and flattens parameters
-2. `parse_function_params()` generates correct `params_code` for strategy == "options"
-3. `build_function_stub()` doesn't use `params_code` for `generic_chemi_request` wrapper
-4. Generated stubs only use `primary_param`, missing flattened parameters
-5. See `dev/phase6_testing_summary.md` for detailed analysis
+**Verification**:
+- Generated 117 chemi stubs successfully
+- `chemi_resolver_universalharvest.R` has 19 flattened parameters with dot notation
+- Bulk wrapper functions generated correctly for POST endpoints
+- Documentation generated via `devtools::document()` without errors
 
 ### Phase 7: Documentation (Low Priority) - NOT STARTED
 - [ ] Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture
@@ -304,31 +303,19 @@ schema_file → preprocess_schema → filtered openapi → openapi_to_spec → s
    - Original parameter name prefixing working
    - Testing script created (dev/test_phase5.R)
    - All Phase 5 features tested and working
-3. **Phase 6 (IN PROGRESS)**: ⚠️ Integration testing with critical issue found
-   - Schema parsing: ✅ Working correctly
-   - Phase 4 integration: ✅ Working correctly
-   - Phase 5 function: ✅ Working correctly
-   - ❌ **CRITICAL ISSUE**: Generated stubs don't include flattened query parameters
-     - `extract_query_params_with_refs()` correctly resolves and flattens schemas
-     - But `build_function_stub()` doesn't use flattened params in generated code
-     - Root cause: `generic_chemi_request` wrapper doesn't use `params_code`
-     - Generated stubs only show primary_param, missing flattened parameters
-     - See `dev/phase6_testing_summary.md` for detailed analysis
-4. **CRITICAL ISSUE TO FIX**: `build_function_stub()` needs to use `query_param_info$params_code`
-   - When using `generic_chemi_request` wrapper, must include flattened query parameters
-   - Currently only uses `primary_param` and `combined_calls`
-   - Flattened parameters (e.g., `request.filesInfo`, `request.options`) are lost
-5. **Phase 7**: Documentation updates (PENDING)
+3. **Phase 6 (COMPLETED)**: ✅ Full integration testing passed
+   - Schema parsing: Working correctly
+   - Phase 4 integration: Working correctly
+   - Phase 5 function: Working correctly
+   - Generated stubs include flattened query parameters
+   - 117 chemi stubs generated successfully
+   - All stubs compile without errors
+4. **Phase 7**: Documentation updates (PENDING)
    - Update `dev/ENDPOINT_EVAL_UTILS_GUIDE.md` with new architecture
    - Document new functions with @export tags
    - Update usage examples in documentation
 
-**Blocking Issue**: Cannot complete Phase 6 until stub generation issue is fixed.
-
-**Next Actions**:
-1. Fix `build_function_stub()` to use flattened query parameters
-2. Re-run Phase 6 testing to verify stubs work correctly
-3. Complete Phase 7 documentation
+**Status**: Phase 6 completed successfully. Ready for merge or Phase 7 documentation.
 
 ## Key Files Modified
 
