@@ -341,11 +341,14 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
         for (prop_name in names(properties)) {
           prop <- properties[[prop_name]]
           
-          # Handle nested objects with dot notation
-          flat_name <- paste0(param_name, ".", prop_name)
-          result_names <- c(result_names, flat_name)
+          # Check if property has $ref and resolve it
+          prop_ref <- prop[["$ref"]]
+          if (!is.null(prop_ref) && nzchar(prop_ref)) {
+            # Resolve the nested $ref
+            prop <- resolve_schema_ref(prop_ref, components, max_depth, 1)
+          }
           
-          # Extract property metadata
+          # Extract property metadata first
           prop_type <- prop[["type"]] %||% NA
           prop_format <- prop[["format"]] %||% NA
           prop_desc <- prop[["description"]] %||% ""
@@ -354,9 +357,10 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
           prop_required <- prop_name %in% required_fields
           prop_example <- prop[["example"]] %||% prop_default %||% NA
           
-          # Handle nested properties recursively
+          # Handle nested objects with dot notation
           if (!is.na(prop_type) && prop_type == "object" && !is.null(prop[["properties"]])) {
             # This is a nested object - recurse with dot notation
+            # DON'T add the parent object to result_names, only the nested properties
             nested_props <- prop[["properties"]]
             nested_required <- prop[["required"]] %||% character(0)
             
@@ -376,52 +380,71 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
                 example = nested_prop[["example"]] %||% nested_prop[["default"]] %||% NA
               )
             }
-          } else if (!is.na(prop_type) && prop_type == "array") {
-            # Array type - check items
-            items <- prop[["items"]] %||% list()
-            items_type <- items[["type"]] %||% NA
-            items_format <- items[["format"]] %||% NA
-            
-            # REJECT binary arrays (e.g., files[])
-            if (!is.na(items_format) && items_format == "binary") {
-              # Skip binary arrays - don't include in query params
-              next
-            }
-            
-            # Support non-binary arrays
-            result_metadata[[flat_name]] <- list(
-              name = flat_name,
-              type = "array",
-              item_type = items_type,
-              format = prop_format,
-              description = prop_desc,
-              enum = prop_enum,
-              default = prop_default,
-              required = prop_required,
-              example = prop_example
-            )
           } else {
-            # Simple property
-            result_metadata[[flat_name]] <- list(
-              name = flat_name,
-              type = prop_type,
-              format = prop_format,
-              description = prop_desc,
-              enum = prop_enum,
-              default = prop_default,
-              required = prop_required,
-              example = prop_example
-            )
+            # Simple property or array (not an object with nested properties)
+            flat_name <- paste0(param_name, ".", prop_name)
+            
+            # Check if array type and reject binary arrays
+            if (!is.na(prop_type) && prop_type == "array") {
+              items <- prop[["items"]] %||% list()
+              items_type <- items[["type"]] %||% NA
+              items_format <- items[["format"]] %||% NA
+              
+              # REJECT binary arrays (e.g., files[])
+              if (!is.na(items_format) && items_format == "binary") {
+                # Skip binary arrays - don't include in query params
+                next
+              }
+              
+              # Support non-binary arrays
+              result_names <- c(result_names, flat_name)
+              result_metadata[[flat_name]] <- list(
+                name = flat_name,
+                type = "array",
+                item_type = items_type,
+                format = prop_format,
+                description = prop_desc,
+                enum = prop_enum,
+                default = prop_default,
+                required = prop_required,
+                example = prop_example
+              )
+            } else {
+              # Simple property
+              result_names <- c(result_names, flat_name)
+              result_metadata[[flat_name]] <- list(
+                name = flat_name,
+                type = prop_type,
+                format = prop_format,
+                description = prop_desc,
+                enum = prop_enum,
+                default = prop_default,
+                required = prop_required,
+                example = prop_example
+              )
+            }
           }
         }
       }
     } else {
       # No $ref - simple parameter with inline schema
+      # REJECT binary arrays (e.g., files[])
+      schema_type <- schema[["type"]] %||% NA
+      schema_format <- schema[["format"]] %||% NA
+      if (!is.na(schema_type) && schema_type == "array") {
+        items <- schema[["items"]] %||% list()
+        items_format <- items[["format"]] %||% NA
+        if (!is.na(items_format) && items_format == "binary") {
+          # Skip binary arrays - don't include in query params
+          next
+        }
+      }
+      
       result_names <- c(result_names, param_name)
       result_metadata[[param_name]] <- list(
         name = param_name,
-        type = schema[["type"]] %||% NA,
-        format = schema[["format"]] %||% NA,
+        type = schema_type,
+        format = schema_format,
         description = param[["description"]] %||% "",
         enum = schema[["enum"]] %||% NULL,
         default = schema[["default"]] %||% NA,
