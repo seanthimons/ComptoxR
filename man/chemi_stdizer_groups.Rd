@@ -8,9 +8,6 @@ chemi_stdizer_groups()
 
 chemi_stdizer_groups()
 }
-\arguments{
-\item{id}{Primary query parameter}
-}
 \value{
 Returns a tibble with results
 
@@ -23,7 +20,7 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups(id = "DTXSID7020182")
+chemi_stdizer_groups()
 }
 \dontrun{
 chemi_stdizer_groups()

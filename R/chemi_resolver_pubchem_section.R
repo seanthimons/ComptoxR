@@ -14,16 +14,20 @@
 #' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
 chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
-  result <- generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(idType)) options[['idType']] <- idType
+  if (!is.null(section)) options[['section']] <- section
+    result <- generic_request(
+    query = NULL,
     endpoint = "resolver/pubchem-section",
     method = "GET",
-    batch_limit = 0,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    query = query,
-    idType = idType,
-    section = section
+    options = options
   )
 
   # Additional post-processing can be added here

@@ -4,10 +4,7 @@
 \alias{chemi_amos_mass_range}
 \title{Returns a list of substances whose monoisotopic mass falls within the specified range.}
 \usage{
-chemi_amos_mass_range(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_mass_range()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_range(query = "DTXSID7020182")
+chemi_amos_mass_range()
 }
 }

@@ -15,17 +15,21 @@
 #' chemi_resolver_lookup(query = "DTXSID7020182")
 #' }
 chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = FALSE) {
-  result <- generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(idType)) options[['idType']] <- idType
+  if (!is.null(fuzzy)) options[['fuzzy']] <- fuzzy
+  if (!is.null(mol)) options[['mol']] <- mol
+    result <- generic_request(
+    query = NULL,
     endpoint = "resolver/lookup",
     method = "GET",
-    batch_limit = 0,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    query = query,
-    idType = idType,
-    fuzzy = fuzzy,
-    mol = mol
+    options = options
   )
 
   # Additional post-processing can be added here
@@ -41,31 +45,17 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param ids List of chemical identifiers to look up. All identifiers must be of the same type or type should be Any.
-#' @param filters Optional parameter
-#' @param format Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX
-#' @param fuzzy If set to true fuzzy lookup result is returned which usually means a substring search. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic
-#' @param idsType Chemical identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId
-#' @param mol If set to true then MOL is requested as a result
 #' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_lookup_bulk(ids = "DTXSID7020182")
+#' chemi_resolver_lookup_bulk()
 #' }
-chemi_resolver_lookup_bulk <- function(ids, filters = NULL, format = NULL, fuzzy = NULL, idsType = NULL, mol = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(filters)) options$filters <- filters
-  if (!is.null(format)) options$format <- format
-  if (!is.null(fuzzy)) options$fuzzy <- fuzzy
-  if (!is.null(idsType)) options$idsType <- idsType
-  if (!is.null(mol)) options$mol <- mol
+chemi_resolver_lookup_bulk <- function() {
   result <- generic_chemi_request(
-    query = ids,
+    query = NULL,
     endpoint = "resolver/lookup",
-    options = options,
     tidy = FALSE
   )
 

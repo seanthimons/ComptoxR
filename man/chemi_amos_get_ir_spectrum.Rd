@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_ir_spectrum}
 \title{Returns an IR spectrum by database ID.}
 \usage{
-chemi_amos_get_ir_spectrum(internal_id)
-}
-\arguments{
-\item{internal_id}{Unique ID of the IR spectrum of interest.}
+chemi_amos_get_ir_spectrum()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_ir_spectrum(internal_id = "DTXSID7020182")
+chemi_amos_get_ir_spectrum()
 }
 }

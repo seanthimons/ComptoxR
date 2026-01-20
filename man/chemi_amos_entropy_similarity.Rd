@@ -4,10 +4,7 @@
 \alias{chemi_amos_entropy_similarity}
 \title{Calculates the entropy similarity for two spectra.}
 \usage{
-chemi_amos_entropy_similarity(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_entropy_similarity()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_entropy_similarity(query = "DTXSID7020182")
+chemi_amos_entropy_similarity()
 }
 }

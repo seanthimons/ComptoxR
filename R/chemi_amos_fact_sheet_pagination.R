@@ -3,26 +3,27 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param limit Limit of records to return.
-#' @param offset Offset of fact sheets to return.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_fact_sheet_pagination(limit = "DTXSID7020182")
+#' chemi_amos_fact_sheet_pagination()
 #' }
-chemi_amos_fact_sheet_pagination <- function(limit, offset = NULL) {
-  generic_request(
-    query = limit,
+chemi_amos_fact_sheet_pagination <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "amos/fact_sheet_pagination/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE,
-    path_params = c(offset = offset)
+    tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

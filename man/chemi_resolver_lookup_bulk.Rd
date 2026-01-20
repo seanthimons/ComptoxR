@@ -4,27 +4,7 @@
 \alias{chemi_resolver_lookup_bulk}
 \title{Resolver Lookup}
 \usage{
-chemi_resolver_lookup_bulk(
-  ids,
-  filters = NULL,
-  format = NULL,
-  fuzzy = NULL,
-  idsType = NULL,
-  mol = NULL
-)
-}
-\arguments{
-\item{ids}{List of chemical identifiers to look up. All identifiers must be of the same type or type should be Any.}
-
-\item{filters}{Optional parameter}
-
-\item{format}{Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
-
-\item{fuzzy}{If set to true fuzzy lookup result is returned which usually means a substring search. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic}
-
-\item{idsType}{Chemical identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId}
-
-\item{mol}{If set to true then MOL is requested as a result}
+chemi_resolver_lookup_bulk()
 }
 \value{
 Returns a list with result object
@@ -34,6 +14,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_lookup_bulk(ids = "DTXSID7020182")
+chemi_resolver_lookup_bulk()
 }
 }

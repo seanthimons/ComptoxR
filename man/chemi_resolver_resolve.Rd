@@ -4,21 +4,16 @@
 \alias{chemi_resolver_resolve}
 \title{Resolver Resolve}
 \usage{
-chemi_resolver_resolve(mol, queries = NULL)
-}
-\arguments{
-\item{mol}{Required parameter}
-
-\item{queries}{Optional parameter}
+chemi_resolver_resolve()
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_resolver_resolve(mol = "DTXSID7020182")
+chemi_resolver_resolve()
 }
 }

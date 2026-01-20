@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_info_by_id}
 \title{Returns general information about a record by ID.}
 \usage{
-chemi_amos_get_info_by_id(internal_id)
-}
-\arguments{
-\item{internal_id}{Unique ID of the record of interest.}
+chemi_amos_get_info_by_id()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_info_by_id(internal_id = "DTXSID7020182")
+chemi_amos_get_info_by_id()
 }
 }

@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_image_for_dtxsid}
 \title{Retrieves a substance's image from the database.}
 \usage{
-chemi_amos_get_image_for_dtxsid(dtxsid)
-}
-\arguments{
-\item{dtxsid}{The DTXSID for the substance of interest.}
+chemi_amos_get_image_for_dtxsid()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_image_for_dtxsid(dtxsid = "DTXSID7020182")
+chemi_amos_get_image_for_dtxsid()
 }
 }

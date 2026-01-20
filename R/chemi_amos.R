@@ -3,24 +3,27 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param dtxsid The DTXSID for the substance of interest.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos(dtxsid = "DTXSID7020182")
+#' chemi_amos()
 #' }
-chemi_amos <- function(dtxsid) {
-  generic_request(
-    query = dtxsid,
+chemi_amos <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "amos/search/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

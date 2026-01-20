@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_ms_ready_methods}
 \title{Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself.}
 \usage{
-chemi_amos_get_ms_ready_methods(inchikey)
-}
-\arguments{
-\item{inchikey}{InChIKey to search by.}
+chemi_amos_get_ms_ready_methods()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_ms_ready_methods(inchikey = "DTXSID7020182")
+chemi_amos_get_ms_ready_methods()
 }
 }

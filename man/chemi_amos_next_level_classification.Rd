@@ -4,10 +4,7 @@
 \alias{chemi_amos_next_level_classification}
 \title{Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification.}
 \usage{
-chemi_amos_next_level_classification(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_next_level_classification()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_next_level_classification(query = "DTXSID7020182")
+chemi_amos_next_level_classification()
 }
 }

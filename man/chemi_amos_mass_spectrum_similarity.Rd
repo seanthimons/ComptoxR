@@ -4,10 +4,7 @@
 \alias{chemi_amos_mass_spectrum_similarity}
 \title{Takes a mass range, methodology, and mass spectrum, and returns all spectra that match the mass and methodology, with entropy similarities between the database spectra and the user-supplied one.}
 \usage{
-chemi_amos_mass_spectrum_similarity(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_mass_spectrum_similarity()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectrum_similarity(query = "DTXSID7020182")
+chemi_amos_mass_spectrum_similarity()
 }
 }

@@ -4,14 +4,7 @@
 \alias{chemi_stdizer_records}
 \title{Stdizer Records}
 \usage{
-chemi_stdizer_records(options, records = NULL, full = NULL)
-}
-\arguments{
-\item{options}{Required parameter}
-
-\item{records}{Optional parameter}
-
-\item{full}{Optional parameter}
+chemi_stdizer_records()
 }
 \value{
 Returns a tibble with results
@@ -21,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_records(options = "DTXSID7020182")
+chemi_stdizer_records()
 }
 }

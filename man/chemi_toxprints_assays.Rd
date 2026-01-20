@@ -4,21 +4,19 @@
 \alias{chemi_toxprints_assays}
 \title{Toxprints Assays}
 \usage{
-chemi_toxprints_assays(name)
+chemi_toxprints_assays()
 
-chemi_toxprints_assays(name)
+chemi_toxprints_assays()
 }
 \arguments{
-\item{name}{Primary query parameter}
-
 \item{category}{Required parameter}
 
 \item{label}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -30,6 +28,6 @@ Returns a tibble with results
 chemi_toxprints_assays(category = "DTXSID7020182")
 }
 \dontrun{
-chemi_toxprints_assays(name = "DTXSID7020182")
+chemi_toxprints_assays()
 }
 }

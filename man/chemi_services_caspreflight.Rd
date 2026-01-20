@@ -4,10 +4,7 @@
 \alias{chemi_services_caspreflight}
 \title{Services Caspreflight}
 \usage{
-chemi_services_caspreflight(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_services_caspreflight()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_services_caspreflight(query = "DTXSID7020182")
+chemi_services_caspreflight()
 }
 }
