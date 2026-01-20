@@ -4,10 +4,7 @@
 \alias{chemi_amos_batch}
 \title{Generates an Excel workbook which lists all records in the database that contain a given set of DTXSIDs.}
 \usage{
-chemi_amos_batch(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_batch()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_batch(query = "DTXSID7020182")
+chemi_amos_batch()
 }
 }

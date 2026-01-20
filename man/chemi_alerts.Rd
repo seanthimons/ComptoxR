@@ -4,21 +4,26 @@
 \alias{chemi_alerts}
 \title{Alerts}
 \usage{
-chemi_alerts(options, chemicals = NULL)
+chemi_alerts(query, id_type = "AnyId", options = NULL)
 }
 \arguments{
-\item{options}{Required parameter}
+\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{chemicals}{Optional parameter}
+\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+
+\item{options}{Optional parameter}
 }
 \value{
 Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function first resolves chemical identifiers using \code{chemi_resolver},
+then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
 \dontrun{
-chemi_alerts(options = "DTXSID7020182")
+chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
 }
 }

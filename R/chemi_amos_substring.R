@@ -3,24 +3,27 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param substring A name substring to search by.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_substring(substring = "DTXSID7020182")
+#' chemi_amos_substring()
 #' }
-chemi_amos_substring <- function(substring) {
-  generic_request(
-    query = substring,
+chemi_amos_substring <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "amos/substring_search/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

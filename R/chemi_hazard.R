@@ -13,29 +13,27 @@
 #' chemi_hazard(query = "DTXSID7020182")
 #' }
 chemi_hazard <- function(query, full = TRUE) {
-  result <- generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(full)) options[['full']] <- full
+    result <- generic_request(
+    query = NULL,
     endpoint = "hazard",
     method = "GET",
-    batch_limit = 0,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    query = query,
-    full = full
+    options = options
   )
 
   # Additional post-processing can be added here
 
-	result <- result %>% 
-		pluck('hazardChemicals', 1, 'scores') %>% 
-		map(., as_tibble) %>% 
-		list_rbind() %>% 
-		mutate(query = query) %>% 
-		relocate(query, .before = 'hazardId') %>% 
-		unnest_wider(., 'records', names_sep = '_')
-
   return(result)
 }
+
+
 
 
 #' Hazard
@@ -48,8 +46,8 @@ chemi_hazard <- function(query, full = TRUE) {
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
-#' @param empty Optional parameter
 #' @param options Optional parameter
+#' @param empty Optional parameter
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -57,7 +55,7 @@ chemi_hazard <- function(query, full = TRUE) {
 #' \dontrun{
 #' chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = NULL) {
+chemi_hazard_bulk <- function(query, id_type = "AnyId", options = NULL, empty = NULL) {
   # Resolve identifiers to Chemical objects
   resolved <- chemi_resolver(query = query, id_type = id_type)
 
@@ -83,8 +81,8 @@ chemi_hazard_bulk <- function(query, id_type = "AnyId", empty = NULL, options = 
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(empty)) extra_options$empty <- empty
   if (!is.null(options)) extra_options$options <- options
+  if (!is.null(empty)) extra_options$empty <- empty
 
   # Build and send request
   base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")

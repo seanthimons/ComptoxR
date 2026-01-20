@@ -21,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_ncc_cats(smiles = "DTXSID7020182")
+chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
 }
 }

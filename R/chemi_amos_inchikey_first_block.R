@@ -3,24 +3,27 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param first_block First block of an InChIKey.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_inchikey_first_block(first_block = "DTXSID7020182")
+#' chemi_amos_inchikey_first_block()
 #' }
-chemi_amos_inchikey_first_block <- function(first_block) {
-  generic_request(
-    query = first_block,
+chemi_amos_inchikey_first_block <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "amos/inchikey_first_block_search/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = NULL,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

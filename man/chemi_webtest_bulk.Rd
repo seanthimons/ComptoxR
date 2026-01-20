@@ -4,16 +4,7 @@
 \alias{chemi_webtest_bulk}
 \title{Webtest}
 \usage{
-chemi_webtest_bulk(type, chemicals = NULL, format = NULL, options = NULL)
-}
-\arguments{
-\item{type}{Required parameter}
-
-\item{chemicals}{Optional parameter}
-
-\item{format}{Optional parameter. Options: JSON, CSV, TSV}
-
-\item{options}{Optional parameter}
+chemi_webtest_bulk()
 }
 \value{
 Returns a tibble with results
@@ -23,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_webtest_bulk(type = c("DTXSID3039242", "DTXSID10894891", "DTXSID20152651"))
+chemi_webtest_bulk()
 }
 }

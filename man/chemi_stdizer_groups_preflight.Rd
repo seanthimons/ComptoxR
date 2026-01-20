@@ -4,10 +4,7 @@
 \alias{chemi_stdizer_groups_preflight}
 \title{Stdizer Groups Preflight}
 \usage{
-chemi_stdizer_groups_preflight(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_stdizer_groups_preflight()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups_preflight(query = "DTXSID7020182")
+chemi_stdizer_groups_preflight()
 }
 }

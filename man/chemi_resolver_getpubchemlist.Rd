@@ -4,21 +4,26 @@
 \alias{chemi_resolver_getpubchemlist}
 \title{Resolver Getpubchemlist}
 \usage{
-chemi_resolver_getpubchemlist(chemicals, section = NULL)
+chemi_resolver_getpubchemlist(query, id_type = "AnyId", section = NULL)
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
+
+\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{section}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function first resolves chemical identifiers using \code{chemi_resolver},
+then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
 \dontrun{
-chemi_resolver_getpubchemlist(chemicals = "DTXSID7020182")
+chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 }
 }

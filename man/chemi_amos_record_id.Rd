@@ -4,10 +4,7 @@
 \alias{chemi_amos_record_id}
 \title{Searches for a record in the database by ID.}
 \usage{
-chemi_amos_record_id(internal_id)
-}
-\arguments{
-\item{internal_id}{Unique ID of the record of interest.}
+chemi_amos_record_id()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_record_id(internal_id = "DTXSID7020182")
+chemi_amos_record_id()
 }
 }

@@ -2,157 +2,18 @@
 % Please edit documentation in R/chemi_search.R
 \name{chemi_search}
 \alias{chemi_search}
-\title{Cheminformatics Search}
+\title{Search}
 \usage{
-chemi_search(
-  searchType,
-  inputType = NULL,
-  query = NULL,
-  smiles = NULL,
-  querySmiles = NULL,
-  offset = NULL,
-  limit = NULL,
-  sortBy = NULL,
-  sortDirection = NULL,
-  params = NULL
-)
-
-chemi_search(
-  searchType,
-  inputType = NULL,
-  query = NULL,
-  smiles = NULL,
-  querySmiles = NULL,
-  offset = NULL,
-  limit = NULL,
-  sortBy = NULL,
-  sortDirection = NULL,
-  params = NULL
-)
-}
-\arguments{
-\item{searchType}{Required parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
-
-\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
-
-\item{query}{Optional parameter}
-
-\item{smiles}{Optional parameter}
-
-\item{querySmiles}{Optional parameter}
-
-\item{offset}{Optional parameter}
-
-\item{limit}{Optional parameter}
-
-\item{sortBy}{Optional parameter}
-
-\item{sortDirection}{Optional parameter}
-
-\item{params}{Optional parameter}
-
-\item{search_type}{Type of search to perform. One of:
-\itemize{
-\item \code{"exact"} - Exact structure match
-\item \code{"substructure"} - Substructure search
-\item \code{"similar"} - Similarity search
-\item \code{"mass"} - Mass-based search
-\item \code{"hazard"} - Hazard-based search
-\item \code{"features"} - Feature-based search
-}}
-
-\item{similarity_type}{Similarity metric for similar searches. One of
-\code{"tanimoto"} (default), \code{"euclid"}, or \code{"tversky"}.}
-
-\item{min_similarity}{Minimum similarity threshold (0-1). Defaults to 0.85.}
-
-\item{hazard_name}{Hazard endpoint name for hazard searches. Use short names:
-\code{"acute_oral"}, \code{"acute_inhal"}, \code{"acute_dermal"},
-\code{"cancer"}, \code{"geno"}, \code{"endo"}, \code{"reprod"},
-\code{"develop"}, \code{"neuro_single"}, \code{"neuro_repeat"},
-\code{"sys_single"}, \code{"sys_repeat"}, \code{"skin_sens"},
-\code{"skin_irr"}, \code{"eye"}, \code{"aq_acute"}, \code{"aq_chron"},
-\code{"persis"}, \code{"bioacc"}, \code{"expo"}.}
-
-\item{min_toxicity}{Minimum toxicity level for hazard searches.
-One of \code{"VH"} (Very High), \code{"H"} (High), \code{"M"} (Medium),
-\code{"L"} (Low), or \code{"A"} (Any).}
-
-\item{min_authority}{Minimum data authority level for hazard searches.
-One of \code{"auth"} (Authoritative), \code{"screen"} (Screening),
-or \code{"qsar"} (QSAR).}
-
-\item{mass_type}{Type of mass for mass searches. One of \code{"mono"}
-(monoisotopic mass), \code{"mw"} (molecular weight), or \code{"abu"}
-(most abundant mass).}
-
-\item{min_mass}{Minimum mass value for mass searches.}
-
-\item{max_mass}{Maximum mass value for mass searches.}
-
-\item{filter_features}{Logical; whether to apply feature filters. Defaults to FALSE.}
-
-\item{feature_filters}{Named logical vector of feature filters to apply when
-\code{filter_features = TRUE}. Valid filter names: \code{"stereo"},
-\code{"chiral"}, \code{"isotopes"}, \code{"charged"}, \code{"multicomponent"},
-\code{"radicals"}, \code{"salts"}, \code{"polymers"}, \code{"sgroups"}.}
-
-\item{element_include}{Character vector of element symbols to include in results.}
-
-\item{element_exclude}{Character vector of element symbols to exclude from results.}
-
-\item{exclude_all_others}{Logical; if TRUE, excludes all elements except those
-in \code{element_include}. Defaults to FALSE.}
+chemi_search()
 }
 \value{
-A tibble containing search results with columns depending on search type.
-For similarity searches, includes a \code{relationship} column indicating
-\code{"parent"} (query compound) or \code{"child"} (similar compound).
-
 Returns a tibble with results
 }
 \description{
-Search the cheminformatics database using various search types including
-exact structure, substructure, similarity, mass, hazard, and feature searches.
-
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-# Exact search by DTXSID
-chemi_search("DTXSID7020182", "exact")
-
-# Similarity search with custom threshold
-chemi_search("DTXSID7020182", "similar", min_similarity = 0.9)
-
-# Mass range search
-chemi_search(
-  query = NULL,
-  search_type = "mass",
-  mass_type = "mono",
-  min_mass = 100,
-  max_mass = 200
-)
-
-# Hazard search for carcinogenicity
-chemi_search(
-  query = NULL,
-  search_type = "hazard",
-  hazard_name = "cancer",
-  min_toxicity = "H",
-  min_authority = "auth"
-)
-
-# Feature search with element filtering
-chemi_search(
-  query = NULL,
-  search_type = "features",
-  element_include = c("C", "N", "O"),
-  exclude_all_others = TRUE,
-  limit = 100
-)
-}
-\dontrun{
-chemi_search(searchType = c("DTXSID70198443", "DTXSID80161401", "DTXSID2023270"))
+chemi_search()
 }
 }

@@ -4,19 +4,16 @@
 \alias{chemi_safety_rqcodes}
 \title{Safety Rqcodes}
 \usage{
-chemi_safety_rqcodes(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_safety_rqcodes()
 }
 \value{
 Returns a tibble with results (array of objects)
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_safety_rqcodes(query = "DTXSID7020182")
+chemi_safety_rqcodes()
 }
 }

@@ -4,19 +4,16 @@
 \alias{chemi_toxprints_chemicals_categories}
 \title{Toxprints Chemicals Categories}
 \usage{
-chemi_toxprints_chemicals_categories(chemicals)
-}
-\arguments{
-\item{chemicals}{Required parameter}
+chemi_toxprints_chemicals_categories()
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_toxprints_chemicals_categories(chemicals = "DTXSID7020182")
+chemi_toxprints_chemicals_categories()
 }
 }
