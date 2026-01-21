@@ -116,10 +116,13 @@ chemi_endpoints <- parse_chemi_schemas() %>%
 # ==============================================================================
 
 # Search R/ directory for existing endpoint implementations
+# Pass expected_files to only count hits in the correct target file for each endpoint
+# This prevents false positives when an endpoint is used by a different wrapper function
 res_chemi <- find_endpoint_usages_base(
 	chemi_endpoints$route, 
 	pkg_dir = here::here("R"), 
 	files_regex = "^chemi_.*\\.R$",
+	expected_files = chemi_endpoints$file
 )
 
 # Filter to endpoints with no hits (not yet implemented)
