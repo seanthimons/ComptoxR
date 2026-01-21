@@ -16,6 +16,10 @@
 #'   (e.g., both "/alerts" and "alerts"). This helps catch endpoints that may be stored
 #'   with or without a leading slash in the code.
 #' @param keep_trailing_slash Logical, retain trailing slash in base paths.
+#' @param expected_files Optional character vector of expected file names (basenames) for each endpoint.
+#'   Must be the same length as `endpoints` if provided. When provided, only hits from files
+#'   matching the expected file name are counted as valid implementations. This prevents
+#'   false positives when an endpoint is used in a different file (e.g., a wrapper function).
 #' @return A list with two elements:
 #'   \describe{\item{hits}{data.frame of each match with file, line, text, etc.}\item{summary}{summary data.frame per endpoint.}}
 #' @export
@@ -25,8 +29,18 @@ find_endpoint_usages_base <- function(
   ignore_case = TRUE,
   files_regex = "\\.(R|Rmd|qmd|Rnw|Rd|md)$",
   include_no_leading_slash = TRUE,
-  keep_trailing_slash = TRUE
+  keep_trailing_slash = TRUE,
+  expected_files = NULL
 ) {
+  # Validate expected_files if provided
+  if (!is.null(expected_files) && length(expected_files) != length(endpoints)) {
+    stop(sprintf(
+      "expected_files must have the same length as endpoints (got %d expected_files for %d endpoints)",
+      length(expected_files),
+      length(endpoints)
+    ))
+  }
+
   base_paths <- strip_curly_params(endpoints, keep_trailing_slash = keep_trailing_slash, leading_slash = 'remove')
 
   files <- list.files(pkg_dir, pattern = files_regex, recursive = TRUE, full.names = TRUE)
@@ -55,10 +69,15 @@ find_endpoint_usages_base <- function(
   for (i in seq_along(endpoints)) {
     ep <- endpoints[i]
     bp <- base_paths[i]
+    expected_file <- if (!is.null(expected_files)) expected_files[i] else NULL
     # Create pattern variations: with and without leading slash
     pat_set <- unique(c(bp, if (include_no_leading_slash) stringr::str_remove(bp, "^/")))
     for (pat in pat_set) {
       for (f in files) {
+        # If expected_file is specified, only check files with matching basename
+        if (!is.null(expected_file) && basename(f) != expected_file) {
+          next
+        }
         h <- scan_file(f, pat)
         if (!is.null(h)) {
           h$endpoint <- ep
