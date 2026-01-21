@@ -144,38 +144,28 @@ run_setup <- function() {
       )))
     })
     
-    latencies <- purrr::map_dbl(results, "latency")
-    latency_values <- latencies[is.finite(latencies)]
-    latency_range <- if (length(latency_values) > 1) {
-    	range(latency_values)
-    } else {
-    	c(NA_real_, NA_real_)
-    }
+    healthy_latency <- 0.3
+    degrading_latency <- 1.0
     
-    latency_colour <- function(latency, latency_fmt, latency_values, latency_range) {
+    latency_colour <- function(latency, latency_fmt, healthy_latency, degrading_latency) {
     	if (latency_fmt == "") {
     		return("")
     	}
-    	if (!is.finite(latency) || length(latency_values) == 0) {
+    	if (!is.finite(latency)) {
     		return(cli::col_yellow(latency_fmt))
     	}
-    	if (length(latency_values) == 1 || is.na(latency_range[1]) || latency_range[1] == latency_range[2]) {
+    	if (latency <= healthy_latency) {
     		return(cli::col_green(latency_fmt))
     	}
-    	
-    	ratio <- (latency - latency_range[1]) / (latency_range[2] - latency_range[1])
-    	if (ratio <= 0.33) {
-    		cli::col_green(latency_fmt)
-    	} else if (ratio <= 0.66) {
-    		cli::col_yellow(latency_fmt)
-    	} else {
-    		cli::col_red(latency_fmt)
+    	if (latency <= degrading_latency) {
+    		return(cli::col_yellow(latency_fmt))
     	}
+    	cli::col_red(latency_fmt)
     }
     
     results_output <- purrr::map_chr(results, function(result) {
     	latency_display <- if (is.finite(result$latency)) {
-    		paste0("[", latency_colour(result$latency, result$latency_fmt, latency_values, latency_range), "]")
+    		paste0("[", latency_colour(result$latency, result$latency_fmt, healthy_latency, degrading_latency), "]")
     	} else {
     		""
     	}
