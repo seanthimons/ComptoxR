@@ -463,8 +463,6 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   if (!tidy) return(body)
 
   # 8. Tidy Conversion
-  if (!tidy) return(body)
-
   # Handle cases where body is a named list of results (keyed by query)
   if (!is.null(names(body)) && !is.data.frame(body)) {
       res <- body %>%
