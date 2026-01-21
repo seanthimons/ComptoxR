@@ -146,17 +146,20 @@ run_setup <- function() {
     
     latencies <- purrr::map_dbl(results, "latency")
     latency_values <- latencies[is.finite(latencies)]
-    latency_range <- if (length(latency_values) > 0) {
+    latency_range <- if (length(latency_values) > 1) {
     	range(latency_values)
     } else {
     	c(NA_real_, NA_real_)
     }
     
-    latency_colour <- function(latency, latency_fmt) {
+    latency_colour <- function(latency, latency_fmt, latency_values, latency_range) {
+    	if (latency_fmt == "") {
+    		return("")
+    	}
     	if (!is.finite(latency) || length(latency_values) == 0) {
     		return(cli::col_yellow(latency_fmt))
     	}
-    	if (latency_range[1] == latency_range[2]) {
+    	if (length(latency_values) == 1 || is.na(latency_range[1]) || latency_range[1] == latency_range[2]) {
     		return(cli::col_green(latency_fmt))
     	}
     	
@@ -172,7 +175,7 @@ run_setup <- function() {
     
     results_output <- purrr::map_chr(results, function(result) {
     	latency_display <- if (is.finite(result$latency)) {
-    		paste0("[", latency_colour(result$latency, result$latency_fmt), "]")
+    		paste0("[", latency_colour(result$latency, result$latency_fmt, latency_values, latency_range), "]")
     	} else {
     		""
     	}
