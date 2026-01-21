@@ -165,13 +165,13 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # ==============================================================================
 
 # Remove intermediate variables (keep chemi_spec_with_text for inspection)
-# rm(
-# 	chemi_config, 
-# 	chemi_schema_files, 
-# 	#chemi_endpoints, 
-# 	res_chemi
-# 	#chemi_endpoints_to_build
-# )
+rm(
+	chemi_config, 
+	chemi_schema_files, 
+	chemi_endpoints, 
+	res_chemi,
+	chemi_endpoints_to_build
+)
 
 # ==============================================================================
 # Test loading

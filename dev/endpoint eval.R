@@ -148,7 +148,14 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 rm(
   ct_config,
   ctx_schema_files,
-  #endpoints,
-  res
-  #endpoints_to_build
+  endpoints,
+  res,
+  endpoints_to_build
 )
+
+# ==============================================================================
+# Test loading
+# ==============================================================================
+
+devtools::document()
+#devtools::load_all()
