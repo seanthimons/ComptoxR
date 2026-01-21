@@ -373,6 +373,9 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #' @param pluck_res Optional character; the name of the field to extract from the JSON response.
 #' @param wrap Boolean; whether to wrap the query in a {"chemicals": [...], "options": ...} structure.
 #'        Defaults to TRUE. If FALSE, sends a JSON array of objects like [{"sid": "ID1"}, ...].
+#' @param array_payload Boolean; if TRUE, creates a flat structure with identifiers as an array:
+#'        {"ids": ["ID1", "ID2"], "option1": "value1", ...}. When TRUE, sid_label is used as the
+#'        array key name and options are merged at the top level. Defaults to FALSE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 #' @param ... Additional arguments passed to httr2.
 #'
@@ -380,7 +383,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #' @export
 generic_chemi_request <- function(query, endpoint, options = list(), sid_label = "sid", 
                                   server = "chemi_burl", auth = FALSE, pluck_res = NULL, 
-                                  wrap = TRUE, tidy = TRUE, ...) {
+                                  wrap = TRUE, array_payload = FALSE, tidy = TRUE, ...) {
   
   # 1. Base URL Resolution
   base_url <- Sys.getenv(server, unset = server)
@@ -392,15 +395,23 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
 
   # 3. Payload Construction
-  chemicals <- purrr::map(query, ~ set_names(list(.x), sid_label))
-  
-  if (wrap) {
-    payload <- list(
-      chemicals = chemicals,
-      options = options
-    )
+  if (array_payload) {
+    # Array format: {"ids": ["ID1", "ID2"], "option1": "value1", ...}
+    # Put identifiers directly as an array, merge options at top level
+    payload <- set_names(list(query), sid_label)
+    payload <- c(payload, options)
   } else {
-    payload <- chemicals
+    # Standard format with wrap parameter
+    chemicals <- purrr::map(query, ~ set_names(list(.x), sid_label))
+    
+    if (wrap) {
+      payload <- list(
+        chemicals = chemicals,
+        options = options
+      )
+    } else {
+      payload <- chemicals
+    }
   }
 
   # Check environment flags
