@@ -15,7 +15,7 @@ chemi_resolver_getallannotations <- function() {
     query = NULL,
     endpoint = "resolver/getallannotations",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

@@ -23,7 +23,7 @@ chemi_resolver_links <- function(query, idType = "AnyId", fuzzy = "Not") {
     query = NULL,
     endpoint = "resolver/links",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

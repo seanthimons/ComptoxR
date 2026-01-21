@@ -15,7 +15,7 @@ chemi_resolver_getdatasources <- function() {
     query = NULL,
     endpoint = "resolver/getdatasources",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

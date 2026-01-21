@@ -19,7 +19,7 @@ chemi_resolver_getsubstance <- function(name) {
     query = NULL,
     endpoint = "resolver/getsubstance",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
