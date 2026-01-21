@@ -61,6 +61,14 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
 #' chemi_resolver_lookup_bulk(ids = c("DTXSID7020182", "50-00-0"))
 #' }
 chemi_resolver_lookup_bulk <- function(ids, idsType = "AnyId", fuzzy = "Not", mol = FALSE, filters = NULL, format = NULL) {
+  # Input validation
+  if (is.null(ids) || length(ids) == 0) {
+    cli::cli_abort("ids must be a non-empty character vector")
+  }
+  
+  # Convert to character vector if needed
+  ids <- as.character(ids)
+  
   # Build request body according to LookupRequest schema
   body <- list(
     ids = ids,
