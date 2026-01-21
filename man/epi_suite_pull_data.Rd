@@ -11,6 +11,9 @@ epi_suite_pull_data(epi_obj, endpoints = NULL)
 
 \item{endpoints}{Endpoints to filter for}
 }
+\value{
+A list
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
