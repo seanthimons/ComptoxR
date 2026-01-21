@@ -373,9 +373,11 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #' @param pluck_res Optional character; the name of the field to extract from the JSON response.
 #' @param wrap Boolean; whether to wrap the query in a {"chemicals": [...], "options": ...} structure.
 #'        Defaults to TRUE. If FALSE, sends a JSON array of objects like [{"sid": "ID1"}, ...].
+#'        Ignored if array_payload is TRUE.
 #' @param array_payload Boolean; if TRUE, creates a flat structure with identifiers as an array:
 #'        {"ids": ["ID1", "ID2"], "option1": "value1", ...}. When TRUE, sid_label is used as the
-#'        array key name and options are merged at the top level. Defaults to FALSE.
+#'        array key name and options are merged at the top level. Takes precedence over wrap parameter.
+#'        Defaults to FALSE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 #' @param ... Additional arguments passed to httr2.
 #'
@@ -398,8 +400,7 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   if (array_payload) {
     # Array format: {"ids": ["ID1", "ID2"], "option1": "value1", ...}
     # Put identifiers directly as an array, merge options at top level
-    payload <- set_names(list(query), sid_label)
-    payload <- c(payload, options)
+    payload <- c(set_names(list(query), sid_label), options)
   } else {
     # Standard format with wrap parameter
     chemicals <- purrr::map(query, ~ set_names(list(.x), sid_label))
