@@ -478,6 +478,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
   } else if (is_query_only) {
     # Query-only endpoint: pass query = NULL, all params via ellipsis
+    # For query-only endpoints, batch_limit should be 0 (static endpoint)
+    effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
+    
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
@@ -485,7 +488,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {batch_limit_code}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
   )
 
   # Additional post-processing can be added here
