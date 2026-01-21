@@ -43,7 +43,7 @@ chemi_resolver_classyfire <- function(query, idType = "AnyId", fuzzy = "Not", ki
     query = NULL,
     endpoint = "resolver/classyfire",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
