@@ -10,28 +10,45 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule(left = 'Ping Test for Configured Endpoints')
+  cli::cli_rule(left = 'Configured API endpoints (ping test)')
+  cli::cli_alert_warning(
+  	'You can change these using the *_server() function!'
+  )
 	
-	server_urls <- c(
+	server_urls <- list(
   # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
-		"CompTox Dashboard API" = paste0(Sys.getenv("ctx_burl"), 'chemical/health'),
-    "ECOTOX" = Sys.getenv("eco_burl"),
-    "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/'
+		"CompTox Dashboard API" = list(
+			display_url = Sys.getenv("ctx_burl"),
+			ping_url = paste0(Sys.getenv("ctx_burl"), 'chemical/health')
+		),
+    "ECOTOX" = list(
+    	display_url = Sys.getenv("eco_burl"),
+    	ping_url = Sys.getenv("eco_burl")
+    ),
+    "EPI Suite API" = list(
+    	display_url = Sys.getenv("epi_burl"),
+    	ping_url = Sys.getenv("epi_burl")
+    )
     #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
 
   # Filter out any endpoints with empty/unset URLs
-  active_endpoints <- server_urls[server_urls != "" & !is.na(server_urls)]
+  active_endpoints <- purrr::keep(
+  	server_urls,
+  	~ nzchar(.x$display_url) && !is.na(.x$display_url)
+  )
   
   # Remove entries with duplicate URLs, keeping the first name. Using `unique()` would strip the names.
-  ping_list <- active_endpoints[!duplicated(active_endpoints)]
+  ping_urls <- purrr::map_chr(active_endpoints, "ping_url")
+  ping_list <- active_endpoints[!duplicated(ping_urls)]
 
   if (length(ping_list) == 0) {
     cli::cli_alert_info("No server endpoints are configured to ping.")
     cli::cli_end()
   } else {
     # A more informative and visually appealing check function
-    check_url <- function(url, name) {
+    check_url <- function(endpoint, name) {
+    	url <- endpoint$ping_url
       tryCatch(
         {
           # Use HEAD request for efficiency; we just want to check connectivity
@@ -50,12 +67,19 @@ run_setup <- function() {
           
           status <- httr2::resp_status(resp)
           
-          # Use cli for styled output. 3xx redirects are not considered errors.
-          if (status >= 200 && status < 400) {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')} [{latency_fmt}]")
+          status_text <- if (status >= 200 && status < 400) {
+          	cli::col_green(cli::format_inline("OK ({status})"))
           } else {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')} [{latency_fmt}]")
+          	cli::col_yellow(cli::format_inline("WARN ({status})"))
           }
+          
+          list(
+          	name = name,
+          	url = endpoint$display_url,
+          	status_text = status_text,
+          	latency = latency,
+          	latency_fmt = latency_fmt
+          )
         },
         error = function(e) {
           # Catch httr2-specific errors for more robust error messages
@@ -66,12 +90,18 @@ run_setup <- function() {
           } else {
             "Request failed" # Fallback for other errors
           }
-          cli::format_inline("{.strong {name}}: {cli::col_red('ERROR (', error_msg, ')')}")
+          list(
+          	name = name,
+          	url = endpoint$display_url,
+          	status_text = cli::col_red(cli::format_inline("ERROR ({error_msg})")),
+          	latency = NA_real_,
+          	latency_fmt = ""
+          )
         }
       )
     }
 
-		results <- purrr::imap_chr(ping_list, check_url)
+		results <- purrr::imap(ping_list, check_url)
 
     # Check for active Cheminformatics endpoints ----
     tryCatch({
@@ -92,15 +122,65 @@ run_setup <- function() {
       active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
       total_chemi_endpoints <- nrow(endpoints)
       
-      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_green('OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)')} [{latency_fmt}]")
-      results <- c(results, chemi_status)
+      chemi_status <- cli::col_green(
+      	cli::format_inline("OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)")
+      )
+      results <- c(results, list(list(
+      	name = "Cheminformatics API",
+      	url = Sys.getenv("chemi_burl"),
+      	status_text = chemi_status,
+      	latency = latency,
+      	latency_fmt = latency_fmt
+      )))
       
     }, error = function(e) {
-      chemi_status <- cli::format_inline("{.strong Cheminformatics API}: {cli::col_red('ERROR (Failed to get endpoints)')}")
-      results <<- c(results, chemi_status)
+      chemi_status <- cli::col_red("ERROR (Failed to get endpoints)")
+      results <<- c(results, list(list(
+      	name = "Cheminformatics API",
+      	url = Sys.getenv("chemi_burl"),
+      	status_text = chemi_status,
+      	latency = NA_real_,
+      	latency_fmt = ""
+      )))
     })
     
-    cli::cli_li(items = results)
+    healthy_latency <- 0.3
+    degrading_latency <- 1.0
+    
+    latency_colour <- function(latency, latency_fmt, healthy_latency, degrading_latency) {
+    	if (latency_fmt == "") {
+    		return("")
+    	}
+    	if (!is.finite(latency)) {
+    		return(cli::col_yellow(latency_fmt))
+    	}
+    	if (latency <= healthy_latency) {
+    		return(cli::col_green(latency_fmt))
+    	}
+    	if (latency <= degrading_latency) {
+    		return(cli::col_yellow(latency_fmt))
+    	}
+    	cli::col_red(latency_fmt)
+    }
+    
+    results_output <- purrr::map_chr(results, function(result) {
+    	latency_display <- if (is.finite(result$latency)) {
+    		paste0("[", latency_colour(result$latency, result$latency_fmt, healthy_latency, degrading_latency), "]")
+    	} else {
+    		""
+    	}
+    	url_display <- if (nzchar(result$url)) {
+    		paste0(result$url, " - ")
+    	} else {
+    		""
+    	}
+    	
+    	cli::format_inline(
+    		"{.strong {result$name}}: {url_display}{result$status_text} {latency_display}"
+    	)
+    })
+    
+    cli::cli_li(items = results_output)
     cli::cli_end()
 		
   }
@@ -492,22 +572,23 @@ reset_servers <- function() {
         build_date
       })
     )
-    cli::cli_rule(left = 'Available API endpoints:')
-    cli::cli_alert_warning(
-      'You can change these using the *_server() function!'
-    )
-    cli::cli_dl(c(
-      'CompTox Chemistry Dashboard' = '{Sys.getenv("ctx_burl")}',
-      'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
-      'ECOTOX' = '{Sys.getenv("eco_burl")}',
-      'EPI Suite' = '{Sys.getenv("epi_burl")}',
-      'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
-
-    ))
+    
 		cli::cli_rule(left = 'Run settings')
+		debug_flag <- Sys.getenv("run_debug")
+		verbose_flag <- Sys.getenv("run_verbose")
+		debug_value <- if (debug_flag == "TRUE") {
+			cli::col_red("TRUE")
+		} else {
+			cli::col_green("FALSE")
+		}
+		verbose_value <- if (verbose_flag == "TRUE") {
+			cli::col_green("TRUE")
+		} else {
+			cli::col_red("FALSE")
+		}
 		cli::cli_dl(c(
-			'Debug' = '{Sys.getenv("run_debug")}',
-			'Verbose' = '{Sys.getenv("run_verbose")}',
+			'Debug' = "{debug_value}",
+			'Verbose' = "{verbose_value}",
 			'Batch limit' = '{Sys.getenv("batch_limit")}'
 		))
   })
