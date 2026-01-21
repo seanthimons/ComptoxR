@@ -13,6 +13,7 @@ generic_chemi_request(
   auth = FALSE,
   pluck_res = NULL,
   wrap = TRUE,
+  array_payload = FALSE,
   tidy = TRUE,
   ...
 )
@@ -33,7 +34,13 @@ generic_chemi_request(
 \item{pluck_res}{Optional character; the name of the field to extract from the JSON response.}
 
 \item{wrap}{Boolean; whether to wrap the query in a {"chemicals": \link{...}, "options": ...} structure.
-Defaults to TRUE. If FALSE, sends a JSON array of objects like \link{{"sid": "ID1"}, ...}.}
+Defaults to TRUE. If FALSE, sends a JSON array of objects like \link{{"sid": "ID1"}, ...}.
+Ignored if array_payload is TRUE.}
+
+\item{array_payload}{Boolean; if TRUE, creates a flat structure with identifiers as an array:
+{"ids": \link{"ID1", "ID2"}, "option1": "value1", ...}. When TRUE, sid_label is used as the
+array key name and options are merged at the top level. Takes precedence over wrap parameter.
+Defaults to FALSE.}
 
 \item{tidy}{Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.}
 
