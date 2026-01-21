@@ -23,7 +23,7 @@ chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
     query = NULL,
     endpoint = "resolver/mesh",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

@@ -23,7 +23,7 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
     query = NULL,
     endpoint = "resolver/pubchem-section",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
