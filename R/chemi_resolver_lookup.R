@@ -1,7 +1,7 @@
 #' Resolver Lookup
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Required parameter
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
@@ -17,12 +17,11 @@
 chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = FALSE) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
   if (!is.null(idType)) options[['idType']] <- idType
   if (!is.null(fuzzy)) options[['fuzzy']] <- fuzzy
   if (!is.null(mol)) options[['mol']] <- mol
     result <- generic_request(
-    query = NULL,
+    query = query,
     endpoint = "resolver/lookup",
     method = "GET",
     batch_limit = 0,
@@ -43,7 +42,7 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
 #' Resolver Lookup (Bulk)
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' Performs bulk lookup of chemical identifiers via POST endpoint.
 #'

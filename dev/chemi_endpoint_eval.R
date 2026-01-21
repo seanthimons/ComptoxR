@@ -83,7 +83,7 @@ chemi_endpoints <- parse_chemi_schemas() %>%
 		),
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
-    batch_limit = NA_integer_,
+    batch_limit = 0,
 		# Seems to be needed to be at the end for this mutate to work properly
 		route = str_remove_all(string = route, pattern = "^api/")
   ) %>%

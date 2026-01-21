@@ -2,18 +2,40 @@
 % Please edit documentation in R/chemi_resolver_lookup.R
 \name{chemi_resolver_lookup_bulk}
 \alias{chemi_resolver_lookup_bulk}
-\title{Resolver Lookup}
+\title{Resolver Lookup (Bulk)}
 \usage{
-chemi_resolver_lookup_bulk()
+chemi_resolver_lookup_bulk(
+  ids,
+  idsType = "AnyId",
+  fuzzy = "Not",
+  mol = FALSE,
+  filters = NULL,
+  format = NULL
+)
+}
+\arguments{
+\item{ids}{Character vector of chemical identifiers to look up. All identifiers must be of the same type or type should be AnyId.}
+
+\item{idsType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
+
+\item{fuzzy}{Fuzzy lookup setting. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)}
+
+\item{mol}{If TRUE, MOL is requested as a result (default: FALSE)}
+
+\item{filters}{Optional filters object}
+
+\item{format}{Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
 }
 \value{
 Returns a list with result object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Performs bulk lookup of chemical identifiers via POST endpoint.
 }
 \examples{
 \dontrun{
-chemi_resolver_lookup_bulk()
+chemi_resolver_lookup_bulk(ids = c("DTXSID7020182", "50-00-0"))
 }
 }
