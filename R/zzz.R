@@ -156,13 +156,18 @@ run_setup <- function() {
     	if (!is.finite(latency) || length(latency_values) == 0) {
     		return(cli::col_yellow(latency_fmt))
     	}
-    	if (latency <= 0.5) {
+    	if (latency_range[1] == latency_range[2]) {
     		return(cli::col_green(latency_fmt))
     	}
-    	if (latency <= 1.5) {
-    		return(cli::col_yellow(latency_fmt))
+    	
+    	ratio <- (latency - latency_range[1]) / (latency_range[2] - latency_range[1])
+    	if (ratio <= 0.33) {
+    		cli::col_green(latency_fmt)
+    	} else if (ratio <= 0.66) {
+    		cli::col_yellow(latency_fmt)
+    	} else {
+    		cli::col_red(latency_fmt)
     	}
-    	cli::col_red(latency_fmt)
     }
     
     results_output <- purrr::map_chr(results, function(result) {
