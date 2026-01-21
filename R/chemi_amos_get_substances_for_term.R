@@ -15,7 +15,7 @@ chemi_amos_get_substances_for_term <- function() {
     query = NULL,
     endpoint = "amos/get_substances_for_search_term/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

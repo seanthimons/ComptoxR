@@ -15,7 +15,7 @@ chemi_toxprints_enrichments <- function() {
     query = NULL,
     endpoint = "toxprints/enrichments",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

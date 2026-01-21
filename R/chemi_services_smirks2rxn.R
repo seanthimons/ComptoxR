@@ -19,7 +19,7 @@ chemi_services_smirks2rxn <- function(smirks) {
     query = NULL,
     endpoint = "services/smirks2rxn",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

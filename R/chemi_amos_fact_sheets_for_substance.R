@@ -15,7 +15,7 @@ chemi_amos_fact_sheets_for_substance <- function() {
     query = NULL,
     endpoint = "amos/fact_sheets_for_substance/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

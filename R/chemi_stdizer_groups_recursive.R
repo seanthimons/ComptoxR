@@ -15,7 +15,7 @@ chemi_stdizer_groups_recursive <- function() {
     query = NULL,
     endpoint = "stdizer/groups/recursive",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

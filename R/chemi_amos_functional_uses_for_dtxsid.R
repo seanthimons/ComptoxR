@@ -15,7 +15,7 @@ chemi_amos_functional_uses_for_dtxsid <- function() {
     query = NULL,
     endpoint = "amos/functional_uses_for_dtxsid/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

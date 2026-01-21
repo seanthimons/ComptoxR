@@ -15,7 +15,7 @@ chemi_amos_fact_sheet_pagination <- function() {
     query = NULL,
     endpoint = "amos/fact_sheet_pagination/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

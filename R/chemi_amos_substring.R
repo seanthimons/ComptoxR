@@ -15,7 +15,7 @@ chemi_amos_substring <- function() {
     query = NULL,
     endpoint = "amos/substring_search/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

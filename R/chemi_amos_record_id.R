@@ -15,7 +15,7 @@ chemi_amos_record_id <- function() {
     query = NULL,
     endpoint = "amos/record_id_search/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

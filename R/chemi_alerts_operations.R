@@ -15,7 +15,7 @@ chemi_alerts_operations <- function() {
     query = NULL,
     endpoint = "alerts/operations",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

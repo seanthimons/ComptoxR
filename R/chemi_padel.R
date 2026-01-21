@@ -29,7 +29,7 @@ chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = F
     query = NULL,
     endpoint = "padel",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

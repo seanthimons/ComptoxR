@@ -19,7 +19,7 @@ chemi_toxprints_assays_check <- function(name) {
     query = NULL,
     endpoint = "toxprints/assays/check",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

@@ -23,7 +23,7 @@ chemi_search_substructure <- function(smiles, exportSmiles = NULL, exportMol = N
     query = NULL,
     endpoint = "search/substructure",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
