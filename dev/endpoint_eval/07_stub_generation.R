@@ -460,7 +460,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       stop("Unknown wrapper function: ", wrapper_fn)
     }
   } else if (is_query_only) {
-    # Query-only endpoint: pass query = NULL, all params via ellipsis
+    # Query-only endpoint: all params via ellipsis, no query parameter needed
     # For query-only endpoints, batch_limit should be 0 (static endpoint)
     effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
     
@@ -468,7 +468,6 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_request(
-    query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
@@ -484,7 +483,6 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_chemi_request(
-    query = NULL,
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE
   )

@@ -14,7 +14,6 @@
 #' }
 cc_export <- function(uri, returnAsAttachment = NULL) {
   result <- generic_request(
-    query = NULL,
     endpoint = "export",
     method = "GET",
     batch_limit = 0,
