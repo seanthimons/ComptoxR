@@ -62,17 +62,19 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
 #' }
 chemi_resolver_lookup_bulk <- function(ids, idsType = "AnyId", fuzzy = "Not", mol = FALSE, filters = NULL, format = NULL) {
   # Build request body according to LookupRequest schema
-  body <- list(ids = ids)
+  body <- list(
+    ids = ids,
+    idsType = idsType,
+    fuzzy = fuzzy,
+    mol = mol
+  )
   
-  # Add optional parameters
-  if (!is.null(idsType)) body$idsType <- idsType
-  if (!is.null(fuzzy)) body$fuzzy <- fuzzy
-  if (!is.null(mol)) body$mol <- mol
+  # Add truly optional parameters
   if (!is.null(filters)) body$filters <- filters
   if (!is.null(format)) body$format <- format
   
   # Build and send request
-  base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
+  base_url <- Sys.getenv("chemi_burl", unset = "")
   if (base_url == "") base_url <- "chemi_burl"
   
   req <- httr2::request(base_url) |>
