@@ -15,7 +15,7 @@ chemi_amos_find_dtxsids <- function() {
     query = NULL,
     endpoint = "amos/find_dtxsids/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

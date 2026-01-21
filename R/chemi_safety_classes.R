@@ -15,7 +15,7 @@ chemi_safety_classes <- function() {
     query = NULL,
     endpoint = "safety/classes",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

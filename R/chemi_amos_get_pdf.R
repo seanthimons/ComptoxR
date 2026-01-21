@@ -15,7 +15,7 @@ chemi_amos_get_pdf <- function() {
     query = NULL,
     endpoint = "amos/get_pdf/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

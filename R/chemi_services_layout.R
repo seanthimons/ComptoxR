@@ -19,7 +19,7 @@ chemi_services_layout <- function(smiles) {
     query = NULL,
     endpoint = "services/layout",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

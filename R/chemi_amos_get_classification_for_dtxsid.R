@@ -15,7 +15,7 @@ chemi_amos_get_classification_for_dtxsid <- function() {
     query = NULL,
     endpoint = "amos/get_classification_for_dtxsid/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

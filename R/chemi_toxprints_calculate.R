@@ -23,7 +23,7 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
     query = NULL,
     endpoint = "toxprints/calculate",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

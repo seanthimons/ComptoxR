@@ -15,7 +15,7 @@ chemi_amos_get_mass_spectrum <- function() {
     query = NULL,
     endpoint = "amos/get_mass_spectrum/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

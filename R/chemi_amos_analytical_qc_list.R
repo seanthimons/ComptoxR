@@ -15,7 +15,7 @@ chemi_amos_analytical_qc_list <- function() {
     query = NULL,
     endpoint = "amos/analytical_qc_list/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

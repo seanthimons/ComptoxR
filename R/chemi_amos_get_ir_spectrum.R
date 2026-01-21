@@ -15,7 +15,7 @@ chemi_amos_get_ir_spectrum <- function() {
     query = NULL,
     endpoint = "amos/get_ir_spectrum/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

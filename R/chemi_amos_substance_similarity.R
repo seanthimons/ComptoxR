@@ -15,7 +15,7 @@ chemi_amos_substance_similarity <- function() {
     query = NULL,
     endpoint = "amos/substance_similarity_search/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

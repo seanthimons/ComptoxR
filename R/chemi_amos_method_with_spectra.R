@@ -15,7 +15,7 @@ chemi_amos_method_with_spectra <- function() {
     query = NULL,
     endpoint = "amos/method_with_spectra/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

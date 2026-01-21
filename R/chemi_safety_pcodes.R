@@ -15,7 +15,7 @@ chemi_safety_pcodes <- function() {
     query = NULL,
     endpoint = "safety/pcodes",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

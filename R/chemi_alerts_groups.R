@@ -15,7 +15,7 @@ chemi_alerts_groups <- function() {
     query = NULL,
     endpoint = "alerts/groups/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
@@ -46,7 +46,7 @@ chemi_alerts_groups <- function() {
     query = NULL,
     endpoint = "alerts/groups",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

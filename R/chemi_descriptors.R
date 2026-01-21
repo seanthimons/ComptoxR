@@ -27,7 +27,7 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
     query = NULL,
     endpoint = "descriptors",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

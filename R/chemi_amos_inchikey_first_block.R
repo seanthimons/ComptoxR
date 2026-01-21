@@ -15,7 +15,7 @@ chemi_amos_inchikey_first_block <- function() {
     query = NULL,
     endpoint = "amos/inchikey_first_block_search/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

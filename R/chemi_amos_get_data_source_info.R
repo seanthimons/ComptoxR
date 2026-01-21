@@ -15,7 +15,7 @@ chemi_amos_get_data_source_info <- function() {
     query = NULL,
     endpoint = "amos/get_data_source_info/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

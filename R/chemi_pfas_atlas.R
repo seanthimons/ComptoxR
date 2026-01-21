@@ -19,7 +19,7 @@ chemi_pfas_atlas <- function(smiles) {
     query = NULL,
     endpoint = "pfas_atlas",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

@@ -21,7 +21,7 @@ chemi_toxprints_assays <- function(category, label = NULL) {
     query = NULL,
     endpoint = "toxprints/assays",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
@@ -80,7 +80,7 @@ chemi_toxprints_assays <- function() {
     query = NULL,
     endpoint = "toxprints/assays/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE

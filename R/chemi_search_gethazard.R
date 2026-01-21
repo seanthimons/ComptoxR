@@ -19,7 +19,7 @@ chemi_search_gethazard <- function(sid) {
     query = NULL,
     endpoint = "search/gethazard",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

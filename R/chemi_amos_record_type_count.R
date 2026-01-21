@@ -15,7 +15,7 @@ chemi_amos_record_type_count <- function() {
     query = NULL,
     endpoint = "amos/record_type_count/",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
