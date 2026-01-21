@@ -366,6 +366,35 @@ np_server <- function(server = NULL){
 	}
 }
 
+#' Set API endpoints for CAS Common Chemistry API
+#' 
+#' @param server Defines what server to target
+#' 
+#' @return Should return the Sys Env variable `cc_server`
+#' @export
+
+cc_server <- function(server = NULL){
+if (is.null(server)) {
+		{
+			cli::cli_alert_danger("Server URL reset!")
+			Sys.setenv("cc_burl" = "")
+		}
+	} else {
+		switch(
+			as.character(server),
+			"1" = Sys.setenv("cc_burl" = "https://commonchemistry.cas.org/api/"),
+			{
+				cli::cli_alert_warning("Invalid server option selected!")
+				cli::cli_alert_info("Valid options are 1 (Production).")
+				cli::cli_alert_warning("Server URL reset!")
+				Sys.setenv("cc_burl" = "")
+			}
+		)
+
+		Sys.getenv("cc_burl")
+	}
+}
+
 #' Set debug mode
 #'
 #' @param debug A logical value to enable or disable debug mode.

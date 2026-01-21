@@ -1,4 +1,4 @@
-#' Retrieves CCTE API key from the Sys Environment
+#' Retrieves CTX API key from the Sys Environment
 #'
 #' @description An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 #'

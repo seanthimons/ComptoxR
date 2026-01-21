@@ -32,11 +32,9 @@ jobs:
       - name: Download schemas
         run: |
           pkgload::load_all()
-          cli::cli_h1("Downloading CTX schemas")
           ct_schema()
-          cli::cli_h1("Downloading Cheminformatics schemas")
           chemi_schema()
-          cli::cli_alert_success("Schema download complete")
+          cc_schema()
         shell: Rscript {0}
       - name: Compute schema hashes
         id: hash
