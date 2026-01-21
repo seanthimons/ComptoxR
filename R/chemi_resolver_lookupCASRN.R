@@ -19,7 +19,7 @@ chemi_resolver_lookupCASRN <- function(query) {
     query = NULL,
     endpoint = "resolver/lookupCASRN",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,

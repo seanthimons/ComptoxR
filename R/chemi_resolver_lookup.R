@@ -25,7 +25,7 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
     query = NULL,
     endpoint = "resolver/lookup",
     method = "GET",
-    batch_limit = NULL,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
