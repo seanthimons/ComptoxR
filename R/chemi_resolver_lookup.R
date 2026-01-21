@@ -98,7 +98,14 @@ chemi_resolver_lookup_bulk <- function(ids, idsType = "AnyId", fuzzy = "Not", mo
   resp <- httr2::req_perform(req)
   
   if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
-    cli::cli_abort("API request to {.val resolver/lookup} failed with status {httr2::resp_status(resp)}")
+    error_body <- tryCatch(
+      httr2::resp_body_string(resp),
+      error = function(e) "No error details available"
+    )
+    cli::cli_abort(c(
+      "API request to {.val resolver/lookup} failed with status {httr2::resp_status(resp)}",
+      "i" = "Error details: {error_body}"
+    ))
   }
   
   result <- httr2::resp_body_json(resp, simplifyVector = FALSE)
