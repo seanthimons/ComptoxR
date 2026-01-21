@@ -443,8 +443,10 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
   if (run_verbose) {
+    # Determine count based on whether chemicals or query was provided
+    item_count <- if (!is.null(resolved_chemicals)) length(resolved_chemicals) else length(query)
     cli::cli_rule(left = paste('Generic Chemi Request:', endpoint))
-    cli::cli_dl(c('Number of items' = '{length(query)}'))
+    cli::cli_dl(c('Number of items' = '{item_count}'))
     cli::cli_rule()
     cli::cli_end()
   }
@@ -519,7 +521,8 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
         purrr::list_rbind()
       
       # If the results match the query length, add the query column
-      if (nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
+      # Only do this when query (not chemicals) was provided
+      if (!is.null(query) && length(query) > 0 && nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
          res <- dplyr::bind_cols(dtxsid = query, res)
       }
   }
