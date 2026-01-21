@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_nmr_spectrum}
 \title{Endpoint for retrieving a specified NMR spectrum from the database.}
 \usage{
-chemi_amos_get_nmr_spectrum(internal_id)
-}
-\arguments{
-\item{internal_id}{Unique ID of the NMR spectrum of interest.}
+chemi_amos_get_nmr_spectrum()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_nmr_spectrum(internal_id = "DTXSID7020182")
+chemi_amos_get_nmr_spectrum()
 }
 }

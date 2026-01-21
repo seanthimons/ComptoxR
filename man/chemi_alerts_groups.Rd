@@ -8,9 +8,6 @@ chemi_alerts_groups()
 
 chemi_alerts_groups()
 }
-\arguments{
-\item{id}{Primary query parameter}
-}
 \value{
 Returns a tibble with results
 
@@ -23,7 +20,7 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_alerts_groups(id = "DTXSID7020182")
+chemi_alerts_groups()
 }
 \dontrun{
 chemi_alerts_groups()

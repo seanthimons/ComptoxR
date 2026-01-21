@@ -12,15 +12,23 @@
 #' chemi_search_gethazard(sid = "DTXSID7020182")
 #' }
 chemi_search_gethazard <- function(sid) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(sid)) options[['sid']] <- sid
+    result <- generic_request(
+    query = NULL,
     endpoint = "search/gethazard",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    sid = sid
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

@@ -4,21 +4,26 @@
 \alias{chemi_resolver_universalharvest_cart}
 \title{Resolver Universalharvest Cart}
 \usage{
-chemi_resolver_universalharvest_cart(chemicals, info = NULL)
+chemi_resolver_universalharvest_cart(query, id_type = "AnyId", info = NULL)
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
+
+\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{info}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function first resolves chemical identifiers using \code{chemi_resolver},
+then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
 \dontrun{
-chemi_resolver_universalharvest_cart(chemicals = "DTXSID7020182")
+chemi_resolver_universalharvest_cart(query = c("50-00-0", "DTXSID7020182"))
 }
 }

@@ -4,10 +4,7 @@
 \alias{chemi_amos_substring}
 \title{Returns information on substances where the specified substring is in or equal to a name.}
 \usage{
-chemi_amos_substring(substring)
-}
-\arguments{
-\item{substring}{A name substring to search by.}
+chemi_amos_substring()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substring(substring = "DTXSID7020182")
+chemi_amos_substring()
 }
 }

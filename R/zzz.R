@@ -405,9 +405,13 @@ run_debug <- function(debug = FALSE) {
 	if (is.logical(debug)) {
 		Sys.setenv("run_debug" = as.character(debug))
 		if (isTRUE(debug)) {
-			cli::cli_alert_info("Debug mode is now ON.")
+			cli::cli_alert_info(
+				paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
+			)
 		} else {
-			cli::cli_alert_info("Debug mode is now OFF.")
+			cli::cli_alert_info(
+				paste0("Debug mode is now ", cli::style_bold(cli::col_green("OFF")))
+			)
 		}
 	} else {
 		cli::cli_alert_warning(
@@ -450,9 +454,13 @@ run_verbose <- function(verbose = FALSE) {
 	if (is.logical(verbose)) {
 		Sys.setenv("run_verbose" = as.character(verbose))
 		if (isTRUE(verbose)) {
-			cli::cli_alert_info("Verbose mode is now ON.")
+			cli::cli_alert_info(
+				paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
+			)
 		} else {
-			cli::cli_alert_info("Verbose mode is now OFF.")
+			cli::cli_alert_info(
+				paste0("Verbose mode is now ", cli::style_bold(cli::col_red("OFF")))
+			)
 		}
 	} else {
 		cli::cli_alert_warning(

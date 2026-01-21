@@ -3,22 +3,23 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param chemicals Required parameter
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_chemicals_categories(chemicals = "DTXSID7020182")
+#' chemi_toxprints_chemicals_categories()
 #' }
-chemi_toxprints_chemicals_categories <- function(chemicals) {
-
-  generic_chemi_request(
-    query = chemicals,
+chemi_toxprints_chemicals_categories <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "toxprints/chemicals_categories",
-    wrap = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

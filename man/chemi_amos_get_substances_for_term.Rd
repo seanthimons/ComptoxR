@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_substances_for_term}
 \title{Returns substance(s) that match a search term.}
 \usage{
-chemi_amos_get_substances_for_term(search_term)
-}
-\arguments{
-\item{search_term}{A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name.}
+chemi_amos_get_substances_for_term()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_substances_for_term(search_term = "DTXSID7020182")
+chemi_amos_get_substances_for_term()
 }
 }

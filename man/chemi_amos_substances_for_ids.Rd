@@ -4,10 +4,7 @@
 \alias{chemi_amos_substances_for_ids}
 \title{Returns an Excel file containing a deduplicated list of substances that appear in a given set of database record IDs.}
 \usage{
-chemi_amos_substances_for_ids(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_substances_for_ids()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_ids(query = "DTXSID7020182")
+chemi_amos_substances_for_ids()
 }
 }

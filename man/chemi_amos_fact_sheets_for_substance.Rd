@@ -4,10 +4,7 @@
 \alias{chemi_amos_fact_sheets_for_substance}
 \title{Returns a list of fact sheet IDs that are associated with the given DTXSID.}
 \usage{
-chemi_amos_fact_sheets_for_substance(dtxsid)
-}
-\arguments{
-\item{dtxsid}{The DTXSID for the substance of interest.}
+chemi_amos_fact_sheets_for_substance()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_fact_sheets_for_substance(dtxsid = "DTXSID7020182")
+chemi_amos_fact_sheets_for_substance()
 }
 }

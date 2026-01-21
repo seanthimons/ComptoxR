@@ -11,7 +11,7 @@
 #' chemi_amos_database()
 #' }
 chemi_amos_database <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "amos/database_summary/",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_amos_database <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

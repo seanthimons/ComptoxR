@@ -20,16 +20,44 @@ The `endpoint_eval_utils.R` script is a code generation utility that parses Open
 
 ## Architecture Overview {#architecture-overview}
 
-The utility provides four main capabilities:
+The utility provides five main capabilities:
 
-1.  **OpenAPI Parsing** (`openapi_to_spec`) - Converts OpenAPI JSON to a tidy specification tibble
-2.  **Codebase Analysis** (`find_endpoint_usages_base`) - Searches for existing endpoint implementations
-3.  **Parameter Parsing** (`parse_path_parameters`, `parse_function_params`) - Extracts and organizes function parameters
-4.  **Code Generation** (`build_function_stub`, `render_endpoint_stubs`) - Generates R function source code
+1.  **Schema Preprocessing** (`preprocess_schema`) - Filters endpoints and reduces schema complexity
+2.  **OpenAPI Parsing** (`openapi_to_spec`) - Converts OpenAPI JSON to a tidy specification tibble
+3.  **Codebase Analysis** (`find_endpoint_usages_base`) - Searches for existing endpoint implementations
+4.  **Parameter Parsing** (`parse_path_parameters`, `parse_function_params`, `extract_query_params_with_refs`) - Extracts and organizes function parameters
+5.  **Code Generation** (`build_function_stub`, `render_endpoint_stubs`) - Generates R function source code
+
+### Processing Pipeline
+
+```
+schema_file → preprocess_schema → filtered openapi → openapi_to_spec → specification tibble
+                ↓                              ↓
+                extract_referenced_schemas    extract_body_properties
+                ↓                              ↓
+                filter_components_by_refs      resolve_schema_ref
+                                               ↓
+                                               extract_query_params_with_refs
+```
 
 ------------------------------------------------------------------------
 
 ## Schema Parsing Flow {#schema-parsing-flow}
+
+### Step 0: Preprocess Schema (Optional)
+
+The `preprocess_schema()` function reduces schema complexity before parsing:
+
+1.  **Filter endpoints** - Removes unwanted endpoints matching `ENDPOINT_PATTERNS_TO_EXCLUDE`
+    - Pattern: `render|replace|add|freeze|metadata|version|reports|download|export|protocols`
+2.  **Collect referenced schemas** - Walks through paths to find all `$ref` values
+3.  **Filter components** - Keeps only schemas actually referenced by endpoints
+4.  **Prevent circular references** - Simplifies schema resolution
+
+```r
+# Enable preprocessing (default when openapi is a file path)
+spec <- openapi_to_spec(openapi = "schema/chemi-hazard-prod.json", preprocess = TRUE)
+```
 
 ### Step 1: Load OpenAPI Schemas
 
@@ -78,6 +106,17 @@ In addition to parameters, the following endpoint-level metadata is extracted:
 | `deprecated` | `operation.deprecated` | Whether endpoint is deprecated |
 | `description` | `operation.description` | Detailed endpoint description |
 | `response_schema_type` | Detected from `responses` | Response type classification (array/object/scalar/binary/unknown) |
+| `request_type` | Detected from body/query | Request classification (json/query_only/query_with_schema) |
+| `body_schema_full` | Resolved from body schema | Complete schema structure (type, properties, item_schema) |
+| `body_item_type` | From array item schema | Type of array items or NA for objects |
+
+**Request Type Classification:**
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `"json"` | POST with JSON body | `/api/hazard` POST |
+| `"query_only"` | GET with query params only | `/api/search?q=benzene` |
+| `"query_with_schema"` | GET with schema-based query | Complex query endpoints |
 
 **Deprecated Detection:**
 
@@ -184,6 +223,64 @@ Query parameters are URL query string parameters (e.g., `?projection=all`):
 
 1.  If no path parameters exist, the first query parameter becomes the primary parameter
 2.  All query parameters are passed through the ellipsis (`...`) mechanism
+
+#### Query Parameter $ref Resolution
+
+When query parameters reference schemas via `$ref`, `extract_query_params_with_refs()` resolves and flattens them:
+
+1.  **Schema Resolution** - Resolves `$ref` to get actual schema properties
+2.  **Object Flattening** - Flattens nested objects using dot notation
+3.  **Binary Array Rejection** - Excludes parameters with `format: binary` (e.g., file uploads)
+4.  **Prefix Preservation** - Maintains original parameter name as prefix
+
+**Example: Nested Object Flattening**
+
+OpenAPI Schema:
+```json
+{
+  "name": "request",
+  "schema": { "$ref": "#/components/schemas/UniversalHarvestRequest" }
+}
+```
+
+Where `UniversalHarvestRequest` has:
+```json
+{
+  "properties": {
+    "info": { "$ref": "#/components/schemas/UniversalHarvestInfo" },
+    "chemicals": { "type": "array" }
+  }
+}
+```
+
+And `UniversalHarvestInfo` has:
+```json
+{
+  "properties": {
+    "keyName": { "type": "string" },
+    "keyType": { "type": "string" },
+    "loadNames": { "type": "boolean" }
+  }
+}
+```
+
+Result: Flattened parameters with dot notation:
+- `request.info.keyName`
+- `request.info.keyType`
+- `request.info.loadNames`
+- `request.chemicals`
+
+**Generated Function Signature:**
+```r
+chemi_resolver_universalharvest <- function(
+  request.info.keyName,
+  request.info.keyType = NULL,
+  request.info.loadNames = NULL,
+  request.chemicals = NULL
+) {
+  # ...
+}
+```
 
 ### Body Parameters
 
@@ -454,15 +551,28 @@ flowchart TB
         E --> F
     end
 
+    subgraph "Schema Preprocessing"
+        F --> F1[preprocess_schema]
+        F1 --> F2[Filter endpoints by ENDPOINT_PATTERNS_TO_EXCLUDE]
+        F2 --> F3[extract_referenced_schemas]
+        F3 --> F4[filter_components_by_refs]
+        F4 --> F5[Reduced OpenAPI spec]
+    end
+
     subgraph "Schema Parsing"
-        F --> G[openapi_to_spec]
+        F5 --> G[openapi_to_spec]
         G --> H[For each route/method]
         H --> I[Extract path parameters]
         H --> J[Extract query parameters]
         H --> K[Extract body parameters]
+        J --> J1[extract_query_params_with_refs]
+        J1 --> J2[resolve_schema_ref for $ref params]
+        J2 --> J3[Flatten nested objects with dot notation]
+        K --> K1[extract_body_properties]
+        K1 --> K2[resolve_schema_ref for body schema]
         I --> L[param_metadata]
-        J --> L
-        K --> L
+        J3 --> L
+        K2 --> L
         L --> M[Build spec tibble row]
     end
 
@@ -513,6 +623,7 @@ flowchart TB
 flowchart LR
     subgraph "Input"
         A[OpenAPI Schema]
+        A1[components]
     end
 
     subgraph "Extraction"
@@ -522,10 +633,23 @@ flowchart LR
         A --> E[metadata]
     end
 
+    subgraph "$ref Resolution"
+        C --> C1[extract_query_params_with_refs]
+        C1 --> C2{Has $ref?}
+        C2 -->|Yes| C3[resolve_schema_ref]
+        C3 --> C4[Flatten with dot notation]
+        C2 -->|No| C5[Use as-is]
+        A1 --> C3
+        D --> D1[extract_body_properties]
+        D1 --> D2[resolve_schema_ref]
+        A1 --> D2
+    end
+
     subgraph "Parsing"
         B --> F[parse_path_parameters]
-        C --> G[parse_function_params]
-        D --> H[parse_function_params]
+        C4 --> G[parse_function_params]
+        C5 --> G
+        D2 --> H[parse_function_params]
         E --> F
         E --> G
         E --> H
@@ -678,8 +802,14 @@ chemi_rq <- function(query) {
 
 | Function | Purpose | Input | Output |
 |--------------------|------------------|-----------------|-----------------|
+| `preprocess_schema()` | Filter endpoints and reduce schema complexity | Schema file path | Filtered OpenAPI list |
+| `extract_referenced_schemas()` | Collect all $ref values from paths | OpenAPI paths | Character vector of schema names |
+| `filter_components_by_refs()` | Keep only referenced schemas | Components, refs | Filtered components |
+| `resolve_schema_ref()` | Resolve $ref with circular detection | Schema ref, components, max_depth | Resolved schema definition |
+| `extract_body_properties()` | Extract body schema metadata | Request body, components | Schema structure with properties |
+| `extract_query_params_with_refs()` | Resolve and flatten query params | Parameters, components | `list(names, metadata)` |
 | `parse_chemi_schemas()` | Load and merge OpenAPI schemas | Schema directory | Unified spec tibble |
-| `openapi_to_spec()` | Parse single OpenAPI to spec | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type` |
+| `openapi_to_spec()` | Parse single OpenAPI to spec | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type`, `request_type` |
 | `uses_chemical_schema()` | Check if body uses Chemical schema | Request body, OpenAPI spec | `TRUE` / `FALSE` |
 | `get_body_schema_type()` | Classify body schema type | Request body, OpenAPI spec | `"chemical_array"`, `"string_array"`, etc. |
 | `parse_path_parameters()` | Parse path params | Param string, metadata | Signature, calls, docs |
@@ -692,20 +822,40 @@ chemi_rq <- function(query) {
 
 ## Debugging Tips
 
-1.  **Inspect parsed schema:**
+1.  **Inspect parsed schema with preprocessing:**
 
     ``` r
-    spec <- openapi_to_spec(jsonlite::fromJSON("schema/chemi-hazard-prod.json"))
+    spec <- openapi_to_spec("schema/chemi-hazard-prod.json", preprocess = TRUE)
     View(spec)
+    
+    # Check new columns
+    spec %>% select(route, method, request_type, body_schema_full, body_item_type)
     ```
 
 2.  **Check parameter metadata:**
 
     ``` r
     spec$body_param_metadata[[1]]  # First endpoint's body params
+    spec$query_param_metadata[[1]] # First endpoint's query params (with flattened $ref)
     ```
 
-3.  **Check which endpoints need resolver wrapping:**
+3.  **Test query parameter $ref resolution:**
+
+    ``` r
+    source("endpoint_eval_utils.R")
+    openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
+    
+    # Find an endpoint with query params that have $ref
+    params <- openapi$paths[["/api/resolver/universalharvest"]]$post$parameters
+    components <- openapi$components
+    
+    # Test the extraction
+    result <- extract_query_params_with_refs(params, components)
+    print(result$names)     # Flattened parameter names with dot notation
+    print(result$metadata)  # Metadata for each parameter
+    ```
+
+4.  **Check which endpoints need resolver wrapping:**
 
     ``` r
     source("endpoint_eval_utils.R")
@@ -718,7 +868,7 @@ chemi_rq <- function(query) {
     print(CHEMICAL_SCHEMA_PATTERNS)
     ```
 
-4.  **Test stub generation:**
+5.  **Test stub generation:**
 
     ``` r
     stub <- build_function_stub(fn, endpoint, method, title, batch_limit,
@@ -727,14 +877,29 @@ chemi_rq <- function(query) {
     cat(stub)
     ```
 
-5.  **Enable verbose output:**
+6.  **Enable verbose output:**
 
     ``` r
     Sys.setenv(run_verbose = "TRUE")
     Sys.setenv(run_debug = "TRUE")
     ```
 
-6.  **Add new schema patterns for resolver wrapping:**
+7.  **Debug schema resolution:**
+
+    ``` r
+    source("endpoint_eval_utils.R")
+    openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
+    
+    # Manually resolve a schema reference
+    resolved <- resolve_schema_ref(
+      "#/components/schemas/UniversalHarvestRequest",
+      openapi$components,
+      max_depth = 5
+    )
+    print(resolved)
+    ```
+
+8.  **Add new schema patterns for resolver wrapping:**
 
     Edit the `CHEMICAL_SCHEMA_PATTERNS` constant at the top of `endpoint_eval_utils.R`:
 
@@ -1070,6 +1235,9 @@ flowchart TD
 | Issue | File | Function |
 |-------|------|----------|
 | Schema not loading | `chemi_endpoint_eval.R` | Filtering logic |
+| Schema preprocessing | `endpoint_eval_utils.R` | `preprocess_schema()` |
+| $ref resolution failing | `endpoint_eval_utils.R` | `resolve_schema_ref()` |
+| Query params not flattened | `endpoint_eval_utils.R` | `extract_query_params_with_refs()` |
 | batch_limit wrong | `endpoint eval.R` | batch_limit assignment |
 | Parameter sanitization | `endpoint_eval_utils.R` | `sanitize_param()` |
 | Wrapper selection | `endpoint_eval_utils.R` | GET override logic |

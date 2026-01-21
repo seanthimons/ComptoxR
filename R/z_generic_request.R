@@ -364,7 +364,8 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #' This specialized template handles the nested payload structure common to the
 #' EPA cheminformatics microservices: {"chemicals": [{"sid": "ID1"}], "options": {...}}
 #'
-#' @param query A character vector of identifiers (DTXSIDs, etc.)
+#' @param query A character vector of identifiers (DTXSIDs, etc.). If NULL and chemicals is
+#'        provided, the chemicals parameter is used instead.
 #' @param endpoint The specific sub-path (e.g., "toxprints/calculate")
 #' @param options A named list of parameters to be placed in the 'options' JSON field.
 #' @param sid_label The key used for identifiers in the JSON body (usually "sid").
@@ -373,34 +374,68 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #' @param pluck_res Optional character; the name of the field to extract from the JSON response.
 #' @param wrap Boolean; whether to wrap the query in a {"chemicals": [...], "options": ...} structure.
 #'        Defaults to TRUE. If FALSE, sends a JSON array of objects like [{"sid": "ID1"}, ...].
+#'        Ignored if array_payload is TRUE.
+#' @param array_payload Boolean; if TRUE, creates a flat structure with identifiers as an array:
+#'        {"ids": ["ID1", "ID2"], "option1": "value1", ...}. When TRUE, sid_label is used as the
+#'        array key name and options are merged at the top level. Takes precedence over wrap parameter.
+#'        Defaults to FALSE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
+#' @param chemicals Optional list of pre-resolved Chemical objects. Each element should be a
+#'        list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
+#'        this takes precedence over the query parameter for building the chemicals payload.
 #' @param ... Additional arguments passed to httr2.
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a raw list.
 #' @export
-generic_chemi_request <- function(query, endpoint, options = list(), sid_label = "sid", 
+generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_label = "sid", 
                                   server = "chemi_burl", auth = FALSE, pluck_res = NULL, 
-                                  wrap = TRUE, tidy = TRUE, ...) {
+                                  wrap = TRUE, array_payload = FALSE, tidy = TRUE,
+                                  chemicals = NULL, ...) {
   
   # 1. Base URL Resolution
   base_url <- Sys.getenv(server, unset = server)
   if (base_url == "") base_url <- server
 
   # 2. Input Normalization
-  query <- unique(as.vector(query))
-  query <- query[!is.na(query) & query != ""]
-  if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
+  # If pre-resolved chemicals are provided, use them directly
+  if (!is.null(chemicals) && is.list(chemicals) && length(chemicals) > 0) {
+    # Use pre-resolved chemicals directly
+    resolved_chemicals <- chemicals
+  } else {
+    # Standard query handling
+    query <- unique(as.vector(query))
+    query <- query[!is.na(query) & query != ""]
+    if (length(query) == 0) cli::cli_abort("Either query or chemicals parameter must be provided.")
+    resolved_chemicals <- NULL
+  }
 
   # 3. Payload Construction
-  chemicals <- purrr::map(query, ~ set_names(list(.x), sid_label))
-  
-  if (wrap) {
-    payload <- list(
-      chemicals = chemicals,
-      options = options
-    )
+  if (!is.null(resolved_chemicals)) {
+    # Pre-resolved chemicals provided - use them directly
+    if (wrap) {
+      payload <- list(
+        chemicals = resolved_chemicals,
+        options = options
+      )
+    } else {
+      payload <- resolved_chemicals
+    }
+  } else if (array_payload) {
+    # Array format: {"ids": ["ID1", "ID2"], "option1": "value1", ...}
+    # Put identifiers directly as an array, merge options at top level
+    payload <- c(set_names(list(query), sid_label), options)
   } else {
-    payload <- chemicals
+    # Standard format with wrap parameter
+    chemicals_list <- purrr::map(query, ~ set_names(list(.x), sid_label))
+    
+    if (wrap) {
+      payload <- list(
+        chemicals = chemicals_list,
+        options = options
+      )
+    } else {
+      payload <- chemicals_list
+    }
   }
 
   # Check environment flags
@@ -408,8 +443,10 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
 
   if (run_verbose) {
+    # Determine count based on whether chemicals or query was provided
+    item_count <- if (!is.null(resolved_chemicals)) length(resolved_chemicals) else length(query)
     cli::cli_rule(left = paste('Generic Chemi Request:', endpoint))
-    cli::cli_dl(c('Number of items' = '{length(query)}'))
+    cli::cli_dl(c('Number of items' = '{item_count}'))
     cli::cli_rule()
     cli::cli_end()
   }
@@ -451,8 +488,6 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
   if (!tidy) return(body)
 
   # 8. Tidy Conversion
-  if (!tidy) return(body)
-
   # Handle cases where body is a named list of results (keyed by query)
   if (!is.null(names(body)) && !is.data.frame(body)) {
       res <- body %>%
@@ -486,7 +521,8 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
         purrr::list_rbind()
       
       # If the results match the query length, add the query column
-      if (nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
+      # Only do this when query (not chemicals) was provided
+      if (!is.null(query) && length(query) > 0 && nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
          res <- dplyr::bind_cols(dtxsid = query, res)
       }
   }

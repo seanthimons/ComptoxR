@@ -2,38 +2,40 @@
 % Please edit documentation in R/chemi_resolver_lookup.R
 \name{chemi_resolver_lookup_bulk}
 \alias{chemi_resolver_lookup_bulk}
-\title{Resolver Lookup}
+\title{Resolver Lookup (Bulk)}
 \usage{
 chemi_resolver_lookup_bulk(
   ids,
+  idsType = "AnyId",
+  fuzzy = "Not",
+  mol = FALSE,
   filters = NULL,
-  format = NULL,
-  fuzzy = NULL,
-  idsType = NULL,
-  mol = NULL
+  format = NULL
 )
 }
 \arguments{
-\item{ids}{List of chemical identifiers to look up. All identifiers must be of the same type or type should be Any.}
+\item{ids}{Character vector of chemical identifiers to look up. All identifiers must be of the same type or type should be AnyId.}
 
-\item{filters}{Optional parameter}
+\item{idsType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
 
-\item{format}{Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
+\item{fuzzy}{Fuzzy lookup setting. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)}
 
-\item{fuzzy}{If set to true fuzzy lookup result is returned which usually means a substring search. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic}
+\item{mol}{If TRUE, MOL is requested as a result (default: FALSE)}
 
-\item{idsType}{Chemical identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId}
+\item{filters}{Optional filters object}
 
-\item{mol}{If set to true then MOL is requested as a result}
+\item{format}{Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
 }
 \value{
 Returns a list with result object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Performs bulk lookup of chemical identifiers via POST endpoint.
 }
 \examples{
 \dontrun{
-chemi_resolver_lookup_bulk(ids = "DTXSID7020182")
+chemi_resolver_lookup_bulk(ids = c("DTXSID7020182", "50-00-0"))
 }
 }

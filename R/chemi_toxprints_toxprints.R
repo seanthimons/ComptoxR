@@ -5,7 +5,7 @@
 #'
 #' @param category Required parameter
 #' @param label Optional parameter
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
@@ -13,16 +13,24 @@
 #' chemi_toxprints_toxprints(category = "DTXSID7020182")
 #' }
 chemi_toxprints_toxprints <- function(category, label = NULL) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(category)) options[['category']] <- category
+  if (!is.null(label)) options[['label']] <- label
+    result <- generic_request(
+    query = NULL,
     endpoint = "toxprints/toxprints",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    category = category,
-    label = label
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

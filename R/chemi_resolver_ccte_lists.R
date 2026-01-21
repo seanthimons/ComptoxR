@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @return Returns a tibble with results (array of objects)
 #' @export
 #'
 #' @examples
@@ -11,7 +11,7 @@
 #' chemi_resolver_ccte_lists()
 #' }
 chemi_resolver_ccte_lists <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "resolver/ccte-lists",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_resolver_ccte_lists <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

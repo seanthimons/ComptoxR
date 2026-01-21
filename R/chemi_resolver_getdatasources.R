@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @return Returns a tibble with results (array of objects)
 #' @export
 #'
 #' @examples
@@ -11,7 +11,7 @@
 #' chemi_resolver_getdatasources()
 #' }
 chemi_resolver_getdatasources <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "resolver/getdatasources",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_resolver_getdatasources <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

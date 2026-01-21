@@ -4,19 +4,19 @@
 \alias{chemi_resolver_casharvest}
 \title{Resolver Casharvest}
 \usage{
-chemi_resolver_casharvest(request)
+chemi_resolver_casharvest(request.filesInfo)
 }
 \arguments{
-\item{request}{Required parameter}
+\item{request.filesInfo}{Required parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_resolver_casharvest(request = "DTXSID7020182")
+chemi_resolver_casharvest(request.filesInfo = "DTXSID7020182")
 }
 }

@@ -11,20 +11,28 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats(smiles = "DTXSID7020182")
+#' chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
 #' }
 chemi_ncc_cats <- function(smiles, logp, ws) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(logp)) options[['logp']] <- logp
+  if (!is.null(ws)) options[['ws']] <- ws
+    result <- generic_request(
+    query = NULL,
     endpoint = "ncc_cats",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    smiles = smiles,
-    logp = logp,
-    ws = ws
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -35,22 +43,23 @@ chemi_ncc_cats <- function(smiles, logp, ws) {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A list of DTXSIDs to search for
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(query = "DTXSID7020182")
+#' chemi_ncc_cats_bulk()
 #' }
-chemi_ncc_cats_bulk <- function(query) {
-  generic_chemi_request(
-    query = query,
+chemi_ncc_cats_bulk <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "ncc_cats",
-    server = "chemi_burl",
-    auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

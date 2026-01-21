@@ -4,12 +4,14 @@
 \alias{chemi_stdizer_chemicals}
 \title{Stdizer Chemicals}
 \usage{
-chemi_stdizer_chemicals(options, chemicals = NULL, full = NULL)
+chemi_stdizer_chemicals(query, id_type = "AnyId", options = NULL, full = NULL)
 }
 \arguments{
-\item{options}{Required parameter}
+\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{chemicals}{Optional parameter}
+\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+
+\item{options}{Optional parameter}
 
 \item{full}{Optional parameter}
 }
@@ -18,9 +20,12 @@ Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function first resolves chemical identifiers using \code{chemi_resolver},
+then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
 \dontrun{
-chemi_stdizer_chemicals(options = "DTXSID7020182")
+chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
 }
 }

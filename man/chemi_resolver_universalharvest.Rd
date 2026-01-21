@@ -4,19 +4,75 @@
 \alias{chemi_resolver_universalharvest}
 \title{Resolver Universalharvest}
 \usage{
-chemi_resolver_universalharvest(request)
+chemi_resolver_universalharvest(
+  request.info.keyName,
+  request.info.keyType = NULL,
+  request.info.loadNames = NULL,
+  request.info.loadCASRNs = NULL,
+  request.info.loadDeletedCASRNs = NULL,
+  request.info.loadInChIKeys = NULL,
+  request.info.loadDTXSIDs = NULL,
+  request.info.loadSMILESs = NULL,
+  request.info.loadTotals = NULL,
+  request.info.loadVendors = NULL,
+  request.info.useResolver = NULL,
+  request.info.usePubchem = NULL,
+  request.info.useCommonchemistry = NULL,
+  request.info.deepSearch = NULL,
+  request.info.pubchem_headers = NULL,
+  request.info.cc_headers = NULL,
+  request.info.resolver_headers = NULL,
+  request.info.keyChemIdType = NULL,
+  request.chemicals = NULL
+)
 }
 \arguments{
-\item{request}{Required parameter}
+\item{request.info.keyName}{Required parameter}
+
+\item{request.info.keyType}{Optional parameter}
+
+\item{request.info.loadNames}{Optional parameter}
+
+\item{request.info.loadCASRNs}{Optional parameter}
+
+\item{request.info.loadDeletedCASRNs}{Optional parameter}
+
+\item{request.info.loadInChIKeys}{Optional parameter}
+
+\item{request.info.loadDTXSIDs}{Optional parameter}
+
+\item{request.info.loadSMILESs}{Optional parameter}
+
+\item{request.info.loadTotals}{Optional parameter}
+
+\item{request.info.loadVendors}{Optional parameter}
+
+\item{request.info.useResolver}{Optional parameter}
+
+\item{request.info.usePubchem}{Optional parameter}
+
+\item{request.info.useCommonchemistry}{Optional parameter}
+
+\item{request.info.deepSearch}{Optional parameter}
+
+\item{request.info.pubchem_headers}{Optional parameter}
+
+\item{request.info.cc_headers}{Optional parameter}
+
+\item{request.info.resolver_headers}{Optional parameter}
+
+\item{request.info.keyChemIdType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId}
+
+\item{request.chemicals}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_resolver_universalharvest(request = "DTXSID7020182")
+chemi_resolver_universalharvest(request.info.keyName = "DTXSID7020182")
 }
 }

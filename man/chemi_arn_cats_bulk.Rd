@@ -4,10 +4,7 @@
 \alias{chemi_arn_cats_bulk}
 \title{Generate groups for multiple molecules}
 \usage{
-chemi_arn_cats_bulk(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_arn_cats_bulk()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk(query = "DTXSID7020182")
+chemi_arn_cats_bulk()
 }
 }

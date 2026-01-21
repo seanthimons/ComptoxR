@@ -4,10 +4,7 @@
 \alias{chemi_amos_spectral_entropy}
 \title{Calculates the spectral entropy for a single spectrum.}
 \usage{
-chemi_amos_spectral_entropy(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_spectral_entropy()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectral_entropy(query = "DTXSID7020182")
+chemi_amos_spectral_entropy()
 }
 }

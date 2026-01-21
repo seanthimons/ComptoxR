@@ -5,29 +5,42 @@
 \title{Resolver Getsimilaritylist}
 \usage{
 chemi_resolver_getsimilaritylist(
-  chemicals,
-  fingerprintName = NULL,
+  query,
+  id_type = "AnyId",
   get_chemicals = NULL,
   main = NULL,
+  fingerprintName = NULL,
+  scoreName = NULL,
+  tverskyI = NULL,
+  rdkitType = NULL,
+  rdkitRadius = NULL,
+  rdkitBits = NULL,
   padelCompute2D = NULL,
   padelCompute3D = NULL,
   padelComputeFingerprints = NULL,
-  rdkitBits = NULL,
-  rdkitRadius = NULL,
-  rdkitType = NULL,
-  scoreName = NULL,
-  toxprintsProfile = NULL,
-  tverskyI = NULL
+  toxprintsProfile = NULL
 )
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{fingerprintName}{Optional parameter}
+\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{get_chemicals}{Optional parameter}
 
 \item{main}{Optional parameter}
+
+\item{fingerprintName}{Optional parameter}
+
+\item{scoreName}{Optional parameter}
+
+\item{tverskyI}{Optional parameter}
+
+\item{rdkitType}{Optional parameter}
+
+\item{rdkitRadius}{Optional parameter}
+
+\item{rdkitBits}{Optional parameter}
 
 \item{padelCompute2D}{Optional parameter}
 
@@ -35,26 +48,19 @@ chemi_resolver_getsimilaritylist(
 
 \item{padelComputeFingerprints}{Optional parameter}
 
-\item{rdkitBits}{Optional parameter}
-
-\item{rdkitRadius}{Optional parameter}
-
-\item{rdkitType}{Optional parameter}
-
-\item{scoreName}{Optional parameter}
-
 \item{toxprintsProfile}{Optional parameter}
-
-\item{tverskyI}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function first resolves chemical identifiers using \code{chemi_resolver},
+then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
 \dontrun{
-chemi_resolver_getsimilaritylist(chemicals = "DTXSID7020182")
+chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
 }
 }

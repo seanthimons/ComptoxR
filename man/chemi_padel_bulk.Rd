@@ -4,12 +4,7 @@
 \alias{chemi_padel_bulk}
 \title{Padel}
 \usage{
-chemi_padel_bulk(chemicals, options = NULL)
-}
-\arguments{
-\item{chemicals}{Required parameter}
-
-\item{options}{Optional parameter}
+chemi_padel_bulk()
 }
 \value{
 Returns a tibble with results
@@ -19,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_padel_bulk(chemicals = "DTXSID7020182")
+chemi_padel_bulk()
 }
 }

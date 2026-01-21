@@ -4,10 +4,7 @@
 \alias{chemi_stdizer_groups_recursive}
 \title{Stdizer Groups Recursive}
 \usage{
-chemi_stdizer_groups_recursive(id)
-}
-\arguments{
-\item{id}{Primary query parameter}
+chemi_stdizer_groups_recursive()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups_recursive(id = "DTXSID7020182")
+chemi_stdizer_groups_recursive()
 }
 }

@@ -4,14 +4,7 @@
 \alias{chemi_toxprints_bulk}
 \title{Toxprints}
 \usage{
-chemi_toxprints_bulk(chemicals, profile = NULL, options = NULL)
-}
-\arguments{
-\item{chemicals}{Required parameter}
-
-\item{profile}{Optional parameter}
-
-\item{options}{Optional parameter}
+chemi_toxprints_bulk()
 }
 \value{
 Returns a list with result object
@@ -21,6 +14,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_bulk(chemicals = c("DTXSID10900961", "DTXSID2042353", "DTXSID1022421"))
+chemi_toxprints_bulk()
 }
 }

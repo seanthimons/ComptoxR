@@ -5,7 +5,7 @@
 #'
 #' @param category Required parameter
 #' @param label Optional parameter
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
@@ -13,16 +13,24 @@
 #' chemi_toxprints_assays(category = "DTXSID7020182")
 #' }
 chemi_toxprints_assays <- function(category, label = NULL) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(category)) options[['category']] <- category
+  if (!is.null(label)) options[['label']] <- label
+    result <- generic_request(
+    query = NULL,
     endpoint = "toxprints/assays",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    category = category,
-    label = label
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -33,41 +41,23 @@ chemi_toxprints_assays <- function(category, label = NULL) {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param id Required parameter
-#' @param name Optional parameter
-#' @param category Optional parameter
-#' @param actives Optional parameter
-#' @param total Optional parameter
-#' @param metrics Optional parameter
-#' @param chemicals Optional parameter
-#' @param labels Optional parameter
-#' @param options Optional parameter
-#' @param acl Optional parameter
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_assays_bulk(id = "DTXSID7020182")
+#' chemi_toxprints_assays_bulk()
 #' }
-chemi_toxprints_assays_bulk <- function(id, name = NULL, category = NULL, actives = NULL, total = NULL, metrics = NULL, chemicals = NULL, labels = NULL, options = NULL, acl = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(name)) options$name <- name
-  if (!is.null(category)) options$category <- category
-  if (!is.null(actives)) options$actives <- actives
-  if (!is.null(total)) options$total <- total
-  if (!is.null(metrics)) options$metrics <- metrics
-  if (!is.null(chemicals)) options$chemicals <- chemicals
-  if (!is.null(labels)) options$labels <- labels
-  if (!is.null(options)) options$options <- options
-  if (!is.null(acl)) options$acl <- acl
-  generic_chemi_request(
-    query = id,
+chemi_toxprints_assays_bulk <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "toxprints/assays",
-    options = options,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -78,24 +68,27 @@ chemi_toxprints_assays_bulk <- function(id, name = NULL, category = NULL, active
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param name Primary query parameter
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_assays(name = "DTXSID7020182")
+#' chemi_toxprints_assays()
 #' }
-chemi_toxprints_assays <- function(name) {
-  generic_request(
-    query = name,
+chemi_toxprints_assays <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "toxprints/assays/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

@@ -4,10 +4,7 @@
 \alias{chemi_amos_get_substance_file_for_record}
 \title{Creates an Excel workbook listing the substances in the specified record with some additional identifiers.}
 \usage{
-chemi_amos_get_substance_file_for_record(internal_id)
-}
-\arguments{
-\item{internal_id}{Unique ID of the record of interest.}
+chemi_amos_get_substance_file_for_record()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_substance_file_for_record(internal_id = "DTXSID7020182")
+chemi_amos_get_substance_file_for_record()
 }
 }
