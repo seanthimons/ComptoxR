@@ -228,3 +228,74 @@ chemi_schema <- function() {
 
 	invisible(chemi_server(1))
 }
+
+#' Download API schemas
+#'
+#' @description
+#' This function downloads the JSON schemas for the CAS Common Chemistry API
+#' endpoints. The schemas are saved in the 'schema' directory of the project.
+#'
+#' @return `NULL`.
+#'
+#' @examples
+#' if (interactive()) {
+#'  cc_schema()
+#' }
+cc_schema <- function() {
+	# Create schema directory if it doesn't exist
+	schema_dir <- here::here('schema')
+	if (!dir.exists(schema_dir)) {
+		dir.create(schema_dir, recursive = TRUE)
+	}
+
+	endpoints <- list(
+		'https://commonchemistry.cas.org/swagger/commonchemistry-swagger.json'
+	)
+
+	ping_url <- function(url) {
+		req <- httr2::request(url) %>%
+			httr2::req_method("HEAD") %>%
+			httr2::req_timeout(5) %>%
+			httr2::req_error(is_error = \(resp) FALSE)
+
+		resp <- try(httr2::req_perform(req), silent = TRUE)
+
+		if (inherits(resp, "try-error")) {
+			cli::cli_alert_warning("URL is not reachable, skipping download: {url}")
+			return(FALSE)
+		}
+
+		status <- httr2::resp_status(resp)
+
+		if (status >= 200 && status < 400) {
+			return(TRUE)
+		} else {
+			cli::cli_alert_warning(
+				"URL returned status {status}, skipping download: {url}"
+			)
+			return(FALSE)
+		}
+	}
+
+	map(
+		endpoints,
+		function(endpoint) {
+				# Sets the path
+	
+				url_to_check <- endpoint
+
+				#if (ping_url(url_to_check)) {
+					download.file(
+						url = url_to_check,
+						destfile = here::here(
+							'schema',
+							paste0("commonchemistry-prod.json")
+						),
+						mode = 'wb'
+					)
+				#}
+		},
+		.progress = TRUE
+	)
+	invisible(NULL)
+}
