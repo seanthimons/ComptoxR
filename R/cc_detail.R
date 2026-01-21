@@ -14,7 +14,6 @@
 #' }
 cc_detail <- function(cas_rn, uri = NULL) {
   result <- generic_request(
-    query = NULL,
     endpoint = "detail",
     method = "GET",
     batch_limit = 0,

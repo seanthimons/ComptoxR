@@ -15,7 +15,6 @@
 #' }
 cc_search <- function(q, offset = NULL, size = NULL) {
   result <- generic_request(
-    query = NULL,
     endpoint = "search",
     method = "GET",
     batch_limit = 0,
