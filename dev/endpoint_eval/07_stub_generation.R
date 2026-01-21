@@ -289,7 +289,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' {fn}(query = c("50-00-0", "DTXSID7020182"))
 #\' }}')
 
-    # Generate resolver-wrapped function body
+    # Generate resolver-wrapped function body using generic_chemi_request
     fn_body <- glue::glue('
 {fn} <- function({fn_signature_resolver}) {{
   # Resolve identifiers to Chemical objects
@@ -317,30 +317,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
 {options_assembly}
 
-  # Build and send request
-  base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
-  if (base_url == "") base_url <- "chemi_burl"
-
-  payload <- list(chemicals = chemicals)
-  if (length(extra_options) > 0) payload$options <- extra_options
-
-  req <- httr2::request(base_url) |>
-    httr2::req_url_path_append("{endpoint}") |>
-    httr2::req_method("POST") |>
-    httr2::req_body_json(payload) |>
-    httr2::req_headers(Accept = "application/json")
-
-  if (as.logical(Sys.getenv("run_debug", "FALSE"))) {{
-    return(httr2::req_dry_run(req))
-  }}
-
-  resp <- httr2::req_perform(req)
-
-  if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {{
-    cli::cli_abort("API request to {{.val {endpoint}}} failed with status {{httr2::resp_status(resp)}}")
-  }}
-
-  result <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+  result <- generic_chemi_request(
+    query = NULL,
+    endpoint = "{endpoint}",
+    options = extra_options,
+    chemicals = chemicals,
+    tidy = FALSE
+  )
 
   # Additional post-processing can be added here
 
