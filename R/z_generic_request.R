@@ -387,7 +387,7 @@ generic_request <- function(query, endpoint, method = "POST", server = 'ctx_burl
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a raw list.
 #' @export
-generic_chemi_request <- function(query, endpoint, options = list(), sid_label = "sid", 
+generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_label = "sid", 
                                   server = "chemi_burl", auth = FALSE, pluck_res = NULL, 
                                   wrap = TRUE, array_payload = FALSE, tidy = TRUE,
                                   chemicals = NULL, ...) {
@@ -405,7 +405,7 @@ generic_chemi_request <- function(query, endpoint, options = list(), sid_label =
     # Standard query handling
     query <- unique(as.vector(query))
     query <- query[!is.na(query) & query != ""]
-    if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
+    if (length(query) == 0) cli::cli_abort("Either query or chemicals parameter must be provided.")
     resolved_chemicals <- NULL
   }
 
