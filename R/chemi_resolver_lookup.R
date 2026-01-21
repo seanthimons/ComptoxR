@@ -74,7 +74,7 @@ chemi_resolver_lookup_bulk <- function(ids, idsType = "AnyId", fuzzy = "Not", mo
   if (!is.null(format)) body$format <- format
   
   # Build and send request
-  base_url <- Sys.getenv("chemi_burl", unset = "")
+  base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
   if (base_url == "") base_url <- "chemi_burl"
   
   req <- httr2::request(base_url) |>
