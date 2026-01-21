@@ -5,7 +5,7 @@
 \title{Generic Cheminformatics API Request Function}
 \usage{
 generic_chemi_request(
-  query,
+  query = NULL,
   endpoint,
   options = list(),
   sid_label = "sid",
@@ -15,11 +15,13 @@ generic_chemi_request(
   wrap = TRUE,
   array_payload = FALSE,
   tidy = TRUE,
+  chemicals = NULL,
   ...
 )
 }
 \arguments{
-\item{query}{A character vector of identifiers (DTXSIDs, etc.)}
+\item{query}{A character vector of identifiers (DTXSIDs, etc.). If NULL and chemicals is
+provided, the chemicals parameter is used instead.}
 
 \item{endpoint}{The specific sub-path (e.g., "toxprints/calculate")}
 
@@ -43,6 +45,10 @@ array key name and options are merged at the top level. Takes precedence over wr
 Defaults to FALSE.}
 
 \item{tidy}{Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.}
+
+\item{chemicals}{Optional list of pre-resolved Chemical objects. Each element should be a
+list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
+this takes precedence over the query parameter for building the chemicals payload.}
 
 \item{...}{Additional arguments passed to httr2.}
 }
