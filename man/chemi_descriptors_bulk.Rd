@@ -4,24 +4,7 @@
 \alias{chemi_descriptors_bulk}
 \title{Descriptors}
 \usage{
-chemi_descriptors_bulk(
-  type,
-  chemicals = NULL,
-  chemIdType = NULL,
-  format = NULL,
-  options = NULL
-)
-}
-\arguments{
-\item{type}{Required parameter}
-
-\item{chemicals}{Optional parameter}
-
-\item{chemIdType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId}
-
-\item{format}{Optional parameter. Options: JSON, CSV, TSV}
-
-\item{options}{Optional parameter}
+chemi_descriptors_bulk()
 }
 \value{
 Returns a tibble with results
@@ -31,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk(type = "DTXSID7020182")
+chemi_descriptors_bulk()
 }
 }

@@ -3,24 +3,28 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param request Required parameter
+#' @param request.filesInfo Required parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_services_files(request = "DTXSID7020182")
+#' chemi_services_files(request.filesInfo = "DTXSID7020182")
 #' }
-chemi_services_files <- function(request) {
+chemi_services_files <- function(request.filesInfo) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(request)) options[['request']] <- request
-  generic_chemi_request(
-    query = request,
+  if (!is.null(request.filesInfo)) options[['request.filesInfo']] <- request.filesInfo
+    result <- generic_chemi_request(
+    query = NULL,
     endpoint = "services/files",
     options = options,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

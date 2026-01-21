@@ -4,48 +4,16 @@
 \alias{chemi_toxprints_assays_bulk}
 \title{Toxprints Assays}
 \usage{
-chemi_toxprints_assays_bulk(
-  id,
-  name = NULL,
-  category = NULL,
-  actives = NULL,
-  total = NULL,
-  metrics = NULL,
-  chemicals = NULL,
-  labels = NULL,
-  options = NULL,
-  acl = NULL
-)
-}
-\arguments{
-\item{id}{Required parameter}
-
-\item{name}{Optional parameter}
-
-\item{category}{Optional parameter}
-
-\item{actives}{Optional parameter}
-
-\item{total}{Optional parameter}
-
-\item{metrics}{Optional parameter}
-
-\item{chemicals}{Optional parameter}
-
-\item{labels}{Optional parameter}
-
-\item{options}{Optional parameter}
-
-\item{acl}{Optional parameter}
+chemi_toxprints_assays_bulk()
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_toxprints_assays_bulk(id = "DTXSID7020182")
+chemi_toxprints_assays_bulk()
 }
 }

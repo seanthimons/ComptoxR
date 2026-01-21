@@ -4,10 +4,7 @@
 \alias{chemi_amos_spectrum_count_for_methodology}
 \title{Returns the number of spectra that have a specified methodology.}
 \usage{
-chemi_amos_spectrum_count_for_methodology(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_spectrum_count_for_methodology()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectrum_count_for_methodology(query = "DTXSID7020182")
+chemi_amos_spectrum_count_for_methodology()
 }
 }

@@ -16,19 +16,27 @@
 #' chemi_descriptors(smiles = "DTXSID7020182")
 #' }
 chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", timeout = NULL) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(type)) options[['type']] <- type
+  if (!is.null(headers)) options[['headers']] <- headers
+  if (!is.null(format)) options[['format']] <- format
+  if (!is.null(timeout)) options[['timeout']] <- timeout
+    result <- generic_request(
+    query = NULL,
     endpoint = "descriptors",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    smiles = smiles,
-    type = type,
-    headers = headers,
-    format = format,
-    timeout = timeout
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -39,31 +47,23 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param type Required parameter
-#' @param chemicals Optional parameter
-#' @param chemIdType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId
-#' @param format Optional parameter. Options: JSON, CSV, TSV
-#' @param options Optional parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_descriptors_bulk(type = "DTXSID7020182")
+#' chemi_descriptors_bulk()
 #' }
-chemi_descriptors_bulk <- function(type, chemicals = NULL, chemIdType = NULL, format = NULL, options = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(chemicals)) options$chemicals <- chemicals
-  if (!is.null(chemIdType)) options$chemIdType <- chemIdType
-  if (!is.null(format)) options$format <- format
-  if (!is.null(options)) options$options <- options
-  generic_chemi_request(
-    query = type,
+chemi_descriptors_bulk <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "descriptors",
-    options = options,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

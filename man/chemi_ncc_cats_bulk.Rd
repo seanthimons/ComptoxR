@@ -4,10 +4,7 @@
 \alias{chemi_ncc_cats_bulk}
 \title{Generate categories for multiple molecules}
 \usage{
-chemi_ncc_cats_bulk(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_ncc_cats_bulk()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk(query = "DTXSID7020182")
+chemi_ncc_cats_bulk()
 }
 }

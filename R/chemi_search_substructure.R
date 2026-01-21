@@ -14,17 +14,25 @@
 #' chemi_search_substructure(smiles = "DTXSID7020182")
 #' }
 chemi_search_substructure <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(exportSmiles)) options[['exportSmiles']] <- exportSmiles
+  if (!is.null(exportMol)) options[['exportMol']] <- exportMol
+    result <- generic_request(
+    query = NULL,
     endpoint = "search/substructure",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    smiles = smiles,
-    exportSmiles = exportSmiles,
-    exportMol = exportMol
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

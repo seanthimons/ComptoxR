@@ -17,20 +17,28 @@
 #' chemi_padel(smiles = "DTXSID7020182")
 #' }
 chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL) {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(x2d)) options[['2d']] <- x2d
+  if (!is.null(x3d)) options[['3d']] <- x3d
+  if (!is.null(fp)) options[['fp']] <- fp
+  if (!is.null(headers)) options[['headers']] <- headers
+  if (!is.null(timeout)) options[['timeout']] <- timeout
+    result <- generic_request(
+    query = NULL,
     endpoint = "padel",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    smiles = smiles,
-    x2d = x2d,
-    x3d = x3d,
-    fp = fp,
-    headers = headers,
-    timeout = timeout
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -41,25 +49,23 @@ chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = F
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param chemicals Required parameter
-#' @param options Optional parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_padel_bulk(chemicals = "DTXSID7020182")
+#' chemi_padel_bulk()
 #' }
-chemi_padel_bulk <- function(chemicals, options = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(options)) options$options <- options
-  generic_chemi_request(
-    query = chemicals,
+chemi_padel_bulk <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "padel",
-    options = options,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

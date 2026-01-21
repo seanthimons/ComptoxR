@@ -4,10 +4,7 @@
 \alias{chemi_amos_max_similarity}
 \title{Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.}
 \usage{
-chemi_amos_max_similarity(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_max_similarity()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_max_similarity(query = "DTXSID7020182")
+chemi_amos_max_similarity()
 }
 }

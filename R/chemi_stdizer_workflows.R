@@ -11,7 +11,7 @@
 #' chemi_stdizer_workflows()
 #' }
 chemi_stdizer_workflows <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "stdizer/workflows",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_stdizer_workflows <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

@@ -4,10 +4,7 @@
 \alias{chemi_amos_substance_similarity}
 \title{Returns a list of similar substances to a given DTXSID.}
 \usage{
-chemi_amos_substance_similarity(dtxsid)
-}
-\arguments{
-\item{dtxsid}{The DTXSID for the substance of interest.}
+chemi_amos_substance_similarity()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substance_similarity(dtxsid = "DTXSID7020182")
+chemi_amos_substance_similarity()
 }
 }

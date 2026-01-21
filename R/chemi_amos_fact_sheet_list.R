@@ -11,7 +11,7 @@
 #' chemi_amos_fact_sheet_list()
 #' }
 chemi_amos_fact_sheet_list <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "amos/fact_sheet_list",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_amos_fact_sheet_list <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

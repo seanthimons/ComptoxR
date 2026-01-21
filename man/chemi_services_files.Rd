@@ -4,10 +4,10 @@
 \alias{chemi_services_files}
 \title{Services Files}
 \usage{
-chemi_services_files(request)
+chemi_services_files(request.filesInfo)
 }
 \arguments{
-\item{request}{Required parameter}
+\item{request.filesInfo}{Required parameter}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_services_files(request = "DTXSID7020182")
+chemi_services_files(request.filesInfo = "DTXSID7020182")
 }
 }

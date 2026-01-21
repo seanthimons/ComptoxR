@@ -5,7 +5,7 @@
 #'
 #' @param query Required parameter
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
@@ -13,16 +13,24 @@
 #' chemi_resolver_safety_flags(query = "DTXSID7020182")
 #' }
 chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(idType)) options[['idType']] <- idType
+    result <- generic_request(
+    query = NULL,
     endpoint = "resolver/safety-flags",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    query = query,
-    idType = idType
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
@@ -33,24 +41,28 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param request Required parameter
-#' @return Returns a tibble with results
+#' @param request.filesInfo Required parameter
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_safety_flags_bulk(request = "DTXSID7020182")
+#' chemi_resolver_safety_flags_bulk(request.filesInfo = "DTXSID7020182")
 #' }
-chemi_resolver_safety_flags_bulk <- function(request) {
+chemi_resolver_safety_flags_bulk <- function(request.filesInfo) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(request)) options[['request']] <- request
-  generic_chemi_request(
-    query = request,
+  if (!is.null(request.filesInfo)) options[['request.filesInfo']] <- request.filesInfo
+    result <- generic_chemi_request(
+    query = NULL,
     endpoint = "resolver/safety-flags",
     options = options,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

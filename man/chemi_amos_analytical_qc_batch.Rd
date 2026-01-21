@@ -4,10 +4,7 @@
 \alias{chemi_amos_analytical_qc_batch}
 \title{Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs.}
 \usage{
-chemi_amos_analytical_qc_batch(query)
-}
-\arguments{
-\item{query}{A list of DTXSIDs to search for}
+chemi_amos_analytical_qc_batch()
 }
 \value{
 Returns a tibble with results
@@ -17,6 +14,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_analytical_qc_batch(query = "DTXSID7020182")
+chemi_amos_analytical_qc_batch()
 }
 }

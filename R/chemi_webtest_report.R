@@ -15,18 +15,26 @@
 #' chemi_webtest_report(structure = "DTXSID7020182")
 #' }
 chemi_webtest_report <- function(structure, endpoint, method = "consensus", format = "HTML") {
-  generic_request(
+  # Collect optional parameters
+  options <- list()
+  if (!is.null(structure)) options[['structure']] <- structure
+  if (!is.null(endpoint)) options[['endpoint']] <- endpoint
+  if (!is.null(method)) options[['method']] <- method
+  if (!is.null(format)) options[['format']] <- format
+    result <- generic_request(
+    query = NULL,
     endpoint = "webtest/report",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    structure = structure,
-    endpoint = endpoint,
-    method = method,
-    format = format
+    options = options
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

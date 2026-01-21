@@ -3,24 +3,27 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param functional_use Functional use class.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_dtxsids_for_functional_use(functional_use = "DTXSID7020182")
+#' chemi_amos_dtxsids_for_functional_use()
 #' }
-chemi_amos_dtxsids_for_functional_use <- function(functional_use) {
-  generic_request(
-    query = functional_use,
+chemi_amos_dtxsids_for_functional_use <- function() {
+  result <- generic_request(
+    query = NULL,
     endpoint = "amos/dtxsids_for_functional_use/",
     method = "GET",
-    batch_limit = 1,
+    batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

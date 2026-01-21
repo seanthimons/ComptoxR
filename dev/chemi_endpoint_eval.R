@@ -83,7 +83,7 @@ chemi_endpoints <- parse_chemi_schemas() %>%
 		),
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
-    batch_limit = NA_integer_,
+    batch_limit = 0,
 		# Seems to be needed to be at the end for this mutate to work properly
 		route = str_remove_all(string = route, pattern = "^api/")
   ) %>%
@@ -116,10 +116,13 @@ chemi_endpoints <- parse_chemi_schemas() %>%
 # ==============================================================================
 
 # Search R/ directory for existing endpoint implementations
+# Pass expected_files to only count hits in the correct target file for each endpoint
+# This prevents false positives when an endpoint is used by a different wrapper function
 res_chemi <- find_endpoint_usages_base(
 	chemi_endpoints$route, 
 	pkg_dir = here::here("R"), 
 	files_regex = "^chemi_.*\\.R$",
+	expected_files = chemi_endpoints$file
 )
 
 # Filter to endpoints with no hits (not yet implemented)
@@ -151,7 +154,7 @@ chemi_spec_aggregated <- chemi_spec_with_text %>%
   group_by(file) %>%
   summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
 
-scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE)
+scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = FALSE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed

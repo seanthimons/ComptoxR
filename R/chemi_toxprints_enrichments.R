@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
@@ -11,7 +11,7 @@
 #' chemi_toxprints_enrichments()
 #' }
 chemi_toxprints_enrichments <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "toxprints/enrichments",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_toxprints_enrichments <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

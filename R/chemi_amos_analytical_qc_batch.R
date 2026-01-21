@@ -3,22 +3,23 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query A list of DTXSIDs to search for
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_analytical_qc_batch(query = "DTXSID7020182")
+#' chemi_amos_analytical_qc_batch()
 #' }
-chemi_amos_analytical_qc_batch <- function(query) {
-  generic_chemi_request(
-    query = query,
+chemi_amos_analytical_qc_batch <- function() {
+  result <- generic_chemi_request(
+    query = NULL,
     endpoint = "amos/analytical_qc_batch_search",
-    server = "chemi_burl",
-    auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 

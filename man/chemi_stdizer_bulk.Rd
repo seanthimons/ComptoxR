@@ -4,10 +4,21 @@
 \alias{chemi_stdizer_bulk}
 \title{Stdizer}
 \usage{
-chemi_stdizer_bulk(request)
+chemi_stdizer_bulk(
+  request.filesInfo,
+  request.options.workflow = NULL,
+  request.options.run = NULL,
+  request.options.recordId = NULL
+)
 }
 \arguments{
-\item{request}{Required parameter}
+\item{request.filesInfo}{Required parameter}
+
+\item{request.options.workflow}{Optional parameter}
+
+\item{request.options.run}{Optional parameter}
+
+\item{request.options.recordId}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -17,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_bulk(request = "DTXSID7020182")
+chemi_stdizer_bulk(request.filesInfo = "DTXSID7020182")
 }
 }

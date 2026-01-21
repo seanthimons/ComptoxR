@@ -11,7 +11,7 @@
 #' chemi_alerts_operations()
 #' }
 chemi_alerts_operations <- function() {
-  generic_request(
+  result <- generic_request(
     query = NULL,
     endpoint = "alerts/operations",
     method = "GET",
@@ -20,6 +20,10 @@ chemi_alerts_operations <- function() {
     auth = FALSE,
     tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }
 
 
