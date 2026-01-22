@@ -493,6 +493,20 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 }}
 
 ')
+    } else if (wrapper_fn == "generic_cc_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}  result <- generic_cc_request(
+    endpoint = "{endpoint}",
+    method = "{method}"{combined_calls}
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }

@@ -13,12 +13,11 @@
 #' cc_export(uri = "123-91-1")
 #' }
 cc_export <- function(uri, returnAsAttachment = NULL) {
-  result <- generic_request(
+  result <- generic_cc_request(
     endpoint = "export",
     method = "GET",
-    batch_limit = 0,
-    `uri` = uri,
-    `returnAsAttachment` = returnAsAttachment
+    uri = uri,
+    returnAsAttachment = returnAsAttachment
   )
 
   # Additional post-processing can be added here
