@@ -47,9 +47,8 @@ get_missing_global_variables <- function(wd = getwd()) {
   
 }
 
-get_missing_global_variables()
-
-
+# Run manually when you want to detect missing global variables:
+# get_missing_global_variables()
 # 4. Local Install
 # devtools::install(dependencies = TRUE, reload = TRUE)
 
