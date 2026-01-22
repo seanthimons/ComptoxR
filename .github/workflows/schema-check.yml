@@ -13,49 +13,44 @@ jobs:
   check-schemas:
     runs-on: ubuntu-latest
     name: Check for Schema Updates
-
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-
     permissions:
       contents: write
       pull-requests: write
-
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: integration
           fetch-depth: 0
-
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 'release'
+          r-version: release
           use-public-rspm: true
-
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgload, any::cli
+          extra-packages: any::pkgload, any::cli, any::here
           needs: check
-
       - name: Download schemas
         run: |
           pkgload::load_all()
-          cli::cli_h1("Downloading CTX schemas")
           ct_schema()
-          cli::cli_h1("Downloading Cheminformatics schemas")
           chemi_schema()
-          cli::cli_alert_success("Schema download complete")
+          cc_schema()
         shell: Rscript {0}
-
       - name: Compute schema hashes
         id: hash
-        run: |
-          schema_files <- list.files("schema", pattern = "\\.json$", full.names = TRUE)
+        run: >
+          schema_files <- list.files("schema", pattern = "\\.json$", full.names =
+          TRUE)
+
           if (length(schema_files) == 0) {
             cli::cli_abort("No schema files found!")
           }
+
           hashes <- data.frame(
             file = basename(schema_files),
             hash = sapply(schema_files, function(f) tools::md5sum(f), USE.NAMES = FALSE)

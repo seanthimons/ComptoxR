@@ -4,18 +4,19 @@
 \alias{ct_skin_eye}
 \title{Retrieves known hazard and risk characterizations by DTXSID for skin and eye endpoints.}
 \usage{
-ct_skin_eye(query, ccte_api_key = NULL, debug = F)
+ct_skin_eye(query)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results
 }
 \description{
 Retrieves known hazard and risk characterizations by DTXSID for skin and eye endpoints.
+}
+\examples{
+\dontrun{
+ct_skin_eye(query = "DTXSID7020182")
+}
 }

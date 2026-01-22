@@ -27,6 +27,7 @@ test_names <- c(
   "A name with extra spaces ( 2 : 1 )",
   "A name with decimals (1.5:1)",
   "1,2-Dichlorobenzene", # Should be FALSE
+ "Mixture (3:1 w/w)",
   NA
 )
 extract_mixture(names)

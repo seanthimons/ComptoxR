@@ -2,68 +2,18 @@
 % Please edit documentation in R/chemi_search.R
 \name{chemi_search}
 \alias{chemi_search}
-\title{Cheminformatics Search}
+\title{Search}
 \usage{
-chemi_search(
-  query,
-  searchType = c("exact", "substruture", "similar", "mass", "hazard", "features"),
-  similarity_type = c("tanimoto", "euclid", "tversky"),
-  min_similarity = NULL,
-  min_toxicity = c("VH", "H", "M", "L", "A"),
-  min_auth = c("auth", "screen", "qsar"),
-  hazard_name = c("acute_oral", "acute_inhal", "acute_dermal", "cancer", "geno", "endo",
-    "reprod", "develop", "neuro_single", "neuro_repeat", "sys_single", "sys_repeat",
-    "skin_sens", "skin_irr", "eye", "aq_acute", "aq_chron", "persis", "bioacc", "expo"),
-  filter_results = FALSE,
-  filter_inc = list("stereo", "chiral", "isotopes", "charged", "multicomponent",
-    "radicals", "salts", "polymers", "sgroups"),
-  element_inc = NULL,
-  element_exc = NULL,
-  mass_type = c("mono", "mw", "abu"),
-  min_mass = NULL,
-  max_mass = NULL,
-  debug = F,
-  ...
-)
-}
-\arguments{
-\item{query}{Takes a list of variables (such as DTXSIDs, CASRN, names, etc.) to search by.}
-
-\item{searchType}{string}
-
-\item{similarity_type}{string}
-
-\item{min_similarity}{string}
-
-\item{min_toxicity}{string}
-
-\item{min_auth}{string}
-
-\item{hazard_name}{string}
-
-\item{filter_results}{Boolean to restrict the data returned.}
-
-\item{filter_inc}{A list of feature subtypes to include. Searches by \code{AND} operation}
-
-\item{element_inc}{A vector of elements to include.}
-
-\item{element_exc}{A vector of elements to exclude, or the option of \code{ALL} to exclude every element EXCEPT the searched elements.}
-
-\item{mass_type}{string}
-
-\item{min_mass}{string}
-
-\item{max_mass}{string}
-
-\item{debug}{string}
-
-\item{...}{string}
-
-\item{coerce}{Boolean variable to coerce list to a data.frame. Defaults to \code{FALSE}.}
+chemi_search()
 }
 \value{
-A dataframe
+Returns a tibble with results
 }
 \description{
-Searching function that interfaces with the Cheminformatics API. Sends POST request.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\examples{
+\dontrun{
+chemi_search()
+}
 }

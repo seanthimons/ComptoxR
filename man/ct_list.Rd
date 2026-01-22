@@ -7,12 +7,12 @@
 ct_list(list_name, extract_dtxsids = TRUE)
 }
 \arguments{
-\item{list_name}{Search parameter}
+\item{list_name}{Search parameter (list name or vector of list names)}
 
 \item{extract_dtxsids}{Boolean to pluck out just the DTXSIDs.}
 }
 \value{
-Returns a tibble with results
+Returns a character vector (if extract_dtxsids=TRUE) or list of results (if FALSE)
 }
 \description{
 Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.

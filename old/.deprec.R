@@ -1,15 +1,15 @@
 
-# ct_search_mass <- function(start, end, ccte_api_key = NULL, debug = F){
+# ct_search_mass <- function(start, end, ctx_api_key= NULL, debug = F){
 
 #   if (is.null(ccte_api_key)) {
 #     token <- ct_api_key()
 #   }
 
-#   burl <- Sys.getenv('burl')
+#   ctx_burl <- Sys.getenv('ctx_burl')
 #   surl <- "chemical/msready/search/by-mass/"
 #   start_mass <- start
 #   end_mass <- end
-#   urls <- paste0(burl, surl, start_mass, '/', end_mass)
+#   urls <- paste0(ctx_burl, surl, start_mass, '/', end_mass)
 
 #   df <- map_dfr(urls, ~{
 
@@ -29,16 +29,16 @@
 #   return(df)
 # }
 
-# ct_search_formula <- function(query, ccte_api_key = NULL, debug = F){
+# ct_search_formula <- function(query, ctx_api_key= NULL, debug = F){
 
 #   if (is.null(ccte_api_key)) {
 #     token <- ct_api_key()
 #   }
 
-#   burl <- Sys.getenv('burl')
+#   ctx_burl <- Sys.getenv('ctx_burl')
 #   surl <- "chemical/msready/search/by-formula/"
 
-#   urls <- paste0(burl, surl, query)
+#   urls <- paste0(ctx_burl, surl, query)
 
 #   df <- map_dfr(urls, ~{
 
@@ -61,13 +61,13 @@
 #                               'equal',
 #                               'contain'),
 
-#                     ccte_api_key = NULL,
+#                     ctx_api_key= NULL,
 #                     debug = F){
 
 #   if (is.null(ccte_api_key)) {
 #     token <- ct_api_key()
 #   }
-#   burl <- Sys.getenv('burl')
+#   ctx_burl <- Sys.getenv('ctx_burl')
 
 #   if(identical(c('start-with',
 #                  'equal',
@@ -81,7 +81,7 @@
 
 #   surl <- "chemical/search/"
 
-#   urls <- do.call(paste0, expand.grid(burl,surl,param,'/',query))
+#   urls <- do.call(paste0, expand.grid(ctx_burl,surl,param,'/',query))
 
 #   df <- map(urls, possibly(~{
 

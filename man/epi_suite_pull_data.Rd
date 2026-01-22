@@ -2,13 +2,18 @@
 % Please edit documentation in R/epi_suite.R
 \name{epi_suite_pull_data}
 \alias{epi_suite_pull_data}
-\title{Title}
+\title{Pull EPI-Suite response by endpoints}
 \usage{
 epi_suite_pull_data(epi_obj, endpoints = NULL)
 }
 \arguments{
-\item{endpoints}{}
+\item{epi_obj}{A EPI-Suite response object}
+
+\item{endpoints}{Endpoints to filter for}
+}
+\value{
+A list
 }
 \description{
-Title
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

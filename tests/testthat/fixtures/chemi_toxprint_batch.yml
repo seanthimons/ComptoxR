@@ -1,0 +1,26 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/toxprints/calculate
+    body:
+      string: '{"chemicals":[{"sid":"DTXSID7020182"},{"sid":"DTXSID5032381"}],"options":{"OR":3,"PV1":0.050000000000000003,"TP":3}}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:34 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"actives":0,"total":1,"metrics":[{"ordinal":122,"label":"bond:COH_alcohol_aromatic","count":1},{"ordinal":123,"label":"bond:COH_alcohol_aromatic_phenol","count":1},{"ordinal":128,"label":"bond:COH_alcohol_generic","count":1},{"ordinal":423,"label":"chain:alkaneBranch_neopentyl_C5","count":1},{"ordinal":437,"label":"chain:alkaneLinear_ethyl_C2_(connect_noZ_CN=4)","count":1},{"ordinal":473,"label":"chain:aromaticAlkane_Ar-C-Ar","count":1},{"ordinal":475,"label":"chain:aromaticAlkane_Ph-C1_acyclic_connect_noDblBd","count":1},{"ordinal":476,"label":"chain:aromaticAlkane_Ph-C1_acyclic_generic","count":1},{"ordinal":478,"label":"chain:aromaticAlkane_Ph-C1-Ph","count":1},{"ordinal":585,"label":"ring:aromatic_benzene","count":1}],"chemicals":[{"chemId":"DTXSID7020182","cid":"DTXCID30182","sid":"DTXSID7020182","casrn":"80-05-7","name":"Bisphenol
+        A","smiles":"CC(C1C=CC(O)=CC=1)(C1C=CC(O)=CC=1)C","canonicalSmiles":"CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1","inchi":"InChI=1S/C15H16O2/c1-15(2,11-3-7-13(16)8-4-11)12-5-9-14(17)10-6-12/h3-10,16-17H,1-2H3","inchiKey":"IISBACLAFKSPIT-UHFFFAOYSA-N","key":"IISBACLAFKSPIT-UHFFFAOYSA-N-toxprint_V2_0_r711","bits":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"message":"No
+        errors"}],"options":{"profile":"toxprint_V2_0_r711","OR":3.0,"PV1":0.05,"TP":3}}'
+  recorded_at: 2026-01-05 04:07:34
+recorded_with: VCR-vcr/2.1.0

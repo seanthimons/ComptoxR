@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/toxprints/calculate
+    body:
+      string: '{"chemicals":[{"sid":"INVALID_DTXSID"}],"options":{"OR":3,"PV1":0.050000000000000003,"TP":3}}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 05 Jan 2026 04:07:34 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"actives":0,"total":0,"metrics":[],"chemicals":[],"options":{"profile":"toxprint_V2_0_r711","OR":3.0,"PV1":0.05,"TP":3}}'
+  recorded_at: 2026-01-05 04:07:34
+recorded_with: VCR-vcr/2.1.0

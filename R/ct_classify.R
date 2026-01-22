@@ -33,8 +33,14 @@
 #' # classified_df <- ct_classify(df_example)
 #' # print(classified_df)
 ct_classify <- function(df) {
-  # Call the pre-built, optimized internal classifier function.
-  ComptoxR:::.classifier(df)
+  # Retrieve the pre-built classifier from the private environment
+  .classifier <- .ComptoxREnv$classifier
+  if (is.null(.classifier)) {
+    .classifier <- create_compound_classifier()
+    .ComptoxREnv$classifier <- .classifier
+  }
+
+  .classifier(df)
 }
 
 

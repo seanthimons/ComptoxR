@@ -18,7 +18,7 @@ chemi_cluster <- function(
 		cli::cli_abort('Missing sort!')
 	}
 
-	chemicals <- chemi_resolver(chemicals)
+	chemicals <- chemi_resolver(chemicals, id_type = 'DTXSID', mol = FALSE)
 
 	cli_rule(left = "Similarity payload options")
 	cli_dl(
@@ -68,10 +68,25 @@ chemi_cluster <- function(
 	mol_names <- parsed_resp %>%
 		pluck(., 'order') %>%
 		map(., ~ pluck(.x, 'chemical')) %>%
-		map(., ~ keep(.x, names(.x) %in% c('sid', 'name'))) %>%
+		map(
+			.,
+			~ keep(
+				.x,
+				names(.x) %in%
+					c(
+						# TODO removed the DTXSID field as some compounds don't have it? Very odd.
+						#	'sid',
+						'name'
+					)
+			)
+		) %>%
 		map(., as_tibble) %>%
 		list_rbind() %>%
-		select(dtxsid = sid, name = name)
+		select(
+			# TODO removed the DTXSID field as some compounds don't have it? Very odd.
+			#dtxsid = sid,
+			name = name
+		)
 
 	# Is there a way to fix this locally by altering the lists when there is no color, which indicates perfect similarity?
 	similarity <- parsed_resp %>%
@@ -123,20 +138,21 @@ chemi_cluster_sim_list <- function(chemi_cluster_data) {
 	similarity <- chemi_cluster_data$similarity
 
 	sim_list <- similarity %>%
-		set_names(., mol_names$dtxsid) %>%
-		map(., ~ set_names(.x, mol_names$dtxsid)) %>%
+		set_names(., mol_names$name) %>%
+		map(., ~ set_names(.x, mol_names$name)) %>%
 		map(., ~ enframe(.x, name = 'child', value = 'value')) %>%
 		list_rbind(., names_to = 'parent') %>%
-		filter(parent != child) %>%
-		left_join(., mol_names, join_by('parent' == 'dtxsid')) %>%
-		left_join(., mol_names, join_by('child' == 'dtxsid')) %>%
-		select(
-			parent,
-			parent_name = name.x,
-			child,
-			child_name = name.y,
-			value
-		)
-
+	# ! NOTE Removes perfect correlations
+		filter(parent != child) #%>%
+	# ! NOTE Commented out due to DTXSID not always being present.
+	# left_join(., mol_names, join_by('parent' == 'name')) %>%
+	# left_join(., mol_names, join_by('child' == 'name')) %>%
+	# select(
+	# 	parent,
+	# 	parent_name = name.x,
+	# 	child,
+	# 	child_name = name.y,
+	# 	value
+	# )
 	return(sim_list)
 }

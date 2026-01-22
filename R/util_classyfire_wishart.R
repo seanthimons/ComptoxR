@@ -37,7 +37,7 @@ util_classyfire_wishart <- function(query, path = "entities") {
   cli::cli_rule(left = "ClassyFire Wishart payload options")
   cli::cli_dl(c(
     "Number of queries" = "{length(query)}"
-    # ,"Base URL (burl)" = "{burl}",
+    # ,"Base URL (ctx_burl)" = "{ctx_burl}",
     # "Path" = "{path}",
     # "Debug mode (run_debug)" = "{run_debug}",
     # "Verbose mode (run_verbose)" = "{run_verbose}"

@@ -1,16 +1,14 @@
 #' Fetch Chemical Functional Use Information
 #'
 #' This function queries the chemical annotation API to retrieve functional use
-#' data for a given set of chemical identifiers (DTXSIDs). It strictly follows
-#' the design principles of the `httr2` package for clarity, robustness, and
-#' explicit error handling. It is controlled by environment variables for base
-#  URL, API key, and operational modes (debug/verbose).
+#' data for a given set of chemical identifiers (DTXSIDs).
 #'
 #' @param query A character vector of one or more DTXSIDs to query.
 #' @param path The specific API endpoint path for the functional use query.
 #'   Defaults to the standard endpoint for DTXSID-based lookups.
 #'
 #' @return A `tibble` containing the aggregated functional use data
+#' @export
 
 
 chemi_functional_use <- function(query) {
