@@ -3,13 +3,14 @@ name: Test Coverage
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main, dev, dev-*]
-  # pull_request:
-  #   branches: [main, dev]
+  push:
+    branches: [main, dev, dev-*]
+  pull_request:
+    branches: [main, dev]
 
 jobs:
   test-coverage:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} (R ${{ matrix.r-version }})
 
