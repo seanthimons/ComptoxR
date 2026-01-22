@@ -19,7 +19,7 @@ test_that("run_quiet sets options correctly", {
   } else {
     options(ComptoxR.quiet = orig_option)
   }
-  Sys.setenv("COMPTOXR_STARTUP_QUIET" = orig_env)
+  Sys.setenv(COMPTOXR_STARTUP_QUIET = orig_env)
 })
 
 test_that("run_quiet handles invalid input", {
@@ -30,7 +30,7 @@ test_that("run_quiet handles invalid input", {
   # Test with invalid input
   expect_message(run_quiet("invalid"), "Invalid quiet option")
   expect_false(getOption("ComptoxR.quiet"))
-  expect_equal(Sys.getenv("COMPTOXR_STARTUP_QUIET"), "false")
+  expect_equal(Sys.getenv("COMPTOXR_STARTUP_QUIET"), "FALSE")
   
   # Restore original state
   if (is.null(orig_option)) {
@@ -38,7 +38,7 @@ test_that("run_quiet handles invalid input", {
   } else {
     options(ComptoxR.quiet = orig_option)
   }
-  Sys.setenv("COMPTOXR_STARTUP_QUIET" = orig_env)
+  Sys.setenv(COMPTOXR_STARTUP_QUIET = orig_env)
 })
 
 test_that(".should_suppress_startup detects quiet option", {

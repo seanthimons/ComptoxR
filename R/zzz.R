@@ -593,7 +593,7 @@ run_quiet <- function(quiet = TRUE) {
 		cli::cli_alert_info("Valid options are TRUE or FALSE.")
 		cli::cli_alert_warning("Quiet mode set to FALSE.")
 		options(ComptoxR.quiet = FALSE)
-		Sys.setenv("COMPTOXR_STARTUP_QUIET" = "false")
+		Sys.setenv("COMPTOXR_STARTUP_QUIET" = "FALSE")
 	}
 }
 
