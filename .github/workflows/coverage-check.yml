@@ -2,6 +2,7 @@
 name: Coverage Check
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, dev]
   pull_request:
@@ -9,6 +10,7 @@ on:
 
 jobs:
   coverage-check:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     name: Check Coverage Threshold
 

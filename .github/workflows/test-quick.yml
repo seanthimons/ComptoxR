@@ -2,6 +2,7 @@
 name: Quick Tests
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main, dev]
   push:
@@ -9,6 +10,7 @@ on:
 
 jobs:
   quick-test:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     name: Quick Test Suite
 

@@ -8,3 +8,14 @@
 ^.RData
 ^R\.curation.R
 ^R\.deprec.R
+^dev/
+^schema/
+^\.github/
+^\.quarto/
+^old/
+^output/
+schema_hashes\.csv
+build\.R
+^testing\.R$
+air\.toml
+
