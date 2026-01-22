@@ -1,6 +1,20 @@
 # Internal package environment for session-level caching
 .ComptoxREnv <- new.env(parent = emptyenv())
 
+#' Check if startup messages should be suppressed
+#'
+#' @return Logical indicating whether to suppress startup messages
+#' @keywords internal
+.should_suppress_startup <- function() {
+  # Check the COMPTOXR_STARTUP_QUIET environment variable
+  # This allows users to completely suppress all startup messages
+  # by setting options(ComptoxR.quiet = TRUE) or Sys.setenv("COMPTOXR_STARTUP_QUIET" = "true")
+  quiet_option <- getOption("ComptoxR.quiet", default = FALSE)
+  quiet_env <- tolower(Sys.getenv("COMPTOXR_STARTUP_QUIET", "false")) == "true"
+  
+  return(isTRUE(quiet_option) || quiet_env)
+}
+
 #' First time setup for functions
 
 #'
@@ -10,6 +24,11 @@
 #' @export
 
 run_setup <- function() {
+  # Check if startup messages should be suppressed
+  if (.should_suppress_startup()) {
+    return(invisible(NULL))
+  }
+  
   cli::cli_rule(left = 'Configured API endpoints (ping test)')
   cli::cli_alert_warning(
   	'You can change these using the *_server() function!'
@@ -414,21 +433,25 @@ if (is.null(server)) {
 run_debug <- function(debug = FALSE) {
 	if (is.logical(debug)) {
 		Sys.setenv("run_debug" = as.character(debug))
-		if (isTRUE(debug)) {
-			cli::cli_alert_info(
-				paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
-			)
-		} else {
-			cli::cli_alert_info(
-				paste0("Debug mode is now ", cli::style_bold(cli::col_green("OFF")))
-			)
+		if (!.should_suppress_startup()) {
+			if (isTRUE(debug)) {
+				cli::cli_alert_info(
+					paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
+				)
+			} else {
+				cli::cli_alert_info(
+					paste0("Debug mode is now ", cli::style_bold(cli::col_green("OFF")))
+				)
+			}
 		}
 	} else {
-		cli::cli_alert_warning(
-			"Invalid debug option selected!"
-		)
-		cli::cli_alert_info("Valid options are TRUE or FALSE.")
-		cli::cli_alert_warning("Debug mode set to FALSE.")
+		if (!.should_suppress_startup()) {
+			cli::cli_alert_warning(
+				"Invalid debug option selected!"
+			)
+			cli::cli_alert_info("Valid options are TRUE or FALSE.")
+			cli::cli_alert_warning("Debug mode set to FALSE.")
+		}
 		Sys.setenv("run_debug" = "FALSE")
 	}
 }
@@ -463,21 +486,25 @@ run_debug <- function(debug = FALSE) {
 run_verbose <- function(verbose = FALSE) {
 	if (is.logical(verbose)) {
 		Sys.setenv("run_verbose" = as.character(verbose))
-		if (isTRUE(verbose)) {
-			cli::cli_alert_info(
-				paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
-			)
-		} else {
-			cli::cli_alert_info(
-				paste0("Verbose mode is now ", cli::style_bold(cli::col_red("OFF")))
-			)
+		if (!.should_suppress_startup()) {
+			if (isTRUE(verbose)) {
+				cli::cli_alert_info(
+					paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
+				)
+			} else {
+				cli::cli_alert_info(
+					paste0("Verbose mode is now ", cli::style_bold(cli::col_red("OFF")))
+				)
+			}
 		}
 	} else {
-		cli::cli_alert_warning(
-			"Invalid verbose option selected!"
-		)
-		cli::cli_alert_info("Valid options are TRUE or FALSE.")
-		cli::cli_alert_warning("Verbose mode set to FALSE.")
+		if (!.should_suppress_startup()) {
+			cli::cli_alert_warning(
+				"Invalid verbose option selected!"
+			)
+			cli::cli_alert_info("Valid options are TRUE or FALSE.")
+			cli::cli_alert_warning("Verbose mode set to FALSE.")
+		}
 		Sys.setenv("run_verbose" = "FALSE")
 	}
 }
@@ -503,6 +530,70 @@ batch_limit <- function(limit = 200){
 		cli::cli_alert_warning(
 			"Invalid limit option selected!"
 		)
+	}
+}
+
+#' Suppress package startup messages
+#'
+#' Controls whether package startup messages are suppressed when the package is
+#' loaded. This overrides the verbose/debug flags and provides complete control
+#' over startup message display.
+#'
+#' @param quiet A logical value indicating whether to suppress startup messages.
+#'   When `TRUE`, all startup messages including API endpoint checks and token
+#'   status are suppressed. When `FALSE`, normal startup behavior resumes based
+#'   on verbose/debug settings. Defaults to `TRUE`.
+#'
+#' @details
+#' This function sets the R option `ComptoxR.quiet` which is checked during
+#' package attachment. It also sets the `COMPTOXR_STARTUP_QUIET` environment
+#' variable for consistency. Setting this option to `TRUE` will suppress all
+#' startup messages, including:
+#' \itemize{
+#'   \item Package version and build date
+#'   \item Debug/verbose/batch limit settings
+#'   \item API endpoint ping tests
+#'   \item API token status checks
+#' }
+#'
+#' Note: This suppression does not affect the actual initialization behavior
+#' such as setting server URLs, initializing global variables, or configuring
+#' environment settings. Only the display of messages is affected.
+#'
+#' @examples
+#' \dontrun{
+#' # Suppress all startup messages
+#' run_quiet(TRUE)
+#'
+#' # Re-enable startup messages
+#' run_quiet(FALSE)
+#'
+#' # Can also be set before loading the package:
+#' options(ComptoxR.quiet = TRUE)
+#' library(ComptoxR)  # No startup messages will be shown
+#' }
+#' @export
+run_quiet <- function(quiet = TRUE) {
+	if (is.logical(quiet)) {
+		options(ComptoxR.quiet = quiet)
+		Sys.setenv("COMPTOXR_STARTUP_QUIET" = as.character(quiet))
+		if (isTRUE(quiet)) {
+			cli::cli_alert_info(
+				paste0("Startup message suppression is now ", cli::style_bold(cli::col_green("ON")))
+			)
+		} else {
+			cli::cli_alert_info(
+				paste0("Startup message suppression is now ", cli::style_bold(cli::col_red("OFF")))
+			)
+		}
+	} else {
+		cli::cli_alert_warning(
+			"Invalid quiet option selected!"
+		)
+		cli::cli_alert_info("Valid options are TRUE or FALSE.")
+		cli::cli_alert_warning("Quiet mode set to FALSE.")
+		options(ComptoxR.quiet = FALSE)
+		Sys.setenv("COMPTOXR_STARTUP_QUIET" = "false")
 	}
 }
 
@@ -567,7 +658,10 @@ reset_servers <- function() {
 	}
 
 # Conditionally display startup message based on verbosity
-	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
+	# Check quiet mode first - it overrides verbose/debug flags
+	if (!.should_suppress_startup() && 
+	    Sys.getenv("run_verbose") == "TRUE" && 
+	    !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
 		packageStartupMessage(
 			.header()
 		)
@@ -597,6 +691,11 @@ reset_servers <- function() {
 # Header -----------------------------------------------------------------
 
 .header <- function() {
+  # Check if startup messages should be suppressed
+  if (.should_suppress_startup()) {
+    return(invisible(NULL))
+  }
+  
   if (is.na(utils::packageDate('ComptoxR'))) {
     build_date <- paste0(
       as.character(Sys.Date()),
