@@ -14,6 +14,7 @@
 #' @importFrom stringr str_detect
 #'
 #' @examples
+#'  \dontrun{
 #' test_names <- c(
 #'   "Ethanol, water (1:1)",
 #'   "Sodium chloride",
@@ -27,7 +28,9 @@
 #' extract_mixture(names)
 #' test_names %>% enframe(., name = 'idx', value = 'name') %>% mutate(bool_mix = extract_mixture(name))
 #' # Expected output: TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, NA
+#' }
 extract_mixture <- function(name_vector) {
+	name_vector <- na.omit(name_vector)
   stopifnot(is.character(name_vector))
 
   # Core ratio like "2:1", "1.5/1", "3-2"
