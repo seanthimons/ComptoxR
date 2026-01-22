@@ -9,6 +9,7 @@ on:
         default: 'patch'
         type: choice
         options:
+          - none
           - patch
           - minor
           - major
@@ -41,25 +42,27 @@ jobs:
           git config --local user.name "GitHub Actions"
 
       - name: Bump version and document
+        if: github.event.inputs.version_type != 'none'
         run: |
           # Bump version
           #usethis::use_version(which = "${{ github.event.inputs.version_type }}")
           
-          # Finalize NEWS
-          library(autonewsmd)
-          an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = getwd())
-          an$generate()
-          an$write(force = TRUE)
-          
-          # Document
+          # Document (NEWS.md will be generated after tagging)
           devtools::document()
         shell: Rscript {0}
 
       - name: Commit version bump
+        if: github.event.inputs.version_type != 'none'
         run: |
           VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
-          git add DESCRIPTION NEWS.md man/ NAMESPACE
+          git add DESCRIPTION man/ NAMESPACE
           git commit -m "chore: bump version to $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Get current version
+        if: github.event.inputs.version_type == 'none'
+        run: |
+          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Check package
@@ -69,10 +72,30 @@ jobs:
       - name: Build package
         run: R CMD build .
 
-      - name: Push changes and tag
+      - name: Push changes and create tag
         run: |
+          git push origin main
           git tag v${{ env.VERSION }}
-          git push origin main --tags
+          git push origin --tags
+
+      - name: Generate NEWS.md after tagging
+        run: |
+          # Now that the tag exists, regenerate NEWS.md so commits appear under the tag
+          library(autonewsmd)
+          an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = getwd())
+          an$generate()
+          an$write(force = TRUE)
+        shell: Rscript {0}
+
+      - name: Commit and push NEWS.md
+        run: |
+          git add NEWS.md
+          if git diff --cached --quiet; then
+            echo "No NEWS.md changes to commit"
+          else
+            git commit -m "docs: update NEWS.md for v${{ env.VERSION }} [skip ci]"
+            git push origin main
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
