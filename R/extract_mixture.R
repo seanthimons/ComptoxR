@@ -30,7 +30,6 @@
 #' # Expected output: TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, NA
 #' }
 extract_mixture <- function(name_vector) {
-	name_vector <- na.omit(name_vector)
   stopifnot(is.character(name_vector))
 
   # Core ratio like "2:1", "1.5/1", "3-2"
