@@ -25,7 +25,7 @@
 #'  "Mixture (3:1 w/w)",
 #'   NA
 #' )
-#' extract_mixture(names)
+#' extract_mixture(test_names)
 #' test_names %>% enframe(., name = 'idx', value = 'name') %>% mutate(bool_mix = extract_mixture(name))
 #' # Expected output: TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, NA
 #' }
