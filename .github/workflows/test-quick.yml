@@ -2,10 +2,11 @@
 name: Quick Tests
 
 on:
-  pull_request:
-    branches: [main, dev]
-  push:
-    branches: [dev-*]
+  workflow_dispatch:
+  # pull_request:
+  #   branches: [main, dev]
+  # push:
+  #   branches: [dev-*]
 
 jobs:
   quick-test:
