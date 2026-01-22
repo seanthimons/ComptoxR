@@ -13,6 +13,9 @@
 
 #### New features
 
+-   add ‘none’ option to release workflow for creating releases without
+    version bump
+    ([907429a](https://github.com/seanthimons/ComptoxR/tree/907429a55ca3e849edb1f4dbbc35479748db7a09))
 -   update to 1.4.0 with new functions and features
     ([d8c46b3](https://github.com/seanthimons/ComptoxR/tree/d8c46b3ac586720bab28bfca5a53401faf57240f))
 -   updated common_chemistry functions, promoted some to `stable`
@@ -243,6 +246,8 @@
 
 #### Other changes
 
+-   Update NEWS.md \[skip ci\]
+    ([8813f0e](https://github.com/seanthimons/ComptoxR/tree/8813f0e9c930307b1bbb418f38498d8a9ef7eb16))
 -   docs update for generic functions
     ([d42eaee](https://github.com/seanthimons/ComptoxR/tree/d42eaee206fc068acd0e39a1776af0c3fa801ae1))
 -   docs update
@@ -290,7 +295,7 @@
     ([e035f64](https://github.com/seanthimons/ComptoxR/tree/e035f6470a49619f088a70e4cd8e8eb9e6156b45))
 
 Full set of changes:
-[`v1.3.0...aca2953`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...aca2953)
+[`v1.3.0...18a0ef4`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...18a0ef4)
 
 ## v1.3.0 (2025-10-02)
 
