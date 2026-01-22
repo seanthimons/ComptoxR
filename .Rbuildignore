@@ -16,5 +16,6 @@
 ^output/
 schema_hashes\.csv
 build\.R
+^testing\.R$
 air\.toml
 
