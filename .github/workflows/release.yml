@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type to bump (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::usethis, any::devtools, any::autonewsmd, any::here, any::rcmdcheck
+
+      - name: Git identity
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Bump version and document
+        run: |
+          # Bump version
+          usethis::use_version(which = "${{ github.event.inputs.version_type }}")
+          
+          # Finalize NEWS
+          library(autonewsmd)
+          an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = getwd())
+          an$generate()
+          an$write(force = TRUE)
+          
+          # Document
+          devtools::document()
+        shell: Rscript {0}
+
+      - name: Commit version bump
+        run: |
+          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
+          git add DESCRIPTION NEWS.md man/ NAMESPACE
+          git commit -m "chore: bump version to $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Check package
+        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+        shell: Rscript {0}
+
+      - name: Build package
+        run: R CMD build .
+
+      - name: Push changes and tag
+        run: |
+          git tag v${{ env.VERSION }}
+          git push origin main --tags
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          body: |
+            ## Changes in v${{ env.VERSION }}
+            See [NEWS.md](https://github.com/${{ github.repository }}/blob/main/NEWS.md) for details.
+          files: ComptoxR_${{ env.VERSION }}.tar.gz
+          draft: false
+          prerelease: false

@@ -10,6 +10,12 @@
 #' @returns A data frame of search results.
 #' @export
 ct_search <- function(query, request_method = "GET", search_method = "exact") {
+
+	# Check if query is a list (and not a dataframe) to flatten it
+	if(is.list(query) && !is.data.frame(query)) {
+    query <- as.character(unlist(query, use.names = FALSE))
+  }
+	
 	# 1. Input validation and setup
 	query_vector <- unique(as.vector(query))
 
@@ -42,7 +48,7 @@ ct_search <- function(query, request_method = "GET", search_method = "exact") {
 	)
 
 	# Base request object
-	base_req <- httr2::request(Sys.getenv('burl')) %>%
+	base_req <- httr2::request(Sys.getenv('ctx_burl')) %>%
 		httr2::req_headers(
 			accept = "application/json",
 			`x-api-key` = ct_api_key()

@@ -1,61 +1,20 @@
-#Adding new testing chemicals
+# PURPOSE: Helper script for local development and preparing for a release.
+# Note: Official releases are now handled via GitHub Actions (release.yml).
 
-build_testing_chemicals(chems = c(
+# 1. Update testing chemicals if needed
+# build_testing_chemicals(chems = c('DTXSID401337424'))
 
-))
-
-#Load latest data 
-#pt <- readRDS("C:\\Users\\STHIMONS\\Documents\\curation\\final\\pt.RDS")
-#usethis::use_data(pt, overwrite = TRUE)
-
-run_verbose(TRUE)
-
-# PURPOSE: To be run on a release branch to prepare a package for a new versioned release.
-
-# 1. Bump version for the new release
-# This updates the DESCRIPTION file and creates a commit.
-# Choose 'patch', 'minor', or 'major' as appropriate for the changes made.
-usethis::use_version(which = 'minor')
-
-# 2. Generate/Update NEWS.md from Conventional Commits
-# This requires that you've been using conventional commits in your feature branches.
-
-library(autonewsmd)
-tryCatch({
-    an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = here::here())
-    an$generate()
-    an$write(force = TRUE)
-    rm(an)
-    
-    # It's good practice to commit this change immediately.
-    # You can do this from the terminal:
-    # git add NEWS.md
-    # git commit -m "docs: Update NEWS.md for release"
-    
-}, error = function(e) {
-    warning("Could not automatically generate NEWS.md. Please update it manually.")
-})
-
-
-# 3. Regenerate Documentation
-# This ensures all documentation is up-to-date with the latest code and version.
-
+# 2. Local Documentation and Style check
 devtools::document()
-# Commit these changes from the terminal:
-# git add man/ NAMESPACE
-# git commit -m "docs: Regenerate documentation"
+# styler::style_pkg() # Optional: if you use styler
 
-# 4. CRITICAL: Run Comprehensive Checks
-# This is the most important step. Do not proceed if this fails.
-#message("Running comprehensive package checks...")
-#devtools::check()
+# 3. Local Checks (Run these before pushing)
+# devtools::check()
 
-# 5. Build Package Tarball and Binary
-# This ensures the package can be built successfully.
-#devtools::build()
-devtools::build(binary = TRUE) # For Windows
+# 4. Local Install
+# devtools::install(dependencies = TRUE, reload = TRUE)
 
-
-# 6. Final Local Install and Reload
-# A final check to ensure the package can be installed and loaded.
-devtools::install(pkg = ".", dependencies = TRUE, reload = TRUE)
+# TO RELEASE A NEW VERSION:
+# 1. Ensure all changes are committed and pushed to 'main'.
+# 2. Go to GitHub Actions -> "Release" workflow.
+# 3. Click "Run workflow" and choose the version bump type.

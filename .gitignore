@@ -34,6 +34,10 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 .Rproj.user
+
+.*/
+lib/
+
 global_assays.xlsx
 global_assay.xlsx
 invasive_species.csv
@@ -42,14 +46,21 @@ threatened_endangered_species.csv
 candidate-list-of-svhc-for-authorisation-export.xlsx
 temp.R
 output
-source_info 2023-02-15.xlsx
-pt.xlsx
 testing_chems.RDS
 pt.RDS
-cas_list.csv
-scratch.R
+# scratch.R
 temp.txt
 temp.R
 
+*.xlsx
+*.csv
+
+/roadmap/
+
 /.quarto/
-/schema/*
+# /schema/*
+
+.*
+!.github
+!.gitignore
+

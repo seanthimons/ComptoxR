@@ -5,7 +5,7 @@
 \alias{testing_chemicals}
 \title{Data frame of DTXSIDs to test things with.}
 \format{
-An object of class \code{data.frame} with 115 rows and 5 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 117 rows and 5 columns.
 }
 \usage{
 testing_chemicals

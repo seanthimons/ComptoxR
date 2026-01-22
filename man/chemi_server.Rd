@@ -10,10 +10,9 @@ chemi_server(server = NULL)
 \item{server}{Defines what server to target. If \code{NULL}, the server URL is
 reset. Valid options are:
 \itemize{
-\item \code{1}: Production
-\item \code{2}: Development
-\item \code{3}: Internal
-\item \code{4}: Bleeding-edge
+\item Production: 1
+\item Staging: 2
+\item Development: 3
 }}
 }
 \value{

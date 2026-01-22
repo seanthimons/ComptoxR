@@ -2,58 +2,23 @@
 % Please edit documentation in R/chemi_hazard.R
 \name{chemi_hazard}
 \alias{chemi_hazard}
-\title{Hazard Comparison}
+\title{Hazard}
 \usage{
-chemi_hazard(
-  query,
-  analogs = c("substructure", "similar", "toxprint"),
-  min_sim = NULL,
-  coerce = c("simple", "bin", "numerical")
-)
+chemi_hazard(query, full = TRUE)
 }
 \arguments{
-\item{query}{A list of DTXSIDS to search for.}
+\item{query}{Required parameter}
 
-\item{analogs}{String of variables to search for. Defaults to no analogs to look for if not specified.}
-
-\item{min_sim}{Tanimoto similarity coefficient to search for analogs by. Defaults to \code{0.8} if an analog option and no variable is specified .}
-
-\item{coerce}{Choice of \code{simple}, \code{bin}, or \code{numerical}.}
-
-\item{cts_generations}{A number of metabolite generations to predict for. Maximum of \code{4} allowed.}
-
-\item{enhance}{Enhance responses with subjective endpoint definitions.}
+\item{full}{Optional parameter (default: TRUE)}
 }
 \value{
-A lists of dataframes
+Returns a tibble with results
 }
 \description{
-Retrieves records for queried compounds.Generates a list:
-\itemize{
-\item \code{headers}: DTXSID and preferred name
-\item \code{data}: longform table of DTXSIDs, name, and data needed to create a HTML table with formatting
-\item \code{score} table with raw binned values
-\item \code{records} table with converted values from \code{score}, changes based on \code{coerce} arguement. Used for ToxPi calculations
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
-}
-\details{
-The \code{coerce} option will greatly change how the final numerical outputs of the function work:
-\itemize{
-\item \code{simple}: Currently changes the lettered bins with \emph{no} respect to the final authority level of the source:
-\itemize{
-\item 'VH' = \code{5}
-\item 'H' = \code{4}
-\item 'M' = \code{3}
-\item 'L' = \code{2}
-\item 'I' = \code{1}
-\item 'ND or NA' = \code{NA}
-}
-\item \code{bin}: Currently changes the lettered bins \emph{with} respect to the final authority level of the source:
-\itemize{
-\item 'Authorative' = No change
-\item 'Screening' = -1/3 score penalty
-\item 'QSAR model' = -2/3 score penalty
-}
-\item \code{numerical}: Generates opinionated numerical equivalents (for GHS codes) or retrieves experimental endpoint data. Inverts data to better be used for ToxPi analysis.
+\examples{
+\dontrun{
+chemi_hazard(query = "DTXSID7020182")
 }
 }

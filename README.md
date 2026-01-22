@@ -1,12 +1,61 @@
 # ComptoxR
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml)
 <!-- badges: end -->
 
 
 # Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
 
-ComptoxR is designed to leverage the USEPA ORD-CCTE's APIs for accessing the underlying data that makes up the CompTox Chemical Dashboard. It includes functions to access or recreate data from the GenRA, TEST, and Cheminformatics products to inform rapid chemical risk screening. A method of weighing and prioritizing a group of chemicals is also included.
+ComptoxR provides access to the US EPA's CompTox Chemical Dashboard APIs and related products for chemical risk screening and prioritization. The package integrates data from multiple EPA databases including CompTox Chemistry Dashboard, GenRA Engine, Toxicity Estimation Software Tool (TEST), ECOTOX, and EPI Suite to enable comprehensive chemical hazard assessment and toxicity screening.
+
+## Main Purpose
+
+ComptoxR enables researchers to query and analyze chemical hazard, toxicity, and environmental data from EPA databases for:
+- Rapid chemical risk screening and prioritization
+- Regulatory compliance assessment
+- Chemical hazard prioritization studies
+- Environmental fate and exposure modeling
+- Toxicity prediction and bioactivity screening
+- Chemical structure and property analysis
+
+## Key Capabilities
+
+### Chemical Identification & Search
+- Resolve chemical identifiers (DTXSID, DTXCID, CAS, SMILES, InChI, InChIKey, chemical names) with fuzzy or exact matching
+- Search chemicals by string matching (exact, starts-with, or contains)
+- Retrieve detailed compound information with various projection options
+- Classify compounds as organic, inorganic, isotope, or Markush structures
+
+### Hazard & Safety Assessment
+- Generate hazard comparison data with multiple coercion methods
+- Retrieve GHS codes and NFPA 704 safety diamond information
+- Access Toxprint molecular fingerprint analysis
+- Query cancer endpoints, genotoxicity data, skin/eye irritation information
+- Get GHS classifications and regulatory hazard data
+
+### Bioactivity & Toxicity Data
+- Query bioactivity and toxicity screening models
+- Access environmental degradation and fate data
+- Retrieve exposure information from multiple sources
+- Get QSAR model predictions
+
+### Chemical Properties & Descriptors
+- Access molecular descriptors and chemical properties
+- Retrieve EPI Suite environmental partition predictions
+- Get molecular classifications using ClassyFire chemical taxonomy
+- Find similar or related compounds
+- Perform chemical clustering and similarity analysis
+
+### Risk Screening & Prioritization
+- Chemical risk prioritization queries
+- Regulatory list associations
+- Functional use information
+- Analog searches for hazard comparison
+
+### Batch Processing
+- Automatic batch processing for large queries (default 200 compounds per batch)
+- Support for multiple server environments (Production, Staging, Development)
 
 An API Key is needed to access some of these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 
@@ -30,10 +79,10 @@ install_github("seanthimons/ComptoxR")
 
 ### Setting API keys
 
-Set API key in System Environment to the variable `ccte_api_key`.
+Set API key in System Environment to the variable `ctx_api_key`.
 
 ``` r
-Sys.setenv('ccte_api_key' = [TOKEN HERE])
+Sys.setenv('ctx_api_key' = [TOKEN HERE])
 ```
 
 Restart R to ensure that the token is detected properly.

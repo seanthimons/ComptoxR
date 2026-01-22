@@ -1,50 +1,36 @@
 #' Returns all public lists that contain a queried compound
 #'
 #' @param query A DTXSID to search by.
-#' @param ccte_api_key Checks for API key in Sys env
 #'
-#' @return Returns a tibble with results
+#' @return Returns a named list with results
 #' @export
 
-ct_compound_in_list <- function(query, ccte_api_key = NULL) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
+ct_compound_in_list <- function(query) {
 
-  df <- map(
-    query,
-    possibly(
-      ~ {
-        cli::cli_alert_info('Searching for lists that contain {(.x)}')
-        cli::cli_end()
+  # Use generic_request with tidy=FALSE to get list output
+  results <- generic_request(
+    query = query,
+    endpoint = "chemical/list/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1,
+    tidy = FALSE,
+    projection = 'chemicallistname'
+  )
 
-        burl <- Sys.getenv('burl')
-        surl <- "chemical/list/search/by-dtxsid/"
-        urls <- paste0(burl, surl, .x, '?projection=chemicallistname')
+  # Extract the first element from each result (list of list names)
+  df <- results %>%
+    purrr::map(~ {
+      if (is.list(.x) && length(.x) > 0) {
+        list_names <- purrr::pluck(.x, 1)
+        cli::cli_alert_success('{length(list_names)} lists found!')
+        return(list_names)
+      } else {
+        cli::cli_alert_warning('No lists found')
+        return(NULL)
+      }
+    }) %>%
+    purrr::set_names(query) %>%
+    purrr::compact()
 
-        response <- GET(
-          url = urls,
-          add_headers("x-api-key" = ct_api_key()),
-          progress()
-        )
-
-        if (response$status != 200) {
-          cli::cli_alert_warning('Request failed on {(.x)}')
-          cli::cli_end()
-          return(NULL)
-        } else {
-          df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
-
-          df <- as.list(df) %>% pluck(1)
-
-          cli::cli_alert_success('{length(df)} lists found!')
-          cli::cli_end()
-          return(df)
-        }
-      },
-      NULL
-    )
-  ) %>%
-    set_names(., query) %>%
-    compact()
+  return(df)
 }

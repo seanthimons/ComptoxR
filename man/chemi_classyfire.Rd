@@ -16,3 +16,8 @@ Returns NA if the request fails for a given DTXSID.
 \description{
 This function retrieves Classyfire classificatons for a given DTXSID using the EPA's cheminformatics API.
 }
+\examples{
+\dontrun{
+chemi_classyfire(query = "DTXSID7020182")
+}
+}

@@ -2,64 +2,58 @@
 #'
 #' This function has no parameters to search by.
 #'
-#' @param ccte_api_key Checks for API key in Sys env
 #' @param return_dtxsid Boolean; Return all DTXSIDs contained within each list
 #' @param coerce Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.
 #'
-#' @return Returns a tibble of results
+#' @return Returns a tibble of results (or nested list if coerce=TRUE)
 #' @export
 
 ct_lists_all <- function(
   return_dtxsid = FALSE,
-  coerce = FALSE,
-  ccte_api_key = NULL
+  coerce = FALSE
 ) {
-  if (is.null(ccte_api_key)) {
-    token <- ct_api_key()
-  }
 
-  cli::cli_alert_info('Grabbing all public lists...')
+  #cli::cli_alert_info('Grabbing all public lists...')
 
-  if (return_dtxsid == FALSE) {
-    urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistall"
+  # Determine projection
+  projection <- if (!return_dtxsid) {
+    "chemicallistall"
   } else {
-    urls <- "https://api-ccte.epa.gov/chemical/list/?projection=chemicallistwithdtxsids"
+    "chemicallistwithdtxsids"
   }
 
-  df <-
-    response <- GET(url = urls, add_headers("x-api-key" = token), progress())
+  # Use generic_request with batch_limit=0 for static endpoint
+  df <- generic_request(
+    query = NULL,  # No query needed for static endpoint
+    endpoint = "chemical/list/all",
+    method = "GET",
+    batch_limit = 0,  # Static endpoint flag
+    tidy = TRUE,
+    projection = projection
+  )
 
-  if (response$status != 200) {
-    cli::cli_abort('Request failed!')
-    cli::cli_alert_danger('Reason: {response$status}')
-  } else {
-    df <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
+  cli::cli_alert_success('{nrow(df)} lists found!')
 
-    cli::cli_alert_success('{nrow(df)} lists found!')
-  }
-
-  if (return_dtxsid == TRUE & coerce == TRUE) {
-    cli::cli_alert_warning('Coerceing DTXSID strings per list to list-column!')
+  if (return_dtxsid & coerce) {
+    cli::cli_alert_warning('Coercing DTXSID strings per list to list-column!')
 
     df <- df %>%
       split(.$listName) %>%
-      map(., as.list) %>%
-      map(
+      purrr::map(., as.list) %>%
+      purrr::map(
         .,
         ~ {
           .x$dtxsids <- stringr::str_split(.x$dtxsids, pattern = ',') %>%
-            pluck(1)
+            purrr::pluck(1)
           .x
         }
       )
   } else {
-    if (return_dtxsid == FALSE & coerce == TRUE) {
+    if (!return_dtxsid & coerce) {
       cli::cli_alert_warning('You need to request DTXSIDs...')
       cli::cli_end()
-
-      df
-    } else {
-      (df)
     }
   }
+
+  return(df)
 }

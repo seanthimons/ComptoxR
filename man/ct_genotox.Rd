@@ -4,18 +4,19 @@
 \alias{ct_genotox}
 \title{Retrieves data on known or predicted genotoxic effects by DTXSID}
 \usage{
-ct_genotox(query, ccte_api_key = NULL, debug = F)
+ct_genotox(query)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results
 }
 \description{
 Retrieves data on known or predicted genotoxic effects by DTXSID
+}
+\examples{
+\dontrun{
+ct_genotox(query = "DTXSID7020182")
+}
 }

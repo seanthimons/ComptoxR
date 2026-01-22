@@ -2,94 +2,118 @@
 
 #' Creates a highly robust, two-pass function for extracting molecular formulas
 #'
-#' This is an internal "factory" function that only extracts formulas found
-#' inside parentheses or square brackets. It is not exported for users.
-#' It runs once when the package is loaded to create the optimized extractor.
+#' This internal "factory" function builds a pre-validated, high-performance
+#' extractor that finds and validates chemical formulas only when they appear
+#' inside parentheses or square brackets. It is designed to run once when the
+#' package is loaded and return a closure that performs fast extraction.
+#'
+#' Performance notes:
+#' - The list of element symbols and the validator regex are built once, avoiding
+#'   repeated string assembly and allocations on every call.
+#' - stringr/stringi still compile the regex internally at match-time, but
+#'   pre-building the long alternations and groups avoids per-call construction
+#'   overhead and improves maintainability.
+#'
+#' Robustness notes (updated):
+#' - Correct handling of bracket characters (explicit alternation instead of a
+#'   fragile character class).
+#' - Candidate finder allows spaces, middle dot (·), plus/minus, and periods inside
+#'   bracketed content so complexes and hydrates are captured.
+#' - Roman numeral filter is case-insensitive and whitespace-tolerant to avoid
+#'   misclassifying oxidation states like "(III)" or "( ii )" as formulas.
+#' - Carbon backbone range filter recognizes hyphen and en dash (e.g., "C9–12").
 #'
 #' @return A function for extracting molecular formulas from within enclosures.
 #' @noRd
 create_formula_extractor_final <- function() {
   # --- ONE-TIME EXPENSIVE SETUP ---
-  # This part (defining elements and the validator) remains the same.
-  # fmt: skip
+
+  # Periodic table symbols (including lanthanides/actinides + common elements)
+	#fmt:skip
   elements_list <- c(
-    'He', 'Li', 'Be', 'Ne', 'Na', 'Mg', 'Al', 'Si', 'Cl', 'Ar', 'Ca', 'Sc',
-    'Ti', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', 'Ga', 'Ge', 'As', 'Se',
-    'Br', 'Kr', 'Rb', 'Sr', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag',
-    'Cd', 'In', 'Sn', 'Sb', 'Te', 'Xe', 'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd',
-    'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', 'Hf',
-    'Ta', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At',
-    'Rn', 'Fr', 'Ra', 'Ac', 'Th', 'Pa', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf',
-    'Es', 'Fm', 'Md', 'No', 'Lr', 'Rf', 'Db', 'Sg', 'Bh', 'Hs', 'Mt', 'Ds',
-    'Rg', 'Cn', 'Nh', 'Fl', 'Mc', 'Lv', 'Ts', 'Og',
-    'H', 'B', 'C', 'N', 'O', 'F', 'P', 'S', 'K', 'V', 'I', 'Y', 'W', 'U'
+    'He','Li','Be','Ne','Na','Mg','Al','Si','Cl','Ar','Ca','Sc','Ti','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se',
+    'Br','Kr','Rb','Sr','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','Xe','Cs','Ba','La','Ce','Pr','Nd',
+    'Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu','Hf','Ta','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At',
+    'Rn','Fr','Ra','Ac','Th','Pa','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr','Rf','Db','Sg','Bh','Hs','Mt','Ds',
+    'Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og','H','B','C','N','O','F','P','S','K','V','I','Y','W','U'
   )
   elements_pattern <- paste(elements_list, collapse = "|")
-  element_chunk <- glue::glue("(?:{elements_pattern})\\d*")
-  group_chunk <- glue::glue("(?:[\\[(](?:{element_chunk})+[\\])]\\d*)")
-  validator_regex <- glue::glue(r"(^({element_chunk}(?:{element_chunk}|{group_chunk})*)$)")
 
-  # --- UPDATED REGEX FOR CANDIDATE FINDING ---
-  # This regex now specifically finds text enclosed in () or [].
-  # It's intentionally broad to capture the whole block for later processing.
-  candidate_regex <- "[\\[(][A-Za-z0-9()-.\\[\\]]+[\\])]"
+  element_chunk   <- glue::glue("(?:{elements_pattern})\\d*")
+  group_chunk     <- glue::glue("(?:\\((?:{element_chunk})+\\)\\d*|\\[(?:{element_chunk})+\\]\\d*)")
+  validator_regex <- glue::glue("^(?:{element_chunk}|{group_chunk})+(?:[+-]\\d*)?$")
 
-  # These filter patterns are still useful.
-  roman_numeral_regex <- "^(?:I|V|X|L|C|D|M){1,}$" # Anchored for whole string check
-  carbon_range_regex <- "^C\\d+-\\d+$" # Anchored for whole string check
+  # FIX: Do NOT allow '(' or ')' inside the (...) alternative; allow them inside [...] only.
+  candidate_regex <- "(\\([A-Za-z0-9+\\-\\.·\\s]*\\)|\\[[A-Za-z0-9()+\\-\\.·\\s]*\\])"
 
-  # --- RETURN THE MODIFIED WORKHORSE FUNCTION ---
+  roman_numeral_regex <- "(?i)^\\s*(?:i|v|x|l|c|d|m)+\\s*$"
+  carbon_range_regex  <- "^\\s*C\\d+\\s*[-–]\\s*\\d+\\s*$"
+
   function(text_vector) {
-    # 1. Extract all potential enclosed candidates from the text vector.
     candidates <- stringr::str_extract_all(text_vector, candidate_regex)
-
-    # 2. Iterate through each list of candidates found in each text element.
     lapply(candidates, function(cand_list) {
-      if (length(cand_list) == 0) {
-        return(character(0))
-      }
+      if (length(cand_list) == 0) return(character(0))
 
-      # 3. NEW STEP: Trim the outer parentheses/brackets from each candidate.
-      # e.g., "(H2O)" becomes "H2O"
-      trimmed_candidates <- stringr::str_sub(cand_list, 2, -2)
+      trimmed <- stringr::str_sub(cand_list, 2, -2)
+      trimmed <- stringr::str_squish(trimmed)
 
-      # 4. Filter the *trimmed* candidates.
-      # Filter out Roman numerals
-      valid_mask_roman <- !stringr::str_detect(trimmed_candidates, roman_numeral_regex)
-      # Filter out carbon backbone ranges
-      valid_mask_carbon <- !stringr::str_detect(trimmed_candidates, carbon_range_regex)
-      # Filter based on the formula validation regex
-      valid_mask_formula <- stringr::str_detect(trimmed_candidates, validator_regex)
+      keep_roman  <- !stringr::str_detect(trimmed, roman_numeral_regex)
+      keep_carbon <- !stringr::str_detect(trimmed, carbon_range_regex)
 
-      # Combine all filters and apply to the trimmed candidates
-      final_mask <- valid_mask_roman & valid_mask_carbon & valid_mask_formula
-      trimmed_candidates[final_mask]
+      cleaned     <- stringr::str_replace_all(trimmed, "[·\\.\\s]+", "")
+      is_formula  <- stringr::str_detect(cleaned, validator_regex)
+
+      res <- trimmed[keep_roman & keep_carbon & is_formula]
+      unique(res)  # de-duplicate while preserving order
     })
   }
 }
 
 #' Extract molecular formulas from text
-
 #'
-#' This function finds and extracts chemically valid molecular formulas from a
-#' character vector. It correctly handles parentheses, brackets, and numbers,
-#' and validates against a list of all known chemical elements.
+#' Finds and returns chemically valid molecular formulas from a character vector,
+#' restricted to content inside parentheses or square brackets.
+#'
+#' Behavior:
+#' - Correctly handles parentheses, square brackets, stoichiometric numbers, and
+#'   grouped substructures (e.g., "(NH3)2").
+#' - Recognizes complexes and hydrates inside brackets when they include spaces,
+#'   middle dot (·), plus/minus, or periods (these are normalized before validation).
+#' - Ignores oxidation state Roman numerals in brackets, e.g., "(III)" or "( ii )".
+#' - Excludes carbon backbone ranges like "C9–12".
 #'
 #' @param text_vector A character vector of text to search.
-#'
-#' @return A list of character vectors. Each element of the list corresponds
-#'   to an element of the input `text_vector` and contains all formulas found.
-#'
+#' @return A list of character vectors. Each element corresponds to one input
+#'   string and contains all formulas found inside its bracketed content.
 #' @export
-#' @importFrom stringr str_extract_all str_detect
+#' @importFrom stringr str_extract_all str_detect str_squish str_replace_all
 #' @importFrom glue glue
 #'
 #' @examples
-#' texts <- c("Water is H2O.", "Invalid: Az(B2)3.", "Complex: [Pt(NH3)2Cl2]")
+#' texts <- c(
+#'   "Water (H2O) and ethanol (C2H5OH).",
+#'   "Complex: [Pt(NH3)2Cl2] catalyst.",
+#'   "Hydrate: (CuSO4 · 5H2O)",
+#'   "Oxidation state: iron (III) chloride",  # "(III)" is ignored
+#'   "Backbone range: C9–12 alcohols"         # "C9–12" is ignored
+#' )
 #' extract_formulas(texts)
-
 extract_formulas <- function(text_vector) {
-  # This function simply calls the pre-built, optimized extractor.
-  ComptoxR:::.extractor(text_vector)
+
+	.extractor <- .ComptoxREnv$extractor
+  if (is.null(.extractor)) {
+    .extractor <- create_formula_extractor_final()
+    .ComptoxREnv$extractor <- .extractor
+  }
+
+  .extractor(text_vector)
 }
 
+# R/dev-helpers.R (optional)
+# --------------------------
+#' Rebuild and refresh the cached formula extractor (for interactive dev)
+#' @keywords internal
+reload_formula_extractor <- function() {
+  .ComptoxREnv$extractor <- create_formula_extractor_final()
+  invisible(TRUE)
+}

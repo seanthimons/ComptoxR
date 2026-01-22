@@ -1,4 +1,8 @@
+# Internal package environment for session-level caching
+.ComptoxREnv <- new.env(parent = emptyenv())
+
 #' First time setup for functions
+
 #'
 #' Tests to see if APIs are up and tokens are present.
 #'
@@ -6,29 +10,49 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule(left = 'Ping Test for Configured Endpoints')
+  cli::cli_rule(left = 'Configured API endpoints (ping test)')
+  cli::cli_alert_warning(
+  	'You can change these using the *_server() function!'
+  )
 	
-	server_urls <- c(
+	server_urls <- list(
   # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
-		"CompTox Dashboard API" = paste0(Sys.getenv("burl"), 'chemical/health'),
-    "Cheminformatics API" = paste0(Sys.getenv("chemi_burl"), "/#"),
-    "ECOTOX" = Sys.getenv("eco_burl"),
-    "EPI Suite API" = 'https://episuite.dev/EpiWebSuite/#/',
-    "Natural Products API" = 'https://app.naturalproducts.net/home'
+		"CompTox Dashboard API" = list(
+			display_url = Sys.getenv("ctx_burl"),
+			ping_url = paste0(Sys.getenv("ctx_burl"), 'chemical/health')
+		),
+    "ECOTOX" = list(
+    	display_url = Sys.getenv("eco_burl"),
+    	ping_url = Sys.getenv("eco_burl")
+    ),
+    "EPI Suite API" = list(
+    	display_url = Sys.getenv("epi_burl"),
+    	ping_url = Sys.getenv("epi_burl")
+    ),
+		"Common Chemistry API" = list(
+			display_url = Sys.getenv("cc_burl"),
+			ping_url = Sys.getenv("cc_burl")
+		)
+    #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
 
   # Filter out any endpoints with empty/unset URLs
-  active_endpoints <- server_urls[server_urls != "" & !is.na(server_urls)]
+  active_endpoints <- purrr::keep(
+  	server_urls,
+  	~ nzchar(.x$display_url) && !is.na(.x$display_url)
+  )
   
   # Remove entries with duplicate URLs, keeping the first name. Using `unique()` would strip the names.
-  ping_list <- active_endpoints[!duplicated(active_endpoints)]
+  ping_urls <- purrr::map_chr(active_endpoints, "ping_url")
+  ping_list <- active_endpoints[!duplicated(ping_urls)]
 
   if (length(ping_list) == 0) {
     cli::cli_alert_info("No server endpoints are configured to ping.")
     cli::cli_end()
   } else {
     # A more informative and visually appealing check function
-    check_url <- function(url, name) {
+    check_url <- function(endpoint, name) {
+    	url <- endpoint$ping_url
       tryCatch(
         {
           # Use HEAD request for efficiency; we just want to check connectivity
@@ -38,15 +62,28 @@ run_setup <- function() {
             # Don't error on HTTP status, we check it manually
             httr2::req_error(is_error = \(resp) FALSE)
           
+          start_time <- Sys.time()
           resp <- httr2::req_perform(req)
+          end_time <- Sys.time()
+          
+          latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+          latency_fmt <- paste0(round(latency * 1000), "ms")
+          
           status <- httr2::resp_status(resp)
           
-          # Use cli for styled output. 3xx redirects are not considered errors.
-          if (status >= 200 && status < 400) {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_green('OK (', status, ')')}")
+          status_text <- if (status >= 200 && status < 400) {
+          	cli::col_green(cli::format_inline("OK ({status})"))
           } else {
-            formatted_output <- cli::format_inline("{.strong {name}}: {cli::col_yellow('WARN (', status, ')')}")
+          	cli::col_yellow(cli::format_inline("WARN ({status})"))
           }
+          
+          list(
+          	name = name,
+          	url = endpoint$display_url,
+          	status_text = status_text,
+          	latency = latency,
+          	latency_fmt = latency_fmt
+          )
         },
         error = function(e) {
           # Catch httr2-specific errors for more robust error messages
@@ -57,26 +94,116 @@ run_setup <- function() {
           } else {
             "Request failed" # Fallback for other errors
           }
-          cli::format_inline("{.strong {name}}: {cli::col_red('ERROR (', error_msg, ')')}")
+          list(
+          	name = name,
+          	url = endpoint$display_url,
+          	status_text = cli::col_red(cli::format_inline("ERROR ({error_msg})")),
+          	latency = NA_real_,
+          	latency_fmt = ""
+          )
         }
       )
     }
 
-		results <- purrr::imap_chr(ping_list, check_url)
+		results <- purrr::imap(ping_list, check_url)
 
-    cli::cli_li(items = results)
+    # Check for active Cheminformatics endpoints ----
+    tryCatch({
+      start_time <- Sys.time()
+      resp <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+        httr2::req_perform()
+      end_time <- Sys.time()
+      
+      latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      latency_fmt <- paste0(round(latency * 1000), "ms")
+
+      endpoints <- resp %>%
+        httr2::resp_body_json() %>%
+        purrr::map(., ~ tibble::as_tibble(.x)) %>%
+        purrr::list_rbind() %>% 
+				dplyr::filter(!is.na(is_available))
+      
+      active_chemi_endpoints <- sum(endpoints$is_available, na.rm = TRUE)
+      total_chemi_endpoints <- nrow(endpoints)
+      
+      chemi_status <- cli::col_green(
+      	cli::format_inline("OK ({active_chemi_endpoints}/{total_chemi_endpoints} endpoints active)")
+      )
+      results <- c(results, list(list(
+      	name = "Cheminformatics API",
+      	url = Sys.getenv("chemi_burl"),
+      	status_text = chemi_status,
+      	latency = latency,
+      	latency_fmt = latency_fmt
+      )))
+      
+    }, error = function(e) {
+      chemi_status <- cli::col_red("ERROR (Failed to get endpoints)")
+      results <<- c(results, list(list(
+      	name = "Cheminformatics API",
+      	url = Sys.getenv("chemi_burl"),
+      	status_text = chemi_status,
+      	latency = NA_real_,
+      	latency_fmt = ""
+      )))
+    })
+    
+    healthy_latency <- 0.3
+    degrading_latency <- 1.0
+    
+    latency_colour <- function(latency, latency_fmt, healthy_latency, degrading_latency) {
+    	if (latency_fmt == "") {
+    		return("")
+    	}
+    	if (!is.finite(latency)) {
+    		return(cli::col_yellow(latency_fmt))
+    	}
+    	if (latency <= healthy_latency) {
+    		return(cli::col_green(latency_fmt))
+    	}
+    	if (latency <= degrading_latency) {
+    		return(cli::col_yellow(latency_fmt))
+    	}
+    	cli::col_red(latency_fmt)
+    }
+    
+    results_output <- purrr::map_chr(results, function(result) {
+    	latency_display <- if (is.finite(result$latency)) {
+    		paste0("[", latency_colour(result$latency, result$latency_fmt, healthy_latency, degrading_latency), "]")
+    	} else {
+    		""
+    	}
+    	url_display <- if (nzchar(result$url)) {
+    		paste0(result$url, " - ")
+    	} else {
+    		""
+    	}
+    	
+    	cli::format_inline(
+    		"{.strong {result$name}}: {url_display}{result$status_text} {latency_display}"
+    	)
+    })
+    
+    cli::cli_li(items = results_output)
     cli::cli_end()
 		
   }
 
-  # More informative token check
+
+  # Token check ----
   cli::cli_rule(left = 'API Token Status')
-  # Assuming ct_api_key() is defined elsewhere and returns the key or ""
-  api_key <- ct_api_key()
-  if (is.null(api_key) || api_key == "") {
-    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.fn ct_api_key} to set it.")
+  # Directly check the environment variable to avoid aborting during package load
+  api_key <- Sys.getenv("ctx_api_key")
+  if (api_key == "") {
+    cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ctx_api_key= 'YOUR_KEY_HERE')} to set it.")
   } else {
-    cli::cli_alert_success("CompTox API Key: {.strong SET}.")
+    cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
+  }
+	api_key <- Sys.getenv("cc_api_key")
+  if (api_key == "") {
+    cli::cli_alert_warning("Common Chemistry API Key: {.strong NOT SET}. Use {.run Sys.setenv(cc_api_key= 'YOUR_KEY_HERE')} to set it.")
+  } else {
+    cli::cli_alert_success(cli::col_green("Common Chemistry API Key: {.strong SET}."))
   }
   
   invisible(NULL)
@@ -88,39 +215,38 @@ run_setup <- function() {
 #' @param server Defines what server to target. If `NULL` the server URL is
 #'   reset. Valid options are:
 #'   \itemize{
-#'     \item `1`: Production
-#'     \item `2`: Staging
-#'     \item `3`: Development
-#'     \item `9`: Scraping
+#'     \item Production: 1
+#'     \item Staging: 2
+#'     \item Development: 3
+#'     \item Scraping: 9
 #'   }
 #'
-#' @return Should return the Sys Env variable `burl`.
+#' @return Should return the Sys Env variable `ctx_burl`.
 #' @export
 
-ct_server <- function(server = NULL) {
+ctx_server <- function(server = NULL) {
 	if (is.null(server)) {
 		{
 			cli::cli_alert_danger("Server URL reset!")
-			Sys.setenv("burl" = "")
+			Sys.setenv("ctx_burl" = "")
 		}
 	} else {
 		switch(
 			as.character(server),
-			"1" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
-			"2" = Sys.setenv('burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
-			"3" = Sys.setenv('burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
-			"4" = Sys.setenv('burl' = 'https://comptox.epa.gov/ctx-api/'),
-			"5" = Sys.setenv('burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
-			"9" = Sys.setenv('burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
+			"1" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/ctx-api/'),
+			"2" = Sys.setenv('ctx_burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
+			"3" = Sys.setenv('ctx_burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
+			"5" = Sys.setenv('ctx_burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
+			"9" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
 			{
 				cli::cli_alert_warning("\nInvalid server option selected!\n")
 				#cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
 				cli::cli_alert_warning("Server URL reset!")
-				Sys.setenv("burl" = "")
+				Sys.setenv("ctx_burl" = "")
 			}
 		)
 
-		Sys.getenv('burl')
+		Sys.getenv('ctx_burl')
 	}
 }
 
@@ -133,10 +259,9 @@ ct_server <- function(server = NULL) {
 #' @param server Defines what server to target. If `NULL`, the server URL is
 #'   reset. Valid options are:
 #'   \itemize{
-#'     \item `1`: Production
-#'     \item `2`: Development
-#'     \item `3`: Internal
-#'     \item `4`: Bleeding-edge
+#'     \item Production: 1
+#'     \item Staging: 2
+#'     \item Development: 3
 #'   }
 #'
 #' @return Should return the Sys Env variable `chemi_burl`
@@ -151,13 +276,14 @@ chemi_server <- function(server = NULL) {
 		switch(
 			as.character(server),
 			"1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api"),
-			"2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
-			"3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
-			"4" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api/"),
+			# "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
+			# "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
+			"2" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api"),
+			"3" = Sys.setenv("chemi_burl" = "https://cim-dev.sciencedataexperts.com/api"), 
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
-					"Valid options are 1 (Production), 2 (Development), 3 (Internal), 4 (Bleeding-edge)."
+					"Valid options are 1 (Production), 2 (Staging), 3 (Development)."
 				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("chemi_burl" = "")
@@ -250,6 +376,35 @@ np_server <- function(server = NULL){
 	}
 }
 
+#' Set API endpoints for CAS Common Chemistry API
+#' 
+#' @param server Defines what server to target
+#' 
+#' @return Should return the Sys Env variable `cc_server`
+#' @export
+
+cc_server <- function(server = NULL){
+if (is.null(server)) {
+		{
+			cli::cli_alert_danger("Server URL reset!")
+			Sys.setenv("cc_burl" = "")
+		}
+	} else {
+		switch(
+			as.character(server),
+			"1" = Sys.setenv("cc_burl" = "https://commonchemistry.cas.org/api/"),
+			{
+				cli::cli_alert_warning("Invalid server option selected!")
+				cli::cli_alert_info("Valid options are 1 (Production).")
+				cli::cli_alert_warning("Server URL reset!")
+				Sys.setenv("cc_burl" = "")
+			}
+		)
+
+		Sys.getenv("cc_burl")
+	}
+}
+
 #' Set debug mode
 #'
 #' @param debug A logical value to enable or disable debug mode.
@@ -260,9 +415,13 @@ run_debug <- function(debug = FALSE) {
 	if (is.logical(debug)) {
 		Sys.setenv("run_debug" = as.character(debug))
 		if (isTRUE(debug)) {
-			cli::cli_alert_info("Debug mode is now ON.")
+			cli::cli_alert_info(
+				paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
+			)
 		} else {
-			cli::cli_alert_info("Debug mode is now OFF.")
+			cli::cli_alert_info(
+				paste0("Debug mode is now ", cli::style_bold(cli::col_green("OFF")))
+			)
 		}
 	} else {
 		cli::cli_alert_warning(
@@ -305,9 +464,13 @@ run_verbose <- function(verbose = FALSE) {
 	if (is.logical(verbose)) {
 		Sys.setenv("run_verbose" = as.character(verbose))
 		if (isTRUE(verbose)) {
-			cli::cli_alert_info("Verbose mode is now ON.")
+			cli::cli_alert_info(
+				paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
+			)
 		} else {
-			cli::cli_alert_info("Verbose mode is now OFF.")
+			cli::cli_alert_info(
+				paste0("Verbose mode is now ", cli::style_bold(cli::col_red("OFF")))
+			)
 		}
 	} else {
 		cli::cli_alert_warning(
@@ -319,11 +482,35 @@ run_verbose <- function(verbose = FALSE) {
 	}
 }
 
+#' Set batch limit for POST requests
+#'
+#' Sets the global batch limit for POST requests. Defaults to 200. 
+#' @param limit Numeric number
+#' @export
+
+batch_limit <- function(limit = 200){
+
+	# Initial setting if not detected
+
+	if (is.null(Sys.getenv("batch_limit")) || Sys.getenv("batch_limit") == ""){
+		Sys.setenv("batch_limit" = "200")
+	}
+
+	if (is.numeric(limit)) {
+		Sys.setenv("batch_limit" = as.character(limit))
+
+	}else{
+		cli::cli_alert_warning(
+			"Invalid limit option selected!"
+		)
+	}
+}
+
 #' Reset all servers
 
 reset_servers <- function() {
 	# Reset CompTox Chemistry Dashboard server URL
-	ct_server()
+	ctx_server()
 	# Reset Cheminformatics server URL
 	chemi_server()
 	# Reset EPI Suite server URL
@@ -332,20 +519,51 @@ reset_servers <- function() {
 	eco_server()
 	# Reset Natural Products server URL
 	np_server()
+	# Reset Common Chemistry server URL
+	cc_server()
 }
 
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
 
-	if (Sys.getenv('burl') == "") {
-		ct_server(server = 1)
+	# Conditionally swap to DEV / STAG environments if in the DEV version
+	# Only set default servers if they haven't been explicitly configured
+	if (is.na(utils::packageDate('ComptoxR'))) {
+		# DEV version defaults (only if not already set)
+		if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
+		if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
+		if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
+		if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
+		if (Sys.getenv("np_burl") == "") np_server(server = 1)
+		if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
+		# Only set verbose if not already configured
+		if (Sys.getenv("run_verbose") == "") {
+			run_verbose(verbose = FALSE)
+		}
+    if (Sys.getenv("run_debug") == "") {
+			run_debug(debug = FALSE)
+		}
+		batch_limit(limit = 200)
+
+	} else if (Sys.getenv('ctx_burl') == "") {
+		# Production version defaults (only if not already set)
+		ctx_server(server = 1)
 		chemi_server(server = 1)
 		epi_server(server = 1)
 		eco_server(server = 1)
 		np_server(server = 1)
-		run_debug(debug = FALSE)
-		run_verbose(verbose = TRUE)
+		cc_server(server = 1)
+		# Only set verbose if not already configured
+		if (Sys.getenv("run_verbose") == "") {
+			run_verbose(verbose = FALSE)
+		}
+    if (Sys.getenv("run_debug") == "") {
+			run_debug(debug = FALSE)
+		}
+
+
+		batch_limit(limit = 200)
 	}
 
 # Conditionally display startup message based on verbosity
@@ -359,24 +577,27 @@ reset_servers <- function() {
 
 # Load -------------------------------------------------------------------
 
-.extractor <- NULL
-.classifier <- NULL
+# .extractor <- NULL
+# .classifier <- NULL
 
 # .onLoad is a special function that R runs when a package is loaded.
 .onLoad <- function(libname, pkgname) {
 	# Call the factory ONCE and assign the result to our placeholder.
-	# The "super-assignment" operator (<<-) ensures we modify the .extractor
-	# in the package's namespace, not just a local copy.
-	.extractor <<- create_formula_extractor_final()
-	.classifier <<- create_compound_classifier()
+
+  .ComptoxREnv$extractor <- create_formula_extractor_final()
+	.ComptoxREnv$classifier <- create_compound_classifier()
+	
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
 }
 
+	# (Optional) Silence R CMD check "no visible binding" notes
+	utils::globalVariables(c(".ComptoxREnv"))
+
 # Header -----------------------------------------------------------------
 
 .header <- function() {
-  if (is.na(build_date <- utils::packageDate('ComptoxR'))) {
+  if (is.na(utils::packageDate('ComptoxR'))) {
     build_date <- paste0(
       as.character(Sys.Date()),
       cli::style_bold(cli::col_red(" NIGHTLY BUILD"))
@@ -402,24 +623,27 @@ reset_servers <- function() {
         build_date
       })
     )
-    cli::cli_rule(left = 'Available API endpoints:')
-    cli::cli_alert_warning(
-      'You can change these using the *_server() function!'
-    )
-    cli::cli_dl(c(
-      'CompTox Chemistry Dashboard' = '{Sys.getenv("burl")}',
-      'Cheminformatics' = '{Sys.getenv("chemi_burl")}',
-      'ECOTOX' = '{Sys.getenv("eco_burl")}',
-      'EPI Suite' = '{Sys.getenv("epi_burl")}',
-      'NP Cheminformatics Microservices' = '{Sys.getenv("np_burl")}'
-
-    ))
+    
 		cli::cli_rule(left = 'Run settings')
+		debug_flag <- Sys.getenv("run_debug")
+		verbose_flag <- Sys.getenv("run_verbose")
+		debug_value <- if (debug_flag == "TRUE") {
+			cli::col_red("TRUE")
+		} else {
+			cli::col_green("FALSE")
+		}
+		verbose_value <- if (verbose_flag == "TRUE") {
+			cli::col_green("TRUE")
+		} else {
+			cli::col_red("FALSE")
+		}
 		cli::cli_dl(c(
-			'Debug' = '{Sys.getenv("run_debug")}',
-			'Verbose' = '{Sys.getenv("run_verbose")}'
+			'Debug' = "{debug_value}",
+			'Verbose' = "{verbose_value}",
+			'Batch limit' = '{Sys.getenv("batch_limit")}'
 		))
   })
 
   run_setup()
 }
+	

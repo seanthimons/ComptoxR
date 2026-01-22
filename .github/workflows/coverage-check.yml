@@ -1,0 +1,100 @@
+# GitHub Actions workflow to enforce minimum coverage
+name: Coverage Check
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  coverage-check:
+    runs-on: ubuntu-latest
+    name: Check Coverage Threshold
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      ctx_api_key: ${{ secrets.CTX_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::covr
+            any::testthat
+            any::vcr
+
+      - name: Check coverage meets threshold
+        run: |
+          cov <- covr::package_coverage()
+          percent <- covr::percent_coverage(cov)
+
+          cat(sprintf("\n📊 Current Coverage: %.2f%%\n", percent))
+
+          # Set thresholds
+          MINIMUM_COVERAGE <- 70
+          WARNING_COVERAGE <- 80
+          TARGET_COVERAGE <- 90
+
+          if (percent < MINIMUM_COVERAGE) {
+            cat(sprintf("❌ FAIL: Coverage (%.2f%%) is below minimum threshold (%.0f%%)\n", percent, MINIMUM_COVERAGE))
+            quit(status = 1)
+          } else if (percent < WARNING_COVERAGE) {
+            cat(sprintf("⚠️  WARNING: Coverage (%.2f%%) is below warning threshold (%.0f%%)\n", percent, WARNING_COVERAGE))
+            cat(sprintf("   Target coverage is %.0f%%\n", TARGET_COVERAGE))
+          } else if (percent < TARGET_COVERAGE) {
+            cat(sprintf("✓ PASS: Coverage (%.2f%%) meets minimum, approaching target (%.0f%%)\n", percent, TARGET_COVERAGE))
+          } else {
+            cat(sprintf("✓ EXCELLENT: Coverage (%.2f%%) meets or exceeds target (%.0f%%)\n", percent, TARGET_COVERAGE))
+          }
+
+          # Print detailed report
+          cat("\n📋 Coverage by File:\n")
+          print(cov)
+        shell: Rscript {0}
+
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Run coverage again to get results
+            const { execSync } = require('child_process');
+            const coverage = execSync('Rscript -e "cov <- covr::package_coverage(); cat(sprintf(\'%.2f\', covr::percent_coverage(cov)))"').toString();
+
+            const comment = `## 📊 Test Coverage Report
+
+            **Current Coverage:** ${coverage}%
+
+            | Threshold | Target | Status |
+            |-----------|--------|--------|
+            | Minimum | 70% | ${parseFloat(coverage) >= 70 ? '✅' : '❌'} |
+            | Warning | 80% | ${parseFloat(coverage) >= 80 ? '✅' : '⚠️'} |
+            | Target | 90% | ${parseFloat(coverage) >= 90 ? '✅' : '📈'} |
+
+            <details>
+            <summary>View detailed coverage report</summary>
+
+            Run \`covr::report(covr::package_coverage())\` locally for detailed analysis.
+
+            </details>
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

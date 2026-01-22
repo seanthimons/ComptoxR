@@ -4,14 +4,10 @@
 \alias{ct_cancer}
 \title{Retrieves cancer-related hazard and risk values for a give DTXSID}
 \usage{
-ct_cancer(query, ccte_api_key = NULL, debug = F)
+ct_cancer(query)
 }
 \arguments{
 \item{query}{A single DTXSID (in quotes) or a list to be queried}
-
-\item{ccte_api_key}{Checks for API key in Sys env}
-
-\item{debug}{Flag to show API calls}
 }
 \value{
 Returns a tibble with results
@@ -19,4 +15,9 @@ Returns a tibble with results
 \description{
 Values returned include source and URL, level of known or predicted risk, and exposure route (if known).
 Cancer slope values and THQ values can also be found from running the \code{ct_hazard()} or \code{ct_ghs} functions.
+}
+\examples{
+\dontrun{
+ct_cancer(query = "DTXSID7020182")
+}
 }
