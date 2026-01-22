@@ -5,7 +5,7 @@
 \title{Generic API Request Function}
 \usage{
 generic_request(
-  query,
+  query = NULL,
   endpoint,
   method = "POST",
   server = "ctx_burl",

@@ -78,6 +78,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
   chemi_tidy_param <- if (is_chemi_get) ',\n    tidy = FALSE' else ""
 
+	# Build server and auth params for common_chemistry (cc_) GET endpoints 
+	cc_server_params <- if (grepl("^cc_", fn)) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
+
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
   if (!is.null(request_type) && nzchar(request_type)) {
@@ -460,7 +463,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       stop("Unknown wrapper function: ", wrapper_fn)
     }
   } else if (is_query_only) {
-    # Query-only endpoint: pass query = NULL, all params via ellipsis
+    # Query-only endpoint: all params via ellipsis, no query parameter needed
     # For query-only endpoints, batch_limit should be 0 (static endpoint)
     effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
     
@@ -468,10 +471,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_request(
-    query = NULL,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{cc_server_params}{content_type_call}{combined_calls}
   )
 
   # Additional post-processing can be added here
@@ -484,9 +486,22 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_chemi_request(
-    query = NULL,
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
+    } else if (wrapper_fn == "generic_cc_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}  result <- generic_cc_request(
+    endpoint = "{endpoint}",
+    method = "{method}"{combined_calls}
   )
 
   # Additional post-processing can be added here
