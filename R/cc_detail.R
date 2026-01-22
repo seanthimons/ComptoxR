@@ -13,12 +13,11 @@
 #' cc_detail(cas_rn = "123-91-1")
 #' }
 cc_detail <- function(cas_rn, uri = NULL) {
-  result <- generic_request(
+  result <- generic_cc_request(
     endpoint = "detail",
     method = "GET",
-    batch_limit = 0,
-    `cas_rn` = cas_rn,
-    `uri` = uri
+    cas_rn = cas_rn,
+    uri = uri
   )
 
   # Additional post-processing can be added here
