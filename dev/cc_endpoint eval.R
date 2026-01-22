@@ -28,9 +28,9 @@ library(tidyverse)
 # Configuration
 # ==============================================================================
 
-# commonchemistry (commonchemistry_*) function generation configuration
+# commonchemistry (cc_*) function generation configuration
 cc_config <- list(
-  wrapper_function = "generic_request",
+  wrapper_function = "generic_cc_request",
   param_strategy = "extra_params",
   example_query = "123-91-1",
   lifecycle_badge = "experimental"
