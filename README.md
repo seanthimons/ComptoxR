@@ -93,6 +93,30 @@ On attaching the package, the API server paths will automatically be set to publ
 
 To control certain verbosity outputs, use the `run_verbose(verbose = *BOOLEAN*)` function. This also hides the initial header output if `verbose = FALSE`.
 
+#### Suppressing Startup Messages
+
+To completely suppress all package startup messages (including API endpoint checks and token status), you can use one of the following methods:
+
+**Method 1: Set option before loading the package (Recommended)**
+```r
+options(ComptoxR.quiet = TRUE)
+library(ComptoxR)  # No startup messages will be shown
+```
+
+**Method 2: Set environment variable before loading**
+```r
+Sys.setenv(COMPTOXR_STARTUP_QUIET = "true")
+library(ComptoxR)  # No startup messages will be shown
+```
+
+**Method 3: Use `run_quiet()` function after loading**
+```r
+library(ComptoxR)  # Normal startup messages displayed
+run_quiet(TRUE)    # Suppresses future startup-related messages
+```
+
+Note: The quiet mode only suppresses message display. All initialization behavior (setting server URLs, initializing global variables, etc.) is preserved and functions normally.
+
 ## Disclaimers
 
 This resource is a proof-of-concept and is a compilation of information sourced from many databases and literature sources, including U.S. Federal and state sources and international bodies, which can save the user time by providing information in one location. The data are not fully reviewed by USEPA -- the user must apply judgment in use of the information. You should consult the original scientific paper or data source if possible. Reference herein to any specific commercial products, process, or service by trade name, trademark, manufacturer, or otherwise, does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government. The views and opinions of the developers of the site expressed herein do not necessarily state or reflect those of the United States Government, and shall not be used for advertising or product endorsement purposes With respect to documents available from this server, neither the United States Government nor any of their employees, makes any warranty, express or implied, including the warranties of merchantability and fitness for a particular purpose, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.
