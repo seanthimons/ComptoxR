@@ -127,6 +127,10 @@
 
 #### Bug fixes
 
+-   updated workflows to not infinite-trigger
+    ([cf85cb6](https://github.com/seanthimons/ComptoxR/tree/cf85cb66d1e0eb63165c188f7ad6dff3d4e052e9))
+-   disabled workflows while debuggin building errors
+    ([94712a0](https://github.com/seanthimons/ComptoxR/tree/94712a0619c9938c1ad32ca3dd1dc14e8b17515f))
 -   workflow updates
     ([d047790](https://github.com/seanthimons/ComptoxR/tree/d047790d0cb8d1e1c6411b97d6c7c6833ccd326a))
 -   Phase 5 bug fixes and circular reference detection
@@ -247,6 +251,8 @@
 #### Other changes
 
 -   Update NEWS.md \[skip ci\]
+    ([afcaabd](https://github.com/seanthimons/ComptoxR/tree/afcaabdc8e42a40fe0bd3679f63de8546a8a22f1))
+-   Update NEWS.md \[skip ci\]
     ([8813f0e](https://github.com/seanthimons/ComptoxR/tree/8813f0e9c930307b1bbb418f38498d8a9ef7eb16))
 -   docs update for generic functions
     ([d42eaee](https://github.com/seanthimons/ComptoxR/tree/d42eaee206fc068acd0e39a1776af0c3fa801ae1))
@@ -295,7 +301,7 @@
     ([e035f64](https://github.com/seanthimons/ComptoxR/tree/e035f6470a49619f088a70e4cd8e8eb9e6156b45))
 
 Full set of changes:
-[`v1.3.0...18a0ef4`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...18a0ef4)
+[`v1.3.0...111a1e4`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...111a1e4)
 
 ## v1.3.0 (2025-10-02)
 
