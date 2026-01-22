@@ -33,7 +33,8 @@ cc_config <- list(
   wrapper_function = "generic_cc_request",
   param_strategy = "extra_params",
   example_query = "123-91-1",
-  lifecycle_badge = "experimental"
+  lifecycle_badge = "experimental",
+	batch_limit = 1
 )
 
 #==============================================================================
@@ -152,6 +153,14 @@ rm(
   cc_config,
   cc_schema_files,
   endpoints,
-  res,
+  cc_res,
   endpoints_to_build
 )
+
+
+# ==============================================================================
+# Test loading
+# ==============================================================================
+
+devtools::document()
+#devtools::load_all()

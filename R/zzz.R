@@ -28,7 +28,11 @@ run_setup <- function() {
     "EPI Suite API" = list(
     	display_url = Sys.getenv("epi_burl"),
     	ping_url = Sys.getenv("epi_burl")
-    )
+    ),
+		"Common Chemistry API" = list(
+			display_url = Sys.getenv("cc_burl"),
+			ping_url = Sys.getenv("cc_burl")
+		)
     #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
 
@@ -194,6 +198,12 @@ run_setup <- function() {
     cli::cli_alert_warning("CompTox API Key: {.strong NOT SET}. Use {.run Sys.setenv(ctx_api_key= 'YOUR_KEY_HERE')} to set it.")
   } else {
     cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
+  }
+	api_key <- Sys.getenv("cc_api_key")
+  if (api_key == "") {
+    cli::cli_alert_warning("Common Chemistry API Key: {.strong NOT SET}. Use {.run Sys.setenv(cc_api_key= 'YOUR_KEY_HERE')} to set it.")
+  } else {
+    cli::cli_alert_success(cli::col_green("Common Chemistry API Key: {.strong SET}."))
   }
   
   invisible(NULL)
@@ -509,6 +519,8 @@ reset_servers <- function() {
 	eco_server()
 	# Reset Natural Products server URL
 	np_server()
+	# Reset Common Chemistry server URL
+	cc_server()
 }
 
 # Attach -----------------------------------------------------------------
@@ -524,6 +536,7 @@ reset_servers <- function() {
 		if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 		if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
 		if (Sys.getenv("np_burl") == "") np_server(server = 1)
+		if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 		# Only set verbose if not already configured
 		if (Sys.getenv("run_verbose") == "") {
 			run_verbose(verbose = FALSE)
@@ -540,6 +553,7 @@ reset_servers <- function() {
 		epi_server(server = 1)
 		eco_server(server = 1)
 		np_server(server = 1)
+		cc_server(server = 1)
 		# Only set verbose if not already configured
 		if (Sys.getenv("run_verbose") == "") {
 			run_verbose(verbose = FALSE)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_api_key.R
 \name{ct_api_key}
 \alias{ct_api_key}
-\title{Retrieves CCTE API key from the Sys Environment}
+\title{Retrieves CTX API key from the Sys Environment}
 \usage{
 Use `Sys.setenv(ctx_api_key= 'TOKEN HERE')` to set it.
 
