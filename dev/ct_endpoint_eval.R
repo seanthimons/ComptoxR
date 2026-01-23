@@ -124,7 +124,7 @@ endpoints_to_build <- endpoints %>%
 
 # Render R function source code using unified template
 spec_with_text <- render_endpoint_stubs(
-  endpoints_to_build[1,],
+  endpoints_to_build,
   config = ct_config
 )
 
@@ -139,7 +139,7 @@ spec_with_text <- render_endpoint_stubs(
 
 # ! BUILD ----
 # Uncomment to generate files:
-scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
+scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE)
 
 # Inspect results (which files were created/skipped/errored):
 scaffold_result %>% filter(action == "skipped")  # Files that already existed
@@ -150,13 +150,13 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 # ==============================================================================
 
 # Remove intermediate variables (keep spec_with_text for inspection)
-rm(
-  ct_config,
-  ctx_schema_files,
-  endpoints,
-  res,
-  endpoints_to_build
-)
+# rm(
+#   ct_config,
+#   ctx_schema_files,
+#   endpoints,
+#   res,
+#   endpoints_to_build
+# )
 
 # ==============================================================================
 # Test loading

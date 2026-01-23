@@ -4,7 +4,9 @@
 \alias{ct_chemical_property}
 \title{Get summary by DTXSID and property}
 \usage{
-ct_chemical_property(dtxsid, propName = NULL)
+ct_chemical_property()
+
+ct_chemical_property()
 }
 \arguments{
 \item{dtxsid}{Required parameter}
@@ -13,12 +15,19 @@ ct_chemical_property(dtxsid, propName = NULL)
 }
 \value{
 Returns a tibble with results
+
+Returns a scalar value
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 ct_chemical_property(dtxsid = "DTXSID7020182")
+}
+\dontrun{
+ct_chemical_property()
 }
 }

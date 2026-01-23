@@ -4,16 +4,25 @@
 \alias{ct_bioactivity_data_by_aeid}
 \title{Get data for a batch of AEIDs}
 \usage{
-ct_bioactivity_data_by_aeid(query)
+ct_bioactivity_data_by_aeid()
+
+ct_bioactivity_data_by_aeid()
 }
 \value{
 Returns a tibble with results
+
+Returns a scalar value
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 ct_bioactivity_data_by_aeid(query = "DTXSID7020182")
+}
+\dontrun{
+ct_bioactivity_data_by_aeid()
 }
 }
