@@ -18,7 +18,7 @@
 # ==============================================================================
 
 # Load shared utilities
-source("endpoint_eval_utils.R")
+source(here::here("dev", "endpoint_eval_utils.R"))
 
 # Load required packages
 library(jsonlite)
@@ -107,7 +107,12 @@ endpoints <- map(
 # ==============================================================================
 
 # Search R/ directory for existing endpoint implementations
-res <- find_endpoint_usages_base(endpoints$route, pkg_dir = here::here("R"))
+res <- find_endpoint_usages_base(
+	endpoints$route, 
+	pkg_dir = here::here("R"),
+	files_regex = "^ct_.*\\.R$",
+	expected_files = endpoints$file
+)
 
 # Filter to endpoints with no hits (not yet implemented)
 endpoints_to_build <- endpoints %>%
@@ -119,7 +124,7 @@ endpoints_to_build <- endpoints %>%
 
 # Render R function source code using unified template
 spec_with_text <- render_endpoint_stubs(
-  endpoints_to_build,
+  endpoints_to_build[1,],
   config = ct_config
 )
 

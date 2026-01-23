@@ -119,28 +119,3 @@ ct_bioactivity <- function(
 
   return(df)
 }
-
-#' Gets all bioassays
-#'
-#' Requests all bioassays; the package will automatically grab this information everytime the package is attached.
-#'
-#' @return Data frame
-
-ct_bio_assay_all <- function() {
-  req <- request(Sys.getenv('ctx_burl')) %>%
-    req_method("GET") %>%
-    req_url_path_append("bioactivity/assay/") %>%
-    req_headers(
-      Accept = "application/hal+json",
-      `x-api-key` = ct_api_key()
-    )
-
-  resp <- req_perform(req)
-
-  if (resp_status(resp) < 200 || resp_status(resp) >= 300) {
-    cli::cli_abort(paste("API request failed with status", resp_status(resp)))
-  }
-
-  df <- resp_body_json(resp)
-  return(df)
-}
