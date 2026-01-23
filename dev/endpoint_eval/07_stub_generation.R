@@ -139,7 +139,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   } else {
     # Standard case: primary param comes from path params
     primary_param <- "NULL"
-    if (nzchar(path_param_info$fn_signature)) {
+    if (nzchar(path_param_info$fn_signature %||% "")) {
       primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
     } else if (isTRUE(query_param_info$has_params)) {
       primary_param <- query_param_info$primary_param
@@ -153,8 +153,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Add query parameters if they exist
     if (isTRUE(query_param_info$has_params)) {
       query_sig <- query_param_info$fn_signature
-      if (nzchar(query_sig)) {
-        if (nzchar(fn_signature)) {
+      if (nzchar(query_sig %||% "")) {
+        if (nzchar(fn_signature %||% "")) {
           fn_signature <- paste0(fn_signature, ", ", query_sig)
         } else {
           fn_signature <- query_sig
@@ -339,7 +339,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
-  if (is_body_only) {
+  if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
       # Extract parameter info from body_param_info
@@ -462,7 +462,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
-  } else if (is_query_only) {
+  } else if (isTRUE(is_query_only)) {
     # Query-only endpoint: all params via ellipsis, no query parameter needed
     # For query-only endpoints, batch_limit should be 0 (static endpoint)
     effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
