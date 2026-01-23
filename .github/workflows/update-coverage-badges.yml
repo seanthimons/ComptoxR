@@ -34,11 +34,9 @@ jobs:
           use-public-rspm: true
       
       - name: Install R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: |
-            any::jsonlite
-            any::here
+        run: |
+          install.packages(c("jsonlite", "here"))
+        shell: Rscript {0}
       
       - name: Calculate schema coverage
         id: coverage
