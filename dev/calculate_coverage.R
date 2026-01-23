@@ -101,10 +101,10 @@ count_r_functions <- function(function_prefix) {
   return(function_count)
 }
 
-# Calculate coverage for CCD (Common Chemistry Database)
-cat("Calculating CCD (Common Chemistry) coverage...\n")
-ccd_endpoints <- count_schema_endpoints("^commonchemistry-prod\\.json$")
-ccd_functions <- count_r_functions("cc_")
+# Calculate coverage for CCD (CompTox Chemical Dashboard)
+cat("Calculating CCD (CompTox Chemical Dashboard) coverage...\n")
+ccd_endpoints <- count_all_schema_endpoints("^ctx-.*-prod\\.json$")
+ccd_functions <- count_r_functions("ct_")
 ccd_coverage_raw <- if (ccd_endpoints > 0) (ccd_functions / ccd_endpoints) * 100 else 0
 ccd_coverage <- min(round(ccd_coverage_raw, 1), 100.0)
 
