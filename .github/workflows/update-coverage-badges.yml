@@ -77,7 +77,7 @@ jobs:
             sed -i "s|CCD_coverage-[0-9.]*%25-[a-z]*|CCD_coverage-${{ steps.coverage.outputs.ccd_coverage }}%25-${{ steps.coverage.outputs.ccd_color }}|g" README.md
           else
             # Insert badges after the Test Coverage badge if not present
-            sed -i '/Test Coverage/a [![CCD Coverage](https://img.shields.io/badge/CCD_coverage-${{ steps.coverage.outputs.ccd_coverage }}%25-${{ steps.coverage.outputs.ccd_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)' README.md
+            sed -i "/Test Coverage/a [![CCD Coverage](https://img.shields.io/badge/CCD_coverage-${{ steps.coverage.outputs.ccd_coverage }}%25-${{ steps.coverage.outputs.ccd_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)" README.md
           fi
           
           # Update Cheminformatic badge
@@ -85,7 +85,7 @@ jobs:
             sed -i "s|Cheminformatic_coverage-[0-9.]*%25-[a-z]*|Cheminformatic_coverage-${{ steps.coverage.outputs.chemi_coverage }}%25-${{ steps.coverage.outputs.chemi_color }}|g" README.md
           else
             # Insert badges after the CCD badge if not present
-            sed -i '/CCD_coverage/a [![Cheminformatic Coverage](https://img.shields.io/badge/Cheminformatic_coverage-${{ steps.coverage.outputs.chemi_coverage }}%25-${{ steps.coverage.outputs.chemi_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)' README.md
+            sed -i "/CCD_coverage/a [![Cheminformatic Coverage](https://img.shields.io/badge/Cheminformatic_coverage-${{ steps.coverage.outputs.chemi_coverage }}%25-${{ steps.coverage.outputs.chemi_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)" README.md
           fi
       
       - name: Commit and push if changes
