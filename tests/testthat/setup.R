@@ -12,7 +12,7 @@ Sys.setenv("run_verbose" = "FALSE")
 # Explicitly set servers to Production for tests
 # This ensures consistency across different developer environments
 # Set server URLs directly as environment variables
-Sys.setenv("ctx_burl" = "https://api-ccte.epa.gov/")
+Sys.setenv("ctx_burl" = "https://comptox.epa.gov/ctx-api/")
 Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api")
 Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api")
 Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm")
