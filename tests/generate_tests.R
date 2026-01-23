@@ -16,64 +16,61 @@ source("tests/testthat/helper-test-generator.R")
 TEST_DIR <- "tests/testthat"
 
 # Standard test cases for different function signatures
+# Note: Most ct_ and chemi_ functions use 'query' as their parameter name
 test_cases <- list(
-  # Functions that take dtxsid parameter
-  dtxsid_single = list(
-    valid = list(dtxsid = "DTXSID7020182"),
+  # Functions that take query parameter (most common)
+  query_single = list(
+    valid = list(query = "DTXSID7020182"),
     batch = c("DTXSID7020182", "DTXSID5032381", "DTXSID8024291"),
     invalid = "INVALID_DTXSID"
   ),
 
-  # Functions that take cas parameter
-  cas_single = list(
-    valid = list(cas = "50-00-0"),
-    batch = c("50-00-0", "108-88-3", "71-43-2"),
-    invalid = "INVALID-CAS"
-  ),
-
-  # Functions that take smiles parameter
-  smiles_single = list(
-    valid = list(smiles = "C=O"),
-    batch = c("C=O", "c1ccccc1", "CCO"),
-    invalid = "INVALID_SMILES"
-  ),
-
-  # Functions that take list name parameter
+  # Functions that take list_name parameter
   list_name = list(
-    valid = list(listname = "PRODWATER"),
+    valid = list(list_name = "PRODWATER"),
     batch = NULL,
     invalid = "NONEXISTENT_LIST"
+  ),
+
+  # Functions that take chemicals parameter
+  chemicals = list(
+    valid = list(chemicals = "benzene"),
+    batch = c("benzene", "toluene", "xylene"),
+    invalid = "INVALID_CHEMICAL_NAME_XYZ"
   )
 )
 
 # Function signature mapping
 # Maps function names to their expected parameter types
 function_signatures <- list(
-  # DTXSID-based functions
-  ct_hazard = "dtxsid_single",
-  ct_cancer = "dtxsid_single",
-  ct_genotox = "dtxsid_single",
-  ct_skin_eye = "dtxsid_single",
-  ct_details = "dtxsid_single",
-  ct_synonym = "dtxsid_single",
-  ct_ghs = "dtxsid_single",
-  ct_properties = "dtxsid_single",
-  ct_functional_use = "dtxsid_single",
-
-  # Search functions
-  ct_search = "smiles_single",
-  ct_similar = "dtxsid_single",
+  # Query-based functions (most common - use 'query' parameter)
+  ct_hazard = "query_single",
+  ct_cancer = "query_single",
+  ct_genotox = "query_single",
+  ct_skin_eye = "query_single",
+  ct_details = "query_single",
+  ct_synonym = "query_single",
+  ct_ghs = "query_single",
+  ct_search = "query_single",
+  ct_similar = "query_single",
+  ct_env_fate = "query_single",
+  ct_test = "query_single",
+  ct_related = "query_single",
+  ct_compound_in_list = "query_single",
 
   # List functions
   ct_list = "list_name",
 
-  # Chemi functions (mostly DTXSID)
-  chemi_toxprint = "dtxsid_single",
-  chemi_safety = "dtxsid_single",
-  chemi_hazard = "dtxsid_single",
-  chemi_rq = "dtxsid_single",
-  chemi_classyfire = "smiles_single",
-  chemi_predict = "dtxsid_single"
+  # Chemi functions (mostly use 'query' parameter)
+  chemi_toxprint = "query_single",
+  chemi_safety = "query_single",
+  chemi_hazard = "query_single",
+  chemi_classyfire = "query_single",
+  chemi_predict = "query_single",
+  chemi_safety_section = "query_single",
+
+  # Chemi functions with chemicals parameter
+  chemi_cluster = "chemicals"
 )
 
 # Main test generation function
@@ -112,8 +109,8 @@ generate_tests <- function(functions_to_test = NULL, overwrite = FALSE) {
     # Get test case template for this function
     sig_type <- function_signatures[[fn_name]]
     if (is.null(sig_type)) {
-      # Default to dtxsid if not specified
-      sig_type <- "dtxsid_single"
+      # Default to query_single if not specified
+      sig_type <- "query_single"
       cat("⚠ Using default test case for", fn_name, "\n")
     }
 
