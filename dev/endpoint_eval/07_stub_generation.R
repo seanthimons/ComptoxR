@@ -29,16 +29,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   batch_limit_code <- if (is.null(batch_limit) || is.na(batch_limit)) "NULL" else as.character(batch_limit)
 
   # Determine response type and return documentation based on content_type
-  content_type <- content_type %||% ""
+  content_type <- if (is.null(content_type) || is.na(content_type)) "" else content_type
   is_image <- grepl("image/", content_type, fixed = TRUE)
   is_text <- grepl("text/plain", content_type, fixed = TRUE)
   is_json <- content_type == "" || grepl("application/json", content_type, fixed = TRUE)
 
   # Set return type documentation based on response schema
-  if (is_image) {
+  if (isTRUE(is_image)) {
     return_doc <- "Returns image data (raw bytes or magick image object)"
     content_type_call <- paste0(',\n    content_type = "', content_type, '"')
-  } else if (is_text) {
+  } else if (isTRUE(is_text)) {
     return_doc <- "Returns a character string"
     content_type_call <- ',\n    content_type = "text/plain"'
   } else {
@@ -73,13 +73,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   }
 
   # Build server and auth params for chemi GET endpoints
-  chemi_server_params <- if (is_chemi_get) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
+  chemi_server_params <- if (isTRUE(is_chemi_get)) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
 
   # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
-  chemi_tidy_param <- if (is_chemi_get) ',\n    tidy = FALSE' else ""
+  chemi_tidy_param <- if (isTRUE(is_chemi_get)) ',\n    tidy = FALSE' else ""
 
 	# Build server and auth params for common_chemistry (cc_) GET endpoints 
-	cc_server_params <- if (grepl("^cc_", fn)) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
+	cc_server_params <- if (isTRUE(grepl("^cc_", fn))) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
 
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
