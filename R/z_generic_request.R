@@ -588,10 +588,10 @@ generic_search_request <- function(
   }
 
   # 3. Request building
-  req <- httr2::request(base_url) |>
-    httr2::req_url_path_append(endpoint) |>
-    httr2::req_method("POST") |>
-    httr2::req_body_json(payload) |>
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_method("POST") %>%
+    httr2::req_body_json(payload) %>%
     httr2::req_headers(
       Accept = "application/json",
       `Content-Type` = "application/json"

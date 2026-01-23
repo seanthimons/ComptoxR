@@ -91,10 +91,10 @@ chemi_resolver_pubchem_section_bulk <- function(query, id_type = "AnyId", sectio
   payload <- list(chemicals = chemicals)
   if (length(extra_options) > 0) payload$options <- extra_options
 
-  req <- httr2::request(base_url) |>
-    httr2::req_url_path_append("resolver/pubchem-section") |>
-    httr2::req_method("POST") |>
-    httr2::req_body_json(payload) |>
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append("resolver/pubchem-section") %>%
+    httr2::req_method("POST") %>%
+    httr2::req_body_json(payload) %>%
     httr2::req_headers(Accept = "application/json")
 
   if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
