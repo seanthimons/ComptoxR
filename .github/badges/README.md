@@ -39,8 +39,8 @@ Badge colors reflect the coverage level:
 
 ## Current Coverage
 
-- **CCD Coverage**: 200% (6 functions / 3 endpoints)
-  - Note: Coverage >100% indicates multiple wrapper functions per endpoint, often providing different features or convenience methods
+- **CCD Coverage**: 100% (6 functions / 3 endpoints)
+  - Note: Coverage is capped at 100%. Multiple wrapper functions per endpoint (such as utility or convenience methods) do not increase coverage beyond 100%
 - **Cheminformatic Coverage**: 75.5% (145 functions / 192 endpoints)
 
 ## Manual Update

@@ -105,7 +105,8 @@ count_r_functions <- function(function_prefix) {
 cat("Calculating CCD (Common Chemistry) coverage...\n")
 ccd_endpoints <- count_schema_endpoints("^commonchemistry-prod\\.json$")
 ccd_functions <- count_r_functions("cc_")
-ccd_coverage <- if (ccd_endpoints > 0) round((ccd_functions / ccd_endpoints) * 100, 1) else 0
+ccd_coverage_raw <- if (ccd_endpoints > 0) (ccd_functions / ccd_endpoints) * 100 else 0
+ccd_coverage <- min(round(ccd_coverage_raw, 1), 100.0)
 
 cat(sprintf("CCD Endpoints: %d\n", ccd_endpoints))
 cat(sprintf("CCD Functions: %d\n", ccd_functions))
@@ -115,7 +116,8 @@ cat(sprintf("CCD Coverage: %.1f%%\n\n", ccd_coverage))
 cat("Calculating Cheminformatic coverage...\n")
 chemi_endpoints <- count_all_schema_endpoints("^chemi-.*-prod\\.json$")
 chemi_functions <- count_r_functions("chemi_")
-chemi_coverage <- if (chemi_endpoints > 0) round((chemi_functions / chemi_endpoints) * 100, 1) else 0
+chemi_coverage_raw <- if (chemi_endpoints > 0) (chemi_functions / chemi_endpoints) * 100 else 0
+chemi_coverage <- min(round(chemi_coverage_raw, 1), 100.0)
 
 cat(sprintf("Cheminformatic Endpoints: %d\n", chemi_endpoints))
 cat(sprintf("Cheminformatic Functions: %d\n", chemi_functions))
