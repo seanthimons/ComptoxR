@@ -123,8 +123,19 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
       is_required <- TRUE
     }
     
+    # For primary parameters (first query param when no path params exist),
+    # only mark as required if the schema says so AND it has no default value.
+    # This ensures optional params with default values keep their defaults.
     if (!is.null(primary_param) && p_san == primary_param) {
-      is_required <- TRUE
+      # Only mark as required if the schema explicitly says required=true
+      # and there's no default value provided
+      has_default <- is.list(entry) && !is.null(entry$default) && 
+                     !(length(entry$default) == 1 && is.na(entry$default))
+      schema_required <- is.list(entry) && isTRUE(entry$required)
+      
+      if (schema_required && !has_default) {
+        is_required <- TRUE
+      }
     }
     
     if (is_required) {

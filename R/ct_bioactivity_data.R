@@ -19,3 +19,28 @@ ct_bioactivity_data <- function(query) {
   )
 }
 
+#' Get summary data by DTXSID
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @return Returns a scalar value
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_bioactivity_data()
+#' }
+ct_bioactivity_data <- function() {
+  result <- generic_request(
+    endpoint = "bioactivity/data/summary/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+

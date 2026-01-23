@@ -105,7 +105,7 @@ Wrappers around `generic_chemi_request()`:
    # For each ct_ function
    create_wrapper_test_file(
      fn_name = "ct_hazard",
-     valid_input = list(dtxsid = "DTXSID7020182"),
+     valid_input = list(query = "DTXSID7020182"),
      batch_input = c("DTXSID7020182", "DTXSID5032381"),
      invalid_input = "INVALID_ID",
      output_file = "tests/testthat/test-ct_hazard.R"

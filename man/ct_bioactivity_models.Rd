@@ -4,19 +4,30 @@
 \alias{ct_bioactivity_models}
 \title{Return ToxCast models for given dtxsid}
 \usage{
-ct_bioactivity_models(query)
+ct_bioactivity_models(dtxsid, model)
+
+ct_bioactivity_models(dtxsid, model)
 }
 \arguments{
+\item{dtxsid}{dtxsid}
+
+\item{model}{model}
+
 \item{query}{List of DTXSIDs to search for}
 }
 \value{
 A tibble
+
+Returns a tibble with results (array of objects)
 }
 \description{
-Return ToxCast models for given dtxsid
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 ct_bioactivity_models(query = "DTXSID7020182")
+}
+\dontrun{
+ct_bioactivity_models(dtxsid = "DTXSID7020182")
 }
 }
