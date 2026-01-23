@@ -20,6 +20,7 @@ mixtures that might not be flagged by other means. The search is robust to
 extra whitespace.
 }
 \examples{
+ \dontrun{
 test_names <- c(
   "Ethanol, water (1:1)",
   "Sodium chloride",
@@ -30,7 +31,8 @@ test_names <- c(
  "Mixture (3:1 w/w)",
   NA
 )
-extract_mixture(names)
+extract_mixture(test_names)
 test_names \%>\% enframe(., name = 'idx', value = 'name') \%>\% mutate(bool_mix = extract_mixture(name))
 # Expected output: TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, NA
+}
 }
