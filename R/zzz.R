@@ -529,48 +529,50 @@ reset_servers <- function() {
 
 	# Conditionally swap to DEV / STAG environments if in the DEV version
 	# Only set default servers if they haven't been explicitly configured
-	if (is.na(utils::packageDate('ComptoxR'))) {
-		# DEV version defaults (only if not already set)
-		if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
-		if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
-		if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
-		if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
-		if (Sys.getenv("np_burl") == "") np_server(server = 1)
-		if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
-		# Only set verbose if not already configured
-		if (Sys.getenv("run_verbose") == "") {
-			run_verbose(verbose = FALSE)
-		}
-    if (Sys.getenv("run_debug") == "") {
-			run_debug(debug = FALSE)
-		}
-		batch_limit(limit = 200)
+	# Suppress messages during package attach to comply with CRAN policy
+	suppressMessages({
+		if (is.na(utils::packageDate('ComptoxR'))) {
+			# DEV version defaults (only if not already set)
+			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
+			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
+			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
+			if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
+			if (Sys.getenv("np_burl") == "") np_server(server = 1)
+			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
+			# Only set verbose if not already configured
+			if (Sys.getenv("run_verbose") == "") {
+				run_verbose(verbose = FALSE)
+			}
+			if (Sys.getenv("run_debug") == "") {
+				run_debug(debug = FALSE)
+			}
+			batch_limit(limit = 200)
 
-	} else if (Sys.getenv('ctx_burl') == "") {
-		# Production version defaults (only if not already set)
-		ctx_server(server = 1)
-		chemi_server(server = 1)
-		epi_server(server = 1)
-		eco_server(server = 1)
-		np_server(server = 1)
-		cc_server(server = 1)
-		# Only set verbose if not already configured
-		if (Sys.getenv("run_verbose") == "") {
-			run_verbose(verbose = FALSE)
-		}
-    if (Sys.getenv("run_debug") == "") {
-			run_debug(debug = FALSE)
-		}
+		} else if (Sys.getenv('ctx_burl') == "") {
+			# Production version defaults (only if not already set)
+			ctx_server(server = 1)
+			chemi_server(server = 1)
+			epi_server(server = 1)
+			eco_server(server = 1)
+			np_server(server = 1)
+			cc_server(server = 1)
+			# Only set verbose if not already configured
+			if (Sys.getenv("run_verbose") == "") {
+				run_verbose(verbose = FALSE)
+			}
+			if (Sys.getenv("run_debug") == "") {
+				run_debug(debug = FALSE)
+			}
 
-
-		batch_limit(limit = 200)
-	}
+			batch_limit(limit = 200)
+		}
+	})
 
 # Conditionally display startup message based on verbosity
 	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
-		packageStartupMessage(
-			.header()
-		)
+		# Capture cli output and wrap in packageStartupMessage for CRAN compliance
+		header_output <- paste(utils::capture.output(.header()), collapse = "\n")
+		packageStartupMessage(header_output)
 	}
 
 }
