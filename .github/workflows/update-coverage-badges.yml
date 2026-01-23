@@ -1,0 +1,104 @@
+# GitHub Actions workflow to update CCD and Cheminformatic schema coverage badges
+name: Update Schema Coverage Badges
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+  schedule:
+    # Run weekly on Monday at 9am UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    name: Update Schema Coverage Badges
+    
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+      
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::jsonlite
+            any::here
+      
+      - name: Calculate schema coverage
+        id: coverage
+        run: |
+          Rscript dev/calculate_coverage.R
+        shell: bash
+      
+      - name: Create badge directory
+        run: |
+          mkdir -p .github/badges
+      
+      - name: Create CCD coverage badge JSON
+        run: |
+          cat > .github/badges/ccd-coverage.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "CCD coverage",
+            "message": "${{ steps.coverage.outputs.ccd_coverage }}%",
+            "color": "${{ steps.coverage.outputs.ccd_color }}"
+          }
+          EOF
+      
+      - name: Create Cheminformatic coverage badge JSON
+        run: |
+          cat > .github/badges/chemi-coverage.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "Cheminformatic coverage",
+            "message": "${{ steps.coverage.outputs.chemi_coverage }}%",
+            "color": "${{ steps.coverage.outputs.chemi_color }}"
+          }
+          EOF
+      
+      - name: Update README badges
+        run: |
+          # Update CCD badge
+          if grep -q "CCD_coverage" README.md; then
+            sed -i "s|CCD_coverage-[0-9.]*%25-[a-z]*|CCD_coverage-${{ steps.coverage.outputs.ccd_coverage }}%25-${{ steps.coverage.outputs.ccd_color }}|g" README.md
+          else
+            # Insert badges after the Test Coverage badge if not present
+            sed -i '/Test Coverage/a [![CCD Coverage](https://img.shields.io/badge/CCD_coverage-${{ steps.coverage.outputs.ccd_coverage }}%25-${{ steps.coverage.outputs.ccd_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)' README.md
+          fi
+          
+          # Update Cheminformatic badge
+          if grep -q "Cheminformatic_coverage" README.md; then
+            sed -i "s|Cheminformatic_coverage-[0-9.]*%25-[a-z]*|Cheminformatic_coverage-${{ steps.coverage.outputs.chemi_coverage }}%25-${{ steps.coverage.outputs.chemi_color }}|g" README.md
+          else
+            # Insert badges after the CCD badge if not present
+            sed -i '/CCD_coverage/a [![Cheminformatic Coverage](https://img.shields.io/badge/Cheminformatic_coverage-${{ steps.coverage.outputs.chemi_coverage }}%25-${{ steps.coverage.outputs.chemi_color }}.svg)](https://github.com/${{ github.repository }}/actions/workflows/update-coverage-badges.yml)' README.md
+          fi
+      
+      - name: Commit and push if changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .github/badges/*.json README.md
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update schema coverage badges [skip ci]"
+            git push
+          fi
