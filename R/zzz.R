@@ -570,9 +570,17 @@ reset_servers <- function() {
 
 # Conditionally display startup message based on verbosity
 	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
-		# Capture cli output and wrap in packageStartupMessage for CRAN compliance
-		header_output <- paste(utils::capture.output(.header()), collapse = "\n")
-		packageStartupMessage(header_output)
+		# Use cli's message handler to preserve ANSI formatting while remaining CRAN compliant
+		# cli outputs through message() by default, which packageStartupMessage wraps
+		withCallingHandlers(
+			.header(),
+			message = function(m) {
+				# Strip trailing newline to preserve original spacing
+				msg <- sub("\n$", "", conditionMessage(m))
+				packageStartupMessage(msg)
+				invokeRestart("muffleMessage")
+			}
+		)
 	}
 
 }
