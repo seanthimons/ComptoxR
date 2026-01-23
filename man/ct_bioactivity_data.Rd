@@ -4,16 +4,25 @@
 \alias{ct_bioactivity_data}
 \title{Get bioactivity data for a batch of DTXSIDs}
 \usage{
-ct_bioactivity_data(query)
+ct_bioactivity_data()
+
+ct_bioactivity_data()
 }
 \value{
 Returns a tibble with results
+
+Returns a scalar value
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 ct_bioactivity_data(query = "DTXSID7020182")
+}
+\dontrun{
+ct_bioactivity_data()
 }
 }

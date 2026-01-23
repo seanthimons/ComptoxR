@@ -2,6 +2,12 @@
 # Stub Generation
 # ==============================================================================
 
+# Helper function to handle both NULL and NA with a default value
+# Unlike %||% which only handles NULL, this also handles NA
+`%|NA|%` <- function(x, default) {
+  if (is.null(x) || (length(x) == 1 && is.na(x))) default else x
+}
+
 #' Build a single function stub from components
 #'
 #' Generates R function source code with roxygen documentation using configuration.
@@ -29,16 +35,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   batch_limit_code <- if (is.null(batch_limit) || is.na(batch_limit)) "NULL" else as.character(batch_limit)
 
   # Determine response type and return documentation based on content_type
-  content_type <- content_type %||% ""
+  content_type <- if (is.null(content_type) || is.na(content_type)) "" else content_type
   is_image <- grepl("image/", content_type, fixed = TRUE)
   is_text <- grepl("text/plain", content_type, fixed = TRUE)
   is_json <- content_type == "" || grepl("application/json", content_type, fixed = TRUE)
 
   # Set return type documentation based on response schema
-  if (is_image) {
+  if (isTRUE(is_image)) {
     return_doc <- "Returns image data (raw bytes or magick image object)"
     content_type_call <- paste0(',\n    content_type = "', content_type, '"')
-  } else if (is_text) {
+  } else if (isTRUE(is_text)) {
     return_doc <- "Returns a character string"
     content_type_call <- ',\n    content_type = "text/plain"'
   } else {
@@ -73,13 +79,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   }
 
   # Build server and auth params for chemi GET endpoints
-  chemi_server_params <- if (is_chemi_get) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
+  chemi_server_params <- if (isTRUE(is_chemi_get)) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
 
   # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
-  chemi_tidy_param <- if (is_chemi_get) ',\n    tidy = FALSE' else ""
+  chemi_tidy_param <- if (isTRUE(is_chemi_get)) ',\n    tidy = FALSE' else ""
 
 	# Build server and auth params for common_chemistry (cc_) GET endpoints 
-	cc_server_params <- if (grepl("^cc_", fn)) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
+	cc_server_params <- if (isTRUE(grepl("^cc_", fn))) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
 
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
@@ -94,7 +100,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     is_body_only <- (isTRUE(body_param_info$has_params) &&
                      !isTRUE(path_param_info$has_path_params) &&
-                     nchar(path_param_info$fn_signature) == 0)
+                     nchar(path_param_info$fn_signature %|NA|% "") == 0)
   }
 
   if (isTRUE(is_body_only)) {
@@ -123,7 +129,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
   } else if (isTRUE(is_query_only)) {
     # Query-only endpoint: primary param comes from query params
-    primary_param <- query_param_info$primary_param
+    # Use path param as primary if query doesn't have one (e.g., endpoint with path + optional query params)
+    primary_param <- query_param_info$primary_param %||% path_param_info$primary_param %||% "NULL"
     fn_signature <- query_param_info$fn_signature
     combined_calls <- query_param_info$params_call
     param_docs <- query_param_info$param_docs
@@ -139,7 +146,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   } else {
     # Standard case: primary param comes from path params
     primary_param <- "NULL"
-    if (nzchar(path_param_info$fn_signature)) {
+    if (nzchar(path_param_info$fn_signature %||% "")) {
       primary_param <- strsplit(path_param_info$fn_signature, ",")[[1]][1]
     } else if (isTRUE(query_param_info$has_params)) {
       primary_param <- query_param_info$primary_param
@@ -153,8 +160,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Add query parameters if they exist
     if (isTRUE(query_param_info$has_params)) {
       query_sig <- query_param_info$fn_signature
-      if (nzchar(query_sig)) {
-        if (nzchar(fn_signature)) {
+      if (nzchar(query_sig %||% "")) {
+        if (nzchar(fn_signature %||% "")) {
           fn_signature <- paste0(fn_signature, ", ", query_sig)
         } else {
           fn_signature <- query_sig
@@ -202,10 +209,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   }
 
   # Build example call string - handle case where there are no parameters
-  example_call <- if (primary_param == "NULL" || primary_param == "" || nchar(fn_signature) == 0) {
+  # Use %|NA|% to handle NULL/NA values safely
+  fn_signature_safe <- fn_signature %|NA|% ""
+  primary_param_safe <- primary_param %|NA|% "NULL"
+  example_call <- if (primary_param_safe == "NULL" || primary_param_safe == "" || nchar(fn_signature_safe) == 0) {
     paste0(fn, "()")
   } else {
-    paste0(fn, "(", primary_param, ' = ', example_value_vec, ')')
+    paste0(fn, "(", primary_param_safe, ' = ', example_value_vec, ')')
   }
 
   # Build roxygen header with parameter descriptions from metadata
@@ -339,7 +349,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
-  if (is_body_only) {
+  if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
       # Extract parameter info from body_param_info
@@ -462,7 +472,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
-  } else if (is_query_only) {
+  } else if (isTRUE(is_query_only)) {
     # Query-only endpoint: all params via ellipsis, no query parameter needed
     # For query-only endpoints, batch_limit should be 0 (static endpoint)
     effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
@@ -780,13 +790,13 @@ render_endpoint_stubs <- function(spec,
         path_param_info = path_param_info,
         query_param_info = query_param_info,
         body_param_info = body_param_info,
-        content_type = content_type %||% "",
+        content_type = content_type %|NA|% "",
         config = config,
-        needs_resolver = isTRUE(as.logical(needs_resolver %||% FALSE)),
-        body_schema_type = body_schema_type %||% "unknown",
-        deprecated = isTRUE(as.logical(deprecated %||% FALSE)),
-        response_schema_type = response_schema_type %||% "unknown",
-        request_type = request_type
+        needs_resolver = isTRUE(as.logical(needs_resolver %|NA|% FALSE)),
+        body_schema_type = body_schema_type %|NA|% "unknown",
+        deprecated = isTRUE(as.logical(deprecated %|NA|% FALSE)),
+        response_schema_type = response_schema_type %|NA|% "unknown",
+        request_type = request_type %|NA|% ""
       )
     }
   )
