@@ -1,6 +1,6 @@
 # Schema Coverage Badges
 
-This directory contains the badge data files for displaying CCD and Cheminformatic schema coverage in the README.
+This directory contains the badge data files for displaying CCD (CompTox Chemical Dashboard) and Cheminformatic schema coverage in the README.
 
 ## What are Schema Coverage Badges?
 
@@ -9,11 +9,11 @@ Schema coverage badges show the percentage of API endpoints that have been imple
 ## How It Works
 
 1. **Schemas**: The `schema/` directory contains JSON schema files for various APIs:
-   - `commonchemistry-prod.json`: CAS Common Chemistry Database (CCD) API schema (3 endpoints)
+   - `ctx-*-prod.json`: CompTox Chemical Dashboard (CCD) API schemas (140 total endpoints across all services)
    - `chemi-*-prod.json`: Cheminformatic services schemas (192 total endpoints across all services)
 
 2. **R Functions**: The `R/` directory contains wrapper functions:
-   - `cc_*` functions: CCD wrappers (6 functions)
+   - `ct_*` functions: CompTox Chemical Dashboard (CCD) wrappers (111 functions)
    - `chemi_*` functions: Cheminformatic wrappers (145 functions)
 
 3. **Coverage Calculation**: The `dev/calculate_coverage.R` script:
@@ -21,6 +21,7 @@ Schema coverage badges show the percentage of API endpoints that have been imple
    - Counts implemented R wrapper functions
    - Calculates coverage percentage: (functions / endpoints) × 100%
    - Determines badge color based on coverage level
+   - Caps coverage at 100% to avoid confusing percentages
 
 4. **Badge Updates**: The `.github/workflows/update-coverage-badges.yml` workflow:
    - Runs on releases, weekly schedule, or manual trigger
@@ -39,9 +40,10 @@ Badge colors reflect the coverage level:
 
 ## Current Coverage
 
-- **CCD Coverage**: 100% (6 functions / 3 endpoints)
-  - Note: Coverage is capped at 100%. Multiple wrapper functions per endpoint (such as utility or convenience methods) do not increase coverage beyond 100%
+- **CCD Coverage**: 79.3% (111 functions / 140 endpoints)
+  - CompTox Chemical Dashboard (ct_* functions covering ctx-* schemas)
 - **Cheminformatic Coverage**: 75.5% (145 functions / 192 endpoints)
+  - Note: Coverage is capped at 100%. Multiple wrapper functions per endpoint do not increase coverage beyond 100%
 
 ## Manual Update
 
