@@ -102,6 +102,8 @@ count_r_functions <- function(function_prefix) {
 }
 
 # Calculate coverage for CCD (CompTox Chemical Dashboard)
+# CCD has multiple schema files (ctx-chemical, ctx-hazard, ctx-bioactivity, ctx-exposure)
+# so we use count_all_schema_endpoints to aggregate across all ctx-*-prod.json files
 cat("Calculating CCD (CompTox Chemical Dashboard) coverage...\n")
 ccd_endpoints <- count_all_schema_endpoints("^ctx-.*-prod\\.json$")
 ccd_functions <- count_r_functions("ct_")
