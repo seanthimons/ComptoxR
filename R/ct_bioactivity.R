@@ -113,6 +113,7 @@ ct_bioactivity <- function(
     list_rbind(names_to = "query_id")
 
   if (annotate == TRUE) {
+		# TODO: UPDATE THIS TO CORRECT FUNCTION
     bioassay_all <- ct_bio_assay_all()
     df <- left_join(df, bioassay_all, join_by('aeid'))
   }
