@@ -1,7 +1,7 @@
 #' Export
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param uri Required parameter
 #' @param returnAsAttachment Optional parameter
