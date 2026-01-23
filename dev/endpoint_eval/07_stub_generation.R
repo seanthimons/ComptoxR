@@ -83,7 +83,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
-  if (!is.null(request_type) && nzchar(request_type)) {
+  if (!is.null(request_type) && !is.na(request_type) && nzchar(request_type)) {
     is_body_only <- request_type == "json"
     is_query_only <- request_type == "query_only"
   } else {
