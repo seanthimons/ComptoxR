@@ -4,7 +4,7 @@
 
 test_that("ct_similar works with valid input", {
     vcr::use_cassette("ct_similar_dtxsid", {
-        result <- ct_similar(dtxsid = "DTXSID7020182")
+        result <- ct_similar(query = "DTXSID7020182")
         {
             expect_s3_class(result, "tbl_df")
             expect_true(ncol(result) > 0)
@@ -14,7 +14,7 @@ test_that("ct_similar works with valid input", {
 
 test_that("ct_similar handles batch requests", {
     vcr::use_cassette("ct_similar_batch", {
-        result <- ct_similar(dtxsid = c("DTXSID7020182", "DTXSID5032381", 
+        result <- ct_similar(query = c("DTXSID7020182", "DTXSID5032381", 
         "DTXSID8024291"))
         expect_s3_class(result, "tbl_df")
         expect_true(nrow(result) > 0)
@@ -23,7 +23,7 @@ test_that("ct_similar handles batch requests", {
 
 test_that("ct_similar handles invalid input gracefully", {
     vcr::use_cassette("ct_similar_error", {
-        expect_warning(result <- ct_similar(dtxsid = "INVALID_DTXSID"))
+        expect_warning(result <- ct_similar(query = "INVALID_DTXSID"))
         expect_true(is.null(result) || nrow(result) == 0)
     })
 })

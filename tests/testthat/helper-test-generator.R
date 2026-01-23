@@ -14,7 +14,7 @@
 #' \dontrun{
 #' generate_wrapper_test(
 #'   fn_name = "ct_hazard",
-#'   test_inputs = list(dtxsid = "DTXSID7020182"),
+#'   test_inputs = list(query = "DTXSID7020182"),
 #'   expected_behavior = "returns_tibble",
 #'   cassette_name = "ct_hazard_single"
 #' )
@@ -65,9 +65,9 @@ generate_wrapper_test <- function(fn_name,
 #'
 #' @param fn_name Function name
 #' @param batch_inputs Vector or list of inputs to batch
-#' @param param_name Name of the parameter to batch (e.g., "dtxsid")
+#' @param param_name Name of the parameter to batch (e.g., "query")
 #' @param cassette_name VCR cassette name
-generate_batch_test <- function(fn_name, batch_inputs, param_name = "dtxsid", cassette_name = NULL) {
+generate_batch_test <- function(fn_name, batch_inputs, param_name = "query", cassette_name = NULL) {
 
   if (is.null(cassette_name)) {
     cassette_name <- paste0(fn_name, "_batch")
@@ -91,7 +91,7 @@ generate_batch_test <- function(fn_name, batch_inputs, param_name = "dtxsid", ca
 #' @param fn_name Function name
 #' @param bad_input Invalid input to test
 #' @param param_name Parameter name for the bad input
-generate_error_test <- function(fn_name, bad_input, param_name = "dtxsid") {
+generate_error_test <- function(fn_name, bad_input, param_name = "query") {
 
   test_call <- rlang::call2(fn_name, !!rlang::sym(param_name) := bad_input)
 
@@ -180,8 +180,9 @@ create_wrapper_test_file <- function(fn_name,
 generate_all_ct_tests <- function(output_dir = "tests/testthat") {
 
   # Define standard test cases for different function types
-  standard_dtxsid_test <- list(
-    valid = list(dtxsid = "DTXSID7020182"),
+  # Note: Most ct_ and chemi_ functions use 'query' as the parameter name
+  standard_query_test <- list(
+    valid = list(query = "DTXSID7020182"),
     batch = c("DTXSID7020182", "DTXSID5032381"),
     invalid = "INVALID_ID"
   )
@@ -199,9 +200,9 @@ generate_all_ct_tests <- function(output_dir = "tests/testthat") {
     if (!file.exists(output_file)) {
       create_wrapper_test_file(
         fn_name = fn,
-        valid_input = standard_dtxsid_test$valid,
-        batch_input = standard_dtxsid_test$batch,
-        invalid_input = standard_dtxsid_test$invalid,
+        valid_input = standard_query_test$valid,
+        batch_input = standard_query_test$batch,
+        invalid_input = standard_query_test$invalid,
         output_file = output_file
       )
       message("✓ Created ", output_file)
