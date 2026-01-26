@@ -62,9 +62,20 @@ chemi_endpoints <- parse_chemi_schemas() %>%
     name = route %>%
       # Remove /api/ prefix and common tokens
       str_remove_all(string = ., pattern = "^api/") %>%
+      # Remove common uninformative tokens from the route:
+      # (?i)                    - Case insensitive matching
+      # (?:^|[/_-])             - Must be at start OR preceded by / _ or -
+      # (?:chemi|search(?:es)?  - Match "chemi", "search", or "searches"
+      #   |summary              - OR "summary"
+      #   |by[/_-]dtxsid)       - OR "by-dtxsid", "by_dtxsid", "by/dtxsid"
+      # (?=$|[/_-])             - Must be at end OR followed by / _ or -
       str_remove_all(
         regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
       ) %>%
+      # Remove trailing "-summary" that may remain after first pass:
+      # (?i)      - Case insensitive
+      # -summary  - Literal "-summary"
+      # (?=$|[/_-]|$) - Must be at end OR followed by separator
       str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
       # Collapse any remaining separators to spaces
       str_replace_all("[/]+", " ") %>%

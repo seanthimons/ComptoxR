@@ -67,21 +67,29 @@ endpoints <- map(
 
     # Generate file name from route
     # Remove common prefixes/suffixes, collapse to clean identifier
-    file = route %>%
+    name = route %>%
       # 1) Remove tokens with optional left separator, only when delimited on the right
       str_remove_all(
-        regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
-      ) %>%
+        # regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
+				regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])")
+
+			) %>%
       str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
       # 2) Collapse any remaining separators to spaces
       str_replace_all("[/]+", " ") %>%
-      # 3) Trim and normalize whitespace
+      # Trim and normalize whitespace
       str_squish() %>%
-      # 4) Replace spaces with underscores
-      str_replace_all(., pattern = "\\s", replacement = "_"),
+      # Replace spaces with underscores
+      str_replace_all(., pattern = "\\s", replacement = "_") %>% 
+      # Replace hyphens with underscores
+      str_replace_all(., pattern = "-", replacement = "_"),
 
     # Build full file name with prefix
-    file = paste0("ct_", domain, "_", file, ".R"),
+    file = case_when(
+			nchar(name) == 0 ~ paste0("ct_", domain, ".R"),
+			str_detect(name, pattern = domain) ~ paste0("ct_", name, ".R"),
+			.default = paste0("ct_", domain, "_", name, ".R")
+		),
 
     # Set batch_limit:
     # - GET with path params: 1 (single item appended to path)
@@ -99,8 +107,21 @@ endpoints <- map(
     route,
     factor(method, levels = c('POST', 'GET'))
   ) %>%
-  # Remove duplicates (prefer first occurrence per route)
-  distinct(route, .keep_all = TRUE)
+  # # Remove duplicates (prefer first occurrence per route)
+  # distinct(route, .keep_all = TRUE)
+	group_by(file) %>%
+	mutate(
+		method_count = n(),
+		# Generate function name: append _post for POST when collision exists
+		fn = case_when(
+			method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
+			method == "GET" ~ tools::file_path_sans_ext(basename(file)),
+			method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
+			.default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+		)
+	) %>%
+	ungroup() %>%
+	select(-method_count)
 
 # ==============================================================================
 # Find Missing Endpoints
@@ -117,6 +138,11 @@ res <- find_endpoint_usages_base(
 # Filter to endpoints with no hits (not yet implemented)
 endpoints_to_build <- endpoints %>%
   filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+
+# Filter to endpoints with hits (already implemented)
+endpoints_already_implemented <- endpoints %>%
+  filter(route %in% {res$summary %>% filter(n_hits > 0) %>% pull(endpoint)})
+
 
 # ==============================================================================
 # Generate Function Stubs
@@ -164,3 +190,4 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 devtools::document()
 #devtools::load_all()
+
