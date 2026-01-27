@@ -89,9 +89,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
+  # Request types:
+  #   - "json": POST/PUT/PATCH with request body (body_only)
+  #   - "path": GET with path parameters (standard path-based endpoint)
+  #   - "query_only": GET without path parameters (static endpoint, query params only)
   if (!is.null(request_type) && !is.na(request_type) && nzchar(request_type)) {
     is_body_only <- request_type == "json"
-    is_query_only <- request_type == "query_only"
+    # NEW: Simple body types are also body-only
+    is_simple_body <- body_schema_type %in% c("string", "string_array")
+    is_query_only <- request_type == "query_only"  # "path" falls through to standard case
   } else {
     # Legacy detection for backward compatibility
     is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
@@ -101,6 +107,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     is_body_only <- (isTRUE(body_param_info$has_params) &&
                      !isTRUE(path_param_info$has_path_params) &&
                      nchar(path_param_info$fn_signature %|NA|% "") == 0)
+
+    # NEW: Simple body types are body-only even if body_param_info$has_params is FALSE
+    is_simple_body <- body_schema_type %in% c("string", "string_array")
   }
 
   if (isTRUE(is_body_only)) {
