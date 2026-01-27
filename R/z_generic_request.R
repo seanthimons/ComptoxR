@@ -376,7 +376,7 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 #' Generic Cheminformatics API Request Function
 #'
 #' This specialized template handles the nested payload structure common to the
-#' EPA cheminformatics microservices: {"chemicals": [{"sid": "ID1"}], "options": {...}}
+#' EPA cheminformatics microservices: `{"chemicals": [{"sid": "ID1"}], "options": {...}}`
 #'
 #' @param query A character vector of identifiers (DTXSIDs, etc.). If NULL and chemicals is
 #'        provided, the chemicals parameter is used instead.
@@ -386,11 +386,11 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 #' @param server Global environment variable name for the base URL (default: 'chemi_burl').
 #' @param auth Boolean; whether to include the API key header. Defaults to FALSE.
 #' @param pluck_res Optional character; the name of the field to extract from the JSON response.
-#' @param wrap Boolean; whether to wrap the query in a {"chemicals": [...], "options": ...} structure.
-#'        Defaults to TRUE. If FALSE, sends a JSON array of objects like [{"sid": "ID1"}, ...].
+#' @param wrap Boolean; whether to wrap the query in a `{"chemicals": [...], "options": ...}` structure.
+#'        Defaults to TRUE. If FALSE, sends a JSON array of objects like `[{"sid": "ID1"}, ...]`.
 #'        Ignored if array_payload is TRUE.
 #' @param array_payload Boolean; if TRUE, creates a flat structure with identifiers as an array:
-#'        {"ids": ["ID1", "ID2"], "option1": "value1", ...}. When TRUE, sid_label is used as the
+#'        `{"ids": ["ID1", "ID2"], "option1": "value1", ...}`. When TRUE, sid_label is used as the
 #'        array key name and options are merged at the top level. Takes precedence over wrap parameter.
 #'        Defaults to FALSE.
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
@@ -547,7 +547,7 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
 #' Generic Search API Request Function
 #'
 #' Specialized template for the cheminformatics search endpoint which uses a
-#' different payload structure: \code{{"inputType", "searchType", "params", "query"}}
+#' different payload structure: `inputType`, `searchType`, `params`, `query`
 #'
 #' @param search_type The search type (e.g., "EXACT", "SIMILAR", "MASS", "HAZARD", "FEATURES").
 #' @param input_type The input format type. Defaults to "MOL".
