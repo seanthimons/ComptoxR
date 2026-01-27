@@ -358,6 +358,88 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
+  # Handle simple body types (string, string_array)
+  if (isTRUE(is_simple_body)) {
+    # For simple body types, use "query" as the primary parameter
+    primary_param <- "query"
+    fn_signature <- "query"
+
+    # Build parameter documentation based on body schema type
+    if (body_schema_type == "string") {
+      param_docs <- "#' @param query Character string to send in request body\n"
+    } else if (body_schema_type == "string_array") {
+      param_docs <- "#' @param query Character vector of strings to send in request body\n"
+    } else {
+      param_docs <- "#' @param query Query data to send in request body\n"
+    }
+
+    # Build example value
+    if (isTRUE(method == "POST")) {
+      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      if (length(dtxsids) > 1) {
+        example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
+      } else {
+        example_value_vec <- paste0('"', dtxsids, '"')
+      }
+    } else {
+      example_value_vec <- '"DTXSID7020182"'
+    }
+
+    # Build roxygen header
+    roxygen_header <- glue::glue('
+#\' {title}
+#\'
+#\' @description
+#\' `r lifecycle::badge("{lifecycle_badge}")`
+#\'
+{param_docs}#\' @return {return_doc}
+#\' @export
+#\'
+#\' @examples
+#\' \\dontrun{{
+#\' {fn}(query = {example_value_vec})
+#\' }}')
+
+    # Generate function body with newline collapsing for arrays
+    if (body_schema_type == "string_array") {
+      # Array body: collapse with newlines
+      fn_body <- glue::glue('
+{fn} <- function(query) {{
+  # Collapse array to newline-delimited string for API
+  body_string <- paste(query, collapse = "\\n")
+
+  result <- generic_request(
+    query = body_string,
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "1000"))
+  )
+
+  return(result)
+}}
+
+')
+    } else {
+      # Simple string body: pass directly
+      fn_body <- glue::glue('
+{fn} <- function(query) {{
+  result <- generic_request(
+    query = query,
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "1000"))
+  )
+
+  return(result)
+}}
+
+')
+    }
+
+    # Return early with generated stub
+    return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
+  }
+
   if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
