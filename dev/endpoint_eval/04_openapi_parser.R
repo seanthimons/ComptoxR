@@ -124,13 +124,32 @@ uses_chemical_schema <- function(request_body, openapi_spec) {
 }
 
 # Determine the body schema type for code generation
-# Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "simple_object", or "unknown"
+# Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "string", "simple_object", or "unknown"
 get_body_schema_type <- function(request_body, openapi_spec) {
   if (is.null(request_body) || !is.list(request_body)) return("unknown")
 
-  # Navigate: requestBody -> content -> application/json -> schema -> $ref
+  # Navigate: requestBody -> content -> application/json -> schema
   content <- request_body[["content"]] %||% list()
   json_schema <- content[["application/json"]][["schema"]] %||% list()
+
+  # Check for inline schema (no $ref)
+  schema_type <- json_schema[["type"]]
+  if (!is.null(schema_type) && nzchar(schema_type)) {
+    # Inline schema with direct type
+    if (schema_type == "string") {
+      return("string")
+    } else if (schema_type == "array") {
+      # Check array item type
+      items <- json_schema[["items"]] %||% list()
+      item_type <- items[["type"]] %||% ""
+      if (item_type == "string") {
+        return("string_array")
+      }
+    } else if (schema_type == "object") {
+      return("simple_object")
+    }
+    return("unknown")
+  }
 
   # Get the schema reference
   ref <- json_schema[["$ref"]]
@@ -365,6 +384,9 @@ openapi_to_spec <- function(
         } else {
           character(0)
         }
+      } else if (body_props$type %in% c("string", "string_array") && length(body_props$properties) > 0) {
+        # Simple body types (string or string_array) - extract synthetic parameter names
+        names(body_props$properties)
       } else {
         character(0)
       }
@@ -376,6 +398,9 @@ openapi_to_spec <- function(
             body_props$properties[[name]]
           } else if (body_props$type == "array" && !is.null(body_props$item_schema)) {
             body_props$item_schema$properties[[name]]
+          } else if (body_props$type %in% c("string", "string_array")) {
+            # Simple body types - use the synthetic parameter metadata
+            body_props$properties[[name]]
           } else {
             list(name = name, type = NA, description = "", enum = NULL, default = NA, required = FALSE, example = NA)
           }
@@ -464,8 +489,14 @@ openapi_to_spec <- function(
         # Response schema type for enhanced documentation
         response_schema_type = response_schema_type,
         # NEW: Schema type classification
-        request_type = if (method %in% c("post", "put", "patch") && has_body) {
+        # - "json": POST/PUT/PATCH with request body
+        # - "path": GET with path parameters (appends to URL)
+        # - "query_only": GET without path parameters (static endpoint, params via query string)
+        # NOTE: method is already uppercased at this point, so compare with uppercase
+        request_type = if (toupper(method) %in% c("POST", "PUT", "PATCH") && has_body) {
           "json"
+        } else if (length(path_names) > 0) {
+          "path"
         } else {
           "query_only"
         },
