@@ -7,16 +7,13 @@
 ct_chemical_search_equal_bulk(query)
 }
 \arguments{
-\item{query}{Character vector of search terms (chemical names, DTXSIDs, CAS, InChIKey)}
+\item{query}{Character vector of values to search for}
 }
 \value{
 A tibble with search results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Search for chemicals using exact string matching (batch).
-Values are sent as newline-delimited plain text.
 }
 \examples{
 \dontrun{

@@ -24,6 +24,11 @@
 #'        - "application/json": Parses response as JSON (default behavior)
 #'        - "text/plain": Returns response as character string
 #'        - "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
+#' @param body_type How to encode the request body for POST requests. Defaults to "json".
+#'        Supported types:
+#'        - "json": Send as JSON array via `httr2::req_body_json()` (default)
+#'        - "raw_text": Send as newline-delimited plain text via `httr2::req_body_raw()`
+#'          with content type "text/plain". Used for endpoints like /chemical/search/equal/.
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
 #'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
@@ -35,7 +40,7 @@
 #'         - image/*: Raw bytes, or a magick image object if the magick package is available.
 #'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
-generic_request <- function(query = NULL, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", ...) {
+generic_request <- function(query = NULL, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", body_type = "json", ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -138,8 +143,17 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
       # Implementation for POST requests (Typically bulk searches)
       if (toupper(method) == "POST") {
         req <- req %>%
-          httr2::req_method("POST") %>%
-          httr2::req_body_json(query_part, auto_unbox = FALSE)
+          httr2::req_method("POST")
+
+        # Set request body based on body_type
+        if (body_type == "raw_text") {
+          # Send as newline-delimited plain text (e.g., /chemical/search/equal/)
+          body_text <- paste(query_part, collapse = "\n")
+          req <- req %>% httr2::req_body_raw(body_text, type = "text/plain")
+        } else {
+          # Default: Send as JSON array
+          req <- req %>% httr2::req_body_json(query_part, auto_unbox = FALSE)
+        }
 
         # Append additional path parameters if provided
         if (!is.null(path_params) && length(path_params) > 0) {

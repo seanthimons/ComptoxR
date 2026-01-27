@@ -14,6 +14,7 @@ generic_request(
   tidy = TRUE,
   path_params = NULL,
   content_type = "application/json",
+  body_type = "json",
   ...
 )
 }
@@ -46,6 +47,12 @@ Supported types:
 - "application/json": Parses response as JSON (default behavior)
 - "text/plain": Returns response as character string
 - "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image}
+
+\item{body_type}{How to encode the request body for POST requests. Defaults to "json".
+Supported types:
+- "json": Send as JSON array via \code{httr2::req_body_json()} (default)
+- "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
+with content type "text/plain". Used for endpoints like /chemical/search/equal/.}
 
 \item{...}{Additional parameters:
 - If method is "POST": Added as query parameters to the URL.
