@@ -1,0 +1,52 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://comptox.epa.gov/ctx-api/chemical/search/equal/
+    body:
+      string: |-
+        DTXSID7020182
+        DTXSID9020112
+  response:
+    status: 200
+    headers:
+      Date: Tue, 27 Jan 2026 16:55:53 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "dtxsid" : "DTXSID7020182",
+          "dtxcid" : "DTXCID30182",
+          "casrn" : "80-05-7",
+          "smiles" : "CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1",
+          "preferredName" : "Bisphenol A",
+          "searchName" : "DSSTox_Substance_Id",
+          "searchValue" : "DTXSID7020182",
+          "rank" : 1,
+          "hasStructureImage" : 1,
+          "isMarkush" : false,
+          "searchMsgs" : null,
+          "suggestions" : null,
+          "isDuplicate" : false
+        }, {
+          "dtxsid" : "DTXSID9020112",
+          "dtxcid" : "DTXCID90112",
+          "casrn" : "1912-24-9",
+          "smiles" : "CCNC1=NC(NC(C)C)=NC(Cl)=N1",
+          "preferredName" : "Atrazine",
+          "searchName" : "DSSTox_Substance_Id",
+          "searchValue" : "DTXSID9020112",
+          "rank" : 1,
+          "hasStructureImage" : 1,
+          "isMarkush" : false,
+          "searchMsgs" : null,
+          "suggestions" : null,
+          "isDuplicate" : false
+        } ]
+  recorded_at: 2026-01-27 16:55:53
+recorded_with: VCR-vcr/2.1.0
