@@ -1,0 +1,7 @@
+library(jsonlite)
+schema <- fromJSON("schema/ctx_chemical_prod.json", simplifyVector = FALSE)
+paths <- names(schema$paths)
+cat("Total paths:", length(paths), "\n\n")
+equal_paths <- grep("equal", paths, value = TRUE)
+cat("Paths with 'equal':\n")
+print(equal_paths)

@@ -67,3 +67,5 @@ else
     echo "Operation cancelled. Backup branch preserved: $BACKUP_BRANCH"
     rm "$MAILMAP_FILE"
 fi
+
+# If something went wrong, restore with: git reset --hard backup-before-authorship-fix-20260127-140440
