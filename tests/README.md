@@ -2,6 +2,38 @@
 
 This directory contains the test suite for ComptoxR using `testthat` (version 3) and `vcr` for HTTP interaction recording.
 
+## 🆕 New Metadata-Based Test Generation System
+
+ComptoxR now features an advanced metadata-based test generation system that automatically creates appropriate tests based on function signatures and documentation.
+
+### Quick Start with New System
+
+```r
+# Generate tests for a new function
+source("tests/generate_tests_v2.R")
+preview_test("my_function")           # Preview before generating
+regenerate_function_tests("my_function")  # Generate test file
+
+# Generate tests for multiple functions
+generate_tests_with_metadata(
+  functions_to_test = c("func1", "func2")
+)
+```
+
+### Key Features
+
+- ✅ **Automatic return type detection** - Validates tibbles, character vectors, lists, images, etc.
+- ✅ **Parameter-aware** - Uses correct parameter names and test inputs
+- ✅ **Example-based testing** - Leverages `@examples` from documentation
+- ✅ **Smart batch detection** - Only generates batch tests for functions that support it
+
+### Documentation
+
+- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Comprehensive guide to the new system
+- **[MIGRATION.md](MIGRATION.md)** - Migrating from old template-based system
+
+---
+
 ## Setup
 
 ### Prerequisites

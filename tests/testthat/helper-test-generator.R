@@ -1,7 +1,24 @@
 # Test Template Generator for ComptoxR Wrapper Functions
 #
+# ⚠️  DEPRECATED - This is the OLD template-based test generator
+#
+# Please use the NEW metadata-based system instead:
+#   - tests/testthat/helper-function-metadata.R
+#   - tests/testthat/helper-test-generator-v2.R
+#   - tests/generate_tests_v2.R
+#
+# This file is kept for backwards compatibility only.
+# See tests/MIGRATION.md for migration instructions.
+#
+# OLD SYSTEM (DEPRECATED):
 # This helper provides utilities to generate standardized tests for API wrapper functions.
 # Most wrapper functions follow similar patterns, so we can use template-based testing.
+#
+# PROBLEMS WITH THIS SYSTEM:
+# - Assumes all functions return tibbles (many return character vectors, lists, or images)
+# - Uses generic test inputs that don't match actual function signatures
+# - Doesn't leverage function documentation or examples
+# - Manual function signature mapping required
 
 #' Generate a standard test for a simple wrapper function
 #'

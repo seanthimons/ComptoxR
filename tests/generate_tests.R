@@ -1,7 +1,17 @@
 #!/usr/bin/env Rscript
 # Quick-start script to generate test files for all wrapper functions
 #
-# Usage:
+# ⚠️  DEPRECATED - This is the OLD template-based test generator
+#
+# Please use the NEW metadata-based system instead:
+#   source("tests/generate_tests_v2.R")
+#   generate_tests_with_metadata()
+#
+# See tests/MIGRATION.md for migration instructions.
+#
+# This file is kept for backwards compatibility only.
+#
+# Usage (OLD SYSTEM - DEPRECATED):
 #   Rscript generate_tests.R
 #
 # Or from R console:
