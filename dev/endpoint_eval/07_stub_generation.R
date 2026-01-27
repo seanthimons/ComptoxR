@@ -32,7 +32,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
-  batch_limit_code <- if (is.null(batch_limit) || is.na(batch_limit)) "NULL" else as.character(batch_limit)
+  # For POST methods with bulk requests, use environment variable for runtime configuration
+  batch_limit_code <- if (is.null(batch_limit) || is.na(batch_limit)) {
+    'as.numeric(Sys.getenv("batch_limit", "1000"))'
+  } else if (batch_limit > 1) {
+    # Bulk batching - use environment variable
+    'as.numeric(Sys.getenv("batch_limit", "1000"))'
+  } else {
+    # batch_limit = 0 (static) or 1 (path-based) - keep as-is
+    as.character(batch_limit)
+  }
 
   # Determine response type and return documentation based on content_type
   content_type <- if (is.null(content_type) || is.na(content_type)) "" else content_type
