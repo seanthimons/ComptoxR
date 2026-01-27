@@ -148,7 +148,29 @@ extract_body_properties <- function(request_body, components) {
   
   # Check schema type
   type <- json_schema[["type"]] %||% NA
-  
+
+  # Handle simple string type
+  if (!is.na(type) && type == "string") {
+    # Create synthetic parameter metadata for the string body
+    metadata <- list(
+      query = list(
+        name = "query",
+        type = "string",
+        format = json_schema[["format"]] %||% NA,
+        description = json_schema[["description"]] %||% "Query string to search for",
+        enum = json_schema[["enum"]] %||% NULL,
+        default = json_schema[["default"]] %||% NA,
+        required = TRUE,
+        example = json_schema[["example"]] %||% NA
+      )
+    )
+
+    return(list(
+      type = "string",
+      properties = metadata
+    ))
+  }
+
   # If array, extract item type
   if (type == "array" && !is.null(json_schema[["items"]])) {
     items <- json_schema[["items"]]
