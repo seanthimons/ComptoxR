@@ -1,4 +1,6 @@
 #' Retrieves data on known or predicted genotoxic effects by DTXSID
+#' 
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried
 #' @return Returns a tibble with results

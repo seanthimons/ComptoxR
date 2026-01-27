@@ -1,3 +1,5 @@
+# TODO Migrate to generic requests + promote to stable after testing
+
 #' INDIGO conversion service
 #'
 #' Takes SMILES or MOL array for input to convert a single compound.

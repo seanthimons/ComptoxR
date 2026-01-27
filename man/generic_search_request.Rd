@@ -34,6 +34,6 @@ The parsed JSON response body (list structure).
 }
 \description{
 Specialized template for the cheminformatics search endpoint which uses a
-different payload structure: \code{{"inputType", "searchType", "params", "query"}}
+different payload structure: \code{inputType}, \code{searchType}, \code{params}, \code{query}
 }
 \keyword{internal}

@@ -1,4 +1,6 @@
+
 #' Returns all compounds on a given list
+#' `r lifecycle::badge("stable")`
 #'
 #' Can be used to return all compounds from a single list (e.g.:'PRODWATER') or a list of aggregated lists.
 #'

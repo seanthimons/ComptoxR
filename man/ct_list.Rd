@@ -2,7 +2,8 @@
 % Please edit documentation in R/ct_list.R
 \name{ct_list}
 \alias{ct_list}
-\title{Returns all compounds on a given list}
+\title{Returns all compounds on a given list
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}}
 \usage{
 ct_list(list_name, extract_dtxsids = TRUE)
 }

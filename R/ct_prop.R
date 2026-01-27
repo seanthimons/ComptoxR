@@ -1,3 +1,4 @@
+# TODO Eval for migration to generic requests
 #' Retrieves compound physio-chem properties by DTXSID
 #'
 #' Returns both experimental and predicted results.

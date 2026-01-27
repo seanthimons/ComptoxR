@@ -1,3 +1,5 @@
+# TODO Migrate to generic requests + promote to stable after testing
+
 #' Retrieves Chemical Fate and Transport parameters
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried

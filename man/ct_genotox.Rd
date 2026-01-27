@@ -13,7 +13,7 @@ ct_genotox(query)
 Returns a tibble with results
 }
 \description{
-Retrieves data on known or predicted genotoxic effects by DTXSID
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \dontrun{

@@ -1,4 +1,7 @@
 #' Returns all public lists that contain a queried compound
+#' 
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query A DTXSID to search by.
 #'

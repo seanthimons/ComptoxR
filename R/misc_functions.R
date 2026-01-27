@@ -1,24 +1,3 @@
-#' Purrr map_df with progress bar
-#'
-#' @param .x List to map over
-#' @param .f Function to apply
-#' @param ... Passes along other function arguments
-#' @param .id ID column to be created
-#'
-#' @return A list
-
-map_df_progress <- function(.x, .f, ..., .id = NULL) {
-  .f <- purrr::as_mapper(.f, ...)
-  pb <- progress::progress_bar$new(total = length(.x), force = TRUE)
-
-  f <- function(...) {
-    pb$tick()
-    .f(...)
-  }
-  purrr::map_df(.x, f, ..., .id = .id)
-}
-
-
 #' Creates a new minimum function that ignores NAs and suppresses warning
 #'
 #' @param x Vector

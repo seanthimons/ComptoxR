@@ -1,4 +1,7 @@
+# TODO Migrate to generic requests + promote to stable after testing
+
 #' Product usage, functional usage, and exposure searching
+#' 
 #'
 #' @details
 #' For argument `domain` a list of parameters is offered:

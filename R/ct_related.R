@@ -1,4 +1,4 @@
-# R/ct_related.R
+# TODO Follow up to see if this will remain
 
 #' Get related substances from the EPA CompTox dashboard.
 #'

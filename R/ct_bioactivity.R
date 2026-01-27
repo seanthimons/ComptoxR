@@ -1,3 +1,4 @@
+# TODO Migrate to generic requests + promote to stable after testing
 #' Requests bioactivity assay data
 #'
 #' @param search_type Choose from `aeid`, `spid`, `m4id`, and `dtxsid`. Defaults to `dtxsid` if not specified.

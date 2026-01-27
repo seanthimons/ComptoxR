@@ -1,5 +1,8 @@
 #' @title Get Similar Compounds by DTXSID
 #' 
+#' @description
+#' `r lifecycle::badge("questioning")`
+#' 
 #' @param query A character vector of DTXSIDs.
 #' @param similarity The similarity threshold, a numeric value between 0 and 1. Optional, defaults to 0.8.
 #'

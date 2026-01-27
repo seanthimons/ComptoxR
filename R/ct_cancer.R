@@ -1,3 +1,4 @@
+# TODO Migrate to generic requests + promote to stable after testing
 #' Retrieves cancer-related hazard and risk values for a give DTXSID
 #'
 #'Values returned include source and URL, level of known or predicted risk, and exposure route (if known).

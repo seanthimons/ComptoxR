@@ -1,3 +1,4 @@
+# TODO Add in post-processing + promote to stable after testing
 #'Retrieves for hazard data by DTXSID
 #'
 #' @param query A single DTXSID (in quotes) or a list to be queried

@@ -13,5 +13,5 @@ ct_compound_in_list(query)
 Returns a named list with results
 }
 \description{
-Returns all public lists that contain a queried compound
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }

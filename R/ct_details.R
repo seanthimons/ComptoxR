@@ -1,3 +1,5 @@
+# TODO Migrate to generic requests + promote to stable after testing
+
 #' Retrieve compound details by DTXSID
 #'
 #'
