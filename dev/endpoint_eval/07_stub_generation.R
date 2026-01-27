@@ -367,6 +367,100 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
+  # Special case: /chemical/search/equal/ POST endpoint needs raw text body
+  is_raw_text_endpoint <- (
+    endpoint == "chemical/search/equal/" &&
+    toupper(method) == "POST" &&
+    body_schema_type == "string"
+  )
+
+  # Generate raw text body function for /chemical/search/equal/ POST
+  if (isTRUE(is_raw_text_endpoint)) {
+    # Build roxygen header
+    roxygen_header <- glue::glue('
+#\' {title}
+#\'
+#\' @description
+#\' `r lifecycle::badge("{lifecycle_badge}")`
+#\'
+#\' Search for chemicals using exact string matching (batch).
+#\' Values are sent as newline-delimited plain text.
+#\'
+#\' @param query Character vector of search terms (chemical names, DTXSIDs, CAS, InChIKey)
+#\' @return A tibble with search results
+#\' @export
+#\'
+#\' @examples
+#\' \\dontrun{{
+#\' {fn}(query = c("DTXSID7020182", "DTXSID9020112"))
+#\' }}')
+
+    fn_body <- glue::glue('
+{fn} <- function(query) {{
+  # Input validation
+  if (is.list(query) && !is.data.frame(query)) {{
+    query <- as.character(unlist(query, use.names = FALSE))
+  }}
+  query <- unique(as.vector(query))
+  query <- query[!is.na(query) & nzchar(query)]
+
+  if (length(query) == 0) {{
+    cli::cli_abort("Query must contain at least one non-empty value.")
+  }}
+
+  # Batch configuration (API max is 200)
+  batch_limit <- as.numeric(Sys.getenv("batch_limit", "200"))
+  batch_limit <- min(batch_limit, 200)  # Enforce API maximum
+
+  # Split into batches
+  if (length(query) > batch_limit) {{
+    batches <- split(query, ceiling(seq_along(query) / batch_limit))
+  }} else {{
+    batches <- list(query)
+  }}
+
+  # Build and execute requests
+  results <- purrr::map(batches, function(batch) {{
+    body_text <- paste(batch, collapse = "\\n")
+
+    req <- httr2::request(Sys.getenv("ctx_burl")) |>
+      httr2::req_url_path_append("{endpoint}") |>
+      httr2::req_headers(
+        Accept = "application/json",
+        `x-api-key` = ct_api_key()
+      ) |>
+      httr2::req_body_raw(body_text, type = "text/plain")
+
+    resp <- httr2::req_perform(req)
+
+    if (httr2::resp_status(resp) >= 300) {{
+      cli::cli_warn("Request failed with status {{httr2::resp_status(resp)}}")
+      return(NULL)
+    }}
+
+    httr2::resp_body_json(resp)
+  }}, .progress = length(batches) > 1) |>
+    purrr::list_flatten() |>
+    purrr::compact()
+
+  if (length(results) == 0) {{
+    return(tibble::tibble())
+  }}
+
+  # Convert to tibble
+  results |>
+    purrr::map(function(x) {{
+      x[purrr::map_lgl(x, is.null)] <- NA
+      tibble::as_tibble(x)
+    }}) |>
+    purrr::list_rbind()
+}}
+
+')
+
+    return(paste0(roxygen_header, "\\n", fn_body, "\\n\\n"))
+  }
+
   # Handle simple body types (string, string_array)
   if (isTRUE(is_simple_body)) {
     # For simple body types, use "query" as the primary parameter
