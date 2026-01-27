@@ -367,12 +367,27 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
+  # ===========================================================================
+  # Body Type Handling for POST Requests
+  # ===========================================================================
+  # Most POST endpoints expect JSON-encoded request bodies. The CompTox API has
+  # exactly ONE endpoint that requires raw text (newline-delimited):
+  #   - POST /chemical/search/equal/ (body_schema_type == "string")
+  #
+  # All other POST endpoints with array bodies (body_schema_type == "string_array")
+  # should use the default JSON encoding via generic_request().
+  #
+  # Decision: RAW-TEXT-01 (2026-01-27) - Special case in stub generation
+  # ===========================================================================
+
   # Handle raw text body endpoints (body_schema_type == "string" for POST)
   # These endpoints expect newline-delimited plain text, not JSON
+  # IMPORTANT: Only /chemical/search/equal/ uses this pattern
   is_raw_text_body <- (
     body_schema_type == "string" &&
     toupper(method) == "POST" &&
-    wrapper_fn == "generic_request"
+    wrapper_fn == "generic_request" &&
+    (endpoint == "chemical/search/equal/" || grepl("chemical/search/equal/$", endpoint))
   )
 
   if (isTRUE(is_raw_text_body)) {
@@ -453,16 +468,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' {fn}(query = {example_value_vec})
 #\' }}')
 
-    # Generate function body with newline collapsing for arrays
+    # Generate function body based on body schema type
     if (body_schema_type == "string_array") {
-      # Array body: collapse with newlines
+      # Array body: pass directly, generic_request() handles JSON encoding
       fn_body <- glue::glue('
 {fn} <- function(query) {{
-  # Collapse array to newline-delimited string for API
-  body_string <- paste(query, collapse = "\\n")
-
   result <- generic_request(
-    query = body_string,
+    query = query,
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
