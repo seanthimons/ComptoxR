@@ -206,9 +206,35 @@ extract_body_properties <- function(request_body, components) {
     }
     
     # Simple array (e.g., string array)
+    item_type <- items[["type"]] %||% NA
+
+    if (!is.na(item_type) && item_type == "string") {
+      # String array - create query parameter metadata
+      metadata <- list(
+        query = list(
+          name = "query",
+          type = "array",
+          item_type = "string",
+          format = json_schema[["format"]] %||% NA,
+          description = json_schema[["description"]] %||% "Array of strings to search for",
+          enum = json_schema[["enum"]] %||% NULL,
+          default = json_schema[["default"]] %||% NA,
+          required = TRUE,
+          example = json_schema[["example"]] %||% items[["example"]] %||% NA
+        )
+      )
+
+      return(list(
+        type = "string_array",
+        item_type = "string",
+        properties = metadata
+      ))
+    }
+
+    # Non-string arrays without object items
     return(list(
       type = "array",
-      item_type = items[["type"]] %||% NA,
+      item_type = item_type,
       properties = list()
     ))
   }
