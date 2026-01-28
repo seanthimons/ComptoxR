@@ -22,7 +22,7 @@
 #' @param content_type Response content type(s) from OpenAPI spec (e.g., "application/json", "image/png").
 #' @param config Configuration list specifying template behavior.
 #' @param needs_resolver Boolean; whether this endpoint needs resolver pre-processing.
-#' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "simple_object", "unknown").
+#' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "object_array", "simple_object", "unknown").
 #' @param deprecated Boolean; whether endpoint is deprecated in OpenAPI spec.
 #' @param response_schema_type Character; type of response schema ("array", "object", "scalar", "binary", "unknown").
 #' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").

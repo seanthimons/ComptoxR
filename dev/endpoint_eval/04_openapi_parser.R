@@ -124,7 +124,7 @@ uses_chemical_schema <- function(request_body, openapi_spec) {
 }
 
 # Determine the body schema type for code generation
-# Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "string", "simple_object", or "unknown"
+# Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "object_array" (inline objects), "string", "simple_object", or "unknown"
 get_body_schema_type <- function(request_body, openapi_spec) {
   if (is.null(request_body) || !is.list(request_body)) return("unknown")
 
@@ -144,6 +144,9 @@ get_body_schema_type <- function(request_body, openapi_spec) {
       item_type <- items[["type"]] %||% ""
       if (item_type == "string") {
         return("string_array")
+      } else if (item_type == "object" && !is.null(items[["properties"]])) {
+        # Inline object array (e.g., ncc-cats endpoint)
+        return("object_array")
       }
     } else if (schema_type == "object") {
       return("simple_object")
@@ -374,8 +377,8 @@ openapi_to_spec <- function(
         required_names <- names(purrr::keep(body_props$properties, ~ .x$required))
         optional_names <- names(purrr::keep(body_props$properties, ~ !.x$required))
         c(required_names, optional_names)
-      } else if (body_props$type == "array" && !is.null(body_props$item_schema)) {
-        # For array bodies with object items, extract object properties
+      } else if (body_props$type %in% c("array", "object_array") && !is.null(body_props$item_schema)) {
+        # For array bodies with object items (ref or inline), extract object properties
         item_properties <- body_props$item_schema$properties
         if (length(item_properties) > 0) {
           required_names <- names(purrr::keep(item_properties, ~ .x$required))
@@ -396,7 +399,7 @@ openapi_to_spec <- function(
         purrr::map(body_names, function(name) {
           if (body_props$type == "object") {
             body_props$properties[[name]]
-          } else if (body_props$type == "array" && !is.null(body_props$item_schema)) {
+          } else if (body_props$type %in% c("array", "object_array") && !is.null(body_props$item_schema)) {
             body_props$item_schema$properties[[name]]
           } else if (body_props$type %in% c("string", "string_array")) {
             # Simple body types - use the synthetic parameter metadata

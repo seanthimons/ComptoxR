@@ -204,10 +204,34 @@ extract_body_properties <- function(request_body, components) {
         ))
       }
     }
-    
-    # Simple array (e.g., string array)
-    item_type <- items[["type"]] %||% NA
 
+    # Array with inline object items (no $ref, but has type: object with properties)
+    item_type <- items[["type"]] %||% NA
+    if (!is.na(item_type) && item_type == "object" && !is.null(items[["properties"]])) {
+      required_fields <- items[["required"]] %||% character(0)
+      metadata <- purrr::imap(items[["properties"]], function(prop, prop_name) {
+        list(
+          name = prop_name,
+          type = prop[["type"]] %||% NA,
+          format = prop[["format"]] %||% NA,
+          description = prop[["description"]] %||% "",
+          enum = prop[["enum"]] %||% NULL,
+          default = prop[["default"]] %||% NA,
+          required = prop_name %in% required_fields,
+          example = prop[["example"]] %||% prop[["default"]] %||% NA
+        )
+      })
+      names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+      return(list(
+        type = "object_array",
+        item_schema = list(
+          inline = TRUE,
+          properties = metadata
+        )
+      ))
+    }
+
+    # Simple array (e.g., string array)
     if (!is.na(item_type) && item_type == "string") {
       # String array - create query parameter metadata
       metadata <- list(
