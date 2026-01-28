@@ -1,0 +1,25 @@
+#' Get functional-use data for a batch of DTXSIDs
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param query Character vector of strings to send in request body
+#' @return Returns a scalar value
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_exposure_functional_use(query = c("DTXSID6026296", "DTXSID3032040", "DTXSID8031865"))
+#' }
+ct_exposure_functional_use <- function(query) {
+  result <- generic_request(
+    query = query,
+    endpoint = "exposure/functional-use/search/by-dtxsid/",
+    method = "POST",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
+  )
+
+  return(result)
+}
+
+

@@ -1,0 +1,27 @@
+#' Get Reported Functional Use data by DTXSID
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param dtxsid DSSTox Substance Identifier. Type: string
+#' @return Returns a scalar value
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_exposure_ccd_functional_use(dtxsid = "DTXSID0020232")
+#' }
+ct_exposure_ccd_functional_use <- function(dtxsid) {
+  result <- generic_request(
+    query = dtxsid,
+    endpoint = "exposure/ccd/functional-use/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+

@@ -4,23 +4,19 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param smiles SMILES string of the molecule
-#' @param logp Octanol-water partition coefficient
-#' @param ws Water solubility (mg/L)
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
+#' chemi_pfas_atlas(smiles = "Fc1c(F)c(F)c2c(c1F)C(F)(F)C(F)(Br)C2(Cl)Cl")
 #' }
-chemi_ncc_cats <- function(smiles, logp, ws) {
+chemi_pfas_atlas <- function(smiles) {
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(logp)) options[['logp']] <- logp
-  if (!is.null(ws)) options[['ws']] <- ws
     result <- generic_request(
-    endpoint = "ncc_cats",
+    endpoint = "pfas_atlas",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
@@ -43,24 +39,19 @@ chemi_ncc_cats <- function(smiles, logp, ws) {
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param smiles Required parameter
-#' @param logp Required parameter
-#' @param ws Required parameter
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(smiles = c("DTXSID2046541", "DTXSID00205033", "DTXSID501045175"))
+#' chemi_pfas_atlas_bulk(smiles = c("DTXSID3033511", "DTXSID601026093", "DTXSID2033314"))
 #' }
-chemi_ncc_cats_bulk <- function(smiles, logp, ws) {
-  # Build options list for additional parameters
-  options <- list()
-  options$logp <- logp
-  options$ws <- ws
+chemi_pfas_atlas_bulk <- function(smiles) {
+
   result <- generic_chemi_request(
     query = smiles,
-    endpoint = "ncc_cats",
-    options = options,
+    endpoint = "pfas_atlas",
+    wrap = FALSE,
     tidy = FALSE
   )
 

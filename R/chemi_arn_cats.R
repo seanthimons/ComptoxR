@@ -1,26 +1,24 @@
-#' Generate categories for one molecule
+#' Generate descriptors for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles SMILES string of the molecule
-#' @param logp Octanol-water partition coefficient
-#' @param ws Water solubility (mg/L)
+#' @param smiles SMILES to generate groups for
+#' @param model Model to use for group prediction (default: RF)
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
+#' chemi_arn_cats(smiles = "DTXSID7020182")
 #' }
-chemi_ncc_cats <- function(smiles, logp, ws) {
+chemi_arn_cats <- function(smiles, model = "RF") {
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(logp)) options[['logp']] <- logp
-  if (!is.null(ws)) options[['ws']] <- ws
+  if (!is.null(model)) options[['model']] <- model
     result <- generic_request(
-    endpoint = "ncc_cats",
+    endpoint = "arn_cats",
     method = "GET",
     batch_limit = 0,
     server = "chemi_burl",
@@ -37,29 +35,27 @@ chemi_ncc_cats <- function(smiles, logp, ws) {
 
 
 
-#' Generate categories for multiple molecules
+#' Generate groups for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param logp Required parameter
-#' @param ws Required parameter
+#' @param chemicals Required parameter
+#' @param model Optional parameter. Options: RF, NN (default: RF)
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(smiles = c("DTXSID2046541", "DTXSID00205033", "DTXSID501045175"))
+#' chemi_arn_cats_bulk(chemicals = c("DTXSID30275709", "DTXSID80218080", "DTXSID50474898"))
 #' }
-chemi_ncc_cats_bulk <- function(smiles, logp, ws) {
+chemi_arn_cats_bulk <- function(chemicals, model = "RF") {
   # Build options list for additional parameters
   options <- list()
-  options$logp <- logp
-  options$ws <- ws
+  if (!is.null(model = "RF")) options$model = "RF" <- model = "RF"
   result <- generic_chemi_request(
-    query = smiles,
-    endpoint = "ncc_cats",
+    query = chemicals,
+    endpoint = "arn_cats",
     options = options,
     tidy = FALSE
   )
