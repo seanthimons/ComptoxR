@@ -18,7 +18,7 @@ chemi_cluster <- function(
 		cli::cli_abort('Missing sort!')
 	}
 
-	chemicals <- chemi_resolver_lookup(chemicals, id_type = 'DTXSID', mol = FALSE)
+	chemicals <- chemi_resolver_lookup(chemicals, idType = 'DTXSID', mol = FALSE)
 
 	cli_rule(left = "Similarity payload options")
 	cli_dl(
