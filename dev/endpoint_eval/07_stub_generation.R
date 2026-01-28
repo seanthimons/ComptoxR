@@ -271,7 +271,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       character(0)
     }
 
-    # Build function signature: query, id_type, plus any additional body params
+    # Build function signature: query, idType, plus any additional body params
     additional_sig <- if (length(body_params_vec) > 0) {
       paste0(", ", paste(body_params_vec, "= NULL", collapse = ", "))
     } else {
