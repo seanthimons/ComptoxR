@@ -334,23 +334,21 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }}
   )
 
-  if (nrow(resolved) == 0) {{
+  if (length(resolved) == 0) {{
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }}
 
-  # Transform resolved tibble to Chemical object format
-  # Map column names: dtxsid -> sid, etc.
-  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {{
-    row <- resolved[i, ]
+  # Transform resolved list to Chemical object format expected by endpoint
+  chemicals <- purrr::map(resolved, function(chem) {{
     list(
-      sid = row$dtxsid,
-      smiles = row$smiles,
-      casrn = row$casrn,
-      inchi = row$inchi,
-      inchiKey = row$inchiKey,
-      name = row$name,
-      mol = row$mol
+      sid = chem$dtxsid %||% chem$sid,
+      smiles = chem$smiles,
+      casrn = chem$casrn,
+      inchi = chem$inchi,
+      inchiKey = chem$inchiKey,
+      name = chem$name,
+      mol = chem$mol
     )
   }})
 
