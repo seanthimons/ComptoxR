@@ -1,0 +1,61 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/alerts/alerts
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 28 Jan 2026 18:22:18 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"@c":".Alert","type":"GROUP","text":"AIM","logicType":"OR","operations":[],"frozen":false,"id":"64342a305085da469c49913f","name":"aim"},{"@c":".Alert","type":"GROUP","text":"Acute
+        Aquatic Toxicity","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d3","name":"acuteAquatic"},{"@c":".Alert","type":"GROUP","text":"Acute
+        Mammalian Toxicity Dermal","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c6","name":"acuteMammalianDermal"},{"@c":".Alert","type":"GROUP","text":"Acute
+        Mammalian Toxicity Inhalation","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c5","name":"acuteMammalianInhalation"},{"@c":".Alert","type":"GROUP","text":"Acute
+        Mammalian Toxicity Oral","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c4","name":"acuteMammalianOral"},{"@c":".Alert","type":"GROUP","text":"Ashby","logicType":"OR","operations":[],"frozen":false,"id":"64342a245085da469c499133","name":"ashby"},{"@c":".Alert","type":"GROUP","text":"BMS","logicType":"OR","operations":[],"frozen":false,"id":"64342a275085da469c499135","name":"bms"},{"@c":".Alert","type":"GROUP","text":"Bioaccumulation","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d6","name":"bioaccumulation"},{"@c":".Alert","type":"GROUP","text":"CERAPP
+        binders","logicType":"OR","operations":[],"frozen":false,"id":"64342a2d5085da469c49913a","name":"cerapp"},{"@c":".Alert","type":"GROUP","text":"Carcinogenicity","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c7","name":"carcinogenicity"},{"@c":".Alert","type":"GROUP","text":"Chronic
+        Aquatic Toxicity","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d4","name":"chronicAquatic"},{"@c":".Alert","type":"GROUP","text":"Developmental","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603cb","name":"developmental"},{"@c":".Alert","type":"GROUP","text":"Dundee","logicType":"OR","operations":[],"frozen":false,"id":"64342a275085da469c499136","name":"dundee"},{"@c":".Alert","type":"GROUP","text":"Emergency
+        Response","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d8","name":"emergencyResponse"},{"@c":".Alert","type":"GROUP","text":"Endocrine
+        Disruption","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c9","name":"endocrine"},{"@c":".Alert","type":"GROUP","text":"Exposure","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d7","name":"exposure"},{"@c":".Alert","type":"GROUP","text":"Eye
+        Irritation","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d2","name":"eyeIrritation"},{"@c":".Alert","type":"GROUP","text":"Genotoxicity
+        Mutagenicity","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c8","name":"genotoxicity"},{"@c":".Alert","type":"GROUP","text":"Glaxo","logicType":"OR","operations":[],"frozen":false,"id":"64342a275085da469c499137","name":"glaxo"},{"@c":".Alert","type":"GROUP","text":"IARC1","logicType":"OR","operations":[],"frozen":false,"id":"64342a2e5085da469c49913b","name":"iarc1"},{"@c":".Alert","type":"GROUP","text":"IARC2A","logicType":"OR","operations":[],"frozen":false,"id":"64342a2e5085da469c49913c","name":"iarc2a"},{"@c":".Alert","type":"GROUP","text":"IARC2B","logicType":"OR","operations":[],"frozen":false,"id":"64342a2e5085da469c49913d","name":"iarc2b"},{"@c":".Alert","type":"GROUP","text":"IARC3","logicType":"OR","operations":[],"frozen":false,"id":"64342a2f5085da469c49913e","name":"iarc3"},{"@c":".Alert","type":"GROUP","text":"MLSMR","logicType":"OR","operations":[],"frozen":false,"id":"64342a275085da469c499138","name":"mlsmr"},{"@c":".Alert","type":"GROUP","text":"Neurotoxicity
+        Repeat Exposure","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603cc","name":"neurotoxicityRepeat"},{"@c":".Alert","type":"GROUP","text":"Neurotoxicity
+        Single Exposure","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603cd","name":"neurotoxicitySingle"},{"@c":".Alert","type":"GROUP","text":"PAINS","logicType":"OR","operations":[],"frozen":false,"id":"64342a295085da469c499139","name":"pains"},{"@c":".Alert","type":"GROUP","text":"Persistence","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d5","name":"persistence"},{"@c":".Alert","type":"GROUP","text":"Reproductive","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603ca","name":"reproductive"},{"@c":".Alert","type":"GROUP","text":"Site-Specific
+        Screening","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d9","name":"siteSpecific"},{"@c":".Alert","type":"GROUP","text":"Skin
+        Irritation","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d1","name":"skinIrritation"},{"@c":".Alert","type":"GROUP","text":"Skin
+        Sensitization","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603d0","name":"skinSensitization"},{"@c":".Alert","type":"GROUP","text":"Systemic
+        Toxicity Repeat Exposure","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603ce","name":"systemicToxicityRepeat"},{"@c":".Alert","type":"GROUP","text":"Systemic
+        Toxicity Single Exposure","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603cf","name":"systemicToxicitySingle"},{"@c":".Alert","type":"GROUP","text":"TTC","logicType":"OR","operations":[],"frozen":false,"id":"64342a245085da469c499134","name":"ttc"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''artifact detection''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b2","name":"artifact_detection"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''background control''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603bb","name":"background_control"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cell adhesion molecules''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603af","name":"cell_adhesion_molecules"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cell cycle''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b1","name":"cell_cycle"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cell morphology''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c2","name":"cell_morphology"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cyp''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c1","name":"cyp"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cytokine''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603ae","name":"cytokine"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''cytotoxicity''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c3","name":"cytotoxicity"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''dna binding''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603be","name":"dna_binding"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''dna repair/prolif/mutag''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603c0","name":"dna_repair_prolif_mutag"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''enzymatic activity''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603bd","name":"enzymatic_activity"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''gpcr''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b3","name":"gpcr"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''growth factor''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b5","name":"growth_factor"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''ion channel''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b9","name":"ion_channel"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''kinase''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b7","name":"kinase"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''malformation''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603bc","name":"malformation"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''misc cell damage''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b0","name":"misc_cell_damage"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''nuclear receptor''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603bf","name":"nuclear_receptor"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''protease''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b4","name":"protease"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''steroid hormone''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b6","name":"steroid_hormone"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''stress response''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603b8","name":"stress_response"},{"@c":".Alert","type":"GROUP","text":"Toxprints
+        ''transporter''","logicType":"OR","operations":[],"frozen":false,"id":"64369c430905fc679f2603ba","name":"transporter"}]'
+  recorded_at: 2026-01-28 18:22:18
+recorded_with: VCR-vcr/2.1.0

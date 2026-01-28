@@ -3,7 +3,7 @@
 # ==============================================================================
 
 # These OpenAPI schema references indicate endpoints that accept full Chemical
-# objects. Functions for these endpoints will first call chemi_resolver() to
+# objects. Functions for these endpoints will first call chemi_resolver_lookup() to
 # convert identifiers (DTXSID, CAS, SMILES, etc.) to complete Chemical objects.
 CHEMICAL_SCHEMA_PATTERNS <- c(
   "#/components/schemas/Chemical",

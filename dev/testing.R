@@ -140,7 +140,7 @@ request_method = 'POST'
 )
 
 
-chemi_resolver(query = c(testing_chemicals$casrn, testing_chemicals$casrn))
+chemi_resolver_lookup(query = c(testing_chemicals$casrn, testing_chemicals$casrn))
 
 
 

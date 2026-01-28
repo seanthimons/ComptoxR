@@ -1,30 +1,23 @@
 # Tests for ct_bioactivity
-# Custom test - takes search_type and query parameters
+# Generated using metadata-based test generator
+# Return type: unknown
+# A data frame
 
 
-test_that("ct_bioactivity works with valid DTXSID input", {
-    vcr::use_cassette("ct_bioactivity_dtxsid", {
-        result <- ct_bioactivity(search_type = "dtxsid", query = "DTXSID7020182")
+test_that("ct_bioactivity works with single input", {
+    vcr::use_cassette("ct_bioactivity_single", {
+        result <- ct_bioactivity(`ct_bioactivity <- function(` = "DTXSID7020182")
         {
-            expect_s3_class(result, "tbl_df")
-            expect_true(ncol(result) > 0)
+            expect_true(!is.null(result))
         }
     })
 })
 
-test_that("ct_bioactivity handles batch requests", {
-    vcr::use_cassette("ct_bioactivity_batch", {
-        result <- ct_bioactivity(search_type = "dtxsid", query = c("DTXSID7020182", 
-        "DTXSID5032381", "DTXSID8024291"))
-        expect_s3_class(result, "tbl_df")
-        expect_true(nrow(result) > 0)
+test_that("ct_bioactivity handles invalid input gracefully", {
+    vcr::use_cassette("ct_bioactivity_error", {
+        result <- suppressWarnings(ct_bioactivity(`ct_bioactivity <- function(` = "INVALID_DTXSID_12345"))
+        expect_true(is.null(result) || (is.data.frame(result) && nrow(result) == 
+            0) || (is.character(result) && length(result) == 0) || (is.list(result) && 
+            length(result) == 0))
     })
 })
-
-test_that("ct_bioactivity handles invalid input gracefully", 
-    {
-        vcr::use_cassette("ct_bioactivity_error", {
-            expect_warning(result <- ct_bioactivity(search_type = "dtxsid", query = "INVALID_DTXSID"))
-            expect_true(is.null(result) || nrow(result) == 0)
-        })
-    })

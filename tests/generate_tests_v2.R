@@ -10,11 +10,11 @@
 # Or from R console:
 #   source("tests/generate_tests_v2.R")
 
-library(ComptoxR)
+#library(ComptoxR)
 
 # Load the test generator helpers
-source("tests/testthat/helper-function-metadata.R")
-source("tests/testthat/helper-test-generator-v2.R")
+source("tests/testthat/tools/helper-function-metadata.R")
+source("tests/testthat/tools/helper-test-generator-v2.R")
 
 # Configuration
 TEST_DIR <- "tests/testthat"

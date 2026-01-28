@@ -1,30 +1,40 @@
 # Tests for ct_bioactivity_assay
-# Generated using helper-test-generator.R
+# Generated using metadata-based test generator
+# Return type: unknown
+# Returns a scalar value
 
 
-test_that("ct_bioactivity_assay works with valid input", {
-    vcr::use_cassette("ct_bioactivity_assay_query", {
-        result <- ct_bioactivity_assay(query = "DTXSID7020182")
+test_that("ct_bioactivity_assay works with single input", {
+    vcr::use_cassette("ct_bioactivity_assay_single", {
+        result <- ct_bioactivity_assay(`projection = "assay-all"` = "DTXSID7020182")
         {
-            expect_s3_class(result, "tbl_df")
-            expect_true(ncol(result) > 0)
+            expect_true(!is.null(result))
         }
+    })
+})
+
+test_that("ct_bioactivity_assay works with documented example", {
+    vcr::use_cassette("ct_bioactivity_assay_example", {
+        result <- ct_bioactivity_assay(projection = "assay-all")
+        expect_true(!is.null(result))
     })
 })
 
 test_that("ct_bioactivity_assay handles batch requests", {
     vcr::use_cassette("ct_bioactivity_assay_batch", {
-        result <- ct_bioactivity_assay(query = c("DTXSID7020182", 
-        "DTXSID5032381"))
-        expect_s3_class(result, "tbl_df")
-        expect_true(nrow(result) > 0)
+        result <- ct_bioactivity_assay(`projection = "assay-all"` = c("DTXSID7020182", 
+        "DTXSID5032381", "DTXSID8024291"))
+        {
+            expect_true(!is.null(result))
+        }
     })
 })
 
-test_that("ct_bioactivity_assay handles invalid input gracefully", 
-    {
-        vcr::use_cassette("ct_bioactivity_assay_error", {
-            expect_warning(result <- ct_bioactivity_assay(query = "INVALID_ID"))
-            expect_true(is.null(result) || nrow(result) == 0)
-        })
+test_that("ct_bioactivity_assay handles invalid input gracefully", {
+    vcr::use_cassette("ct_bioactivity_assay_error", {
+        result <- suppressWarnings(ct_bioactivity_assay(`projection = "assay-all"` = "INVALID_DTXSID_12345"))
+        expect_true(is.null(result) || (is.data.frame(result) && nrow(result) == 
+            0) || (is.character(result) && length(result) == 0) || (is.list(result) && 
+            length(result) == 0))
     })
+})

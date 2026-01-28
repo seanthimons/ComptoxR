@@ -1,0 +1,19 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/hazard/skin-eye/search/by-dtxsid/INVALID_DTXSID
+  response:
+    status: 200
+    headers:
+      Date: Wed, 28 Jan 2026 18:18:00 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: '[ ]'
+  recorded_at: 2026-01-28 18:18:00
+recorded_with: VCR-vcr/2.1.0

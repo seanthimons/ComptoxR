@@ -258,7 +258,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   if (isTRUE(needs_resolver) && body_schema_type == "chemical_array") {
     # Generate resolver-wrapped stub
     # These endpoints expect full Chemical objects (with sid, smiles, casrn, inchi, etc.)
-    # We first resolve identifiers via chemi_resolver, then send to the endpoint
+    # We first resolve identifiers via chemi_resolver_lookup, then send to the endpoint
 
     # Build additional parameters from body_param_info (excluding 'chemicals')
     body_params_vec <- if (isTRUE(body_param_info$has_params)) {
@@ -309,7 +309,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @description
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
-#\' This function first resolves chemical identifiers using `chemi_resolver`,
+#\' This function first resolves chemical identifiers using `chemi_resolver_lookup`,
 #\' then sends the resolved Chemical objects to the API endpoint.
 #\'
 {resolver_param_docs}#\' @return {return_doc}
@@ -324,7 +324,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     fn_body <- glue::glue('
 {fn} <- function({fn_signature_resolver}) {{
   # Resolve identifiers to Chemical objects
-  resolved <- chemi_resolver(query = query, id_type = id_type)
+	resolved <- tryCatch(
+    chemi_resolver_lookup(query = query, id_type = id_type),
+    error = function(e) {{
+      tryCatch(
+        chemi_resolver_lookup(query = query),
+        error = function(e2) stop("chemi_resolver_lookup failed: ", e2$message)
+      )
+    }}
+  )
 
   if (nrow(resolved) == 0) {{
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
