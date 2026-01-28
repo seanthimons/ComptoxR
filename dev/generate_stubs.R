@@ -151,7 +151,7 @@ generate_ct_stubs <- function() {
   spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = ct_config)
 
   # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
+  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
@@ -252,7 +252,7 @@ generate_chemi_stubs <- function() {
     summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
 
   # Write files
-  scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = FALSE, quiet = TRUE)
+  scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
@@ -324,7 +324,7 @@ generate_cc_stubs <- function() {
   spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = cc_config)
 
   # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE, quiet = TRUE)
+  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
