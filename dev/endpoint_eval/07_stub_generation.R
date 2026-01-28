@@ -278,7 +278,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       ""
     }
 
-    fn_signature_resolver <- paste0('query, id_type = "AnyId"', additional_sig)
+    fn_signature_resolver <- paste0('query, idType = "AnyId"', additional_sig)
 
     # Build options list from additional body params
     options_assembly <- if (length(body_params_vec) > 0) {
@@ -294,7 +294,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Build the param docs for resolver wrapper
     resolver_param_docs <- paste0(
       "#' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)\n",
-      "#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)\n"
+      "#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)\n"
     )
     if (length(body_params_vec) > 0) {
       for (p in body_params_vec) {
@@ -325,7 +325,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature_resolver}) {{
   # Resolve identifiers to Chemical objects
 	resolved <- tryCatch(
-    chemi_resolver_lookup(query = query, id_type = id_type),
+    chemi_resolver_lookup(query = query, idType = idType),
     error = function(e) {{
       tryCatch(
         chemi_resolver_lookup(query = query),
