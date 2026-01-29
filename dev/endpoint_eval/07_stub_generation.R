@@ -252,8 +252,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     # Example value from body param metadata
     example_value <- example_query
-    if (!is.null(body_param_info$primary_example) && !is.na(body_param_info$primary_example)) {
-      example_value <- as.character(body_param_info$primary_example)
+    if (!is.null(body_param_info$primary_example) && length(body_param_info$primary_example) > 0 && !is.na(body_param_info$primary_example[1])) {
+      example_value <- as.character(body_param_info$primary_example[1])
     }
     
     # Build example_value_vec for example call generation
@@ -277,8 +277,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     # Example value from query param metadata
     example_value <- example_query
-    if (!is.null(query_param_info$primary_example) && !is.na(query_param_info$primary_example)) {
-      example_value <- as.character(query_param_info$primary_example)
+    if (!is.null(query_param_info$primary_example) && length(query_param_info$primary_example) > 0 && !is.na(query_param_info$primary_example[1])) {
+      example_value <- as.character(query_param_info$primary_example[1])
     }
     
     # Build example_value_vec for example call generation
@@ -331,8 +331,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     # Determine example value from path param metadata
     example_value <- example_query
-    if (!is.null(path_param_info$primary_example) && !is.na(path_param_info$primary_example)) {
-      example_value <- as.character(path_param_info$primary_example)
+    if (!is.null(path_param_info$primary_example) && length(path_param_info$primary_example) > 0 && !is.na(path_param_info$primary_example[1])) {
+      example_value <- as.character(path_param_info$primary_example[1])
     }
     
     # For POST requests, use sample from testing_chemicals
