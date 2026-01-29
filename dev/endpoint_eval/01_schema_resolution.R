@@ -44,26 +44,24 @@ filter_components_by_refs <- function(components, refs) {
 }
 
 # Preprocess OpenAPI schema
+# Filters out unwanted endpoints but keeps all schema components intact
 preprocess_schema <- function(schema_file, exclude_endpoints = ENDPOINT_PATTERNS_TO_EXCLUDE) {
   # Load schema
   openapi <- jsonlite::fromJSON(schema_file, simplifyVector = FALSE)
-  
-  # Filter out unwanted endpoints
+
+  # Filter out unwanted endpoints (preflight, health checks, etc.)
   paths <- openapi$paths
   if (!is.null(paths) && length(paths) > 0) {
     keep_paths <- names(paths)[!stringr::str_detect(names(paths), exclude_endpoints)]
     openapi$paths <- paths[keep_paths]
   }
-  
-  # Extract all referenced schemas
-  refs <- extract_referenced_schemas(openapi$paths)
-  
-  # Filter components to keep only referenced schemas
-  components <- openapi[["components"]] %||% list()
-  if (length(components) > 0) {
-    openapi$components <- filter_components_by_refs(components, refs)
-  }
-  
+
+
+  # Keep all components/definitions intact - aggressive filtering caused
+
+  # regression issues with nested references (e.g., array items, response schemas)
+  # that weren't caught by extract_referenced_schemas()
+
   openapi
 }
 
