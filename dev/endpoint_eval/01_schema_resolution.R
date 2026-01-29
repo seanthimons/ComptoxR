@@ -195,8 +195,12 @@ extract_swagger2_body_schema <- function(parameters, definitions) {
   # Now extract properties from resolved schema (same logic as OpenAPI 3.0)
   schema_type <- body_schema[["type"]] %||% NA
 
-  # BODY-04: Handle inline object schemas (direct properties, no $ref)
-  if (!is.na(schema_type) && schema_type == "object" && !is.null(body_schema[["properties"]])) {
+  # BODY-04: Handle object schemas with properties
+  # In Swagger 2.0, schemas with properties often omit the explicit type="object"
+  has_properties <- !is.null(body_schema[["properties"]]) && length(body_schema[["properties"]]) > 0
+  is_object <- (!is.na(schema_type) && schema_type == "object") || (is.na(schema_type) && has_properties)
+
+  if (is_object && has_properties) {
     required_fields <- body_schema[["required"]] %||% character(0)
     metadata <- purrr::imap(body_schema[["properties"]], function(prop, prop_name) {
       list(

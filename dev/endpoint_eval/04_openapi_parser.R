@@ -336,6 +336,21 @@ openapi_to_spec <- function(
     openapi <- preprocess_schema(openapi)
   }
 
+  # Detect schema version (Swagger 2.0 vs OpenAPI 3.0)
+  schema_version <- detect_schema_version(openapi)
+  cli::cli_alert_info("Detected schema version: {schema_version$type} {schema_version$version}")
+
+  # Get schema definitions/components based on version
+  # Swagger 2.0 uses "definitions", OpenAPI 3.0 uses "components/schemas"
+  if (identical(schema_version$type, "swagger")) {
+    definitions <- openapi[["definitions"]] %||% list()
+    # For Swagger 2.0, we'll pass definitions to body extraction
+    components <- list(schemas = definitions)  # Normalize for resolve_schema_ref compatibility
+  } else {
+    definitions <- NULL
+    components <- openapi[["components"]] %||% list()
+  }
+
   base_url <- default_base_url %||% {
     srv <- openapi$servers
     if (is.list(srv) && length(srv) && !is.null(srv[[1]]$url)) srv[[1]]$url else "https://example.com"
@@ -365,9 +380,14 @@ openapi_to_spec <- function(
       path_meta  <- param_metadata(parameters, "path")
 
       # Extract request body schema metadata for POST/PUT/PATCH
-      components <- openapi[["components"]] %||% list()
       body_props <- if (method %in% c("post", "put", "patch")) {
-        extract_body_properties(op$requestBody, components)
+        if (identical(schema_version$type, "swagger")) {
+          # Swagger 2.0: body is in parameters array, resolve against definitions
+          extract_body_properties(op$parameters, definitions, schema_version = schema_version)
+        } else {
+          # OpenAPI 3.0: body is in requestBody object
+          extract_body_properties(op$requestBody, components)
+        }
       } else {
         list(type = "unknown", properties = list())
       }
@@ -417,7 +437,14 @@ openapi_to_spec <- function(
       # Combine all parameters (path parameters first, then query parameters)
       combined <- c(path_names, query_names)
 
-      has_body <- !is.null(op$requestBody)
+      # Detect if endpoint has request body
+      has_body <- if (identical(schema_version$type, "swagger")) {
+        # Swagger 2.0: check for body parameter in parameters array
+        any(purrr::map_lgl(op$parameters %||% list(), ~ identical(.x[["in"]], "body")))
+      } else {
+        # OpenAPI 3.0: check for requestBody object
+        !is.null(op$requestBody)
+      }
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
       
@@ -429,14 +456,25 @@ openapi_to_spec <- function(
 
       # Detect if the request body uses the Chemical schema (needs resolver)
       needs_resolver <- if (method %in% c("post", "put", "patch") && has_body) {
-        uses_chemical_schema(op$requestBody, openapi)
+        if (identical(schema_version$type, "swagger")) {
+          # Swagger 2.0: check body parameter schema for Chemical patterns
+          # For now, return FALSE - chemi schemas don't use Chemical resolver pattern
+          FALSE
+        } else {
+          uses_chemical_schema(op$requestBody, openapi)
+        }
       } else {
         FALSE
       }
 
       # Get body schema type for more specific code generation
       body_schema_type <- if (method %in% c("post", "put", "patch") && has_body) {
-        get_body_schema_type(op$requestBody, openapi)
+        if (identical(schema_version$type, "swagger")) {
+          # Use the type from body_props which was already extracted
+          body_props$type %||% "unknown"
+        } else {
+          get_body_schema_type(op$requestBody, openapi)
+        }
       } else {
         "unknown"
       }
