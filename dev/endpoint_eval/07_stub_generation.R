@@ -1006,7 +1006,8 @@ render_endpoint_stubs <- function(spec,
     response_schema_type = "unknown",
     request_type = NA_character_,
     body_schema_full = list(list()),
-    body_item_type = NA_character_
+    body_item_type = NA_character_,
+    source_file = NA_character_
   ))
 
   # ===========================================================================
@@ -1034,12 +1035,12 @@ render_endpoint_stubs <- function(spec,
   # Collect skipped endpoints for reporting (NOTIFY-02)
   skipped_endpoints <- spec %>%
     dplyr::filter(skip_endpoint) %>%
-    dplyr::select(route, method, skip_reason)
+    dplyr::select(route, method, skip_reason, source_file)
 
   # Collect suspicious endpoints for reporting
   suspicious_endpoints <- spec %>%
     dplyr::filter(suspicious, !skip_endpoint) %>%
-    dplyr::select(route, method, suspicious_reason)
+    dplyr::select(route, method, suspicious_reason, source_file)
 
   # Store in tracking environment for later summary
   .StubGenEnv$skipped <- c(.StubGenEnv$skipped, list(skipped_endpoints))
@@ -1167,8 +1168,9 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
     cli::cli_alert_danger("{n_skipped} endpoint{?s} skipped")
     cli::cli_div(theme = list(span.skip = list(color = "red")))
     for (i in seq_len(n_skipped)) {
+      source_info <- if (!is.na(skipped$source_file[i])) paste0(" [", skipped$source_file[i], "]") else ""
       cli::cli_bullets(c(
-        " " = "{.emph {skipped$method[i]} {skipped$route[i]}}: {skipped$skip_reason[i]}"
+        " " = "{.emph {skipped$method[i]} {skipped$route[i]}}{source_info}: {skipped$skip_reason[i]}"
       ))
     }
     cli::cli_end()
@@ -1178,8 +1180,9 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
     cli::cli_alert_warning("{n_suspicious} endpoint{?s} suspicious (may have incomplete API docs)")
     cli::cli_div(theme = list(span.warn = list(color = "yellow")))
     for (i in seq_len(n_suspicious)) {
+      source_info <- if (!is.na(suspicious$source_file[i])) paste0(" [", suspicious$source_file[i], "]") else ""
       cli::cli_bullets(c(
-        " " = "{.emph {suspicious$method[i]} {suspicious$route[i]}}: {suspicious$suspicious_reason[i]}"
+        " " = "{.emph {suspicious$method[i]} {suspicious$route[i]}}{source_info}: {suspicious$suspicious_reason[i]}"
       ))
     }
     cli::cli_end()
@@ -1202,7 +1205,8 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
   if (n_skipped > 0) {
     log_lines <- c(log_lines, "SKIPPED ENDPOINTS:", "")
     for (i in seq_len(n_skipped)) {
-      log_lines <- c(log_lines, paste0("  ", skipped$method[i], " ", skipped$route[i], " - ", skipped$skip_reason[i]))
+      source_info <- if (!is.na(skipped$source_file[i])) paste0(" [", skipped$source_file[i], "]") else ""
+      log_lines <- c(log_lines, paste0("  ", skipped$method[i], " ", skipped$route[i], source_info, " - ", skipped$skip_reason[i]))
     }
     log_lines <- c(log_lines, "")
   }
@@ -1210,7 +1214,8 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
   if (n_suspicious > 0) {
     log_lines <- c(log_lines, "SUSPICIOUS ENDPOINTS:", "")
     for (i in seq_len(n_suspicious)) {
-      log_lines <- c(log_lines, paste0("  ", suspicious$method[i], " ", suspicious$route[i], " - ", suspicious$suspicious_reason[i]))
+      source_info <- if (!is.na(suspicious$source_file[i])) paste0(" [", suspicious$source_file[i], "]") else ""
+      log_lines <- c(log_lines, paste0("  ", suspicious$method[i], " ", suspicious$route[i], source_info, " - ", suspicious$suspicious_reason[i]))
     }
   }
 
