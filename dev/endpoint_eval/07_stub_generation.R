@@ -984,6 +984,53 @@ render_endpoint_stubs <- function(spec,
     body_item_type = NA_character_
   ))
 
+  # ===========================================================================
+  # Empty POST Detection and Filtering
+  # ===========================================================================
+  # Detect POST endpoints with no query params, no path params, and empty body.
+  # These endpoints cannot accept meaningful user input and should be skipped.
+
+  detection_results <- purrr::pmap(
+    list(
+      method = spec$method,
+      query_params = spec$query_params,
+      path_params = spec$path_params,
+      body_schema_full = spec$body_schema_full,
+      body_schema_type = spec$body_schema_type
+    ),
+    is_empty_post_endpoint
+  )
+
+  spec$skip_endpoint <- purrr::map_lgl(detection_results, "skip")
+  spec$skip_reason <- purrr::map_chr(detection_results, "reason")
+  spec$suspicious <- purrr::map_lgl(detection_results, "suspicious")
+  spec$suspicious_reason <- purrr::map_chr(detection_results, ~ .x$suspicious_reason %||% "")
+
+  # Collect skipped endpoints for reporting (NOTIFY-02)
+  skipped_endpoints <- spec %>%
+    dplyr::filter(skip_endpoint) %>%
+    dplyr::select(route, method, skip_reason)
+
+  # Collect suspicious endpoints for reporting
+  suspicious_endpoints <- spec %>%
+    dplyr::filter(suspicious, !skip_endpoint) %>%
+    dplyr::select(route, method, suspicious_reason)
+
+  # Store in tracking environment for later summary
+  .StubGenEnv$skipped <- c(.StubGenEnv$skipped, list(skipped_endpoints))
+  .StubGenEnv$suspicious <- c(.StubGenEnv$suspicious, list(suspicious_endpoints))
+
+  # Filter out skipped endpoints before processing
+  spec <- spec %>% dplyr::filter(!skip_endpoint)
+
+  # Early return if all endpoints were skipped
+ if (nrow(spec) == 0) {
+    cli::cli_alert_warning("All endpoints were skipped (empty POST schemas)")
+    return(tibble::tibble(
+      fn = character(), endpoint = character(), title = character(), text = character()
+    ))
+  }
+
   # Pre-process some columns
   spec <- spec %>%
     dplyr::mutate(
