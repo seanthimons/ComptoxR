@@ -2,6 +2,7 @@
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/seanthimons/comptoxr/badge)](https://www.codefactor.io/repository/github/seanthimons/comptoxr)
 [![CCD Coverage](https://img.shields.io/badge/CCD_coverage-79.3%25-green.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/update-coverage-badges.yml)
 [![Cheminformatic Coverage](https://img.shields.io/badge/Cheminformatic_coverage-75.5%25-green.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/update-coverage-badges.yml)
 <!-- badges: end -->
