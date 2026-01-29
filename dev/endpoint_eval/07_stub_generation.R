@@ -1109,3 +1109,100 @@ render_endpoint_stubs <- function(spec,
 
   spec
 }
+
+# ==============================================================================
+# Endpoint Tracking and Reporting
+# ==============================================================================
+
+#' Report skipped and suspicious endpoints from stub generation
+#'
+#' Call this after all render_endpoint_stubs() calls to display summary.
+#' Also writes to log file for later reference.
+#'
+#' @param log_dir Directory for log file. Default: "dev/logs"
+#' @return Invisible NULL. Called for side effects (cli output).
+#' @export
+report_skipped_endpoints <- function(log_dir = "dev/logs") {
+  # Combine all tracked results
+  skipped <- dplyr::bind_rows(.StubGenEnv$skipped)
+  suspicious <- dplyr::bind_rows(.StubGenEnv$suspicious)
+
+  n_skipped <- nrow(skipped)
+  n_suspicious <- nrow(suspicious)
+
+  if (n_skipped == 0 && n_suspicious == 0) {
+    cli::cli_alert_success("All endpoints generated successfully")
+    return(invisible(NULL))
+  }
+
+  # Summary count line (NOTIFY-03)
+  cli::cli_h2("Endpoint Generation Report")
+
+  if (n_skipped > 0) {
+    cli::cli_alert_danger("{n_skipped} endpoint{?s} skipped")
+    cli::cli_div(theme = list(span.skip = list(color = "red")))
+    for (i in seq_len(n_skipped)) {
+      cli::cli_bullets(c(
+        " " = "{.emph {skipped$method[i]} {skipped$route[i]}}: {skipped$skip_reason[i]}"
+      ))
+    }
+    cli::cli_end()
+  }
+
+  if (n_suspicious > 0) {
+    cli::cli_alert_warning("{n_suspicious} endpoint{?s} suspicious (may have incomplete API docs)")
+    cli::cli_div(theme = list(span.warn = list(color = "yellow")))
+    for (i in seq_len(n_suspicious)) {
+      cli::cli_bullets(c(
+        " " = "{.emph {suspicious$method[i]} {suspicious$route[i]}}: {suspicious$suspicious_reason[i]}"
+      ))
+    }
+    cli::cli_end()
+  }
+
+  # Write to log file
+  if (!dir.exists(log_dir)) {
+    dir.create(log_dir, recursive = TRUE)
+  }
+
+  log_file <- file.path(log_dir, paste0("stub_generation_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".log"))
+
+  log_lines <- c(
+    paste0("Stub Generation Report - ", Sys.time()),
+    paste0("Skipped: ", n_skipped),
+    paste0("Suspicious: ", n_suspicious),
+    ""
+  )
+
+  if (n_skipped > 0) {
+    log_lines <- c(log_lines, "SKIPPED ENDPOINTS:", "")
+    for (i in seq_len(n_skipped)) {
+      log_lines <- c(log_lines, paste0("  ", skipped$method[i], " ", skipped$route[i], " - ", skipped$skip_reason[i]))
+    }
+    log_lines <- c(log_lines, "")
+  }
+
+  if (n_suspicious > 0) {
+    log_lines <- c(log_lines, "SUSPICIOUS ENDPOINTS:", "")
+    for (i in seq_len(n_suspicious)) {
+      log_lines <- c(log_lines, paste0("  ", suspicious$method[i], " ", suspicious$route[i], " - ", suspicious$suspicious_reason[i]))
+    }
+  }
+
+  writeLines(log_lines, log_file)
+  cli::cli_alert_info("Log written to {.file {log_file}}")
+
+  invisible(NULL)
+}
+
+#' Reset skipped/suspicious endpoint tracking
+#'
+#' Call before starting a new generation run to clear previous results.
+#'
+#' @return Invisible NULL.
+#' @export
+reset_endpoint_tracking <- function() {
+  .StubGenEnv$skipped <- list()
+  .StubGenEnv$suspicious <- list()
+  invisible(NULL)
+}

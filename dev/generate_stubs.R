@@ -76,6 +76,9 @@ source(file.path(utils_dir, "05_file_scaffold.R"))
 source(file.path(utils_dir, "06_param_parsing.R"))
 source(file.path(utils_dir, "07_stub_generation.R"))
 
+# Reset endpoint tracking at start of generation run
+reset_endpoint_tracking()
+
 # ==============================================================================
 # Helper Functions
 # ==============================================================================
@@ -347,6 +350,9 @@ all_results <- bind_rows(
   chemi_results %>% mutate(api = "chemi"),
   cc_results %>% mutate(api = "cc")
 )
+
+# Report skipped/suspicious endpoints
+report_skipped_endpoints(log_dir = here::here("dev", "logs"))
 
 # ==============================================================================
 # Summary
