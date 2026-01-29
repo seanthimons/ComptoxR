@@ -372,7 +372,7 @@ openapi_to_spec <- function(
       
       # Extract query parameters with $ref resolution
       components <- openapi[["components"]] %||% list()
-      query_result <- extract_query_params_with_refs(parameters, components)
+      query_result <- extract_query_params_with_refs(parameters, components, schema_version)
       query_names <- query_result$names  # Use resolved/flattened parameter names
       query_meta <- query_result$metadata  # Use enhanced metadata from resolved schemas
       
