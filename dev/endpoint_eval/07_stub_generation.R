@@ -49,17 +49,22 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 
 
   # Check for empty body schema
+
   # Empty body conditions:
   #   - NULL or missing body_schema_full
   #   - length(body_schema_full) == 0
   #   - type == "object" with no properties or empty properties
+  #   - type == "array" with primitive items (no named properties extractable)
   #   - No $ref and no meaningful schema content
   is_body_empty <- FALSE
+  body_empty_reason <- ""
 
   if (is.null(body_schema_full)) {
     is_body_empty <- TRUE
+    body_empty_reason <- "null body schema"
   } else if (length(body_schema_full) == 0) {
     is_body_empty <- TRUE
+    body_empty_reason <- "empty body schema"
   } else if (is.list(body_schema_full)) {
     schema_type <- body_schema_full$type %||% ""
     has_properties <- !is.null(body_schema_full$properties) && length(body_schema_full$properties) > 0
@@ -68,8 +73,28 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 
     if (schema_type == "object" && !has_properties && !has_ref) {
       is_body_empty <- TRUE
-    } else if (schema_type == "" && !has_properties && !has_ref && !has_items) {
+      body_empty_reason <- "object with no properties"
+    } else if (schema_type %in% c("", "unknown") && !has_properties && !has_ref && !has_items) {
+      # Unknown or empty type with no properties/ref/items cannot produce named params
       is_body_empty <- TRUE
+      body_empty_reason <- "no properties, ref, or items"
+    } else if (schema_type == "array" && has_items) {
+      # Array with items but no named properties - check if items are primitive
+      # e.g., {"type": "array", "items": {"type": "string"}} yields no function parameters
+      items_schema <- body_schema_full$items
+      if (is.list(items_schema)) {
+        items_type <- items_schema$type %||% ""
+        items_has_properties <- !is.null(items_schema$properties) && length(items_schema$properties) > 0
+        items_has_ref <- !is.null(items_schema$`$ref`)
+
+        # Primitive array items (string, integer, number, boolean) with no properties/ref
+        # cannot produce named function parameters
+        if (items_type %in% c("string", "integer", "number", "boolean") &&
+            !items_has_properties && !items_has_ref) {
+          is_body_empty <- TRUE
+          body_empty_reason <- paste0("array of ", items_type, " (no named parameters)")
+        }
+      }
     }
   }
 
@@ -79,7 +104,7 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 
   skip_reason <- ""
   if (should_skip) {
-    skip_reason <- "No query parameters, no path parameters, empty body schema"
+    skip_reason <- paste0("No query params, no path params, ", body_empty_reason)
   }
 
   # Determine suspicious status
