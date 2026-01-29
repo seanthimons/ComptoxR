@@ -131,6 +131,179 @@ resolve_schema_ref <- function(schema_ref, components, max_depth = 5, depth = 0)
   schema_def
 }
 
+# Detect OpenAPI/Swagger version from schema root
+# Returns list with: version (string), type ("swagger"|"openapi"|"unknown")
+detect_schema_version <- function(schema) {
+  # Check swagger field first (Swagger 2.0)
+  if (!is.null(schema$swagger) && grepl("^2\\.", as.character(schema$swagger))) {
+    return(list(version = as.character(schema$swagger), type = "swagger"))
+  }
+  # Check openapi field (OpenAPI 3.x)
+  if (!is.null(schema$openapi) && grepl("^3\\.", as.character(schema$openapi))) {
+    return(list(version = as.character(schema$openapi), type = "openapi"))
+  }
+  # Unknown version
+  return(list(version = "unknown", type = "unknown"))
+}
+
+# Extract body schema from Swagger 2.0 parameters array
+# Swagger 2.0 uses parameters[].in="body" with schema property
+# Returns: list with type, properties (matching extract_body_properties output format)
+extract_swagger2_body_schema <- function(parameters, definitions) {
+  if (is.null(parameters) || !is.list(parameters) || length(parameters) == 0) {
+    return(list(type = "unknown", properties = list()))
+  }
+
+  # Find body parameters (in="body")
+  body_params <- purrr::keep(parameters, ~ identical(.x[["in"]], "body"))
+
+  # Find formData parameters for mutual exclusivity check
+  formData_params <- purrr::keep(parameters, ~ identical(.x[["in"]], "formData"))
+
+  # BODY-06: Validate body/formData mutual exclusivity
+  if (length(body_params) > 0 && length(formData_params) > 0) {
+    cli::cli_alert_warning("Swagger 2.0 spec violation: both body and formData parameters present. Using body parameter.")
+  }
+
+  # BODY-05: Validate single body parameter constraint
+  if (length(body_params) > 1) {
+    cli::cli_alert_warning("Swagger 2.0 spec violation: multiple body parameters found ({length(body_params)}). Using first body parameter.")
+  }
+
+  if (length(body_params) == 0) {
+    return(list(type = "unknown", properties = list()))
+  }
+
+  # Use first body parameter
+  body_param <- body_params[[1]]
+  body_schema <- body_param[["schema"]] %||% list()
+
+  if (length(body_schema) == 0) {
+    return(list(type = "unknown", properties = list()))
+  }
+
+  # Check for $ref to #/definitions/
+  if (!is.null(body_schema[["$ref"]])) {
+    ref <- body_schema[["$ref"]]
+    # BODY-03: Resolve $ref to #/definitions/{SchemaName}
+    resolved <- resolve_swagger2_definition_ref(ref, definitions)
+    if (!is.null(resolved)) {
+      body_schema <- resolved
+    }
+  }
+
+  # Now extract properties from resolved schema (same logic as OpenAPI 3.0)
+  schema_type <- body_schema[["type"]] %||% NA
+
+  # BODY-04: Handle inline object schemas (direct properties, no $ref)
+  if (!is.na(schema_type) && schema_type == "object" && !is.null(body_schema[["properties"]])) {
+    required_fields <- body_schema[["required"]] %||% character(0)
+    metadata <- purrr::imap(body_schema[["properties"]], function(prop, prop_name) {
+      list(
+        name = prop_name,
+        type = prop[["type"]] %||% NA,
+        format = prop[["format"]] %||% NA,
+        description = prop[["description"]] %||% "",
+        enum = prop[["enum"]] %||% NULL,
+        default = prop[["default"]] %||% NA,
+        required = prop_name %in% required_fields,
+        example = prop[["example"]] %||% prop[["default"]] %||% NA
+      )
+    })
+    names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+    return(list(type = "object", properties = metadata))
+  }
+
+  # Handle array type
+  if (!is.na(schema_type) && schema_type == "array" && !is.null(body_schema[["items"]])) {
+    items <- body_schema[["items"]]
+
+    # Resolve items $ref if present
+    if (!is.null(items[["$ref"]])) {
+      resolved_items <- resolve_swagger2_definition_ref(items[["$ref"]], definitions)
+      if (!is.null(resolved_items) && !is.null(resolved_items[["properties"]])) {
+        required_fields <- resolved_items[["required"]] %||% character(0)
+        metadata <- purrr::imap(resolved_items[["properties"]], function(prop, prop_name) {
+          list(
+            name = prop_name,
+            type = prop[["type"]] %||% NA,
+            format = prop[["format"]] %||% NA,
+            description = prop[["description"]] %||% "",
+            enum = prop[["enum"]] %||% NULL,
+            default = prop[["default"]] %||% NA,
+            required = prop_name %in% required_fields,
+            example = prop[["example"]] %||% prop[["default"]] %||% NA
+          )
+        })
+        names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
+        ref_type <- stringr::str_replace(items[["$ref"]], "#/definitions/", "")
+        return(list(
+          type = "array",
+          item_schema = list(ref_type = ref_type, properties = metadata)
+        ))
+      }
+    }
+
+    # Inline array items
+    item_type <- items[["type"]] %||% NA
+    if (!is.na(item_type) && item_type == "string") {
+      metadata <- list(
+        query = list(
+          name = "query",
+          type = "array",
+          item_type = "string",
+          format = NA,
+          description = body_schema[["description"]] %||% "Array of strings",
+          enum = NULL,
+          default = NA,
+          required = TRUE,
+          example = items[["example"]] %||% NA
+        )
+      )
+      return(list(type = "string_array", item_type = "string", properties = metadata))
+    }
+  }
+
+  # Handle simple string type
+  if (!is.na(schema_type) && schema_type == "string") {
+    metadata <- list(
+      query = list(
+        name = "query",
+        type = "string",
+        format = body_schema[["format"]] %||% NA,
+        description = body_schema[["description"]] %||% "Query string",
+        enum = body_schema[["enum"]] %||% NULL,
+        default = body_schema[["default"]] %||% NA,
+        required = TRUE,
+        example = body_schema[["example"]] %||% NA
+      )
+    )
+    return(list(type = "string", properties = metadata))
+  }
+
+  list(type = "unknown", properties = list())
+}
+
+# Resolve Swagger 2.0 definition reference
+# Swagger 2.0 uses #/definitions/{SchemaName} (not #/components/schemas/)
+resolve_swagger2_definition_ref <- function(ref, definitions) {
+  if (is.null(ref) || !nzchar(ref)) return(NULL)
+
+  # Parse #/definitions/{SchemaName}
+  if (!grepl("^#/definitions/", ref)) {
+    return(NULL)
+  }
+
+  schema_name <- stringr::str_replace(ref, "#/definitions/", "")
+
+  if (is.null(definitions) || !is.list(definitions)) return(NULL)
+
+  schema_def <- definitions[[schema_name]]
+  if (is.null(schema_def) || !is.list(schema_def)) return(NULL)
+
+  schema_def
+}
+
 # Extract body properties from request body
 extract_body_properties <- function(request_body, components) {
   if (is.null(request_body) || !is.list(request_body)) return(list())
