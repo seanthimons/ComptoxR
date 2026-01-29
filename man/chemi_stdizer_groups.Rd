@@ -5,14 +5,26 @@
 \title{Stdizer Groups}
 \usage{
 chemi_stdizer_groups()
+
+chemi_stdizer_groups()
+}
+\arguments{
+\item{id}{Primary query parameter. Type: string}
 }
 \value{
+Returns a tibble with results
+
 Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
+\dontrun{
+chemi_stdizer_groups(id = "DTXSID7020182")
+}
 \dontrun{
 chemi_stdizer_groups()
 }

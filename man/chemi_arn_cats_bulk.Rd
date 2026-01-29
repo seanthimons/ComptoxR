@@ -4,7 +4,12 @@
 \alias{chemi_arn_cats_bulk}
 \title{Generate groups for multiple molecules}
 \usage{
-chemi_arn_cats_bulk()
+chemi_arn_cats_bulk(chemicals, model = "RF")
+}
+\arguments{
+\item{chemicals}{Required parameter}
+
+\item{model}{Optional parameter. Options: RF, NN (default: RF)}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk()
+chemi_arn_cats_bulk(chemicals = c("DTXSID80161401", "DTXSID3060245", "DTXSID4048141"))
 }
 }

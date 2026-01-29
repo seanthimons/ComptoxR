@@ -4,7 +4,12 @@
 \alias{chemi_resolver_resolve}
 \title{Resolver Resolve}
 \usage{
-chemi_resolver_resolve()
+chemi_resolver_resolve(queries = NULL, mol = NULL)
+}
+\arguments{
+\item{queries}{Optional parameter}
+
+\item{mol}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -14,6 +19,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_resolve()
+chemi_resolver_resolve(queries = c("DTXSID8023638", "DTXSID8047004", "DTXSID301054196"))
 }
 }

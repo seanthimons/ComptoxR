@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_search(searchType = c("DTXSID2033314", "DTXSID50474898", "DTXSID40893599"))
+#' chemi_search(searchType = c("DTXSID10894891", "DTXSID2024030", "DTXSID701018815"))
 #' }
 chemi_search <- function(searchType = NULL, inputType = NULL, query = NULL, smiles = NULL, querySmiles = NULL, offset = NULL, limit = NULL, sortBy = NULL, sortDirection = NULL, params = NULL) {
   # Build options list for additional parameters

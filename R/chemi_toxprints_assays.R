@@ -55,7 +55,7 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_assays_bulk(id = c("DTXSID6034479", "DTXSID30275709", "DTXSID7025508"))
+#' chemi_toxprints_assays_bulk(id = c("DTXSID2044397", "DTXSID8047004", "DTXSID301054196"))
 #' }
 chemi_toxprints_assays_bulk <- function(id = NULL, name = NULL, category = NULL, actives = NULL, total = NULL, metrics = NULL, chemicals = NULL, labels = NULL, options = NULL, acl = NULL) {
   # Build options list for additional parameters

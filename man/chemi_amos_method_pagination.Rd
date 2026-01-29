@@ -4,7 +4,12 @@
 \alias{chemi_amos_method_pagination}
 \title{Returns information on a batch of methods.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction.}
 \usage{
-chemi_amos_method_pagination()
+chemi_amos_method_pagination(limit, offset = NULL)
+}
+\arguments{
+\item{limit}{Limit of records to return.}
+
+\item{offset}{Offset of method records to return.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_method_pagination()
+chemi_amos_method_pagination(limit = "DTXSID7020182")
 }
 }

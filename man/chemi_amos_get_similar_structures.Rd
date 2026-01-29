@@ -4,7 +4,10 @@
 \alias{chemi_amos_get_similar_structures}
 \title{Returns a list of methods and fact sheets, each of which contain at least one substance of sufficient similarity to the searched substance.}
 \usage{
-chemi_amos_get_similar_structures()
+chemi_amos_get_similar_structures(dtxsid)
+}
+\arguments{
+\item{dtxsid}{The DTXSID for the substance of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_similar_structures()
+chemi_amos_get_similar_structures(dtxsid = "DTXSID7020182")
 }
 }

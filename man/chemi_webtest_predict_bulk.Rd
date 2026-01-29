@@ -4,7 +4,21 @@
 \alias{chemi_webtest_predict_bulk}
 \title{Webtest Predict}
 \usage{
-chemi_webtest_predict_bulk()
+chemi_webtest_predict_bulk(
+  structures,
+  endpoints,
+  methods = NULL,
+  format = NULL
+)
+}
+\arguments{
+\item{structures}{Molecule expressed as SMILES or MOL}
+
+\item{endpoints}{Endpoint to predict}
+
+\item{methods}{Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)}
+
+\item{format}{Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_webtest_predict_bulk()
+chemi_webtest_predict_bulk(structures = c("DTXSID1034187", "DTXSID50182047", "DTXSID20582510"))
 }
 }

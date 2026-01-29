@@ -4,7 +4,10 @@
 \alias{chemi_amos_get_mass_spectrum}
 \title{Retrieves a mass spectrum by its ID in AMOS's database with supporting information.}
 \usage{
-chemi_amos_get_mass_spectrum()
+chemi_amos_get_mass_spectrum(internal_id)
+}
+\arguments{
+\item{internal_id}{Unique ID of the mass spectrum of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_mass_spectrum()
+chemi_amos_get_mass_spectrum(internal_id = "DTXSID7020182")
 }
 }

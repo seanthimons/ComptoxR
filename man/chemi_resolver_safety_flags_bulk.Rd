@@ -4,10 +4,51 @@
 \alias{chemi_resolver_safety_flags_bulk}
 \title{Resolver Safety Flags}
 \usage{
-chemi_resolver_safety_flags_bulk(request.filesInfo)
+chemi_resolver_safety_flags_bulk(
+  chemId = NULL,
+  cid = NULL,
+  sid = NULL,
+  casrn = NULL,
+  name = NULL,
+  smiles = NULL,
+  canonicalSmiles = NULL,
+  inchi = NULL,
+  inchiKey = NULL,
+  mol = NULL,
+  molFormula = NULL,
+  averageMass = NULL,
+  monoisotopicMass = NULL,
+  image = NULL
+)
 }
 \arguments{
-\item{request.filesInfo}{Required parameter}
+\item{chemId}{Optional parameter}
+
+\item{cid}{Optional parameter}
+
+\item{sid}{Optional parameter}
+
+\item{casrn}{Optional parameter}
+
+\item{name}{Optional parameter}
+
+\item{smiles}{Optional parameter}
+
+\item{canonicalSmiles}{Optional parameter}
+
+\item{inchi}{Optional parameter}
+
+\item{inchiKey}{Optional parameter}
+
+\item{mol}{Optional parameter}
+
+\item{molFormula}{Optional parameter}
+
+\item{averageMass}{Optional parameter}
+
+\item{monoisotopicMass}{Optional parameter}
+
+\item{image}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -17,6 +58,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_safety_flags_bulk(request.filesInfo = "DTXSID7020182")
+chemi_resolver_safety_flags_bulk(chemId = c("DTXSID0021969", "DTXSID10895040", "DTXSID7020182"))
 }
 }

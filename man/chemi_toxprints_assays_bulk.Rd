@@ -4,7 +4,39 @@
 \alias{chemi_toxprints_assays_bulk}
 \title{Toxprints Assays}
 \usage{
-chemi_toxprints_assays_bulk()
+chemi_toxprints_assays_bulk(
+  id = NULL,
+  name = NULL,
+  category = NULL,
+  actives = NULL,
+  total = NULL,
+  metrics = NULL,
+  chemicals = NULL,
+  labels = NULL,
+  options = NULL,
+  acl = NULL
+)
+}
+\arguments{
+\item{id}{Optional parameter}
+
+\item{name}{Optional parameter}
+
+\item{category}{Optional parameter}
+
+\item{actives}{Optional parameter}
+
+\item{total}{Optional parameter}
+
+\item{metrics}{Optional parameter}
+
+\item{chemicals}{Optional parameter}
+
+\item{labels}{Optional parameter}
+
+\item{options}{Optional parameter}
+
+\item{acl}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -14,6 +46,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_assays_bulk()
+chemi_toxprints_assays_bulk(id = c("DTXSID2044397", "DTXSID8047004", "DTXSID301054196"))
 }
 }

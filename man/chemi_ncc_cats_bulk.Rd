@@ -4,7 +4,14 @@
 \alias{chemi_ncc_cats_bulk}
 \title{Generate categories for multiple molecules}
 \usage{
-chemi_ncc_cats_bulk()
+chemi_ncc_cats_bulk(smiles, logp, ws)
+}
+\arguments{
+\item{smiles}{Required parameter}
+
+\item{logp}{Required parameter}
+
+\item{ws}{Required parameter}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk()
+chemi_ncc_cats_bulk(smiles = c("DTXSID10895040", "DTXSID70228451", "DTXSID501045175"))
 }
 }

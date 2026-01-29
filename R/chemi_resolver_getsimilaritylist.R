@@ -7,7 +7,7 @@
 #' then sends the resolved Chemical objects to the API endpoint.
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
-#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
+#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param get_chemicals Optional parameter
 #' @param main Optional parameter
 #' @param fingerprintName Optional parameter
@@ -27,10 +27,10 @@
 #' \dontrun{
 #' chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getsimilaritylist <- function(query, id_type = "AnyId", get_chemicals = NULL, main = NULL, fingerprintName = NULL, scoreName = NULL, tverskyI = NULL, rdkitType = NULL, rdkitRadius = NULL, rdkitBits = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, toxprintsProfile = NULL) {
+chemi_resolver_getsimilaritylist <- function(query, idType = "AnyId", get_chemicals = NULL, main = NULL, fingerprintName = NULL, scoreName = NULL, tverskyI = NULL, rdkitType = NULL, rdkitRadius = NULL, rdkitBits = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, toxprintsProfile = NULL) {
   # Resolve identifiers to Chemical objects
 	resolved <- tryCatch(
-    chemi_resolver_lookup(query = query, id_type = id_type),
+    chemi_resolver_lookup(query = query, idType = idType),
     error = function(e) {
       tryCatch(
         chemi_resolver_lookup(query = query),
@@ -39,23 +39,21 @@ chemi_resolver_getsimilaritylist <- function(query, id_type = "AnyId", get_chemi
     }
   )
 
-  if (nrow(resolved) == 0) {
+  if (length(resolved) == 0) {
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }
 
-  # Transform resolved tibble to Chemical object format
-  # Map column names: dtxsid -> sid, etc.
-  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {
-    row <- resolved[i, ]
+  # Transform resolved list to Chemical object format expected by endpoint
+  chemicals <- purrr::map(resolved, function(chem) {
     list(
-      sid = row$dtxsid,
-      smiles = row$smiles,
-      casrn = row$casrn,
-      inchi = row$inchi,
-      inchiKey = row$inchiKey,
-      name = row$name,
-      mol = row$mol
+      sid = chem$dtxsid %||% chem$sid,
+      smiles = chem$smiles,
+      casrn = chem$casrn,
+      inchi = chem$inchi,
+      inchiKey = chem$inchiKey,
+      name = chem$name,
+      mol = chem$mol
     )
   })
 

@@ -4,12 +4,14 @@
 \alias{chemi_toxprints_assays}
 \title{Toxprints Assays}
 \usage{
-chemi_toxprints_assays()
+chemi_toxprints_assays(name)
 
-chemi_toxprints_assays()
+chemi_toxprints_assays(name)
 }
 \arguments{
-\item{category}{Required parameter}
+\item{name}{Primary query parameter. Type: string}
+
+\item{category}{Optional parameter}
 
 \item{label}{Optional parameter}
 }
@@ -28,6 +30,6 @@ Returns a list with result object
 chemi_toxprints_assays(category = "DTXSID7020182")
 }
 \dontrun{
-chemi_toxprints_assays()
+chemi_toxprints_assays(name = "DTXSID7020182")
 }
 }

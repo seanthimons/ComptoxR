@@ -53,7 +53,7 @@ chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus",
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict_bulk(structures = c("DTXSID90486733", "DTXSID80218080", "DTXSID1023786"))
+#' chemi_webtest_predict_bulk(structures = c("DTXSID1034187", "DTXSID50182047", "DTXSID20582510"))
 #' }
 chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = NULL) {
   # Build options list for additional parameters

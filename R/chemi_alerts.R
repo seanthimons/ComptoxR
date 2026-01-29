@@ -7,7 +7,7 @@
 #' then sends the resolved Chemical objects to the API endpoint.
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
-#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
+#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param options Optional parameter
 #' @return Returns a tibble with results
 #' @export
@@ -16,10 +16,10 @@
 #' \dontrun{
 #' chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_alerts <- function(query, id_type = "AnyId", options = NULL) {
+chemi_alerts <- function(query, idType = "AnyId", options = NULL) {
   # Resolve identifiers to Chemical objects
 	resolved <- tryCatch(
-    chemi_resolver_lookup(query = query, id_type = id_type),
+    chemi_resolver_lookup(query = query, idType = idType),
     error = function(e) {
       tryCatch(
         chemi_resolver_lookup(query = query),
@@ -28,23 +28,21 @@ chemi_alerts <- function(query, id_type = "AnyId", options = NULL) {
     }
   )
 
-  if (nrow(resolved) == 0) {
+  if (length(resolved) == 0) {
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }
 
-  # Transform resolved tibble to Chemical object format
-  # Map column names: dtxsid -> sid, etc.
-  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {
-    row <- resolved[i, ]
+  # Transform resolved list to Chemical object format expected by endpoint
+  chemicals <- purrr::map(resolved, function(chem) {
     list(
-      sid = row$dtxsid,
-      smiles = row$smiles,
-      casrn = row$casrn,
-      inchi = row$inchi,
-      inchiKey = row$inchiKey,
-      name = row$name,
-      mol = row$mol
+      sid = chem$dtxsid %||% chem$sid,
+      smiles = chem$smiles,
+      casrn = chem$casrn,
+      inchi = chem$inchi,
+      inchiKey = chem$inchiKey,
+      name = chem$name,
+      mol = chem$mol
     )
   })
 

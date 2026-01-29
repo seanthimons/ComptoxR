@@ -48,7 +48,7 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_bulk(query = c("DTXSID9032537", "DTXSID7024902", "DTXSID80505725"))
+#' chemi_toxprints_bulk(query = c("DTXSID9032537", "DTXSID2042353", "DTXSID40292184"))
 #' }
 chemi_toxprints_bulk <- function(query) {
   result <- generic_request(

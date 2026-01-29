@@ -5,14 +5,26 @@
 \title{Alerts Groups}
 \usage{
 chemi_alerts_groups()
+
+chemi_alerts_groups()
+}
+\arguments{
+\item{id}{Primary query parameter. Type: string}
 }
 \value{
+Returns a tibble with results
+
 Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
+\dontrun{
+chemi_alerts_groups(id = "DTXSID7020182")
+}
 \dontrun{
 chemi_alerts_groups()
 }

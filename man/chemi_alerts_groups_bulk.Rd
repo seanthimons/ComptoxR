@@ -4,7 +4,36 @@
 \alias{chemi_alerts_groups_bulk}
 \title{Alerts Groups}
 \usage{
-chemi_alerts_groups_bulk()
+chemi_alerts_groups_bulk(
+  type = NULL,
+  text = NULL,
+  description = NULL,
+  value = NULL,
+  logicType = NULL,
+  operations = NULL,
+  frozen = NULL,
+  id = NULL,
+  name = NULL
+)
+}
+\arguments{
+\item{type}{Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD, PROPERTY, GROUP, REFERENCE}
+
+\item{text}{Optional parameter}
+
+\item{description}{Optional parameter}
+
+\item{value}{Optional parameter}
+
+\item{logicType}{Optional parameter. Options: NONE, OR, AND, NOT}
+
+\item{operations}{Optional parameter}
+
+\item{frozen}{Optional parameter}
+
+\item{id}{Optional parameter}
+
+\item{name}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +43,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_alerts_groups_bulk()
+chemi_alerts_groups_bulk(type = c("DTXSID4036304", "DTXSID00176779", "DTXSID5044946"))
 }
 }

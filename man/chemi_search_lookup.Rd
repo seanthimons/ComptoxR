@@ -4,7 +4,24 @@
 \alias{chemi_search_lookup}
 \title{Search Lookup}
 \usage{
-chemi_search_lookup()
+chemi_search_lookup(
+  searchType = NULL,
+  inputType = NULL,
+  query = NULL,
+  limit = NULL,
+  params = NULL
+)
+}
+\arguments{
+\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+
+\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
+
+\item{query}{Optional parameter}
+
+\item{limit}{Optional parameter}
+
+\item{params}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +31,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search_lookup()
+chemi_search_lookup(searchType = c("DTXSID1023786", "DTXSID5060271", "DTXSID901336271"))
 }
 }

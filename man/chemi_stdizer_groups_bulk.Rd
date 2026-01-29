@@ -4,12 +4,42 @@
 \alias{chemi_stdizer_groups_bulk}
 \title{Stdizer Groups}
 \usage{
-chemi_stdizer_groups_bulk(request.filesInfo, request.replace = NULL)
+chemi_stdizer_groups_bulk(
+  type = NULL,
+  text = NULL,
+  description = NULL,
+  flag = NULL,
+  invalid = NULL,
+  invalidMessage = NULL,
+  operations = NULL,
+  frozen = NULL,
+  id = NULL,
+  value = NULL,
+  acl = NULL
+)
 }
 \arguments{
-\item{request.filesInfo}{Required parameter}
+\item{type}{Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE}
 
-\item{request.replace}{Optional parameter}
+\item{text}{Optional parameter}
+
+\item{description}{Optional parameter}
+
+\item{flag}{Optional parameter}
+
+\item{invalid}{Optional parameter}
+
+\item{invalidMessage}{Optional parameter}
+
+\item{operations}{Optional parameter}
+
+\item{frozen}{Optional parameter}
+
+\item{id}{Optional parameter}
+
+\item{value}{Optional parameter}
+
+\item{acl}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -19,6 +49,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups_bulk(request.filesInfo = "DTXSID7020182")
+chemi_stdizer_groups_bulk(type = c("DTXSID70963875", "DTXSID80161401", "DTXSID301027109"))
 }
 }

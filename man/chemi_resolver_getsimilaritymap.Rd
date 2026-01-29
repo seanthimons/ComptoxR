@@ -4,12 +4,12 @@
 \alias{chemi_resolver_getsimilaritymap}
 \title{Resolver Getsimilaritymap}
 \usage{
-chemi_resolver_getsimilaritymap(query, id_type = "AnyId", section = NULL)
+chemi_resolver_getsimilaritymap(query, idType = "AnyId", section = NULL)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+\item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{section}{Optional parameter}
 }
@@ -19,7 +19,7 @@ Returns a list with result object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver},
+This function first resolves chemical identifiers using \code{chemi_resolver_lookup},
 then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{

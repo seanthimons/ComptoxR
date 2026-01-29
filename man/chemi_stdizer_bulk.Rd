@@ -5,14 +5,14 @@
 \title{Stdizer}
 \usage{
 chemi_stdizer_bulk(
-  request.filesInfo,
+  request.filesInfo = NULL,
   request.options.workflow = NULL,
   request.options.run = NULL,
   request.options.recordId = NULL
 )
 }
 \arguments{
-\item{request.filesInfo}{Required parameter}
+\item{request.filesInfo}{Optional parameter}
 
 \item{request.options.workflow}{Optional parameter}
 

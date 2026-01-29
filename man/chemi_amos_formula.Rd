@@ -4,7 +4,10 @@
 \alias{chemi_amos_formula}
 \title{Returns a list of substances that have the given molecular formula.}
 \usage{
-chemi_amos_formula()
+chemi_amos_formula(formula)
+}
+\arguments{
+\item{formula}{Molecular furmula to search by.  Formula should be in Hill form.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_formula()
+chemi_amos_formula(formula = "DTXSID7020182")
 }
 }

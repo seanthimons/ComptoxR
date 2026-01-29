@@ -5,7 +5,7 @@
 \title{Resolver Classyfire}
 \usage{
 chemi_resolver_classyfire(
-  query,
+  query = NULL,
   idType = "AnyId",
   fuzzy = "Not",
   kingdom = NULL,
@@ -21,7 +21,7 @@ chemi_resolver_classyfire(
 )
 }
 \arguments{
-\item{query}{Required parameter}
+\item{query}{Optional parameter}
 
 \item{idType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
 

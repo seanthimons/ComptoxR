@@ -4,12 +4,12 @@
 \alias{chemi_resolver_pubchem_section_bulk}
 \title{Resolver Pubchem Section}
 \usage{
-chemi_resolver_pubchem_section_bulk(query, id_type = "AnyId", section = NULL)
+chemi_resolver_pubchem_section_bulk(query, idType = "AnyId", section = NULL)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+\item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{section}{Optional parameter}
 }
@@ -19,7 +19,7 @@ Returns a tibble with results (array of objects)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver},
+This function first resolves chemical identifiers using \code{chemi_resolver_lookup},
 then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{

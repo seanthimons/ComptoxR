@@ -47,7 +47,7 @@ chemi_arn_cats <- function(smiles, model = "RF") {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_arn_cats_bulk(chemicals = c("DTXSID30275709", "DTXSID80218080", "DTXSID50474898"))
+#' chemi_arn_cats_bulk(chemicals = c("DTXSID80161401", "DTXSID3060245", "DTXSID4048141"))
 #' }
 chemi_arn_cats_bulk <- function(chemicals, model = "RF") {
   # Build options list for additional parameters

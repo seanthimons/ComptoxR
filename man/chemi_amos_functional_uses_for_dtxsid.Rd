@@ -4,7 +4,10 @@
 \alias{chemi_amos_functional_uses_for_dtxsid}
 \title{Returns a list of functional use classifications for a substance.}
 \usage{
-chemi_amos_functional_uses_for_dtxsid()
+chemi_amos_functional_uses_for_dtxsid(dtxsid)
+}
+\arguments{
+\item{dtxsid}{The DTXSID for the substance of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_functional_uses_for_dtxsid()
+chemi_amos_functional_uses_for_dtxsid(dtxsid = "DTXSID7020182")
 }
 }

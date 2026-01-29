@@ -5,7 +5,7 @@
 \title{Resolver Universalharvest}
 \usage{
 chemi_resolver_universalharvest(
-  request.info.keyName,
+  request.info.keyName = NULL,
   request.info.keyType = NULL,
   request.info.loadNames = NULL,
   request.info.loadCASRNs = NULL,
@@ -27,7 +27,7 @@ chemi_resolver_universalharvest(
 )
 }
 \arguments{
-\item{request.info.keyName}{Required parameter}
+\item{request.info.keyName}{Optional parameter}
 
 \item{request.info.keyType}{Optional parameter}
 

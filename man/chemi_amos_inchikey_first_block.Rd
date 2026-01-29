@@ -4,7 +4,10 @@
 \alias{chemi_amos_inchikey_first_block}
 \title{Returns a list of substances found by InChIKey.}
 \usage{
-chemi_amos_inchikey_first_block()
+chemi_amos_inchikey_first_block(first_block)
+}
+\arguments{
+\item{first_block}{First block of an InChIKey.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_inchikey_first_block()
+chemi_amos_inchikey_first_block(first_block = "DTXSID7020182")
 }
 }

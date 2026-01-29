@@ -4,7 +4,7 @@
 \alias{chemi_schema}
 \title{Download API schemas}
 \usage{
-chemi_schema()
+chemi_schema(record = FALSE)
 }
 \value{
 Invisibly sets the server to production and returns \code{NULL}.

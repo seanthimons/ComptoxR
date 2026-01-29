@@ -4,7 +4,10 @@
 \alias{chemi_amos_dtxsids_for_functional_use}
 \title{Returns a list of DTXSIDs for the given functional use.}
 \usage{
-chemi_amos_dtxsids_for_functional_use()
+chemi_amos_dtxsids_for_functional_use(functional_use)
+}
+\arguments{
+\item{functional_use}{Functional use class.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_dtxsids_for_functional_use()
+chemi_amos_dtxsids_for_functional_use(functional_use = "DTXSID7020182")
 }
 }

@@ -4,7 +4,10 @@
 \alias{chemi_padel_bulk}
 \title{Padel}
 \usage{
-chemi_padel_bulk()
+chemi_padel_bulk(query)
+}
+\arguments{
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_padel_bulk()
+chemi_padel_bulk(query = c("DTXSID2044397", "DTXSID5029683", "DTXSID9032537"))
 }
 }

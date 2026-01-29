@@ -4,7 +4,39 @@
 \alias{chemi_search}
 \title{Search}
 \usage{
-chemi_search()
+chemi_search(
+  searchType = NULL,
+  inputType = NULL,
+  query = NULL,
+  smiles = NULL,
+  querySmiles = NULL,
+  offset = NULL,
+  limit = NULL,
+  sortBy = NULL,
+  sortDirection = NULL,
+  params = NULL
+)
+}
+\arguments{
+\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+
+\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
+
+\item{query}{Optional parameter}
+
+\item{smiles}{Optional parameter}
+
+\item{querySmiles}{Optional parameter}
+
+\item{offset}{Optional parameter}
+
+\item{limit}{Optional parameter}
+
+\item{sortBy}{Optional parameter}
+
+\item{sortDirection}{Optional parameter}
+
+\item{params}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +46,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search()
+chemi_search(searchType = c("DTXSID10894891", "DTXSID2024030", "DTXSID701018815"))
 }
 }

@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_services_convert(content = c("DTXSID60160518", "DTXSID2046541", "DTXSID70228451"))
+#' chemi_services_convert(content = c("DTXSID9032537", "DTXSID40515441", "DTXSID60570416"))
 #' }
 chemi_services_convert <- function(content = NULL, type = NULL) {
   # Build options list for additional parameters

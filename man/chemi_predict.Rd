@@ -19,7 +19,7 @@ API returns no results for a given query.
 }
 \description{
 This function takes a vector of chemical identifiers as input, resolves them
-using \code{chemi_resolver}, and then uses an external API to predict their properties.
+using \code{chemi_resolver_lookup}, and then uses an external API to predict their properties.
 It sends a POST request to the API endpoint, passing the resolved chemical names
 in the request body.
 }

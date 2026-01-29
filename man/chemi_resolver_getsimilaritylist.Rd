@@ -6,7 +6,7 @@
 \usage{
 chemi_resolver_getsimilaritylist(
   query,
-  id_type = "AnyId",
+  idType = "AnyId",
   get_chemicals = NULL,
   main = NULL,
   fingerprintName = NULL,
@@ -24,7 +24,7 @@ chemi_resolver_getsimilaritylist(
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
-\item{id_type}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
+\item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{get_chemicals}{Optional parameter}
 
@@ -56,7 +56,7 @@ Returns a tibble with results (array of objects)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver},
+This function first resolves chemical identifiers using \code{chemi_resolver_lookup},
 then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{

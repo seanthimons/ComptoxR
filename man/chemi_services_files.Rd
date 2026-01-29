@@ -4,10 +4,10 @@
 \alias{chemi_services_files}
 \title{Services Files}
 \usage{
-chemi_services_files(request.filesInfo)
+chemi_services_files(request.filesInfo = NULL)
 }
 \arguments{
-\item{request.filesInfo}{Required parameter}
+\item{request.filesInfo}{Optional parameter}
 }
 \value{
 Returns a tibble with results

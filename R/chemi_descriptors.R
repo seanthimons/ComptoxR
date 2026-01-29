@@ -52,7 +52,7 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
 #'
 #' @examples
 #' \dontrun{
-#' chemi_descriptors_bulk(query = c("DTXSID00894067", "DTXSID90937533", "DTXSID10900961"))
+#' chemi_descriptors_bulk(query = c("DTXSID70963875", "DTXSID2024030", "DTXSID10895040"))
 #' }
 chemi_descriptors_bulk <- function(query) {
   result <- generic_request(

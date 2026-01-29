@@ -81,7 +81,7 @@ chemi_stdizer_groups <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_stdizer_groups_bulk(type = c("DTXSID2021731", "DTXSID5044946", "DTXSID90937533"))
+#' chemi_stdizer_groups_bulk(type = c("DTXSID70963875", "DTXSID80161401", "DTXSID301027109"))
 #' }
 chemi_stdizer_groups_bulk <- function(type = NULL, text = NULL, description = NULL, flag = NULL, invalid = NULL, invalidMessage = NULL, operations = NULL, frozen = NULL, id = NULL, value = NULL, acl = NULL) {
   # Build options list for additional parameters

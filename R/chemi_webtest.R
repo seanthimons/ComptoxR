@@ -46,7 +46,7 @@ chemi_webtest <- function(smiles, headers = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_bulk(query = c("DTXSID4020533", "DTXSID90873482", "DTXSID1024122"))
+#' chemi_webtest_bulk(query = c("DTXSID601029659", "DTXSID60894104", "DTXSID5060271"))
 #' }
 chemi_webtest_bulk <- function(query) {
   result <- generic_request(

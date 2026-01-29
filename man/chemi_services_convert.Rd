@@ -4,7 +4,12 @@
 \alias{chemi_services_convert}
 \title{Services Convert}
 \usage{
-chemi_services_convert()
+chemi_services_convert(content = NULL, type = NULL)
+}
+\arguments{
+\item{content}{Optional parameter}
+
+\item{type}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_services_convert()
+chemi_services_convert(content = c("DTXSID9032537", "DTXSID40515441", "DTXSID60570416"))
 }
 }

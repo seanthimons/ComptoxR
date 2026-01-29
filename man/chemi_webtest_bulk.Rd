@@ -4,7 +4,10 @@
 \alias{chemi_webtest_bulk}
 \title{Webtest}
 \usage{
-chemi_webtest_bulk()
+chemi_webtest_bulk(query)
+}
+\arguments{
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_webtest_bulk()
+chemi_webtest_bulk(query = c("DTXSID601029659", "DTXSID60894104", "DTXSID5060271"))
 }
 }

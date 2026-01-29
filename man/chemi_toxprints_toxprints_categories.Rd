@@ -4,7 +4,10 @@
 \alias{chemi_toxprints_toxprints_categories}
 \title{Toxprints Toxprints Categories}
 \usage{
-chemi_toxprints_toxprints_categories()
+chemi_toxprints_toxprints_categories(chemical = NULL)
+}
+\arguments{
+\item{chemical}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -14,6 +17,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_toxprints_categories()
+chemi_toxprints_toxprints_categories(chemical = c("DTXSID90893948", "DTXSID3033511", "DTXSID20964832"))
 }
 }
