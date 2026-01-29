@@ -67,6 +67,61 @@ preprocess_schema <- function(schema_file, exclude_endpoints = ENDPOINT_PATTERNS
   openapi
 }
 
+# Validate schema reference format
+# Returns TRUE if valid, aborts with cli::cli_abort() if invalid
+validate_schema_ref <- function(ref, endpoint_context = NULL) {
+  # Must be a non-empty string
+  if (!is.character(ref) || !nzchar(ref)) {
+    cli::cli_abort(c(
+      "x" = "Invalid schema reference: empty or non-character",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
+  }
+
+  # Must start with #/ (internal reference)
+  if (!grepl("^#/", ref)) {
+    cli::cli_abort(c(
+      "x" = "Invalid reference format: {.val {ref}}",
+      "i" = "References must start with {.code #/}",
+      "i" = "External file references are not supported",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
+  }
+
+  # Check for external file refs (not supported)
+  if (grepl("\\.(json|yaml|yml)#", ref)) {
+    cli::cli_abort(c(
+      "x" = "External file reference not supported: {.val {ref}}",
+      "i" = "All schemas must be in single file",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
+  }
+
+  # Check for valid path prefixes
+  valid_prefixes <- c("#/components/schemas/", "#/definitions/")
+  has_valid_prefix <- any(purrr::map_lgl(valid_prefixes, ~ grepl(paste0("^", .x), ref)))
+
+  if (!has_valid_prefix) {
+    cli::cli_warn(c(
+      "!" = "Unusual reference path: {.val {ref}}",
+      "i" = "Expected {.code #/components/schemas/} or {.code #/definitions/}",
+      "i" = "Proceeding with caution"
+    ))
+  }
+
+  # Extract and validate schema name
+  schema_name <- stringr::str_replace(ref, "^#/(components/schemas|definitions)/", "")
+  if (!nzchar(schema_name)) {
+    cli::cli_abort(c(
+      "x" = "Missing schema name in reference: {.val {ref}}",
+      "i" = "Reference path is incomplete (trailing slash only)",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
+  }
+
+  TRUE
+}
+
 # Resolve schema reference to actual schema definition
 resolve_schema_ref <- function(schema_ref, components, max_depth = 5, depth = 0) {
   # Check depth limit
