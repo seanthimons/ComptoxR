@@ -8,6 +8,103 @@
   if (is.null(x) || (length(x) == 1 && is.na(x))) default else x
 }
 
+# Environment for tracking skipped/suspicious endpoints during generation
+.StubGenEnv <- new.env(parent = emptyenv())
+.StubGenEnv$skipped <- list()
+.StubGenEnv$suspicious <- list()
+
+#' Detect empty POST endpoints that cannot accept meaningful input
+#'
+#' Checks if a POST endpoint has no query params, no path params, and an empty
+#' body schema. Such endpoints cannot receive any user input and should be skipped.
+#'
+#' @param method HTTP method (GET, POST, etc.)
+#' @param query_params Query parameters string (comma-separated or empty)
+#' @param path_params Path parameters string (comma-separated or empty)
+#' @param body_schema_full Full body schema list from OpenAPI spec
+#' @param body_schema_type Character type classification of body schema
+#' @return A list with:
+#'   - skip: Boolean, TRUE if endpoint should be skipped
+#'   - reason: Character, explanation for skipping
+#'   - suspicious: Boolean, TRUE if endpoint has only optional params
+#'   - suspicious_reason: Character, explanation for suspicion
+#' @keywords internal
+is_empty_post_endpoint <- function(method, query_params, path_params, body_schema_full, body_schema_type) {
+  # SCOPE-01: Only analyze POST endpoints
+
+  if (!identical(toupper(method), "POST")) {
+    return(list(
+      skip = FALSE,
+      reason = "",
+      suspicious = FALSE,
+      suspicious_reason = ""
+    ))
+  }
+
+  # Check for no query params
+  has_query_params <- !is.null(query_params) && nzchar(query_params %||% "")
+
+  # Check for no path params
+  has_path_params <- !is.null(path_params) && nzchar(path_params %||% "")
+
+
+  # Check for empty body schema
+  # Empty body conditions:
+  #   - NULL or missing body_schema_full
+  #   - length(body_schema_full) == 0
+  #   - type == "object" with no properties or empty properties
+  #   - No $ref and no meaningful schema content
+  is_body_empty <- FALSE
+
+  if (is.null(body_schema_full)) {
+    is_body_empty <- TRUE
+  } else if (length(body_schema_full) == 0) {
+    is_body_empty <- TRUE
+  } else if (is.list(body_schema_full)) {
+    schema_type <- body_schema_full$type %||% ""
+    has_properties <- !is.null(body_schema_full$properties) && length(body_schema_full$properties) > 0
+    has_ref <- !is.null(body_schema_full$`$ref`)
+    has_items <- !is.null(body_schema_full$items) && length(body_schema_full$items) > 0
+
+    if (schema_type == "object" && !has_properties && !has_ref) {
+      is_body_empty <- TRUE
+    } else if (schema_type == "" && !has_properties && !has_ref && !has_items) {
+      is_body_empty <- TRUE
+    }
+  }
+
+  # Determine skip status
+  # DETECT-04: All conditions must be TRUE for skip
+  should_skip <- !has_query_params && !has_path_params && is_body_empty
+
+  skip_reason <- ""
+  if (should_skip) {
+    skip_reason <- "No query parameters, no path parameters, empty body schema"
+  }
+
+  # Determine suspicious status
+  # Suspicious: Has query params but they might all be optional, and body is empty
+  # We check if query_params exist but pattern suggests optional-only
+  # (This is a heuristic - full optional detection would require metadata parsing)
+  is_suspicious <- FALSE
+  suspicious_reason <- ""
+
+  if (!should_skip && has_query_params && is_body_empty && !has_path_params) {
+    # Has some query params but empty body - mark as suspicious
+    # In practice, endpoints with only optional query params and no body
+    # may not function meaningfully
+    is_suspicious <- TRUE
+    suspicious_reason <- "Only query parameters with empty body schema (verify API docs)"
+  }
+
+  list(
+    skip = should_skip,
+    reason = skip_reason,
+    suspicious = is_suspicious,
+    suspicious_reason = suspicious_reason
+  )
+}
+
 #' Build a single function stub from components
 #'
 #' Generates R function source code with roxygen documentation using configuration.
