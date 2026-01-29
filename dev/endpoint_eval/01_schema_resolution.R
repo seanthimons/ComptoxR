@@ -305,8 +305,15 @@ resolve_swagger2_definition_ref <- function(ref, definitions) {
 }
 
 # Extract body properties from request body
-extract_body_properties <- function(request_body, components) {
+extract_body_properties <- function(request_body, components, schema_version = NULL) {
   if (is.null(request_body) || !is.list(request_body)) return(list())
+
+  # If schema_version indicates Swagger 2.0 and request_body is parameters array,
+  # delegate to Swagger 2.0 extraction and return early
+  if (!is.null(schema_version) && identical(schema_version$type, "swagger")) {
+    # For Swagger 2.0: request_body is actually parameters, components is definitions
+    return(extract_swagger2_body_schema(request_body, components))
+  }
   
   # Navigate: requestBody -> content -> application/json -> schema
   content <- request_body[["content"]] %||% list()
