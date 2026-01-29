@@ -1,0 +1,12 @@
+Stub Generation Report - 2026-01-29 18:01:14.795139
+Skipped: 5
+Suspicious: 0
+
+SKIPPED ENDPOINTS:
+
+  POST predictor/predict [chemi-predictor-staging.json] - No query params, no path params, no properties, ref, or items
+  POST services/universalpreflight [chemi-services-prod.json] - No query params, no path params, empty body schema
+  POST services/preflight [chemi-services-prod.json] - No query params, no path params, empty body schema
+  POST services/caspreflight [chemi-services-prod.json] - No query params, no path params, empty body schema
+  POST stdizer/groups/preflight [chemi-stdizer-prod.json] - No query params, no path params, empty body schema
+

@@ -38,4 +38,4 @@ ensure_cols <- function(df, cols_with_defaults) {
 }
 
 # Endpoint exclusion patterns - these endpoints are removed during preprocessing
-ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols|preflight"
+ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols|preflight|universalpreflight|caspreflight"

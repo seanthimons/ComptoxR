@@ -183,7 +183,7 @@ generate_chemi_stubs <- function() {
     parse_chemi_schemas() %>%
       filter(
         str_detect(method, 'GET|POST'),
-        !str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download|export|protocols')
+        !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE)
       ) %>%
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),

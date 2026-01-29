@@ -33,3 +33,36 @@ chemi_mordred <- function(smiles, headers = NULL) {
 }
 
 
+
+
+#' Generate descriptors for multiple molecules
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param chemicals Required parameter
+#' @param options Optional parameter
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_mordred_bulk(chemicals = c("DTXSID3032040", "DTXSID3039242", "DTXSID6026296"))
+#' }
+chemi_mordred_bulk <- function(chemicals, options = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(options)) options$options <- options
+  result <- generic_chemi_request(
+    query = chemicals,
+    endpoint = "mordred",
+    options = options,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+
