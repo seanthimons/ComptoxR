@@ -123,65 +123,127 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
 }
 
 # Resolve schema reference to actual schema definition
-resolve_schema_ref <- function(schema_ref, components, max_depth = 5, depth = 0) {
-  # Check depth limit
-  if (depth > max_depth) {
-    stop("Schema reference depth exceeded max_depth = ", max_depth, ". Possible circular reference or overly complex schema.")
-  }
-  
-  # Handle circular reference detection
-  ref_key <- if (is.character(schema_ref)) schema_ref else "inline"
-  if (exists(ref_key, envir = resolve_stack)) {
-    stop("Circular reference detected for schema: ", ref_key)
-  }
-  
+# Enhanced with version-aware fallback chain (REF-01), version context (REF-02), and depth limit 3 (REF-03)
+resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, max_depth = 3, depth = 0, endpoint_context = NULL) {
   # If schema_ref is actual schema (not a reference), just return it
   if (!is.character(schema_ref)) {
     return(schema_ref)
   }
-  
-  # Parse reference
-  ref_parts <- strsplit(schema_ref, "/", fixed = TRUE)[[1]]
-  if (length(ref_parts) < 4 || ref_parts[2] != "components" || ref_parts[3] != "schemas") {
-    return(list(type = "unknown"))
+
+  # Validate reference format
+  validate_schema_ref(schema_ref, endpoint_context)
+
+  # Check depth limit (REF-03)
+  if (depth > max_depth) {
+    cli::cli_abort(c(
+      "x" = "Reference depth limit exceeded: {.val {max_depth}}",
+      "i" = "Current reference: {.val {schema_ref}}",
+      "i" = "This may indicate circular references or overly complex schema",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
   }
-  
-  schema_name <- ref_parts[4]
-  
+
   # Sanitize ref_key for use as variable name in R environment
-  # Replace problematic characters with underscores
-  sanitized_key <- gsub("[^a-zA-Z0-9]", "_", ref_key)
-  
+  sanitized_key <- gsub("[^a-zA-Z0-9]", "_", schema_ref)
+
   # Check for circular reference - only error if we're going DEEPER
-  # (same reference at same depth is OK - just multiple references)
   if (exists(sanitized_key, envir = resolve_stack)) {
     existing_depth <- get(sanitized_key, envir = resolve_stack)
     if (depth > existing_depth) {
-      stop("Circular reference detected for schema: ", ref_key, ". Current depth: ", depth, ", Previous depth: ", existing_depth)
+      cli::cli_warn(c(
+        "!" = "Circular reference detected: {.val {schema_ref}}",
+        "i" = "Current depth: {depth}, Previous depth: {existing_depth}",
+        "i" = "Returning partial schema"
+      ))
+      return(list(type = "circular_ref", ref = schema_ref))
     }
   }
-  
-  # Track reference for cleanup on exit (overwrite with new depth if exists)
+
+  # Track reference for cleanup on exit
   assign(sanitized_key, depth, envir = resolve_stack)
   on.exit({
     if (exists(sanitized_key, envir = resolve_stack)) {
-      rm(sanitized_key, envir = resolve_stack)
+      rm(list = sanitized_key, envir = resolve_stack)
     }
   }, add = TRUE)
-   
-  # Look up schema
-  schemas <- components[["schemas"]] %||% list()
-  schema_def <- schemas[[schema_name]]
-  
+
+  # Determine primary and secondary paths based on version (REF-01)
+  if (!is.null(schema_version) && identical(schema_version$type, "swagger")) {
+    # Swagger 2.0: definitions first, then components
+    primary_path <- "#/definitions/"
+    secondary_path <- "#/components/schemas/"
+    # For Swagger 2.0, components may be normalized definitions (from 07-02)
+    primary_container <- components  # May be definitions directly or components$schemas
+    secondary_container <- components[["schemas"]] %||% list()
+  } else {
+    # OpenAPI 3.0 or unknown: components first, then definitions
+    primary_path <- "#/components/schemas/"
+    secondary_path <- "#/definitions/"
+    primary_container <- components[["schemas"]] %||% list()
+    secondary_container <- components  # May have definitions at root
+  }
+
+  # Extract schema name from reference
+  schema_name <- NULL
+  if (grepl(paste0("^", gsub("/", "\\\\/", primary_path)), schema_ref)) {
+    schema_name <- stringr::str_replace(schema_ref, paste0("^", primary_path), "")
+  } else if (grepl(paste0("^", gsub("/", "\\\\/", secondary_path)), schema_ref)) {
+    schema_name <- stringr::str_replace(schema_ref, paste0("^", secondary_path), "")
+  } else {
+    # Unusual path - try extracting from either known prefix
+    schema_name <- stringr::str_replace(schema_ref, "^#/(components/schemas|definitions)/", "")
+  }
+
+  # Try primary location
+  schema_def <- NULL
+  if (!is.null(schema_name) && nzchar(schema_name)) {
+    schema_def <- primary_container[[schema_name]]
+  }
+
+  # Try secondary location (fallback)
   if (is.null(schema_def) || !is.list(schema_def)) {
-    return(list(type = "unknown"))
+    fallback_def <- secondary_container[[schema_name]]
+    if (!is.null(fallback_def) && is.list(fallback_def)) {
+      # Log fallback usage (always, not just verbose)
+      cli::cli_alert_info(c(
+        "Reference resolved via fallback",
+        "i" = "Reference: {.val {schema_ref}}",
+        "i" = "Primary location not found: {.path {primary_path}{schema_name}}",
+        "i" = "Resolved from: {.path {secondary_path}{schema_name}}"
+      ))
+      schema_def <- fallback_def
+    }
   }
-  
-  # Handle schema composition (allOf, oneOf, anyOf)
+
+  # Both failed - fatal error
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    cli::cli_abort(c(
+      "x" = "Cannot resolve schema reference: {.val {schema_ref}}",
+      "i" = "Tried: {.path {primary_path}{schema_name}}, {.path {secondary_path}{schema_name}}",
+      "i" = "Available in primary: {.val {names(primary_container)}}",
+      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+    ))
+  }
+
+  # Warn if resolved schema is empty
+  if (length(schema_def) == 0 || (is.null(schema_def$type) && is.null(schema_def$properties) && is.null(schema_def[["$ref"]]))) {
+    cli::cli_warn(c(
+      "!" = "Resolved schema is empty: {.val {schema_ref}}",
+      "i" = "Schema exists but has no type, properties, or nested $ref",
+      "i" = "Treating as valid but may indicate schema authoring issue"
+    ))
+  }
+
+  # Handle schema composition (allOf, oneOf, anyOf) - recurse with depth tracking
   if (!is.null(schema_def[["allOf"]])) {
-    return(resolve_schema_ref(schema_def[["allOf"]][[1]], components, max_depth, depth + 1))
+    return(resolve_schema_ref(schema_def[["allOf"]][[1]], components, schema_version, max_depth, depth + 1, endpoint_context))
   }
-  
+
+  # Handle nested $ref in resolved schema
+  if (!is.null(schema_def[["$ref"]])) {
+    return(resolve_schema_ref(schema_def[["$ref"]], components, schema_version, max_depth, depth + 1, endpoint_context))
+  }
+
   # Return resolved schema
   schema_def
 }
@@ -382,7 +444,7 @@ extract_body_properties <- function(request_body, components, schema_version = N
   
   # Resolve reference if present
   if (!is.null(json_schema[["$ref"]])) {
-    json_schema <- resolve_schema_ref(json_schema[["$ref"]], components, max_depth = 5)
+    json_schema <- resolve_schema_ref(json_schema[["$ref"]], components, schema_version, max_depth = 3)
   }
   
   # Check schema type
@@ -416,7 +478,7 @@ extract_body_properties <- function(request_body, components, schema_version = N
     
     # If items is a reference, resolve it
     if (!is.null(items[["$ref"]])) {
-      resolved <- resolve_schema_ref(items[["$ref"]], components, max_depth = 5)
+      resolved <- resolve_schema_ref(items[["$ref"]], components, schema_version, max_depth = 3)
       
       # If resolved is object with properties, extract them
       if (!is.null(resolved[["properties"]])) {
@@ -532,7 +594,7 @@ extract_body_properties <- function(request_body, components, schema_version = N
 
 # Extract query parameters with schema reference resolution
 # Flattens referenced schemas into individual query parameters
-extract_query_params_with_refs <- function(parameters, components, max_depth = 5) {
+extract_query_params_with_refs <- function(parameters, components, schema_version = NULL, max_depth = 3) {
   result_names <- character(0)
   result_metadata <- list()
   
@@ -552,7 +614,7 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
     
     if (!is.null(schema_ref) && nzchar(schema_ref)) {
       # Resolve the schema reference
-      resolved <- resolve_schema_ref(schema_ref, components, max_depth, depth = 0)
+      resolved <- resolve_schema_ref(schema_ref, components, schema_version, max_depth, depth = 0)
       
       # Check if resolved schema has properties (object)
       properties <- resolved[["properties"]] %||% list()
@@ -581,7 +643,7 @@ extract_query_params_with_refs <- function(parameters, components, max_depth = 5
           prop_ref <- prop[["$ref"]]
           if (!is.null(prop_ref) && nzchar(prop_ref)) {
             # Resolve the nested $ref
-            prop <- resolve_schema_ref(prop_ref, components, max_depth, 1)
+            prop <- resolve_schema_ref(prop_ref, components, schema_version, max_depth, 1)
           }
           
           # Extract property metadata first
