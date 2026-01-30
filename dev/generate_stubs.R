@@ -83,6 +83,62 @@ reset_endpoint_tracking()
 # Helper Functions
 # ==============================================================================
 
+#' Select schema files with optional stage-based prioritization
+#'
+#' For schemas with multiple stage variants (e.g., chemi-mordred-prod.json,
+#' chemi-mordred-staging.json), selects the highest priority stage per domain.
+#'
+#' @param pattern Regex pattern to match schema files (e.g., "^chemi-.*\\.json$")
+#' @param exclude_pattern Optional pattern to exclude (e.g., "ui"). NULL to skip.
+#' @param stage_priority Character vector of stage names in priority order.
+#'   NULL for schemas without stage variants (ct, cc).
+#' @param schema_dir Path to schema directory. Defaults to here::here("schema").
+#' @return Character vector of selected filenames (not full paths)
+select_schema_files <- function(
+  pattern,
+  exclude_pattern = NULL,
+  stage_priority = NULL,
+  schema_dir = NULL
+) {
+  if (is.null(schema_dir)) schema_dir <- here::here("schema")
+
+  # List matching files
+  files <- list.files(path = schema_dir, pattern = pattern, full.names = FALSE)
+
+  if (length(files) == 0) return(character(0))
+
+  # Apply exclusion filter
+  if (!is.null(exclude_pattern) && nzchar(exclude_pattern)) {
+    files <- files[!grepl(exclude_pattern, files, ignore.case = TRUE)]
+  }
+
+  if (length(files) == 0) return(character(0))
+
+  # Stage-based selection (if stage_priority provided)
+  if (!is.null(stage_priority)) {
+    schema_meta <- tibble(file = files) %>%
+      tidyr::separate_wider_delim(
+        cols = file,
+        delim = "-",
+        names = c("origin", "domain", "stage"),
+        cols_remove = FALSE
+      ) %>%
+      mutate(
+        stage = str_remove(stage, "\\.json$"),
+        stage = factor(stage, levels = stage_priority)
+      )
+
+    files <- schema_meta %>%
+      group_by(domain) %>%
+      arrange(stage, .by_group = TRUE) %>%
+      slice(1) %>%
+      ungroup() %>%
+      pull(file)
+  }
+
+  files
+}
+
 #' Generate stubs for CompTox Dashboard API
 #' @return tibble with scaffold results
 generate_ct_stubs <- function() {
@@ -164,11 +220,11 @@ generate_ct_stubs <- function() {
 generate_chemi_stubs <- function() {
   cli_h2("Cheminformatics (chemi_*)")
 
-  # Check for schema files first
-  chemi_schema_files <- list.files(
-    path = here::here('schema'),
+  # Select schema files with stage prioritization
+  chemi_schema_files <- select_schema_files(
     pattern = "^chemi-.*\\.json$",
-    full.names = FALSE
+    exclude_pattern = "ui",
+    stage_priority = c("prod", "staging", "dev")
   )
 
   if (length(chemi_schema_files) == 0) {
@@ -178,9 +234,19 @@ generate_chemi_stubs <- function() {
 
   cli_alert_info("Found {length(chemi_schema_files)} chemi schema file(s)")
 
-  # Parse all chemi schemas
+  # Parse all schemas using openapi_to_spec directly
   chemi_endpoints <- tryCatch({
-    parse_chemi_schemas() %>%
+    map(
+      chemi_schema_files,
+      ~ {
+        openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+        spec <- openapi_to_spec(openapi)
+        spec$source_file <- .x
+        spec
+      },
+      .progress = FALSE
+    ) %>%
+      list_rbind() %>%
       filter(
         str_detect(method, 'GET|POST'),
         !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE)
@@ -248,6 +314,12 @@ generate_chemi_stubs <- function() {
 
   # Generate stubs
   chemi_spec_with_text <- render_endpoint_stubs(chemi_endpoints_to_build, config = chemi_config)
+
+  # Check if any stubs were generated (render may skip endpoints with empty schemas)
+  if (nrow(chemi_spec_with_text) == 0) {
+    cli_alert_warning("No chemi stubs generated (all skipped)")
+    return(tibble(action = character(), file = character()))
+  }
 
   # Aggregate by file (multiple functions per file)
   chemi_spec_aggregated <- chemi_spec_with_text %>%
