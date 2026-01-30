@@ -1,0 +1,123 @@
+# GitHub Actions workflow for pipeline integration tests
+name: Pipeline Integration Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      rerecord_cassettes:
+        description: 'Re-record VCR cassettes (requires API key)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  pipeline-tests:
+    runs-on: ubuntu-latest
+    name: Integration Tests & Coverage
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      ctx_api_key: ${{ secrets.CTX_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::covr
+            any::testthat
+            any::vcr
+            any::withr
+            any::here
+            any::jsonlite
+
+      - name: Delete cassettes if re-recording
+        if: github.event.inputs.rerecord_cassettes == 'true'
+        run: rm -rf tests/testthat/fixtures/_vcr/integration-*.yml
+
+      - name: Run pipeline integration tests
+        id: integration-tests
+        run: |
+          Rscript -e 'devtools::test(filter = "pipeline")'
+        continue-on-error: true
+
+      - name: Check R/ coverage (>= 75%)
+        id: r-coverage
+        run: |
+          Rscript -e '
+            r_cov <- covr::package_coverage()
+            r_pct <- covr::percent_coverage(r_cov)
+            cat(sprintf("\n📊 R/ Coverage: %.2f%%\n", r_pct))
+            if (r_pct < 75) {
+              cat("❌ FAIL: R/ coverage below 75% threshold (rOpenSci requirement)\n")
+              quit(status = 1)
+            }
+            cat("✅ R/ coverage meets rOpenSci requirement\n")
+          '
+
+      - name: Check dev/ coverage (>= 80%) - GHA only, not sent to Codecov
+        id: dev-coverage
+        run: |
+          Rscript -e '
+            # Note: dev/ coverage is GHA-only enforcement, not uploaded to Codecov
+            # dev/ is internal tooling, Codecov focuses on shipped R/ package code
+            dev_files <- list.files("dev/endpoint_eval", pattern = "\\.R$", full.names = TRUE)
+            dev_tests <- list.files("tests/testthat", pattern = "^test-pipeline", full.names = TRUE)
+            dev_cov <- covr::file_coverage(source_files = dev_files, test_files = dev_tests)
+            dev_pct <- covr::percent_coverage(dev_cov)
+            cat(sprintf("\n📊 dev/endpoint_eval/ Coverage: %.2f%%\n", dev_pct))
+            if (dev_pct < 80) {
+              cat("❌ FAIL: dev/ coverage below 80% threshold (internal target)\n")
+              quit(status = 1)
+            }
+            cat("✅ dev/ coverage meets internal target\n")
+          '
+
+      - name: Upload R/ coverage to Codecov (dev/ excluded intentionally)
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+      - name: Upload failure artifacts
+        if: always() && (steps.integration-tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-failures-${{ github.run_id }}
+          path: |
+            tests/testthat/failures/*.R
+            tests/testthat/failures/*.txt
+          retention-days: 5
+          if-no-files-found: ignore
+
+      - name: Fail if tests failed
+        if: steps.integration-tests.outcome == 'failure'
+        run: exit 1
+
+      - name: Create issue on main branch failure
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: dacbd/create-issue-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Pipeline tests failed on main branch
+          body: |
+            ## Pipeline Integration Test Failure
+
+            The pipeline integration tests failed on the main branch.
+
+            **Failed Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            **Commit:** ${{ github.sha }}
+
+            Please investigate the failure artifacts or re-run the workflow.
+          labels: bug,CI,pipeline
