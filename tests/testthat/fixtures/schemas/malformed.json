@@ -1,0 +1,8 @@
+{
+  "not_a_valid_schema": true,
+  "missing": [
+    "openapi",
+    "swagger",
+    "paths"
+  ]
+}
