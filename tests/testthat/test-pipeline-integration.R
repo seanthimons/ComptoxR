@@ -15,7 +15,7 @@ describe("E2E: CompTox Dashboard Pipeline", {
     skip_on_cran()
 
     # Skip if no cassette AND no API key (first-run scenario)
-    cassette_path <- here::here("tests/testthat/fixtures/_vcr/integration-ctx-hazard.yml")
+    cassette_path <- here::here("tests/testthat/fixtures/integration-ctx-hazard.yml")
     has_cassette <- file.exists(cassette_path)
     has_api_key <- nzchar(Sys.getenv("ctx_api_key"))
     skip_if(!has_cassette && !has_api_key,
@@ -161,7 +161,7 @@ describe("E2E: Cheminformatics Pipeline", {
     skip_on_cran()
 
     # Skip if no cassette AND no API key (first-run scenario)
-    cassette_path <- here::here("tests/testthat/fixtures/_vcr/integration-chemi-safety.yml")
+    cassette_path <- here::here("tests/testthat/fixtures/integration-chemi-safety.yml")
     has_cassette <- file.exists(cassette_path)
     has_api_key <- nzchar(Sys.getenv("ctx_api_key"))
     skip_if(!has_cassette && !has_api_key,
