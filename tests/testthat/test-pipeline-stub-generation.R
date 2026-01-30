@@ -233,6 +233,7 @@ describe("build_function_stub", {
     defaults$path_param_info$primary_param <- "dtxsid"
     defaults$path_param_info$fn_signature <- "dtxsid"
     defaults$path_param_info$param_docs <- "#' @param dtxsid Chemical identifier\n"
+    defaults$request_type <- "path"  # Use path type for path param test
 
     stub <- do.call(build_function_stub, defaults)
 
@@ -290,6 +291,7 @@ describe("build_function_stub", {
 
     defaults <- create_stub_defaults()
     defaults$config$wrapper_function <- "generic_chemi_request"
+    defaults$method <- "POST"  # Chemi endpoints use POST
     defaults$request_type <- "json"
     defaults$body_param_info$has_params <- TRUE
     defaults$body_param_info$primary_param <- "query"
