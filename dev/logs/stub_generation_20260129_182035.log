@@ -1,8 +1,0 @@
-Stub Generation Report - 2026-01-29 18:20:35.995043
-Skipped: 1
-Suspicious: 0
-
-SKIPPED ENDPOINTS:
-
-  POST predictor/predict [chemi-predictor-staging.json] - No query params, no path params, no properties, ref, or items
-
