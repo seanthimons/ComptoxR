@@ -1,0 +1,46 @@
+# Codecov configuration for ComptoxR
+# https://docs.codecov.com/docs/codecov-yaml
+#
+# COVERAGE STRATEGY:
+# - R/ package code: Measured by Codecov (this config) + GHA workflow
+# - dev/ internal tooling: Measured by GHA workflow ONLY (not Codecov)
+#
+# dev/ is intentionally ignored here because it's internal tooling,
+# not part of the shipped R package. GHA workflow enforces dev/ >= 80%
+# separately as an internal quality gate.
+
+codecov:
+  require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...90"
+
+  status:
+    project:
+      default:
+        target: auto         # Compare against base commit
+        threshold: 1%        # Allow 1% drop without failing
+        informational: false # Block PR if fails
+
+    patch:
+      default:
+        target: 80%          # New code must have 80% coverage
+        threshold: 0%        # No wiggle room for new code
+        informational: false
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+
+# dev/ excluded intentionally - internal tooling, not shipped package code
+# dev/ coverage is enforced in GHA workflow (>=80%) as separate quality gate
+ignore:
+  - "tests/**"
+  - "data-raw/**"
+  - "inst/**"
+  - "dev/**"        # dev/ coverage checked in GHA, not Codecov
+  - "man/**"
+  - "vignettes/**"
