@@ -88,6 +88,10 @@ reset_endpoint_tracking()
 #' For schemas with multiple stage variants (e.g., chemi-mordred-prod.json,
 #' chemi-mordred-staging.json), selects the highest priority stage per domain.
 #'
+#' WHY THIS EXISTS: Extracted from generate_chemi_stubs() for reusability (EXTRACT-HELPER decision).
+#' Chemi microservices have multiple deployment stages per domain, requiring stage-based selection.
+#' CT/CC APIs only have prod schemas, so stage_priority is NULL for those.
+#'
 #' @param pattern Regex pattern to match schema files (e.g., "^chemi-.*\\.json$")
 #' @param exclude_pattern Optional pattern to exclude (e.g., "ui"). NULL to skip.
 #' @param stage_priority Character vector of stage names in priority order.
@@ -115,6 +119,11 @@ select_schema_files <- function(
   if (length(files) == 0) return(character(0))
 
   # Stage-based selection (if stage_priority provided)
+  # STAGE PRIORITY LOGIC:
+  # For chemi microservices, each domain (amos, rdkit, mordred, etc.) may have
+  # multiple schemas: chemi-{domain}-prod.json, chemi-{domain}-staging.json, chemi-{domain}-dev.json
+  # We select the BEST available stage per domain using the priority order.
+  # Example: If prod exists, use it. If only staging exists, use that.
   if (!is.null(stage_priority)) {
     schema_meta <- tibble(file = files) %>%
       tidyr::separate_wider_delim(
@@ -125,13 +134,14 @@ select_schema_files <- function(
       ) %>%
       mutate(
         stage = str_remove(stage, "\\.json$"),
-        stage = factor(stage, levels = stage_priority)
+        stage = factor(stage, levels = stage_priority)  # Factor ordering = priority
       )
 
+    # Group by domain, sort by stage priority, take first (highest priority)
     files <- schema_meta %>%
       group_by(domain) %>%
       arrange(stage, .by_group = TRUE) %>%
-      slice(1) %>%
+      slice(1) %>%  # Take highest priority stage per domain
       ungroup() %>%
       pull(file)
   }
@@ -235,11 +245,16 @@ generate_chemi_stubs <- function() {
   cli_alert_info("Found {length(chemi_schema_files)} chemi schema file(s)")
 
   # Parse all schemas using openapi_to_spec directly
+  # UNIFIED PIPELINE (v1.6 - UNIFY-CHEMI decision):
+  # Previously used parse_chemi_schemas() which was chemi-specific.
+  # Now calls openapi_to_spec() directly, same as generate_ct_stubs() and generate_cc_stubs().
+  # This ensures consistent Swagger 2.0 handling across all generators.
   chemi_endpoints <- tryCatch({
     map(
       chemi_schema_files,
       ~ {
         openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+        # openapi_to_spec handles both Swagger 2.0 (amos, rdkit, mordred) and OpenAPI 3.0
         spec <- openapi_to_spec(openapi)
         spec$source_file <- .x
         spec
@@ -249,7 +264,7 @@ generate_chemi_stubs <- function() {
       list_rbind() %>%
       filter(
         str_detect(method, 'GET|POST'),
-        !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE)
+        !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE)  # Exclude admin/UI routes
       ) %>%
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),

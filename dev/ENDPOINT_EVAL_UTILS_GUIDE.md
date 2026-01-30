@@ -1026,9 +1026,13 @@ chemi_rq <- function(query) {
 1.  **Inspect parsed schema with preprocessing:**
 
     ``` r
+    # Load utilities
+    source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
+
     spec <- openapi_to_spec("schema/chemi-hazard-prod.json", preprocess = TRUE)
     View(spec)
-    
+
     # Check new columns
     spec %>% select(route, method, request_type, body_schema_full, body_item_type)
     ```
@@ -1043,15 +1047,18 @@ chemi_rq <- function(query) {
 3.  **Test query parameter $ref resolution:**
 
     ``` r
-    source("endpoint_eval_utils.R")
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
     openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
-    
+
+    # Detect version
+    schema_version <- detect_schema_version(openapi)
+
     # Find an endpoint with query params that have $ref
     params <- openapi$paths[["/api/resolver/universalharvest"]]$post$parameters
     components <- openapi$components
-    
+
     # Test the extraction
-    result <- extract_query_params_with_refs(params, components)
+    result <- extract_query_params_with_refs(params, components, schema_version)
     print(result$names)     # Flattened parameter names with dot notation
     print(result$metadata)  # Metadata for each parameter
     ```
@@ -1492,7 +1499,19 @@ flowchart TD
    - `is_body_only`, `is_query_only`, `has_additional_params`
    - `primary_param`, `fn_signature`
 3. **Test schema changes in isolation:** Modify a copy of the OpenAPI JSON to test edge cases
-4. **Review glue templates:** The actual code is generated via glue() - check line 1609+ for templates
+4. **Review glue templates:** The actual code is generated via glue() - check `dev/endpoint_eval/07_stub_generation.R` for templates
+5. **Understand the v1.5-v1.6 architecture evolution:**
+   - **v1.5 (Swagger 2.0 support):** Added version detection, Swagger 2.0 body extraction, fallback reference resolution
+   - **v1.6 (Pipeline unification - UNIFY-CHEMI decision):** Eliminated `parse_chemi_schemas()`, made `generate_chemi_stubs()` call `openapi_to_spec()` directly
+   - **Why unify?** Reduces code duplication, ensures consistent Swagger 2.0 handling, simplifies maintenance
+6. **Schema file selection strategy:**
+   - Extracted `select_schema_files()` as reusable helper (EXTRACT-HELPER decision)
+   - Stage prioritization only for chemi schemas (prod > staging > dev)
+   - CT/CC schemas use simple pattern matching (always prod suffix)
+7. **When adding new schema support:**
+   - Check version with `detect_schema_version()` first
+   - Add Swagger 2.0 test cases if needed
+   - Update fallback chains if using non-standard reference paths
 
 ### Tips for Junior Developers
 
@@ -1501,8 +1520,16 @@ flowchart TD
 3. **Compare working examples:** Find a similar working function and compare its schema vs generated code
 4. **Check one endpoint at a time:**
    ```r
-   # Filter to single endpoint for testing
+   # Load utilities
+   source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+   source(file.path("dev", "endpoint_eval", "07_stub_generation.R"))
+
+   # Parse schema and filter to single endpoint
+   openapi <- jsonlite::fromJSON("schema/chemi-hazard-prod.json", simplifyVector = FALSE)
+   eps <- openapi_to_spec(openapi)
    test_ep <- eps %>% filter(route == "your-specific-route")
+
+   # Generate stub
    stub <- render_endpoint_stubs(test_ep, config = chemi_config)
    cat(stub$text)
    ```
@@ -1510,4 +1537,9 @@ flowchart TD
    - GET with path params? (batch_limit = 1)
    - GET with query params only? (batch_limit = 0)
    - POST with body? (batch_limit = NULL, might need wrap)
-6. **Read the flowcharts:** Start with the main processing flow, then dive into specific areas
+6. **Check schema version when debugging chemi endpoints:**
+   ```r
+   schema_version <- detect_schema_version(openapi)
+   # Swagger 2.0 uses definitions, OpenAPI 3.0 uses components
+   ```
+7. **Read the flowcharts:** Start with the main processing flow, then dive into specific areas
