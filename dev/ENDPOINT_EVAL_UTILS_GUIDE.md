@@ -52,6 +52,37 @@ schema_file → select_schema_files → schema_list → openapi_to_spec (per fil
 
 ------------------------------------------------------------------------
 
+## Schema Version Detection
+
+Before parsing, `openapi_to_spec()` detects the schema version to apply version-specific processing rules.
+
+### detect_schema_version()
+
+**Purpose:** Identifies whether the schema is Swagger 2.0 or OpenAPI 3.0
+
+**Detection logic:**
+1. Checks `swagger` field → If matches `^2\.` → Swagger 2.0
+2. Checks `openapi` field → If matches `^3\.` → OpenAPI 3.0
+3. Otherwise → Unknown version
+
+**Returns:** `list(version = "2.0" | "3.0.0", type = "swagger" | "openapi" | "unknown")`
+
+**Example:**
+```r
+openapi <- jsonlite::fromJSON("schema/chemi-amos-prod.json", simplifyVector = FALSE)
+version_info <- detect_schema_version(openapi)
+# Returns: list(version = "2.0", type = "swagger")
+```
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 251-262
+
+**Why it matters:**
+- Swagger 2.0 uses `definitions` for schemas, OpenAPI 3.0 uses `components/schemas`
+- Swagger 2.0 puts request body in `parameters` array, OpenAPI 3.0 uses `requestBody` object
+- Reference resolution needs version-aware fallback chains
+
+------------------------------------------------------------------------
+
 ## Schema Parsing Flow {#schema-parsing-flow}
 
 ### Step 0: Preprocess Schema (Optional)
@@ -202,6 +233,100 @@ The `get_response_schema_type()` function analyzes successful response schemas (
 
 ------------------------------------------------------------------------
 
+## Swagger 2.0 Support
+
+The stub generation pipeline fully supports Swagger 2.0 schemas, which are used by some cheminformatics microservices (AMOS, RDKit, Mordred).
+
+### Key Differences: OpenAPI 3.0 vs Swagger 2.0
+
+| Aspect | OpenAPI 3.0 | Swagger 2.0 |
+|--------|-------------|-------------|
+| **Root field** | `openapi: "3.0.0"` | `swagger: "2.0"` |
+| **Schema location** | `components.schemas` | `definitions` |
+| **Request body** | `requestBody` object | `parameters[]` with `in="body"` |
+| **Reference path** | `#/components/schemas/Name` | `#/definitions/Name` |
+| **Body constraints** | Multiple content types allowed | Single body parameter only |
+
+### Swagger 2.0 Processing Flow
+
+```mermaid
+flowchart TD
+    A[openapi_to_spec entry] --> B[detect_schema_version]
+    B --> C{Version type?}
+    C -->|swagger| D[Use definitions as components]
+    C -->|openapi| E[Use components.schemas]
+    D --> F[For each endpoint]
+    E --> F
+    F --> G{Method has body?}
+    G -->|Yes swagger| H[extract_swagger2_body_schema]
+    G -->|Yes openapi| I[extract_body_properties standard]
+    G -->|No| J[Skip body extraction]
+    H --> K[Find parameters with in=body]
+    K --> L[Extract schema property]
+    L --> M{Schema has $ref?}
+    M -->|Yes| N[resolve_swagger2_definition_ref]
+    M -->|No| O[Use inline schema]
+    N --> P[Extract properties from resolved schema]
+    O --> P
+    P --> Q[Build parameter metadata]
+    I --> Q
+    J --> Q
+```
+
+### Version-Aware Reference Resolution
+
+The `resolve_schema_ref()` function uses a version-aware fallback chain:
+
+**For Swagger 2.0:**
+1. Try `#/definitions/{Name}` first (primary)
+2. Fallback to `#/components/schemas/{Name}` (for normalized schemas)
+
+**For OpenAPI 3.0:**
+1. Try `#/components/schemas/{Name}` first (primary)
+2. Fallback to `#/definitions/{Name}` (for legacy refs)
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 168-182
+
+**Why fallback matters:**
+- Some schemas mix conventions during migration
+- Normalization step may create `components.schemas` from Swagger 2.0 `definitions`
+- Robust resolution prevents failures on edge cases
+
+**Logging:** Fallback usage is always logged with `cli::cli_alert_info()` for transparency
+
+### Implicit Object Type Detection
+
+Swagger 2.0 schemas often omit `type: "object"` when `properties` field is present. The pipeline detects this implicitly:
+
+```r
+# BODY-04: Implicit object detection
+has_properties <- !is.null(schema$properties) && length(schema$properties) > 0
+is_object <- (schema$type == "object") || (is.na(schema$type) && has_properties)
+```
+
+This handles schemas like:
+```json
+{
+  "properties": {
+    "dtxsids": {"type": "array"}
+  },
+  "required": ["dtxsids"]
+}
+```
+
+Even without explicit `"type": "object"`.
+
+### Which Schemas Use Swagger 2.0?
+
+**Cheminformatics microservices:**
+- AMOS (`chemi-amos-prod.json`)
+- RDKit (`chemi-rdkit-prod.json`)
+- Mordred (`chemi-mordred-prod.json`)
+
+**CompTox Dashboard and Common Chemistry:** Use OpenAPI 3.0
+
+------------------------------------------------------------------------
+
 ## POST Example Generation
 
 ### Dynamic Example Data
@@ -325,11 +450,37 @@ chemi_resolver_universalharvest <- function(
 
 ### Body Parameters
 
-For POST/PUT/PATCH endpoints, body parameters come from request body schemas:
+For POST/PUT/PATCH endpoints, body parameters come from request body schemas.
 
-1.  Schema references (`$ref`) are resolved from `#/components/schemas/`
-2.  Properties are extracted with their types, defaults, and required status
-3.  Required parameters come first in the function signature, then optional with defaults
+**Version-aware body extraction:**
+
+#### OpenAPI 3.0
+Body parameters extracted from `requestBody` object:
+1. Navigate: `requestBody → content → application/json → schema`
+2. Resolve `$ref` from `#/components/schemas/`
+3. Extract properties with types, defaults, and required status
+
+#### Swagger 2.0
+Body parameters extracted from `parameters` array using `extract_swagger2_body_schema()`:
+1. Find parameters with `in="body"`
+2. Extract `schema` property from body parameter
+3. Resolve `$ref` from `#/definitions/`
+4. Handle object schemas, array schemas, and simple types
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 267-404
+
+**Key differences:**
+
+| Feature | OpenAPI 3.0 | Swagger 2.0 |
+|---------|-------------|-------------|
+| Location | `requestBody` object | `parameters[]` array with `in="body"` |
+| Reference path | `#/components/schemas/` | `#/definitions/` |
+| Multiple bodies | Allowed (rare) | Forbidden (max 1) |
+| Mutual exclusivity | N/A | Cannot mix body + formData |
+
+**Validation (Swagger 2.0 only):**
+- **BODY-05**: Warns if multiple body parameters detected (spec violation)
+- **BODY-06**: Warns if both body and formData parameters present (spec violation)
 
 ### Parameter Strategy
 
@@ -852,11 +1003,14 @@ chemi_rq <- function(query) {
 | `preprocess_schema()` | Filter endpoints and reduce schema complexity | Schema file path | Filtered OpenAPI list |
 | `extract_referenced_schemas()` | Collect all $ref values from paths | OpenAPI paths | Character vector of schema names |
 | `filter_components_by_refs()` | Keep only referenced schemas | Components, refs | Filtered components |
-| `resolve_schema_ref()` | Resolve $ref with circular detection | Schema ref, components, max_depth | Resolved schema definition |
-| `extract_body_properties()` | Extract body schema metadata | Request body, components | Schema structure with properties |
-| `extract_query_params_with_refs()` | Resolve and flatten query params | Parameters, components | `list(names, metadata)` |
+| `detect_schema_version()` | Detect Swagger 2.0 vs OpenAPI 3.0 | OpenAPI spec | `list(version, type)` |
+| `resolve_schema_ref()` | Resolve $ref with version-aware fallback | Schema ref, components, schema_version | Resolved schema definition |
+| `extract_swagger2_body_schema()` | Extract body from Swagger 2.0 parameters | Parameters array, definitions | Schema structure with properties |
+| `resolve_swagger2_definition_ref()` | Resolve Swagger 2.0 definition refs | Ref string, definitions | Resolved schema definition |
+| `extract_body_properties()` | Extract body schema metadata (version-aware) | Request body/parameters, components, schema_version | Schema structure with properties |
+| `extract_query_params_with_refs()` | Resolve and flatten query params | Parameters, components, schema_version | `list(names, metadata)` |
 | `select_schema_files()` | Stage-based schema file selection | Pattern, stage priority | Character vector of filenames |
-| `openapi_to_spec()` | Parse single OpenAPI to spec | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type`, `request_type` |
+| `openapi_to_spec()` | Parse OpenAPI to spec (Swagger 2.0 & 3.0) | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type`, `request_type` |
 | `uses_chemical_schema()` | Check if body uses Chemical schema | Request body, OpenAPI spec | `TRUE` / `FALSE` |
 | `get_body_schema_type()` | Classify body schema type | Request body, OpenAPI spec | `"chemical_array"`, `"string_array"`, etc. |
 | `parse_path_parameters()` | Parse path params | Param string, metadata | Signature, calls, docs |
@@ -939,16 +1093,46 @@ chemi_rq <- function(query) {
 7.  **Debug schema resolution:**
 
     ``` r
-    source("endpoint_eval_utils.R")
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
     openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
-    
+
+    # Detect version first
+    schema_version <- detect_schema_version(openapi)
+    print(schema_version)
+
     # Manually resolve a schema reference
     resolved <- resolve_schema_ref(
       "#/components/schemas/UniversalHarvestRequest",
       openapi$components,
-      max_depth = 5
+      schema_version = schema_version,
+      max_depth = 3
     )
     print(resolved)
+    ```
+
+8.  **Debug Swagger 2.0 body extraction:**
+
+    ``` r
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
+
+    # Load a Swagger 2.0 schema
+    openapi <- jsonlite::fromJSON("schema/chemi-amos-prod.json", simplifyVector = FALSE)
+    schema_version <- detect_schema_version(openapi)
+
+    # Check if it's Swagger 2.0
+    if (schema_version$type == "swagger") {
+      # Extract body from parameters array
+      endpoint_op <- openapi$paths[["/api/amos/calculate"]]$post
+      body_params <- purrr::keep(endpoint_op$parameters, ~ .x[["in"]] == "body")
+      print(body_params)
+
+      # Extract body schema
+      body_schema <- extract_swagger2_body_schema(
+        endpoint_op$parameters,
+        openapi$definitions
+      )
+      print(body_schema)
+    }
     ```
 
 8.  **Add new schema patterns for resolver wrapping:**
@@ -1287,16 +1471,18 @@ flowchart TD
 
 | Issue | File | Function |
 |-------|------|----------|
-| Schema not loading | `chemi_endpoint_eval.R` | Filtering logic |
-| Schema preprocessing | `endpoint_eval_utils.R` | `preprocess_schema()` |
-| $ref resolution failing | `endpoint_eval_utils.R` | `resolve_schema_ref()` |
-| Query params not flattened | `endpoint_eval_utils.R` | `extract_query_params_with_refs()` |
-| batch_limit wrong | `endpoint eval.R` | batch_limit assignment |
-| Parameter sanitization | `endpoint_eval_utils.R` | `sanitize_param()` |
-| Wrapper selection | `endpoint_eval_utils.R` | GET override logic |
-| wrap logic | `endpoint_eval_utils.R` | `has_no_additional_params` |
-| Resolver detection | `endpoint_eval_utils.R` | `uses_chemical_schema()` |
-| Function naming | `chemi_endpoint_eval.R` | fn generation |
+| Schema not loading | `generate_stubs.R` | Filtering logic in generators |
+| Schema version detection | `01_schema_resolution.R` | `detect_schema_version()` |
+| Schema preprocessing | `01_schema_resolution.R` | `preprocess_schema()` |
+| Swagger 2.0 body extraction | `01_schema_resolution.R` | `extract_swagger2_body_schema()` |
+| $ref resolution failing | `01_schema_resolution.R` | `resolve_schema_ref()` |
+| Query params not flattened | `01_schema_resolution.R` | `extract_query_params_with_refs()` |
+| batch_limit wrong | `generate_stubs.R` | batch_limit assignment |
+| Parameter sanitization | `06_param_parsing.R` | `sanitize_param()` |
+| Wrapper selection | `07_stub_generation.R` | GET override logic |
+| wrap logic | `07_stub_generation.R` | `has_no_additional_params` |
+| Resolver detection | `04_openapi_parser.R` | `uses_chemical_schema()` |
+| Function naming | `generate_stubs.R` | fn generation |
 
 ### Tips for Senior Developers
 
