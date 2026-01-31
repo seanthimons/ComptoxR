@@ -78,3 +78,27 @@ load_fixture_schema <- function(filename) {
   path <- get_fixture_path(filename)
   jsonlite::fromJSON(path, simplifyVector = FALSE)
 }
+
+#' Get default stub generation configuration
+#'
+#' Returns the default configuration list expected by build_function_stub().
+#' This provides sensible defaults for generating API wrapper function stubs.
+#'
+#' @return A list with the following fields:
+#'   \item{wrapper_function}{The standard wrapper function to use ("generic_request")}
+#'   \item{example_query}{A well-known test chemical DTXSID ("DTXSID7020182" - Aspirin)}
+#'   \item{lifecycle_badge}{Default lifecycle badge for generated stubs ("experimental")}
+#'   \item{default_query_doc}{Default roxygen documentation for query parameter}
+#'   \item{example_dtxsids}{Optional vector of example DTXSIDs (NULL uses default sampling)}
+#'   \item{param_strategy}{Default parameter handling strategy ("extra_params")}
+#' @export
+get_stubgen_config <- function() {
+  list(
+    wrapper_function = "generic_request",
+    example_query = "DTXSID7020182",
+    lifecycle_badge = "experimental",
+    default_query_doc = "#' @param query A list of DTXSIDs to search for\n",
+    example_dtxsids = NULL,
+    param_strategy = "extra_params"
+  )
+}
