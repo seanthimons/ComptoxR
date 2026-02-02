@@ -82,25 +82,31 @@ pubchem_search <- function(query,
   
   endpoint <- paste(endpoint_parts, collapse = "/")
   
-  # Set up options for GET request with query parameter (for special SMILES)
-  options <- list()
+  # Build query parameters for special cases (SMILES with special characters)
+  query_params <- list()
   if (use_post && input_type == "smiles") {
-    options[[input_type]] <- query
+    query_params[[input_type]] <- query
     # Remove the encoded query from endpoint since we're using query parameter
     endpoint <- gsub(paste0("/", utils::URLencode(query, reserved = TRUE)), "", endpoint)
   }
   
   # Make the request using generic_request
+  # Pass query parameters via ... ellipsis (will be handled as query string parameters)
   result <- tryCatch({
-    generic_request(
-      query = NULL,  # We don't use query batching for external API
-      endpoint = endpoint,
-      method = "GET",
-      batch_limit = 0,  # Static endpoint
-      server = "https://pubchem.ncbi.nlm.nih.gov/rest/pug",
-      auth = FALSE,
-      tidy = TRUE,
-      options = options
+    do.call(
+      generic_request,
+      c(
+        list(
+          query = NULL,  # We don't use query batching for external API
+          endpoint = endpoint,
+          method = "GET",
+          batch_limit = 0,  # Static endpoint
+          server = "https://pubchem.ncbi.nlm.nih.gov/rest/pug",
+          auth = FALSE,
+          tidy = TRUE
+        ),
+        query_params  # Add query parameters dynamically
+      )
     )
   }, error = function(e) {
     cli::cli_warn("PubChem search failed: {e$message}")
