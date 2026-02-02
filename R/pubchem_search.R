@@ -191,8 +191,8 @@ pubchem_search_bulk <- function(queries,
     cli::cli_abort("output must be one of: {paste(valid_outputs, collapse = ', ')}")
   }
   
-  # Remove duplicates and empty values
-  queries <- unique(queries[!is.na(queries) & queries != ""])
+  # Remove duplicates and empty values (including whitespace-only strings)
+  queries <- unique(queries[!is.na(queries) & trimws(queries) != ""])
   
   if (length(queries) == 0) {
     cli::cli_warn("No valid queries provided after filtering")
@@ -210,7 +210,8 @@ pubchem_search_bulk <- function(queries,
   
   # Perform individual searches with progress tracking
   results <- purrr::map_dfr(queries, function(q) {
-    # Add small delay to respect PubChem rate limits (max 5 requests per second)
+    # Add small delay to respect PubChem rate limits 
+    # (max 5 requests per second = 0.2s per request, using 0.21s for safety margin)
     Sys.sleep(0.21)
     
     result <- pubchem_search(
