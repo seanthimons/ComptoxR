@@ -25,19 +25,19 @@ package_sitrep <- function() {
   
   # Helper function to add lines to log
   add_log <- function(...) {
-    log_lines <<- c(log_lines, paste0(...))
+    log_lines <<- c(log_lines, paste0(..., collapse = ""))
   }
   
   # Header
-  add_log("=" , rep("=", 70))
+  add_log(paste0(rep("=", 70), collapse = ""))
   add_log("ComptoxR Package Situation Report")
   add_log("Generated: ", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"))
-  add_log("=" , rep("=", 70))
+  add_log(paste0(rep("=", 70), collapse = ""))
   add_log("")
   
   # Package Version
   add_log("PACKAGE VERSION")
-  add_log("-" , rep("-", 70))
+  add_log(paste0(rep("-", 70), collapse = ""))
   pkg_version <- tryCatch(
     as.character(utils::packageVersion('ComptoxR')),
     error = function(e) "Unknown"
@@ -57,7 +57,7 @@ package_sitrep <- function() {
   
   # API Tokens Status
   add_log("API TOKENS STATUS")
-  add_log("-" , rep("-", 70))
+  add_log(paste0(rep("-", 70), collapse = ""))
   
   ctx_api_key <- Sys.getenv("ctx_api_key")
   ctx_key_set <- nzchar(ctx_api_key) && !is.na(ctx_api_key)
@@ -70,7 +70,7 @@ package_sitrep <- function() {
   
   # Server Paths
   add_log("CONFIGURED SERVER PATHS")
-  add_log("-" , rep("-", 70))
+  add_log(paste0(rep("-", 70), collapse = ""))
   
   servers <- list(
     "CompTox Dashboard API" = "ctx_burl",
@@ -92,7 +92,7 @@ package_sitrep <- function() {
   
   # Ping Test Results
   add_log("PING TEST RESULTS")
-  add_log("-" , rep("-", 70))
+  add_log(paste0(rep("-", 70), collapse = ""))
   
   # Define ping endpoints
   ping_endpoints <- list(
@@ -258,14 +258,14 @@ package_sitrep <- function() {
   
   # Local Fallback Implementation (Future Development)
   add_log("LOCAL FALLBACK IMPLEMENTATION")
-  add_log("-" , rep("-", 70))
+  add_log(paste0(rep("-", 70), collapse = ""))
   add_log("Status: Not yet implemented (future development)")
   add_log("")
   
   # Footer
-  add_log("=" , rep("=", 70))
+  add_log(paste0(rep("=", 70), collapse = ""))
   add_log("End of Report")
-  add_log("=" , rep("=", 70))
+  add_log(paste0(rep("=", 70), collapse = ""))
   
   # Write to log file
   writeLines(log_lines, log_filename)
