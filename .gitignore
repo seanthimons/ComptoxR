@@ -64,3 +64,5 @@ temp.R
 !.github
 !.gitignore
 
+# Log files from package_sitrep
+*.log
