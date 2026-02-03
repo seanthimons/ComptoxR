@@ -36,8 +36,8 @@ test_that("package_sitrep creates timestamped log file", {
   withr::with_tempdir({
     result <- package_sitrep()
     
-    # Check log file naming pattern
-    expect_match(result$log_file, "^comptoxr_sitrep_\\d{8}_\\d{6}\\.log$")
+    # Check log file naming pattern (use basename to handle full paths)
+    expect_match(basename(result$log_file), "^comptoxr_sitrep_\\d{8}_\\d{6}\\.log$")
   })
 })
 

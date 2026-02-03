@@ -137,7 +137,7 @@ package_sitrep <- function() {
       req <- httr2::request(full_url) %>%
         httr2::req_method("HEAD") %>%
         httr2::req_timeout(5) %>%
-        httr2::req_error(is_error = \(resp) FALSE)
+        httr2::req_error(is_error = function(resp) FALSE)
       
       start_time <- Sys.time()
       resp <- httr2::req_perform(req)
@@ -204,6 +204,8 @@ package_sitrep <- function() {
     if (nzchar(chemi_url)) {
       start_time <- Sys.time()
       resp <- httr2::request(paste0(chemi_url, "/services/cim_component_info")) %>%
+        httr2::req_timeout(5) %>%
+        httr2::req_error(is_error = function(resp) FALSE) %>%
         httr2::req_perform()
       end_time <- Sys.time()
       
