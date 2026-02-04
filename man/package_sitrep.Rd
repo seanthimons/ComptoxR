@@ -8,8 +8,8 @@ package_sitrep()
 }
 \value{
 Invisibly returns a list with diagnostic information. Also writes
-  a timestamped .log file to the current working directory and displays
-  information to the console.
+a timestamped .log file to the current working directory and displays
+information to the console.
 }
 \description{
 Creates a diagnostic log file with useful troubleshooting information including
