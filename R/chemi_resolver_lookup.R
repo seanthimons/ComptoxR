@@ -27,7 +27,7 @@ chemi_resolver_lookup <- function(query, idType = "AnyId", fuzzy = "Not", mol = 
     batch_limit = 0,
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE,
+    tidy = TRUE,
     options = options
   )
 
@@ -86,7 +86,7 @@ chemi_resolver_lookup_bulk <- function(ids, idsType = "AnyId", fuzzy = "Not", mo
     options = options,
     sid_label = "ids",
     array_payload = TRUE,
-    tidy = FALSE
+    tidy = TRUE
   )
   
   # Additional post-processing can be added here
