@@ -13,6 +13,7 @@ jobs:
   check-schemas:
     runs-on: ubuntu-latest
     name: Check for Schema Updates
+    timeout-minutes: 15
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
@@ -70,21 +71,40 @@ jobs:
           fi
 
       - name: Download schemas
+        id: download
+        continue-on-error: true
         run: |
           pkgload::load_all()
-          ct_schema()
-          chemi_schema()
-          cc_schema()
+          download_ok <- TRUE
+          tryCatch(ct_schema(timeout = 60), error = function(e) {
+            cli::cli_alert_warning("ct_schema failed: {conditionMessage(e)}")
+            download_ok <<- FALSE
+          })
+          tryCatch(chemi_schema(timeout = 60), error = function(e) {
+            cli::cli_alert_warning("chemi_schema failed: {conditionMessage(e)}")
+            download_ok <<- FALSE
+          })
+          tryCatch(cc_schema(timeout = 60), error = function(e) {
+            cli::cli_alert_warning("cc_schema failed: {conditionMessage(e)}")
+            download_ok <<- FALSE
+          })
+          if (!download_ok) {
+            cli::cli_alert_warning("One or more schema downloads failed - workflow will continue with available schemas")
+          }
         shell: Rscript {0}
 
       - name: Compute schema hashes
         id: hash
+        continue-on-error: true
         run: >
           schema_files <- list.files("schema", pattern = "\\.json$", full.names =
           TRUE)
 
           if (length(schema_files) == 0) {
-            cli::cli_abort("No schema files found!")
+            cli::cli_alert_warning("No schema files found - skipping hash computation")
+            # Write empty hashes CSV so downstream steps don't fail
+            write.csv(data.frame(file = character(), hash = character()), "schema_hashes.csv", row.names = FALSE, quote = FALSE)
+            quit(save = "no", status = 0)
           }
 
           hashes <- data.frame(
@@ -100,6 +120,7 @@ jobs:
 
       - name: Diff schemas
         id: diff
+        continue-on-error: true
         run: |
           source("dev/endpoint_eval/04_openapi_parser.R")
           source("dev/diff_schemas.R")
@@ -168,6 +189,16 @@ jobs:
             echo "Changes detected:"
             git diff --stat
             git status --short
+          fi
+
+      - name: Workflow status summary
+        if: always()
+        run: |
+          if [ "${{ steps.download.outcome }}" = "failure" ]; then
+            echo "::warning::Schema download had failures - some schemas may be missing"
+          fi
+          if [ "${{ steps.diff.outcome }}" = "failure" ]; then
+            echo "::warning::Schema diff encountered errors"
           fi
 
       - name: Prepare PR body
