@@ -26,7 +26,7 @@ Fix the broken schema-check GitHub Action workflow by resolving the unicode_map 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 16: CI Fix** - Fix unicode_map dependency breaking load_all() in CI
-- [ ] **Phase 17: Schema Diffing** - Add endpoint-level diff with breaking change detection
+- [x] **Phase 17: Schema Diffing** - Add endpoint-level diff with breaking change detection
 - [ ] **Phase 18: Reliability** - Add timeout protection and graceful failure handling
 
 ## Phase Details
@@ -56,8 +56,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 17-01-PLAN.md — Create schema diff engine with endpoint-level comparison and breaking change classification
-- [ ] 17-02-PLAN.md — Integrate diff engine into CI workflow and update PR body template
+- [x] 17-01-PLAN.md — Create schema diff engine with endpoint-level comparison and breaking change classification
+- [x] 17-02-PLAN.md — Integrate diff engine into CI workflow and update PR body template
 
 ### Phase 18: Reliability
 **Goal**: Workflow handles API failures gracefully without blocking development
@@ -68,10 +68,10 @@ Plans:
   2. Workflow completes with warning status when schemas unavailable (not failure status)
   3. Expected 404s from brute-force path discovery are logged as info, not errors
   4. Actual API failures (network errors, 500s) are clearly reported as warnings
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 18-01: TBD
+- [ ] 18-01-PLAN.md — Add timeout protection to schema downloads and make CI workflow resilient to failures
 
 ## Progress
 
@@ -81,5 +81,5 @@ Phases execute in numeric order: 16 → 17 → 18
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 16. CI Fix | v1.9 | 1/1 | ✓ Complete | 2026-02-12 |
-| 17. Schema Diffing | v1.9 | 0/2 | Not started | - |
-| 18. Reliability | v1.9 | 0/? | Not started | - |
+| 17. Schema Diffing | v1.9 | 2/2 | ✓ Complete | 2026-02-12 |
+| 18. Reliability | v1.9 | 0/1 | Not started | - |

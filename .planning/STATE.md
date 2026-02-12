@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-12)
 
 **Core value:** Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
-**Current focus:** Phase 16 complete — ready for Phase 17
+**Current focus:** Phase 17 complete — ready for Phase 18
 
 ## Current Position
 
 Phase: 17 of 18 (Schema Diffing)
 Plan: 2/2 complete
-Status: Phase 17 complete — ready for Phase 18 or next milestone
+Status: Phase 17 verified and complete — ready for Phase 18
 Last activity: 2026-02-12 — Completed 17-02-PLAN.md (CI workflow integration)
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 67%
 
 ## Performance Metrics
 
