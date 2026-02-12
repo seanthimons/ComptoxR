@@ -4,7 +4,12 @@
 \alias{chemi_schema}
 \title{Download API schemas}
 \usage{
-chemi_schema(record = FALSE)
+chemi_schema(record = FALSE, timeout = 30)
+}
+\arguments{
+\item{record}{Logical. If TRUE, returns a tibble logging all download attempts.}
+
+\item{timeout}{Maximum time (in seconds) to wait for each download. Default: 30.}
 }
 \value{
 Invisibly sets the server to production and returns \code{NULL}.

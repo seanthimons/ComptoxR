@@ -6,13 +6,15 @@
 #' environment (production, staging, development). The schemas are saved in the
 #' 'schema' directory of the project.
 #'
+#' @param timeout Maximum time (in seconds) to wait for each download. Default: 30.
+#'
 #' @return Invisibly sets the server to production and returns `NULL`.
 #'
 #' @examples
 #' if (interactive()) {
 #'  ct_schema()
 #' }
-ct_schema <- function() {
+ct_schema <- function(timeout = 30) {
 	# Create schema directory if it doesn't exist
 	schema_dir <- here::here('schema')
 	if (!dir.exists(schema_dir)) {
@@ -32,31 +34,6 @@ ct_schema <- function() {
 		'exposure'
 	)
 
-	ping_url <- function(url) {
-		req <- httr2::request(url) %>%
-			httr2::req_method("HEAD") %>%
-			httr2::req_timeout(5) %>%
-			httr2::req_error(is_error = \(resp) FALSE)
-
-		resp <- try(httr2::req_perform(req), silent = TRUE)
-
-		if (inherits(resp, "try-error")) {
-			cli::cli_alert_warning("URL is not reachable, skipping download: {url}")
-			return(FALSE)
-		}
-
-		status <- httr2::resp_status(resp)
-
-		if (status >= 200 && status < 400) {
-			return(TRUE)
-		} else {
-			cli::cli_alert_warning(
-				"URL returned status {status}, skipping download: {url}"
-			)
-			return(FALSE)
-		}
-	}
-
 	map(
 		endpoints,
 		function(endpoint) {
@@ -64,18 +41,35 @@ ct_schema <- function() {
 				# Sets the path
 				ctx_server(idx)
 
-				url_to_check <- paste0(Sys.getenv('ctx_burl'), 'docs/', endpoint, '.json')
+				url <- paste0(Sys.getenv('ctx_burl'), 'docs/', endpoint, '.json')
+				destfile <- here::here('schema', paste0("ctx-", endpoint, '-', server, '.json'))
 
-				if (ping_url(url_to_check)) {
-					download.file(
-						url = url_to_check,
-						destfile = here::here(
-							'schema',
-							paste0("ctx-", endpoint, '-', server, '.json')
-						),
-						mode = 'wb'
-					)
-				}
+				tryCatch(
+					{
+						req <- httr2::request(url) %>%
+							httr2::req_timeout(timeout) %>%
+							httr2::req_error(is_error = \(resp) FALSE)
+
+						resp <- httr2::req_perform(req)
+						status <- httr2::resp_status(resp)
+
+						if (status >= 200 && status < 400) {
+							body_raw <- httr2::resp_body_raw(resp)
+							writeBin(body_raw, destfile)
+							cli::cli_alert_success("Downloaded {endpoint} schema from {server} server")
+						} else if (status >= 500) {
+							cli::cli_alert_warning("Server error ({status}) downloading {endpoint} from {server}")
+						} else {
+							cli::cli_alert_warning("HTTP {status} downloading {endpoint} from {server}")
+						}
+					},
+					httr2_timeout = function(e) {
+						cli::cli_alert_warning("Timeout downloading {endpoint} schema from {server} ({timeout}s limit)")
+					},
+					error = function(e) {
+						cli::cli_alert_warning("Network error downloading {endpoint} from {server}: {conditionMessage(e)}")
+					}
+				)
 			})
 		},
 		.progress = TRUE
@@ -92,13 +86,16 @@ ct_schema <- function() {
 #' environment (production, staging, development). The schemas are saved in the
 #' 'schema' directory of the project.
 #'
+#' @param record Logical. If TRUE, returns a tibble logging all download attempts.
+#' @param timeout Maximum time (in seconds) to wait for each download. Default: 30.
+#'
 #' @return Invisibly sets the server to production and returns `NULL`.
 #'
 #' @examples
 #' if (interactive()) {
 #'  chemi_schema()
 #' }
-chemi_schema <- function(record = FALSE) {
+chemi_schema <- function(record = FALSE, timeout = 30) {
 	# Create schema directory if it doesn't exist
 	schema_dir <- here::here('schema')
 	if (!dir.exists(schema_dir)) {
@@ -140,7 +137,7 @@ chemi_schema <- function(record = FALSE) {
 	# Attempt to GET and save a schema, returning list(success, status).
 	attempt_download <- function(url, endpoint, server) {
 		req <- httr2::request(url) %>%
-			httr2::req_timeout(10) %>%
+			httr2::req_timeout(timeout) %>%
 			httr2::req_error(is_error = \(resp) FALSE)
 
 		resp <- try(httr2::req_perform(req), silent = TRUE)
@@ -192,6 +189,8 @@ chemi_schema <- function(record = FALSE) {
 		return(list(success = TRUE, status = status))
 	}
 
+	any_schemas_downloaded <- FALSE
+
 	imap(
 		serv,
 		function(idx, server) {
@@ -199,44 +198,55 @@ chemi_schema <- function(record = FALSE) {
 			chemi_server(idx)
 
 			endpoints <-
-				try(
-					request(paste0(
-						Sys.getenv('chemi_burl'),
-						'/services/cim_component_info'
-					)) %>%
-						req_perform() %>%
-						resp_body_json() %>%
-						map(., ~ as_tibble(.x)) %>%
-						list_rbind() %>%
-						pull(name),
-					silent = TRUE
-				)
-
-			if (inherits(endpoints, "try-error")) {
-				cli::cli_alert_warning("Could not retrieve endpoints for {server} server. Attempting to use development server as a fallback.")
-				
-				# Set server to last in list (dev) and try again
-				chemi_server(last(serv))
-				
-				endpoints <-
-					try(
+				tryCatch(
+					{
 						request(paste0(
 							Sys.getenv('chemi_burl'),
 							'/services/cim_component_info'
 						)) %>%
+							req_timeout(timeout) %>%
 							req_perform() %>%
 							resp_body_json() %>%
 							map(., ~ as_tibble(.x)) %>%
 							list_rbind() %>%
-							pull(name),
-						silent = TRUE
+							pull(name)
+					},
+					error = function(e) {
+						cli::cli_alert_warning("Could not reach chemi server ({server}): {conditionMessage(e)}")
+						NULL
+					}
+				)
+
+			if (is.null(endpoints)) {
+				cli::cli_alert_warning("Could not retrieve endpoints for {server} server. Attempting to use development server as a fallback.")
+
+				# Set server to last in list (dev) and try again
+				chemi_server(last(serv))
+
+				endpoints <-
+					tryCatch(
+						{
+							request(paste0(
+								Sys.getenv('chemi_burl'),
+								'/services/cim_component_info'
+							)) %>%
+								req_timeout(timeout) %>%
+								req_perform() %>%
+								resp_body_json() %>%
+								map(., ~ as_tibble(.x)) %>%
+								list_rbind() %>%
+								pull(name)
+						},
+						error = function(e) {
+							NULL
+						}
 					)
-				
+
 				# Set server back to original for downloads
 				chemi_server(idx)
-				
-				if (inherits(endpoints, "try-error")) {
-					cli::cli_alert_danger("Fallback failed. Could not retrieve any endpoints for {server} server.")
+
+				if (is.null(endpoints)) {
+					cli::cli_alert_warning("Fallback failed. Could not retrieve any endpoints for {server} server.")
 					return()
 				}
 			}
@@ -286,6 +296,7 @@ chemi_schema <- function(record = FALSE) {
 					}
 					if (isTRUE(res_try$success)) {
 						cli::cli_alert_info("Downloaded schema for {endpoint} from {u}")
+						any_schemas_downloaded <<- TRUE
 						break
 					}
 				}
@@ -298,6 +309,11 @@ chemi_schema <- function(record = FALSE) {
 
 	# Reset to production server
 	chemi_server(1)
+
+	# Warn if no schemas were downloaded across all servers
+	if (!any_schemas_downloaded && !isTRUE(record)) {
+		cli::cli_alert_warning("No chemi schemas could be downloaded from any server")
+	}
 
 	if (isTRUE(record)) {
 		if (exists('.__chemi_schema_log', envir = .GlobalEnv)) {
@@ -318,13 +334,15 @@ chemi_schema <- function(record = FALSE) {
 #' This function downloads the JSON schemas for the CAS Common Chemistry API
 #' endpoints. The schemas are saved in the 'schema' directory of the project.
 #'
+#' @param timeout Maximum time (in seconds) to wait for each download. Default: 30.
+#'
 #' @return `NULL`.
 #'
 #' @examples
 #' if (interactive()) {
 #'  cc_schema()
 #' }
-cc_schema <- function() {
+cc_schema <- function(timeout = 30) {
 	# Create schema directory if it doesn't exist
 	schema_dir <- here::here('schema')
 	if (!dir.exists(schema_dir)) {
@@ -335,48 +353,38 @@ cc_schema <- function() {
 		'https://commonchemistry.cas.org/swagger/commonchemistry-swagger.json'
 	)
 
-	ping_url <- function(url) {
-		req <- httr2::request(url) %>%
-			httr2::req_method("HEAD") %>%
-			httr2::req_timeout(5) %>%
-			httr2::req_error(is_error = \(resp) FALSE)
-
-		resp <- try(httr2::req_perform(req), silent = TRUE)
-
-		if (inherits(resp, "try-error")) {
-			cli::cli_alert_warning("URL is not reachable, skipping download: {url}")
-			return(FALSE)
-		}
-
-		status <- httr2::resp_status(resp)
-
-		if (status >= 200 && status < 400) {
-			return(TRUE)
-		} else {
-			cli::cli_alert_warning(
-				"URL returned status {status}, skipping download: {url}"
-			)
-			return(FALSE)
-		}
-	}
-
 	map(
 		endpoints,
 		function(endpoint) {
-				# Sets the path
-	
-				url_to_check <- endpoint
+			url <- endpoint
+			destfile <- here::here('schema', "commonchemistry-prod.json")
 
-				#if (ping_url(url_to_check)) {
-					download.file(
-						url = url_to_check,
-						destfile = here::here(
-							'schema',
-							paste0("commonchemistry-prod.json")
-						),
-						mode = 'wb'
-					)
-				#}
+			tryCatch(
+				{
+					req <- httr2::request(url) %>%
+						httr2::req_timeout(timeout) %>%
+						httr2::req_error(is_error = \(resp) FALSE)
+
+					resp <- httr2::req_perform(req)
+					status <- httr2::resp_status(resp)
+
+					if (status >= 200 && status < 400) {
+						body_raw <- httr2::resp_body_raw(resp)
+						writeBin(body_raw, destfile)
+						cli::cli_alert_success("Downloaded Common Chemistry schema")
+					} else if (status >= 500) {
+						cli::cli_alert_warning("Server error ({status}) downloading Common Chemistry schema")
+					} else {
+						cli::cli_alert_warning("HTTP {status} downloading Common Chemistry schema")
+					}
+				},
+				httr2_timeout = function(e) {
+					cli::cli_alert_warning("Timeout downloading Common Chemistry schema ({timeout}s limit)")
+				},
+				error = function(e) {
+					cli::cli_alert_warning("Network error downloading Common Chemistry schema: {conditionMessage(e)}")
+				}
+			)
 		},
 		.progress = TRUE
 	)

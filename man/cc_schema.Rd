@@ -4,7 +4,10 @@
 \alias{cc_schema}
 \title{Download API schemas}
 \usage{
-cc_schema()
+cc_schema(timeout = 30)
+}
+\arguments{
+\item{timeout}{Maximum time (in seconds) to wait for each download. Default: 30.}
 }
 \value{
 \code{NULL}.
