@@ -104,7 +104,7 @@ unicode_map <- c(greek_map, math_map, script_map, misc_map, latin_map)
 unicode_map <- unicode_map[!duplicated(names(unicode_map))]
 
 # Sort by name length descending to ensure longer sequences or specific characters are handled?
-# Since these are single characters usually, order doesn't matter for fixed replacement 
+# Since these are single characters usually, order doesn't matter for fixed replacement
 # unless we have multi-char sequences. stringi::stri_replace_all_fixed handles this.
 
 # Save as package data
