@@ -44,7 +44,18 @@ jobs:
             any::fs
             any::readr
             any::forcats
+            any::usethis
           needs: check
+
+      - name: Ensure internal data
+        run: |
+          if (!file.exists("R/sysdata.rda")) {
+            cli::cli_alert_warning("sysdata.rda missing, regenerating from data-raw/")
+            source("data-raw/unicode_map.R")
+          } else {
+            cli::cli_alert_info("sysdata.rda found, skipping regeneration")
+          }
+        shell: Rscript {0}
 
       - name: Download schemas
         run: |
