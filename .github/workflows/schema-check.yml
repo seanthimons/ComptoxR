@@ -132,7 +132,6 @@ jobs:
         id: diff
         continue-on-error: true
         run: |
-          source("dev/endpoint_eval/04_openapi_parser.R")
           source("dev/diff_schemas.R")
           results <- diff_schemas("schema_old", "schema")
           md <- format_diff_markdown(results)
