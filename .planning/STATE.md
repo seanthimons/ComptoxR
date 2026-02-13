@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-12)
 
 **Core value:** Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
-**Current focus:** Phase 17 complete — ready for Phase 18
+**Current focus:** v1.9 milestone complete — all phases (16-18) shipped
 
 ## Current Position
 
-Phase: 17 of 18 (Schema Diffing)
-Plan: 2/2 complete
-Status: Phase 17 verified and complete — ready for Phase 18
-Last activity: 2026-02-12 — Completed 17-02-PLAN.md (CI workflow integration)
+Phase: 18 of 18 (Reliability)
+Plan: 1/1 complete
+Status: v1.9 milestone complete — all 3 phases verified
+Last activity: 2026-02-12 — Phase 18 verified and complete
 
-Progress: [██████░░░░] 67%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 2.7 minutes
-- Total execution time: 0.13 hours
+- Total plans completed: 4
+- Average duration: 3.3 minutes
+- Total execution time: 0.22 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [██████░░░░] 67%
 |-------|-------|-------|----------|
 | 16 - CI Fix | 1 | 3 min | 3 min |
 | 17 - Schema Diffing | 2 | 5 min | 2.5 min |
+| 18 - Reliability | 1 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 16-01 (3 min), 17-01 (4 min), 17-02 (1 min)
-- Trend: Accelerating — simple integration tasks executing faster
+- Last 5 plans: 16-01 (3 min), 17-01 (4 min), 17-02 (1 min), 18-01 (5 min)
+- Trend: Stable — consistent execution velocity around 3-5 min per plan
 
 *Updated after each plan completion*
 
@@ -43,11 +44,11 @@ Progress: [██████░░░░] 67%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- [18-01]: Default timeout of 30s for R functions, 60s for CI (CI runners slower)
+- [18-01]: Silent 404s in chemi_schema brute-force to reduce log noise
+- [18-01]: CI workflow uses continue-on-error for graceful degradation
 - [16-01]: Move unicode_map generation from R/ to data-raw/ to fix CI pkgload::load_all() failure
-- [16-01]: Add sysdata.rda regeneration fallback in CI for resilience
 - [v1.8]: Three-cassette VCR strategy for test organization
-- [v1.7]: Use "query" as synthetic param name for consistency
-- [v1.6]: Unified pipeline — all generators use openapi_to_spec() directly
 
 ### Pending Todos
 
@@ -61,11 +62,11 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-12
-Stopped at: Completed 17-02-PLAN.md (CI workflow integration)
+Stopped at: Completed 18-01-PLAN.md (timeout protection and CI resilience)
 Resume file: None
 
 **Archived Milestones:**
 - v1.0-v1.8: See `.planning/milestones/` directory
 
 ---
-*Last updated: 2026-02-12 after completing 17-02-PLAN.md*
+*Last updated: 2026-02-12 after completing 18-01-PLAN.md*

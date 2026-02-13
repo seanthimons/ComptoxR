@@ -15,7 +15,7 @@ Fix the broken schema-check GitHub Action workflow by resolving the unicode_map 
 - ✅ **v1.6 Unified Stub Generation Pipeline** - Phase 10 (shipped 2026-01-30)
 - ✅ **v1.7 Documentation Refresh** - Phase 11 (shipped 2026-01-29)
 - ✅ **v1.8 Testing Infrastructure** - Phases 12-15 (shipped 2026-01-31)
-- 🚧 **v1.9 Schema Check Workflow Fix** - Phases 16-18 (in progress)
+- ✅ **v1.9 Schema Check Workflow Fix** - Phases 16-18 (shipped 2026-02-12)
 
 ## Phases
 
@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 16: CI Fix** - Fix unicode_map dependency breaking load_all() in CI
 - [x] **Phase 17: Schema Diffing** - Add endpoint-level diff with breaking change detection
-- [ ] **Phase 18: Reliability** - Add timeout protection and graceful failure handling
+- [x] **Phase 18: Reliability** - Add timeout protection and graceful failure handling
 
 ## Phase Details
 
@@ -71,7 +71,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 18-01-PLAN.md — Add timeout protection to schema downloads and make CI workflow resilient to failures
+- [x] 18-01-PLAN.md — Add timeout protection to schema downloads and make CI workflow resilient to failures
 
 ## Progress
 
@@ -82,4 +82,4 @@ Phases execute in numeric order: 16 → 17 → 18
 |-------|-----------|----------------|--------|-----------|
 | 16. CI Fix | v1.9 | 1/1 | ✓ Complete | 2026-02-12 |
 | 17. Schema Diffing | v1.9 | 2/2 | ✓ Complete | 2026-02-12 |
-| 18. Reliability | v1.9 | 0/1 | Not started | - |
+| 18. Reliability | v1.9 | 1/1 | ✓ Complete | 2026-02-12 |
