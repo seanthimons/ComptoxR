@@ -657,7 +657,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         optional_params <- optional_params[-1]
         other_required <- character(0)
       } else {
-        stop("Body-only endpoint must have at least one parameter")
+        # Body schema has properties but none could be extracted as function params
+        # (e.g., array-only properties). Skip gracefully and track for reporting.
+        cli::cli_alert_warning("Skipping body-only endpoint {fn}: body schema has no extractable parameters")
+        .StubGenEnv$skipped <- c(.StubGenEnv$skipped, list(tibble::tibble(
+          route = endpoint, method = method,
+          skip_reason = "Body properties not extractable as function parameters",
+          source_file = NA_character_
+        )))
+        return(NA_character_)
       }
 
       # Build options assembly code
@@ -1132,6 +1140,9 @@ render_endpoint_stubs <- function(spec,
       )
     }
   )
+
+  # Remove endpoints that returned NA (skipped during stub generation)
+  spec <- spec %>% dplyr::filter(!is.na(text))
 
   spec
 }
