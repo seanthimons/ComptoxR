@@ -91,37 +91,6 @@
             "description": "OK"
           }
         }
-      },
-      "patch": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "groupUpdatePatch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LibraryGroup"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
     "/api/alerts": {
@@ -554,7 +523,9 @@
               "*/*": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -574,7 +545,10 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/AlertsMetadata"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LibraryGroup"
+                  }
                 }
               }
             }
@@ -630,9 +604,6 @@
           "description": {
             "type": "string"
           },
-          "aux": {
-            "type": "string"
-          },
           "value": {
             "type": "string"
           },
@@ -683,20 +654,6 @@
           },
           "description": {
             "type": "string"
-          },
-          "aux": {
-            "type": "string"
-          }
-        }
-      },
-      "AlertInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
           }
         }
       },
@@ -707,12 +664,6 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "alertsInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AlertInfo"
             }
           },
           "resolve": {
@@ -737,9 +688,6 @@
       "Chemical": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "chemId": {
             "type": "string"
           },
@@ -840,9 +788,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "aux": {
             "type": "string"
           },
           "value": {
@@ -968,9 +913,6 @@
           },
           "showAlertsOnly": {
             "type": "boolean"
-          },
-          "showImages": {
-            "type": "boolean"
           }
         }
       },
@@ -998,20 +940,6 @@
           }
         }
       },
-      "AlertsMetadata": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "groups": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LibraryGroup"
-            }
-          }
-        }
-      },
       "Alert": {
         "type": "object",
         "properties": {
@@ -1032,9 +960,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "aux": {
             "type": "string"
           },
           "value": {
@@ -1062,9 +987,6 @@
             "type": "string"
           },
           "name": {
-            "type": "string"
-          },
-          "category": {
             "type": "string"
           }
         }

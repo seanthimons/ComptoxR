@@ -1,0 +1,258 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Descriptors Module",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Default Server URL"
+    }
+  ],
+  "paths": {
+    "/api/descriptors": {
+      "get": {
+        "tags": [
+          ""
+        ],
+        "operationId": "descriptorsGet",
+        "parameters": [
+          {
+            "name": "smiles",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "headers",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "JSON",
+              "enum": [
+                "JSON",
+                "CSV",
+                "TSV"
+              ]
+            }
+          },
+          {
+            "name": "timeout",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          ""
+        ],
+        "operationId": "descriptorsPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescriptorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/descriptors/version": {
+      "get": {
+        "tags": [
+          ""
+        ],
+        "operationId": "versionGet",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/descriptors/metadata": {
+      "get": {
+        "tags": [
+          ""
+        ],
+        "operationId": "metadataGet",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptorsMetadata"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DescriptorsRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "chemicals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "chemIdType": {
+            "type": "string",
+            "enum": [
+              "DTXSID",
+              "DTXCID",
+              "SMILES",
+              "MOL",
+              "CAS",
+              "Name",
+              "InChI",
+              "InChIKey",
+              "InChIKey_1",
+              "AnyId"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "JSON",
+              "CSV",
+              "TSV"
+            ]
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "VersionInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DescriptorsMeta": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionInfo"
+          },
+          "url": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "DescriptorsMetadata": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "$ref": "#/components/schemas/VersionInfo"
+          },
+          "descriptors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DescriptorsMeta"
+            }
+          }
+        }
+      }
+    }
+  }
+}

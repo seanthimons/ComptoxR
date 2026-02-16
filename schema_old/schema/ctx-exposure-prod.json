@@ -1,0 +1,2391 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Computational Toxicology and Exposure (CTX) APIs - CTX Exposure API",
+    "description": "The CTX Exposure API is part of US EPA's Computational Toxicology and Exposure APIs. The CTX Exposure API provides programmtic access to exposure data through a set of endpoints.",
+    "version": "1.1.1"
+  },
+  "servers": [
+    {
+      "url": "https://comptox.epa.gov/ctx-api",
+      "description": "Production Environment"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Functional Use Resource",
+      "description": "Collection of endpoints with functional use data. Functional use describes a chemical's role in a product or process, which can help determine exposure pathways used to assess chemical exposure. These curated data are sourced from US EPA's Chemicals and Products Database (CPDat)."
+    },
+    {
+      "name": "List Presence Resource",
+      "description": "Collection of endpoints with list presence data, reflecting the occurrence of chemicals on lists present in publicly available documents (sourced from a variety of federal and state agencies and trade associations). These lists are tagged with List Presence Keywords (LPKs) which is a controlled vocabulary developed by EPA that describe broad use information for a chemical useful for general categorization of chemicals across uses, populations, and/or regulatory groups. These curated data are sourced from US EPA's Chemicals and Products Database (CPDat)."
+    },
+    {
+      "name": "Product Data Resource",
+      "description": "Collection of endpoints pertaining to product data. These data provide information on how chemicals are used in commerce or by consumers as well as weight fractions of ingredients in products, where available. These curated data are sourced from US EPA's Chemicals and Products Database (CPDat)."
+    },
+    {
+      "name": "httk Data Resource",
+      "description": "Collection of endpoints with data to support toxicokinetic modeling applications sourced from the US EPA high throughput toxicokinetics `httk` R package. Models to predict toxicokinetics (chemical absorption, distribution, metabolism, and excretion by the body) are tailored using chemical-specific in vitro data and physiological information."
+    },
+    {
+      "name": "Demographic Exposure Prediction Resource",
+      "description": "Collection of endpoints with SEEM demographic exposure prediction data. SEEM (Systematic Empirical Evaluation of Models) is a framework developed by the US EPA to predict exposure to chemicals across the general population and demographic subsets of the US."
+    },
+    {
+      "name": "General Exposure Prediction Resource",
+      "description": "Collection of endpoints for general prediction data. SEEM (Systematic Empirical Evaluation of Models) is a framework developed by the US EPA to predict exposure to chemicals across the general population and demographic subsets of the US."
+    },
+    {
+      "name": "MMDB Resource",
+      "description": "Collection of endpoints with harmonized data from the Multimedia Monitoring Database (MMDB) to inform on chemical presence in various media like air, water, soil, and human tissues."
+    },
+    {
+      "name": "CCD Data Resource",
+      "description": "Collection of endpoints used to populate CompTox Chemicals Dashboard (CCD) Exposure tabs."
+    }
+  ],
+  "paths": {
+    "/exposure/seem/general/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "General Exposure Prediction Resource"
+        ],
+        "summary": "Get SEEM General Exposure Prediction data for a batch of DTXSIDs",
+        "description": "return SEEM general exposure prediction data for requested DTXSIDs",
+        "operationId": "batchSearchGenExpoPrediction",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID00195485\",\"DTXSID00195400\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GenExpoPrediction"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/seem/demographic/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "Demographic Exposure Prediction Resource"
+        ],
+        "summary": "Get SEEM Demographic Exposure Prediction data for batch of DTXSIDs",
+        "description": "return SEEM demographic prediction data for requested DTXSIDs",
+        "operationId": "batchSearchDemoExpoPrediction",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID00195506\",\"DTXSID0027301\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/DemoExpoPrediction"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/product-data/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "Product Data Resource"
+        ],
+        "summary": "Get product data for a batch of DTXSIDs",
+        "description": "return product data for requested DTXSIDs",
+        "operationId": "batchSearchProductData",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID7020182\",\"DTXSID9020112\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProductData"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/list-presence/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "List Presence Resource"
+        ],
+        "summary": "Get List Presence data for a batch of DTXSIDs",
+        "description": "return list presence data for requested DTXSIDs",
+        "operationId": "batchSearchListPresence",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID7020182\",\"DTXSID9020112\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ListPresence"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/httk/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "httk Data Resource"
+        ],
+        "summary": "Get httk data for a batch of DTXSIDs",
+        "description": "return httk data for requested DTXSIDs",
+        "operationId": "batchSearchHttk",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID0027301\",\"DTXSID0027272\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/HttkData"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/functional-use/search/by-dtxsid/": {
+      "post": {
+        "tags": [
+          "Functional Use Resource"
+        ],
+        "summary": "Get functional-use data for a batch of DTXSIDs",
+        "description": "return functional-use data for requested DTXSIDs",
+        "operationId": "batchSearchFunctionalUse",
+        "requestBody": {
+          "description": "JSON array of DSSTox Substance Identifier",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": "[\"DTXSID7020182\",\"DTXSID9020112\"]"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FunctionalUse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/seem/general/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "General Exposure Prediction Resource"
+        ],
+        "summary": "Get SEEM General Exposure Prediction data by DTXSID",
+        "description": "return SEEM general exposure prediction data for requested DTXSID",
+        "operationId": "getGenExpoPredictionByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          },
+          {
+            "name": "projection",
+            "in": "query",
+            "description": "Specifies whether to use projection. Optional: ccd-general.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GenExpoPrediction"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/seem/demographic/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "Demographic Exposure Prediction Resource"
+        ],
+        "summary": "Get SEEM Demographic Exposure Prediction data by DTXSID",
+        "description": "return SEEM demographic prediction data for requested DTXSID",
+        "operationId": "getDemoExpoPredictionByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          },
+          {
+            "name": "projection",
+            "in": "query",
+            "description": "Specifies whether to use projection. Optional: ccd-demographic.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/DemoExpoPrediction"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/product-data/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "Product Data Resource"
+        ],
+        "summary": "Get product data by DTXSID",
+        "description": "return product data for requested DTXSID",
+        "operationId": "getProductDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ProductData"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/product-data/puc": {
+      "get": {
+        "tags": [
+          "Product Data Resource"
+        ],
+        "summary": "Get all product use categories",
+        "description": "return all product use category options. Products are organized by product use categories (PUCs): a controlled vocabulary developed by EPA that seeks to organize products in a way relevant for exposure modeling.",
+        "operationId": "getProductDataPuc",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Puc"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/mmdb/single-sample/by-medium": {
+      "get": {
+        "tags": [
+          "MMDB Resource"
+        ],
+        "summary": "Get Single Sample data by Medium",
+        "description": "return harmonized single sample records for requested medium",
+        "operationId": "getHarmonizedSingleSampleDataByMedium",
+        "parameters": [
+          {
+            "name": "medium",
+            "in": "query",
+            "description": "harmonized medium",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "surface water"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MMDBSingleSample"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/mmdb/single-sample/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "MMDB Resource"
+        ],
+        "summary": "Get Single Sample data by DTXSID",
+        "description": "return harmonized single-sample records for requested DTXSID",
+        "operationId": "getHarmonizedSingleSampleDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID7020182"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MMDBSingleSample"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/mmdb/mediums": {
+      "get": {
+        "tags": [
+          "MMDB Resource"
+        ],
+        "summary": "Get all Media options",
+        "description": "return all harmonized medium options and their corresponding definitions",
+        "operationId": "getAllHarmonizedMedia",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MMDBMediaDescSummary"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/mmdb/aggregate/by-medium": {
+      "get": {
+        "tags": [
+          "MMDB Resource"
+        ],
+        "summary": "Get Aggregate data by Medium",
+        "description": "return harmonized aggregate records for requested medium",
+        "operationId": "getHarmonizedAggregateDataByMedium",
+        "parameters": [
+          {
+            "name": "medium",
+            "in": "query",
+            "description": "harmonized medium",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "surface water"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MMDBAggregate"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/mmdb/aggregate/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "MMDB Resource"
+        ],
+        "summary": "Get Aggregate data by DTXSID",
+        "description": "return harmonized aggregate records for requested DTXSID",
+        "operationId": "getHarmonizedAggregateDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID7020182"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MMDBAggregate"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/list-presence/tags": {
+      "get": {
+        "tags": [
+          "List Presence Resource"
+        ],
+        "summary": "Get List Presence Tags",
+        "description": "return list presence tags",
+        "operationId": "getListPresenceTags",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ListPresenceTag"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/list-presence/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "List Presence Resource"
+        ],
+        "summary": "Get List Presence data by DTXSID",
+        "description": "return list presence data for requested DTXSID",
+        "operationId": "getListPresenceByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ListPresence"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/httk/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "httk Data Resource"
+        ],
+        "summary": "Get httk data by DTXSID",
+        "description": "return httk data for requested DTXSID",
+        "operationId": "getHttkDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/HttkData"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/functional-use/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "Functional Use Resource"
+        ],
+        "summary": "Get functional use data by DTXSID",
+        "description": "return functional use data for requested DTXSID",
+        "operationId": "getFunctionalUseByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FunctionalUse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/functional-use/probability/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "Functional Use Resource"
+        ],
+        "summary": "Get functional use probability by DTXSID",
+        "description": "return functional use probability for requested DTXSID",
+        "operationId": "getFunctionalUseProbabilityByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/QsurDataAll"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/functional-use/category": {
+      "get": {
+        "tags": [
+          "Functional Use Resource"
+        ],
+        "summary": "Get functional use categories",
+        "description": "return all functional use categories",
+        "operationId": "getFunctionalUseCategory",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FunctionalUseCategory"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/puc/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get Product Use Category data by DTXSID",
+        "description": "return Product Use Category data for requested DTXSID",
+        "operationId": "getProductUseCategoryByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDProductUseCategory"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get Production Volume data by DTXSID",
+        "description": "return Production Volume data for requested DTXSID",
+        "operationId": "getProductionVolumeDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDProductionVolume"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get Biomonitoring data by DTXSID with CCD projection",
+        "description": "return NHANES inferences data for requested DTXSID. There is an available projection aligned with what's available on the CCD Exposure Biomonitoring tab: ccd-biomonitoring. If no projection is specified, a default CCDBiomonitoring projection will be returned.",
+        "operationId": "getBiomonitoringDataByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID7020182"
+          },
+          {
+            "name": "projection",
+            "in": "query",
+            "description": "Specifies if projection is used. Option: ccd-biomonitoring, If omitted, the default CCDBiomonitoring data is returned.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDBiomonitoring"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CCDBiomonitoringAll"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/keywords/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get General Use Keywords data by DTXSID",
+        "description": "return General Use Keywords data for requested DTXSID",
+        "operationId": "getGeneralUseKeywordsByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDGeneralUseKeywords"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get Reported Functional Use data by DTXSID",
+        "description": "return Reported Functional Use data for requested DTXSID",
+        "operationId": "getReportedFunctionalUseByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDReportedFunctionalUse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}": {
+      "get": {
+        "tags": [
+          "CCD Data Resource"
+        ],
+        "summary": "Get Chemical Weight Fractions data by DTXSID",
+        "description": "return Chemical Weight Fractions data for requested DTXSID",
+        "operationId": "getChemicalWeightFractionsByDtxsid",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "path",
+            "description": "DSSTox Substance Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID0020232"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CCDChemicalWeightFractions"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GenExpoPrediction": {
+        "type": "object",
+        "description": "These are estimates of the average (geometric mean) exposure rate (mg/kg bodyweight/day) for the U.S. population. We are 50% confident that the exposure for the chemical is below the median estimate, and we are 95% confident that the average exposure rate is below the upper 95th percent estimate. Total population predictions are based upon consensus exposure model predictions and the similarity of the compound to those chemicals monitored by NHANES. The method for the total U.S. population was described in a 2018 publication, \"Consensus Modeling of Median Chemical Intake for the U.S. Population Based on Predictions of Exposure Pathways\".",
+        "properties": {
+          "dtxsid": {
+            "type": "string",
+            "description": "Chemical identifier",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "productionVolume": {
+            "type": "number",
+            "description": "How much chemical is produced or imported in the United States"
+          },
+          "units": {
+            "type": "string",
+            "description": "Units on production volume",
+            "maxLength": 7,
+            "minLength": 0
+          },
+          "stockholmConvention": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Whether (1) or not (0) the chemical is banned by the Stockholm Convention on persistent organic pollutants"
+          },
+          "probabilityDietary": {
+            "type": "number",
+            "description": "QSPR-predicted probability that the chemical has human exposure via a dietary pathway"
+          },
+          "probabilityResidential": {
+            "type": "number",
+            "description": "QSPR-predicted probability that the chemical has human exposure via a consumer use pathway"
+          },
+          "probabilityPesticde": {
+            "type": "number",
+            "description": "QSPR-predicted probability that the chemical has human exposure via a far-field pesticide pathway"
+          },
+          "probabilityIndustrial": {
+            "type": "number",
+            "description": "QSPR-predicted probability that the chemical has human exposure via a far-field industrial pathway"
+          }
+        }
+      },
+      "DemoExpoPrediction": {
+        "type": "object",
+        "description": "These are estimates of the average (geometric mean) exposure rate (mg/kg bodyweight/day) for the U.S. population. We are 50% confident that the exposure for the chemical is below the median estimate, and we are 95% confident that the average exposure rate is below the upper 95th percent estimate. Total population predictions are based upon consensus exposure model predictions and the similarity of the compound to those chemicals monitored by NHANES. The method for the demographic-specific predictions are based upon a simpler, heuristic model described in the 2014 publication \"High Throughput Heuristics for Prioritizing Human Exposure to Environmental Chemicals\".",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dtxsid": {
+            "type": "string",
+            "description": "Chemical identifier",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "demographic": {
+            "type": "string",
+            "description": "Which portion of the U.S. population these values refer to",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "predictor": {
+            "type": "string",
+            "description": "The model/approach used to make a prediction",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "median": {
+            "type": "number",
+            "format": "double",
+            "description": "The median predicted value"
+          },
+          "medianText": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "l95": {
+            "type": "number",
+            "format": "double",
+            "description": "The lower 95th percentile confidence value (uncertainty) for the prediction"
+          },
+          "l95Text": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "u95": {
+            "type": "number",
+            "format": "double",
+            "description": "The upper 95th percentile confidence value (uncertainty) for the prediction"
+          },
+          "u95Text": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "units": {
+            "type": "string",
+            "description": "The units of the prediction",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "ad": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Whether (1) or not (0) the chemical is within the applicability domain of the predictor"
+          },
+          "reference": {
+            "type": "string",
+            "description": "The peer reviewed journal article explaining how the prediction was made",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        }
+      },
+      "ProductData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "docid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doctitle": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "docdate": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "productname": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "gencat": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodfam": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodtype": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "classificationmethod": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "rawmincomp": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "rawmaxcomp": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "rawcentralcomp": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "unittype": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "lowerweightfraction": {
+            "type": "number"
+          },
+          "upperweightfraction": {
+            "type": "number"
+          },
+          "centralweightfraction": {
+            "type": "number"
+          },
+          "weightfractiontype": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "component": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          }
+        }
+      },
+      "ListPresence": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string"
+          },
+          "docid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doctitle": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "docsubtitle": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 0
+          },
+          "docdate": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "organization": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "reportedfunction": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "functioncategory": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "component": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "keywordset": {
+            "type": "string"
+          }
+        }
+      },
+      "HttkData": {
+        "type": "object",
+        "description": "The information here describes toxicokinetics in humans. Values are 1) measured either in vitro or in vivo, 2) predicted from chemical properties using in silico tools, or 3) computed with mathematical models simulating toxicokinetics. Note: intrinsic hepatic clearance and fraction unbound in plasma values can have measured values listed, but these may be assumed from measured data using a surrogate species. The Data Source Species column identifies the measured data species source. We use these assumed measured values in calculations to estimate other outcomes, such as volume of distribution, PK half life, and steady-state plasma concentration. The in vitro measured values reflect the value curated for the open source R package “httk”. The computed values are generated with httk using the reported in vitro values. \"https://CRAN.R-project.org/package=httk\". The in vivo measured values are estimated from toxicokinetic concentration vs. time contained in the CvTdb (https://doi.org/10.1038/s41597-020-0455-1). In vivo estimates are calculated using R package “invivoPKfit” (https://github.com/USEPA/CompTox-ExpoCast-invivoPKfit)",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dtxsid": {
+            "type": "string",
+            "description": "Chemical identifier",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "parameter": {
+            "type": "string",
+            "description": "The toxicokinetic parameter. Clint = Intrinsic hepatic clearance rate, Fup = fraction unbound in plasma, Vd = effective volume of distribution, Days.Css = number of days to reach steady-state from constant exposure, Css = plasma concentration after reaching steady-state, TK.Half.Life = number of hours for half of chemical in body to be eliminated",
+            "maxLength": 15,
+            "minLength": 0
+          },
+          "measuredText": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0
+          },
+          "measured": {
+            "type": "number",
+            "description": "Experimentally measured value for the parameter"
+          },
+          "predictedText": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0
+          },
+          "predicted": {
+            "type": "number",
+            "description": "The predicted value for the parameter"
+          },
+          "units": {
+            "type": "string",
+            "description": "Units on the predicted parameter",
+            "maxLength": 30,
+            "minLength": 0
+          },
+          "model": {
+            "type": "string",
+            "description": "The toxicokinetic model used to predict the parameter",
+            "maxLength": 15,
+            "minLength": 0
+          },
+          "reference": {
+            "type": "string",
+            "description": "Peer reviewed journal article(s) from which measured or predicted value was derived",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "percentile": {
+            "type": "string",
+            "description": "For humans, what fraction of the population have a lower value given the same dose. Not relevant to animal species",
+            "maxLength": 5,
+            "minLength": 0
+          },
+          "species": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0
+          },
+          "dataSourceSpecies": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0
+          }
+        }
+      },
+      "FunctionalUse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "datatype": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "docid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doctitle": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "docdate": {
+            "type": "string",
+            "maxLength": 25,
+            "minLength": 0
+          },
+          "reportedfunction": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "functioncategory": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        }
+      },
+      "Puc": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "kindName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "genCat": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodfam": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodtype": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "definition": {
+            "type": "string"
+          }
+        }
+      },
+      "MMDBSingleSample": {
+        "type": "object",
+        "description": "The information here describes harmonized single-sample records associated with studies that report sample-level results in MMDB with their associated source and metadata information.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unique database ID for this individual table record"
+          },
+          "fullSourceName": {
+            "type": "string",
+            "description": "Full name of the data source",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "chemicalName": {
+            "type": "string",
+            "description": "Any reported chemical name reported in the raw data",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "dtxsid": {
+            "type": "string",
+            "description": "DSSTox chemical structure ID",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "preferredName": {
+            "type": "string",
+            "description": "Preferred chemical name for this DTXSID",
+            "maxLength": 300,
+            "minLength": 0
+          },
+          "casrn": {
+            "type": "string",
+            "description": "CASRN associated with this DTXSID",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "result": {
+            "type": "string",
+            "description": "Any reported concentration or sample result included in the raw data (any format)",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "units": {
+            "type": "string",
+            "description": "Any reported units included in the raw data (any format)",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "cleanedUnits": {
+            "type": "string",
+            "description": "Units from the raw data formatted for consistency"
+          },
+          "lod": {
+            "type": "string",
+            "description": "Limit of detection associated witht he study, if available",
+            "maxLength": 45,
+            "minLength": 0
+          },
+          "loq": {
+            "type": "string",
+            "description": "Limit of quantification associated witht he study, if available",
+            "maxLength": 45,
+            "minLength": 0
+          },
+          "detectionFlag": {
+            "type": "string",
+            "description": "Flag indicating if raw data indicated a measurement below limit of detection",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "resultFlag": {
+            "type": "string",
+            "description": "Any reported flags associated with the reported concentrationresult in the raw data",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "detected": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Single variable indicating whether observation is associated with detection of the chemical (1:yes; 2:no; NA:could not be determined conclusively)"
+          },
+          "detectedConflict": {
+            "type": "integer",
+            "format": "int32",
+            "description": "A quality flag to note if fields used to determine if a chemical was detected were in conflict, resulting in less certain detected field designation (1:the detected field for a chemical sample is less certain; 0:no conflict)"
+          },
+          "notesDetects": {
+            "type": "string",
+            "description": "Description of detected status"
+          },
+          "species": {
+            "type": "string",
+            "description": "Any species name (biota) reported in the raw data",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "media": {
+            "type": "string",
+            "description": "Any media name reported in the raw data",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "harmonizedMedium": {
+            "type": "string",
+            "description": "Harmonized medium associated with the reported_media",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "method": {
+            "type": "string",
+            "description": "Any reported analytical method information included in the raw data (any format)",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "collectionActivityId": {
+            "type": "string",
+            "description": "Any reported collection activity ID reported in the raw data",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "sampleId": {
+            "type": "string",
+            "description": "Any reported sample ID reported in the raw data",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "mmdbSampleId": {
+            "type": "string",
+            "description": "Standardized sample ID issued for unique combinations of sample and source for single-sample data"
+          },
+          "dates": {
+            "type": "string",
+            "description": "Any reported date of sample collection in the raw data (any format)",
+            "maxLength": 45,
+            "minLength": 0
+          },
+          "year": {
+            "type": "string",
+            "description": "Year of sample collection",
+            "maxLength": 4,
+            "minLength": 0
+          },
+          "month": {
+            "type": "string",
+            "description": "Month of sample collection (any format)",
+            "maxLength": 4,
+            "minLength": 0
+          },
+          "time": {
+            "type": "string",
+            "description": "Time of sample collection (any format)"
+          },
+          "location": {
+            "type": "string",
+            "description": "Any specific location reported in the raw data that does not fit other location variables (any format)",
+            "maxLength": 250,
+            "minLength": 0
+          },
+          "stateOrProvince": {
+            "type": "string",
+            "description": "U.S. state or international province where sample was collected"
+          },
+          "county": {
+            "type": "string",
+            "description": "U.S. county where sample was collected",
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "country": {
+            "type": "string",
+            "description": "Country where sample was collected",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "qualityFlag": {
+            "type": "string",
+            "description": "Flag indicating if raw data included any quality flags for the record",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "link": {
+            "type": "string",
+            "description": "Any web link to location of the record in the original data source",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "reference": {
+            "type": "string",
+            "description": "Any literature reference included in the raw data (any format)",
+            "maxLength": 300,
+            "minLength": 0
+          },
+          "version": {
+            "type": "string",
+            "description": "Release version of the data"
+          },
+          "exportDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date this data was inserted into a materialized view"
+          },
+          "casnumber": {
+            "type": "string"
+          }
+        }
+      },
+      "MMDBMediaDescSummary": {
+        "type": "object",
+        "properties": {
+          "harmonizedMedium": {
+            "type": "string"
+          },
+          "harmonizedMediumDesc": {
+            "type": "string"
+          }
+        }
+      },
+      "MMDBAggregate": {
+        "type": "object",
+        "description": "The information here describes records associated with reported statistics from aggregate studies in MMDB with their associated source and metadata information.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unique database ID for this individual table record"
+          },
+          "fullSourceName": {
+            "type": "string",
+            "description": "Full name of the data source",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "chemicalName": {
+            "type": "string",
+            "description": "Any reported chemical name reported in the raw data",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "dtxsid": {
+            "type": "string",
+            "description": "DSSTox chemical structure ID",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "preferredName": {
+            "type": "string",
+            "description": "Preferred chemical name for this DTXSID",
+            "maxLength": 300,
+            "minLength": 0
+          },
+          "casrn": {
+            "type": "string",
+            "description": "CASRN associated with this DTXSID",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "result": {
+            "type": "string",
+            "description": "Reported value (any format) for reported_statistic"
+          },
+          "units": {
+            "type": "string",
+            "description": "Any reported units included in the raw data (any format)",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "cleanedUnits": {
+            "type": "string",
+            "description": "Units from the raw data formatted for consistency"
+          },
+          "statistic": {
+            "type": "string",
+            "description": "Name of the reported statistic in the raw data",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "sampleSize": {
+            "type": "string",
+            "description": "Reported sample size"
+          },
+          "lod": {
+            "type": "string",
+            "description": "Limit of detection associated witht he study, if available"
+          },
+          "loq": {
+            "type": "string",
+            "description": "Limit of quantification associated witht he study, if available"
+          },
+          "numDetects": {
+            "type": "string",
+            "description": "Reported number of detections"
+          },
+          "numNonDetects": {
+            "type": "string",
+            "description": "Any reported number of nondetects in the raw data"
+          },
+          "rateDetects": {
+            "type": "string",
+            "description": "Reported rate of detection (percent or fraction) included in the raw data (any format)"
+          },
+          "detected": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Single variable indicating whether observation is associated with detection of the chemical (1:yes; 2:no; NA:could not be determined conclusively)"
+          },
+          "detectedConflict": {
+            "type": "integer",
+            "format": "int32",
+            "description": "A quality flag to note if fields used to determine if a chemical was detected were in conflict, resulting in less certain detected field designation (1:the detected field for a chemical sample is less certain; 0:no conflict)"
+          },
+          "notesDetects": {
+            "type": "string",
+            "description": "Description of detected status"
+          },
+          "species": {
+            "type": "string",
+            "description": "Any species name (biota) reported in the raw data",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "media": {
+            "type": "string",
+            "description": "Any media name reported in the raw data",
+            "maxLength": 120,
+            "minLength": 0
+          },
+          "harmonizedMedium": {
+            "type": "string",
+            "description": "Harmonized medium associated with the reported_media",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "population": {
+            "type": "string",
+            "description": "Any reported description of the population studied",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "subPopulation": {
+            "type": "string",
+            "description": "Any reported subpopulation of human subjects included in the raw data (any format)"
+          },
+          "collectionActivityId": {
+            "type": "string",
+            "description": "Any reported collection activity ID reported in the raw data",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "dates": {
+            "type": "string",
+            "description": "Any reported date information for sample collection in the raw data (any format)"
+          },
+          "years": {
+            "type": "string",
+            "description": "Inclusive year range of sample collection in the raw data (any format)"
+          },
+          "location": {
+            "type": "string",
+            "description": "Any specific location reported in the raw data that does not fit other location variables (any format)",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "stateOrProvince": {
+            "type": "string",
+            "description": "U.S. state or international province where sample was collected"
+          },
+          "county": {
+            "type": "string",
+            "description": "U.S. county where sample was collected",
+            "maxLength": 60,
+            "minLength": 0
+          },
+          "country": {
+            "type": "string",
+            "description": "Country where sample was collected"
+          },
+          "qualityFlag": {
+            "type": "string",
+            "description": "Flag indicating if raw data included any quality flags for the record",
+            "maxLength": 200,
+            "minLength": 0
+          },
+          "link": {
+            "type": "string",
+            "description": "Any web link to location of the record in the original data source",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "reference": {
+            "type": "string",
+            "description": "Any literature reference included in the raw data (any format)",
+            "maxLength": 300,
+            "minLength": 0
+          },
+          "version": {
+            "type": "string",
+            "description": "Release version of the data"
+          },
+          "exportDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date this data was inserted into a materialized view"
+          },
+          "casnumber": {
+            "type": "string"
+          }
+        }
+      },
+      "ListPresenceTag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tagName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "tagDefinition": {
+            "type": "string",
+            "maxLength": 750,
+            "minLength": 0
+          },
+          "tagKind": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          }
+        }
+      },
+      "QsurDataAll": {
+        "type": "object",
+        "properties": {
+          "harmonizedFunctionalUse": {
+            "type": "string"
+          },
+          "dtxsid": {
+            "type": "string"
+          },
+          "probability": {
+            "type": "number"
+          }
+        }
+      },
+      "FunctionalUseCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "definition": {
+            "type": "string"
+          }
+        }
+      },
+      "CCDProductUseCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "displayPuc": {
+            "type": "string",
+            "maxLength": 202,
+            "minLength": 0
+          },
+          "pucKind": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "genCat": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodfam": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodtype": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "definition": {
+            "type": "string"
+          }
+        }
+      },
+      "CCDProductionVolume": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          }
+        }
+      },
+      "CCDBiomonitoring": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "demographic": {
+            "type": "string"
+          },
+          "median": {
+            "type": "number"
+          },
+          "upperBound": {
+            "type": "number"
+          },
+          "lowerBound": {
+            "type": "number"
+          },
+          "nhanesCohort": {
+            "type": "string"
+          }
+        }
+      },
+      "CCDBiomonitoringAll": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "dtxsid": {
+            "type": "string"
+          },
+          "median": {
+            "type": "number"
+          },
+          "upper95th": {
+            "type": "number"
+          },
+          "lower95th": {
+            "type": "number"
+          },
+          "hoverMsg": {
+            "type": "string"
+          }
+        }
+      },
+      "CCDGeneralUseKeywords": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "keywordset": {
+            "type": "string"
+          },
+          "sourceCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          }
+        }
+      },
+      "CCDReportedFunctionalUse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "definition": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        }
+      },
+      "CCDChemicalWeightFractions": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dtxsid": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodName": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "displayPuc": {
+            "type": "string",
+            "maxLength": 202,
+            "minLength": 0
+          },
+          "pucKind": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "lowerweightfraction": {
+            "type": "number"
+          },
+          "upperweightfraction": {
+            "type": "number"
+          },
+          "weightfractiontype": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "gencat": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prodfam": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "prod_type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "pucDefinition": {
+            "type": "string"
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "sourceDescription": {
+            "type": "string"
+          },
+          "sourceUrl": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "sourceDownloadDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "productCount": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "description": "Each API request requires an api_key. Contact the CTX API Admin to request an API Key.",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  }
+}
