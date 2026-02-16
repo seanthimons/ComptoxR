@@ -44,12 +44,11 @@
           "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
           "type": "string"
         },
-        "ids": {
-          "description": "List of DTXSIDs or other identifiers to search for.",
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
           "example": [
             "DTXSID9020112",
-            "DTXSID3022401",
-            "benzene"
+            "DTXSID3022401"
           ],
           "items": {
             "type": "string"
@@ -151,50 +150,6 @@
         }
       }
     },
-    "NewDocument": {
-      "properties": {
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "source": {
-          "description": "Name of the source.  Optional.",
-          "type": "string"
-        }
-      }
-    },
-    "NewFactSheet": {
-      "properties": {
-        "document_type": {
-          "description": "Type of fact sheet.  Optional.",
-          "type": "string"
-        },
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "source": {
-          "description": "Name of the source.  Optional.",
-          "type": "string"
-        }
-      }
-    },
-    "NewMethod": {
-      "properties": {
-        "document_type": {
-          "description": "Type of method. Optional.",
-          "type": "string"
-        },
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "source": {
-          "description": "Name of the source.  Optional.",
-          "type": "string"
-        }
-      }
-    },
     "RecordCountsByDTXSIDRequest": {
       "properties": {
         "dtxsids": {
@@ -284,12 +239,11 @@
           "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
           "type": "string"
         },
-        "ids": {
-          "description": "List of DTXSIDs or other identifiers to search for.",
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
           "example": [
             "DTXSID9020112",
-            "DTXSID3022401",
-            "benzene"
+            "DTXSID3022401"
           ],
           "items": {
             "type": "string"
@@ -562,70 +516,6 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/amos/add_new_fact_sheet/": {
-      "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new fact sheet on the<br/>frontend.",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewFactSheet"
-            }
-          }
-        ],
-        "responses": {},
-        "summary": "Adds a new fact sheet to the database.  The new ID is automatically determined and assigned by this function."
-      }
-    },
-    "/api/amos/add_new_method/": {
-      "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewMethod"
-            }
-          }
-        ],
-        "responses": {},
-        "summary": "Adds a new method to the database.  The new ID is automatically determined and assigned by this function."
-      }
-    },
-    "/api/amos/add_new_product_declaration/": {
-      "post": {
-        "description": "function.  Additionally, since little metadata is currently being added during this step, all documents are set to<br/>be drafts in the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewDocument"
-            }
-          }
-        ],
-        "responses": {},
-        "summary": "Adds a new product declaration to the database.  The new ID is automatically determined and assigned by this"
-      }
-    },
-    "/api/amos/add_new_safety_data_sheet/": {
-      "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewDocument"
-            }
-          }
-        ],
-        "responses": {},
-        "summary": "Adds a new safety data sheet to the database.  The new ID is automatically determined and assigned by this function."
-      }
-    },
     "/api/amos/additional_sources_for_substance/{dtxsid}": {
       "get": {
         "description": "",
@@ -668,7 +558,7 @@
     },
     "/api/amos/analytical_qc_batch_search": {
       "post": {
-        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.  Analytical QC data can be found in the general batch search, but will lack some domain-specific information that this search supplies.",
+        "description": "<br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.  Analytical QC data can be found in the general batch search, but will lack some domain-specific information that this search supplies.",
         "parameters": [
           {
             "in": "body",
@@ -683,7 +573,7 @@
             "description": "An Excel file containing records and information for Analytical QC records matching the supplied DTXSIDs and filters."
           }
         },
-        "summary": "Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs"
+        "summary": "Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs."
       }
     },
     "/api/amos/analytical_qc_list/": {
@@ -775,6 +665,26 @@
         "summary": "Returns a summary of the records in the database, organized by record types, methodologies, and sources."
       }
     },
+    "/api/amos/dtxsids_for_functional_use/{functional_use}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Functional use class.",
+            "in": "path",
+            "name": "functional_use",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of DTXSIDs for the given functional use."
+          }
+        },
+        "summary": "Returns a list of DTXSIDs for the given functional use."
+      }
+    },
     "/api/amos/entropy_similarity/": {
       "post": {
         "description": "",
@@ -833,6 +743,26 @@
         "summary": "Returns information on a batch of fact sheets.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction."
       }
     },
+    "/api/amos/fact_sheets_for_substance/{dtxsid}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "The DTXSID for the substance of interest.",
+            "in": "path",
+            "name": "dtxsid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of fact sheet IDs."
+          }
+        },
+        "summary": "Returns a list of fact sheet IDs that are associated with the given DTXSID."
+      }
+    },
     "/api/amos/find_dtxsids/{internal_id}": {
       "get": {
         "description": "",
@@ -871,26 +801,6 @@
           }
         },
         "summary": "Returns a list of substances that have the given molecular formula."
-      }
-    },
-    "/api/amos/functional_class_search/{functional_class}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "Functional use class.",
-            "in": "path",
-            "name": "functional_class",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of substances for the given functional use."
-          }
-        },
-        "summary": "Returns a list of DTXSIDs for the given functional use."
       }
     },
     "/api/amos/functional_uses_for_dtxsid/{dtxsid}": {
@@ -942,29 +852,6 @@
           }
         },
         "summary": "Returns a list of major data sources in AMOS with some supplemental information."
-      }
-    },
-    "/api/amos/get_fact_sheet_editor_info/{internal_id}": {
-      "get": {
-        "description": "appears in the pdf_metadata field in the FactSheets database table.",
-        "parameters": [
-          {
-            "description": "Unique ID of the fact sheet of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON structure containing the information about the fact sheet."
-          },
-          "204": {
-            "description": "A message no fact sheet was found for the submitted internal_id value."
-          }
-        },
-        "summary": "Retrieves metadata from the database about a single fact sheet.  This is not necessarily just the metadata that"
       }
     },
     "/api/amos/get_image_for_dtxsid/{dtxsid}": {
@@ -1025,9 +912,6 @@
         "responses": {
           "200": {
             "description": "A JSON object containing the IR spectrum and supporting metadata."
-          },
-          "204": {
-            "description": "No IR spectrum was found for the given internal ID."
           }
         },
         "summary": "Returns an IR spectrum by database ID."
@@ -1048,35 +932,9 @@
         "responses": {
           "200": {
             "description": "A JSON object containing the spectrum, entropy calculations, and other information."
-          },
-          "204": {
-            "description": "A message saying that no spectrum with the given ID was found."
           }
         },
         "summary": "Retrieves a mass spectrum by its ID in AMOS's database with supporting information."
-      }
-    },
-    "/api/amos/get_method_editor_info/{internal_id}": {
-      "get": {
-        "description": "in the pdf_metadata field in the Method database table.",
-        "parameters": [
-          {
-            "description": "Unique ID of the method of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON structure containing the information about the method."
-          },
-          "204": {
-            "description": "A message no method was found for the submitted internal_id value."
-          }
-        },
-        "summary": "Retrieves metadata from the database about a single method.  This is not necessarily just the metadata that appears"
       }
     },
     "/api/amos/get_ms_ready_methods/{inchikey}": {
@@ -1114,9 +972,6 @@
         "responses": {
           "200": {
             "description": "A JSON object containing the spectrum and metadata about it."
-          },
-          "204": {
-            "description": "No NMR spectrum was found for the given internal ID."
           }
         },
         "summary": "Endpoint for retrieving a specified NMR spectrum from the database."
@@ -1127,7 +982,7 @@
         "description": "",
         "parameters": [
           {
-            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.",
+            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.",
             "in": "path",
             "name": "record_type",
             "required": true,
@@ -1144,12 +999,6 @@
         "responses": {
           "200": {
             "description": "The PDF being searched, in the form of an <iframe>-compatible element."
-          },
-          "204": {
-            "description": "No record of the specified type was found for the specified ID."
-          },
-          "404": {
-            "description": "An invalid record type was supplied."
           }
         },
         "summary": "Retrieves a PDF from the database by the internal ID and type of record."
@@ -1160,7 +1009,7 @@
         "description": "<br/>Fact sheets, methods, and spectrum PDFs all have associated metadata, so this uses the record_type argument to differentiate<br/>between them.",
         "parameters": [
           {
-            "description": "A string indicating which kind of record is being retrieved. Valid values are 'spectrum', 'fact sheet', and 'method'.",
+            "description": "A string indicating which kind of record is being retrieved. Valid values are 'spectrum, 'fact sheet', and 'method'.",
             "in": "path",
             "name": "record_type",
             "required": true,
@@ -1177,58 +1026,9 @@
         "responses": {
           "200": {
             "description": "A JSON structure containing the name of the document, its associated metadata, and whether the document has associated spectra (always false for non-methods)."
-          },
-          "204": {
-            "description": "No record of the specified type was found for the specified ID."
           }
         },
         "summary": "Retrieves metadata associated with a PDF record."
-      }
-    },
-    "/api/amos/get_product_declaration_editor_info/{internal_id}": {
-      "get": {
-        "description": "that appears in the pdf_metadata field in the ProductDeclarations database table.",
-        "parameters": [
-          {
-            "description": "Unique ID of the product declaration.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON structure containing the information about the product declaration."
-          },
-          "204": {
-            "description": "A message that no product declaration was found for the submitted internal_id value."
-          }
-        },
-        "summary": "Retrieves metadata from the database about a single product declaration.  This is not necessarily just the metadata"
-      }
-    },
-    "/api/amos/get_safety_data_sheet_editor_info/{internal_id}": {
-      "get": {
-        "description": "that appears in the pdf_metadata field in the SafetyDataSheets database table.",
-        "parameters": [
-          {
-            "description": "Unique ID of the safety data sheet.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON structure containing the information about the safety data sheet."
-          },
-          "204": {
-            "description": "A message no safety data sheet was found for the submitted internal_id value."
-          }
-        },
-        "summary": "Retrieves metadata from the database about a single safety data sheet.  This is not necessarily just the metadata"
       }
     },
     "/api/amos/get_similar_structures/{dtxsid}": {
@@ -1273,7 +1073,7 @@
     },
     "/api/amos/get_substances_for_search_term/{search_term}": {
       "get": {
-        "description": "<br/>Takes a string that is interpreted as either an InChIKey, CASRN, DTXSID, or substance name and returns a list of any<br/>substances that match the search term.  If no DTXSID is found, the function returns None.  If multiple synonyms or<br/>the first block InChIKey matches are found, the response will have an 'ambiguity' variable will be passed indicating<br/>the issue.<br/><br/>If an InChIKey is searched for, the results will consist of all InChIKeys that match the first block of the InChIKey.",
+        "description": "<br/>Takes a string that is interpreted as either an InChIKey, CASRN, DTXSID, or substance name and returns a list of any substances that match the search term.<br/><br/>If no DTXSID is found, the function returns None.  If multiple synonyms or the first block InChIKey matches are found, the response will have an 'ambiguity' variable will be passed indicating the issue.<br/><br/>If an InChIKey is searched for, the results will consist of all InChIKeys that match the first block of the InChIKey.",
         "parameters": [
           {
             "description": "A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name.",
@@ -1309,39 +1109,6 @@
           }
         },
         "summary": "Returns a list of substances found by InChIKey."
-      }
-    },
-    "/api/amos/list_fact_sheet_types/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "List of fact sheet types."
-          }
-        },
-        "summary": "Returns a list of all unique fact sheet types, coming from the document_type field of the fact sheet table."
-      }
-    },
-    "/api/amos/list_functional_classes": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "List of functional use classes."
-          }
-        },
-        "summary": "Returns a list of all functional use classes that are assigned to at least one substance."
-      }
-    },
-    "/api/amos/list_sources_by_record_type/{record_type}": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "List of source names."
-          }
-        },
-        "summary": "Returns a list of all unique source names in the database for a specific record type."
       }
     },
     "/api/amos/mass_range_search/": {
@@ -1509,33 +1276,6 @@
         "summary": "Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification."
       }
     },
-    "/api/amos/product_declaration_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of product declarations to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of product declarations."
-          }
-        },
-        "summary": "Returns information on a batch of product declarations.  Used for sending chunks of the table at a time instead of"
-      }
-    },
     "/api/amos/record_counts_by_dtxsid/": {
       "post": {
         "description": "",
@@ -1576,33 +1316,6 @@
         "summary": "Searches for a record in the database by ID."
       }
     },
-    "/api/amos/record_ids_for_substance/{dtxsid}/{record_type}": {
-      "get": {
-        "description": "table displays of records.",
-        "parameters": [
-          {
-            "description": "The DTXSID for the substance of interest.",
-            "in": "path",
-            "name": "dtxsid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "The record type of interest.",
-            "in": "path",
-            "name": "record_type",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of record IDs."
-          }
-        },
-        "summary": "Returns a list of record IDs that are associated with the given DTXSID.  This is intended to help when filtering"
-      }
-    },
     "/api/amos/record_type_count/{record_type}": {
       "get": {
         "description": "",
@@ -1626,44 +1339,6 @@
         "summary": "Returns the number of records of the given type."
       }
     },
-    "/api/amos/release_notes": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "List of release notes in the form of JSON objects, sorted in reverse chronological order."
-          }
-        },
-        "summary": "Returns a list of release notes for AMOS."
-      }
-    },
-    "/api/amos/safety_data_sheet_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of safety data sheets to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of safety data sheets."
-          }
-        },
-        "summary": "Returns information on a batch of safety data sheets.  Used for sending chunks of the table at a time instead of"
-      }
-    },
     "/api/amos/search/{dtxsid}": {
       "get": {
         "description": "",
@@ -1682,26 +1357,6 @@
           }
         },
         "summary": "Retrieves a list of records from the database that contain a searched DTXSID."
-      }
-    },
-    "/api/amos/search_by_text/{substr}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "The substring to search for.",
-            "in": "path",
-            "name": "substr",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON object containing a list of records from the database, counts of records by record type, and matches for highlighting"
-          }
-        },
-        "summary": "Retrieves a list of records from the ElasticSearch database that contain a searched substring"
       }
     },
     "/api/amos/spectral_entropy/": {
@@ -1766,7 +1421,7 @@
     },
     "/api/amos/substances_for_classification/": {
       "post": {
-        "description": "<br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming<br/>keyword.  Additionally, not all substances in the database have a ClassyFire classification.",
+        "description": "<br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming keyword.  Additionally, not all substances in the database have a ClassyFire classification.",
         "parameters": [
           {
             "in": "body",
@@ -1806,7 +1461,7 @@
     },
     "/api/amos/substring_search/{substring}": {
       "get": {
-        "description": "<br/>Substances where either the EPA-preferred name or an EPA-recorgnized synonyms are returned. This returns a list of<br/>substances, synonyms that matched the search (if any), and the record counts for each substance.",
+        "description": "<br/>Substances where either the EPA-preferred name or an EPA-recorgnized synonyms are returned. This returns a list of substances, synonyms that matched the search (if any), and the record counts for each substance.",
         "parameters": [
           {
             "description": "A name substring to search by.",
@@ -1822,98 +1477,6 @@
           }
         },
         "summary": "Returns information on substances where the specified substring is in or equal to a name."
-      }
-    },
-    "/api/amos/update_fact_sheet_info/{internal_id}": {
-      "put": {
-        "description": "is also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be<br/>returned.",
-        "parameters": [
-          {
-            "description": "Unique ID of the fact sheet of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Database was updated successfully."
-          },
-          "409": {
-            "description": "Some of the new data was invalid; a list of issues will be returned."
-          }
-        },
-        "summary": "Attempts to use the submitted data to update the information related to a single fact sheet.  Some basic validation"
-      }
-    },
-    "/api/amos/update_method_info/{internal_id}": {
-      "put": {
-        "description": "also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be returned.",
-        "parameters": [
-          {
-            "description": "Unique ID of the method of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Database was updated successfully."
-          },
-          "409": {
-            "description": "Some of the new data was invalid; a list of issues will be returned."
-          }
-        },
-        "summary": "Attempts to use the submitted data to update the information related to a single method.  Some basic validation is"
-      }
-    },
-    "/api/amos/update_product_declaration_info/{internal_id}": {
-      "put": {
-        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
-        "parameters": [
-          {
-            "description": "Unique ID of the product declaration of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Database was updated successfully."
-          },
-          "409": {
-            "description": "Some of the new data was invalid; a list of issues will be returned."
-          }
-        },
-        "summary": "Attempts to use the submitted data to update the information related to a single product declaration.  Some"
-      }
-    },
-    "/api/amos/update_safety_data_sheet_info/{internal_id}": {
-      "put": {
-        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
-        "parameters": [
-          {
-            "description": "Unique ID of the product declaration of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Database was updated successfully."
-          },
-          "409": {
-            "description": "Some of the new data was invalid; a list of issues will be returned."
-          }
-        },
-        "summary": "Attempts to use the submitted data to update the information related to a single safety datat sheet.  Some"
       }
     }
   },

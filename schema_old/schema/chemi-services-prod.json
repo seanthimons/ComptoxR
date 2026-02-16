@@ -124,36 +124,6 @@
         }
       }
     },
-    "/api/services/export_json_report": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "exportJsonReport",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/services/export": {
       "post": {
         "tags": [
@@ -207,37 +177,6 @@
               "*/*": {
                 "schema": {
                   "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/collated_report": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "exportCollatedReport",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportCollatedReportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
                 }
               }
             }
@@ -329,32 +268,6 @@
         }
       }
     },
-    "/api/services/release_notes": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "releaseNotesGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ReleaseNoteTableItem"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/services/metadata": {
       "get": {
         "tags": [
@@ -368,7 +281,9 @@
               "*/*": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -399,29 +314,6 @@
               "*/*": {
                 "schema": {
                   "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/cim_component_info": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "cimComponentInfoGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CimComponentInfo"
-                  }
                 }
               }
             }
@@ -463,12 +355,6 @@
         "properties": {
           "empty": {
             "type": "boolean"
-          },
-          "first": {
-            "$ref": "#/components/schemas/PreflightInfo"
-          },
-          "last": {
-            "$ref": "#/components/schemas/PreflightInfo"
           }
         }
       },
@@ -503,9 +389,6 @@
       "Chemical": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "chemId": {
             "type": "string"
           },
@@ -616,9 +499,6 @@
               "$ref": "#/components/schemas/Chemical"
             }
           },
-          "readyReport": {
-            "$ref": "#/components/schemas/ReadyReport"
-          },
           "format": {
             "type": "string",
             "enum": [
@@ -641,30 +521,6 @@
           }
         }
       },
-      "ReadyReport": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "resultType": {
-            "type": "string"
-          },
-          "modelDetails": {
-            "type": "object",
-            "additionalProperties": {}
-          },
-          "message": {
-            "type": "string"
-          },
-          "modelName": {
-            "type": "string"
-          }
-        }
-      },
       "ConvertRequest": {
         "type": "object",
         "properties": {
@@ -673,38 +529,6 @@
           },
           "type": {
             "type": "string"
-          }
-        }
-      },
-      "ExportCollatedReportRequest": {
-        "type": "object",
-        "properties": {
-          "hazardRequest": {
-            "type": "string"
-          },
-          "chemicals": {
-            "type": "string"
-          },
-          "alertRequest": {
-            "type": "string"
-          },
-          "predictionRequest": {
-            "type": "string"
-          },
-          "exportHazard": {
-            "type": "boolean"
-          },
-          "exportHazard2": {
-            "type": "boolean"
-          },
-          "exportSafety": {
-            "type": "boolean"
-          },
-          "exportAlerts": {
-            "type": "boolean"
-          },
-          "exportPrediction": {
-            "type": "boolean"
           }
         }
       },
@@ -736,12 +560,6 @@
         "properties": {
           "empty": {
             "type": "boolean"
-          },
-          "first": {
-            "$ref": "#/components/schemas/CASPreflightInfo"
-          },
-          "last": {
-            "$ref": "#/components/schemas/CASPreflightInfo"
           }
         }
       },
@@ -766,87 +584,6 @@
           "compiled": {
             "type": "string",
             "format": "date-time"
-          }
-        }
-      },
-      "ReleaseNote": {
-        "type": "object",
-        "properties": {
-          "module": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
-        }
-      },
-      "ReleaseNoteTableItem": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "releaseNotes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReleaseNote"
-            }
-          }
-        }
-      },
-      "CimComponentInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string",
-            "enum": [
-              "Module",
-              "Tools",
-              "Model",
-              "Data",
-              "Ui"
-            ]
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "api": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "availableIsConstant": {
-            "type": "boolean"
-          },
-          "coreUI": {
-            "type": "boolean"
-          },
-          "isAvailableResetRest": {
-            "type": "boolean",
-            "writeOnly": true
-          },
-          "api_only": {
-            "type": "boolean"
-          },
-          "build_date": {
-            "type": "string"
-          },
-          "build_id": {
-            "type": "string"
-          },
-          "is_available": {
-            "type": "boolean"
           }
         }
       }

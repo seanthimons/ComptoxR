@@ -41,6 +41,39 @@
         }
       }
     },
+    "/api/search/lookup": {
+      "post": {
+        "tags": [
+          "search-controller"
+        ],
+        "operationId": "lookup",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LookupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchRecord"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/search/download": {
       "post": {
         "tags": [
@@ -212,15 +245,7 @@
           {
             "name": "smiles",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "dtxsid",
-            "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -532,44 +557,6 @@
           }
         }
       }
-    },
-    "/api/search/download/mol-by-smiles": {
-      "get": {
-        "tags": [
-          "search-controller"
-        ],
-        "operationId": "getMol_1",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -627,25 +614,11 @@
             "type": "integer",
             "format": "int32"
           },
-          "maxNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "minNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
           "sortBy": {
             "type": "string"
           },
           "sortDirection": {
             "type": "string"
-          },
-          "hazardNames": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           },
           "params": {
             "type": "object",
@@ -727,14 +700,6 @@
             "type": "number",
             "format": "double"
           },
-          "requestMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "diffRequestMass": {
-            "type": "number",
-            "format": "double"
-          },
           "mol": {
             "type": "string"
           },
@@ -779,10 +744,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "appliedMin": {
-            "type": "number",
-            "format": "float"
-          },
           "records": {
             "type": "array",
             "items": {
@@ -801,6 +762,57 @@
           "recordsCount": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "LookupRequest": {
+        "type": "object",
+        "properties": {
+          "searchType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "SUBSTRUCTURE",
+              "SIMILAR",
+              "FORMULA",
+              "MASS",
+              "FEATURES",
+              "HAZARD",
+              "ADVANCED"
+            ]
+          },
+          "inputType": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "AUTO",
+              "MOL",
+              "RXN",
+              "SDF",
+              "RDF",
+              "SMI",
+              "SMILES",
+              "SMIRKS",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "TXT",
+              "MSP"
+            ]
+          },
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },

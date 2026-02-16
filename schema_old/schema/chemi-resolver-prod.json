@@ -11,86 +11,6 @@
     }
   ],
   "paths": {
-    "/api/resolver/ghs-list-count": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "ghsListCountGet",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HcodeCount"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "ghsListCountGet_1",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "array",
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HcodeCount"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/resolver/universalharvest_cart": {
       "post": {
         "tags": [
@@ -671,7 +591,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -866,36 +788,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/PubchemRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/export_classyfire": {
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "exportClassyFire",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
               }
             }
           },
@@ -1338,7 +1230,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {}
+                  "additionalProperties": {
+                    "type": "object"
+                  }
                 }
               }
             }
@@ -1510,131 +1404,6 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/RecordLinks"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/hcodes": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "hcodeListGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HcodeListElement"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/ghs/pcodes": {
-      "get": {
-        "tags": [
-          "ghs-controller"
-        ],
-        "operationId": "pCodesGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pcode"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/ghs/hcodes": {
-      "get": {
-        "tags": [
-          "ghs-controller"
-        ],
-        "operationId": "hCodesGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Hcode"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/ghs/classes": {
-      "get": {
-        "tags": [
-          "ghs-controller"
-        ],
-        "operationId": "classesGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Hcode"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/resolver/ghs-list": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "ghsListGet",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ResolvedChemical"
                   }
                 }
               }
@@ -2024,24 +1793,9 @@
   },
   "components": {
     "schemas": {
-      "HcodeCount": {
-        "type": "object",
-        "properties": {
-          "hcode": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "Chemical": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
           "chemId": {
             "type": "string"
           },
@@ -2196,11 +1950,15 @@
           },
           "flags": {
             "type": "object",
-            "additionalProperties": {}
+            "additionalProperties": {
+              "type": "object"
+            }
           },
           "rqCode": {
             "type": "object",
-            "additionalProperties": {}
+            "additionalProperties": {
+              "type": "object"
+            }
           }
         }
       },
@@ -2846,46 +2604,6 @@
           }
         }
       },
-      "ExportRequest": {
-        "type": "object",
-        "properties": {
-          "records": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResolvedChemical"
-            }
-          },
-          "showImages": {
-            "type": "boolean"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Chemical"
-            }
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "SDF",
-              "SMI",
-              "MOL",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "PDF",
-              "HTML",
-              "XML",
-              "DOCX"
-            ]
-          },
-          "selectedForSimilarity": {
-            "$ref": "#/components/schemas/Chemical"
-          }
-        }
-      },
       "SafetyExportRequest": {
         "type": "object",
         "properties": {
@@ -2951,6 +2669,37 @@
           }
         }
       },
+      "ExportRequest": {
+        "type": "object",
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResolvedChemical"
+            }
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "SDF",
+              "SMI",
+              "MOL",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "PDF",
+              "HTML",
+              "XML",
+              "DOCX"
+            ]
+          },
+          "selectedForSimilarity": {
+            "$ref": "#/components/schemas/Chemical"
+          }
+        }
+      },
       "VersionInfo": {
         "type": "object",
         "properties": {
@@ -2996,110 +2745,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Link"
-            }
-          }
-        }
-      },
-      "HcodeListElement": {
-        "type": "object",
-        "properties": {
-          "statement": {
-            "type": "string"
-          },
-          "codes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "uniqueItems": true
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "Pcode": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "codes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "description": {
-            "type": "string"
-          },
-          "obsolete": {
-            "type": "boolean"
-          }
-        }
-      },
-      "Hcode": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "obsolete": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "string"
-          },
-          "statements": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "classes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "category": {
-            "type": "string"
-          },
-          "un_class": {
-            "type": "string"
-          },
-          "pictograms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "signal": {
-            "type": "string"
-          },
-          "prevention": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "response": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "storage": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "disposal": {
-            "type": "array",
-            "items": {
-              "type": "string"
             }
           }
         }
@@ -3223,12 +2868,6 @@
           "pageable": {
             "$ref": "#/components/schemas/PageableObject"
           },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          },
           "size": {
             "type": "integer",
             "format": "int32"
@@ -3245,6 +2884,12 @@
           },
           "sort": {
             "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           },
           "numberOfElements": {
             "type": "integer",

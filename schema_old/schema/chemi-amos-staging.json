@@ -833,6 +833,26 @@
         "summary": "Returns information on a batch of fact sheets.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction."
       }
     },
+    "/api/amos/fact_sheets_for_substance/{dtxsid}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "The DTXSID for the substance of interest.",
+            "in": "path",
+            "name": "dtxsid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of fact sheet IDs."
+          }
+        },
+        "summary": "Returns a list of fact sheet IDs that are associated with the given DTXSID."
+      }
+    },
     "/api/amos/find_dtxsids/{internal_id}": {
       "get": {
         "description": "",
@@ -1509,33 +1529,6 @@
         "summary": "Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification."
       }
     },
-    "/api/amos/product_declaration_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of product declarations to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of product declarations."
-          }
-        },
-        "summary": "Returns information on a batch of product declarations.  Used for sending chunks of the table at a time instead of"
-      }
-    },
     "/api/amos/record_counts_by_dtxsid/": {
       "post": {
         "description": "",
@@ -1576,33 +1569,6 @@
         "summary": "Searches for a record in the database by ID."
       }
     },
-    "/api/amos/record_ids_for_substance/{dtxsid}/{record_type}": {
-      "get": {
-        "description": "table displays of records.",
-        "parameters": [
-          {
-            "description": "The DTXSID for the substance of interest.",
-            "in": "path",
-            "name": "dtxsid",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "The record type of interest.",
-            "in": "path",
-            "name": "record_type",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of record IDs."
-          }
-        },
-        "summary": "Returns a list of record IDs that are associated with the given DTXSID.  This is intended to help when filtering"
-      }
-    },
     "/api/amos/record_type_count/{record_type}": {
       "get": {
         "description": "",
@@ -1635,33 +1601,6 @@
           }
         },
         "summary": "Returns a list of release notes for AMOS."
-      }
-    },
-    "/api/amos/safety_data_sheet_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of safety data sheets to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of safety data sheets."
-          }
-        },
-        "summary": "Returns information on a batch of safety data sheets.  Used for sending chunks of the table at a time instead of"
       }
     },
     "/api/amos/search/{dtxsid}": {
