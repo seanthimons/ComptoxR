@@ -185,7 +185,20 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
 		}
 
 		destfile <- here::here('schema', paste0('chemi-', endpoint, '-', server, ext))
-		writeBin(body_raw, destfile)
+		# Pretty-print JSON for readable diffs; fall back to raw bytes for YAML/errors
+		if (ext == '.json') {
+			parsed <- tryCatch(
+				jsonlite::fromJSON(text_preview, simplifyVector = FALSE),
+				error = function(e) NULL
+			)
+			if (!is.null(parsed)) {
+				jsonlite::write_json(parsed, destfile, pretty = TRUE, auto_unbox = TRUE)
+			} else {
+				writeBin(body_raw, destfile)
+			}
+		} else {
+			writeBin(body_raw, destfile)
+		}
 		return(list(success = TRUE, status = status))
 	}
 
