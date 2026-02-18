@@ -1,5 +1,5 @@
 # Periodic schema update check
-# Runs on schedule to detect API schema changes and generate function stubs
+# Runs on schedule to detect API schema changes
 name: Schema Update Check
 
 on:
@@ -13,7 +13,6 @@ jobs:
   check-schemas:
     runs-on: ubuntu-latest
     name: Check for Schema Updates
-    timeout-minutes: 15
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
@@ -35,256 +34,112 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: |
-            any::pkgload
-            any::cli
-            any::here
-            any::jsonlite
-            any::tidyverse
-            any::devtools
-            any::fs
-            any::readr
-            any::forcats
-            any::usethis
-            any::stringr
-            any::purrr
+          extra-packages: any::pkgload, any::cli, any::here, any::desc
           needs: check
 
-      - name: Ensure internal data
+      - name: Bump nightly version
+        id: version
         run: |
-          if (!file.exists("R/sysdata.rda")) {
-            cli::cli_alert_warning("sysdata.rda missing, regenerating from data-raw/")
-            source("data-raw/unicode_map.R")
-          } else {
-            cli::cli_alert_info("sysdata.rda found, skipping regeneration")
-          }
-        shell: Rscript {0}
+          current <- desc::desc_get_version()
+          parts <- as.integer(strsplit(as.character(current), "\\.")[[1]])
 
-      - name: Save old schemas for diff
-        run: |
-          if [ -d "schema" ] && [ "$(ls -A schema/*.json 2>/dev/null)" ]; then
-            cp -r schema schema_old
-            echo "Saved $(ls schema_old/*.json | wc -l) schema files for diffing"
-          else
-            mkdir -p schema_old
-            echo "No existing schemas to save (fresh run)"
-          fi
+          if (length(parts) == 4) {
+            parts[4] <- parts[4] + 1
+          } else {
+            parts <- c(parts, 9001L)
+          }
+
+          new_version <- paste(parts, collapse = ".")
+          desc::desc_set_version(new_version)
+          cli::cli_alert_success("Version bumped: {current} -> {new_version}")
+          cat(sprintf("new_version=%s\n", new_version), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(sprintf("old_version=%s\n", as.character(current)), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+        shell: Rscript {0}
 
       - name: Download schemas
-        id: download
-        continue-on-error: true
         run: |
           pkgload::load_all()
-          download_ok <- TRUE
-          tryCatch(ct_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("ct_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
-          tryCatch(chemi_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("chemi_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
-          tryCatch(cc_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("cc_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
-          if (!download_ok) {
-            cli::cli_alert_warning("One or more schema downloads failed - workflow will continue with available schemas")
-          }
-        shell: Rscript {0}
-
-      - name: Pretty-print schemas
-        run: |
-          schema_files <- list.files("schema", pattern = "\\.json$", full.names = TRUE)
-          for (f in schema_files) {
-            json <- jsonlite::fromJSON(f, simplifyVector = FALSE)
-            jsonlite::write_json(json, f, pretty = TRUE, auto_unbox = TRUE)
-          }
-          cli::cli_alert_info("Pretty-printed {length(schema_files)} schema files")
+          ct_schema()
+          chemi_schema()
+          cc_schema()
         shell: Rscript {0}
 
       - name: Compute schema hashes
         id: hash
-        continue-on-error: true
         run: >
           schema_files <- list.files("schema", pattern = "\\.json$", full.names =
           TRUE)
 
           if (length(schema_files) == 0) {
-            cli::cli_alert_warning("No schema files found - skipping hash computation")
-            # Write empty hashes CSV so downstream steps don't fail
-            write.csv(data.frame(file = character(), hash = character()), "schema_hashes.csv", row.names = FALSE, quote = FALSE)
-            quit(save = "no", status = 0)
+            cli::cli_abort("No schema files found!")
           }
 
           hashes <- data.frame(
             file = basename(schema_files),
             hash = sapply(schema_files, function(f) tools::md5sum(f), USE.NAMES = FALSE)
           )
-          # Sort for consistent ordering
           hashes <- hashes[order(hashes$file), ]
-          # Write updated hashes
           write.csv(hashes, "schema_hashes.csv", row.names = FALSE, quote = FALSE)
           cli::cli_alert_info("Computed hashes for {nrow(hashes)} schema files")
         shell: Rscript {0}
 
-      - name: Diff schemas
-        id: diff
-        continue-on-error: true
+      - name: Check for changes
+        id: changes
         run: |
-          source("dev/diff_schemas.R")
-          results <- diff_schemas("schema_old", "schema")
-          md <- format_diff_markdown(results)
-          writeLines(md, "schema_diff_report.md")
-
-          # Count changes for workflow outputs
-          breaking <- sum(sapply(results, function(r) {
-            nrow(r$removed) + sum(r$modified$breaking)
-          }))
-          nonbreaking <- sum(sapply(results, function(r) {
-            nrow(r$added) + sum(!r$modified$breaking)
-          }))
-
-          # Write to GITHUB_OUTPUT
-          gh_output <- Sys.getenv("GITHUB_OUTPUT")
-          cat(sprintf("breaking_count=%d\n", breaking), file = gh_output, append = TRUE)
-          cat(sprintf("nonbreaking_count=%d\n", nonbreaking), file = gh_output, append = TRUE)
-          cat(sprintf("has_endpoint_changes=%s\n", tolower(as.character(breaking + nonbreaking > 0))), file = gh_output, append = TRUE)
-
-          cli::cli_alert_info("Schema diff: {breaking} breaking, {nonbreaking} non-breaking changes")
-        shell: Rscript {0}
-
-      - name: Check for schema changes
-        id: schema_changes
-        run: |
-          if git diff --quiet schema/ schema_hashes.csv; then
+          if git diff --quiet schema/ schema_hashes.csv DESCRIPTION; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "No schema changes detected"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Schema changes detected!"
-            git diff --stat schema/ schema_hashes.csv
+            git diff --stat schema/ schema_hashes.csv DESCRIPTION
           fi
-
-      - name: Generate function stubs
-        id: stubs
-        if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          source("dev/generate_stubs.R")
-        shell: Rscript {0}
-
-      - name: Update documentation
-        if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          devtools::document()
-        shell: Rscript {0}
-
-      - name: Calculate coverage
-        id: coverage
-        if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          source("dev/calculate_coverage.R")
-        shell: Rscript {0}
-
-      - name: Check for all changes
-        id: changes
-        run: |
-          # Check if there are any changes to commit
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No changes to commit"
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected:"
-            git diff --stat
-            git status --short
-          fi
-
-      - name: Workflow status summary
-        if: always()
-        run: |
-          if [ "${{ steps.download.outcome }}" = "failure" ]; then
-            echo "::warning::Schema download had failures - some schemas may be missing"
-          fi
-          if [ "${{ steps.diff.outcome }}" = "failure" ]; then
-            echo "::warning::Schema diff encountered errors"
-          fi
-
-      - name: Prepare PR body
-        id: pr_body
-        if: steps.changes.outputs.has_changes == 'true'
-        run: |
-          # Build PR body from template + diff report
-          cat > pr_body.md << 'HEADER'
-          ## Automated Schema Update
-
-          This PR was automatically generated by the schema check workflow.
-          HEADER
-
-          # Add changed files list
-          CHANGED_FILES=$(git diff --name-only schema/)
-          if [ -n "$CHANGED_FILES" ]; then
-            echo "" >> pr_body.md
-            echo "### Changed Files" >> pr_body.md
-            echo "$CHANGED_FILES" | while read -r file; do
-              echo "- \`$file\`" >> pr_body.md
-            done
-          fi
-
-          # Add endpoint diff section if report exists
-          if [ -f "schema_diff_report.md" ]; then
-            echo "" >> pr_body.md
-            cat schema_diff_report.md >> pr_body.md
-          fi
-
-          # Add stub generation section
-          cat >> pr_body.md << 'STUBS'
-
-          ### Function Stub Generation
-          STUBS
-          echo "- **Stubs Generated:** ${{ steps.stubs.outputs.stubs_generated || '0' }}" >> pr_body.md
-          echo "- **New Files Created:** ${{ steps.stubs.outputs.stubs_created || '0' }}" >> pr_body.md
-          echo "- **Existing Files Updated:** ${{ steps.stubs.outputs.stubs_appended || '0' }}" >> pr_body.md
-
-          # Add coverage section
-          cat >> pr_body.md << 'COVERAGE'
-
-          ### API Coverage
-          | API | Coverage | Endpoints | Functions |
-          |-----|----------|-----------|-----------|
-          COVERAGE
-          echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage || 'N/A' }}% | ${{ steps.coverage.outputs.ccd_endpoints || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions || 'N/A' }} |" >> pr_body.md
-          echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage || 'N/A' }}% | ${{ steps.coverage.outputs.chemi_endpoints || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions || 'N/A' }} |" >> pr_body.md
-
-          # Add review checklist with breaking change awareness
-          BREAKING="${{ steps.diff.outputs.breaking_count || '0' }}"
-          cat >> pr_body.md << 'CHECKLIST'
-
-          ### Review Checklist
-          CHECKLIST
-          if [ "$BREAKING" != "0" ]; then
-            echo "- [ ] **⚠ BREAKING CHANGES detected** — review removed/modified endpoints above" >> pr_body.md
-          fi
-          cat >> pr_body.md << 'TAIL'
-          - [ ] Review schema changes for breaking API modifications
-          - [ ] Review generated function stubs for correctness
-          - [ ] Check if any existing package functions need updates
-          - [ ] Run tests to verify compatibility
-
-          ---
-          Generated by GitHub Actions
-          TAIL
 
       - name: Create Pull Request
-        if: steps.changes.outputs.has_changes == 'true'
+        if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update API schemas and generate function stubs"
-          title: "chore: API schema updates detected"
-          body-path: pr_body.md
+          commit-message: "chore: update API schemas and bump nightly version to ${{ steps.version.outputs.new_version }}"
+          title: "chore: API schema updates detected (${{ steps.version.outputs.new_version }})"
+          body: |
+            ## Automated Schema Update
+            This PR was automatically generated by the schema check workflow.
+
+            ### Version Bump
+            `${{ steps.version.outputs.old_version }}` → `${{ steps.version.outputs.new_version }}`
+
+            The following API schemas have been updated:
+            ```
+            ${{ steps.changes.outputs.diff || 'See changed files below' }}
+            ```
+            ### Review Checklist
+            - [ ] Review schema changes for breaking API modifications
+            - [ ] Check if any package functions need updates
+            - [ ] Run tests to verify compatibility
+            ---
+            🤖 Generated by GitHub Actions
           branch: automated/schema-update
           delete-branch: true
           labels: |
             automated
             schemas
+
+      - name: Build nightly package
+        if: steps.changes.outputs.changed == 'true'
+        run: R CMD build --no-build-vignettes --no-manual .
+
+      - name: Publish nightly release
+        if: steps.changes.outputs.changed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: nightly-${{ steps.version.outputs.new_version }}
+          name: "Nightly ${{ steps.version.outputs.new_version }}"
+          body: |
+            ## Nightly Build `${{ steps.version.outputs.new_version }}`
+            Built automatically from the `integration` branch on ${{ github.run_id }}.
+            This is a pre-release build — **not intended for production use**.
+          files: ComptoxR_${{ steps.version.outputs.new_version }}.tar.gz
+          prerelease: true
+          make_latest: false
