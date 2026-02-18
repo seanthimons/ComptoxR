@@ -61,3 +61,63 @@ chemi_pfas_cats_bulk <- function(chemicals) {
 }
 
 
+
+
+#' Get PFAS-CATS version information
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_pfas_cats_version()
+#' }
+chemi_pfas_cats_version <- function() {
+  result <- generic_request(
+    endpoint = "pfas_cats/version",
+    method = "GET",
+    batch_limit = 0,
+    server = "chemi_burl",
+    auth = FALSE,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+
+
+
+#' Get PFAS-CATS metadata
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_pfas_cats_metadata()
+#' }
+chemi_pfas_cats_metadata <- function() {
+  result <- generic_request(
+    endpoint = "pfas_cats/metadata",
+    method = "GET",
+    batch_limit = 0,
+    server = "chemi_burl",
+    auth = FALSE,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+

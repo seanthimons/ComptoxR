@@ -63,3 +63,93 @@ chemi_opera_bulk <- function(smiles) {
 }
 
 
+
+
+#' Get OPERA version information
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_opera_version()
+#' }
+chemi_opera_version <- function() {
+  result <- generic_request(
+    endpoint = "opera/version",
+    method = "GET",
+    batch_limit = 0,
+    server = "chemi_burl",
+    auth = FALSE,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+
+
+
+#' Get OPERA metadata
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_opera_metadata()
+#' }
+chemi_opera_metadata <- function() {
+  result <- generic_request(
+    endpoint = "opera/metadata",
+    method = "GET",
+    batch_limit = 0,
+    server = "chemi_burl",
+    auth = FALSE,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+
+
+
+#' Upload file for OPERA predictions
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param file Required parameter
+#' @return Returns a tibble with results
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_opera_file(file = "chemicals.csv")
+#' }
+chemi_opera_file <- function(file) {
+
+  result <- generic_chemi_request(
+    query = file,
+    endpoint = "opera/file",
+    wrap = FALSE,
+    tidy = FALSE
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}
+
+
