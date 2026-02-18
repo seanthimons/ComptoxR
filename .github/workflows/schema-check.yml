@@ -39,6 +39,7 @@ jobs:
             any::pkgload
             any::cli
             any::here
+            any::desc
             any::jsonlite
             any::tidyverse
             any::devtools
@@ -288,3 +289,51 @@ jobs:
           labels: |
             automated
             schemas
+
+      - name: Bump nightly version
+        if: steps.changes.outputs.has_changes == 'true'
+        id: version
+        run: |
+          current <- desc::desc_get_version()
+          parts <- as.integer(strsplit(as.character(current), "\\.")[[1]])
+
+          if (length(parts) == 4) {
+            parts[4] <- parts[4] + 1
+          } else {
+            parts <- c(parts, 9000L)
+          }
+
+          new_version <- paste(parts, collapse = ".")
+          desc::desc_set_version(new_version)
+          cli::cli_alert_success("Version bumped: {current} -> {new_version}")
+          cat(sprintf("new_version=%s\n", new_version), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+          cat(sprintf("old_version=%s\n", as.character(current)), file = Sys.getenv("GITHUB_OUTPUT"), append = TRUE)
+        shell: Rscript {0}
+
+      - name: Build nightly package
+        if: steps.changes.outputs.has_changes == 'true'
+        run: R CMD build --no-build-vignettes --no-manual .
+
+      - name: Publish nightly release
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: nightly-${{ steps.version.outputs.new_version }}
+          name: "Nightly ${{ steps.version.outputs.new_version }}"
+          body: |
+            ## Nightly Build `${{ steps.version.outputs.new_version }}`
+            
+            This is an automated pre-release build generated when API schema changes are detected.
+            Built from the `integration` branch (workflow run ${{ github.run_id }}).
+            
+            ### What's included
+            - Updated API schemas
+            - Generated function stubs for new endpoints
+            - Updated documentation
+            
+            **This is a pre-release build — not intended for production use.**
+            Review the corresponding PR for details on schema changes and breaking modifications.
+          files: ComptoxR_${{ steps.version.outputs.new_version }}.tar.gz
+          prerelease: true
+          make_latest: false
