@@ -458,19 +458,19 @@
           "units": {
             "type": "string"
           },
-          "logUnits": {
-            "type": "string"
-          },
-          "logMolar": {
-            "type": "boolean"
+          "logValueDigits": {
+            "type": "integer",
+            "format": "int32"
           },
           "valueDigits": {
             "type": "integer",
             "format": "int32"
           },
-          "logValueDigits": {
-            "type": "integer",
-            "format": "int32"
+          "logUnits": {
+            "type": "string"
+          },
+          "logMolar": {
+            "type": "boolean"
           }
         }
       },
@@ -597,6 +597,12 @@
               "$ref": "#/components/schemas/MethodInfo"
             }
           },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndpointInfo"
+            }
+          },
           "inputFormats": {
             "type": "array",
             "items": {
@@ -618,12 +624,6 @@
                 "TXT",
                 "MSP"
               ]
-            }
-          },
-          "endpoints": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EndpointInfo"
             }
           }
         }
