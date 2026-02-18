@@ -75,6 +75,15 @@
                 "value": "xlsx"
               }
             }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -111,6 +120,15 @@
                 "summary": "Excel",
                 "value": "xlsx"
               }
+            }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
@@ -176,6 +194,15 @@
                 "summary": "Excel",
                 "value": "xlsx"
               }
+            }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
