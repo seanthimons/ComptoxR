@@ -597,12 +597,6 @@
               "$ref": "#/components/schemas/MethodInfo"
             }
           },
-          "endpoints": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EndpointInfo"
-            }
-          },
           "inputFormats": {
             "type": "array",
             "items": {
@@ -624,6 +618,12 @@
                 "TXT",
                 "MSP"
               ]
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndpointInfo"
             }
           }
         }
