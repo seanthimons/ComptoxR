@@ -727,6 +727,14 @@
             "type": "number",
             "format": "double"
           },
+          "requestMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "diffRequestMass": {
+            "type": "number",
+            "format": "double"
+          },
           "mol": {
             "type": "string"
           },

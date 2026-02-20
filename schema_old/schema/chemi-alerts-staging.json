@@ -968,6 +968,9 @@
           },
           "showAlertsOnly": {
             "type": "boolean"
+          },
+          "showImages": {
+            "type": "boolean"
           }
         }
       },

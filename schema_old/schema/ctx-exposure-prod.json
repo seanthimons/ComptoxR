@@ -2379,13 +2379,13 @@
         }
       }
     },
-    "securitySchemes": {
-      "api_key": {
-        "type": "apiKey",
-        "description": "Each API request requires an api_key. Contact the CTX API Admin to request an API Key.",
-        "name": "x-api-key",
-        "in": "header"
-      }
+        "securitySchemes": {
+            "api_key": {
+                "type": "apiKey",
+                "description": "Each API request requires an api_key. Contact the CTX API Admin to request an API Key.",
+                "name": "x-api-key",
+                "in": "header"
+            }
+        }
     }
-  }
 }
