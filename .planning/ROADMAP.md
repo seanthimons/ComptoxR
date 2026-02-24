@@ -75,7 +75,10 @@ Plans:
   2. Generated stubs expose an `all_pages` parameter (default TRUE) to let users opt out
   3. Individual pagination params (page, offset, etc.) remain in the function signature for manual control
   4. Non-paginated endpoints are unaffected (no regression)
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 21-01-PLAN.md -- Add pagination metadata plumbing and pagination-aware stub generation with tests
 
 ### Phase 22: Testing
 **Goal**: Pagination detection and auto-pagination are verified by automated tests
@@ -97,5 +100,5 @@ Phases execute in numeric order: 19 -> 20 -> 21 -> 22
 |-------|-----------|----------------|--------|-----------|
 | 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
 | 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
-| 21. Stub Generation Integration | v2.0 | 0/TBD | Pending | - |
+| 21. Stub Generation Integration | v2.0 | 0/1 | Pending | - |
 | 22. Testing | v2.0 | 0/TBD | Pending | - |
