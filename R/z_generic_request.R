@@ -573,14 +573,19 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 #' @param chemicals Optional list of pre-resolved Chemical objects. Each element should be a
 #'        list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
 #'        this takes precedence over the query parameter for building the chemicals payload.
+#' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+#'        When TRUE, uses httr2::req_perform_iterative() to loop through pages.
+#' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
+#' @param pagination_strategy Pagination strategy. For chemi search, usually "offset_limit" (body).
 #' @param ... Additional arguments passed to httr2.
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a raw list.
 #' @export
-generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_label = "sid", 
-                                  server = "chemi_burl", auth = FALSE, pluck_res = NULL, 
+generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_label = "sid",
+                                  server = "chemi_burl", auth = FALSE, pluck_res = NULL,
                                   wrap = TRUE, array_payload = FALSE, tidy = TRUE,
-                                  chemicals = NULL, ...) {
+                                  chemicals = NULL, paginate = FALSE, max_pages = 100,
+                                  pagination_strategy = NULL, ...) {
   
   # 1. Base URL Resolution
   base_url <- Sys.getenv(server, unset = server)
@@ -655,6 +660,77 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
   # 5. Debugging
   if (run_debug) {
     return(httr2::req_dry_run(req))
+  }
+
+  # 5.5. Pagination
+  if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
+    # Chemi Search: offset + limit in request body
+    # Response: {totalRecordsCount, recordsCount, records, offset, limit, ...}
+    # Use custom next_req since iterate_with_offset only handles query params
+    page_limit <- as.numeric(options[["limit"]] %||% 100)
+
+    next_req <- function(resp, req) {
+      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      total <- body[["totalRecordsCount"]] %||% 0
+      current_offset <- body[["offset"]] %||% 0
+      records_count <- body[["recordsCount"]] %||% length(body[["records"]] %||% list())
+
+      # Done if we've fetched all records or got an empty page
+      if (records_count == 0 || (current_offset + records_count) >= total) return(NULL)
+
+      new_offset <- current_offset + records_count
+      req %>% httr2::req_body_json_modify(offset = new_offset)
+    }
+
+    resps <- httr2::req_perform_iterative(
+      req,
+      next_req = next_req,
+      max_reqs = max_pages,
+      on_error = "return",
+      progress = run_verbose
+    )
+
+    resps <- httr2::resps_successes(resps)
+
+    if (length(resps) == 0) {
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (run_verbose) {
+      cli::cli_alert_success("Chemi pagination complete: {length(resps)} pages fetched.")
+    }
+
+    # Extract records from each page
+    body_list <- purrr::map(resps, function(resp) {
+      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      records <- body[["records"]] %||% list()
+      if (!is.null(pluck_res)) {
+        records <- purrr::map(records, ~ purrr::pluck(.x, pluck_res))
+      }
+      records
+    }) %>% purrr::list_flatten()
+
+    if (length(body_list) == 0) {
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (!tidy) return(body_list)
+
+    # Tidy conversion (same logic as non-paginated path)
+    res <- body_list %>%
+      purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) {
+          x[purrr::map_lgl(x, is.null)] <- NA
+          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
+        } else if (is.null(x) || length(x) == 0) {
+          NULL
+        } else {
+          tibble::tibble(value = x)
+        }
+      }) %>%
+      purrr::list_rbind()
+
+    return(res)
   }
 
   # 6. Execution
