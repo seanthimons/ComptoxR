@@ -27,7 +27,7 @@ Add automatic pagination to all EPA API endpoints. Paginated functions transpare
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 19: Pagination Detection** - Detect and classify pagination patterns in OpenAPI schemas
-- [ ] **Phase 20: Auto-Pagination Engine** - Add pagination loop to all three request templates
+- [x] **Phase 20: Auto-Pagination Engine** - Add pagination loop to all three request templates
 - [ ] **Phase 21: Stub Generation Integration** - Generate auto-paginating stubs for detected endpoints
 - [ ] **Phase 22: Testing** - Unit and integration tests for pagination
 
@@ -63,8 +63,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 20-01-PLAN.md -- Add paginate_loop, pagination to generic_request() + generic_cc_request() + tests
-- [ ] 20-02-PLAN.md -- Add pagination to generic_chemi_request() + tests
+- [x] 20-01-PLAN.md -- Add paginate_loop, pagination to generic_request() + generic_cc_request() + tests
+- [x] 20-02-PLAN.md -- Add pagination to generic_chemi_request() + tests
 
 ### Phase 21: Stub Generation Integration
 **Goal**: Generated stubs for paginated endpoints auto-paginate by default
@@ -96,6 +96,6 @@ Phases execute in numeric order: 19 -> 20 -> 21 -> 22
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
-| 20. Auto-Pagination Engine | v2.0 | 0/TBD | Pending | - |
+| 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
 | 21. Stub Generation Integration | v2.0 | 0/TBD | Pending | - |
 | 22. Testing | v2.0 | 0/TBD | Pending | - |

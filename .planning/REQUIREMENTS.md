@@ -17,13 +17,13 @@ Requirements for automatic pagination support across all EPA API endpoints.
 ### Auto-Pagination in Request Templates
 
 - [ ] **PAG-05**: `generic_request()` accepts a `paginate` parameter that triggers automatic fetching of all pages
-- [ ] **PAG-06**: `generic_chemi_request()` accepts a `paginate` parameter for cheminformatics paginated endpoints
+- [x] **PAG-06**: `generic_chemi_request()` accepts a `paginate` parameter for cheminformatics paginated endpoints
 - [ ] **PAG-07**: `generic_cc_request()` accepts a `paginate` parameter for CAS Common Chemistry paginated endpoints
-- [ ] **PAG-08**: Offset/limit pagination: automatically increments offset until response returns fewer results than the limit
+- [x] **PAG-08**: Offset/limit pagination: automatically increments offset until response returns fewer results than the limit
 - [ ] **PAG-09**: Page/size pagination: automatically increments page number until response returns fewer results than page size or an empty page
 - [ ] **PAG-10**: Cursor-based pagination: follows cursor tokens from response until no next cursor is returned
 - [ ] **PAG-11**: Path-based pagination (AMOS `/{limit}/{offset}`): auto-increments offset path parameter across requests
-- [ ] **PAG-12**: All pagination strategies combine results into a single tibble (tidy=TRUE) or single list (tidy=FALSE)
+- [x] **PAG-12**: All pagination strategies combine results into a single tibble (tidy=TRUE) or single list (tidy=FALSE)
 - [ ] **PAG-13**: Progress feedback via `cli` when verbose mode is enabled (e.g., "Fetching page 3...")
 
 ### Generated Stub Integration
@@ -75,13 +75,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PAG-03 | Phase 19 | Complete |
 | PAG-04 | Phase 19 | Complete |
 | PAG-05 | Phase 20 | Pending |
-| PAG-06 | Phase 20 | Pending |
+| PAG-06 | Phase 20 | Complete |
 | PAG-07 | Phase 20 | Pending |
-| PAG-08 | Phase 20 | Pending |
+| PAG-08 | Phase 20 | Complete |
 | PAG-09 | Phase 20 | Pending |
 | PAG-10 | Phase 20 | Pending |
 | PAG-11 | Phase 20 | Pending |
-| PAG-12 | Phase 20 | Pending |
+| PAG-12 | Phase 20 | Complete |
 | PAG-13 | Phase 20 | Pending |
 | PAG-14 | Phase 21 | Pending |
 | PAG-15 | Phase 21 | Pending |
@@ -100,4 +100,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after Phase 19 Plan 01 completion*
+*Last updated: 2026-02-24 after Phase 20 Plan 02 completion*
