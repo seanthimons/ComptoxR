@@ -2,38 +2,34 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-12)
+See: .planning/PROJECT.md (updated 2026-02-24)
 
-**Core value:** Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
-**Current focus:** v1.9 milestone complete — all phases (16-18) shipped
+**Core value:** Paginated API endpoints return all results transparently — users call a function once and get everything back.
+**Current focus:** v2.0 Paginated Requests — phases 19-22
 
 ## Current Position
 
-Phase: 18 of 18 (Reliability)
-Plan: 1/1 complete
-Status: v1.9 milestone complete — all 3 phases verified
-Last activity: 2026-02-12 — Phase 18 verified and complete
+Phase: 19 of 22 (Pagination Detection)
+Plan: 0/TBD
+Status: Milestone started — ready for Phase 19 planning
+Last activity: 2026-02-24 — v2.0 milestone created
 
-Progress: [██████████] 100%
+Progress: [----------] 0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 4 (from v1.9)
 - Average duration: 3.3 minutes
 - Total execution time: 0.22 hours
 
-**By Phase:**
+**By Phase (v1.9):**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 16 - CI Fix | 1 | 3 min | 3 min |
 | 17 - Schema Diffing | 2 | 5 min | 2.5 min |
 | 18 - Reliability | 1 | 5 min | 5 min |
-
-**Recent Trend:**
-- Last 5 plans: 16-01 (3 min), 17-01 (4 min), 17-02 (1 min), 18-01 (5 min)
-- Trend: Stable — consistent execution velocity around 3-5 min per plan
 
 *Updated after each plan completion*
 
@@ -44,11 +40,20 @@ Progress: [██████████] 100%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [18-01]: Default timeout of 30s for R functions, 60s for CI (CI runners slower)
-- [18-01]: Silent 404s in chemi_schema brute-force to reduce log noise
-- [18-01]: CI workflow uses continue-on-error for graceful degradation
-- [16-01]: Move unicode_map generation from R/ to data-raw/ to fix CI pkgload::load_all() failure
-- [v1.8]: Three-cassette VCR strategy for test organization
+- [v2.0]: Auto-paginate all pages by default; users get everything in one call
+- [v2.0]: Regex-based pattern detection for future-proofing new pagination endpoints
+- [v2.0]: All current pagination patterns implemented (offset/limit, page/size, cursor, path-based)
+- [v2.0]: Stub generator updated to detect and generate auto-paginating code
+
+### Pagination Patterns Discovered
+
+| Pattern | Endpoints | Mechanism |
+|---------|-----------|-----------|
+| Offset/limit path params | AMOS `*_pagination/{limit}/{offset}` | Path-based GET |
+| Keyset/cursor (dev API) | AMOS `*_keyset_pagination/{limit}?cursor=` | Cursor query param |
+| pageNumber query param | `ct_exposure_mmdb_*` | Query param GET |
+| offset+size query params | `cc_search`, `chemi_search` | Query param GET |
+| page+size query params | `chemi_resolver_classyfire` | Query param POST (via options) |
 
 ### Pending Todos
 
@@ -61,12 +66,12 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-12
-Stopped at: Completed 18-01-PLAN.md (timeout protection and CI resilience)
+Last session: 2026-02-24
+Stopped at: v2.0 milestone created, ready for `/gsd:plan-phase 19`
 Resume file: None
 
 **Archived Milestones:**
-- v1.0-v1.8: See `.planning/milestones/` directory
+- v1.0-v1.9: See `.planning/milestones/` directory
 
 ---
-*Last updated: 2026-02-12 after completing 18-01-PLAN.md*
+*Last updated: 2026-02-24 after v2.0 milestone creation*
