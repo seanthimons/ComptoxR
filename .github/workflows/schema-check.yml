@@ -154,6 +154,9 @@ jobs:
           cli::cli_alert_info("Schema diff: {breaking} breaking, {nonbreaking} non-breaking changes")
         shell: Rscript {0}
 
+      - name: Clean up temporary diff artifacts
+        run: rm -rf schema_old
+
       - name: Check for schema changes
         id: schema_changes
         run: |
