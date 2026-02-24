@@ -60,7 +60,11 @@ Plans:
   6. Combined results are a single tibble (tidy=TRUE) or single list (tidy=FALSE)
   7. Pagination stops after max_pages (default 100) or on empty/error response
   8. Verbose mode shows page progress via `cli`
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 20-01-PLAN.md -- Add paginate_loop, pagination to generic_request() + generic_cc_request() + tests
+- [ ] 20-02-PLAN.md -- Add pagination to generic_chemi_request() + tests
 
 ### Phase 21: Stub Generation Integration
 **Goal**: Generated stubs for paginated endpoints auto-paginate by default
