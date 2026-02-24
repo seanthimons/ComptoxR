@@ -59,3 +59,31 @@
     Output
       path_params = c(id = id)
 
+# snapshot test - paginated offset_limit endpoint
+
+    Code
+      cat("Function signature:\n")
+    Output
+      Function signature:
+    Code
+      signature <- stringr::str_extract(stub, "test_function <- function\\([^)]+\\)")
+      cat(signature)
+    Output
+      test_function <- function(limit, offset = 0, all_pages = TRUE)
+    Code
+      cat("\n\nGeneric request call:\n")
+    Output
+      
+      
+      Generic request call:
+    Code
+      request_call <- stringr::str_extract(stub, "generic_request\\([\\s\\S]*?\\)")
+      cat(request_call)
+    Output
+      generic_request(
+          query = limit,
+          endpoint = "/test/endpoint",
+          method = "GET",
+          batch_limit = 1,
+          path_params = c(offset = offset)
+

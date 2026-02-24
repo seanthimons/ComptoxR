@@ -218,7 +218,9 @@ create_stub_defaults <- function() {
     body_schema_type = "unknown",
     deprecated = FALSE,
     response_schema_type = "object",
-    request_type = "query_only"
+    request_type = "query_only",
+    pagination_strategy = "none",
+    pagination_metadata = NULL
   )
 }
 
@@ -405,6 +407,170 @@ describe("build_function_stub", {
     stub <- do.call(build_function_stub, defaults)
 
     expect_true(grepl('body_type = "raw_text"', stub))
+  })
+})
+
+# ==============================================================================
+# Pagination Stub Generation Tests (Phase 21)
+# ==============================================================================
+
+describe("build_function_stub pagination", {
+  test_that("paginated endpoint adds all_pages parameter to signature", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    defaults <- create_stub_defaults()
+    defaults$pagination_strategy <- "offset_limit"
+    defaults$pagination_metadata <- list(params = c("limit", "offset"))
+    defaults$path_param_info <- list(
+      has_path_params = TRUE,
+      has_any_path_params = TRUE,
+      primary_param = "limit",
+      fn_signature = "limit, offset",
+      param_docs = "#' @param limit Limit\n#' @param offset Offset\n",
+      path_params_call = ",\n    path_params = c(offset = offset)",
+      primary_example = "10"
+    )
+    defaults$request_type <- "path"
+    defaults$batch_limit <- 1
+    defaults$method <- "GET"
+
+    stub <- do.call(build_function_stub, defaults)
+
+    expect_true(grepl("all_pages = TRUE", stub, fixed = TRUE))
+    expect_true(grepl("@param all_pages", stub, fixed = TRUE))
+    expect_true(grepl("paginate = all_pages", stub, fixed = TRUE))
+    expect_true(grepl("max_pages = 100", stub, fixed = TRUE))
+    expect_true(grepl('pagination_strategy = "offset_limit"', stub, fixed = TRUE))
+  })
+
+  test_that("paginated endpoint sets offset default to 0", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    defaults <- create_stub_defaults()
+    defaults$pagination_strategy <- "offset_limit"
+    defaults$pagination_metadata <- list(params = c("limit", "offset"))
+    defaults$path_param_info <- list(
+      has_path_params = TRUE,
+      has_any_path_params = TRUE,
+      primary_param = "limit",
+      fn_signature = "limit, offset",
+      param_docs = "#' @param limit Limit\n#' @param offset Offset\n",
+      path_params_call = ",\n    path_params = c(offset = offset)",
+      primary_example = "10"
+    )
+    defaults$request_type <- "path"
+    defaults$batch_limit <- 1
+    defaults$method <- "GET"
+
+    stub <- do.call(build_function_stub, defaults)
+
+    expect_true(grepl("offset = 0", stub, fixed = TRUE))
+  })
+
+  test_that("paginated endpoint with page_number strategy sets pageNumber default to 1", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    defaults <- create_stub_defaults()
+    defaults$pagination_strategy <- "page_number"
+    defaults$pagination_metadata <- list(params = c("pageNumber"))
+    defaults$path_param_info <- list(
+      has_path_params = TRUE,
+      has_any_path_params = TRUE,
+      primary_param = "studyType",
+      fn_signature = "studyType",
+      param_docs = "#' @param studyType Study type\n",
+      path_params_call = "",
+      primary_example = "CHR"
+    )
+    defaults$query_param_info <- list(
+      has_params = TRUE,
+      primary_param = "studyType",
+      fn_signature = "pageNumber",
+      param_docs = "#' @param pageNumber Page number\n",
+      params_call = ",\n    pageNumber = pageNumber",
+      params_code = "",
+      primary_example = "1"
+    )
+    defaults$request_type <- "path"
+    defaults$batch_limit <- 1
+    defaults$method <- "GET"
+
+    stub <- do.call(build_function_stub, defaults)
+
+    expect_true(grepl("pageNumber = 1", stub, fixed = TRUE))
+    expect_true(grepl("all_pages = TRUE", stub, fixed = TRUE))
+  })
+
+  test_that("non-paginated endpoint is unaffected", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    defaults <- create_stub_defaults()
+    defaults$pagination_strategy <- "none"
+    defaults$pagination_metadata <- NULL
+
+    stub <- do.call(build_function_stub, defaults)
+
+    expect_false(grepl("all_pages", stub, fixed = TRUE))
+    expect_false(grepl("paginate", stub, fixed = TRUE))
+    expect_false(grepl("max_pages", stub, fixed = TRUE))
+    expect_false(grepl("pagination_strategy", stub, fixed = TRUE))
+  })
+
+  test_that("non-paginated endpoint with explicit none produces identical output to defaults", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    # Stub with explicit pagination_strategy = "none"
+    defaults1 <- create_stub_defaults()
+    defaults1$pagination_strategy <- "none"
+    defaults1$pagination_metadata <- NULL
+    stub1 <- do.call(build_function_stub, defaults1)
+
+    clear_stubgen_env()
+
+    # Stub relying on default pagination params
+    defaults2 <- create_stub_defaults()
+    # pagination_strategy and pagination_metadata already default to "none" and NULL
+    stub2 <- do.call(build_function_stub, defaults2)
+
+    expect_identical(stub1, stub2)
+  })
+
+  test_that("snapshot test - paginated offset_limit endpoint", {
+    source_pipeline_files()
+    clear_stubgen_env()
+
+    defaults <- create_stub_defaults()
+    defaults$pagination_strategy <- "offset_limit"
+    defaults$pagination_metadata <- list(params = c("limit", "offset"))
+    defaults$path_param_info <- list(
+      has_path_params = TRUE,
+      has_any_path_params = TRUE,
+      primary_param = "limit",
+      fn_signature = "limit, offset",
+      param_docs = "#' @param limit Limit\n#' @param offset Offset\n",
+      path_params_call = ",\n    path_params = c(offset = offset)",
+      primary_example = "10"
+    )
+    defaults$request_type <- "path"
+    defaults$batch_limit <- 1
+    defaults$method <- "GET"
+
+    stub <- do.call(build_function_stub, defaults)
+
+    expect_snapshot({
+      cat("Function signature:\n")
+      signature <- stringr::str_extract(stub, "test_function <- function\\([^)]+\\)")
+      cat(signature)
+
+      cat("\n\nGeneric request call:\n")
+      request_call <- stringr::str_extract(stub, "generic_request\\([\\s\\S]*?\\)")
+      cat(request_call)
+    })
   })
 })
 

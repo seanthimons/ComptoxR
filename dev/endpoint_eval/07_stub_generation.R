@@ -150,7 +150,7 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 #' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown", request_type = NULL) {
+build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown", request_type = NULL, pagination_strategy = "none", pagination_metadata = NULL) {
   if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
 
   # Format batch_limit for code
@@ -348,6 +348,53 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
   }
 
+  # =========================================================================
+  # Pagination Parameter Generation (Phase 21)
+  # =========================================================================
+  # For paginated endpoints, add all_pages parameter and pagination call args
+  pagination_call_params <- ""
+
+  if (!isTRUE(pagination_strategy == "none") && !is.null(pagination_strategy) && !is.na(pagination_strategy)) {
+    # 1. Set sensible defaults for pagination params already in signature
+    pag_params <- if (!is.null(pagination_metadata) && !is.null(pagination_metadata$params)) {
+      pagination_metadata$params
+    } else {
+      character(0)
+    }
+
+    fn_signature_safe_pag <- fn_signature %|NA|% ""
+    if ("offset" %in% pag_params && grepl("\\boffset\\b", fn_signature_safe_pag)) {
+      fn_signature <- gsub("\\boffset(?!\\s*=)", "offset = 0", fn_signature, perl = TRUE)
+    }
+    if ("page" %in% pag_params && grepl("\\bpage\\b", fn_signature_safe_pag) && !grepl("\\bpageNumber\\b", fn_signature_safe_pag)) {
+      fn_signature <- gsub("\\bpage(?!\\s*=|Number)", "page = 0", fn_signature, perl = TRUE)
+    }
+    if ("pageNumber" %in% pag_params && grepl("\\bpageNumber\\b", fn_signature_safe_pag)) {
+      fn_signature <- gsub("\\bpageNumber(?!\\s*=)", "pageNumber = 1", fn_signature, perl = TRUE)
+    }
+
+    # 2. Append all_pages = TRUE to end of signature
+    fn_signature_check <- fn_signature %|NA|% ""
+    if (nzchar(fn_signature_check)) {
+      fn_signature <- paste0(fn_signature, ", all_pages = TRUE")
+    } else {
+      fn_signature <- "all_pages = TRUE"
+    }
+
+    # 3. Add @param all_pages documentation
+    param_docs <- paste0(
+      param_docs,
+      "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n"
+    )
+
+    # 4. Build pagination call params string (inserted into glue templates)
+    pagination_call_params <- paste0(
+      ",\n    paginate = all_pages",
+      ",\n    max_pages = 100",
+      ',\n    pagination_strategy = "', pagination_strategy, '"'
+    )
+  }
+
   # Build example call string - handle case where there are no parameters
   # Use %|NA|% to handle NULL/NA values safely
   fn_signature_safe <- fn_signature %|NA|% ""
@@ -481,7 +528,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     endpoint = "{endpoint}",
     options = extra_options,
     chemicals = chemicals,
-    tidy = FALSE
+    tidy = FALSE{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -543,7 +590,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     endpoint = "{endpoint}",
     method = "POST",
     batch_limit = {batch_limit_code},
-    body_type = "raw_text"
+    body_type = "raw_text"{pagination_call_params}
   )
 
   return(result)
@@ -605,7 +652,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){pagination_call_params}
   )
 
   return(result)
@@ -620,7 +667,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){pagination_call_params}
   )
 
   return(result)
@@ -708,7 +755,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   result <- generic_chemi_request(
     query = {query_param},
     endpoint = "{endpoint}"{options_call}{wrap_param},
-    tidy = FALSE
+    tidy = FALSE{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -752,7 +799,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {batch_limit_code},
-    body = body{content_type_call}
+    body = body{content_type_call}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -775,7 +822,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {query_param_info$params_code}  result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{cc_server_params}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{cc_server_params}{content_type_call}{combined_calls}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -789,7 +836,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_chemi_request(
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE
+    tidy = FALSE{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -803,7 +850,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_cc_request(
     endpoint = "{endpoint}",
-    method = "{method}"{combined_calls}
+    method = "{method}"{combined_calls}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -854,7 +901,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -871,7 +918,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -887,7 +934,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {query_param_info$params_code}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE
+    tidy = FALSE{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -930,7 +977,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{extra_params}
+    batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{extra_params}{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -947,7 +994,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     endpoint = "{endpoint}",
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE
+    tidy = FALSE{pagination_call_params}
   )
 
   # Additional post-processing can be added here
@@ -1120,9 +1167,11 @@ render_endpoint_stubs <- function(spec,
       body_schema_type = spec$body_schema_type,
       deprecated = spec$deprecated,
       response_schema_type = spec$response_schema_type,
-      request_type = spec$request_type
+      request_type = spec$request_type,
+      pagination_strategy = spec$pagination_strategy,
+      pagination_metadata = spec$pagination_metadata
     ),
-    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type, request_type) {
+    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type, request_type, pagination_strategy, pagination_metadata) {
       build_function_stub(
         fn = fn,
         endpoint = endpoint,
@@ -1138,7 +1187,9 @@ render_endpoint_stubs <- function(spec,
         body_schema_type = body_schema_type %|NA|% "unknown",
         deprecated = isTRUE(as.logical(deprecated %|NA|% FALSE)),
         response_schema_type = response_schema_type %|NA|% "unknown",
-        request_type = request_type %|NA|% ""
+        request_type = request_type %|NA|% "",
+        pagination_strategy = pagination_strategy %|NA|% "none",
+        pagination_metadata = pagination_metadata
       )
     }
   )
