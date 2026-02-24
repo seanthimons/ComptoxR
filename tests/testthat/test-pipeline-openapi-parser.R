@@ -380,3 +380,140 @@ describe("openapi_to_spec", {
     expect_true(any(result$request_type %in% c("json", "query_only", "path")))
   })
 })
+
+# ==============================================================================
+# Pagination Detection Tests
+# ==============================================================================
+
+describe("detect_pagination", {
+  test_that("detects AMOS offset/limit path pagination", {
+    source_pipeline_files()
+    r <- detect_pagination(
+      "/api/amos/method_pagination/{limit}/{offset}",
+      "limit,offset", "", ""
+    )
+    expect_equal(r$strategy, "offset_limit")
+    expect_equal(r$registry_key, "offset_limit_path")
+    expect_equal(r$param_location, "path")
+  })
+
+  test_that("detects AMOS cursor pagination", {
+    source_pipeline_files()
+    r <- detect_pagination(
+      "/api/amos/method_keyset_pagination/{limit}",
+      "limit", "cursor", ""
+    )
+    expect_equal(r$strategy, "cursor")
+    expect_equal(r$registry_key, "cursor_path")
+  })
+
+  test_that("detects CTX pageNumber query pagination", {
+    source_pipeline_files()
+    r <- detect_pagination("/hazard/toxref/search", "", "pageNumber", "")
+    expect_equal(r$strategy, "page_number")
+    expect_equal(r$registry_key, "page_number_query")
+    expect_equal(r$param_location, "query")
+  })
+
+  test_that("detects Common Chemistry offset+size query pagination", {
+    source_pipeline_files()
+    r <- detect_pagination("/search", "", "q,offset,size", "")
+    expect_equal(r$strategy, "offset_limit")
+    expect_equal(r$registry_key, "offset_size_query")
+    expect_equal(r$param_location, "query")
+  })
+
+  test_that("detects Chemi search body offset+limit pagination", {
+    source_pipeline_files()
+    r <- detect_pagination("/api/search", "", "", "query,offset,limit")
+    expect_equal(r$strategy, "offset_limit")
+    expect_equal(r$registry_key, "offset_size_body")
+    expect_equal(r$param_location, "body")
+  })
+
+  test_that("detects Chemi resolver page+size query pagination", {
+    source_pipeline_files()
+    r <- detect_pagination("/api/resolver/classyfire", "", "page,size", "")
+    expect_equal(r$strategy, "page_size")
+    expect_equal(r$registry_key, "page_size_query")
+  })
+
+  test_that("detects Chemi resolver page+itemsPerPage query pagination", {
+    source_pipeline_files()
+    r <- detect_pagination("/api/resolver/getpubchemlist", "", "page,itemsPerPage", "")
+    expect_equal(r$strategy, "page_size")
+    expect_equal(r$registry_key, "page_items_query")
+  })
+
+  test_that("returns none for non-paginated endpoint", {
+    source_pipeline_files()
+    r <- detect_pagination("/chemical/detail/by-dtxsid", "dtxsid", "", "")
+    expect_equal(r$strategy, "none")
+    expect_true(is.na(r$registry_key))
+    expect_length(r$params, 0)
+  })
+
+  test_that("single limit param alone does not trigger false positive", {
+    source_pipeline_files()
+    r <- detect_pagination("/api/endpoint", "limit", "", "")
+    expect_equal(r$strategy, "none")
+  })
+
+  test_that("empty params return none", {
+    source_pipeline_files()
+    r <- detect_pagination("/api/endpoint", "", "", "")
+    expect_equal(r$strategy, "none")
+  })
+
+  test_that("custom registry overrides detection (PAG-02 configurability)", {
+    source_pipeline_files()
+    custom_registry <- list(
+      custom_pattern = list(
+        strategy = "custom_strategy",
+        route_pattern = NULL,
+        param_names = c("myPage"),
+        param_location = "query",
+        description = "Custom pagination"
+      )
+    )
+    r <- detect_pagination("/api/custom", "", "myPage,other", "", registry = custom_registry)
+    expect_equal(r$strategy, "custom_strategy")
+    expect_equal(r$registry_key, "custom_pattern")
+
+    # Default registry should NOT match this
+    r2 <- detect_pagination("/api/custom", "", "myPage,other", "")
+    expect_equal(r2$strategy, "none")
+  })
+
+  test_that("openapi_to_spec includes pagination columns", {
+    source_pipeline_files()
+    schema <- load_fixture_schema("minimal-openapi-3.json")
+    result <- openapi_to_spec(schema, preprocess = FALSE)
+
+    expect_true("pagination_strategy" %in% names(result))
+    expect_true("pagination_metadata" %in% names(result))
+    expect_true(all(result$pagination_strategy %in% c("none", "offset_limit", "cursor", "page_number", "page_size")))
+  })
+
+  test_that("AMOS schema has paginated endpoints detected", {
+    source_pipeline_files()
+    schema_path <- here::here("schema", "chemi-amos-prod.json")
+    skip_if_not(file.exists(schema_path), "AMOS schema not available")
+
+    spec <- openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
+    strategies <- table(spec$pagination_strategy)
+
+    # AMOS schema should have offset_limit endpoints (cursor is dev-only)
+    expect_true("offset_limit" %in% names(strategies))
+    expect_true("none" %in% names(strategies))
+  })
+
+  test_that("non-paginated schema has all none strategies", {
+    source_pipeline_files()
+    schema_path <- here::here("schema", "ctx-chemical-prod.json")
+    skip_if_not(file.exists(schema_path), "CTX chemical schema not available")
+
+    spec <- openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
+    expect_true(all(spec$pagination_strategy == "none"))
+  })
+})

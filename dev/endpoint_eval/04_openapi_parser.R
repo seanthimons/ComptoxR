@@ -581,6 +581,14 @@ openapi_to_spec <- function(
         ""
       }
 
+      # Detect pagination strategy (PAG-01, PAG-03)
+      pagination_info <- detect_pagination(
+        route = route,
+        path_params = if (length(path_names) > 0) paste(path_names, collapse = ",") else "",
+        query_params = if (length(query_names) > 0) paste(query_names, collapse = ",") else "",
+        body_params = if (length(body_names) > 0) paste(body_names, collapse = ",") else ""
+      )
+
       fn <- if (name_strategy == "operationId") sanitize_name(operationId) else sanitize_name(method_path_name(route, method))
 
       tibble::tibble(
@@ -630,7 +638,10 @@ openapi_to_spec <- function(
           body_props$item_schema$ref_type
         } else {
           NA
-        }
+        },
+        # Pagination detection (Phase 19)
+        pagination_strategy = pagination_info$strategy,
+        pagination_metadata = list(pagination_info)
       )
     })
   })

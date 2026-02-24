@@ -1015,7 +1015,9 @@ render_endpoint_stubs <- function(spec,
     request_type = NA_character_,
     body_schema_full = list(list()),
     body_item_type = NA_character_,
-    source_file = NA_character_
+    source_file = NA_character_,
+    pagination_strategy = "none",
+    pagination_metadata = list(NULL)
   ))
 
   # ===========================================================================
