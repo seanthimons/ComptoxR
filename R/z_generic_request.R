@@ -29,6 +29,14 @@
 #'        - "json": Send as JSON array via `httr2::req_body_json()` (default)
 #'        - "raw_text": Send as newline-delimited plain text via `httr2::req_body_raw()`
 #'          with content type "text/plain". Used for endpoints like /chemical/search/equal/.
+#' @param paginate Boolean; whether to automatically fetch all pages for paginated endpoints.
+#'        Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
+#'        pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.
+#' @param max_pages Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
+#'        Acts as a safety limit to prevent runaway pagination loops.
+#' @param pagination_strategy The pagination strategy to use. One of: "offset_limit", "page_number",
+#'        "page_size", "cursor", or NULL. When NULL, paginate is ignored.
+#'        Usually set by generated stubs from Phase 19 metadata.
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
 #'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
@@ -40,7 +48,7 @@
 #'         - image/*: Raw bytes, or a magick image object if the magick package is available.
 #'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
-generic_request <- function(query = NULL, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", body_type = "json", ...) {
+generic_request <- function(query = NULL, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", body_type = "json", paginate = FALSE, max_pages = 100, pagination_strategy = NULL, ...) {
 
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
@@ -222,6 +230,174 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
   # If 'run_debug' is TRUE, we return a dry run of the first request instead of executing.
   if (run_debug) {
     return(req_list %>% purrr::pluck(1) %>% httr2::req_dry_run())
+  }
+
+  # --- 5.5. Pagination ---
+  # When paginate=TRUE, use httr2::req_perform_iterative() instead of normal execution
+  if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
+    first_req <- req_list[[1]]
+
+    # Build strategy-specific next_req callback for httr2::req_perform_iterative()
+    if (pagination_strategy == "offset_limit" && !is.null(path_params)) {
+      # AMOS-style: limit in path (query), offset in path_params
+      # iterate_with_offset doesn't support path params, so use custom next_req
+      page_limit <- as.numeric(query[1])
+      initial_offset <- as.numeric(path_params[["offset"]] %||% path_params[[1]] %||% 0)
+
+      next_req <- function(resp, req) {
+        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        # Done if fewer records than limit returned
+        if (length(body) < page_limit || length(body) == 0) return(NULL)
+
+        # Calculate new offset
+        prev_url <- httr2::url_parse(req$url)
+        path_parts <- strsplit(prev_url$path, "/")[[1]]
+        current_offset <- as.numeric(path_parts[length(path_parts)])
+        new_offset <- current_offset + page_limit
+
+        # Rebuild URL with new offset in path
+        path_parts[length(path_parts)] <- as.character(new_offset)
+        new_path <- paste(path_parts, collapse = "/")
+        req$url <- httr2::url_modify(req$url, path = new_path)
+        req
+      }
+
+    } else if (pagination_strategy == "page_number") {
+      # CTX-style: pageNumber as query parameter, starts at 1
+      next_req <- httr2::iterate_with_offset(
+        "pageNumber",
+        start = as.numeric(ellipsis_args[["pageNumber"]] %||% 1),
+        offset = 1,
+        resp_complete = function(resp) {
+          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+          length(body) == 0
+        }
+      )
+
+    } else if (pagination_strategy == "page_size") {
+      # Spring Boot Pageable: page + size as query params, 0-indexed
+      start_page <- as.numeric(ellipsis_args[["page"]] %||% 0)
+      next_req <- httr2::iterate_with_offset(
+        "page",
+        start = start_page,
+        offset = 1,
+        resp_pages = function(resp) {
+          httr2::resp_body_json(resp, simplifyVector = FALSE)[["totalPages"]]
+        },
+        resp_complete = function(resp) {
+          isTRUE(httr2::resp_body_json(resp, simplifyVector = FALSE)[["last"]])
+        }
+      )
+
+    } else if (pagination_strategy == "offset_limit" && is.null(path_params)) {
+      # Offset/limit via query params (e.g., Common Chemistry offset+size)
+      offset_name <- "offset"
+      size_name <- if ("size" %in% names(ellipsis_args)) "size" else "limit"
+      initial_offset <- as.numeric(ellipsis_args[[offset_name]] %||% 0)
+      page_size <- as.numeric(ellipsis_args[[size_name]] %||% 100)
+
+      next_req <- httr2::iterate_with_offset(
+        offset_name,
+        start = initial_offset,
+        offset = page_size,
+        resp_complete = function(resp) {
+          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+          # Check various response shapes for exhaustion
+          records <- body[["results"]] %||% body[["data"]] %||%
+            (if (is.list(body) && is.null(names(body))) body else NULL)
+          if (is.null(records)) return(TRUE)
+          # Done if fewer records than page size
+          length(records) < page_size || length(records) == 0
+        }
+      )
+
+    } else if (pagination_strategy == "cursor") {
+      # Cursor/keyset: cursor value in query param
+      next_req <- httr2::iterate_with_cursor(
+        "cursor",
+        resp_param_value = function(resp) {
+          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+          body[["cursor"]] %||% body[["nextCursor"]] %||% body[["next"]]
+        }
+      )
+
+    } else {
+      cli::cli_abort("Unknown pagination_strategy: {.val {pagination_strategy}}")
+    }
+
+    # Execute iterative pagination
+    resps <- httr2::req_perform_iterative(
+      first_req,
+      next_req = next_req,
+      max_reqs = max_pages,
+      on_error = "return",
+      progress = run_verbose
+    )
+
+    # Filter to successful responses only
+    resps <- httr2::resps_successes(resps)
+
+    if (length(resps) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (run_verbose) {
+      cli::cli_alert_success("Pagination complete: {length(resps)} pages fetched.")
+    }
+
+    # Extract records from all responses based on strategy
+    body_list <- purrr::map(resps, function(resp) {
+      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+      # Strategy-specific record extraction
+      records <- if (pagination_strategy == "page_size") {
+        # Spring Boot wraps in "content"
+        body[["content"]] %||% list()
+      } else if (!is.null(body[["results"]])) {
+        # Common Chemistry wraps in "results"
+        body[["results"]]
+      } else if (!is.null(body[["records"]])) {
+        # Chemi Search wraps in "records"
+        body[["records"]]
+      } else if (is.list(body) && is.null(names(body))) {
+        # Top-level array (AMOS, CTX pageNumber)
+        body
+      } else {
+        list(body)
+      }
+
+      records
+    }) |> purrr::list_flatten()
+
+    if (length(body_list) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    # Apply same output formatting as non-paginated path
+    if (!tidy) {
+      return(body_list |>
+        purrr::map(function(x) {
+          if (is.list(x) && length(x) > 0) x[purrr::map_lgl(x, is.null)] <- NA
+          x
+        }))
+    }
+
+    res <- body_list |>
+      purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) {
+          x[purrr::map_lgl(x, is.null)] <- NA
+          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
+        } else if (is.null(x) || length(x) == 0) {
+          NULL
+        } else {
+          tibble::tibble(value = x)
+        }
+      }) |>
+      purrr::list_rbind()
+
+    return(res)
   }
 
   # --- 6. Execution ---
