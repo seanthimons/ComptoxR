@@ -819,6 +819,9 @@ generic_search_request <- function(
 #' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
 #'        If FALSE, returns a cleaned list structure.
 #' @param content_type Expected response content type. Defaults to "application/json".
+#' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+#' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
+#' @param pagination_strategy Pagination strategy (usually "offset_limit" for CC). Defaults to NULL.
 #' @param ... Additional parameters passed as query parameters to the API.
 #'
 #' @return Depends on content_type and tidy parameter:
@@ -827,8 +830,9 @@ generic_search_request <- function(
 #'         - text/plain: A character string.
 #'         If no results are found, returns an empty tibble or list.
 #' @export
-generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl", 
-                               auth = TRUE, tidy = TRUE, content_type = "application/json", ...) {
+generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
+                               auth = TRUE, tidy = TRUE, content_type = "application/json",
+                               paginate = FALSE, max_pages = 100, pagination_strategy = NULL, ...) {
   
   # --- 1. Base URL Resolution ---
   base_url <- Sys.getenv(server, unset = server)
@@ -868,10 +872,82 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
   if (run_debug) {
     return(httr2::req_dry_run(req))
   }
-  
+
+  # --- 4.5. Pagination ---
+  if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
+    # Common Chemistry uses offset/size query params
+    # Response: {count: "N", results: [...]}
+    offset_val <- as.numeric(ellipsis_args[["offset"]] %||% 0)
+    size_val <- as.numeric(ellipsis_args[["size"]] %||% 100)
+
+    next_req <- httr2::iterate_with_offset(
+      "offset",
+      start = offset_val,
+      offset = size_val,
+      resp_complete = function(resp) {
+        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        total <- as.numeric(body[["count"]] %||% 0)
+        results <- body[["results"]] %||% list()
+        length(results) == 0 || length(results) < size_val
+      }
+    )
+
+    resps <- httr2::req_perform_iterative(
+      req,
+      next_req = next_req,
+      max_reqs = max_pages,
+      on_error = "return",
+      progress = run_verbose
+    )
+
+    resps <- httr2::resps_successes(resps)
+
+    if (length(resps) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (run_verbose) {
+      cli::cli_alert_success("CC pagination complete: {length(resps)} pages fetched.")
+    }
+
+    # Extract records from "results" field of each page
+    body_list <- purrr::map(resps, function(resp) {
+      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      body[["results"]] %||% list()
+    }) |> purrr::list_flatten()
+
+    if (length(body_list) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (!tidy) {
+      return(body_list |> purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) x[purrr::map_lgl(x, is.null)] <- NA
+        x
+      }))
+    }
+
+    res <- body_list |>
+      purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) {
+          x[purrr::map_lgl(x, is.null)] <- NA
+          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
+        } else if (is.null(x) || length(x) == 0) {
+          NULL
+        } else {
+          tibble::tibble(value = x)
+        }
+      }) |>
+      purrr::list_rbind()
+
+    return(res)
+  }
+
   # --- 5. Execution ---
   resp <- httr2::req_perform(req)
-  
+
   # --- 6. Response Processing ---
   status <- httr2::resp_status(resp)
   if (status < 200 || status >= 300) {
