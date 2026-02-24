@@ -42,7 +42,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. `openapi_to_spec()` output includes pagination metadata for endpoints that have pagination params
   3. Each paginated endpoint is classified as one of: `offset_limit`, `page_size`, `cursor`, or `path_pagination`
   4. All 5 known pagination patterns (AMOS offset/limit, AMOS keyset/cursor, ct pageNumber, cc offset/size, chemi page/size) are correctly detected
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 19-01-PLAN.md -- Add pagination registry, detection function, pipeline integration, and tests
 
 ### Phase 20: Auto-Pagination Engine
 **Goal**: Request templates can automatically fetch all pages and combine results
@@ -88,7 +91,7 @@ Phases execute in numeric order: 19 -> 20 -> 21 -> 22
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 19. Pagination Detection | v2.0 | 0/TBD | Pending | - |
+| 19. Pagination Detection | v2.0 | 0/1 | Planned | - |
 | 20. Auto-Pagination Engine | v2.0 | 0/TBD | Pending | - |
 | 21. Stub Generation Integration | v2.0 | 0/TBD | Pending | - |
 | 22. Testing | v2.0 | 0/TBD | Pending | - |

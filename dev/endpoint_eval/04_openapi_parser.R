@@ -307,6 +307,86 @@ order_path_by_route <- function(path_names, route) {
   }
 }
 
+# Detect pagination strategy for an endpoint based on route pattern and parameter names
+#
+# Iterates through PAGINATION_REGISTRY entries (most specific first) to classify
+# how an endpoint paginates. Returns strategy metadata for the spec tibble.
+#
+# @param route Character; the endpoint route path (e.g., "/api/amos/method_pagination/{limit}/{offset}")
+# @param path_params Character; comma-separated path parameter names
+# @param query_params Character; comma-separated query parameter names
+# @param body_params Character; comma-separated body parameter names
+# @param registry List; pagination registry (default: PAGINATION_REGISTRY from 00_config.R)
+# @return A list with strategy, registry_key, params, param_location, description
+detect_pagination <- function(route, path_params, query_params, body_params,
+                              registry = PAGINATION_REGISTRY) {
+  # Split comma-separated param strings into character vectors
+  split_params <- function(x) {
+    if (is.null(x) || !nzchar(x)) return(character(0))
+    trimws(strsplit(x, ",")[[1]])
+  }
+
+  path_vec  <- split_params(path_params)
+  query_vec <- split_params(query_params)
+  body_vec  <- split_params(body_params)
+
+  for (entry_name in names(registry)) {
+    entry <- registry[[entry_name]]
+
+    # If route_pattern is specified, check route first
+    if (!is.null(entry$route_pattern)) {
+      if (!stringr::str_detect(route, entry$route_pattern)) {
+        next
+      }
+    }
+
+    # Cursor strategy: special case -- "limit" in path AND "cursor" in query
+    if (identical(entry$strategy, "cursor")) {
+      if ("limit" %in% path_vec && "cursor" %in% query_vec) {
+        return(list(
+          strategy = entry$strategy,
+          registry_key = entry_name,
+          params = entry$param_names,
+          param_location = entry$param_location,
+          description = entry$description
+        ))
+      }
+      next
+    }
+
+    # Match based on param_location
+    location <- entry$param_location
+    matched <- FALSE
+
+    if (identical(location, "path")) {
+      matched <- all(entry$param_names %in% path_vec)
+    } else if (identical(location, "query")) {
+      matched <- all(entry$param_names %in% query_vec)
+    } else if (identical(location, "body")) {
+      matched <- all(entry$param_names %in% body_vec)
+    }
+
+    if (matched) {
+      return(list(
+        strategy = entry$strategy,
+        registry_key = entry_name,
+        params = entry$param_names,
+        param_location = entry$param_location,
+        description = entry$description
+      ))
+    }
+  }
+
+  # No match found
+  list(
+    strategy = "none",
+    registry_key = NA_character_,
+    params = character(0),
+    param_location = NA_character_,
+    description = "No pagination detected"
+  )
+}
+
 # ------------------------------------------------------------------------------
 # Main Parsing Functions
 # ------------------------------------------------------------------------------
