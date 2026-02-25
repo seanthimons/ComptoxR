@@ -66,3 +66,6 @@ temp.R
 
 # Log files from package_sitrep
 *.log
+
+# Temporary schema diff artifacts (CI workflow)
+schema_old/

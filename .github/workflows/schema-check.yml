@@ -62,6 +62,8 @@ jobs:
 
       - name: Save old schemas for diff
         run: |
+          # Always start clean to avoid nested cp -r into existing directory
+          rm -rf schema_old
           if [ -d "schema" ] && [ "$(ls -A schema/*.json 2>/dev/null)" ]; then
             cp -r schema schema_old
             echo "Saved $(ls schema_old/*.json | wc -l) schema files for diffing"
