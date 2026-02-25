@@ -15,6 +15,9 @@ generic_request(
   path_params = NULL,
   content_type = "application/json",
   body_type = "json",
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
   ...
 )
 }
@@ -53,6 +56,17 @@ Supported types:
 - "json": Send as JSON array via \code{httr2::req_body_json()} (default)
 - "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
 with content type "text/plain". Used for endpoints like /chemical/search/equal/.}
+
+\item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
+Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
+pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.}
+
+\item{max_pages}{Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
+Acts as a safety limit to prevent runaway pagination loops.}
+
+\item{pagination_strategy}{The pagination strategy to use. One of: "offset_limit", "page_number",
+"page_size", "cursor", or NULL. When NULL, paginate is ignored.
+Usually set by generated stubs from Phase 19 metadata.}
 
 \item{...}{Additional parameters:
 - If method is "POST": Added as query parameters to the URL.

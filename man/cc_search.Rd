@@ -4,27 +4,22 @@
 \alias{cc_search}
 \title{Search}
 \usage{
-cc_search(q, offset = NULL, size = NULL)
+cc_search(q = NULL, offset = 0, size = NULL, all_pages = TRUE)
 }
 \arguments{
-\item{q}{Required parameter}
+\item{q}{Optional parameter}
 
 \item{offset}{Optional parameter}
 
 \item{size}{Optional parameter}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a tibble with results
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-
-Provides the ability to search against the Common Chemistry data source
-Allows searching by CAS RN (with or without dashes), SMILES (canonical or isomeric), InChI (with or without the "InChI=" prefix), InChIKey, and name
-Searching by name allows use of a trailing wildcard (e.g., car*)
-All searches are case-insensitive
-The result is in the form of substance summary information
-The results are paginated, with a maximum page size of 100
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{

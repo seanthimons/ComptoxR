@@ -13,6 +13,8 @@ ct_exposure_mmdb_aggregate_by_medium(medium, pageNumber = 1)
 \item{medium}{harmonized medium}
 
 \item{pageNumber}{Optional parameter (default: 1)}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a scalar value

@@ -11,6 +11,9 @@ generic_cc_request(
   auth = TRUE,
   tidy = TRUE,
   content_type = "application/json",
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
   ...
 )
 }
@@ -27,6 +30,12 @@ generic_cc_request(
 If FALSE, returns a cleaned list structure.}
 
 \item{content_type}{Expected response content type. Defaults to "application/json".}
+
+\item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.}
+
+\item{max_pages}{Maximum pages to fetch when paginate=TRUE. Defaults to 100.}
+
+\item{pagination_strategy}{Pagination strategy (usually "offset_limit" for CC). Defaults to NULL.}
 
 \item{...}{Additional parameters passed as query parameters to the API.}
 }

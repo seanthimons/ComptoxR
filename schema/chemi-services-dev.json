@@ -896,15 +896,15 @@
           "title": {
             "type": "string"
           },
-          "isAvailableResetRest": {
-            "type": "boolean",
-            "writeOnly": true
+          "availableIsConstant": {
+            "type": "boolean"
           },
           "coreUI": {
             "type": "boolean"
           },
-          "availableIsConstant": {
-            "type": "boolean"
+          "isAvailableResetRest": {
+            "type": "boolean",
+            "writeOnly": true
           },
           "api_only": {
             "type": "boolean"
