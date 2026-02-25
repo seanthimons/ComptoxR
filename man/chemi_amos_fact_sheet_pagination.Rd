@@ -4,12 +4,14 @@
 \alias{chemi_amos_fact_sheet_pagination}
 \title{Returns information on a batch of fact sheets.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction.}
 \usage{
-chemi_amos_fact_sheet_pagination(limit, offset = NULL)
+chemi_amos_fact_sheet_pagination(limit, offset = 0, all_pages = TRUE)
 }
 \arguments{
 \item{limit}{Limit of records to return.}
 
 \item{offset}{Offset of fact sheets to return.}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a tibble with results

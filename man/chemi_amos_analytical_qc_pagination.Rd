@@ -4,12 +4,14 @@
 \alias{chemi_amos_analytical_qc_pagination}
 \title{Returns information on a batch of Analytical QC documents.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction.}
 \usage{
-chemi_amos_analytical_qc_pagination(limit, offset = NULL)
+chemi_amos_analytical_qc_pagination(limit, offset = 0, all_pages = TRUE)
 }
 \arguments{
 \item{limit}{Limit of records to return.}
 
 \item{offset}{Offset of the records to return.}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a tibble with results
