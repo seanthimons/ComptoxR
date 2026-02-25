@@ -1,3 +1,65 @@
+#' Safe list-to-tibble binding with type recovery
+#'
+#' Converts a list of named lists (API records) into a tibble, handling
+#' type mismatches across records by coercing to character first, then
+#' recovering types column-wise.
+#'
+#' @param body_list A list of named lists (each element = one record).
+#' @param type_convert Logical; apply column-wise type recovery via
+#'   `utils::type.convert()`. Default TRUE.
+#' @param names_to Passed to `purrr::list_rbind()` for named outer lists.
+#'   Creates a column from the names of `body_list`.
+#' @return A tibble.
+#' @noRd
+safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
+  if (length(body_list) == 0) return(tibble::tibble())
+
+  # Phase 1: Coerce each record to a single-row all-character tibble
+
+  rows <- purrr::map(body_list, function(x) {
+    # Preserve query attribute
+    q_attr <- attr(x, "query")
+
+    if (is.null(x) || length(x) == 0) return(NULL)
+
+    # Primitive (non-list) value
+    if (!is.list(x)) {
+      row <- tibble::tibble(value = as.character(x))
+      if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+      return(row)
+    }
+
+    # Named list (typical API record)
+    row <- purrr::imap(x, function(val, nm) {
+      if (is.null(val)) {
+        NA_character_
+      } else if (is.list(val) || length(val) > 1) {
+        # Nested list or multi-element vector -> list-column
+        list(val)
+      } else {
+        as.character(val)
+      }
+    })
+    row <- tibble::as_tibble(row)
+    if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+    row
+  })
+
+  res <- purrr::list_rbind(rows, names_to = names_to)
+
+  if (nrow(res) == 0) return(tibble::tibble())
+
+  # Phase 2: Type recovery on character columns
+  if (type_convert) {
+    res <- dplyr::mutate(res, dplyr::across(
+      dplyr::where(is.character),
+      ~ utils::type.convert(.x, as.is = TRUE)
+    ))
+  }
+
+  res
+}
+
 #' Generic API Request Function
 #'
 #' This is a centralized template function used by nearly all `ct_*` functions
@@ -398,20 +460,7 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
         }))
     }
 
-    res <- body_list |>
-      purrr::map(function(x) {
-        if (is.list(x) && length(x) > 0) {
-          x[purrr::map_lgl(x, is.null)] <- NA
-          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
-        } else if (is.null(x) || length(x) == 0) {
-          NULL
-        } else {
-          tibble::tibble(value = x)
-        }
-      }) |>
-      purrr::list_rbind()
-
-    return(res)
+    return(safe_tidy_bind(body_list))
   }
 
   # --- 6. Execution ---
@@ -539,26 +588,7 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
   }
 
   # --- 9. Tidy Conversion ---
-  # Convert the parsed JSON (list of lists) into a tidy tibble.
-  res <- body_list %>%
-    purrr::map(function(x) {
-      q_attr <- attr(x, "query")
-      if (is.list(x) && length(x) > 0) {
-        # Replace NULLs with NA so they don't disappear during tibble conversion
-        x[purrr::map_lgl(x, is.null)] <- NA
-        row <- tibble::as_tibble(x)
-        if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
-        return(row)
-      } else if (is.null(x) || length(x) == 0) {
-        return(NULL)
-      } else {
-        # Primitive values (strings/numbers) are wrapped into a 'value' column
-        row <- tibble::tibble(value = x)
-        if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
-        return(row)
-      }
-    }) %>%
-    purrr::list_rbind()
+  res <- safe_tidy_bind(body_list)
 
   return(res)
 }
@@ -730,21 +760,7 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
 
     if (!tidy) return(body_list)
 
-    # Tidy conversion (same logic as non-paginated path)
-    res <- body_list %>%
-      purrr::map(function(x) {
-        if (is.list(x) && length(x) > 0) {
-          x[purrr::map_lgl(x, is.null)] <- NA
-          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
-        } else if (is.null(x) || length(x) == 0) {
-          NULL
-        } else {
-          tibble::tibble(value = x)
-        }
-      }) %>%
-      purrr::list_rbind()
-
-    return(res)
+    return(safe_tidy_bind(body_list))
   }
 
   # 6. Execution
@@ -770,41 +786,15 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
   # 8. Tidy Conversion
   # Handle cases where body is a named list of results (keyed by query)
   if (!is.null(names(body)) && !is.data.frame(body)) {
-      res <- body %>%
-        purrr::map(function(x) {
-          if (is.list(x) && length(x) > 0) {
-            x[purrr::map_lgl(x, is.null)] <- NA
-            return(tibble::as_tibble(x))
-          } else {
-            return(tibble::tibble(value = x))
-          }
-        }) %>%
-        purrr::list_rbind(names_to = "query_id")
+    res <- safe_tidy_bind(body, names_to = "query_id")
   } else {
-      # If body is an unnamed list, we attempt to match it back to the query 
-      # if the counts match exactly, otherwise we just bind.
-      res <- body %>%
-        purrr::map(function(x) {
-          if (is.list(x) && length(x) > 0) {
-            # Check for name collisions or nested lists
-            x[purrr::map_lgl(x, is.null)] <- NA
-            # We use try as some deeply nested chemi-results might fail direct as_tibble
-            t_res <- try(tibble::as_tibble(x), silent = TRUE)
-            if (inherits(t_res, "try-error")) return(tibble::tibble(data = list(x)))
-            return(t_res)
-          } else if (is.null(x) || length(x) == 0) {
-            return(NULL)
-          } else {
-            return(tibble::tibble(value = x))
-          }
-        }) %>%
-        purrr::list_rbind()
-      
-      # If the results match the query length, add the query column
-      # Only do this when query (not chemicals) was provided
-      if (!is.null(query) && length(query) > 0 && nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
-         res <- dplyr::bind_cols(dtxsid = query, res)
-      }
+    res <- safe_tidy_bind(body)
+
+    # If the results match the query length, add the query column
+    # Only do this when query (not chemicals) was provided
+    if (!is.null(query) && length(query) > 0 && nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
+       res <- dplyr::bind_cols(dtxsid = query, res)
+    }
   }
 
   return(res)
@@ -1074,36 +1064,16 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
   }
   
   # --- 8. Tidy Conversion ---
-  # Handle single object vs array of objects
   if (is.list(body) && !is.null(names(body))) {
-    # Single object response
-    body[purrr::map_lgl(body, is.null)] <- NA
-    res <- tryCatch(
-      tibble::as_tibble(body),
-      error = function(e) tibble::tibble(data = list(body))
-    )
+    # Single object response — wrap in list for safe_tidy_bind
+    res <- safe_tidy_bind(list(body))
   } else if (is.list(body)) {
     # Array of objects
-    res <- body %>%
-      purrr::map(function(x) {
-        if (is.list(x) && length(x) > 0) {
-          x[purrr::map_lgl(x, is.null)] <- NA
-          t_res <- tryCatch(
-            tibble::as_tibble(x),
-            error = function(e) tibble::tibble(data = list(x))
-          )
-          return(t_res)
-        } else if (is.null(x) || length(x) == 0) {
-          return(NULL)
-        } else {
-          return(tibble::tibble(value = x))
-        }
-      }) %>%
-      purrr::list_rbind()
+    res <- safe_tidy_bind(body)
   } else {
     # Primitive value
     res <- tibble::tibble(value = body)
   }
-  
+
   return(res)
 }
