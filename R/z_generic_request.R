@@ -337,6 +337,14 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
     # Filter to successful responses only
     resps <- httr2::resps_successes(resps)
 
+    # Warn if pagination may have been truncated
+    if (length(resps) >= max_pages) {
+      cli::cli_warn(c(
+        "Pagination stopped at {.val {max_pages}} page{?s} (the {.arg max_pages} limit).",
+        "i" = "More data may be available. Increase {.arg max_pages} to fetch additional pages."
+      ))
+    }
+
     if (length(resps) == 0) {
       cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
       if (tidy) return(tibble::tibble()) else return(list())
