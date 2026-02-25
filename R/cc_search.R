@@ -1,18 +1,12 @@
 #' Search
 #'
 #' @description
-#' `r lifecycle::badge("stable")`
+#' `r lifecycle::badge("experimental")`
 #'
-#' Provides the ability to search against the Common Chemistry data source
-#' Allows searching by CAS RN (with or without dashes), SMILES (canonical or isomeric), InChI (with or without the "InChI=" prefix), InChIKey, and name
-#' Searching by name allows use of a trailing wildcard (e.g., car*)
-#' All searches are case-insensitive
-#' The result is in the form of substance summary information
-#' The results are paginated, with a maximum page size of 100
-#' 
-#' @param q Required parameter
+#' @param q Optional parameter
 #' @param offset Optional parameter
 #' @param size Optional parameter
+#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -20,34 +14,19 @@
 #' \dontrun{
 #' cc_search(q = "123-91-1")
 #' }
-cc_search <- function(q, offset = NULL, size = NULL) {
+cc_search <- function(q = NULL, offset = 0, size = NULL, all_pages = TRUE) {
   result <- generic_cc_request(
     endpoint = "search",
     method = "GET",
     `q` = q,
     `offset` = offset,
-    `size` = size
+    `size` = size,
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "offset_limit"
   )
 
   # Additional post-processing can be added here
-
-	if(result$count > 1){
-		
-		cli::cli_alert('Multiple results returned')
-
-	}else{
-
-		# Only one result
-
-		result <- result %>% 
-		pluck(., 'results', 1)
-
-		if('images' %in% names(result)){
-		result <- discard_at(result, 'images') %>% 
-			as_tibble()
-		}
-
-	}
 
   return(result)
 }

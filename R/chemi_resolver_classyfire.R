@@ -16,6 +16,7 @@
 #' @param substituent Optional parameter
 #' @param page Optional parameter (default: 0)
 #' @param size Optional parameter (default: 1000)
+#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a list with result object
 #' @export
 #'
@@ -23,7 +24,7 @@
 #' \dontrun{
 #' chemi_resolver_classyfire(query = "DTXSID7020182")
 #' }
-chemi_resolver_classyfire <- function(query = NULL, idType = "AnyId", fuzzy = "Not", kingdom = NULL, superklass = NULL, klass = NULL, subklass = NULL, directParent = NULL, geometricDescriptor = NULL, alternativeParent = NULL, substituent = NULL, page = 0, size = 1000) {
+chemi_resolver_classyfire <- function(query = NULL, idType = "AnyId", fuzzy = "Not", kingdom = NULL, superklass = NULL, klass = NULL, subklass = NULL, directParent = NULL, geometricDescriptor = NULL, alternativeParent = NULL, substituent = NULL, page = 0, size = 1000, all_pages = TRUE) {
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) options[['query']] <- query
@@ -46,7 +47,10 @@ chemi_resolver_classyfire <- function(query = NULL, idType = "AnyId", fuzzy = "N
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    options = options
+    options = options,
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "page_size"
   )
 
   # Additional post-processing can be added here

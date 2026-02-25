@@ -5,6 +5,7 @@
 #'
 #' @param limit Limit of records to return.
 #' @param offset Offset of fact sheets to return.
+#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -12,7 +13,7 @@
 #' \dontrun{
 #' chemi_amos_fact_sheet_pagination(limit = "DTXSID7020182")
 #' }
-chemi_amos_fact_sheet_pagination <- function(limit, offset = NULL) {
+chemi_amos_fact_sheet_pagination <- function(limit, offset = 0, all_pages = TRUE) {
   result <- generic_request(
     query = limit,
     endpoint = "amos/fact_sheet_pagination/",
@@ -21,7 +22,10 @@ chemi_amos_fact_sheet_pagination <- function(limit, offset = NULL) {
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
-    path_params = c(offset = offset)
+    path_params = c(offset = offset),
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "offset_limit"
   )
 
   # Additional post-processing can be added here

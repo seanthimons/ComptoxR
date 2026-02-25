@@ -55,7 +55,10 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
     endpoint = "resolver/getpubchemlist",
     options = extra_options,
     chemicals = chemicals,
-    tidy = FALSE
+    tidy = FALSE,
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "page_size"
   )
 
   # Additional post-processing can be added here

@@ -364,12 +364,18 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     fn_signature_safe_pag <- fn_signature %|NA|% ""
     if ("offset" %in% pag_params && grepl("\\boffset\\b", fn_signature_safe_pag)) {
+      # Replace bare "offset" or "offset = NULL" with "offset = 0"
+      fn_signature <- gsub("\\boffset\\s*=\\s*NULL", "offset = 0", fn_signature, perl = TRUE)
       fn_signature <- gsub("\\boffset(?!\\s*=)", "offset = 0", fn_signature, perl = TRUE)
     }
     if ("page" %in% pag_params && grepl("\\bpage\\b", fn_signature_safe_pag) && !grepl("\\bpageNumber\\b", fn_signature_safe_pag)) {
+      # Replace bare "page" or "page = NULL" with "page = 0"
+      fn_signature <- gsub("\\bpage\\s*=\\s*NULL", "page = 0", fn_signature, perl = TRUE)
       fn_signature <- gsub("\\bpage(?!\\s*=|Number)", "page = 0", fn_signature, perl = TRUE)
     }
     if ("pageNumber" %in% pag_params && grepl("\\bpageNumber\\b", fn_signature_safe_pag)) {
+      # Replace bare "pageNumber" or "pageNumber = NULL" with "pageNumber = 1"
+      fn_signature <- gsub("\\bpageNumber\\s*=\\s*NULL", "pageNumber = 1", fn_signature, perl = TRUE)
       fn_signature <- gsub("\\bpageNumber(?!\\s*=)", "pageNumber = 1", fn_signature, perl = TRUE)
     }
 

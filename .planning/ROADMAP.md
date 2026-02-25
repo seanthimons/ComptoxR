@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 19: Pagination Detection** - Detect and classify pagination patterns in OpenAPI schemas
 - [x] **Phase 20: Auto-Pagination Engine** - Add pagination loop to all three request templates
-- [ ] **Phase 21: Stub Generation Integration** - Generate auto-paginating stubs for detected endpoints
+- [x] **Phase 21: Stub Generation Integration** - Generate auto-paginating stubs for detected endpoints
 - [ ] **Phase 22: Testing** - Unit and integration tests for pagination
 
 ## Phase Details
@@ -78,7 +78,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 21-01-PLAN.md -- Add pagination metadata plumbing and pagination-aware stub generation with tests
+- [x] 21-01-PLAN.md -- Add pagination metadata plumbing and pagination-aware stub generation with tests
 
 ### Phase 22: Testing
 **Goal**: Pagination detection and auto-pagination are verified by automated tests
@@ -100,5 +100,5 @@ Phases execute in numeric order: 19 -> 20 -> 21 -> 22
 |-------|-----------|----------------|--------|-----------|
 | 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
 | 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
-| 21. Stub Generation Integration | v2.0 | 0/1 | Pending | - |
+| 21. Stub Generation Integration | v2.0 | 1/1 | Complete | 2026-02-24 |
 | 22. Testing | v2.0 | 0/TBD | Pending | - |
