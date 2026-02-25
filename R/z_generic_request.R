@@ -16,6 +16,22 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
 
   # Phase 1: Coerce each record to a single-row all-character tibble
 
+  # Pre-scan: identify fields that ever contain a list or multi-element vector.
+
+  # These must be list-columns in ALL rows to avoid type conflicts during binding.
+  list_fields <- character(0)
+  for (x in body_list) {
+    if (is.list(x)) {
+      for (nm in names(x)) {
+        val <- x[[nm]]
+        if (!is.null(val) && (is.list(val) || length(val) > 1)) {
+          list_fields <- c(list_fields, nm)
+        }
+      }
+    }
+  }
+  list_fields <- unique(list_fields)
+
   rows <- purrr::map(body_list, function(x) {
     # Preserve query attribute
     q_attr <- attr(x, "query")
@@ -32,9 +48,13 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
     # Named list (typical API record)
     row <- purrr::imap(x, function(val, nm) {
       if (is.null(val)) {
-        NA_character_
+        # Fields that are list-columns elsewhere need NA wrapped in list()
+        if (nm %in% list_fields) list(NULL) else NA_character_
       } else if (is.list(val) || length(val) > 1) {
         # Nested list or multi-element vector -> list-column
+        list(val)
+      } else if (nm %in% list_fields) {
+        # Scalar, but this field is a list-column in other rows — wrap to match
         list(val)
       } else {
         as.character(val)

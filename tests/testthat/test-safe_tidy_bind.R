@@ -158,3 +158,20 @@ test_that("safe_tidy_bind handles mix of NULL and valid records", {
   expect_equal(nrow(res), 2)
   expect_equal(res$a, c(1L, 3L))
 })
+
+test_that("safe_tidy_bind handles field that is list in some rows, scalar in others", {
+  # Reproduces: Can't combine `..1$methodologies` <list> and `..93$methodologies` <character>
+  input <- list(
+    list(id = "A", methodologies = list("method1", "method2")),
+    list(id = "B", methodologies = "single_method"),
+    list(id = "C", methodologies = NULL)
+  )
+  res <- safe_tidy_bind(input)
+  expect_s3_class(res, "tbl_df")
+  expect_equal(nrow(res), 3)
+  # All should be list-column since at least one record has a list value
+  expect_true(is.list(res$methodologies))
+  expect_equal(res$methodologies[[1]], list("method1", "method2"))
+  expect_equal(res$methodologies[[2]], "single_method")
+  expect_null(res$methodologies[[3]])
+})
