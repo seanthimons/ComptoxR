@@ -16,6 +16,9 @@ generic_chemi_request(
   array_payload = FALSE,
   tidy = TRUE,
   chemicals = NULL,
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
   ...
 )
 }
@@ -49,6 +52,13 @@ Defaults to FALSE.}
 \item{chemicals}{Optional list of pre-resolved Chemical objects. Each element should be a
 list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
 this takes precedence over the query parameter for building the chemicals payload.}
+
+\item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
+
+\item{max_pages}{Maximum pages to fetch when paginate=TRUE. Defaults to 100.}
+
+\item{pagination_strategy}{Pagination strategy. For chemi search, usually "offset_limit" (body).}
 
 \item{...}{Additional arguments passed to httr2.}
 }
