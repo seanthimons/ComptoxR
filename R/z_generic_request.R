@@ -69,7 +69,19 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
 
   if (nrow(res) == 0) return(tibble::tibble())
 
-  # Phase 2: Type recovery on character columns
+  # Phase 2: Collapse list-columns into semicolon-separated strings
+  list_cols <- names(res)[purrr::map_lgl(res, is.list)]
+  if (length(list_cols) > 0) {
+    res <- dplyr::mutate(res, dplyr::across(
+      dplyr::all_of(list_cols),
+      ~ purrr::map_chr(.x, function(val) {
+        if (is.null(val) || length(val) == 0) return(NA_character_)
+        paste(as.character(unlist(val)), collapse = "; ")
+      })
+    ))
+  }
+
+  # Phase 3: Type recovery on character columns
   if (type_convert) {
     res <- dplyr::mutate(res, dplyr::across(
       dplyr::where(is.character),

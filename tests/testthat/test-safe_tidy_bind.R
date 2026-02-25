@@ -82,9 +82,10 @@ test_that("safe_tidy_bind handles nested lists as list-columns", {
   )
   res <- safe_tidy_bind(input)
   expect_s3_class(res, "tbl_df")
-  expect_true(is.list(res$tags))
-  expect_equal(res$tags[[1]], list("x", "y"))
-  expect_equal(res$tags[[2]], list("z"))
+  # List-columns are collapsed to semicolon-separated strings
+  expect_type(res$tags, "character")
+  expect_equal(res$tags[[1]], "x; y")
+  expect_equal(res$tags[[2]], "z")
 })
 
 test_that("safe_tidy_bind handles primitive (non-list) values", {
@@ -169,9 +170,9 @@ test_that("safe_tidy_bind handles field that is list in some rows, scalar in oth
   res <- safe_tidy_bind(input)
   expect_s3_class(res, "tbl_df")
   expect_equal(nrow(res), 3)
-  # All should be list-column since at least one record has a list value
-  expect_true(is.list(res$methodologies))
-  expect_equal(res$methodologies[[1]], list("method1", "method2"))
+  # List-columns collapsed to semicolon-separated strings
+  expect_type(res$methodologies, "character")
+  expect_equal(res$methodologies[[1]], "method1; method2")
   expect_equal(res$methodologies[[2]], "single_method")
-  expect_null(res$methodologies[[3]])
+  expect_true(is.na(res$methodologies[[3]]))
 })
