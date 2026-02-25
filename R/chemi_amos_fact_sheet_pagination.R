@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_fact_sheet_pagination(limit = "DTXSID7020182")
+#' chemi_amos_fact_sheet_pagination(limit = 100)
 #' }
 chemi_amos_fact_sheet_pagination <- function(limit, offset = 0, all_pages = TRUE) {
   result <- generic_request(

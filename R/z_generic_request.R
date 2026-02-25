@@ -246,8 +246,14 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 
       next_req <- function(resp, req) {
         body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        # Unwrap if response is wrapped in a named container (e.g., {"results": [...]})
+        records <- if (is.list(body) && !is.null(names(body))) {
+          body[["results"]] %||% body[["records"]] %||% body[["data"]] %||% body
+        } else {
+          body
+        }
         # Done if fewer records than limit returned
-        if (length(body) < page_limit || length(body) == 0) return(NULL)
+        if (length(records) < page_limit || length(records) == 0) return(NULL)
 
         # Calculate new offset
         prev_url <- httr2::url_parse(req$url)
