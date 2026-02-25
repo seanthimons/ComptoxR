@@ -1,7 +1,6 @@
 # TODO
 
 ## Pending PRs (Resolve Immediately)
-- [ ] PR #94: chore: API schema updates detected [open] — `automated/schema-update`
 - [ ] PR #74: Refine PubChem search parameter passing [draft] — `copilot/add-pubchem-search-functionality`
 
 ## High Priority (Quick Wins & Critical)
@@ -22,25 +21,26 @@
 - [ ] Advanced schema handling: content-type extraction, primitive types, nested arrays (#83) — medium impact, high complexity
 
 ## Refactoring: Migrate to Generic Requests
-- [ ] Migrate `ct_bioactivity()` to generic requests + promote to stable — `R/ct_bioactivity.R:1`
-- [ ] Fix incorrect function reference in `ct_bioactivity()` — `R/ct_bioactivity.R:117` — TODO says "UPDATE THIS TO CORRECT FUNCTION"
-- [ ] Migrate `ct_cancer()` to generic requests + promote to stable — `R/ct_cancer.R:1`
-- [ ] Migrate `ct_demographic_exposure()` to generic requests + promote to stable — `R/ct_demographic_exposure.R:1`
-- [ ] Migrate `ct_details()` to generic requests + promote to stable — `R/ct_details.R:1`
-- [ ] Migrate `ct_descriptors()` to generic requests + promote to stable — `R/ct_descriptors.R:1`
-- [ ] Migrate `ct_env_fate()` to generic requests + promote to stable — `R/ct_env_fate.R:1`
-- [ ] Migrate `ct_functional_use()` to generic requests + promote to stable — `R/ct_functional_use.R:1`
-- [ ] Add post-processing to `ct_hazard()` + promote to stable — `R/ct_hazard.R:1`
-- [ ] Migrate `ct_lists_all()` to generic requests + promote to stable — `R/ct_lists_all.R:1`
-- [ ] Evaluate `ct_prop()` for migration to generic requests — `R/ct_prop.R:1`
+- [ ] Migrate `ct_bioactivity()` to generic requests + promote to stable (#97) — `R/ct_bioactivity.R:1`
+- [ ] Fix incorrect function reference in `ct_bioactivity()` (#98) — `R/ct_bioactivity.R:117` — TODO says "UPDATE THIS TO CORRECT FUNCTION"
+- [ ] Migrate `ct_cancer()` to generic requests + promote to stable (#99) — `R/ct_cancer.R:1`
+- [ ] Migrate `ct_demographic_exposure()` to generic requests + promote to stable (#100) — `R/ct_demographic_exposure.R:1`
+- [ ] Migrate `ct_details()` to generic requests + promote to stable (#101) — `R/ct_details.R:1`
+- [ ] Migrate `ct_descriptors()` to generic requests + promote to stable (#102) — `R/ct_descriptors.R:1`
+- [ ] Migrate `ct_env_fate()` to generic requests + promote to stable (#103) — `R/ct_env_fate.R:1`
+- [ ] Migrate `ct_functional_use()` to generic requests + promote to stable (#104) — `R/ct_functional_use.R:1`
+- [ ] Add post-processing to `ct_hazard()` + promote to stable (#105) — `R/ct_hazard.R:1`
+- [ ] Migrate `ct_lists_all()` to generic requests + promote to stable (#106) — `R/ct_lists_all.R:1`
+- [ ] Evaluate `ct_prop()` for migration to generic requests (#107) — `R/ct_prop.R:1`
 
 ## Low Priority (Backlog)
 - [ ] Follow up on bad SMILES info (#30) — low impact, low complexity
-- [ ] Remove hardcoded `ctx_server(server = 9)` workaround in `ct_related()` — `R/ct_related.R:43` — remove override once the related-substances API endpoint is available on production
-- [ ] Determine if `ct_related()` endpoint will remain — `R/ct_related.R:1` — follow up on whether the related-substances endpoint is permanent
-- [ ] Investigate missing DTXSID field in `chemi_cluster()` — `R/chemi_cluster.R:77,86` — some compounds don't return a DTXSID field; the field was removed as a workaround but root cause is unclear
+- [ ] Remove hardcoded `ctx_server(server = 9)` workaround in `ct_related()` (#108) — `R/ct_related.R:43` — remove override once the related-substances API endpoint is available on production
+- [ ] Determine if `ct_related()` endpoint will remain (#109) — `R/ct_related.R:1` — follow up on whether the related-substances endpoint is permanent
+- [ ] Investigate missing DTXSID field in `chemi_cluster()` (#110) — `R/chemi_cluster.R:77,86` — some compounds don't return a DTXSID field; the field was removed as a workaround but root cause is unclear
 
 ## Completed
+- [x] PR #94: chore: API schema updates detected [merged] — `automated/schema-update`
 - [x] POST requests for chemical/search/equals/ (#73)
 - [x] fix: follow-up on unicode_map always saving to sysdata.rda (#80)
 - [x] fix: ComptoxR::as_cas() and is_cas() error handling (#77)
