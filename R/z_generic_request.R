@@ -92,6 +92,15 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
   res
 }
 
+# Check if an HTTP response represents a transient error worth retrying.
+# Returns TRUE for 429 (rate-limited) and all 5xx (server errors).
+# Used as the `is_transient` predicate for `httr2::req_retry()`.
+# @noRd
+is_transient_error <- function(resp) {
+  status <- httr2::resp_status(resp)
+  status == 429 || status >= 500
+}
+
 #' Generic API Request Function
 #'
 #' This is a centralized template function used by nearly all `ct_*` functions
@@ -315,6 +324,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           req <- req %>% httr2::req_url_query(search = paste(query_part, collapse = ","), !!!ellipsis_args)
         }
       }
+
+      # Add retry with exponential backoff for transient errors (429, 5xx)
+      req <- req %>% httr2::req_retry(
+        max_tries = 3,
+        is_transient = is_transient_error
+      )
 
       return(req)
     }
@@ -733,6 +748,12 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
     req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
   }
 
+  # Add retry with exponential backoff for transient errors (429, 5xx)
+  req <- req %>% httr2::req_retry(
+    max_tries = 3,
+    is_transient = is_transient_error
+  )
+
   # 5. Debugging
   if (run_debug) {
     return(httr2::req_dry_run(req))
@@ -979,7 +1000,13 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
   if (length(ellipsis_args) > 0) {
     req <- req %>% httr2::req_url_query(!!!ellipsis_args)
   }
-  
+
+  # Add retry with exponential backoff for transient errors (429, 5xx)
+  req <- req %>% httr2::req_retry(
+    max_tries = 3,
+    is_transient = is_transient_error
+  )
+
   # --- 4. Debugging Hook ---
   if (run_debug) {
     return(httr2::req_dry_run(req))
