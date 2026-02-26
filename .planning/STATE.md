@@ -2,19 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24)
+See: .planning/PROJECT.md (updated 2026-02-26)
 
-**Core value:** Paginated API endpoints return all results transparently — users call a function once and get everything back.
-**Current focus:** v2.0 Paginated Requests — phases 19-22
+**Core value:** Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
+**Current focus:** v2.1 Test Infrastructure — Phase 23 (Build Fixes & Test Generator Core)
 
 ## Current Position
 
-Phase: 21 of 22 (Stub Generation Integration)
-Plan: 1/1 complete
-Status: Phase 21 complete — pagination-aware stub generation verified (61/61 tests pass)
-Last activity: 2026-02-24 — Phase 21 verified via UAT
+Phase: 23 of 26 (Build Fixes & Test Generator Core)
+Plan: 0 of TBD
+Status: Ready to plan
+Last activity: 2026-02-26 — Roadmap created for v2.1 milestone
 
-Progress: [########--] 75%
+Progress: [░░░░░░░░░░] 0% (0/TBD plans complete)
 
 ## Performance Metrics
 
@@ -23,18 +23,10 @@ Progress: [########--] 75%
 - Average duration: 3.3 minutes
 - Total execution time: 0.38 hours
 
-**By Phase (v1.9):**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 16 - CI Fix | 1 | 3 min | 3 min |
-| 17 - Schema Diffing | 2 | 5 min | 2.5 min |
-| 18 - Reliability | 1 | 5 min | 5 min |
-| 19 - Pagination Detection | 1 | 4 min | 4 min |
-| 20 - Auto-Pagination Engine | 2 | 7 min | 3.5 min |
-| 21 - Stub Generation Integration | 1 | 4 min | 4 min |
-
-*Updated after each plan completion*
+**Recent context:**
+- v2.0 phases 19-21 completed in 4 plans
+- Phase 22 pagination testing folded into v2.1 milestone
+- v2.1 starts fresh with build fixes before any new feature work
 
 ## Accumulated Context
 
@@ -43,40 +35,52 @@ Progress: [########--] 75%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [v2.0]: Auto-paginate all pages by default; users get everything in one call
-- [v2.0]: Regex-based pattern detection for future-proofing new pagination endpoints
-- [v2.0]: All current pagination patterns implemented (offset/limit, page/size, cursor, path-based)
-- [v2.0]: Stub generator updated to detect and generate auto-paginating code
-- [19-01]: Registry-based pagination detection with 7 entries covering 5 strategies
-- [20-02]: Custom next_req callback for body-based offset/limit since iterate_with_offset only handles query params
+- [v2.1]: Include build fixes in test infrastructure milestone (entangled with test failures)
+- [v2.1]: Nuke all bad VCR cassettes and re-record from production with correct params
+- [v2.1]: Both local dev script + CI workflow for test automation
+- [v2.1]: Phase 22 pagination testing folded into Phase 26 of this milestone
+- [v2.1]: Test generator must read actual tidy flag from function bodies, not assume
+- [v2.1]: Test generator must map parameter names to correct test value types
 
-### Pagination Patterns Discovered
+### Known Issues (from TODO)
 
-| Pattern | Endpoints | Mechanism |
-|---------|-----------|-----------|
-| Offset/limit path params | AMOS `*_pagination/{limit}/{offset}` | Path-based GET |
-| Keyset/cursor (dev API) | AMOS `*_keyset_pagination/{limit}?cursor=` | Cursor query param |
-| pageNumber query param | `ct_exposure_mmdb_*` | Query param GET |
-| offset+size query params | `cc_search`, `chemi_search` | Query param GET |
-| page+size query params | `chemi_resolver_classyfire` | Query param POST (via options) |
+**Build errors blocking R CMD check:**
+- `"RF" <- model = "RF"` invalid syntax in `chemi_arn_cats_bulk`
+- Duplicate `endpoint` argument in multiple functions
+- Non-ASCII characters in `R/extract_mol_formula.R`
+- Roxygen @param documentation mismatches
+- httr2 compatibility issues (resp_is_transient, resp_status_class)
+
+**Test failures (834+):**
+- 122 stubs use tidy=FALSE but tests assert tibble
+- Test generator blindly passes DTXSIDs to all parameters
+- 673 untracked VCR cassettes recorded with wrong params
+
+**Root cause:** Test generator doesn't read actual function metadata
 
 ### Pending Todos
 
 **Deferred to future milestones:**
 - ADV-01-04: Advanced schema handling (content-type extraction, primitive types, nested arrays)
+- S7 class implementation (#29)
+- Schema-check workflow improvements (#96)
+- Advanced testing features (snapshot tests, performance benchmarks, contract testing)
 
 ### Blockers/Concerns
 
-None yet.
+None yet. Starting fresh with Phase 23.
 
 ## Session Continuity
 
-Last session: 2026-02-24
-Stopped at: Phase 21 complete and verified; Phase 22 not yet planned
+Last session: 2026-02-26
+Stopped at: Roadmap creation complete for v2.1 milestone
 Resume file: None
 
 **Archived Milestones:**
 - v1.0-v1.9: See `.planning/milestones/` directory
+- v2.0: Phases 19-21 complete, Phase 22 folded into v2.1 Phase 26
+
+**Next action:** Plan Phase 23 (Build Fixes & Test Generator Core)
 
 ---
-*Last updated: 2026-02-24 after Phase 21 verification*
+*Last updated: 2026-02-26 after v2.1 roadmap creation*

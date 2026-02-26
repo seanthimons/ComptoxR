@@ -1,8 +1,8 @@
-# Roadmap: ComptoxR v2.0 Paginated Requests
+# Roadmap: ComptoxR Test Infrastructure
 
 ## Overview
 
-Add automatic pagination to all EPA API endpoints. Paginated functions transparently fetch all pages and return combined results. The stub generator detects pagination patterns via regex and generates auto-paginating wrapper code. Users call a function once and get everything back.
+ComptoxR's stub generation pipeline (v1.9) produces clean API wrappers, but the test infrastructure is broken. The test generator doesn't read actual parameter types or tidy flags from stubs, producing 834+ failing tests and 673 bad VCR cassettes. This milestone fixes build blockers, rebuilds the test generator to produce correct tests, cleans up cassettes, and automates the stub-to-test pipeline with CI reporting.
 
 ## Milestones
 
@@ -16,89 +16,81 @@ Add automatic pagination to all EPA API endpoints. Paginated functions transpare
 - v1.7 Documentation Refresh - Phase 11 (shipped 2026-01-29)
 - v1.8 Testing Infrastructure - Phases 12-15 (shipped 2026-01-31)
 - v1.9 Schema Check Workflow Fix - Phases 16-18 (shipped 2026-02-12)
-- **v2.0 Paginated Requests** - Phases 19-22 (current)
+- v2.0 Paginated Requests - Phases 19-21 (shipped 2026-02-24)
+- **v2.1 Test Infrastructure** - Phases 23-26 (current)
 
 ## Phases
 
 **Phase Numbering:**
-- Integer phases (19, 20, 21, 22): Planned milestone work
-- Decimal phases (19.1, 19.2): Urgent insertions (marked with INSERTED)
+- Integer phases (23, 24, 25, 26): Planned milestone work
+- Decimal phases (23.1, 23.2): Urgent insertions (marked with INSERTED)
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 19: Pagination Detection** - Detect and classify pagination patterns in OpenAPI schemas
-- [x] **Phase 20: Auto-Pagination Engine** - Add pagination loop to all three request templates
-- [x] **Phase 21: Stub Generation Integration** - Generate auto-paginating stubs for detected endpoints
-- [ ] **Phase 22: Testing** - Unit and integration tests for pagination
+- [ ] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata
+- [ ] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering
+- [ ] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI
+- [ ] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds
 
 ## Phase Details
 
-### Phase 19: Pagination Detection
-**Goal**: Stub generator identifies paginated endpoints and classifies their pagination strategy
-**Depends on**: Nothing (builds on existing schema parsing)
-**Requirements**: PAG-01, PAG-02, PAG-03, PAG-04
+### Phase 23: Build Fixes & Test Generator Core
+**Goal**: Package builds cleanly and test generator produces correct tests by reading actual function metadata
+**Depends on**: Nothing (foundation work)
+**Requirements**: BUILD-01, BUILD-02, BUILD-03, BUILD-04, BUILD-05, BUILD-06, BUILD-07, BUILD-08, TGEN-01, TGEN-02, TGEN-03, TGEN-04, TGEN-05
 **Success Criteria** (what must be TRUE):
-  1. A regex-based registry of pagination parameter patterns exists and is configurable
-  2. `openapi_to_spec()` output includes pagination metadata for endpoints that have pagination params
-  3. Each paginated endpoint is classified as one of: `offset_limit`, `page_size`, `cursor`, or `path_pagination`
-  4. All 5 known pagination patterns (AMOS offset/limit, AMOS keyset/cursor, ct pageNumber, cc offset/size, chemi page/size) are correctly detected
-**Plans:** 1 plan
+  1. R CMD check produces 0 errors on Windows, macOS, and Linux
+  2. Generated test files call functions with correctly typed parameters (DTXSID for query, integer for limit, string for search_type)
+  3. Generated tests assert list return type for tidy=FALSE functions and tibble for tidy=TRUE functions
+  4. Generated tests include unique cassette names per test variant (single, batch, error, example)
+  5. All stub generation syntax bugs fixed (no reserved word collisions, no duplicate args, valid roxygen)
+**Plans**: TBD
 
-Plans:
-- [x] 19-01-PLAN.md -- Add pagination registry, detection function, pipeline integration, and tests
-
-### Phase 20: Auto-Pagination Engine
-**Goal**: Request templates can automatically fetch all pages and combine results
-**Depends on**: Phase 19
-**Requirements**: PAG-05, PAG-06, PAG-07, PAG-08, PAG-09, PAG-10, PAG-11, PAG-12, PAG-13, PAG-17, PAG-18, PAG-19
+### Phase 24: VCR Cassette Cleanup
+**Goal**: Clean cassette infrastructure with verified API key filtering and bulk management tools
+**Depends on**: Phase 23 (need correct test generator before re-recording)
+**Requirements**: VCR-01, VCR-02, VCR-03, VCR-04, VCR-05, VCR-06, VCR-07
 **Success Criteria** (what must be TRUE):
-  1. `generic_request()` with `paginate = TRUE` fetches all pages for offset/limit and page/size endpoints
-  2. `generic_chemi_request()` with `paginate = TRUE` fetches all pages for chemi paginated endpoints
-  3. `generic_cc_request()` with `paginate = TRUE` fetches all pages for CC search endpoints
-  4. Cursor-based pagination follows cursor tokens until exhausted
-  5. Path-based AMOS pagination increments offset path parameter correctly
-  6. Combined results are a single tibble (tidy=TRUE) or single list (tidy=FALSE)
-  7. Pagination stops after max_pages (default 100) or on empty/error response
-  8. Verbose mode shows page progress via `cli`
-**Plans:** 2 plans
+  1. All 673 untracked cassettes with wrong parameters are deleted from the filesystem
+  2. Helper functions exist for deleting cassettes (all, by pattern, by function name)
+  3. All committed cassettes show `<<<API_KEY>>>` placeholder, never actual keys
+  4. Documentation exists for batched cassette re-recording (20-50 at a time with delays)
+  5. High-priority functions (hazard, exposure, chemical domains) have clean cassettes re-recorded
+**Plans**: TBD
 
-Plans:
-- [x] 20-01-PLAN.md -- Add paginate_loop, pagination to generic_request() + generic_cc_request() + tests
-- [x] 20-02-PLAN.md -- Add pagination to generic_chemi_request() + tests
-
-### Phase 21: Stub Generation Integration
-**Goal**: Generated stubs for paginated endpoints auto-paginate by default
-**Depends on**: Phase 19, Phase 20
-**Requirements**: PAG-14, PAG-15, PAG-16
+### Phase 25: Automated Test Generation Pipeline
+**Goal**: CI detects stub-test gaps and automatically generates missing tests after stub creation
+**Depends on**: Phase 23 (test generator working), Phase 24 (cassette management in place)
+**Requirements**: AUTO-01, AUTO-02, AUTO-03, AUTO-04, AUTO-05, AUTO-06
 **Success Criteria** (what must be TRUE):
-  1. `build_function_stub()` produces stubs that call request templates with `paginate = TRUE` for paginated endpoints
-  2. Generated stubs expose an `all_pages` parameter (default TRUE) to let users opt out
-  3. Individual pagination params (page, offset, etc.) remain in the function signature for manual control
-  4. Non-paginated endpoints are unaffected (no regression)
-**Plans:** 1 plan
+  1. Running `dev/detect_test_gaps.R` outputs list of functions lacking test files
+  2. Running `dev/generate_tests.R` creates test files for all detected gaps
+  3. GitHub Action workflow triggers after stub generation and commits new test files
+  4. CI workflow summary shows test gap count and coverage metrics
+  5. Generated stubs marked `@lifecycle stable` are protected from test generator overwrites
+  6. Test generation is integrated into stub workflow: generate stubs → detect gaps → generate tests → commit together
+**Plans**: TBD
 
-Plans:
-- [x] 21-01-PLAN.md -- Add pagination metadata plumbing and pagination-aware stub generation with tests
-
-### Phase 22: Testing
-**Goal**: Pagination detection and auto-pagination are verified by automated tests
-**Depends on**: Phase 19, Phase 20, Phase 21
-**Requirements**: PAG-20, PAG-21, PAG-22
+### Phase 26: Pagination Tests & Coverage Hardening
+**Goal**: Pagination functionality verified by tests and coverage thresholds tuned for generated code
+**Depends on**: Phase 25 (automated test generation working)
+**Requirements**: PAG-20, PAG-21, PAG-22, PAG-23
 **Success Criteria** (what must be TRUE):
-  1. Unit tests verify regex detection catches all known pagination patterns from real schemas
-  2. Unit tests verify each pagination strategy (offset, page, cursor, path) with mocked responses
-  3. At least one integration test runs a paginated stub end-to-end with VCR cassettes
-  4. All existing tests continue to pass (no regression)
+  1. Unit tests verify all 5 pagination regex patterns detect correctly from real schemas
+  2. Unit tests verify each pagination strategy (offset/limit, page/size, cursor, path-based) with mocked responses
+  3. At least one integration test runs paginated stub end-to-end with VCR cassettes
+  4. All existing non-pagination tests continue to pass (no regression)
+  5. Coverage configuration excludes auto-generated defensive code or uses tiered thresholds (R/ >=75%, dev/ >=80%, stubs >=50%)
 **Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 19 -> 20 -> 21 -> 22
+Phases execute in numeric order: 23 → 24 → 25 → 26
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
-| 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
-| 21. Stub Generation Integration | v2.0 | 1/1 | Complete | 2026-02-24 |
-| 22. Testing | v2.0 | 0/TBD | Pending | - |
+| 23. Build Fixes & Test Generator Core | v2.1 | 0/TBD | Not started | - |
+| 24. VCR Cassette Cleanup | v2.1 | 0/TBD | Not started | - |
+| 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
+| 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
