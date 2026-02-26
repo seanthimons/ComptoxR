@@ -220,7 +220,7 @@ generate_ct_stubs <- function() {
   spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = ct_config)
 
   # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
+  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
@@ -342,7 +342,7 @@ generate_chemi_stubs <- function() {
     summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
 
   # Write files
-  scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
+  scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
@@ -414,7 +414,7 @@ generate_cc_stubs <- function() {
   spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = cc_config)
 
   # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = TRUE, append = TRUE, quiet = TRUE)
+  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
   scaffold_result
 }
@@ -461,9 +461,14 @@ if (nrow(all_results) == 0) {
   skipped <- sum(str_detect(all_results$action, "skipped"), na.rm = TRUE)
   errors <- sum(all_results$action == "error", na.rm = TRUE)
 
+  protected <- sum(all_results$action == "skipped_lifecycle", na.rm = TRUE)
+
   cli_alert_info("Created: {created} file(s)")
   cli_alert_info("Appended: {appended} file(s)")
   cli_alert_info("Skipped: {skipped} file(s)")
+  if (protected > 0) {
+    cli_alert_warning("Protected (lifecycle guard): {protected} file(s)")
+  }
   if (errors > 0) {
     cli_alert_danger("Errors: {errors} file(s)")
   }
