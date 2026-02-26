@@ -22,7 +22,7 @@
 
 ## Refactoring: Migrate to Generic Requests
 - [ ] Migrate `ct_bioactivity()` to generic requests + promote to stable (#97) — `R/ct_bioactivity.R:1`
-- [ ] Fix incorrect function reference in `ct_bioactivity()` (#98) — `R/ct_bioactivity.R:117` — TODO says "UPDATE THIS TO CORRECT FUNCTION"
+- [x] Fix incorrect function reference in `ct_bioactivity()` (#98) — replaced `ct_bio_assay_all()` with `ct_bioactivity_assay()`
 - [ ] Migrate `ct_cancer()` to generic requests + promote to stable (#99) — `R/ct_cancer.R:1`
 - [ ] Migrate `ct_demographic_exposure()` to generic requests + promote to stable (#100) — `R/ct_demographic_exposure.R:1`
 - [ ] Migrate `ct_details()` to generic requests + promote to stable (#101) — `R/ct_details.R:1`
