@@ -4,11 +4,11 @@
 - [ ] PR #74: Refine PubChem search parameter passing [draft] — `copilot/add-pubchem-search-functionality`
 
 ## High Priority (Quick Wins & Critical)
-- [ ] Add request backoff feature to generic requests (#75) — high impact, medium complexity
-- [ ] Stub generator: protect stable functions from overwrite (#95) — the stub generator (`generate_stubs.R`) calls `scaffold_files(overwrite = TRUE, append = TRUE)`, which will blindly overwrite existing files. If a stable/maturing function exists but `find_endpoint_usages_base` fails to match it (e.g., different endpoint string format, different filename), the stub generator treats it as "missing" and overwrites the file with an experimental stub, destroying existing documentation. Needs a guard that checks lifecycle status of existing functions before writing:
-  - [ ] In `scaffold_files` or upstream: before overwriting, scan the target file for `@lifecycle` roxygen tags — skip if any function has `stable`, `maturing`, or `superseded` lifecycle
-  - [ ] Improve `find_endpoint_usages_base` matching to reduce false negatives (e.g., partial route matching, cross-reference by function name not just endpoint string)
-  - [ ] Consider `overwrite = FALSE` as the default in CI, with explicit opt-in for known-safe overwrites
+- [x] Add request backoff feature to generic requests (#75) — high impact, medium complexity
+- [x] Stub generator: protect stable functions from overwrite (#95) — lifecycle guard in `scaffold_files()`, fallback function-definition matching in `find_endpoint_usages_base()`, `overwrite=FALSE` default (PR #112)
+  - [x] In `scaffold_files` or upstream: before overwriting, scan the target file for `@lifecycle` roxygen tags — skip if any function has `stable`, `maturing`, or `superseded` lifecycle
+  - [x] Improve `find_endpoint_usages_base` matching to reduce false negatives (e.g., partial route matching, cross-reference by function name not just endpoint string)
+  - [x] Consider `overwrite = FALSE` as the default in CI, with explicit opt-in for known-safe overwrites
 
 ## Medium Priority
 - [ ] Schema-check workflow improvements (#96) — further iteration on the automated schema-check CI:

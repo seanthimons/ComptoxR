@@ -21,7 +21,7 @@ chemi_amos_method_pagination <- function(limit, offset = 0, all_pages = TRUE) {
     batch_limit = 1,
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE,
+    tidy = TRUE,
     path_params = c(offset = offset),
     paginate = all_pages,
     max_pages = 100,
