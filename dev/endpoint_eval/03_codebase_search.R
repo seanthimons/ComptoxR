@@ -150,6 +150,41 @@ find_endpoint_usages_base <- function(
       first_snippet = NA_character_,
       stringsAsFactors = FALSE
     )
+
+    # --- Fallback: file-existence + function-definition check ---
+    # When endpoint string matching fails, check if the expected file exists
+    # and contains a real function definition (not just a stub placeholder).
+    # This catches stable functions that use a different endpoint string format
+    # than what the schema generates.
+    if (!is.null(expected_files)) {
+      ep_to_expected <- setNames(expected_files, endpoints)
+      for (i in seq_len(nrow(summary_missing))) {
+        ep <- summary_missing$endpoint[i]
+        ef <- ep_to_expected[ep]
+        if (is.na(ef) || is.null(ef)) next
+
+        candidate <- file.path(pkg_dir, ef)
+        if (!file.exists(candidate)) next
+
+        lines <- tryCatch(readLines(candidate, warn = FALSE), error = function(e) character())
+        if (length(lines) == 0) next
+
+        # Derive expected function name from the filename (e.g., ct_hazard.R -> ct_hazard)
+        fn_name <- tools::file_path_sans_ext(basename(ef))
+        # Check for a function definition: fn_name <- function or fn_name = function
+        fn_pattern <- paste0("^\\s*", gsub("\\.", "\\\\.", fn_name), "\\s*(<-|=)\\s*function\\b")
+        fn_hits <- which(stringr::str_detect(lines, fn_pattern))
+
+        if (length(fn_hits) > 0) {
+          summary_missing$n_hits[i] <- 1L
+          summary_missing$n_files[i] <- 1L
+          summary_missing$first_file[i] <- candidate
+          summary_missing$first_line[i] <- fn_hits[1]
+          summary_missing$first_snippet[i] <- substr(lines[fn_hits[1]], 1, 240)
+        }
+      }
+    }
+
     summary <- rbind(summary_found, summary_missing)
   } else {
     summary <- summary_found

@@ -2,6 +2,34 @@
 # File Scaffolding
 # ==============================================================================
 
+#' Check if a file contains a protected lifecycle badge
+#'
+#' Scans an R source file for `lifecycle::badge()` calls and returns TRUE if
+#' any badge is "stable", "maturing", or "superseded". These indicate the file
+#' contains mature code that should not be overwritten by generated stubs.
+#'
+#' @param path Path to the R source file.
+#' @return Logical; TRUE if a protected lifecycle is found, FALSE otherwise.
+#' @keywords internal
+has_protected_lifecycle <- function(path) {
+  protected_statuses <- c("stable", "maturing", "superseded", "deprecated", "defunct")
+  lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) character())
+  if (length(lines) == 0) return(FALSE)
+
+  # Match lifecycle::badge("status") patterns
+  badges <- stringr::str_extract_all(
+    lines,
+    'lifecycle::badge\\("([^"]+)"\\)'
+  )
+
+  statuses <- unlist(badges, use.names = FALSE)
+  if (length(statuses) == 0) return(FALSE)
+
+  # Extract just the status string from the badge call
+  statuses <- stringr::str_extract(statuses, '(?<=badge\\(")[^"]+')
+  any(tolower(statuses) %in% protected_statuses)
+}
+
 #' Write generated files to disk based on a specification tibble
 #'
 #' Creates or updates files according to a data frame describing file paths and their content.
@@ -70,6 +98,25 @@ scaffold_files <- function(
     if (!fs::dir_exists(dir_path)) fs::dir_create(dir_path, recurse = TRUE)
 
     existed <- fs::file_exists(path)
+
+    # --- Lifecycle guard ---
+    # Protect stable/maturing/superseded functions from being overwritten
+    # by experimental stubs. If an existing file contains a non-experimental
+    # lifecycle badge, skip the write entirely.
+    if (existed && (overwrite || append)) {
+      protected <- has_protected_lifecycle(path)
+      if (protected) {
+        if (!quiet) {
+          cli::cli_alert_warning(
+            "Skipping {.path {basename(path)}} — contains stable/maturing/superseded lifecycle"
+          )
+        }
+        return(dplyr::tibble(
+          index = index, path = path, action = "skipped_lifecycle",
+          existed = TRUE, written = FALSE, size_bytes = file.size(path)
+        ))
+      }
+    }
 
     # Decide whether to skip, append, or write fresh/overwrite
     if (existed && !overwrite && !append) {
