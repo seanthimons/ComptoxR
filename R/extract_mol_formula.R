@@ -17,11 +17,11 @@
 #' Robustness notes (updated):
 #' - Correct handling of bracket characters (explicit alternation instead of a
 #'   fragile character class).
-#' - Candidate finder allows spaces, middle dot (·), plus/minus, and periods inside
+#' - Candidate finder allows spaces, middle dot (\u00b7), plus/minus, and periods inside
 #'   bracketed content so complexes and hydrates are captured.
 #' - Roman numeral filter is case-insensitive and whitespace-tolerant to avoid
 #'   misclassifying oxidation states like "(III)" or "( ii )" as formulas.
-#' - Carbon backbone range filter recognizes hyphen and en dash (e.g., "C9–12").
+#' - Carbon backbone range filter recognizes hyphen and en dash (e.g., "C9\u201312").
 #'
 #' @return A function for extracting molecular formulas from within enclosures.
 #' @noRd
@@ -44,10 +44,10 @@ create_formula_extractor_final <- function() {
   validator_regex <- glue::glue("^(?:{element_chunk}|{group_chunk})+(?:[+-]\\d*)?$")
 
   # FIX: Do NOT allow '(' or ')' inside the (...) alternative; allow them inside [...] only.
-  candidate_regex <- "(\\([A-Za-z0-9+\\-\\.·\\s]*\\)|\\[[A-Za-z0-9()+\\-\\.·\\s]*\\])"
+  candidate_regex <- "(\\([A-Za-z0-9+\\-\\.\\u00b7\\s]*\\)|\\[[A-Za-z0-9()+\\-\\.\\u00b7\\s]*\\])"
 
   roman_numeral_regex <- "(?i)^\\s*(?:i|v|x|l|c|d|m)+\\s*$"
-  carbon_range_regex  <- "^\\s*C\\d+\\s*[-–]\\s*\\d+\\s*$"
+  carbon_range_regex  <- "^\\s*C\\d+\\s*[-\\u2013]\\s*\\d+\\s*$"
 
   function(text_vector) {
     candidates <- stringr::str_extract_all(text_vector, candidate_regex)
@@ -60,7 +60,7 @@ create_formula_extractor_final <- function() {
       keep_roman  <- !stringr::str_detect(trimmed, roman_numeral_regex)
       keep_carbon <- !stringr::str_detect(trimmed, carbon_range_regex)
 
-      cleaned     <- stringr::str_replace_all(trimmed, "[·\\.\\s]+", "")
+      cleaned     <- stringr::str_replace_all(trimmed, "[\\u00b7\\.\\s]+", "")
       is_formula  <- stringr::str_detect(cleaned, validator_regex)
 
       res <- trimmed[keep_roman & keep_carbon & is_formula]
@@ -78,9 +78,9 @@ create_formula_extractor_final <- function() {
 #' - Correctly handles parentheses, square brackets, stoichiometric numbers, and
 #'   grouped substructures (e.g., "(NH3)2").
 #' - Recognizes complexes and hydrates inside brackets when they include spaces,
-#'   middle dot (·), plus/minus, or periods (these are normalized before validation).
+#'   middle dot (\u00b7), plus/minus, or periods (these are normalized before validation).
 #' - Ignores oxidation state Roman numerals in brackets, e.g., "(III)" or "( ii )".
-#' - Excludes carbon backbone ranges like "C9–12".
+#' - Excludes carbon backbone ranges like "C9\u201312".
 #'
 #' @param text_vector A character vector of text to search.
 #' @return A list of character vectors. Each element corresponds to one input
@@ -93,9 +93,9 @@ create_formula_extractor_final <- function() {
 #' texts <- c(
 #'   "Water (H2O) and ethanol (C2H5OH).",
 #'   "Complex: [Pt(NH3)2Cl2] catalyst.",
-#'   "Hydrate: (CuSO4 · 5H2O)",
+#'   "Hydrate: (CuSO4 \u00b7 5H2O)",
 #'   "Oxidation state: iron (III) chloride",  # "(III)" is ignored
-#'   "Backbone range: C9–12 alcohols"         # "C9–12" is ignored
+#'   "Backbone range: C9\u201312 alcohols"         # "C9\u201312" is ignored
 #' )
 #' extract_formulas(texts)
 extract_formulas <- function(text_vector) {

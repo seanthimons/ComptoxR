@@ -39,7 +39,7 @@ chemi_functional_use <- function(query) {
 	result <- resp_list %>% 
 		resps_successes() %>% 
     map(.,
-			~ resp_body_json(.x) %>% flatten()
+			~ resp_body_json(.x) %>% jsonlite::flatten()
 			) %>%
 		compact() %>% 
 		map(., ~list_c(.x) %>% tibble::as_tibble_col('functional_classes')) %>% 
