@@ -62,7 +62,7 @@ Plans:
   3. All committed cassettes show `<<<API_KEY>>>` placeholder, never actual keys
   4. Documentation exists for batched cassette re-recording (20-50 at a time with delays)
   5. High-priority functions (hazard, exposure, chemical domains) have clean cassettes re-recorded
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 Plans:
 - [ ] 24-01-PLAN.md — Implement VCR cassette management helper functions (delete, list, audit)
 - [ ] 24-02-PLAN.md — Delete 673 bad cassettes and run API key security audit
@@ -101,6 +101,6 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
-| 24. VCR Cassette Cleanup | 1/3 | In Progress|  | - |
+| 24. VCR Cassette Cleanup | 2/3 | In Progress|  | - |
 | 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
