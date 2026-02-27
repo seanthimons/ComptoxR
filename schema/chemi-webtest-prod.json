@@ -464,11 +464,11 @@
           "logMolar": {
             "type": "boolean"
           },
-          "logValueDigits": {
+          "valueDigits": {
             "type": "integer",
             "format": "int32"
           },
-          "valueDigits": {
+          "logValueDigits": {
             "type": "integer",
             "format": "int32"
           }
