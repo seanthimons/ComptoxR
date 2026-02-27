@@ -124,37 +124,53 @@ extract_formals_regex <- function(file_path, function_name) {
 extract_tidy_flag <- function(file_path) {
   lines <- readLines(file_path, warn = FALSE)
 
-  # Find lines with generic request calls
+  # Find the start of generic request calls
   request_patterns <- c(
     "generic_request\\(",
     "generic_chemi_request\\(",
     "generic_cc_request\\("
   )
 
-  request_lines <- character(0)
+  # Collect all lines from start of call to its closing paren
+  call_blocks <- character(0)
   for (pattern in request_patterns) {
-    matches <- grep(pattern, lines, value = TRUE)
-    if (length(matches) > 0) {
-      request_lines <- c(request_lines, matches)
+    start_indices <- grep(pattern, lines)
+    if (length(start_indices) == 0) next
+
+    for (start_idx in start_indices) {
+      # Read lines until we find the matching closing paren
+      block <- lines[start_idx]
+      open_count <- str_count(block, "\\(")
+      close_count <- str_count(block, "\\)")
+
+      idx <- start_idx
+      while (open_count > close_count && idx < length(lines)) {
+        idx <- idx + 1
+        block <- paste(block, lines[idx])
+        open_count <- open_count + str_count(lines[idx], "\\(")
+        close_count <- close_count + str_count(lines[idx], "\\)")
+      }
+
+      call_blocks <- c(call_blocks, block)
     }
   }
 
-  if (length(request_lines) == 0) {
+  if (length(call_blocks) == 0) {
     # No generic request call found - default to TRUE
     return(TRUE)
   }
 
-  # Search for explicit tidy = TRUE/FALSE
-  for (line in request_lines) {
+  # Search for explicit tidy = TRUE/FALSE in the complete call blocks
+  for (block in call_blocks) {
     # Look for explicit tidy = TRUE or tidy = FALSE
-    if (grepl("tidy\\s*=\\s*TRUE", line, ignore.case = TRUE)) {
+    if (grepl("tidy\\s*=\\s*TRUE", block, ignore.case = TRUE)) {
       return(TRUE)
     }
-    if (grepl("tidy\\s*=\\s*FALSE", line, ignore.case = TRUE)) {
+    if (grepl("tidy\\s*=\\s*FALSE", block, ignore.case = TRUE)) {
       return(FALSE)
     }
     # Look for pass-through: tidy = tidy
-    if (grepl("tidy\\s*=\\s*tidy", line)) {
+    if (grepl("tidy\\s*=\\s*tidy", block)) {
       # Check function signature for tidy default
       # If function has tidy parameter, need to check its default
       # For now, assume TRUE (most common case)
