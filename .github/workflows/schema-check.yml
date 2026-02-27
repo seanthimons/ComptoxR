@@ -253,8 +253,8 @@ jobs:
           | API | Coverage | Endpoints | Functions |
           |-----|----------|-----------|-----------|
           COVERAGE
-          echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage || 'N/A' }}% | ${{ steps.coverage.outputs.ccd_endpoints || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions || 'N/A' }} |" >> pr_body.md
-          echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage || 'N/A' }}% | ${{ steps.coverage.outputs.chemi_endpoints || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions || 'N/A' }} |" >> pr_body.md
+          echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions_fmt || 'N/A' }} |" >> pr_body.md
+          echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions_fmt || 'N/A' }} |" >> pr_body.md
 
           # Add review checklist with breaking change awareness
           BREAKING="${{ steps.diff.outputs.breaking_count || '0' }}"
