@@ -62,7 +62,11 @@ Plans:
   3. All committed cassettes show `<<<API_KEY>>>` placeholder, never actual keys
   4. Documentation exists for batched cassette re-recording (20-50 at a time with delays)
   5. High-priority functions (hazard, exposure, chemical domains) have clean cassettes re-recorded
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 24-01-PLAN.md — Implement VCR cassette management helper functions (delete, list, audit)
+- [ ] 24-02-PLAN.md — Delete 673 bad cassettes and run API key security audit
+- [ ] 24-03-PLAN.md — Create parallel re-recording script with mirai
 
 ### Phase 25: Automated Test Generation Pipeline
 **Goal**: CI detects stub-test gaps and automatically generates missing tests after stub creation
@@ -96,7 +100,7 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 23. Build Fixes & Test Generator Core | 5/5 | Complete   | 2026-02-27 | - |
+| 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
 | 24. VCR Cassette Cleanup | v2.1 | 0/TBD | Not started | - |
 | 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
