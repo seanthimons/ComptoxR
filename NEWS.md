@@ -2,7 +2,7 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-01-28)
+## Unreleased (2026-02-27)
 
 #### Breaking changes
 
@@ -11,6 +11,8 @@
 
 #### New features
 
+-   use coverage delta outputs in schema PR body
+    ([e9f93bb](https://github.com/seanthimons/ComptoxR/tree/e9f93bb0a31b5dfa8e651f3c78485d6ee7643961))
 -   add ‘none’ option to release workflow for creating releases without
     version bump
     ([614524e](https://github.com/seanthimons/ComptoxR/tree/614524e7fec993ab6b0ed5ab18d6df322dd1f75b))
@@ -90,6 +92,8 @@
 
 #### Bug fixes
 
+-   restore full schema-check workflow from integration \[skip ci\]
+    ([5b8ec8b](https://github.com/seanthimons/ComptoxR/tree/5b8ec8b680ccf2a8ea6fe800041ecda44bd5bcdc))
 -   updated workflows to not infinite-trigger
     ([83a0856](https://github.com/seanthimons/ComptoxR/tree/83a08563689a5bad5ccdab1bf44ed335142e125e))
 -   disabled workflows while debuggin building errors
@@ -180,6 +184,8 @@
 #### Other changes
 
 -   Update NEWS.md \[skip ci\]
+    ([48bba0a](https://github.com/seanthimons/ComptoxR/tree/48bba0ab8793cb50e21331392c81656a7f98eca7))
+-   Update NEWS.md \[skip ci\]
     ([5d1970a](https://github.com/seanthimons/ComptoxR/tree/5d1970a81ea2ccf0b0e839d4c966c045c038b6fa))
 -   Update NEWS.md \[skip ci\]
     ([042d25e](https://github.com/seanthimons/ComptoxR/tree/042d25eb6efa3e3c5a4fda65bee2a41eecf34e56))
@@ -220,7 +226,7 @@
     ([de08440](https://github.com/seanthimons/ComptoxR/tree/de08440ce6c952fc7b2a01b9bc73d5bfde12cfbb))
 
 Full set of changes:
-[`v1.3.0...4f150d9`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...4f150d9)
+[`v1.3.0...e9f93bb`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...e9f93bb)
 
 ## v1.3.0 (2025-10-02)
 
