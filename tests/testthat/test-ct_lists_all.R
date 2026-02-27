@@ -1,35 +1,18 @@
 # Tests for ct_lists_all
 # Generated using metadata-based test generator
-# Return type: tibble
-# Returns a tibble of results (or nested list if coerce=TRUE)
-
 
 test_that("ct_lists_all works with single input", {
-    vcr::use_cassette("ct_lists_all_single", {
-        result <- ct_lists_all(`ct_lists_all <- function(` = "DTXSID7020182")
-        {
-            expect_s3_class(result, "tbl_df")
-            expect_true(ncol(result) > 0 || nrow(result) == 0)
-        }
-    })
+  vcr::use_cassette("ct_lists_all_single", {
+    result <- ct_lists_all(return_dtxsid = FALSE)
+    expect_s3_class(result, "tbl_df")
+  })
 })
-
 test_that("ct_lists_all handles batch requests", {
-    vcr::use_cassette("ct_lists_all_batch", {
-        result <- ct_lists_all(`ct_lists_all <- function(` = c("DTXSID7020182", "DTXSID5032381", 
-        "DTXSID8024291"))
-        {
-            expect_s3_class(result, "tbl_df")
-            expect_true(is.data.frame(result))
-        }
-    })
+  vcr::use_cassette("ct_lists_all_batch", {
+    result <- ct_lists_all(return_dtxsid = c(FALSE, FALSE))
+    expect_s3_class(result, "tbl_df")
+  })
 })
-
-test_that("ct_lists_all handles invalid input gracefully", {
-    vcr::use_cassette("ct_lists_all_error", {
-        result <- suppressWarnings(ct_lists_all(`ct_lists_all <- function(` = "INVALID_DTXSID_12345"))
-        expect_true(is.null(result) || (is.data.frame(result) && nrow(result) == 
-            0) || (is.character(result) && length(result) == 0) || (is.list(result) && 
-            length(result) == 0))
-    })
+test_that("ct_lists_all handles errors gracefully", {
+  expect_error(ct_lists_all())
 })
