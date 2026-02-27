@@ -8,13 +8,13 @@
 ### Build Fixes
 
 - [ ] **BUILD-01**: R CMD check produces 0 errors after fixing stub generator syntax bugs (`"RF" <- model = "RF"`, duplicate `endpoint` args)
-- [ ] **BUILD-02**: All unused/undeclared imports resolved (devtools, magick, usethis removed or moved to Suggests; ggplot2, janitor removed from Imports)
-- [ ] **BUILD-03**: Non-ASCII characters in `R/extract_mol_formula.R` replaced with `\uxxxx` escapes
-- [ ] **BUILD-04**: `jsonlite::flatten` vs `purrr::flatten` import collision resolved
-- [ ] **BUILD-05**: httr2 compatibility fixed — either update minimum version or replace missing `resp_is_transient`/`resp_status_class` calls
+- [x] **BUILD-02**: All unused/undeclared imports resolved (devtools, magick, usethis removed or moved to Suggests; ggplot2, janitor removed from Imports)
+- [x] **BUILD-03**: Non-ASCII characters in `R/extract_mol_formula.R` replaced with `\uxxxx` escapes
+- [x] **BUILD-04**: `jsonlite::flatten` vs `purrr::flatten` import collision resolved
+- [x] **BUILD-05**: httr2 compatibility fixed — either update minimum version or replace missing `resp_is_transient`/`resp_status_class` calls
 - [ ] **BUILD-06**: Roxygen `@param` documentation matches actual function signatures across all generated stubs
-- [ ] **BUILD-07**: Non-standard license in DESCRIPTION replaced with valid CRAN-compatible license specification
-- [ ] **BUILD-08**: Partial argument match `body` → `body_type` fixed in `ct_chemical_msready_by_mass` and `ct_chemical_msready_search_by_mass_bulk`
+- [x] **BUILD-07**: Non-standard license in DESCRIPTION replaced with valid CRAN-compatible license specification
+- [x] **BUILD-08**: Partial argument match `body` → `body_type` fixed in `ct_chemical_msready_by_mass` and `ct_chemical_msready_search_by_mass_bulk`
 
 ### Test Generator
 
@@ -110,13 +110,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | BUILD-01 | Phase 23 | Pending |
-| BUILD-02 | Phase 23 | Pending |
-| BUILD-03 | Phase 23 | Pending |
-| BUILD-04 | Phase 23 | Pending |
-| BUILD-05 | Phase 23 | Pending |
+| BUILD-02 | Phase 23 | Complete |
+| BUILD-03 | Phase 23 | Complete |
+| BUILD-04 | Phase 23 | Complete |
+| BUILD-05 | Phase 23 | Complete |
 | BUILD-06 | Phase 23 | Pending |
-| BUILD-07 | Phase 23 | Pending |
-| BUILD-08 | Phase 23 | Pending |
+| BUILD-07 | Phase 23 | Complete |
+| BUILD-08 | Phase 23 | Complete |
 | TGEN-01 | Phase 23 | Pending |
 | TGEN-02 | Phase 23 | Pending |
 | TGEN-03 | Phase 23 | Pending |
