@@ -78,9 +78,9 @@ create_formula_extractor_final <- function() {
 #' - Correctly handles parentheses, square brackets, stoichiometric numbers, and
 #'   grouped substructures (e.g., "(NH3)2").
 #' - Recognizes complexes and hydrates inside brackets when they include spaces,
-#'   middle dot (\u00b7), plus/minus, or periods (these are normalized before validation).
+#'   middle dot (U+00B7), plus/minus, or periods (these are normalized before validation).
 #' - Ignores oxidation state Roman numerals in brackets, e.g., "(III)" or "( ii )".
-#' - Excludes carbon backbone ranges like "C9\u201312".
+#' - Excludes carbon backbone ranges like "C9-12".
 #'
 #' @param text_vector A character vector of text to search.
 #' @return A list of character vectors. Each element corresponds to one input
@@ -93,9 +93,9 @@ create_formula_extractor_final <- function() {
 #' texts <- c(
 #'   "Water (H2O) and ethanol (C2H5OH).",
 #'   "Complex: [Pt(NH3)2Cl2] catalyst.",
-#'   "Hydrate: (CuSO4 \u00b7 5H2O)",
+#'   "Hydrate: (CuSO4 . 5H2O)",
 #'   "Oxidation state: iron (III) chloride",  # "(III)" is ignored
-#'   "Backbone range: C9\u201312 alcohols"         # "C9\u201312" is ignored
+#'   "Backbone range: C9-12 alcohols"         # "C9-12" is ignored
 #' )
 #' extract_formulas(texts)
 extract_formulas <- function(text_vector) {
