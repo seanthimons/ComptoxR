@@ -28,7 +28,7 @@ ComptoxR's stub generation pipeline (v1.9) produces clean API wrappers, but the 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
-- [ ] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering
+- [x] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering (completed 2026-02-27)
 - [ ] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI
 - [ ] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds
 
@@ -62,7 +62,7 @@ Plans:
   3. All committed cassettes show `<<<API_KEY>>>` placeholder, never actual keys
   4. Documentation exists for batched cassette re-recording (20-50 at a time with delays)
   5. High-priority functions (hazard, exposure, chemical domains) have clean cassettes re-recorded
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 24-01-PLAN.md — Implement VCR cassette management helper functions (delete, list, audit)
 - [ ] 24-02-PLAN.md — Delete 673 bad cassettes and run API key security audit
@@ -101,6 +101,6 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
-| 24. VCR Cassette Cleanup | 2/3 | In Progress|  | - |
+| 24. VCR Cassette Cleanup | 3/3 | Complete   | 2026-02-27 | - |
 | 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
