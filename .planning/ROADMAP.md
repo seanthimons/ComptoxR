@@ -44,7 +44,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Generated tests assert list return type for tidy=FALSE functions and tibble for tidy=TRUE functions
   4. Generated tests include unique cassette names per test variant (single, batch, error, example)
   5. All stub generation syntax bugs fixed (no reserved word collisions, no duplicate args, valid roxygen)
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 23-01-PLAN.md — Merge PR + non-generator BUILD fixes (license, imports, encoding, httr2, partial match)
+- [ ] 23-02-PLAN.md — Fix stub generator syntax + schema automation pipeline (Items 2 & 3)
+- [ ] 23-03-PLAN.md — Build metadata-aware test generator core (all TGEN requirements)
+- [ ] 23-04-PLAN.md — Purge and regenerate stubs, validate with R CMD check
 
 ### Phase 24: VCR Cassette Cleanup
 **Goal**: Clean cassette infrastructure with verified API key filtering and bulk management tools
@@ -90,7 +95,7 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 23. Build Fixes & Test Generator Core | v2.1 | 0/TBD | Not started | - |
+| 23. Build Fixes & Test Generator Core | v2.1 | 0/4 | Planning complete | - |
 | 24. VCR Cassette Cleanup | v2.1 | 0/TBD | Not started | - |
 | 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
