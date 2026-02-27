@@ -27,7 +27,7 @@ ComptoxR's stub generation pipeline (v1.9) produces clean API wrappers, but the 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata
+- [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
 - [ ] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering
 - [ ] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI
 - [ ] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds
@@ -44,12 +44,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Generated tests assert list return type for tidy=FALSE functions and tibble for tidy=TRUE functions
   4. Generated tests include unique cassette names per test variant (single, batch, error, example)
   5. All stub generation syntax bugs fixed (no reserved word collisions, no duplicate args, valid roxygen)
-**Plans:** 3/4 plans executed
+**Plans:** 5 plans (4 complete + 1 gap closure)
 Plans:
-- [ ] 23-01-PLAN.md — Merge PR + non-generator BUILD fixes (license, imports, encoding, httr2, partial match)
-- [ ] 23-02-PLAN.md — Fix stub generator syntax + schema automation pipeline (Items 2 & 3)
-- [ ] 23-03-PLAN.md — Build metadata-aware test generator core (all TGEN requirements)
-- [ ] 23-04-PLAN.md — Purge and regenerate stubs, validate with R CMD check
+- [x] 23-01-PLAN.md — Merge PR + non-generator BUILD fixes (license, imports, encoding, httr2, partial match)
+- [x] 23-02-PLAN.md — Fix stub generator syntax + schema automation pipeline (Items 2 & 3)
+- [x] 23-03-PLAN.md — Build metadata-aware test generator core (all TGEN requirements)
+- [x] 23-04-PLAN.md — Purge and regenerate stubs, validate with R CMD check
+- [ ] 23-05-PLAN.md — Gap closure: regenerate 6 test files with malformed parameter interpolation
 
 ### Phase 24: VCR Cassette Cleanup
 **Goal**: Clean cassette infrastructure with verified API key filtering and bulk management tools
@@ -95,7 +96,7 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 23. Build Fixes & Test Generator Core | 3/4 | In Progress|  | - |
+| 23. Build Fixes & Test Generator Core | 4/4 | Complete   | 2026-02-27 | - |
 | 24. VCR Cassette Cleanup | v2.1 | 0/TBD | Not started | - |
 | 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
