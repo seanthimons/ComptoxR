@@ -692,13 +692,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Extract parameter info from body_param_info
       param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
       param_vec <- trimws(param_vec)
-      param_vec <- gsub("\\s*=\\s*NULL$", "", param_vec)  # Remove " = NULL" suffix
+      # BUILD-01 FIX: Remove ALL default values, not just " = NULL"
+      # This ensures param_vec contains only parameter names (e.g., "model" not "model = \"RF\"")
+      param_vec <- gsub("\\s*=\\s*.*$", "", param_vec)  # Remove " = <anything>" suffix
 
-      # Identify required params (no "= NULL" in signature)
+      # Identify required params (no "=" in original signature)
       sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
       sig_parts <- trimws(sig_parts)
-      required_params <- sig_parts[!grepl("=", sig_parts)]
-      optional_params <- param_vec[!param_vec %in% required_params]
+      required_params_mask <- !grepl("=", sig_parts)
+      required_params <- param_vec[required_params_mask]
+      optional_params <- param_vec[!required_params_mask]
 
       # For generic_chemi_request, the first parameter is the 'query' (DTXSIDs)
       # and all other parameters go into the 'options' list
@@ -734,6 +737,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         }
 
         # Add optional params with NULL checks
+        # BUILD-01 FIX: Use clean parameter name in condition and assignment
+        # Previously generated: if (!is.null(model = "RF")) options$model = "RF" <- model = "RF"
+        # Now generates: if (!is.null(model)) options$model <- model
         for (p in optional_params) {
           options_code_lines <- c(options_code_lines, paste0("  if (!is.null(", p, ")) options$", p, " <- ", p))
         }
@@ -774,12 +780,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Similar logic for generic_request
       param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
       param_vec <- trimws(param_vec)
-      param_vec <- gsub("\\s*=\\s*NULL$", "", param_vec)
+      # BUILD-01 FIX: Remove ALL default values, not just " = NULL"
+      param_vec <- gsub("\\s*=\\s*.*$", "", param_vec)
 
       sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
       sig_parts <- trimws(sig_parts)
-      required_params <- sig_parts[!grepl("=", sig_parts)]
-      optional_params <- param_vec[!param_vec %in% required_params]
+      required_params_mask <- !grepl("=", sig_parts)
+      required_params <- param_vec[required_params_mask]
+      optional_params <- param_vec[!required_params_mask]
 
       body_code_lines <- c(
         "  # Build request body",
@@ -1015,7 +1023,57 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   }
 
   # Combine header and body
-  paste0(roxygen_header,"\n", fn_body, "\n\n")
+  result <- paste0(roxygen_header,"\n", fn_body, "\n\n")
+
+  # BUILD-01 FIX: Validate syntax before returning
+  # This catches syntax errors at generation time rather than at runtime
+  parsed <- tryCatch({
+    parse(text = result)
+  }, error = function(e) {
+    cli::cli_abort(c(
+      "x" = "Generated invalid R syntax for function {.fn {fn}}",
+      "i" = "Parse error: {e$message}",
+      "i" = "Endpoint: {endpoint}",
+      "i" = "Check parameter defaults and assignment operators in generated code"
+    ))
+  })
+
+  # BUILD-06 FIX: Validate @param tags match function formals
+  # Extract formals from parsed function
+  fn_expr <- NULL
+  for (i in seq_along(parsed)) {
+    expr <- parsed[[i]]
+    if (is.call(expr) && as.character(expr[[1]]) == "<-" &&
+        is.call(expr[[3]]) && as.character(expr[[3]][[1]]) == "function") {
+      fn_expr <- expr[[3]]
+      break
+    }
+  }
+
+  if (!is.null(fn_expr)) {
+    actual_formals <- names(formals(eval(fn_expr)))
+
+    # Extract @param names from roxygen
+    param_lines <- strsplit(roxygen_header, "\n")[[1]]
+    param_lines <- grep("^#' @param ", param_lines, value = TRUE)
+    documented_params <- sub("^#' @param (\\S+).*", "\\1", param_lines)
+
+    # Check for mismatches
+    missing_docs <- setdiff(actual_formals, documented_params)
+    extra_docs <- setdiff(documented_params, actual_formals)
+
+    if (length(missing_docs) > 0 || length(extra_docs) > 0) {
+      cli::cli_warn(c(
+        "!" = "Roxygen @param mismatch for function {.fn {fn}}",
+        "i" = if (length(missing_docs) > 0) paste0("Missing docs: ", paste(missing_docs, collapse = ", ")),
+        "i" = if (length(extra_docs) > 0) paste0("Extra docs: ", paste(extra_docs, collapse = ", ")),
+        "i" = "Function formals: ", paste(actual_formals, collapse = ", "),
+        "i" = "Documented params: ", paste(documented_params, collapse = ", ")
+      ))
+    }
+  }
+
+  result
 }
 
 #' Render R function stubs from endpoint specification
