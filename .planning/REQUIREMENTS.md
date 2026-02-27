@@ -7,22 +7,22 @@
 
 ### Build Fixes
 
-- [ ] **BUILD-01**: R CMD check produces 0 errors after fixing stub generator syntax bugs (`"RF" <- model = "RF"`, duplicate `endpoint` args)
+- [x] **BUILD-01**: R CMD check produces 0 errors after fixing stub generator syntax bugs (`"RF" <- model = "RF"`, duplicate `endpoint` args)
 - [x] **BUILD-02**: All unused/undeclared imports resolved (devtools, magick, usethis removed or moved to Suggests; ggplot2, janitor removed from Imports)
 - [x] **BUILD-03**: Non-ASCII characters in `R/extract_mol_formula.R` replaced with `\uxxxx` escapes
 - [x] **BUILD-04**: `jsonlite::flatten` vs `purrr::flatten` import collision resolved
 - [x] **BUILD-05**: httr2 compatibility fixed — either update minimum version or replace missing `resp_is_transient`/`resp_status_class` calls
-- [ ] **BUILD-06**: Roxygen `@param` documentation matches actual function signatures across all generated stubs
+- [x] **BUILD-06**: Roxygen `@param` documentation matches actual function signatures across all generated stubs
 - [x] **BUILD-07**: Non-standard license in DESCRIPTION replaced with valid CRAN-compatible license specification
 - [x] **BUILD-08**: Partial argument match `body` → `body_type` fixed in `ct_chemical_msready_by_mass` and `ct_chemical_msready_search_by_mass_bulk`
 
 ### Test Generator
 
-- [ ] **TGEN-01**: Test generator reads actual parameter names and types from function signatures, mapping each to appropriate test values (DTXSID for query, integer for limit, string for search_type, etc.)
-- [ ] **TGEN-02**: Test generator reads `tidy` flag from `generic_request()`/`generic_chemi_request()` calls and asserts list or tibble accordingly
-- [ ] **TGEN-03**: Test generator handles functions with no parameters (static endpoints) by generating parameterless test calls
-- [ ] **TGEN-04**: Test generator handles functions with `path_params` by generating appropriate test values per parameter name
-- [ ] **TGEN-05**: Generated tests use unique cassette names per test variant (single, batch, error, example) to enable isolated re-recording
+- [x] **TGEN-01**: Test generator reads actual parameter names and types from function signatures, mapping each to appropriate test values (DTXSID for query, integer for limit, string for search_type, etc.)
+- [x] **TGEN-02**: Test generator reads `tidy` flag from `generic_request()`/`generic_chemi_request()` calls and asserts list or tibble accordingly
+- [x] **TGEN-03**: Test generator handles functions with no parameters (static endpoints) by generating parameterless test calls
+- [x] **TGEN-04**: Test generator handles functions with `path_params` by generating appropriate test values per parameter name
+- [x] **TGEN-05**: Generated tests use unique cassette names per test variant (single, batch, error, example) to enable isolated re-recording
 
 ### Pagination Tests (carried from v2.0 Phase 22)
 
@@ -109,19 +109,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BUILD-01 | Phase 23 | Pending |
+| BUILD-01 | Phase 23 | Complete |
 | BUILD-02 | Phase 23 | Complete |
 | BUILD-03 | Phase 23 | Complete |
 | BUILD-04 | Phase 23 | Complete |
 | BUILD-05 | Phase 23 | Complete |
-| BUILD-06 | Phase 23 | Pending |
+| BUILD-06 | Phase 23 | Complete |
 | BUILD-07 | Phase 23 | Complete |
 | BUILD-08 | Phase 23 | Complete |
-| TGEN-01 | Phase 23 | Pending |
-| TGEN-02 | Phase 23 | Pending |
-| TGEN-03 | Phase 23 | Pending |
-| TGEN-04 | Phase 23 | Pending |
-| TGEN-05 | Phase 23 | Pending |
+| TGEN-01 | Phase 23 | Complete |
+| TGEN-02 | Phase 23 | Complete |
+| TGEN-03 | Phase 23 | Complete |
+| TGEN-04 | Phase 23 | Complete |
+| TGEN-05 | Phase 23 | Complete |
 | VCR-01 | Phase 24 | Pending |
 | VCR-02 | Phase 24 | Pending |
 | VCR-03 | Phase 24 | Pending |
