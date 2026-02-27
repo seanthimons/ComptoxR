@@ -75,6 +75,7 @@ source(file.path(utils_dir, "04_openapi_parser.R"))
 source(file.path(utils_dir, "05_file_scaffold.R"))
 source(file.path(utils_dir, "06_param_parsing.R"))
 source(file.path(utils_dir, "07_stub_generation.R"))
+source(file.path(utils_dir, "08_drift_detection.R"))
 
 # Reset endpoint tracking at start of generation run
 reset_endpoint_tracking()
@@ -82,72 +83,8 @@ reset_endpoint_tracking()
 # ==============================================================================
 # Helper Functions
 # ==============================================================================
-
-#' Select schema files with optional stage-based prioritization
-#'
-#' For schemas with multiple stage variants (e.g., chemi-mordred-prod.json,
-#' chemi-mordred-staging.json), selects the highest priority stage per domain.
-#'
-#' WHY THIS EXISTS: Extracted from generate_chemi_stubs() for reusability (EXTRACT-HELPER decision).
-#' Chemi microservices have multiple deployment stages per domain, requiring stage-based selection.
-#' CT/CC APIs only have prod schemas, so stage_priority is NULL for those.
-#'
-#' @param pattern Regex pattern to match schema files (e.g., "^chemi-.*\\.json$")
-#' @param exclude_pattern Optional pattern to exclude (e.g., "ui"). NULL to skip.
-#' @param stage_priority Character vector of stage names in priority order.
-#'   NULL for schemas without stage variants (ct, cc).
-#' @param schema_dir Path to schema directory. Defaults to here::here("schema").
-#' @return Character vector of selected filenames (not full paths)
-select_schema_files <- function(
-  pattern,
-  exclude_pattern = NULL,
-  stage_priority = NULL,
-  schema_dir = NULL
-) {
-  if (is.null(schema_dir)) schema_dir <- here::here("schema")
-
-  # List matching files
-  files <- list.files(path = schema_dir, pattern = pattern, full.names = FALSE)
-
-  if (length(files) == 0) return(character(0))
-
-  # Apply exclusion filter
-  if (!is.null(exclude_pattern) && nzchar(exclude_pattern)) {
-    files <- files[!grepl(exclude_pattern, files, ignore.case = TRUE)]
-  }
-
-  if (length(files) == 0) return(character(0))
-
-  # Stage-based selection (if stage_priority provided)
-  # STAGE PRIORITY LOGIC:
-  # For chemi microservices, each domain (amos, rdkit, mordred, etc.) may have
-  # multiple schemas: chemi-{domain}-prod.json, chemi-{domain}-staging.json, chemi-{domain}-dev.json
-  # We select the BEST available stage per domain using the priority order.
-  # Example: If prod exists, use it. If only staging exists, use that.
-  if (!is.null(stage_priority)) {
-    schema_meta <- tibble(file = files) %>%
-      tidyr::separate_wider_delim(
-        cols = file,
-        delim = "-",
-        names = c("origin", "domain", "stage"),
-        cols_remove = FALSE
-      ) %>%
-      mutate(
-        stage = str_remove(stage, "\\.json$"),
-        stage = factor(stage, levels = stage_priority)  # Factor ordering = priority
-      )
-
-    # Group by domain, sort by stage priority, take first (highest priority)
-    files <- schema_meta %>%
-      group_by(domain) %>%
-      arrange(stage, .by_group = TRUE) %>%
-      slice(1) %>%  # Take highest priority stage per domain
-      ungroup() %>%
-      pull(file)
-  }
-
-  files
-}
+# Note: select_schema_files() has been moved to dev/endpoint_eval/01_schema_resolution.R
+# for shared use between generate_stubs.R and diff_schemas.R
 
 #' Generate stubs for CompTox Dashboard API
 #' @return tibble with scaffold results
@@ -206,12 +143,23 @@ generate_ct_stubs <- function() {
     expected_files = endpoints$file
   )
 
+  # Detect parameter drift for existing endpoints
+  ct_drift <- detect_parameter_drift(
+    endpoints = endpoints,
+    usage_summary = res$summary %>% filter(n_hits > 0),
+    pkg_dir = here::here("R")
+  )
+
   endpoints_to_build <- endpoints %>%
     filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
   if (nrow(endpoints_to_build) == 0) {
     cli_alert_success("All ct_* endpoints already implemented")
-    return(tibble(action = character(), file = character()))
+    # Return drift results even if no new stubs
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = ct_drift
+    ))
   }
 
   cli_alert_info("Found {nrow(endpoints_to_build)} endpoint(s) to generate")
@@ -222,7 +170,11 @@ generate_ct_stubs <- function() {
   # Write files
   scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
-  scaffold_result
+  # Return both scaffold and drift results
+  list(
+    scaffold = scaffold_result,
+    drift = ct_drift
+  )
 }
 
 #' Generate stubs for Cheminformatics API
@@ -317,12 +269,23 @@ generate_chemi_stubs <- function() {
     expected_files = chemi_endpoints$file
   )
 
+  # Detect parameter drift for existing endpoints
+  chemi_drift <- detect_parameter_drift(
+    endpoints = chemi_endpoints,
+    usage_summary = res_chemi$summary %>% filter(n_hits > 0),
+    pkg_dir = here::here("R")
+  )
+
   chemi_endpoints_to_build <- chemi_endpoints %>%
     filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
   if (nrow(chemi_endpoints_to_build) == 0) {
     cli_alert_success("All chemi_* endpoints already implemented")
-    return(tibble(action = character(), file = character()))
+    # Return drift results even if no new stubs
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = chemi_drift
+    ))
   }
 
   cli_alert_info("Found {nrow(chemi_endpoints_to_build)} endpoint(s) to generate")
@@ -333,7 +296,11 @@ generate_chemi_stubs <- function() {
   # Check if any stubs were generated (render may skip endpoints with empty schemas)
   if (nrow(chemi_spec_with_text) == 0) {
     cli_alert_warning("No chemi stubs generated (all skipped)")
-    return(tibble(action = character(), file = character()))
+    # Return drift results even if no stubs
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = chemi_drift
+    ))
   }
 
   # Aggregate by file (multiple functions per file)
@@ -344,7 +311,11 @@ generate_chemi_stubs <- function() {
   # Write files
   scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
-  scaffold_result
+  # Return both scaffold and drift results
+  list(
+    scaffold = scaffold_result,
+    drift = chemi_drift
+  )
 }
 
 #' Generate stubs for Common Chemistry API
@@ -400,12 +371,23 @@ generate_cc_stubs <- function() {
     expected_files = endpoints$file
   )
 
+  # Detect parameter drift for existing endpoints
+  cc_drift <- detect_parameter_drift(
+    endpoints = endpoints,
+    usage_summary = cc_res$summary %>% filter(n_hits > 0),
+    pkg_dir = here::here("R")
+  )
+
   endpoints_to_build <- endpoints %>%
     filter(route %in% {cc_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
 
   if (nrow(endpoints_to_build) == 0) {
     cli_alert_success("All cc_* endpoints already implemented")
-    return(tibble(action = character(), file = character()))
+    # Return drift results even if no new stubs
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = cc_drift
+    ))
   }
 
   cli_alert_info("Found {nrow(endpoints_to_build)} endpoint(s) to generate")
@@ -416,7 +398,11 @@ generate_cc_stubs <- function() {
   # Write files
   scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
 
-  scaffold_result
+  # Return both scaffold and drift results
+  list(
+    scaffold = scaffold_result,
+    drift = cc_drift
+  )
 }
 
 # ==============================================================================
@@ -431,11 +417,27 @@ ct_results <- generate_ct_stubs()
 chemi_results <- generate_chemi_stubs()
 cc_results <- generate_cc_stubs()
 
-# Combine results
+# Extract scaffold and drift results
+ct_scaffold <- if (is.list(ct_results) && "scaffold" %in% names(ct_results)) ct_results$scaffold else ct_results
+chemi_scaffold <- if (is.list(chemi_results) && "scaffold" %in% names(chemi_results)) chemi_results$scaffold else chemi_results
+cc_scaffold <- if (is.list(cc_results) && "scaffold" %in% names(cc_results)) cc_results$scaffold else cc_results
+
+ct_drift <- if (is.list(ct_results) && "drift" %in% names(ct_results)) ct_results$drift else tibble()
+chemi_drift <- if (is.list(chemi_results) && "drift" %in% names(chemi_results)) chemi_results$drift else tibble()
+cc_drift <- if (is.list(cc_results) && "drift" %in% names(cc_results)) cc_results$drift else tibble()
+
+# Combine scaffold results
 all_results <- bind_rows(
-  ct_results %>% mutate(api = "ct"),
-  chemi_results %>% mutate(api = "chemi"),
-  cc_results %>% mutate(api = "cc")
+  ct_scaffold %>% mutate(api = "ct"),
+  chemi_scaffold %>% mutate(api = "chemi"),
+  cc_scaffold %>% mutate(api = "cc")
+)
+
+# Combine drift results
+all_drift <- bind_rows(
+  ct_drift %>% mutate(api = "ct"),
+  chemi_drift %>% mutate(api = "chemi"),
+  cc_drift %>% mutate(api = "cc")
 )
 
 # Report skipped/suspicious endpoints
@@ -486,6 +488,36 @@ if (nrow(all_results) == 0) {
   }
 }
 
+# ==============================================================================
+# Drift Reporting
+# ==============================================================================
+
+if (nrow(all_drift) > 0) {
+  cli_h2("Parameter Drift Detected")
+  cli_alert_warning("{nrow(all_drift)} parameter drift(s) detected across {length(unique(all_drift$endpoint))} endpoint(s)")
+
+  # Group by endpoint
+  for (ep in unique(all_drift$endpoint)) {
+    ep_drifts <- all_drift %>% filter(endpoint == ep)
+    cli_alert_info("Endpoint: {ep} ({ep_drifts$file[1]})")
+
+    for (i in seq_len(nrow(ep_drifts))) {
+      if (ep_drifts$drift_type[i] == "param_added") {
+        cli_bullets(c("+" = "Added: {ep_drifts$param_name[i]} ({ep_drifts$schema_value[i]})"))
+      } else if (ep_drifts$drift_type[i] == "param_removed") {
+        cli_bullets(c("-" = "Removed: {ep_drifts$param_name[i]} (no longer in schema)"))
+      }
+    }
+  }
+
+  # Write drift report to file for CI
+  drift_report_path <- here::here("drift_report.csv")
+  write.csv(all_drift, drift_report_path, row.names = FALSE)
+  cli_alert_info("Drift report written to: {drift_report_path}")
+} else {
+  cli_alert_success("No parameter drift detected")
+}
+
 # Output for GitHub Actions
 if (Sys.getenv("GITHUB_OUTPUT") != "") {
   output_file <- Sys.getenv("GITHUB_OUTPUT")
@@ -494,9 +526,14 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   appended <- sum(all_results$action == "appended", na.rm = TRUE)
   total_new <- created + appended
 
+  drift_count <- nrow(all_drift)
+  drift_endpoints <- length(unique(all_drift$endpoint))
+
   cat(sprintf("stubs_generated=%d\n", total_new), file = output_file, append = TRUE)
   cat(sprintf("stubs_created=%d\n", created), file = output_file, append = TRUE)
   cat(sprintf("stubs_appended=%d\n", appended), file = output_file, append = TRUE)
+  cat(sprintf("drift_count=%d\n", drift_count), file = output_file, append = TRUE)
+  cat(sprintf("drift_endpoints=%d\n", drift_endpoints), file = output_file, append = TRUE)
 
   cli_alert_info("Output written to GITHUB_OUTPUT")
 }

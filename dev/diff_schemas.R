@@ -204,11 +204,41 @@ diff_single_schema <- function(old_path, new_path) {
 #' @param old_dir Directory containing old schema JSON files
 #' @param new_dir Directory containing new schema JSON files
 #' @param pattern File pattern to match (default: "\\.json$")
+#' @param stage_priority Optional character vector of stage names in priority order.
+#'   When provided, uses select_schema_files() to filter to canonical schemas per domain.
+#'   NULL to diff all matching files (default).
+#' @param exclude_pattern Optional pattern to exclude (e.g., "ui"). Only used if stage_priority is provided.
 #' @return List of per-schema diff results
-diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$") {
+diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$", stage_priority = NULL, exclude_pattern = NULL) {
+  # Source schema selection utility if using stage priority
+  if (!is.null(stage_priority)) {
+    if (!exists("select_schema_files")) {
+      suppressMessages({
+        source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
+      })
+    }
+  }
+
   # List files in both directories
-  old_files <- list.files(old_dir, pattern = pattern, full.names = FALSE)
-  new_files <- list.files(new_dir, pattern = pattern, full.names = FALSE)
+  if (!is.null(stage_priority)) {
+    # Use select_schema_files to get canonical schemas per domain
+    old_files <- select_schema_files(
+      pattern = pattern,
+      exclude_pattern = exclude_pattern,
+      stage_priority = stage_priority,
+      schema_dir = old_dir
+    )
+    new_files <- select_schema_files(
+      pattern = pattern,
+      exclude_pattern = exclude_pattern,
+      stage_priority = stage_priority,
+      schema_dir = new_dir
+    )
+  } else {
+    # List all matching files
+    old_files <- list.files(old_dir, pattern = pattern, full.names = FALSE)
+    new_files <- list.files(new_dir, pattern = pattern, full.names = FALSE)
+  }
 
   all_files <- unique(c(old_files, new_files))
 

@@ -590,6 +590,72 @@ extract_body_properties <- function(request_body, components, schema_version = N
   list(type = "unknown", properties = list())
 }
 
+#' Select schema files with optional stage-based prioritization
+#'
+#' For schemas with multiple stage variants (e.g., chemi-mordred-prod.json,
+#' chemi-mordred-staging.json), selects the highest priority stage per domain.
+#'
+#' WHY THIS EXISTS: Extracted from generate_stubs() for reusability (EXTRACT-HELPER decision).
+#' Chemi microservices have multiple deployment stages per domain, requiring stage-based selection.
+#' CT/CC APIs only have prod schemas, so stage_priority is NULL for those.
+#'
+#' @param pattern Regex pattern to match schema files (e.g., "^chemi-.*\\.json$")
+#' @param exclude_pattern Optional pattern to exclude (e.g., "ui"). NULL to skip.
+#' @param stage_priority Character vector of stage names in priority order.
+#'   NULL for schemas without stage variants (ct, cc).
+#' @param schema_dir Path to schema directory. Defaults to here::here("schema").
+#' @return Character vector of selected filenames (not full paths)
+select_schema_files <- function(
+  pattern,
+  exclude_pattern = NULL,
+  stage_priority = NULL,
+  schema_dir = NULL
+) {
+  if (is.null(schema_dir)) schema_dir <- here::here("schema")
+
+  # List matching files
+  files <- list.files(path = schema_dir, pattern = pattern, full.names = FALSE)
+
+  if (length(files) == 0) return(character(0))
+
+  # Apply exclusion filter
+  if (!is.null(exclude_pattern) && nzchar(exclude_pattern)) {
+    files <- files[!grepl(exclude_pattern, files, ignore.case = TRUE)]
+  }
+
+  if (length(files) == 0) return(character(0))
+
+  # Stage-based selection (if stage_priority provided)
+  # STAGE PRIORITY LOGIC:
+  # For chemi microservices, each domain (amos, rdkit, mordred, etc.) may have
+  # multiple schemas: chemi-{domain}-prod.json, chemi-{domain}-staging.json, chemi-{domain}-dev.json
+  # We select the BEST available stage per domain using the priority order.
+  # Example: If prod exists, use it. If only staging exists, use that.
+  if (!is.null(stage_priority)) {
+    schema_meta <- tibble::tibble(file = files) %>%
+      tidyr::separate_wider_delim(
+        cols = file,
+        delim = "-",
+        names = c("origin", "domain", "stage"),
+        cols_remove = FALSE
+      ) %>%
+      dplyr::mutate(
+        stage = stringr::str_remove(stage, "\\.json$"),
+        stage = factor(stage, levels = stage_priority)  # Factor ordering = priority
+      )
+
+    # Group by domain, sort by stage priority, take first (highest priority)
+    files <- schema_meta %>%
+      dplyr::group_by(domain) %>%
+      dplyr::arrange(stage, .by_group = TRUE) %>%
+      dplyr::slice(1) %>%  # Take highest priority stage per domain
+      dplyr::ungroup() %>%
+      dplyr::pull(file)
+  }
+
+  files
+}
+
 # Extract query parameters with schema reference resolution
 # Flattens referenced schemas into individual query parameters
 extract_query_params_with_refs <- function(parameters, components, schema_version = NULL, max_depth = 3) {

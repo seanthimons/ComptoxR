@@ -135,7 +135,13 @@ jobs:
         continue-on-error: true
         run: |
           source("dev/diff_schemas.R")
-          results <- diff_schemas("schema_old", "schema")
+          # Use stage priority for chemi schemas to ensure diff and stub generator agree
+          results <- diff_schemas(
+            "schema_old",
+            "schema",
+            stage_priority = c("prod", "staging", "dev"),
+            exclude_pattern = "ui"
+          )
           md <- format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")
 
@@ -250,6 +256,42 @@ jobs:
           echo "- **Stubs Generated:** ${{ steps.stubs.outputs.stubs_generated || '0' }}" >> pr_body.md
           echo "- **New Files Created:** ${{ steps.stubs.outputs.stubs_created || '0' }}" >> pr_body.md
           echo "- **Existing Files Updated:** ${{ steps.stubs.outputs.stubs_appended || '0' }}" >> pr_body.md
+
+          # Add parameter drift section if detected
+          DRIFT_COUNT="${{ steps.stubs.outputs.drift_count || '0' }}"
+          if [ "$DRIFT_COUNT" != "0" ] && [ -f "drift_report.csv" ]; then
+            echo "" >> pr_body.md
+            echo "### Parameter Drift Detected" >> pr_body.md
+            echo "" >> pr_body.md
+            echo "**${DRIFT_COUNT} parameter drift(s) detected across ${{ steps.stubs.outputs.drift_endpoints || '0' }} endpoint(s).**" >> pr_body.md
+            echo "" >> pr_body.md
+            echo "| Function | Endpoint | Change | Parameter | Details |" >> pr_body.md
+            echo "|----------|----------|--------|-----------|---------|" >> pr_body.md
+            # Read drift_report.csv and format as markdown table
+            tail -n +2 drift_report.csv | while IFS=',' read -r endpoint file function_name drift_type param_name schema_value code_value; do
+              # Remove quotes from CSV fields
+              endpoint=$(echo "$endpoint" | tr -d '"')
+              file=$(echo "$file" | tr -d '"')
+              function_name=$(echo "$function_name" | tr -d '"')
+              drift_type=$(echo "$drift_type" | tr -d '"')
+              param_name=$(echo "$param_name" | tr -d '"')
+              schema_value=$(echo "$schema_value" | tr -d '"')
+              code_value=$(echo "$code_value" | tr -d '"')
+
+              # Format change type
+              if [ "$drift_type" = "param_added" ]; then
+                change="➕ Added"
+                details="$schema_value"
+              else
+                change="➖ Removed"
+                details="$code_value"
+              fi
+
+              echo "| \`$function_name\` | $endpoint | $change | \`$param_name\` | $details |" >> pr_body.md
+            done
+            echo "" >> pr_body.md
+            echo "**Action Required:** Review these functions manually and update parameters as needed." >> pr_body.md
+          fi
 
           # Add coverage section
           cat >> pr_body.md << 'COVERAGE'
