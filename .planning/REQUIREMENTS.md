@@ -34,10 +34,10 @@
 ### VCR Cassette Management
 
 - [ ] **VCR-01**: All 673 untracked cassettes recorded with wrong parameters are deleted
-- [ ] **VCR-02**: `delete_all_cassettes()` function implemented in helper-vcr.R for bulk cassette deletion
-- [ ] **VCR-03**: `delete_cassettes(pattern)` function implemented for pattern-based cassette deletion
-- [ ] **VCR-04**: `list_cassettes()` function implemented to enumerate existing cassettes
-- [ ] **VCR-05**: `check_cassette_safety()` function implemented to scan cassettes for leaked API keys
+- [x] **VCR-02**: `delete_all_cassettes()` function implemented in helper-vcr.R for bulk cassette deletion
+- [x] **VCR-03**: `delete_cassettes(pattern)` function implemented for pattern-based cassette deletion
+- [x] **VCR-04**: `list_cassettes()` function implemented to enumerate existing cassettes
+- [x] **VCR-05**: `check_cassette_safety()` function implemented to scan cassettes for leaked API keys
 - [ ] **VCR-06**: Security audit confirms all committed cassettes are API-key filtered (show `<<<API_KEY>>>` not actual keys)
 - [ ] **VCR-07**: Cassette re-recording script supports batched execution (20-50 at a time) with rate-limit delays
 
@@ -123,10 +123,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TGEN-04 | Phase 23 | Complete |
 | TGEN-05 | Phase 23 | Complete |
 | VCR-01 | Phase 24 | Pending |
-| VCR-02 | Phase 24 | Pending |
-| VCR-03 | Phase 24 | Pending |
-| VCR-04 | Phase 24 | Pending |
-| VCR-05 | Phase 24 | Pending |
+| VCR-02 | Phase 24 | Complete |
+| VCR-03 | Phase 24 | Complete |
+| VCR-04 | Phase 24 | Complete |
+| VCR-05 | Phase 24 | Complete |
 | VCR-06 | Phase 24 | Pending |
 | VCR-07 | Phase 24 | Pending |
 | AUTO-01 | Phase 25 | Pending |
