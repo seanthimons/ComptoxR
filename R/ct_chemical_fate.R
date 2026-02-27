@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_fate(query = c("DTXSID1025568", "DTXSID80143348", "DTXSID8047004"))
+#' ct_chemical_fate(query = "DTXSID7020182")
 #' }
 ct_chemical_fate <- function(query) {
   result <- generic_request(

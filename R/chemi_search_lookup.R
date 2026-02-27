@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_search_lookup(searchType = c("DTXSID1023786", "DTXSID5060271", "DTXSID901336271"))
+#' chemi_search_lookup(searchType = "DTXSID7020182")
 #' }
 chemi_search_lookup <- function(searchType = NULL, inputType = NULL, query = NULL, limit = NULL, params = NULL) {
   # Build options list for additional parameters

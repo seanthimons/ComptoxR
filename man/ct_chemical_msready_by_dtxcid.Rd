@@ -17,6 +17,6 @@ Returns a tibble with results (array of objects)
 }
 \examples{
 \dontrun{
-ct_chemical_msready_by_dtxcid(query = c("DTXSID10900961", "DTXSID5060271", "DTXSID1024122"))
+ct_chemical_msready_by_dtxcid(query = "DTXSID7020182")
 }
 }

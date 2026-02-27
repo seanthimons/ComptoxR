@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_services_convert(content = c("DTXSID9032537", "DTXSID40515441", "DTXSID60570416"))
+chemi_services_convert(content = "DTXSID7020182")
 }
 }

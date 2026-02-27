@@ -47,7 +47,7 @@ chemi_mordred <- function(smiles, headers = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_mordred_bulk(chemicals = c("DTXSID3032040", "DTXSID3039242", "DTXSID6026296"))
+#' chemi_mordred_bulk(chemicals = "DTXSID7020182")
 #' }
 chemi_mordred_bulk <- function(chemicals, options = NULL) {
   # Build options list for additional parameters

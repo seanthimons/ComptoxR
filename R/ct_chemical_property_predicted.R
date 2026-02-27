@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_property_predicted(query = c("DTXSID801027235", "DTXSID80109469", "DTXSID1020930"))
+#' ct_chemical_property_predicted(query = "DTXSID7020182")
 #' }
 ct_chemical_property_predicted <- function(query) {
   result <- generic_request(

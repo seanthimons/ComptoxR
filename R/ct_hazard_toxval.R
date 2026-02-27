@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_toxval(query = c("DTXSID30203567", "DTXSID30197038", "DTXSID30997772"))
+#' ct_hazard_toxval(query = "DTXSID7020182")
 #' }
 ct_hazard_toxval <- function(query) {
   result <- generic_request(

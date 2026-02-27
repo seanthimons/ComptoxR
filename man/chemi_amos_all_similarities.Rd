@@ -34,6 +34,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_all_similarities(da_window = c("DTXSID4020533", "DTXSID7024902", "DTXSID90893948"))
+chemi_amos_all_similarities(da_window = "DTXSID7020182")
 }
 }

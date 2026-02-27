@@ -58,6 +58,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_safety_flags_bulk(chemId = c("DTXSID0021969", "DTXSID10895040", "DTXSID7020182"))
+chemi_resolver_safety_flags_bulk(chemId = "DTXSID7020182")
 }
 }

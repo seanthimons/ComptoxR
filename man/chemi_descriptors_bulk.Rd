@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk(query = c("DTXSID70963875", "DTXSID2024030", "DTXSID10895040"))
+chemi_descriptors_bulk(query = "DTXSID7020182")
 }
 }

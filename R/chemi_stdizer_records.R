@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_stdizer_records(options = c("DTXSID90203381", "DTXSID301027109", "DTXSID3060245"))
+#' chemi_stdizer_records(options = "DTXSID7020182")
 #' }
 chemi_stdizer_records <- function(options = NULL, records = NULL, full = NULL) {
   # Build options list for additional parameters

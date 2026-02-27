@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectral_entropy(spectrum = c("DTXSID10894891", "DTXSID8047004", "DTXSID30197038"))
+chemi_amos_spectral_entropy(spectrum = "DTXSID7020182")
 }
 }

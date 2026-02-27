@@ -27,7 +27,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_property_predicted(query = c("DTXSID801027235", "DTXSID80109469", "DTXSID1020930"))
+ct_chemical_property_predicted(query = "DTXSID7020182")
 }
 \dontrun{
 ct_chemical_property_predicted(dtxsid = "DTXSID7020182")

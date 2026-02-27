@@ -21,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_fact_sheet_pagination(limit = 100)
+chemi_amos_fact_sheet_pagination(limit = "DTXSID7020182")
 }
 }

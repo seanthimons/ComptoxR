@@ -13,14 +13,15 @@
 #' @param sortBy Optional parameter
 #' @param sortDirection Optional parameter
 #' @param params Optional parameter
+#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_search(searchType = c("DTXSID10894891", "DTXSID2024030", "DTXSID701018815"))
+#' chemi_search(searchType = "DTXSID7020182")
 #' }
-chemi_search <- function(searchType = NULL, inputType = NULL, query = NULL, smiles = NULL, querySmiles = NULL, offset = NULL, limit = NULL, sortBy = NULL, sortDirection = NULL, params = NULL) {
+chemi_search <- function(searchType = NULL, inputType = NULL, query = NULL, smiles = NULL, querySmiles = NULL, offset = 0, limit = NULL, sortBy = NULL, sortDirection = NULL, params = NULL, all_pages = TRUE) {
   # Build options list for additional parameters
   options <- list()
   if (!is.null(inputType)) options$inputType <- inputType
@@ -36,7 +37,10 @@ chemi_search <- function(searchType = NULL, inputType = NULL, query = NULL, smil
     query = searchType,
     endpoint = "search",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "offset_limit"
   )
 
   # Additional post-processing can be added here

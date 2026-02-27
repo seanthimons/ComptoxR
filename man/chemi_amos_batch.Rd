@@ -46,6 +46,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_batch(additional_record_info = c("DTXSID2046541", "DTXSID601026093", "DTXSID90203381"))
+chemi_amos_batch(additional_record_info = "DTXSID7020182")
 }
 }

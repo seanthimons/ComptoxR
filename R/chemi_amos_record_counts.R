@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_record_counts(dtxsids = c("DTXSID8023638", "DTXSID50941636", "DTXSID5029683"))
+#' chemi_amos_record_counts(dtxsids = "DTXSID7020182")
 #' }
 chemi_amos_record_counts <- function(dtxsids = NULL) {
 

@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_exposure_httk(query = c("DTXSID9064922", "DTXSID00330354", "DTXSID30203567"))
+ct_exposure_httk(query = "DTXSID7020182")
 }
 }

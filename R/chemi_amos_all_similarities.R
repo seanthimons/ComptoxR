@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_all_similarities(da_window = c("DTXSID4020533", "DTXSID7024902", "DTXSID90893948"))
+#' chemi_amos_all_similarities(da_window = "DTXSID7020182")
 #' }
 chemi_amos_all_similarities <- function(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
   # Build options list for additional parameters

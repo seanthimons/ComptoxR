@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_ids(internal_id_list = c("DTXSID10900961", "DTXSID7020182", "DTXSID00894108"))
+chemi_amos_substances_for_ids(internal_id_list = "DTXSID7020182")
 }
 }

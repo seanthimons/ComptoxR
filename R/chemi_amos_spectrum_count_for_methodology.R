@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_spectrum_count_for_methodology(dtxsid = c("DTXSID4048141", "DTXSID60570416", "DTXSID1034187"))
+#' chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID7020182")
 #' }
 chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_type = NULL) {
   # Build options list for additional parameters

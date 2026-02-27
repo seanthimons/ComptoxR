@@ -43,6 +43,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_alerts_groups_bulk(type = c("DTXSID4036304", "DTXSID00176779", "DTXSID5044946"))
+chemi_alerts_groups_bulk(type = "DTXSID7020182")
 }
 }

@@ -46,6 +46,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_assays_bulk(id = c("DTXSID2044397", "DTXSID8047004", "DTXSID301054196"))
+chemi_toxprints_assays_bulk(id = "DTXSID7020182")
 }
 }

@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_webtest_bulk(query = c("DTXSID601029659", "DTXSID60894104", "DTXSID5060271"))
+chemi_webtest_bulk(query = "DTXSID7020182")
 }
 }

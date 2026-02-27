@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_toxprints_categories(chemical = c("DTXSID90893948", "DTXSID3033511", "DTXSID20964832"))
+#' chemi_toxprints_toxprints_categories(chemical = "DTXSID7020182")
 #' }
 chemi_toxprints_toxprints_categories <- function(chemical = NULL) {
 

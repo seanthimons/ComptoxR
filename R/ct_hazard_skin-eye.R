@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_skin_eye(query = c("DTXSID401336719", "DTXSID90203381", "DTXSID10895040"))
+#' ct_hazard_skin_eye(query = "DTXSID7020182")
 #' }
 ct_hazard_skin_eye <- function(query) {
   result <- generic_request(

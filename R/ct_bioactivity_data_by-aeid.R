@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data_by_aeid(query = c("DTXSID7022883", "DTXSID501045175", "DTXSID70228451"))
+#' ct_bioactivity_data_by_aeid(query = "DTXSID7020182")
 #' }
 ct_bioactivity_data_by_aeid <- function(query) {
   result <- generic_request(

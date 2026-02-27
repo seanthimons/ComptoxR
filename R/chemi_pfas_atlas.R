@@ -44,7 +44,7 @@ chemi_pfas_atlas <- function(smiles) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_pfas_atlas_bulk(smiles = c("DTXSID80161401", "DTXSID00205033", "DTXSID10185731"))
+#' chemi_pfas_atlas_bulk(smiles = "DTXSID7020182")
 #' }
 chemi_pfas_atlas_bulk <- function(smiles) {
 

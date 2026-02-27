@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_range(lower_mass_limit = c("DTXSID80218080", "DTXSID5029683", "DTXSID2021731"))
+#' chemi_amos_mass_range(lower_mass_limit = "DTXSID7020182")
 #' }
 chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NULL) {
   # Build options list for additional parameters

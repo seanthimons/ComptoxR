@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_resolve(queries = c("DTXSID8023638", "DTXSID8047004", "DTXSID301054196"))
+#' chemi_resolver_resolve(queries = "DTXSID7020182")
 #' }
 chemi_resolver_resolve <- function(queries = NULL, mol = NULL) {
   # Build options list for additional parameters

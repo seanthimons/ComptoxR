@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_analytical_qc_batch(base_url = c("DTXSID2042353", "DTXSID20964832", "DTXSID6026296"))
+#' chemi_amos_analytical_qc_batch(base_url = "DTXSID7020182")
 #' }
 chemi_amos_analytical_qc_batch <- function(base_url = NULL, dtxsids = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL) {
   # Build options list for additional parameters

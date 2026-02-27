@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_spectrum_similarity(lower_mass_limit = c("DTXSID40515441", "DTXSID701030449", "DTXSID9032537"))
+#' chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID7020182")
 #' }
 chemi_amos_mass_spectrum_similarity <- function(lower_mass_limit = NULL, methodology = NULL, spectrum = NULL, type = NULL, upper_mass_limit = NULL, window = NULL) {
   # Build options list for additional parameters

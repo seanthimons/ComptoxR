@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_extra_data(query = c("DTXSID3039242", "DTXSID801027235", "DTXSID2046541"))
+ct_chemical_extra_data(query = "DTXSID7020182")
 }
 }

@@ -49,6 +49,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups_bulk(type = c("DTXSID70963875", "DTXSID80161401", "DTXSID301027109"))
+chemi_stdizer_groups_bulk(type = "DTXSID7020182")
 }
 }

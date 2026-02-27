@@ -4,12 +4,14 @@
 \alias{chemi_opera}
 \title{Opera}
 \usage{
-chemi_opera(smiles, format = "json")
+chemi_opera(smiles, format = "json", standardize = FALSE)
 }
 \arguments{
 \item{smiles}{SMILES to generate predictions for}
 
 \item{format}{Format to return predictions in (json, csv, xlsx) (default: json)}
+
+\item{standardize}{Standardize chemical before calculating predictions (default: FALSE)}
 }
 \value{
 Returns a tibble with results

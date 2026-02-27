@@ -28,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_webtest_predict_bulk(structures = c("DTXSID1034187", "DTXSID50182047", "DTXSID20582510"))
+chemi_webtest_predict_bulk(structures = "DTXSID7020182")
 }
 }

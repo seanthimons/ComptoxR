@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_seem_demographic(query = c("DTXSID10185731", "DTXSID90203381", "DTXSID1022421"))
+#' ct_exposure_seem_demographic(query = "DTXSID7020182")
 #' }
 ct_exposure_seem_demographic <- function(query) {
   result <- generic_request(

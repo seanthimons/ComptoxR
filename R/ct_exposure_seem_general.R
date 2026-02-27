@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_seem_general(query = c("DTXSID1034187", "DTXSID2033314", "DTXSID1020930"))
+#' ct_exposure_seem_general(query = "DTXSID7020182")
 #' }
 ct_exposure_seem_general <- function(query) {
   result <- generic_request(

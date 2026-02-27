@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_hazard_genetox(query = c("DTXSID1024122", "DTXSID9020584", "DTXSID70963875"))
+ct_hazard_genetox(query = "DTXSID7020182")
 }
 }

@@ -33,7 +33,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_fate(query = c("DTXSID1025568", "DTXSID80143348", "DTXSID8047004"))
+ct_chemical_fate(query = "DTXSID7020182")
 }
 \dontrun{
 ct_chemical_fate(dtxsid = "DTXSID7020182")

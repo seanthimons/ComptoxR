@@ -25,7 +25,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_bioactivity_data(query = c("DTXSID90893948", "DTXSID701018815", "DTXSID3033511"))
+ct_bioactivity_data(query = "DTXSID7020182")
 }
 \dontrun{
 ct_bioactivity_data(dtxsid = "DTXSID9026974")

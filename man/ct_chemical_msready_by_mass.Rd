@@ -19,6 +19,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-ct_chemical_msready_by_mass(masses = c("DTXSID90873482", "DTXSID2021731", "DTXSID90937533"))
+ct_chemical_msready_by_mass(masses = "DTXSID7020182")
 }
 }

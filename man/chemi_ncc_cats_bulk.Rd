@@ -21,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk(smiles = c("DTXSID10895040", "DTXSID70228451", "DTXSID501045175"))
+chemi_ncc_cats_bulk(smiles = "DTXSID7020182")
 }
 }

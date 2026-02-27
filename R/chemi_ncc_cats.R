@@ -50,7 +50,7 @@ chemi_ncc_cats <- function(smiles, logp, ws) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(smiles = c("DTXSID10895040", "DTXSID70228451", "DTXSID501045175"))
+#' chemi_ncc_cats_bulk(smiles = "DTXSID7020182")
 #' }
 chemi_ncc_cats_bulk <- function(smiles, logp, ws) {
   # Build options list for additional parameters

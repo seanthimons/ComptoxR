@@ -54,7 +54,7 @@ chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = F
 #'
 #' @examples
 #' \dontrun{
-#' chemi_padel_bulk(query = c("DTXSID2044397", "DTXSID5029683", "DTXSID9032537"))
+#' chemi_padel_bulk(query = "DTXSID7020182")
 #' }
 chemi_padel_bulk <- function(query) {
   result <- generic_request(

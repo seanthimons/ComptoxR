@@ -4,12 +4,18 @@
 \alias{ct_hazard_toxref_observations_by_study_type}
 \title{Get observations by Study Type}
 \usage{
-ct_hazard_toxref_observations_by_study_type(studyType, pageNumber = 1)
+ct_hazard_toxref_observations_by_study_type(
+  studyType,
+  pageNumber = 1,
+  all_pages = TRUE
+)
 }
 \arguments{
 \item{studyType}{Study Type. Type: string}
 
 \item{pageNumber}{Optional parameter (default: 1)}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a scalar value

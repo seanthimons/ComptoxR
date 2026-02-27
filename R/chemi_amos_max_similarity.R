@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_max_similarity(da_window = c("DTXSID10185731", "DTXSID3032040", "DTXSID60894104"))
+#' chemi_amos_max_similarity(da_window = "DTXSID7020182")
 #' }
 chemi_amos_max_similarity <- function(da_window = NULL, dtxsids = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
   # Build options list for additional parameters

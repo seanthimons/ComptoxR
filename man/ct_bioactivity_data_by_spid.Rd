@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_by_spid(query = c("DTXSID10900961", "DTXSID80726751", "DTXSID2042353"))
+ct_bioactivity_data_by_spid(query = "DTXSID7020182")
 }
 }

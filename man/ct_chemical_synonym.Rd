@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_synonym(query = c("DTXSID801027235", "DTXSID00894067", "DTXSID5064889"))
+ct_chemical_synonym(query = "DTXSID7020182")
 }
 }

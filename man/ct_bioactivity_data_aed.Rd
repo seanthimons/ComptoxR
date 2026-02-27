@@ -17,6 +17,6 @@ Returns a tibble with results (array of objects)
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_aed(query = c("DTXSID2023270", "DTXSID70475221", "DTXSID2024030"))
+ct_bioactivity_data_aed(query = "DTXSID7020182")
 }
 }

@@ -17,6 +17,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_bulk(query = c("DTXSID9032537", "DTXSID2042353", "DTXSID40292184"))
+chemi_toxprints_bulk(query = "DTXSID7020182")
 }
 }

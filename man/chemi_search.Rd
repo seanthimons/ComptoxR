@@ -10,11 +10,12 @@ chemi_search(
   query = NULL,
   smiles = NULL,
   querySmiles = NULL,
-  offset = NULL,
+  offset = 0,
   limit = NULL,
   sortBy = NULL,
   sortDirection = NULL,
-  params = NULL
+  params = NULL,
+  all_pages = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ chemi_search(
 \item{sortDirection}{Optional parameter}
 
 \item{params}{Optional parameter}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a tibble with results
@@ -46,6 +49,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search(searchType = c("DTXSID10894891", "DTXSID2024030", "DTXSID701018815"))
+chemi_search(searchType = "DTXSID7020182")
 }
 }

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_list_presence(query = c("DTXSID8023638", "DTXSID1049641", "DTXSID9024938"))
+#' ct_exposure_list_presence(query = "DTXSID7020182")
 #' }
 ct_exposure_list_presence <- function(query) {
   result <- generic_request(

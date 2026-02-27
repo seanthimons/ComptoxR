@@ -59,7 +59,7 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_safety_flags_bulk(chemId = c("DTXSID0021969", "DTXSID10895040", "DTXSID7020182"))
+#' chemi_resolver_safety_flags_bulk(chemId = "DTXSID7020182")
 #' }
 chemi_resolver_safety_flags_bulk <- function(chemId = NULL, cid = NULL, sid = NULL, casrn = NULL, name = NULL, smiles = NULL, canonicalSmiles = NULL, inchi = NULL, inchiKey = NULL, mol = NULL, molFormula = NULL, averageMass = NULL, monoisotopicMass = NULL, image = NULL) {
   # Build options list for additional parameters

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_cancer(query = c("DTXSID50182047", "DTXSID80218080", "DTXSID80143348"))
+#' ct_hazard_cancer(query = "DTXSID7020182")
 #' }
 ct_hazard_cancer <- function(query) {
   result <- generic_request(

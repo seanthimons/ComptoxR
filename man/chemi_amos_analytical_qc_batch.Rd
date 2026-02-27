@@ -34,6 +34,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_analytical_qc_batch(base_url = c("DTXSID2042353", "DTXSID20964832", "DTXSID6026296"))
+chemi_amos_analytical_qc_batch(base_url = "DTXSID7020182")
 }
 }

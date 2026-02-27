@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_count_substances_in_ids(internal_id_list = c("DTXSID1025568", "DTXSID1049641", "DTXSID901336502"))
+#' chemi_amos_count_substances_in_ids(internal_id_list = "DTXSID7020182")
 #' }
 chemi_amos_count_substances_in_ids <- function(internal_id_list = NULL) {
 

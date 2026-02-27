@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_spectra_for_substances(dtxsids = c("DTXSID10894891", "DTXSID10894750", "DTXSID4048141"))
+#' chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID7020182")
 #' }
 chemi_amos_mass_spectra_for_substances <- function(dtxsids = NULL) {
 

@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_next_level_classification(kingdom = c("DTXSID10900961", "DTXSID401336719", "DTXSID6026296"))
+#' chemi_amos_next_level_classification(kingdom = "DTXSID7020182")
 #' }
 chemi_amos_next_level_classification <- function(kingdom = NULL, klass = NULL, superklass = NULL) {
   # Build options list for additional parameters

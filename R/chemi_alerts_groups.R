@@ -79,7 +79,7 @@ chemi_alerts_groups <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_alerts_groups_bulk(type = c("DTXSID4036304", "DTXSID00176779", "DTXSID5044946"))
+#' chemi_alerts_groups_bulk(type = "DTXSID7020182")
 #' }
 chemi_alerts_groups_bulk <- function(type = NULL, text = NULL, description = NULL, value = NULL, logicType = NULL, operations = NULL, frozen = NULL, id = NULL, name = NULL) {
   # Build options list for additional parameters

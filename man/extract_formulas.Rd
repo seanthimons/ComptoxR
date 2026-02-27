@@ -23,18 +23,18 @@ Behavior:
 \item Correctly handles parentheses, square brackets, stoichiometric numbers, and
 grouped substructures (e.g., "(NH3)2").
 \item Recognizes complexes and hydrates inside brackets when they include spaces,
-middle dot (·), plus/minus, or periods (these are normalized before validation).
+middle dot (\u00b7), plus/minus, or periods (these are normalized before validation).
 \item Ignores oxidation state Roman numerals in brackets, e.g., "(III)" or "( ii )".
-\item Excludes carbon backbone ranges like "C9–12".
+\item Excludes carbon backbone ranges like "C9\u201312".
 }
 }
 \examples{
 texts <- c(
   "Water (H2O) and ethanol (C2H5OH).",
   "Complex: [Pt(NH3)2Cl2] catalyst.",
-  "Hydrate: (CuSO4 · 5H2O)",
+  "Hydrate: (CuSO4 \u00b7 5H2O)",
   "Oxidation state: iron (III) chloride",  # "(III)" is ignored
-  "Backbone range: C9–12 alcohols"         # "C9–12" is ignored
+  "Backbone range: C9\u201312 alcohols"         # "C9\u201312" is ignored
 )
 extract_formulas(texts)
 }

@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk(chemicals = c("DTXSID80161401", "DTXSID3060245", "DTXSID4048141"))
+chemi_arn_cats_bulk(chemicals = "DTXSID7020182")
 }
 }

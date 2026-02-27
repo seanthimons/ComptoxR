@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_batch(additional_record_info = c("DTXSID2046541", "DTXSID601026093", "DTXSID90203381"))
+#' chemi_amos_batch(additional_record_info = "DTXSID7020182")
 #' }
 chemi_amos_batch <- function(additional_record_info = NULL, always_download_file = NULL, base_url = NULL, dtxsids = NULL, include_classyfire = NULL, include_external_links = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL, record_types = NULL) {
   # Build options list for additional parameters

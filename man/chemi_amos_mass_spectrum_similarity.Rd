@@ -34,6 +34,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectrum_similarity(lower_mass_limit = c("DTXSID40515441", "DTXSID701030449", "DTXSID9032537"))
+chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID7020182")
 }
 }

@@ -5,6 +5,7 @@
 #'
 #' @param smiles SMILES to generate predictions for
 #' @param format Format to return predictions in (json, csv, xlsx) (default: json)
+#' @param standardize Standardize chemical before calculating predictions (default: FALSE)
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -12,11 +13,12 @@
 #' \dontrun{
 #' chemi_opera(smiles = "DTXSID7020182")
 #' }
-chemi_opera <- function(smiles, format = "json") {
+chemi_opera <- function(smiles, format = "json", standardize = FALSE) {
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) options[['smiles']] <- smiles
   if (!is.null(format)) options[['format']] <- format
+  if (!is.null(standardize)) options[['standardize']] <- standardize
     result <- generic_request(
     endpoint = "opera",
     method = "GET",
