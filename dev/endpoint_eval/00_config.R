@@ -93,4 +93,8 @@ ensure_cols <- function(df, cols_with_defaults) {
 }
 
 # Endpoint exclusion patterns - these endpoints are removed during preprocessing
+# NOTE: `file` is excluded globally because file-download endpoints (e.g.,
+# /predictor_models/model/file/) return binary content with no documented
+# response structure. Until EPA publishes documentation for these endpoints,
+# we cannot generate meaningful wrappers. — 2026-02-27
 ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols|preflight|universalpreflight|caspreflight|file"

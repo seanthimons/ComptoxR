@@ -143,6 +143,81 @@ get_badge_color <- function(coverage) {
 ccd_color <- get_badge_color(ccd_coverage)
 chemi_color <- get_badge_color(chemi_coverage)
 
+# =============================================================================
+# Coverage deltas
+# =============================================================================
+
+# Read baseline from previous run (if it exists)
+baseline_path <- here::here("schema", "coverage_baseline.json")
+baseline <- if (file.exists(baseline_path)) {
+  tryCatch(
+    jsonlite::fromJSON(baseline_path),
+    error = function(e) {
+      warning(sprintf("Error reading baseline: %s", e$message))
+      NULL
+    }
+  )
+} else {
+  NULL
+}
+
+# Format a delta as "(+N)" / "(-N)" / "(+0.5)" or "" if unchanged/no baseline
+# Uses decimal format only when the current value has a fractional part (e.g., coverage %)
+format_delta <- function(current, baseline_val) {
+  if (is.null(baseline_val) || is.na(baseline_val)) return("")
+  diff <- current - baseline_val
+  if (abs(diff) < 1e-9) return("")
+  is_whole <- abs(current - round(current)) < 1e-9
+  if (is_whole) {
+    sprintf(" (%+d)", as.integer(round(diff)))
+  } else {
+    sprintf(" (%+.1f)", diff)
+  }
+}
+
+# Build formatted strings with deltas
+ccd_coverage_fmt <- paste0(
+  sprintf("%.1f%%", ccd_coverage),
+  format_delta(ccd_coverage, baseline$ccd_coverage)
+)
+ccd_endpoints_fmt <- paste0(
+  ccd_endpoints,
+  format_delta(ccd_endpoints, baseline$ccd_endpoints)
+)
+ccd_functions_fmt <- paste0(
+  ccd_functions,
+  format_delta(ccd_functions, baseline$ccd_functions)
+)
+chemi_coverage_fmt <- paste0(
+  sprintf("%.1f%%", chemi_coverage),
+  format_delta(chemi_coverage, baseline$chemi_coverage)
+)
+chemi_endpoints_fmt <- paste0(
+  chemi_endpoints,
+  format_delta(chemi_endpoints, baseline$chemi_endpoints)
+)
+chemi_functions_fmt <- paste0(
+  chemi_functions,
+  format_delta(chemi_functions, baseline$chemi_functions)
+)
+
+cat("\nCoverage deltas (vs baseline):\n")
+cat(sprintf("  CCD:   %s | %s endpoints | %s functions\n", ccd_coverage_fmt, ccd_endpoints_fmt, ccd_functions_fmt))
+cat(sprintf("  Chemi: %s | %s endpoints | %s functions\n", chemi_coverage_fmt, chemi_endpoints_fmt, chemi_functions_fmt))
+
+# Write updated baseline
+new_baseline <- list(
+  ccd_coverage = ccd_coverage,
+  ccd_endpoints = ccd_endpoints,
+  ccd_functions = ccd_functions,
+  chemi_coverage = chemi_coverage,
+  chemi_endpoints = chemi_endpoints,
+  chemi_functions = chemi_functions,
+  timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+)
+jsonlite::write_json(new_baseline, baseline_path, auto_unbox = TRUE, pretty = TRUE)
+cat(sprintf("Baseline updated: %s\n", baseline_path))
+
 # Create output for GitHub Actions
 if (Sys.getenv("GITHUB_OUTPUT") != "") {
   output_file <- Sys.getenv("GITHUB_OUTPUT")
@@ -154,13 +229,21 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   cat(sprintf("ccd_functions=%d\n", ccd_functions), file = output_file, append = TRUE)
   cat(sprintf("chemi_endpoints=%d\n", chemi_endpoints), file = output_file, append = TRUE)
   cat(sprintf("chemi_functions=%d\n", chemi_functions), file = output_file, append = TRUE)
-  
+
+  # Formatted strings with deltas for PR body
+  cat(sprintf("ccd_coverage_fmt=%s\n", ccd_coverage_fmt), file = output_file, append = TRUE)
+  cat(sprintf("ccd_endpoints_fmt=%s\n", ccd_endpoints_fmt), file = output_file, append = TRUE)
+  cat(sprintf("ccd_functions_fmt=%s\n", ccd_functions_fmt), file = output_file, append = TRUE)
+  cat(sprintf("chemi_coverage_fmt=%s\n", chemi_coverage_fmt), file = output_file, append = TRUE)
+  cat(sprintf("chemi_endpoints_fmt=%s\n", chemi_endpoints_fmt), file = output_file, append = TRUE)
+  cat(sprintf("chemi_functions_fmt=%s\n", chemi_functions_fmt), file = output_file, append = TRUE)
+
   cat("Coverage data written to GITHUB_OUTPUT\n")
 }
 
 # Print summary
 cat("\n=== Summary ===\n")
-cat(sprintf("CCD Coverage: %.1f%% (%d/%d) - Color: %s\n", 
+cat(sprintf("CCD Coverage: %.1f%% (%d/%d) - Color: %s\n",
             ccd_coverage, ccd_functions, ccd_endpoints, ccd_color))
-cat(sprintf("Cheminformatic Coverage: %.1f%% (%d/%d) - Color: %s\n", 
+cat(sprintf("Cheminformatic Coverage: %.1f%% (%d/%d) - Color: %s\n",
             chemi_coverage, chemi_functions, chemi_endpoints, chemi_color))
