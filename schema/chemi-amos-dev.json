@@ -1287,7 +1287,7 @@
     },
     "/api/amos/get_similar_structures/{dtxsid}": {
       "get": {
-        "description": "<br/>Search similarity is currently hardcoded to 0.5.",
+        "description": "substance.<br/><br/>Search similarity is currently hardcoded to 0.5.",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1302,7 +1302,7 @@
             "description": "A JSON object containing lists of the related methods, the related fact sheets, and the similar substances.."
           }
         },
-        "summary": "Returns a list of methods and fact sheets, each of which contain at least one substance of sufficient similarity to the searched substance."
+        "summary": "Returns lists of documents, each of which contain at least one substance of sufficient similarity to the searched"
       }
     },
     "/api/amos/get_substance_file_for_record/{internal_id}": {
