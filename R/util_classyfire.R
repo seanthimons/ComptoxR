@@ -65,7 +65,10 @@ util_classyfire <- function(query) {
         httr2::req_timeout(5) %>%
         httr2::req_retry(
           max_tries = 10,
-          is_transient = ~ httr2::resp_is_transient(.x) || httr2::resp_status_class(.x) == "server"
+          is_transient = ~ {
+            status <- httr2::resp_status(.x)
+            status == 429 || status >= 500
+          }
         )
 
       # --- Handle debug mode (dry run) ---
