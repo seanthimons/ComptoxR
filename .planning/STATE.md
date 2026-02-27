@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.9
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T13:11:28.000Z"
+last_updated: "2026-02-27T18:51:27.138Z"
 progress:
   total_phases: 23
-  completed_phases: 21
-  total_plans: 36
-  completed_plans: 36
+  completed_phases: 22
+  total_plans: 37
+  completed_plans: 37
 ---
 
 # Project State
@@ -23,18 +23,18 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 Phase: 23 of 26 (Build Fixes & Test Generator Core)
-Plan: 4 of 4
+Plan: 5 of 5
 Status: Complete
-Last activity: 2026-02-27 — Completed 23-04: Purge and regenerate stubs
+Last activity: 2026-02-27 — Completed 23-05: Gap closure - fix malformed test parameters
 
-Progress: [██████████] 100% (4/4 plans complete)
+Progress: [██████████] 100% (5/5 plans complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12 (4 from v1.9 + 4 from v2.0 + 4 from v2.1)
-- Average duration: 5.3 minutes
-- Total execution time: 1.03 hours
+- Total plans completed: 13 (4 from v1.9 + 4 from v2.0 + 5 from v2.1)
+- Average duration: 5.2 minutes
+- Total execution time: 1.06 hours
 
 **Phase 23 metrics:**
 | Plan | Duration | Tasks | Files | Date |
@@ -43,12 +43,13 @@ Progress: [██████████] 100% (4/4 plans complete)
 | 02   | 6.7 min  | 2     | 8     | 2026-02-27 |
 | 03   | 4.8 min  | 2     | 2     | 2026-02-27 |
 | 04   | 10.8 min | 2     | 154   | 2026-02-27 |
+| 05   | 1.9 min  | 2     | 6     | 2026-02-27 |
 
 **Recent context:**
 - v2.0 phases 19-21 completed in 4 plans
 - Phase 22 pagination testing folded into v2.1 milestone
 - v2.1 starts fresh with build fixes before any new feature work
-- Phase 23 complete: BUILD-01, BUILD-02, BUILD-06 fixed, test generator built, all stubs regenerated
+- Phase 23 complete: BUILD-01, BUILD-02, BUILD-06 fixed, test generator built, all stubs regenerated, legacy tests fixed
 - R CMD check now produces 0 errors (primary success criterion)
 
 ## Accumulated Context
@@ -71,6 +72,7 @@ Recent decisions affecting current work:
 - [Phase 23]: Drift detection is report-only (no auto-modification of existing functions)
 - [Phase 23]: Delete and regenerate all experimental stubs after fixing generator
 - [Phase 23]: Keep 14 manually maintained functions during purge
+- [Phase 23]: Regenerate legacy test files instead of manual fixing
 
 ### Known Issues (from TODO)
 
@@ -93,6 +95,7 @@ Recent decisions affecting current work:
 - ~~Test generator blindly passes DTXSIDs to all parameters~~ ✅ FIXED (23-03)
 - ~~Test generator assumes all functions return tibbles~~ ✅ FIXED (23-03)
 - ~~Test generator doesn't read actual function metadata~~ ✅ FIXED (23-03)
+- ~~6 legacy test files with malformed parameter names~~ ✅ FIXED (23-05)
 - 673 untracked VCR cassettes need re-recording (Phase 24)
 
 ### Pending Todos
@@ -110,21 +113,22 @@ None yet. Starting fresh with Phase 23.
 ## Session Continuity
 
 Last session: 2026-02-27
-Stopped at: Completed Phase 23 Plan 04 (Purge and regenerate stubs)
-Resume file: .planning/phases/23-build-fixes-test-generator-core/23-04-SUMMARY.md
+Stopped at: Completed Phase 23 Plan 05 (Gap closure - fix malformed test parameters)
+Resume file: .planning/phases/23-build-fixes-test-generator-core/23-05-SUMMARY.md
 
 **Archived Milestones:**
 - v1.0-v1.9: See `.planning/milestones/` directory
 - v2.0: Phases 19-21 complete, Phase 22 folded into v2.1 Phase 26
 
 **Phase 23 Complete:**
-- All 4 plans executed
+- All 5 plans executed
 - BUILD-01, BUILD-02, BUILD-06 fixed
 - Test generator built with metadata awareness
 - All 230 experimental stubs regenerated
+- 6 legacy test files fixed with correct parameter names
 - R CMD check: 0 errors
 
 **Next action:** Begin next phase (Phase 24 or next v2.1 milestone phase)
 
 ---
-*Last updated: 2026-02-27 after completing 23-04*
+*Last updated: 2026-02-27 after completing 23-05*
