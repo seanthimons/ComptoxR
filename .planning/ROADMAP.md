@@ -29,7 +29,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
 - [x] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering (completed 2026-02-27)
-- [ ] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI
+- [x] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI (completed 2026-03-01)
 - [ ] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds
 
 ## Phase Details
@@ -79,7 +79,7 @@ Plans:
   4. CI workflow summary shows test gap count and coverage metrics
   5. Generated stubs marked `@lifecycle stable` are protected from test generator overwrites
   6. Test generation is integrated into stub workflow: generate stubs → detect gaps → generate tests → commit together
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 25-01-PLAN.md — Gap detection script and test manifest system
 - [ ] 25-02-PLAN.md — Extend test generator with manifest support and CI output
@@ -106,5 +106,5 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 |-------|-----------|----------------|--------|-----------|
 | 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
 | 24. VCR Cassette Cleanup | 3/3 | Complete    | 2026-02-27 | - |
-| 25. Automated Test Generation Pipeline | 2/3 | In Progress|  | - |
+| 25. Automated Test Generation Pipeline | 3/3 | Complete   | 2026-03-01 | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
