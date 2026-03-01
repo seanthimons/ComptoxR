@@ -14,6 +14,36 @@ library(glue)
 library(purrr)
 library(stringr)
 library(cli)
+library(jsonlite)
+library(here)
+
+# Manifest helpers (shared pattern with detect_test_gaps.R)
+#' Read test manifest
+#' @noRd
+read_test_manifest <- function() {
+  manifest_path <- file.path(here::here(), "dev", "test_manifest.json")
+  if (!file.exists(manifest_path)) {
+    return(list(version = "1.0", updated = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"), files = list()))
+  }
+  jsonlite::fromJSON(manifest_path, simplifyVector = FALSE)
+}
+
+#' Write test manifest
+#' @noRd
+write_test_manifest <- function(manifest) {
+  manifest_path <- file.path(here::here(), "dev", "test_manifest.json")
+  jsonlite::write_json(manifest, manifest_path, pretty = TRUE, auto_unbox = TRUE)
+}
+
+#' Check if function calls generic_request
+#' @noRd
+calls_generic_request <- function(file_path) {
+  tryCatch({
+    expr <- parse(file = file_path)
+    all_calls <- unlist(lapply(expr, all.names))
+    any(c("generic_request", "generic_chemi_request", "generic_cc_request") %in% all_calls)
+  }, error = function(e) FALSE)
+}
 
 #' Extract function formals (parameters) from R source file
 #'
@@ -422,9 +452,28 @@ test_that("{function_name} works with single input", {{
   # Add error test
   test_content <- paste0(test_content, "\n", error_test)
 
-  # Write to file
+  # Check manifest for protection
   test_file <- file.path(output_dir, paste0("test-", function_name, ".R"))
+  test_basename <- basename(test_file)
+  manifest <- read_test_manifest()
+
+  if (!is.null(manifest$files[[test_basename]]) &&
+      identical(manifest$files[[test_basename]]$status, "protected")) {
+    cli::cli_alert_warning("Skipping protected file: {test_basename}")
+    return(invisible(NULL))
+  }
+
+  # Write to file
   writeLines(test_content, test_file)
+
+  # Register in manifest
+  manifest <- read_test_manifest()
+  manifest$files[[test_basename]] <- list(
+    status = "generated",
+    generated_date = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ")
+  )
+  manifest$updated <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ")
+  write_test_manifest(manifest)
 
   cli::cli_alert_success("Generated {test_file}")
   invisible(test_file)
@@ -453,8 +502,16 @@ generate_all_tests <- function(r_dir = "R", test_dir = "tests/testthat", force =
 
   generated_count <- 0
   skipped_count <- 0
+  api_wrapper_count <- 0
 
   for (file in function_files) {
+    # Skip non-API functions (those that don't call generic_request)
+    if (!calls_generic_request(file)) {
+      next
+    }
+
+    api_wrapper_count <- api_wrapper_count + 1
+
     # Extract function name from filename
     function_name <- tools::file_path_sans_ext(basename(file))
 
@@ -477,18 +534,29 @@ generate_all_tests <- function(r_dir = "R", test_dir = "tests/testthat", force =
 
   cli::cli_alert_success("Generated {generated_count} test files")
   cli::cli_alert_info("Skipped {skipped_count} existing test files")
+  cli::cli_alert_info("Found {api_wrapper_count} API wrapper functions")
+
+  # Calculate gaps remaining (API wrapper count minus tests with real content)
+  gaps_remaining <- api_wrapper_count - (generated_count + skipped_count)
+
+  # Write GITHUB_OUTPUT variables if in CI
+  gh_output <- Sys.getenv("GITHUB_OUTPUT")
+  if (nzchar(gh_output)) {
+    cat(sprintf("tests_generated=%d\n", generated_count), file = gh_output, append = TRUE)
+    cat(sprintf("tests_skipped=%d\n", skipped_count), file = gh_output, append = TRUE)
+    cat(sprintf("gaps_remaining=%d\n", gaps_remaining), file = gh_output, append = TRUE)
+  }
 
   invisible(list(
     generated = generated_count,
     skipped = skipped_count,
-    total = length(function_files)
+    total = length(function_files),
+    api_wrappers = api_wrapper_count,
+    gaps_remaining = gaps_remaining
   ))
 }
 
-# If sourced as a script (not in a test), run the generator
-if (!exists("testthat_test_that_env", envir = parent.frame())) {
-  # Only run if not in a test context
-  if (interactive()) {
-    cli::cli_alert_info("Source this file and run generate_all_tests() to generate tests")
-  }
+# Auto-run when sourced as a script (for CI)
+if (!interactive()) {
+  generate_all_tests()
 }
