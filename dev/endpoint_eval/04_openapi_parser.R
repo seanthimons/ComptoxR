@@ -377,7 +377,24 @@ detect_pagination <- function(route, path_params, query_params, body_params,
     }
   }
 
-  # No match found
+  # No match found - check if params resemble pagination
+  pagination_like_params <- c(
+    "page", "pageNumber", "pageSize", "offset", "limit", "size", "cursor",
+    "itemsPerPage", "skip", "top", "after", "before", "startIndex", "count"
+  )
+
+  all_params <- c(path_vec, query_vec, body_vec)
+  suspicious <- intersect(all_params, pagination_like_params)
+
+  if (length(suspicious) > 0) {
+    cli::cli_warn(c(
+      "Parameters resemble pagination but no registry pattern matched.",
+      "i" = "Route: {.val {route}}",
+      "i" = "Suspicious params: {.val {suspicious}}",
+      "i" = "Consider adding a new entry to PAGINATION_REGISTRY in 00_config.R"
+    ))
+  }
+
   list(
     strategy = "none",
     registry_key = NA_character_,
