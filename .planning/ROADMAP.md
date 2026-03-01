@@ -79,7 +79,11 @@ Plans:
   4. CI workflow summary shows test gap count and coverage metrics
   5. Generated stubs marked `@lifecycle stable` are protected from test generator overwrites
   6. Test generation is integrated into stub workflow: generate stubs → detect gaps → generate tests → commit together
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 25-01-PLAN.md — Gap detection script and test manifest system
+- [ ] 25-02-PLAN.md — Extend test generator with manifest support and CI output
+- [ ] 25-03-PLAN.md — CI workflow integration (schema-check.yml gap detection + test generation steps)
 
 ### Phase 26: Pagination Tests & Coverage Hardening
 **Goal**: Pagination functionality verified by tests and coverage thresholds tuned for generated code
@@ -101,6 +105,6 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
-| 24. VCR Cassette Cleanup | 3/3 | Complete   | 2026-02-27 | - |
-| 25. Automated Test Generation Pipeline | v2.1 | 0/TBD | Not started | - |
+| 24. VCR Cassette Cleanup | 3/3 | Complete    | 2026-02-27 | - |
+| 25. Automated Test Generation Pipeline | v2.1 | 0/3 | Planned | - |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
