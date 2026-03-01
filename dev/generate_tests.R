@@ -498,15 +498,17 @@ generate_all_tests <- function(r_dir = "R", test_dir = "tests/testthat", force =
   )
 
   cli::cli_h1("Test Generation Summary")
-  cli::cli_alert_info("Found {length(function_files)} API wrapper files")
+  cli::cli_alert_info("Found {length(function_files)} candidate files matching ct_/chemi_/cc_ pattern")
 
   generated_count <- 0
   skipped_count <- 0
   api_wrapper_count <- 0
+  skipped_non_api <- 0
 
   for (file in function_files) {
     # Skip non-API functions (those that don't call generic_request)
     if (!calls_generic_request(file)) {
+      skipped_non_api <- skipped_non_api + 1
       next
     }
 
@@ -532,9 +534,10 @@ generate_all_tests <- function(r_dir = "R", test_dir = "tests/testthat", force =
     })
   }
 
+  cli::cli_alert_info("Skipped {skipped_non_api} non-API files (no generic_request call)")
+  cli::cli_alert_info("Found {api_wrapper_count} API wrapper functions")
   cli::cli_alert_success("Generated {generated_count} test files")
   cli::cli_alert_info("Skipped {skipped_count} existing test files")
-  cli::cli_alert_info("Found {api_wrapper_count} API wrapper functions")
 
   # Calculate gaps remaining (API wrapper count minus tests with real content)
   gaps_remaining <- api_wrapper_count - (generated_count + skipped_count)

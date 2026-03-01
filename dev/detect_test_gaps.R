@@ -216,7 +216,7 @@ detect_gaps <- function() {
   all_r_files <- fs::dir_ls(here::here("R"), regexp = "\\.R$")
   r_files <- all_r_files[grepl("^(ct_|chemi_|cc_)", basename(all_r_files))]
 
-  cli::cli_alert_info("Scanning {length(r_files)} API wrapper files...")
+  cli::cli_alert_info("Scanning {length(r_files)} candidate files matching ct_/chemi_/cc_ pattern...")
 
   gaps <- list()
 
