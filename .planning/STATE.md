@@ -3,12 +3,25 @@ gsd_state_version: 1.0
 milestone: v1.9
 milestone_name: milestone
 status: unknown
-last_updated: "2026-02-27T21:59:02.811Z"
+last_updated: "2026-03-01T04:59:02.613Z"
 progress:
-  total_phases: 24
+  total_phases: 25
   completed_phases: 23
-  total_plans: 40
-  completed_plans: 40
+  total_plans: 43
+  completed_plans: 42
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.9
+milestone_name: milestone
+status: unknown
+last_updated: "2026-03-01T04:58:20.228Z"
+progress:
+  total_phases: 25
+  completed_phases: 23
+  total_plans: 43
+  completed_plans: 41
 ---
 
 ---
@@ -31,16 +44,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
-**Current focus:** v2.1 Test Infrastructure — Phase 24 (VCR Cassette Cleanup)
+**Current focus:** v2.1 Test Infrastructure — Phase 25 (Automated Test Generation Pipeline)
 
 ## Current Position
 
-Phase: 24 of 26 (VCR Cassette Cleanup)
-Plan: 3 of 3
-Status: Complete
-Last activity: 2026-02-27 — Completed 24-02: VCR cassette cleanup and security audit
+Phase: 25 of 26 (Automated Test Generation Pipeline)
+Plan: 2 of 3
+Status: In Progress
+Last activity: 2026-02-28 — Completed 25-02: Manifest integration and CI output
 
-Progress: [██████████] 100% (3/3 plans complete)
+Progress: [██████▒▒▒▒] 67% (2/3 plans complete)
 
 ## Performance Metrics
 
@@ -65,13 +78,20 @@ Progress: [██████████] 100% (3/3 plans complete)
 | 02   | 1.4 min  | 2     | 0     | 2026-02-27 |
 | 03   | 2.0 min  | 2     | 1     | 2026-02-27 |
 
+**Phase 25 metrics:**
+| Plan | Duration | Tasks | Files | Date |
+|------|----------|-------|-------|------|
+| 02   | 2.0 min  | 1     | 2     | 2026-02-28 |
+
 **Recent context:**
 - v2.0 phases 19-21 completed in 4 plans
 - Phase 22 pagination testing folded into v2.1 milestone
 - v2.1 starts fresh with build fixes before any new feature work
 - Phase 23 complete: BUILD-01, BUILD-02, BUILD-06 fixed, test generator built, all stubs regenerated, legacy tests fixed
 - R CMD check now produces 0 errors (primary success criterion)
-- Phase 24 in progress: VCR cassette helpers (01) + parallel re-recording script (03) complete, Plan 02 pending
+- Phase 24 complete: VCR cassette cleanup and parallel re-recording infrastructure
+- Phase 25 in progress: Test automation pipeline (Plan 02 complete - manifest integration)
+| Phase 25 P01 | 2.8 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -98,6 +118,10 @@ Recent decisions affecting current work:
 - [Phase 24-01]: check_cassette_safety is report-only with no auto-fix capability
 - [Phase 24-03]: Use mirai with 8 workers for parallel cassette re-recording
 - [Phase 24-03]: Default batch size of 20 files, prioritize Chemical/chemi_search/chemi_resolver
+- [Phase 25-02]: Duplicate manifest helpers in both detect_test_gaps.R and generate_tests.R for standalone operation
+- [Phase 25-02]: Use AST-based calls_generic_request() to filter API wrappers from utility functions
+- [Phase 25]: Use AST-based detection instead of regex for identifying generic_request calls
+- [Phase 25]: Manifest tracks 'generated' vs 'protected' status for overwrite prevention
 
 ### Known Issues (from TODO)
 
@@ -137,9 +161,9 @@ None yet. Starting fresh with Phase 23.
 
 ## Session Continuity
 
-Last session: 2026-02-27
-Stopped at: Completed Phase 24 Plan 02 (VCR cassette cleanup and security audit)
-Resume file: .planning/phases/24-vcr-cassette-cleanup/24-02-SUMMARY.md
+Last session: 2026-02-28
+Stopped at: Completed Phase 25 Plan 02 (Manifest integration and CI output)
+Resume file: .planning/phases/25-automated-test-generation-pipeline/25-02-SUMMARY.md
 
 **Archived Milestones:**
 - v1.0-v1.9: See `.planning/milestones/` directory
@@ -157,7 +181,10 @@ Resume file: .planning/phases/24-vcr-cassette-cleanup/24-02-SUMMARY.md
 - Plan 01 complete: VCR cassette management helpers (delete/list/check functions)
 - Plan 02 complete: Deleted 673 untracked bad cassettes, security audit confirms 33 remaining cassettes are API-key safe
 - Plan 03 complete: Parallel re-recording script using mirai (8 workers, batched execution)
-- Next: Phase 25 or next milestone phase
+
+**Phase 25 In Progress:**
+- Plan 02 complete: Extended test generator with manifest support, overwrite protection, CI output variables
+- Next: Plan 03 (final plan in phase)
 
 ---
-*Last updated: 2026-02-27 after completing 24-02*
+*Last updated: 2026-02-28 after completing 25-02*

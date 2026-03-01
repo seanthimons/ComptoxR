@@ -44,11 +44,11 @@
 ### Automation & CI
 
 - [ ] **AUTO-01**: `dev/detect_test_gaps.R` script identifies functions in R/ without corresponding test files
-- [ ] **AUTO-02**: `dev/generate_tests.R` script generates tests for all detected gaps using the fixed test generator
+- [x] **AUTO-02**: `dev/generate_tests.R` script generates tests for all detected gaps using the fixed test generator
 - [ ] **AUTO-03**: GitHub Action workflow detects new/changed stubs and generates corresponding test files
 - [ ] **AUTO-04**: CI reports test gap count and coverage metrics in workflow summary
 - [ ] **AUTO-05**: Coverage thresholds tuned for generated code (exclude auto-generated stubs from strict thresholds or use tiered rates)
-- [ ] **AUTO-06**: Test generation is integrated into stub generation pipeline — running `dev/generate_stubs.R` followed by `dev/generate_tests.R` produces matched stub+test pairs
+- [x] **AUTO-06**: Test generation is integrated into stub generation pipeline — running `dev/generate_stubs.R` followed by `dev/generate_tests.R` produces matched stub+test pairs
 
 ## v2.0 Requirements (validated)
 
@@ -130,11 +130,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VCR-06 | Phase 24 | Complete |
 | VCR-07 | Phase 24 | Complete |
 | AUTO-01 | Phase 25 | Pending |
-| AUTO-02 | Phase 25 | Pending |
+| AUTO-02 | Phase 25 | Complete |
 | AUTO-03 | Phase 25 | Pending |
 | AUTO-04 | Phase 25 | Pending |
 | AUTO-05 | Phase 25 | Pending |
-| AUTO-06 | Phase 25 | Pending |
+| AUTO-06 | Phase 25 | Complete |
 | PAG-20 | Phase 26 | Pending |
 | PAG-21 | Phase 26 | Pending |
 | PAG-22 | Phase 26 | Pending |
