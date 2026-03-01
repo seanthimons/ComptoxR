@@ -190,6 +190,22 @@ jobs:
           devtools::document()
         shell: Rscript {0}
 
+      - name: Detect test gaps
+        id: gaps
+        if: steps.schema_changes.outputs.changed == 'true'
+        continue-on-error: true
+        run: |
+          source("dev/detect_test_gaps.R")
+        shell: Rscript {0}
+
+      - name: Generate missing tests
+        id: tests
+        if: steps.schema_changes.outputs.changed == 'true' && steps.gaps.outputs.gaps_found == 'true'
+        continue-on-error: true
+        run: |
+          source("dev/generate_tests.R")
+        shell: Rscript {0}
+
       - name: Calculate coverage
         id: coverage
         if: steps.schema_changes.outputs.changed == 'true'
@@ -293,6 +309,16 @@ jobs:
             echo "**Action Required:** Review these functions manually and update parameters as needed." >> pr_body.md
           fi
 
+          # Add test gaps section
+          cat >> pr_body.md << 'TESTGAPS'
+
+          ### Test Gaps & Generation
+          TESTGAPS
+          echo "- **Gaps Detected:** ${{ steps.gaps.outputs.gaps_count || '0' }}" >> pr_body.md
+          echo "- **Tests Generated:** ${{ steps.tests.outputs.tests_generated || '0' }}" >> pr_body.md
+          echo "- **Tests Skipped (Protected):** ${{ steps.tests.outputs.tests_skipped || '0' }}" >> pr_body.md
+          echo "- **Gaps Remaining:** ${{ steps.tests.outputs.gaps_remaining || '0' }}" >> pr_body.md
+
           # Add coverage section
           cat >> pr_body.md << 'COVERAGE'
 
@@ -327,8 +353,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update API schemas and generate function stubs"
-          title: "chore: API schema updates detected"
+          commit-message: "chore: update API schemas, generate function stubs and tests"
+          title: "chore: API schema and test updates"
           body-path: pr_body.md
           branch: automated/schema-update
           delete-branch: true
