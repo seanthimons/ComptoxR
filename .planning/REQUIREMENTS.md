@@ -26,7 +26,7 @@
 
 ### Pagination Tests (carried from v2.0 Phase 22)
 
-- [ ] **PAG-20**: Unit tests verify regex detection catches all 5 known pagination patterns from real schemas
+- [x] **PAG-20**: Unit tests verify regex detection catches all 5 known pagination patterns from real schemas
 - [ ] **PAG-21**: Unit tests verify each pagination strategy (offset/limit, page/size, cursor, path-based) with mocked responses
 - [ ] **PAG-22**: At least one integration test runs a paginated stub end-to-end with VCR cassettes
 - [ ] **PAG-23**: All existing non-pagination tests continue to pass (no regression)
@@ -135,7 +135,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTO-04 | Phase 25 | Complete |
 | AUTO-05 | Phase 25 | Complete |
 | AUTO-06 | Phase 25 | Complete |
-| PAG-20 | Phase 26 | Pending |
+| PAG-20 | Phase 26 | Complete |
 | PAG-21 | Phase 26 | Pending |
 | PAG-22 | Phase 26 | Pending |
 | PAG-23 | Phase 26 | Pending |
