@@ -27,9 +27,9 @@ ComptoxR's stub generation pipeline (v1.9) produces clean API wrappers, but the 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
-- [x] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering (completed 2026-02-27)
-- [x] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI (completed 2026-03-01)
+- [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
+- [x] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering (completed 2026-02-27)
+- [x] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI (completed 2026-03-01)
 - [ ] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds
 
 ## Phase Details
@@ -95,7 +95,10 @@ Plans:
   3. At least one integration test runs paginated stub end-to-end with VCR cassettes
   4. All existing non-pagination tests continue to pass (no regression)
   5. Coverage configuration excludes auto-generated defensive code or uses tiered thresholds (R/ >=75%, dev/ >=80%, stubs >=50%)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 26-01-PLAN.md — Pagination detection tests + detect_pagination enhancement
+- [ ] 26-02-PLAN.md — Pagination execution tests, integration test, and coverage configuration
 
 ## Progress
 
@@ -106,5 +109,5 @@ Phases execute in numeric order: 23 → 24 → 25 → 26
 |-------|-----------|----------------|--------|-----------|
 | 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
 | 24. VCR Cassette Cleanup | 3/3 | Complete    | 2026-02-27 | - |
-| 25. Automated Test Generation Pipeline | 3/3 | Complete   | 2026-03-01 | - |
-| 26. Pagination Tests & Coverage Hardening | v2.1 | 0/TBD | Not started | - |
+| 25. Automated Test Generation Pipeline | 3/3 | Complete    | 2026-03-01 | - |
+| 26. Pagination Tests & Coverage Hardening | v2.1 | 0/2 | Not started | - |
