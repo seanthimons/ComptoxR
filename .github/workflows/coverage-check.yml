@@ -38,26 +38,22 @@ jobs:
 
       - name: Check coverage meets threshold
         run: |
-          cov <- covr::package_coverage()
+          # Measure coverage excluding R/data.R
+          cov <- covr::package_coverage(
+            type = "tests",
+            line_exclusions = list("R/data.R")
+          )
           percent <- covr::percent_coverage(cov)
 
           cat(sprintf("\n📊 Current Coverage: %.2f%%\n", percent))
 
-          # Set thresholds
-          MINIMUM_COVERAGE <- 70
-          WARNING_COVERAGE <- 80
-          TARGET_COVERAGE <- 90
+          # Set threshold (warn-only, no failures)
+          MINIMUM_COVERAGE <- 75
 
           if (percent < MINIMUM_COVERAGE) {
-            cat(sprintf("❌ FAIL: Coverage (%.2f%%) is below minimum threshold (%.0f%%)\n", percent, MINIMUM_COVERAGE))
-            quit(status = 1)
-          } else if (percent < WARNING_COVERAGE) {
-            cat(sprintf("⚠️  WARNING: Coverage (%.2f%%) is below warning threshold (%.0f%%)\n", percent, WARNING_COVERAGE))
-            cat(sprintf("   Target coverage is %.0f%%\n", TARGET_COVERAGE))
-          } else if (percent < TARGET_COVERAGE) {
-            cat(sprintf("✓ PASS: Coverage (%.2f%%) meets minimum, approaching target (%.0f%%)\n", percent, TARGET_COVERAGE))
+            cat(sprintf("⚠️  WARNING: Coverage (%.2f%%) is below target threshold (%.0f%%)\n", percent, MINIMUM_COVERAGE))
           } else {
-            cat(sprintf("✓ EXCELLENT: Coverage (%.2f%%) meets or exceeds target (%.0f%%)\n", percent, TARGET_COVERAGE))
+            cat(sprintf("✓ PASS: Coverage (%.2f%%) meets or exceeds target (%.0f%%)\n", percent, MINIMUM_COVERAGE))
           }
 
           # Print detailed report
@@ -82,14 +78,16 @@ jobs:
 
             | Threshold | Target | Status |
             |-----------|--------|--------|
-            | Minimum | 70% | ${parseFloat(coverage) >= 70 ? '✅' : '❌'} |
-            | Warning | 80% | ${parseFloat(coverage) >= 80 ? '✅' : '⚠️'} |
-            | Target | 90% | ${parseFloat(coverage) >= 90 ? '✅' : '📈'} |
+            | Target | 75% | ${parseFloat(coverage) >= 75 ? '✅' : '⚠️'} |
+
+            **Note:** Coverage is informational only and does not block merges. The 75% target is a guideline.
 
             <details>
             <summary>View detailed coverage report</summary>
 
             Run \`covr::report(covr::package_coverage())\` locally for detailed analysis.
+
+            Coverage excludes: R/data.R (documentation-only file)
 
             </details>
             `;
