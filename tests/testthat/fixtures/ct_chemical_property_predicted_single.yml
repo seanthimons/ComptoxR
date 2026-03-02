@@ -1,0 +1,19 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/summary/predicted/search/?dtxsid=DTXSID7020182&propName=MolWeight
+  response:
+    status: 200
+    headers:
+      Date: Mon, 02 Mar 2026 00:24:33 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: '[ ]'
+  recorded_at: 2026-03-02 00:24:34
+recorded_with: VCR-vcr/2.1.0

@@ -163,3 +163,59 @@ check_cassette_safety <- function(pattern = NULL) {
 
   invisible(issues)
 }
+
+#' Find cassettes with HTTP error responses (4xx/5xx)
+#'
+#' Scans cassette files for non-2xx status codes. These "poison" cassettes
+#' will replay error responses forever and should be deleted and re-recorded.
+#'
+#' @param delete Logical. If TRUE, delete bad cassettes. Default FALSE (report only).
+#' @return Invisible data frame with columns: cassette, status
+#' @export
+check_cassette_errors <- function(delete = FALSE) {
+  cassette_dir <- here::here("tests/testthat/fixtures")
+  if (!dir.exists(cassette_dir)) {
+    cli::cli_alert_info("No cassette directory found")
+    return(invisible(data.frame(cassette = character(), status = integer())))
+  }
+
+  cassettes <- fs::dir_ls(cassette_dir, glob = "*.yml")
+  if (length(cassettes) == 0) {
+    cli::cli_alert_info("No cassettes found")
+    return(invisible(data.frame(cassette = character(), status = integer())))
+  }
+
+  bad <- data.frame(cassette = character(), status = integer(), stringsAsFactors = FALSE)
+
+  for (cassette in cassettes) {
+    lines <- readLines(cassette, warn = FALSE)
+    status_lines <- grep("^\\s+status:\\s+[0-9]+", lines, value = TRUE)
+    codes <- as.integer(gsub("\\D", "", status_lines))
+    error_codes <- codes[codes >= 400]
+    if (length(error_codes) > 0) {
+      bad <- rbind(bad, data.frame(
+        cassette = fs::path_file(cassette),
+        status = error_codes[1],
+        stringsAsFactors = FALSE
+      ))
+    }
+  }
+
+  if (nrow(bad) == 0) {
+    cli::cli_alert_success("All {length(cassettes)} cassettes have clean responses")
+  } else {
+    cli::cli_alert_danger("Found {nrow(bad)} cassette{?s} with error responses:")
+    for (i in seq_len(nrow(bad))) {
+      cli::cli_alert_warning("{bad$cassette[i]} (HTTP {bad$status[i]})")
+    }
+    if (delete) {
+      paths <- fs::path(cassette_dir, bad$cassette)
+      fs::file_delete(paths)
+      cli::cli_alert_success("Deleted {nrow(bad)} bad cassette{?s}")
+    } else {
+      cli::cli_alert_info("Run check_cassette_errors(delete = TRUE) to remove them")
+    }
+  }
+
+  invisible(bad)
+}

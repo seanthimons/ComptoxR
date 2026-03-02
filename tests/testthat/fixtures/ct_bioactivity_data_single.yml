@@ -1,0 +1,35 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/bioactivity/data/summary/search/by-dtxsid/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Date: Mon, 02 Mar 2026 00:25:17 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: no-cache, must-revalidate
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "dtxsid" : "DTXSID7020182",
+          "activeMc" : 236,
+          "totalMc" : 981,
+          "activeSc" : 39,
+          "totalSc" : 383,
+          "cytotoxMedianRaw" : 1.647829,
+          "cytotoxMad" : 0.25084555,
+          "globalMad" : 0.17031652,
+          "cytotoxMedianLog" : 1.647829,
+          "cytotoxMedianUm" : 44.445625,
+          "cytotoxLowerUm" : 13.705014,
+          "cytotoxLowerLog" : 1.1368794,
+          "ntested" : 87.0,
+          "nhit" : 16.0
+        } ]
+  recorded_at: 2026-03-02 00:25:17
+recorded_with: VCR-vcr/2.1.0

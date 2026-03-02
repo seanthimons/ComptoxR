@@ -1,0 +1,98 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/fate/summary/search/by-dtxsid/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Date: Mon, 02 Mar 2026 00:24:41 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "unit" : "cm^3/molecule*sec",
+          "predictedCount" : 1,
+          "predictedMax" : 1.6218102E-11,
+          "experimentalMax" : null,
+          "predictedMin" : 1.6218102E-11,
+          "predictedMedian" : 1.6218102E-11,
+          "experimentalMin" : null,
+          "propName" : "Atmos. Hydroxylation Rate",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 1.6218102E-11,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "L/kg",
+          "predictedCount" : 2,
+          "predictedMax" : 117.26639,
+          "experimentalMax" : 67.7,
+          "predictedMin" : 43.651585,
+          "predictedMedian" : 80.458984,
+          "experimentalMin" : 1.7,
+          "propName" : "Bioconcentration Factor",
+          "experimentalMedian" : 13.3,
+          "experimentalAverage" : 21.550144,
+          "predictedAverage" : 80.458984,
+          "experimentalCount" : 11
+        }, {
+          "unit" : "days",
+          "predictedCount" : 1,
+          "predictedMax" : 15.1356125,
+          "experimentalMax" : null,
+          "predictedMin" : 15.1356125,
+          "predictedMedian" : 15.1356125,
+          "experimentalMin" : null,
+          "propName" : "Biodeg. Half-Life",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 15.1356125,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "days",
+          "predictedCount" : 1,
+          "predictedMax" : 1.8620871,
+          "experimentalMax" : 1.8620871,
+          "predictedMin" : 1.8620871,
+          "predictedMedian" : 1.8620871,
+          "experimentalMin" : 1.8620871,
+          "propName" : "Fish Biotrans. Half-Life (Km)",
+          "experimentalMedian" : 1.8620871,
+          "experimentalAverage" : 1.8620871,
+          "predictedAverage" : 1.8620871,
+          "experimentalCount" : 1
+        }, {
+          "unit" : "Binary 0/1",
+          "predictedCount" : 1,
+          "predictedMax" : 0.0,
+          "experimentalMax" : null,
+          "predictedMin" : 0.0,
+          "predictedMedian" : 0.0,
+          "experimentalMin" : null,
+          "propName" : "Ready Binary Biodegradability",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 0.0,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "L/kg",
+          "predictedCount" : 1,
+          "predictedMax" : 1445.4398,
+          "experimentalMax" : null,
+          "predictedMin" : 1445.4398,
+          "predictedMedian" : 1445.4398,
+          "experimentalMin" : null,
+          "propName" : "Soil Adsorp. Coeff. (Koc)",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 1445.4398,
+          "experimentalCount" : 0
+        } ]
+  recorded_at: 2026-03-02 00:24:42
+recorded_with: VCR-vcr/2.1.0
