@@ -1,0 +1,163 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OPERA Predictor",
+    "version": "0.0.1",
+    "description": "API gateway to OPERA predictions"
+  },
+  "paths": {
+    "/api/opera/version": {
+      "get": {
+        "operationId": "app.get_version",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/opera/metadata": {
+      "get": {
+        "operationId": "app.get_metadata",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/opera": {
+      "get": {
+        "operationId": "app.get_predict",
+        "parameters": [
+          {
+            "name": "smiles",
+            "in": "query",
+            "description": "SMILES to generate predictions for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "example1": {
+                "summary": "SMILES that generates one of the 56 ARN groups",
+                "value": "CC(C)c1ccc2sc3ccccc3c(=O)c2c1"
+              },
+              "example2": {
+                "summary": "Miscellaneous chemistry",
+                "value": "c1ccc(OP(Oc2ccccc2)Oc2ccccc2)cc1"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "operationId": "app.post_predict",
+        "summary": "Generate predictions for multiple molecules",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "smiles": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "smiles"
+                ],
+                "example": {
+                  "smiles": [
+                    "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                    "CCCCN"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/opera/file": {
+      "post": {
+        "operationId": "app.post_predict_file",
+        "description": "Calculates OPERA predictions for a file (CSV, SMI, SDF)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "File to predict"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (e.g. invalid file or file is already OCRed)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Request": {
+        "type": "object",
+        "properties": {
+          "smiles": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "smiles"
+        ],
+        "example": {
+          "smiles": [
+            "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+            "CCCCN"
+          ]
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": ""
+    }
+  ]
+}

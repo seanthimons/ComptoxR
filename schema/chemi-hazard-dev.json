@@ -645,6 +645,10 @@
           },
           "image": {
             "type": "string"
+          },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
           }
         }
       },
@@ -663,6 +667,9 @@
             "additionalProperties": {}
           },
           "chemical": {
+            "$ref": "#/components/schemas/Chemical"
+          },
+          "chemicalWithAdditionalProps": {
             "$ref": "#/components/schemas/Chemical"
           }
         }
@@ -1277,6 +1284,9 @@
           },
           "change": {
             "$ref": "#/components/schemas/Change"
+          },
+          "chemicalWithAdditionalProps": {
+            "$ref": "#/components/schemas/Chemical"
           }
         }
       },
