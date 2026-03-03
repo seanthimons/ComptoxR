@@ -637,12 +637,18 @@ select_schema_files <- function(
         cols = file,
         delim = "-",
         names = c("origin", "domain", "stage"),
-        cols_remove = FALSE
+        cols_remove = FALSE,
+        too_few = "align_start",  # Handle files with < 3 hyphen-delimited parts
+        too_many = "merge"        # Handle files with > 3 hyphen-delimited parts
       ) %>%
+      dplyr::filter(!is.na(stage)) %>%  # Drop files without stage component
       dplyr::mutate(
         stage = stringr::str_remove(stage, "\\.json$"),
         stage = factor(stage, levels = stage_priority)  # Factor ordering = priority
       )
+
+    # Files that couldn't be parsed (no stage) are included as-is
+    unparsed <- setdiff(files, schema_meta$file)
 
     # Group by domain, sort by stage priority, take first (highest priority)
     files <- schema_meta %>%
@@ -651,6 +657,8 @@ select_schema_files <- function(
       dplyr::slice(1) %>%  # Take highest priority stage per domain
       dplyr::ungroup() %>%
       dplyr::pull(file)
+
+    files <- c(files, unparsed)
   }
 
   files
