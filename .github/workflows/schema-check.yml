@@ -133,7 +133,12 @@ jobs:
         continue-on-error: true
         run: |
           source("dev/diff_schemas.R")
-          results <- diff_schemas("schema_old", "schema")
+          results <- diff_schemas(
+            "schema_old",
+            "schema",
+            stage_priority = c("prod", "staging", "dev"),
+            exclude_pattern = "ui|coverage_baseline|schema_hashes"
+          )
           md <- format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")
 
