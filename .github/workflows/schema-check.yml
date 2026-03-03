@@ -185,14 +185,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Update documentation
-        if: steps.schema_changes.outputs.changed == 'true'
+        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated > 0
         run: |
           devtools::document()
         shell: Rscript {0}
 
       - name: Detect test gaps
         id: gaps
-        if: steps.schema_changes.outputs.changed == 'true'
+        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated > 0
         continue-on-error: true
         run: |
           source("dev/detect_test_gaps.R")
@@ -200,7 +200,7 @@ jobs:
 
       - name: Generate missing tests
         id: tests
-        if: steps.schema_changes.outputs.changed == 'true' && steps.gaps.outputs.gaps_found == 'true'
+        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated > 0 && steps.gaps.outputs.gaps_found == 'true'
         continue-on-error: true
         run: |
           source("dev/generate_tests.R")

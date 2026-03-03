@@ -10,9 +10,9 @@ Generated API wrapper functions must send requests in the format the API expects
 
 ## Current State
 
-**Latest shipped:** v1.9 Schema Check Workflow Fix (2026-02-12)
+**Latest shipped:** v2.1 Test Infrastructure (2026-03-02)
 
-The stub generation pipeline is fully documented, consolidated, and tested:
+The stub generation pipeline is fully documented, consolidated, tested, and automated:
 - Query parameter extraction and function signatures (v1.0)
 - Raw text body support for `/chemical/search/equal/` (v1.1)
 - JSON array encoding for bulk POST endpoints (v1.2)
@@ -23,33 +23,28 @@ The stub generation pipeline is fully documented, consolidated, and tested:
 - Preflight endpoint filtering (v1.5)
 - Unified `openapi_to_spec()` pipeline for all schema types (v1.6)
 - `select_schema_files()` helper for stage-based prioritization (v1.6)
-- Removed `parse_chemi_schemas()` redundancy (v1.6)
 - Updated ENDPOINT_EVAL_UTILS_GUIDE.md with comprehensive documentation (v1.7)
 - Comprehensive test infrastructure with 95+ test cases (v1.8)
 - E2E integration tests for full schema -> stub -> execution flow (v1.8)
-- CI/CD pipeline with coverage thresholds (R/ >=75%, dev/ >=80%) (v1.8)
-- Codecov integration for coverage tracking (v1.8)
-- Fixed unicode_map CI dependency issue (v1.9)
+- CI/CD pipeline with coverage thresholds and Codecov integration (v1.8)
 - Endpoint-level schema diffing with breaking change detection (v1.9)
 - Timeout protection and graceful failure handling (v1.9)
-
-## Current Milestone: v2.1 Test Infrastructure
-
-**Goal:** Fix build blockers, rebuild test generation to produce correct tests for every function, and automate the stub-to-test pipeline with CI reporting.
-
-**Target features:**
-- Fix build errors (bad stub code, duplicate args, dependency mismatches)
-- Rebuild test generator to respect actual parameter types and tidy flags
-- Nuke bad VCR cassettes and re-record from production with correct params
-- Generate tests for every exported function targeting high coverage
-- Pagination-specific tests (carried from v2.0 Phase 22)
-- Local dev script + CI workflow for automated test generation on new stubs
-- CI reporting: logs, progress reports, coverage enforcement
+- Auto-pagination engine for all request templates (v2.0)
+- 4 pagination strategies: offset/limit, page/size, cursor, path-based (v2.0)
+- R CMD check 0 errors — all build blockers fixed (v2.1)
+- Metadata-aware test generator reading function signatures and tidy flags (v2.1)
+- VCR cassette cleanup with parallel re-recording script (v2.1)
+- Automated test gap detection + generation pipeline in CI (v2.1)
+- 102 pagination tests (detection, execution, integration) (v2.1)
+- 75% coverage threshold (warn-only) with Codecov (v2.1)
 
 ## Deferred
 
 Future milestones:
 - Advanced schema handling (ADV-01-04)
+- Advanced testing: snapshot tests, performance benchmarks, contract testing
+- S7 class implementation (#29)
+- Schema-check workflow improvements (#96)
 
 ## Requirements
 
@@ -95,24 +90,28 @@ Future milestones:
 - Code duplication reduced via `select_schema_files()` helper — v1.6
 - All existing stubs regenerate correctly (no regression) — v1.6
 - Chemi stubs benefit from v1.5 Swagger 2.0 body extraction — v1.6
+- Auto-pagination engine for offset/limit, page/size, cursor, path-based strategies — v2.0
+- Pagination pattern detection from OpenAPI schemas — v2.0
+- Generated stubs auto-paginate by default — v2.0
+- R CMD check produces 0 errors after build fixes — v2.1
+- Test generator reads actual parameter names/types from function signatures — v2.1
+- Test generator reads tidy flag from generic_request() calls — v2.1
+- VCR cassette management helpers (delete, list, check_safety) — v2.1
+- Automated test gap detection + generation pipeline in CI — v2.1
+- 102 pagination tests (detection, execution, integration) — v2.1
+- 75% coverage threshold (warn-only) with Codecov — v2.1
 
 ### Active
 
-- Fix build errors blocking R CMD check
-- Rebuild test generator with correct parameter type detection
-- Re-record VCR cassettes from production with correct params
-- Test coverage for all exported API wrapper functions
-- Pagination-specific tests (Phase 22 carry-forward)
-- Automated stub-to-test pipeline (local + CI)
-- CI logs and progress reporting
+(None — define next milestone with `/gsd:new-milestone`)
 
 ### Out of Scope
 
-- Adding new API endpoints — focus is test infrastructure, not coverage expansion
 - Parallel page fetching — rate limits make sequential safer
 - Session caching — separate concern
-- S7 class implementation — deferred
-- Advanced schema handling — deferred
+- S7 class implementation — deferred (#29)
+- Advanced schema handling — deferred (ADV-01-04)
+- httptest2 migration — would require rewriting 706+ cassettes
 
 ## Context
 
@@ -179,7 +178,7 @@ Future milestones:
 | v1.8 | Testing infrastructure | Complete |
 | v1.9 | Schema check workflow fix | Complete |
 | v2.0 | Paginated requests | Complete |
-| v2.1 | Test infrastructure | In Progress |
+| v2.1 | Test infrastructure | Complete |
 
 ---
-*Last updated: 2026-02-26 after v2.1 milestone started*
+*Last updated: 2026-03-02 after v2.1 milestone completed*

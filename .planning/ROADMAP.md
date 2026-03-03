@@ -1,113 +1,91 @@
-# Roadmap: ComptoxR Test Infrastructure
-
-## Overview
-
-ComptoxR's stub generation pipeline (v1.9) produces clean API wrappers, but the test infrastructure is broken. The test generator doesn't read actual parameter types or tidy flags from stubs, producing 834+ failing tests and 673 bad VCR cassettes. This milestone fixes build blockers, rebuilds the test generator to produce correct tests, cleans up cassettes, and automates the stub-to-test pipeline with CI reporting.
+# Roadmap: ComptoxR Stub Generation Pipeline
 
 ## Milestones
 
-- v1.0 Stub Generation Fix - Phases 1-2 (shipped 2026-01-27)
-- v1.1 Raw Text Body Fix - Phase 3 (shipped 2026-01-27)
-- v1.2 Bulk Request Body Type Fix - Phase 4 (shipped 2026-01-28)
-- v1.3 Chemi Resolver Integration Fix - Phase 5 (shipped 2026-01-28)
-- v1.4 Empty POST Endpoint Detection - Phase 6 (shipped 2026-01-29)
-- v1.5 Swagger 2.0 Body Schema Support - Phases 7-9 (shipped 2026-01-29)
-- v1.6 Unified Stub Generation Pipeline - Phase 10 (shipped 2026-01-30)
-- v1.7 Documentation Refresh - Phase 11 (shipped 2026-01-29)
-- v1.8 Testing Infrastructure - Phases 12-15 (shipped 2026-01-31)
-- v1.9 Schema Check Workflow Fix - Phases 16-18 (shipped 2026-02-12)
-- v2.0 Paginated Requests - Phases 19-21 (shipped 2026-02-24)
-- **v2.1 Test Infrastructure** - Phases 23-26 (current)
+- v1.0 Stub Generation Fix — Phases 1-2 (shipped 2026-01-27)
+- v1.1 Raw Text Body Fix — Phase 3 (shipped 2026-01-27)
+- v1.2 Bulk Request Body Type Fix — Phase 4 (shipped 2026-01-28)
+- v1.3 Chemi Resolver Integration Fix — Phase 5 (shipped 2026-01-28)
+- v1.4 Empty POST Endpoint Detection — Phase 6 (shipped 2026-01-29)
+- v1.5 Swagger 2.0 Body Schema Support — Phases 7-9 (shipped 2026-01-29)
+- v1.6 Unified Stub Generation Pipeline — Phase 10 (shipped 2026-01-30)
+- v1.7 Documentation Refresh — Phase 11 (shipped 2026-01-29)
+- v1.8 Testing Infrastructure — Phases 12-15 (shipped 2026-01-31)
+- v1.9 Schema Check Workflow Fix — Phases 16-18 (shipped 2026-02-12)
+- v2.0 Paginated Requests — Phases 19-21 (shipped 2026-02-24)
+- v2.1 Test Infrastructure — Phases 23-26 (shipped 2026-03-02)
 
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (23, 24, 25, 26): Planned milestone work
-- Decimal phases (23.1, 23.2): Urgent insertions (marked with INSERTED)
+<details>
+<summary>v1.0-v1.9 (Phases 1-18) — SHIPPED</summary>
 
-Decimal phases appear between their surrounding integers in numeric order.
+- [x] Phase 1: Fix Body Parameter Extraction (2/2 plans) — completed 2026-01-27
+- [x] Phase 2: Validate and Regenerate (2/2 plans) — completed 2026-01-27
+- [x] Phase 3: Raw Text Body (2/2 plans) — completed 2026-01-27
+- [x] Phase 4: JSON Body Default (3/3 plans) — completed 2026-01-28
+- [x] Phase 5: Resolver Integration Fix (1/1 plan) — completed 2026-01-28
+- [x] Phase 6: Empty POST Detection (1/1 plan) — completed 2026-01-29
+- [x] Phase 7: Version Detection (2/2 plans) — completed 2026-01-29
+- [x] Phase 8: Reference Resolution (2/2 plans) — completed 2026-01-29
+- [x] Phase 9: Integration Validation (1/1 plan) — completed 2026-01-29
+- [x] Phase 10: Pipeline Consolidation (1/1 plan) — completed 2026-01-30
+- [x] Phase 11: Documentation Update (1/1 plan) — completed 2026-01-29
+- [x] Phase 12: Test Infrastructure Setup (1/1 plan) — completed 2026-01-30
+- [x] Phase 13: Unit Tests (2/2 plans) — completed 2026-01-31
+- [x] Phase 14: Integration CI (2/2 plans) — completed 2026-01-31
+- [x] Phase 15: Integration Test Fixes (1/1 plan) — completed 2026-01-31
+- [x] Phase 16: CI Fix (1/1 plan) — completed 2026-02-12
+- [x] Phase 17: Schema Diffing (2/2 plans) — completed 2026-02-12
+- [x] Phase 18: Reliability (1/1 plan) — completed 2026-02-12
 
-- [x] **Phase 23: Build Fixes & Test Generator Core** - Fix stub syntax errors and rebuild test generator to read actual metadata (completed 2026-02-27)
-- [x] **Phase 24: VCR Cassette Cleanup** - Delete bad cassettes, add cleanup tools, verify API key filtering (completed 2026-02-27)
-- [x] **Phase 25: Automated Test Generation Pipeline** - Detect gaps, generate tests, integrate with CI (completed 2026-03-01)
-- [x] **Phase 26: Pagination Tests & Coverage Hardening** - Add pagination tests and tune coverage thresholds (completed 2026-03-01)
+</details>
 
-## Phase Details
+<details>
+<summary>v2.0 Paginated Requests (Phases 19-21) — SHIPPED 2026-02-24</summary>
 
-### Phase 23: Build Fixes & Test Generator Core
-**Goal**: Package builds cleanly and test generator produces correct tests by reading actual function metadata
-**Depends on**: Nothing (foundation work)
-**Requirements**: BUILD-01, BUILD-02, BUILD-03, BUILD-04, BUILD-05, BUILD-06, BUILD-07, BUILD-08, TGEN-01, TGEN-02, TGEN-03, TGEN-04, TGEN-05
-**Success Criteria** (what must be TRUE):
-  1. R CMD check produces 0 errors on Windows, macOS, and Linux
-  2. Generated test files call functions with correctly typed parameters (DTXSID for query, integer for limit, string for search_type)
-  3. Generated tests assert list return type for tidy=FALSE functions and tibble for tidy=TRUE functions
-  4. Generated tests include unique cassette names per test variant (single, batch, error, example)
-  5. All stub generation syntax bugs fixed (no reserved word collisions, no duplicate args, valid roxygen)
-**Plans:** 5/5 plans complete
-Plans:
-- [x] 23-01-PLAN.md — Merge PR + non-generator BUILD fixes (license, imports, encoding, httr2, partial match)
-- [x] 23-02-PLAN.md — Fix stub generator syntax + schema automation pipeline (Items 2 & 3)
-- [x] 23-03-PLAN.md — Build metadata-aware test generator core (all TGEN requirements)
-- [x] 23-04-PLAN.md — Purge and regenerate stubs, validate with R CMD check
-- [ ] 23-05-PLAN.md — Gap closure: regenerate 6 test files with malformed parameter interpolation
+- [x] Phase 19: Pagination Detection (1/1 plan) — completed 2026-02-24
+- [x] Phase 20: Auto-Pagination Engine (2/2 plans) — completed 2026-02-24
+- [x] Phase 21: Stub Generation Integration (1/1 plan) — completed 2026-02-24
 
-### Phase 24: VCR Cassette Cleanup
-**Goal**: Clean cassette infrastructure with verified API key filtering and bulk management tools
-**Depends on**: Phase 23 (need correct test generator before re-recording)
-**Requirements**: VCR-01, VCR-02, VCR-03, VCR-04, VCR-05, VCR-06, VCR-07
-**Success Criteria** (what must be TRUE):
-  1. All 673 untracked cassettes with wrong parameters are deleted from the filesystem
-  2. Helper functions exist for deleting cassettes (all, by pattern, by function name)
-  3. All committed cassettes show `<<<API_KEY>>>` placeholder, never actual keys
-  4. Documentation exists for batched cassette re-recording (20-50 at a time with delays)
-  5. High-priority functions (hazard, exposure, chemical domains) have clean cassettes re-recorded
-**Plans:** 3/3 plans complete
-Plans:
-- [ ] 24-01-PLAN.md — Implement VCR cassette management helper functions (delete, list, audit)
-- [ ] 24-02-PLAN.md — Delete 673 bad cassettes and run API key security audit
-- [ ] 24-03-PLAN.md — Create parallel re-recording script with mirai
+</details>
 
-### Phase 25: Automated Test Generation Pipeline
-**Goal**: CI detects stub-test gaps and automatically generates missing tests after stub creation
-**Depends on**: Phase 23 (test generator working), Phase 24 (cassette management in place)
-**Requirements**: AUTO-01, AUTO-02, AUTO-03, AUTO-04, AUTO-05, AUTO-06
-**Success Criteria** (what must be TRUE):
-  1. Running `dev/detect_test_gaps.R` outputs list of functions lacking test files
-  2. Running `dev/generate_tests.R` creates test files for all detected gaps
-  3. GitHub Action workflow triggers after stub generation and commits new test files
-  4. CI workflow summary shows test gap count and coverage metrics
-  5. Generated stubs marked `@lifecycle stable` are protected from test generator overwrites
-  6. Test generation is integrated into stub workflow: generate stubs → detect gaps → generate tests → commit together
-**Plans:** 3/3 plans complete
-Plans:
-- [ ] 25-01-PLAN.md — Gap detection script and test manifest system
-- [ ] 25-02-PLAN.md — Extend test generator with manifest support and CI output
-- [ ] 25-03-PLAN.md — CI workflow integration (schema-check.yml gap detection + test generation steps)
+<details>
+<summary>v2.1 Test Infrastructure (Phases 23-26) — SHIPPED 2026-03-02</summary>
 
-### Phase 26: Pagination Tests & Coverage Hardening
-**Goal**: Pagination functionality verified by tests and coverage thresholds tuned for generated code
-**Depends on**: Phase 25 (automated test generation working)
-**Requirements**: PAG-20, PAG-21, PAG-22, PAG-23
-**Success Criteria** (what must be TRUE):
-  1. Unit tests verify all 5 pagination regex patterns detect correctly from real schemas
-  2. Unit tests verify each pagination strategy (offset/limit, page/size, cursor, path-based) with mocked responses
-  3. At least one integration test runs paginated stub end-to-end with VCR cassettes
-  4. All existing non-pagination tests continue to pass (no regression)
-  5. Coverage configuration excludes auto-generated defensive code or uses tiered thresholds (R/ >=75%, dev/ >=80%, stubs >=50%)
-**Plans:** 2/2 plans complete
-Plans:
-- [ ] 26-01-PLAN.md — Pagination detection tests + detect_pagination enhancement
-- [ ] 26-02-PLAN.md — Pagination execution tests, integration test, and coverage configuration
+- [x] Phase 23: Build Fixes & Test Generator Core (5/5 plans) — completed 2026-02-27
+- [x] Phase 24: VCR Cassette Cleanup (3/3 plans) — completed 2026-02-27
+- [x] Phase 25: Automated Test Generation Pipeline (3/3 plans) — completed 2026-03-01
+- [x] Phase 26: Pagination Tests & Coverage Hardening (2/2 plans) — completed 2026-03-01
+
+</details>
 
 ## Progress
 
-**Execution Order:**
-Phases execute in numeric order: 23 → 24 → 25 → 26
-
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 23. Build Fixes & Test Generator Core | 5/5 | Complete    | 2026-02-27 | - |
-| 24. VCR Cassette Cleanup | 3/3 | Complete    | 2026-02-27 | - |
-| 25. Automated Test Generation Pipeline | 3/3 | Complete    | 2026-03-01 | - |
-| 26. Pagination Tests & Coverage Hardening | 2/2 | Complete   | 2026-03-01 | - |
+| 1. Fix Body Parameter Extraction | v1.0 | 2/2 | Complete | 2026-01-27 |
+| 2. Validate and Regenerate | v1.0 | 2/2 | Complete | 2026-01-27 |
+| 3. Raw Text Body | v1.1 | 2/2 | Complete | 2026-01-27 |
+| 4. JSON Body Default | v1.2 | 3/3 | Complete | 2026-01-28 |
+| 5. Resolver Integration Fix | v1.3 | 1/1 | Complete | 2026-01-28 |
+| 6. Empty POST Detection | v1.4 | 1/1 | Complete | 2026-01-29 |
+| 7. Version Detection | v1.5 | 2/2 | Complete | 2026-01-29 |
+| 8. Reference Resolution | v1.5 | 2/2 | Complete | 2026-01-29 |
+| 9. Integration Validation | v1.5 | 1/1 | Complete | 2026-01-29 |
+| 10. Pipeline Consolidation | v1.6 | 1/1 | Complete | 2026-01-30 |
+| 11. Documentation Update | v1.7 | 1/1 | Complete | 2026-01-29 |
+| 12. Test Infrastructure Setup | v1.8 | 1/1 | Complete | 2026-01-30 |
+| 13. Unit Tests | v1.8 | 2/2 | Complete | 2026-01-31 |
+| 14. Integration CI | v1.8 | 2/2 | Complete | 2026-01-31 |
+| 15. Integration Test Fixes | v1.8 | 1/1 | Complete | 2026-01-31 |
+| 16. CI Fix | v1.9 | 1/1 | Complete | 2026-02-12 |
+| 17. Schema Diffing | v1.9 | 2/2 | Complete | 2026-02-12 |
+| 18. Reliability | v1.9 | 1/1 | Complete | 2026-02-12 |
+| 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
+| 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
+| 21. Stub Generation Integration | v2.0 | 1/1 | Complete | 2026-02-24 |
+| 23. Build Fixes & Test Generator Core | v2.1 | 5/5 | Complete | 2026-02-27 |
+| 24. VCR Cassette Cleanup | v2.1 | 3/3 | Complete | 2026-02-27 |
+| 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
+| 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
