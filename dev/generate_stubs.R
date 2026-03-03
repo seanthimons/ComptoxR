@@ -529,9 +529,17 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   drift_count <- nrow(all_drift)
   drift_endpoints <- length(unique(all_drift$endpoint))
 
+  skipped <- sum(str_detect(all_results$action, "skipped"), na.rm = TRUE)
+  protected <- sum(all_results$action == "skipped_lifecycle", na.rm = TRUE)
+
+  # Count endpoints that were found but skipped during rendering (empty schemas)
+  render_skipped <- sum(sapply(.StubGenEnv$skipped, nrow), na.rm = TRUE)
+
   cat(sprintf("stubs_generated=%d\n", total_new), file = output_file, append = TRUE)
   cat(sprintf("stubs_created=%d\n", created), file = output_file, append = TRUE)
   cat(sprintf("stubs_appended=%d\n", appended), file = output_file, append = TRUE)
+  cat(sprintf("stubs_skipped=%d\n", skipped + render_skipped), file = output_file, append = TRUE)
+  cat(sprintf("stubs_protected=%d\n", protected), file = output_file, append = TRUE)
   cat(sprintf("drift_count=%d\n", drift_count), file = output_file, append = TRUE)
   cat(sprintf("drift_endpoints=%d\n", drift_endpoints), file = output_file, append = TRUE)
 

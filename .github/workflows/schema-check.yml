@@ -272,6 +272,8 @@ jobs:
           echo "- **Stubs Generated:** ${{ steps.stubs.outputs.stubs_generated || '0' }}" >> pr_body.md
           echo "- **New Files Created:** ${{ steps.stubs.outputs.stubs_created || '0' }}" >> pr_body.md
           echo "- **Existing Files Updated:** ${{ steps.stubs.outputs.stubs_appended || '0' }}" >> pr_body.md
+          echo "- **Skipped (empty schema):** ${{ steps.stubs.outputs.stubs_skipped || '0' }}" >> pr_body.md
+          echo "- **Protected (lifecycle guard):** ${{ steps.stubs.outputs.stubs_protected || '0' }}" >> pr_body.md
 
           # Add parameter drift section if detected
           DRIFT_COUNT="${{ steps.stubs.outputs.drift_count || '0' }}"
