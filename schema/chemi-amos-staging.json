@@ -686,6 +686,33 @@
         "summary": "Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs"
       }
     },
+    "/api/amos/analytical_qc_keyset_pagination/{limit}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Optional keyset cursor returned by a previous response.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of information on a keyset-paginated batch of Analytical QC documents."
+          }
+        },
+        "summary": "Returns information on a batch of Analytical QC documents using keyset pagination."
+      }
+    },
     "/api/amos/analytical_qc_list/": {
       "get": {
         "description": "",
@@ -793,6 +820,33 @@
           }
         },
         "summary": "Calculates the entropy similarity for two spectra."
+      }
+    },
+    "/api/amos/fact_sheet_keyset_pagination/{limit}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Optional keyset cursor returned by a previous response.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on a keyset-paginated batch of fact sheets."
+          }
+        },
+        "summary": "Returns information on a batch of fact sheets using keyset pagination."
       }
     },
     "/api/amos/fact_sheet_list": {
@@ -1233,7 +1287,7 @@
     },
     "/api/amos/get_similar_structures/{dtxsid}": {
       "get": {
-        "description": "<br/>Search similarity is currently hardcoded to 0.5.",
+        "description": "substance.<br/><br/>Search similarity is currently hardcoded to 0.5.",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1248,7 +1302,7 @@
             "description": "A JSON object containing lists of the related methods, the related fact sheets, and the similar substances.."
           }
         },
-        "summary": "Returns a list of methods and fact sheets, each of which contain at least one substance of sufficient similarity to the searched substance."
+        "summary": "Returns lists of documents, each of which contain at least one substance of sufficient similarity to the searched"
       }
     },
     "/api/amos/get_substance_file_for_record/{internal_id}": {
@@ -1424,6 +1478,33 @@
         "summary": "Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum."
       }
     },
+    "/api/amos/method_keyset_pagination/{limit}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Optional keyset cursor returned by a previous response.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on a keyset-paginated batch of methods."
+          }
+        },
+        "summary": "Returns information on a batch of methods using keyset pagination."
+      }
+    },
     "/api/amos/method_list": {
       "get": {
         "description": "",
@@ -1507,6 +1588,33 @@
           }
         },
         "summary": "Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification."
+      }
+    },
+    "/api/amos/product_declaration_keyset_pagination/{limit}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Optional keyset cursor returned by a previous response.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on a keyset-paginated batch of product declarations."
+          }
+        },
+        "summary": "Returns information on a batch of product declarations using keyset pagination."
       }
     },
     "/api/amos/product_declaration_pagination/{limit}/{offset}": {
@@ -1635,6 +1743,33 @@
           }
         },
         "summary": "Returns a list of release notes for AMOS."
+      }
+    },
+    "/api/amos/safety_data_sheet_keyset_pagination/{limit}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Optional keyset cursor returned by a previous response.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on a keyset-paginated batch of safety data sheets."
+          }
+        },
+        "summary": "Returns information on a batch of safety data sheets using keyset pagination."
       }
     },
     "/api/amos/safety_data_sheet_pagination/{limit}/{offset}": {
