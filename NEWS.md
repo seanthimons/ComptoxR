@@ -92,6 +92,8 @@
 
 #### Bug fixes
 
+-   exclude non-API endpoints and non-schema files from diff
+    ([20fff3d](https://github.com/seanthimons/ComptoxR/tree/20fff3da1a21bf2a4838585e25ed15bcc1ffb3d9))
 -   gate devtools::document() on stubs_generated output
     ([cefc14c](https://github.com/seanthimons/ComptoxR/tree/cefc14c0988034055c553c8c7dd16f994227088b))
 -   restore full schema-check workflow from integration \[skip ci\]
@@ -186,6 +188,8 @@
 #### Other changes
 
 -   Update NEWS.md \[skip ci\]
+    ([8f65db0](https://github.com/seanthimons/ComptoxR/tree/8f65db012868a337d869bbf200e8434cd2fcfb96))
+-   Update NEWS.md \[skip ci\]
     ([88d7054](https://github.com/seanthimons/ComptoxR/tree/88d7054d357701174d311e6b1cd1c8398bf9e5ca))
 -   Update NEWS.md \[skip ci\]
     ([48bba0a](https://github.com/seanthimons/ComptoxR/tree/48bba0ab8793cb50e21331392c81656a7f98eca7))
@@ -230,7 +234,7 @@
     ([de08440](https://github.com/seanthimons/ComptoxR/tree/de08440ce6c952fc7b2a01b9bc73d5bfde12cfbb))
 
 Full set of changes:
-[`v1.3.0...cefc14c`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...cefc14c)
+[`v1.3.0...20fff3d`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...20fff3d)
 
 ## v1.3.0 (2025-10-02)
 
