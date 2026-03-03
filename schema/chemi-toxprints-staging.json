@@ -918,6 +918,10 @@
           "image": {
             "type": "string"
           },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
+          },
           "key": {
             "type": "string"
           },
@@ -1274,6 +1278,10 @@
           },
           "image": {
             "type": "string"
+          },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
           },
           "key": {
             "type": "string"

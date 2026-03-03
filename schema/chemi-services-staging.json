@@ -549,6 +549,10 @@
           },
           "image": {
             "type": "string"
+          },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
           }
         }
       },
@@ -607,6 +611,23 @@
           }
         }
       },
+      "ColDef": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "headerName": {
+            "type": "string"
+          },
+          "cellClass": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        }
+      },
       "ExportRequest": {
         "type": "object",
         "properties": {
@@ -641,6 +662,47 @@
           }
         }
       },
+      "Parent": {
+        "type": "object",
+        "properties": {
+          "headerName": {
+            "type": "string"
+          },
+          "parent": {},
+          "unit": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "headerNameWithUnits": {
+            "type": "string"
+          }
+        }
+      },
+      "PassedColumn": {
+        "type": "object",
+        "properties": {
+          "colDef": {
+            "$ref": "#/components/schemas/ColDef"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Parent"
+          },
+          "field": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "headerName": {
+            "type": "string"
+          },
+          "strippedBackground": {
+            "type": "boolean"
+          }
+        }
+      },
       "ReadyReport": {
         "type": "object",
         "properties": {
@@ -648,6 +710,12 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
             }
           },
           "resultType": {
@@ -659,6 +727,12 @@
           },
           "message": {
             "type": "string"
+          },
+          "dataColumns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
+            }
           },
           "modelName": {
             "type": "string"
