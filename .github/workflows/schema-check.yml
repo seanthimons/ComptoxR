@@ -140,7 +140,7 @@ jobs:
             "schema_old",
             "schema",
             stage_priority = c("prod", "staging", "dev"),
-            exclude_pattern = "ui"
+            exclude_pattern = "ui|coverage_baseline|schema_hashes"
           )
           md <- format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")

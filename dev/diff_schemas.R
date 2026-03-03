@@ -76,6 +76,12 @@ diff_single_schema <- function(old_path, new_path) {
     old_spec <- suppressMessages(openapi_to_spec(old_json))
     new_spec <- suppressMessages(openapi_to_spec(new_json))
 
+    # Filter out admin/auth/metadata/version endpoints
+    if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+      old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+      new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+    }
+
     # Create endpoint keys as "{METHOD} {route}"
     old_spec <- old_spec %>%
       mutate(endpoint_key = paste(method, route))
@@ -262,6 +268,11 @@ diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$", stage_priority 
         new_json <- jsonlite::fromJSON(new_path, simplifyVector = FALSE)
         new_spec <- suppressMessages(openapi_to_spec(new_json))
 
+        # Filter out admin/auth/metadata/version endpoints
+        if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+          new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+        }
+
         results[[file]] <- list(
           schema_file = file,
           added = new_spec %>% select(route, method, summary),
@@ -286,6 +297,11 @@ diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$", stage_priority 
         }
         old_json <- jsonlite::fromJSON(old_path, simplifyVector = FALSE)
         old_spec <- suppressMessages(openapi_to_spec(old_json))
+
+        # Filter out admin/auth/metadata/version endpoints
+        if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+          old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+        }
 
         results[[file]] <- list(
           schema_file = file,
