@@ -2085,6 +2085,10 @@
           },
           "image": {
             "type": "string"
+          },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
           }
         }
       },
