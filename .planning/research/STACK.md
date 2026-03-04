@@ -1,303 +1,386 @@
 # Technology Stack
 
-**Project:** ComptoxR Test Infrastructure & Build Fixes (v2.1)
-**Researched:** 2026-02-26
+**Project:** ComptoxR v2.2 Package Stabilization
+**Researched:** 2026-03-04
 
-## Recommended Stack
+## Executive Summary
 
-### Core Testing Framework
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| testthat | 3.3.2 | Unit testing framework | Current CRAN version (2026-01-11). Edition 3 required for modern test organization, snapshot testing, parallel execution. Already validated in existing infrastructure. |
-| vcr | 2.1.0 | HTTP cassette recording | Current CRAN version (2025-12-05). Proven to work with 706 existing cassettes. Native integration with httr2 via webmockr. |
-| withr | Latest | Temporary state management | Already in Suggests. Essential for test isolation (temp dirs, env vars, options). |
+ComptoxR v2.2 migrates remaining ct_* functions to use centralized request templates (`generic_request()` and `generic_chemi_request()`) while stabilizing the package with lifecycle badges and comprehensive testing. The existing stack already provides all core capabilities—no new framework dependencies are needed. The migration requires only leveraging existing R package development tools (lifecycle, testthat, vcr, roxygen2) that are already in DESCRIPTION.
 
-**NO CHANGES NEEDED** - These are the EXACT versions already working in the project.
+**Key Finding:** This is a stabilization milestone, not a feature expansion. The stack is complete—we need workflow discipline, not new packages.
 
-### Coverage Infrastructure
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| covr | 3.6.5 | Code coverage calculation | Current CRAN version. Already integrated with Codecov. Supports package_coverage() and file_coverage() for granular R/ vs dev/ enforcement. |
-| Codecov GHA | v4 | Coverage upload & reporting | Already configured in pipeline-tests.yml and test-coverage.yml. Threshold enforcement handled in R code (pipeline-tests.yml lines 55-85), not Codecov config, for R/dev separation. |
+---
 
-**NO CHANGES NEEDED** - Current setup enforces thresholds correctly (R/ >=75%, dev/ >=80%) via Rscript in CI.
+## Core Stack (Existing - No Changes)
 
-### Build Validation
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| rcmdcheck | Latest via r-lib/actions | R CMD check automation | Used via r-lib/actions/check-r-package@v2 in test-coverage.yml. Detects syntax errors, documentation mismatches, license issues, non-ASCII chars. |
-| devtools | Via Imports (not needed) | Local dev workflow | Currently used via :: calls (warning in TODO). Move to Suggests if keeping, or replace with direct calls to underlying packages (pkgbuild, roxygen2). |
+All core dependencies are already in DESCRIPTION and functional.
 
-**DECISION REQUIRED**: Fix devtools dependency warning by adding to Suggests or removing :: calls.
+### HTTP Client & Request Handling
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| httr2 | 1.2.1 | HTTP client | Modern pipeable API with built-in retries, rate limiting, OAuth support. Successor to httr. |
+| jsonlite | ≥ 1.8.8 | JSON parsing | Fast, reliable JSON handling. Industry standard for R. |
 
-### VCR Cassette Management at Scale
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| fs | 1.6.6 | Cross-platform file ops | NOT currently used, but recommended for cassette bulk operations. Provides fs::dir_ls(), fs::file_delete() with better error handling and cross-platform paths than base R. |
-| Custom helper | N/A | Bulk cassette operations | Extend existing tests/testthat/helper-vcr.R with fs-based helpers. Pattern-based deletion already documented (CLAUDE.md), needs implementation. |
+**Integration point:** `generic_request()` and `generic_chemi_request()` in `R/z_generic_request.R` already handle all HTTP operations. Migration requires zero changes to HTTP stack.
 
-**IMPLEMENTATION NEEDED**: Add fs to Suggests, implement delete_all_cassettes() and delete_cassettes(pattern) in helper-vcr.R.
+### Data Manipulation (Tidyverse)
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| dplyr | ≥ 1.1.4 (CRAN: 1.2.0) | Data transformation | Table joins for `ct_bioactivity(annotate=TRUE)`, filtering, mutating post-processed results. |
+| tidyr | ≥ 1.3.1 | Data reshaping | Unnesting list-columns, pivoting API responses. Used in post-processing patterns. |
+| purrr | ≥ 1.0.2 | Functional programming | Mapping over batches, list operations in `ct_lists_all(coerce=TRUE)`. |
+| tibble | (installed) | Data frames | Tidy tibble output via `safe_tidy_bind()`. |
 
-### Test Generation Automation
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| Custom generator | N/A | Metadata-based test creation | tests/testthat/tools/helper-test-generator-v2.R already exists. Uses function signature extraction + parameter type detection. Generate via tests/generate_tests_v2.R script. |
-| roxygen2 | 7.3.3 | Function metadata source | Extract @param, @return, @examples from generated stubs. Already RoxygenNote: 7.3.3 in DESCRIPTION. |
+**Integration point:** Post-processing wrappers like `ct_lists_all()` use dplyr/tidyr/purrr for transformations after calling generated stubs. Versions already meet requirements (dplyr 1.2.0 has `filter_out()`, `recode_values()` but not needed for migration).
 
-**NO NEW TOOLS NEEDED** - Test generation infrastructure complete. Focus on fixing generator logic (parameter type detection, tidy flag matching).
+### String Processing
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| stringr | ≥ 1.5.1 | String operations | Splitting DTXSID strings (`ct_lists_all(coerce=TRUE)`), pattern matching. |
+| stringi | (installed) | Unicode handling | Dependency of stringr, handles unicode normalization. |
 
-### CI Automation & Reporting
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| GitHub Actions | N/A | Workflow automation | 11 existing workflows. pipeline-tests.yml already set up for integration testing. |
-| r-lib/actions | Latest | R-specific GHA steps | setup-r@v2, setup-r-dependencies@v2, check-r-package@v2. Standard ecosystem actions, auto-updated by Dependabot. |
-| cli (R pkg) | Already in Imports | Progress reporting | Already used throughout codebase. Use cli::cli_progress_bar() for cassette re-recording, cli::cli_alert_*() for status. |
+**Integration point:** Used in post-processing patterns for string splitting, cleaning.
 
-**NO CHANGES NEEDED** - CI infrastructure complete. Add progress reporting to scripts via existing cli package.
+### Package Development
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| roxygen2 | 7.3.3 | Documentation generation | Converts roxygen comments to .Rd files. Supports lifecycle badges via inline R (`r lifecycle::badge("stable")`). |
+| devtools | 2.4.5 | Development workflow | Orchestrates `document()`, `check()`, `test()`, `install()`. Modular architecture delegates to pkgload, pkgbuild, rcmdcheck. |
 
-### Build Error Detection
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| rcmdcheck | (see above) | Syntax/doc validation | Catches "RF" <- invalid syntax, duplicate args, roxygen @param mismatches. |
-| lintr | Optional (not needed) | Static analysis | Would catch additional style issues, but TODO items are rcmdcheck errors, not style violations. Skip to avoid scope creep. |
-| styler | Optional (not needed) | Code formatting | NOT needed for build fixes. Stub generator already formats code. Skip. |
+**Integration point:** `devtools::document()` regenerates man/ files after adding lifecycle badges. No changes needed—workflow already established.
 
-**SKIP NEW TOOLS** - rcmdcheck catches all current build errors. Don't add lintr/styler unless user explicitly requests.
+---
 
-## Supporting Libraries
+## Lifecycle Management (Existing - Active Use)
 
-### Already in Use (Keep)
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| httr2 | 1.2.1+ | HTTP client | All API wrappers. Note: TODO.md flags missing httr2 functions (resp_is_transient, resp_status_class) - verify httr2 version meets minimum or refactor retry logic. |
-| jsonlite | >= 1.8.8 | JSON parsing | Schema parsing, API responses. |
-| dplyr | >= 1.1.4 | Data manipulation | Test helpers, coverage scripts. |
-| here | Already in Imports | Path management | Schema loading, cassette paths. |
-| stringr | >= 1.5.1 | String manipulation | Pattern matching for cassette management. |
-| purrr | >= 1.0.2 | Functional programming | Batch operations, test generation. |
+### lifecycle Package
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| lifecycle | 1.0.5 | Function lifecycle badges | Standard tidyverse approach to signaling function stability. Already imported in DESCRIPTION. |
 
-### Consider Adding to Suggests
-| Library | Rationale |
-|---------|-----------|
-| fs | Cassette bulk operations (706 files to manage). Better than base file.remove() for scale. |
+**Current usage:**
+- 409 functions already have lifecycle badges (per grep count)
+- `ct_hazard()`, `ct_lists_all()`, `ct_bioactivity()` marked `@lifecycle stable`
+- Badge inserted via roxygen: `#' @description` then `#' ` `r lifecycle::badge("stable")`
 
-### DO NOT ADD
-| Library | Why Skip |
-|---------|----------|
-| patrick | Parameterized testing - test generator already handles parameter variations via metadata. Adding would duplicate functionality. |
-| xpectr | Test expectation generation - custom generator (helper-test-generator-v2.R) already built and tailored to API wrapper patterns. xpectr is generic, wouldn't understand tidy flags or endpoint-specific patterns. |
-| tinytest | Alternative test framework - already committed to testthat 3. |
-| RUnit | Legacy framework - incompatible with vcr integration. |
-| lintr | Static analysis - not needed for current build errors. Adds CI time. |
-| styler | Code formatter - stub generator already formats. Not a build blocker. |
-| roxytest | Inline tests - API wrappers need integration tests with real HTTP, not unit tests. |
-
-## Alternatives Considered
-
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| HTTP testing | vcr 2.1.0 | httptest2 | vcr already validated with 706 cassettes. httptest2 would require rewriting all tests. |
-| Coverage | covr 3.6.5 | covr + DT for HTML reports | DT adds heavy dependency for minimal gain. Codecov web UI provides better reporting. |
-| File ops | fs 1.6.6 | base file.* functions | Base R works but fs provides better errors and cross-platform consistency. Low-risk addition. |
-| Test generation | Custom (metadata-based) | xpectr | xpectr doesn't understand API wrapper patterns (tidy flags, DTXSID vs limit params, bulk vs single). Custom generator already built. |
-| CI coverage | covr + Rscript thresholds | Codecov YAML config | Current approach enforces R/ (>=75%) and dev/ (>=80%) separately. Codecov config would apply single threshold to both. |
-
-## Installation
-
-### Core Dependencies (Already Satisfied)
+**Migration pattern:**
 ```r
-# From DESCRIPTION - no changes needed
-Imports: cli, dplyr, httr2, jsonlite, purrr, stringr, here, ...
-Suggests: vcr, withr, ...
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Retrieves hazard data by DTXSID.
 ```
 
-### Recommended Addition
+**Stages used in v2.2:**
+- **stable**: User-facing ct_* functions after migration passes tests
+- **experimental**: (implicit) Generated stubs (not user-facing, may change with schema updates)
+
+**Protection mechanism:**
+- Stub generator checks for lifecycle badges in roxygen comments
+- Functions marked `stable` are NOT overwritten during regeneration
+- Enables safe coexistence of stable wrappers and generated stubs
+
+**Source:** [lifecycle package CRAN](https://cran.r-project.org/package=lifecycle), [Lifecycle stages documentation](https://lifecycle.r-lib.org/articles/stages.html)
+
+---
+
+## Testing Infrastructure (Existing - No Changes)
+
+### Test Framework
+| Technology | Current Version | Purpose | Why |
+|------------|-----------------|---------|-----|
+| testthat | 3.2.3 (CRAN: 3.3.2) | Unit testing | Industry standard. Parallel test execution via `Config/testthat/parallel: true`. |
+| vcr | 2.1.0 | HTTP replay | Records API interactions to YAML cassettes. Works with httr, httr2, crul. No internet required after recording. |
+| webmockr | (suggested) | HTTP mocking | Dependency of vcr. Provides request matching and replay. |
+
+**Current test coverage:**
+- 256 API wrapper functions
+- 33 have VCR cassettes recorded
+- 297 pre-existing test failures (VCR/API key issues)
+- Test generator in `dev/generate_tests.R` creates metadata-aware tests
+
+**VCR workflow (already established):**
+1. First run: Requires API key, hits production, records to `tests/testthat/fixtures/*.yml`
+2. Subsequent runs: Replays from cassettes (no API key needed)
+3. CI runs: Use recorded cassettes (no live API calls)
+
+**Cassette management helpers:**
 ```r
-# Add to Suggests in DESCRIPTION
-Suggests:
-    ...existing...,
-    fs (>= 1.6.0)
+# In tests/testthat/helper-vcr.R
+list_cassettes()                  # List all cassettes
+delete_cassettes("ct_hazard*")    # Delete by pattern
+check_cassette_safety()           # Verify no leaked API keys
+check_cassette_errors(delete=TRUE) # Find/delete 4xx/5xx responses
 ```
 
-### Local Development Setup
+**Integration point:** Migration tests use same VCR pattern as existing tests. No new testing patterns required.
+
+**Sources:**
+- [vcr package documentation](https://docs.ropensci.org/vcr/)
+- [Using vcr • HTTP testing in R](https://books.ropensci.org/http-testing/vcr.html)
+- [testthat 3.3.2 CRAN](https://cran.r-project.org/web/packages/testthat/testthat.pdf)
+
+### Alternative: httptest2 (Evaluated - NOT Recommended)
+
+| Technology | Version | Purpose | Why NOT |
+|------------|---------|---------|---------|
+| httptest2 | (available) | Alternative HTTP mocking | Would require rewriting 33+ existing cassettes. vcr already works with httr2. Migration cost > benefit. |
+
+**Decision:** Stay with vcr. It already supports httr2, has 33 cassettes recorded, and provides cassette management helpers.
+
+**Source:** [httptest2 documentation](https://enpiar.com/httptest2/articles/httptest2.html)
+
+---
+
+## Migration-Specific Patterns
+
+### Pattern 1: Thin Wrapper (ct_hazard)
+**Stack requirement:** None beyond generic_request()
+
 ```r
-# Install/update test dependencies
-install.packages(c("testthat", "vcr", "withr", "covr", "fs"))
-
-# Verify versions
-packageVersion("testthat")  # Should be 3.3.2
-packageVersion("vcr")       # Should be 2.1.0
-packageVersion("covr")      # Should be 3.6.5
+ct_hazard <- function(query) {
+  ct_hazard_toxval_search_bulk(query = query)
+}
 ```
 
-## Integration Points
+**Testing:** Standard VCR cassette, expects tibble output.
 
-### Test Generation Pipeline
-```
-Function stub (R/*.R)
-  → roxygen2 docs (@param, @return, @examples)
-  → helper-function-metadata.R (extract_function_metadata)
-  → helper-test-generator-v2.R (generate test code)
-  → tests/testthat/test-*.R (write file)
-  → vcr (record cassettes on first run)
-```
+### Pattern 2: Dispatcher with Post-Processing (ct_bioactivity)
+**Stack requirement:** dplyr (already imported)
 
-**Key integration:** Test generator reads tidy parameter from generic_request() calls to determine if function returns tibble or list. Must parse actual function body, not just signature.
+```r
+ct_bioactivity <- function(query, search_type, annotate = FALSE) {
+  df <- switch(search_type,
+    "dtxsid" = ct_bioactivity_data_search_bulk(query),
+    "aeid"   = ct_bioactivity_data_search_by_aeid_bulk(query),
+    ...
+  )
 
-### VCR Cassette Lifecycle
-```
-First test run (with API key)
-  → vcr::use_cassette() intercepts httr2
-  → HTTP request to production API
-  → Response saved to tests/testthat/fixtures/*.yml
-  → API key filtered via vcr_configure(filter_sensitive_data)
+  if (annotate) {
+    bioassay_all <- ct_bioactivity_assay()
+    df <- dplyr::left_join(df, bioassay_all, by = "aeid")
+  }
 
-Subsequent runs (no API key needed)
-  → vcr::use_cassette() loads fixture
-  → webmockr blocks real HTTP
-  → Tests run against recorded response
+  return(df)
+}
 ```
 
-**Key integration:** helper-vcr.R configures filter_sensitive_data. Must be sourced before any vcr::use_cassette() calls (currently in tests/testthat/helper-vcr.R, loaded automatically by testthat).
+**Testing:** Multiple cassettes (one per search_type, one for annotate=TRUE). VCR can handle multiple cassettes per test file.
 
-### Coverage Enforcement
+### Pattern 3: Conditional Post-Processing (ct_lists_all)
+**Stack requirement:** dplyr, purrr, stringr (already imported)
+
+```r
+ct_lists_all <- function(return_dtxsid = FALSE, coerce = FALSE) {
+  projection <- if (!return_dtxsid) "chemicallistall" else "chemicallistwithdtxsids"
+  df <- ct_chemical_list_all(projection = projection)
+
+  if (return_dtxsid & coerce) {
+    df <- df %>%
+      split(.$listName) %>%
+      purrr::map(~ {
+        .x$dtxsids <- stringr::str_split(.x$dtxsids, ",")[[1]]
+        .x
+      })
+  }
+
+  return(df)
+}
 ```
-CI workflow (pipeline-tests.yml or coverage-check.yml)
-  → covr::package_coverage() (R/ package code)
-  → covr::file_coverage() (dev/ internal code)
-  → Rscript threshold checks (R/ >= 75%, dev/ >= 80%)
-  → covr::codecov() uploads to Codecov (R/ only, dev/ excluded)
-```
 
-**Key integration:** Codecov receives R/ package coverage only. Dev/ coverage enforced in CI but not uploaded (internal tooling, not shipped code).
+**Testing:** Multiple cassettes for projection variants. Test coerce logic separately with pre-recorded data.
 
-### Build Validation
-```
-git push
-  → GitHub Actions (test-coverage.yml or R-CMD-check.yml)
-  → r-lib/actions/setup-r-dependencies (install pkg + suggests)
-  → devtools::test() (run tests with vcr)
-  → r-lib/actions/check-r-package (R CMD check)
-  → rcmdcheck detects syntax errors, doc mismatches, warnings
-  → Fail CI if errors/warnings present
-```
-
-**Key integration:** R CMD check runs AFTER tests pass. Tests use recorded cassettes (no API key needed in CI for existing cassettes).
-
-## Version Compatibility
-
-### Minimum R Version
-- **Current:** R >= 3.5.0 (DESCRIPTION)
-- **Issue:** Native pipe |> used in 7 files requires R >= 4.1.0 (TODO.md line 38)
-- **Fix:** Update DESCRIPTION to `Depends: R (>= 4.1.0)`
-
-### httr2 Version Issue
-- **Problem:** Code references httr2::resp_is_transient and httr2::resp_status_class but these don't exist in installed httr2 (TODO.md line 20)
-- **Solutions:**
-  1. Update minimum httr2 version if functions exist in newer release
-  2. Refactor retry logic to use req_retry(is_transient = ...) pattern (httr2 >= 1.0.0)
-- **Verify:** Check httr2 1.2.1 changelog for these function names
-
-### testthat Edition
-- **Required:** Edition 3 (already configured via Config/testthat/edition: 3)
-- **Features used:** Parallel testing, snapshot tests, modern expect_* functions
-- **DO NOT downgrade** to Edition 2
-
-## Sources
-
-### Current Package Versions
-- [testthat 3.3.2 (2026-01-11)](https://cran.r-project.org/web/packages/testthat/testthat.pdf)
-- [vcr 2.1.0 (2025-12-05)](https://cran.r-project.org/web/packages/vcr/vcr.pdf)
-- [covr 3.6.5 documentation](https://covr.r-lib.org/)
-- [httr2 1.2.1 on CRAN](https://cran.r-project.org/package=httr2)
-- [fs 1.6.6 documentation](https://fs.r-lib.org/)
-
-### Testing Best Practices
-- [HTTP testing in R - Managing cassettes](https://books.ropensci.org/http-testing/managing-cassettes.html)
-- [vcr Getting Started](https://cran.r-project.org/web/packages/vcr/vignettes/vcr.html)
-- [httr2 request retry documentation](https://httr2.r-lib.org/reference/req_retry.html)
-
-### CI Integration
-- [Codecov GitHub Actions integration](https://about.codecov.io/tool/github-actions/)
-- [How to Generate Code Coverage Reports with GitHub Actions (2026-01-27)](https://oneuptime.com/blog/post/2026-01-27-code-coverage-reports-github-actions/view)
-- [R Package CI automation - r-lib/actions](https://github.com/r-lib/actions)
-
-### Test Generation
-- [xpectr - R test generation](https://github.com/LudvigOlsen/xpectr) (evaluated but not recommended)
-- [testthat documentation](https://testthat.r-lib.org/)
-
-## Implementation Notes
-
-### Priority 1: Fix Build Blockers (No New Dependencies)
-1. Invalid syntax in chemi_arn_cats_bulk - stub generator bug
-2. Duplicate endpoint args - stub generator bug
-3. httr2 function references - verify version or refactor
-4. Update DESCRIPTION R version to >= 4.1.0 for native pipe
-
-**Tools:** rcmdcheck (already in CI), stub generator fixes (dev/endpoint_eval/)
-
-### Priority 2: Fix Test Infrastructure (Minimal New Dependencies)
-1. Add fs to Suggests for cassette management
-2. Implement delete_all_cassettes() and delete_cassettes(pattern) in helper-vcr.R
-3. Fix test generator parameter type detection (helper-test-generator-v2.R)
-4. Fix test generator tidy flag matching (read actual function body)
-
-**Tools:** fs (add to Suggests), custom test generator (already exists)
-
-### Priority 3: Cassette Re-recording (Use Existing Tools)
-1. Run delete_all_cassettes() to nuke 706 fixtures
-2. Set ctx_api_key env var
-3. Run devtools::test() to re-record from production
-4. Run devtools::test() again to verify cassettes work
-5. Use check_cassette_safety() to verify no exposed keys
-6. Commit cassettes
-
-**Tools:** vcr (already installed), custom helpers (implement in helper-vcr.R)
-
-### Priority 4: CI Enhancements (No New Dependencies)
-1. Add cli progress bars to cassette re-recording script
-2. Add workflow dispatch input for "re-record cassettes" flag (already in pipeline-tests.yml line 9)
-3. Improve coverage reporting with file-level breakdown
-
-**Tools:** cli (already in Imports), GitHub Actions (already configured)
+---
 
 ## What NOT to Add
 
-### Avoided: Test Generation Tools
-- **xpectr** - Generic test generator doesn't understand API wrapper patterns (tidy flags, DTXSID vs other params, bulk vs single requests). Custom generator (helper-test-generator-v2.R) already tailored to ComptoxR patterns.
-- **patrick** - Parameterized testing adds complexity. Custom generator handles parameter variations via metadata extraction.
-- **roxytest** - Inline tests inappropriate for API wrappers requiring live HTTP (or cassettes).
+### S7 Classes
+**Status:** Deferred to post-v2.2 (#29)
+**Why:** Migration focuses on function stabilization, not return type refactoring. S7 would require changing all return types, breaking user code.
 
-### Avoided: Static Analysis Tools
-- **lintr** - Build errors are syntax/logic issues, not style violations. Adding lintr increases CI time without solving current blockers.
-- **styler** - Stub generator already formats code. Not needed for build fixes.
+### Post-Processing Recipe System
+**Status:** Deferred (#120)
+**Why:** Only 3-4 functions have complex post-processing (ct_bioactivity, ct_lists_all, ct_details). Recipe system is over-engineering until proven pattern emerges from more migrations.
 
-### Avoided: Alternative Testing Frameworks
-- **httptest2** - Would require rewriting 706 VCR cassettes. vcr working fine.
-- **tinytest** - Already committed to testthat 3. No migration path.
-- **RUnit** - Legacy framework, incompatible with vcr.
+### Advanced Schema Handling
+**Status:** Deferred (ADV-01-04)
+**Why:** Stub generation pipeline is complete and functional. Advanced features (nested schemas, $allOf, discriminators) not needed for current OpenAPI schemas.
 
-### Avoided: Heavy Dependencies
-- **DT** - HTML coverage reports add 10+ dependency packages. Codecov web UI provides better reporting.
-- **shiny** - No need for interactive test runners. CI-first workflow.
+### Parallel Page Fetching
+**Status:** Out of scope
+**Why:** EPA API rate limits make sequential safer. Pagination engine (v2.0) handles offset/limit, page/size, cursor, and path-based strategies sequentially.
+
+### Session Caching
+**Status:** Out of scope
+**Why:** Separate concern. Package already uses `.ComptoxREnv` for compiled regex caching, but result caching belongs in user space.
+
+---
+
+## Installation
+
+### Required (Already in DESCRIPTION)
+```r
+# Core dependencies (Imports)
+install.packages(c(
+  "httr2", "jsonlite",           # HTTP & JSON
+  "dplyr", "tidyr", "purrr", "tibble", # Data manipulation
+  "stringr", "stringi",           # String processing
+  "cli", "lifecycle", "rlang",    # Package infrastructure
+  "glue", "here", "magrittr", "scales" # Utilities
+))
+
+# Development dependencies (Suggests)
+install.packages(c(
+  "testthat", "vcr", "webmockr",  # Testing
+  "roxygen2", "devtools",         # Documentation & workflow
+  "mockery", "withr"              # Test utilities
+))
+```
+
+### Version Constraints
+- R (>= 3.5.0): Wide compatibility, no cutting-edge features required
+- dplyr (>= 1.1.4): Need `across()`, `where()` selectors. Current CRAN (1.2.0) exceeds requirement.
+- jsonlite (>= 1.8.8): Security and performance fixes
+- stringr (>= 1.5.1): Improved regex handling
+- tidyr (>= 1.3.1): Modern unnesting functions
+
+**All constraints already satisfied by current CRAN versions.**
+
+---
+
+## Development Workflow (Unchanged)
+
+### Documentation Regeneration
+```r
+devtools::document()  # Regenerate man/ from roxygen comments
+```
+
+Run after:
+- Adding lifecycle badges to ct_* functions
+- Migrating function to use generated stub
+- Changing parameter signatures
+
+### Testing
+```r
+devtools::test()                              # Run all tests
+testthat::test_file("tests/testthat/test-ct_hazard.R")  # Run specific test
+
+# VCR cassette management (first run requires API key)
+source("tests/testthat/helper-vcr.R")
+delete_cassettes("ct_hazard*")                # Re-record cassette
+check_cassette_safety()                       # Verify no leaked keys
+```
+
+### Package Check
+```r
+devtools::check()  # R CMD check (comprehensive validation)
+```
+
+Target: 0 errors, 0 warnings before marking functions `stable`.
+
+---
+
+## Integration Points
+
+### Stub Generator → User-Facing Wrappers
+**File:** `dev/endpoint_eval/07_stub_generation.R`
+
+**Lifecycle protection:**
+```r
+# Stub generator checks roxygen comments for lifecycle badges
+# If badge == "stable", skip overwriting that function
+# Allows safe regeneration without clobbering stable wrappers
+```
+
+**Migration workflow:**
+1. Generate stub (e.g., `ct_hazard_toxval_search_bulk()`)
+2. Create thin wrapper (`ct_hazard()`) that calls stub
+3. Test wrapper with VCR
+4. Add `@lifecycle stable` badge
+5. Run `devtools::document()`
+6. Future stub regeneration skips wrapper, regenerates underlying stub
+
+### Test Generator → Migration Tests
+**File:** `dev/generate_tests.R`
+
+**Metadata extraction:**
+- Reads function signatures via `extract_function_formals()`
+- Detects `tidy` flag from `generic_request()` calls in function body
+- Generates tests expecting tibble output if `tidy=TRUE`
+- Handles static endpoints (no parameters) correctly
+
+**Migration workflow:**
+1. Migrate ct_* function to use stub
+2. Run test generator: `source("dev/generate_tests.R")`
+3. Record cassette on first test run (requires API key)
+4. Subsequent runs replay cassette
+
+### Generic Request Templates → All Functions
+**File:** `R/z_generic_request.R`
+
+**Already handles:**
+- Batching (default: 200 items per POST)
+- Authentication (x-api-key header)
+- Retries (exponential backoff for 429/5xx)
+- POST vs GET method selection
+- Path parameters (`path_params` vector)
+- Projection parameters
+- Tidy conversion via `safe_tidy_bind()`
+
+**No changes needed for migration.**
+
+---
 
 ## Confidence Assessment
 
-| Area | Confidence | Reasoning |
-|------|------------|-----------|
-| Core stack | HIGH | testthat 3.3.2, vcr 2.1.0, covr 3.6.5 verified via CRAN. Already working in project (706 cassettes, 11 CI workflows). |
-| fs addition | MEDIUM | Version 1.6.6 verified via CRAN. Standard r-lib package, low risk. Not critical path - base R file ops work, fs just cleaner. |
-| httr2 version issue | LOW | resp_is_transient and resp_status_class referenced but not found. Need to check httr2 1.2.1 docs to verify if functions exist or if retry logic needs refactor. |
-| Test generator fixes | HIGH | helper-test-generator-v2.R exists and documented. Issues are logic bugs (wrong param types, tidy flag mismatch), not missing tools. |
-| Cassette management | MEDIUM | Pattern exists in docs (CLAUDE.md shows delete_all_cassettes, delete_cassettes), but not implemented in helper-vcr.R. Implementation straightforward with fs. |
-| CI integration | HIGH | 11 existing workflows, pipeline-tests.yml already enforces R/dev coverage separately. No new tools needed, just script improvements. |
+| Area | Confidence | Notes |
+|------|------------|-------|
+| HTTP stack | HIGH | httr2 1.2.1 in production, generic_request() proven with 14 functions |
+| Testing infrastructure | HIGH | vcr 2.1.0 supports httr2, 33 cassettes recorded, helper functions work |
+| Lifecycle management | HIGH | lifecycle 1.0.5 stable, 409 functions already badged, stub generator protection works |
+| Development workflow | HIGH | devtools 2.4.5, roxygen2 7.3.3 in daily use, R CMD check passes (v2.1) |
+| Migration patterns | MEDIUM | Thin wrappers proven (ct_hazard), dispatcher patterns proven (ct_bioactivity), but 20+ functions untested |
+| Post-processing complexity | MEDIUM | ct_lists_all pattern works, but edge cases may emerge in complex functions |
 
-## Open Questions
+## Gaps & Risks
 
-1. **httr2 minimum version:** Does httr2 1.2.1 include resp_is_transient and resp_status_class, or were these removed? If removed, what's the modern equivalent for req_retry(is_transient = ...)?
+### Identified Gaps
+1. **Test coverage:** Only 33/256 functions have VCR cassettes. Migration will require recording cassettes for 20+ functions.
+2. **Undocumented post-processing patterns:** May discover new patterns beyond thin wrapper / dispatcher / conditional logic.
+3. **Edge cases in generated stubs:** Some ct_* functions may expose bugs in stub generation (e.g., incorrect parameter mapping, missing pagination).
 
-2. **devtools dependency:** Keep in Suggests or remove :: calls? Used for document(), test(), check() but these can be called via roxygen2::, testthat::, rcmdcheck:: directly.
+### Mitigation Strategies
+1. **Test coverage:** Prioritize cassette recording for high-traffic functions first (hazard, bioactivity, lists). Batch recording sessions with API key set.
+2. **Pattern discovery:** Document patterns as discovered in ARCHITECTURE.md (deferred to ARCHITECTURE research). Extract to recipe system only if 5+ functions share complex pattern.
+3. **Stub edge cases:** Test-driven migration—if stub doesn't work, fix stub generator, regenerate, retest. Use lifecycle protection to avoid overwriting stable wrappers.
 
-3. **Test generation scope:** Generate tests for ALL 250+ exported functions, or only new stubs? README.md suggests metadata-based generator (v2) exists but TODO.md shows 834+ test failures from auto-generated tests - indicates generator needs fixes before mass regeneration.
+---
 
-4. **Cassette re-recording strategy:** Delete all 706 and re-record, or delete only the 673 untracked (per TODO.md) that have wrong parameter values? Full re-record safer but requires API key + rate limit management.
+## Sources
+
+**R Package Development:**
+- [R Packages (2e)](https://r-pkgs.org/) — Comprehensive guide to package development
+- [devtools package](https://devtools.r-lib.org/) — Development workflow tools
+- [roxygen2 documentation](https://roxygen2.r-lib.org/) — In-line documentation system
+
+**Lifecycle Management:**
+- [lifecycle package CRAN](https://cran.r-project.org/package=lifecycle) — Official package page
+- [Lifecycle stages](https://lifecycle.r-lib.org/articles/stages.html) — Badge types and usage
+- [Lifecycle badges in roxygen](https://lifecycle.r-lib.org/reference/badge.html) — Embedding badges in documentation
+
+**Testing & HTTP Mocking:**
+- [testthat package](https://testthat.r-lib.org/) — Unit testing framework
+- [vcr package documentation](https://docs.ropensci.org/vcr/) — HTTP replay library
+- [Using vcr • HTTP testing in R](https://books.ropensci.org/http-testing/vcr.html) — VCR usage guide
+- [httptest2 documentation](https://enpiar.com/httptest2/articles/httptest2.html) — Alternative HTTP mocking (not recommended)
+- [httr2 wrapping APIs guide](https://httr2.r-lib.org/articles/wrapping-apis.html) — Best practices for API wrappers
+
+**Package Versions:**
+- [dplyr 1.2.0 release notes](https://tidyverse.org/blog/2026/02/dplyr-1-2-0/) — Latest dplyr features
+- [purrr CRAN page](https://cran.r-project.org/web/packages/purrr/purrr.pdf) — Functional programming tools
+- [cli package CRAN](https://cran.r-project.org/package=cli) — CLI helpers (version 3.6.4)
+
+---
+
+**Last Updated:** 2026-03-04
+**Overall Confidence:** HIGH — Stack is complete and proven. Migration requires workflow discipline, not new dependencies.
