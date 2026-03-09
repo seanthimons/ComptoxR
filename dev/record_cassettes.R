@@ -201,7 +201,7 @@ writeLines("", log_conn)
 # Track overall results
 all_results <- list()
 
-# Process each family sequentially (parallel within family)
+# Process each family sequentially (parallel unique test files within family)
 for (family in families) {
   cli_h2("Family: {family}")
 
@@ -217,53 +217,62 @@ for (family in families) {
     next
   }
 
-  cli_alert_info("Recording {length(cassettes_to_record)} cassette{?s} ({n_skipped} skipped)")
+  # Deduplicate: get unique test files for this family
+  # Running a test file once records ALL its cassettes
+  unique_test_files <- unique(unlist(cassette_to_test[cassettes_to_record]))
 
-  # Delete existing cassettes for this family
+  cli_alert_info("Recording {length(cassettes_to_record)} cassette{?s} via {length(unique_test_files)} test file{?s} ({n_skipped} skipped)")
+
+  # Delete existing cassettes for this family so VCR re-records them
   for (cassette in cassettes_to_record) {
     if (fs::file_exists(cassette)) {
       fs::file_delete(cassette)
     }
   }
 
-  # Submit parallel tasks
+  # Submit parallel tasks — one per unique test file
+  pkg_dir <- here::here()
   family_results <- mirai_map(
-    cassettes_to_record,
-    function(cassette_path) {
+    unique_test_files,
+    function(test_file) {
       tryCatch({
-        # Load required libraries in worker
-        library(testthat)
+        # Set working directory to package root so VCR helper finds fixtures
+        setwd(pkg_dir)
 
-        # Get test file from mapping (passed via closure)
-        test_file <- cassette_to_test_map[[cassette_path]]
+        # Source VCR helper to configure cassette dir and sanitization
+        source(file.path(pkg_dir, "tests/testthat/helper-vcr.R"), local = TRUE)
 
-        # Run test file (this records the cassette via VCR)
-        test_result <- testthat::test_file(test_file, reporter = "minimal")
+        # Run the test file — VCR records any missing cassettes
+        test_result <- testthat::test_file(
+          test_file,
+          reporter = testthat::MinimalReporter$new()
+        )
 
         list(
           success = TRUE,
-          cassette = cassette_path,
-          test_file = test_file
+          test_file = test_file,
+          n_tests = sum(vapply(test_result, function(r) length(r$results), integer(1)))
         )
       }, error = function(e) {
         list(
           success = FALSE,
-          cassette = cassette_path,
+          test_file = test_file,
           error = e$message
         )
       })
     },
-    .args = list(cassette_to_test_map = cassette_to_test)
+    .args = list(pkg_dir = pkg_dir)
   )
 
-  # Analyze results
-  successes <- sum(vapply(family_results, function(r) r$success, logical(1)))
-  failures <- length(family_results) - successes
-  failure_rate <- failures / length(family_results)
+  # Collect results safely (mirai errors may not be lists)
+  n_files <- length(family_results)
+  successes <- sum(vapply(family_results, function(r) isTRUE(r$success), logical(1)))
+  failures <- n_files - successes
+  failure_rate <- if (n_files > 0) failures / n_files else 0
 
   # Log results
   writeLines(paste("Family:", family), log_conn)
-  writeLines(paste("  Total:", length(family_results)), log_conn)
+  writeLines(paste("  Test files:", n_files), log_conn)
   writeLines(paste("  Success:", successes), log_conn)
   writeLines(paste("  Failures:", failures), log_conn)
   writeLines(paste("  Failure rate:", sprintf("%.1f%%", failure_rate * 100)), log_conn)
@@ -271,26 +280,40 @@ for (family in families) {
 
   # Store results
   all_results[[family]] <- list(
-    total = length(family_results),
+    total = n_files,
     successes = successes,
     failures = failures,
     failure_rate = failure_rate,
+    cassette_count = length(cassettes_to_record),
     results = family_results
   )
 
   # Report
   if (failures > 0) {
-    cli_alert_warning("{failures} failure{?s} ({sprintf('%.1f%%', failure_rate * 100)})")
+    cli_alert_warning("{failures}/{n_files} test file{?s} failed ({sprintf('%.1f%%', failure_rate * 100)})")
 
-    # Log failed cassettes
-    for (result in family_results) {
-      if (!result$success) {
-        cli_alert_danger("  {fs::path_file(result$cassette)}: {result$error}")
-        writeLines(paste("  FAIL:", fs::path_file(result$cassette), "-", result$error), log_conn)
+    # Log failed test files
+    for (i in seq_along(family_results)) {
+      result <- family_results[[i]]
+      if (!isTRUE(result$success)) {
+        err_msg <- if (is.list(result) && !is.null(result$error)) {
+          result$error
+        } else if (inherits(result, "condition")) {
+          conditionMessage(result)
+        } else {
+          "unknown error"
+        }
+        tf <- if (is.list(result) && !is.null(result$test_file)) {
+          fs::path_file(result$test_file)
+        } else {
+          fs::path_file(unique_test_files[[i]])
+        }
+        cli_alert_danger("  {tf}: {err_msg}")
+        writeLines(paste("  FAIL:", tf, "-", err_msg), log_conn)
       }
     }
   } else {
-    cli_alert_success("All {successes} cassette{?s} recorded successfully")
+    cli_alert_success("All {successes} test file{?s} passed — cassettes recorded")
   }
 
   # Check failure threshold
@@ -321,14 +344,16 @@ close(log_conn)
 cli_h1("Recording Summary")
 
 # Calculate totals
-total_cassettes <- sum(vapply(all_results, function(r) r$total, integer(1)))
-total_successes <- sum(vapply(all_results, function(r) r$successes, integer(1)))
-total_failures <- sum(vapply(all_results, function(r) r$failures, integer(1)))
-overall_failure_rate <- total_failures / total_cassettes
+total_test_files <- sum(vapply(all_results, function(r) r$total, numeric(1)))
+total_successes <- sum(vapply(all_results, function(r) r$successes, numeric(1)))
+total_failures <- sum(vapply(all_results, function(r) r$failures, numeric(1)))
+total_cassettes <- sum(vapply(all_results, function(r) r$cassette_count, numeric(1)))
+overall_failure_rate <- if (total_test_files > 0) total_failures / total_test_files else 0
 
 # Display summary table
 cli_alert_info("Overall Results:")
-cli_alert_info("  Total cassettes: {total_cassettes}")
+cli_alert_info("  Test files run: {total_test_files}")
+cli_alert_info("  Cassettes targeted: {total_cassettes}")
 cli_alert_info("  Successful: {total_successes}")
 cli_alert_info("  Failed: {total_failures}")
 cli_alert_info("  Failure rate: {sprintf('%.1f%%', overall_failure_rate * 100)}")
