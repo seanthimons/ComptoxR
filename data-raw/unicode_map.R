@@ -6,28 +6,28 @@
 # Greek Alphabet mapping (both cases -> lowercase)
 greek_map <- c(
   # Lowercase
-  "\u03b1" = ".alpha.", "\u03b2" = ".beta.", "\u03b3" = ".gamma.", "\u03b4" = ".delta.",
-  "\u03b5" = ".epsilon.", "\u03b6" = ".zeta.", "\u03b7" = ".eta.", "\u03b8" = ".theta.",
-  "\u03b9" = ".iota.", "\u03ba" = ".kappa.", "\u03bb" = ".lambda.", "\u03bc" = ".mu.",
-  "\u03bd" = ".nu.", "\u03be" = ".xi.", "\u03bf" = ".omicron.", "\u03c0" = ".pi.",
-  "\u03c1" = ".rho.", "\u03c2" = ".sigma.", "\u03c3" = ".sigma.", "\u03c4" = ".tau.",
-  "\u03c5" = ".upsilon.", "\u03c6" = ".phi.", "\u03c7" = ".chi.", "\u03c8" = ".psi.",
-  "\u03c9" = ".omega.",
+  "\u03b1" = "alpha", "\u03b2" = "beta", "\u03b3" = "gamma", "\u03b4" = "delta",
+  "\u03b5" = "epsilon", "\u03b6" = "zeta", "\u03b7" = "eta", "\u03b8" = "theta",
+  "\u03b9" = "iota", "\u03ba" = "kappa", "\u03bb" = "lambda", "\u03bc" = "mu",
+  "\u03bd" = "nu", "\u03be" = "xi", "\u03bf" = "omicron", "\u03c0" = "pi",
+  "\u03c1" = "rho", "\u03c2" = "sigma", "\u03c3" = "sigma", "\u03c4" = "tau",
+  "\u03c5" = "upsilon", "\u03c6" = "phi", "\u03c7" = "chi", "\u03c8" = "psi",
+  "\u03c9" = "omega",
   # Uppercase
-  "\u0391" = ".alpha.", "\u0392" = ".beta.", "\u0393" = ".gamma.", "\u0394" = ".delta.",
-  "\u0395" = ".epsilon.", "\u0396" = ".zeta.", "\u0397" = ".eta.", "\u0398" = ".theta.",
-  "\u0399" = ".iota.", "\u039a" = ".kappa.", "\u039b" = ".lambda.", "\u039c" = ".mu.",
-  "\u039d" = ".nu.", "\u039e" = ".xi.", "\u039f" = ".omicron.", "\u03a0" = ".pi.",
-  "\u03a1" = ".rho.", "\u03a3" = ".sigma.", "\u03a4" = ".tau.", "\u03a5" = ".upsilon.",
-  "\u03a6" = ".phi.", "\u03a7" = ".chi.", "\u03a8" = ".psi.", "\u03a9" = ".omega.",
+  "\u0391" = "alpha", "\u0392" = "beta", "\u0393" = "gamma", "\u0394" = "delta",
+  "\u0395" = "epsilon", "\u0396" = "zeta", "\u0397" = "eta", "\u0398" = "theta",
+  "\u0399" = "iota", "\u039a" = "kappa", "\u039b" = "lambda", "\u039c" = "mu",
+  "\u039d" = "nu", "\u039e" = "xi", "\u039f" = "omicron", "\u03a0" = "pi",
+  "\u03a1" = "rho", "\u03a3" = "sigma", "\u03a4" = "tau", "\u03a5" = "upsilon",
+  "\u03a6" = "phi", "\u03a7" = "chi", "\u03a8" = "psi", "\u03a9" = "omega",
   # Symbol variants
-  "\u03d0" = ".beta.", "\u03d1" = ".theta.", "\u03d5" = ".phi.", "\u03d6" = ".pi.",
-  "\u03f0" = ".kappa.", "\u03f1" = ".rho.", "\u03f5" = ".epsilon.",
+  "\u03d0" = "beta", "\u03d1" = "theta", "\u03d5" = "phi", "\u03d6" = "pi",
+  "\u03f0" = "kappa", "\u03f1" = "rho", "\u03f5" = "epsilon",
   # Mathematical Greek (Mathematical Bold/Italic/etc often found in chemical names)
-  # Examples from fix.replace.unicode.R
-  "\u1D6C2" = ".alpha.", "\u1D6FC" = ".alpha.", "\u1D736" = ".alpha.", "\u1D770" = ".alpha.", "\u1D7AA" = ".alpha.",
-  "\u1D6C3" = ".beta.", "\u1D6FD" = ".beta.", "\u1D737" = ".beta.", "\u1D771" = ".beta.", "\u1D7AB" = ".beta."
-  # ... Add more if identified, but standard Greek covers 99%
+  # Examples from fixreplaceunicodeR
+  "\u1D6C2" = "alpha", "\u1D6FC" = "alpha", "\u1D736" = "alpha", "\u1D770" = "alpha", "\u1D7AA" = "alpha",
+  "\u1D6C3" = "beta", "\u1D6FD" = "beta", "\u1D737" = "beta", "\u1D771" = "beta", "\u1D7AB" = "beta"
+  #  Add more if identified, but standard Greek covers 99%
 )
 
 # Mathematical and scientific symbols
