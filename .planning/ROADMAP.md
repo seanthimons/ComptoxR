@@ -70,7 +70,7 @@
 
 **Goal:** Migrate all user-facing ct_* functions to use generated stubs via generic_request(), classify functions by complexity, and get the package to a clean build + passing test state.
 
-- [ ] Phase 27: Test Infrastructure Stabilization
+- [x] Phase 27: Test Infrastructure Stabilization (completed 2026-03-10)
   - **Goal:** Fix mechanical test blockers (VCR key sanitization, purrr::flatten warning, cassette re-recording) so tests can run reliably
   - **Depends on:** v2.1 verification complete
   - **Requirements:** [INFRA-27-01, INFRA-27-02, INFRA-27-03, INFRA-27-04, INFRA-27-05, INFRA-27-06]
@@ -123,7 +123,7 @@
 | 24. VCR Cassette Cleanup | v2.1 | 3/3 | Complete | 2026-02-27 |
 | 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
-| 27. Test Infrastructure Stabilization | 2/3 | In Progress|  | — |
+| 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
 | 28. Thin Wrapper Migration | v2.2 | 0/0 | Planned | — |
 | 29. Direct Template Migration | v2.2 | 0/0 | Planned | — |
 | 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |
