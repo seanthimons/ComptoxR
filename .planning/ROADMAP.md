@@ -70,7 +70,7 @@
 
 **Goal:** Migrate all user-facing ct_* functions to use generated stubs via generic_request(), classify functions by complexity, and get the package to a clean build + passing test state.
 
-- [x] Phase 27: Test Infrastructure Stabilization (completed 2026-03-10)
+- [x] Phase 27: Test Infrastructure Stabilization (completed 2026-03-10)
   - **Goal:** Fix mechanical test blockers (VCR key sanitization, purrr::flatten warning, cassette re-recording) so tests can run reliably
   - **Depends on:** v2.1 verification complete
   - **Requirements:** [INFRA-27-01, INFRA-27-02, INFRA-27-03, INFRA-27-04, INFRA-27-05, INFRA-27-06]
@@ -80,12 +80,18 @@
     - [ ] 27-03-PLAN.md — Execute cassette re-recording and validate results
 
 - [ ] Phase 28: Thin Wrapper Migration
-  - **Goal:** Migrate trivial ct_* functions (ct_hazard, ct_cancer, ct_functional_use, etc.) that are 1-line delegations to generated stubs
+  - **Goal:** Build hook injection system and migrate all hand-written ct_* wrappers to generated stubs + hooks, deleting old wrapper files
   - **Depends on:** Phase 27
-  - **Plans:** 0 — needs `/gsd:plan-phase 28`
+  - **Requirements:** [HOOK-28-01, HOOK-28-02, HOOK-28-03, HOOK-28-04, HOOK-28-05, HOOK-28-06, HOOK-28-07, HOOK-28-08, HOOK-28-09, HOOK-28-10]
+  - **Plans:** 5 plans
+    - [ ] 28-01-PLAN.md — Hook registry foundation (.HookRegistry, run_hook, YAML config, .onLoad)
+    - [ ] 28-02-PLAN.md — Hook primitive functions and unit tests
+    - [ ] 28-03-PLAN.md — Delete pure pass-through wrappers and deprecated code
+    - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
+    - [ ] 28-05-PLAN.md — Stub regeneration, test generator update, full validation
 
 - [ ] Phase 29: Direct Template Migration
-  - **Goal:** Migrate medium-complexity functions (ct_descriptors, ct_prop, ct_related) that use raw httr2 to generic_request()
+  - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
   - **Depends on:** Phase 28
   - **Plans:** 0 — needs `/gsd:plan-phase 29`
 
@@ -124,6 +130,6 @@
 | 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
-| 28. Thin Wrapper Migration | v2.2 | 0/0 | Planned | — |
+| 28. Thin Wrapper Migration | v2.2 | 0/5 | Planned | — |
 | 29. Direct Template Migration | v2.2 | 0/0 | Planned | — |
 | 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |
