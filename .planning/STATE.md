@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Package Stabilization
 status: in_progress
-stopped_at: Completed 28-02-PLAN.md
-last_updated: "2026-03-11T14:49:12.306Z"
-last_activity: 2026-03-11 — Completed 28-03 (deleted thin wrapper functions)
+stopped_at: Completed 28-05-PLAN.md
+last_updated: "2026-03-11T15:08:53.531Z"
+last_activity: 2026-03-11 — Completed 28-04 (generator hook integration and wrapper cleanup)
 progress:
   total_phases: 29
+  completed_phases: 26
+  total_plans: 53
+  completed_plans: 52
+  percent: 98
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.2
+milestone_name: Package Stabilization
+status: in_progress
+stopped_at: Completed 28-04-PLAN.md
+last_updated: "2026-03-11T14:58:21.086Z"
+last_activity: 2026-03-11 — Completed 28-03 (deleted thin wrapper functions)
+progress:
+  [██████████] 98%
   completed_phases: 25
   total_plans: 53
   completed_plans: 50
@@ -84,12 +100,12 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 
 ## Current Position
 
-Phase: 28 (Thin Wrapper Migration)
-Plan: 28-03 complete, 28-02 next
-Status: Executing v2.2 Phase 28
-Last activity: 2026-03-11 — Completed 28-03 (deleted thin wrapper functions)
+Phase: 28 (Thin Wrapper Migration) — COMPLETE
+Plan: 28-05 complete (5/5 plans executed)
+Status: Phase 28 complete, ready for Phase 29 or Phase 30
+Last activity: 2026-03-11 — Completed 28-05 (migration validation, test generator update, NEWS finalization)
 
-Progress: [█████████░] 92% (49/53 plans executed)
+Progress: [██████████] 98% (52/53 plans executed)
 
 ## Milestone v2.2 Overview
 
@@ -160,6 +176,56 @@ Full history: `.planning/MILESTONES.md`
 - NEWS.md documents breaking changes with explicit migration guide
 - Package builds and loads cleanly after deletions
 
+**From Phase 28-04 (2026-03-11):**
+- Extended stub generator with hook parameter injection and call generation
+  - Reads inst/hook_config.yml at generation time
+  - Injects extra_params into function signatures with defaults and @param docs
+  - Inserts run_hook() calls at pre_request and post_response lifecycle points
+  - Modified 11 glue templates to support hook calls via template variables
+  - Non-hook functions unchanged (has_hooks flag gates modifications)
+  - Generator parses without syntax errors
+- Created dev/check_hook_config.R CI drift detection script
+  - Validates YAML hook function references resolve to real functions
+  - Checks declared extra_params exist in generated stub signatures
+  - Searches all R files for function definitions (handles multi-function stubs)
+  - Fails build if config-param mismatch detected
+  - Currently flags 4 bioactivity stubs needing regeneration (expected state)
+- Deleted 5 hand-written wrapper functions replaced by hook-powered stubs:
+  - ct_lists_all, ct_bioactivity, ct_similar, ct_list, ct_compound_in_list
+  - All logic migrated to declarative hooks
+  - devtools::document() auto-deleted 5 .Rd files, updated NAMESPACE
+  - Package loads cleanly after deletions
+- Updated NEWS.md with comprehensive breaking changes and migration paths
+
+**From Phase 28-05 (2026-03-11):**
+- Regenerated 4 bioactivity stubs with hook parameters
+  - Added annotate = FALSE parameter to ct_bioactivity_data_search_bulk
+  - Added annotate = FALSE parameter to ct_bioactivity_data_search_by_aeid_bulk
+  - Added annotate = FALSE parameter to ct_bioactivity_data_search_by_spid_bulk
+  - Added annotate = FALSE parameter to ct_bioactivity_data_search_by_m4id_bulk
+  - All include run_hook() post_response calls for annotate_assay_if_requested hook
+  - CI drift check now passes (8 functions, 9 hooks, 4 extra params validated)
+- Extended test generator (dev/generate_tests.R) with hook awareness
+  - Reads inst/hook_config.yml at generation time
+  - For functions with extra_params, generates additional test variants
+  - Creates unique cassette names per variant (e.g., {function_name}_{param_name})
+  - Handles boolean (test with TRUE), numeric (test with non-default), and other param types
+- Updated 4 test files referencing deleted wrapper functions
+  - test-ct_bioactivity.R: Now calls ct_bioactivity_data_search_bulk() with annotate param
+  - test-ct_lists_all.R: Now calls ct_chemical_list_all() with projection param
+  - test-ct_functional_use.R: Now calls ct_exposure_functional_use_search_bulk()
+  - test-ct_list.R: Now calls ct_chemical_list_search_by_name() / _bulk()
+- Finalized NEWS.md with comprehensive Phase 28 migration guide
+  - Simple pass-through wrappers removed section (8 functions)
+  - Hook-powered wrappers replaced section (5 functions + examples)
+  - New Features section documenting hook system architecture
+- Validation results:
+  - 42 hook tests passing (11 registry + 31 primitives)
+  - Package loads cleanly (devtools::load_all())
+  - CI drift check passes (dev/check_hook_config.R)
+  - devtools::check() has environmental quarto error (not code-related)
+- **Phase 28 complete:** Thin wrapper migration fully operational
+
 ## Pending Todos
 
 **Deferred pipeline work (ON HOLD):**
@@ -173,10 +239,10 @@ Full history: `.planning/MILESTONES.md`
 
 ## Session Continuity
 
-Last session: 2026-03-11T14:49:12.300Z
-Action: Completed 28-03-PLAN.md — deleted pure pass-through wrapper functions
-Stopped at: Completed 28-02-PLAN.md
-Next: Execute 28-04-PLAN.md or 28-02-PLAN.md (check wave dependencies)
+Last session: 2026-03-11T15:08:53.525Z
+Action: Completed 28-04-PLAN.md — generator hook integration and wrapper cleanup
+Stopped at: Completed 28-05-PLAN.md
+Next: Execute 28-05-PLAN.md or check if phase complete
 
 ---
 *Last updated: 2026-03-11 after completing Phase 28 Plan 03*
