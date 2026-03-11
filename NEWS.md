@@ -2,9 +2,28 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-01-22)
+## Unreleased (2026-03-11)
 
 #### Breaking changes
+
+* **Phase 28 Thin Wrapper Migration:** Removed friendly-name wrapper functions:
+  `ct_hazard()`, `ct_cancer()`, `ct_env_fate()`, `ct_demographic_exposure()`,
+  `ct_general_exposure()`, `ct_functional_use()`, `ct_functional_use_probability()`,
+  and `ct_genotox()`. Use the generated stub names directly instead:
+  - `ct_hazard()` → `ct_hazard_toxval_search_bulk()`
+  - `ct_cancer()` → `ct_hazard_cancer_search_bulk()`
+  - `ct_env_fate()` → `ct_chemical_fate_search_bulk()`
+  - `ct_demographic_exposure()` → `ct_exposure_seem_demographic_search_bulk()`
+  - `ct_general_exposure()` → `ct_exposure_seem_general_search_bulk()`
+  - `ct_functional_use()` → `ct_exposure_functional_use_search_bulk()`
+  - `ct_functional_use_probability()` → `ct_exposure_functional_use_probability_search()`
+  - `ct_genotox()` → `ct_hazard_genetox_details_search_bulk()`
+
+* Removed deprecated `ct_descriptors()` function. This endpoint (INDIGO conversion
+  service) is not documented in the published API schemas and may have been removed
+  from the upstream API.
+
+#### Breaking changes (2026-01-22)
 
 -   migrate from httr to httr2 across all API functions
     ([5636653](https://github.com/seanthimons/ComptoxR/tree/563665333fba97755222a2d04de0c03237125901))
