@@ -1,37 +1,74 @@
 # PURPOSE: Create a comprehensive dictionary of Unicode mappings for chemical names.
-# Both uppercase and lowercase Greek letters are mapped to lowercase pseudo-delimited names (e.g., .alpha.).
+# Both uppercase and lowercase Greek letters are mapped to lowercase plain names (e.g., alpha).
 # Scientific symbols and other non-ASCII characters are mapped to their ASCII equivalents.
-# This script is part of the dev-unicode-cleaning branch.
+# Note: Dots around names (e.g., .alpha.) were removed to align with upstream search requirements.
 
-# Greek Alphabet mapping (both cases -> lowercase)
-greek_map <- c(
-  # Lowercase
-  "\u03b1" = "alpha", "\u03b2" = "beta", "\u03b3" = "gamma", "\u03b4" = "delta",
-  "\u03b5" = "epsilon", "\u03b6" = "zeta", "\u03b7" = "eta", "\u03b8" = "theta",
-  "\u03b9" = "iota", "\u03ba" = "kappa", "\u03bb" = "lambda", "\u03bc" = "mu",
-  "\u03bd" = "nu", "\u03be" = "xi", "\u03bf" = "omicron", "\u03c0" = "pi",
-  "\u03c1" = "rho", "\u03c2" = "sigma", "\u03c3" = "sigma", "\u03c4" = "tau",
-  "\u03c5" = "upsilon", "\u03c6" = "phi", "\u03c7" = "chi", "\u03c8" = "psi",
-  "\u03c9" = "omega",
-  # Uppercase
-  "\u0391" = "alpha", "\u0392" = "beta", "\u0393" = "gamma", "\u0394" = "delta",
-  "\u0395" = "epsilon", "\u0396" = "zeta", "\u0397" = "eta", "\u0398" = "theta",
-  "\u0399" = "iota", "\u039a" = "kappa", "\u039b" = "lambda", "\u039c" = "mu",
-  "\u039d" = "nu", "\u039e" = "xi", "\u039f" = "omicron", "\u03a0" = "pi",
-  "\u03a1" = "rho", "\u03a3" = "sigma", "\u03a4" = "tau", "\u03a5" = "upsilon",
-  "\u03a6" = "phi", "\u03a7" = "chi", "\u03a8" = "psi", "\u03a9" = "omega",
-  # Symbol variants
-  "\u03d0" = "beta", "\u03d1" = "theta", "\u03d5" = "phi", "\u03d6" = "pi",
-  "\u03f0" = "kappa", "\u03f1" = "rho", "\u03f5" = "epsilon",
-  # Mathematical Greek (Mathematical Bold/Italic/etc often found in chemical names)
-  # Examples from fixreplaceunicodeR
-  "\u1D6C2" = "alpha", "\u1D6FC" = "alpha", "\u1D736" = "alpha", "\u1D770" = "alpha", "\u1D7AA" = "alpha",
-  "\u1D6C3" = "beta", "\u1D6FD" = "beta", "\u1D737" = "beta", "\u1D771" = "beta", "\u1D7AB" = "beta"
-  #  Add more if identified, but standard Greek covers 99%
+# Helper function to generate hex-to-character mappings for a block
+# Many Greek variants start at specific offsets in the Mathematical Alphanumeric block (U+1D400)
+gen_greek_block <- function(start_hex, names) {
+  out <- names
+  names(out) <- sapply(0:(length(names)-1), function(i) {
+    intToUtf8(start_hex + i)
+  })
+  out
+}
+
+# Standard Greek names (lowercase order per U+03B1 block)
+# Note: This includes 'varsigma' which is a common variant of sigma
+standard_low_names <- c(
+  "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
+  "iota", "kappa", "lambda", "mu", "nu", "xi", "omicron", "pi",
+  "rho", "varsigma", "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega"
 )
 
-# Mathematical and scientific symbols
-math_map <- c(
+# Standard Greek names (uppercase order per U+0391 block)
+standard_cap_names <- c(
+  "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
+  "iota", "kappa", "lambda", "mu", "nu", "xi", "omicron", "pi",
+  "rho", "unused", "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega"
+)
+
+# 1. Standard Greek Block (U+0370–U+03FF)
+standard_low <- gen_greek_block(0x03B1, standard_low_names)
+standard_cap <- gen_greek_block(0x0391, standard_cap_names)
+# Cleanup: remove the "unused" gap in uppercase block (U+03A2)
+standard_cap <- standard_cap[names(standard_cap) != intToUtf8(0x03A2)]
+
+# 2. Mathematical Alphanumeric Greek Blocks (U+1D6A8–U+1D7FF)
+# Each sub-block has 25 lowercase and 25 uppercase characters
+math_blocks <- list(
+  bold_cap = 0x1D6A8, bold_low = 0x1D6C2,
+  ital_cap = 0x1D6E2, ital_low = 0x1D6FC,
+  bold_ital_cap = 0x1D71C, bold_ital_low = 0x1D736,
+  sans_bold_cap = 0x1D756, sans_bold_low = 0x1D770,
+  sans_bold_ital_cap = 0x1D790, sans_bold_ital_low = 0x1D7AA
+)
+
+math_maps <- lapply(names(math_blocks), function(bn) {
+  nms <- if (grepl("low", bn)) standard_low_names else standard_cap_names
+  res <- gen_greek_block(math_blocks[[bn]], nms)
+  res[res != "unused"]
+})
+math_map_combined <- unlist(math_maps)
+
+# 3. Specific Symbol Variants (common in chemical informatics)
+symbol_variants <- c(
+  "\u03d0" = "beta",    # Greek Beta Symbol
+  "\u03d1" = "theta",   # Greek Theta Symbol
+  "\u03d2" = "upsilon", # Greek Upsilon Symbol
+  "\u03d5" = "phi",     # Greek Phi Symbol
+  "\u03d6" = "pi",      # Greek Pi Symbol
+  "\u03f0" = "kappa",   # Greek Kappa Symbol
+  "\u03f1" = "rho",     # Greek Rho Symbol
+  "\u03f5" = "epsilon"  # Greek Lunate Epsilon Symbol
+)
+
+greek_map <- c(standard_low, standard_cap, math_map_combined, symbol_variants)
+# Ensure varsigma is treated as sigma for searching
+greek_map[greek_map == "varsigma"] <- "sigma"
+
+# 4. Mathematical and scientific symbols
+math_symbols <- c(
   "\u00b1" = "+/-",
   "\u2265" = ">=",
   "\u2264" = "<=",
@@ -53,7 +90,7 @@ math_map <- c(
   "\u2229" = "^"
 )
 
-# Subscripts and Superscripts (map to normal numbers)
+# 5. Subscripts and Superscripts (map to normal numbers)
 script_map <- c(
   "\u00b9" = "1", "\u00b2" = "2", "\u00b3" = "3",
   "\u2070" = "0", "\u2074" = "4", "\u2075" = "5", "\u2076" = "6", "\u2077" = "7", "\u2078" = "8", "\u2079" = "9",
@@ -61,7 +98,7 @@ script_map <- c(
   "\u207b" = "-", "\u207a" = "+"
 )
 
-# Units and other symbols
+# 6. Units and other symbols (Trademark/Registered removed as metadata noise)
 misc_map <- c(
   "\u00b5" = "u", # Micro sign
   "\u03bc" = "u", # Small Greek Mu
@@ -84,7 +121,7 @@ misc_map <- c(
   "\u2021" = "|"   # Double dagger
 )
 
-# Latin characters with accents -> ASCII equivalents
+# 7. Latin characters with accents -> ASCII equivalents
 latin_map <- c(
   "\u00fc" = "u", "\u00f9" = "u", "\u00fa" = "u", "\u00fb" = "u",
   "\u00e9" = "e", "\u00e8" = "e", "\u00eb" = "e", "\u00ea" = "e",
@@ -98,14 +135,14 @@ latin_map <- c(
 )
 
 # Combine all into one dictionary
-unicode_map <- c(greek_map, math_map, script_map, misc_map, latin_map)
+unicode_map <- c(greek_map, math_symbols, script_map, misc_map, latin_map)
 
-# Remove duplicates if any (by choosing the first occurrence)
+# Remove duplicates if any (prioritize first occurrence)
 unicode_map <- unicode_map[!duplicated(names(unicode_map))]
 
-# Sort by name length descending to ensure longer sequences or specific characters are handled?
-# Since these are single characters usually, order doesn't matter for fixed replacement
-# unless we have multi-char sequences. stringi::stri_replace_all_fixed handles this.
+# Crucial step: use stri_unescape_unicode to ensure the keys are 
+# actual Unicode characters in the dictionary
+names(unicode_map) <- stringi::stri_unescape_unicode(stringi::stri_escape_unicode(names(unicode_map)))
 
 # Save as package data
 usethis::use_data(unicode_map, overwrite = TRUE, internal = TRUE)

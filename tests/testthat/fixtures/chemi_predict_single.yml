@@ -1,0 +1,49 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/lookup?query=DTXSID7020182&idType=AnyId&fuzzy=Not&mol=FALSE
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:02:40 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"chemical":{"chemId":"DTXSID7020182","cid":"DTXCID30182","sid":"DTXSID7020182","casrn":"80-05-7","name":"Bisphenol
+        A","smiles":"CC(C1C=CC(O)=CC=1)(C1C=CC(O)=CC=1)C","canonicalSmiles":"CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1","inchi":"InChI=1S/C15H16O2/c1-15(2,11-3-7-13(16)8-4-11)12-5-9-14(17)10-6-12/h3-10,16-17H,1-2H3","inchiKey":"IISBACLAFKSPIT-UHFFFAOYSA-N"},"resolvedBy":"DTXSID","confidence":1.0,"result":"FOUND","query":"DTXSID7020182","message":"prod_dsstox_10272022","source":"DTX"}]'
+  recorded_at: 2026-03-04 20:02:41
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/webtest/predict
+    body:
+      string: '{"structures":[{"chemical":"DTXSID7020182; DTXCID30182; DTXSID7020182;
+        80-05-7; Bisphenol A; CC(C1C=CC(O)=CC=1)(C1C=CC(O)=CC=1)C; CC(C)(C1C=CC(O)=CC=1)C1C=CC(O)=CC=1;
+        InChI=1S/C15H16O2/c1-15(2,11-3-7-13(16)8-4-11)12-5-9-14(17)10-6-12/h3-10,16-17H,1-2H3;
+        IISBACLAFKSPIT-UHFFFAOYSA-N","resolvedBy":"DTXSID","confidence":1,"result":"FOUND","query":"DTXSID7020182","message":"prod_dsstox_10272022","source":"DTX"}],"report":"JSON"}'
+  response:
+    status: 400
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:02:40 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"timestamp":"2026-03-04T20:02:40.783+00:00","status":400,"error":"Bad
+        Request","message":"JSON parse error: Cannot deserialize value of type `java.util.ArrayList<java.lang.Object>`
+        from Object value (token `JsonToken.START_OBJECT`)","path":"/api/webtest/predict"}'
+  recorded_at: 2026-03-04 20:02:41
+recorded_with: VCR-vcr/2.1.0

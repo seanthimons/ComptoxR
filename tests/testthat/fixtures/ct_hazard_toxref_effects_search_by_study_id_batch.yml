@@ -1,0 +1,74 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/hazard/toxref/effects/search/by-study-id/DTXSID7020182
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:12:13 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVjbEOgjAURXe+4qULi6RITDSMhpiwqoPrgz5CI6HavqJo/Hexndxu7rk5950ACJ5vJKAE
+        gY3xXDY
+        DjlexCkTzENEeFRzp7slxRI6RvfuxTZ6HRhGjHsL6sARSwAZaM05kGVLHXs21SuGh
+        uYcJB08lpNX5cq
+        qrbV7k612RRrMeF/fYxl/Z4wutkmyeljpJXUctO+kIbdvLZs6CN9NK/qlE
+        8vkCotNB3w==
+  recorded_at: 2026-03-04 20:12:13
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/hazard/toxref/effects/search/by-study-id/DTXSID5032381
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:12:13 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVjbEOgjAURXe/4qULi6QomhhGQ0xY1cH1QR+hkVBtX1E0/rvYTm4399yc+14ACJ5uJKAA
+        gbXxXNQ
+        9DlexDERzH9EeFRzp7slxRI6RvfuxTZaFRhGj7sP6MAdSwAYaM4xkGRLHXk2VSuCh
+        uYMRe08FJOX5cq
+        rKbZav890qiWY9zO6hib+ywxdaJdk8LbWS2pYadtIR2qaT9ZQGb6qV/FOJ
+        xecLo31B4w==
+  recorded_at: 2026-03-04 20:12:14
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/hazard/toxref/effects/search/by-study-id/DTXSID8024291
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:12:13 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVjbEOgjAURXe/4qULi6RIGJTREBNWdXB90EdoJFTbVxSN/y62k9vNPTfnvlcAgucbCShB
+        YGM8l82
+        A41WsA9E8RLRHBUe6e3IckWNk736syLLQKGLUQ1gflkAK2EBrxoksQ+LYq7lWCTw0
+        9zDh4KmEpDpfTn
+        W1zfIi322SaNbj4h7b+Ct7fKFVks3TUiep66hlJx2hbXvZzGnwplrJP5VY
+        fb6k70Hr
+  recorded_at: 2026-03-04 20:12:14
+recorded_with: VCR-vcr/2.1.0

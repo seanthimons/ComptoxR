@@ -1,0 +1,71 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/detail/search/by-dtxcid/DTXSID7020182?projection=chemicaldetailall
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:07:00 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVzTEPwiAQhuG9v+LCrIKNiaaj6eKqDq5XOAMRQeVQG+N/V2FyvffyfK8GQPB4IQEdCBxi
+        5m7wGE5
+        iUopjX9MaDWzpmilxTYmRc/q1hVLlYojR+fJt+KmdgYdjC3f0maDfH3abfqlaNV+1
+        ECLDMeZgZhVz4c
+        sFXaektnR2Gr2sokyEN23lME6rK/8w0bw/XDg6yg==
+  recorded_at: 2026-03-04 20:07:01
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/detail/search/by-dtxcid/DTXSID5032381?projection=chemicaldetailall
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:07:01 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVzTEPwiAQhuG9v+LCrFKtJqaj6eKqDq5XOAMRQeVQG+N/V2Hqeu/l+d4VgODhSgJaENiH
+        xG3v0J/
+        FJBfLrqQNatjRLVHkkiIjp/hvy7rOF02M1uVvzS9lNTwtG3igSwTd4bjfdqu6WTTr
+        OfjAcArJ61nBrP
+        9xXpUpqQxdrEIniygj4V0Z2Q/T4soRJqrPF1zmOs4=
+  recorded_at: 2026-03-04 20:07:01
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/detail/search/by-dtxcid/DTXSID8024291?projection=chemicaldetailall
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:07:02 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxVzTEPwiAQhuG9v+LCrFKbDtrRdHFVB9crnIGIoHKojfG/qzB1vffyfO8KQPB4JQEdCBxC
+        4m5w6M9
+        ilotlV9IGNezolihySZGRU/y3tq7zRROjdflb80tZDU/LBh7oEkF/OO63/apu2ma9
+        BB8YTiF5vSiY9T
+        /OqzIllaGLVehkEWUkvCsjh3FeXDnBRPX5Al5gOtY=
+  recorded_at: 2026-03-04 20:07:02
+recorded_with: VCR-vcr/2.1.0

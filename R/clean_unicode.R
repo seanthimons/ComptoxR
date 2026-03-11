@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @details
-#' Greek letters are replaced with lowercase labels surrounded by periods (e.g., '.alpha.').
+#' Greek letters are replaced with lowercase labels (e.g., 'alpha').
 #' Mathematical symbols like '≥' are replaced with '>=' and '±' with '+/-'.
 #' If a data frame is provided, all character columns are processed.
 #'
@@ -19,10 +19,10 @@
 #' @examples
 #' \dontrun{
 #' clean_unicode("17β-Estradiol")
-#' # Returns: "17.beta.-Estradiol"
+#' # Returns: "17beta-Estradiol"
 #'
 #' clean_unicode("Concentration ≥ 10 µg/L")
-#' # Returns: "Concentration >= 10 u g/L"
+#' # Returns: "Concentration >= 10 ug/L"
 #' }
 #'
 #' @importFrom stringi stri_replace_all_fixed stri_escape_unicode

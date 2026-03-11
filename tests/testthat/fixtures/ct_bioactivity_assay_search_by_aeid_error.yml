@@ -1,0 +1,26 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/bioactivity/assay/search/by-aeid/INVALID_DTXSID_12345
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:06:00 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: no-cache, must-revalidate
+      Content-Type: application/json
+      Cneonction: close
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        {
+          "timestamp" : "2026-03-04T20:06:00.020+00:00",
+          "status" : 400,
+          "error" : "Bad Request",
+          "path" : "/bioactivity/assay/search/by-aeid/INVALID_DTXSID_12345"
+        }
+  recorded_at: 2026-03-04 20:06:00
+recorded_with: VCR-vcr/2.1.0

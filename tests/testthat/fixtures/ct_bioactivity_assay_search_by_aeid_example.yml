@@ -1,0 +1,28 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://comptox.epa.gov/ctx-api/bioactivity/assay/search/by-aeid/
+    body:
+      string: '["DTXSID10895040","DTXSID5029683","DTXSID10900961"]'
+  response:
+    status: 500
+    headers:
+      Date: Wed, 04 Mar 2026 20:06:01 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: no-cache, must-revalidate
+      Content-Type: application/json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        {
+          "timestamp" : "2026-03-04T20:06:01.304+00:00",
+          "status" : 500,
+          "error" : "Internal Server Error",
+          "path" : "/bioactivity/assay/search/by-aeid/"
+        }
+  recorded_at: 2026-03-04 20:06:01
+recorded_with: VCR-vcr/2.1.0

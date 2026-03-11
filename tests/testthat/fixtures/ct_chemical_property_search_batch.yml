@@ -1,0 +1,284 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/summary/search/by-dtxsid/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:09:00 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "unit" : "°C",
+          "predictedCount" : 3,
+          "predictedMax" : 400.837,
+          "experimentalMax" : 360.5,
+          "predictedMin" : 343.0,
+          "predictedMedian" : 359.9328,
+          "experimentalMin" : 220.0,
+          "propName" : "Boiling Point",
+          "experimentalMedian" : 360.0,
+          "experimentalAverage" : 313.5,
+          "predictedAverage" : 367.92328,
+          "experimentalCount" : 3
+        }, {
+          "unit" : "g/cm^3",
+          "predictedCount" : 2,
+          "predictedMax" : 1.1945426,
+          "experimentalMax" : 1.2,
+          "predictedMin" : 1.144,
+          "predictedMedian" : 1.1692713,
+          "experimentalMin" : 1.195,
+          "propName" : "Density",
+          "experimentalMedian" : 1.195,
+          "experimentalAverage" : 1.197,
+          "predictedAverage" : 1.1692713,
+          "experimentalCount" : 2
+        }, {
+          "unit" : "°C",
+          "predictedCount" : 2,
+          "predictedMax" : 192.423,
+          "experimentalMax" : 227.1,
+          "predictedMin" : 188.14139,
+          "predictedMedian" : 190.2822,
+          "experimentalMin" : 79.15,
+          "propName" : "Flash Point",
+          "experimentalMedian" : 207.1,
+          "experimentalAverage" : 169.69849,
+          "predictedAverage" : 190.2822,
+          "experimentalCount" : 6
+        }, {
+          "unit" : "atm-m3/mole",
+          "predictedCount" : 1,
+          "predictedMax" : 1.2589254E-7,
+          "experimentalMax" : 3.9476932E-11,
+          "predictedMin" : 1.2589254E-7,
+          "predictedMedian" : 1.2589254E-7,
+          "experimentalMin" : 3.9476932E-11,
+          "propName" : "Henry's Law Constant",
+          "experimentalMedian" : 3.9476932E-11,
+          "experimentalAverage" : 3.9476932E-11,
+          "predictedAverage" : 1.2589254E-7,
+          "experimentalCount" : 1
+        }, {
+          "unit" : "Dimensionless",
+          "predictedCount" : 1,
+          "predictedMax" : 1.599,
+          "experimentalMax" : null,
+          "predictedMin" : 1.599,
+          "predictedMedian" : 1.599,
+          "experimentalMin" : null,
+          "propName" : "Index of Refraction",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 1.599,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Log10 unitless",
+          "predictedCount" : 2,
+          "predictedMax" : 3.627,
+          "experimentalMax" : null,
+          "predictedMin" : 3.32,
+          "predictedMedian" : 3.4735,
+          "experimentalMin" : null,
+          "propName" : "LogD5.5",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 3.4735,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Log10 unitless",
+          "predictedCount" : 2,
+          "predictedMax" : 3.627,
+          "experimentalMax" : null,
+          "predictedMin" : 3.32,
+          "predictedMedian" : 3.4735,
+          "experimentalMin" : null,
+          "propName" : "LogD7.4",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 3.4735,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Log10 unitless",
+          "predictedCount" : 1,
+          "predictedMax" : 8.38,
+          "experimentalMax" : null,
+          "predictedMin" : 8.38,
+          "predictedMedian" : 8.38,
+          "experimentalMin" : null,
+          "propName" : "LogKoa: Octanol-Air",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 8.38,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Log10 unitless",
+          "predictedCount" : 2,
+          "predictedMax" : 3.627,
+          "experimentalMax" : 3.64,
+          "predictedMin" : 3.32,
+          "predictedMedian" : 3.4735,
+          "experimentalMin" : 2.2,
+          "propName" : "LogKow: Octanol-Water",
+          "experimentalMedian" : 3.32,
+          "experimentalAverage" : 3.272,
+          "predictedAverage" : 3.4735,
+          "experimentalCount" : 4
+        }, {
+          "unit" : "°C",
+          "predictedCount" : 2,
+          "predictedMax" : 153.0,
+          "experimentalMax" : 160.0,
+          "predictedMin" : 124.90922,
+          "predictedMedian" : 138.9546,
+          "experimentalMin" : 152.5,
+          "propName" : "Melting Point",
+          "experimentalMedian" : 154.5,
+          "experimentalAverage" : 154.82118,
+          "predictedAverage" : 138.9546,
+          "experimentalCount" : 11
+        }, {
+          "unit" : "cm^3/mol",
+          "predictedCount" : 1,
+          "predictedMax" : 68.168,
+          "experimentalMax" : null,
+          "predictedMin" : 68.168,
+          "predictedMedian" : 68.168,
+          "experimentalMin" : null,
+          "propName" : "Molar Refractivity",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 68.168,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "cm^3/mol",
+          "predictedCount" : 1,
+          "predictedMax" : 199.565,
+          "experimentalMax" : null,
+          "predictedMin" : 199.565,
+          "predictedMedian" : 199.565,
+          "experimentalMin" : null,
+          "propName" : "Molar Volume",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 199.565,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Log10 unitless",
+          "predictedCount" : 2,
+          "predictedMax" : 10.293,
+          "experimentalMax" : null,
+          "predictedMin" : 9.46,
+          "predictedMedian" : 9.8765,
+          "experimentalMin" : null,
+          "propName" : "pKa Acidic Apparent",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 9.8765,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "Å^3",
+          "predictedCount" : 1,
+          "predictedMax" : 27.024,
+          "experimentalMax" : null,
+          "predictedMin" : 27.024,
+          "predictedMedian" : 27.024,
+          "experimentalMin" : null,
+          "propName" : "Polarizability",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 27.024,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "dyn/cm",
+          "predictedCount" : 1,
+          "predictedMax" : 46.024,
+          "experimentalMax" : null,
+          "predictedMin" : 46.024,
+          "predictedMedian" : 46.024,
+          "experimentalMin" : null,
+          "propName" : "Surface Tension",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 46.024,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "mW/(m*K)",
+          "predictedCount" : 1,
+          "predictedMax" : 150.38904,
+          "experimentalMax" : null,
+          "predictedMin" : 150.38904,
+          "predictedMedian" : 150.38904,
+          "experimentalMin" : null,
+          "propName" : "Thermal Conductivity",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 150.38904,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "mmHg",
+          "predictedCount" : 3,
+          "predictedMax" : 2.5931179E-6,
+          "experimentalMax" : 4.0E-8,
+          "predictedMin" : 6.76083E-8,
+          "predictedMedian" : 5.34E-7,
+          "experimentalMin" : 1.2075982E-9,
+          "propName" : "Vapor Pressure",
+          "experimentalMedian" : 2.1545125E-8,
+          "experimentalAverage" : 2.1074463E-8,
+          "predictedAverage" : 1.0649087E-6,
+          "experimentalCount" : 3
+        }, {
+          "unit" : "cP",
+          "predictedCount" : 1,
+          "predictedMax" : 9.668763,
+          "experimentalMax" : null,
+          "predictedMin" : 9.668763,
+          "predictedMedian" : 9.668763,
+          "experimentalMin" : null,
+          "propName" : "Viscosity",
+          "experimentalMedian" : null,
+          "experimentalAverage" : null,
+          "predictedAverage" : 9.668763,
+          "experimentalCount" : 0
+        }, {
+          "unit" : "mol/L",
+          "predictedCount" : 3,
+          "predictedMax" : 0.001245575,
+          "experimentalMax" : 0.0015135612,
+          "predictedMin" : 3.8E-4,
+          "predictedMedian" : 7.4131024E-4,
+          "experimentalMin" : 5.25E-4,
+          "propName" : "Water Solubility",
+          "experimentalMedian" : 0.0013182567,
+          "experimentalAverage" : 0.0011090258,
+          "predictedAverage" : 7.8896177E-4,
+          "experimentalCount" : 12
+        } ]
+  recorded_at: 2026-03-04 20:09:01
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/summary/search/by-dtxsid/DTXSID5032381
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:09:01 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: '[ ]'
+  recorded_at: 2026-03-04 20:09:02
+recorded_with: VCR-vcr/2.1.0

@@ -1,0 +1,105 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/safety/statements
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 04 Mar 2026 20:03:07 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"statement":"","codes":["H205"]},{"statement":"Flammable chemical
+        under pressure: may explode if heated","codes":["H283"]},{"statement":"Flammable
+        aerosol","codes":["H223"]},{"statement":"May react explosively even in the
+        absence of air","codes":["H230"]},{"statement":"May cause or intensify fire","codes":["H270"]},{"statement":"Harmful
+        if swallowed, in contact with skin or if inhaled","codes":["H302+H312+H332"]},{"statement":"Toxic
+        if swallowed or in contact with skin","codes":["H301+H311"]},{"statement":"Toxic
+        in contact with skin","codes":["H311"]},{"statement":"May cause genetic defects","codes":["H340"]},{"statement":"oxidizer","codes":["H270","H272"]},{"statement":"Causes
+        mild skin irritation","codes":["H316"]},{"statement":"May be harmful in contact
+        with skin","codes":["H313"]},{"statement":"Heating may cause an explosion","codes":["H240"]},{"statement":"May
+        be harmful if inhaled","codes":["H333"]},{"statement":"May damage fertility","codes":["H360FD","H360Fd","H360F"]},{"statement":"Flammable
+        gas","codes":["H221"]},{"statement":"Very sensitive","codes":["H210"]},{"statement":"Harmful
+        to aquatic life with long lasting effects","codes":["H412"]},{"statement":"Harmful
+        in contact with skin or if inhaled","codes":["H312+H332"]},{"statement":"Heating
+        may cause a fire","codes":["H242"]},{"statement":"Harmful if inhaled","codes":["H332"]},{"statement":"Fatal
+        if swallowed, in contact with skin or if inhaled","codes":["H300+H310+H330"]},{"statement":"Fire
+        or projection hazard","codes":["H207","H204"]},{"statement":"Fatal in contact
+        with skin or if inhaled","codes":["H310+H330"]},{"statement":"severe projection
+        hazard","codes":["H202"]},{"statement":"Toxic in contact with skin or if inhaled.","codes":["H311+H331"]},{"statement":"may
+        cause cryogenic burns or injury","codes":["H281"]},{"statement":"In contact
+        with water releases flammable gas","codes":["H261"]},{"statement":"Suspected
+        of causing genetic defects","codes":["H341"]},{"statement":"Harms public health
+        and the environment by destroying ozone in the upper atmosphere","codes":["H420"]},{"statement":"Contains
+        refrigerated gas","codes":["H281"]},{"statement":"May cause fire or explosion","codes":["H271"]},{"statement":"Very
+        toxic to aquatic life","codes":["H400"]},{"statement":"Suspected of damaging
+        fertility","codes":["H361fd","H360Df","H361f"]},{"statement":"increased risk
+        of explosion if desensitizing agent is reduced","codes":["H207","H206","H208"]},{"statement":"Suspected
+        of damaging fertility or the unborn child","codes":["H361"]},{"statement":"Catches
+        fire spontaneously if exposed to air","codes":["H250"]},{"statement":"May
+        cause allergy or asthma symptoms or breathing difficulties if inhaled","codes":["H334"]},{"statement":"Self-heating
+        in large quantities","codes":["H252"]},{"statement":"In contact with water
+        releases flammable gases which may ignite spontaneously","codes":["H260"]},{"statement":"May
+        cause harm to breast-fed children","codes":["H362"]},{"statement":"Suspected
+        of causing cancer","codes":["H351"]},{"statement":"Fatal if inhaled","codes":["H330"]},{"statement":"may
+        catch fire","codes":["H252","H251"]},{"statement":"May be harmful if swallowed
+        or in contact with skin","codes":["H303+H313"]},{"statement":"Harmful to aquatic
+        life","codes":["H402"]},{"statement":"Fatal in contact with skin","codes":["H310"]},{"statement":"Extremely
+        flammable chemical under pressure: may explode if heated","codes":["H282"]},{"statement":"Pressurized
+        container: may burst if heated","codes":["H229"]},{"statement":"Harmful in
+        contact with skin","codes":["H312"]},{"statement":"Fatal if swallowed or if
+        inhaled","codes":["H300+H330"]},{"statement":"Combustible liquid","codes":["H227"]},{"statement":"Toxic
+        if inhaled","codes":["H331"]},{"statement":"Chemical under pressure: may explode
+        if heated","codes":["H284"]},{"statement":"Suspected of damaging the unborn
+        child","codes":["H361d","H361fd","H360Fd"]},{"statement":"Self-heating","codes":["H251"]},{"statement":"May
+        damage the unborn child","codes":["H360D","H360Df","H360FD"]},{"statement":"May
+        cause long lasting harmful effects to aquatic life","codes":["H413"]},{"statement":"Causes
+        skin irritation","codes":["H315"]},{"statement":"May be corrosive to metals","codes":["H290"]},{"statement":"Causes
+        damage to organs through prolonged or repeated exposure","codes":["H373","H372"]},{"statement":"Fatal
+        if swallowed","codes":["H300"]},{"statement":"Highly Flammable liquid and
+        vapor","codes":["H225"]},{"statement":"Explosive","codes":["H209","H201","H203","H202"]},{"statement":"Toxic
+        to aquatic life","codes":["H401"]},{"statement":"Unstable Explosive","codes":["H200"]},{"statement":"May
+        cause damage to organs","codes":["H371"]},{"statement":"Extremely flammable
+        liquid and vapor","codes":["H224"]},{"statement":"Toxic if swallowed","codes":["H301"]},{"statement":"May
+        be harmful if swallowed or if inhaled","codes":["H303+H333"]},{"statement":"May
+        cause an allergic skin reaction","codes":["H317"]},{"statement":"Maybe sensitive","codes":["H211"]},{"statement":"May
+        cause drowsiness or dizziness","codes":["H336"]},{"statement":"Causes eye
+        irritation","codes":["H320"]},{"statement":"May be fatal if swallowed and
+        enters airways","codes":["H305","H304"]},{"statement":"Harmful if swallowed
+        or if inhaled","codes":["H302+H332"]},{"statement":"Harmful if swallowed","codes":["H302"]},{"statement":"Causes
+        serious eye damage","codes":["H318"]},{"statement":"May be harmful if swallowed,
+        in contact with skin or if inhaled","codes":["H303+H313+H333"]},{"statement":"Harmful
+        if swallowed or in contact with skin","codes":["H302+H312"]},{"statement":"Flammable
+        liquid and vapor","codes":["H226"]},{"statement":"mass explosion hazard","codes":["H201"]},{"statement":"May
+        damage fertility or the unborn child","codes":["H360"]},{"statement":"Causes
+        severe skin burns and eye damage","codes":["H314"]},{"statement":"Very toxic
+        to aquatic life with long lasting effects","codes":["H410"]},{"statement":"May
+        be harmful if swallowed","codes":["H303"]},{"statement":"Toxic if swallowed
+        or if inhaled","codes":["H301+H331"]},{"statement":"Fire, blast or projection
+        hazard","codes":["H206"]},{"statement":"Causes damage to organs","codes":["H370"]},{"statement":"Extremely
+        flammable gas","codes":["H220"]},{"statement":"Toxic to aquatic life with
+        long lasting effects","codes":["H411"]},{"statement":"Cause skin and eye irritation","codes":["H315+H320"]},{"statement":"Fire
+        hazard","codes":["H208"]},{"statement":"May intensify fire","codes":["H272"]},{"statement":"May
+        react explosively even in the absence of air at elevated pressure and/or temperature","codes":["H231"]},{"statement":"Causes
+        serious eye irritation","codes":["H319"]},{"statement":"May be harmful in
+        contact with skin or if inhaled","codes":["H313+H333"]},{"statement":"May
+        mass explode in fire","codes":["H205"]},{"statement":"fire, blast or projection
+        hazard","codes":["H203"]},{"statement":"May cause cancer by inhalation","codes":["H350i"]},{"statement":"May
+        cause respiratory irritation","codes":["H335"]},{"statement":"Extremely flammable
+        aerosol","codes":["H222"]},{"statement":"May ignite spontaneously if exposed
+        to air","codes":["H232"]},{"statement":"May cause cancer","codes":["H350"]},{"statement":"Toxic
+        if swallowed, in contact with skin or if inhaled","codes":["H301+H311+H331"]},{"statement":"Fatal
+        if swallowed or in contact with skin","codes":["H300+H310"]},{"statement":"may
+        explode if heated","codes":["H280"]},{"statement":"Flammable solid","codes":["H228"]},{"statement":"Contains
+        gas under pressure","codes":["H280"]},{"statement":"strong Oxidizer","codes":["H271"]},{"statement":"Heating
+        may cause a fire or explosion","codes":["H241"]}]'
+  recorded_at: 2026-03-04 20:03:07
+recorded_with: VCR-vcr/2.1.0

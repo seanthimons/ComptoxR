@@ -1,0 +1,46 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/services/layout?smiles=c1ccccc1
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '466'
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:04:56 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: |2
+
+          -INDIGO-03042620042D
+
+          0  0  0  0  0  0  0  0  0  0  0 V3000
+        M  V30 BEGIN CTAB
+        M  V30 COUNTS 6 6 0 0 0
+        M  V30 BEGIN ATOM
+        M  V30 1 C 0.0 0.0 0.0 0
+        M  V30 2 C -1.6 0.0 0.0 0
+        M  V30 3 C -2.4 -1.38564 0.0 0
+        M  V30 4 C -1.6 -2.77128 0.0 0
+        M  V30 5 C 0.0 -2.77128 0.0 0
+        M  V30 6 C 0.800001 -1.38564 0.0 0
+        M  V30 END ATOM
+        M  V30 BEGIN BOND
+        M  V30 1 4 1 2
+        M  V30 2 4 2 3
+        M  V30 3 4 3 4
+        M  V30 4 4 4 5
+        M  V30 5 4 5 6
+        M  V30 6 4 6 1
+        M  V30 END BOND
+        M  V30 END CTAB
+        M  END
+  recorded_at: 2026-03-04 20:04:56
+recorded_with: VCR-vcr/2.1.0

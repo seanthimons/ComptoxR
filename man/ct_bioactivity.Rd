@@ -2,20 +2,38 @@
 % Please edit documentation in R/ct_bioactivity.R
 \name{ct_bioactivity}
 \alias{ct_bioactivity}
-\title{Requests bioactivity assay data}
+\title{Bioactivity assay data}
 \usage{
-ct_bioactivity(search_type, query, annotate = FALSE)
+ct_bioactivity(
+  query,
+  search_type = c("dtxsid", "aeid", "spid", "m4id"),
+  annotate = FALSE
+)
 }
 \arguments{
-\item{search_type}{Choose from \code{aeid}, \code{spid}, \code{m4id}, and \code{dtxsid}. Defaults to \code{dtxsid} if not specified.}
+\item{query}{Character vector of identifiers to query.}
 
-\item{query}{List of variables to be queried.}
+\item{search_type}{One of \code{"dtxsid"} (default), \code{"aeid"}, \code{"spid"}, or
+\code{"m4id"}.}
 
-\item{annotate}{Boolean, if \code{TRUE} will perform a secondary request to join the the assay details against the assay IDs.}
+\item{annotate}{Logical; if \code{TRUE}, performs a secondary request to join
+assay annotation details via \code{\link[=ct_bioactivity_assay]{ct_bioactivity_assay()}}. Default \code{FALSE}.}
 }
 \value{
-A data frame
+A tibble of bioactivity results. If \code{annotate = TRUE}, includes
+assay annotation columns joined by \code{aeid}.
 }
 \description{
-Requests bioactivity assay data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Retrieves bioactivity data by DTXSID, AEID, SPID, or M4ID. Dispatches to
+the appropriate generated endpoint function based on \code{search_type}.
+}
+\examples{
+\dontrun{
+ct_bioactivity(query = "DTXSID7020182")
+ct_bioactivity(query = c("DTXSID7020182", "DTXSID2021028"))
+ct_bioactivity(query = "3032", search_type = "aeid")
+ct_bioactivity(query = "DTXSID7020182", annotate = TRUE)
+}
 }

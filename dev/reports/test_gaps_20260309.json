@@ -1,0 +1,211 @@
+{
+  "timestamp": "2026-03-09T18:48:26Z",
+  "gaps_count": 34,
+  "gaps": {
+    "cc_detail": {
+      "function_name": "cc_detail",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/cc_detail.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-cc_detail.R",
+      "reason": "no_test_file"
+    },
+    "cc_export": {
+      "function_name": "cc_export",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/cc_export.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-cc_export.R",
+      "reason": "no_test_file"
+    },
+    "cc_search": {
+      "function_name": "cc_search",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/cc_search.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-cc_search.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amnb_nate": {
+      "function_name": "chemi_amnb_nate",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_amnb_nate.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_amnb_nate.R",
+      "reason": "no_test_file"
+    },
+    "chemi_classyfire": {
+      "function_name": "chemi_classyfire",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_classyfire.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_classyfire.R",
+      "reason": "no_test_file"
+    },
+    "chemi_hazard": {
+      "function_name": "chemi_hazard",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_hazard.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_hazard.R",
+      "reason": "no_test_file"
+    },
+    "chemi_mordred": {
+      "function_name": "chemi_mordred",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_mordred.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_mordred.R",
+      "reason": "no_test_file"
+    },
+    "chemi_opera": {
+      "function_name": "chemi_opera",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_opera.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_opera.R",
+      "reason": "no_test_file"
+    },
+    "chemi_pfas_cats": {
+      "function_name": "chemi_pfas_cats",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_pfas_cats.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_pfas_cats.R",
+      "reason": "no_test_file"
+    },
+    "chemi_predictor_modelset_report": {
+      "function_name": "chemi_predictor_modelset_report",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_predictor_modelset_report.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_predictor_modelset_report.R",
+      "reason": "no_test_file"
+    },
+    "chemi_predictor_models_predict": {
+      "function_name": "chemi_predictor_models_predict",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_predictor_models_predict.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_predictor_models_predict.R",
+      "reason": "no_test_file"
+    },
+    "chemi_predictor_qmrf": {
+      "function_name": "chemi_predictor_qmrf",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_predictor_qmrf.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_predictor_qmrf.R",
+      "reason": "no_test_file"
+    },
+    "chemi_predictor_report": {
+      "function_name": "chemi_predictor_report",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_predictor_report.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_predictor_report.R",
+      "reason": "no_test_file"
+    },
+    "chemi_rdkit": {
+      "function_name": "chemi_rdkit",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_rdkit.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_rdkit.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_links": {
+      "function_name": "chemi_resolver_links",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_links.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_links.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_lookup": {
+      "function_name": "chemi_resolver_lookup",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_lookup.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_lookup.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_lookupCASRN": {
+      "function_name": "chemi_resolver_lookupCASRN",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_lookupCASRN.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_lookupCASRN.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_mesh": {
+      "function_name": "chemi_resolver_mesh",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_mesh.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_mesh.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_pubchem_section": {
+      "function_name": "chemi_resolver_pubchem_section",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_pubchem_section.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_pubchem_section.R",
+      "reason": "no_test_file"
+    },
+    "chemi_resolver_safety_flags": {
+      "function_name": "chemi_resolver_safety_flags",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/chemi_resolver_safety_flags.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-chemi_resolver_safety_flags.R",
+      "reason": "no_test_file"
+    },
+    "ct_bioactivity_data_aed": {
+      "function_name": "ct_bioactivity_data_aed",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_bioactivity_data_aed.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_bioactivity_data_aed.R",
+      "reason": "no_test_file"
+    },
+    "ct_chemical_detail": {
+      "function_name": "ct_chemical_detail",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_chemical_detail.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_chemical_detail.R",
+      "reason": "no_test_file"
+    },
+    "ct_chemical_equal": {
+      "function_name": "ct_chemical_equal",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_chemical_equal.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_chemical_equal.R",
+      "reason": "no_test_file"
+    },
+    "ct_chemical_synonym": {
+      "function_name": "ct_chemical_synonym",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_chemical_synonym.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_chemical_synonym.R",
+      "reason": "no_test_file"
+    },
+    "ct_compound_in_list": {
+      "function_name": "ct_compound_in_list",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_compound_in_list.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_compound_in_list.R",
+      "reason": "no_test_file"
+    },
+    "ct_exposure_httk": {
+      "function_name": "ct_exposure_httk",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_exposure_httk.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_exposure_httk.R",
+      "reason": "no_test_file"
+    },
+    "ct_exposure_seem_demographic": {
+      "function_name": "ct_exposure_seem_demographic",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_exposure_seem_demographic.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_exposure_seem_demographic.R",
+      "reason": "no_test_file"
+    },
+    "ct_exposure_seem_general": {
+      "function_name": "ct_exposure_seem_general",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_exposure_seem_general.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_exposure_seem_general.R",
+      "reason": "no_test_file"
+    },
+    "ct_genotox": {
+      "function_name": "ct_genotox",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_genotox.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_genotox.R",
+      "reason": "no_test_file"
+    },
+    "ct_hazard_cancer": {
+      "function_name": "ct_hazard_cancer",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_hazard_cancer.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_hazard_cancer.R",
+      "reason": "no_test_file"
+    },
+    "ct_hazard_genetox": {
+      "function_name": "ct_hazard_genetox",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_hazard_genetox.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_hazard_genetox.R",
+      "reason": "no_test_file"
+    },
+    "ct_hazard_genetox_details": {
+      "function_name": "ct_hazard_genetox_details",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_hazard_genetox_details.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_hazard_genetox_details.R",
+      "reason": "no_test_file"
+    },
+    "ct_hazard_toxval": {
+      "function_name": "ct_hazard_toxval",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_hazard_toxval.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_hazard_toxval.R",
+      "reason": "no_test_file"
+    },
+    "ct_similar": {
+      "function_name": "ct_similar",
+      "file_path": "C:/Users/sxthi/Documents/ComptoxR/R/ct_similar.R",
+      "test_file": "C:/Users/sxthi/Documents/ComptoxR/tests/testthat/test-ct_similar.R",
+      "reason": "no_test_file"
+    }
+  },
+  "stale_protected": []
+}

@@ -39,7 +39,8 @@
 
 ---
 
-## Pending PRs
+## Pending PRs (Resolve Immediately)
+- [ ] PR #121: chore: API schema updates detected [open] — `automated/schema-update`
 - [ ] PR #74: Refine PubChem search parameter passing [draft] — `copilot/add-pubchem-search-functionality`
 
 ## Completed (Recent)
@@ -50,6 +51,8 @@
   - [x] Consider `overwrite = FALSE` as the default in CI, with explicit opt-in for known-safe overwrites
 
 ## Medium Priority (PAUSED — resume after build/tests are clean)
+- [ ] Design post-processing recipe system for stub generator (#120) — architectural decision on how to store/apply post-processing logic that survives stub regeneration
+- [ ] Check if stub generation captures API schema descriptions (#122) [gsd] — audit and enhance pipeline to pull descriptions into roxygen docs
 - [ ] Schema-check workflow improvements (#96) — further iteration on the automated schema-check CI:
   - [ ] Fix "Schema diff encountered errors" warning — debug why `diff_schemas.R` hits errors during parsing (likely a single schema with non-standard OpenAPI structure)
   - [ ] Detect endpoint-level changes within files that only differ by formatting — currently pretty-printing neutralizes these, so real param/route changes inside otherwise-reformatted files could be missed

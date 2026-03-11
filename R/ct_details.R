@@ -1,41 +1,30 @@
-# TODO Migrate to generic requests + promote to stable after testing
-
-#' Retrieve compound details by DTXSID
+#' Chemical details by DTXSID
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
 #'
-#' @param query A single DTXSID (in quotes) or a list to be queried
-#' @param projection A subset of date to be returned. By default returns a minimal set of common identifiers.
+#' Retrieves chemical detail data for chemicals by DTXSID with configurable
+#' projection level. Projection values are passed directly to the API.
 #'
-#' @return a data frame
+#' @param query Character vector of DTXSIDs
+#' @param projection API projection string. Common values: `"compact"` (default),
+#'   `"chemicaldetailall"`, `"chemicaldetailstandard"`, `"chemicalidentifier"`,
+#'   `"chemicalstructure"`, `"ntatoolkit"`, `"ccdchemicaldetails"`,
+#'   `"ccdassaydetails"`.
+#'
+#' @return A tibble of chemical detail results
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' ct_details(query = "DTXSID7020182")
+#' ct_details(query = "DTXSID7020182", projection = "chemicaldetailall")
 #' }
-ct_details <- function(
-	query,
-	projection = c("all", "standard", "id", "structure", "nta", 'compact')
-) {
-	if (missing(projection)) {
-		projection <- 'compact'
-	}
-
-	proj <- case_when(
-		projection == "all" ~ "chemicaldetailall",
-		projection == "standard" ~ "chemicaldetailstandard",
-		projection == "id" ~ "chemicalidentifier",
-		projection == "structure" ~ "chemicalstructure",
-		projection == "nta" ~ "ntatoolkit",
-
-		projection == 'compact' ~ 'compact',
-		TRUE ~ NA_character_
-	)
-  
+ct_details <- function(query, projection = "compact") {
   generic_request(
     query = query,
     endpoint = "chemical/detail/search/by-dtxsid/",
     method = "POST",
-    projection = proj
+    projection = projection
   )
 }

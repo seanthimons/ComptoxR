@@ -1,0 +1,68 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/predicted/search/by-range/DTXSID7020182
+  response:
+    status: 404
+    headers:
+      Date: Wed, 04 Mar 2026 20:08:57 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJydzrEKwjAQBuC9T3FkVlNLQelcBBcXHVzTy2GDMSnJZQjiu9s2PoHbcd/x3/+uAATniQR0
+        INTgE3e
+        DVe4pNqsYtoUunuHkk9MFIitOcZG2bteNJlbG/m5hcYMQKPoUkABHehlUVk7BTxQ4
+        zwNpg0xaRlIBRz
+        nkbVDuQbK/3a/n/lA39f7Y7Mo/4+ZEh6WL/DtNVJ8vLgZMGQ==
+  recorded_at: 2026-03-04 20:08:57
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/predicted/search/by-range/DTXSID5032381
+  response:
+    status: 404
+    headers:
+      Date: Wed, 04 Mar 2026 20:08:57 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJydzjEOwjAMBdC9p7AyAym0SKhzhcTCAgNr6lg0IiRV4gwV4u60DSfoZvlZ3/9TAAgeBxLQ
+        gFCdT9x
+        0VrmX2Cxi2Ga6eoazT05niKw4xVnqsl42mlgZ+7+F2Q1CoOhTQALs6W1QWTkEP1Dg
+        cRpIG2TSMpIK2M
+        tu3AblniTb++N2aY9ldahO+13+Z9yU6DB3kavTRPH9AS62TB0=
+  recorded_at: 2026-03-04 20:08:57
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/property/predicted/search/by-range/DTXSID8024291
+  response:
+    status: 404
+    headers:
+      Date: Wed, 04 Mar 2026 20:08:57 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJydzjEOwjAMBdC9p7AyAylVB+hcIbGwwMCaOhaNCEmVOEOEuDttwwnYLD/r+78rAMF5IgEd
+        CDX4xN1
+        glXuKzSqGbaGLZzj55HSByIpTXKSt23WjiZWxv1tY3CAEij4FJMCRXgaVlVPwEwXO
+        80DaIJOWkVTAUQ
+        55G5R7kOxv9+u5P9RN2xz3u/LPuDnRYeki/04T1ecLMDRMJQ==
+  recorded_at: 2026-03-04 20:08:58
+recorded_with: VCR-vcr/2.1.0

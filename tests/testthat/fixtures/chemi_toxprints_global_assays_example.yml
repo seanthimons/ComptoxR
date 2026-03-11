@@ -1,0 +1,22 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/toxprints/global_assays?category=DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:05:06 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"assays":[],"total":796}'
+  recorded_at: 2026-03-04 20:05:06
+recorded_with: VCR-vcr/2.1.0

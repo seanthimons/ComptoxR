@@ -2,18 +2,30 @@
 % Please edit documentation in R/ct_lists_all.R
 \name{ct_lists_all}
 \alias{ct_lists_all}
-\title{Grabs all public lists}
+\title{All public chemical lists}
 \usage{
 ct_lists_all(return_dtxsid = FALSE, coerce = FALSE)
 }
 \arguments{
-\item{return_dtxsid}{Boolean; Return all DTXSIDs contained within each list}
+\item{return_dtxsid}{Logical; return all DTXSIDs contained within each list.
+Default \code{FALSE}.}
 
-\item{coerce}{Boolean; Coerce each list of DTXSIDs into a vector rather than the native string.}
+\item{coerce}{Logical; coerce each list of DTXSIDs into a vector rather than
+the native comma-separated string. Requires \code{return_dtxsid = TRUE}.
+Default \code{FALSE}.}
 }
 \value{
-Returns a tibble of results (or nested list if coerce=TRUE)
+A tibble of chemical lists, or a named list of lists if
+\code{coerce = TRUE}.
 }
 \description{
-This function has no parameters to search by.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Retrieves all public chemical lists from the CompTox Dashboard.
+}
+\examples{
+\dontrun{
+ct_lists_all()
+ct_lists_all(return_dtxsid = TRUE, coerce = TRUE)
+}
 }

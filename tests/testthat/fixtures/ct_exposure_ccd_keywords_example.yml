@@ -1,0 +1,130 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/exposure/ccd/keywords/search/by-dtxsid/DTXSID0020232
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:09:30 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "id" : 1075,
+          "keywordset" : "Canada, pharmaceutical",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1076,
+          "keywordset" : "detected, emissions, pharmaceutical, soil",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1077,
+          "keywordset" : "detected, emissions, wastewater",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1078,
+          "keywordset" : "detected, drinking_water, Pesticides, water",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1079,
+          "keywordset" : "food_additive, Substances Added to Food (formerly EAFUS) (2/2019)",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1080,
+          "keywordset" : "detected, MN Chemical Screening, pharmaceutical, surface_water",
+          "sourceCount" : 2,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1081,
+          "keywordset" : "detected, MN Chemical Screening, surface_water",
+          "sourceCount" : 8,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1082,
+          "keywordset" : "detected, drinking_water, MN Chemical Screening",
+          "sourceCount" : 7,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1083,
+          "keywordset" : "detected, ground_water, MN Chemical Screening, pharmaceutical",
+          "sourceCount" : 2,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1084,
+          "keywordset" : "Europe",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1085,
+          "keywordset" : "detected, MN Chemical Screening, wastewater",
+          "sourceCount" : 2,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1086,
+          "keywordset" : "detected, ground_water, MN Chemical Screening",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1087,
+          "keywordset" : "pharmaceutical",
+          "sourceCount" : 13,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1088,
+          "keywordset" : "Europe, pharmaceutical",
+          "sourceCount" : 2,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1089,
+          "keywordset" : "active_ingredient, Europe, Pesticides",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1090,
+          "keywordset" : "detected, drinking_water",
+          "sourceCount" : 2,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1091,
+          "keywordset" : "detected, pharmaceutical, wastewater",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1092,
+          "keywordset" : "detected, pharmaceutical, soil",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1093,
+          "keywordset" : "active_ingredient, animal_products, Europe, pharmaceutical, residue",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1094,
+          "keywordset" : "inert_ingredient, non_food_use, Pesticides",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1095,
+          "keywordset" : "inert_ingredient, Pesticides",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        }, {
+          "id" : 1096,
+          "keywordset" : "active_ingredient, Australia",
+          "sourceCount" : 1,
+          "dtxsid" : "DTXSID0020232"
+        } ]
+  recorded_at: 2026-03-04 20:09:30
+recorded_with: VCR-vcr/2.1.0

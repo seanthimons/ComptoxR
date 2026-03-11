@@ -1,0 +1,706 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/getallannotations
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:02:46 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"name":"State Drinking Water Guidelines (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Molecular Weight","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"U.S. Production","annotations":["Hazardous
+        Substances Data Bank (HSDB)","EPA Chemical Data Reporting (CDR)"],"uploading":false},{"name":"FDA
+        Pharmacological Classification","annotations":["FDA Pharm Classes","National
+        Drug Code (NDC) Directory"],"uploading":false},{"name":"Formulations/Preparations","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Animal Drugs","annotations":["European
+        Medicines Agency (EMA)","NORMAN Suspect List Exchange","FDA Approved Animal
+        Drug Products (Green Book)"],"uploading":false},{"name":"Related HSDB Records","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Methods of Manufacturing","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"State Drinking Water
+        Standards (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Medical
+        Surveillance","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"29Si
+        NMR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"Fish/Seafood
+        Concentrations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Flammable
+        Limits","annotations":["Hazardous Substances Data Bank (HSDB)","The National
+        Institute for Occupational Safety and Health (NIOSH)"],"uploading":false},{"name":"Air
+        and Water Reactions","annotations":["CAMEO Chemicals"],"uploading":false},{"name":"Environmental
+        Water Concentrations (Complete)","annotations":["Hazardous Substances Data
+        Bank (HSDB)"],"uploading":false},{"name":"Impurities (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"RTECS Number","annotations":["The
+        National Institute for Occupational Safety and Health (NIOSH)"],"uploading":false},{"name":"EPA
+        Hazardous Waste Number","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hepatotoxicity","annotations":["LiverTox"],"uploading":false},{"name":"Toxic
+        Combustion Products","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Non-Human
+        Toxicity Excerpts (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Biological Half-Life","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Haz-Map, Information on Hazardous Chemicals
+        and Occupational Diseases","DrugBank"],"uploading":false},{"name":"Boiling
+        Point","annotations":["CAMEO Chemicals","Hazardous Substances Data Bank (HSDB)","The
+        National Institute for Occupational Safety and Health (NIOSH)","Occupational
+        Safety and Health Administration (OSHA)","Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","ILO-WHO International Chemical Safety
+        Cards (ICSCs)","Human Metabolome Database (HMDB)","DrugBank"],"uploading":false},{"name":"Drug
+        Tolerance","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Solubility","annotations":["CAMEO
+        Chemicals","Hazardous Substances Data Bank (HSDB)","The National Institute
+        for Occupational Safety and Health (NIOSH)","ILO-WHO International Chemical
+        Safety Cards (ICSCs)","Burnham Center for Chemical Genomics","Human Metabolome
+        Database (HMDB)","DrugBank","EU Food Improvement Agents","Joint FAO/WHO Expert
+        Committee on Food Additives (JECFA)","NCI Investigational Drugs"],"uploading":false},{"name":"Other
+        Standards Regulations and Guidelines (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Human Toxicity Excerpts","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Drug Labels","annotations":["DailyMed"],"uploading":false},{"name":"GC-MS","annotations":["Human
+        Metabolome Database (HMDB)","SpectraBase","NIST Mass Spectrometry Data Center","MassBank
+        Europe","MassBank of North America (MoNA)"],"uploading":false},{"name":"GlyCosmos
+        Tissue/Organ","annotations":["GlyCosmos Glycoscience Portal"],"uploading":false},{"name":"Exposure
+        Control and Personal Protection","annotations":["Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"1H-13C
+        NMR Spectra","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"Atmospheric
+        Concentrations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Natural
+        Pollution Sources (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Synthesis References","annotations":["The
+        University of Alabama Libraries"],"uploading":false},{"name":"Other Spectra","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Minerals","annotations":["Handbook
+        of Mineralogy","Athena Minerals","RRUFF Project"],"uploading":false},{"name":"ICSC
+        Number","annotations":["ILO-WHO International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Milk
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Effluent Concentrations","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Sediment/Soil Concentrations","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Soil Adsorption/Mobility","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"NFPA Hazard Classification","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Occupational Safety and Health Administration
+        (OSHA)"],"uploading":false},{"name":"Food Additive Status","annotations":["FDA
+        Center for Food Safety and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"HPLC","annotations":["NCI
+        Investigational Drugs"],"uploading":false},{"name":"Probable Routes of Human
+        Exposure (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Surface
+        Tension","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazard
+        Classes and Categories","annotations":["European Chemicals Agency (ECHA)","Hazardous
+        Chemical Information System (HCIS), Safe Work Australia","NITE-CMC","NJDOH
+        RTK Hazardous Substance List","Regulation (EC) No 1272/2008 of the European
+        Parliament and of the Council"],"uploading":false},{"name":"NIOSH Recommendations","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazard Quotient
+        Level 0.1 or Cancer Risk Level 1E-06","annotations":["EPA Regional Screening
+        Levels for Chemical Contaminants at Superfund Sites"],"uploading":false},{"name":"Dispersion","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"SpringerMaterials
+        Properties","annotations":["SpringerMaterials"],"uploading":false},{"name":"Bionecessity
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Maximum
+        Drug Dose","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Artificial
+        Pollution Sources (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Safe Storage","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"DEA
+        Listed Chemicals","annotations":["Drug Enforcement Administration (DEA)"],"uploading":false},{"name":"Body
+        Burden (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"CCDC
+        Number","annotations":["The Cambridge Structural Database"],"uploading":false},{"name":"Occupational
+        Exposure Limits (OEL)","annotations":["ILO-WHO International Chemical Safety
+        Cards (ICSCs)"],"uploading":false},{"name":"Japan PMDA Drugs","annotations":["Japan
+        Pharmaceuticals and Medical Devices Agency (PMDA)"],"uploading":false},{"name":"Industry
+        Uses","annotations":["EPA Chemical Data Reporting (CDR)"],"uploading":false},{"name":"Milk
+        Concentrations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Clean
+        Water Act Requirements","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"NCI
+        Thesaurus Code","annotations":["NCI Thesaurus (NCIt)"],"uploading":false},{"name":"Drug-Food
+        Interactions","annotations":["DrugBank"],"uploading":false},{"name":"Stability/Shelf
+        Life","annotations":["Hazardous Substances Data Bank (HSDB)","NCI Investigational
+        Drugs"],"uploading":false},{"name":"PFAS","annotations":["NORMAN Suspect List
+        Exchange"],"uploading":false},{"name":"Environmental Water Concentrations","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Endocrine Disruptors","annotations":["NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"ClinicalTrials.gov","annotations":["ClinicalTrials.gov"],"uploading":false},{"name":"Radiation
+        Limits and Potential","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Fire
+        Fighting Procedures","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"JECFA
+        Number","annotations":["Joint FAO/WHO Expert Committee on Food Additives (JECFA)"],"uploading":false},{"name":"Natural
+        Pollution Sources","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Populations
+        at Special Risk (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Fire Fighting Procedures (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Melting Point","annotations":["CAMEO
+        Chemicals","Hazardous Substances Data Bank (HSDB)","The National Institute
+        for Occupational Safety and Health (NIOSH)","Occupational Safety and Health
+        Administration (OSHA)","Haz-Map, Information on Hazardous Chemicals and Occupational
+        Diseases","ILO-WHO International Chemical Safety Cards (ICSCs)","Human Metabolome
+        Database (HMDB)","DrugBank","EU Food Improvement Agents"],"uploading":false},{"name":"GlyCosmos
+        Subsumption","annotations":["GlyCosmos Glycoscience Portal"],"uploading":false},{"name":"Pharmacodynamics","annotations":["DrugBank"],"uploading":false},{"name":"FDA
+        Generally Recognized as Safe - GRAS Notices","annotations":["FDA Center for
+        Food Safety and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"Food
+        Additive Classes","annotations":["EU Food Improvement Agents","Joint FAO/WHO
+        Expert Committee on Food Additives (JECFA)"],"uploading":false},{"name":"Drug-Drug
+        Interactions","annotations":["DrugBank"],"uploading":false},{"name":"GlyConnect
+        Structure","annotations":["GlyConnect"],"uploading":false},{"name":"IFRA Fragrance
+        Standards","annotations":["International Fragrance Association (IFRA)"],"uploading":false},{"name":"FDA
+        Purple Book","annotations":["FDA Purple Book"],"uploading":false},{"name":"Special
+        Reports","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Average
+        Daily Intake","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Reactive
+        Group","annotations":["CAMEO Chemicals"],"uploading":false},{"name":"Solubility
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Taste","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Antidote and Emergency
+        Treatment (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Record
+        Description","annotations":["CAMEO Chemicals","Agency for Toxic Substances
+        and Disease Registry (ATSDR)","Toxin and Toxin Target Database (T3DB)","EPA
+        Air Toxics","Drug Database, Clinicalinfo.hiv.gov","ChEBI","Drug Enforcement
+        Administration (DEA)","GlyCosmos Glycoscience Portal","DrugBank","E. coli
+        Metabolome Database (ECMDB)","Yeast Metabolome Database (YMDB)","The CA Office
+        of Environmental Health Hazard Assessment (OEHHA)","FDA Pharm Classes","RRUFF
+        Project","LiverTox","LOTUS - the natural products occurrence database","NCI
+        Thesaurus (NCIt)"],"uploading":false},{"name":"Symptoms","annotations":["The
+        National Institute for Occupational Safety and Health (NIOSH)","Toxin and
+        Toxin Target Database (T3DB)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Viscosity","annotations":["Hazardous
+        Substances Data Bank (HSDB)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)","EU Food Improvement Agents"],"uploading":false},{"name":"FDA Approved
+        Drugs","annotations":["Drugs@FDA"],"uploading":false},{"name":"TSCA Test Submissions
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Drug
+        Warnings","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Color/Form","annotations":["Hazardous
+        Substances Data Bank (HSDB)","U.S. Chemical Safety and Hazard Investigation
+        Board (CSB)"],"uploading":false},{"name":"Wikipedia","annotations":["Wikipedia"],"uploading":false},{"name":"Lipids","annotations":["LIPID
+        MAPS"],"uploading":false},{"name":"Toxicity Data","annotations":["Haz-Map,
+        Information on Hazardous Chemicals and Occupational Diseases","Toxin and Toxin
+        Target Database (T3DB)","NCI Investigational Drugs"],"uploading":false},{"name":"Shipping
+        Name/ Number DOT/UN/NA/IMO","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"First Aid","annotations":["CAMEO Chemicals","The
+        National Institute for Occupational Safety and Health (NIOSH)","Emergency
+        Response Guidebook (ERG)"],"uploading":false},{"name":"Environmental Biodegradation","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Vapor Density","annotations":["CAMEO
+        Chemicals","Hazardous Substances Data Bank (HSDB)","Occupational Safety and
+        Health Administration (OSHA)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Reactivity Alerts","annotations":["CAMEO
+        Chemicals"],"uploading":false},{"name":"Minimum Risk Level","annotations":["Toxin
+        and Toxin Target Database (T3DB)"],"uploading":false},{"name":"Nikkaji Number","annotations":["Japan
+        Chemical Substance Dictionary (Nikkaji)"],"uploading":false},{"name":"Cosmetics","annotations":["Cosmetic
+        Ingredient Review (CIR)","NORMAN Suspect List Exchange"],"uploading":false},{"name":"GC","annotations":["NCI
+        Investigational Drugs"],"uploading":false},{"name":"Mechanism of Action (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Vapor Phase IR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"FDA
+        Inventory of Effective Food Contact Substance Notifications - FCN","annotations":["FDA
+        Center for Food Safety and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"Hazard
+        Quotient Level 3 or Cancer Risk Level 1E-04","annotations":["EPA Regional
+        Screening Levels for Chemical Contaminants at Superfund Sites"],"uploading":false},{"name":"Drug
+        Transformations","annotations":["NORMAN Suspect List Exchange"],"uploading":false},{"name":"Synonyms
+        and Identifiers","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Pesticides","annotations":["USDA
+        Pesticide Data Program","EU Pesticides Database","NORMAN Suspect List Exchange"],"uploading":false},{"name":"Ecotoxicity
+        Values","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Caco2
+        Permeability","annotations":["DrugBank"],"uploading":false},{"name":"GlyGen
+        Classification","annotations":["GlyGen"],"uploading":false},{"name":"Self-Accelerating
+        Decomposition Temperature (SADT)","annotations":["U.S. Chemical Safety and
+        Hazard Investigation Board (CSB)"],"uploading":false},{"name":"Drug Indication","annotations":["DrugBank","European
+        Medicines Agency (EMA)"],"uploading":false},{"name":"NIOSH Analytical Methods","annotations":["NIOSH
+        Manual of Analytical Methods"],"uploading":false},{"name":"Firefighting Hazards","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Non-Human Toxicity
+        Excerpts","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Consumption
+        Patterns","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Personal
+        Protective Equipment (PPE)","annotations":["CAMEO Chemicals","Hazardous Substances
+        Data Bank (HSDB)","The National Institute for Occupational Safety and Health
+        (NIOSH)"],"uploading":false},{"name":"Nonfire Spill Response","annotations":["CAMEO
+        Chemicals"],"uploading":false},{"name":"Permethylated Mass","annotations":["GlyGen"],"uploading":false},{"name":"Antidote
+        and Emergency Treatment","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Skin,
+        Eye, and Respiratory Irritations","annotations":["Hazardous Substances Data
+        Bank (HSDB)"],"uploading":false},{"name":"Heat of Vaporization","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Radiation Limits
+        and Potential (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"National
+        Toxicology Program Studies","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"1D NMR Spectra","annotations":["Hazardous
+        Substances Data Bank (HSDB)","NMRShiftDB"],"uploading":false},{"name":"Metabolism/Metabolites","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Toxin and Toxin Target Database (T3DB)","DrugBank","NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"Environmental Fate/Exposure
+        Summary","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Effluent
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"FDA Orange Book","annotations":["FDA
+        Orange Book"],"uploading":false},{"name":"1H NMR Spectra","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Human Metabolome Database (HMDB)","SpectraBase","NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"Accelerating Rate Calorimetry
+        (ARC)","annotations":["U.S. Chemical Safety and Hazard Investigation Board
+        (CSB)"],"uploading":false},{"name":"Human Toxicity Excerpts (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Storage Conditions
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"General
+        Manufacturing Information (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Critical Temperature & Pressure","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Adverse Effects","annotations":["Haz-Map,
+        Information on Hazardous Chemicals and Occupational Diseases"],"uploading":false},{"name":"Highly
+        Hazardous Substance","annotations":["European Chemicals Agency (ECHA)","Occupational
+        Safety and Health Administration (OSHA)"],"uploading":false},{"name":"Environmental
+        Biodegradation (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Restriction Limits in the Finished Product
+        (%)","annotations":["International Fragrance Association (IFRA)"],"uploading":false},{"name":"Associated
+        Disorders and Diseases","annotations":["Comparative Toxicogenomics Database
+        (CTD)","Haz-Map, Information on Hazardous Chemicals and Occupational Diseases","Therapeutic
+        Target Database (TTD)"],"uploading":false},{"name":"Threshold Limit Values
+        (TLV)","annotations":["Hazardous Substances Data Bank (HSDB)","Occupational
+        Safety and Health Administration (OSHA)","Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","ILO-WHO International Chemical Safety
+        Cards (ICSCs)"],"uploading":false},{"name":"Acceptable Daily Intakes (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Volatilization from
+        Water/Soil","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Corrosivity","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"General Manufacturing
+        Information","annotations":["Hazardous Substances Data Bank (HSDB)","EPA Chemical
+        Data Reporting (CDR)","EPA Chemicals under the TSCA"],"uploading":false},{"name":"Acute
+        Effects","annotations":["ChemIDplus"],"uploading":false},{"name":"Preventions","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Average
+        Daily Intake (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"GlyGen
+        Motifs","annotations":["GlyGen"],"uploading":false},{"name":"EU Clinical Trials
+        Register","annotations":["EU Clinical Trials Register"],"uploading":false},{"name":"UN
+        Classification","annotations":["ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Health Effects","annotations":["Toxin
+        and Toxin Target Database (T3DB)"],"uploading":false},{"name":"Other Environmental
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Ecotoxicity Excerpts","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Volatilization from
+        Water/Soil (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"ICSC
+        Environmental Data","annotations":["ILO-WHO International Chemical Safety
+        Cards (ICSCs)"],"uploading":false},{"name":"Sampling Procedures (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Regulatory Agencies
+        (Superlist Locators)","annotations":["ChemIDplus"],"uploading":false},{"name":"Heat
+        of Combustion","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Crystal
+        Structure Data","annotations":["Crystallography Open Database (COD)","The
+        Cambridge Structural Database"],"uploading":false},{"name":"Kovats Retention
+        Index","annotations":["NIST Mass Spectrometry Data Center"],"uploading":false},{"name":"Shipment
+        Methods and Regulations (Complete)","annotations":["Hazardous Substances Data
+        Bank (HSDB)"],"uploading":false},{"name":"Plant Concentrations (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"FDA Indirect Additives
+        used in Food Contact Substances","annotations":["FDA Center for Food Safety
+        and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"Classification
+        Codes","annotations":["ChemIDplus"],"uploading":false},{"name":"UNII","annotations":["FDA
+        Global Substance Registration System (GSRS)"],"uploading":false},{"name":"Superlist
+        Classification Codes","annotations":["ChemIDplus"],"uploading":false},{"name":"PDBe
+        Structure Code","annotations":["Protein Data Bank in Europe (PDBe)"],"uploading":false},{"name":"FDA
+        National Drug Code Directory","annotations":["National Drug Code (NDC) Directory"],"uploading":false},{"name":"Carcinogen
+        Classification","annotations":["Toxin and Toxin Target Database (T3DB)","International
+        Agency for Research on Cancer (IARC)"],"uploading":false},{"name":"Formulations/Preparations
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Associated
+        Chemicals","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Autoignition
+        Temperature","annotations":["CAMEO Chemicals","Hazardous Substances Data Bank
+        (HSDB)","ILO-WHO International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Lower
+        Explosive Limit (LEL)","annotations":["CAMEO Chemicals","The National Institute
+        for Occupational Safety and Health (NIOSH)","Occupational Safety and Health
+        Administration (OSHA)"],"uploading":false},{"name":"Color/Form (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"FDA Requirements","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"IR Spectra","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Acceptable Daily
+        Intakes","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"RCRA
+        Requirements (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Nature
+        Journal References","annotations":["Nature Synthesis","Nature Catalysis","Nature
+        Chemical Biology","Nature Chemistry","Nature Communications","Nature Portfolio
+        Journals"],"uploading":false},{"name":"Cleanup Methods (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Other Experimental
+        Properties","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Clinical
+        Laboratory Methods (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"WHO Essential Medicines","annotations":["WHO
+        Model Lists of Essential Medicines"],"uploading":false},{"name":"LogP","annotations":["Hazardous
+        Substances Data Bank (HSDB)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)","Human Metabolome Database (HMDB)","DrugBank"],"uploading":false},{"name":"Human
+        Toxicity Values (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Cancer Sites","annotations":["The National
+        Institute for Occupational Safety and Health (NIOSH)","EPA Integrated Risk
+        Information System (IRIS)"],"uploading":false},{"name":"LogS","annotations":["DrugBank"],"uploading":false},{"name":"Federal
+        Drinking Water Standards","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazards
+        Summary","annotations":["Hazardous Substances Data Bank (HSDB)","Agency for
+        Toxic Substances and Disease Registry (ATSDR)","Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","U.S. Chemical Safety and Hazard Investigation
+        Board (CSB)","EPA Air Toxics"],"uploading":false},{"name":"Effects During
+        Pregnancy and Lactation","annotations":["Drugs and Lactation Database (LactMed)","Mother
+        To Baby Fact Sheets"],"uploading":false},{"name":"PDBe Ligand Code","annotations":["Protein
+        Data Bank in Europe (PDBe)"],"uploading":false},{"name":"Preventive Measures
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"DOT
+        Emergency Guidelines (Complete)","annotations":["Hazardous Substances Data
+        Bank (HSDB)"],"uploading":false},{"name":"NIOSH Recommendations (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Metabolite Pathways","annotations":["Human
+        Metabolome Database (HMDB)"],"uploading":false},{"name":"TSCA Test Submissions","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Exposure Routes","annotations":["The
+        National Institute for Occupational Safety and Health (NIOSH)","Toxin and
+        Toxin Target Database (T3DB)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Last Revision Date","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Last Review Date","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Health Hazards","annotations":["CAMEO
+        Chemicals","Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"Uses
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"U.S.
+        Exports (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Acid
+        Value","annotations":["EU Food Improvement Agents"],"uploading":false},{"name":"Household
+        Products","annotations":["Consumer Product Information Database (CPID)"],"uploading":false},{"name":"Toxic-by-Inhalation
+        (TIH) Gas","annotations":["Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"TSCA
+        Requirements","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"History
+        and Incidents (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Disease
+        and References","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"Substance
+        Title","annotations":["Hazardous Substances Data Bank (HSDB)","ChemIDplus"],"uploading":false},{"name":"Chemical
+        Classes","annotations":["Haz-Map, Information on Hazardous Chemicals and Occupational
+        Diseases","Baker Lab, Chemistry Department, The University of North Carolina
+        at Chapel Hill","UVCBs and Multi-Constituent Substances (MCS) Committee","NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"Deprecated CAS","annotations":["EPA
+        DSSTox","ChemIDplus","EPA Chemicals under the TSCA","FDA Global Substance
+        Registration System (GSRS)"],"uploading":false},{"name":"Federal Drinking
+        Water Standards (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"ChEBI ID","annotations":["ChEBI"],"uploading":false},{"name":"Vapor
+        Pressure","annotations":["CAMEO Chemicals","Hazardous Substances Data Bank
+        (HSDB)","The National Institute for Occupational Safety and Health (NIOSH)","Occupational
+        Safety and Health Administration (OSHA)","Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","ILO-WHO International Chemical Safety
+        Cards (ICSCs)","Suuberg Lab, School of Engineering, Brown University"],"uploading":false},{"name":"Plant
+        Concentrations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"EU
+        Pesticides Data","annotations":["EU Pesticides Database"],"uploading":false},{"name":"FIFRA
+        Requirements","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Preventive
+        Measures","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"pH","annotations":["Hazardous
+        Substances Data Bank (HSDB)","EU Food Improvement Agents"],"uploading":false},{"name":"Non-Human
+        Toxicity Values","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Populations
+        at Special Risk","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"1H-1H
+        NMR Spectra","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"Relative
+        Evaporation Rate","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Cleanup
+        Methods","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"European
+        Community (EC) Number","annotations":["European Chemicals Agency (ECHA)","EU
+        Food Improvement Agents"],"uploading":false},{"name":"Toxicity Summary","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Toxin and Toxin Target Database (T3DB)"],"uploading":false},{"name":"Ionization
+        Efficiency","annotations":["Kruve Lab, Ionization & Mass Spectrometry, Stockholm
+        University"],"uploading":false},{"name":"Polymerization","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Drug Idiosyncrasies","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"LC-MS","annotations":["MassBank
+        Europe","MassBank of North America (MoNA)"],"uploading":false},{"name":"MICAD
+        Imaging Information","annotations":["Molecular Imaging and Contrast Agent
+        Database (MICAD)"],"uploading":false},{"name":"U.S. Exports","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Environmental Fate
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Protein
+        Binding","annotations":["DrugBank"],"uploading":false},{"name":"FDA Green
+        Book Patents","annotations":["FDA Approved Animal Drug Products (Green Book)"],"uploading":false},{"name":"11B
+        NMR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"13C
+        NMR Spectra","annotations":["Hazardous Substances Data Bank (HSDB)","Human
+        Metabolome Database (HMDB)","SpectraBase","NORMAN Suspect List Exchange"],"uploading":false},{"name":"19F
+        NMR Spectra","annotations":["SpectraBase","NORMAN Suspect List Exchange"],"uploading":false},{"name":"GlyCosmos
+        Species","annotations":["GlyCosmos Glycoscience Portal"],"uploading":false},{"name":"Interactions","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"DOT Emergency Guidelines","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Recommended Exposure
+        Limit (REL)","annotations":["The National Institute for Occupational Safety
+        and Health (NIOSH)","Occupational Safety and Health Administration (OSHA)"],"uploading":false},{"name":"Other
+        Environmental Concentrations","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Hazardous Reactivities and Incompatibilities","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"LiverTox Summary","annotations":["LiverTox"],"uploading":false},{"name":"FEMA
+        Number","annotations":["Joint FAO/WHO Expert Committee on Food Additives (JECFA)","Flavor
+        and Extract Manufacturers Association (FEMA)"],"uploading":false},{"name":"GlyCosmos
+        Monoisotopic Mass","annotations":["GlyCosmos Glycoscience Portal"],"uploading":false},{"name":"FEMA
+        Flavor Profile","annotations":["Flavor and Extract Manufacturers Association
+        (FEMA)"],"uploading":false},{"name":"Chemical Dangers","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Absorption,
+        Distribution and Excretion (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"ATR-IR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"Other
+        Resources (Internet Locators)","annotations":["ChemIDplus"],"uploading":false},{"name":"Animal
+        Concentrations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Use
+        Classification","annotations":["The National Institute for Occupational Safety
+        and Health (NIOSH)","Agency for Toxic Substances and Disease Registry (ATSDR)","EPA
+        Air Toxics","USGS Columbia Environmental Research Center","Suuberg Lab, School
+        of Engineering, Brown University","EU Food Improvement Agents","NJDOH RTK
+        Hazardous Substance List","EU Pesticides Database","Joint FAO/WHO Expert Committee
+        on Food Additives (JECFA)","European Medicines Agency (EMA)","NORMAN Suspect
+        List Exchange","FDA Approved Animal Drug Products (Green Book)","FDA Orange
+        Book","EPA Safer Choice","International Fragrance Association (IFRA)"],"uploading":false},{"name":"HMDB
+        ID","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"FDA
+        Green Book","annotations":["FDA Approved Animal Drug Products (Green Book)"],"uploading":false},{"name":"Therapeutic
+        Uses (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Cancer
+        Drugs","annotations":["NCI Cancer Drugs"],"uploading":false},{"name":"Sediment/Soil
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"FCN Number","annotations":["FDA Center
+        for Food Safety and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"Drug
+        Warnings (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Ongoing
+        Test Status","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"DOT
+        Label","annotations":["CAMEO Chemicals"],"uploading":false},{"name":"Analytic
+        Laboratory Methods","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Target
+        Organs","annotations":["The National Institute for Occupational Safety and
+        Health (NIOSH)","Agency for Toxic Substances and Disease Registry (ATSDR)","EPA
+        Integrated Risk Information System (IRIS)"],"uploading":false},{"name":"FDA
+        Requirements (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Molecular
+        Formula","annotations":["CAMEO Chemicals","Hazardous Substances Data Bank
+        (HSDB)","ILO-WHO International Chemical Safety Cards (ICSCs)","Australian
+        Industrial Chemicals Introduction Scheme (AICIS)","EU Food Improvement Agents","NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"Isolation and Evacuation","annotations":["CAMEO
+        Chemicals","Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"Associated
+        Article","annotations":["Crystallography Open Database (COD)","The Cambridge
+        Structural Database"],"uploading":false},{"name":"Associated Chemicals (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Metabolism/Metabolites
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazards
+        Identification","annotations":["Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"Evidence
+        for Carcinogenicity","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Biological
+        Half-Life (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hydrophobicity","annotations":["DrugBank"],"uploading":false},{"name":"Agrochemical
+        Category","annotations":["EU Pesticides Database","EPA Pesticide Ecotoxicity
+        Database","NORMAN Suspect List Exchange"],"uploading":false},{"name":"Monosaccharide
+        Composition","annotations":["GlyGen"],"uploading":false},{"name":"Springer
+        Nature References","annotations":["Springer Nature"],"uploading":false},{"name":"Regulatory
+        Information","annotations":["Drug Enforcement Administration (DEA)","Australian
+        Industrial Chemicals Introduction Scheme (AICIS)","New Zealand Environmental
+        Protection Authority (EPA)"],"uploading":false},{"name":"ATC Code","annotations":["European
+        Medicines Agency (EMA)","NORMAN Suspect List Exchange","WHO Anatomical Therapeutic
+        Chemical (ATC) Classification"],"uploading":false},{"name":"CERCLA Reportable
+        Quantities (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Dielectric
+        Constant","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Toxicological
+        Information","annotations":["Agency for Toxic Substances and Disease Registry
+        (ATSDR)"],"uploading":false},{"name":"Interactions (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Threshold Limit
+        Values (TLV) (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Shipment
+        Methods and Regulations","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"NLM
+        Resources (File Locators)","annotations":["ChemIDplus"],"uploading":false},{"name":"Pharos
+        Ligand ID","annotations":["Pharos"],"uploading":false},{"name":"Manufacturers","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Body Burden","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"DEA Controlled Substances","annotations":["Drug
+        Enforcement Administration (DEA)","National Drug Code (NDC) Directory"],"uploading":false},{"name":"UV
+        Spectra","annotations":["Hazardous Substances Data Bank (HSDB)","EU Food Improvement
+        Agents","NCI Investigational Drugs"],"uploading":false},{"name":"Inhalation
+        Risk","annotations":["ILO-WHO International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Cellular
+        Locations","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"Impurities","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Environmental Bioconcentration
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"National
+        Toxicology Program Studies (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Medical Surveillance (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Refractive Index","annotations":["Hazardous
+        Substances Data Bank (HSDB)","EU Food Improvement Agents","Joint FAO/WHO Expert
+        Committee on Food Additives (JECFA)"],"uploading":false},{"name":"KEGG ID","annotations":["KEGG"],"uploading":false},{"name":"USDA
+        Pesticide Data Program","annotations":["USDA Pesticide Data Program"],"uploading":false},{"name":"Federal
+        Drinking Water Guidelines","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"RCRA Requirements","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Absorption, Distribution
+        and Excretion","annotations":["Hazardous Substances Data Bank (HSDB)","DrugBank"],"uploading":false},{"name":"ChEMBL
+        ID","annotations":["ChEMBL"],"uploading":false},{"name":"Atmospheric Standards
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazardous
+        Reactivities & Incompatibilities","annotations":["The National Institute for
+        Occupational Safety and Health (NIOSH)"],"uploading":false},{"name":"Biochemical
+        Reactions","annotations":["IUPHAR/BPS Guide to PHARMACOLOGY","Rhea - Annotated
+        Reactions Database"],"uploading":false},{"name":"Packaging and Labelling","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Probable
+        Routes of Human Exposure","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Mechanism
+        of Action","annotations":["Hazardous Substances Data Bank (HSDB)","DrugBank"],"uploading":false},{"name":"Henry''s
+        Law Constant","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Disposal
+        Methods (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Related
+        Records","annotations":["NORMAN Suspect List Exchange"],"uploading":false},{"name":"Emergency
+        Response Planning Guidelines","annotations":["Hazardous Substances Data Bank
+        (HSDB)","Haz-Map, Information on Hazardous Chemicals and Occupational Diseases","Emergency
+        Response Guidebook (ERG)"],"uploading":false},{"name":"Polymers","annotations":["NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"CSL Reaction Information","annotations":["Pistoia
+        Alliance Chemical Safety Library"],"uploading":false},{"name":"Evidence for
+        Carcinogenicity (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Biomarker Information","annotations":["MarkerDB"],"uploading":false},{"name":"Food
+        Survey Values (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Spillage
+        Disposal","annotations":["ILO-WHO International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Consumer
+        Uses","annotations":["EPA Chemical Data Reporting (CDR)"],"uploading":false},{"name":"AEGLs
+        Notes","annotations":["EPA Acute Exposure Guideline Levels (AEGLs)"],"uploading":false},{"name":"Human
+        Toxicity Values","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Artificial
+        Pollution Sources","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"First
+        Aid Measures","annotations":["ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Transformations","annotations":["ChEMBL","NORMAN
+        Suspect List Exchange"],"uploading":false},{"name":"EC Classification","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"RXCUI","annotations":["NLM
+        RxNorm Terminology"],"uploading":false},{"name":"Odor","annotations":["Hazardous
+        Substances Data Bank (HSDB)","U.S. Chemical Safety and Hazard Investigation
+        Board (CSB)"],"uploading":false},{"name":"Fire Fighting","annotations":["CAMEO
+        Chemicals","ILO-WHO International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Ecotoxicity
+        Excerpts (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Shipping
+        Name/ Number DOT/UN/NA/IMO (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Thieme References","annotations":["Thieme
+        Chemistry"],"uploading":false},{"name":"Update History","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Therapeutic Uses","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Non-Human Toxicity
+        Values (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"EPA
+        IRIS Information","annotations":["EPA Integrated Risk Information System (IRIS)"],"uploading":false},{"name":"FIFRA
+        Requirements (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Other
+        MS","annotations":["Hazardous Substances Data Bank (HSDB)","MassBank Europe","MassBank
+        of North America (MoNA)"],"uploading":false},{"name":"Soil Standards","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"UV-VIS Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"EPA
+        Provisional Peer-Reviewed Toxicity Values","annotations":["EPA Provisional
+        Peer-Reviewed Toxicity Values (PPRTVs)"],"uploading":false},{"name":"UVCB","annotations":["EPA
+        Chemicals under the TSCA"],"uploading":false},{"name":"U.S. Production (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"DrugBank ID","annotations":["DrugBank"],"uploading":false},{"name":"Physical
+        Description","annotations":["CAMEO Chemicals","The National Institute for
+        Occupational Safety and Health (NIOSH)","Occupational Safety and Health Administration
+        (OSHA)","Haz-Map, Information on Hazardous Chemicals and Occupational Diseases","ILO-WHO
+        International Chemical Safety Cards (ICSCs)","U.S. Chemical Safety and Hazard
+        Investigation Board (CSB)","EPA Chemical Data Reporting (CDR)","Human Metabolome
+        Database (HMDB)","EU Food Improvement Agents","Joint FAO/WHO Expert Committee
+        on Food Additives (JECFA)"],"uploading":false},{"name":"Enthalpy of Sublimation","annotations":["Suuberg
+        Lab, School of Engineering, Brown University"],"uploading":false},{"name":"Accidental
+        Release Measures","annotations":["Emergency Response Guidebook (ERG)"],"uploading":false},{"name":"Animal
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Ionization Potential","annotations":["The
+        National Institute for Occupational Safety and Health (NIOSH)","Occupational
+        Safety and Health Administration (OSHA)"],"uploading":false},{"name":"EMA
+        Drug Information","annotations":["European Medicines Agency (EMA)"],"uploading":false},{"name":"Stability/Shelf
+        Life (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"U.S.
+        Imports","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazardous
+        Substances DataBank Number","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Ecotoxicity Values (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Acute Exposure Guideline
+        Levels (AEGLs)","annotations":["EPA Acute Exposure Guideline Levels (AEGLs)"],"uploading":false},{"name":"Environmental
+        Abiotic Degradation","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Collision
+        Cross Section","annotations":["Baker Lab, Chemistry Department, The University
+        of North Carolina at Chapel Hill","CCSbase","NORMAN Suspect List Exchange"],"uploading":false},{"name":"Atmospheric
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Other Experimental Properties (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Explosive Limits
+        and Potential","annotations":["Hazardous Substances Data Bank (HSDB)","ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"UN
+        Number","annotations":["CAMEO Chemicals","The National Institute for Occupational
+        Safety and Health (NIOSH)","ILO-WHO International Chemical Safety Cards (ICSCs)","Emergency
+        Response Guidebook (ERG)","NJDOH RTK Hazardous Substance List"],"uploading":false},{"name":"Density","annotations":["CAMEO
+        Chemicals","Hazardous Substances Data Bank (HSDB)","The National Institute
+        for Occupational Safety and Health (NIOSH)","Occupational Safety and Health
+        Administration (OSHA)","ILO-WHO International Chemical Safety Cards (ICSCs)","Joint
+        FAO/WHO Expert Committee on Food Additives (JECFA)"],"uploading":false},{"name":"Agrochemical
+        Transformations","annotations":["NORMAN Suspect List Exchange"],"uploading":false},{"name":"Respirator
+        Recommendations","annotations":["The National Institute for Occupational Safety
+        and Health (NIOSH)"],"uploading":false},{"name":"Other Hazardous Reactions","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Physical Dangers","annotations":["ILO-WHO
+        International Chemical Safety Cards (ICSCs)"],"uploading":false},{"name":"Effects
+        of Short Term Exposure","annotations":["ILO-WHO International Chemical Safety
+        Cards (ICSCs)"],"uploading":false},{"name":"FTIR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"AEGLs
+        Table","annotations":["EPA Acute Exposure Guideline Levels (AEGLs)"],"uploading":false},{"name":"DSSTox
+        Substance ID","annotations":["EPA DSSTox"],"uploading":false},{"name":"Personal
+        Protective Equipment (PPE) (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Odor Threshold (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"17O NMR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"Analytic
+        Laboratory Methods (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"U.S. Imports (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Effects of Long
+        Term Exposure","annotations":["ILO-WHO International Chemical Safety Cards
+        (ICSCs)"],"uploading":false},{"name":"Chemical-Target Interactions","annotations":["Comparative
+        Toxicogenomics Database (CTD)","Toxin and Toxin Target Database (T3DB)","Chemical
+        Probes Portal","ChEMBL","GlyCosmos Glycoscience Portal","IUPHAR/BPS Guide
+        to PHARMACOLOGY","Drug Gene Interaction database (DGIdb)","BindingDB","DrugBank","Therapeutic
+        Target Database (TTD)"],"uploading":false},{"name":"HIV/AIDS and Opportunistic
+        Infection Drugs","annotations":["Drug Database, Clinicalinfo.hiv.gov"],"uploading":false},{"name":"Names
+        and Synonyms","annotations":["ChemIDplus"],"uploading":false},{"name":"Bionecessity","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Human Drugs","annotations":["Drugs@FDA","European
+        Medicines Agency (EMA)","NORMAN Suspect List Exchange"],"uploading":false},{"name":"Disposal
+        Methods","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Emergency
+        Response Planning Guidelines (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Storage Conditions","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Consumption Patterns
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Allowable
+        Tolerances (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"CERCLA
+        Reportable Quantities","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Taxonomy","annotations":["GlyCosmos
+        Glycoscience Portal","NORMAN Suspect List Exchange","The Natural Products
+        Atlas","E. coli Metabolome Database (ECMDB)","Yeast Metabolome Database (YMDB)","ECI
+        Group, LCSB, University of Luxembourg","West Coast Metabolomics Center-UC
+        Davis","Natural Product Activity and Species Source (NPASS)","KNApSAcK Species-Metabolite
+        Database","LOTUS - the natural products occurrence database"],"uploading":false},{"name":"EPA
+        Safer Chemical","annotations":["EPA Safer Choice"],"uploading":false},{"name":"Biologic
+        Line Notation","annotations":["GlyTouCan Project"],"uploading":false},{"name":"OSHA
+        Standards","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"GlyTouCan
+        Accession","annotations":["GlycoNAVI","GlyCosmos Glycoscience Portal","GlyTouCan
+        Project"],"uploading":false},{"name":"MS-MS","annotations":["Human Metabolome
+        Database (HMDB)","NORMAN Suspect List Exchange","NIST Mass Spectrometry Data
+        Center"],"uploading":false},{"name":"Reported Fatal Dose","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Toxin and Toxin Target Database (T3DB)"],"uploading":false},{"name":"GHS
+        Classification","annotations":["European Chemicals Agency (ECHA)","Hazardous
+        Substances Data Bank (HSDB)","Hazardous Chemical Information System (HCIS),
+        Safe Work Australia","NITE-CMC","Regulation (EC) No 1272/2008 of the European
+        Parliament and of the Council"],"uploading":false},{"name":"FDA Substances
+        Added to Food","annotations":["FDA Center for Food Safety and Applied Nutrition
+        (CFSAN)"],"uploading":false},{"name":"DEA Drug Facts","annotations":["Drug
+        Enforcement Administration (DEA)"],"uploading":false},{"name":"Soil Adsorption/Mobility
+        (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Metabolomics
+        Workbench ID","annotations":["Metabolomics Workbench"],"uploading":false},{"name":"Immediately
+        Dangerous to Life or Health (IDLH)","annotations":["CAMEO Chemicals","Hazardous
+        Substances Data Bank (HSDB)","The National Institute for Occupational Safety
+        and Health (NIOSH)","Occupational Safety and Health Administration (OSHA)","Haz-Map,
+        Information on Hazardous Chemicals and Occupational Diseases"],"uploading":false},{"name":"Lipid
+        Maps ID (LM_ID)","annotations":["LIPID MAPS"],"uploading":false},{"name":"Environmental
+        Abiotic Degradation (Complete)","annotations":["Hazardous Substances Data
+        Bank (HSDB)"],"uploading":false},{"name":"Clinical Laboratory Methods","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Color Additive Status","annotations":["FDA
+        Center for Food Safety and Applied Nutrition (CFSAN)"],"uploading":false},{"name":"Standard
+        Transportation Number","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"31P
+        NMR Spectra","annotations":["SpectraBase","NORMAN Suspect List Exchange"],"uploading":false},{"name":"EPA
+        Ecotoxicity","annotations":["EPA Pesticide Ecotoxicity Database"],"uploading":false},{"name":"Fire
+        Potential","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Environmental
+        Bioconcentration","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Sampling
+        Procedures","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Optical
+        Rotation","annotations":["Hazardous Substances Data Bank (HSDB)","EU Food
+        Improvement Agents","NCI Investigational Drugs"],"uploading":false},{"name":"MALDI
+        Recipes","annotations":["NIST Synthetic Polymer MALDI Recipes Database"],"uploading":false},{"name":"OSHA
+        Standards (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"FDA
+        Orange Book Patents","annotations":["FDA Orange Book"],"uploading":false},{"name":"Flash
+        Point","annotations":["CAMEO Chemicals","Hazardous Substances Data Bank (HSDB)","The
+        National Institute for Occupational Safety and Health (NIOSH)","Occupational
+        Safety and Health Administration (OSHA)","Haz-Map, Information on Hazardous
+        Chemicals and Occupational Diseases","ILO-WHO International Chemical Safety
+        Cards (ICSCs)"],"uploading":false},{"name":"Drug Induced Liver Injury","annotations":["Drug
+        Induced Liver Injury Rank (DILIrank) Dataset"],"uploading":false},{"name":"Upper
+        Explosive Limit (UEL)","annotations":["CAMEO Chemicals","The National Institute
+        for Occupational Safety and Health (NIOSH)","Occupational Safety and Health
+        Administration (OSHA)"],"uploading":false},{"name":"Related CAS","annotations":["ChemIDplus","CAS
+        Common Chemistry"],"uploading":false},{"name":"Decomposition","annotations":["Hazardous
+        Substances Data Bank (HSDB)","ILO-WHO International Chemical Safety Cards
+        (ICSCs)","U.S. Chemical Safety and Hazard Investigation Board (CSB)"],"uploading":false},{"name":"FDA
+        Medication Guides","annotations":["FDA Medication Guides"],"uploading":false},{"name":"Food
+        Survey Values","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Evaluations
+        of the Joint FAO/WHO Expert Committee on Food Additives - JECFA","annotations":["Joint
+        FAO/WHO Expert Committee on Food Additives (JECFA)"],"uploading":false},{"name":"Isoelectric
+        Point","annotations":["DrugBank"],"uploading":false},{"name":"Firefighting
+        Hazards (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"DEA
+        Drug and Chemical Information","annotations":["Drug Enforcement Administration
+        (DEA)"],"uploading":false},{"name":"COD Number","annotations":["Crystallography
+        Open Database (COD)"],"uploading":false},{"name":"Special Reports (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Reactivity Profile","annotations":["CAMEO
+        Chemicals"],"uploading":false},{"name":"Wiley References","annotations":["Wiley"],"uploading":false},{"name":"15N
+        NMR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"Food
+        Additive Definition","annotations":["EU Food Improvement Agents"],"uploading":false},{"name":"Environmental
+        Fate","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Differential
+        Scanning Calorimetry (DSC)","annotations":["U.S. Chemical Safety and Hazard
+        Investigation Board (CSB)"],"uploading":false},{"name":"Explosive Limits and
+        Potential (Complete)","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Hazardous
+        Reactivities and Incompatibilities (Complete)","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"NSC Number","annotations":["DTP/NCI"],"uploading":false},{"name":"DOT
+        ID and Guide","annotations":["The National Institute for Occupational Safety
+        and Health (NIOSH)"],"uploading":false},{"name":"History and Incidents","annotations":["Hazardous
+        Substances Data Bank (HSDB)","U.S. Chemical Safety and Hazard Investigation
+        Board (CSB)"],"uploading":false},{"name":"Molecular Imaging Information","annotations":["Molecular
+        Imaging Database (MOLI)"],"uploading":false},{"name":"CAS","annotations":["European
+        Chemicals Agency (ECHA)","CAMEO Chemicals","Hazardous Substances Data Bank
+        (HSDB)","EPA DSSTox","ChemIDplus","The National Institute for Occupational
+        Safety and Health (NIOSH)","Occupational Safety and Health Administration
+        (OSHA)","ILO-WHO International Chemical Safety Cards (ICSCs)","EPA Acute Exposure
+        Guideline Levels (AEGLs)","CAS Common Chemistry","EPA Chemical Data Reporting
+        (CDR)","Australian Industrial Chemicals Introduction Scheme (AICIS)","Human
+        Metabolome Database (HMDB)","EPA Chemicals under the TSCA","FDA Global Substance
+        Registration System (GSRS)","EPA Integrated Risk Information System (IRIS)","DrugBank","EPA
+        Provisional Peer-Reviewed Toxicity Values (PPRTVs)","DTP/NCI","New Zealand
+        Environmental Protection Authority (EPA)","International Fragrance Association
+        (IFRA)"],"uploading":false},{"name":"Other Safety Information","annotations":["Australian
+        Industrial Chemicals Introduction Scheme (AICIS)"],"uploading":false},{"name":"Permissible
+        Exposure Limit (PEL)","annotations":["The National Institute for Occupational
+        Safety and Health (NIOSH)","Occupational Safety and Health Administration
+        (OSHA)","Haz-Map, Information on Hazardous Chemicals and Occupational Diseases"],"uploading":false},{"name":"Other
+        Standards Regulations and Guidelines","annotations":["Hazardous Substances
+        Data Bank (HSDB)"],"uploading":false},{"name":"Allowable Tolerances","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Odor Threshold","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Haz-Map, Information on Hazardous Chemicals
+        and Occupational Diseases"],"uploading":false},{"name":"Uses","annotations":["Hazardous
+        Substances Data Bank (HSDB)","Haz-Map, Information on Hazardous Chemicals
+        and Occupational Diseases","Toxin and Toxin Target Database (T3DB)","EPA Air
+        Toxics","EPA Chemical and Products Database (CPDat)","USGS National Minerals
+        Information Center","UVCBs and Multi-Constituent Substances (MCS) Committee","Cosmetic
+        Ingredient Review (CIR)","NORMAN Suspect List Exchange","NIST Synthetic Polymer
+        MALDI Recipes Database"],"uploading":false},{"name":"Drug Classes","annotations":["LiverTox"],"uploading":false},{"name":"NIPH
+        Clinical Trials Search of Japan","annotations":["NIPH Clinical Trials Search
+        of Japan"],"uploading":false},{"name":"DEA Code Number","annotations":["Drug
+        Enforcement Administration (DEA)"],"uploading":false},{"name":"Fire Hazards","annotations":["CAMEO
+        Chemicals","ILO-WHO International Chemical Safety Cards (ICSCs)","Emergency
+        Response Guidebook (ERG)"],"uploading":false},{"name":"State Drinking Water
+        Guidelines","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"State
+        Drinking Water Standards","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Protein
+        Bound 3D Structures","annotations":["RCSB Protein Data Bank (RCSB PDB)"],"uploading":false},{"name":"Atmospheric
+        Standards","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Food
+        Additives","annotations":["FDA Center for Food Safety and Applied Nutrition
+        (CFSAN)"],"uploading":false},{"name":"PDBe Conformer","annotations":["Protein
+        Data Bank in Europe (PDBe)"],"uploading":false},{"name":"Patents","annotations":["DrugBank"],"uploading":false},{"name":"MALDI","annotations":["MassBank
+        Europe"],"uploading":false},{"name":"Associated Foods","annotations":["FooDB"],"uploading":false},{"name":"Tissue
+        Locations","annotations":["Human Metabolome Database (HMDB)"],"uploading":false},{"name":"Fragrances","annotations":["International
+        Fragrance Association (IFRA)"],"uploading":false},{"name":"Dissociation Constants","annotations":["Hazardous
+        Substances Data Bank (HSDB)","IUPAC Digitized pKa Dataset","ChEMBL","DrugBank"],"uploading":false},{"name":"Treatment","annotations":["Toxin
+        and Toxin Target Database (T3DB)"],"uploading":false},{"name":"Peroxide Forming
+        Chemical","annotations":["Lab and Research Safety, University of Minnesota"],"uploading":false},{"name":"Acute
+        Toxicity Link","annotations":["USGS Columbia Environmental Research Center"],"uploading":false},{"name":"Fish/Seafood
+        Concentrations (Complete)","annotations":["Hazardous Substances Data Bank
+        (HSDB)"],"uploading":false},{"name":"Methods of Manufacturing (Complete)","annotations":["Hazardous
+        Substances Data Bank (HSDB)"],"uploading":false},{"name":"Raman Spectra","annotations":["Hazardous
+        Substances Data Bank (HSDB)","SpectraBase"],"uploading":false},{"name":"HSDB
+        Note","annotations":["Hazardous Substances Data Bank (HSDB)"],"uploading":false},{"name":"Wikidata","annotations":["Wikidata"],"uploading":false},{"name":"Near
+        IR Spectra","annotations":["SpectraBase"],"uploading":false},{"name":"NIOSH
+        Toxicity Data","annotations":["The National Institute for Occupational Safety
+        and Health (NIOSH)"],"uploading":false}]'
+  recorded_at: 2026-03-04 20:02:47
+recorded_with: VCR-vcr/2.1.0

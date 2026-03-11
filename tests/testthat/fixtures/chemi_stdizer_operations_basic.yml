@@ -1,0 +1,51 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/stdizer/operations
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 04 Mar 2026 20:05:00 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"@c":".Change","type":"METHOD","text":"Dearomatize","value":"dearomatize"},{"@c":".Change","type":"METHOD","text":"Remove
+        Isotopes","value":"removeIsotopes"},{"@c":".Change","type":"METHOD","text":"Reset
+        Stereocenters","value":"resetStereocenters"},{"@c":".Change","type":"METHOD","text":"Reset
+        cis/trans","value":"resetCisTrans"},{"@c":".Change","type":"METHOD","text":"Fold
+        Hydrogens","value":"foldHydrogens"},{"@c":".Change","type":"METHOD","text":"Remove
+        Highlights","value":"removeHighlights"},{"@c":".Change","type":"METHOD","text":"Componentize","value":"componentize"},{"@c":".Change","type":"METHOD","text":"Fix
+        unusual valences","value":"fixValences"},{"@c":".Change","type":"METHOD","text":"Fix
+        unusual charges","value":"fixCharges"},{"@c":".Check","type":"METHOD","text":"Is
+        multi-component?","value":"isMulticomponent"},{"@c":".Check","type":"METHOD","text":"Inorganic?","value":"isInorganic"},{"@c":".Check","type":"METHOD","text":"Has
+        Query?","value":"hasQuery"},{"@c":".Check","type":"METHOD","text":"Metal-organic?","value":"isMetalorganic"},{"@c":".Check","type":"METHOD","text":"Bad
+        valence?","value":"hasBadValence"},{"@c":".Check","type":"METHOD","text":"Ambiguous
+        Hydrogens?","value":"hasAmbiguousH"},{"@c":".Check","type":"METHOD","text":"Pseudo-atom?","value":"hasPseudoatom"},{"@c":".Check","type":"METHOD","text":"Generic
+        SGroups?","value":"hasGenericSGroups"},{"@c":".Check","type":"METHOD","text":"Super-atom?","value":"hasSuperatom"},{"@c":".Check","type":"METHOD","text":"Repeating
+        Units?","value":"hasRepeatingUnits"},{"@c":".Check","type":"METHOD","text":"Multiple
+        Groups?","value":"hasMultipleGroups"},{"@c":".Check","type":"METHOD","text":"R-Groups?","value":"hasRGroups"},{"@c":".Check","type":"METHOD","text":"Is
+        flag set?","value":"checkFlag"},{"@c":".LibraryGroup","type":"GROUP","text":"Mesomeric
+        transformations","operations":[],"frozen":false,"id":"64342a1cb67b842e3792553d","value":"mesomers"},{"@c":".LibraryGroup","type":"GROUP","text":"Tautomers
+        standardization","operations":[],"frozen":false,"id":"64342a1cb67b842e3792553e","value":"tautomers"},{"@c":".LibraryGroup","type":"GROUP","text":"Neutralize
+        and de-radicalize","operations":[],"frozen":false,"id":"64342a1cb67b842e3792553f","value":"neutralize"},{"@c":".LibraryGroup","type":"GROUP","text":"Break
+        salts","operations":[],"frozen":false,"id":"64342a1db67b842e37925540","value":"break-salts"},{"@c":".LibraryGroup","type":"GROUP","text":"MS-Ready
+        exclusions","operations":[],"frozen":false,"id":"64342a1db67b842e37925541","value":"ms-ready-exclusions"},{"@c":".LibraryGroup","type":"GROUP","text":"QSAR-Ready
+        exclusions","operations":[],"frozen":false,"id":"64342a1fb67b842e37925542","value":"qsar-ready-exclusions"},{"@c":".LibraryGroup","type":"GROUP","text":"Standard
+        checks","operations":[],"frozen":false,"id":"64342a1fb67b842e37925543","value":"standard-checks"},{"@c":".LibraryGroup","type":"GROUP","text":"Markush
+        checks","operations":[],"frozen":false,"id":"64342a1fb67b842e37925544","value":"markush-checks"},{"@c":".LibraryGroup","type":"GROUP","text":"Neutralize
+        and de-radicalize","description":"TMM edit","operations":[],"frozen":false,"id":"6446ae2de3f8b430de4abc7f","value":"neutralize_TMM"},{"@c":".LibraryGroup","type":"GROUP","text":"QSAR-Ready
+        exclusions_CNL","operations":[],"frozen":false,"id":"6446ae59e3f8b430de4abc83","value":"qsar-ready-exclusions_CNL"},{"@c":".LibraryGroup","type":"GROUP","text":"QSAR-Ready
+        exclusions_TMM","operations":[],"frozen":false,"id":"6446ae66e3f8b430de4abc84","value":"qsar-ready-exclusions_TMM"},{"@c":".LibraryGroup","type":"GROUP","text":"Tautomers
+        standardization_CNL","operations":[],"frozen":true,"id":"6446ae6ee3f8b430de4abc85","value":"tautomers_CNL"},{"@c":".LibraryGroup","type":"GROUP","text":"QSAR-Ready
+        exclusions","operations":[],"frozen":false,"id":"66269e3c8f26506ab5aa273a","value":"qsar-ready-exclusions_0"},{"@c":".LibraryGroup","type":"GROUP","text":"Tautomers_KNIME_list","description":"Transformations
+        supplied in the SI for https://doi.org/10.1186/s13321-024-00814-3.","operations":[],"frozen":false,"id":"680a95afb4013b2d59edd97b","value":"Tautomers_KNIME_list"}]'
+  recorded_at: 2026-03-04 20:05:01
+recorded_with: VCR-vcr/2.1.0

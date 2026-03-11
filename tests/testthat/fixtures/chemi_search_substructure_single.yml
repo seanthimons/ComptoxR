@@ -1,0 +1,18 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/search/substructure?smiles=c1ccccc1
+  response:
+    status: 504
+    headers:
+      Server: nginx/1.21.4
+      Date: Wed, 04 Mar 2026 20:06:25 GMT
+      Content-Type: text/html
+      Content-Length: '167'
+      Connection: keep-alive
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: "<html>\r\n<head><title>504 Gateway Time-out</title></head>\r\n<body>\r\n<center><h1>504
+        Gateway Time-out</h1></center>\r\n<hr><center>nginx/1.21.4</center>\r\n</body>\r\n</html>\r\n"
+  recorded_at: 2026-03-04 20:06:26
+recorded_with: VCR-vcr/2.1.0

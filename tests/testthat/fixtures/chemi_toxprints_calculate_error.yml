@@ -1,0 +1,23 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/toxprints/calculate?smiles=INVALID_SMILES_XYZ&labels=FALSE
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:05:05 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"actives":0,"total":1,"metrics":[],"chemicals":[{"chemId":"INVALID_SMILES_XYZ","smiles":"INVALID_SMILES_XYZ","key":"INVALID_SMILES_XYZ-toxprint_V2_0_r711","message":"Cannot
+        interpret SMILES: INVALID_SMILES_XYZ"}],"options":{"profile":"toxprint_V2_0_r711","OR":3.0,"PV1":0.05,"TP":3}}'
+  recorded_at: 2026-03-04 20:05:05
+recorded_with: VCR-vcr/2.1.0

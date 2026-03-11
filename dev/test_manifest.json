@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-02-28T23:56:24Z",
+  "updated": "2026-03-09T14:42:52Z",
   "files": {
     "test-cc_detail.R": {
       "status": "generated",
@@ -148,7 +148,7 @@
     },
     "test-ct_hazard.R": {
       "status": "generated",
-      "generated_date": "2026-02-28T23:56:23Z"
+      "generated_date": "2026-03-09T14:42:51Z"
     },
     "test-ct_hazard_cancer.R": {
       "status": "generated",
@@ -169,6 +169,18 @@
     "test-ct_similar.R": {
       "status": "generated",
       "generated_date": "2026-02-28T23:56:24Z"
+    },
+    "test-mock_static.R": {
+      "status": "generated",
+      "generated_date": "2026-03-09T14:42:51Z"
+    },
+    "test-mock_path.R": {
+      "status": "generated",
+      "generated_date": "2026-03-09T14:42:51Z"
+    },
+    "test-ct_list.R": {
+      "status": "generated",
+      "generated_date": "2026-03-09T14:42:52Z"
     }
   }
 }

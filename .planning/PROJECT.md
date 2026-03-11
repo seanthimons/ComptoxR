@@ -1,50 +1,50 @@
-# ComptoxR Stub Generation Pipeline
+# ComptoxR
 
 ## What This Is
 
-ComptoxR's automated function stub generation pipeline for EPA CompTox API wrappers. The pipeline parses OpenAPI schemas and generates R functions with correct signatures, documentation, and request handling.
+ComptoxR is an R package providing wrappers for USEPA CompTox Chemical Dashboard APIs. The project encompasses both the automated stub generation pipeline (which produces API wrappers from OpenAPI schemas) and the user-facing package that researchers use for chemical hazard assessment, toxicity screening, and environmental fate analysis.
 
 ## Core Value
 
-Generated API wrapper functions must send requests in the format the API expects — correct body encoding, content types, and parameter handling.
+Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
+
+## Current Milestone: v2.2 Package Stabilization
+
+**Goal:** Migrate all user-facing ct_* functions to use generated stubs via `generic_request()`, classify functions by complexity, and get the package to a clean build + passing test state.
+
+**Approach (from structured debate analysis):** Modified B+C hybrid — fix mechanical blockers first, classify remaining functions by complexity, migrate thin ones as wrappers, vertical-slice complex ones, defer post-processing recipe system until concrete need surfaces.
+
+**Target features:**
+- All ct_* functions migrated to generic_request() or delegating to generated stubs
+- R CMD check passes with 0 errors/warnings on current branch
+- Test generator produces correct tests for migrated functions
+- User-facing functions promoted to `@lifecycle stable`
 
 ## Current State
 
-**Latest shipped:** v2.1 Test Infrastructure (2026-03-02)
+**Latest shipped:** v2.1 Test Infrastructure (2026-03-02, verified 2026-03-09)
+**Active:** v2.2 Package Stabilization — phases 27-30 created, not yet planned
 
-The stub generation pipeline is fully documented, consolidated, tested, and automated:
-- Query parameter extraction and function signatures (v1.0)
-- Raw text body support for `/chemical/search/equal/` (v1.1)
-- JSON array encoding for bulk POST endpoints (v1.2)
-- Correct resolver integration with idType parameter (v1.3)
-- Empty POST endpoint detection and reporting (v1.4)
-- Swagger 2.0 body-in-parameters extraction (v1.5)
-- Version-aware reference resolution with fallback chain (v1.5)
-- Preflight endpoint filtering (v1.5)
-- Unified `openapi_to_spec()` pipeline for all schema types (v1.6)
-- `select_schema_files()` helper for stage-based prioritization (v1.6)
-- Updated ENDPOINT_EVAL_UTILS_GUIDE.md with comprehensive documentation (v1.7)
-- Comprehensive test infrastructure with 95+ test cases (v1.8)
-- E2E integration tests for full schema -> stub -> execution flow (v1.8)
-- CI/CD pipeline with coverage thresholds and Codecov integration (v1.8)
-- Endpoint-level schema diffing with breaking change detection (v1.9)
-- Timeout protection and graceful failure handling (v1.9)
-- Auto-pagination engine for all request templates (v2.0)
-- 4 pagination strategies: offset/limit, page/size, cursor, path-based (v2.0)
-- R CMD check 0 errors — all build blockers fixed (v2.1)
-- Metadata-aware test generator reading function signatures and tidy flags (v2.1)
-- VCR cassette cleanup with parallel re-recording script (v2.1)
-- Automated test gap detection + generation pipeline in CI (v2.1)
-- 102 pagination tests (detection, execution, integration) (v2.1)
-- 75% coverage threshold (warn-only) with Codecov (v2.1)
+**Stub generation pipeline (v1.0-v2.1) — ON HOLD:**
+The pipeline is fully functional and automated. Resuming pipeline work (advanced schema handling, S7 classes, etc.) is deferred until package stabilization is complete.
+
+Key pipeline capabilities:
+- Unified schema parsing for OpenAPI 3.0 and Swagger 2.0 (v1.5-v1.6)
+- Auto-pagination engine with 4 strategies (v2.0)
+- Metadata-aware test generator (v2.1)
+- CI/CD pipeline with automated schema diffing and stub regeneration (v1.8-v2.1)
 
 ## Deferred
 
-Future milestones:
+**Pipeline work (ON HOLD — resume after v2.2):**
 - Advanced schema handling (ADV-01-04)
 - Advanced testing: snapshot tests, performance benchmarks, contract testing
 - S7 class implementation (#29)
 - Schema-check workflow improvements (#96)
+
+**Package work (deferred past v2.2):**
+- Post-processing recipe system (#120) — defer until concrete need surfaces
+- EPI Suite / ECOTOX / GenRA integration
 
 ## Requirements
 
@@ -103,7 +103,7 @@ Future milestones:
 
 ### Active
 
-(None — define next milestone with `/gsd:new-milestone`)
+(Defining for v2.2 — see REQUIREMENTS.md)
 
 ### Out of Scope
 
@@ -115,26 +115,30 @@ Future milestones:
 
 ## Context
 
-**Shipped Versions:**
-- v1.0: Query parameter signatures (2026-01-27)
-- v1.1: Raw text body fix (2026-01-27)
-- v1.2: Bulk request body type fix (2026-01-28)
-- v1.3: Chemi resolver integration fix (2026-01-28)
-- v1.4: Empty POST endpoint detection (2026-01-29)
-- v1.5: Swagger 2.0 body schema support (2026-01-29)
-- v1.6: Unified stub generation pipeline (2026-01-30)
-- v1.7: Documentation refresh (2026-01-29)
-- v1.8: Testing infrastructure (2026-01-31)
-- v1.9: Schema check workflow fix (2026-02-12)
+**v2.2 context:**
+- 40% of user-facing functions already migrated (14/35 using generic templates)
+- Current branch `feat/migrate-ct-functions` has 10+ functions partially migrated (uncommitted)
+- Functions range from trivial 1-line wrappers (ct_hazard) to complex dispatchers (ct_bioactivity with search_type switch + annotation join) to post-processors (ct_lists_all with coerce/split logic)
+- 297 pre-existing test failures from VCR/API key issues
+- Only 33 of 256 API wrappers have recorded VCR cassettes
+- Stable functions protected from stub generator overwrite via lifecycle tags (#95)
 
-**Tech Stack:** R package using httr2, tidyverse, roxygen2
+**Shipped pipeline versions (v1.0-v2.1):**
+- v1.0-v1.9: Schema parsing, stub generation, test infrastructure (2026-01-27 to 2026-02-12)
+- v2.0: Paginated requests (2026-02-24)
+- v2.1: Test infrastructure overhaul (2026-03-02)
+
+**Tech Stack:** R package using httr2, tidyverse, roxygen2, vcr, testthat
 
 ## Key Files
 
 - `R/z_generic_request.R` — Core request templates (generic_request, generic_chemi_request, generic_cc_request)
+- `R/ct_bioactivity.R` — Complex dispatcher pattern (search_type switch + annotate join)
+- `R/ct_lists_all.R` — Post-processing pattern (conditional projection + coerce/split)
+- `R/ct_hazard.R` — Thin wrapper pattern (1-line delegation to generated stub)
+- `R/ct_details.R` — Direct generic_request() pattern (with projection parameter)
 - `dev/endpoint_eval/07_stub_generation.R` — Stub generation logic
-- `R/ct_chemical_search_equal.R` — Example of generated raw text body stub
-- `R/chemi_resolver_lookup.R` — Resolver function for chemical identifiers
+- `dev/generate_tests.R` — Test generation script
 
 ## Key Decisions
 
@@ -179,6 +183,7 @@ Future milestones:
 | v1.9 | Schema check workflow fix | Complete |
 | v2.0 | Paginated requests | Complete |
 | v2.1 | Test infrastructure | Complete |
+| v2.2 | Package stabilization | Active |
 
 ---
-*Last updated: 2026-03-02 after v2.1 milestone completed*
+*Last updated: 2026-03-09 after doc realignment with disk state*

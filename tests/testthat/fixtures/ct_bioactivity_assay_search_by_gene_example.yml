@@ -1,0 +1,41 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/bioactivity/assay/search/by-gene/TUBA1A
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:06:01 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: no-cache, must-revalidate
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "aeid" : 8,
+          "geneSymbol" : "TUBA1A",
+          "assayComponentEndpointName" : "APR_HepG2_MicrotubuleCSK_1hr",
+          "assayComponentEndpointDesc" : "Data from the assay component APR_HepG2_MicrotubuleCSK_1hr was analyzed into 1 assay endpoint. \nThis assay endpoint, APR_HepG2_MicrotubuleCSK_1hr, was analyzed with bidirectional fitting relative to DMSO as the negative control and baseline of activity. \nUsing a type of conformation reporter, measures of protein for gain or loss-of-signal activity can be used to understand the signaling at the cellular-level. \nFurthermore, this assay endpoint can be referred to as a primary readout, because this assay has produced multiple assay endpoints where this one serves a signaling function. \nTo generalize the intended target to other relatable targets, this assay endpoint is annotated to the cell morphology intended target family, where the subfamily is cell conformation.",
+          "multiConcActives" : "1/310(0.32%)",
+          "singleConcActive" : null
+        }, {
+          "aeid" : 28,
+          "geneSymbol" : "TUBA1A",
+          "assayComponentEndpointName" : "APR_HepG2_MicrotubuleCSK_24hr",
+          "assayComponentEndpointDesc" : "Data from the assay component APR_HepG2_MicrotubuleCSK_24hr was analyzed into 1 assay endpoint. \nThis assay endpoint, APR_HepG2_MicrotubuleCSK_24hr, was analyzed with bidirectional fitting relative to DMSO as the negative control and baseline of activity. \nUsing a type of conformation reporter, measures of protein for gain or loss-of-signal activity can be used to understand the signaling at the cellular-level. \nFurthermore, this assay endpoint can be referred to as a primary readout, because this assay has produced multiple assay endpoints where this one serves a signaling function. \nTo generalize the intended target to other relatable targets, this assay endpoint is annotated to the cell morphology intended target family, where the subfamily is cell conformation.",
+          "multiConcActives" : "131/1066(12.29%)",
+          "singleConcActive" : null
+        }, {
+          "aeid" : 48,
+          "geneSymbol" : "TUBA1A",
+          "assayComponentEndpointName" : "APR_HepG2_MicrotubuleCSK_72hr",
+          "assayComponentEndpointDesc" : "Data from the assay component APR_HepG2_MicrotubuleCSK_72hr was analyzed into 1 assay endpoint. \nThis assay endpoint, APR_HepG2_MicrotubuleCSK_72hr, was analyzed with bidirectional fitting relative to DMSO as the negative control and baseline of activity. \nUsing a type of conformation reporter, measures of protein for gain or loss-of-signal activity can be used to understand the signaling at the cellular-level. \nFurthermore, this assay endpoint can be referred to as a primary readout, because this assay has produced multiple assay endpoints where this one serves a signaling function. \nTo generalize the intended target to other relatable targets, this assay endpoint is annotated to the cell morphology intended target family, where the subfamily is cell conformation.",
+          "multiConcActives" : "150/1051(14.27%)",
+          "singleConcActive" : null
+        } ]
+  recorded_at: 2026-03-04 20:06:01
+recorded_with: VCR-vcr/2.1.0
