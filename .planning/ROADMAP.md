@@ -98,7 +98,7 @@
     - [ ] 29-01-PLAN.md — Property coerce hook, delete ct_properties and .prop_ids
     - [ ] 29-02-PLAN.md — Migrate ct_related to generic_request
 
-- [ ] Phase 30: Build Quality Validation
+- [x] Phase 30: Build Quality Validation (completed 2026-03-11)
   - **Goal:** R CMD check produces 0 errors (warnings and notes acceptable)
   - **Depends on:** Phase 29
   - **Requirements:** [BUILD-CLEAN, YAML-DEP, DUP-ARG]
@@ -137,4 +137,4 @@
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
 | 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
 | 29. Direct Template Migration | 2/2 | Complete    | 2026-03-11 | — |
-| 30. Build Quality Validation | v2.2 | 0/1 | Planned | — |
+| 30. Build Quality Validation | 1/1 | Complete   | 2026-03-11 | — |
