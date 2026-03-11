@@ -90,7 +90,7 @@
     - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
     - [ ] 28-05-PLAN.md — Stub regeneration, test generator update, full validation
 
-- [ ] Phase 29: Direct Template Migration
+- [x] Phase 29: Direct Template Migration (completed 2026-03-11)
   - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
   - **Depends on:** Phase 28
   - **Requirements:** [PROP-COERCE, PROP-DELETE, PROP-IDS, REL-MIGRATE, REL-VALIDATE, NEWS-DOC]
@@ -134,5 +134,5 @@
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
 | 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
-| 29. Direct Template Migration | v2.2 | 0/2 | Planned | — |
+| 29. Direct Template Migration | 2/2 | Complete   | 2026-03-11 | — |
 | 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |

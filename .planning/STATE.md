@@ -3,14 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Package Stabilization
 status: in_progress
-stopped_at: Phase 29 context gathered
-last_updated: "2026-03-11T15:54:47.785Z"
-last_activity: 2026-03-11 — Completed 28-05 (migration validation, test generator update, NEWS finalization)
+stopped_at: Completed 29-02-PLAN.md
+last_updated: "2026-03-11T16:10:31Z"
+last_activity: 2026-03-11 — Completed 29-02 (ct_related migration to generic_request)
 progress:
   total_phases: 29
-  completed_phases: 26
+  completed_phases: 27
   total_plans: 53
-  completed_plans: 52
+  completed_plans: 54
+  percent: 100
 ---
 
 ---
@@ -115,12 +116,12 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 
 ## Current Position
 
-Phase: 28 (Thin Wrapper Migration) — COMPLETE
-Plan: 28-05 complete (5/5 plans executed)
-Status: Phase 28 complete, ready for Phase 29 or Phase 30
-Last activity: 2026-03-11 — Completed 28-05 (migration validation, test generator update, NEWS finalization)
+Phase: 29 (Direct Template Migration) — COMPLETE
+Plan: 29-02 complete (2/2 plans executed)
+Status: Phase 29 complete, ready for Phase 30
+Last activity: 2026-03-11 — Completed 29-02 (ct_related migration to generic_request)
 
-Progress: [██████████] 98% (52/53 plans executed)
+Progress: [██████████] 100% (54/53 plans executed — Phase 29 added 1 plan)
 
 ## Milestone v2.2 Overview
 
@@ -241,6 +242,29 @@ Full history: `.planning/MILESTONES.md`
   - devtools::check() has environmental quarto error (not code-related)
 - **Phase 28 complete:** Thin wrapper migration fully operational
 
+**From Phase 29-01 (2026-03-11):**
+- Deleted ct_properties() wrapper function
+  - Users now call ct_chemical_property_experimental_search_bulk() and ct_chemical_property_predicted_search_bulk() directly
+  - Range searches use ct_chemical_property_experimental_search_by_range() with path_params
+  - Added coerce hook to split results by propertyId into named list of data frames
+- Deleted .prop_ids() internal helper
+  - Users call ct_chemical_property_experimental_name() and ct_chemical_property_predicted_name() stubs directly
+- Added property_hooks.R with coerce_by_property_id hook primitive
+- Updated inst/hook_config.yml with coerce parameter for property search stubs
+- Regenerated property search stubs with hook support
+- Updated tests to call new stub names
+- NEWS.md documents breaking changes and migration paths
+
+**From Phase 29-02 (2026-03-11):**
+- Migrated ct_related() from raw httr2 to generic_request template
+  - Uses batch_limit=0 pattern for query-string-based GET endpoint
+  - Server cleanup guaranteed via on.exit (fixes potential leak on error)
+  - Added error handling for empty API responses
+  - Manual purrr::map loop for per-DTXSID query parameters
+- Added 4 new tests for server cleanup and input validation
+- All 7 tests passing
+- **Phase 29 complete:** Zero raw httr2 code remaining in package
+
 ## Pending Todos
 
 **Deferred pipeline work (ON HOLD):**
@@ -254,10 +278,10 @@ Full history: `.planning/MILESTONES.md`
 
 ## Session Continuity
 
-Last session: 2026-03-11T15:54:47.776Z
-Action: Completed 28-04-PLAN.md — generator hook integration and wrapper cleanup
-Stopped at: Phase 29 context gathered
-Next: Execute 28-05-PLAN.md or check if phase complete
+Last session: 2026-03-11T16:10:31Z
+Action: Completed 29-02-PLAN.md — ct_related migration to generic_request
+Stopped at: Phase 29 complete
+Next: Plan Phase 30 (Build Quality Validation) or verify milestone completion
 
 ---
-*Last updated: 2026-03-11 after completing Phase 28 Plan 03*
+*Last updated: 2026-03-11 after completing Phase 29 Plan 02*
