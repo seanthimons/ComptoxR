@@ -23,6 +23,19 @@
   service) is not documented in the published API schemas and may have been removed
   from the upstream API.
 
+* **Phase 28 Hook-Powered Wrapper Migration:** Removed hand-written wrapper functions
+  that have been replaced by hook-powered generated stubs:
+  - `ct_lists_all()` → Use `ct_chemical_list_all()` with `return_dtxsid` and `coerce` parameters
+  - `ct_bioactivity()` → Use individual endpoint functions:
+    - `ct_bioactivity_data_search_bulk()` for DTXSID queries
+    - `ct_bioactivity_data_search_by_aeid_bulk()` for AEID queries
+    - `ct_bioactivity_data_search_by_spid_bulk()` for SPID queries
+    - `ct_bioactivity_data_search_by_m4id_bulk()` for M4ID queries
+    All support `annotate` parameter for assay annotation joins
+  - `ct_similar()` → Use generated stub with `similarity` parameter
+  - `ct_list()` → Use generated stub with `extract_dtxsids` parameter
+  - `ct_compound_in_list()` → Use generated stub (formatting automated via hooks)
+
 #### Breaking changes (2026-01-22)
 
 -   migrate from httr to httr2 across all API functions
