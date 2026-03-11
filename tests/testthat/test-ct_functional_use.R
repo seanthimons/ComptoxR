@@ -1,18 +1,20 @@
-# Tests for ct_functional_use
-# Generated using metadata-based test generator
+# Tests for ct_functional_use (updated for Phase 28 migration)
+# ct_functional_use() wrapper removed - now test ct_exposure_functional_use_search_bulk()
 
-test_that("ct_functional_use works with single input", {
+test_that("ct_exposure_functional_use_search_bulk works with single input", {
   vcr::use_cassette("ct_functional_use_single", {
-    result <- ct_functional_use(query = "DTXSID7020182")
+    result <- ct_exposure_functional_use_search_bulk(query = "DTXSID7020182")
     expect_s3_class(result, "tbl_df")
   })
 })
-test_that("ct_functional_use handles batch requests", {
+
+test_that("ct_exposure_functional_use_search_bulk handles batch requests", {
   vcr::use_cassette("ct_functional_use_batch", {
-    result <- ct_functional_use(query = c("DTXSID7020182", "DTXSID3060245"))
+    result <- ct_exposure_functional_use_search_bulk(query = c("DTXSID7020182", "DTXSID3060245"))
     expect_s3_class(result, "tbl_df")
   })
 })
-test_that("ct_functional_use handles errors gracefully", {
-  expect_error(ct_functional_use())
+
+test_that("ct_exposure_functional_use_search_bulk handles errors gracefully", {
+  expect_error(ct_exposure_functional_use_search_bulk())
 })

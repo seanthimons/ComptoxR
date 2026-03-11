@@ -6,10 +6,12 @@
 
 #### Breaking changes
 
-* **Phase 28 Thin Wrapper Migration:** Removed friendly-name wrapper functions:
-  `ct_hazard()`, `ct_cancer()`, `ct_env_fate()`, `ct_demographic_exposure()`,
-  `ct_general_exposure()`, `ct_functional_use()`, `ct_functional_use_probability()`,
-  and `ct_genotox()`. Use the generated stub names directly instead:
+* **Phase 28 Thin Wrapper Migration Complete:** This release completes the migration of
+  hand-written wrapper functions to generated stubs with declarative hook-based customization.
+  All user-facing ct_* functions now use the same underlying generic_request() template,
+  reducing code duplication and improving maintainability.
+
+  **Simple pass-through wrappers removed (Plan 28-03):**
   - `ct_hazard()` → `ct_hazard_toxval_search_bulk()`
   - `ct_cancer()` → `ct_hazard_cancer_search_bulk()`
   - `ct_env_fate()` → `ct_chemical_fate_search_bulk()`
@@ -18,23 +20,32 @@
   - `ct_functional_use()` → `ct_exposure_functional_use_search_bulk()`
   - `ct_functional_use_probability()` → `ct_exposure_functional_use_probability_search()`
   - `ct_genotox()` → `ct_hazard_genetox_details_search_bulk()`
+  - `ct_descriptors()` → Removed (deprecated INDIGO endpoint not in published API schemas)
 
-* Removed deprecated `ct_descriptors()` function. This endpoint (INDIGO conversion
-  service) is not documented in the published API schemas and may have been removed
-  from the upstream API.
+  **Hook-powered wrappers replaced by declarative configuration (Plans 28-01 through 28-05):**
+  - `ct_lists_all()` → `ct_chemical_list_all()` with `return_dtxsid` and `coerce` parameters
+    * Example: `ct_chemical_list_all(projection = "chemicallistwithdtxsids")`
+  - `ct_bioactivity()` → Individual endpoint functions with `annotate` parameter:
+    * `ct_bioactivity_data_search_bulk(query, annotate = FALSE)` for DTXSID queries
+    * `ct_bioactivity_data_search_by_aeid_bulk(query, annotate = FALSE)` for AEID queries
+    * `ct_bioactivity_data_search_by_spid_bulk(query, annotate = FALSE)` for SPID queries
+    * `ct_bioactivity_data_search_by_m4id_bulk(query, annotate = FALSE)` for M4ID queries
+    * Set `annotate = TRUE` to join assay annotations by aeid
+  - `ct_similar()` → Generated stub with `similarity` parameter (validation via pre_request hook)
+  - `ct_list()` → Generated stub with `extract_dtxsids` parameter (extraction via post_response hook)
+  - `ct_compound_in_list()` → Generated stub (formatting automated via post_response hook)
 
-* **Phase 28 Hook-Powered Wrapper Migration:** Removed hand-written wrapper functions
-  that have been replaced by hook-powered generated stubs:
-  - `ct_lists_all()` → Use `ct_chemical_list_all()` with `return_dtxsid` and `coerce` parameters
-  - `ct_bioactivity()` → Use individual endpoint functions:
-    - `ct_bioactivity_data_search_bulk()` for DTXSID queries
-    - `ct_bioactivity_data_search_by_aeid_bulk()` for AEID queries
-    - `ct_bioactivity_data_search_by_spid_bulk()` for SPID queries
-    - `ct_bioactivity_data_search_by_m4id_bulk()` for M4ID queries
-    All support `annotate` parameter for assay annotation joins
-  - `ct_similar()` → Use generated stub with `similarity` parameter
-  - `ct_list()` → Use generated stub with `extract_dtxsids` parameter
-  - `ct_compound_in_list()` → Use generated stub (formatting automated via hooks)
+#### New features
+
+* **Hook System for Generated Stubs (Phase 28):** Introduced declarative hook system that allows
+  generated API stubs to be customized without hand-written wrapper code. Hooks are configured
+  via `inst/hook_config.yml` and execute at three lifecycle points:
+  - `pre_request`: Validate or transform parameters before API call
+  - `post_response`: Process API response before returning to user
+  - `transform`: Replace entire request logic with custom implementation
+
+  Hook primitives live in `R/hooks/` and are automatically loaded at package initialization.
+  CI drift detection (`dev/check_hook_config.R`) ensures declared hooks and parameters exist.
 
 #### Breaking changes (2026-01-22)
 
