@@ -1,11 +1,17 @@
 # Tests for hook primitive functions
 
 # Load hook functions (they're not exported, so we need to source them)
-# In actual package context, they're loaded via .onLoad
+# Hook files are in R/hooks/ and contain @noRd functions
+hook_files <- list.files(here::here("R/hooks"), pattern = "\\.R$", full.names = TRUE)
+for (hook_file in hook_files) {
+  source(hook_file)
+}
+
 test_that("hook functions can be loaded", {
   # This just ensures the hooks exist
-  expect_true(exists("validate_similarity", mode = "function", inherits = FALSE) ||
-              TRUE) # Will pass once hooks are loaded
+  expect_true(exists("validate_similarity", mode = "function"))
+  expect_true(exists("uppercase_query", mode = "function"))
+  expect_true(exists("annotate_assay_if_requested", mode = "function"))
 })
 
 # ============================================================================
