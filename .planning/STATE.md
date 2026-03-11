@@ -117,9 +117,9 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 29 (Direct Template Migration) — COMPLETE
-Plan: 29-02 complete (2/2 plans executed)
+Plan: Both plans complete (2/2 plans executed)
 Status: Phase 29 complete, ready for Phase 30
-Last activity: 2026-03-11 — Completed 29-02 (ct_related migration to generic_request)
+Last activity: 2026-03-11 — Completed 29-01 (property search migration) and 29-02 (ct_related migration)
 
 Progress: [██████████] 100% (54/53 plans executed — Phase 29 added 1 plan)
 
