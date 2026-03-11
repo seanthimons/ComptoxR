@@ -79,7 +79,7 @@
     - [ ] 27-02-PLAN.md — VCR sanitization, health check script, and parallel recording script
     - [ ] 27-03-PLAN.md — Execute cassette re-recording and validate results
 
-- [x] Phase 28: Thin Wrapper Migration (1/5 complete) (completed 2026-03-11)
+- [x] Phase 28: Thin Wrapper Migration (1/5 complete) (completed 2026-03-11)
   - **Goal:** Build hook injection system and migrate all hand-written ct_* wrappers to generated stubs + hooks, deleting old wrapper files
   - **Depends on:** Phase 27
   - **Requirements:** [HOOK-28-01, HOOK-28-02, HOOK-28-03, HOOK-28-04, HOOK-28-05, HOOK-28-06, HOOK-28-07, HOOK-28-08, HOOK-28-09, HOOK-28-10]
@@ -93,7 +93,10 @@
 - [ ] Phase 29: Direct Template Migration
   - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
   - **Depends on:** Phase 28
-  - **Plans:** 0 — needs `/gsd:plan-phase 29`
+  - **Requirements:** [PROP-COERCE, PROP-DELETE, PROP-IDS, REL-MIGRATE, REL-VALIDATE, NEWS-DOC]
+  - **Plans:** 2 plans
+    - [ ] 29-01-PLAN.md — Property coerce hook, delete ct_properties and .prop_ids
+    - [ ] 29-02-PLAN.md — Migrate ct_related to generic_request
 
 - [ ] Phase 30: Build Quality Validation
   - **Goal:** R CMD check 0 errors/warnings, all migrated functions tested, user-facing functions promoted to @lifecycle stable
@@ -131,5 +134,5 @@
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
 | 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
-| 29. Direct Template Migration | v2.2 | 0/0 | Planned | — |
+| 29. Direct Template Migration | v2.2 | 0/2 | Planned | — |
 | 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |
