@@ -79,12 +79,12 @@
     - [ ] 27-02-PLAN.md — VCR sanitization, health check script, and parallel recording script
     - [ ] 27-03-PLAN.md — Execute cassette re-recording and validate results
 
-- [ ] Phase 28: Thin Wrapper Migration
+- [ ] Phase 28: Thin Wrapper Migration (1/5 complete)
   - **Goal:** Build hook injection system and migrate all hand-written ct_* wrappers to generated stubs + hooks, deleting old wrapper files
   - **Depends on:** Phase 27
   - **Requirements:** [HOOK-28-01, HOOK-28-02, HOOK-28-03, HOOK-28-04, HOOK-28-05, HOOK-28-06, HOOK-28-07, HOOK-28-08, HOOK-28-09, HOOK-28-10]
   - **Plans:** 5 plans
-    - [ ] 28-01-PLAN.md — Hook registry foundation (.HookRegistry, run_hook, YAML config, .onLoad)
+    - [x] 28-01-PLAN.md — Hook registry foundation (.HookRegistry, run_hook, YAML config, .onLoad)
     - [ ] 28-02-PLAN.md — Hook primitive functions and unit tests
     - [ ] 28-03-PLAN.md — Delete pure pass-through wrappers and deprecated code
     - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
