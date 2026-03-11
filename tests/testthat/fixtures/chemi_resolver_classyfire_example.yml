@@ -1,0 +1,27 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/classyfire?query=DTXSID7020182&idType=AnyId&fuzzy=Not&page=0&size=1000
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:02:46 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"content":[{"sid":"DTXSID7020182","smiles":"CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1","kingdom":"Organic
+        compounds","superklass":"Benzenoids","klass":"Benzene and substituted derivatives","subklass":"Diphenylmethanes","directParent":"Bisphenols","geometricDescriptor":"Aromatic
+        homomonocyclic compounds","alternativeParents":["1-hydroxy-2-unsubstituted
+        benzenoids","Hydrocarbon derivatives","Organooxygen compounds","Phenylpropanes"],"substituents":["Phenylpropane","Aromatic
+        homomonocyclic compound","Organic oxygen compound","1-hydroxy-2-unsubstituted
+        benzenoid","Phenol","Hydrocarbon derivative","Bisphenol","Organooxygen compound"]}],"pageable":{"pageNumber":0,"pageSize":1000,"sort":{"sorted":false,"empty":true,"unsorted":true},"offset":0,"paged":true,"unpaged":false},"last":true,"totalPages":1,"totalElements":1,"size":1000,"number":0,"sort":{"sorted":false,"empty":true,"unsorted":true},"first":true,"numberOfElements":1,"empty":false}'
+  recorded_at: 2026-03-04 20:02:46
+recorded_with: VCR-vcr/2.1.0

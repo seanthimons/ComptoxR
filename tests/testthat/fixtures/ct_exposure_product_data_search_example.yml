@@ -1,0 +1,62 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://comptox.epa.gov/ctx-api/exposure/product-data/search/by-dtxsid/
+    body:
+      string: '["DTXSID301027109","DTXSID1060138","DTXSID90893948"]'
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:11:49 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "id" : 1217204,
+          "dtxsid" : "DTXSID90893948",
+          "docid" : 1349680,
+          "doctitle" : "CHLORINE TRIFLUORIDE",
+          "docdate" : "jan 24 1989",
+          "productname" : "chlorine trifluoride",
+          "gencat" : "Laboratory supplies",
+          "prodfam" : null,
+          "prodtype" : null,
+          "classificationmethod" : "Automatic",
+          "rawmincomp" : null,
+          "rawmaxcomp" : null,
+          "rawcentralcomp" : " 100.0",
+          "unittype" : "percent",
+          "lowerweightfraction" : null,
+          "upperweightfraction" : null,
+          "centralweightfraction" : 1.000000000000000,
+          "weightfractiontype" : "reported",
+          "component" : null
+        }, {
+          "id" : 1142543,
+          "dtxsid" : "DTXSID90893948",
+          "docid" : 1328751,
+          "doctitle" : "chlorine trifluoride",
+          "docdate" : "06/01/1998",
+          "productname" : "chlorine trifluoride",
+          "gencat" : null,
+          "prodfam" : null,
+          "prodtype" : null,
+          "classificationmethod" : null,
+          "rawmincomp" : null,
+          "rawmaxcomp" : null,
+          "rawcentralcomp" : " >99",
+          "unittype" : "percent",
+          "lowerweightfraction" : 0.990000000000000,
+          "upperweightfraction" : 1.000000000000000,
+          "centralweightfraction" : null,
+          "weightfractiontype" : "reported",
+          "component" : null
+        } ]
+  recorded_at: 2026-03-04 20:11:49
+recorded_with: VCR-vcr/2.1.0

@@ -1,0 +1,18 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/dashboard-api/ccdapp2/related-substances/search/by-dtxsid?id=INVALID_DTXSID_12345
+  response:
+    status: 202
+    headers:
+      Date: Wed, 04 Mar 2026 20:12:46 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: '[ ]'
+  recorded_at: 2026-03-04 20:12:47
+recorded_with: VCR-vcr/2.1.0

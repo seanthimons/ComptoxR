@@ -2,9 +2,77 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-01-22)
+## Unreleased (2026-03-11)
 
 #### Breaking changes
+
+* **Phase 28 Thin Wrapper Migration Complete:** This release completes the migration of
+  hand-written wrapper functions to generated stubs with declarative hook-based customization.
+  All user-facing ct_* functions now use the same underlying generic_request() template,
+  reducing code duplication and improving maintainability.
+
+  **Simple pass-through wrappers removed (Plan 28-03):**
+  - `ct_hazard()` → `ct_hazard_toxval_search_bulk()`
+  - `ct_cancer()` → `ct_hazard_cancer_search_bulk()`
+  - `ct_env_fate()` → `ct_chemical_fate_search_bulk()`
+  - `ct_demographic_exposure()` → `ct_exposure_seem_demographic_search_bulk()`
+  - `ct_general_exposure()` → `ct_exposure_seem_general_search_bulk()`
+  - `ct_functional_use()` → `ct_exposure_functional_use_search_bulk()`
+  - `ct_functional_use_probability()` → `ct_exposure_functional_use_probability_search()`
+  - `ct_genotox()` → `ct_hazard_genetox_details_search_bulk()`
+  - `ct_descriptors()` → Removed (deprecated INDIGO endpoint not in published API schemas)
+
+  **Hook-powered wrappers replaced by declarative configuration (Plans 28-01 through 28-05):**
+  - `ct_lists_all()` → `ct_chemical_list_all()` with `return_dtxsid` and `coerce` parameters
+    * Example: `ct_chemical_list_all(projection = "chemicallistwithdtxsids")`
+  - `ct_bioactivity()` → Individual endpoint functions with `annotate` parameter:
+    * `ct_bioactivity_data_search_bulk(query, annotate = FALSE)` for DTXSID queries
+    * `ct_bioactivity_data_search_by_aeid_bulk(query, annotate = FALSE)` for AEID queries
+    * `ct_bioactivity_data_search_by_spid_bulk(query, annotate = FALSE)` for SPID queries
+    * `ct_bioactivity_data_search_by_m4id_bulk(query, annotate = FALSE)` for M4ID queries
+    * Set `annotate = TRUE` to join assay annotations by aeid
+  - `ct_similar()` → Generated stub with `similarity` parameter (validation via pre_request hook)
+  - `ct_list()` → Generated stub with `extract_dtxsids` parameter (extraction via post_response hook)
+  - `ct_compound_in_list()` → Generated stub (formatting automated via post_response hook)
+
+* **Phase 29 Direct Template Migration:**
+
+  **Plan 29-01 - Property search migration:**
+
+  **ct_properties() removed:**
+  - Compound search path:
+    * `ct_properties(search_param = "compound", query = dtxsids)` →
+      `ct_chemical_property_experimental_search_bulk(query = dtxsids)` or
+      `ct_chemical_property_predicted_search_bulk(query = dtxsids)`
+    * Add `coerce = TRUE` to split results by propertyId into named list of data frames
+  - Range search path:
+    * `ct_properties(search_param = "property", query = "MolWeight", range = c(100, 500))` →
+      `ct_chemical_property_experimental_search_by_range(propertyName = "MolWeight", start = 100, end = 500)` or
+      `ct_chemical_property_predicted_search_by_range(propertyId = "MolWeight", start = 100, end = 500)`
+
+  **.prop_ids() removed:**
+  - Use `ct_chemical_property_experimental_name()` and `ct_chemical_property_predicted_name()` directly
+
+  **Plan 29-02 - ct_related migration:**
+  - `ct_related()` migrated to generic_request() template
+  - Function name and behavior unchanged
+  - Server cleanup now guaranteed via on.exit (previously could leak on error)
+  - Improved error handling from generic_request infrastructure
+  - All raw httr2 code removed from package
+
+#### New features
+
+* **Hook System for Generated Stubs (Phase 28):** Introduced declarative hook system that allows
+  generated API stubs to be customized without hand-written wrapper code. Hooks are configured
+  via `inst/hook_config.yml` and execute at three lifecycle points:
+  - `pre_request`: Validate or transform parameters before API call
+  - `post_response`: Process API response before returning to user
+  - `transform`: Replace entire request logic with custom implementation
+
+  Hook primitives live in `R/hooks/` and are automatically loaded at package initialization.
+  CI drift detection (`dev/check_hook_config.R`) ensures declared hooks and parameters exist.
+
+#### Breaking changes (2026-01-22)
 
 -   migrate from httr to httr2 across all API functions
     ([5636653](https://github.com/seanthimons/ComptoxR/tree/563665333fba97755222a2d04de0c03237125901))

@@ -1,0 +1,1128 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/getdatasources
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:02:52 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"name":"001Chemical","substanceCount":"368497","annotationCount":"","annotations":[],"uploading":false},{"name":"10X
+        CHEM","substanceCount":"519110","annotationCount":"","annotations":[],"uploading":false},{"name":"1st
+        Scientific","substanceCount":"49887","annotationCount":"","annotations":[],"uploading":false},{"name":"3A
+        SpeedChemical Inc","substanceCount":"4931","annotationCount":"","annotations":[],"uploading":false},{"name":"3ASenrise","substanceCount":"39914","annotationCount":"","annotations":[],"uploading":false},{"name":"3WAY
+        PHARM INC","substanceCount":"118215","annotationCount":"","annotations":[],"uploading":false},{"name":"4C
+        Pharma Scientific Inc","substanceCount":"20187","annotationCount":"","annotations":[],"uploading":false},{"name":"A&J
+        Pharmtech CO., LTD.","substanceCount":"184005","annotationCount":"","annotations":[],"uploading":false},{"name":"A1
+        BioChem Labs","substanceCount":"127300","annotationCount":"","annotations":[],"uploading":false},{"name":"A2B
+        Chem","substanceCount":"1372892","annotationCount":"","annotations":[],"uploading":false},{"name":"A2Z
+        Chemical","substanceCount":"8470","annotationCount":"","annotations":[],"uploading":false},{"name":"AA
+        BLOCKS","substanceCount":"1228049","annotationCount":"","annotations":[],"uploading":false},{"name":"AAA
+        Chemistry","substanceCount":"118740","annotationCount":"","annotations":[],"uploading":false},{"name":"Aaron
+        Chemicals LLC","substanceCount":"110562","annotationCount":"","annotations":[],"uploading":false},{"name":"AAT
+        Bioquest","substanceCount":"322","annotationCount":"","annotations":[],"uploading":false},{"name":"AbaChemScene","substanceCount":"414271","annotationCount":"","annotations":[],"uploading":false},{"name":"Abacipharm
+        Corp","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"ABBLIS
+        Chemicals","substanceCount":"10624","annotationCount":"","annotations":[],"uploading":false},{"name":"Abbott
+        Labs","substanceCount":"52664","annotationCount":"","annotations":[],"uploading":false},{"name":"abcr
+        GmbH","substanceCount":"362036","annotationCount":"","annotations":[],"uploading":false},{"name":"Abdelkarem
+        Lab, Pharmacy Department, Assiut University","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"Abe
+        Lab, University of Texas MD Anderson Cancer Center","substanceCount":"2000","annotationCount":"","annotations":[],"uploading":false},{"name":"ABI
+        Chem","substanceCount":"7952950","annotationCount":"","annotations":[],"uploading":false},{"name":"AbMole
+        Bioscience","substanceCount":"9425","annotationCount":"","annotations":[],"uploading":false},{"name":"AbovChem
+        LLC","substanceCount":"17554","annotationCount":"","annotations":[],"uploading":false},{"name":"Abu
+        Montakim Tareq, International Islamic University Chittagong","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Acadechem","substanceCount":"93009","annotationCount":"","annotations":[],"uploading":false},{"name":"ACBlock-Lab","substanceCount":"543","annotationCount":"","annotations":[],"uploading":false},{"name":"Accel
+        Scientific","substanceCount":"194176","annotationCount":"","annotations":[],"uploading":false},{"name":"Accela
+        ChemBio Inc.","substanceCount":"240521","annotationCount":"","annotations":[],"uploading":false},{"name":"Ace
+        Therapeutics","substanceCount":"1640","annotationCount":"","annotations":[],"uploading":false},{"name":"Acemol","substanceCount":"2357","annotationCount":"","annotations":[],"uploading":false},{"name":"Aceschem
+        Inc","substanceCount":"14588","annotationCount":"","annotations":[],"uploading":false},{"name":"Acesobio","substanceCount":"711","annotationCount":"","annotations":[],"uploading":false},{"name":"Achemica","substanceCount":"139412","annotationCount":"","annotations":[],"uploading":false},{"name":"Achemo
+        Scientific Limited","substanceCount":"81853","annotationCount":"","annotations":[],"uploading":false},{"name":"Achemtek","substanceCount":"17190","annotationCount":"","annotations":[],"uploading":false},{"name":"Acmec
+        Biochemical","substanceCount":"80590","annotationCount":"","annotations":[],"uploading":false},{"name":"ACO
+        Pharm Screening Compound","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Acorn
+        PharmaTech Product List","substanceCount":"61380","annotationCount":"","annotations":[],"uploading":false},{"name":"ACT
+        Chemical","substanceCount":"10492","annotationCount":"","annotations":[],"uploading":false},{"name":"Activate
+        Scientific","substanceCount":"179158","annotationCount":"","annotations":[],"uploading":false},{"name":"Active
+        Biopharma","substanceCount":"1057","annotationCount":"","annotations":[],"uploading":false},{"name":"Adooq
+        BioScience","substanceCount":"5743","annotationCount":"","annotations":[],"uploading":false},{"name":"Advanced
+        Technology & Industrial Co., Ltd.","substanceCount":"124","annotationCount":"","annotations":[],"uploading":false},{"name":"AEchem
+        Scientific Corp., USA","substanceCount":"61917","annotationCount":"","annotations":[],"uploading":false},{"name":"AEZ
+        Kimya","substanceCount":"930","annotationCount":"","annotations":[],"uploading":false},{"name":"Agency
+        for Toxic Substances and Disease Registry (ATSDR)","substanceCount":"","annotationCount":"207","annotations":["Hazards
+        Summary","Record Description","Target Organs","Toxicological Information","Use
+        Classification"],"uploading":false},{"name":"Agios Pharmaceuticals","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"AgroIntelBioScan.com","substanceCount":"237796","annotationCount":"","annotations":[],"uploading":false},{"name":"AHH
+        Chemical co.,ltd","substanceCount":"172113","annotationCount":"","annotations":[],"uploading":false},{"name":"AIBioTech,
+        LLC","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"AiFChem,
+        an XtalPi Company","substanceCount":"320782","annotationCount":"","annotations":[],"uploading":false},{"name":"AK
+        Scientific, Inc. (AKSCI)","substanceCount":"158022","annotationCount":"","annotations":[],"uploading":false},{"name":"AKos
+        Consulting & Solutions","substanceCount":"24444787","annotationCount":"","annotations":[],"uploading":false},{"name":"Aladdin
+        Scientific","substanceCount":"58088","annotationCount":"","annotations":[],"uploading":false},{"name":"Alagar
+        Yadav, Karpagam University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Alcatraz
+        Chemicals","substanceCount":"81","annotationCount":"","annotations":[],"uploading":false},{"name":"AlchemyPharm","substanceCount":"1016","annotationCount":"","annotations":[],"uploading":false},{"name":"Alfa
+        Chemistry","substanceCount":"482938","annotationCount":"","annotations":[],"uploading":false},{"name":"AlfaChemInvent
+        LLC","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Alichem","substanceCount":"431690","annotationCount":"","annotations":[],"uploading":false},{"name":"Alinda
+        Chemical Trade Company Ltd","substanceCount":"35307","annotationCount":"","annotations":[],"uploading":false},{"name":"ALKEMIX","substanceCount":"27","annotationCount":"","annotations":[],"uploading":false},{"name":"Allbio
+        Pharm Co., Ltd","substanceCount":"36458","annotationCount":"","annotations":[],"uploading":false},{"name":"Alliance
+        of Genome Resources","substanceCount":"","annotations":[],"uploading":false},{"name":"Alomone
+        Labs","substanceCount":"239","annotationCount":"","annotations":[],"uploading":false},{"name":"Alsachim","substanceCount":"5051","annotationCount":"","annotations":[],"uploading":false},{"name":"Amadis
+        Chemical","substanceCount":"440102","annotationCount":"","annotations":[],"uploading":false},{"name":"Amatye","substanceCount":"81","annotationCount":"","annotations":[],"uploading":false},{"name":"Ambeed","substanceCount":"216074","annotationCount":"","annotations":[],"uploading":false},{"name":"Ambinter","substanceCount":"10108256","annotationCount":"","annotations":[],"uploading":false},{"name":"Ambit
+        Biosciences","substanceCount":"38","annotationCount":"","annotations":[],"uploading":false},{"name":"Amerigo
+        Scientific","substanceCount":"2057","annotationCount":"","annotations":[],"uploading":false},{"name":"Amfluoro","substanceCount":"75164","annotationCount":"","annotations":[],"uploading":false},{"name":"AmicBase
+        - Antimicrobial Activities","substanceCount":"610","annotationCount":"","annotations":[],"uploading":false},{"name":"Ampyridine
+        Co.,Ltd","substanceCount":"1873","annotationCount":"","annotations":[],"uploading":false},{"name":"AN
+        PharmaTech","substanceCount":"34292","annotationCount":"","annotations":[],"uploading":false},{"name":"Analytical
+        Resources Core (ARC), Colorado State University (CSU)","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Angayarkanni
+        Lab, Department of Microbial Biotechnology, Bharathiar University","substanceCount":"16","annotationCount":"","annotations":[],"uploading":false},{"name":"Angel
+        Pharmatech Ltd.","substanceCount":"73643","annotationCount":"","annotations":[],"uploading":false},{"name":"Angene
+        Chemical","substanceCount":"1259701","annotationCount":"","annotations":[],"uploading":false},{"name":"Annker
+        Organics","substanceCount":"1045","annotationCount":"","annotations":[],"uploading":false},{"name":"Ansion
+        Pharma","substanceCount":"80","annotationCount":"","annotations":[],"uploading":false},{"name":"Anten
+        Chemical","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Anward","substanceCount":"62108","annotationCount":"","annotations":[],"uploading":false},{"name":"AOBChem
+        USA","substanceCount":"61468","annotationCount":"","annotations":[],"uploading":false},{"name":"AOBIOUS
+        INC","substanceCount":"1768","annotationCount":"","annotations":[],"uploading":false},{"name":"Apeiron
+        Synthesis","substanceCount":"28","annotationCount":"","annotations":[],"uploading":false},{"name":"ApexBio
+        Technology","substanceCount":"7095","annotationCount":"","annotations":[],"uploading":false},{"name":"Apexmol","substanceCount":"63662","annotationCount":"","annotations":[],"uploading":false},{"name":"APICDMO","substanceCount":"31","annotationCount":"","annotations":[],"uploading":false},{"name":"Apollo
+        Scientific","substanceCount":"101","annotationCount":"","annotations":[],"uploading":false},{"name":"AppChem","substanceCount":"404692","annotationCount":"","annotations":[],"uploading":false},{"name":"Appretech","substanceCount":"10","annotationCount":"","annotations":[],"uploading":false},{"name":"April
+        Scientific Inc.","substanceCount":"333","annotationCount":"","annotations":[],"uploading":false},{"name":"Aribo
+        Reagent","substanceCount":"28519","annotationCount":"","annotations":[],"uploading":false},{"name":"Ark
+        Pharm, Inc.","substanceCount":"44349","annotationCount":"","annotations":[],"uploading":false},{"name":"Ark
+        Pharma Scientific Limited","substanceCount":"35851","annotationCount":"","annotations":[],"uploading":false},{"name":"Aromalake
+        Chemical","substanceCount":"4408","annotationCount":"","annotations":[],"uploading":false},{"name":"Aromsyn
+        catalogue","substanceCount":"7089","annotationCount":"","annotations":[],"uploading":false},{"name":"Aronis","substanceCount":"27395","annotationCount":"","annotations":[],"uploading":false},{"name":"Arromax
+        Pharmatech Co., Ltd","substanceCount":"105","annotationCount":"","annotations":[],"uploading":false},{"name":"ASAS
+        Labor GmbH","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"ASCA
+        GmbH - Angewandte Synthesechemie Adlershof","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"ASINEX","substanceCount":"362469","annotationCount":"","annotations":[],"uploading":false},{"name":"Assembly
+        Blocks Pvt. Ltd.","substanceCount":"32517","annotationCount":"","annotations":[],"uploading":false},{"name":"AstaTech,
+        Inc.","substanceCount":"415672","annotationCount":"","annotations":[],"uploading":false},{"name":"Athena
+        Minerals","substanceCount":"","annotationCount":"8227","annotations":["Minerals"],"uploading":false},{"name":"Atomic
+        Mass Data Center (AMDC), International Atomic Energy Agency (IAEA)","substanceCount":"","annotations":[],"uploading":false},{"name":"ATPase-Kinase
+        Pharmacophores (AKP)","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Aurora
+        Fine Chemicals LLC","substanceCount":"34304433","annotationCount":"","annotations":[],"uploading":false},{"name":"Aurum
+        Pharmatech LLC","substanceCount":"180852","annotationCount":"","annotations":[],"uploading":false},{"name":"Australian
+        Industrial Chemicals Introduction Scheme (AICIS)","substanceCount":"","annotationCount":"62123","annotations":["CAS","Molecular
+        Formula","Other Safety Information","Regulatory Information"],"uploading":false},{"name":"AVA
+        Biochem Switzerland","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"AvaChem
+        Scientific","substanceCount":"7876","annotationCount":"","annotations":[],"uploading":false},{"name":"Avanti
+        Polar Lipids","substanceCount":"272","annotationCount":"","annotations":[],"uploading":false},{"name":"Avantor
+        Inc","substanceCount":"100","annotationCount":"","annotations":[],"uploading":false},{"name":"AX
+        Molecules Inc","substanceCount":"2995","annotationCount":"","annotations":[],"uploading":false},{"name":"Axispharm","substanceCount":"4037","annotationCount":"","annotations":[],"uploading":false},{"name":"Axon
+        Medchem","substanceCount":"2943","annotationCount":"","annotations":[],"uploading":false},{"name":"AZEPINE","substanceCount":"600","annotationCount":"","annotations":[],"uploading":false},{"name":"B&C
+        Chemical","substanceCount":"505","annotationCount":"","annotations":[],"uploading":false},{"name":"B.
+        J. Corporation","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"Baker
+        Lab, Chemistry Department, The University of North Carolina at Chapel Hill","substanceCount":"5725","annotationCount":"3608","annotations":["Chemical
+        Classes","Collision Cross Section"],"uploading":false},{"name":"Bangyong Technology  Co.,
+        Ltd.","substanceCount":"2851","annotationCount":"","annotations":[],"uploading":false},{"name":"Bar-Sagi
+        Lab, NYU School of Medicine","substanceCount":"2281","annotationCount":"","annotations":[],"uploading":false},{"name":"Barrie
+        Walker, BARK Information Services","substanceCount":"63","annotationCount":"","annotations":[],"uploading":false},{"name":"Baynoe
+        Chem","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Be-Medicine","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Beck
+        Research Group, Department of Chemistry and Biochemistry, Eastern Illinois
+        University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Beijing
+        Advanced Technology Co, Ltd","substanceCount":"28","annotationCount":"","annotations":[],"uploading":false},{"name":"Beilstein
+        Journals","substanceCount":"9405","annotationCount":"","annotations":[],"uploading":false},{"name":"Belisle
+        Laboratory, Department of Microbiology, Immunology and Pathology, Colorado
+        State University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Beltsville
+        Human Nutrition Research Center, ARS, USDA","substanceCount":"20","annotationCount":"","annotations":[],"uploading":false},{"name":"BenchChem","substanceCount":"1517772","annotationCount":"","annotations":[],"uploading":false},{"name":"BePharm
+        Ltd.","substanceCount":"122059","annotationCount":"","annotations":[],"uploading":false},{"name":"BerrChemical","substanceCount":"12094","annotationCount":"","annotations":[],"uploading":false},{"name":"Bertin
+        Pharma","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Bestdo
+        Inc","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"Bhaskar
+        Lab, Department of Zoology, Sri Venkateswara University, Tirupati, Andhra
+        Pradesh, INDIA","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"Bic
+        Biotech","substanceCount":"340132","annotationCount":"","annotations":[],"uploading":false},{"name":"BIDD","substanceCount":"1768","annotationCount":"","annotations":[],"uploading":false},{"name":"BIND","substanceCount":"1207","annotationCount":"","annotations":[],"uploading":false},{"name":"BindingDB","substanceCount":"1412992","annotationCount":"52451","annotations":["Chemical-Target
+        Interactions"],"uploading":false},{"name":"Bioactive Microbial Small Molecules,
+        Department of Biotechnology and Biomedicine, DTU Bioengineering","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"BioAssay
+        Research Database (BARD)","substanceCount":"","annotations":[],"uploading":false},{"name":"BioAustralis
+        Fine Chemicals","substanceCount":"1065","annotationCount":"","annotations":[],"uploading":false},{"name":"Biochem
+        Technologies","substanceCount":"26","annotationCount":"","annotations":[],"uploading":false},{"name":"BioChemPartner","substanceCount":"22322","annotationCount":"","annotations":[],"uploading":false},{"name":"Biocore","substanceCount":"74380","annotationCount":"","annotations":[],"uploading":false},{"name":"BioCrick","substanceCount":"14558","annotationCount":"","annotations":[],"uploading":false},{"name":"BioCyc","substanceCount":"21652","annotationCount":"","annotations":[],"uploading":false},{"name":"BioGRID","substanceCount":"","annotations":[],"uploading":false},{"name":"Biological
+        Magnetic Resonance Data Bank (BMRB)","substanceCount":"1147","annotationCount":"","annotations":[],"uploading":false},{"name":"Biomatrik
+        Inc. (Monodispersed PEG Manufacturer)","substanceCount":"723","annotationCount":"","annotations":[],"uploading":false},{"name":"Biomedical
+        and Microbial Research Laboratory (BMRL), Biochemistry Department, Bharathiar
+        University","substanceCount":"9","annotationCount":"","annotations":[],"uploading":false},{"name":"Biopharma
+        PEG Scientific Inc","substanceCount":"6961","annotationCount":"","annotations":[],"uploading":false},{"name":"Bioprocess
+        Technology Lab, Department of Microbiology, Bharathidasan University","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Biopurify
+        Phytochemicals","substanceCount":"1127","annotationCount":"","annotations":[],"uploading":false},{"name":"Biorbyt","substanceCount":"95700","annotationCount":"","annotations":[],"uploading":false},{"name":"Biosynce
+        Pharmatech","substanceCount":"14360","annotationCount":"","annotations":[],"uploading":false},{"name":"Biosynth","substanceCount":"274865","annotationCount":"","annotations":[],"uploading":false},{"name":"BLD
+        Pharm","substanceCount":"1319055","annotationCount":"","annotations":[],"uploading":false},{"name":"BOC
+        Sciences","substanceCount":"516534","annotationCount":"","annotations":[],"uploading":false},{"name":"Boehringer
+        Ingelheim - opnMe.com","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Boerchem","substanceCount":"10113","annotationCount":"","annotations":[],"uploading":false},{"name":"Boone
+        Lab, Chemical Genomics, University of Toronto","substanceCount":"1521","annotationCount":"","annotations":[],"uploading":false},{"name":"Boroncore","substanceCount":"4876","annotationCount":"","annotations":[],"uploading":false},{"name":"Boronpharm","substanceCount":"8927","annotationCount":"","annotations":[],"uploading":false},{"name":"Bradner/Qi
+        Labs at DFCI","substanceCount":"65741","annotationCount":"","annotations":[],"uploading":false},{"name":"BRENDA:
+        Enzyme Functional Data","substanceCount":"","annotations":[],"uploading":false},{"name":"Brenntag
+        Connect","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Bright
+        Pigments, Inc","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Broad
+        Institute","substanceCount":"211534","annotationCount":"","annotations":[],"uploading":false},{"name":"BroadPharm","substanceCount":"18255","annotationCount":"","annotations":[],"uploading":false},{"name":"Bu
+        Lab, School of Pharmaceutical Sciences, Sun Yat-Sen University","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"Buhrlage
+        Lab, Dana-Farber Cancer Institute and Novartis Institutes for BioMedical Research
+        (Cambridge, Mass)","substanceCount":"47480","annotationCount":"","annotations":[],"uploading":false},{"name":"Burek
+        Lab, Department of Anaesthesiology, Intensive Care, Emergency and Pain Med,
+        University Hospital Wuerzburg","substanceCount":"1282","annotationCount":"","annotations":[],"uploading":false},{"name":"C.
+        David Weaver Laboratory, Vanderbilt University","substanceCount":"96718","annotationCount":"","annotations":[],"uploading":false},{"name":"Calbiochem","substanceCount":"1631","annotationCount":"","annotations":[],"uploading":false},{"name":"California
+        Office of Environmental Health Hazard Assessment (OEHHA)","substanceCount":"","annotationCount":"971","annotations":[],"uploading":false},{"name":"California
+        Peptide Research, Inc.","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"California
+        Safe Cosmetics Program (CSCP) Product Database","substanceCount":"","annotationCount":"3718","annotations":[],"uploading":false},{"name":"CAMEO
+        Chemicals","substanceCount":"","annotationCount":"5094","annotations":["Air
+        and Water Reactions","Autoignition Temperature","Boiling Point","CAS","DOT
+        Label","Density","Fire Fighting","Fire Hazards","First Aid","Flash Point","Health
+        Hazards","Immediately Dangerous to Life or Health (IDLH)","Isolation and Evacuation","Lower
+        Explosive Limit (LEL)","Melting Point","Molecular Formula","Nonfire Spill
+        Response","Personal Protective Equipment (PPE)","Physical Description","Reactive
+        Group","Reactivity Alerts","Reactivity Profile","Record Description","Solubility","UN
+        Number","Upper Explosive Limit (UEL)","Vapor Density","Vapor Pressure"],"uploading":false},{"name":"Cancer
+        Functional Genomics, Wellcome Trust Sanger Institute","substanceCount":"794","annotationCount":"","annotations":[],"uploading":false},{"name":"Cancer
+        Research UK Cambridge Research Institute","substanceCount":"332","annotationCount":"","annotations":[],"uploading":false},{"name":"Cangzhou
+        Enke Pharma Tech Co.,Ltd.","substanceCount":"4683","annotationCount":"","annotations":[],"uploading":false},{"name":"CAPOT","substanceCount":"77742","annotationCount":"","annotations":[],"uploading":false},{"name":"Carbott
+        PharmTech Inc.","substanceCount":"935","annotationCount":"","annotations":[],"uploading":false},{"name":"Carcinogenic
+        Potency Database (CPDB)","substanceCount":"1547","annotationCount":"","annotations":[],"uploading":false},{"name":"Career
+        Henan Chemical Co","substanceCount":"151","annotationCount":"","annotations":[],"uploading":false},{"name":"CAS
+        Common Chemistry","substanceCount":"","annotationCount":"482961","annotations":["CAS","Related
+        CAS"],"uploading":false},{"name":"Catalogue of Life (COL)","substanceCount":"","annotations":[],"uploading":false},{"name":"CATO
+        Research Chemicals Inc.","substanceCount":"79824","annotationCount":"","annotations":[],"uploading":false},{"name":"Cayman
+        Chemical","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"CC_PMLSC","substanceCount":"395","annotationCount":"","annotations":[],"uploading":false},{"name":"CCSbase","substanceCount":"16129","annotationCount":"9215","annotations":["Collision
+        Cross Section"],"uploading":false},{"name":"CD Biosynsis","substanceCount":"800","annotationCount":"","annotations":[],"uploading":false},{"name":"CD
+        Formulation","substanceCount":"1902","annotationCount":"","annotations":[],"uploading":false},{"name":"CEGChem","substanceCount":"11854","annotationCount":"","annotations":[],"uploading":false},{"name":"Cell
+        Line Ontology (CLO)","substanceCount":"","annotations":[],"uploading":false},{"name":"Cell
+        Ontology (CL)","substanceCount":"","annotations":[],"uploading":false},{"name":"Center
+        for Alimentary and Metabolic Science (CAMS), UC Davis School of Medicine","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Center
+        for Chemical Genomics, University of Michigan","substanceCount":"263229","annotationCount":"","annotations":[],"uploading":false},{"name":"Center
+        for Natural Product Technologies at UIC (CENAPT)","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"CF
+        Plus Chemicals","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"ChangChem","substanceCount":"17211","annotationCount":"","annotations":[],"uploading":false},{"name":"Changzhou
+        Highassay Chemical Co., Ltd","substanceCount":"3348","annotationCount":"","annotations":[],"uploading":false},{"name":"Changzhou
+        Naide Chemical","substanceCount":"129","annotationCount":"","annotations":[],"uploading":false},{"name":"ChEBI","substanceCount":"191953","annotationCount":"179537","annotations":["ChEBI
+        ID","Record Description"],"uploading":false},{"name":"Chem-Impex","substanceCount":"35288","annotationCount":"","annotations":[],"uploading":false},{"name":"Chem-Space.com
+        Database","substanceCount":"5112680","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemaphor
+        Chemical Services","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemBank","substanceCount":"1607755","annotationCount":"","annotations":[],"uploading":false},{"name":"Chembase.cn","substanceCount":"299985","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemBioBank","substanceCount":"2345","annotationCount":"","annotations":[],"uploading":false},{"name":"ChEMBL","substanceCount":"2878135","annotationCount":"4748537","annotations":["ChEMBL
+        ID","Chemical-Target Interactions","Dissociation Constants","Transformations"],"uploading":false},{"name":"ChemBlock","substanceCount":"107570","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemBridge","substanceCount":"1912057","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemchart","substanceCount":"49","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemDB","substanceCount":"3564938","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemDiv","substanceCount":"1566731","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemenu
+        Inc.","substanceCount":"453460","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemExper
+        Chemical Directory","substanceCount":"156258","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemFaces","substanceCount":"9730","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemFish
+        Tokyo Co., Ltd.","substanceCount":"9100","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemhere","substanceCount":"490990","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemical
+        Biology Department, Max Planck Institute of Molecular Physiology","substanceCount":"107","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemical
+        Bull","substanceCount":"14","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemical
+        Carcinogenesis Research Information System (CCRIS)","substanceCount":"9562","annotationCount":"","annotations":[],"uploading":false},{"name":"chemical
+        genetic matrix","substanceCount":"14584","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemical
+        Probes Portal","substanceCount":"451","annotationCount":"1762","annotations":["Chemical-Target
+        Interactions"],"uploading":false},{"name":"Chemical Synthesis Database","substanceCount":"40366","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemIDplus","substanceCount":"440557","annotationCount":"552959","annotations":["Acute
+        Effects","CAS","Classification Codes","Deprecated CAS","NLM Resources (File
+        Locators)","Names and Synonyms","Other Resources (Internet Locators)","Regulatory
+        Agencies (Superlist Locators)","Related CAS","Substance Title","Superlist
+        Classification Codes"],"uploading":false},{"name":"Chemieliva Pharmaceutical
+        Co., Ltd","substanceCount":"1492202","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemieTek","substanceCount":"164","annotationCount":"","annotations":[],"uploading":false},{"name":"Cheminformatics
+        & Chemogenomics Research Group (CCRG), Indiana University School of Informatics","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Cheminformatics
+        Friedrich-Schiller-University Jena","substanceCount":"895557","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemLabIndex","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemMol","substanceCount":"302003","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemodex
+        Ltd.","substanceCount":"1405","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemoproteomic
+        Metabolic Pathway Resource, Scripps University","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemoSapiens","substanceCount":"549945","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemotion","substanceCount":"5377","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemProbes","substanceCount":"64","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemShuttle","substanceCount":"111573","annotationCount":"","annotations":[],"uploading":false},{"name":"Chemsoon","substanceCount":"129","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemSpider","substanceCount":"14642781","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemTik","substanceCount":"905802","annotationCount":"","annotations":[],"uploading":false},{"name":"ChemWise","substanceCount":"128","annotationCount":"","annotations":[],"uploading":false},{"name":"Chen
+        Lab, School of Medicine, Emory University","substanceCount":"2012","annotationCount":"","annotations":[],"uploading":false},{"name":"Chengdu
+        Artis Biotech Co. Ltd.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"CHESS
+        fine organics","substanceCount":"946","annotationCount":"","annotations":[],"uploading":false},{"name":"China
+        MainChem Co., Ltd","substanceCount":"444","annotationCount":"","annotations":[],"uploading":false},{"name":"Chiralblock
+        Biosciences","substanceCount":"2071","annotationCount":"","annotations":[],"uploading":false},{"name":"CHIRALEN","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Chirial
+        Bio-material Co., Ltd.","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"Chiron
+        AS","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Chris
+        Southan","substanceCount":"70","annotationCount":"","annotations":[],"uploading":false},{"name":"Chung
+        Lab, Department of Pediatrics, Emory University","substanceCount":"2000","annotationCount":"","annotations":[],"uploading":false},{"name":"Circadian
+        Research, Kay Laboratory, University of California at San Diego (UCSD)","substanceCount":"1281","annotationCount":"","annotations":[],"uploading":false},{"name":"Ciulli
+        Lab, Division of Biological Chemistry and Drug Discovery, University of Dundee","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Clearsynth","substanceCount":"94468","annotationCount":"","annotations":[],"uploading":false},{"name":"ClinicalTrials.gov","substanceCount":"","annotationCount":"10186","annotations":["ClinicalTrials.gov"],"uploading":false},{"name":"Clinivex","substanceCount":"203642","annotationCount":"","annotations":[],"uploading":false},{"name":"CLRI
+        (CSIR)","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"CMLD-BU","substanceCount":"1629","annotationCount":"","annotations":[],"uploading":false},{"name":"Coenza","substanceCount":"92","annotationCount":"","annotations":[],"uploading":false},{"name":"Collaborative
+        Drug Discovery, Inc.","substanceCount":"1431760","annotationCount":"","annotations":[],"uploading":false},{"name":"Columbia
+        University Molecular Screening Center","substanceCount":"399","annotationCount":"","annotations":[],"uploading":false},{"name":"Combi-Blocks","substanceCount":"254517","annotationCount":"","annotations":[],"uploading":false},{"name":"Commission
+        on New Minerals, Nomenclature and Classification (CNMNC)","substanceCount":"","annotationCount":"6210","annotations":[],"uploading":false},{"name":"Comparative
+        Toxicogenomics Database (CTD)","substanceCount":"18596","annotationCount":"59120","annotations":["Associated
+        Disorders and Diseases","Chemical-Target Interactions"],"uploading":false},{"name":"Compass
+        Remediation Chemicals","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Consumer
+        Product Information Database (CPID)","substanceCount":"","annotationCount":"4791","annotations":["Household
+        Products"],"uploading":false},{"name":"Cooke Chemical Co., Ltd","substanceCount":"129821","annotationCount":"","annotations":[],"uploading":false},{"name":"Cooperative
+        Patent Classification (CPC)","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"CoreSyn","substanceCount":"4106","annotationCount":"","annotations":[],"uploading":false},{"name":"Corson
+        Lab, School of Medicine, Indiana University","substanceCount":"20231","annotationCount":"","annotations":[],"uploading":false},{"name":"Cosmetic
+        Ingredient Review (CIR)","substanceCount":"","annotationCount":"6301","annotations":["Cosmetics","Uses"],"uploading":false},{"name":"Cosmetic
+        Ingredients Guide","substanceCount":"418","annotationCount":"","annotations":[],"uploading":false},{"name":"Cosutin
+        Industrial","substanceCount":"11","annotationCount":"","annotations":[],"uploading":false},{"name":"COVID-19
+        Disease Map","substanceCount":"","annotations":[],"uploading":false},{"name":"Creasyn
+        Finechem","substanceCount":"650","annotationCount":"","annotations":[],"uploading":false},{"name":"Creative
+        Biogene","substanceCount":"1254","annotationCount":"","annotations":[],"uploading":false},{"name":"Creative
+        Biolabs","substanceCount":"4468","annotationCount":"","annotations":[],"uploading":false},{"name":"Creative
+        BioMart","substanceCount":"700","annotationCount":"","annotations":[],"uploading":false},{"name":"Creative
+        Enzymes","substanceCount":"12575","annotationCount":"","annotations":[],"uploading":false},{"name":"Creative
+        Proteomics","substanceCount":"17101","annotationCount":"","annotations":[],"uploading":false},{"name":"CreativePeptides","substanceCount":"33497","annotationCount":"","annotations":[],"uploading":false},{"name":"Crooks
+        Lab, College of Pharmacy, University of Arkansas for Medical Sciences","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Crystallography
+        Open Database (COD)","substanceCount":"245473","annotationCount":"286346","annotations":["Associated
+        Article","COD Number","Crystal Structure Data"],"uploading":false},{"name":"CSNpharm","substanceCount":"8064","annotationCount":"","annotations":[],"uploading":false},{"name":"Cure
+        First","substanceCount":"2685","annotationCount":"","annotations":[],"uploading":false},{"name":"cyandye
+        llc","substanceCount":"31","annotationCount":"","annotations":[],"uploading":false},{"name":"Cyclic
+        PharmaTech","substanceCount":"3772","annotationCount":"","annotations":[],"uploading":false},{"name":"CYH
+        Pharma","substanceCount":"62","annotationCount":"","annotations":[],"uploading":false},{"name":"CymitQuimica","substanceCount":"787281","annotationCount":"","annotations":[],"uploading":false},{"name":"DailyMed","substanceCount":"","annotationCount":"19029","annotations":["Drug
+        Labels"],"uploading":false},{"name":"Dao Fu Chemical","substanceCount":"11","annotationCount":"","annotations":[],"uploading":false},{"name":"DAOGE
+        BIOPHARMA","substanceCount":"4662","annotationCount":"","annotations":[],"uploading":false},{"name":"Database
+        of Interacting Proteins (DIP)","substanceCount":"","annotations":[],"uploading":false},{"name":"Davey
+        Lab, Department of Microbiology, NEIDL, Boston University","substanceCount":"6708","annotationCount":"","annotations":[],"uploading":false},{"name":"Day
+        Biochem","substanceCount":"58194","annotationCount":"","annotations":[],"uploading":false},{"name":"DC
+        Chemicals","substanceCount":"22762","annotationCount":"","annotations":[],"uploading":false},{"name":"Debye
+        Scientific Co., Ltd","substanceCount":"511854","annotationCount":"","annotations":[],"uploading":false},{"name":"DempoChem","substanceCount":"16818","annotationCount":"","annotations":[],"uploading":false},{"name":"Denison
+        Lab, Department of Environmental Toxicology, UC Davis","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Department
+        of drug chemistry, Lithuanian University of Health Sciences","substanceCount":"24","annotationCount":"","annotations":[],"uploading":false},{"name":"Department
+        of Molecular Cell Biology, Weizmann Institute of Science","substanceCount":"85","annotationCount":"","annotations":[],"uploading":false},{"name":"Department
+        of Pharmacy, LMU","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Dependency
+        Map (DepMap)","substanceCount":"","annotations":[],"uploading":false},{"name":"Derbyshire
+        Lab, Chemistry Department, Duke University","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"DerMardirossian
+        Lab, San Diego Biomedical Research Institute","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"Dharmacon,
+        a Horizon Discovery Group company","substanceCount":"1901537","annotationCount":"","annotations":[],"uploading":false},{"name":"DHS
+        Chemical Facility Anti-Terrorism Standards (CFATS) Chemicals of Interest","substanceCount":"","annotationCount":"325","annotations":[],"uploading":false},{"name":"Diabetic
+        Complications Screening","substanceCount":"1040","annotationCount":"","annotations":[],"uploading":false},{"name":"DiRusso
+        Lab, Biochemistry Department, University of Nebraska","substanceCount":"43720","annotationCount":"","annotations":[],"uploading":false},{"name":"DiscoveryGate","substanceCount":"11399046","annotationCount":"","annotations":[],"uploading":false},{"name":"Domainex","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Dong
+        Lab, School of Life Science and Biotechnology, Dalian University of Technology","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Dr
+        Amee George, Victorian Centre for Functional Genomics, Peter MacCallum Cancer
+        Centre","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Dr
+        Karuna Singh Lab, Mahila Mahavidyalaya, Banaras Hindu University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Dr.
+        Anitha Jabamalairaj, Department of Biotechnology,E-YUVA Centre, Anna University,
+        Chennai","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Drosophila
+        RNAi Screening Center (DRSC)","substanceCount":"39459","annotationCount":"","annotations":[],"uploading":false},{"name":"Drug
+        Database, Clinicalinfo.hiv.gov","substanceCount":"","annotationCount":"140","annotations":["HIV/AIDS
+        and Opportunistic Infection Drugs","Record Description"],"uploading":false},{"name":"Drug
+        Enforcement Administration (DEA)","substanceCount":"","annotationCount":"543","annotations":["DEA
+        Code Number","DEA Controlled Substances","DEA Drug Facts","DEA Drug and Chemical
+        Information","DEA Listed Chemicals","Record Description","Regulatory Information"],"uploading":false},{"name":"Drug
+        Gene Interaction database (DGIdb)","substanceCount":"","annotationCount":"18531","annotations":["Chemical-Target
+        Interactions"],"uploading":false},{"name":"DrugBank","substanceCount":"13575","annotationCount":"28383","annotations":["Absorption,
+        Distribution and Excretion","Biological Half-Life","Boiling Point","CAS","Caco2
+        Permeability","Chemical-Target Interactions","Dissociation Constants","Drug
+        Indication","Drug-Drug Interactions","Drug-Food Interactions","DrugBank ID","Hydrophobicity","Isoelectric
+        Point","LogP","LogS","Mechanism of Action","Melting Point","Metabolism/Metabolites","Patents","Pharmacodynamics","Protein
+        Binding","Record Description","Solubility"],"uploading":false},{"name":"DrugCentral","substanceCount":"8238","annotationCount":"11100","annotations":[],"uploading":false},{"name":"Drugs
+        and Lactation Database (LactMed)","substanceCount":"","annotationCount":"1885","annotations":["Effects
+        During Pregnancy and Lactation"],"uploading":false},{"name":"Drugs@FDA","substanceCount":"","annotationCount":"6330","annotations":["FDA
+        Approved Drugs","Human Drugs"],"uploading":false},{"name":"DSL Chemicals","substanceCount":"28007","annotationCount":"","annotations":[],"uploading":false},{"name":"DTP/NCI","substanceCount":"331775","annotationCount":"329396","annotations":["CAS","NSC
+        Number"],"uploading":false},{"name":"E. coli Metabolome Database (ECMDB)","substanceCount":"","annotationCount":"5003","annotations":["Record
+        Description","Taxonomy"],"uploading":false},{"name":"EAWAG Biocatalysis/Biodegradation
+        Database","substanceCount":"1396","annotationCount":"","annotations":[],"uploading":false},{"name":"ECI
+        Group, LCSB, University of Luxembourg","substanceCount":"1799800","annotationCount":"1603","annotations":["Taxonomy"],"uploading":false},{"name":"EDASA
+        Scientific","substanceCount":"27982","annotationCount":"","annotations":[],"uploading":false},{"name":"EFSA
+        OpenFoodTox","substanceCount":"","annotationCount":"6093","annotations":[],"uploading":false},{"name":"Egon
+        Willighagen, Department of Bioinformatics - BiGCaT, Maastricht University","substanceCount":"158065","annotationCount":"","annotations":[],"uploading":false},{"name":"eHeterocycles
+        Ltd","substanceCount":"750","annotationCount":"","annotations":[],"uploading":false},{"name":"eInhibitors","substanceCount":"797","annotationCount":"","annotations":[],"uploading":false},{"name":"Elizabeth''s
+        Lab, Sri Ramachandra Institute of Higher Education and Research (SRIHER) (DU)","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Elsa
+        Biotechnology","substanceCount":"13868","annotationCount":"","annotations":[],"uploading":false},{"name":"EMD
+        Biosciences","substanceCount":"402","annotationCount":"","annotations":[],"uploading":false},{"name":"EMD
+        Millipore","substanceCount":"2672","annotationCount":"","annotations":[],"uploading":false},{"name":"Emergency
+        Response Guidebook (ERG)","substanceCount":"","annotationCount":"2333","annotations":["Accidental
+        Release Measures","Emergency Response Planning Guidelines","Exposure Control
+        and Personal Protection","Fire Hazards","First Aid","Hazards Identification","Health
+        Hazards","Isolation and Evacuation","Toxic-by-Inhalation (TIH) Gas","UN Number"],"uploading":false},{"name":"Eminent
+        Biosciences","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"eMolecules","substanceCount":"625463","annotationCount":"","annotations":[],"uploading":false},{"name":"Emory
+        University Molecular Libraries Screening Center","substanceCount":"144067","annotationCount":"","annotations":[],"uploading":false},{"name":"Enamine","substanceCount":"5199173","annotationCount":"","annotations":[],"uploading":false},{"name":"Encyclopedia
+        of Life (EOL)","substanceCount":"","annotations":[],"uploading":false},{"name":"Ennopharm","substanceCount":"3000","annotationCount":"","annotations":[],"uploading":false},{"name":"eNovation
+        Chemicals","substanceCount":"576009","annotationCount":"","annotations":[],"uploading":false},{"name":"enQuireBio","substanceCount":"52","annotationCount":"","annotations":[],"uploading":false},{"name":"enviPath","substanceCount":"4244","annotationCount":"","annotations":[],"uploading":false},{"name":"EPA
+        Acute Exposure Guideline Levels (AEGLs)","substanceCount":"","annotationCount":"315","annotations":["AEGLs
+        Notes","AEGLs Table","Acute Exposure Guideline Levels (AEGLs)","CAS"],"uploading":false},{"name":"EPA
+        Chemical and Products Database (CPDat)","substanceCount":"","annotationCount":"9852","annotations":["Uses"],"uploading":false},{"name":"EPA
+        Chemical Data Reporting (CDR)","substanceCount":"","annotationCount":"8032","annotations":["CAS","Consumer
+        Uses","General Manufacturing Information","Industry Uses","Physical Description","U.S.
+        Production"],"uploading":false},{"name":"EPA Chemicals under the TSCA","substanceCount":"","annotationCount":"70754","annotations":["CAS","Deprecated
+        CAS","General Manufacturing Information","UVCB"],"uploading":false},{"name":"EPA
+        DSSTox","substanceCount":"1250498","annotationCount":"1246399","annotations":["CAS","DSSTox
+        Substance ID","Deprecated CAS"],"uploading":false},{"name":"EPA Hazardous
+        Air Pollutants","substanceCount":"","annotationCount":"181","annotations":[],"uploading":false},{"name":"EPA
+        Integrated Risk Information System (IRIS)","substanceCount":"","annotationCount":"572","annotations":["CAS","Cancer
+        Sites","EPA IRIS Information","Target Organs"],"uploading":false},{"name":"EPA
+        Pesticide Ecotoxicity Database","substanceCount":"","annotationCount":"1213","annotations":["Agrochemical
+        Category","EPA Ecotoxicity"],"uploading":false},{"name":"EPA Provisional Peer-Reviewed
+        Toxicity Values (PPRTVs)","substanceCount":"","annotationCount":"410","annotations":["CAS","EPA
+        Provisional Peer-Reviewed Toxicity Values"],"uploading":false},{"name":"EPA
+        Regional Screening Levels for Chemical Contaminants at Superfund Sites","substanceCount":"","annotationCount":"1779","annotations":["Hazard
+        Quotient Level 0.1 or Cancer Risk Level 1E-06","Hazard Quotient Level 3 or
+        Cancer Risk Level 1E-04"],"uploading":false},{"name":"EPA Safe Drinking Water
+        Act (SDWA)","substanceCount":"","annotationCount":"430","annotations":[],"uploading":false},{"name":"EPA
+        Safer Choice","substanceCount":"","annotationCount":"982","annotations":["EPA
+        Safer Chemical","Use Classification"],"uploading":false},{"name":"EPA Substance
+        Registry Services","substanceCount":"115032","annotationCount":"","annotations":[],"uploading":false},{"name":"Erezrtech","substanceCount":"13","annotationCount":"","annotations":[],"uploading":false},{"name":"Esther
+        Woon lab, National University of Singapore","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"ET
+        Co.,Ltd.","substanceCount":"2821","annotationCount":"","annotations":[],"uploading":false},{"name":"EU
+        Clinical Trials Register","substanceCount":"","annotationCount":"6064","annotations":["EU
+        Clinical Trials Register"],"uploading":false},{"name":"EU Food Improvement
+        Agents","substanceCount":"","annotationCount":"2865","annotations":["Acid
+        Value","European Community (EC) Number","Food Additive Classes","Food Additive
+        Definition","Melting Point","Molecular Formula","Optical Rotation","Physical
+        Description","Refractive Index","Solubility","UV Spectra","Use Classification","Viscosity","pH"],"uploading":false},{"name":"EU
+        Pesticides Database","substanceCount":"","annotationCount":"1465","annotations":["Agrochemical
+        Category","EU Pesticides Data","Pesticides","Use Classification"],"uploading":false},{"name":"European
+        Chemicals Agency (ECHA)","substanceCount":"","annotationCount":"788745","annotations":["CAS","European
+        Community (EC) Number","GHS Classification","Hazard Classes and Categories","Highly
+        Hazardous Substance"],"uploading":false},{"name":"European Medicines Agency
+        (EMA)","substanceCount":"","annotationCount":"28294","annotations":["ATC Code","Animal
+        Drugs","Drug Indication","EMA Drug Information","Human Drugs","Use Classification"],"uploading":false},{"name":"EvitaChem","substanceCount":"557016","annotationCount":"","annotations":[],"uploading":false},{"name":"Excel-Asia","substanceCount":"26","annotationCount":"","annotations":[],"uploading":false},{"name":"Excenen
+        Pharmatech","substanceCount":"18944","annotationCount":"","annotations":[],"uploading":false},{"name":"Exclusive
+        Chemistry Ltd","substanceCount":"4781","annotationCount":"","annotations":[],"uploading":false},{"name":"Eximed
+        Laboratory","substanceCount":"63783","annotationCount":"","annotations":[],"uploading":false},{"name":"Expert
+        Synthesis Solutions","substanceCount":"163","annotationCount":"","annotations":[],"uploading":false},{"name":"Fahrul
+        Nurkolis Lab, Department of Pharmaceutical, Nutritional, Biomedical, and Translational
+        Medicine, Medical Research Center of Indonesia, Surabaya, Indonesia","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"fcenuba","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"FChemicals","substanceCount":"18","annotationCount":"","annotations":[],"uploading":false},{"name":"FDA
+        Approved Animal Drug Products (Green Book)","substanceCount":"","annotationCount":"1678","annotations":["Animal
+        Drugs","FDA Green Book","FDA Green Book Patents","Use Classification"],"uploading":false},{"name":"FDA
+        Controlled Substance Staff","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"FDA
+        Generally Recognized as Safe (GRAS)","substanceCount":"","annotationCount":"1235","annotations":[],"uploading":false},{"name":"FDA
+        Global Substance Registration System (GSRS)","substanceCount":"164765","annotationCount":"164765","annotations":["CAS","Deprecated
+        CAS","UNII"],"uploading":false},{"name":"FDA Liver Toxicity Knowledge Base
+        (LTKB)","substanceCount":"1036","annotationCount":"2902","annotations":[],"uploading":false},{"name":"FDA
+        Medication Guides","substanceCount":"","annotationCount":"878","annotations":["FDA
+        Medication Guides"],"uploading":false},{"name":"FDA Orange Book","substanceCount":"","annotationCount":"2937","annotations":["FDA
+        Orange Book","FDA Orange Book Patents","Use Classification"],"uploading":false},{"name":"FDA
+        Packaging & Food Contact Substances (FCS)","substanceCount":"","annotationCount":"6488","annotations":[],"uploading":false},{"name":"FDA
+        Pharm Classes","substanceCount":"","annotationCount":"2957","annotations":["FDA
+        Pharmacological Classification","Record Description"],"uploading":false},{"name":"FDA
+        Purple Book","substanceCount":"","annotationCount":"833","annotations":["FDA
+        Purple Book"],"uploading":false},{"name":"FDA Regulatory Status of Color Additives","substanceCount":"","annotationCount":"302","annotations":[],"uploading":false},{"name":"FDA
+        Substances Added to Food","substanceCount":"","annotationCount":"3971","annotations":[],"uploading":false},{"name":"Fermalogic","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Fernandez-Hernando
+        Lab, Department of Comparative Medicine, Yale University","substanceCount":"21690","annotationCount":"","annotations":[],"uploading":false},{"name":"Fine
+        Organic Chemistry Lab (LQOF), Universidade Estadual Paulista (Unesp)","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Finetech
+        Industry Limited","substanceCount":"173542","annotationCount":"","annotations":[],"uploading":false},{"name":"Finley
+        and King Labs, Harvard Medical School","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Fisher
+        Chemical","substanceCount":"2168","annotationCount":"","annotations":[],"uploading":false},{"name":"Fisher
+        Drug Discovery Resource Center","substanceCount":"287414","annotationCount":"","annotations":[],"uploading":false},{"name":"FivePhoton/Pacific
+        Ion","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Flavor
+        and Extract Manufacturers Association (FEMA)","substanceCount":"","annotationCount":"2793","annotations":["FEMA
+        Flavor Profile","FEMA Number"],"uploading":false},{"name":"Fluor-Probes","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"Fluorochem","substanceCount":"96024","annotationCount":"","annotations":[],"uploading":false},{"name":"Fluoropharm
+        Co.,Ltd","substanceCount":"1266","annotationCount":"","annotations":[],"uploading":false},{"name":"FlyBase","substanceCount":"","annotations":[],"uploading":false},{"name":"Focus
+        Biomolecules","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Fondchemical
+        Limited","substanceCount":"3154","annotationCount":"","annotations":[],"uploading":false},{"name":"FooDB","substanceCount":"","annotationCount":"57131","annotations":["Associated
+        Foods"],"uploading":false},{"name":"ForeChem","substanceCount":"1317","annotationCount":"","annotations":[],"uploading":false},{"name":"Fornace
+        Lab, Georgetown University Medical Center","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Founder
+        Pharma","substanceCount":"44839","annotationCount":"","annotations":[],"uploading":false},{"name":"Fragmenta","substanceCount":"2016","annotationCount":"","annotations":[],"uploading":false},{"name":"Fredberg
+        Lab, Harvard T.H. Chan School of Public Health","substanceCount":"11200","annotationCount":"","annotations":[],"uploading":false},{"name":"Frinton
+        Laboratories","substanceCount":"1374","annotationCount":"","annotations":[],"uploading":false},{"name":"Fumizol
+        Ltd","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"Funakoshi
+        Co., Ltd.","substanceCount":"30","annotationCount":"","annotations":[],"uploading":false},{"name":"Functional
+        Genomics Laboratory (NCATS/FGL)","substanceCount":"114898","annotationCount":"","annotations":[],"uploading":false},{"name":"Functional
+        Metabolomics Lab, Radboud University","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"FUSC","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"FutureChem","substanceCount":"151","annotationCount":"","annotations":[],"uploading":false},{"name":"Gademann
+        Lab, Department of Chemistry, University of Zurich","substanceCount":"36","annotationCount":"","annotations":[],"uploading":false},{"name":"Gallagher
+        Lab, School of Chemistry, University of Bristol","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Gandia-Herrero
+        Lab, Biochemistry and Molecular Biology A Department, University of Murcia","substanceCount":"44","annotationCount":"","annotations":[],"uploading":false},{"name":"Ganolix
+        LifeScience","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Garg
+        Lab, Department of Chemistry and Biochemistry, UCLA","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Gene
+        Curation Coalition (GenCC)","substanceCount":"","annotations":[],"uploading":false},{"name":"Gene
+        Ontology (GO)","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Genentech","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Genetic
+        Toxicology Data Bank (GENE-TOX)","substanceCount":"3214","annotationCount":"","annotations":[],"uploading":false},{"name":"Genome
+        Instability in Tumors (B420) group, DKFZ","substanceCount":"378","annotationCount":"","annotations":[],"uploading":false},{"name":"Genomics
+        of Drug Sensitivity in Cancer (GDSC)","substanceCount":"","annotations":[],"uploading":false},{"name":"Georganics","substanceCount":"1788","annotationCount":"","annotations":[],"uploading":false},{"name":"GFS
+        Chemicals","substanceCount":"641","annotationCount":"","annotations":[],"uploading":false},{"name":"GHS
+        Classification (UNECE)","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"GL
+        Biochem","substanceCount":"147","annotationCount":"","annotations":[],"uploading":false},{"name":"GlaxoSmithKline
+        (GSK)","substanceCount":"14118","annotationCount":"","annotations":[],"uploading":false},{"name":"Glentham
+        Life Sciences Ltd.","substanceCount":"13105","annotationCount":"","annotations":[],"uploading":false},{"name":"GLIDA,
+        GPCR-Ligand Database","substanceCount":"21192","annotationCount":"","annotations":[],"uploading":false},{"name":"Glixx
+        Labs Inc","substanceCount":"16587","annotationCount":"","annotations":[],"uploading":false},{"name":"Global
+        Health Medicines R&D, GSK","substanceCount":"33","annotationCount":"","annotations":[],"uploading":false},{"name":"Gloriam
+        Group: Pharmaceutical informatics - Department of Drug Design and Pharmacology,
+        University of Copenhagen","substanceCount":"304","annotationCount":"","annotations":[],"uploading":false},{"name":"Glycan
+        Naming and Subsumption Ontology (GNOme)","substanceCount":"","annotationCount":"45301","annotations":[],"uploading":false},{"name":"GlycoNAVI","substanceCount":"","annotationCount":"783","annotations":["GlyTouCan
+        Accession"],"uploading":false},{"name":"GlyConnect","substanceCount":"","annotationCount":"6173","annotations":["GlyConnect
+        Structure"],"uploading":false},{"name":"GlyCosmos Glycoscience Portal","substanceCount":"","annotationCount":"795678","annotations":["Chemical-Target
+        Interactions","GlyCosmos Monoisotopic Mass","GlyCosmos Species","GlyCosmos
+        Subsumption","GlyCosmos Tissue/Organ","GlyTouCan Accession","Record Description","Taxonomy"],"uploading":false},{"name":"GlyGen","substanceCount":"","annotationCount":"125520","annotations":["GlyGen
+        Classification","GlyGen Motifs","Monosaccharide Composition","Permethylated
+        Mass"],"uploading":false},{"name":"GlyTouCan Project","substanceCount":"189942","annotationCount":"250433","annotations":["Biologic
+        Line Notation","GlyTouCan Accession"],"uploading":false},{"name":"GNF / Scripps  Winzeler
+        lab","substanceCount":"5697","annotationCount":"","annotations":[],"uploading":false},{"name":"Golm
+        Metabolome Database (GMD), Max Planck Institute of Molecular Plant Physiology","substanceCount":"1320","annotationCount":"","annotations":[],"uploading":false},{"name":"Google
+        Patents","substanceCount":"21941800","annotationCount":"","annotations":[],"uploading":false},{"name":"Grape
+        King Bio","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Greatcell
+        Solar Materials","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"Grechko
+        Lab, Department of Pharmacology and Bioinformatics, Volgograd State Medical
+        University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Gregory
+        Genta-Jouve, University Paris Descartes","substanceCount":"42","annotationCount":"","annotations":[],"uploading":false},{"name":"Gregory
+        J. Crowther","substanceCount":"13460","annotationCount":"","annotations":[],"uploading":false},{"name":"Gruechem
+        Pharm","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"GSP
+        Chem Ind","substanceCount":"20","annotationCount":"","annotations":[],"uploading":false},{"name":"Gulick
+        Lab, Department of Structural Biology, University at Buffalo","substanceCount":"4400","annotationCount":"","annotations":[],"uploading":false},{"name":"Guri
+        Giaever, Pharmaceutical Sciences, University of British Columbia","substanceCount":"3275","annotationCount":"","annotations":[],"uploading":false},{"name":"Hairui
+        Chemical","substanceCount":"408873","annotationCount":"","annotations":[],"uploading":false},{"name":"Halochem","substanceCount":"12461","annotationCount":"","annotations":[],"uploading":false},{"name":"Handbook
+        of Mineralogy","substanceCount":"","annotationCount":"5605","annotations":["Minerals"],"uploading":false},{"name":"Hangzhou
+        APIChem Technology","substanceCount":"30377","annotationCount":"","annotations":[],"uploading":false},{"name":"Hangzhou
+        Trylead Chemical Technology","substanceCount":"9322","annotationCount":"","annotations":[],"uploading":false},{"name":"Hanmi","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Harvard
+        Medical School (HMS) LINCS","substanceCount":"","annotations":[],"uploading":false},{"name":"Haz-Map,
+        Information on Hazardous Chemicals and Occupational Diseases","substanceCount":"","annotationCount":"12205","annotations":["Adverse
+        Effects","Associated Disorders and Diseases","Biological Half-Life","Boiling
+        Point","Chemical Classes","Emergency Response Planning Guidelines","Exposure
+        Control and Personal Protection","Flash Point","Hazards Summary","Immediately
+        Dangerous to Life or Health (IDLH)","Melting Point","Odor Threshold","Permissible
+        Exposure Limit (PEL)","Physical Description","Threshold Limit Values (TLV)","Toxicity
+        Data","Uses","Vapor Pressure"],"uploading":false},{"name":"Hazardous Chemical
+        Information System (HCIS), Safe Work Australia","substanceCount":"","annotationCount":"6973","annotations":["GHS
+        Classification","Hazard Classes and Categories"],"uploading":false},{"name":"Hazardous
+        Substances Data Bank (HSDB)","substanceCount":"","annotationCount":"6060","annotations":["13C
+        NMR Spectra","1D NMR Spectra","1H NMR Spectra","Absorption, Distribution and
+        Excretion","Absorption, Distribution and Excretion (Complete)","Acceptable
+        Daily Intakes","Acceptable Daily Intakes (Complete)","Allowable Tolerances","Allowable
+        Tolerances (Complete)","Analytic Laboratory Methods","Analytic Laboratory
+        Methods (Complete)","Animal Concentrations","Animal Concentrations (Complete)","Antidote
+        and Emergency Treatment","Antidote and Emergency Treatment (Complete)","Artificial
+        Pollution Sources","Artificial Pollution Sources (Complete)","Associated Chemicals","Associated
+        Chemicals (Complete)","Atmospheric Concentrations","Atmospheric Concentrations
+        (Complete)","Atmospheric Standards","Atmospheric Standards (Complete)","Autoignition
+        Temperature","Average Daily Intake","Average Daily Intake (Complete)","Biological
+        Half-Life","Biological Half-Life (Complete)","Bionecessity","Bionecessity
+        (Complete)","Body Burden","Body Burden (Complete)","Boiling Point","CAS","CERCLA
+        Reportable Quantities","CERCLA Reportable Quantities (Complete)","Clean Water
+        Act Requirements","Cleanup Methods","Cleanup Methods (Complete)","Clinical
+        Laboratory Methods","Clinical Laboratory Methods (Complete)","Color/Form","Color/Form
+        (Complete)","Consumption Patterns","Consumption Patterns (Complete)","Corrosivity","Critical
+        Temperature & Pressure","DOT Emergency Guidelines","DOT Emergency Guidelines
+        (Complete)","Decomposition","Density","Dielectric Constant","Dispersion","Disposal
+        Methods","Disposal Methods (Complete)","Dissociation Constants","Drug Idiosyncrasies","Drug
+        Tolerance","Drug Warnings","Drug Warnings (Complete)","EPA Hazardous Waste
+        Number","Ecotoxicity Excerpts","Ecotoxicity Excerpts (Complete)","Ecotoxicity
+        Values","Ecotoxicity Values (Complete)","Effluent Concentrations","Effluent
+        Concentrations (Complete)","Emergency Response Planning Guidelines","Emergency
+        Response Planning Guidelines (Complete)","Environmental Abiotic Degradation","Environmental
+        Abiotic Degradation (Complete)","Environmental Bioconcentration","Environmental
+        Bioconcentration (Complete)","Environmental Biodegradation","Environmental
+        Biodegradation (Complete)","Environmental Fate","Environmental Fate (Complete)","Environmental
+        Fate/Exposure Summary","Environmental Water Concentrations","Environmental
+        Water Concentrations (Complete)","Evidence for Carcinogenicity","Evidence
+        for Carcinogenicity (Complete)","Explosive Limits and Potential","Explosive
+        Limits and Potential (Complete)","FDA Requirements","FDA Requirements (Complete)","FIFRA
+        Requirements","FIFRA Requirements (Complete)","Federal Drinking Water Guidelines","Federal
+        Drinking Water Standards","Federal Drinking Water Standards (Complete)","Fire
+        Fighting Procedures","Fire Fighting Procedures (Complete)","Fire Potential","Firefighting
+        Hazards","Firefighting Hazards (Complete)","Fish/Seafood Concentrations","Fish/Seafood
+        Concentrations (Complete)","Flammable Limits","Flash Point","Food Survey Values","Food
+        Survey Values (Complete)","Formulations/Preparations","Formulations/Preparations
+        (Complete)","GHS Classification","General Manufacturing Information","General
+        Manufacturing Information (Complete)","HSDB Note","Hazardous Reactivities
+        and Incompatibilities","Hazardous Reactivities and Incompatibilities (Complete)","Hazardous
+        Substances DataBank Number","Hazards Summary","Heat of Combustion","Heat of
+        Vaporization","Henry''s Law Constant","History and Incidents","History and
+        Incidents (Complete)","Human Toxicity Excerpts","Human Toxicity Excerpts (Complete)","Human
+        Toxicity Values","Human Toxicity Values (Complete)","IR Spectra","Immediately
+        Dangerous to Life or Health (IDLH)","Impurities","Impurities (Complete)","Interactions","Interactions
+        (Complete)","Last Review Date","Last Revision Date","LogP","Manufacturers","Maximum
+        Drug Dose","Mechanism of Action","Mechanism of Action (Complete)","Medical
+        Surveillance","Medical Surveillance (Complete)","Melting Point","Metabolism/Metabolites","Metabolism/Metabolites
+        (Complete)","Methods of Manufacturing","Methods of Manufacturing (Complete)","Milk
+        Concentrations","Milk Concentrations (Complete)","Molecular Formula","Molecular
+        Weight","NFPA Hazard Classification","NIOSH Recommendations","NIOSH Recommendations
+        (Complete)","National Toxicology Program Studies","National Toxicology Program
+        Studies (Complete)","Natural Pollution Sources","Natural Pollution Sources
+        (Complete)","Non-Human Toxicity Excerpts","Non-Human Toxicity Excerpts (Complete)","Non-Human
+        Toxicity Values","Non-Human Toxicity Values (Complete)","OSHA Standards","OSHA
+        Standards (Complete)","Odor","Odor Threshold","Odor Threshold (Complete)","Ongoing
+        Test Status","Optical Rotation","Other Environmental Concentrations","Other
+        Environmental Concentrations (Complete)","Other Experimental Properties","Other
+        Experimental Properties (Complete)","Other Hazardous Reactions","Other MS","Other
+        Spectra","Other Standards Regulations and Guidelines","Other Standards Regulations
+        and Guidelines (Complete)","Personal Protective Equipment (PPE)","Personal
+        Protective Equipment (PPE) (Complete)","Plant Concentrations","Plant Concentrations
+        (Complete)","Polymerization","Populations at Special Risk","Populations at
+        Special Risk (Complete)","Preventive Measures","Preventive Measures (Complete)","Probable
+        Routes of Human Exposure","Probable Routes of Human Exposure (Complete)","RCRA
+        Requirements","RCRA Requirements (Complete)","Radiation Limits and Potential","Radiation
+        Limits and Potential (Complete)","Raman Spectra","Refractive Index","Related
+        HSDB Records","Relative Evaporation Rate","Reported Fatal Dose","Sampling
+        Procedures","Sampling Procedures (Complete)","Sediment/Soil Concentrations","Sediment/Soil
+        Concentrations (Complete)","Shipment Methods and Regulations","Shipment Methods
+        and Regulations (Complete)","Shipping Name/ Number DOT/UN/NA/IMO","Shipping
+        Name/ Number DOT/UN/NA/IMO (Complete)","Skin, Eye, and Respiratory Irritations","Soil
+        Adsorption/Mobility","Soil Adsorption/Mobility (Complete)","Soil Standards","Solubility","Solubility
+        (Complete)","Special Reports","Special Reports (Complete)","Stability/Shelf
+        Life","Stability/Shelf Life (Complete)","Standard Transportation Number","State
+        Drinking Water Guidelines","State Drinking Water Guidelines (Complete)","State
+        Drinking Water Standards","State Drinking Water Standards (Complete)","Storage
+        Conditions","Storage Conditions (Complete)","Substance Title","Surface Tension","Synonyms
+        and Identifiers","TSCA Requirements","TSCA Test Submissions","TSCA Test Submissions
+        (Complete)","Taste","Therapeutic Uses","Therapeutic Uses (Complete)","Threshold
+        Limit Values (TLV)","Threshold Limit Values (TLV) (Complete)","Toxic Combustion
+        Products","Toxicity Summary","U.S. Exports","U.S. Exports (Complete)","U.S.
+        Imports","U.S. Imports (Complete)","U.S. Production","U.S. Production (Complete)","UV
+        Spectra","Update History","Uses","Uses (Complete)","Vapor Density","Vapor
+        Pressure","Viscosity","Volatilization from Water/Soil","Volatilization from
+        Water/Soil (Complete)","pH"],"uploading":false},{"name":"HDH Pharma","substanceCount":"40203","annotationCount":"","annotations":[],"uploading":false},{"name":"Hefei
+        Hirisun Pharmatech Co., Ltd","substanceCount":"10720","annotationCount":"","annotations":[],"uploading":false},{"name":"Hefei
+        LBAO Chemicals","substanceCount":"101","annotationCount":"","annotations":[],"uploading":false},{"name":"Hello
+        Bio","substanceCount":"1251","annotationCount":"","annotations":[],"uploading":false},{"name":"Herbest
+        Bio-Tech","substanceCount":"420","annotationCount":"","annotations":[],"uploading":false},{"name":"Heterocyclics
+        Research Chemicals & Building blocks","substanceCount":"4919","annotationCount":"","annotations":[],"uploading":false},{"name":"Heteroz
+        LLC","substanceCount":"100","annotationCount":"","annotations":[],"uploading":false},{"name":"Hoffman
+        Fine Chemicals","substanceCount":"19430","annotationCount":"","annotations":[],"uploading":false},{"name":"Hopax
+        Fine Chemicals","substanceCount":"30","annotationCount":"","annotations":[],"uploading":false},{"name":"Horrigan
+        Lab, Baylor College of Medicine","substanceCount":"951","annotationCount":"","annotations":[],"uploading":false},{"name":"Hubei
+        JHchemco International Trade Co.,Ltd.","substanceCount":"10","annotationCount":"","annotations":[],"uploading":false},{"name":"Hubei
+        Teyer Pharmaceutical Co., Ltd.","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"HUGO
+        Gene Nomenclature Committee (HGNC)","substanceCount":"","annotations":[],"uploading":false},{"name":"Human
+        Metabolome Database (HMDB)","substanceCount":"217776","annotationCount":"247821","annotations":["13C
+        NMR Spectra","1H NMR Spectra","1H-13C NMR Spectra","1H-1H NMR Spectra","Boiling
+        Point","CAS","Cellular Locations","Disease and References","GC-MS","HMDB ID","LogP","MS-MS","Melting
+        Point","Metabolite Pathways","Physical Description","Solubility","Tissue Locations"],"uploading":false},{"name":"Human
+        Protein Atlas (HPA)","substanceCount":"","annotations":[],"uploading":false},{"name":"HUMGENEX","substanceCount":"16","annotationCount":"","annotations":[],"uploading":false},{"name":"Hunan
+        Chemfish Pharmaceutical Co., Ltd.","substanceCount":"13238","annotationCount":"","annotations":[],"uploading":false},{"name":"Hunan
+        Huateng Pharmaceutical Co., Ltd.","substanceCount":"9394","annotationCount":"","annotations":[],"uploading":false},{"name":"Iain
+        Fraser","substanceCount":"43744","annotationCount":"","annotations":[],"uploading":false},{"name":"IBM","substanceCount":"15193999","annotationCount":"","annotations":[],"uploading":false},{"name":"ICCB-Longwood
+        Screening Facility, Harvard Medical School","substanceCount":"788757","annotationCount":"","annotations":[],"uploading":false},{"name":"ichemcluster","substanceCount":"23","annotationCount":"","annotations":[],"uploading":false},{"name":"iChemical
+        Technology USA Inc","substanceCount":"59819","annotationCount":"","annotations":[],"uploading":false},{"name":"IHU
+        Mediterranee Infection","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"ILO-WHO
+        International Chemical Safety Cards (ICSCs)","substanceCount":"","annotationCount":"1712","annotations":["Autoignition
+        Temperature","Boiling Point","CAS","Chemical Dangers","Decomposition","Density","EC
+        Classification","Effects of Long Term Exposure","Effects of Short Term Exposure","Explosive
+        Limits and Potential","Exposure Routes","Fire Fighting","Fire Hazards","First
+        Aid Measures","Flash Point","ICSC Environmental Data","ICSC Number","Inhalation
+        Risk","LogP","Melting Point","Molecular Formula","Occupational Exposure Limits
+        (OEL)","Packaging and Labelling","Physical Dangers","Physical Description","Preventions","Safe
+        Storage","Solubility","Spillage Disposal","Symptoms","Threshold Limit Values
+        (TLV)","UN Classification","UN Number","Vapor Density","Vapor Pressure","Viscosity"],"uploading":false},{"name":"Immune
+        Epitope Database (IEDB)","substanceCount":"3743","annotationCount":"","annotations":[],"uploading":false},{"name":"Immunology
+        Lab, Department of Biotechnology, Calicut University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"InFarmatik","substanceCount":"1077","annotationCount":"","annotations":[],"uploading":false},{"name":"InfectX
+        Consortium","substanceCount":"115878","annotationCount":"","annotations":[],"uploading":false},{"name":"Infinium
+        PharmaChem Pvt Ltd","substanceCount":"142","annotationCount":"","annotations":[],"uploading":false},{"name":"Inhibitor
+        2","substanceCount":"440","annotationCount":"","annotations":[],"uploading":false},{"name":"Innogen
+        Pharmaceutical Technology Co., Ltd.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Innovapharm","substanceCount":"888480","annotationCount":"","annotations":[],"uploading":false},{"name":"Innovative
+        Therapeutics Lab","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"INOH","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Insect
+        Molecular Biology Lab, Department of Environmental Biotechnology, Bharathidasan
+        University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"INSERM,
+        Institut National de la Sante et de la Recherche Medicale","substanceCount":"22950","annotationCount":"","annotations":[],"uploading":false},{"name":"IntAct
+        Molecular Interaction Database","substanceCount":"","annotations":[],"uploading":false},{"name":"Integrated
+        Taxonomic Information System (ITIS)","substanceCount":"","annotations":[],"uploading":false},{"name":"INTERBIOSCREEN","substanceCount":"568966","annotationCount":"","annotations":[],"uploading":false},{"name":"International
+        Agency for Research on Cancer (IARC)","substanceCount":"","annotationCount":"1055","annotations":["Carcinogen
+        Classification"],"uploading":false},{"name":"International Fragrance Association
+        (IFRA)","substanceCount":"","annotationCount":"3954","annotations":["CAS","Fragrances","IFRA
+        Fragrance Standards","Restriction Limits in the Finished Product (%)","Use
+        Classification"],"uploading":false},{"name":"InterPro","substanceCount":"","annotations":[],"uploading":false},{"name":"InvivoChem","substanceCount":"54239","annotationCount":"","annotations":[],"uploading":false},{"name":"Iodochem","substanceCount":"9747","annotationCount":"","annotations":[],"uploading":false},{"name":"Irvine
+        Chemistry Lab","substanceCount":"86","annotationCount":"","annotations":[],"uploading":false},{"name":"Isca
+        Biochemicals","substanceCount":"155","annotationCount":"","annotations":[],"uploading":false},{"name":"Isoprenoids","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Isotopes
+        Expert ","substanceCount":"181","annotationCount":"","annotations":[],"uploading":false},{"name":"ISpharm","substanceCount":"91993","annotationCount":"","annotations":[],"uploading":false},{"name":"iThemba
+        Pharmaceuticals","substanceCount":"77","annotationCount":"","annotations":[],"uploading":false},{"name":"IUPAC
+        Commission on Isotopic Abundances and Atomic Weights (CIAAW)","substanceCount":"","annotations":[],"uploading":false},{"name":"IUPAC
+        Digitized pKa Dataset","substanceCount":"11579","annotationCount":"11570","annotations":["Dissociation
+        Constants"],"uploading":false},{"name":"IUPAC Periodic Table of the Elements
+        and Isotopes (IPTEI)","substanceCount":"","annotations":[],"uploading":false},{"name":"IUPHAR/BPS
+        Guide to PHARMACOLOGY","substanceCount":"13610","annotationCount":"13524","annotations":["Biochemical
+        Reactions","Chemical-Target Interactions"],"uploading":false},{"name":"J&H
+        Chemical Co.,ltd","substanceCount":"753120","annotationCount":"","annotations":[],"uploading":false},{"name":"J&W
+        PharmLab","substanceCount":"17797","annotationCount":"","annotations":[],"uploading":false},{"name":"Jackson
+        Lab, Gurdon Institute, University of Cambridge","substanceCount":"50","annotationCount":"","annotations":[],"uploading":false},{"name":"Jamson
+        Pharmachem Technology","substanceCount":"5257","annotationCount":"","annotations":[],"uploading":false},{"name":"Japan
+        Chemical Substance Dictionary (Nikkaji)","substanceCount":"3798675","annotationCount":"3798675","annotations":["Nikkaji
+        Number"],"uploading":false},{"name":"Japan Material Technologies Corporation","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"Japan
+        Pharmaceuticals and Medical Devices Agency (PMDA)","substanceCount":"","annotationCount":"437","annotations":["Japan
+        PMDA Drugs"],"uploading":false},{"name":"Jefferson Lab, U.S. Department of
+        Energy","substanceCount":"","annotations":[],"uploading":false},{"name":"Johari,
+        Chetia Lab, Pharmaceutical Sciences, Dibrugarh University and N.C.Barua, Natural
+        Products, NEIST","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Johns
+        Hopkins Ion Channel Center","substanceCount":"140","annotationCount":"","annotations":[],"uploading":false},{"name":"Joint
+        FAO/WHO Expert Committee on Food Additives (JECFA)","substanceCount":"","annotationCount":"7583","annotations":["Density","Evaluations
+        of the Joint FAO/WHO Expert Committee on Food Additives - JECFA","FEMA Number","Food
+        Additive Classes","JECFA Number","Physical Description","Refractive Index","Solubility","Use
+        Classification"],"uploading":false},{"name":"Jones/Go Lab, Department of Medicine,
+        Emory University","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Joseph
+        Lab, Department of Biotechnology, University of Calicut","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"JPT
+        Peptide Technologies","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"JSSUNTON","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Junyuan
+        Petroleum Group","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"JXP
+        Pharma special in N-Nitroso impurity","substanceCount":"63","annotationCount":"","annotations":[],"uploading":false},{"name":"Karki
+        Laboratory of Innate Immunity and Cell Death, Seoul National University","substanceCount":"1140","annotationCount":"","annotations":[],"uploading":false},{"name":"KCS
+        Online","substanceCount":"19045","annotationCount":"","annotations":[],"uploading":false},{"name":"KEGG","substanceCount":"43593","annotationCount":"31634","annotations":["KEGG
+        ID"],"uploading":false},{"name":"Keith Graham, Bayer Medicinal Chemistry","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Keith
+        Lab, Institute of Cancer Science, University of Glasgow","substanceCount":"6048","annotationCount":"","annotations":[],"uploading":false},{"name":"Kerry
+        Masterson, UC Davis","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Key
+        Organics/BIONET","substanceCount":"345858","annotationCount":"","annotations":[],"uploading":false},{"name":"Kilo
+        Biotech","substanceCount":"431","annotationCount":"","annotations":[],"uploading":false},{"name":"Kinasechem
+        LTD","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"King
+        Scientific","substanceCount":"172045","annotationCount":"","annotations":[],"uploading":false},{"name":"Kingston
+        Chemistry","substanceCount":"19584","annotationCount":"","annotations":[],"uploading":false},{"name":"KNApSAcK
+        Species-Metabolite Database","substanceCount":"","annotationCount":"24184","annotations":["Taxonomy"],"uploading":false},{"name":"Kode
+        Lab, Tumor Immunology & Immunotherapy Group, Advanced Centre for Treatment,
+        Research & Education in Cancer (ACTREC), Tata Memorial Centre","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Krishnasamy
+        Nithya, Chinnasamy Muthukumar, Dhanasekaran Dharumadurai","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Kruve
+        Lab, Ionization & Mass Spectrometry, Stockholm University","substanceCount":"","annotationCount":"507","annotations":["Ionization
+        Efficiency"],"uploading":false},{"name":"KU Outreach Library, The University
+        of Kansas","substanceCount":"5634","annotationCount":"","annotations":[],"uploading":false},{"name":"KUMGM","substanceCount":"5420","annotationCount":"","annotations":[],"uploading":false},{"name":"KunShan
+        HS Chemicals Co., Ltd.","substanceCount":"23","annotationCount":"","annotations":[],"uploading":false},{"name":"Kyfora
+        Bio","substanceCount":"90","annotationCount":"","annotations":[],"uploading":false},{"name":"Kymera
+        Therapeutics","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Lab
+        and Research Safety, University of Minnesota","substanceCount":"","annotationCount":"244","annotations":["Peroxide
+        Forming Chemical"],"uploading":false},{"name":"Lab CT","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"LABIOCHEM
+        s.c.","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"LabNetwork,
+        a WuXi AppTec Company","substanceCount":"798869","annotationCount":"","annotations":[],"uploading":false},{"name":"Laboratorio
+        de Genomica e Expressao (LGE), UNICAMP","substanceCount":"118","annotationCount":"","annotations":[],"uploading":false},{"name":"Laboratory
+        of Environmental Genomics, Carolina Center for Computational Toxicology, University
+        of North Carolina at Chapel Hill","substanceCount":"14","annotationCount":"","annotations":[],"uploading":false},{"name":"Laboratory
+        of organic synthesis and biological activity, Institute of Natural Resources
+        Chemistry","substanceCount":"13","annotationCount":"","annotations":[],"uploading":false},{"name":"labseeker","substanceCount":"56323","annotationCount":"","annotations":[],"uploading":false},{"name":"Lan
+        Pharmatech","substanceCount":"94079","annotationCount":"","annotations":[],"uploading":false},{"name":"Lancrix
+        Chemicals","substanceCount":"159","annotationCount":"","annotations":[],"uploading":false},{"name":"Latoxan","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"LeadScope","substanceCount":"173358","annotationCount":"","annotations":[],"uploading":false},{"name":"LEAPCHEM","substanceCount":"24721","annotationCount":"","annotations":[],"uploading":false},{"name":"LEO
+        BIOCHEM","substanceCount":"1174","annotationCount":"","annotations":[],"uploading":false},{"name":"Lewis
+        Laboratory, University of Nebraska Medical Center","substanceCount":"14305","annotationCount":"","annotations":[],"uploading":false},{"name":"LGC
+        Standards","substanceCount":"348710","annotationCount":"","annotations":[],"uploading":false},{"name":"Lianhe
+        Aigen","substanceCount":"67","annotationCount":"","annotations":[],"uploading":false},{"name":"Life
+        Chemicals","substanceCount":"1345523","annotationCount":"","annotations":[],"uploading":false},{"name":"Life
+        Technologies, Applied Biosystems, Ambion","substanceCount":"64752","annotationCount":"","annotations":[],"uploading":false},{"name":"LifeTein","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"LINCS
+        Data Portal","substanceCount":"","annotations":[],"uploading":false},{"name":"LIPID
+        MAPS","substanceCount":"43399","annotationCount":"49718","annotations":["Lipid
+        Maps ID (LM_ID)","Lipids"],"uploading":false},{"name":"LipidEv","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Liu
+        Zhi-Jie Lab, Molecular Imaging Department, iHuman Institute, ShanghaiTech
+        University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"LiverTox","substanceCount":"","annotationCount":"1222","annotations":["Drug
+        Classes","Hepatotoxicity","LiverTox Summary","Record Description"],"uploading":false},{"name":"LKT
+        Labs","substanceCount":"199","annotationCount":"","annotations":[],"uploading":false},{"name":"Lorad
+        Chemical Corporation","substanceCount":"11","annotationCount":"","annotations":[],"uploading":false},{"name":"Los
+        Alamos National Laboratory, U.S. Department of Energy","substanceCount":"","annotations":[],"uploading":false},{"name":"LOTUS
+        - the natural products occurrence database","substanceCount":"","annotationCount":"192907","annotations":["Record
+        Description","Taxonomy"],"uploading":false},{"name":"Luminescence Technology
+        Corp. (Lumtec)","substanceCount":"1573","annotationCount":"","annotations":[],"uploading":false},{"name":"M4K
+        Pharma","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Macsen
+        Labs","substanceCount":"180","annotationCount":"","annotations":[],"uploading":false},{"name":"Marine
+        Biodiscovery Centre, Aberdeen University","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"MarkerDB","substanceCount":"","annotationCount":"1312","annotations":["Biomarker
+        Information"],"uploading":false},{"name":"Martin-Cabrejas Lab, Instituto de
+        Investigacion en Ciencias de la Alimentacion, Universidad Autonoma de Madrid","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"MassBank
+        Europe","substanceCount":"20269","annotationCount":"133130","annotations":["GC-MS","LC-MS","MALDI","Other
+        MS"],"uploading":false},{"name":"MassBank of North America (MoNA)","substanceCount":"1302305","annotationCount":"1820669","annotations":["GC-MS","LC-MS","Other
+        MS"],"uploading":false},{"name":"Matreya LLC","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Matrix
+        Scientific","substanceCount":"200344","annotationCount":"","annotations":[],"uploading":false},{"name":"Maxim
+        A. Dubinnyi, IBCH RAS","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"McMaster
+        CMCB","substanceCount":"366","annotationCount":"","annotations":[],"uploading":false},{"name":"Mcule","substanceCount":"5847191","annotationCount":"","annotations":[],"uploading":false},{"name":"MedChemexpress
+        MCE","substanceCount":"116897","annotationCount":"","annotations":[],"uploading":false},{"name":"Medical
+        Subject Headings (MeSH)","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"MedlinePlus
+        Genetics","substanceCount":"","annotations":[],"uploading":false},{"name":"Meena
+        Lab, CSIR-Central Salt & Marine Chemicals Research Institute","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Megazyme","substanceCount":"88","annotationCount":"","annotations":[],"uploading":false},{"name":"Meiler
+        Lab, Vanderbilt University","substanceCount":"11585","annotationCount":"","annotations":[],"uploading":false},{"name":"Metabolomics
+        Workbench","substanceCount":"85544","annotationCount":"167376","annotations":["Metabolomics
+        Workbench ID"],"uploading":false},{"name":"MetonChem small molecules for drug
+        research","substanceCount":"117","annotationCount":"","annotations":[],"uploading":false},{"name":"Meyer
+        Lab, Department of Chemical and Systems Biology, Stanford University","substanceCount":"20968","annotationCount":"","annotations":[],"uploading":false},{"name":"MIC
+        Scientific","substanceCount":"835","annotationCount":"","annotations":[],"uploading":false},{"name":"MicroCombiChem
+        GmbH","substanceCount":"6210","annotationCount":"","annotations":[],"uploading":false},{"name":"Midas
+        Pharma GmbH","substanceCount":"751","annotationCount":"","annotations":[],"uploading":false},{"name":"Milbrandt
+        Lab, Department of Genetics, Washington University School of Medicine","substanceCount":"3192","annotationCount":"","annotations":[],"uploading":false},{"name":"Milestone
+        Pharmtech USA Inc.","substanceCount":"1545","annotationCount":"","annotations":[],"uploading":false},{"name":"Milliken-SiVance","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Milwaukee
+        Institute for Drug Discovery","substanceCount":"18007","annotationCount":"","annotations":[],"uploading":false},{"name":"Mittal
+        Dhatu Rashayan Udyog","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"MLP
+        Probe Reports","substanceCount":"","annotations":[],"uploading":false},{"name":"MLSMR","substanceCount":"440101","annotationCount":"","annotations":[],"uploading":false},{"name":"MolCore","substanceCount":"556937","annotationCount":"","annotations":[],"uploading":false},{"name":"Moldb","substanceCount":"3842","annotationCount":"","annotations":[],"uploading":false},{"name":"Molecular
+        Imaging and Contrast Agent Database (MICAD)","substanceCount":"496","annotationCount":"973","annotations":["MICAD
+        Imaging Information"],"uploading":false},{"name":"Molecular Imaging Database
+        (MOLI)","substanceCount":"1951","annotationCount":"1951","annotations":["Molecular
+        Imaging Information"],"uploading":false},{"name":"Molecular Libraries Program,
+        Specialized Chemistry Center, University of Kansas","substanceCount":"6840","annotationCount":"","annotations":[],"uploading":false},{"name":"Molecular
+        Pharmacology Branch, DTP, NCI","substanceCount":"984","annotationCount":"","annotations":[],"uploading":false},{"name":"Molecule
+        Market","substanceCount":"368834","annotationCount":"","annotations":[],"uploading":false},{"name":"Molepedia","substanceCount":"51682","annotationCount":"","annotations":[],"uploading":false},{"name":"MolGenie","substanceCount":"4807847","annotationCount":"","annotations":[],"uploading":false},{"name":"MolMall","substanceCount":"15290","annotationCount":"","annotations":[],"uploading":false},{"name":"Molport","substanceCount":"6884812","annotationCount":"","annotations":[],"uploading":false},{"name":"Mother
+        To Baby Fact Sheets","substanceCount":"","annotationCount":"266","annotations":["Effects
+        During Pregnancy and Lactation"],"uploading":false},{"name":"Motorpharma Ltd.","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Mouse
+        Genome Informatics (MGI)","substanceCount":"","annotations":[],"uploading":false},{"name":"MP
+        Biomedicals","substanceCount":"19777","annotationCount":"","annotations":[],"uploading":false},{"name":"Mrinalini
+        Singh, Department of Botany, Nirmala College","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"MSU
+        Solanum Trichome Project","substanceCount":"67","annotationCount":"","annotations":[],"uploading":false},{"name":"MTDP","substanceCount":"106487","annotationCount":"","annotations":[],"uploading":false},{"name":"MuseChem","substanceCount":"433418","annotationCount":"","annotations":[],"uploading":false},{"name":"Mutabilis","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"MycoMagic
+        Biotech. Co., Ltd.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Nanbyo
+        Disease Ontology (NANDO)","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Nanda
+        Kumar Yellapu, Bhaskar Matcha, Department of Zoology, Sri Venkateswara University,
+        Tiruapati, India","substanceCount":"19","annotationCount":"","annotations":[],"uploading":false},{"name":"Nangia
+        Group, Syracuse University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Nanjing
+        Kaiyuan Biochemical Engineering Co.,Ltd.","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"NanJing
+        LISKON Biological Technology Co.,ltd","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Nanjing
+        Pharmaceutical Factory","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"Nanjing
+        SerPharm","substanceCount":"10418","annotationCount":"","annotations":[],"uploading":false},{"name":"Nantong
+        Baihua Bio-Pharmaceutical Co., Ltd","substanceCount":"425","annotationCount":"","annotations":[],"uploading":false},{"name":"National
+        Center for Advancing Translational Sciences (NCATS)","substanceCount":"407492","annotationCount":"","annotations":[],"uploading":false},{"name":"National
+        Drug Code (NDC) Directory","substanceCount":"","annotationCount":"16689","annotations":["DEA
+        Controlled Substances","FDA National Drug Code Directory","FDA Pharmacological
+        Classification"],"uploading":false},{"name":"Natural Product Activity and
+        Species Source (NPASS)","substanceCount":"","annotationCount":"98600","annotations":["Taxonomy"],"uploading":false},{"name":"Nature
+        Catalysis","substanceCount":"1112","annotationCount":"469","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Nature Chemical Biology","substanceCount":"17482","annotationCount":"16863","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Nature Chemistry","substanceCount":"31360","annotationCount":"29519","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Nature Communications","substanceCount":"1630","annotationCount":"1630","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Nature Portfolio Journals","substanceCount":"319","annotationCount":"285","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Nature Science Technologies
+        Ltd","substanceCount":"224","annotationCount":"","annotations":[],"uploading":false},{"name":"Nature
+        Synthesis","substanceCount":"8154","annotationCount":"7469","annotations":["Nature
+        Journal References"],"uploading":false},{"name":"Natureferm","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Conserved Domains (CDD)","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Gene","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Gene Expression Omnibus (GEO)","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        MedGen","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Pathogen Detection Reference Gene Catalog","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        ProbeDB","substanceCount":"283","annotationCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Protein","substanceCount":"","annotations":[],"uploading":false},{"name":"NCBI
+        Structure","substanceCount":"558088","annotations":[],"uploading":false},{"name":"NCBI
+        Taxonomy","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"NCI
+        Cancer Drugs","substanceCount":"","annotationCount":"383","annotations":["Cancer
+        Drugs"],"uploading":false},{"name":"NCI Investigational Drugs","substanceCount":"","annotationCount":"85","annotations":["GC","HPLC","Optical
+        Rotation","Solubility","Stability/Shelf Life","Toxicity Data","UV Spectra"],"uploading":false},{"name":"NCI
+        Thesaurus (NCIt)","substanceCount":"","annotationCount":"46426","annotations":["NCI
+        Thesaurus Code","Record Description"],"uploading":false},{"name":"NEQUIM -
+        Chemoinformatics Group","substanceCount":"1629","annotationCount":"","annotations":[],"uploading":false},{"name":"Neumann
+        Lab, Biomedicine Discovery Institute, Monash University","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"New
+        Zealand Environmental Protection Authority (EPA)","substanceCount":"","annotationCount":"29238","annotations":["CAS","Regulatory
+        Information"],"uploading":false},{"name":"NewCan Biotech","substanceCount":"13919","annotationCount":"","annotations":[],"uploading":false},{"name":"NextBio","substanceCount":"10186686","annotationCount":"","annotations":[],"uploading":false},{"name":"NextMove
+        Biologics","substanceCount":"8699","annotationCount":"","annotations":[],"uploading":false},{"name":"NextMove
+        Software","substanceCount":"1695084","annotationCount":"","annotations":[],"uploading":false},{"name":"Nextpeptide","substanceCount":"12423","annotationCount":"","annotations":[],"uploading":false},{"name":"NIAID
+        ChemDB","substanceCount":"311022","annotationCount":"303246","annotations":[],"uploading":false},{"name":"NIH
+        Clinical Collection","substanceCount":"868","annotationCount":"","annotations":[],"uploading":false},{"name":"NINDS
+        Approved Drug Screening Program","substanceCount":"1040","annotationCount":"","annotations":[],"uploading":false},{"name":"NIOSH
+        Manual of Analytical Methods","substanceCount":"","annotationCount":"899","annotations":["NIOSH
+        Analytical Methods"],"uploading":false},{"name":"NIPH Clinical Trials Search
+        of Japan","substanceCount":"","annotationCount":"1908","annotations":["NIPH
+        Clinical Trials Search of Japan"],"uploading":false},{"name":"NIST Chemistry
+        WebBook","substanceCount":"54175","annotationCount":"","annotations":[],"uploading":false},{"name":"NIST
+        Mass Spectrometry Data Center","substanceCount":"265960","annotationCount":"365014","annotations":["GC-MS","Kovats
+        Retention Index","MS-MS"],"uploading":false},{"name":"NIST Physical Measurement
+        Laboratory","substanceCount":"","annotations":[],"uploading":false},{"name":"NIST
+        Synthetic Polymer MALDI Recipes Database","substanceCount":"","annotationCount":"1176","annotations":["MALDI
+        Recipes","Uses"],"uploading":false},{"name":"NITE-CMC","substanceCount":"","annotationCount":"5451","annotations":["GHS
+        Classification","Hazard Classes and Categories"],"uploading":false},{"name":"Nitric
+        Oxide Research, National Cancer Institute (NCI)","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"NJDOH
+        RTK Hazardous Substance List","substanceCount":"","annotationCount":"2197","annotations":["Hazard
+        Classes and Categories","UN Number","Use Classification"],"uploading":false},{"name":"NLM
+        RxNorm Terminology","substanceCount":"","annotationCount":"7038","annotations":["RXCUI"],"uploading":false},{"name":"NMMLSC","substanceCount":"6980","annotationCount":"","annotations":[],"uploading":false},{"name":"NMR
+        and Structure Analysis Research Group, Department of Organic and Macromolecular
+        Chemistry, Ghent University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"NMRShiftDB","substanceCount":"42687","annotationCount":"42687","annotations":["1D
+        NMR Spectra"],"uploading":false},{"name":"NOF","substanceCount":"84","annotationCount":"","annotations":[],"uploading":false},{"name":"NORMAN
+        Suspect List Exchange","substanceCount":"139829","annotationCount":"41880","annotations":["13C
+        NMR Spectra","19F NMR Spectra","1H NMR Spectra","31P NMR Spectra","ATC Code","Agrochemical
+        Category","Agrochemical Transformations","Animal Drugs","Chemical Classes","Collision
+        Cross Section","Cosmetics","Drug Transformations","Endocrine Disruptors","Human
+        Drugs","MS-MS","Metabolism/Metabolites","Molecular Formula","PFAS","Pesticides","Polymers","Related
+        Records","Taxonomy","Transformations","Use Classification","Uses"],"uploading":false},{"name":"NorrChemica
+        (SynFinn Discovery Oy)","substanceCount":"34","annotationCount":"","annotations":[],"uploading":false},{"name":"Novartis
+        Institutes for BioMedical Research","substanceCount":"4188","annotationCount":"","annotations":[],"uploading":false},{"name":"NovoSeek","substanceCount":"94514","annotationCount":"","annotations":[],"uploading":false},{"name":"NTP
+        Technical Reports","substanceCount":"","annotationCount":"608","annotations":[],"uploading":false},{"name":"NTZ","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Nuclear
+        Receptor Signaling Atlas (NURSA)","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Nutritional
+        Improvement of Crops, International Centre for Genetic Engineering and Biotechnology
+        (ICGEB) - New Delhi","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Nyati
+        Lab, University of Michigan Medical School","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Oakwood
+        Products","substanceCount":"137930","annotationCount":"","annotations":[],"uploading":false},{"name":"Occupational
+        Safety and Health Administration (OSHA)","substanceCount":"","annotationCount":"949","annotations":["Boiling
+        Point","CAS","Density","Flash Point","Highly Hazardous Substance","Immediately
+        Dangerous to Life or Health (IDLH)","Ionization Potential","Lower Explosive
+        Limit (LEL)","Melting Point","NFPA Hazard Classification","Permissible Exposure
+        Limit (PEL)","Physical Description","Recommended Exposure Limit (REL)","Threshold
+        Limit Values (TLV)","Upper Explosive Limit (UEL)","Vapor Density","Vapor Pressure"],"uploading":false},{"name":"OChem","substanceCount":"74696","annotationCount":"","annotations":[],"uploading":false},{"name":"Olpha","substanceCount":"33","annotationCount":"","annotations":[],"uploading":false},{"name":"OmiChem","substanceCount":"57","annotationCount":"","annotations":[],"uploading":false},{"name":"Omicron
+        Biochemicals, Inc.","substanceCount":"319","annotationCount":"","annotations":[],"uploading":false},{"name":"Online
+        Mendelian Inheritance in Man (OMIM)","substanceCount":"","annotations":[],"uploading":false},{"name":"OpalOrga","substanceCount":"8538","annotationCount":"","annotations":[],"uploading":false},{"name":"Open
+        Targets","substanceCount":"","annotations":[],"uploading":false},{"name":"Organofuel
+        Sweden","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"ORST
+        SMALL MOLECULE SCREENING CENTER","substanceCount":"1998","annotationCount":"","annotations":[],"uploading":false},{"name":"Ossila","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"OtavaChemicals","substanceCount":"35421","annotationCount":"","annotations":[],"uploading":false},{"name":"OXCHEM
+        CORPORATION","substanceCount":"122105","annotationCount":"","annotations":[],"uploading":false},{"name":"P.
+        Ravikumar, M. Jeyam and G. Shalini, Dept.of Bioinformatics, Bharathiar University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"P3
+        BioSystems","substanceCount":"120","annotationCount":"","annotations":[],"uploading":false},{"name":"Paczesny
+        and Yang Labs, IUPUI and University of Michigan","substanceCount":"77700","annotationCount":"","annotations":[],"uploading":false},{"name":"Pan
+        Lab, Icahn School of Medicine at Mount Sinai","substanceCount":"144067","annotationCount":"","annotations":[],"uploading":false},{"name":"PANTHER","substanceCount":"","annotations":[],"uploading":false},{"name":"Paragos","substanceCount":"2395","annotationCount":"","annotations":[],"uploading":false},{"name":"Parchem","substanceCount":"24530","annotationCount":"","annotations":[],"uploading":false},{"name":"Parkway
+        Scientific","substanceCount":"2056","annotationCount":"","annotations":[],"uploading":false},{"name":"PATENTSCOPE
+        (WIPO)","substanceCount":"23124639","annotationCount":"","annotations":[],"uploading":false},{"name":"PathBank","substanceCount":"","annotations":[],"uploading":false},{"name":"Pathway
+        Interaction Database","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Paul
+        Baures","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"PCMD","substanceCount":"116","annotationCount":"","annotations":[],"uploading":false},{"name":"PDSP","substanceCount":"2871","annotationCount":"","annotations":[],"uploading":false},{"name":"PENN-ABS","substanceCount":"85","annotationCount":"","annotations":[],"uploading":false},{"name":"PennChem-GAM","substanceCount":"84","annotationCount":"","annotations":[],"uploading":false},{"name":"PeptART","substanceCount":"289","annotationCount":"","annotations":[],"uploading":false},{"name":"PepTech
+        Corp.","substanceCount":"3489","annotationCount":"","annotations":[],"uploading":false},{"name":"PERA
+        Research Program","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Pertti
+        (Bert) Hakkinen''s Toxicology and Other Annotations","substanceCount":"","annotationCount":"152","annotations":[],"uploading":false},{"name":"Peterson
+        Lab, Genentech","substanceCount":"158","annotationCount":"","annotations":[],"uploading":false},{"name":"Petrascheck
+        Lab, The Scripps Reserach Institute, Department of  Molecular Medicine","substanceCount":"195","annotationCount":"","annotations":[],"uploading":false},{"name":"Petukhov
+        Lab, University of Illinois at Chicago, Department of Medicinal Chemistry","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Pfanstiehl
+        Inc","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"PharmaBlock","substanceCount":"40159","annotationCount":"","annotations":[],"uploading":false},{"name":"Pharmacogenomics_MK
+        Lab","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Pharmacoinformatics
+        Research Group Wien","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"Pharmacore
+        Co., Limited","substanceCount":"60947","annotationCount":"","annotations":[],"uploading":false},{"name":"PharmaSynth","substanceCount":"90","annotationCount":"","annotations":[],"uploading":false},{"name":"PharmGKB","substanceCount":"","annotations":[],"uploading":false},{"name":"Pharos","substanceCount":"","annotationCount":"395173","annotations":["Pharos
+        Ligand ID"],"uploading":false},{"name":"Phion Ltd","substanceCount":"5724","annotationCount":"","annotations":[],"uploading":false},{"name":"Pi
+        Chemicals","substanceCount":"37249","annotationCount":"","annotations":[],"uploading":false},{"name":"Pistoia
+        Alliance Chemical Safety Library","substanceCount":"","annotationCount":"181","annotations":["CSL
+        Reaction Information"],"uploading":false},{"name":"Pistoia Alliance DataFAIRy
+        Bioassay Pilot","substanceCount":"18","annotationCount":"","annotations":[],"uploading":false},{"name":"Plant
+        Reactome","substanceCount":"","annotations":[],"uploading":false},{"name":"Planta
+        Analytica, Inc.","substanceCount":"173","annotationCount":"","annotations":[],"uploading":false},{"name":"PlantCyc","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Polimerbio
+        Chemicals","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"PoLyInfo","substanceCount":"462","annotationCount":"","annotations":[],"uploading":false},{"name":"Polyorganix","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"PomBase:
+        Fission Yeast Resource","substanceCount":"","annotations":[],"uploading":false},{"name":"Pomerantz
+        Lab, Temple University Lewis Katz School of Medicine","substanceCount":"20158","annotationCount":"","annotations":[],"uploading":false},{"name":"Pook
+        Lab, Liggins Institute, Waipapa Taumata Ra - the University of Auckland","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"PorphyChem","substanceCount":"112","annotationCount":"","annotations":[],"uploading":false},{"name":"Porsechemical","substanceCount":"157","annotationCount":"","annotations":[],"uploading":false},{"name":"Poulsen
+        Lab, Department of Chemistry, Aarhus University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Prasad
+        Lab, JSS Academy of Higher Education and Research, Mysore","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"priyadharshini,
+        sabarathinam, angayarkanni, murugesh, palaniswamy","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Probes
+        & Drugs portal","substanceCount":"175353","annotationCount":"","annotations":[],"uploading":false},{"name":"ProChem
+        Inc.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Prof.
+        Malboobi, Plant Biotechnology Lab, National Institute of Genetic Engineering
+        and Biotechnology","substanceCount":"74","annotationCount":"","annotations":[],"uploading":false},{"name":"Prof.
+        Mathan Ramesh, Toxicology Lab, Bharathiar University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Protein
+        Data Bank in Europe (PDBe)","substanceCount":"41046","annotationCount":"40488","annotations":["PDBe
+        Conformer","PDBe Ligand Code","PDBe Structure Code"],"uploading":false},{"name":"Protein
+        Ontology","substanceCount":"","annotations":[],"uploading":false},{"name":"ProteoChem","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Protheragen","substanceCount":"10359","annotationCount":"","annotations":[],"uploading":false},{"name":"Prous
+        Science Drugs of the Future","substanceCount":"5656","annotationCount":"","annotations":[],"uploading":false},{"name":"PubChem
+        Elements","substanceCount":"3942","annotations":[],"uploading":false},{"name":"PubChem
+        Reference Collection","substanceCount":"977708","annotationCount":"","annotations":[],"uploading":false},{"name":"Public
+        Access to Neuroactive & Anticonvulsant Chemical Evaluations (PANAChE)","substanceCount":"567","annotationCount":"","annotations":[],"uploading":false},{"name":"Pugazhvendan
+        Lab, Annamalai University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"PurePEG","substanceCount":"1536","annotationCount":"","annotations":[],"uploading":false},{"name":"QIAGEN","substanceCount":"404190","annotationCount":"","annotations":[],"uploading":false},{"name":"Qingdao
+        Truelight Functional Materials Technology Co., Ltd.","substanceCount":"118","annotationCount":"","annotations":[],"uploading":false},{"name":"Qingdao
+        Wanyuan Mountain Biotech Co.,Ltd","substanceCount":"69","annotationCount":"","annotations":[],"uploading":false},{"name":"Quadriga
+        BioSciences, Inc.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Quality
+        Control Solutions (QCS Standards)","substanceCount":"57658","annotationCount":"","annotations":[],"uploading":false},{"name":"R&D
+        Chemicals","substanceCount":"8352","annotationCount":"","annotations":[],"uploading":false},{"name":"R.Sathishkumar,Phytomatics
+        Laboratory, Department of Bioinformatics, Bharathiar University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Race
+        Chemical","substanceCount":"26426","annotationCount":"","annotations":[],"uploading":false},{"name":"Ralph
+        Tripp Lab, Department of Infectious Diseases, College of Veterinary Medicine
+        at The University of Georgia","substanceCount":"25683","annotationCount":"","annotations":[],"uploading":false},{"name":"Raney
+        Lab, University of Arkansas for Medical Sciences (UAMS)","substanceCount":"21","annotationCount":"","annotations":[],"uploading":false},{"name":"Rangan
+        Lab, Department of Biotechnology, IIT Guwahati","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Rare
+        Chemicals GmbH, Germany","substanceCount":"105514","annotationCount":"","annotations":[],"uploading":false},{"name":"Ras
+        Initiative Chemistry Research Team, Frederick National Laboratory for Cancer
+        Research","substanceCount":"2157","annotationCount":"","annotations":[],"uploading":false},{"name":"Rat
+        Genome Database (RGD)","substanceCount":"","annotations":[],"uploading":false},{"name":"Raushel
+        Lab, Department of Chemistry, Texas A&M University","substanceCount":"23","annotationCount":"","annotations":[],"uploading":false},{"name":"RCSB
+        Protein Data Bank (RCSB PDB)","substanceCount":"","annotationCount":"107461","annotations":["Protein
+        Bound 3D Structures"],"uploading":false},{"name":"Reactome","substanceCount":"","annotations":[],"uploading":false},{"name":"Reddy
+        N Reddy Pharmaceuticals","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Regis
+        Technologies","substanceCount":"35","annotationCount":"","annotations":[],"uploading":false},{"name":"Regulation
+        (EC) No 1272/2008 of the European Parliament and of the Council","substanceCount":"","annotationCount":"4808","annotations":["GHS
+        Classification","Hazard Classes and Categories"],"uploading":false},{"name":"Research
+        group of Professor Matthew Todd, School of Pharmacy, University College London","substanceCount":"96","annotationCount":"","annotations":[],"uploading":false},{"name":"RESOLUTE
+        - Research Empowerment on Solute Carriers","substanceCount":"70","annotationCount":"","annotations":[],"uploading":false},{"name":"Retaj
+        Chemicals","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Rhea
+        - Annotated Reactions Database","substanceCount":"","annotationCount":"11590","annotations":["Biochemical
+        Reactions"],"uploading":false},{"name":"Rieke Metals, LLC","substanceCount":"43716","annotationCount":"","annotations":[],"uploading":false},{"name":"RIKEN
+        Natural Products Depository (RIKEN NPDepo)","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Risk
+        Assessment Information System (RAIS)","substanceCount":"","annotationCount":"2243","annotations":[],"uploading":false},{"name":"Roche
+        Lab, Chemistry and Biochemistry Department, Florida Atlantic University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"RoCo","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Rodriguez
+        Lab, Pathology & Laboratory Medicine at UCLA","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Rosewachem","substanceCount":"2873","annotationCount":"","annotations":[],"uploading":false},{"name":"RR
+        Scientific","substanceCount":"1207989","annotationCount":"","annotations":[],"uploading":false},{"name":"RRUFF
+        Project","substanceCount":"","annotationCount":"15987","annotations":["Minerals","Record
+        Description"],"uploading":false},{"name":"RSChem, LLC","substanceCount":"8261","annotationCount":"","annotations":[],"uploading":false},{"name":"Ruiao
+        Bio (PEG Linker Manufacturer)","substanceCount":"591","annotationCount":"","annotations":[],"uploading":false},{"name":"Runtai
+        Chemical","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Ruthenotope","substanceCount":"14","annotationCount":"","annotations":[],"uploading":false},{"name":"s-abscisicacid.com","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"S.GURUDEEBAN,T.RAMANATHAN
+        & K.SATYAVANI, Marine Medicinal Plant Biotechnology Laboratory, Faculty of
+        Marine Sciences, Annamalai University","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"Saccharomyces
+        Genome Database (SGD)","substanceCount":"","annotations":[],"uploading":false},{"name":"Salvino
+        Lab, The Wistar Institute","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Sanford-Burnham
+        Center for Chemical Genomics","substanceCount":"75107","annotationCount":"57859","annotations":[],"uploading":false},{"name":"Santa
+        Cruz Biotechnology, Inc.","substanceCount":"174341","annotationCount":"","annotations":[],"uploading":false},{"name":"Santagata
+        Laboratory - Brigham and Women''s Hospital and Harvard Medical School","substanceCount":"392","annotationCount":"","annotations":[],"uploading":false},{"name":"Santai
+        Labs","substanceCount":"6365","annotationCount":"","annotations":[],"uploading":false},{"name":"Sarafianos
+        Lab, Center for ViroScience and Cure, Laboratory of Biochemical Pharmacology,
+        Department of Pediatrics, Emory University School of Medicine","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Sarchem
+        Laboratories, Inc.","substanceCount":"207","annotationCount":"","annotations":[],"uploading":false},{"name":"Sarex
+        Overseas Div of Saraf chemicals Pvt.Ltd.","substanceCount":"28","annotationCount":"","annotations":[],"uploading":false},{"name":"Sartorius","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"SASTRA
+        University, Quorum sensing and Peptidomimetics Laboratory","substanceCount":"216","annotationCount":"","annotations":[],"uploading":false},{"name":"Sattelle
+        Laboratory, UCL Respiratory, Division of Medicine, University College London","substanceCount":"451","annotationCount":"","annotations":[],"uploading":false},{"name":"SB-PEPTIDE","substanceCount":"102","annotationCount":"","annotations":[],"uploading":false},{"name":"Scharlab
+        SL","substanceCount":"11","annotationCount":"","annotations":[],"uploading":false},{"name":"SCRIPDB","substanceCount":"6105836","annotationCount":"","annotations":[],"uploading":false},{"name":"Sean
+        Brady Lab, Laboratory of Genetically Encoded Small Molecules, The Rockefeller
+        University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"SelectLab
+        Chemicals GmbH","substanceCount":"1969","annotationCount":"","annotations":[],"uploading":false},{"name":"Selleck
+        Chemicals","substanceCount":"7538","annotationCount":"","annotations":[],"uploading":false},{"name":"SGCOxCompounds","substanceCount":"319","annotationCount":"","annotations":[],"uploading":false},{"name":"SGCStoCompounds","substanceCount":"17","annotationCount":"","annotations":[],"uploading":false},{"name":"Shandong
+        Benrite New Chemical Materials Co.,Ltd","substanceCount":"5982","annotationCount":"","annotations":[],"uploading":false},{"name":"SHANDONG
+        OCTAGON CHEMICALS LIMITED","substanceCount":"128","annotationCount":"","annotations":[],"uploading":false},{"name":"Shandong
+        Youbang Biochemical","substanceCount":"242","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Chemlin","substanceCount":"57","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        FWD Chemicals Limited","substanceCount":"990","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Hanhong Scientific","substanceCount":"610","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Institute of Organic Chemistry","substanceCount":"11948","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Mathcon Pharmaceutical Co.,LTD.","substanceCount":"1023","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Send Pharmaceutical Technology Co., Ltd","substanceCount":"480","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Sinofluoro Chemicals Co., Ltd","substanceCount":"612","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Tauto Biotech Co., Ltd","substanceCount":"148","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Titan Scientific","substanceCount":"29402","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanghai
+        Yuji Sifluo Co., Ltd.","substanceCount":"27","annotationCount":"","annotations":[],"uploading":false},{"name":"Shangyu
+        Catsyn Co., Ltd.","substanceCount":"1187","annotationCount":"","annotations":[],"uploading":false},{"name":"Shanmugaiah
+        Lab, Department of Microbial Technology, Madurai Kamaraj University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Shape
+        Chem","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Shapiro
+        Lab, Department of Biochemistry, University of Illinois","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Sharma
+        Lab, Dr. D. Y. Patil Vidyapeeth, Pune, MH, India","substanceCount":"62","annotationCount":"","annotations":[],"uploading":false},{"name":"SharyPharm","substanceCount":"663","annotationCount":"","annotations":[],"uploading":false},{"name":"Shenzhen
+        Nexconn Pharmatechs. Ltd","substanceCount":"101","annotationCount":"","annotations":[],"uploading":false},{"name":"Shiguo
+        Chen Lab, Nanjing Agricultural University","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Shochem
+        Co.,Ltd","substanceCount":"55","annotationCount":"","annotations":[],"uploading":false},{"name":"Sichuan
+        Hengkang Science and Technology Development Co.,Ltd.","substanceCount":"119","annotationCount":"","annotations":[],"uploading":false},{"name":"Sierra
+        Bioresearch","substanceCount":"36","annotationCount":"","annotations":[],"uploading":false},{"name":"Sigma-Aldrich","substanceCount":"258063","annotationCount":"","annotations":[],"uploading":false},{"name":"SigutLabs","substanceCount":"191","annotationCount":"","annotations":[],"uploading":false},{"name":"SiKEMIA","substanceCount":"154","annotationCount":"","annotations":[],"uploading":false},{"name":"Sinfoo
+        Biotech","substanceCount":"62023","annotationCount":"","annotations":[],"uploading":false},{"name":"Sinofi
+        Ingredients","substanceCount":"106","annotationCount":"","annotations":[],"uploading":false},{"name":"Sintim
+        Lab, Department of Chemistry, Purdue University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Skinner-Adams
+        Lab, Griffith Institute for Drug Discovery","substanceCount":"2451","annotationCount":"","annotations":[],"uploading":false},{"name":"SKKU-NRT","substanceCount":"17","annotationCount":"","annotations":[],"uploading":false},{"name":"SLI
+        Technologies, Inc","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"SLING
+        Consortium","substanceCount":"100656","annotationCount":"","annotations":[],"uploading":false},{"name":"Smaill
+        Lab, Auckland Cancer Society Research Centre","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Small
+        Molecule Screening Facility, UW Madison","substanceCount":"541783","annotationCount":"","annotations":[],"uploading":false},{"name":"Smartox
+        Biotechnology venoms and peptides","substanceCount":"25","annotationCount":"","annotations":[],"uploading":false},{"name":"SMID","substanceCount":"7162","annotationCount":"","annotations":[],"uploading":false},{"name":"Smolecule","substanceCount":"759041","annotationCount":"","annotations":[],"uploading":false},{"name":"SMT
+        Research Ltd.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Snyder
+        Lab, Drexel University","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Solanum
+        Trichome Project","substanceCount":"18","annotationCount":"","annotations":[],"uploading":false},{"name":"Soto
+        Lab, Mitchell Center for Alzheimers Disease and Related Brain Disorders, UT
+        Medical School Houston","substanceCount":"222","annotationCount":"","annotations":[],"uploading":false},{"name":"Southern
+        Research Institute","substanceCount":"443945","annotationCount":"","annotations":[],"uploading":false},{"name":"Southern
+        Research Specialized Biocontainment Screening Center","substanceCount":"14","annotationCount":"","annotations":[],"uploading":false},{"name":"SPECIFIC
+        POLYMERS (SP)","substanceCount":"431","annotationCount":"","annotations":[],"uploading":false},{"name":"Specs","substanceCount":"425952","annotationCount":"","annotations":[],"uploading":false},{"name":"Spectra
+        Group Synthetics","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"SpectraBase","substanceCount":"","annotationCount":"2961763","annotations":["11B
+        NMR Spectra","13C NMR Spectra","15N NMR Spectra","17O NMR Spectra","19F NMR
+        Spectra","1H NMR Spectra","29Si NMR Spectra","31P NMR Spectra","ATR-IR Spectra","FTIR
+        Spectra","GC-MS","Near IR Spectra","Raman Spectra","UV-VIS Spectra","Vapor
+        Phase IR Spectra"],"uploading":false},{"name":"Speranza Chemical Co., Ltd.","substanceCount":"124","annotationCount":"","annotations":[],"uploading":false},{"name":"SpiroChem","substanceCount":"11704","annotationCount":"","annotations":[],"uploading":false},{"name":"Springer
+        Nature","substanceCount":"774944","annotationCount":"753315","annotations":["Springer
+        Nature References"],"uploading":false},{"name":"SpringerMaterials","substanceCount":"34782","annotationCount":"34780","annotations":["SpringerMaterials
+        Properties"],"uploading":false},{"name":"SQUARIX GmbH","substanceCount":"609","annotationCount":"","annotations":[],"uploading":false},{"name":"SRIRAMCHEM","substanceCount":"22","annotationCount":"","annotations":[],"uploading":false},{"name":"SRMLSC","substanceCount":"307","annotationCount":"","annotations":[],"uploading":false},{"name":"Starshine
+        Chemical","substanceCount":"1014621","annotationCount":"","annotations":[],"uploading":false},{"name":"StatPearls","substanceCount":"","annotationCount":"828","annotations":[],"uploading":false},{"name":"Strem
+        Chemicals, Inc.","substanceCount":"5333","annotationCount":"","annotations":[],"uploading":false},{"name":"STRING:
+        functional protein association networks","substanceCount":"","annotationCount":"176530","annotations":[],"uploading":false},{"name":"Structural
+        Genomics Consortium","substanceCount":"177","annotationCount":"","annotations":[],"uploading":false},{"name":"Structural
+        Genomics Consortium (SGC) Toronto","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Sun-shine
+        Chemical","substanceCount":"873","annotationCount":"","annotations":[],"uploading":false},{"name":"Suntto
+        Chemical","substanceCount":"341","annotationCount":"","annotations":[],"uploading":false},{"name":"Sunwain","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Sunway
+        Pharm","substanceCount":"10","annotationCount":"","annotations":[],"uploading":false},{"name":"SureChEMBL","substanceCount":"30853698","annotationCount":"","annotations":[],"uploading":false},{"name":"Suryansh
+        Pharmachem","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Suuberg
+        Lab, School of Engineering, Brown University","substanceCount":"","annotationCount":"9","annotations":["Enthalpy
+        of Sublimation","Use Classification","Vapor Pressure"],"uploading":false},{"name":"Suzhou
+        GeAo New Materials Co.,Ltd","substanceCount":"367","annotationCount":"","annotations":[],"uploading":false},{"name":"Suzhou
+        Health Chemicals Co., Ltd.","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Swiss
+        Institute of Bioinformatics Bgee","substanceCount":"","annotations":[],"uploading":false},{"name":"Swiss
+        Institute of Bioinformatics Cellosaurus","substanceCount":"","annotations":[],"uploading":false},{"name":"Swiss
+        Institute of Bioinformatics ENZYME","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Symb
+        ChemTech","substanceCount":"34","annotationCount":"","annotations":[],"uploading":false},{"name":"Symbol
+        Nomenclature for Glycans (SNFG) Reference Collection","substanceCount":"225","annotationCount":"","annotations":[],"uploading":false},{"name":"Synapharm
+        Industrial Synthesis","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Synblock
+        Inc","substanceCount":"139355","annotationCount":"","annotations":[],"uploading":false},{"name":"SYNCHEM
+        OHG","substanceCount":"5364","annotationCount":"","annotations":[],"uploading":false},{"name":"Syncom","substanceCount":"93","annotationCount":"","annotations":[],"uploading":false},{"name":"SynHet
+        - Synthetic Heterocycles","substanceCount":"561500","annotationCount":"","annotations":[],"uploading":false},{"name":"SynInnova
+        Laboratories Inc.","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Synoventchem","substanceCount":"116","annotationCount":"","annotations":[],"uploading":false},{"name":"SynQuest
+        Laboratories","substanceCount":"16993","annotationCount":"","annotations":[],"uploading":false},{"name":"Syntech
+        Labs","substanceCount":"5417","annotationCount":"","annotations":[],"uploading":false},{"name":"Syntechem","substanceCount":"2751","annotationCount":"","annotations":[],"uploading":false},{"name":"Syntharise
+        Chemical","substanceCount":"173","annotationCount":"","annotations":[],"uploading":false},{"name":"Synthese
+        Nord","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Synthesis
+        With Catalysts Pvt. Ltd.","substanceCount":"60","annotationCount":"","annotations":[],"uploading":false},{"name":"Synthink
+        Research Chemicals","substanceCount":"1107","annotationCount":"","annotations":[],"uploading":false},{"name":"Synthonix,
+        Inc.","substanceCount":"67276","annotationCount":"","annotations":[],"uploading":false},{"name":"Syntree","substanceCount":"48779","annotationCount":"","annotations":[],"uploading":false},{"name":"T&J
+        Chemicals (Singapore)","substanceCount":"32","annotationCount":"","annotations":[],"uploading":false},{"name":"Tag-ON
+        AB","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Tallei
+        Lab, Sam Ratulangi University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Tanyunchem","substanceCount":"28","annotationCount":"","annotations":[],"uploading":false},{"name":"TargetMol","substanceCount":"78515","annotationCount":"","annotations":[],"uploading":false},{"name":"Taunton
+        Lab, Cellular Molecular Pharmacology, UCSF","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"TB
+        Discovery Research, Infectious Disease Research Institute","substanceCount":"1105","annotationCount":"","annotations":[],"uploading":false},{"name":"TCI
+        (Tokyo Chemical Industry)","substanceCount":"31128","annotationCount":"","annotations":[],"uploading":false},{"name":"ten
+        Dijke Lab, Leiden University Medical Center","substanceCount":"70","annotationCount":"","annotations":[],"uploading":false},{"name":"Tenova
+        Pharmaceuticals Inc","substanceCount":"2097","annotationCount":"","annotations":[],"uploading":false},{"name":"Tetrahedron
+        Scientific Inc","substanceCount":"13542","annotationCount":"","annotations":[],"uploading":false},{"name":"TFT
+        Nano Center","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"THE
+        BioTek","substanceCount":"651883","annotationCount":"","annotations":[],"uploading":false},{"name":"The
+        Cambridge Structural Database","substanceCount":"487","annotationCount":"106786","annotations":["Associated
+        Article","CCDC Number","Crystal Structure Data"],"uploading":false},{"name":"The
+        Genomics Institute of the Novartis Research Foundation (GNF)","substanceCount":"47052","annotationCount":"","annotations":[],"uploading":false},{"name":"The
+        National Institute for Occupational Safety and Health (NIOSH)","substanceCount":"","annotationCount":"1324","annotations":["Boiling
+        Point","CAS","Cancer Sites","DOT ID and Guide","Density","Exposure Routes","First
+        Aid","Flammable Limits","Flash Point","Hazardous Reactivities & Incompatibilities","Immediately
+        Dangerous to Life or Health (IDLH)","Ionization Potential","Lower Explosive
+        Limit (LEL)","Melting Point","NIOSH Toxicity Data","Permissible Exposure Limit
+        (PEL)","Personal Protective Equipment (PPE)","Physical Description","RTECS
+        Number","Recommended Exposure Limit (REL)","Respirator Recommendations","Solubility","Symptoms","Target
+        Organs","UN Number","Upper Explosive Limit (UEL)","Use Classification","Vapor
+        Pressure"],"uploading":false},{"name":"The Natural Products Atlas","substanceCount":"36399","annotationCount":"18293","annotations":["Taxonomy"],"uploading":false},{"name":"The
+        Scripps Research Institute Molecular Screening Center","substanceCount":"673228","annotationCount":"","annotations":[],"uploading":false},{"name":"The
+        University of Alabama Libraries","substanceCount":"2885","annotationCount":"2885","annotations":["Synthesis
+        References"],"uploading":false},{"name":"The Zebrafish Information Network
+        (ZFIN)","substanceCount":"","annotations":[],"uploading":false},{"name":"Therapeutic
+        Target Database (TTD)","substanceCount":"21931","annotationCount":"28732","annotations":["Associated
+        Disorders and Diseases","Chemical-Target Interactions"],"uploading":false},{"name":"Thermo
+        Fisher Scientific","substanceCount":"78793","annotationCount":"","annotations":[],"uploading":false},{"name":"Thieme
+        Chemistry","substanceCount":"915598","annotationCount":"915074","annotations":["Thieme
+        References"],"uploading":false},{"name":"Thimmakondu Lab, Department of Chemistry
+        and Biochemistry, San Diego State University","substanceCount":"5","annotationCount":"","annotations":[],"uploading":false},{"name":"Thomson
+        Pharma","substanceCount":"4237719","annotationCount":"","annotations":[],"uploading":false},{"name":"Thoreauchem","substanceCount":"131383","annotationCount":"","annotations":[],"uploading":false},{"name":"Tianjin
+        Yuansu Chemical Reagent Co., LTD","substanceCount":"163","annotationCount":"","annotations":[],"uploading":false},{"name":"TimTec","substanceCount":"745154","annotationCount":"","annotations":[],"uploading":false},{"name":"Tocopharm","substanceCount":"111","annotationCount":"","annotations":[],"uploading":false},{"name":"Tocris
+        Bioscience","substanceCount":"5166","annotationCount":"","annotations":[],"uploading":false},{"name":"TOKU-E
+        Company","substanceCount":"24","annotationCount":"","annotations":[],"uploading":false},{"name":"Toref
+        Standards","substanceCount":"246","annotationCount":"","annotations":[],"uploading":false},{"name":"Total
+        TOSLab Building-Blocks","substanceCount":"910","annotationCount":"","annotations":[],"uploading":false},{"name":"Tox21","substanceCount":"14406","annotationCount":"","annotations":[],"uploading":false},{"name":"Toxin
+        and Toxin Target Database (T3DB)","substanceCount":"","annotationCount":"7410","annotations":["Carcinogen
+        Classification","Chemical-Target Interactions","Exposure Routes","Health Effects","Metabolism/Metabolites","Minimum
+        Risk Level","Record Description","Reported Fatal Dose","Symptoms","Toxicity
+        Data","Toxicity Summary","Treatment","Uses"],"uploading":false},{"name":"ToxPlanet","substanceCount":"371936","annotationCount":"","annotations":[],"uploading":false},{"name":"Tractus","substanceCount":"169344","annotationCount":"","annotations":[],"uploading":false},{"name":"Traditional
+        Medicine Medicinal Chemistry DB","substanceCount":"22463","annotationCount":"","annotations":[],"uploading":false},{"name":"Trichem
+        Laboratories (Bombay) Pvt. Ltd.","substanceCount":"7","annotationCount":"","annotations":[],"uploading":false},{"name":"TripleBond","substanceCount":"1655","annotationCount":"","annotations":[],"uploading":false},{"name":"Trippier
+        Lab, School of Pharmacy, Texas Tech UHSC","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"True
+        PharmaChem","substanceCount":"477","annotationCount":"","annotations":[],"uploading":false},{"name":"TubePharm","substanceCount":"64","annotationCount":"","annotations":[],"uploading":false},{"name":"Twinhang
+        OU","substanceCount":"1998","annotationCount":"","annotations":[],"uploading":false},{"name":"Tyger
+        Scientific","substanceCount":"1531","annotationCount":"","annotations":[],"uploading":false},{"name":"U-M
+        Center for Drug Repurposing","substanceCount":"127","annotationCount":"","annotations":[],"uploading":false},{"name":"U.S.
+        Chemical Safety and Hazard Investigation Board (CSB)","substanceCount":"","annotationCount":"18","annotations":["Accelerating
+        Rate Calorimetry (ARC)","Color/Form","Decomposition","Differential Scanning
+        Calorimetry (DSC)","Hazards Summary","History and Incidents","Odor","Physical
+        Description","Self-Accelerating Decomposition Temperature (SADT)"],"uploading":false},{"name":"Uchem
+        Meditech","substanceCount":"1720","annotationCount":"","annotations":[],"uploading":false},{"name":"UCL-Wolfson
+        Drug Discovery","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"UCLA
+        Molecular Screening Shared Resource","substanceCount":"1407","annotationCount":"","annotations":[],"uploading":false},{"name":"UCSC
+        Chemical Screening Center","substanceCount":"23152","annotationCount":"","annotations":[],"uploading":false},{"name":"UCSF-DeRisi
+        Lab","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"UMN
+        Masonic Cancer Center Analytical Biochemistry Shared Resource","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"UniCarbKB","substanceCount":"1742","annotationCount":"","annotations":[],"uploading":false},{"name":"UniProt","substanceCount":"","annotations":[],"uploading":false},{"name":"University
+        of Iowa High-Throughput Screening Core (UIHTS)","substanceCount":"2640","annotationCount":"","annotations":[],"uploading":false},{"name":"University
+        of Kansas High Throughput Screening Laboratory","substanceCount":"498237","annotationCount":"","annotations":[],"uploading":false},{"name":"University
+        of Pittsburgh Molecular Library Screening Center","substanceCount":"1583","annotationCount":"","annotations":[],"uploading":false},{"name":"UOM
+        Winterburn Research Group","substanceCount":"57","annotationCount":"","annotations":[],"uploading":false},{"name":"Up-Fluorochem","substanceCount":"439","annotationCount":"","annotations":[],"uploading":false},{"name":"UPCMLD","substanceCount":"26490","annotationCount":"","annotations":[],"uploading":false},{"name":"US
+        Code of Federal Regulations, Hazardous Materials, 49 CFR Part 172","substanceCount":"","annotationCount":"4088","annotations":[],"uploading":false},{"name":"USDA
+        APHIS Chemical Effects Database","substanceCount":"","annotationCount":"2135","annotations":[],"uploading":false},{"name":"USDA
+        Pesticide Data Program","substanceCount":"","annotationCount":"759","annotations":["Pesticides","USDA
+        Pesticide Data Program"],"uploading":false},{"name":"USGS Columbia Environmental
+        Research Center","substanceCount":"","annotationCount":"411","annotations":["Acute
+        Toxicity Link","Use Classification"],"uploading":false},{"name":"USGS Health-Based
+        Screening Levels for Evaluating Water-Quality Data","substanceCount":"","annotationCount":"835","annotations":[],"uploading":false},{"name":"USGS
+        National Minerals Information Center","substanceCount":"","annotationCount":"94","annotations":["Uses"],"uploading":false},{"name":"USITC
+        Harmonized Tariff Schedule","substanceCount":"","annotationCount":"2110","annotations":[],"uploading":false},{"name":"UTHSCSA","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"UVCBs
+        and Multi-Constituent Substances (MCS) Committee","substanceCount":"109","annotationCount":"109","annotations":["Chemical
+        Classes","Uses"],"uploading":false},{"name":"Valliscor","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Van
+        Aroma","substanceCount":"87","annotationCount":"","annotations":[],"uploading":false},{"name":"Van
+        Der Es Lab, Leiden Academic Centre For Drug Research (LACDR)","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Vander
+        Kooi Lab UKY","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Vanderbilt
+        High Throughput Screening Facility","substanceCount":"108184","annotationCount":"","annotations":[],"uploading":false},{"name":"Vanderbilt
+        Laboratory for Biosynthetic Studies","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Vanderbilt
+        Specialized Chemistry Center","substanceCount":"8581","annotationCount":"","annotations":[],"uploading":false},{"name":"Vanderbilt
+        University Medical Center","substanceCount":"71","annotationCount":"","annotations":[],"uploading":false},{"name":"VanderVen
+        Lab, College of Veterinary Medicine, Cornell University","substanceCount":"6225","annotationCount":"","annotations":[],"uploading":false},{"name":"VAV
+        Life Sciences Pvt. Ltd.","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"Veeprho","substanceCount":"26124","annotationCount":"","annotations":[],"uploading":false},{"name":"Verge
+        Genomics","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Vesino
+        Industrial Co., Ltd","substanceCount":"16679","annotationCount":"","annotations":[],"uploading":false},{"name":"VEuPathDB:
+        The Eukaryotic Pathogen, Vector and Host Informatics Resource","substanceCount":"","annotations":[],"uploading":false},{"name":"Vichem
+        Chemie Ltd.","substanceCount":"1618","annotationCount":"","annotations":[],"uploading":false},{"name":"Victor
+        Tsetlin Lab, Institute of Bioorganic Chemistry RAS","substanceCount":"6","annotationCount":"","annotations":[],"uploading":false},{"name":"Victorian
+        Centre for Functional Genomics, Peter MacCallum Cancer Centre","substanceCount":"75743","annotationCount":"","annotations":[],"uploading":false},{"name":"Vidya
+        Lab, Department of Biotechnology, RV College of Engineering, Bengaluru","substanceCount":"12","annotationCount":"","annotations":[],"uploading":false},{"name":"VIT
+        University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Vitas-M
+        Laboratory","substanceCount":"1628149","annotationCount":"","annotations":[],"uploading":false},{"name":"Viva
+        Corporation","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"VladaChem","substanceCount":"36791","annotationCount":"","annotations":[],"uploading":false},{"name":"VTT
+        Technical Research Centre of Finland (CSMA)","substanceCount":"1380","annotationCount":"","annotations":[],"uploading":false},{"name":"VWR,
+        Part of Avantor","substanceCount":"42732","annotationCount":"","annotations":[],"uploading":false},{"name":"W&J
+        PharmaChem","substanceCount":"8237","annotationCount":"","annotations":[],"uploading":false},{"name":"Wade
+        Research Foundation","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Wagner
+        Laboratory - University of California, San Diego","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"Wald
+        Lab, School of Medicine, Case Western Reserve University","substanceCount":"799","annotationCount":"","annotations":[],"uploading":false},{"name":"WashU
+        High Throughput Screening Center","substanceCount":"476","annotationCount":"","annotations":[],"uploading":false},{"name":"Watanabe
+        Chemical Ind.","substanceCount":"2076","annotationCount":"","annotations":[],"uploading":false},{"name":"Watec
+        Laboratories","substanceCount":"3856","annotationCount":"","annotations":[],"uploading":false},{"name":"Watson
+        International Limited","substanceCount":"49","annotationCount":"","annotations":[],"uploading":false},{"name":"Web
+        of Science","substanceCount":"20","annotationCount":"","annotations":[],"uploading":false},{"name":"Wenzhou
+        Medical University","substanceCount":"9","annotationCount":"","annotations":[],"uploading":false},{"name":"West
+        Coast Metabolomics Center-UC Davis","substanceCount":"540","annotationCount":"1427","annotations":["Taxonomy"],"uploading":false},{"name":"WHO
+        Anatomical Therapeutic Chemical (ATC) Classification","substanceCount":"","annotationCount":"5678","annotations":["ATC
+        Code"],"uploading":false},{"name":"WHO ATCvet - Classification of Veterinary
+        Medicines","substanceCount":"","annotationCount":"6318","annotations":[],"uploading":false},{"name":"WHO
+        Model Lists of Essential Medicines","substanceCount":"","annotationCount":"605","annotations":["WHO
+        Essential Medicines"],"uploading":false},{"name":"Wiemer Lab","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Wikidata","substanceCount":"1046027","annotationCount":"3371881","annotations":["Wikidata"],"uploading":false},{"name":"WikiPathways","substanceCount":"1879","annotations":[],"uploading":false},{"name":"Wikipedia","substanceCount":"","annotationCount":"26625","annotations":["Wikipedia"],"uploading":false},{"name":"Wiley","substanceCount":"130181","annotationCount":"130181","annotations":["Wiley
+        References"],"uploading":false},{"name":"Wiley Companies (formerly Organic
+        Technologies)","substanceCount":"10","annotationCount":"","annotations":[],"uploading":false},{"name":"Wilshire
+        Technologies","substanceCount":"1731","annotationCount":"","annotations":[],"uploading":false},{"name":"Win-Win
+        Chemical","substanceCount":"43614","annotationCount":"","annotations":[],"uploading":false},{"name":"WIPO","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Wolschendorf
+        Lab, School of Medicine, University of Alabama at Birmingham","substanceCount":"40771","annotationCount":"","annotations":[],"uploading":false},{"name":"Wolves
+        R&D chemical","substanceCount":"4467","annotationCount":"","annotations":[],"uploading":false},{"name":"Wong''s
+        Lab, Department of Immunology, School of Medical Sciences, Health Campus,
+        Universiti Sains Malaysia","substanceCount":"2","annotationCount":"","annotations":[],"uploading":false},{"name":"World
+        Register of Marine Species (WoRMS)","substanceCount":"","annotations":[],"uploading":false},{"name":"WormBase","substanceCount":"","annotations":[],"uploading":false},{"name":"Wright
+        Lab, Michael G DeGroote Institute for Infectious Disease Research, Department
+        of Biochemistry & Biomedical Sciences, McMaster University","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"Wubei-Biochem","substanceCount":"191766","annotationCount":"","annotations":[],"uploading":false},{"name":"Wuhan
+        Atomole Chemicals Co., Ltd.","substanceCount":"577","annotationCount":"","annotations":[],"uploading":false},{"name":"Wuhan
+        Korobio Chemicals Co., Ltd.","substanceCount":"13","annotationCount":"","annotations":[],"uploading":false},{"name":"Wutech","substanceCount":"35611","annotationCount":"","annotations":[],"uploading":false},{"name":"Xavier
+        Lab, Infectious Disease and Microbiome Program, Broad Institute of MIT and
+        Harvard","substanceCount":"13","annotationCount":"","annotations":[],"uploading":false},{"name":"Xenbase","substanceCount":"","annotations":[],"uploading":false},{"name":"Xianzhang
+        Bu lab, School of Pharmaceutucal Sciences, Sun Yat-sen University","substanceCount":"3","annotationCount":"","annotations":[],"uploading":false},{"name":"Xiaojiang
+        Lab, Kunming Institute of Botany, CAS","substanceCount":"10","annotationCount":"","annotations":[],"uploading":false},{"name":"Xinjiang
+        Plants Resource Chemistry key Laboratory","substanceCount":"8","annotationCount":"","annotations":[],"uploading":false},{"name":"Xlinebio","substanceCount":"219","annotationCount":"","annotations":[],"uploading":false},{"name":"xPharm:
+        The Comprehensive Pharmacology Reference","substanceCount":"2462","annotationCount":"","annotations":[],"uploading":false},{"name":"Yan
+        Lab, Georgia Cancer Center, Augusta University","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Yang
+        Lab, CAS-MPG Partner Institute for Computational Biology, Shanghai Institute
+        of Nutrition and Health, Shanghai Institutes for Biological Sciences, Chinese
+        Academy of Sciences","substanceCount":"","annotationCount":"","annotations":[],"uploading":false},{"name":"Yeast
+        Metabolome Database (YMDB)","substanceCount":"","annotationCount":"2026","annotations":["Record
+        Description","Taxonomy"],"uploading":false},{"name":"Yeast Natural Products
+        Laboratory","substanceCount":"4","annotationCount":"","annotations":[],"uploading":false},{"name":"Yick-Vic
+        Chemicals & Pharmaceuticals (HK) Ltd.","substanceCount":"39948","annotationCount":"","annotations":[],"uploading":false},{"name":"Yongcheng
+        Song lab at Baylor College of Medicine","substanceCount":"77","annotationCount":"","annotations":[],"uploading":false},{"name":"Yuhao
+        Chemical","substanceCount":"57350","annotationCount":"","annotations":[],"uploading":false},{"name":"Zancheng
+        Functional Chemicals","substanceCount":"15","annotationCount":"","annotations":[],"uploading":false},{"name":"zealing
+        chemical","substanceCount":"1346","annotationCount":"","annotations":[],"uploading":false},{"name":"ZeoliteMin","substanceCount":"1","annotationCount":"","annotations":[],"uploading":false},{"name":"ZeroPM
+        - Zero Pollution of Persistent, Mobile Substances","substanceCount":"140161","annotationCount":"","annotations":[],"uploading":false},{"name":"Zhuorui
+        Chemical Technology Co.,Ltd","substanceCount":"103","annotationCount":"","annotations":[],"uploading":false},{"name":"ZINC","substanceCount":"13814174","annotationCount":"","annotations":[],"uploading":false},{"name":"Zjartschem","substanceCount":"11432","annotationCount":"","annotations":[],"uploading":false},{"name":"Zoeller
+        Lab, School of Medicine, Boston University","substanceCount":"21741","annotationCount":"","annotations":[],"uploading":false}]'
+  recorded_at: 2026-03-04 20:02:52
+recorded_with: VCR-vcr/2.1.0

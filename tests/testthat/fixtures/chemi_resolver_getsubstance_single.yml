@@ -1,0 +1,23 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/resolver/getsubstance?name=DTXSID7020182
+  response:
+    status: 500
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:03:02 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"timestamp":"2026-03-04T20:03:02.344+00:00","status":500,"error":"Internal
+        Server Error","message":"Cannot invoke \"String.substring(int)\" because the
+        return value of \"java.net.URL.getRef()\" is null","path":"/api/resolver/getsubstance"}'
+  recorded_at: 2026-03-04 20:03:02
+recorded_with: VCR-vcr/2.1.0

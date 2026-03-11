@@ -4,10 +4,12 @@
 \alias{ct_chemical_property_predicted_search_bulk}
 \title{Get predicted properties for a batch of DTXSIDs}
 \usage{
-ct_chemical_property_predicted_search_bulk(query)
+ct_chemical_property_predicted_search_bulk(query, coerce = FALSE)
 }
 \arguments{
 \item{query}{Character vector of strings to send in request body}
+
+\item{coerce}{Logical. If TRUE, split results by propertyId into named list of data frames. Default: FALSE}
 }
 \value{
 Returns a scalar value

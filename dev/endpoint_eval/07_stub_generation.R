@@ -401,6 +401,97 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     )
   }
 
+  # =========================================================================
+  # Hook Parameter Injection (Phase 28)
+  # =========================================================================
+  hook_config_path <- here::here("inst", "hook_config.yml")
+  hook_params_list <- list()
+  has_hooks <- FALSE
+
+  if (file.exists(hook_config_path)) {
+    hook_config <- yaml::read_yaml(hook_config_path)
+    fn_config <- hook_config[[fn]]
+
+    if (!is.null(fn_config)) {
+      has_hooks <- TRUE
+
+      if (!is.null(fn_config$extra_params)) {
+        for (param_name in names(fn_config$extra_params)) {
+          param_spec <- fn_config$extra_params[[param_name]]
+
+          # 1. Append to fn_signature (same pattern as pagination all_pages)
+          fn_signature_check <- fn_signature %|NA|% ""
+          if (nzchar(fn_signature_check)) {
+            fn_signature <- paste0(fn_signature, ", ", param_name, " = ", param_spec$default)
+          } else {
+            fn_signature <- paste0(param_name, " = ", param_spec$default)
+          }
+
+          # 2. Add @param doc
+          param_docs <- paste0(
+            param_docs,
+            "#' @param ", param_name, " ", param_spec$description, "\n"
+          )
+
+          # Track for hook call generation
+          hook_params_list[[param_name]] <- param_spec$default
+        }
+      }
+    }
+  }
+
+  # =========================================================================
+  # Hook Call Generation (Phase 28)
+  # =========================================================================
+  # Build hook call snippets that will be inserted into stub bodies
+  # Pre-request hooks: wrap query before generic_request
+  # Post-response hooks: wrap result after generic_request
+  # Transform hooks: replace generic_request entirely
+
+  hook_pre_request <- ""
+  hook_post_response <- ""
+  hook_is_transform <- FALSE
+
+  if (isTRUE(has_hooks)) {
+    fn_config <- hook_config[[fn]]
+
+    # Build parameter list for hook calls (includes all extra_params + query if applicable)
+    hook_param_names <- names(hook_params_list)
+    hook_param_list_str <- if (length(hook_param_names) > 0) {
+      paste0(", ", paste(hook_param_names, "=", hook_param_names, collapse = ", "))
+    } else {
+      ""
+    }
+
+    # Check for transform hooks (replace entire generic_request)
+    if (!is.null(fn_config$transform) && length(fn_config$transform) > 0) {
+      hook_is_transform <- TRUE
+    }
+
+    # Build pre_request hook call
+    if (!is.null(fn_config$pre_request) && length(fn_config$pre_request) > 0) {
+      # Pre-request hooks modify params before the request
+      # They receive list(params = list(query = ..., extra_param1 = ..., ...))
+      # and return modified data
+      hook_pre_request <- paste0(
+        "  req_data <- run_hook(\"", fn, "\", \"pre_request\", list(params = list(query = query", hook_param_list_str, ")))\n",
+        "  query <- req_data$params$query\n"
+      )
+    }
+
+    # Build post_response hook call
+    if (!is.null(fn_config$post_response) && length(fn_config$post_response) > 0) {
+      # Post-response hooks modify the result after the request
+      # They receive list(result = ..., params = list(extra_param1 = ..., ...))
+      # and return modified result
+      hook_post_response <- paste0(
+        "  result <- run_hook(\"", fn, "\", \"post_response\", list(result = result, params = list(",
+        paste(hook_param_names, "=", hook_param_names, collapse = ", "),
+        ")))\n"
+      )
+    }
+  }
+
   # Build example call string - handle case where there are no parameters
   # Use %|NA|% to handle NULL/NA values safely
   fn_signature_safe <- fn_signature %|NA|% ""
@@ -537,7 +628,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     tidy = FALSE{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -591,7 +682,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Generate function body using generic_request with body_type = "raw_text"
     fn_body <- glue::glue('
 {fn} <- function(query) {{
-  result <- generic_request(
+{hook_pre_request}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "POST",
@@ -654,7 +745,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Array body: pass directly, generic_request() handles JSON encoding
       fn_body <- glue::glue('
 {fn} <- function(query) {{
-  result <- generic_request(
+{hook_pre_request}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
@@ -669,7 +760,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Simple string body: pass directly
       fn_body <- glue::glue('
 {fn} <- function(query) {{
-  result <- generic_request(
+{hook_pre_request}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
@@ -763,14 +854,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{options_assembly}
+{options_assembly}{hook_pre_request}
   result <- generic_chemi_request(
     query = {query_param},
     endpoint = "{endpoint}"{options_call}{wrap_param},
     tidy = FALSE{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -807,7 +898,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
 {body_assembly}
-
+{hook_pre_request}
   result <- generic_request(
     query = NULL,
     endpoint = "{endpoint}",
@@ -816,7 +907,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     body = body{content_type_call}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -833,13 +924,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (wrapper_fn == "generic_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  result <- generic_request(
+{query_param_info$params_code}{hook_pre_request}  result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{cc_server_params}{content_type_call}{combined_calls}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -848,12 +939,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  result <- generic_chemi_request(
+{query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -867,7 +958,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     method = "{method}"{combined_calls}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -918,7 +1009,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -928,14 +1019,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         # Standard generation with existing logic
         fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  result <- generic_request(
+{query_param_info$params_code}{hook_pre_request}  result <- generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{combined_calls}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -945,13 +1036,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}  result <- generic_chemi_request(
+{query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls},
     tidy = FALSE{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -987,14 +1078,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
       fn_body <- glue::glue('
 {fn} <- function({fn_arg}) {{
-  result <- generic_request(
+{hook_pre_request}  result <- generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{extra_params}{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -1003,7 +1094,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else if (wrapper_fn == "generic_chemi_request") {
       fn_body <- glue::glue('
 {fn} <- function({fn_arg}) {{
-  result <- generic_chemi_request(
+{hook_pre_request}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}",
     server = "chemi_burl",
@@ -1011,7 +1102,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     tidy = FALSE{pagination_call_params}
   )
 
-  # Additional post-processing can be added here
+  {hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}

@@ -28,7 +28,7 @@ A function to replace Unicode symbols (Greek letters, math symbols, etc.)
 with their ASCII equivalents or pseudo-delimited names.
 }
 \details{
-Greek letters are replaced with lowercase labels surrounded by periods (e.g., '.alpha.').
+Greek letters are replaced with lowercase labels (e.g., 'alpha').
 Mathematical symbols like '≥' are replaced with '>=' and '±' with '+/-'.
 If a data frame is provided, all character columns are processed.
 
@@ -37,10 +37,10 @@ Unhandled Unicode characters will be flagged for the user.
 \examples{
 \dontrun{
 clean_unicode("17β-Estradiol")
-# Returns: "17.beta.-Estradiol"
+# Returns: "17beta-Estradiol"
 
 clean_unicode("Concentration ≥ 10 µg/L")
-# Returns: "Concentration >= 10 u g/L"
+# Returns: "Concentration >= 10 ug/L"
 }
 
 }

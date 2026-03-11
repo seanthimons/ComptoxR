@@ -1,0 +1,91 @@
+---
+gsd_state_version: 1.0
+milestone: v2.2
+milestone_name: Package Stabilization
+status: roadmap_complete
+last_updated: "2026-03-04T00:00:00.000Z"
+progress:
+  total_phases: 30
+  completed_phases: 26
+  total_plans: 45
+  completed_plans: 45
+---
+
+# Project State
+
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-03-04)
+
+**Core value:** Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
+**Current focus:** v2.2 Package Stabilization — roadmap complete, ready for planning
+
+## Current Position
+
+Phase: Phase 27 (Test Infrastructure Stabilization)
+Plan: Not started
+Status: Roadmap complete
+Last activity: 2026-03-04 — Roadmap created for v2.2
+
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (0/4 phases)
+
+## Milestone v2.2 Overview
+
+**Goal:** Migrate all user-facing ct_* functions to use generated stubs via generic_request(), classify functions by complexity, and get the package to a clean build + passing test state.
+
+**Phases:**
+- Phase 27: Test Infrastructure Stabilization (5 requirements)
+- Phase 28: Thin Wrapper Migration (3 requirements)
+- Phase 29: Direct Template Migration (3 requirements)
+- Phase 30: Build Quality Validation (7 requirements)
+
+**Total:** 4 phases, 18 requirements
+
+## Archived Milestones
+
+- v1.0-v1.9: See `.planning/milestones/` directory
+- v2.0: Phases 19-21 (paginated requests)
+- v2.1: Phases 23-26 (test infrastructure)
+
+Full history: `.planning/MILESTONES.md`
+
+## Accumulated Context
+
+**From v2.1:**
+- 297 pre-existing test failures from VCR/API key issues (not caused by v2.1)
+- Only 33 of 256 API wrappers have recorded cassettes
+- Re-recording script built but not executed (requires API key)
+- purrr::flatten warning persists on package load
+
+**From debate analysis (2026-03-04):**
+- Approved approach: Modified B+C hybrid (fix blockers → classify functions → migrate thin → vertical-slice complex → defer infrastructure)
+- Key insight: "circular dependency" between migration/infrastructure/tests is largely illusory — real blockers are mechanical bugs
+- Post-processing recipe system (#120) deferred — current stable functions are thin wrappers, pattern proven by ct_lists_all
+- Functions classified as: thin (ct_hazard, ct_functional_use), medium (ct_details, ct_env_fate), complex (ct_bioactivity, ct_lists_all)
+
+**From roadmap creation (2026-03-04):**
+- 4 phases derived from 18 requirements (standard depth)
+- Test infrastructure fixes first (Phase 27) — enables confident migration
+- Simple patterns first (Phase 28-29) — thin wrappers, direct templates
+- Complex function validation deferred to final phase (Phase 30) — ct_bioactivity, ct_lists_all
+- 100% requirement coverage validated
+
+## Pending Todos
+
+**Deferred pipeline work (ON HOLD):**
+- ADV-01-04: Advanced schema handling
+- S7 class implementation (#29)
+- Schema-check workflow improvements (#96)
+- Advanced testing features
+
+**Deferred package work:**
+- Post-processing recipe system (#120) — defer until concrete need surfaces
+
+## Session Continuity
+
+Last session: 2026-03-04
+Action: Created roadmap for v2.2 milestone
+Next: Plan Phase 27 (Test Infrastructure Stabilization) — `/gsd:plan-phase 27`
+
+---
+*Last updated: 2026-03-04 after roadmap creation*

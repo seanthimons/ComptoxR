@@ -364,6 +364,7 @@ get_batch_test_values <- function(param_name) {
 #' - single: one valid input with VCR cassette
 #' - batch: 2-3 inputs with VCR cassette (skipped for static endpoints)
 #' - error: missing required params, no cassette
+#' - hook variants: additional tests for hook parameters if function has hooks
 #'
 #' @param function_name Name of function to generate tests for
 #' @param function_file Path to R source file containing function
@@ -374,6 +375,21 @@ generate_test_file <- function(function_name, function_file, output_dir = "tests
   # Extract function metadata
   params <- extract_function_formals(function_file, function_name)
   tidy_flag <- extract_tidy_flag(function_file)
+
+  # Check for hook configuration (Phase 28)
+  hook_config_path <- file.path(here::here(), "inst", "hook_config.yml")
+  hook_params <- NULL
+  if (file.exists(hook_config_path)) {
+    tryCatch({
+      hook_config <- yaml::read_yaml(hook_config_path)
+      fn_config <- hook_config[[function_name]]
+      if (!is.null(fn_config) && !is.null(fn_config$extra_params)) {
+        hook_params <- fn_config$extra_params
+      }
+    }, error = function(e) {
+      cli::cli_alert_warning("Failed to read hook_config.yml: {e$message}")
+    })
+  }
 
   # Determine return assertion based on tidy flag
   return_assertion <- if (tidy_flag) {
@@ -451,6 +467,49 @@ test_that("{function_name} works with single input", {{
 
   # Add error test
   test_content <- paste0(test_content, "\n", error_test)
+
+  # Add hook parameter variant tests (Phase 28)
+  if (!is.null(hook_params) && length(hook_params) > 0) {
+    for (param_name in names(hook_params)) {
+      param_spec <- hook_params[[param_name]]
+
+      # Generate test variant with hook param enabled
+      # For boolean params, test with TRUE; for numeric, use non-default value
+      test_value <- if (param_spec$type == "logical") {
+        "TRUE"
+      } else if (param_spec$type == "numeric") {
+        "0.9"
+      } else {
+        param_spec$default
+      }
+
+      # Build function call with hook param
+      if (length(params) == 0) {
+        # Static endpoint
+        hook_call <- glue('{function_name}({param_name} = {test_value})')
+      } else {
+        # Has primary parameter
+        primary_param <- names(params)[1]
+        single_val <- get_test_value_for_param(primary_param)
+        if (is.character(single_val)) {
+          hook_call <- glue('{function_name}({primary_param} = "{single_val}", {param_name} = {test_value})')
+        } else {
+          hook_call <- glue('{function_name}({primary_param} = {single_val}, {param_name} = {test_value})')
+        }
+      }
+
+      # Generate hook variant test
+      hook_test <- glue('
+test_that("{function_name} works with {param_name} = {test_value}", {{
+  vcr::use_cassette("{function_name}_{param_name}", {{
+    result <- {hook_call}
+    {return_assertion}
+  }})
+}})')
+
+      test_content <- paste0(test_content, "\n", hook_test)
+    }
+  }
 
   # Check manifest for protection
   test_file <- file.path(output_dir, paste0("test-", function_name, ".R"))

@@ -63,7 +63,8 @@ endpoints <- map(
 
     # Extract domain from route (first path segment)
     domain = route %>%
-      stringr::str_extract(., "^[^/]+"),
+      stringr::str_extract(., "^[^/]+") %>%
+      stringr::str_replace_all("-", "_"),
 
     # Generate file name from route
     # Remove common prefixes/suffixes, collapse to clean identifier
@@ -71,7 +72,7 @@ endpoints <- map(
       # 1) Remove tokens with optional left separator, only when delimited on the right
       str_remove_all(
         # regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
-				regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])")
+				regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid|ccd)(?=$|[/_-])")
 
 			) %>%
       str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%

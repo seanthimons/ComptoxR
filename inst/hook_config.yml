@@ -1,0 +1,94 @@
+# Hook Configuration for ComptoxR
+# Each entry maps a generated function name to its hooks and extra parameters.
+# Hooks execute in declared order. Extra params are injected into function signatures.
+
+ct_lists_all:
+  extra_params:
+    return_dtxsid:
+      default: "FALSE"
+      type: "logical"
+      description: "Return all DTXSIDs contained within each list"
+    coerce:
+      default: "FALSE"
+      type: "logical"
+      description: "Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)"
+  transform:
+    - lists_all_transform
+
+ct_similar:
+  extra_params:
+    similarity:
+      default: "0.8"
+      type: "numeric"
+      description: "Similarity threshold (0-1)"
+  pre_request:
+    - validate_similarity
+
+ct_list:
+  extra_params:
+    extract_dtxsids:
+      default: "TRUE"
+      type: "logical"
+      description: "Extract DTXSIDs from results"
+  pre_request:
+    - uppercase_query
+  post_response:
+    - extract_dtxsids_if_requested
+
+ct_compound_in_list:
+  post_response:
+    - format_compound_list_result
+
+ct_bioactivity_data_search_bulk:
+  extra_params:
+    annotate:
+      default: "FALSE"
+      type: "logical"
+      description: "Join assay annotations by aeid"
+  post_response:
+    - annotate_assay_if_requested
+
+ct_bioactivity_data_search_by_aeid_bulk:
+  extra_params:
+    annotate:
+      default: "FALSE"
+      type: "logical"
+      description: "Join assay annotations by aeid"
+  post_response:
+    - annotate_assay_if_requested
+
+ct_bioactivity_data_search_by_spid_bulk:
+  extra_params:
+    annotate:
+      default: "FALSE"
+      type: "logical"
+      description: "Join assay annotations by aeid"
+  post_response:
+    - annotate_assay_if_requested
+
+ct_bioactivity_data_search_by_m4id_bulk:
+  extra_params:
+    annotate:
+      default: "FALSE"
+      type: "logical"
+      description: "Join assay annotations by aeid"
+  post_response:
+    - annotate_assay_if_requested
+
+ct_chemical_property_experimental_search_bulk:
+  extra_params:
+    coerce:
+      default: "FALSE"
+      type: "logical"
+      description: "Split results by propertyId into named list of data frames"
+  post_response:
+    - coerce_by_property_id
+
+ct_chemical_property_predicted_search_bulk:
+  extra_params:
+    coerce:
+      default: "FALSE"
+      type: "logical"
+      description: "Split results by propertyId into named list of data frames"
+  post_response:
+    - coerce_by_property_id

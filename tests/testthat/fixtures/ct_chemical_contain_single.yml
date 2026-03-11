@@ -1,0 +1,53 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/search/contain/DTXSID7020182?top=0&projection=chemicalsearchall
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:06:40 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "dtxsid" : "DTXSID7020182",
+          "dtxcid" : "DTXCID30182",
+          "casrn" : "80-05-7",
+          "preferredName" : "Bisphenol A",
+          "hasStructureImage" : 1,
+          "smiles" : "CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1",
+          "isMarkush" : false,
+          "searchName" : "DSSTox_Substance_Id",
+          "searchValue" : "DTXSID7020182",
+          "rank" : 1
+        }, {
+          "dtxsid" : "DTXSID70201820",
+          "dtxcid" : "DTXCID00124311",
+          "casrn" : "536-95-8",
+          "preferredName" : "Carinamide",
+          "hasStructureImage" : 1,
+          "smiles" : "OC(=O)C1=CC=C(NS(=O)(=O)CC2=CC=CC=C2)C=C1",
+          "isMarkush" : false,
+          "searchName" : "DSSTox_Substance_Id",
+          "searchValue" : "DTXSID70201820",
+          "rank" : 1
+        }, {
+          "dtxsid" : "DTXSID70201825",
+          "dtxcid" : "DTXCID00124316",
+          "casrn" : "53605-00-8",
+          "preferredName" : "Phosphorothioic acid, O,O-diethyl O-3-pyridazinyl ester",
+          "hasStructureImage" : 1,
+          "smiles" : "CCOP(=S)(OCC)OC1=NN=CC=C1",
+          "isMarkush" : false,
+          "searchName" : "DSSTox_Substance_Id",
+          "searchValue" : "DTXSID70201825",
+          "rank" : 1
+        } ]
+  recorded_at: 2026-03-04 20:06:41
+recorded_with: VCR-vcr/2.1.0

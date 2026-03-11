@@ -2,26 +2,30 @@
 % Please edit documentation in R/ct_details.R
 \name{ct_details}
 \alias{ct_details}
-\title{Retrieve compound details by DTXSID}
+\title{Chemical details by DTXSID}
 \usage{
-ct_details(
-  query,
-  projection = c("all", "standard", "id", "structure", "nta", "compact")
-)
+ct_details(query, projection = "compact")
 }
 \arguments{
-\item{query}{A single DTXSID (in quotes) or a list to be queried}
+\item{query}{Character vector of DTXSIDs}
 
-\item{projection}{A subset of date to be returned. By default returns a minimal set of common identifiers.}
+\item{projection}{API projection string. Common values: \code{"compact"} (default),
+\code{"chemicaldetailall"}, \code{"chemicaldetailstandard"}, \code{"chemicalidentifier"},
+\code{"chemicalstructure"}, \code{"ntatoolkit"}, \code{"ccdchemicaldetails"},
+\code{"ccdassaydetails"}.}
 }
 \value{
-a data frame
+A tibble of chemical detail results
 }
 \description{
-Retrieve compound details by DTXSID
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Retrieves chemical detail data for chemicals by DTXSID with configurable
+projection level. Projection values are passed directly to the API.
 }
 \examples{
 \dontrun{
 ct_details(query = "DTXSID7020182")
+ct_details(query = "DTXSID7020182", projection = "chemicaldetailall")
 }
 }

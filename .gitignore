@@ -69,3 +69,6 @@ temp.R
 
 # Temporary schema diff artifacts (CI workflow)
 schema_old/
+
+# Planning docs
+!.planning

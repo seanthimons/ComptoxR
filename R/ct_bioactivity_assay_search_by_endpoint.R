@@ -13,13 +13,11 @@
 #' }
 ct_bioactivity_assay_search_by_endpoint <- function(endpoint) {
   result <- generic_request(
+    query = endpoint,
     endpoint = "bioactivity/assay/search/by-endpoint/",
     method = "GET",
-    batch_limit = 0,
-    `endpoint` = endpoint
+    batch_limit = 1
   )
-
-  # Additional post-processing can be added here
 
   return(result)
 }

@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/stdizer/workflows
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 04 Mar 2026 20:05:01 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"id":"64342a1fb67b842e37925545","type":"Workflow","name":"ms-ready","title":"MS-Ready","frozen":false,"operationsNumber":0,"invalid":false},{"id":"64342a1fb67b842e37925546","type":"Workflow","name":"qsar-ready","title":"QSAR-Ready","frozen":false,"operationsNumber":0,"invalid":false},{"id":"6446ae3ee3f8b430de4abc80","type":"Workflow","name":"QSAR-ready_CNL_edits","title":"QSAR-Ready_CNL","frozen":false,"operationsNumber":0,"invalid":false},{"id":"6446ae45e3f8b430de4abc81","type":"Workflow","name":"QSAR-ready_CNL_edits_TMM","title":"QSAR-ready_CNL_edits_TMM","frozen":false,"operationsNumber":0,"invalid":false},{"id":"6446ae4ce3f8b430de4abc82","type":"Workflow","name":"QSAR-ready_CNL_edits_TMM_2","title":"QSAR-ready_CNL_edits_TMM_2","description":"Change
+        flags to match qsar-ready workflow","frozen":false,"operationsNumber":0,"invalid":false},{"id":"64e60a00076254642d1b52f0","type":"Workflow","name":"qsar-ready_08232023","title":"QSAR-Ready_08232023","frozen":false,"operationsNumber":0,"invalid":false},{"id":"66b3dd1103417e7e0bebe5bc","type":"Workflow","name":"AQC_Transforms","title":"Transformations
+        Proposed for AQC ","description":"Transformations Proposed for AQC ","frozen":false,"operationsNumber":0,"invalid":false},{"id":"680aa088b4013b2d59edd97c","type":"Workflow","name":"qsar-ready_04242025","title":"QSAR-Ready_04242025","frozen":false,"operationsNumber":0,"invalid":false}]'
+  recorded_at: 2026-03-04 20:05:02
+recorded_with: VCR-vcr/2.1.0

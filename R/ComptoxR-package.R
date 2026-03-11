@@ -17,11 +17,11 @@ NULL
 NULL
 #' @import cli
 NULL
-#' @import purrr
+#' @importFrom purrr map map2 map_chr map_lgl imap pluck set_names compact keep list_rbind list_flatten
 NULL
 #' @import stringr
 NULL
 #' @import tidyr
 NULL
-#' @import jsonlite
+#' @importFrom jsonlite fromJSON flatten write_json
 NULL

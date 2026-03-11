@@ -1,0 +1,570 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/exposure/ccd/puc/search/by-dtxsid/DTXSID0020232
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:09:34 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        [ {
+          "id" : 1221,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Food and drug:pharmaceuticals",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Food and drug",
+          "prodfam" : "pharmaceuticals",
+          "prodtype" : null,
+          "definition" : "A product, compound, medicine or therapeutic which is subject to regulation, including medicinal and illicit drugs, biologics, and the salts, esters, and hydrates of pharmaceuticals, includes precursors to pharmaceuticals, additives, and pharmaceuticals for animal/veterinary use. Includes prescription drugs. See 'Food and drug - pharmaceuticals - over the counter' for over-the-counter drugs."
+        }, {
+          "id" : 10532,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:eye care and contacts:eye products",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "eye care and contacts",
+          "prodtype" : "eye products",
+          "definition" : "skin treatments applied to the eyelids and skin around the eye (excludes makeup and eye cream)"
+        }, {
+          "id" : 11109,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:hair conditioning treatment",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "hair conditioning treatment",
+          "definition" : "hair conditioning and moisturizing treatments for occasional use"
+        }, {
+          "id" : 18736,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:eye care and contacts:eye cream",
+          "pucKind" : "Formulation",
+          "prodCount" : 134,
+          "genCat" : "Personal care",
+          "prodfam" : "eye care and contacts",
+          "prodtype" : "eye cream",
+          "definition" : "products applied to skin located around the eye to moisturize or improve skin qualities"
+        }, {
+          "id" : 22609,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Not yet Categorized",
+          "pucKind" : null,
+          "prodCount" : 48,
+          "genCat" : "Not yet Categorized",
+          "prodfam" : null,
+          "prodtype" : null,
+          "definition" : null
+        }, {
+          "id" : 25815,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:body hygiene:bar soap",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "body hygiene",
+          "prodtype" : "bar soap",
+          "definition" : "bar and other solid soaps"
+        }, {
+          "id" : 26559,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:body hygiene:body wash",
+          "pucKind" : "Formulation",
+          "prodCount" : 16,
+          "genCat" : "Personal care",
+          "prodfam" : "body hygiene",
+          "prodtype" : "body wash",
+          "definition" : "body cleaners, washes, shower gels"
+        }, {
+          "id" : 26674,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care",
+          "pucKind" : "Formulation",
+          "prodCount" : 3,
+          "genCat" : "Personal care",
+          "prodfam" : null,
+          "prodtype" : null,
+          "definition" : "general personal care products which do not fit into a more refined category"
+        }, {
+          "id" : 27687,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:body hygiene:body scrub",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "body hygiene",
+          "prodtype" : "body scrub",
+          "definition" : "body cleaners containing abrasives or exfoliants"
+        }, {
+          "id" : 27689,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:facial cleansing and moisturizing:face scrub",
+          "pucKind" : "Formulation",
+          "prodCount" : 6,
+          "genCat" : "Personal care",
+          "prodfam" : "facial cleansing and moisturizing",
+          "prodtype" : "face scrub",
+          "definition" : "facial cleansing products containing exfoliating particles (excluding products for acne)"
+        }, {
+          "id" : 29261,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:facial cleansing and moisturizing:face wash",
+          "pucKind" : "Formulation",
+          "prodCount" : 18,
+          "genCat" : "Personal care",
+          "prodfam" : "facial cleansing and moisturizing",
+          "prodtype" : "face wash",
+          "definition" : "facial cleansing products (excluding scrubs and products for acne)"
+        }, {
+          "id" : 30168,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:shaving and hair removal:shaving cream",
+          "pucKind" : "Formulation",
+          "prodCount" : 3,
+          "genCat" : "Personal care",
+          "prodfam" : "shaving and hair removal",
+          "prodtype" : "shaving cream",
+          "definition" : "shaving creams, foams, balms and soaps"
+        }, {
+          "id" : 30874,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:makeup remover",
+          "pucKind" : "Formulation",
+          "prodCount" : 5,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "makeup remover",
+          "definition" : "products for removing face makeup"
+        }, {
+          "id" : 31176,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:facial cleansing and moisturizing:face mask",
+          "pucKind" : "Formulation",
+          "prodCount" : 14,
+          "genCat" : "Personal care",
+          "prodfam" : "facial cleansing and moisturizing",
+          "prodtype" : "face mask",
+          "definition" : "leave-on masks or peels for treatment of the face"
+        }, {
+          "id" : 31733,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:facial cleansing and moisturizing:face cream/moisturizer",
+          "pucKind" : "Formulation",
+          "prodCount" : 180,
+          "genCat" : "Personal care",
+          "prodfam" : "facial cleansing and moisturizing",
+          "prodtype" : "face cream/moisturizer",
+          "definition" : "moisturizers, lotions, and creams for treating the face (excluding eye-specific products)"
+        }, {
+          "id" : 31970,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:toner",
+          "pucKind" : "Formulation",
+          "prodCount" : 5,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "toner",
+          "definition" : "face and skin toners and astringents, excluding eye related products"
+        }, {
+          "id" : 32373,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:liniment",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "liniment",
+          "prodtype" : null,
+          "definition" : "products for treatment of muscle or joint pain"
+        }, {
+          "id" : 32709,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related",
+          "pucKind" : "Formulation",
+          "prodCount" : 35,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : null,
+          "definition" : "makeup or cosmetic products which do not fit into a more refined category"
+        }, {
+          "id" : 33036,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:skin lightener",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "skin lightener",
+          "prodtype" : null,
+          "definition" : "Products designed to lighten skin or fade spots and scars"
+        }, {
+          "id" : 33305,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:acne treatment:acne spot treatment",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "acne treatment",
+          "prodtype" : "acne spot treatment",
+          "definition" : "products for spot-treating acne, including creams, lotions, wipes and pads"
+        }, {
+          "id" : 33479,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:after sun product",
+          "pucKind" : "Formulation",
+          "prodCount" : 13,
+          "genCat" : "Personal care",
+          "prodfam" : "after sun product",
+          "prodtype" : null,
+          "definition" : "Products for soothing and treating sunburns"
+        }, {
+          "id" : 35088,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Food and drug:pharmaceuticals:over the counter",
+          "pucKind" : "Formulation",
+          "prodCount" : 8,
+          "genCat" : "Food and drug",
+          "prodfam" : "pharmaceuticals",
+          "prodtype" : "over the counter",
+          "definition" : "Over-the-counter (OTC) drugs that are available to consumers without a prescription. Includes products that are taken primarily by oral route. Examples include acetaminophen, aspirin, antacids, decongestants, antihistamines, and laxatives."
+        }, {
+          "id" : 35287,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:self-tanner",
+          "pucKind" : "Formulation",
+          "prodCount" : 19,
+          "genCat" : "Personal care",
+          "prodfam" : "self-tanner",
+          "prodtype" : null,
+          "definition" : "chemical products for tanning, staining, or coloring the skin"
+        }, {
+          "id" : 35630,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Medical/dental",
+          "pucKind" : "Occupation",
+          "prodCount" : 1,
+          "genCat" : "Medical/dental",
+          "prodfam" : null,
+          "prodtype" : null,
+          "definition" : "Medical and dental supplies and equipment, e.g. medical equipment used in a hospital or doctor's office setting, at home (e.g. wheelchairs), Excludes medical testing supplies. See Medical PPE for clothing and personal protective equipment used in medical settings (e.g. scrubs, face masks, gowns, gloves); See Personal Care - Ostomy products for ostomy related products used in home settings."
+        }, {
+          "id" : 35785,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:body:body firming lotion",
+          "pucKind" : "Formulation",
+          "prodCount" : 34,
+          "genCat" : "Personal care",
+          "prodfam" : "body",
+          "prodtype" : "body firming lotion",
+          "definition" : "Moisturizers, creams, and serums that claim to firm, tone, tighten, or lift skin"
+        }, {
+          "id" : 36088,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:general moisturizing:hand/body lotion",
+          "pucKind" : "Formulation",
+          "prodCount" : 147,
+          "genCat" : "Personal care",
+          "prodfam" : "general moisturizing",
+          "prodtype" : "hand/body lotion",
+          "definition" : "products specifically marketed for application to hands or body to moisturize or improve skin characteristics (excluding baby lotion)"
+        }, {
+          "id" : 36711,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Cleaning and safety:safety products:safety lightsticks",
+          "pucKind" : "Occupation",
+          "prodCount" : 2,
+          "genCat" : "Cleaning and safety",
+          "prodfam" : "safety products",
+          "prodtype" : "safety lightsticks",
+          "definition" : "Products used to provide a safe (non-flammable non-electric) light source, used in emergency, occupational, military or industrial settings. Safety lightsticks are a self-contained, short-term light-source, consisting of a plastic tube containing a chemical substance that produces light through chemiluminescence."
+        }, {
+          "id" : 48020,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Laboratory supplies",
+          "pucKind" : "Occupation",
+          "prodCount" : 4,
+          "genCat" : "Laboratory supplies",
+          "prodfam" : null,
+          "prodtype" : null,
+          "definition" : "Products specifically used in a laboratory setting, e.g. laboratory diagnostics or consumables, solvents and reagents used in experiments or laboratory tests, etc. Includes supplies for medical testing. Note that pure chemicals will be included in the 'Raw materials' category."
+        }, {
+          "id" : 60764,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:shampoo - dandruff",
+          "pucKind" : "Formulation",
+          "prodCount" : 4,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "shampoo - dandruff",
+          "definition" : "shampoos, including dual shampoo/conditioner products for treatment of dandruff"
+        }, {
+          "id" : 62765,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:hair spray",
+          "pucKind" : "Formulation",
+          "prodCount" : 4,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "hair spray",
+          "definition" : "spray fixatives for hair"
+        }, {
+          "id" : 63145,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:hair styling",
+          "pucKind" : "Formulation",
+          "prodCount" : 18,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "hair styling",
+          "definition" : "products for imparting hold, shine, or texture to hair"
+        }, {
+          "id" : 63975,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:shaving and hair removal:waxing",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "shaving and hair removal",
+          "prodtype" : "waxing",
+          "definition" : "products for removing hair by waxing"
+        }, {
+          "id" : 64054,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:scalp treatment",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "scalp treatment",
+          "definition" : "products for treating the scalp, including products for dandruff or hair loss (excluding dandruff shampoo)"
+        }, {
+          "id" : 66586,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:sunscreen",
+          "pucKind" : "Formulation",
+          "prodCount" : 31,
+          "genCat" : "Personal care",
+          "prodfam" : "sunscreen",
+          "prodtype" : null,
+          "definition" : "products applied to the skin to block harmful effects of sunlight"
+        }, {
+          "id" : 66660,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Food and drug:supplements",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Food and drug",
+          "prodfam" : "supplements",
+          "prodtype" : null,
+          "definition" : "Products intended for human consumption to supplement health, available without a prescription; including vitamins, minerals, prebiotics, probiotics, and herbal products, excluding Cannabis-derived products."
+        }, {
+          "id" : 66946,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Batteries:electronic device:camera",
+          "pucKind" : "Article",
+          "prodCount" : 18,
+          "genCat" : "Batteries",
+          "prodfam" : "electronic device",
+          "prodtype" : "camera",
+          "definition" : "Electronic device batteries intended for cameras, including photo and video cameras. Includes replacement batteries for these devices."
+        }, {
+          "id" : 68799,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:shaving and hair removal:aftershave",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "shaving and hair removal",
+          "prodtype" : "aftershave",
+          "definition" : "products applied to the skin following shaving to provide scent, or improve skin characteristics"
+        }, {
+          "id" : 73121,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:foot care",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "foot care",
+          "prodtype" : null,
+          "definition" : "miscellaneous products for application to feet, including scrubs, lotions, deodorants, and treatments for skin and nail problems"
+        }, {
+          "id" : 74537,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:deodorant",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "deodorant",
+          "prodtype" : null,
+          "definition" : "deodorants and antiperspirants"
+        }, {
+          "id" : 76219,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:blush/bronzer",
+          "pucKind" : "Formulation",
+          "prodCount" : 4,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "blush/bronzer",
+          "definition" : "cheek blushes, bronzers, and rouges"
+        }, {
+          "id" : 76740,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:foundation/concealer",
+          "pucKind" : "Formulation",
+          "prodCount" : 107,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "foundation/concealer",
+          "definition" : "foundation makeup and concealers"
+        }, {
+          "id" : 77311,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:face powder",
+          "pucKind" : "Formulation",
+          "prodCount" : 2,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "face powder",
+          "definition" : "pressed or loose powders for face"
+        }, {
+          "id" : 77750,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:eye primer",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "eye primer",
+          "definition" : "products for priming eyes for makeup"
+        }, {
+          "id" : 77928,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:makeup primer",
+          "pucKind" : "Formulation",
+          "prodCount" : 5,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "makeup primer",
+          "definition" : "products for priming face for make-up, excluding eye primers"
+        }, {
+          "id" : 79350,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:eye liner",
+          "pucKind" : "Formulation",
+          "prodCount" : 6,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "eye liner",
+          "definition" : "Liquid or pencil eye liners"
+        }, {
+          "id" : 79585,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:eye shadow",
+          "pucKind" : "Formulation",
+          "prodCount" : 5,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "eye shadow",
+          "definition" : "products for coloring eye lids"
+        }, {
+          "id" : 80205,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:mascara",
+          "pucKind" : "Formulation",
+          "prodCount" : 7,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "mascara",
+          "definition" : "eyelash mascaras"
+        }, {
+          "id" : 80494,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:eye makeup",
+          "pucKind" : "Formulation",
+          "prodCount" : 4,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "eye makeup",
+          "definition" : "miscellaneous cosmetic eye products including lash adhesives and tints (excludes eye shadow, mascara, eye primer, and eye liner)"
+        }, {
+          "id" : 81778,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:lip liner",
+          "pucKind" : "Formulation",
+          "prodCount" : 1,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "lip liner",
+          "definition" : "pencils for lining lips"
+        }, {
+          "id" : 81985,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:lip plumper",
+          "pucKind" : "Formulation",
+          "prodCount" : 20,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "lip plumper",
+          "definition" : "Lip products that are designed to plump lips"
+        }, {
+          "id" : 82293,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:lip color",
+          "pucKind" : "Formulation",
+          "prodCount" : 3,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "lip color",
+          "definition" : "colored lip products, excluding glosses"
+        }, {
+          "id" : 82469,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:makeup and related:lip balm",
+          "pucKind" : "Formulation",
+          "prodCount" : 4,
+          "genCat" : "Personal care",
+          "prodfam" : "makeup and related",
+          "prodtype" : "lip balm",
+          "definition" : "lip products primarily for protection"
+        }, {
+          "id" : 82650,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:hair conditioner",
+          "pucKind" : "Formulation",
+          "prodCount" : 18,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "hair conditioner",
+          "definition" : "rinse-out everyday hair conditioners (excluding combo shampoo/conditioner products)"
+        }, {
+          "id" : 83293,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care:shampoo",
+          "pucKind" : "Formulation",
+          "prodCount" : 54,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : "shampoo",
+          "definition" : "shampoos, including dual shampoo/conditioner products"
+        }, {
+          "id" : 83294,
+          "dtxsid" : "DTXSID0020232",
+          "displayPuc" : "Personal care:hair styling and care",
+          "pucKind" : "Formulation",
+          "prodCount" : 6,
+          "genCat" : "Personal care",
+          "prodfam" : "hair styling and care",
+          "prodtype" : null,
+          "definition" : "general hair styling or hair care products which do not fit into a more refined category"
+        } ]
+  recorded_at: 2026-03-04 20:09:34
+recorded_with: VCR-vcr/2.1.0

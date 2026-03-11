@@ -1,0 +1,24 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/file/mol/search/by-dtxcid/DTXCID505
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:08:09 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: text/plain
+      Content-Length: '362'
+    body:
+      string: "\n  Mrv1805 08081912432D          \n\n  0  0  0     0  0            999
+        V3000\nM  V30 BEGIN CTAB\nM  V30 COUNTS 4 3 0 0 0\nM  V30 BEGIN ATOM\nM  V30
+        1 C 2.3093 0 0 0\nM  V30 2 C 1.5386 -1.3333 0 0\nM  V30 3 O 2.3093 -2.6667
+        0 0\nM  V30 4 N 0 -1.3333 0 0\nM  V30 END ATOM\nM  V30 BEGIN BOND\nM  V30
+        1 1 1 2\nM  V30 2 2 2 3\nM  V30 3 1 2 4\nM  V30 END BOND\nM  V30 END CTAB\nM
+        \ END\n"
+  recorded_at: 2026-03-04 20:08:10
+recorded_with: VCR-vcr/2.1.0

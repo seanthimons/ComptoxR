@@ -4,10 +4,12 @@
 \alias{ct_bioactivity_data_search_bulk}
 \title{Get bioactivity data for a batch of DTXSIDs}
 \usage{
-ct_bioactivity_data_search_bulk(query)
+ct_bioactivity_data_search_bulk(query, annotate = FALSE)
 }
 \arguments{
 \item{query}{Character vector of strings to send in request body}
+
+\item{annotate}{Join assay annotations by aeid}
 }
 \value{
 Returns a scalar value

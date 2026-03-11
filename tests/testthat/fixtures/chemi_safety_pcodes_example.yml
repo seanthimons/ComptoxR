@@ -1,0 +1,204 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/safety/pcodes
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 04 Mar 2026 20:03:06 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"code":"P101","codes":["P101"],"description":"If medical advice is
+        needed, have product container or label at hand.","obsolete":false},{"code":"P102","codes":["P102"],"description":"Keep
+        out of reach of children.","obsolete":false},{"code":"P103","codes":["P103"],"description":"Read
+        carefully and follow all instructions.","obsolete":false},{"code":"P201","codes":["P201"],"description":"(Obsolete)
+        Obtain special instructions before use.","obsolete":true},{"code":"P202","codes":["P202"],"description":"(Obsolete)
+        Do not handle until all safety precautions have been read and understood.","obsolete":true},{"code":"P203","codes":["P203"],"description":"Obtain,
+        read and follow all safety instructions before use.","obsolete":false},{"code":"P210","codes":["P210"],"description":"Keep
+        away from heat, hot surface, sparks, open flames and other ignition sources.
+        No smoking.","obsolete":false},{"code":"P211","codes":["P211"],"description":"Do
+        not spray on an open flame or other ignition source.","obsolete":false},{"code":"P212","codes":["P212"],"description":"Avoid
+        heating under confinement or reduction of the desensitized agent.","obsolete":false},{"code":"P220","codes":["P220"],"description":"Keep
+        away from clothing and other combustible materials.","obsolete":false},{"code":"P221","codes":["P221"],"description":"(Obsolete)
+        Take any precaution to avoid mixing with combustibles/...","obsolete":true},{"code":"P222","codes":["P222"],"description":"Do
+        not allow contact with air.","obsolete":false},{"code":"P223","codes":["P223"],"description":"Do
+        not allow contact with water.","obsolete":false},{"code":"P230","codes":["P230"],"description":"Keep
+        wetted with ...","obsolete":false},{"code":"P231","codes":["P231"],"description":"Handle
+        and store contents under inert gas/...","obsolete":false},{"code":"P232","codes":["P232"],"description":"Protect
+        from moisture.","obsolete":false},{"code":"P233","codes":["P233"],"description":"Keep
+        container tightly closed.","obsolete":false},{"code":"P234","codes":["P234"],"description":"Keep
+        only in original container.","obsolete":false},{"code":"P235","codes":["P235"],"description":"Keep
+        cool.","obsolete":false},{"code":"P236","codes":["P236"],"description":"Keep
+        only in original packaging; Division .. in the transport configuraion.","obsolete":false},{"code":"P240","codes":["P240"],"description":"Ground/bond
+        container and receiving equipment.","obsolete":false},{"code":"P241","codes":["P241"],"description":"Use
+        explosion-proof [electrical/ventilating/lighting/.../] equipment.","obsolete":false},{"code":"P242","codes":["P242"],"description":"Use
+        only non-sparking tools.","obsolete":false},{"code":"P243","codes":["P243"],"description":"Take
+        precautionary measures against static discharge.","obsolete":false},{"code":"P244","codes":["P244"],"description":"Keep
+        valves and fittings free from oil and grease.","obsolete":false},{"code":"P250","codes":["P250"],"description":"Do
+        not subject to grinding/shock/friction/...","obsolete":false},{"code":"P251","codes":["P251"],"description":"Do
+        not pierce or burn, even after use.","obsolete":false},{"code":"P260","codes":["P260"],"description":"Do
+        not breathe dust/fume/gas/mist/vapors/spray.","obsolete":false},{"code":"P261","codes":["P261"],"description":"Avoid
+        breathing dust/fume/gas/mist/vapors/spray.","obsolete":false},{"code":"P262","codes":["P262"],"description":"Do
+        not get in eyes, on skin, or on clothing.","obsolete":false},{"code":"P263","codes":["P263"],"description":"Avoid
+        contact during pregnancy/while nursing.","obsolete":false},{"code":"P264","codes":["P264"],"description":"Wash
+        hands [and …] thoroughly after handling.","obsolete":false},{"code":"P265","codes":["P265"],"description":"Do
+        not touch eyes.","obsolete":false},{"code":"P270","codes":["P270"],"description":"Do
+        not eat, drink or smoke when using this product.","obsolete":false},{"code":"P271","codes":["P271"],"description":"Use
+        only outdoors or in a well-ventilated area.","obsolete":false},{"code":"P272","codes":["P272"],"description":"Contaminated
+        work clothing should not be allowed out of the workplace.","obsolete":false},{"code":"P273","codes":["P273"],"description":"Avoid
+        release to the environment.","obsolete":false},{"code":"P280","codes":["P280"],"description":"Wear
+        protective gloves/protective clothing/eye protection/face protection/hearing
+        protection/...","obsolete":false},{"code":"P281","codes":["P281"],"description":"(Obsolete)Use
+        personal protective equipment as required.","obsolete":true},{"code":"P282","codes":["P282"],"description":"Wear
+        cold insulating glovesand either face shield or eye protection.","obsolete":false},{"code":"P283","codes":["P283"],"description":"Wear
+        fire resistant or flame retardant clothing.","obsolete":false},{"code":"P284","codes":["P284"],"description":"[In
+        case of inadequate ventilation] Wear respiratory protection.","obsolete":false},{"code":"P285","codes":["P285"],"description":"(Obsolete)
+        In case of inadequate ventilation wear respiratory protection.","obsolete":true},{"code":"P231+P232","codes":["P231","P232"],"description":"Handle
+        and store contents under inert gas/... Protect from moisture.","obsolete":false},{"code":"P264+P265","codes":["P264","P265"],"description":"Wash
+        hands [and …] thoroughly after handling. Do not touch eyes.","obsolete":false},{"code":"P235+P410","codes":["P235","P410"],"description":"(Obsolete)
+        Keep cool. Protect from sunlight.","obsolete":true},{"code":"P301","codes":["P301"],"description":"IF
+        SWALLOWED:","obsolete":false},{"code":"P302","codes":["P302"],"description":"IF
+        ON SKIN:","obsolete":false},{"code":"P303","codes":["P303"],"description":"IF
+        ON SKIN (or hair):","obsolete":false},{"code":"P304","codes":["P304"],"description":"IF
+        INHALED:","obsolete":false},{"code":"P305","codes":["P305"],"description":"IF
+        IN EYES:","obsolete":false},{"code":"P306","codes":["P306"],"description":"IF
+        ON CLOTHING:","obsolete":false},{"code":"P307","codes":["P307"],"description":"(Obsolete)
+        IF exposed:","obsolete":true},{"code":"P308","codes":["P308"],"description":"IF
+        exposed or concerned:","obsolete":false},{"code":"P309","codes":["P309"],"description":"(Obsolete)
+        IF exposed or if you feel unwell","obsolete":true},{"code":"P310","codes":["P310"],"description":"(Obsolete)
+        Immediately call a POISON CENTER or doctor/physician.","obsolete":true},{"code":"P311","codes":["P311"],"description":"(Obsolete)
+        Call a POISON CENTER or doctor/...","obsolete":true},{"code":"P312","codes":["P312"],"description":"(Obsolete)
+        Call a POISON CENTER or doctor/... if you feel unwell.","obsolete":true},{"code":"P313","codes":["P313"],"description":"(Obsolete)
+        Get medical advice/attention.","obsolete":true},{"code":"P314","codes":["P314"],"description":"(Obsolete)
+        Get medical advice/attention if you feel unwell.","obsolete":true},{"code":"P315","codes":["P315"],"description":"(Obsolete)
+        Get immediate medical advice/attention.","obsolete":true},{"code":"P316","codes":["P316"],"description":"Get
+        emergency medical help immediately.","obsolete":false},{"code":"P317","codes":["P317"],"description":"Get
+        emergency medical help.","obsolete":false},{"code":"P318","codes":["P318"],"description":"if
+        exposed or concerned, get medical advice.","obsolete":false},{"code":"P319","codes":["P319"],"description":"Get
+        medical help if you feel unwell.","obsolete":false},{"code":"P320","codes":["P320"],"description":"Specific
+        treatment is urgent (see ... on this label).","obsolete":false},{"code":"P321","codes":["P321"],"description":"Specific
+        treatment (see ... on this label).","obsolete":false},{"code":"P322","codes":["P322"],"description":"(Obsolete)
+        Specific measures (see ...on this label).","obsolete":true},{"code":"P330","codes":["P330"],"description":"Rinse
+        mouth.","obsolete":false},{"code":"P331","codes":["P331"],"description":"Do
+        NOT induce vomiting.","obsolete":false},{"code":"P332","codes":["P332"],"description":"IF
+        SKIN irritation occurs:","obsolete":false},{"code":"P333","codes":["P333"],"description":"If
+        skin irritation or rash occurs:","obsolete":false},{"code":"P334","codes":["P334"],"description":"Immerse
+        in cool water [or wrap in wet bandages].","obsolete":false},{"code":"P335","codes":["P335"],"description":"Brush
+        off loose particles from skin.","obsolete":false},{"code":"P336","codes":["P336"],"description":"Thaw
+        frosted parts with lukewarm water. Do not rub affected area.","obsolete":false},{"code":"P337","codes":["P337"],"description":"If
+        eye irritation persists:","obsolete":false},{"code":"P338","codes":["P338"],"description":"Remove
+        contact lenses, if present and easy to do. Continue rinsing.","obsolete":false},{"code":"P340","codes":["P340"],"description":"Remove
+        person to fresh air and keep comfortable for breathing.","obsolete":false},{"code":"P341","codes":["P341"],"description":"(Obsolete)
+        If breathing is difficult, remove victim to fresh air and keep at rest in
+        a position comfortable for breathing.","obsolete":true},{"code":"P342","codes":["P342"],"description":"If
+        experiencing respiratory symptoms:","obsolete":false},{"code":"P350","codes":["P350"],"description":"(Obsolete)
+        Gently wash with plenty of soap and water.","obsolete":true},{"code":"P351","codes":["P351"],"description":"Rinse
+        cautiously with water for several minutes.","obsolete":false},{"code":"P352","codes":["P352"],"description":"Wash
+        with plenty of water/...","obsolete":false},{"code":"P353","codes":["P353"],"description":"Rinse
+        skin with water [or shower].","obsolete":false},{"code":"P354","codes":["P354"],"description":"Immediately
+        rinse with water for several minutes.","obsolete":false},{"code":"P360","codes":["P360"],"description":"Rinse
+        immediately contaminated clothing and skin with plenty of water before removing
+        clothes.","obsolete":false},{"code":"P361","codes":["P361"],"description":"Take
+        off immediately all contaminated clothing.","obsolete":false},{"code":"P362","codes":["P362"],"description":"Take
+        off contaminated clothing.","obsolete":false},{"code":"P363","codes":["P363"],"description":"Wash
+        contaminated clothing before reuse.","obsolete":false},{"code":"P364","codes":["P364"],"description":"And
+        wash it before reuse.","obsolete":false},{"code":"P370","codes":["P370"],"description":"In
+        case of fire:","obsolete":false},{"code":"P371","codes":["P371"],"description":"In
+        case of major fire and large quantities:","obsolete":false},{"code":"P372","codes":["P372"],"description":"Explosion
+        risk.","obsolete":false},{"code":"P373","codes":["P373"],"description":"DO
+        NOT fight fire when fire reaches explosives.","obsolete":false},{"code":"P374","codes":["P374"],"description":"(Obsolete)
+        Fight fire with normal precautions from a reasonable distance.","obsolete":true},{"code":"P375","codes":["P375"],"description":"Fight
+        fire remotely due to the risk of explorsion.","obsolete":false},{"code":"P376","codes":["P376"],"description":"Stop
+        leak if safe to do so.","obsolete":false},{"code":"P377","codes":["P377"],"description":"Leaking
+        gas fire: Do not extinguish, unless leak can be stopped safely.","obsolete":false},{"code":"P378","codes":["P378"],"description":"Use
+        ... to extinguish.","obsolete":false},{"code":"P380","codes":["P380"],"description":"Evacuate
+        area.","obsolete":false},{"code":"P381","codes":["P381"],"description":"In
+        case of leakage, eliminate all ignition sources.","obsolete":false},{"code":"P390","codes":["P390"],"description":"Absorb
+        spillage to prevent material damage.","obsolete":false},{"code":"P391","codes":["P391"],"description":"Collect
+        spillage.","obsolete":false},{"code":"P301+P310","codes":["P301","P310"],"description":"(Obsolete)
+        IF SWALLOWED: Immediately call a POISON CENTER/doctor/...","obsolete":true},{"code":"P301+P312","codes":["P301","P312"],"description":"(Obsolete)
+        IF SWALLOWED: call a POISON CENTER/doctor/... IF you feel unwell.","obsolete":true},{"code":"P301+P316","codes":["P301","P316"],"description":"IF
+        SWALLOWED: Get emergency medical help immediately.","obsolete":false},{"code":"P301+P317","codes":["P301","P317"],"description":"IF
+        SWALLOWED: Get medical help.","obsolete":false},{"code":"P301+P330+P331","codes":["P301","P330","P331"],"description":"IF
+        SWALLOWED: Rinse mouth. Do NOT induce vomiting.","obsolete":false},{"code":"P302+P317","codes":["P302","P317"],"description":"IF
+        ON SKIN: Get medical help.","obsolete":false},{"code":"P302+P334","codes":["P302","P334"],"description":"IF
+        ON SKIN: Immerse in cool water or wrap in wet bandages.","obsolete":false},{"code":"P302+P335+P334","codes":["P302","P335","P334"],"description":"Brush
+        off loose particles from skin. Immerse in cool water [or wrap in wet bandages].","obsolete":false},{"code":"P302+P350","codes":["P302","P350"],"description":"(Obsolete)
+        IF ON SKIN: Gently wash with plenty of soap and water.","obsolete":true},{"code":"P302+P352","codes":["P302","P352"],"description":"IF
+        ON SKIN: wash with plenty of water/...","obsolete":false},{"code":"P302+P361+P354","codes":["P302","P361","P354"],"description":"IF
+        ON SKIN: Take off Immediately all contaminated clothing. Immediately rinse
+        with water for several minutes.","obsolete":false},{"code":"P303+P361+P353","codes":["P303","P361","P353"],"description":"IF
+        ON SKIN (or hair): Take off Immediately all contaminated clothing. Rinse SKIN
+        with water [or shower].","obsolete":false},{"code":"P304+P312","codes":["P304","P312"],"description":"(Obsolete)
+        IF INHALED: Call a POISON CENTER/doctor/... if you feel unwell.","obsolete":true},{"code":"P304+P317","codes":["P304","P317"],"description":"IF
+        INHALED: Get medical help.","obsolete":false},{"code":"P304+P340","codes":["P304","P340"],"description":"IF
+        INHALED: Remove person to fresh air and keep comfortable for breathing.","obsolete":false},{"code":"P304+P341","codes":["P304","P341"],"description":"(Obsolete)
+        IF INHALED: If breathing is difficult, remove victim to fresh air and keep
+        at rest in a position comfortable for breathing.","obsolete":true},{"code":"P305+P351+P338","codes":["P305","P351","P338"],"description":"IF
+        IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses
+        if present and easy to do - continue rinsing.","obsolete":false},{"code":"P305+P354+P338","codes":["P305","P354","P338"],"description":"IF
+        IN EYES: Immediately rinse with water for several minutes. Remove contact
+        lenses if present and easy to do. Continue rinsing.","obsolete":false},{"code":"P306+P360","codes":["P306","P360"],"description":"IF
+        ON CLOTHING: Rinse Immediately contaminated CLOTHING and SKIN with plenty
+        of water before removing clothes.","obsolete":false},{"code":"P308+P316","codes":["P308","P316"],"description":"IF
+        exposed or concerned: Get emergency medical help immediately.","obsolete":false},{"code":"P307+P311","codes":["P307","P311"],"description":"(Obsolete)
+        IF exposed: call a POISON CENTER or doctor/physician.","obsolete":true},{"code":"P308+P311","codes":["P308","P311"],"description":"(Obsolete)
+        IF exposed or concerned: Call a POISON CENTER/doctor/...","obsolete":true},{"code":"P308+P313","codes":["P308","P313"],"description":"(Obsolete)
+        IF exposed or concerned: Get medical advice/attention.","obsolete":true},{"code":"P309+P311","codes":["P309","P311"],"description":"(Obsolete)
+        IF exposed or if you feel unwell: call a POISON CENTER or doctor/physician.","obsolete":true},{"code":"P332+P313","codes":["P332","P313"],"description":"(Obsolete)
+        IF SKIN irritation occurs: Get medical advice/attention.","obsolete":true},{"code":"P332+P317","codes":["P332","P317"],"description":"If
+        skin irritation occurs: Get medical help.","obsolete":false},{"code":"P333+P317","codes":["P333","P317"],"description":"If
+        skin irritation or rash occurs: Get medical help.","obsolete":false},{"code":"P336+P317","codes":["P336","P317"],"description":"Immediately
+        thaw frosted parts with lukewarm water. Do not rub affected area. Get medical
+        help.","obsolete":false},{"code":"P337+P317","codes":["P337","P317"],"description":"If
+        eye irritation persists: Get medical help.","obsolete":false},{"code":"P342+P316","codes":["P342","P316"],"description":"If
+        experiencing respiratory symptoms: Get emergence medical help immediately.","obsolete":false},{"code":"P333+P313","codes":["P333","P313"],"description":"(Obsolete)
+        IF SKIN irritation or rash occurs: Get medical advice/attention.","obsolete":true},{"code":"P335+P334","codes":["P335","P334"],"description":"(Obsolete)
+        Brush off loose particles from skin. Immerse in cool water/wrap in wet bandages.","obsolete":true},{"code":"P337+P313","codes":["P337","P313"],"description":"(Obsolete)
+        IF eye irritation persists: Get medical advice/attention.","obsolete":true},{"code":"P342+P311","codes":["P342","P311"],"description":"(Obsolete)
+        IF experiencing respiratory symptoms: Call a POISON CENTER/doctor/...","obsolete":true},{"code":"P361+P364","codes":["P361","P364"],"description":"Take
+        off immediately all contaminated clothing and wash it before reuse.","obsolete":false},{"code":"P362+P364","codes":["P362","P364"],"description":"Take
+        off contaminated clothing and wash it before reuse.","obsolete":false},{"code":"P370+P376","codes":["P370","P376"],"description":"in
+        case of fire: Stop leak if safe to do so.","obsolete":false},{"code":"P370+P378","codes":["P370","P378"],"description":"In
+        case of fire: Use ... to extinguish.","obsolete":false},{"code":"P370+P380","codes":["P370","P380"],"description":"(Obsolete)
+        In case of fire: Evacuate area.","obsolete":true},{"code":"P370+P380+P375","codes":["P370","P380","P375"],"description":"In
+        case of fire: Evacuate area. Fight fire remotely due to the risk of explosion.","obsolete":false},{"code":"P371+P380+P375","codes":["P371","P380","P375"],"description":"In
+        case of major fire and large quantities: Evacuate area. Fight fire remotely
+        due to the risk of explosion.","obsolete":false},{"code":"P370+P372+P380+P373","codes":["P370","P372","P380","P373"],"description":"In
+        case of fire: Explosion risk. Evacuate area. DO NOT fight fire when fire reaches
+        explosives.","obsolete":false},{"code":"P370+P380+P375[+P378]","codes":["P370","P380","P375","P378"],"description":"In
+        case of fire: Evacuate area. Fight fire remotely due to the risk of explosion.
+        [Use…to extinguish].]","obsolete":false},{"code":"P401","codes":["P401"],"description":"Store
+        in accordance with ...","obsolete":false},{"code":"P402","codes":["P402"],"description":"Store
+        in a dry place.","obsolete":false},{"code":"P403","codes":["P403"],"description":"Store
+        in a well-ventilated place.","obsolete":false},{"code":"P404","codes":["P404"],"description":"Store
+        in a closed container.","obsolete":false},{"code":"P405","codes":["P405"],"description":"Store
+        locked up.","obsolete":false},{"code":"P406","codes":["P406"],"description":"Store
+        in corrosive resistant/... container with a resistant inner liner.","obsolete":false},{"code":"P407","codes":["P407"],"description":"Maintain
+        air gap between stacks or pallets.","obsolete":false},{"code":"P410","codes":["P410"],"description":"Protect
+        from sunlight.","obsolete":false},{"code":"P411","codes":["P411"],"description":"Store
+        at temperatures not exceeding ... °C/...°F.","obsolete":false},{"code":"P412","codes":["P412"],"description":"Do
+        not expose to temperatures exceeding 50 °C/ 122 °F.","obsolete":false},{"code":"P413","codes":["P413"],"description":"Store
+        bulk masses greater than ... kg/...lbs at temperatures not exceeding ... °C/...°F.","obsolete":false},{"code":"P420","codes":["P420"],"description":"Store
+        separately.","obsolete":false},{"code":"P422","codes":["P422"],"description":"(Obsolete)
+        Store contents under ...","obsolete":true},{"code":"P402+P404","codes":["P402","P404"],"description":"Store
+        in a dry place. Store in a closed container.","obsolete":false},{"code":"P403+P233","codes":["P403","P233"],"description":"Store
+        in a well-ventilated place. Keep container tightly closed.","obsolete":false},{"code":"P403+P235","codes":["P403","P235"],"description":"Store
+        in a well-ventilated place. Keep cool.","obsolete":false},{"code":"P410+P403","codes":["P410","P403"],"description":"Protect
+        from sunlight. Store in a well-ventilated place.","obsolete":false},{"code":"P410+P412","codes":["P410","P412"],"description":"Protect
+        from sunlight. Do not expose to temperatures exceeding 50 °C/122°F.","obsolete":false},{"code":"P411+P235","codes":["P411","P235"],"description":"(Obsolete)
+        Store at temperatures not exceeding ... °C/...°F. Keep cool.","obsolete":true},{"code":"P501","codes":["P501"],"description":"Dispose
+        of contents/container to ...","obsolete":false},{"code":"P502","codes":["P502"],"description":"Refer
+        to manufacturer or supplier for information on recovery or recycling","obsolete":false},{"code":"P503","codes":["P503"],"description":"Refer
+        to manufacturer/supplier... for information on disposal/recovery/recycling.","obsolete":false}]'
+  recorded_at: 2026-03-04 20:03:07
+recorded_with: VCR-vcr/2.1.0

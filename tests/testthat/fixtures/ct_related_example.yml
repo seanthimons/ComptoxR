@@ -1,0 +1,70 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/dashboard-api/ccdapp2/related-substances/search/by-dtxsid?id=DTXSID0024842
+  response:
+    status: 200
+    headers:
+      Date: Wed, 04 Mar 2026 20:12:46 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Content-Type: application/hal+json
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJztmN1P4zgQwN/5K6w8pVLdxh/5WmkfSqGUr5bdHBzL6XQyjiHWpUk3cRHVav/3k0NT2pIG
+        grjTcUe
+        lPmQ89kw8M794/GMHAINngikR7jElDPAJJLM4bmt5zHJ1mobyRlYMLibtztekobrP
+        ZahFxt4vl8Hhnm
+        Vh6lFsPIwyxfTYb+DHDgDPqQNg5CIWXIlC44bFuVjIOcuzpJjmeI5FIMXQ
+        L+fwdDJNZ0l4GK56BoBxK
+        xKRSR7MrnPFEi4eFAp7C41pJm5ElolwxCbF2xq9iQxF3gY85Wkb
+        jNojeC1zM5qHWXo/Fyqax63SLuNK
+        3olenrN5vmFZ5qlKp2JDOknjQZpNZjHbGGB3ImO34pTl
+        +ZMpSfqwmORVw7NYyeL9E5EoPWiVbyYyLhJ
+        V6d13fiLuRKylaF20J3JebEPxBNAnsH8/FZkC
+        fJbp4LdBJG8jkSvA0+RGhiLhAsgEMK4V+BywJNRDuc
+        yVSPgcpDdglsjvMwF4JCaSsxjoWUqn
+        WJYvo65EJtINL1WqWFzpv0rvOctVUOTK5s7PpoyX0VyR5xMZi
+        ydhSngkA5XJ5LZq5FjMN8QR
+        ywOVzbiaZeJwwm4LK6t5molY79My5frp7CEuzoZCuUq1gkyTPJLTIhSB
+        YBmPRAj6ix001pca
+        pnciK/3cAeBne2ux2Ra2qY9eXmwIW5BaEFWXml6rvtRWNJ6Wmi6uXZmbGK6VV5i
+        GgrOE6ULc
+        Vmr20zorE3+9yIw+coaEjMZkudR6rWHP7VBaU21aAVPHosTHbvOyM5yOVZr+F9dd6f9G0b
+        le
+        05JrEtXHmjT6Kz/z87g1Mvv9cavfH5e6G6VqHCb96PAzCrrLAHc5ghgSSKENHehCD/oQWRAh
+        iBwT
+        Wy3kmghDRCHyWohAZEPkdyPkQeQP2xgie4jbaEjWDC4IYPTGp+fD8WB8MTq46o3g+XAw
+        GPTG34IeHJX
+        6lWhQ2exZMuANhSdkWNnqJ3DoL5NwCxSM3mMGqIgpIHPAwDJ3daKoSIC8dEsL
+        ZKLzIldGPU2IRTHyaA
+        OaEAdiB9rVNMF6sVqc0BWNl+PkWZhUf7e38oQOsV/DE9vvEL+OJ7bf
+        wYi6lLi+V+r91z7jW3Dymm/4y
+        +NaiZOmMFlEtxIm1NTosE1NFQyR09JsIRC53Qg5ELkFRkgN
+        RnbPLg+Ov54Hp/2Lq97gbTGCNhTeDUZ8
+        y/MsivyXc8S1qQ0xhU41SHyK6jnyYK8pSCJxz94a
+        JtgaUrQdJoSSjm0v5z6FiVYgludQ+kjGD5g0h0l
+        1bLecT16BlTLONWcUXKCE6nMJtkxMWxiZ
+        mioexLiFXIh8iEk3whhiUoDGrwHNxdF+cLR/NDo9uPhycv
+        W2oCHvFTTIcqhLraacIdsOLNR1
+        vXIzqkFT2GvKGSVU9uagQd6QuDWgQXanljPI7mDXJZRajzz64Exjz
+        myJ7VbQND29LKL8LGY8
+        U0PFNzVvHKibIxsiF2LUjbAFMSoA49YAJjjeu9o/2z06OwgGw+BtAfNuGyLH
+        crBHGtxlEst1
+        IbEgqQYM8bBdXjlsAYy2txUwfTbN5rHkIJRCRSxJ47ckCh5iu6YPIqhDau9VCOogj1B
+        KHGfZ
+        L30gpTFSUq6ep0lTjixiu8kRhE3d9RDTK3BCW37BFLsbFQeXghqohhqDqy+9b4Nfz8f9y5Pj
+        o
+        7elxrs9llDL9q0ml7I+gR7exgzqebT+UrawtpUZgRIskxwwLsO/hRsYD2kNN4iLOg5azq04
+        irioQ4jv
+        U0oQKfU+uPEqbjRqeZo3PYtIv6zpKW5QIMYmdlqYmLrvsSCmLd33IIjtboQpxAVj
+        cB1jLg+uxqfnX0/
+        PToLg+Mv/ijHgd72y8Ucskz+LGC6Qk4v45vFRb0AmCoERKTX91O1yrgRk
+        Uwk5Dztiyjq36V2X85BNp7
+        i7cBMu7eZdx2OeK3xXYEeIa/fadZhlIYqNwsDP9fdbmfhPOrGj
+        /z//AlDe6/0=
+  recorded_at: 2026-03-04 20:12:47
+recorded_with: VCR-vcr/2.1.0

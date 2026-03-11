@@ -1,0 +1,26 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/bioactivity/aop/search/by-entrez-gene-id/INVALID_DTXSID_12345
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:05:38 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: no-cache, must-revalidate
+      Content-Type: application/json
+      Connection: close
+      Transfer-Encoding: chunked
+    body:
+      string: |-
+        {
+          "timestamp" : "2026-03-04T20:05:38.496+00:00",
+          "status" : 400,
+          "error" : "Bad Request",
+          "path" : "/bioactivity/aop/search/by-entrez-gene-id/INVALID_DTXSID_12345"
+        }
+  recorded_at: 2026-03-04 20:05:38
+recorded_with: VCR-vcr/2.1.0

@@ -1,0 +1,27 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://comptox.epa.gov/ctx-api/chemical/search/equal/INVALID_DTXSID_12345?projection=chemicalsearchall
+  response:
+    status: 400
+    headers:
+      Date: Wed, 04 Mar 2026 20:09:17 GMT
+      Server: Apache
+      Strict-Transport-Security: max-age=63072000; includeSubDomains; preload“
+      Access-Control-Allow-Origin: '*'
+      Vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+      Cache-Control: max-age=0, must-revalidate, no-transform
+      Content-Type: application/problem+json
+      nnCoection: close
+      Transfer-Encoding: chunked
+    body:
+      raw_gzip: |-
+        eJxtjrEKwjAQhnef4sjSRWzVunRTilAQBysiiEjaxBpME20uQxDf3Zg4Oh13393932sEQNA9
+        OIECCG2
+        0xaKRVN3JOBCBMqIVZbDjT8sNRmSQojVflmdZmDCOVMiwXXM6tDfOoHFQO6WV6wtY
+        a6sYZDBwYyUauO
+        oBkmp7WG6q8lLuj7Uv09k8XySTGCGUD1FtFEj9v160VKYmPE+9jG/+3f8E
+        bdd5W6FVsDyBslLCefT+A
+        EInSJg=
+  recorded_at: 2026-03-04 20:09:18
+recorded_with: VCR-vcr/2.1.0

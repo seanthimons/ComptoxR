@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param query Character vector of strings to send in request body
+#' @param coerce Logical. If TRUE, split results by propertyId into named list of data frames. Default: FALSE
 #' @return Returns a scalar value
 #' @export
 #'
@@ -11,13 +12,15 @@
 #' \dontrun{
 #' ct_chemical_property_predicted_search_bulk(query = c("DTXSID8023638", "DTXSID3033511", "DTXSID20582510"))
 #' }
-ct_chemical_property_predicted_search_bulk <- function(query) {
+ct_chemical_property_predicted_search_bulk <- function(query, coerce = FALSE) {
   result <- generic_request(
     query = query,
     endpoint = "chemical/property/predicted/search/by-dtxsid/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+
+  result <- run_hook("ct_chemical_property_predicted_search_bulk", "post_response", list(result = result, params = list(coerce = coerce)))
 
   return(result)
 }

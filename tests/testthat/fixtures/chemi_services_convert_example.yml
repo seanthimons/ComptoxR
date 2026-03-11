@@ -1,0 +1,25 @@
+http_interactions:
+- request:
+    method: POST
+    uri: https://hcd.rtpnc.epa.gov/api/services/convert
+    body:
+      string: '{"chemicals":[{"sid":"DTXSID60160518"},{"sid":"DTXSID2046541"},{"sid":"DTXSID70228451"}],"options":[]}'
+  response:
+    status: 500
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:04:55 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"timestamp":"2026-03-04T20:04:55.862+00:00","status":500,"error":"Internal
+        Server Error","message":"Cannot invoke \"String.hashCode()\" because \"<local3>\"
+        is null","path":"/api/services/convert"}'
+  recorded_at: 2026-03-04 20:04:56
+recorded_with: VCR-vcr/2.1.0

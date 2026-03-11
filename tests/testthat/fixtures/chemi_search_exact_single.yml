@@ -1,0 +1,23 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/search/exact?smiles=c1ccccc1
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:03:11 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"records":[{"id":3039242,"sid":"DTXSID3039242","name":"Benzene","casrn":"71-43-2","similarity":1.0,"mass":78.04695010185242,"formula":"C6
+        H6","smiles":"C1C=CC=CC=1","hazard":"VH","authority":"Authoritative","result":"FOUND","chemId":"71-43-2"}],"request":{"searchType":"EXACT","inputType":"SMILES","query":"c1ccccc1","smiles":"c1ccccc1","querySmiles":"c1ccccc1","offset":0,"limit":0,"params":{}},"limit":0,"offset":0,"totalRecordsCount":1,"features":{"isotopes":0,"charged":0,"multicomponent":0,"radicals":0,"salts":0,"polymers":0,"sgroups":0,"stereo":0,"chiral":0,"elements":{"C":1,"H":1}},"recordsCount":1}'
+  recorded_at: 2026-03-04 20:03:11
+recorded_with: VCR-vcr/2.1.0

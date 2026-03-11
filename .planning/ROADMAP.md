@@ -13,7 +13,8 @@
 - v1.8 Testing Infrastructure — Phases 12-15 (shipped 2026-01-31)
 - v1.9 Schema Check Workflow Fix — Phases 16-18 (shipped 2026-02-12)
 - v2.0 Paginated Requests — Phases 19-21 (shipped 2026-02-24)
-- v2.1 Test Infrastructure — Phases 23-26 (shipped 2026-03-02)
+- v2.1 Test Infrastructure — Phases 23-26 (shipped 2026-03-02, verified 2026-03-09)
+- v2.2 Package Stabilization — Phases 27-30 (active)
 
 ## Phases
 
@@ -51,7 +52,12 @@
 </details>
 
 <details>
-<summary>v2.1 Test Infrastructure (Phases 23-26) — SHIPPED 2026-03-02</summary>
+<summary>v2.1 Test Infrastructure (Phases 23-26) — SHIPPED 2026-03-02 (verified 2026-03-09)</summary>
+
+> **Verification note (2026-03-09):** 3 plans had missing summaries due to a documentation
+> gap (work was executed but summaries were not written). Retroactive summaries created
+> after investigation confirmed all work was completed. Stale 07-version-detection-body-extraction
+> directory deleted.
 
 - [x] Phase 23: Build Fixes & Test Generator Core (5/5 plans) — completed 2026-02-27
 - [x] Phase 24: VCR Cassette Cleanup (3/3 plans) — completed 2026-02-27
@@ -59,6 +65,45 @@
 - [x] Phase 26: Pagination Tests & Coverage Hardening (2/2 plans) — completed 2026-03-01
 
 </details>
+
+### v2.2 Package Stabilization (Phases 27-30) — ACTIVE
+
+**Goal:** Migrate all user-facing ct_* functions to use generated stubs via generic_request(), classify functions by complexity, and get the package to a clean build + passing test state.
+
+- [x] Phase 27: Test Infrastructure Stabilization (completed 2026-03-10)
+  - **Goal:** Fix mechanical test blockers (VCR key sanitization, purrr::flatten warning, cassette re-recording) so tests can run reliably
+  - **Depends on:** v2.1 verification complete
+  - **Requirements:** [INFRA-27-01, INFRA-27-02, INFRA-27-03, INFRA-27-04, INFRA-27-05, INFRA-27-06]
+  - **Plans:** 3 plans
+    - [ ] 27-01-PLAN.md — NAMESPACE selective imports (eliminate purrr/jsonlite @import)
+    - [ ] 27-02-PLAN.md — VCR sanitization, health check script, and parallel recording script
+    - [ ] 27-03-PLAN.md — Execute cassette re-recording and validate results
+
+- [x] Phase 28: Thin Wrapper Migration (1/5 complete) (completed 2026-03-11)
+  - **Goal:** Build hook injection system and migrate all hand-written ct_* wrappers to generated stubs + hooks, deleting old wrapper files
+  - **Depends on:** Phase 27
+  - **Requirements:** [HOOK-28-01, HOOK-28-02, HOOK-28-03, HOOK-28-04, HOOK-28-05, HOOK-28-06, HOOK-28-07, HOOK-28-08, HOOK-28-09, HOOK-28-10]
+  - **Plans:** 5 plans
+    - [x] 28-01-PLAN.md — Hook registry foundation (.HookRegistry, run_hook, YAML config, .onLoad)
+    - [ ] 28-02-PLAN.md — Hook primitive functions and unit tests
+    - [ ] 28-03-PLAN.md — Delete pure pass-through wrappers and deprecated code
+    - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
+    - [ ] 28-05-PLAN.md — Stub regeneration, test generator update, full validation
+
+- [x] Phase 29: Direct Template Migration (completed 2026-03-11)
+  - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
+  - **Depends on:** Phase 28
+  - **Requirements:** [PROP-COERCE, PROP-DELETE, PROP-IDS, REL-MIGRATE, REL-VALIDATE, NEWS-DOC]
+  - **Plans:** 2 plans
+    - [ ] 29-01-PLAN.md — Property coerce hook, delete ct_properties and .prop_ids
+    - [ ] 29-02-PLAN.md — Migrate ct_related to generic_request
+
+- [x] Phase 30: Build Quality Validation (completed 2026-03-11)
+  - **Goal:** R CMD check produces 0 errors (warnings and notes acceptable)
+  - **Depends on:** Phase 29
+  - **Requirements:** [BUILD-CLEAN, YAML-DEP, DUP-ARG]
+  - **Plans:** 1 plan
+    - [ ] 30-01-PLAN.md — Add yaml dependency, fix duplicate endpoint argument, verify build
 
 ## Progress
 
@@ -89,3 +134,7 @@
 | 24. VCR Cassette Cleanup | v2.1 | 3/3 | Complete | 2026-02-27 |
 | 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
+| 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
+| 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
+| 29. Direct Template Migration | 2/2 | Complete    | 2026-03-11 | — |
+| 30. Build Quality Validation | 1/1 | Complete    | 2026-03-11 | — |

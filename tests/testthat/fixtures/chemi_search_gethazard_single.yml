@@ -1,0 +1,23 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/search/gethazard?sid=DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Wed, 04 Mar 2026 20:03:12 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '{"bingoId":7020182,"hazardName":"Eye Irritation","source":"ECHA CLP","score":"VH","authority":"Authoritative","route":"","category":"Eye
+        Dam. 1","hazardCode":"H318","testOrganism":""}'
+  recorded_at: 2026-03-04 20:03:12
+recorded_with: VCR-vcr/2.1.0

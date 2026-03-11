@@ -1,0 +1,337 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/safety/classes
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json;charset=UTF-8
+      Date: Wed, 04 Mar 2026 20:03:06 GMT
+      Server: nginx/1.21.4
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Transfer-Encoding: chunked
+      Vary:
+      - Accept-Encoding
+      - Origin
+      - Access-Control-Request-Method
+      - Access-Control-Request-Headers
+    body:
+      string: '[{"id":"H200-Unstable Explosive","obsolete":true,"code":"H200","statements":["Unstable
+        Explosive"],"classes":["Explosives"],"category":"Unstable Explosive","signal":"Danger","prevention":["P201","P202","P281"],"response":["P372","P373","P380"],"storage":["P401"],"disposal":["P501"]},{"id":"H201-Div
+        1.1","obsolete":true,"code":"H201","statements":["Explosive","mass explosion
+        hazard"],"classes":["Explosives"],"category":"Div 1.1","signal":"Danger","prevention":["P210","P230","P240","P250","P280"],"response":["P370+P380","P372","P373"],"storage":["P401"],"disposal":["P501"]},{"id":"H202-Div
+        1.2","obsolete":true,"code":"H202","statements":["Explosive","severe projection
+        hazard"],"classes":["Explosives"],"category":"Div 1.2","signal":"Danger","prevention":["P210","P230","P240","P250","P280"],"response":["P370+P380","P372","P373"],"storage":["P401"],"disposal":["P501"]},{"id":"H203-Div
+        1.3","obsolete":true,"code":"H203","statements":["Explosive","fire, blast
+        or projection hazard"],"classes":["Explosives"],"category":"Div 1.3","signal":"Danger","prevention":["P210","P230","P240","P250","P280"],"response":["P370+P380","P372","P373"],"storage":["P401"],"disposal":["P501"]},{"id":"H204-Category
+        2B","obsolete":false,"code":"H204","statements":["Fire or projection hazard"],"classes":["Explosives"],"category":"Category
+        2B","un_class":"Div 1.4","signal":"Warning","prevention":["P203","P210","P234","P236","P240","P250","P280"],"response":["P370+P372+P380+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H204-Category
+        2C","obsolete":false,"code":"H204","statements":["Fire or projection hazard"],"classes":["Explosives"],"category":"Category
+        2C","un_class":"Div 1.4","signal":"Warning","prevention":["P203","P210","P234","P236","P240","P250","P280"],"response":["P370+P380+P375+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H205-Div
+        1.5","obsolete":true,"code":"H205","statements":["May mass explode in fire"],"classes":["Explosives"],"category":"Div
+        1.5","signal":"Danger","prevention":["P210","P230","P240","P250","P280"],"response":["P370+P380","P372","P373"],"storage":["P401"],"disposal":["P501"]},{"id":"H205-Div
+        1.6","obsolete":true,"code":"H205","statements":[""],"classes":["Explosives"],"category":"Div
+        1.6","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H206-Category
+        1","obsolete":false,"code":"H206","statements":["Fire, blast or projection
+        hazard","increased risk of explosion if desensitizing agent is reduced"],"classes":["Desensitized
+        explosives"],"category":"Category 1","un_class":"Class 3 or Div 4.1","signal":"Danger","prevention":["P210","P212","P230","P233","P280"],"response":["P370+P380+P375"],"storage":["P401"],"disposal":["P501"]},{"id":"H207-Category
+        2","obsolete":false,"code":"H207","statements":["Fire or projection hazard","increased
+        risk of explosion if desensitizing agent is reduced"],"classes":["Desensitized
+        explosives"],"category":"Category 2","un_class":"Class 3 or Div 4.1","signal":"Danger","prevention":["P210","P212","P230","P233","P280"],"response":["P370+P380+P375"],"storage":["P401"],"disposal":["P501"]},{"id":"H207-Category
+        3","obsolete":false,"code":"H207","statements":["Fire or projection hazard","increased
+        risk of explosion if desensitizing agent is reduced"],"classes":["Desensitized
+        explosives"],"category":"Category 3","un_class":"Class 3 or Div 4.1","signal":"Warning","prevention":["P210","P212","P230","P233","P280"],"response":["P370+P380+P375"],"storage":["P401"],"disposal":["P501"]},{"id":"H208-Category
+        4","obsolete":false,"code":"H208","statements":["Fire hazard","increased risk
+        of explosion if desensitizing agent is reduced"],"classes":["Desensitized
+        explosives"],"category":"Category 4","un_class":"Class 3 or Div 4.1","signal":"Warning","prevention":["P210","P212","P230","P233","P280"],"response":["P371+P380+P375"],"storage":["P401"],"disposal":["P501"]},{"id":"H209-Category
+        1","obsolete":false,"code":"H209","statements":["Explosive"],"classes":["Explosives"],"category":"Category
+        1","signal":"Danger","prevention":["P203","P230","P234","P236","P210","P230","P240","P250","P280"],"response":["P370+P372+P380+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H209-Category
+        2A","obsolete":false,"code":"H209","statements":["Explosive"],"classes":["Explosives"],"category":"Category
+        2A","un_class":"Div 1.1, 1.2, 1.3, 1.4, 1.5, 1.6","signal":"Danger","prevention":["P203","P230","P234","P236","P210","P230","P240","P250","P280"],"response":["P370+P372+P380+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H210-Category
+        1","obsolete":false,"code":"H210","statements":["Very sensitive"],"classes":["Explosives"],"category":"Category
+        1","signal":"Danger","prevention":["P230","P210","P230","P240","P250","P280"],"response":["P370+P372+P380+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H211-Category
+        1","obsolete":false,"code":"H211","statements":["Maybe sensitive"],"classes":["Explosives"],"category":"Category
+        1","signal":"Danger","prevention":["P230","P210","P230","P240","P250","P280"],"response":["P370+P372+P380+P373"],"storage":["P401"],"disposal":["P503"]},{"id":"H220-1A:
+        Flammable gas, Pyrophoric gas, Chemically unstable gas A,B","obsolete":false,"code":"H220","statements":["Extremely
+        flammable gas"],"classes":["Flammable gases"],"category":"1A: Flammable gas,
+        Pyrophoric gas, Chemically unstable gas A,B","un_class":"Div 2.1","signal":"Danger","prevention":["P230","P210","P222","P280"],"response":["P377","P381"],"storage":["P403"],"disposal":[""]},{"id":"H221-1B","obsolete":false,"code":"H221","statements":["Flammable
+        gas"],"classes":["Flammable gases"],"category":"1B","un_class":"Div 2.1","signal":"Danger","prevention":["P210"],"response":["P377","P381"],"storage":["P403"],"disposal":[""]},{"id":"H221-Category
+        2","obsolete":false,"code":"H221","statements":["Flammable gas"],"classes":["Flammable
+        gases"],"category":"Category 2","signal":"Warning","prevention":["P210"],"response":["P377","P381"],"storage":["P403"],"disposal":[""]},{"id":"H222-Category
+        1","obsolete":false,"code":"H222","statements":["Extremely flammable aerosol"],"classes":["Aerosols"],"category":"Category
+        1","un_class":"Div 2.1","signal":"Danger","prevention":["P210","P211","P251"],"response":[""],"storage":["P410+P412"],"disposal":[""]},{"id":"H223-Category
+        2","obsolete":false,"code":"H223","statements":["Flammable aerosol"],"classes":["Aerosols"],"category":"Category
+        2","un_class":"Div 2.1","signal":"Warning","prevention":["P210","P211","P251"],"response":[""],"storage":["P410+P412"],"disposal":[""]},{"id":"H224-Category
+        1","obsolete":false,"code":"H224","statements":["Extremely flammable liquid
+        and vapor"],"classes":["Flammable liquids"],"category":"Category 1","un_class":"Class
+        3","signal":"Danger","prevention":["P210","P233","P240","P241","P242","P243","P280"],"response":["P303+P361+P353","P370+P378"],"storage":["P403+P235"],"disposal":["P501"]},{"id":"H225-Category
+        2","obsolete":false,"code":"H225","statements":["Highly Flammable liquid and
+        vapor"],"classes":["Flammable liquids"],"category":"Category 2","un_class":"Class
+        3","signal":"Danger","prevention":["P210","P233","P240","P241","P242","P243","P280"],"response":["P303+P361+P353","P370+P378"],"storage":["P403+P235"],"disposal":["P501"]},{"id":"H226-Category
+        3","obsolete":false,"code":"H226","statements":["Flammable liquid and vapor"],"classes":["Flammable
+        liquids"],"category":"Category 3","un_class":"Class 3","signal":"Warning","prevention":["P210","P233","P240","P241","P242","P243","P280"],"response":["P303+P361+P353","P370+P378"],"storage":["P403+P235"],"disposal":["P501"]},{"id":"H227-Category
+        4","obsolete":false,"code":"H227","statements":["Combustible liquid"],"classes":["Flammable
+        liquids"],"category":"Category 4","signal":"Warning","prevention":["P210","P280"],"response":["P370+P378"],"storage":["P403"],"disposal":["P501"]},{"id":"H228-Category
+        1","obsolete":false,"code":"H228","statements":["Flammable solid"],"classes":["Flammable
+        solids"],"category":"Category 1","un_class":"Div 4.1","signal":"Danger","prevention":["P210","P240","P241","P280"],"response":["P370+P378"],"storage":[""],"disposal":[""]},{"id":"H228-Category
+        2","obsolete":false,"code":"H228","statements":["Flammable solid"],"classes":["Flammable
+        solids"],"category":"Category 2","un_class":"Div 4.1","signal":"Warning","prevention":["P210","P240","P241","P280"],"response":["P370+P378"],"storage":[""],"disposal":[""]},{"id":"H229-Category
+        1","obsolete":false,"code":"H229","statements":["Pressurized container: may
+        burst if heated"],"classes":["Aerosols"],"category":"Category 1","un_class":"Div
+        2.1","signal":"Danger","prevention":["P210","P211","P251"],"response":[""],"storage":["P410+P412"],"disposal":[""]},{"id":"H229-Category
+        2","obsolete":false,"code":"H229","statements":["Pressurized container: may
+        burst if heated"],"classes":["Aerosols"],"category":"Category 2","un_class":"Div
+        2.1","signal":"Warning","prevention":["P210","P211","P251"],"response":[""],"storage":["P410+P412"],"disposal":[""]},{"id":"H229-Category
+        3","obsolete":false,"code":"H229","statements":["Pressurized container: may
+        burst if heated"],"classes":["Aerosols"],"category":"Category 3","un_class":"Div
+        2.2","signal":"Warning","prevention":["P210","P251"],"response":[""],"storage":["P410+P412"],"disposal":[""]},{"id":"H230-1A,
+        Chemically unstable gas A","obsolete":false,"code":"H230","statements":["May
+        react explosively even in the absence of air"],"classes":["Flammable gases"],"category":"1A,
+        Chemically unstable gas A","un_class":"Div 2.1","prevention":["P203","P210"],"response":["P337","P381"],"storage":["P403"],"disposal":[""]},{"id":"H231-1A,
+        Chemically unstable gas B","obsolete":false,"code":"H231","statements":["May
+        react explosively even in the absence of air at elevated pressure and/or temperature"],"classes":["Flammable
+        gases"],"category":"1A, Chemically unstable gas B","un_class":"Div 2.1","prevention":["P203","P210"],"response":["P337","P381"],"storage":["P403"],"disposal":[""]},{"id":"H232-1A,
+        Pyrophoric gas","obsolete":false,"code":"H232","statements":["May ignite spontaneously
+        if exposed to air"],"classes":["Flammable gases"],"category":"1A, Pyrophoric
+        gas","un_class":"Div 2.1","signal":"Danger","prevention":["P210","P222","P280"],"response":["P377","P381"],"storage":["P403"],"disposal":[""]},{"id":"H240-Type
+        A","obsolete":false,"code":"H240","statements":["Heating may cause an explosion"],"classes":["Self-reactive
+        substances and mixtures","Organic peroxides"],"category":"Type A","un_class":"Div
+        4.1, 5.2 Type A","signal":"Danger","prevention":["P210","P234","P235","P240","P280"],"response":["P370+P372+P380+P373"],"storage":["P403","P410","P411","P420"],"disposal":["P501"]},{"id":"H241-Type
+        B","obsolete":false,"code":"H241","statements":["Heating may cause a fire
+        or explosion"],"classes":["Self-reactive substances and mixtures","Organic
+        peroxides"],"category":"Type B","un_class":"Div 4.1, 5.2 Type B","signal":"Danger","prevention":["P210","P234","P235","P240","P280"],"response":["P370+P380+P375+P378"],"storage":["P403","P410","P411","P420"],"disposal":["P501"]},{"id":"H242-Type
+        C, D","obsolete":false,"code":"H242","statements":["Heating may cause a fire"],"classes":["Self-reactive
+        substances and mixtures","Organic peroxides"],"category":"Type C, D","un_class":"Div
+        4.1, 5.2 Type C, D","signal":"Danger","prevention":["P210","P234","P235","P240","P280"],"response":["P370+P378"],"storage":["P403","P410","P411","P420"],"disposal":["P501"]},{"id":"H242-Type
+        E, F","obsolete":false,"code":"H242","statements":["Heating may cause a fire"],"classes":["Self-reactive
+        substances and mixtures","Organic peroxides"],"category":"Type E, F","un_class":"Div
+        4.1, 5.2 Type E, F","signal":"Warning","prevention":["P210","P234","P235","P240","P280"],"response":["P370+P378"],"storage":["P403","P410","P411","P420"],"disposal":["P501"]},{"id":"H242-Type
+        G","obsolete":false,"code":"H242","statements":["Heating may cause a fire"],"classes":["Self-reactive
+        substances and mixtures","Organic peroxides"],"category":"Type G","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H250-Category
+        1","obsolete":false,"code":"H250","statements":["Catches fire spontaneously
+        if exposed to air"],"classes":["Pyrophoric liquids","Pyrophoric solids"],"category":"Category
+        1","un_class":"Div 4.2","signal":"Danger","prevention":["P210","P222","P231","P233","P280"],"response":["P302+P335+P334","P370+P378"],"storage":[""],"disposal":[""]},{"id":"H251-Category
+        1","obsolete":false,"code":"H251","statements":["Self-heating","may catch
+        fire"],"classes":["Self-heating substances and mixtures"],"category":"Category
+        1","un_class":"Div 4.2","signal":"Danger","prevention":["P235","P280"],"response":[""],"storage":["P407","P410","P413","P420"],"disposal":[""]},{"id":"H252-Category
+        2","obsolete":false,"code":"H252","statements":["Self-heating in large quantities","may
+        catch fire"],"classes":["Self-heating substances and mixtures"],"category":"Category
+        2","un_class":"Div 4.2","signal":"Warning","prevention":["P235","P280"],"response":[""],"storage":["P407","P410","P413","P420"],"disposal":[""]},{"id":"H260-Category
+        1","obsolete":false,"code":"H260","statements":["In contact with water releases
+        flammable gases which may ignite spontaneously"],"classes":["Substances and
+        mixtures which in contact with water, emit flammable gases"],"category":"Category
+        1","un_class":"Div 4.3","signal":"Danger","prevention":["P223","P231+P232","P280"],"response":["P302+P335+P334","P370+P378"],"storage":["P402+P404"],"disposal":["P501"]},{"id":"H261-Category
+        2","obsolete":false,"code":"H261","statements":["In contact with water releases
+        flammable gas"],"classes":["Substances and mixtures which in contact with
+        water, emit flammable gases"],"category":"Category 2","un_class":"Div 4.3","signal":"Danger","prevention":["P223","P231+P232","P280"],"response":["P302+P335+P334","P370+P378"],"storage":["P402+P404"],"disposal":["P501"]},{"id":"H261-Category
+        3","obsolete":false,"code":"H261","statements":["In contact with water releases
+        flammable gas"],"classes":["Substances and mixtures which in contact with
+        water, emit flammable gases"],"category":"Category 3","un_class":"Div 4.3","signal":"Warning","prevention":["P231+P232","P280"],"response":["P370+P378"],"storage":["P402+P404"],"disposal":["P501"]},{"id":"H270-Category
+        1","obsolete":false,"code":"H270","statements":["May cause or intensify fire","oxidizer"],"classes":["Oxidizing
+        gases"],"category":"Category 1","un_class":"Class 2","signal":"Danger","prevention":["P220","P244"],"response":["P370+P376"],"storage":["P403"],"disposal":[""]},{"id":"H271-Category
+        1","obsolete":false,"code":"H271","statements":["May cause fire or explosion","strong
+        Oxidizer"],"classes":["Oxidizing liquids","Oxidizing solids"],"category":"Category
+        1","un_class":"Div 5.1","signal":"Danger","prevention":["P210","P220","P280","P283"],"response":["P306+P360","P371+P380+P375","P370+P378"],"storage":["P420"],"disposal":["P501"]},{"id":"H272-Category
+        2","obsolete":false,"code":"H272","statements":["May intensify fire","oxidizer"],"classes":["Oxidizing
+        liquids","Oxidizing solids"],"category":"Category 2","un_class":"Div 5.1","signal":"Danger","prevention":["P210","P220","P280"],"response":["P370+P378"],"storage":[""],"disposal":["P501"]},{"id":"H272-Category
+        3","obsolete":false,"code":"H272","statements":["May intensify fire","oxidizer"],"classes":["Oxidizing
+        liquids","Oxidizing solids"],"category":"Category 3","un_class":"Div 5.1","signal":"Warning","prevention":["P210","P220","P280"],"response":["P370+P378"],"storage":[""],"disposal":["P501"]},{"id":"H280-Compressed
+        gas, Liquefied gas, Dissolved gas","obsolete":false,"code":"H280","statements":["Contains
+        gas under pressure","may explode if heated"],"classes":["Gases under pressure"],"category":"Compressed
+        gas, Liquefied gas, Dissolved gas","un_class":"Div 2.2","signal":"Warning","prevention":[""],"response":[""],"storage":["P410+P403"],"disposal":[""]},{"id":"H281-Refrigerated
+        liquefied gas","obsolete":false,"code":"H281","statements":["Contains refrigerated
+        gas","may cause cryogenic burns or injury"],"classes":["Gases under pressure"],"category":"Refrigerated
+        liquefied gas","un_class":"Div 2.2","signal":"Warning","prevention":["P282"],"response":["P336+P317"],"storage":["P403"],"disposal":[""]},{"id":"H282-Category
+        1","obsolete":false,"code":"H282","statements":["Extremely flammable chemical
+        under pressure: may explode if heated"],"classes":["Chemicals under pressure"],"category":"Category
+        1","un_class":"Div 2.1","signal":"Danger","prevention":["P210","P211"],"response":["P370+P378","P376","P381"],"storage":["P410+P403"],"disposal":[""]},{"id":"H283-Category
+        2","obsolete":false,"code":"H283","statements":["Flammable chemical under
+        pressure: may explode if heated"],"classes":["Chemicals under pressure"],"category":"Category
+        2","un_class":"Div 2.1","signal":"Warning","prevention":["P210","P211"],"response":["P370+P378","P376","P381"],"storage":["P410+P403"],"disposal":[""]},{"id":"H284-Category
+        3","obsolete":false,"code":"H284","statements":["Chemical under pressure:
+        may explode if heated"],"classes":["Chemicals under pressure"],"category":"Category
+        3","un_class":"Div 2.2","signal":"Warning","prevention":["P210"],"response":["P376"],"storage":["P410+P403"],"disposal":[""]},{"id":"H290-Category
+        1","obsolete":false,"code":"H290","statements":["May be corrosive to metals"],"classes":["Corrosive
+        to Metals"],"category":"Category 1","un_class":"Class 8","signal":"Warning","prevention":["P234"],"response":["P390"],"storage":["P406"],"disposal":[""]},{"id":"H300-Category
+        1, 2","obsolete":false,"code":"H300","statements":["Fatal if swallowed"],"classes":["Acute
+        toxicity, oral"],"category":"Category 1, 2","un_class":"Div 2.3, 6.1","signal":"Danger","prevention":["P264","P270"],"response":["P301+P316","P321","P330"],"storage":["P405"],"disposal":["P501"]},{"id":"H301-Category
+        3","obsolete":false,"code":"H301","statements":["Toxic if swallowed"],"classes":["Acute
+        toxicity, oral"],"category":"Category 3","un_class":"Div 2.3, 6.1","signal":"Danger","prevention":["P264","P270"],"response":["P301+P316","P321","P330"],"storage":["P405"],"disposal":["P501"]},{"id":"H302-Category
+        4","obsolete":false,"code":"H302","statements":["Harmful if swallowed"],"classes":["Acute
+        toxicity, oral"],"category":"Category 4","signal":"Warning","prevention":["P264","P270"],"response":["P301+P317","P330"],"storage":[""],"disposal":["P501"]},{"id":"H303-Category
+        5","obsolete":false,"code":"H303","statements":["May be harmful if swallowed"],"classes":["Acute
+        toxicity, oral"],"category":"Category 5","signal":"Warning","prevention":[""],"response":["P301+P317"],"storage":[""],"disposal":[""]},{"id":"H304-Category
+        1","obsolete":false,"code":"H304","statements":["May be fatal if swallowed
+        and enters airways"],"classes":["Aspiration hazard"],"category":"Category
+        1","signal":"Danger","prevention":[""],"response":["P301+P316","P331"],"storage":["P405"],"disposal":["P501"]},{"id":"H305-Category
+        2","obsolete":false,"code":"H305","statements":["May be fatal if swallowed
+        and enters airways"],"classes":["Aspiration hazard"],"category":"Category
+        2","signal":"Warning","prevention":[""],"response":["P301+P316","P331"],"storage":["P405"],"disposal":["P501"]},{"id":"H310-Category
+        1, 2","obsolete":false,"code":"H310","statements":["Fatal in contact with
+        skin"],"classes":["Acute toxicity, dermal"],"category":"Category 1, 2","un_class":"Div
+        2.3, 6.1","signal":"Danger","prevention":["P262","P264","P270","P280"],"response":["P302+P352","P316","P321","P361+P364"],"storage":["P405"],"disposal":["P501"]},{"id":"H311-Category
+        3","obsolete":false,"code":"H311","statements":["Toxic in contact with skin"],"classes":["Acute
+        toxicity, dermal"],"category":"Category 3","un_class":"Div 2.3, 6.1","signal":"Danger","prevention":["P280"],"response":["P302+P352","P316","P321","P361+P364"],"storage":["P405"],"disposal":["P501"]},{"id":"H312-Category
+        4","obsolete":false,"code":"H312","statements":["Harmful in contact with skin"],"classes":["Acute
+        toxicity, dermal"],"category":"Category 4","signal":"Warning","prevention":["P280"],"response":["P302+P352","P317","P321","P362+P364"],"storage":[""],"disposal":["P501"]},{"id":"H313-Category
+        5","obsolete":false,"code":"H313","statements":["May be harmful in contact
+        with skin"],"classes":["Acute toxicity, dermal"],"category":"Category 5","prevention":[""],"response":["P302+P317"],"storage":[""],"disposal":[""]},{"id":"H314-Category
+        1A, 1B, 1C","obsolete":false,"code":"H314","statements":["Causes severe skin
+        burns and eye damage"],"classes":["Skin corrosion/irritation"],"category":"Category
+        1A, 1B, 1C","un_class":"Class 8","signal":"Danger","prevention":["P260","P264","P280"],"response":["P301+P330+P331","P302+P361+P354","P363","P304+P340","P316","P321","P305+P354+P338"],"storage":["P405"],"disposal":["P501"]},{"id":"H315-Category
+        2","obsolete":false,"code":"H315","statements":["Causes skin irritation"],"classes":["Skin
+        corrosion/irritation"],"category":"Category 2","signal":"Warning","prevention":["P264","P280"],"response":["P302+P352","P321","P332+P317","P362+P364"],"storage":[""],"disposal":[""]},{"id":"H316-Category
+        3","obsolete":false,"code":"H316","statements":["Causes mild skin irritation"],"classes":["Skin
+        corrosion/irritation"],"category":"Category 3","signal":"Warning","prevention":[""],"response":["P332+P317"],"storage":[""],"disposal":[""]},{"id":"H317-Category
+        1, 1A, 1B","obsolete":false,"code":"H317","statements":["May cause an allergic
+        skin reaction"],"classes":["Sensitization, Skin"],"category":"Category 1,
+        1A, 1B","signal":"Warning","prevention":["P261","P272","P280"],"response":["P302+P352","P333+P313","P321","P362+P364"],"storage":[""],"disposal":["P501"]},{"id":"H318-Category
+        1","obsolete":false,"code":"H318","statements":["Causes serious eye damage"],"classes":["Serious
+        eye damage/eye irritation"],"category":"Category 1","signal":"Danger","prevention":["P264+P265","P280"],"response":["P305+P354+P338","P317"],"storage":[""],"disposal":[""]},{"id":"H319-Category
+        2A","obsolete":false,"code":"H319","statements":["Causes serious eye irritation"],"classes":["Serious
+        eye damage/eye irritation"],"category":"Category 2A","signal":"Warning","prevention":["P264+P265","P280"],"response":["P305+P351+P338","P337+P317"],"storage":[""],"disposal":[""]},{"id":"H320-Category
+        2B","obsolete":false,"code":"H320","statements":["Causes eye irritation"],"classes":["Serious
+        eye damage/eye irritation"],"category":"Category 2B","signal":"Warning","prevention":["P264+P265"],"response":["P305+P351+P338","P337+P317"],"storage":[""],"disposal":[""]},{"id":"H330-Category
+        1, 2","obsolete":false,"code":"H330","statements":["Fatal if inhaled"],"classes":["Acute
+        toxicity, inhalation"],"category":"Category 1, 2","un_class":"Div 2.3, 6.1","signal":"Danger","prevention":["P260","P271","P284"],"response":["P304+P340","P316","P320"],"storage":["P403+P233","P405"],"disposal":["P501"]},{"id":"H331-Category
+        3","obsolete":false,"code":"H331","statements":["Toxic if inhaled"],"classes":["Acute
+        toxicity, inhalation"],"category":"Category 3","un_class":"Div 2.3, 6.1","signal":"Danger","prevention":["P261","P271"],"response":["P304+P340","P316","P321"],"storage":["P403+P233","P405"],"disposal":["P501"]},{"id":"H332-Category
+        4","obsolete":false,"code":"H332","statements":["Harmful if inhaled"],"classes":["Acute
+        toxicity, inhalation"],"category":"Category 4","signal":"Warning","prevention":["P261","P271"],"response":["P304+P340","P317"],"storage":[""],"disposal":[""]},{"id":"H333-Category
+        5","obsolete":false,"code":"H333","statements":["May be harmful if inhaled"],"classes":["Acute
+        toxicity, inhalation"],"category":"Category 5","signal":"Warning","prevention":[""],"response":["P304+P317"],"storage":[""],"disposal":[""]},{"id":"H334-Category
+        1, 1A, 1B","obsolete":false,"code":"H334","statements":["May cause allergy
+        or asthma symptoms or breathing difficulties if inhaled"],"classes":["Sensitization,
+        respiratory"],"category":"Category 1, 1A, 1B","signal":"Danger","prevention":["P261","P284"],"response":["P304+P340","P342+P316"],"storage":[""],"disposal":["P501"]},{"id":"H335-Category
+        3","obsolete":false,"code":"H335","statements":["May cause respiratory irritation"],"classes":["Specific
+        target organ toxicity, single exposure","Respiratory tract irritation"],"category":"Category
+        3","signal":"Warning","prevention":["P261","P271"],"response":["P304+P340","P319"],"storage":["P403+P233","P405"],"disposal":["P501"]},{"id":"H336-Category
+        3","obsolete":false,"code":"H336","statements":["May cause drowsiness or dizziness"],"classes":["Specific
+        target organ toxicity, single exposure","Narcotic effects"],"category":"Category
+        3","signal":"Warning","prevention":["P261","P271"],"response":["P304+P340","P319"],"storage":["P403+P233","P405"],"disposal":["P501"]},{"id":"H340-Category
+        1A, 1B","obsolete":false,"code":"H340","statements":["May cause genetic defects"],"classes":["Germ
+        cell mutagenicity"],"category":"Category 1A, 1B","signal":"Danger","prevention":["P203","P281"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H341-Category
+        2","obsolete":false,"code":"H341","statements":["Suspected of causing genetic
+        defects"],"classes":["Germ cell mutagenicity"],"category":"Category 2","signal":"Warning","prevention":["P203","P281"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H350-Category
+        1A, 1B","obsolete":false,"code":"H350","statements":["May cause cancer"],"classes":["Carcinogenicity"],"category":"Category
+        1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H350i-Category
+        1A, 1B","obsolete":false,"code":"H350i","statements":["May cause cancer by
+        inhalation"],"classes":["Carcinogenicity"],"category":"Category 1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H351-Category
+        2","obsolete":false,"code":"H351","statements":["Suspected of causing cancer"],"classes":["Carcinogenicity"],"category":"Category
+        2","signal":"Warning","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360-Category
+        1A, 1B","obsolete":false,"code":"H360","statements":["May damage fertility
+        or the unborn child"],"classes":["Reproductive toxicity"],"category":"Category
+        1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360F-Category
+        1A, 1B","obsolete":false,"code":"H360F","statements":["May damage fertility"],"classes":["Reproductive
+        toxicity"],"category":"Category 1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360D-Category
+        1A, 1B","obsolete":false,"code":"H360D","statements":["May damage the unborn
+        child"],"classes":["Reproductive toxicity"],"category":"Category 1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360FD-Category
+        1A, 1B","obsolete":false,"code":"H360FD","statements":["May damage fertility","May
+        damage the unborn child"],"classes":["Reproductive toxicity"],"category":"Category
+        1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360Fd-Category
+        1A, 1B","obsolete":false,"code":"H360Fd","statements":["May damage fertility","Suspected
+        of damaging the unborn child"],"classes":["Reproductive toxicity"],"category":"Category
+        1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H360Df-Category
+        1A, 1B","obsolete":false,"code":"H360Df","statements":["May damage the unborn
+        child","Suspected of damaging fertility"],"classes":["Reproductive toxicity"],"category":"Category
+        1A, 1B","signal":"Danger","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H361-Category
+        2","obsolete":false,"code":"H361","statements":["Suspected of damaging fertility
+        or the unborn child"],"classes":["Reproductive toxicity"],"category":"Category
+        2","signal":"Warning","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H361f-Category
+        2","obsolete":false,"code":"H361f","statements":["Suspected of damaging fertility"],"classes":["Reproductive
+        toxicity"],"category":"Category 2","signal":"Warning","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H361d-Category
+        2","obsolete":false,"code":"H361d","statements":["Suspected of damaging the
+        unborn child"],"classes":["Reproductive toxicity"],"category":"Category 2","signal":"Warning","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H361fd-Category
+        2","obsolete":false,"code":"H361fd","statements":["Suspected of damaging fertility","Suspected
+        of damaging the unborn child"],"classes":["Reproductive toxicity"],"category":"Category
+        2","signal":"Warning","prevention":["P203","P280"],"response":["P318"],"storage":["P405"],"disposal":["P501"]},{"id":"H362-Additional
+        category","obsolete":false,"code":"H362","statements":["May cause harm to
+        breast-fed children"],"classes":["Reproductive toxicity, effects on or via
+        lactation"],"category":"Additional category","prevention":["P203","P260","P263","P264","P270"],"response":["P318"],"storage":[""],"disposal":[""]},{"id":"H370-Category
+        1","obsolete":false,"code":"H370","statements":["Causes damage to organs"],"classes":["Specific
+        target organ toxicity, single exposure"],"category":"Category 1","signal":"Danger","prevention":["P260","P264","P270"],"response":["P308+P316","P321"],"storage":["P405"],"disposal":["P501"]},{"id":"H371-Category
+        2","obsolete":false,"code":"H371","statements":["May cause damage to organs"],"classes":["Specific
+        target organ toxicity, single exposure"],"category":"Category 2","signal":"Warning","prevention":["P260","P264","P270"],"response":["P308+P316"],"storage":["P405"],"disposal":["P501"]},{"id":"H372-Category
+        1","obsolete":false,"code":"H372","statements":["Causes damage to organs through
+        prolonged or repeated exposure"],"classes":["Specific target organ toxicity,
+        repeated exposure"],"category":"Category 1","signal":"Danger","prevention":["P260","P264","P270"],"response":["P319"],"storage":[""],"disposal":["P501"]},{"id":"H373-Category
+        2","obsolete":false,"code":"H373","statements":["Causes damage to organs through
+        prolonged or repeated exposure"],"classes":["Specific target organ toxicity,
+        repeated exposure"],"category":"Category 2","signal":"Warning","prevention":["P260"],"response":["P319"],"storage":[""],"disposal":["P501"]},{"id":"H400-Category
+        1","obsolete":false,"code":"H400","statements":["Very toxic to aquatic life"],"classes":["Hazardous
+        to the aquatic environment, acute hazard"],"category":"Category 1","un_class":"Class
+        9","signal":"Warning","prevention":["P273"],"response":["P391"],"storage":[""],"disposal":["P501"]},{"id":"H401-Category
+        2","obsolete":false,"code":"H401","statements":["Toxic to aquatic life"],"classes":["Hazardous
+        to the aquatic environment, acute hazard"],"category":"Category 2","prevention":["P273"],"response":[""],"storage":[""],"disposal":["P501"]},{"id":"H402-Category
+        3","obsolete":false,"code":"H402","statements":["Harmful to aquatic life"],"classes":["Hazardous
+        to the aquatic environment, acute hazard"],"category":"Category 3","prevention":["P273"],"response":[""],"storage":[""],"disposal":["P501"]},{"id":"H410-Category
+        1","obsolete":false,"code":"H410","statements":["Very toxic to aquatic life
+        with long lasting effects"],"classes":["Hazardous to the aquatic environment,
+        long-term hazard"],"category":"Category 1","un_class":"Class 9","signal":"Warning","prevention":["P273"],"response":["P391"],"storage":[""],"disposal":["P501"]},{"id":"H411-Category
+        2","obsolete":false,"code":"H411","statements":["Toxic to aquatic life with
+        long lasting effects"],"classes":["Hazardous to the aquatic environment, long-term
+        hazard"],"category":"Category 2","un_class":"Class 9","prevention":["P273"],"response":["P391"],"storage":[""],"disposal":["P501"]},{"id":"H412-Category
+        3","obsolete":false,"code":"H412","statements":["Harmful to aquatic life with
+        long lasting effects"],"classes":["Hazardous to the aquatic environment, long-term
+        hazard"],"category":"Category 3","prevention":["P273"],"response":[""],"storage":[""],"disposal":["P501"]},{"id":"H413-Category
+        4","obsolete":false,"code":"H413","statements":["May cause long lasting harmful
+        effects to aquatic life"],"classes":["Hazardous to the aquatic environment,
+        long-term hazard"],"category":"Category 4","prevention":["P273"],"response":[""],"storage":[""],"disposal":["P501"]},{"id":"H420-Category
+        1","obsolete":false,"code":"H420","statements":["Harms public health and the
+        environment by destroying ozone in the upper atmosphere"],"classes":["Hazardous
+        to the ozone layer"],"category":"Category 1","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":["P502"]},{"id":"H300+H310-Category
+        1, 2","obsolete":false,"code":"H300+H310","statements":["Fatal if swallowed
+        or in contact with skin"],"classes":["Acute toxicity, oral","acute toxicity,
+        dermal"],"category":"Category 1, 2","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H300+H330-Category
+        1, 2","obsolete":false,"code":"H300+H330","statements":["Fatal if swallowed
+        or if inhaled"],"classes":["Acute toxicity, oral","acute toxicity, inhalation"],"category":"Category
+        1, 2","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H310+H330-Category
+        1, 2","obsolete":false,"code":"H310+H330","statements":["Fatal in contact
+        with skin or if inhaled"],"classes":["Acute toxicity, dermal","acute toxicity,
+        inhalation"],"category":"Category 1, 2","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H300+H310+H330-Category
+        1, 2","obsolete":false,"code":"H300+H310+H330","statements":["Fatal if swallowed,
+        in contact with skin or if inhaled"],"classes":["Acute toxicity, oral","acute
+        toxicity, dermal","acute toxicity, inhalation"],"category":"Category 1, 2","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H301+H311-Category
+        3","obsolete":false,"code":"H301+H311","statements":["Toxic if swallowed or
+        in contact with skin"],"classes":["Acute toxicity, oral","acute toxicity,
+        dermal"],"category":"Category 3","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H301+H331-Category
+        3","obsolete":false,"code":"H301+H331","statements":["Toxic if swallowed or
+        if inhaled"],"classes":["Acute toxicity, oral","acute toxicity, inhalation"],"category":"Category
+        3","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H311+H331-Category
+        3","obsolete":false,"code":"H311+H331","statements":["Toxic in contact with
+        skin or if inhaled."],"classes":["Acute toxicity, dermal","acute toxicity,
+        inhalation"],"category":"Category 3","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H301+H311+H331-Category
+        3","obsolete":false,"code":"H301+H311+H331","statements":["Toxic if swallowed,
+        in contact with skin or if inhaled"],"classes":["Acute toxicity, oral","acute
+        toxicity, dermal","acute toxicity, inhalation"],"category":"Category 3","signal":"Danger","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H302+H312-Category
+        4","obsolete":false,"code":"H302+H312","statements":["Harmful if swallowed
+        or in contact with skin"],"classes":["Acute toxicity, oral","acute toxicity,
+        dermal"],"category":"Category 4","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H302+H332-Category
+        4","obsolete":false,"code":"H302+H332","statements":["Harmful if swallowed
+        or if inhaled"],"classes":["Acute toxicity, oral","acute toxicity, inhalation"],"category":"Category
+        4","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H312+H332-Category
+        4","obsolete":false,"code":"H312+H332","statements":["Harmful in contact with
+        skin or if inhaled"],"classes":["Acute toxicity, dermal","acute toxicity,
+        inhalation"],"category":"Category 4","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H302+H312+H332-Category
+        4","obsolete":false,"code":"H302+H312+H332","statements":["Harmful if swallowed,
+        in contact with skin or if inhaled"],"classes":["Acute toxicity, oral","acute
+        toxicity, dermal","acute toxicity, inhalation"],"category":"Category 4","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H303+H313-Category
+        5","obsolete":false,"code":"H303+H313","statements":["May be harmful if swallowed
+        or in contact with skin"],"classes":["Acute toxicity, oral","acute toxicity,
+        dermal"],"category":"Category 5","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H303+H333-Category
+        5","obsolete":false,"code":"H303+H333","statements":["May be harmful if swallowed
+        or if inhaled"],"classes":["Acute toxicity, oral","acute toxicity, inhalation"],"category":"Category
+        5","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H313+H333-Category
+        5","obsolete":false,"code":"H313+H333","statements":["May be harmful in contact
+        with skin or if inhaled"],"classes":["Acute toxicity, dermal","acute toxicity,
+        inhalation"],"category":"Category 5","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H303+H313+H333-Category
+        5","obsolete":false,"code":"H303+H313+H333","statements":["May be harmful
+        if swallowed, in contact with skin or if inhaled"],"classes":["Acute toxicity,
+        oral","acute toxicity, dermal","acute toxicity, inhalation"],"category":"Category
+        5","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]},{"id":"H315+H320-Category
+        2, 2B","obsolete":false,"code":"H315+H320","statements":["Cause skin and eye
+        irritation"],"classes":["Skin corrosion/irritation and serious eye damage/eye
+        irritation"],"category":"Category 2, 2B","signal":"Warning","prevention":[""],"response":[""],"storage":[""],"disposal":[""]}]'
+  recorded_at: 2026-03-04 20:03:06
+recorded_with: VCR-vcr/2.1.0
