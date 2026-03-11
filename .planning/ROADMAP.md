@@ -130,6 +130,6 @@
 | 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
 | 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
-| 28. Thin Wrapper Migration | v2.2 | 0/5 | Planned | — |
+| 28. Thin Wrapper Migration | 3/5 | In Progress|  | — |
 | 29. Direct Template Migration | v2.2 | 0/0 | Planned | — |
 | 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |

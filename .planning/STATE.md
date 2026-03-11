@@ -3,11 +3,43 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Package Stabilization
 status: in_progress
+stopped_at: Completed 28-02-PLAN.md
+last_updated: "2026-03-11T14:49:12.306Z"
+last_activity: 2026-03-11 — Completed 28-03 (deleted thin wrapper functions)
+progress:
+  total_phases: 29
+  completed_phases: 25
+  total_plans: 53
+  completed_plans: 50
+  percent: 94
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.2
+milestone_name: Package Stabilization
+status: in_progress
+stopped_at: Completed 28-03-PLAN.md
+last_updated: "2026-03-11T14:48:29.038Z"
+last_activity: 2026-03-11 — Completed 28-01 (hook system foundation)
+progress:
+  [█████████░] 94%
+  completed_phases: 25
+  total_plans: 53
+  completed_plans: 49
+  percent: 92
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.2
+milestone_name: Package Stabilization
+status: in_progress
 stopped_at: Phase 28 context gathered
 last_updated: "2026-03-10T20:26:56.874Z"
 last_activity: 2026-03-09 — Completed 27-01 (selective purrr/jsonlite imports)
 progress:
-  total_phases: 29
+  [█████████░] 92%
   completed_phases: 25
   total_plans: 48
   completed_plans: 47
@@ -53,11 +85,11 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 28 (Thin Wrapper Migration)
-Plan: 28-01 complete, 28-02 next
+Plan: 28-03 complete, 28-02 next
 Status: Executing v2.2 Phase 28
-Last activity: 2026-03-11 — Completed 28-01 (hook system foundation)
+Last activity: 2026-03-11 — Completed 28-03 (deleted thin wrapper functions)
 
-Progress: [██████████] 98% (48/49 plans executed)
+Progress: [█████████░] 92% (49/53 plans executed)
 
 ## Milestone v2.2 Overview
 
@@ -119,6 +151,15 @@ Full history: `.planning/MILESTONES.md`
 - Supports pre_request, post_response, and transform hook types
 - No-op behavior when hooks missing enables gradual migration
 
+**From Phase 28-03 (2026-03-11):**
+- Deleted 8 pure pass-through wrapper functions: ct_hazard, ct_cancer, ct_env_fate, ct_demographic_exposure, ct_general_exposure, ct_functional_use, ct_functional_use_probability, ct_genotox
+- Deleted deprecated ct_descriptors (INDIGO endpoint not in published schemas)
+- Deleted empty ct_synonym.R file
+- All delegation targets verified to exist before deletion
+- Generated stub names now exposed as public API (clean break, no deprecation shim)
+- NEWS.md documents breaking changes with explicit migration guide
+- Package builds and loads cleanly after deletions
+
 ## Pending Todos
 
 **Deferred pipeline work (ON HOLD):**
@@ -132,10 +173,10 @@ Full history: `.planning/MILESTONES.md`
 
 ## Session Continuity
 
-Last session: 2026-03-11T14:41:38Z
-Action: Completed 28-01-PLAN.md — built hook system foundation (registry, YAML config, dispatcher, tests)
-Stopped at: Plan 28-01 complete
-Next: Execute 28-02-PLAN.md
+Last session: 2026-03-11T14:49:12.300Z
+Action: Completed 28-03-PLAN.md — deleted pure pass-through wrapper functions
+Stopped at: Completed 28-02-PLAN.md
+Next: Execute 28-04-PLAN.md or 28-02-PLAN.md (check wave dependencies)
 
 ---
-*Last updated: 2026-03-11 after completing Phase 28 Plan 01*
+*Last updated: 2026-03-11 after completing Phase 28 Plan 03*
