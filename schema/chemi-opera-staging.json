@@ -40,26 +40,98 @@
             },
             "examples": {
               "example1": {
-                "summary": "SMILES that generates one of the 56 ARN groups",
-                "value": "CC(C)c1ccc2sc3ccccc3c(=O)c2c1"
+                "summary": "50-01-1",
+                "value": "NC(N)=N"
               },
               "example2": {
-                "summary": "Miscellaneous chemistry",
-                "value": "c1ccc(OP(Oc2ccccc2)Oc2ccccc2)cc1"
+                "summary": "50-02-2",
+                "value": "CC1CC2C3CCC4=CC(=O)C=CC4(C)C3(F)C(O)CC2(C)C1(O)C(=O)CO"
+              },
+              "example3": {
+                "summary": "50-12-4",
+                "value": "CCC1(NC(=O)N(C)C1=O)c1ccccc1"
               }
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "schema": {
+              "type": "string",
+              "default": "json"
+            },
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {}
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
           }
         }
       },
       "post": {
         "operationId": "app.post_predict",
         "summary": "Generate predictions for multiple molecules",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "schema": {
+              "type": "string",
+              "default": "json"
+            },
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -76,7 +148,10 @@
                 "example": {
                   "smiles": [
                     "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-                    "CCCCN"
+                    "CCCCN",
+                    "NC(N)=N",
+                    "CC1CC2C3CCC4=CC(=O)C=CC4(C)C3(F)C(O)CC2(C)C1(O)C(=O)CO",
+                    "CCC1(NC(=O)N(C)C1=O)c1ccccc1"
                   ]
                 }
               }
@@ -85,8 +160,10 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {}
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
           }
         }
       }
@@ -95,6 +172,40 @@
       "post": {
         "operationId": "app.post_predict_file",
         "description": "Calculates OPERA predictions for a file (CSV, SMI, SDF)",
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "schema": {
+              "type": "string",
+              "default": "json"
+            },
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            }
+          },
+          {
+            "name": "standardize",
+            "in": "query",
+            "description": "Standardize chemical before calculating predictions",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -117,18 +228,10 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
+            "description": "Success"
           },
           "400": {
-            "description": "Bad request (e.g. invalid file or file is already OCRed)"
+            "description": "Bad request"
           }
         }
       }
@@ -149,7 +252,10 @@
         "example": {
           "smiles": [
             "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-            "CCCCN"
+            "CCCCN",
+            "NC(N)=N",
+            "CC1CC2C3CCC4=CC(=O)C=CC4(C)C3(F)C(O)CC2(C)C1(O)C(=O)CO",
+            "CCC1(NC(=O)N(C)C1=O)c1ccccc1"
           ]
         }
       }

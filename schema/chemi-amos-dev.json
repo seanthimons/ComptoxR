@@ -713,17 +713,6 @@
         "summary": "Returns information on a batch of Analytical QC documents using keyset pagination."
       }
     },
-    "/api/amos/analytical_qc_list/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "A list of information on AnalyticalQC PDFs in the database."
-          }
-        },
-        "summary": "Retrieves information on all the AnalyticalQC PDFs in the database."
-      }
-    },
     "/api/amos/analytical_qc_pagination/{limit}/{offset}": {
       "get": {
         "description": "",
@@ -847,17 +836,6 @@
           }
         },
         "summary": "Returns information on a batch of fact sheets using keyset pagination."
-      }
-    },
-    "/api/amos/fact_sheet_list": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "A list of JSON objects, each one containing information on one fact sheet in the database."
-          }
-        },
-        "summary": "Retrieves a list of fact sheets in the database with their supplemental information."
       }
     },
     "/api/amos/fact_sheet_pagination/{limit}/{offset}": {
@@ -1460,7 +1438,7 @@
     },
     "/api/amos/max_similarity_by_dtxsid/": {
       "post": {
-        "description": "<br/>This endpoint is intended for use with INTERPRET NTA.",
+        "description": "DTXSID and spectrum.<br/><br/>This endpoint is intended for use with INTERPRET NTA.",
         "parameters": [
           {
             "in": "body",
@@ -1475,7 +1453,7 @@
             "description": "A JSON object with DTXSIDs as keys and an array of highest found entropy similarity scores as the values.  The order of values in the array corresponds to their order in the list of user-submitted spectra.  If no spectra were found for a given DTXSID, the DTXSID will map to None."
           }
         },
-        "summary": "Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum."
+        "summary": "Given a list of DTXSIDs and a list of mass spectra, return the highest similarity score for each combination of"
       }
     },
     "/api/amos/method_keyset_pagination/{limit}": {
@@ -1503,17 +1481,6 @@
           }
         },
         "summary": "Returns information on a batch of methods using keyset pagination."
-      }
-    },
-    "/api/amos/method_list": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "A list of JSON objects, each one containing information on one method in the database."
-          }
-        },
-        "summary": "Retrieves a list of methods in the database with their supplemental information."
       }
     },
     "/api/amos/method_pagination/{limit}/{offset}": {

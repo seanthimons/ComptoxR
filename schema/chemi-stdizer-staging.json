@@ -1336,9 +1336,6 @@
           },
           "chemical": {
             "$ref": "#/components/schemas/Chemical"
-          },
-          "chemicalWithAdditionalProps": {
-            "$ref": "#/components/schemas/Chemical"
           }
         }
       },
@@ -1522,9 +1519,6 @@
           },
           "change": {
             "$ref": "#/components/schemas/Change"
-          },
-          "chemicalWithAdditionalProps": {
-            "$ref": "#/components/schemas/Chemical"
           }
         }
       },
@@ -1622,6 +1616,9 @@
           },
           "actField": {
             "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
           }
         }
       },

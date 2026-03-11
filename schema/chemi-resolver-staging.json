@@ -2250,6 +2250,9 @@
           },
           "actField": {
             "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
           }
         }
       },
@@ -3224,14 +3227,14 @@
             "type": "integer",
             "format": "int64"
           },
-          "pageable": {
-            "$ref": "#/components/schemas/PageableObject"
-          },
           "first": {
             "type": "boolean"
           },
           "last": {
             "type": "boolean"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
           },
           "size": {
             "type": "integer",

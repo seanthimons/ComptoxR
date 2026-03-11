@@ -834,6 +834,9 @@
             "items": {
               "$ref": "#/components/schemas/PredictionEndpoint"
             }
+          },
+          "error": {
+            "$ref": "#/components/schemas/PredictionResultMessage"
           }
         }
       },
