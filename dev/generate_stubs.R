@@ -533,7 +533,7 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   protected <- sum(all_results$action == "skipped_lifecycle", na.rm = TRUE)
 
   # Count endpoints that were found but skipped during rendering (empty schemas)
-  render_skipped <- sum(sapply(.StubGenEnv$skipped, nrow), na.rm = TRUE)
+  render_skipped <- sum(vapply(.StubGenEnv$skipped, nrow, integer(1)), na.rm = TRUE)
 
   cat(sprintf("stubs_generated=%d\n", total_new), file = output_file, append = TRUE)
   cat(sprintf("stubs_created=%d\n", created), file = output_file, append = TRUE)
