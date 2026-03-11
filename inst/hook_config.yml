@@ -74,3 +74,21 @@ ct_bioactivity_data_search_by_m4id_bulk:
       description: "Join assay annotations by aeid"
   post_response:
     - annotate_assay_if_requested
+
+ct_chemical_property_experimental_search_bulk:
+  extra_params:
+    coerce:
+      default: "FALSE"
+      type: "logical"
+      description: "Split results by propertyId into named list of data frames"
+  post_response:
+    - coerce_by_property_id
+
+ct_chemical_property_predicted_search_bulk:
+  extra_params:
+    coerce:
+      default: "FALSE"
+      type: "logical"
+      description: "Split results by propertyId into named list of data frames"
+  post_response:
+    - coerce_by_property_id
