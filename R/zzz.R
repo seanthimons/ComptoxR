@@ -596,7 +596,10 @@ reset_servers <- function() {
 
   .ComptoxREnv$extractor <- create_formula_extractor_final()
 	.ComptoxREnv$classifier <- create_compound_classifier()
-	
+
+	# Load hook configuration from YAML
+	load_hook_config()
+
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
 }
