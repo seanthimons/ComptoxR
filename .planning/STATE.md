@@ -3,6 +3,21 @@ gsd_state_version: 1.0
 milestone: v2.2
 milestone_name: Package Stabilization
 status: in_progress
+stopped_at: Phase 29 complete
+last_updated: "2026-03-11T16:17:46.498Z"
+last_activity: 2026-03-11 — Completed 29-01 (property search migration) and 29-02 (ct_related migration)
+progress:
+  total_phases: 29
+  completed_phases: 27
+  total_plans: 55
+  completed_plans: 54
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.2
+milestone_name: Package Stabilization
+status: in_progress
 stopped_at: Completed 29-02-PLAN.md
 last_updated: "2026-03-11T16:10:31Z"
 last_activity: 2026-03-11 — Completed 29-02 (ct_related migration to generic_request)
