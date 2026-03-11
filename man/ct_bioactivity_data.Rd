@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_bioactivity_data.R
 \name{ct_bioactivity_data}
 \alias{ct_bioactivity_data}
-\title{Get bioactivity data for a batch of DTXSIDs}
+\title{Get data by DTXSID}
 \usage{
 ct_bioactivity_data(dtxsid)
 
@@ -11,10 +11,10 @@ ct_bioactivity_data(dtxsid)
 \arguments{
 \item{dtxsid}{DSSTox Substance Identifier. Type: string}
 
-\item{query}{Character vector of strings to send in request body}
+\item{projection}{Specifies if projection is used. Option: toxcast-summary-plot. If omitted, the default BioactivityDataAll data is returned.}
 }
 \value{
-Returns a scalar value
+Returns a tibble with results (array of objects)
 
 Returns a scalar value
 }
@@ -25,7 +25,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_bioactivity_data(query = "DTXSID7020182")
+ct_bioactivity_data(dtxsid = "DTXSID7020182")
 }
 \dontrun{
 ct_bioactivity_data(dtxsid = "DTXSID9026974")

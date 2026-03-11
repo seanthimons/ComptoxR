@@ -9,15 +9,42 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_fate(query = "DTXSID7020182")
+#' ct_chemical_fate_bulk(query = "DTXSID7020182")
 #' }
-ct_chemical_fate <- function(query) {
+ct_chemical_fate_bulk <- function(query) {
   result <- generic_request(
     query = query,
     endpoint = "chemical/fate/search/by-dtxsid/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+
+  return(result)
+}
+
+
+#' Get fate data by DTXSID
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param dtxsid DSSTox Substance Identifier. Type: string
+#' @return Returns a scalar value
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_chemical_fate(dtxsid = "DTXSID7020182")
+#' }
+ct_chemical_fate <- function(dtxsid) {
+  result <- generic_request(
+    query = dtxsid,
+    endpoint = "chemical/fate/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1
+  )
+
+  # Additional post-processing can be added here
 
   return(result)
 }

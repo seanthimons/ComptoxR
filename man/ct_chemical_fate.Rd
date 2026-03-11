@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_chemical_fate.R
 \name{ct_chemical_fate}
 \alias{ct_chemical_fate}
-\title{Get fate data for a batch of DTXSIDs}
+\title{Get fate data by DTXSID}
 \usage{
 ct_chemical_fate(dtxsid)
 
@@ -12,8 +12,6 @@ ct_chemical_fate(dtxsid)
 }
 \arguments{
 \item{dtxsid}{DSSTox Substance Identifier. Type: string}
-
-\item{query}{Character vector of strings to send in request body}
 
 \item{propName}{Required parameter}
 }
@@ -33,7 +31,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_fate(query = "DTXSID7020182")
+ct_chemical_fate(dtxsid = "DTXSID7020182")
 }
 \dontrun{
 ct_chemical_fate(dtxsid = "DTXSID7020182")

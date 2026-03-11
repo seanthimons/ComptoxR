@@ -9,15 +9,42 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data_aed(query = "DTXSID7020182")
+#' ct_bioactivity_data_aed_bulk(query = "DTXSID7020182")
 #' }
-ct_bioactivity_data_aed <- function(query) {
+ct_bioactivity_data_aed_bulk <- function(query) {
   result <- generic_request(
     query = query,
     endpoint = "bioactivity/data/aed/search/by-dtxsid/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+
+  return(result)
+}
+
+
+#' Get AED data by DTXSID
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param dtxsid Primary query parameter. Type: string
+#' @return Returns a list with result object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_bioactivity_data_aed(dtxsid = "DTXSID5021209")
+#' }
+ct_bioactivity_data_aed <- function(dtxsid) {
+  result <- generic_request(
+    query = dtxsid,
+    endpoint = "bioactivity/data/aed/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1
+  )
+
+  # Additional post-processing can be added here
 
   return(result)
 }

@@ -4,12 +4,21 @@
 \alias{chemi_predictor_models_predict}
 \title{Predictor Models Predict}
 \usage{
-chemi_predictor_models_predict(smiles, model_id)
+chemi_predictor_models_predict(
+  model_id,
+  smiles = NULL,
+  identifier = NULL,
+  report_format = "json"
+)
 }
 \arguments{
+\item{model_id}{Model ID to use}
+
 \item{smiles}{SMILES to generate predictions for}
 
-\item{model_id}{Model ID to use}
+\item{identifier}{identifier to generate predictions for}
+
+\item{report_format}{which format to return (default: json)}
 }
 \value{
 Returns a tibble with results

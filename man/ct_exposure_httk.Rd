@@ -2,12 +2,12 @@
 % Please edit documentation in R/ct_exposure_httk.R
 \name{ct_exposure_httk}
 \alias{ct_exposure_httk}
-\title{Get httk data for a batch of DTXSIDs}
+\title{Get httk data by DTXSID}
 \usage{
-ct_exposure_httk(query)
+ct_exposure_httk(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 }
 \value{
 Returns a scalar value
@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_exposure_httk(query = "DTXSID7020182")
+ct_exposure_httk(dtxsid = "DTXSID0020232")
 }
 }

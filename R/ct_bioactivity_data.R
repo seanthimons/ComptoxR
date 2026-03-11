@@ -9,15 +9,44 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data(query = "DTXSID7020182")
+#' ct_bioactivity_data_bulk(query = "DTXSID7020182")
 #' }
-ct_bioactivity_data <- function(query) {
+ct_bioactivity_data_bulk <- function(query) {
   result <- generic_request(
     query = query,
     endpoint = "bioactivity/data/search/by-dtxsid/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+
+  return(result)
+}
+
+
+#' Get data by DTXSID
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param dtxsid DSSTox Substance Identifier. Type: string
+#' @param projection Specifies if projection is used. Option: toxcast-summary-plot. If omitted, the default BioactivityDataAll data is returned.
+#' @return Returns a tibble with results (array of objects)
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ct_bioactivity_data(dtxsid = "DTXSID7020182")
+#' }
+ct_bioactivity_data <- function(dtxsid, projection = NULL) {
+  result <- generic_request(
+    query = dtxsid,
+    endpoint = "bioactivity/data/search/by-dtxsid/",
+    method = "GET",
+    batch_limit = 1,
+    `projection` = projection
+  )
+
+  # Additional post-processing can be added here
 
   return(result)
 }

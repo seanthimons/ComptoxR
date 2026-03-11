@@ -2,12 +2,14 @@
 % Please edit documentation in R/ct_exposure_seem_general.R
 \name{ct_exposure_seem_general}
 \alias{ct_exposure_seem_general}
-\title{Get SEEM General Exposure Prediction data for a batch of DTXSIDs}
+\title{Get SEEM General Exposure Prediction data by DTXSID}
 \usage{
-ct_exposure_seem_general(query)
+ct_exposure_seem_general(dtxsid, projection = NULL)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+
+\item{projection}{Specifies whether to use projection. Optional: ccd-general.}
 }
 \value{
 Returns a scalar value
@@ -17,6 +19,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_exposure_seem_general(query = "DTXSID7020182")
+ct_exposure_seem_general(dtxsid = "DTXSID0020232")
 }
 }

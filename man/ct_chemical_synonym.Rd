@@ -2,12 +2,14 @@
 % Please edit documentation in R/ct_chemical_synonym.R
 \name{ct_chemical_synonym}
 \alias{ct_chemical_synonym}
-\title{Get synonyms for a batch of DTXSIDs}
+\title{Get synonyms by DTXSID}
 \usage{
-ct_chemical_synonym(query)
+ct_chemical_synonym(dtxsid, projection = NULL)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+
+\item{projection}{Projections available include: ccd-synonyms and chemical-synonym-all. By default, chemical-synonym-all will be returned.}
 }
 \value{
 Returns a scalar value
@@ -17,6 +19,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_synonym(query = "DTXSID7020182")
+ct_chemical_synonym(dtxsid = "DTXSID7020182")
 }
 }

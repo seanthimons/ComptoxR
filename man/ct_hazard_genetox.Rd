@@ -2,12 +2,12 @@
 % Please edit documentation in R/ct_hazard_genetox.R
 \name{ct_hazard_genetox}
 \alias{ct_hazard_genetox}
-\title{Get summary data for a batch of DTXSID}
+\title{Get summary data by DTXSID}
 \usage{
-ct_hazard_genetox(query)
+ct_hazard_genetox(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 }
 \value{
 Returns a scalar value
@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_hazard_genetox(query = "DTXSID7020182")
+ct_hazard_genetox(dtxsid = "DTXSID0021125")
 }
 }

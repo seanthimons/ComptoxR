@@ -2,12 +2,12 @@
 % Please edit documentation in R/ct_hazard_cancer.R
 \name{ct_hazard_cancer}
 \alias{ct_hazard_cancer}
-\title{Get data for a batch of DTXSIDs}
+\title{Get data by DTXSID}
 \usage{
-ct_hazard_cancer(query)
+ct_hazard_cancer(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 }
 \value{
 Returns a scalar value
@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_hazard_cancer(query = "DTXSID7020182")
+ct_hazard_cancer(dtxsid = "DTXSID0021125")
 }
 }

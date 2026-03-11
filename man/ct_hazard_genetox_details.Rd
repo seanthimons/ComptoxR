@@ -2,12 +2,14 @@
 % Please edit documentation in R/ct_hazard_genetox_details.R
 \name{ct_hazard_genetox_details}
 \alias{ct_hazard_genetox_details}
-\title{Get detailed data for a batch of DTXSIDs}
+\title{Get detailed data by DTXSID with CCD projection}
 \usage{
-ct_hazard_genetox_details(query)
+ct_hazard_genetox_details(dtxsid, projection = NULL)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
+
+\item{projection}{Specifies if projection is used. Option: ccd-genetox-details. If no projection is specified, the default GenetoxDetail projection is returned.}
 }
 \value{
 Returns a scalar value
@@ -17,6 +19,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_hazard_genetox_details(query = "DTXSID7020182")
+ct_hazard_genetox_details(dtxsid = "DTXSID7020182")
 }
 }

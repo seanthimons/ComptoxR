@@ -2,21 +2,21 @@
 % Please edit documentation in R/ct_bioactivity_data_aed.R
 \name{ct_bioactivity_data_aed}
 \alias{ct_bioactivity_data_aed}
-\title{Get AED data for a batch of DTXSIDs}
+\title{Get AED data by DTXSID}
 \usage{
-ct_bioactivity_data_aed(query)
+ct_bioactivity_data_aed(dtxsid)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{dtxsid}{Primary query parameter. Type: string}
 }
 \value{
-Returns a tibble with results (array of objects)
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_aed(query = "DTXSID7020182")
+ct_bioactivity_data_aed(dtxsid = "DTXSID5021209")
 }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ct_chemical_property_experimental.R
 \name{ct_chemical_property_experimental}
 \alias{ct_chemical_property_experimental}
-\title{Get experimental properties for a batch of DTXSIDs}
+\title{Get experimental properties by DTXSID}
 \usage{
 ct_chemical_property_experimental(dtxsid, propName)
 
@@ -12,8 +12,6 @@ ct_chemical_property_experimental(dtxsid, propName)
 \item{dtxsid}{Required parameter}
 
 \item{propName}{Required parameter}
-
-\item{query}{Character vector of strings to send in request body}
 }
 \value{
 Returns a scalar value
@@ -27,7 +25,7 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_chemical_property_experimental(query = "DTXSID7020182")
+ct_chemical_property_experimental(dtxsid = "DTXSID7020182")
 }
 \dontrun{
 ct_chemical_property_experimental(dtxsid = "DTXSID7020182")
