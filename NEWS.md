@@ -35,6 +35,31 @@
   - `ct_list()` → Generated stub with `extract_dtxsids` parameter (extraction via post_response hook)
   - `ct_compound_in_list()` → Generated stub (formatting automated via post_response hook)
 
+* **Phase 29 Direct Template Migration:**
+
+  **Plan 29-01 - Property search migration:**
+
+  **ct_properties() removed:**
+  - Compound search path:
+    * `ct_properties(search_param = "compound", query = dtxsids)` →
+      `ct_chemical_property_experimental_search_bulk(query = dtxsids)` or
+      `ct_chemical_property_predicted_search_bulk(query = dtxsids)`
+    * Add `coerce = TRUE` to split results by propertyId into named list of data frames
+  - Range search path:
+    * `ct_properties(search_param = "property", query = "MolWeight", range = c(100, 500))` →
+      `ct_chemical_property_experimental_search_by_range(propertyName = "MolWeight", start = 100, end = 500)` or
+      `ct_chemical_property_predicted_search_by_range(propertyId = "MolWeight", start = 100, end = 500)`
+
+  **.prop_ids() removed:**
+  - Use `ct_chemical_property_experimental_name()` and `ct_chemical_property_predicted_name()` directly
+
+  **Plan 29-02 - ct_related migration:**
+  - `ct_related()` migrated to generic_request() template
+  - Function name and behavior unchanged
+  - Server cleanup now guaranteed via on.exit (previously could leak on error)
+  - Improved error handling from generic_request infrastructure
+  - All raw httr2 code removed from package
+
 #### New features
 
 * **Hook System for Generated Stubs (Phase 28):** Introduced declarative hook system that allows
