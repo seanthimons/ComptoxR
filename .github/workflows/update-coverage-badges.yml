@@ -36,7 +36,7 @@ jobs:
 
       - name: Install R dependencies
         run: |
-          install.packages(c("jsonlite", "here", "dplyr", "purrr", "stringr", "cli"))
+          install.packages(c("jsonlite", "here", "dplyr", "purrr", "stringr", "cli", "tidyr", "tibble"))
         shell: Rscript {0}
 
       - name: Calculate schema coverage
