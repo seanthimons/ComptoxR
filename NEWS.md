@@ -2,7 +2,7 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-03-03)
+## Unreleased (2026-03-11)
 
 #### Breaking changes
 
@@ -92,6 +92,8 @@
 
 #### Bug fixes
 
+-   add missing coverage script and bump actions for Node.js 24
+    ([a75ba3d](https://github.com/seanthimons/ComptoxR/tree/a75ba3d6da4177215f18b73ccad123452adb9769))
 -   add skip and protected counts to PR body template
     ([241fec4](https://github.com/seanthimons/ComptoxR/tree/241fec461826d907c0fafc2a3ba1d85e77e3497d))
 -   exclude non-API endpoints and non-schema files from diff
@@ -190,6 +192,8 @@
 #### Other changes
 
 -   Update NEWS.md \[skip ci\]
+    ([63ffc8f](https://github.com/seanthimons/ComptoxR/tree/63ffc8fb47f4fe768b08c94d1c8cc82569872d90))
+-   Update NEWS.md \[skip ci\]
     ([0d9f380](https://github.com/seanthimons/ComptoxR/tree/0d9f3802507c76e0eb00fad684e1e56819ab6431))
 -   Update NEWS.md \[skip ci\]
     ([8f65db0](https://github.com/seanthimons/ComptoxR/tree/8f65db012868a337d869bbf200e8434cd2fcfb96))
@@ -238,7 +242,7 @@
     ([de08440](https://github.com/seanthimons/ComptoxR/tree/de08440ce6c952fc7b2a01b9bc73d5bfde12cfbb))
 
 Full set of changes:
-[`v1.3.0...241fec4`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...241fec4)
+[`v1.3.0...a75ba3d`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...a75ba3d)
 
 ## v1.3.0 (2025-10-02)
 
