@@ -32,14 +32,14 @@ cat("Searching for files with experimental lifecycle badge...\n\n")
 
 # Get all R files
 r_files <- list.files(target_dir, pattern = "\\.R$", full.names = TRUE) %>% 
-	.[grep('^chemi_*', basename(.), invert = F)]
+	.[grep('^ct_|^chemi_*', basename(.), invert = F)]
 
 # Check each file for experimental badge
 experimental_files <- character()
 
 for (file in r_files) {
   content <- readLines(file, warn = FALSE)
-  if (any(str_detect(content, fixed('lifecycle::badge("experimental")')))) {
+  if (any(stringr::str_detect(content, stringr::fixed('lifecycle::badge("experimental")')))) {
     experimental_files <- c(experimental_files, file)
   }
 }

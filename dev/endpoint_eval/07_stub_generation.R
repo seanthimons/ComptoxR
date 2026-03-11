@@ -713,6 +713,19 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       param_docs <- "#' @param query Query data to send in request body\n"
     }
 
+    # Merge query parameters into signature/docs if present
+    query_params_call <- ""
+    query_params_code <- ""
+    if (isTRUE(query_param_info$has_params)) {
+      query_sig <- query_param_info$fn_signature
+      if (nzchar(query_sig %||% "")) {
+        fn_signature <- paste0(fn_signature, ", ", query_sig)
+      }
+      param_docs <- paste0(param_docs, query_param_info$param_docs)
+      query_params_call <- query_param_info$params_call %||% ""
+      query_params_code <- query_param_info$params_code %||% ""
+    }
+
     # Build example value
     if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
@@ -744,12 +757,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     if (body_schema_type == "string_array") {
       # Array body: pass directly, generic_request() handles JSON encoding
       fn_body <- glue::glue('
-{fn} <- function(query) {{
-{hook_pre_request}  result <- generic_request(
+{fn} <- function({fn_signature}) {{
+{query_params_code}{hook_pre_request}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){pagination_call_params}
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){query_params_call}{pagination_call_params}
   )
 
   return(result)
@@ -759,12 +772,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     } else {
       # Simple string body: pass directly
       fn_body <- glue::glue('
-{fn} <- function(query) {{
-{hook_pre_request}  result <- generic_request(
+{fn} <- function({fn_signature}) {{
+{query_params_code}{hook_pre_request}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){pagination_call_params}
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){query_params_call}{pagination_call_params}
   )
 
   return(result)

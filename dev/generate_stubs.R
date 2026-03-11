@@ -122,7 +122,8 @@ generate_ct_stubs <- function() {
         str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
         str_replace_all("[/]+", " ") %>%
         str_squish() %>%
-        str_replace_all("\\s", "_"),
+        str_replace_all("\\s", "_") %>%
+        str_replace_all("-", "_"),
       file = paste0("ct_", domain, "_", file, ".R"),
       batch_limit = case_when(
         method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
@@ -131,7 +132,19 @@ generate_ct_stubs <- function() {
       )
     ) %>%
     arrange(forcats::fct_inorder(domain), route, factor(method, levels = c('POST', 'GET'))) %>%
-    distinct(route, .keep_all = TRUE)
+    distinct(route, method, .keep_all = TRUE) %>%
+    group_by(file) %>%
+    mutate(
+      method_count = n(),
+      fn = case_when(
+        method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
+        method == "GET" ~ tools::file_path_sans_ext(basename(file)),
+        method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
+        .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+      )
+    ) %>%
+    ungroup() %>%
+    select(-method_count)
 
   cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
 
@@ -220,7 +233,14 @@ generate_chemi_stubs <- function() {
       ) %>%
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),
-        domain = route %>% str_extract("^api/([^/]+)") %>% str_remove("^api/"),
+        # Extract service slug from source filename (e.g., "chemi-chet-dev.json" -> "chet")
+        service_slug = source_file %>% str_extract("^chemi-([^-]+)") %>% str_remove("^chemi-"),
+        # Use route domain when route has api/ prefix, otherwise fall back to service slug
+        domain = if_else(
+          str_starts(route, "api/"),
+          route %>% str_remove("^api/") %>% str_extract("^[^/]+"),
+          service_slug
+        ),
         name = route %>%
           str_remove_all("^api/") %>%
           str_remove_all(regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
