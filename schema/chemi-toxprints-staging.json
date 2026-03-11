@@ -1462,6 +1462,9 @@
           },
           "actField": {
             "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
           }
         }
       },
