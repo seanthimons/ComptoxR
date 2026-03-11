@@ -26,7 +26,7 @@ jobs:
       ctx_api_key: ${{ secrets.CTX_API_KEY }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
