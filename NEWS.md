@@ -92,6 +92,8 @@
 
 #### Bug fixes
 
+-   add missing R dependencies for coverage badge workflow
+    ([55f5901](https://github.com/seanthimons/ComptoxR/tree/55f5901e11aad5d4aabeebbda067c2cc8ad97050))
 -   add missing coverage script and bump actions for Node.js 24
     ([a75ba3d](https://github.com/seanthimons/ComptoxR/tree/a75ba3d6da4177215f18b73ccad123452adb9769))
 -   add skip and protected counts to PR body template
@@ -192,6 +194,8 @@
 #### Other changes
 
 -   Update NEWS.md \[skip ci\]
+    ([87b6f11](https://github.com/seanthimons/ComptoxR/tree/87b6f11e382f88dfa7f459b55640af22e0d57708))
+-   Update NEWS.md \[skip ci\]
     ([63ffc8f](https://github.com/seanthimons/ComptoxR/tree/63ffc8fb47f4fe768b08c94d1c8cc82569872d90))
 -   Update NEWS.md \[skip ci\]
     ([0d9f380](https://github.com/seanthimons/ComptoxR/tree/0d9f3802507c76e0eb00fad684e1e56819ab6431))
@@ -242,7 +246,7 @@
     ([de08440](https://github.com/seanthimons/ComptoxR/tree/de08440ce6c952fc7b2a01b9bc73d5bfde12cfbb))
 
 Full set of changes:
-[`v1.3.0...a75ba3d`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...a75ba3d)
+[`v1.3.0...55f5901`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...55f5901)
 
 ## v1.3.0 (2025-10-02)
 
