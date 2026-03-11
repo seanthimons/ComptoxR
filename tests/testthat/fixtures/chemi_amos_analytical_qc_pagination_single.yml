@@ -1,0 +1,23 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/analytical_qc_pagination/DTXSID7020182/0
+  response:
+    status: 500
+    headers:
+      Server: nginx/1.21.4
+      Date: Wed, 11 Mar 2026 16:36:06 GMT
+      Content-Type: text/html; charset=utf-8
+      Content-Length: '265'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        <!doctype html>
+        <html lang=en>
+        <title>500 Internal Server Error</title>
+        <h1>Internal Server Error</h1>
+        <p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>
+  recorded_at: 2026-03-11 16:36:06
+recorded_with: VCR-vcr/2.1.0

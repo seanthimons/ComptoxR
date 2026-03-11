@@ -1,0 +1,19 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/search/INVALID_DTXSID
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Wed, 11 Mar 2026 16:36:02 GMT
+      Content-Type: application/json
+      Content-Length: '77'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"record_type_counts":{"fact sheet":0,"method":0,"spectrum":0},"records":[]}
+  recorded_at: 2026-03-11 16:36:02
+recorded_with: VCR-vcr/2.1.0
