@@ -90,7 +90,7 @@
     - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
     - [ ] 28-05-PLAN.md — Stub regeneration, test generator update, full validation
 
-- [x] Phase 29: Direct Template Migration (completed 2026-03-11)
+- [x] Phase 29: Direct Template Migration (completed 2026-03-11)
   - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
   - **Depends on:** Phase 28
   - **Requirements:** [PROP-COERCE, PROP-DELETE, PROP-IDS, REL-MIGRATE, REL-VALIDATE, NEWS-DOC]
@@ -99,9 +99,11 @@
     - [ ] 29-02-PLAN.md — Migrate ct_related to generic_request
 
 - [ ] Phase 30: Build Quality Validation
-  - **Goal:** R CMD check 0 errors/warnings, all migrated functions tested, user-facing functions promoted to @lifecycle stable
+  - **Goal:** R CMD check produces 0 errors (warnings and notes acceptable)
   - **Depends on:** Phase 29
-  - **Plans:** 0 — needs `/gsd:plan-phase 30`
+  - **Requirements:** [BUILD-CLEAN, YAML-DEP, DUP-ARG]
+  - **Plans:** 1 plan
+    - [ ] 30-01-PLAN.md — Add yaml dependency, fix duplicate endpoint argument, verify build
 
 ## Progress
 
@@ -135,4 +137,4 @@
 | 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
 | 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
 | 29. Direct Template Migration | 2/2 | Complete    | 2026-03-11 | — |
-| 30. Build Quality Validation | v2.2 | 0/0 | Planned | — |
+| 30. Build Quality Validation | v2.2 | 0/1 | Planned | — |
