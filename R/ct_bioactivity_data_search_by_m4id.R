@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param query Character vector of strings to send in request body
+#' @param annotate Join assay annotations by aeid
 #' @return Returns a scalar value
 #' @export
 #'
@@ -11,13 +12,15 @@
 #' \dontrun{
 #' ct_bioactivity_data_search_by_m4id_bulk(query = c("DTXSID7020182", "DTXSID10161156", "DTXSID9020035"))
 #' }
-ct_bioactivity_data_search_by_m4id_bulk <- function(query) {
+ct_bioactivity_data_search_by_m4id_bulk <- function(query, annotate = FALSE) {
   result <- generic_request(
     query = query,
     endpoint = "bioactivity/data/search/by-m4id/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
+
+  result <- run_hook("ct_bioactivity_data_search_by_m4id_bulk", "post_response", list(result = result, params = list(annotate = annotate)))
 
   return(result)
 }
