@@ -606,6 +606,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
          attr(body, "query") <- qp[1]
       }
 
+      # Wrap single-object responses (named lists) so list_flatten preserves
+      # the record structure instead of destructuring into individual scalars
+      if (is.list(body) && !is.null(names(body))) {
+        body <- list(body)
+      }
+
       return(body)
     }) %>%
     # Flatten the list of responses (one list of data per batch) into one single list
