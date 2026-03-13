@@ -166,15 +166,23 @@
     "NewFactSheet": {
       "properties": {
         "document_type": {
-          "description": "Type of fact sheet.  Optional.",
+          "description": "Type of fact sheet. Optional.",
           "type": "string"
         },
         "file": {
           "description": "PDF to add.",
           "type": "file"
         },
+        "skip_clean": {
+          "description": "Skip PDF cleaning. Default false.",
+          "type": "boolean"
+        },
+        "skip_ocr": {
+          "description": "Skip OCR. Default false.",
+          "type": "boolean"
+        },
         "source": {
-          "description": "Name of the source.  Optional.",
+          "description": "Name of the source. Optional.",
           "type": "string"
         }
       }
@@ -564,7 +572,7 @@
   "paths": {
     "/api/amos/add_new_fact_sheet/": {
       "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new fact sheet on the<br/>frontend.",
+        "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf<br/>",
         "parameters": [
           {
             "in": "body",
@@ -575,7 +583,7 @@
           }
         ],
         "responses": {},
-        "summary": "Adds a new fact sheet to the database.  The new ID is automatically determined and assigned by this function."
+        "summary": "Adds a new fact sheet to the database. The new ID is automatically determined and assigned."
       }
     },
     "/api/amos/add_new_method/": {
