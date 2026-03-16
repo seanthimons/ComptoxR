@@ -714,12 +714,15 @@
           "name": {
             "type": "string"
           },
-          "valueDigits": {
-            "type": "integer",
-            "format": "int32"
+          "description": {
+            "type": "string"
           },
           "binary": {
             "type": "boolean"
+          },
+          "valueDigits": {
+            "type": "integer",
+            "format": "int32"
           },
           "units": {
             "type": "string"
