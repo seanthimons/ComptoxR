@@ -698,11 +698,11 @@
           "fullName": {
             "type": "string"
           },
-          "headerName": {
-            "type": "string"
-          },
           "strippedBackground": {
             "type": "boolean"
+          },
+          "headerName": {
+            "type": "string"
           }
         }
       },
@@ -731,14 +731,14 @@
           "message": {
             "type": "string"
           },
+          "modelName": {
+            "type": "string"
+          },
           "dataColumns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PassedColumn"
             }
-          },
-          "modelName": {
-            "type": "string"
           }
         }
       },
