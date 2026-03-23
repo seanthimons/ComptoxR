@@ -698,11 +698,11 @@
           "fullName": {
             "type": "string"
           },
-          "strippedBackground": {
-            "type": "boolean"
-          },
           "headerName": {
             "type": "string"
+          },
+          "strippedBackground": {
+            "type": "boolean"
           }
         }
       },

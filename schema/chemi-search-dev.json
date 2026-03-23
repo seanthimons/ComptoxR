@@ -759,6 +759,14 @@
               "MALFORMED"
             ]
           },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
+          },
           "chemId": {
             "type": "string"
           }

@@ -708,6 +708,14 @@
           "error": {
             "type": "string"
           },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
+          },
           "id": {
             "type": "string"
           },
@@ -752,6 +760,14 @@
           },
           "error": {
             "type": "string"
+          },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
           },
           "id": {
             "type": "string"
