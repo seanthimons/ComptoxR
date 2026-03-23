@@ -795,9 +795,6 @@
           "clusterModelLC50": {
             "$ref": "#/components/schemas/ClusterModel"
           },
-          "lc50ScoreMsg": {
-            "type": "string"
-          },
           "moa": {
             "type": "string"
           },
@@ -808,6 +805,9 @@
             "type": "string"
           },
           "lc50Score": {
+            "type": "string"
+          },
+          "lc50ScoreMsg": {
             "type": "string"
           }
         }
@@ -998,6 +998,10 @@
           "smiles": {
             "type": "string"
           },
+          "scmin": {
+            "type": "number",
+            "format": "double"
+          },
           "cas": {
             "type": "string"
           },
@@ -1006,10 +1010,6 @@
           },
           "dtxcid": {
             "type": "string"
-          },
-          "scmin": {
-            "type": "number",
-            "format": "double"
           }
         }
       },
