@@ -1,11 +1,12 @@
 ### Endpoint Changes
 
-**Summary:** 0 endpoints added, 0 removed, 2 modified across 2 schemas
+**Summary:** 0 endpoints added, 0 removed, 3 modified across 3 schemas
 
 
-#### Breaking Changes
+#### Non-Breaking Changes
 
 | Schema | Endpoint | Change | Detail |
 |--------|----------|--------|--------|
-| chemi-amnb_nate-staging.json | POST /api/amnb_nate | Modified | body params removed: [smiles] |
-| chemi-predictor_models-staging.json | POST /api/predictor_models/predict | Modified | body params removed: [smiles, model_id] |
+| chemi-arn_cats-staging.json | POST /api/arn_cats | Modified | body params added: [smiles] |
+| chemi-pfas_atlas-staging.json | POST /api/pfas_atlas | Modified | body params added: [chemicals] |
+| chemi-pfas_cats-staging.json | POST /api/pfas_cats | Modified | body params added: [smiles] |

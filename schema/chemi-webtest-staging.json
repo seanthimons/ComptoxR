@@ -471,6 +471,62 @@
           }
         }
       },
+      "Chemical": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "mol": {
+            "type": "string"
+          },
+          "molFormula": {
+            "type": "string"
+          },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "image": {
+            "type": "string"
+          },
+          "additionalProps": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
       "PredictionRequest": {
         "type": "object",
         "description": "WebTEST prediction request",
@@ -480,6 +536,13 @@
             "description": "Molecule expressed as SMILES or MOL",
             "items": {
               "type": "string"
+            }
+          },
+          "chemicals": {
+            "type": "array",
+            "description": "Molecule expressed as ID & SMILES or MOL",
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
             }
           },
           "endpoints": {
@@ -640,10 +703,6 @@
       "DSSToxRecord": {
         "type": "object",
         "properties": {
-          "gsid": {
-            "type": "integer",
-            "format": "int32"
-          },
           "cid": {
             "type": "string"
           },
@@ -673,6 +732,14 @@
           },
           "error": {
             "type": "string"
+          },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
           },
           "id": {
             "type": "string"
@@ -717,12 +784,12 @@
           "description": {
             "type": "string"
           },
+          "binary": {
+            "type": "boolean"
+          },
           "valueDigits": {
             "type": "integer",
             "format": "int32"
-          },
-          "binary": {
-            "type": "boolean"
           },
           "units": {
             "type": "string"
@@ -795,9 +862,6 @@
           "clusterModelLC50": {
             "$ref": "#/components/schemas/ClusterModel"
           },
-          "lc50ScoreMsg": {
-            "type": "string"
-          },
           "moa": {
             "type": "string"
           },
@@ -808,6 +872,9 @@
             "type": "string"
           },
           "lc50Score": {
+            "type": "string"
+          },
+          "lc50ScoreMsg": {
             "type": "string"
           }
         }
@@ -998,6 +1065,10 @@
           "smiles": {
             "type": "string"
           },
+          "scmin": {
+            "type": "number",
+            "format": "double"
+          },
           "cas": {
             "type": "string"
           },
@@ -1006,10 +1077,6 @@
           },
           "dtxcid": {
             "type": "string"
-          },
-          "scmin": {
-            "type": "number",
-            "format": "double"
           }
         }
       },
