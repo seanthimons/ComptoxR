@@ -698,11 +698,11 @@
           "fullName": {
             "type": "string"
           },
-          "strippedBackground": {
-            "type": "boolean"
-          },
           "headerName": {
             "type": "string"
+          },
+          "strippedBackground": {
+            "type": "boolean"
           }
         }
       },
@@ -731,14 +731,14 @@
           "message": {
             "type": "string"
           },
-          "modelName": {
-            "type": "string"
-          },
           "dataColumns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PassedColumn"
             }
+          },
+          "modelName": {
+            "type": "string"
           }
         }
       },
@@ -903,15 +903,15 @@
           "title": {
             "type": "string"
           },
+          "availableIsConstant": {
+            "type": "boolean"
+          },
           "coreUI": {
             "type": "boolean"
           },
           "isAvailableResetRest": {
             "type": "boolean",
             "writeOnly": true
-          },
-          "availableIsConstant": {
-            "type": "boolean"
           },
           "api_only": {
             "type": "boolean"

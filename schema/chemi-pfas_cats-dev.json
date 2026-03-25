@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.3",
   "info": {
     "title": "PFAS Cats API",
     "version": "1.0",
@@ -29,55 +29,230 @@
     "/api/pfas_cats": {
       "get": {
         "operationId": "app.get_cats",
-        "summary": "Generate descriptors for one molecule",
+        "summary": "Generate PFAS categories for one molecule",
         "parameters": [
           {
             "name": "smiles",
             "in": "query",
-            "description": "SMILES to generate categories for",
+            "description": "SMILES string of the molecule",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "examples": {
-              "valid_PFAS": {
-                "summary": "SMILES that generates PFAs category",
-                "value": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
-              },
-              "invalid_PFAS": {
-                "summary": "Non-PFAS chemical",
-                "value": "CCCCN"
-              }
-            }
+            "example": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
           }
         ],
         "responses": {
           "200": {
-            "description": "Returns a calculated category or error"
+            "description": "Returns calculated PFAS categories or an error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "chemical": {
+                          "type": "object",
+                          "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+                          "properties": {
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "chemId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "cid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "sid": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "casrn": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "name": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "smiles": {
+                              "type": "string"
+                            },
+                            "canonicalSmiles": {
+                              "type": "string"
+                            },
+                            "inchi": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "inchiKey": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "additionalProps": {
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "smiles",
+                            "canonicalSmiles",
+                            "additionalProps"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "result": {
+                          "type": "object",
+                          "properties": {
+                            "categories": {
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "number"
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            }
+                          },
+                          "required": [
+                            "categories"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "chemical"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "result": {
+                    "chemical": {
+                      "chemId": "resolved-chem-id",
+                      "cid": "resolved-cid",
+                      "sid": "resolved-sid",
+                      "casrn": "resolved-casrn",
+                      "name": "Resolved Chemical",
+                      "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                      "canonicalSmiles": "O=C1OC(c2ccccc2)=NC1C(F)(F)C(F)(F)C(F)(F)F",
+                      "inchi": "resolved-inchi",
+                      "inchiKey": "resolved-inchikey",
+                      "additionalProps": {}
+                    },
+                    "result": {
+                      "categories": [
+                        "PFAA precursors",
+                        "6:2FTCA"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "operationId": "app.post_cats",
-        "summary": "Generate categories for multiple molecules",
+        "summary": "Generate PFAS categories for multiple molecules",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "smiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of SMILES strings, kept for backward compatibility with the previous PFAS Cats POST format."
+                  },
                   "chemicals": {
-                    "type": "array"
+                    "type": "array",
+                    "items": {},
+                    "description": "Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility."
                   }
                 },
-                "required": [
-                  "chemicals"
-                ],
-                "example": {
-                  "chemicals": [
-                    "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-                    "CCCCN"
-                  ]
+                "additionalProperties": false
+              },
+              "examples": {
+                "smilesRequest": {
+                  "value": {
+                    "smiles": [
+                      "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                      "CCCCN"
+                    ]
+                  }
+                },
+                "chemicalsRequest": {
+                  "value": {
+                    "chemicals": [
+                      {
+                        "id": 1,
+                        "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
+                      },
+                      {
+                        "id": "ext-2",
+                        "smiles": "CCCCN"
+                      }
+                    ]
+                  }
+                },
+                "legacyChemicalsRequest": {
+                  "value": {
+                    "chemicals": [
+                      "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                      "CCCCN"
+                    ]
+                  }
                 }
               }
             }
@@ -85,7 +260,169 @@
         },
         "responses": {
           "200": {
-            "description": "Returns calculated descriptors"
+            "description": "Returns calculated PFAS categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "chemical": {
+                            "type": "object",
+                            "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+                            "properties": {
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "chemId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "cid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "sid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "casrn": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "smiles": {
+                                "type": "string"
+                              },
+                              "canonicalSmiles": {
+                                "type": "string"
+                              },
+                              "inchi": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "inchiKey": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "additionalProps": {
+                                "type": "object"
+                              }
+                            },
+                            "required": [
+                              "smiles",
+                              "canonicalSmiles",
+                              "additionalProps"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "result": {
+                            "type": "object",
+                            "properties": {
+                              "categories": {
+                                "type": "array",
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "number"
+                                    }
+                                  ],
+                                  "nullable": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "categories"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "error": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "message"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "chemical"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "results"
+                  ],
+                  "additionalProperties": false
+                },
+                "example": {
+                  "results": [
+                    {
+                      "chemical": {
+                        "id": 1,
+                        "chemId": "resolved-chem-id",
+                        "cid": "resolved-cid",
+                        "sid": "resolved-sid",
+                        "casrn": "resolved-casrn",
+                        "name": "Resolved Chemical",
+                        "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                        "canonicalSmiles": "O=C1OC(c2ccccc2)=NC1C(F)(F)C(F)(F)C(F)(F)F",
+                        "inchi": "resolved-inchi",
+                        "inchiKey": "resolved-inchikey",
+                        "additionalProps": {}
+                      },
+                      "result": {
+                        "categories": [
+                          "PFAA precursors",
+                          "6:2FTCA"
+                        ]
+                      }
+                    },
+                    {
+                      "chemical": {
+                        "id": "ext-2",
+                        "chemId": {},
+                        "cid": {},
+                        "sid": {},
+                        "casrn": {},
+                        "name": {},
+                        "smiles": "CCCCN",
+                        "canonicalSmiles": "CCCCN",
+                        "inchi": {},
+                        "inchiKey": {},
+                        "additionalProps": {}
+                      },
+                      "error": {
+                        "message": "PFAS categories cannot be derived for chemical"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -96,19 +433,478 @@
       "Request": {
         "type": "object",
         "properties": {
+          "smiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of SMILES strings, kept for backward compatibility with the previous PFAS Cats POST format."
+          },
           "chemicals": {
-            "type": "array"
+            "type": "array",
+            "items": {},
+            "description": "Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility."
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputChemical": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "smiles": {
+            "type": "string"
           }
         },
         "required": [
-          "chemicals"
+          "smiles"
         ],
-        "example": {
-          "chemicals": [
-            "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-            "CCCCN"
-          ]
-        }
+        "additionalProperties": false
+      },
+      "PredictionItem": {
+        "type": "object",
+        "properties": {
+          "chemical": {
+            "type": "object",
+            "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+            "properties": {
+              "id": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "chemId": {
+                "type": "string",
+                "nullable": true
+              },
+              "cid": {
+                "type": "string",
+                "nullable": true
+              },
+              "sid": {
+                "type": "string",
+                "nullable": true
+              },
+              "casrn": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "smiles": {
+                "type": "string"
+              },
+              "canonicalSmiles": {
+                "type": "string"
+              },
+              "inchi": {
+                "type": "string",
+                "nullable": true
+              },
+              "inchiKey": {
+                "type": "string",
+                "nullable": true
+              },
+              "additionalProps": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "smiles",
+              "canonicalSmiles",
+              "additionalProps"
+            ],
+            "additionalProperties": false
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "categories": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "nullable": true
+                }
+              }
+            },
+            "required": [
+              "categories"
+            ],
+            "additionalProperties": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "chemical"
+        ],
+        "additionalProperties": false
+      },
+      "PredictionResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chemical": {
+                  "type": "object",
+                  "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+                  "properties": {
+                    "id": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "chemId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "cid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "sid": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "casrn": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "smiles": {
+                      "type": "string"
+                    },
+                    "canonicalSmiles": {
+                      "type": "string"
+                    },
+                    "inchi": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "inchiKey": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "additionalProps": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "smiles",
+                    "canonicalSmiles",
+                    "additionalProps"
+                  ],
+                  "additionalProperties": false
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          }
+                        ],
+                        "nullable": true
+                      }
+                    }
+                  },
+                  "required": [
+                    "categories"
+                  ],
+                  "additionalProperties": false
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "chemical"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "SinglePredictionResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "chemical": {
+                "type": "object",
+                "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+                "properties": {
+                  "id": {
+                    "oneOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "chemId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "cid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "sid": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "casrn": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "smiles": {
+                    "type": "string"
+                  },
+                  "canonicalSmiles": {
+                    "type": "string"
+                  },
+                  "inchi": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "inchiKey": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "additionalProps": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "smiles",
+                  "canonicalSmiles",
+                  "additionalProps"
+                ],
+                "additionalProperties": false
+              },
+              "result": {
+                "type": "object",
+                "properties": {
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "nullable": true
+                    }
+                  }
+                },
+                "required": [
+                  "categories"
+                ],
+                "additionalProperties": false
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "chemical"
+            ],
+            "additionalProperties": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false
+      },
+      "ResolvedChemical": {
+        "type": "object",
+        "description": "Chemical payload enriched via the resolver lookup API when resolution succeeds; otherwise a fallback payload is returned.",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "chemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "cid": {
+            "type": "string",
+            "nullable": true
+          },
+          "sid": {
+            "type": "string",
+            "nullable": true
+          },
+          "casrn": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string",
+            "nullable": true
+          },
+          "inchiKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalProps": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "smiles",
+          "canonicalSmiles",
+          "additionalProps"
+        ],
+        "additionalProperties": false
+      },
+      "PfasPredictionResult": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "nullable": true
+            }
+          }
+        },
+        "required": [
+          "categories"
+        ],
+        "additionalProperties": false
+      },
+      "PredictionError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
       }
     }
   },

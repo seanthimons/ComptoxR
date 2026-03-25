@@ -674,10 +674,6 @@
       "DSSToxRecord": {
         "type": "object",
         "properties": {
-          "gsid": {
-            "type": "integer",
-            "format": "int32"
-          },
           "cid": {
             "type": "string"
           },
@@ -707,6 +703,14 @@
           },
           "error": {
             "type": "string"
+          },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
           },
           "id": {
             "type": "string"
@@ -719,10 +723,6 @@
       "DSSToxRecord2": {
         "type": "object",
         "properties": {
-          "gsid": {
-            "type": "integer",
-            "format": "int32"
-          },
           "cid": {
             "type": "string"
           },
@@ -752,6 +752,14 @@
           },
           "error": {
             "type": "string"
+          },
+          "averageMass": {
+            "type": "number",
+            "format": "double"
+          },
+          "monoisotopicMass": {
+            "type": "number",
+            "format": "double"
           },
           "id": {
             "type": "string"
