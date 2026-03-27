@@ -1110,6 +1110,10 @@
           "profile": {
             "type": "string"
           },
+          "or": {
+            "type": "number",
+            "format": "double"
+          },
           "pv1": {
             "type": "number",
             "format": "double"
@@ -1117,10 +1121,6 @@
           "tp": {
             "type": "integer",
             "format": "int32"
-          },
-          "or": {
-            "type": "number",
-            "format": "double"
           },
           "OR": {
             "type": "number",
