@@ -731,14 +731,14 @@
           "message": {
             "type": "string"
           },
-          "modelName": {
-            "type": "string"
-          },
           "dataColumns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PassedColumn"
             }
+          },
+          "modelName": {
+            "type": "string"
           }
         }
       },
@@ -903,12 +903,12 @@
           "title": {
             "type": "string"
           },
+          "coreUI": {
+            "type": "boolean"
+          },
           "isAvailableResetRest": {
             "type": "boolean",
             "writeOnly": true
-          },
-          "coreUI": {
-            "type": "boolean"
           },
           "availableIsConstant": {
             "type": "boolean"
