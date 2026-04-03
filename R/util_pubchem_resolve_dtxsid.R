@@ -1,21 +1,3 @@
-# CAS checksum validator (internal) -----------------------------------------
-
-# Validate a CAS Registry Number check digit.
-# Returns TRUE if the check digit is correct, FALSE otherwise.
-# @param cas Character string in format "NNNNNNN-NN-N"
-# @noRd
-is_valid_cas <- function(cas) {
-  parts <- strsplit(cas, "-")[[1]]
-  if (length(parts) != 3) return(FALSE)
-  digits <- paste0(parts[1], parts[2])
-  digit_vec <- suppressWarnings(as.integer(strsplit(digits, "")[[1]]))
-  if (any(is.na(digit_vec))) return(FALSE)
-  n <- length(digit_vec)
-  weighted_sum <- sum(digit_vec * seq(n, 1))
-  check_digit <- weighted_sum %% 10
-  check_digit == as.integer(parts[3])
-}
-
 #' Resolve PubChem CIDs to CompTox DTXSIDs
 #'
 #' Extracts DTXSIDs from PubChem synonym lists, with a CAS-based CompTox
@@ -117,7 +99,7 @@ util_pubchem_resolve_dtxsid <- function(cid, cache = TRUE) {
     cas_candidates <- purrr::map_chr(syns[unresolved_idx], function(info) {
       cas_pattern <- "^\\d{1,7}-\\d{2}-\\d$"
       cas_matches <- grep(cas_pattern, info$Synonym, value = TRUE)
-      valid <- Filter(is_valid_cas, cas_matches)
+      valid <- cas_matches[is_cas(cas_matches)]
       if (length(valid) > 0) valid[1] else NA_character_
     })
 

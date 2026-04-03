@@ -16,21 +16,19 @@ test_that("util_pubchem_resolve_dtxsid returns named vector for multiple CIDs", 
   expect_named(result, c("2244", "6623"))
 })
 
-test_that("is_valid_cas validates check digits correctly", {
-  is_valid_cas_fn <- get("is_valid_cas", envir = asNamespace("ComptoxR"))
-
+test_that("CAS validation uses existing is_cas() function", {
   # Valid CAS numbers
-  expect_true(is_valid_cas_fn("50-78-2"))     # aspirin
-  expect_true(is_valid_cas_fn("80-05-7"))     # BPA
-  expect_true(is_valid_cas_fn("7732-18-5"))   # water
+  expect_true(is_cas("50-78-2"))     # aspirin
+  expect_true(is_cas("80-05-7"))     # BPA
+  expect_true(is_cas("7732-18-5"))   # water
 
   # Invalid check digits
-  expect_false(is_valid_cas_fn("50-78-3"))
-  expect_false(is_valid_cas_fn("80-05-8"))
+  expect_false(is_cas("50-78-3"))
+  expect_false(is_cas("80-05-8"))
 
   # Malformed
-  expect_false(is_valid_cas_fn("not-a-cas"))
-  expect_false(is_valid_cas_fn("12345"))
+  expect_false(is_cas("not-a-cas"))
+  expect_false(is_cas("12345"))
 })
 
 test_that("util_pubchem_resolve_dtxsid returns NA for unresolvable CID", {
