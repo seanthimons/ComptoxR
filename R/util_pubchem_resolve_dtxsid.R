@@ -8,7 +8,7 @@ is_valid_cas <- function(cas) {
   parts <- strsplit(cas, "-")[[1]]
   if (length(parts) != 3) return(FALSE)
   digits <- paste0(parts[1], parts[2])
-  digit_vec <- as.integer(strsplit(digits, "")[[1]])
+  digit_vec <- suppressWarnings(as.integer(strsplit(digits, "")[[1]]))
   if (any(is.na(digit_vec))) return(FALSE)
   n <- length(digit_vec)
   weighted_sum <- sum(digit_vec * seq(n, 1))
