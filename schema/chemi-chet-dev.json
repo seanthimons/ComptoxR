@@ -996,6 +996,122 @@
         }
       }
     },
+    "/chemicals/{chemical_id}/image": {
+      "get": {
+        "summary": "Render a chemical structure image",
+        "operationId": "api.chemicals.image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chemical_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "png",
+                "svg",
+                "pdf"
+              ],
+              "default": "png"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rendered chemical image",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad render request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chemical or renderable structure not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Renderer unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/chemicals/alias": {
       "get": {
         "summary": "Fetch aliases for a chemical",
@@ -1646,7 +1762,7 @@
         }
       }
     },
-    "/reaction/reaction_DL": {
+    "/reaction/reaction_dl": {
       "post": {
         "summary": "Download reaction list",
         "operationId": "api.reaction.reaction_dl",
@@ -1981,5 +2097,6 @@
         }
       }
     }
-  }
+  },
+  "components": {}
 }

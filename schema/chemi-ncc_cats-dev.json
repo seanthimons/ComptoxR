@@ -269,13 +269,11 @@
                         }
                       },
                       "required": [
-                        "smiles",
-                        "logp",
-                        "ws"
+                        "smiles"
                       ],
                       "additionalProperties": false
                     },
-                    "description": "Array of input chemicals with optional id and required smiles, logp, and ws."
+                    "description": "Array of input chemicals with required smiles and optional id, logp, and ws."
                   }
                 },
                 "required": [
@@ -520,13 +518,11 @@
                 }
               },
               "required": [
-                "smiles",
-                "logp",
-                "ws"
+                "smiles"
               ],
               "additionalProperties": false
             },
-            "description": "Array of input chemicals with optional id and required smiles, logp, and ws."
+            "description": "Array of input chemicals with required smiles and optional id, logp, and ws."
           }
         },
         "required": [
@@ -574,9 +570,7 @@
           }
         },
         "required": [
-          "smiles",
-          "logp",
-          "ws"
+          "smiles"
         ],
         "additionalProperties": false
       },
