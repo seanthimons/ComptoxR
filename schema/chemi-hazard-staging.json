@@ -916,7 +916,14 @@
       "ScoreRecord": {
         "type": "object",
         "properties": {
+          "ID": {
+            "type": "integer",
+            "format": "int64"
+          },
           "hazardName": {
+            "type": "string"
+          },
+          "dtxsid": {
             "type": "string"
           },
           "CAS": {
@@ -925,10 +932,16 @@
           "name": {
             "type": "string"
           },
+          "smiles": {
+            "type": "string"
+          },
           "source": {
             "type": "string"
           },
           "sourceOriginal": {
+            "type": "string"
+          },
+          "sourceTable": {
             "type": "string"
           },
           "listType": {
@@ -972,8 +985,7 @@
             "type": "boolean"
           },
           "duration": {
-            "type": "number",
-            "format": "double"
+            "type": "string"
           },
           "durationUnits": {
             "type": "string"
@@ -990,11 +1002,21 @@
           "testOrganism": {
             "type": "string"
           },
+          "testOrganismType": {
+            "type": "string"
+          },
           "testType": {
             "type": "string"
           },
           "toxvalID": {
             "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
           },
           "cas": {
             "type": "string"

@@ -623,8 +623,11 @@
           "headerName": {
             "type": "string"
           },
-          "cellClass": {
-            "type": "string"
+          "cellClasses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "unit": {
             "type": "string"
@@ -675,10 +678,10 @@
           "unit": {
             "type": "string"
           },
-          "fullName": {
+          "headerNameWithUnits": {
             "type": "string"
           },
-          "headerNameWithUnits": {
+          "fullName": {
             "type": "string"
           }
         }
@@ -731,14 +734,14 @@
           "message": {
             "type": "string"
           },
+          "modelName": {
+            "type": "string"
+          },
           "dataColumns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PassedColumn"
             }
-          },
-          "modelName": {
-            "type": "string"
           }
         }
       },
@@ -903,12 +906,12 @@
           "title": {
             "type": "string"
           },
-          "coreUI": {
-            "type": "boolean"
-          },
           "isAvailableResetRest": {
             "type": "boolean",
             "writeOnly": true
+          },
+          "coreUI": {
+            "type": "boolean"
           },
           "availableIsConstant": {
             "type": "boolean"
