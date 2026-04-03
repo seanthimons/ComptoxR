@@ -32,6 +32,10 @@ run_setup <- function() {
 		"Common Chemistry API" = list(
 			display_url = Sys.getenv("cc_burl"),
 			ping_url = Sys.getenv("cc_burl")
+		),
+		"PubChem PUG REST" = list(
+			display_url = Sys.getenv("pubchem_burl"),
+			ping_url = paste0(Sys.getenv("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
 		)
     #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
@@ -405,6 +409,37 @@ if (is.null(server)) {
 	}
 }
 
+#' Set API endpoint for PubChem PUG REST API
+#'
+#' PubChem only has a production endpoint (no staging or development).
+#'
+#' @param server Defines what server to target. If `NULL`, the server URL is
+#'   reset. Only valid option is `1` (Production).
+#'
+#' @return Should return the Sys Env variable `pubchem_burl`
+#' @export
+pubchem_server <- function(server = NULL) {
+	if (is.null(server)) {
+		{
+			cli::cli_alert_danger("Server URL reset!")
+			Sys.setenv("pubchem_burl" = "")
+		}
+	} else {
+		switch(
+			as.character(server),
+			"1" = Sys.setenv("pubchem_burl" = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/"),
+			{
+				cli::cli_alert_warning("Invalid server option selected!")
+				cli::cli_alert_info("Valid option is 1 (Production). PubChem has no staging environment.")
+				cli::cli_alert_warning("Server URL reset!")
+				Sys.setenv("pubchem_burl" = "")
+			}
+		)
+
+		Sys.getenv("pubchem_burl")
+	}
+}
+
 #' Set debug mode
 #'
 #' @param debug A logical value to enable or disable debug mode.
@@ -521,6 +556,8 @@ reset_servers <- function() {
 	np_server()
 	# Reset Common Chemistry server URL
 	cc_server()
+	# Reset PubChem PUG REST server URL
+	pubchem_server()
 }
 
 # Attach -----------------------------------------------------------------
@@ -539,6 +576,7 @@ reset_servers <- function() {
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
 			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
+			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
 			# Only set verbose if not already configured
 			if (Sys.getenv("run_verbose") == "") {
 				run_verbose(verbose = FALSE)
@@ -556,6 +594,7 @@ reset_servers <- function() {
 			eco_server(server = 1)
 			np_server(server = 1)
 			cc_server(server = 1)
+			pubchem_server(server = 1)
 			# Only set verbose if not already configured
 			if (Sys.getenv("run_verbose") == "") {
 				run_verbose(verbose = FALSE)

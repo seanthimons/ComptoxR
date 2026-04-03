@@ -291,7 +291,9 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
         }
         # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
         else if (batch_limit == 1) {
-          req <- req %>% httr2::req_url_path_append(as.character(query_part))
+          req <- req %>% httr2::req_url_path_append(
+            curl::curl_escape(as.character(query_part))
+          )
 
           # Append additional path parameters if provided
           if (!is.null(path_params) && length(path_params) > 0) {
@@ -1141,4 +1143,170 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
   }
 
   return(res)
+}
+
+# Generic PubChem PUG REST API Request Function
+#
+# Internal template for PubChem PUG REST API requests. Handles URL construction,
+# rate limiting, retry logic, Fault envelope error parsing, and response
+# unwrapping. NOT exported — users call pubchem_* wrapper functions.
+#
+# @param query The query value (CID, name, formula, etc.). NULL for POST-only requests.
+# @param namespace PUG REST namespace: "cid", "name", "smiles", "inchi", "inchikey", "formula".
+# @param operation PUG REST operation path (e.g., "cids", "property/MolecularWeight", "synonyms").
+# @param output Response format. Default "JSON".
+# @param server Environment variable name for the base URL. Default "pubchem_burl".
+# @param method HTTP method: "GET" (default) or "POST".
+# @param body Named list for POST body fields (passed to req_body_form).
+# @param pluck_path Character vector for nested JSON extraction (e.g., c("PropertyTable", "Properties")).
+# @param tidy Logical; return tibble (TRUE) or list (FALSE). Default TRUE.
+# @return A tibble or list depending on tidy parameter.
+# @noRd
+generic_pubchem_request <- function(
+    query = NULL,
+    namespace = "cid",
+    operation,
+    output = "JSON",
+    server = "pubchem_burl",
+    method = "GET",
+    body = NULL,
+    pluck_path = NULL,
+    tidy = TRUE
+) {
+  # --- 1. Base URL Resolution ---
+  base_url <- Sys.getenv(server, unset = server)
+  if (base_url == "") {
+    cli::cli_abort("PubChem server URL not configured. Run {.run pubchem_server(1)} first.")
+  }
+
+  # Check environment flags
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste("PubChem Request:", namespace, "/", operation))
+    cli::cli_dl(c(
+      "Method" = method,
+      "Namespace" = namespace,
+      "Operation" = operation
+    ))
+    cli::cli_rule()
+    cli::cli_end()
+  }
+
+  # --- 2. Request Construction ---
+  if (toupper(method) == "POST") {
+    # POST: query goes in form body, not URL path
+    req <- httr2::request(base_url) |>
+      httr2::req_url_path_append("compound", namespace, operation, output) |>
+      httr2::req_method("POST")
+
+    if (!is.null(body)) {
+      req <- req |> httr2::req_body_form(!!!body)
+    }
+  } else {
+    # GET: query goes in URL path (escaped)
+    req <- httr2::request(base_url) |>
+      httr2::req_url_path_append("compound", namespace)
+
+    if (!is.null(query)) {
+      req <- req |> httr2::req_url_path_append(curl::curl_escape(as.character(query)))
+    }
+
+    req <- req |> httr2::req_url_path_append(operation, output) |>
+      httr2::req_method("GET")
+  }
+
+  # User-Agent per NCBI guidelines
+  pkg_version <- tryCatch(
+    as.character(utils::packageVersion("ComptoxR")),
+    error = function(e) "dev"
+  )
+  req <- req |>
+    httr2::req_user_agent(paste0("ComptoxR/", pkg_version, " (https://github.com/seanthimons/ComptoxR)"))
+
+  # Rate limiting: 4 req/sec (below PubChem's 5/sec ceiling)
+  req <- req |> httr2::req_throttle(rate = 4)
+
+  # Retry for transient errors (429, 5xx) but NOT 404
+  req <- req |> httr2::req_retry(
+    max_tries = 4,
+    is_transient = function(resp) httr2::resp_status(resp) %in% c(429L, 500L, 503L, 504L)
+  )
+
+  # Suppress auto-throw to parse Fault envelope manually
+  req <- req |> httr2::req_error(is_error = function(r) FALSE)
+
+  # --- 3. Debug Hook ---
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  # --- 4. Execution ---
+  resp <- httr2::req_perform(req)
+
+  # --- 5. Response Processing ---
+  status <- httr2::resp_status(resp)
+
+  # Handle non-200 responses
+  if (status < 200 || status >= 300) {
+    # Try to parse Fault envelope
+    fault_body <- tryCatch(httr2::resp_body_json(resp), error = function(e) NULL)
+    if (!is.null(fault_body$Fault)) {
+      cli::cli_warn("PubChem [{fault_body$Fault$Code}]: {fault_body$Fault$Message}")
+    } else {
+      cli::cli_warn("PubChem request failed with HTTP {status}")
+    }
+    if (tidy) return(tibble::tibble()) else return(list())
+  }
+
+  # Parse response body
+  resp_body <- tryCatch(
+    httr2::resp_body_json(resp),
+    error = function(e) {
+      cli::cli_warn("Failed to parse PubChem response as JSON: {e$message}")
+      return(NULL)
+    }
+  )
+
+  if (is.null(resp_body)) {
+    if (tidy) return(tibble::tibble()) else return(list())
+  }
+
+  # Check for Fault in 200 response (PubChem sometimes does this)
+  if (!is.null(resp_body$Fault)) {
+    cli::cli_warn("PubChem [{resp_body$Fault$Code}]: {resp_body$Fault$Message}")
+    if (tidy) return(tibble::tibble()) else return(list())
+  }
+
+  # --- 6. Response Unwrapping ---
+  if (!is.null(pluck_path)) {
+    result <- purrr::pluck(resp_body, !!!pluck_path, .default = NULL)
+    if (is.null(result)) {
+      cli::cli_warn("Unexpected PubChem response structure for {.val {operation}}")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+  } else {
+    result <- resp_body
+  }
+
+  # --- 7. Output Formatting ---
+  if (!tidy) return(result)
+
+  # Convert to tibble
+  if (is.list(result) && length(result) > 0) {
+    # List of records (e.g., PropertyTable.Properties)
+    if (is.list(result[[1]])) {
+      return(safe_tidy_bind(result))
+    }
+    # Simple vector (e.g., CID list)
+    return(tibble::tibble(value = unlist(result)))
+  }
+
+  # Atomic vector
+  if (is.atomic(result)) {
+    return(tibble::tibble(value = result))
+  }
+
+  tibble::tibble()
 }

@@ -23,6 +23,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     cli,
+    curl,
     dplyr (>= 1.1.4),
     glue,
     here,
