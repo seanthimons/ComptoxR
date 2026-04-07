@@ -28,7 +28,7 @@
     },
     "/api/pfas_cats": {
       "get": {
-        "operationId": "app.get_cats",
+        "operationId": "app.get_cats_async",
         "summary": "Generate PFAS categories for one molecule",
         "parameters": [
           {
@@ -199,7 +199,7 @@
         }
       },
       "post": {
-        "operationId": "app.post_cats",
+        "operationId": "app.post_cats_async",
         "summary": "Generate PFAS categories for multiple molecules",
         "requestBody": {
           "required": true,
