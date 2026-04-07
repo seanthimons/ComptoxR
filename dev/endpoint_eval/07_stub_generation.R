@@ -484,9 +484,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # Post-response hooks modify the result after the request
       # They receive list(result = ..., params = list(extra_param1 = ..., ...))
       # and return modified result
+      hook_params_inner <- if (length(hook_param_names) > 0) {
+        paste(hook_param_names, "=", hook_param_names, collapse = ", ")
+      } else {
+        ""
+      }
       hook_post_response <- paste0(
         "  result <- run_hook(\"", fn, "\", \"post_response\", list(result = result, params = list(",
-        paste(hook_param_names, "=", hook_param_names, collapse = ", "),
+        hook_params_inner,
         ")))\n"
       )
     }

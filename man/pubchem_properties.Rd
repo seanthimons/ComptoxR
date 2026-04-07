@@ -4,7 +4,7 @@
 \alias{pubchem_properties}
 \title{Fetch computed properties from PubChem}
 \usage{
-pubchem_properties(cid, properties = NULL)
+pubchem_properties(cid, properties = NULL, cache = TRUE)
 }
 \arguments{
 \item{cid}{Integer or character vector of PubChem CIDs. Does NOT accept
@@ -14,6 +14,9 @@ compound names or DTXSIDs — use \code{\link[=pubchem_search]{pubchem_search()}
 (default), returns 13 core properties: MolecularFormula, MolecularWeight,
 CanonicalSMILES, InChI, InChIKey, XLogP, TPSA, HBondDonorCount,
 HBondAcceptorCount, Complexity, ExactMass, MonoisotopicMass, HeavyAtomCount.}
+
+\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+environment keyed by CID and property set, so repeated calls are instant.}
 }
 \value{
 A tibble with one row per CID and columns for each requested property

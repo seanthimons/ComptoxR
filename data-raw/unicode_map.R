@@ -53,6 +53,7 @@ math_map_combined <- unlist(math_maps)
 
 # 3. Specific Symbol Variants (common in chemical informatics)
 symbol_variants <- c(
+	"\u03B1" = 'alpha', # Greek Alpha Symbol
   "\u03d0" = "beta",    # Greek Beta Symbol
   "\u03d1" = "theta",   # Greek Theta Symbol
   "\u03d2" = "upsilon", # Greek Upsilon Symbol

@@ -43,9 +43,17 @@ run_hook <- function(fn_name, hook_type, data) {
   }
 
   # Execute each hook in chain order
+  # Look up in package namespace first (hook functions are internal/not exported),
+
+  # then fall back to parent environments for testability
+  ns <- asNamespace("ComptoxR")
   result <- data
   for (hook_name in hook_chain) {
-    hook_fn <- match.fun(hook_name)
+    if (exists(hook_name, envir = ns, mode = "function")) {
+      hook_fn <- get(hook_name, envir = ns, mode = "function")
+    } else {
+      hook_fn <- match.fun(hook_name)
+    }
     result <- hook_fn(result)
   }
 

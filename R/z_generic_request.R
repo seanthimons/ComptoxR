@@ -1225,8 +1225,9 @@ generic_pubchem_request <- function(
   req <- req |>
     httr2::req_user_agent(paste0("ComptoxR/", pkg_version, " (https://github.com/seanthimons/ComptoxR)"))
 
-  # Rate limiting: 4 req/sec (below PubChem's 5/sec ceiling)
-  req <- req |> httr2::req_throttle(rate = 4)
+  # Rate limiting: ~4 req/sec (below PubChem's 5/sec ceiling)
+  # capacity=2 with fill_time_s=1 means max 4 requests per 1-second window
+  req <- req |> httr2::req_throttle(capacity = 4, fill_time_s = 1)
 
   # Retry for transient errors (429, 5xx) but NOT 404
   req <- req |> httr2::req_retry(

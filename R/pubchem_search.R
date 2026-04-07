@@ -10,6 +10,8 @@
 #'   InChIKey, or molecular formula).
 #' @param type Character string. The type of identifier in `query`. One of
 #'   `"name"` (default), `"smiles"`, `"inchi"`, `"inchikey"`, or `"formula"`.
+#' @param cache Logical. If `TRUE` (default), results are cached in the session
+#'   environment so repeated searches for the same query and type are instant.
 #'
 #' @return A tibble with a single column `cid` containing integer PubChem CIDs.
 #'   Returns a zero-row tibble if no matches are found.
@@ -44,11 +46,23 @@
 #' }
 #'
 #' @export
-pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey", "formula")) {
+pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey", "formula"),
+                           cache = TRUE) {
   type <- match.arg(type)
 
   if (!is.character(query) || length(query) != 1 || is.na(query) || !nzchar(query)) {
     cli::cli_abort("{.arg query} must be a single non-empty character string.")
+  }
+
+  # --- Session cache check ---
+  cache_key <- paste0(type, ":", query)
+  if (cache) {
+    if (!exists("pubchem_search_cache", envir = .ComptoxREnv)) {
+      .ComptoxREnv$pubchem_search_cache <- new.env(hash = TRUE, parent = emptyenv())
+    }
+    if (exists(cache_key, envir = .ComptoxREnv$pubchem_search_cache)) {
+      return(get(cache_key, envir = .ComptoxREnv$pubchem_search_cache))
+    }
   }
 
   # Structure inputs MUST use POST to avoid URL encoding issues
@@ -74,7 +88,9 @@ pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey"
   # Handle empty results
   if (length(result) == 0) {
     cli::cli_warn("No PubChem CIDs found for {.val {query}} (type: {type})")
-    return(tibble::tibble(cid = integer(0)))
+    out <- tibble::tibble(cid = integer(0))
+    if (cache) assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+    return(out)
   }
 
   cids <- as.integer(unlist(result))
@@ -83,5 +99,7 @@ pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey"
     cli::cli_inform("{length(cids)} CIDs found for {.val {query}}")
   }
 
-  tibble::tibble(cid = cids)
+  out <- tibble::tibble(cid = cids)
+  if (cache) assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+  out
 }

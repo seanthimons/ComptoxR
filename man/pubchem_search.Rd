@@ -6,7 +6,8 @@
 \usage{
 pubchem_search(
   query,
-  type = c("name", "smiles", "inchi", "inchikey", "formula")
+  type = c("name", "smiles", "inchi", "inchikey", "formula"),
+  cache = TRUE
 )
 }
 \arguments{
@@ -15,6 +16,9 @@ InChIKey, or molecular formula).}
 
 \item{type}{Character string. The type of identifier in \code{query}. One of
 \code{"name"} (default), \code{"smiles"}, \code{"inchi"}, \code{"inchikey"}, or \code{"formula"}.}
+
+\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+environment so repeated searches for the same query and type are instant.}
 }
 \value{
 A tibble with a single column \code{cid} containing integer PubChem CIDs.

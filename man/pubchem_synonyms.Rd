@@ -4,7 +4,7 @@
 \alias{pubchem_synonyms}
 \title{Fetch synonyms from PubChem}
 \usage{
-pubchem_synonyms(cid, tidy = TRUE)
+pubchem_synonyms(cid, tidy = TRUE, cache = TRUE)
 }
 \arguments{
 \item{cid}{Integer or character vector of PubChem CIDs.}
@@ -12,6 +12,9 @@ pubchem_synonyms(cid, tidy = TRUE)
 \item{tidy}{Logical. If \code{TRUE} (default), returns a long-format tibble with
 \code{cid} and \code{synonym} columns. If \code{FALSE}, returns a list of lists with
 \code{CID} and \code{Synonym} elements.}
+
+\item{cache}{Logical. If \code{TRUE} (default), results are cached in the session
+environment keyed by CID, so repeated calls for the same CIDs are instant.}
 }
 \value{
 When \code{tidy = TRUE}: a tibble with columns \code{cid} (integer) and

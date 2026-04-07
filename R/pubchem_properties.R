@@ -33,6 +33,8 @@
 #'   (default), returns 13 core properties: MolecularFormula, MolecularWeight,
 #'   CanonicalSMILES, InChI, InChIKey, XLogP, TPSA, HBondDonorCount,
 #'   HBondAcceptorCount, Complexity, ExactMass, MonoisotopicMass, HeavyAtomCount.
+#' @param cache Logical. If `TRUE` (default), results are cached in the session
+#'   environment keyed by CID and property set, so repeated calls are instant.
 #'
 #' @return A tibble with one row per CID and columns for each requested property
 #'   plus a `CID` column. Returns an empty tibble if no results are found.
@@ -57,7 +59,7 @@
 #' }
 #'
 #' @export
-pubchem_properties <- function(cid, properties = NULL) {
+pubchem_properties <- function(cid, properties = NULL, cache = TRUE) {
   if (is.null(properties)) {
     properties <- .pubchem_default_properties
   }
@@ -74,11 +76,37 @@ pubchem_properties <- function(cid, properties = NULL) {
     cli::cli_abort("{.arg cid} must contain at least one valid integer CID.")
   }
 
-  props_csv <- paste(properties, collapse = ",")
+  props_csv <- paste(sort(properties), collapse = ",")
 
-  if (length(cid) > 1) {
-    # Bulk POST, chunked at 100 CIDs per request
-    cid_batches <- split(cid, ceiling(seq_along(cid) / 100))
+  # --- Session cache: per-CID, keyed by property set ---
+  if (cache) {
+    if (!exists("pubchem_props_cache", envir = .ComptoxREnv)) {
+      .ComptoxREnv$pubchem_props_cache <- new.env(hash = TRUE, parent = emptyenv())
+    }
+    cache_env <- .ComptoxREnv$pubchem_props_cache
+
+    cached_rows <- list()
+    uncached_cids <- integer(0)
+    for (id in cid) {
+      key <- paste0(id, "|", props_csv)
+      if (exists(key, envir = cache_env)) {
+        cached_rows <- c(cached_rows, list(get(key, envir = cache_env)))
+      } else {
+        uncached_cids <- c(uncached_cids, id)
+      }
+    }
+
+    if (length(uncached_cids) == 0) {
+      return(dplyr::bind_rows(cached_rows))
+    }
+  } else {
+    uncached_cids <- cid
+    cached_rows <- list()
+  }
+
+  # --- Fetch uncached CIDs ---
+  if (length(uncached_cids) > 1) {
+    cid_batches <- split(uncached_cids, ceiling(seq_along(uncached_cids) / 100))
     results <- purrr::map(cid_batches, function(batch) {
       generic_pubchem_request(
         namespace = "cid",
@@ -89,14 +117,26 @@ pubchem_properties <- function(cid, properties = NULL) {
         tidy = TRUE
       )
     })
-    dplyr::bind_rows(purrr::compact(results))
+    fresh <- dplyr::bind_rows(purrr::compact(results))
   } else {
-    generic_pubchem_request(
-      query = cid,
+    fresh <- generic_pubchem_request(
+      query = uncached_cids,
       namespace = "cid",
       operation = paste0("property/", props_csv),
       pluck_path = c("PropertyTable", "Properties"),
       tidy = TRUE
     )
   }
+
+  # --- Store each row in cache ---
+  if (cache && nrow(fresh) > 0) {
+    cache_env <- .ComptoxREnv$pubchem_props_cache
+    for (i in seq_len(nrow(fresh))) {
+      row <- fresh[i, , drop = FALSE]
+      key <- paste0(row$CID, "|", props_csv)
+      assign(key, row, envir = cache_env)
+    }
+  }
+
+  dplyr::bind_rows(cached_rows, fresh)
 }

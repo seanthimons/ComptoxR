@@ -118,7 +118,7 @@ generate_ct_stubs <- function() {
       route = strip_curly_params(route, leading_slash = 'remove'),
       domain = route %>% str_extract("^[^/]+"),
       file = route %>%
-        str_remove_all(regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
+        str_remove_all(regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
         str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
         str_replace_all("[/]+", " ") %>%
         str_squish() %>%

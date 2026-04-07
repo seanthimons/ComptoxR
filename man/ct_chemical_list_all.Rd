@@ -4,10 +4,18 @@
 \alias{ct_chemical_list_all}
 \title{Get all lists}
 \usage{
-ct_chemical_list_all(projection = "chemicallistall")
+ct_chemical_list_all(
+  projection = "chemicallistall",
+  return_dtxsid = FALSE,
+  coerce = FALSE
+)
 }
 \arguments{
 \item{projection}{Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)}
+
+\item{return_dtxsid}{Return all DTXSIDs contained within each list}
+
+\item{coerce}{Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)}
 }
 \value{
 Returns a scalar value

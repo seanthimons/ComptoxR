@@ -24,7 +24,7 @@ if (!file.exists(hook_config_path)) {
 hook_config <- yaml::read_yaml(hook_config_path)
 
 # Source all hook files to make functions available
-hook_files <- list.files(here::here("R", "hooks"), pattern = "\\.R$", full.names = TRUE)
+hook_files <- list.files(here::here("R"), pattern = "^hooks_.*\\.R$", full.names = TRUE)
 for (hook_file in hook_files) {
   source(hook_file, local = FALSE)
 }
