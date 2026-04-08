@@ -678,10 +678,10 @@
           "unit": {
             "type": "string"
           },
-          "fullName": {
+          "headerNameWithUnits": {
             "type": "string"
           },
-          "headerNameWithUnits": {
+          "fullName": {
             "type": "string"
           }
         }
@@ -906,15 +906,15 @@
           "title": {
             "type": "string"
           },
-          "availableIsConstant": {
-            "type": "boolean"
-          },
           "coreUI": {
             "type": "boolean"
           },
           "isAvailableResetRest": {
             "type": "boolean",
             "writeOnly": true
+          },
+          "availableIsConstant": {
+            "type": "boolean"
           },
           "api_only": {
             "type": "boolean"

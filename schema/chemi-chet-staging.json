@@ -1762,7 +1762,7 @@
         }
       }
     },
-    "/reaction/reaction_DL": {
+    "/reaction/reaction_dl": {
       "post": {
         "summary": "Download reaction list",
         "operationId": "api.reaction.reaction_dl",
@@ -1961,6 +1961,15 @@
       }
     },
     "/reaction/map_DL": {
+      "options": {
+        "summary": "CORS preflight for map download",
+        "operationId": "api.reaction.map_dl_options",
+        "responses": {
+          "200": {
+            "description": "Preflight response"
+          }
+        }
+      },
       "post": {
         "summary": "Download map reaction list",
         "operationId": "api.reaction.map_dl",

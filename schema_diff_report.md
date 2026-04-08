@@ -1,16 +1,18 @@
 ### Endpoint Changes
 
-**Summary:** 1 endpoints added, 0 removed, 1 modified across 2 schemas
+**Summary:** 2 endpoints added, 1 removed, 1 modified across 2 schemas
 
 
 #### Breaking Changes
 
 | Schema | Endpoint | Change | Detail |
 |--------|----------|--------|--------|
-| chemi-arn_cats-staging.json | POST /api/arn_cats | Modified | body params removed: [smiles, chemicals, model] |
+| chemi-chet-staging.json | POST /reaction/reaction_DL | Removed | Endpoint no longer exists |
+| chemi-opera-staging.json | POST /api/opera | Modified | body params removed: [smiles] |
 
 #### Non-Breaking Changes
 
 | Schema | Endpoint | Change | Detail |
 |--------|----------|--------|--------|
-| chemi-chet-staging.json | GET /chemicals/{chemical_id}/image | Added | New endpoint |
+| chemi-chet-staging.json | OPTIONS /reaction/map_DL | Added | New endpoint |
+| chemi-chet-staging.json | POST /reaction/reaction_dl | Added | New endpoint |
