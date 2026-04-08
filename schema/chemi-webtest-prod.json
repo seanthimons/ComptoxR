@@ -458,6 +458,12 @@
           "units": {
             "type": "string"
           },
+          "logUnits": {
+            "type": "string"
+          },
+          "logMolar": {
+            "type": "boolean"
+          },
           "valueDigits": {
             "type": "integer",
             "format": "int32"
@@ -465,12 +471,6 @@
           "logValueDigits": {
             "type": "integer",
             "format": "int32"
-          },
-          "logUnits": {
-            "type": "string"
-          },
-          "logMolar": {
-            "type": "boolean"
           }
         }
       },

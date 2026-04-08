@@ -413,10 +413,14 @@
                         "canonicalSmiles": "CCCCN",
                         "inchi": {},
                         "inchiKey": {},
-                        "additionalProps": {}
+                        "additionalProps": {
+                          "pfasCatsStatus": "skipped",
+                          "pfasCatsSkipReason": "no_fluorine_atoms_detected",
+                          "pfasCatsSkipMessage": "Chemical does not contain fluorine atoms and was skipped by PFAS Cats"
+                        }
                       },
-                      "error": {
-                        "message": "PFAS categories cannot be derived for chemical"
+                      "result": {
+                        "categories": []
                       }
                     }
                   ]
