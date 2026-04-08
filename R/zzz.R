@@ -643,6 +643,14 @@ reset_servers <- function() {
 	#message("Is .classifier a function? ", is.function(.classifier))
 }
 
+.onUnload <- function(libpath) {
+	if (!is.null(.ComptoxREnv$dsstox_db) &&
+			inherits(.ComptoxREnv$dsstox_db, "DBIConnection") &&
+			DBI::dbIsValid(.ComptoxREnv$dsstox_db)) {
+		DBI::dbDisconnect(.ComptoxREnv$dsstox_db, shutdown = TRUE)
+	}
+}
+
 	# (Optional) Silence R CMD check "no visible binding" notes
 	utils::globalVariables(c(".ComptoxREnv"))
 
@@ -694,6 +702,17 @@ reset_servers <- function() {
 			'Verbose' = "{verbose_value}",
 			'Batch limit' = '{Sys.getenv("batch_limit")}'
 		))
+
+		cli::cli_rule(left = "DSSTox local database")
+		db_path <- dss_path()
+		if (file.exists(db_path)) {
+			db_mb <- round(file.info(db_path)$size / 1024^2)
+			cli::cli_alert_success("Installed: {.path {db_path}} ({db_mb} MB)")
+		} else {
+			cli::cli_alert_warning(
+				"Not installed. Run {.run dss_install()} to enable local chemical lookups."
+			)
+		}
   })
 
   run_setup()

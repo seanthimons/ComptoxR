@@ -24,7 +24,9 @@ Depends:
 Imports:
     cli,
     curl,
+    DBI,
     dplyr (>= 1.1.4),
+    duckdb,
     glue,
     here,
     httr2,

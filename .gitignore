@@ -54,6 +54,7 @@ temp.R
 
 *.xlsx
 *.csv
+*.duckdb
 
 /roadmap/
 
