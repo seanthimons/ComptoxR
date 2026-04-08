@@ -335,20 +335,39 @@ epi_server <- function(server = NULL) {
 #' @export
 
 eco_server <- function(server = NULL) {
+	# Close stale connections on every mode switch
+	.eco_close_con()
+
 	if (is.null(server)) {
-		{
-			cli::cli_alert_danger("Server URL reset!")
-			Sys.setenv("eco_burl" = "")
+		cli::cli_alert_danger("Server URL reset!")
+		Sys.setenv("eco_burl" = "")
+	} else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
+		# String path to a local DuckDB file
+		if (!file.exists(server)) {
+			cli::cli_abort("ECOTOX database file not found: {.path {server}}")
 		}
+		Sys.setenv("eco_burl" = normalizePath(server, mustWork = TRUE))
+		Sys.getenv("eco_burl")
 	} else {
 		switch(
 			as.character(server),
 			"1" = Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm"),
 			"2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
 			"3" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
+			"4" = {
+				db_path <- eco_path()
+				if (!file.exists(db_path)) {
+					cli::cli_alert_warning(
+						"ECOTOX database not found at {.path {db_path}}. Run {.run eco_install()} to set up."
+					)
+				}
+				Sys.setenv("eco_burl" = db_path)
+			},
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
-				cli::cli_alert_info("Valid options are 1 (Dashboard), 2 (Production), 3 (Local).")
+				cli::cli_alert_info(
+					"Valid options are 1 (Dashboard), 2 (Production), 3 (Local), 4 (DuckDB), or a file path."
+				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("eco_burl" = "")
 			}
@@ -573,7 +592,7 @@ reset_servers <- function() {
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
-			if (Sys.getenv("eco_burl") == "") eco_server(server = 3)
+			if (Sys.getenv("eco_burl") == "") eco_server(server = 4)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
 			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
@@ -649,6 +668,7 @@ reset_servers <- function() {
 			DBI::dbIsValid(.ComptoxREnv$dsstox_db)) {
 		DBI::dbDisconnect(.ComptoxREnv$dsstox_db, shutdown = TRUE)
 	}
+	.eco_close_con()
 }
 
 	# (Optional) Silence R CMD check "no visible binding" notes
@@ -711,6 +731,17 @@ reset_servers <- function() {
 		} else {
 			cli::cli_alert_warning(
 				"Not installed. Run {.run dss_install()} to enable local chemical lookups."
+			)
+		}
+
+		cli::cli_rule(left = "ECOTOX local database")
+		eco_db_path <- eco_path()
+		if (file.exists(eco_db_path)) {
+			eco_db_mb <- round(file.info(eco_db_path)$size / 1024^2)
+			cli::cli_alert_success("Installed: {.path {eco_db_path}} ({eco_db_mb} MB)")
+		} else {
+			cli::cli_alert_warning(
+				"Not installed. Run {.run eco_install()} to enable local ECOTOX queries."
 			)
 		}
   })
