@@ -19,4 +19,13 @@ Invisibly, the destination path.
 Copies a pre-built ECOTOX DuckDB file to the package data directory.
 Automated build from source is planned for a future release.
 }
+\seealso{
+Other ecotox: 
+\code{\link{eco_fields}()},
+\code{\link{eco_health}()},
+\code{\link{eco_inventory}()},
+\code{\link{eco_results}()},
+\code{\link{eco_species}()},
+\code{\link{eco_tables}()}
+}
 \concept{ecotox}

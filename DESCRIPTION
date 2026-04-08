@@ -25,6 +25,7 @@ Imports:
     cli,
     curl,
     DBI,
+    dbplyr,
     dplyr (>= 1.1.4),
     duckdb,
     glue,
