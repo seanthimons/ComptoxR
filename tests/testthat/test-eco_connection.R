@@ -51,19 +51,19 @@ test_that("eco_server(NULL) resets eco_burl", {
   expect_equal(Sys.getenv("eco_burl"), "")
 })
 
-test_that("eco_server(1) sets EPA public URL", {
-  old_burl <- Sys.getenv("eco_burl")
-  on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
-
-  suppressMessages(eco_server(1))
-  expect_true(grepl("epa\\.gov", Sys.getenv("eco_burl")))
-})
-
-test_that("eco_server(3) sets localhost URL", {
+test_that("eco_server(3) sets EPA public URL", {
   old_burl <- Sys.getenv("eco_burl")
   on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
 
   suppressMessages(eco_server(3))
+  expect_true(grepl("epa\\.gov", Sys.getenv("eco_burl")))
+})
+
+test_that("eco_server(2) sets localhost URL", {
+  old_burl <- Sys.getenv("eco_burl")
+  on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
+
+  suppressMessages(eco_server(2))
   expect_true(grepl("127\\.0\\.0\\.1", Sys.getenv("eco_burl")))
 })
 
@@ -86,21 +86,26 @@ test_that("eco_server() with invalid string path aborts", {
 })
 
 test_that("eco_install() aborts when no source provided", {
-  expect_error(eco_install(), "source")
+  # If DB already exists, get "already exists" error; otherwise "source" error
+  expect_error(eco_install(), "source|already exists")
 })
 
 test_that("eco_install() aborts when source file missing", {
-  expect_error(eco_install(source = "/nonexistent/ecotox.duckdb"), "not found")
+  # If DB already exists, get "already exists" error; otherwise "not found" error
+  expect_error(
+    eco_install(source = "/nonexistent/ecotox.duckdb"),
+    "not found|already exists"
+  )
 })
 
 # -- Live tests (require database) ------------------------------------------
 
-test_that("eco_server(4) resolves to valid .duckdb path", {
+test_that("eco_server(1) resolves to valid .duckdb path", {
   skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
   on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
 
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   expect_true(grepl("\\.duckdb$", Sys.getenv("eco_burl")))
 })
 
@@ -125,7 +130,7 @@ test_that(".eco_get_con() returns valid connection", {
   }, add = TRUE)
 
   .ComptoxREnv$ecotox_db <- NULL
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   con <- .eco_get_con()
   expect_true(inherits(con, "DBIConnection"))
   expect_true(DBI::dbIsValid(con))
@@ -142,7 +147,7 @@ test_that(".eco_get_con() reuses cached connection", {
   }, add = TRUE)
 
   .ComptoxREnv$ecotox_db <- NULL
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   con1 <- .eco_get_con()
   con2 <- .eco_get_con()
   expect_identical(con1, con2)
@@ -158,7 +163,7 @@ test_that(".eco_close_con() disconnects and clears cache", {
   }, add = TRUE)
 
   .ComptoxREnv$ecotox_db <- NULL
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   con <- .eco_get_con()
   expect_true(DBI::dbIsValid(con))
 
@@ -178,12 +183,12 @@ test_that("eco_server() mode switch closes existing connection", {
   }, add = TRUE)
 
   .ComptoxREnv$ecotox_db <- NULL
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   con <- .eco_get_con()
   expect_true(DBI::dbIsValid(con))
 
-  # Switch to mode 3 — should close the DuckDB connection
-  suppressMessages(eco_server(3))
+  # Switch to mode 2 (Plumber) — should close the DuckDB connection
+  suppressMessages(eco_server(2))
   expect_false(DBI::dbIsValid(con))
   expect_null(.ComptoxREnv$ecotox_db)
 })

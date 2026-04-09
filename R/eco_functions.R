@@ -27,8 +27,8 @@ NULL
 
   cli::cli_abort(c(
     "ECOTOX has no public REST API.",
-    "i" = "Use {.code eco_server(4)} for local DuckDB access.",
-    "i" = "Use {.code eco_server(3)} for a self-hosted Plumber instance.",
+    "i" = "Use {.code eco_server(1)} for local DuckDB access.",
+    "i" = "Use {.code eco_server(2)} for a self-hosted Plumber instance.",
     "i" = "Run {.code eco_install()} to set up the local database."
   ))
 }
@@ -177,6 +177,10 @@ eco_health <- function(con = NULL) {
 #' Searches the `species` table by common name, latin name, or eco group
 #' using SQL `ILIKE` pattern matching.
 #'
+#' @details
+#' When routed to a Plumber instance (`eco_server(2)`), the search is
+#' forwarded as a GET request to `/species?query=...&field=...`.
+#'
 #' @param query A character string with SQL ILIKE wildcards (e.g.,
 #'   `"Rainbow%"`).
 #' @param field Which field to search. One of `"common_name"`,
@@ -197,10 +201,13 @@ eco_species <- function(query,
   route <- .eco_route()
 
   if (route == "plumber") {
-    cli::cli_abort(c(
-      "Species search is not available via the Plumber API.",
-      "i" = "Use {.code eco_server(4)} for local DuckDB access."
-    ))
+    burl <- Sys.getenv("eco_burl")
+    resp <- httr2::request(burl) |>
+      httr2::req_url_path_append("species") |>
+      httr2::req_url_query(query = query, field = field) |>
+      httr2::req_perform()
+    return(httr2::resp_body_json(resp, simplifyVector = TRUE) |>
+      tibble::as_tibble())
   }
 
   con <- .eco_get_con(con)

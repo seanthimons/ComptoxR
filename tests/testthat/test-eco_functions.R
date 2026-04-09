@@ -34,7 +34,7 @@ db_available <- file.exists(eco_path())
 test_that("eco_results() returns enriched tibble for DDT", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_results(casrn = "50-29-3")
@@ -46,7 +46,7 @@ test_that("eco_results() returns enriched tibble for DDT", {
 test_that("eco_results() filters by common_name", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_results(common_name = "Rainbow Trout")
@@ -61,7 +61,7 @@ test_that("eco_results() default endpoints match curated regex", {
 
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_results(casrn = "50-29-3", endpoint = "default")
@@ -78,7 +78,7 @@ test_that("eco_results() default endpoints match curated regex", {
 test_that("eco_results() custom endpoint LC50", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_results(casrn = "50-29-3", endpoint = "LC50")
@@ -90,7 +90,7 @@ test_that("eco_results() custom endpoint LC50", {
 test_that("eco_inventory() returns chemicals tibble", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_inventory()
@@ -101,7 +101,7 @@ test_that("eco_inventory() returns chemicals tibble", {
 test_that("eco_tables() returns character vector with core tables", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_tables()
@@ -112,7 +112,7 @@ test_that("eco_tables() returns character vector with core tables", {
 test_that("eco_fields() returns column names for tests table", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_fields("tests")
@@ -123,7 +123,7 @@ test_that("eco_fields() returns column names for tests table", {
 test_that("eco_species() finds Rainbow trout", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_species("Rainbow%")
@@ -135,7 +135,7 @@ test_that("eco_species() finds Rainbow trout", {
 test_that("eco_health() returns status list", {
   skip_if_not(db_available, "ECOTOX database not installed")
   old_burl <- Sys.getenv("eco_burl")
-  suppressMessages(eco_server(4))
+  suppressMessages(eco_server(1))
   on.exit(Sys.setenv(eco_burl = old_burl), add = TRUE)
 
   result <- eco_health()

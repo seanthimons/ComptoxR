@@ -10,21 +10,16 @@
 #' @export
 
 run_setup <- function() {
-  cli::cli_rule(left = 'Configured API endpoints (ping test)')
+  cli::cli_rule(left = 'API endpoints')
   cli::cli_alert_warning(
-  	'You can change these using the *_server() function!'
+  	'Change with *_server() functions'
   )
 	
 	server_urls <- list(
-  # Dynamically get the list of configured server URLs. Hardcoded until health endpoints are fully up.
 		"CompTox Dashboard API" = list(
 			display_url = Sys.getenv("ctx_burl"),
 			ping_url = paste0(Sys.getenv("ctx_burl"), 'chemical/health')
 		),
-    "ECOTOX" = list(
-    	display_url = Sys.getenv("eco_burl"),
-    	ping_url = Sys.getenv("eco_burl")
-    ),
     "EPI Suite API" = list(
     	display_url = Sys.getenv("epi_burl"),
     	ping_url = Sys.getenv("epi_burl")
@@ -37,8 +32,10 @@ run_setup <- function() {
 			display_url = Sys.getenv("pubchem_burl"),
 			ping_url = paste0(Sys.getenv("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
 		)
-    #,"Natural Products API" = 'https://app.naturalproducts.net/home'
   )
+
+  # ECOTOX is handled as a custom entry below (not in the ping list)
+  eco_url <- Sys.getenv("eco_burl")
 
   # Filter out any endpoints with empty/unset URLs
   active_endpoints <- purrr::keep(
@@ -151,7 +148,64 @@ run_setup <- function() {
       	latency_fmt = ""
       )))
     })
-    
+
+    # DSSTox — always local, no remote API
+    results <- c(results, list(list(
+    	name = "DSSTox",
+    	url = "",
+    	status_text = cli::col_cyan("local DuckDB (no remote API)"),
+    	latency = NA_real_,
+    	latency_fmt = ""
+    )))
+
+    # ECOTOX — show active mode only
+    eco_latency <- NA_real_
+    eco_latency_fmt <- ""
+
+    if (nzchar(eco_url) && grepl("\\.duckdb$", eco_url)) {
+      # Local DuckDB mode
+      eco_status <- cli::col_cyan("local DuckDB")
+    } else if (nzchar(eco_url) && grepl("127\\.0\\.0\\.1", eco_url)) {
+      # Plumber mode — ping health-check
+      tryCatch({
+        req <- httr2::request(paste0(eco_url, "/health-check")) |>
+          httr2::req_timeout(3) |>
+          httr2::req_error(is_error = \(resp) FALSE)
+        start_time <- Sys.time()
+        resp <- httr2::req_perform(req)
+        end_time <- Sys.time()
+        lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
+        eco_latency <- lat
+        eco_latency_fmt <- paste0(round(lat * 1000), "ms")
+        status <- httr2::resp_status(resp)
+        eco_status <- if (status >= 200 && status < 400) {
+          cli::col_green(cli::format_inline("OK ({status})"))
+        } else {
+          cli::col_yellow(cli::format_inline("WARN ({status})"))
+        }
+      }, error = function(e) {
+        eco_status <<- cli::col_red("not responding")
+      })
+    } else if (nzchar(eco_url) && grepl("cfpub\\.epa\\.gov", eco_url)) {
+      eco_status <- cli::col_yellow("not active")
+    } else if (nzchar(eco_url) && grepl("hcd\\.rtpnc\\.epa\\.gov", eco_url)) {
+      eco_status <- cli::col_yellow("placeholder")
+    } else if (nzchar(eco_url)) {
+      eco_status <- cli::col_yellow("unknown endpoint")
+    } else {
+      eco_status <- cli::col_yellow("not configured")
+    }
+
+    eco_url_display <- if (nzchar(eco_url) && grepl("^https?://", eco_url)) eco_url else ""
+
+    results <- c(results, list(list(
+    	name = "ECOTOX",
+    	url = eco_url_display,
+    	status_text = eco_status,
+    	latency = eco_latency,
+    	latency_fmt = eco_latency_fmt
+    )))
+
     healthy_latency <- 0.3
     degrading_latency <- 1.0
     
@@ -195,7 +249,7 @@ run_setup <- function() {
 
 
   # Token check ----
-  cli::cli_rule(left = 'API Token Status')
+  cli::cli_rule(left = 'API tokens')
   # Directly check the environment variable to avoid aborting during package load
   api_key <- Sys.getenv("ctx_api_key")
   if (api_key == "") {
@@ -351,10 +405,7 @@ eco_server <- function(server = NULL) {
 	} else {
 		switch(
 			as.character(server),
-			"1" = Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm"),
-			"2" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
-			"3" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
-			"4" = {
+			"1" = {
 				db_path <- eco_path()
 				if (!file.exists(db_path)) {
 					cli::cli_alert_warning(
@@ -363,10 +414,13 @@ eco_server <- function(server = NULL) {
 				}
 				Sys.setenv("eco_burl" = db_path)
 			},
+			"2" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
+			"3" = Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm"),
+			"4" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
-					"Valid options are 1 (Dashboard), 2 (Production), 3 (Local), 4 (DuckDB), or a file path."
+					"Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev site), or a file path."
 				)
 				cli::cli_alert_warning("Server URL reset!")
 				Sys.setenv("eco_burl" = "")
@@ -592,7 +646,7 @@ reset_servers <- function() {
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
-			if (Sys.getenv("eco_burl") == "") eco_server(server = 4)
+			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
 			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
@@ -723,25 +777,37 @@ reset_servers <- function() {
 			'Batch limit' = '{Sys.getenv("batch_limit")}'
 		))
 
-		cli::cli_rule(left = "DSSTox local database")
+		cli::cli_rule(left = "Local databases")
+
+		# DSSTox
 		db_path <- dss_path()
 		if (file.exists(db_path)) {
 			db_mb <- round(file.info(db_path)$size / 1024^2)
-			cli::cli_alert_success("Installed: {.path {db_path}} ({db_mb} MB)")
+			cli::cli_alert_success(
+				"DSSTox: Installed ({db_mb} MB) {cli::col_silver(paste0('-- ', db_path))}"
+			)
 		} else {
 			cli::cli_alert_warning(
-				"Not installed. Run {.run dss_install()} to enable local chemical lookups."
+				"DSSTox: Not installed. Run {.run dss_install()} to enable local chemical lookups."
 			)
 		}
 
-		cli::cli_rule(left = "ECOTOX local database")
+		# ECOTOX
 		eco_db_path <- eco_path()
 		if (file.exists(eco_db_path)) {
 			eco_db_mb <- round(file.info(eco_db_path)$size / 1024^2)
-			cli::cli_alert_success("Installed: {.path {eco_db_path}} ({eco_db_mb} MB)")
+			# Try to read version date from ECOTOX versions table
+			eco_version <- tryCatch({
+				con <- .eco_get_con()
+				v <- DBI::dbGetQuery(con, "SELECT date FROM versions WHERE latest = TRUE LIMIT 1")
+				if (nrow(v) > 0) paste0(", v", v$date[[1]]) else ""
+			}, error = function(e) "")
+			cli::cli_alert_success(
+				"ECOTOX: Installed ({eco_db_mb} MB{eco_version}) {cli::col_silver(paste0('-- ', eco_db_path))}"
+			)
 		} else {
 			cli::cli_alert_warning(
-				"Not installed. Run {.run eco_install()} to enable local ECOTOX queries."
+				"ECOTOX: Not installed. Run {.run eco_install()} to enable local ECOTOX queries."
 			)
 		}
   })

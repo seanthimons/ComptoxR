@@ -26,6 +26,10 @@ A tibble of matching species records.
 Searches the \code{species} table by common name, latin name, or eco group
 using SQL \code{ILIKE} pattern matching.
 }
+\details{
+When routed to a Plumber instance (\code{eco_server(2)}), the search is
+forwarded as a GET request to \verb{/species?query=...&field=...}.
+}
 \examples{
 \dontrun{
 eco_species("Rainbow\%")
