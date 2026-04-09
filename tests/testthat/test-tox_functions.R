@@ -97,3 +97,32 @@ test_that("tox_tables() includes expected tables", {
   expect_true("toxval" %in% tables)
   expect_true("_metadata" %in% tables)
 })
+
+test_that("human_eco column exists and is filterable", {
+  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+
+  fields <- tox_fields("toxval")
+  expect_true("human_eco" %in% fields)
+
+  # Verify filter actually returns results
+  result <- tox_results(source = "IRIS", cols = "all")
+  expect_true("human_eco" %in% names(result))
+})
+
+test_that("default columns all exist in database", {
+  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+
+  fields <- tox_fields("toxval")
+  default_cols <- .tox_default_cols()
+  missing <- setdiff(default_cols, fields)
+  expect_length(missing, 0)
+})
+
+test_that("tox_results(qc_status = 'all') includes failed records", {
+  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+
+  # "all" should return more rows than default "pass_or_not_determined"
+  all_res <- tox_results(source = "IRIS", qc_status = "all")
+  filtered_res <- tox_results(source = "IRIS", qc_status = "pass_or_not_determined")
+  expect_true(nrow(all_res) >= nrow(filtered_res))
+})

@@ -206,6 +206,50 @@ run_setup <- function() {
     	latency_fmt = eco_latency_fmt
     )))
 
+    # ToxValDB — show active mode
+    tox_url <- Sys.getenv("tox_burl")
+    tox_latency <- NA_real_
+    tox_latency_fmt <- ""
+
+    if (nzchar(tox_url) && grepl("\\.duckdb$", tox_url)) {
+      tox_status <- cli::col_cyan("local DuckDB")
+    } else if (nzchar(tox_url) && grepl("127\\.0\\.0\\.1", tox_url)) {
+      # Plumber mode — ping health-check
+      tryCatch({
+        req <- httr2::request(paste0(tox_url, "/health-check")) |>
+          httr2::req_timeout(3) |>
+          httr2::req_error(is_error = \(resp) FALSE)
+        start_time <- Sys.time()
+        resp <- httr2::req_perform(req)
+        end_time <- Sys.time()
+        lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
+        tox_latency <- lat
+        tox_latency_fmt <- paste0(round(lat * 1000), "ms")
+        status <- httr2::resp_status(resp)
+        tox_status <- if (status >= 200 && status < 400) {
+          cli::col_green(cli::format_inline("OK ({status})"))
+        } else {
+          cli::col_yellow(cli::format_inline("WARN ({status})"))
+        }
+      }, error = function(e) {
+        tox_status <<- cli::col_red("not responding")
+      })
+    } else if (nzchar(tox_url)) {
+      tox_status <- cli::col_yellow("unknown endpoint")
+    } else {
+      tox_status <- cli::col_yellow("not configured")
+    }
+
+    tox_url_display <- if (nzchar(tox_url) && grepl("^https?://", tox_url)) tox_url else ""
+
+    results <- c(results, list(list(
+    	name = "ToxValDB",
+    	url = tox_url_display,
+    	status_text = tox_status,
+    	latency = tox_latency,
+    	latency_fmt = tox_latency_fmt
+    )))
+
     healthy_latency <- 0.3
     degrading_latency <- 1.0
     

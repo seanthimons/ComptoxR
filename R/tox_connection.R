@@ -50,8 +50,8 @@ tox_path <- function() {
   if (!file.exists(path)) {
     cli::cli_abort(c(
       "ToxValDB database not found at {.path {path}}.",
-      "i" = "Run {.run tox_install(source = 'path/to/toxval.duckdb')} to install from a file.",
-      "i" = "Or run {.run tox_install()} to build from source."
+      "i" = "Run {.run tox_install()} to download from GitHub Releases.",
+      "i" = "Or run {.run tox_install(source = 'path/to/toxval.duckdb')} to install from a local file."
     ))
   }
 
@@ -78,16 +78,22 @@ tox_path <- function() {
 
 #' Install the ToxValDB local database
 #'
-#' Copies a pre-built ToxValDB DuckDB file to the package data directory, or
-#' runs the ETL build pipeline from source if no file is provided.
+#' Installs the ToxValDB DuckDB database. By default, downloads a pre-built
+#' database from the latest GitHub Release. Falls back to building from source
+#' if the release asset is not available.
 #'
-#' @param source Path to an existing `toxval.duckdb` file. If `NULL`, runs
-#'   the build script at `inst/toxval/toxval_build.R`.
+#' @param source Path to an existing `toxval.duckdb` file. If provided, the
+#'   file is copied directly (skipping download and build).
+#' @param build Logical; if `TRUE`, skip the download attempt and build from
+#'   source immediately. Default `FALSE`.
+#' @param tag GitHub release tag to download from (e.g. `"v2.1.0"`). Default
+#'   `"latest"`.
 #' @param overwrite Logical; overwrite an existing database? Default `FALSE`.
 #' @return Invisibly, the destination path.
 #' @export
 #' @family toxval
-tox_install <- function(source = NULL, overwrite = FALSE) {
+tox_install <- function(source = NULL, build = FALSE, tag = "latest",
+                        overwrite = FALSE) {
   dest <- tox_path()
   dest_dir <- dirname(dest)
 
@@ -102,24 +108,59 @@ tox_install <- function(source = NULL, overwrite = FALSE) {
     ))
   }
 
+  # 1. Local source file (explicit path)
   if (!is.null(source)) {
     if (!file.exists(source)) {
       cli::cli_abort("Source file not found: {.path {source}}")
     }
     file.copy(source, dest, overwrite = TRUE)
     cli::cli_alert_success("Installed ToxValDB database to {.path {dest}}")
-  } else {
-    build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
-    if (!nzchar(build_script) || !file.exists(build_script)) {
-      cli::cli_abort(c(
-        "Build script not found. Build-from-source requires a development install.",
-        "i" = "Provide a {.arg source} path to a pre-built database instead."
-      ))
-    }
-    cli::cli_alert_info("Running ToxValDB ETL build pipeline...")
-    source(build_script, local = new.env(parent = globalenv()))
-    cli::cli_alert_success("ToxValDB database built at {.path {dest}}")
+    return(invisible(dest))
   }
 
+  # 2. Build from source (explicit opt-in)
+  if (isTRUE(build)) {
+    .tox_build_from_source(dest)
+    return(invisible(dest))
+  }
+
+  # 3. Default: try GitHub Release download, fall back to build
+  tryCatch(
+    .db_download_release("toxval", dest, tag = tag),
+    error = function(e) {
+      cli::cli_warn(c(
+        "Could not download ToxValDB from GitHub Release.",
+        "i" = conditionMessage(e),
+        "i" = "Falling back to build-from-source."
+      ))
+      .tox_build_from_source(dest)
+    }
+  )
+
   invisible(dest)
+}
+
+#' Build ToxValDB from source ETL script
+#' @param dest Destination path for the database.
+#' @keywords internal
+#' @noRd
+.tox_build_from_source <- function(dest) {
+  build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
+  if (!nzchar(build_script) || !file.exists(build_script)) {
+    cli::cli_abort(c(
+      "Build script not found. Build-from-source requires a development install.",
+      "i" = "Provide a {.arg source} path to a pre-built database instead."
+    ))
+  }
+  cli::cli_alert_info("Running ToxValDB ETL build pipeline...")
+  source(build_script, local = new.env(parent = globalenv()))
+
+  if (!file.exists(dest)) {
+    cli::cli_abort(c(
+      "Build script completed but database was not created at {.path {dest}}.",
+      "i" = "The ETL script may have failed silently or written to a different location.",
+      "i" = "Provide a {.arg source} path to a pre-built database instead."
+    ))
+  }
+  cli::cli_alert_success("ToxValDB database built at {.path {dest}}")
 }

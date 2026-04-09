@@ -1,0 +1,106 @@
+name: Build Database Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      databases:
+        description: 'Which databases to build (comma-separated: dsstox,ecotox,toxval)'
+        required: true
+        default: 'dsstox,ecotox,toxval'
+        type: string
+      release_tag:
+        description: 'Release tag to attach assets to (e.g. v2.1.0). Leave empty for latest.'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  build-databases:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools, any::duckdb, any::DBI, any::httr2, any::readr, any::dplyr, any::tidyr, any::purrr, any::stringr, any::cli
+
+      - name: Install package
+        run: devtools::install(dependencies = TRUE, reload = TRUE)
+        shell: Rscript {0}
+
+      - name: Determine release tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.release_tag }}" ]; then
+            echo "tag=${{ github.event.inputs.release_tag }}" >> $GITHUB_OUTPUT
+          else
+            TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Build DSSTox database
+        if: contains(github.event.inputs.databases, 'dsstox')
+        run: |
+          source("data-raw/dsstox.R")
+          file.copy(
+            file.path(tools::R_user_dir("ComptoxR", "data"), "dsstox.duckdb"),
+            "dsstox.duckdb"
+          )
+        shell: Rscript {0}
+
+      - name: Build ECOTOX database
+        if: contains(github.event.inputs.databases, 'ecotox')
+        run: |
+          # ECOTOX build requires the inst/ build script
+          build_script <- system.file("ecotox", "ecotox_build.R", package = "ComptoxR")
+          if (nzchar(build_script) && file.exists(build_script)) {
+            source(build_script)
+          } else {
+            cli::cli_abort("ECOTOX build script not found")
+          }
+          file.copy(
+            file.path(tools::R_user_dir("ComptoxR", "data"), "ecotox.duckdb"),
+            "ecotox.duckdb"
+          )
+        shell: Rscript {0}
+
+      - name: Build ToxValDB database
+        if: contains(github.event.inputs.databases, 'toxval')
+        run: |
+          build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
+          if (nzchar(build_script) && file.exists(build_script)) {
+            source(build_script)
+          } else {
+            cli::cli_abort("ToxValDB build script not found")
+          }
+          file.copy(
+            file.path(tools::R_user_dir("ComptoxR", "data"), "toxval.duckdb"),
+            "toxval.duckdb"
+          )
+        shell: Rscript {0}
+
+      - name: Upload database assets to release
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          DBS="${{ github.event.inputs.databases }}"
+
+          for db in dsstox ecotox toxval; do
+            if echo "$DBS" | grep -q "$db"; then
+              if [ -f "${db}.duckdb" ]; then
+                echo "Uploading ${db}.duckdb to release $TAG"
+                gh release upload "$TAG" "${db}.duckdb" --clobber
+              else
+                echo "Warning: ${db}.duckdb not found, skipping"
+              fi
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}

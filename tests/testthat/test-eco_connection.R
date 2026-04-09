@@ -98,6 +98,69 @@ test_that("eco_install() aborts when source file missing", {
   )
 })
 
+# -- Download path tests ---------------------------------------------------
+
+test_that("eco_install() default path calls .db_download_release", {
+  download_called <- FALSE
+
+  local_mocked_bindings(
+    .db_download_release = function(db_name, dest_path, tag, ...) {
+      download_called <<- TRUE
+      expect_equal(db_name, "ecotox")
+      expect_equal(tag, "latest")
+      writeBin(raw(0), dest_path)
+    }
+  )
+
+  dest <- withr::local_tempdir()
+  withr::local_options(ComptoxR.ecotox_path = file.path(dest, "ecotox.duckdb"))
+
+  eco_install(overwrite = TRUE)
+  expect_true(download_called)
+})
+
+test_that("eco_install(build = TRUE) skips download", {
+  download_called <- FALSE
+
+  local_mocked_bindings(
+    .db_download_release = function(...) {
+      download_called <<- TRUE
+    },
+    .eco_build_from_source = function(dest) {
+      writeBin(raw(0), dest)
+    }
+  )
+
+  dest <- withr::local_tempdir()
+  withr::local_options(ComptoxR.ecotox_path = file.path(dest, "ecotox.duckdb"))
+
+  eco_install(build = TRUE, overwrite = TRUE)
+  expect_false(download_called)
+})
+
+test_that("eco_install() falls back to build on download failure", {
+  build_called <- FALSE
+
+  local_mocked_bindings(
+    .db_download_release = function(...) {
+      cli::cli_abort("No assets found")
+    },
+    .eco_build_from_source = function(dest) {
+      build_called <<- TRUE
+      writeBin(raw(0), dest)
+    }
+  )
+
+  dest <- withr::local_tempdir()
+  withr::local_options(ComptoxR.ecotox_path = file.path(dest, "ecotox.duckdb"))
+
+  expect_warning(
+    eco_install(overwrite = TRUE),
+    "Could not download"
+  )
+  expect_true(build_called)
+})
+
 # -- Live tests (require database) ------------------------------------------
 
 test_that("eco_server(1) resolves to valid .duckdb path", {

@@ -4,11 +4,17 @@
 \alias{tox_install}
 \title{Install the ToxValDB local database}
 \usage{
-tox_install(source = NULL, overwrite = FALSE)
+tox_install(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE)
 }
 \arguments{
-\item{source}{Path to an existing \code{toxval.duckdb} file. If \code{NULL}, runs
-the build script at \code{inst/toxval/toxval_build.R}.}
+\item{source}{Path to an existing \code{toxval.duckdb} file. If provided, the
+file is copied directly (skipping download and build).}
+
+\item{build}{Logical; if \code{TRUE}, skip the download attempt and build from
+source immediately. Default \code{FALSE}.}
+
+\item{tag}{GitHub release tag to download from (e.g. \code{"v2.1.0"}). Default
+\code{"latest"}.}
 
 \item{overwrite}{Logical; overwrite an existing database? Default \code{FALSE}.}
 }
@@ -16,8 +22,9 @@ the build script at \code{inst/toxval/toxval_build.R}.}
 Invisibly, the destination path.
 }
 \description{
-Copies a pre-built ToxValDB DuckDB file to the package data directory, or
-runs the ETL build pipeline from source if no file is provided.
+Installs the ToxValDB DuckDB database. By default, downloads a pre-built
+database from the latest GitHub Release. Falls back to building from source
+if the release asset is not available.
 }
 \seealso{
 Other toxval: 

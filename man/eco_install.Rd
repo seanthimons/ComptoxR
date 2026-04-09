@@ -4,11 +4,17 @@
 \alias{eco_install}
 \title{Install the ECOTOX local database}
 \usage{
-eco_install(source = NULL, overwrite = FALSE)
+eco_install(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE)
 }
 \arguments{
-\item{source}{Path to an existing \code{ecotox.duckdb} file. If \code{NULL}, runs
-the build script at \code{data-raw/ecotox.R}.}
+\item{source}{Path to an existing \code{ecotox.duckdb} file. If provided, the
+file is copied directly (skipping download and build).}
+
+\item{build}{Logical; if \code{TRUE}, skip the download attempt and build from
+source immediately. Default \code{FALSE}.}
+
+\item{tag}{GitHub release tag to download from (e.g. \code{"v2.1.0"}). Default
+\code{"latest"}.}
 
 \item{overwrite}{Logical; overwrite an existing database? Default \code{FALSE}.}
 }
@@ -16,8 +22,9 @@ the build script at \code{data-raw/ecotox.R}.}
 Invisibly, the destination path.
 }
 \description{
-Copies a pre-built ECOTOX DuckDB file to the package data directory, or
-runs the ETL build pipeline from source if no file is provided.
+Installs the ECOTOX DuckDB database. By default, downloads a pre-built
+database from the latest GitHub Release. Falls back to building from source
+if the release asset is not available.
 }
 \seealso{
 Other ecotox: 
