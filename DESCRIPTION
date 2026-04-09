@@ -13,11 +13,11 @@ Description: ComptoxR provides access to the US EPA's CompTox Chemical
     through multiple identifier types (DTXSID, CAS, SMILES, InChI, names),
     hazard and safety assessment (including GHS codes, NFPA safety information,
     cancer, genotoxicity data), bioactivity and toxicity screening from multiple
-    databases (GenRA, TEST, ECOTOX), chemical properties and molecular
+    databases (GenRA, TEST, ECOTOX, ToxValDB), chemical properties and molecular
     descriptors, environmental fate and exposure data, and risk prioritization
     with regulatory list associations. It supports batch processing for large
     queries and integrates data from CompTox Chemistry Dashboard, GenRA Engine,
-    Toxicity Estimation Software Tool (TEST), ECOTOX, and EPI Suite.
+    Toxicity Estimation Software Tool (TEST), ECOTOX, ToxValDB, and EPI Suite.
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.5.0)

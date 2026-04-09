@@ -431,6 +431,63 @@ eco_server <- function(server = NULL) {
 	}
 }
 
+#' Set API endpoints for ToxValDB endpoints
+#'
+#' @param server Defines what server to target. If `NULL`, the server URL is
+#'   reset. Valid options are:
+#'   \itemize{
+#'     \item Local DuckDB: 1
+#'     \item Plumber: 2
+#'     \item EPA ToxValDB browser: 3
+#'     \item Development: 4
+#'   }
+#'   A string argument is treated as a path to a custom `.duckdb` file.
+#'
+#' @return Should return the Sys Env variable `tox_burl`
+#' @export
+tox_server <- function(server = NULL) {
+	# Close stale connections on every mode switch
+	.tox_close_con()
+
+	if (is.null(server)) {
+		cli::cli_alert_danger("Server URL reset!")
+		Sys.setenv("tox_burl" = "")
+	} else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
+		# String path to a local DuckDB file
+		if (!file.exists(server)) {
+			cli::cli_abort("ToxValDB database file not found: {.path {server}}")
+		}
+		Sys.setenv("tox_burl" = normalizePath(server, mustWork = TRUE))
+		Sys.getenv("tox_burl")
+	} else {
+		switch(
+			as.character(server),
+			"1" = {
+				db_path <- tox_path()
+				if (!file.exists(db_path)) {
+					cli::cli_alert_warning(
+						"ToxValDB database not found at {.path {db_path}}. Run {.run tox_install()} to set up."
+					)
+				}
+				Sys.setenv("tox_burl" = db_path)
+			},
+			"2" = Sys.setenv("tox_burl" = "http://127.0.0.1:5556"),
+			"3" = Sys.setenv("tox_burl" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"),
+			"4" = Sys.setenv("tox_burl" = ""),
+			{
+				cli::cli_alert_warning("Invalid server option selected!")
+				cli::cli_alert_info(
+					"Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev), or a file path."
+				)
+				cli::cli_alert_warning("Server URL reset!")
+				Sys.setenv("tox_burl" = "")
+			}
+		)
+
+		Sys.getenv("tox_burl")
+	}
+}
+
 np_server <- function(server = NULL){
 	if (is.null(server)) {
 		{
@@ -625,6 +682,8 @@ reset_servers <- function() {
 	epi_server()
 	# Reset ECOTOX server URL
 	eco_server()
+	# Reset ToxValDB server URL
+	tox_server()
 	# Reset Natural Products server URL
 	np_server()
 	# Reset Common Chemistry server URL
@@ -647,6 +706,7 @@ reset_servers <- function() {
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
+			if (Sys.getenv("tox_burl") == "") tox_server(server = 1)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
 			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
@@ -665,6 +725,7 @@ reset_servers <- function() {
 			chemi_server(server = 1)
 			epi_server(server = 1)
 			eco_server(server = 1)
+			tox_server(server = 1)
 			np_server(server = 1)
 			cc_server(server = 1)
 			pubchem_server(server = 1)
@@ -723,6 +784,7 @@ reset_servers <- function() {
 		DBI::dbDisconnect(.ComptoxREnv$dsstox_db, shutdown = TRUE)
 	}
 	.eco_close_con()
+	.tox_close_con()
 }
 
 	# (Optional) Silence R CMD check "no visible binding" notes
@@ -808,6 +870,24 @@ reset_servers <- function() {
 		} else {
 			cli::cli_alert_warning(
 				"ECOTOX: Not installed. Run {.run eco_install()} to enable local ECOTOX queries."
+			)
+		}
+
+		# ToxValDB
+		tox_db_path <- tox_path()
+		if (file.exists(tox_db_path)) {
+			tox_db_mb <- round(file.info(tox_db_path)$size / 1024^2)
+			tox_version <- tryCatch({
+				con <- .tox_get_con()
+				v <- DBI::dbGetQuery(con, "SELECT version_label FROM _metadata WHERE is_latest = TRUE LIMIT 1")
+				if (nrow(v) > 0) paste0(", v", v$version_label[[1]]) else ""
+			}, error = function(e) "")
+			cli::cli_alert_success(
+				"ToxValDB: Installed ({tox_db_mb} MB{tox_version}) {cli::col_silver(paste0('-- ', tox_db_path))}"
+			)
+		} else {
+			cli::cli_alert_warning(
+				"ToxValDB: Not installed. Run {.run tox_install()} to enable local ToxValDB queries."
 			)
 		}
   })
