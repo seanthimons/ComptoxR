@@ -4,9 +4,9 @@
 # with enrichment tables (unit conversion, lifestage, risk binning, etc.).
 #
 # Usage:
-#   source("data-raw/ecotox.R")
-#   — or —
 #   eco_install()  # locates and sources this script automatically
+#   — or, from a development checkout —
+#   source("data-raw/ecotox.R")
 #
 # Requires Suggests: arrow, janitor, lubridate, readr, readxl, rvest
 

@@ -16,7 +16,7 @@ NULL
 .eco_route <- function() {
   burl <- Sys.getenv("eco_burl")
 
-  if (nzchar(burl) && grepl("\\.duckdb$", burl) && file.exists(burl)) {
+  if (nzchar(burl) && grepl("\\.duckdb$", burl)) {
     return("duckdb")
   }
 
@@ -645,7 +645,11 @@ eco_results <- function(casrn = NULL,
       init_conc = dplyr::if_else(
         !is.na(.data$conc1_mean),
         .data$conc1_mean,
-        sqrt(pmax(.data$conc1_min * .data$conc1_max, 0, na.rm = TRUE))
+        dplyr::if_else(
+          !is.na(.data$conc1_min) & !is.na(.data$conc1_max),
+          sqrt(pmax(.data$conc1_min * .data$conc1_max, 0)),
+          NA_real_
+        )
       ),
       final_conc = .data$init_conc * .data$conversion_factor_unit,
       obs_duration = dplyr::coalesce(
