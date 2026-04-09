@@ -50,7 +50,8 @@ eco_path <- function() {
   if (!file.exists(path)) {
     cli::cli_abort(c(
       "ECOTOX database not found at {.path {path}}.",
-      "i" = "Run {.run eco_install(source = 'path/to/ecotox.duckdb')} to install it."
+      "i" = "Run {.run eco_install(source = 'path/to/ecotox.duckdb')} to install from a file.",
+      "i" = "Or run {.run eco_install()} to build from source."
     ))
   }
 
@@ -77,11 +78,11 @@ eco_path <- function() {
 
 #' Install the ECOTOX local database
 #'
-#' Copies a pre-built ECOTOX DuckDB file to the package data directory.
-#' Automated build from source is planned for a future release.
+#' Copies a pre-built ECOTOX DuckDB file to the package data directory, or
+#' runs the ETL build pipeline from source if no file is provided.
 #'
-#' @param source Path to an existing `ecotox.duckdb` file. Required in this
-#'   release.
+#' @param source Path to an existing `ecotox.duckdb` file. If `NULL`, runs
+#'   the build script at `data-raw/ecotox.R`.
 #' @param overwrite Logical; overwrite an existing database? Default `FALSE`.
 #' @return Invisibly, the destination path.
 #' @export
@@ -89,17 +90,6 @@ eco_path <- function() {
 eco_install <- function(source = NULL, overwrite = FALSE) {
   dest <- eco_path()
   dest_dir <- dirname(dest)
-
-  if (is.null(source)) {
-    cli::cli_abort(c(
-      "A {.arg source} path to a pre-built ECOTOX database is required.",
-      "i" = "Automated build from source is coming in a future release."
-    ))
-  }
-
-  if (!file.exists(source)) {
-    cli::cli_abort("Source file not found: {.path {source}}")
-  }
 
   if (!dir.exists(dest_dir)) {
     dir.create(dest_dir, recursive = TRUE)
@@ -112,7 +102,31 @@ eco_install <- function(source = NULL, overwrite = FALSE) {
     ))
   }
 
-  file.copy(source, dest, overwrite = TRUE)
-  cli::cli_alert_success("Installed ECOTOX database to {.path {dest}}")
+  if (!is.null(source)) {
+    if (!file.exists(source)) {
+      cli::cli_abort("Source file not found: {.path {source}}")
+    }
+    file.copy(source, dest, overwrite = TRUE)
+    cli::cli_alert_success("Installed ECOTOX database to {.path {dest}}")
+  } else {
+    build_script <- system.file("data-raw", "ecotox.R", package = "ComptoxR")
+    if (!nzchar(build_script)) {
+      # Fallback for development (not yet installed)
+      build_script <- file.path(
+        system.file(package = "ComptoxR"),
+        "..", "data-raw", "ecotox.R"
+      )
+    }
+    if (!file.exists(build_script)) {
+      cli::cli_abort(c(
+        "Build script not found.",
+        "i" = "Provide a {.arg source} path to a pre-built database instead."
+      ))
+    }
+    cli::cli_alert_info("Running ECOTOX ETL build pipeline...")
+    source(build_script, local = new.env(parent = globalenv()))
+    cli::cli_alert_success("ECOTOX database built at {.path {dest}}")
+  }
+
   invisible(dest)
 }

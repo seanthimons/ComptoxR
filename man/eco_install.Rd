@@ -7,8 +7,8 @@
 eco_install(source = NULL, overwrite = FALSE)
 }
 \arguments{
-\item{source}{Path to an existing \code{ecotox.duckdb} file. Required in this
-release.}
+\item{source}{Path to an existing \code{ecotox.duckdb} file. If \code{NULL}, runs
+the build script at \code{data-raw/ecotox.R}.}
 
 \item{overwrite}{Logical; overwrite an existing database? Default \code{FALSE}.}
 }
@@ -16,8 +16,8 @@ release.}
 Invisibly, the destination path.
 }
 \description{
-Copies a pre-built ECOTOX DuckDB file to the package data directory.
-Automated build from source is planned for a future release.
+Copies a pre-built ECOTOX DuckDB file to the package data directory, or
+runs the ETL build pipeline from source if no file is provided.
 }
 \seealso{
 Other ecotox: 
