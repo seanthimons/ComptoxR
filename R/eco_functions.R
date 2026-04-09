@@ -1,9 +1,8 @@
 # ECOTOX Local Database — Core Query Functions
 # -----------------------------------------------
 
-# dbplyr is needed for dplyr::tbl() to translate to SQL on DBI connections.
-# This explicit import prevents the "Namespace in Imports field not imported
-# from: 'dbplyr'" R CMD check warning.
+# dbplyr is required at runtime for dplyr::tbl() on DBI connections.
+# This explicit import prevents R CMD check "not imported from" warnings.
 #' @importFrom dbplyr sql_render
 NULL
 
@@ -341,10 +340,19 @@ eco_results <- function(casrn = NULL,
   # Drop NULLs
   body <- body[!vapply(body, is.null, logical(1))]
 
-  resp <- httr2::request(burl) |>
-    httr2::req_url_path_append("results") |>
-    httr2::req_body_json(body) |>
-    httr2::req_perform()
+  resp <- tryCatch(
+    httr2::request(burl) |>
+      httr2::req_url_path_append("results") |>
+      httr2::req_body_json(body) |>
+      httr2::req_perform(),
+    error = function(e) {
+      cli::cli_abort(c(
+        "ECOTOX Plumber request failed.",
+        "x" = conditionMessage(e),
+        "i" = "Is the Plumber server running? Check {.code eco_server(2)}."
+      ))
+    }
+  )
 
   httr2::resp_body_json(resp, simplifyVector = TRUE) |>
     tibble::as_tibble()
@@ -395,7 +403,7 @@ eco_results <- function(casrn = NULL,
   result_query <- dplyr::tbl(con, "tests") |>
     dplyr::select(
       dplyr::all_of(base_test_cols),
-      dplyr::contains("_duration_"),
+      dplyr::starts_with("study_duration_"),
       dplyr::any_of(test_cols)
     ) |>
     dplyr::inner_join(
@@ -524,20 +532,12 @@ eco_results <- function(casrn = NULL,
         c("exposure_type", "measurement", "endpoint", "effect"),
         ~ stringr::str_remove_all(., "\\/|\\*|\\~")
       ),
-      dplyr::across(
-        c("obs_duration_mean", "obs_duration_min", "obs_duration_max"),
-        ~ dplyr::sql(sprintf(
-          "TRY_CAST(REGEXP_REPLACE(%s, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)",
-          dplyr::cur_column()
-        ))
-      ),
-      dplyr::across(
-        c("conc1_mean", "conc1_min", "conc1_max"),
-        ~ dplyr::sql(sprintf(
-          "TRY_CAST(REGEXP_REPLACE(%s, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)",
-          dplyr::cur_column()
-        ))
-      )
+      obs_duration_mean = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_mean, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      obs_duration_min  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      obs_duration_max  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      conc1_mean = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_mean, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      conc1_min  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      conc1_max  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)")
     )
 
   # Exposure types
@@ -566,8 +566,7 @@ eco_results <- function(casrn = NULL,
       dplyr::tbl(con, "app_effect_groups_and_measurements") |>
         dplyr::select(
           "measurement_term", "measurement_name",
-          "effect_code", effect_name = "effect",
-          -"measurement_definition"
+          "effect_code", effect_name = "effect"
         ),
       by = dplyr::join_by(
         "effect" == "effect_code",

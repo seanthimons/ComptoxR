@@ -10,6 +10,8 @@
 #
 # Requires Suggests: arrow, janitor, lubridate, readr, readxl, rvest
 
+.build_ecotox_db <- function() {
+
 # 0. Dependency check --------------------------------------------------------
 
 rlang::check_installed(
@@ -1192,3 +1194,5 @@ cli::cli_alert_info(
 )
 
 invisible(output_path)
+}
+.build_ecotox_db()

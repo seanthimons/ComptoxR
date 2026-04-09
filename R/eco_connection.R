@@ -110,16 +110,9 @@ eco_install <- function(source = NULL, overwrite = FALSE) {
     cli::cli_alert_success("Installed ECOTOX database to {.path {dest}}")
   } else {
     build_script <- system.file("data-raw", "ecotox.R", package = "ComptoxR")
-    if (!nzchar(build_script)) {
-      # Fallback for development (not yet installed)
-      build_script <- file.path(
-        system.file(package = "ComptoxR"),
-        "..", "data-raw", "ecotox.R"
-      )
-    }
-    if (!file.exists(build_script)) {
+    if (!nzchar(build_script) || !file.exists(build_script)) {
       cli::cli_abort(c(
-        "Build script not found.",
+        "Build script not found. Build-from-source requires a development install.",
         "i" = "Provide a {.arg source} path to a pre-built database instead."
       ))
     }

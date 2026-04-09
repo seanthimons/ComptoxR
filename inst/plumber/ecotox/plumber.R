@@ -12,6 +12,9 @@ library(ComptoxR)
 # Default: eco_server(1) uses R_user_dir resolution.
 eco_server(getOption("ComptoxR.ecotox_path", default = 1))
 
+# Note: Uses internal ComptoxR function. Requires matching ComptoxR version.
+.get_con <- function() ComptoxR:::.eco_get_con()
+
 #* @apiTitle ECOTOX API
 #* @apiDescription Thin wrapper around ComptoxR eco_*() functions
 
@@ -44,7 +47,11 @@ function(table_name) {
 #* @param table_name:str Table name
 #* @get /tables/<table_name>
 function(table_name) {
-  con <- ComptoxR:::.eco_get_con()
+  con <- .get_con()
+  valid_tables <- DBI::dbListTables(con)
+  if (!table_name %in% valid_tables) {
+    stop("Table not found: ", table_name, call. = FALSE)
+  }
   dplyr::tbl(con, table_name) |> dplyr::collect()
 }
 
