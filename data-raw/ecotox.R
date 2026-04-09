@@ -561,6 +561,7 @@ duration_conversion <- dplyr::tbl(eco_con, "duration_unit_codes") |>
       stringr::str_detect(tolower(description), "day") ~ 24,
       stringr::str_detect(tolower(description), "week") ~ 24 * 7,
       stringr::str_detect(tolower(description), "month") ~ 24 * 30.43685,
+      stringr::str_detect(tolower(description), "year") ~ 24 * 365.2425,
       .default = 1
     ),
     cur_unit_duration = dplyr::case_when(

@@ -642,14 +642,11 @@ eco_results <- function(casrn = NULL,
 .eco_post_process <- function(df) {
   df |>
     dplyr::mutate(
-      init_conc = dplyr::if_else(
-        !is.na(.data$conc1_mean),
-        .data$conc1_mean,
-        dplyr::if_else(
-          !is.na(.data$conc1_min) & !is.na(.data$conc1_max),
+      init_conc = dplyr::case_when(
+        !is.na(.data$conc1_mean) ~ .data$conc1_mean,
+        !is.na(.data$conc1_min) & !is.na(.data$conc1_max) ~
           sqrt(pmax(.data$conc1_min * .data$conc1_max, 0)),
-          NA_real_
-        )
+        .default = NA_real_
       ),
       final_conc = .data$init_conc * .data$conversion_factor_unit,
       obs_duration = dplyr::coalesce(
