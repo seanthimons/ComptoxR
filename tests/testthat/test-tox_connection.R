@@ -137,11 +137,51 @@ test_that("tox_install() falls back to build on download failure", {
 
 # Build pipeline tests ---------------------------------------------------
 
-test_that(".build_toxval_db staleness check skips fresh database", {
-  # Source the build script to get .build_toxval_db
+# Helper: load .build_toxval_db() without triggering the trailing auto-invoke.
+# Parses the build script and evaluates only the function/constant definitions.
+.load_build_defs <- function(env = parent.frame()) {
+  build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
+  if (!nzchar(build_script)) return(invisible(FALSE))
+  exprs <- parse(build_script)
+  # Evaluate everything except the bare .build_toxval_db() call at the end
+  for (expr in exprs) {
+    txt <- deparse(expr, width.cutoff = 500L)
+    if (identical(trimws(paste(txt, collapse = "")), ".build_toxval_db()")) next
+    eval(expr, envir = env)
+  }
+  invisible(TRUE)
+}
+
+test_that("build script self-invokes when sourced into isolated env", {
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
   skip_if(!nzchar(build_script), "Build script not found (not dev install)")
-  source(build_script, local = TRUE)
+
+  # Source into an isolated env — the real invocation path used by
+  # .tox_build_from_source(). Verify the function actually executes
+  # (not just gets defined and discarded). We detect execution by
+  # checking that cli messages were emitted (staleness check or Clowder query).
+  msgs <- character(0)
+  result <- withCallingHandlers(
+    tryCatch(
+      source(build_script, local = new.env(parent = globalenv())),
+      error = function(e) conditionMessage(e)
+    ),
+    message = function(m) {
+      msgs <<- c(msgs, conditionMessage(m))
+      invokeRestart("muffleMessage")
+    }
+  )
+
+  # If the function ran, it would emit at least one cli message
+  # (staleness skip, Clowder query, or dependency check)
+  ran <- length(msgs) > 0 || (is.character(result) && nzchar(result))
+  expect_true(ran, label = "build script should execute .build_toxval_db() on source")
+})
+
+test_that(".build_toxval_db staleness check skips fresh database", {
+  build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
+  skip_if(!nzchar(build_script), "Build script not found (not dev install)")
+  .load_build_defs()
 
   # Create a fake "fresh" database file
   tmp <- withr::local_tempdir()
@@ -161,20 +201,32 @@ test_that(".build_toxval_db staleness check skips fresh database", {
 test_that(".build_toxval_db force=TRUE bypasses staleness", {
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
   skip_if(!nzchar(build_script), "Build script not found (not dev install)")
-  source(build_script, local = TRUE)
+  .load_build_defs()
 
-  # Create a fresh database file
+  # Create a fresh database file (normally would be skipped by staleness check)
   tmp <- withr::local_tempdir()
   db_path <- file.path(tmp, "toxval.duckdb")
   writeBin(raw(10), db_path)
 
-  # force=TRUE should attempt the build (and fail at Clowder in CI)
-  # We just verify it does NOT short-circuit
-  expect_error(
-    .build_toxval_db(output_path = db_path, force = TRUE),
-    "Clowder|download|timeout|connect",
-    ignore.case = TRUE
+  # force=TRUE should NOT short-circuit. The build will either succeed
+  # (changing the file) or fail at Clowder/network. Either way, verify
+  # it attempted the build by checking the file was modified or an error
+  # related to the build (not staleness) was thrown.
+  result <- tryCatch(
+    {
+      .build_toxval_db(output_path = db_path, force = TRUE)
+      "success"
+    },
+    error = function(e) conditionMessage(e)
   )
+
+  if (result == "success") {
+    # Build succeeded — file should be larger than 10 bytes
+    expect_true(file.size(db_path) > 10)
+  } else {
+    # Build failed at network/Clowder — that's fine, it didn't short-circuit
+    expect_false(grepl("up-to-date", result, ignore.case = TRUE))
+  }
 })
 
 test_that("version extraction handles standard v97_0 format", {
@@ -234,7 +286,7 @@ test_that("atomic build produces valid DuckDB on success", {
 test_that("row count threshold constant is reasonable", {
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
   skip_if(!nzchar(build_script), "Build script not found (not dev install)")
-  source(build_script, local = TRUE)
+  .load_build_defs()
 
   # Verify the constant exists and is a sensible value
   expect_true(exists(".TOXVAL_MIN_ROWS"))

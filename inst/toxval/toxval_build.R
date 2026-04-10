@@ -8,7 +8,7 @@
 #   .build_toxval_db()  # or call via tox_install()
 
 # Clowder dataset URL for ToxValDB v9 per-source files
-.TOXVAL_CLOWDER_DATASET <- "https://clowder.edap-cluster.com/api/datasets/6572f1d2e4b0bfe1afb58fec/files"
+.TOXVAL_CLOWDER_DATASET <- "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
 
 # Minimum expected row count for ToxValDB v9.x (sanity check)
 .TOXVAL_MIN_ROWS <- 100000L
@@ -25,7 +25,7 @@
 
   # 2. Resolve output path
   if (is.null(output_path)) {
-    output_path <- ComptoxR::tox_path()
+    output_path <- file.path(tools::R_user_dir("ComptoxR", "data"), "toxval.duckdb")
   }
   output_dir <- dirname(output_path)
   if (!dir.exists(output_dir)) {
@@ -92,11 +92,26 @@
     ))
   }
 
-  # Filter for toxval_v9 Excel files
+
+  # Filter for latest-version toxval per-source Excel files.
+  # Dataset contains multiple versions (v92..v97) and QC-fail files —
+  # keep only toxval_all_res_toxval_v9*_*.xlsx (the per-source data files).
   toxval_files <- purrr::keep(file_list, function(f) {
     fname <- f$filename %||% ""
-    grepl("^toxval_v9.*\\.xlsx$", fname, ignore.case = TRUE)
+    grepl("^toxval_all_res_toxval_v9.*\\.xlsx$", fname, ignore.case = TRUE)
   })
+
+  # Keep only the latest version present
+  if (length(toxval_files) > 0) {
+    all_versions <- purrr::map_chr(toxval_files, ~ {
+      stringr::str_extract(.x$filename, "v\\d{2,3}_\\d+") %||% ""
+    })
+    latest_ver <- sort(unique(all_versions), decreasing = TRUE)[1]
+    toxval_files <- purrr::keep(toxval_files, function(f) {
+      grepl(latest_ver, f$filename, fixed = TRUE)
+    })
+    cli::cli_alert_info("Using latest version: {latest_ver}")
+  }
 
   if (length(toxval_files) == 0) {
     cli::cli_abort("No ToxValDB v9 Excel files found in Clowder dataset.")
@@ -261,3 +276,4 @@
 
   invisible(output_path)
 }
+.build_toxval_db()
