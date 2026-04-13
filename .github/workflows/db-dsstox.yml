@@ -22,6 +22,8 @@ jobs:
   build-dsstox:
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    permissions:
+      contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -39,6 +41,13 @@ jobs:
             TAG=$(gh release list --repo "${{ github.repository }}" --limit 1 \
               --json tagName --jq '.[0].tagName')
             echo "value=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate release tag
+        run: |
+          if [ -z "${{ steps.tag.outputs.value }}" ]; then
+            echo "No release tag found — cannot proceed"
+            exit 1
           fi
 
       - name: Check asset staleness
@@ -63,6 +72,11 @@ jobs:
             echo "needed=true" >> "$GITHUB_OUTPUT"
           else
             ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s)
+            if [ -z "$ASSET_EPOCH" ]; then
+              echo "Could not parse asset date '$ASSET_DATE' — forcing rebuild"
+              echo "needed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
             NOW_EPOCH=$(date +%s)
             AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
             echo "Asset age: ${AGE_DAYS} days (threshold: ${MAX_AGE} days)"
@@ -94,6 +108,10 @@ jobs:
         if: steps.check.outputs.needed == 'true'
         run: |
           DB_PATH=$(Rscript -e "cat(file.path(tools::R_user_dir('ComptoxR', 'data'), 'dsstox.duckdb'))")
+          if [ -z "$DB_PATH" ] || [ ! -f "$DB_PATH" ]; then
+            echo "Database not found at '$DB_PATH' — build may have failed"
+            exit 1
+          fi
           gh release upload "${{ steps.tag.outputs.value }}" "$DB_PATH" \
             --clobber \
             --repo "${{ github.repository }}"
