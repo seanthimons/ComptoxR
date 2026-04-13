@@ -5,11 +5,11 @@
 
 #' Determine ToxValDB routing mode
 #'
-#' Checks `toxval_burl()` env var and returns the access mode.
+#' Checks `toxval_burl` env var and returns the access mode.
 #' @return `"duckdb"` or `"plumber"`.
 #' @keywords internal
 .tox_route <- function() {
-  burl <- Sys.getenv("toxval_burl()")
+  burl <- Sys.getenv("toxval_burl")
 
   if (nzchar(burl) && grepl("\\.duckdb$", burl)) {
     return("duckdb")
@@ -83,7 +83,7 @@ toxval_tables <- function(con = NULL) {
     con <- .tox_get_con(con)
     DBI::dbListTables(con)
   } else {
-    burl <- Sys.getenv("toxval_burl()")
+    burl <- Sys.getenv("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("tables") |>
       httr2::req_perform()
@@ -114,7 +114,7 @@ toxval_fields <- function(table_name, con = NULL) {
     con <- .tox_get_con(con)
     DBI::dbListFields(con, table_name)
   } else {
-    burl <- Sys.getenv("toxval_burl()")
+    burl <- Sys.getenv("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("fields", table_name) |>
       httr2::req_perform()
@@ -142,7 +142,7 @@ toxval_health <- function(con = NULL) {
 
   if (route == "duckdb") {
     con <- .tox_get_con(con)
-    db_path <- Sys.getenv("toxval_burl()")
+    db_path <- Sys.getenv("toxval_burl")
 
     meta <- tryCatch(
       {
@@ -161,7 +161,7 @@ toxval_health <- function(con = NULL) {
       db_size_mb = round(file.size(db_path) / (1024 * 1024), 2)
     )
   } else {
-    burl <- Sys.getenv("toxval_burl()")
+    burl <- Sys.getenv("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("health-check") |>
       httr2::req_perform()
@@ -190,7 +190,7 @@ toxval_sources <- function(con = NULL) {
     result <- DBI::dbGetQuery(con, "SELECT DISTINCT source FROM toxval ORDER BY source")
     result$source
   } else {
-    burl <- Sys.getenv("toxval_burl()")
+    burl <- Sys.getenv("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("sources") |>
       httr2::req_perform()
@@ -226,7 +226,7 @@ toxval_search <- function(dtxsid,
   route <- .tox_route()
 
   if (route == "plumber") {
-    burl <- Sys.getenv("toxval_burl()")
+    burl <- Sys.getenv("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("search") |>
       httr2::req_body_json(list(dtxsid = dtxsid, limit = as.integer(limit))) |>
@@ -264,7 +264,6 @@ toxval_search <- function(dtxsid,
 #' @param toxval_type Character vector of toxval types (e.g., `"RfD"`, `"RfC"`).
 #' @param species Character vector of species names. Matched against both
 #'   `species_common` and `latin_name`.
-#' @param human_eco Character vector of human/eco classifications.
 #' @param qc_status QC filter mode. One of:
 #'   - `"pass_or_not_determined"` (default): exclude rows where qc_status
 #'     starts with "fail"
@@ -292,7 +291,6 @@ toxval_results <- function(dtxsid = NULL,
                         source = NULL,
                         toxval_type = NULL,
                         species = NULL,
-                        human_eco = NULL,
                         qc_status = c("pass_or_not_determined", "pass", "all"),
                         cols = c("default", "all"),
                         con = NULL) {
@@ -318,7 +316,7 @@ toxval_results <- function(dtxsid = NULL,
     return(.tox_results_plumber(
       dtxsid = dtxsid, casrn = casrn, source = source,
       toxval_type = toxval_type, species = species,
-      human_eco = human_eco, qc_status = qc_status, cols = cols
+      qc_status = qc_status, cols = cols
     ))
   }
 
@@ -374,13 +372,7 @@ toxval_results <- function(dtxsid = NULL,
       )
   }
 
-  # 7. Human/eco filter
-  if (!is.null(human_eco) && length(human_eco) > 0) {
-    he_vals <- unique(human_eco)
-    query <- query |> dplyr::filter(.data$human_eco %in% he_vals)
-  }
-
-  # 8. Column selection
+  # 7. Column selection
   if (cols == "default") {
     default_cols <- .tox_default_cols()
     query <- query |> dplyr::select(dplyr::any_of(default_cols))
@@ -396,8 +388,8 @@ toxval_results <- function(dtxsid = NULL,
 #' @keywords internal
 #' @noRd
 .tox_results_plumber <- function(dtxsid, casrn, source, toxval_type,
-                                  species, human_eco, qc_status, cols) {
-  burl <- Sys.getenv("toxval_burl()")
+                                  species, qc_status, cols) {
+  burl <- Sys.getenv("toxval_burl")
 
   body <- list(
     dtxsid = dtxsid,
@@ -405,7 +397,6 @@ toxval_results <- function(dtxsid = NULL,
     source = source,
     toxval_type = toxval_type,
     species = species,
-    human_eco = human_eco,
     qc_status = qc_status,
     cols = cols
   )

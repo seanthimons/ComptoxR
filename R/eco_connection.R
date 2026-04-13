@@ -137,6 +137,7 @@ eco_install <- function(source = NULL, build = FALSE, tag = "latest",
     }
   )
 
+  if (!file.exists(dest)) cli::cli_abort("Installation failed: database not found at {.path {dest}}")
   invisible(dest)
 }
 

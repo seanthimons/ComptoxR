@@ -3,16 +3,16 @@
 
 # Always-run tests (no database required) --------------------------------
 
-test_that("toxval_path()() returns path ending in toxval.duckdb", {
-  path <- toxval_path()()
+test_that("toxval_path() returns path ending in toxval.duckdb", {
+  path <- toxval_path()
   expect_true(grepl("toxval\\.duckdb$", path))
 })
 
-test_that("toxval_path()() respects options(ComptoxR.toxval_path)", {
+test_that("toxval_path() respects options(ComptoxR.toxval_path)", {
   withr::with_options(
     list(ComptoxR.toxval_path = "/tmp/custom_toxval.duckdb"),
     {
-      expect_equal(toxval_path()(), "/tmp/custom_toxval.duckdb")
+      expect_equal(toxval_path(), "/tmp/custom_toxval.duckdb")
     }
   )
 })
@@ -21,7 +21,7 @@ test_that(".tox_get_con() aborts when DB missing", {
   withr::with_options(
     list(ComptoxR.toxval_path = "/nonexistent/path/toxval.duckdb"),
     {
-      withr::with_envvar(c("toxval_burl()" = ""), {
+      withr::with_envvar(c("toxval_burl" = ""), {
         expect_error(.tox_get_con(), "ToxValDB database not found")
       })
     }
@@ -37,18 +37,18 @@ test_that(".tox_close_con() is safe with no connection", {
 })
 
 test_that("toxval_server()(NULL) resets toxval_burl()", {
-  old <- Sys.getenv("toxval_burl()")
+  old <- Sys.getenv("toxval_burl")
   suppressMessages(toxval_server()(NULL))
-  expect_equal(Sys.getenv("toxval_burl()"), "")
+  expect_equal(Sys.getenv("toxval_burl"), "")
   # Restore
-  Sys.setenv("toxval_burl()" = old)
+  Sys.setenv("toxval_burl" = old)
 })
 
 test_that("toxval_server()(99) warns invalid option", {
-  old <- Sys.getenv("toxval_burl()")
+  old <- Sys.getenv("toxval_burl")
   expect_message(toxval_server()(99), "Invalid server option")
   # Restore
-  Sys.setenv("toxval_burl()" = old)
+  Sys.setenv("toxval_burl" = old)
 })
 
 test_that("toxval_server()() with nonexistent file path aborts", {
@@ -73,7 +73,7 @@ test_that(".db_download_release() aborts on 404 / missing asset", {
   )
 })
 
-test_that("tox_install() default path calls .db_download_release", {
+test_that("toxval_install() default path calls .db_download_release", {
   download_called <- FALSE
 
   local_mocked_bindings(
@@ -89,11 +89,11 @@ test_that("tox_install() default path calls .db_download_release", {
   dest <- withr::local_tempdir()
   withr::local_options(ComptoxR.toxval_path = file.path(dest, "toxval.duckdb"))
 
-  tox_install(overwrite = TRUE)
+  toxval_install(overwrite = TRUE)
   expect_true(download_called)
 })
 
-test_that("tox_install(build = TRUE) skips download", {
+test_that("toxval_install(build = TRUE) skips download", {
   download_called <- FALSE
 
   local_mocked_bindings(
@@ -108,11 +108,11 @@ test_that("tox_install(build = TRUE) skips download", {
   dest <- withr::local_tempdir()
   withr::local_options(ComptoxR.toxval_path = file.path(dest, "toxval.duckdb"))
 
-  tox_install(build = TRUE, overwrite = TRUE)
+  toxval_install(build = TRUE, overwrite = TRUE)
   expect_false(download_called)
 })
 
-test_that("tox_install() falls back to build on download failure", {
+test_that("toxval_install() falls back to build on download failure", {
   build_called <- FALSE
 
   local_mocked_bindings(
@@ -129,7 +129,7 @@ test_that("tox_install() falls back to build on download failure", {
   withr::local_options(ComptoxR.toxval_path = file.path(dest, "toxval.duckdb"))
 
   expect_warning(
-    tox_install(overwrite = TRUE),
+    toxval_install(overwrite = TRUE),
     "Could not download"
   )
   expect_true(build_called)
@@ -297,7 +297,7 @@ test_that("row count threshold constant is reasonable", {
 # Live tests (database required) ------------------------------------------
 
 test_that("connection returns valid DBIConnection", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   con <- .tox_get_con()
   expect_true(inherits(con, "DBIConnection"))
@@ -305,17 +305,17 @@ test_that("connection returns valid DBIConnection", {
 })
 
 test_that(".tox_get_con() returns same cached connection", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   con1 <- .tox_get_con()
   con2 <- .tox_get_con()
   expect_identical(con1, con2)
 })
 
-test_that("tox_health() returns expected fields", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+test_that("toxval_health() returns expected fields", {
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
-  health <- tox_health()
+  health <- toxval_health()
   expect_type(health, "list")
   expect_true("status" %in% names(health))
   expect_true("db_path" %in% names(health))
