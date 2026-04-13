@@ -36,23 +36,23 @@ test_that(".tox_close_con() is safe with no connection", {
   .ComptoxREnv$toxval_db <- old
 })
 
-test_that("toxval_server()(NULL) resets toxval_burl()", {
+test_that("toxval_server(NULL) resets toxval_burl", {
   old <- Sys.getenv("toxval_burl")
-  suppressMessages(toxval_server()(NULL))
+  suppressMessages(toxval_server(NULL))
   expect_equal(Sys.getenv("toxval_burl"), "")
   # Restore
   Sys.setenv("toxval_burl" = old)
 })
 
-test_that("toxval_server()(99) warns invalid option", {
+test_that("toxval_server(99) warns invalid option", {
   old <- Sys.getenv("toxval_burl")
-  expect_message(toxval_server()(99), "Invalid server option")
+  expect_message(toxval_server(99), "Invalid server option")
   # Restore
   Sys.setenv("toxval_burl" = old)
 })
 
-test_that("toxval_server()() with nonexistent file path aborts", {
-  expect_error(toxval_server()("/nonexistent.duckdb"), "not found")
+test_that("toxval_server() with nonexistent file path aborts", {
+  expect_error(toxval_server("/nonexistent.duckdb"), "not found")
 })
 
 

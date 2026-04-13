@@ -18,7 +18,7 @@ reset. Valid options are:
 A string argument is treated as a path to a custom \code{.duckdb} file.}
 }
 \value{
-Should return the Sys Env variable \code{toxval_burl()}
+Should return the Sys Env variable \code{toxval_burl}
 }
 \description{
 Set API endpoints for ToxValDB endpoints

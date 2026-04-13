@@ -42,7 +42,7 @@ test_that(".tox_default_cols() returns expected column count", {
 # Live tests (database required) ------------------------------------------
 
 test_that("toxval_results(casrn) returns tibble with default columns", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   result <- toxval_results(casrn = "50-00-0")
   expect_s3_class(result, "tbl_df")
@@ -55,7 +55,7 @@ test_that("toxval_results(casrn) returns tibble with default columns", {
 })
 
 test_that("toxval_results(source) filters correctly", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   result <- toxval_results(source = "IRIS")
   expect_s3_class(result, "tbl_df")
@@ -63,7 +63,7 @@ test_that("toxval_results(source) filters correctly", {
 })
 
 test_that("toxval_results(dtxsid, cols = 'all') returns all columns", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   result <- toxval_results(dtxsid = "DTXSID7020182", cols = "all")
   expect_s3_class(result, "tbl_df")
@@ -72,7 +72,7 @@ test_that("toxval_results(dtxsid, cols = 'all') returns all columns", {
 })
 
 test_that("toxval_sources() returns character vector with known sources", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   sources <- toxval_sources()
   expect_type(sources, "character")
@@ -82,7 +82,7 @@ test_that("toxval_sources() returns character vector with known sources", {
 })
 
 test_that("toxval_search() returns non-empty tibble for valid DTXSID", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   result <- toxval_search("DTXSID7020182")
   expect_s3_class(result, "tbl_df")
@@ -97,7 +97,7 @@ test_that("toxval_search() rejects non-character input", {
 })
 
 test_that("toxval_tables() includes expected tables", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   tables <- toxval_tables()
   expect_type(tables, "character")
@@ -106,7 +106,7 @@ test_that("toxval_tables() includes expected tables", {
 })
 
 test_that("human_eco column absent from v9.7.0 data", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   # human_eco is referenced in toxval_results() but does not exist in v9.7.0.
   # This test documents the known gap. If a future version adds the column,
@@ -117,7 +117,7 @@ test_that("human_eco column absent from v9.7.0 data", {
 })
 
 test_that("default columns all exist in database", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   fields <- toxval_fields("toxval")
   default_cols <- .tox_default_cols()
@@ -126,7 +126,7 @@ test_that("default columns all exist in database", {
 })
 
 test_that("toxval_results(qc_status = 'all') includes failed records", {
-  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
 
   # "all" should return more rows than default "pass_or_not_determined"
   all_res <- toxval_results(source = "IRIS", qc_status = "all")

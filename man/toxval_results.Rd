@@ -10,7 +10,6 @@ toxval_results(
   source = NULL,
   toxval_type = NULL,
   species = NULL,
-  human_eco = NULL,
   qc_status = c("pass_or_not_determined", "pass", "all"),
   cols = c("default", "all"),
   con = NULL
@@ -27,8 +26,6 @@ toxval_results(
 
 \item{species}{Character vector of species names. Matched against both
 \code{species_common} and \code{latin_name}.}
-
-\item{human_eco}{Character vector of human/eco classifications.}
 
 \item{qc_status}{QC filter mode. One of:
 \itemize{
