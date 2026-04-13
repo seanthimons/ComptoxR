@@ -9,7 +9,7 @@
 #'
 #' @return A character string with the full file path.
 #' @keywords internal
-tox_path <- function() {
+toxval_path <- function() {
   opt <- getOption("ComptoxR.toxval_path")
   if (!is.null(opt) && nzchar(opt)) {
     return(opt)
@@ -39,12 +39,12 @@ tox_path <- function() {
     return(cached)
   }
 
-  # Resolve path: if tox_burl ends in .duckdb use that, else use tox_path()
-  tox_burl <- Sys.getenv("tox_burl")
-  if (nzchar(tox_burl) && grepl("\\.duckdb$", tox_burl)) {
-    path <- tox_burl
+  # Resolve path: if toxval_burl ends in .duckdb use that, else use toxval_path()
+  toxval_burl <- Sys.getenv("toxval_burl")
+  if (nzchar(toxval_burl) && grepl("\\.duckdb$", toxval_burl)) {
+    path <- toxval_burl
   } else {
-    path <- tox_path()
+    path <- toxval_path()
   }
 
   if (!file.exists(path)) {
@@ -92,9 +92,9 @@ tox_path <- function() {
 #' @return Invisibly, the destination path.
 #' @export
 #' @family toxval
-tox_install <- function(source = NULL, build = FALSE, tag = "latest",
+toxval_install <- function(source = NULL, build = FALSE, tag = "latest",
                         overwrite = FALSE) {
-  dest <- tox_path()
+  dest <- toxval_path()
   dest_dir <- dirname(dest)
 
   if (!dir.exists(dest_dir)) {

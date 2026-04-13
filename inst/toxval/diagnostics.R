@@ -16,7 +16,7 @@ toxval_diag_columns <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::tox_path(),
+      dbdir = ComptoxR::toxval_path()(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -76,7 +76,7 @@ toxval_diag_schema_drift <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::tox_path(),
+      dbdir = ComptoxR::toxval_path()(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -121,7 +121,7 @@ toxval_diag_quality <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::tox_path(),
+      dbdir = ComptoxR::toxval_path()(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -269,7 +269,7 @@ toxval_diag_freshness <- function() {
   cli::cli_h1("ToxValDB Freshness Check")
 
   # Local version
-  path <- ComptoxR::tox_path()
+  path <- ComptoxR::toxval_path()()
   if (!file.exists(path)) {
     cli::cli_alert_danger("ToxValDB not installed at {.path {path}}")
     return(invisible(NULL))

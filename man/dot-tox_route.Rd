@@ -10,6 +10,6 @@
 \code{"duckdb"} or \code{"plumber"}.
 }
 \description{
-Checks \code{tox_burl} env var and returns the access mode.
+Checks \code{toxval_burl()} env var and returns the access mode.
 }
 \keyword{internal}

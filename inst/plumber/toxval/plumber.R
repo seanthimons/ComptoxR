@@ -3,14 +3,14 @@
 # Launch:
 #   plumber::pr_run(plumber::pr("inst/plumber/toxval/plumber.R"), port = 5556)
 #
-# Configure DB path before launching (optional — defaults to tox_server(1)):
+# Configure DB path before launching (optional — defaults to toxval_server()(1)):
 #   options(ComptoxR.toxval_path = "/path/to/toxval.duckdb")
 
 library(ComptoxR)
 
 # Point at the local DuckDB. Users configure this path before launching.
-# Default: tox_server(1) uses R_user_dir resolution.
-tox_server(getOption("ComptoxR.toxval_path", default = 1))
+# Default: toxval_server()(1) uses R_user_dir resolution.
+toxval_server(getOption("ComptoxR.toxval_path", default = 1))
 
 # Note: Uses internal ComptoxR function. Requires matching ComptoxR version.
 .get_con <- function() ComptoxR:::.tox_get_con()
@@ -43,13 +43,12 @@ function() {
   tox_sources()
 }
 
-#* Search by name or effect
-#* @param pattern Search pattern (auto-wrapped with % wildcards)
-#* @param field One of name, toxicological_effect
-#* @param limit Maximum rows (default 100)
-#* @get /search
-function(pattern, field = "name", limit = 100L) {
-  tox_search(pattern, field = field, limit = as.integer(limit))
+#* Search by DTXSID
+#* @param dtxsid A list of DTXSIDs
+#* @param limit Maximum rows (default 1000)
+#* @post /search
+function(dtxsid, limit = 1000L) {
+  toxval_search(dtxsid, limit = as.integer(limit))
 }
 
 #* Query ToxValDB results

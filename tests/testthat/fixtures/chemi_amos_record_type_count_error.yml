@@ -1,0 +1,15 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/record_type_count/INVALID_DTXSID_12345
+  response:
+    status: 204
+    headers:
+      Server: nginx/1.21.4
+      Date: Thu, 09 Apr 2026 13:55:17 GMT
+      Content-Type: text/html; charset=utf-8
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+  recorded_at: 2026-04-09 13:55:18
+recorded_with: VCR-vcr/2.1.0

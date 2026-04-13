@@ -207,7 +207,7 @@ run_setup <- function() {
     )))
 
     # ToxValDB — show active mode
-    tox_url <- Sys.getenv("tox_burl")
+    tox_url <- Sys.getenv("toxval_burl()")
     tox_latency <- NA_real_
     tox_latency_fmt <- ""
 
@@ -487,48 +487,48 @@ eco_server <- function(server = NULL) {
 #'   }
 #'   A string argument is treated as a path to a custom `.duckdb` file.
 #'
-#' @return Should return the Sys Env variable `tox_burl`
+#' @return Should return the Sys Env variable `toxval_burl()`
 #' @export
-tox_server <- function(server = NULL) {
+toxval_server <- function(server = NULL) {
 	# Close stale connections on every mode switch
 	.tox_close_con()
 
 	if (is.null(server)) {
 		cli::cli_alert_danger("Server URL reset!")
-		Sys.setenv("tox_burl" = "")
+		Sys.setenv("toxval_burl()" = "")
 	} else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
 		# String path to a local DuckDB file
 		if (!file.exists(server)) {
 			cli::cli_abort("ToxValDB database file not found: {.path {server}}")
 		}
-		Sys.setenv("tox_burl" = normalizePath(server, mustWork = TRUE))
-		Sys.getenv("tox_burl")
+		Sys.setenv("toxval_burl()" = normalizePath(server, mustWork = TRUE))
+		Sys.getenv("toxval_burl()")
 	} else {
 		switch(
 			as.character(server),
 			"1" = {
-				db_path <- tox_path()
+				db_path <- toxval_path()
 				if (!file.exists(db_path)) {
 					cli::cli_alert_warning(
 						"ToxValDB database not found at {.path {db_path}}. Run {.run tox_install()} to set up."
 					)
 				}
-				Sys.setenv("tox_burl" = db_path)
+				Sys.setenv("toxval_burl()" = db_path)
 			},
-			"2" = Sys.setenv("tox_burl" = "http://127.0.0.1:5556"),
-			"3" = Sys.setenv("tox_burl" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"),
-			"4" = Sys.setenv("tox_burl" = ""),
+			"2" = Sys.setenv("toxval_burl()" = "http://127.0.0.1:5556"),
+			"3" = Sys.setenv("toxval_burl()" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"),
+			"4" = Sys.setenv("toxval_burl()" = ""),
 			{
 				cli::cli_alert_warning("Invalid server option selected!")
 				cli::cli_alert_info(
 					"Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev), or a file path."
 				)
 				cli::cli_alert_warning("Server URL reset!")
-				Sys.setenv("tox_burl" = "")
+				Sys.setenv("toxval_burl()" = "")
 			}
 		)
 
-		Sys.getenv("tox_burl")
+		Sys.getenv("toxval_burl()")
 	}
 }
 
@@ -727,7 +727,7 @@ reset_servers <- function() {
 	# Reset ECOTOX server URL
 	eco_server()
 	# Reset ToxValDB server URL
-	tox_server()
+	toxval_server()()
 	# Reset Natural Products server URL
 	np_server()
 	# Reset Common Chemistry server URL
@@ -750,7 +750,7 @@ reset_servers <- function() {
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
-			if (Sys.getenv("tox_burl") == "") tox_server(server = 1)
+			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
 			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
@@ -769,7 +769,7 @@ reset_servers <- function() {
 			chemi_server(server = 1)
 			epi_server(server = 1)
 			eco_server(server = 1)
-			tox_server(server = 1)
+			toxval_server()(server = 1)
 			np_server(server = 1)
 			cc_server(server = 1)
 			pubchem_server(server = 1)
@@ -849,20 +849,9 @@ reset_servers <- function() {
   cli::cli({
     cli::cli_rule()
 
-    cli::cli_alert_success(
-      c(
-        "This is version ",
-        {
-          as.character(utils::packageVersion('ComptoxR'))
-        },
-        " of ComptoxR"
-      )
-    )
-    cli::cli_alert_success(
-      c('Built on: ', {
-        build_date
-      })
-    )
+    pkg_version <- as.character(utils::packageVersion('ComptoxR'))
+    cli::cli_alert_success("This is version {pkg_version} of ComptoxR")
+    cli::cli_alert_success("Built on: {build_date}")
     
 		cli::cli_rule(left = 'Run settings')
 		debug_flag <- Sys.getenv("run_debug")
@@ -918,7 +907,7 @@ reset_servers <- function() {
 		}
 
 		# ToxValDB
-		tox_db_path <- tox_path()
+		tox_db_path <- toxval_path()
 		if (file.exists(tox_db_path)) {
 			tox_db_mb <- round(file.info(tox_db_path)$size / 1024^2)
 			tox_version <- tryCatch({

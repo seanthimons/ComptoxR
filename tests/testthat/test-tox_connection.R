@@ -3,16 +3,16 @@
 
 # Always-run tests (no database required) --------------------------------
 
-test_that("tox_path() returns path ending in toxval.duckdb", {
-  path <- tox_path()
+test_that("toxval_path()() returns path ending in toxval.duckdb", {
+  path <- toxval_path()()
   expect_true(grepl("toxval\\.duckdb$", path))
 })
 
-test_that("tox_path() respects options(ComptoxR.toxval_path)", {
+test_that("toxval_path()() respects options(ComptoxR.toxval_path)", {
   withr::with_options(
     list(ComptoxR.toxval_path = "/tmp/custom_toxval.duckdb"),
     {
-      expect_equal(tox_path(), "/tmp/custom_toxval.duckdb")
+      expect_equal(toxval_path()(), "/tmp/custom_toxval.duckdb")
     }
   )
 })
@@ -21,7 +21,7 @@ test_that(".tox_get_con() aborts when DB missing", {
   withr::with_options(
     list(ComptoxR.toxval_path = "/nonexistent/path/toxval.duckdb"),
     {
-      withr::with_envvar(c("tox_burl" = ""), {
+      withr::with_envvar(c("toxval_burl()" = ""), {
         expect_error(.tox_get_con(), "ToxValDB database not found")
       })
     }
@@ -36,23 +36,23 @@ test_that(".tox_close_con() is safe with no connection", {
   .ComptoxREnv$toxval_db <- old
 })
 
-test_that("tox_server(NULL) resets tox_burl", {
-  old <- Sys.getenv("tox_burl")
-  suppressMessages(tox_server(NULL))
-  expect_equal(Sys.getenv("tox_burl"), "")
+test_that("toxval_server()(NULL) resets toxval_burl()", {
+  old <- Sys.getenv("toxval_burl()")
+  suppressMessages(toxval_server()(NULL))
+  expect_equal(Sys.getenv("toxval_burl()"), "")
   # Restore
-  Sys.setenv("tox_burl" = old)
+  Sys.setenv("toxval_burl()" = old)
 })
 
-test_that("tox_server(99) warns invalid option", {
-  old <- Sys.getenv("tox_burl")
-  expect_message(tox_server(99), "Invalid server option")
+test_that("toxval_server()(99) warns invalid option", {
+  old <- Sys.getenv("toxval_burl()")
+  expect_message(toxval_server()(99), "Invalid server option")
   # Restore
-  Sys.setenv("tox_burl" = old)
+  Sys.setenv("toxval_burl()" = old)
 })
 
-test_that("tox_server() with nonexistent file path aborts", {
-  expect_error(tox_server("/nonexistent.duckdb"), "not found")
+test_that("toxval_server()() with nonexistent file path aborts", {
+  expect_error(toxval_server()("/nonexistent.duckdb"), "not found")
 })
 
 
@@ -297,7 +297,7 @@ test_that("row count threshold constant is reasonable", {
 # Live tests (database required) ------------------------------------------
 
 test_that("connection returns valid DBIConnection", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   con <- .tox_get_con()
   expect_true(inherits(con, "DBIConnection"))
@@ -305,7 +305,7 @@ test_that("connection returns valid DBIConnection", {
 })
 
 test_that(".tox_get_con() returns same cached connection", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   con1 <- .tox_get_con()
   con2 <- .tox_get_con()
@@ -313,7 +313,7 @@ test_that(".tox_get_con() returns same cached connection", {
 })
 
 test_that("tox_health() returns expected fields", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   health <- tox_health()
   expect_type(health, "list")

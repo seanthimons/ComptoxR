@@ -1,0 +1,53 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/record_id_search/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Thu, 09 Apr 2026 13:55:17 GMT
+      Content-Type: application/json
+      Content-Length: '50'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"data_type":null,"link":null,"record_type":null}
+  recorded_at: 2026-04-09 13:55:17
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/record_id_search/DTXSID5032381
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Thu, 09 Apr 2026 13:55:17 GMT
+      Content-Type: application/json
+      Content-Length: '50'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"data_type":null,"link":null,"record_type":null}
+  recorded_at: 2026-04-09 13:55:17
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/record_id_search/DTXSID8024291
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Thu, 09 Apr 2026 13:55:17 GMT
+      Content-Type: application/json
+      Content-Length: '50'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"data_type":null,"link":null,"record_type":null}
+  recorded_at: 2026-04-09 13:55:18
+recorded_with: VCR-vcr/2.1.0

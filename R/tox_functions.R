@@ -5,11 +5,11 @@
 
 #' Determine ToxValDB routing mode
 #'
-#' Checks `tox_burl` env var and returns the access mode.
+#' Checks `toxval_burl()` env var and returns the access mode.
 #' @return `"duckdb"` or `"plumber"`.
 #' @keywords internal
 .tox_route <- function() {
-  burl <- Sys.getenv("tox_burl")
+  burl <- Sys.getenv("toxval_burl()")
 
   if (nzchar(burl) && grepl("\\.duckdb$", burl)) {
     return("duckdb")
@@ -21,8 +21,8 @@
 
   cli::cli_abort(c(
     "ToxValDB has no public REST API.",
-    "i" = "Use {.code tox_server(1)} for local DuckDB access.",
-    "i" = "Use {.code tox_server(2)} for a self-hosted Plumber instance.",
+    "i" = "Use {.code toxval_server()(1)} for local DuckDB access.",
+    "i" = "Use {.code toxval_server()(2)} for a self-hosted Plumber instance.",
     "i" = "Run {.code tox_install()} to set up the local database."
   ))
 }
@@ -76,14 +76,14 @@
 #' \dontrun{
 #' tox_tables()
 #' }
-tox_tables <- function(con = NULL) {
+toxval_tables <- function(con = NULL) {
   route <- .tox_route()
 
   if (route == "duckdb") {
     con <- .tox_get_con(con)
     DBI::dbListTables(con)
   } else {
-    burl <- Sys.getenv("tox_burl")
+    burl <- Sys.getenv("toxval_burl()")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("tables") |>
       httr2::req_perform()
@@ -103,7 +103,7 @@ tox_tables <- function(con = NULL) {
 #' \dontrun{
 #' tox_fields("toxval")
 #' }
-tox_fields <- function(table_name, con = NULL) {
+toxval_fields <- function(table_name, con = NULL) {
   if (!is.character(table_name) || length(table_name) != 1L || !nzchar(table_name)) {
     cli::cli_abort("{.arg table_name} must be a single non-empty character string.")
   }
@@ -114,7 +114,7 @@ tox_fields <- function(table_name, con = NULL) {
     con <- .tox_get_con(con)
     DBI::dbListFields(con, table_name)
   } else {
-    burl <- Sys.getenv("tox_burl")
+    burl <- Sys.getenv("toxval_burl()")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("fields", table_name) |>
       httr2::req_perform()
@@ -137,12 +137,12 @@ tox_fields <- function(table_name, con = NULL) {
 #' \dontrun{
 #' tox_health()
 #' }
-tox_health <- function(con = NULL) {
+toxval_health <- function(con = NULL) {
   route <- .tox_route()
 
   if (route == "duckdb") {
     con <- .tox_get_con(con)
-    db_path <- Sys.getenv("tox_burl")
+    db_path <- Sys.getenv("toxval_burl()")
 
     meta <- tryCatch(
       {
@@ -161,7 +161,7 @@ tox_health <- function(con = NULL) {
       db_size_mb = round(file.size(db_path) / (1024 * 1024), 2)
     )
   } else {
-    burl <- Sys.getenv("tox_burl")
+    burl <- Sys.getenv("toxval_burl()")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("health-check") |>
       httr2::req_perform()
@@ -182,7 +182,7 @@ tox_health <- function(con = NULL) {
 #' \dontrun{
 #' tox_sources()
 #' }
-tox_sources <- function(con = NULL) {
+toxval_sources <- function(con = NULL) {
   route <- .tox_route()
 
   if (route == "duckdb") {
@@ -190,7 +190,7 @@ tox_sources <- function(con = NULL) {
     result <- DBI::dbGetQuery(con, "SELECT DISTINCT source FROM toxval ORDER BY source")
     result$source
   } else {
-    burl <- Sys.getenv("tox_burl")
+    burl <- Sys.getenv("toxval_burl()")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("sources") |>
       httr2::req_perform()
@@ -199,43 +199,37 @@ tox_sources <- function(con = NULL) {
 }
 
 
-#' Search ToxValDB by name or effect
+#' Search ToxValDB by DTXSID
 #'
-#' Searches the `toxval` table by chemical name or toxicological effect
-#' using SQL `ILIKE` pattern matching.
+#' Searches the `toxval` table by one or more DTXSIDs and returns matching
+#' records with the default column set.
 #'
-#' @param pattern A character string with SQL ILIKE wildcards (e.g.,
-#'   `"%formaldehyde%"`). Wrapping `%` wildcards are added automatically if
-#'   not present.
-#' @param field Which field to search. One of `"name"` or
-#'   `"toxicological_effect"`.
-#' @param limit Maximum number of rows to return. Default 100.
+#' @param dtxsid A character vector of DTXSIDs (e.g., `"DTXSID7020182"`).
+#' @param limit Maximum number of rows to return. Default 1000.
 #' @param con An optional `DBI::DBIConnection`.
 #' @return A tibble of matching records (default columns).
 #' @export
 #' @family toxval
 #' @examples
 #' \dontrun{
-#' tox_search("formaldehyde")
-#' tox_search("liver%", field = "toxicological_effect")
+#' toxval_search("DTXSID7020182")
+#' toxval_search(c("DTXSID7020182", "DTXSID3021392"))
 #' }
-tox_search <- function(pattern,
-                       field = c("name", "toxicological_effect"),
-                       limit = 100L,
+toxval_search <- function(dtxsid,
+                       limit = 1000L,
                        con = NULL) {
-  field <- match.arg(field)
+  if (!is.character(dtxsid) || length(dtxsid) == 0L || !all(nzchar(dtxsid))) {
+    cli::cli_abort("{.arg dtxsid} must be a non-empty character vector.")
+  }
 
-  # Auto-wrap with wildcards if not present
-  if (!grepl("^%", pattern)) pattern <- paste0("%", pattern)
-  if (!grepl("%$", pattern)) pattern <- paste0(pattern, "%")
-
+  dtxsid <- unique(dtxsid)
   route <- .tox_route()
 
   if (route == "plumber") {
-    burl <- Sys.getenv("tox_burl")
+    burl <- Sys.getenv("toxval_burl()")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("search") |>
-      httr2::req_url_query(pattern = pattern, field = field, limit = limit) |>
+      httr2::req_body_json(list(dtxsid = dtxsid, limit = as.integer(limit))) |>
       httr2::req_perform()
     return(httr2::resp_body_json(resp, simplifyVector = TRUE) |>
       tibble::as_tibble())
@@ -246,11 +240,11 @@ tox_search <- function(pattern,
   default_cols <- .tox_default_cols()
   col_select <- paste(default_cols, collapse = ", ")
 
-  # field is from match.arg — safe to interpolate
+  placeholders <- paste(rep("?", length(dtxsid)), collapse = ", ")
   sql <- paste0(
-    "SELECT ", col_select, " FROM toxval WHERE ", field, " ILIKE ? LIMIT ?"
+    "SELECT ", col_select, " FROM toxval WHERE dtxsid IN (", placeholders, ") LIMIT ?"
   )
-  result <- DBI::dbGetQuery(con, sql, params = list(pattern, as.integer(limit)))
+  result <- DBI::dbGetQuery(con, sql, params = c(as.list(dtxsid), list(as.integer(limit))))
   tibble::as_tibble(result)
 }
 
@@ -293,7 +287,7 @@ tox_search <- function(pattern,
 #' # Query by DTXSID with all columns
 #' tox_results(dtxsid = "DTXSID7020182", cols = "all")
 #' }
-tox_results <- function(dtxsid = NULL,
+toxval_results <- function(dtxsid = NULL,
                         casrn = NULL,
                         source = NULL,
                         toxval_type = NULL,
@@ -403,7 +397,7 @@ tox_results <- function(dtxsid = NULL,
 #' @noRd
 .tox_results_plumber <- function(dtxsid, casrn, source, toxval_type,
                                   species, human_eco, qc_status, cols) {
-  burl <- Sys.getenv("tox_burl")
+  burl <- Sys.getenv("toxval_burl()")
 
   body <- list(
     dtxsid = dtxsid,
@@ -427,7 +421,7 @@ tox_results <- function(dtxsid = NULL,
       cli::cli_abort(c(
         "ToxValDB Plumber request failed.",
         "x" = conditionMessage(e),
-        "i" = "Is the Plumber server running? Check {.code tox_server(2)}."
+        "i" = "Is the Plumber server running? Check {.code toxval_server()(2)}."
       ))
     }
   )

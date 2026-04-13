@@ -11,19 +11,19 @@ test_that("tox_results() aborts when all filters NULL", {
 })
 
 test_that(".tox_route() returns 'plumber' for localhost URLs", {
-  withr::with_envvar(c("tox_burl" = "http://127.0.0.1:5556"), {
+  withr::with_envvar(c("toxval_burl()" = "http://127.0.0.1:5556"), {
     expect_equal(.tox_route(), "plumber")
   })
 })
 
 test_that(".tox_route() aborts for public URLs", {
-  withr::with_envvar(c("tox_burl" = "https://comptox.epa.gov/dashboard"), {
+  withr::with_envvar(c("toxval_burl()" = "https://comptox.epa.gov/dashboard"), {
     expect_error(.tox_route(), "no public REST API")
   })
 })
 
 test_that(".tox_route() returns 'duckdb' for .duckdb paths", {
-  withr::with_envvar(c("tox_burl" = "/some/path/toxval.duckdb"), {
+  withr::with_envvar(c("toxval_burl()" = "/some/path/toxval.duckdb"), {
     expect_equal(.tox_route(), "duckdb")
   })
 })
@@ -42,7 +42,7 @@ test_that(".tox_default_cols() returns expected column count", {
 # Live tests (database required) ------------------------------------------
 
 test_that("tox_results(casrn) returns tibble with default columns", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   result <- tox_results(casrn = "50-00-0")
   expect_s3_class(result, "tbl_df")
@@ -55,7 +55,7 @@ test_that("tox_results(casrn) returns tibble with default columns", {
 })
 
 test_that("tox_results(source) filters correctly", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   result <- tox_results(source = "IRIS")
   expect_s3_class(result, "tbl_df")
@@ -63,7 +63,7 @@ test_that("tox_results(source) filters correctly", {
 })
 
 test_that("tox_results(dtxsid, cols = 'all') returns all columns", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   result <- tox_results(dtxsid = "DTXSID7020182", cols = "all")
   expect_s3_class(result, "tbl_df")
@@ -72,7 +72,7 @@ test_that("tox_results(dtxsid, cols = 'all') returns all columns", {
 })
 
 test_that("tox_sources() returns character vector with known sources", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   sources <- tox_sources()
   expect_type(sources, "character")
@@ -81,16 +81,23 @@ test_that("tox_sources() returns character vector with known sources", {
   expect_true(any(grepl("IRIS", sources)))
 })
 
-test_that("tox_search() returns non-empty tibble", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+test_that("toxval_search() returns non-empty tibble for valid DTXSID", {
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
-  result <- tox_search("formaldehyde")
+  result <- toxval_search("DTXSID7020182")
   expect_s3_class(result, "tbl_df")
   expect_true(nrow(result) > 0)
+  expect_true(all(result$dtxsid == "DTXSID7020182"))
+})
+
+test_that("toxval_search() rejects non-character input", {
+  expect_error(toxval_search(123), "non-empty character vector")
+  expect_error(toxval_search(character(0)), "non-empty character vector")
+  expect_error(toxval_search(""), "non-empty character vector")
 })
 
 test_that("tox_tables() includes expected tables", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   tables <- tox_tables()
   expect_type(tables, "character")
@@ -99,7 +106,7 @@ test_that("tox_tables() includes expected tables", {
 })
 
 test_that("human_eco column absent from v9.7.0 data", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   # human_eco is referenced in tox_results() but does not exist in v9.7.0.
   # This test documents the known gap. If a future version adds the column,
@@ -110,7 +117,7 @@ test_that("human_eco column absent from v9.7.0 data", {
 })
 
 test_that("default columns all exist in database", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   fields <- tox_fields("toxval")
   default_cols <- .tox_default_cols()
@@ -119,7 +126,7 @@ test_that("default columns all exist in database", {
 })
 
 test_that("tox_results(qc_status = 'all') includes failed records", {
-  skip_if_not(file.exists(tox_path()), "ToxValDB not installed")
+  skip_if_not(file.exists(toxval_path()()), "ToxValDB not installed")
 
   # "all" should return more rows than default "pass_or_not_determined"
   all_res <- tox_results(source = "IRIS", qc_status = "all")
