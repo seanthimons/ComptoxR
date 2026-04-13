@@ -1,0 +1,100 @@
+name: Build & Upload ECOTOX Database
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to attach asset to (e.g. v2.0.0). Leave blank for latest.'
+        required: false
+        default: ''
+      force:
+        description: 'Force rebuild even if asset is already fresh'
+        type: boolean
+        default: false
+      max_age_days:
+        description: 'Rebuild if existing asset is older than this many days (default: 90)'
+        type: string
+        default: '90'
+
+jobs:
+  build-ecotox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "value=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ inputs.tag }}" ]; then
+            echo "value=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            TAG=$(gh release list --repo "${{ github.repository }}" --limit 1 \
+              --json tagName --jq '.[0].tagName')
+            echo "value=$TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check asset staleness
+        id: check
+        run: |
+          TAG="${{ steps.tag.outputs.value }}"
+          MAX_AGE="${{ inputs.max_age_days }}"
+          MAX_AGE="${MAX_AGE:-90}"
+          FORCE="${{ inputs.force }}"
+          FORCE="${FORCE:-false}"
+
+          ASSET_DATE=$(gh release view "$TAG" --repo "${{ github.repository }}" \
+            --json assets \
+            --jq '.assets[] | select(.name == "ecotox.duckdb") | .updatedAt' \
+            2>/dev/null || true)
+
+          if [ -z "$ASSET_DATE" ]; then
+            echo "ecotox.duckdb not found on release $TAG — will build."
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          elif [ "$FORCE" = "true" ]; then
+            echo "Force flag set — will rebuild."
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          else
+            ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s)
+            NOW_EPOCH=$(date +%s)
+            AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
+            echo "Asset age: ${AGE_DAYS} days (threshold: ${MAX_AGE} days)"
+            if [ "$AGE_DAYS" -gt "$MAX_AGE" ]; then
+              echo "Asset is stale — will rebuild."
+              echo "needed=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "Asset is fresh — skipping build."
+              echo "needed=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - uses: r-lib/actions/setup-r@v2
+        if: steps.check.outputs.needed == 'true'
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        if: steps.check.outputs.needed == 'true'
+        with:
+          extra-packages: local::.
+          needs: check
+
+      - name: Build ECOTOX database
+        if: steps.check.outputs.needed == 'true'
+        run: Rscript data-raw/ecotox.R
+
+      - name: Upload asset to release
+        if: steps.check.outputs.needed == 'true'
+        run: |
+          DB_PATH=$(Rscript -e "cat(file.path(tools::R_user_dir('ComptoxR', 'data'), 'ecotox.duckdb'))")
+          gh release upload "${{ steps.tag.outputs.value }}" "$DB_PATH" \
+            --clobber \
+            --repo "${{ github.repository }}"
+          echo "Uploaded ecotox.duckdb to release ${{ steps.tag.outputs.value }}"
