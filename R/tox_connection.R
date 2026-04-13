@@ -50,8 +50,8 @@ toxval_path <- function() {
   if (!file.exists(path)) {
     cli::cli_abort(c(
       "ToxValDB database not found at {.path {path}}.",
-      "i" = "Run {.run tox_install()} to download from GitHub Releases.",
-      "i" = "Or run {.run tox_install(source = 'path/to/toxval.duckdb')} to install from a local file."
+      "i" = "Run {.run toxval_install()} to download from GitHub Releases.",
+      "i" = "Or run {.run toxval_install(source = 'path/to/toxval.duckdb')} to install from a local file."
     ))
   }
 
@@ -104,7 +104,7 @@ toxval_install <- function(source = NULL, build = FALSE, tag = "latest",
   if (file.exists(dest) && !overwrite) {
     cli::cli_abort(c(
       "ToxValDB database already exists at {.path {dest}}.",
-      "i" = "Use {.code tox_install(overwrite = TRUE)} to replace it."
+      "i" = "Use {.code toxval_install(overwrite = TRUE)} to replace it."
     ))
   }
 

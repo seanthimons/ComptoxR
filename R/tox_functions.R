@@ -23,7 +23,7 @@
     "ToxValDB has no public REST API.",
     "i" = "Use {.code toxval_server()(1)} for local DuckDB access.",
     "i" = "Use {.code toxval_server()(2)} for a self-hosted Plumber instance.",
-    "i" = "Run {.code tox_install()} to set up the local database."
+    "i" = "Run {.code toxval_install()} to set up the local database."
   ))
 }
 

@@ -510,7 +510,7 @@ toxval_server <- function(server = NULL) {
 				db_path <- toxval_path()
 				if (!file.exists(db_path)) {
 					cli::cli_alert_warning(
-						"ToxValDB database not found at {.path {db_path}}. Run {.run tox_install()} to set up."
+						"ToxValDB database not found at {.path {db_path}}. Run {.run toxval_install()} to set up."
 					)
 				}
 				Sys.setenv("toxval_burl" = db_path)
@@ -920,7 +920,7 @@ reset_servers <- function() {
 			)
 		} else {
 			cli::cli_alert_warning(
-				"ToxValDB: Not installed. Run {.run tox_install()} to enable local ToxValDB queries."
+				"ToxValDB: Not installed. Run {.run toxval_install()} to enable local ToxValDB queries."
 			)
 		}
   })
