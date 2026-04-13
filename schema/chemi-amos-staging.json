@@ -344,6 +344,18 @@
         }
       }
     },
+    "dtxsids_search_schema": {
+      "properties": {
+        "dtxsids": {
+          "description": "Array of DTXSIDs as strings.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID2023985"
+          ],
+          "type": "array"
+        }
+      }
+    },
     "entropy_similarity_request": {
       "properties": {
         "spectrum_1": {
@@ -797,6 +809,22 @@
           }
         },
         "summary": "Returns a summary of the records in the database, organized by record types, methodologies, and sources."
+      }
+    },
+    "/api/amos/dtxsids/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/dtxsids_search_schema"
+            }
+          }
+        ],
+        "responses": {},
+        "summary": "Returns substance information and record counts for a list of DTXSIDs."
       }
     },
     "/api/amos/entropy_similarity/": {
@@ -1458,7 +1486,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A JSON object with DTXSIDs as keys and an array of highest found entropy similarity scores as the values.  The order of values in the array corresponds to their order in the list of user-submitted spectra.  If no spectra were found for a given DTXSID, the DTXSID will map to None."
+            "description": "A JSON object with DTXSIDs as keys and an array of dictionaries as the values.  Each dictionary contains a similarity score and the spectrum that had that score.  The order of values in the array corresponds to their order in the list of user-submitted spectra.  If no spectra were found for a given DTXSID, the result will be None instead of a dictionary."
           }
         },
         "summary": "Given a list of DTXSIDs and a list of mass spectra, return the highest similarity score for each combination of"
@@ -1720,6 +1748,66 @@
         "summary": "Returns a list of release notes for AMOS."
       }
     },
+    "/api/amos/retrieve_fact_sheets/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "List of fact sheet IDs to return information on.",
+            "in": "query",
+            "name": "internal_ids",
+            "required": false,
+            "type": "array of strings"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on the submitted batch of fact sheets."
+          }
+        },
+        "summary": "Returns information on a batch of fact sheets specified by internal ID."
+      }
+    },
+    "/api/amos/retrieve_product_declarations/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "List of product declaration IDs to return information on.",
+            "in": "query",
+            "name": "internal_ids",
+            "required": false,
+            "type": "array of strings"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on the submitted batch of product declarations."
+          }
+        },
+        "summary": "Returns information on a batch of product declarations specified by internal ID."
+      }
+    },
+    "/api/amos/retrieve_safety_data_sheets/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "List of safety data sheet IDs to return information on.",
+            "in": "query",
+            "name": "internal_ids",
+            "required": false,
+            "type": "array of strings"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of information on the submitted batch of safety data sheets."
+          }
+        },
+        "summary": "Returns information on a batch of safety data sheets specified by internal ID."
+      }
+    },
     "/api/amos/safety_data_sheet_keyset_pagination/{limit}": {
       "get": {
         "description": "",
@@ -1812,6 +1900,41 @@
           }
         },
         "summary": "Retrieves a list of records from the ElasticSearch database that contain a searched substring"
+      }
+    },
+    "/api/amos/search_for_document_ids/{record_type}": {
+      "post": {
+        "description": "matches, and document text.",
+        "parameters": [
+          {
+            "description": "Record type to filter by.  Should be either 'Fact Sheet', 'Method', 'Product Declaration', or 'Safety Data Sheet' (capitalization included).",
+            "in": "path",
+            "name": "record_type",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Search query parameters.  Exact parameters are still in flux, but generally consist of database field names with values and flags for whether to perform exact matches or not.",
+            "in": "query",
+            "name": "search_info",
+            "required": false,
+            "type": "dict"
+          },
+          {
+            "description": "List of field names in search_info that are fields in the record_info table in PostgreSQL.",
+            "in": "query",
+            "name": "record_info_fields",
+            "type": "array of strings"
+          },
+          {
+            "description": "List of field names in search_info that are fields in the fact_sheets table in PostgreSQL.",
+            "in": "query",
+            "name": "table_fields",
+            "type": "array of strings"
+          }
+        ],
+        "responses": {},
+        "summary": "Runs searches for document IDs that pass a list of submitted filters, including document metadata, substance"
       }
     },
     "/api/amos/spectral_entropy/": {

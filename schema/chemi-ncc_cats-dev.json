@@ -268,17 +268,11 @@
                           ]
                         }
                       },
-                      "required": [
-                        "smiles"
-                      ],
                       "additionalProperties": false
                     },
-                    "description": "Array of input chemicals with required smiles and optional id, logp, and ws."
+                    "description": "Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors."
                   }
                 },
-                "required": [
-                  "chemicals"
-                ],
                 "additionalProperties": false
               },
               "examples": {
@@ -517,17 +511,11 @@
                   ]
                 }
               },
-              "required": [
-                "smiles"
-              ],
               "additionalProperties": false
             },
-            "description": "Array of input chemicals with required smiles and optional id, logp, and ws."
+            "description": "Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors."
           }
         },
-        "required": [
-          "chemicals"
-        ],
         "additionalProperties": false
       },
       "InputChemical": {
@@ -569,9 +557,6 @@
             ]
           }
         },
-        "required": [
-          "smiles"
-        ],
         "additionalProperties": false
       },
       "PredictionItem": {

@@ -784,10 +784,6 @@
           "description": {
             "type": "string"
           },
-          "valueDigits": {
-            "type": "integer",
-            "format": "int32"
-          },
           "binary": {
             "type": "boolean"
           },
@@ -801,6 +797,10 @@
             "type": "string"
           },
           "logValueDigits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "valueDigits": {
             "type": "integer",
             "format": "int32"
           }
