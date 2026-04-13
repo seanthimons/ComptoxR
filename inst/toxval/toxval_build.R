@@ -5,7 +5,7 @@
 #
 # Usage:
 #   source(system.file("toxval", "toxval_build.R", package = "ComptoxR"))
-#   .build_toxval_db()  # or call via tox_install()
+#   .build_toxval_db()  # or call via toxval_install()
 
 # Clowder dataset URL for ToxValDB v9 per-source files
 .TOXVAL_CLOWDER_DATASET <- "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
@@ -79,7 +79,7 @@
         "Failed to query Clowder API for ToxValDB files.",
         "x" = conditionMessage(e),
         "i" = "The EPA Clowder server may be unavailable. Try again later.",
-        "i" = "Or use {.code tox_install(source = 'path/to/toxval.duckdb')} with a pre-built file."
+        "i" = "Or use {.code toxval_install(source = 'path/to/toxval.duckdb')} with a pre-built file."
       ))
     }
   )
@@ -230,7 +230,7 @@
     cli::cli_abort(c(
       "Row count sanity check failed: {nrow(stacked)} rows (expected >= {.TOXVAL_MIN_ROWS}).",
       "i" = "The Clowder data may be incomplete or the API response has changed.",
-      "i" = "Use {.code tox_install(source = 'path/to/toxval.duckdb')} with a pre-built file."
+      "i" = "Use {.code toxval_install(source = 'path/to/toxval.duckdb')} with a pre-built file."
     ))
   }
 

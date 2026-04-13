@@ -52,13 +52,13 @@ or human/eco classification. Returns a tibble with curated default columns
 \examples{
 \dontrun{
 # Query by CASRN (Formaldehyde)
-tox_results(casrn = "50-00-0")
+toxval_results(casrn = "50-00-0")
 
 # Query by source
-tox_results(source = "IRIS")
+toxval_results(source = "IRIS")
 
 # Query by DTXSID with all columns
-tox_results(dtxsid = "DTXSID7020182", cols = "all")
+toxval_results(dtxsid = "DTXSID7020182", cols = "all")
 }
 }
 \seealso{

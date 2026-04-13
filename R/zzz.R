@@ -207,47 +207,47 @@ run_setup <- function() {
     )))
 
     # ToxValDB — show active mode
-    tox_url <- Sys.getenv("toxval_burl")
-    tox_latency <- NA_real_
-    tox_latency_fmt <- ""
+    toxval_url <- Sys.getenv("toxval_burl")
+    toxval_latency <- NA_real_
+    toxval_latency_fmt <- ""
 
-    if (nzchar(tox_url) && grepl("\\.duckdb$", tox_url)) {
-      tox_status <- cli::col_cyan("local DuckDB")
-    } else if (nzchar(tox_url) && grepl("127\\.0\\.0\\.1", tox_url)) {
+    if (nzchar(toxval_url) && grepl("\\.duckdb$", toxval_url)) {
+      toxval_status <- cli::col_cyan("local DuckDB")
+    } else if (nzchar(toxval_url) && grepl("127\\.0\\.0\\.1", toxval_url)) {
       # Plumber mode — ping health-check
       tryCatch({
-        req <- httr2::request(paste0(tox_url, "/health-check")) |>
+        req <- httr2::request(paste0(toxval_url, "/health-check")) |>
           httr2::req_timeout(3) |>
           httr2::req_error(is_error = \(resp) FALSE)
         start_time <- Sys.time()
         resp <- httr2::req_perform(req)
         end_time <- Sys.time()
         lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
-        tox_latency <- lat
-        tox_latency_fmt <- paste0(round(lat * 1000), "ms")
+        toxval_latency <- lat
+        toxval_latency_fmt <- paste0(round(lat * 1000), "ms")
         status <- httr2::resp_status(resp)
-        tox_status <- if (status >= 200 && status < 400) {
+        toxval_status <- if (status >= 200 && status < 400) {
           cli::col_green(cli::format_inline("OK ({status})"))
         } else {
           cli::col_yellow(cli::format_inline("WARN ({status})"))
         }
       }, error = function(e) {
-        tox_status <<- cli::col_red("not responding")
+        toxval_status <<- cli::col_red("not responding")
       })
-    } else if (nzchar(tox_url)) {
-      tox_status <- cli::col_yellow("unknown endpoint")
+    } else if (nzchar(toxval_url)) {
+      toxval_status <- cli::col_yellow("unknown endpoint")
     } else {
-      tox_status <- cli::col_yellow("not configured")
+      toxval_status <- cli::col_yellow("not configured")
     }
 
-    tox_url_display <- if (nzchar(tox_url) && grepl("^https?://", tox_url)) tox_url else ""
+    toxval_url_display <- if (nzchar(toxval_url) && grepl("^https?://", toxval_url)) toxval_url else ""
 
     results <- c(results, list(list(
     	name = "ToxValDB",
-    	url = tox_url_display,
-    	status_text = tox_status,
-    	latency = tox_latency,
-    	latency_fmt = tox_latency_fmt
+    	url = toxval_url_display,
+    	status_text = toxval_status,
+    	latency = toxval_latency,
+    	latency_fmt = toxval_latency_fmt
     )))
 
     healthy_latency <- 0.3
@@ -907,16 +907,16 @@ reset_servers <- function() {
 		}
 
 		# ToxValDB
-		tox_db_path <- toxval_path()
-		if (file.exists(tox_db_path)) {
-			tox_db_mb <- round(file.info(tox_db_path)$size / 1024^2)
-			tox_version <- tryCatch({
+		toxval_db_path <- toxval_path()
+		if (file.exists(toxval_db_path)) {
+			toxval_db_mb <- round(file.info(toxval_db_path)$size / 1024^2)
+			toxval_version <- tryCatch({
 				con <- .tox_get_con()
 				v <- DBI::dbGetQuery(con, "SELECT version_label FROM _metadata WHERE is_latest = TRUE LIMIT 1")
 				if (nrow(v) > 0) paste0(", v", v$version_label[[1]]) else ""
 			}, error = function(e) "")
 			cli::cli_alert_success(
-				"ToxValDB: Installed ({tox_db_mb} MB{tox_version}) {cli::col_silver(paste0('-- ', tox_db_path))}"
+				"ToxValDB: Installed ({toxval_db_mb} MB{toxval_version}) {cli::col_silver(paste0('-- ', toxval_db_path))}"
 			)
 		} else {
 			cli::cli_alert_warning(

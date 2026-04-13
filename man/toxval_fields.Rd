@@ -19,7 +19,7 @@ List fields in a ToxValDB table
 }
 \examples{
 \dontrun{
-tox_fields("toxval")
+toxval_fields("toxval")
 }
 }
 \seealso{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tox_functions.R
 \name{.tox_default_cols}
 \alias{.tox_default_cols}
-\title{Default columns returned by tox_results()}
+\title{Default columns returned by toxval_results()}
 \usage{
 .tox_default_cols()
 }

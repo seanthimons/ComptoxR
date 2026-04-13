@@ -24,7 +24,7 @@
 The downloaded file path (invisibly), or aborts on failure.
 }
 \description{
-Internal helper used by \code{tox_install()}, \code{eco_install()}, and \code{dss_install()}
+Internal helper used by \code{toxval_install()}, \code{eco_install()}, and \code{dss_install()}
 to download pre-built \code{.duckdb} files attached to GitHub Releases.
 }
 \keyword{internal}

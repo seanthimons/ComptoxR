@@ -19,7 +19,7 @@ label and file size.
 }
 \examples{
 \dontrun{
-tox_health()
+toxval_health()
 }
 }
 \seealso{

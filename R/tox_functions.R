@@ -27,7 +27,7 @@
   ))
 }
 
-#' Default columns returned by tox_results()
+#' Default columns returned by toxval_results()
 #'
 #' Returns the curated set of ~45 default columns: 35 universal + 10 key
 #' moderate coverage columns.
@@ -74,7 +74,7 @@
 #' @family toxval
 #' @examples
 #' \dontrun{
-#' tox_tables()
+#' toxval_tables()
 #' }
 toxval_tables <- function(con = NULL) {
   route <- .tox_route()
@@ -101,7 +101,7 @@ toxval_tables <- function(con = NULL) {
 #' @family toxval
 #' @examples
 #' \dontrun{
-#' tox_fields("toxval")
+#' toxval_fields("toxval")
 #' }
 toxval_fields <- function(table_name, con = NULL) {
   if (!is.character(table_name) || length(table_name) != 1L || !nzchar(table_name)) {
@@ -135,7 +135,7 @@ toxval_fields <- function(table_name, con = NULL) {
 #' @family toxval
 #' @examples
 #' \dontrun{
-#' tox_health()
+#' toxval_health()
 #' }
 toxval_health <- function(con = NULL) {
   route <- .tox_route()
@@ -180,7 +180,7 @@ toxval_health <- function(con = NULL) {
 #' @family toxval
 #' @examples
 #' \dontrun{
-#' tox_sources()
+#' toxval_sources()
 #' }
 toxval_sources <- function(con = NULL) {
   route <- .tox_route()
@@ -216,7 +216,7 @@ toxval_sources <- function(con = NULL) {
 #' toxval_search(c("DTXSID7020182", "DTXSID3021392"))
 #' }
 toxval_search <- function(dtxsid,
-                       limit = 1000L,
+                       limit = 1e5L,
                        con = NULL) {
   if (!is.character(dtxsid) || length(dtxsid) == 0L || !all(nzchar(dtxsid))) {
     cli::cli_abort("{.arg dtxsid} must be a non-empty character vector.")
@@ -249,7 +249,7 @@ toxval_search <- function(dtxsid,
 }
 
 
-# tox_results — main query engine ----------------------------------------
+# toxval_results — main query engine ----------------------------------------
 
 #' Query ToxValDB results
 #'
@@ -278,13 +278,13 @@ toxval_search <- function(dtxsid,
 #' @examples
 #' \dontrun{
 #' # Query by CASRN (Formaldehyde)
-#' tox_results(casrn = "50-00-0")
+#' toxval_results(casrn = "50-00-0")
 #'
 #' # Query by source
-#' tox_results(source = "IRIS")
+#' toxval_results(source = "IRIS")
 #'
 #' # Query by DTXSID with all columns
-#' tox_results(dtxsid = "DTXSID7020182", cols = "all")
+#' toxval_results(dtxsid = "DTXSID7020182", cols = "all")
 #' }
 toxval_results <- function(dtxsid = NULL,
                         casrn = NULL,

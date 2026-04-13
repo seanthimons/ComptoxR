@@ -4,7 +4,7 @@
 \alias{toxval_search}
 \title{Search ToxValDB by DTXSID}
 \usage{
-toxval_search(dtxsid, limit = 1000L, con = NULL)
+toxval_search(dtxsid, limit = 100000L, con = NULL)
 }
 \arguments{
 \item{dtxsid}{A character vector of DTXSIDs (e.g., \code{"DTXSID7020182"}).}

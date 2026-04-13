@@ -17,7 +17,7 @@ Returns the distinct source names available in the ToxValDB database.
 }
 \examples{
 \dontrun{
-tox_sources()
+toxval_sources()
 }
 }
 \seealso{

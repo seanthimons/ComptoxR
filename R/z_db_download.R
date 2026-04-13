@@ -3,7 +3,7 @@
 
 #' Download a DuckDB database from a GitHub Release asset
 #'
-#' Internal helper used by `tox_install()`, `eco_install()`, and `dss_install()`
+#' Internal helper used by `toxval_install()`, `eco_install()`, and `dss_install()`
 #' to download pre-built `.duckdb` files attached to GitHub Releases.
 #'
 #' @param db_name One of `"dsstox"`, `"ecotox"`, or `"toxval"`.

@@ -3,7 +3,7 @@
 # Lightweight checks to inform design decisions and verify data quality.
 # Run interactively or via: source(system.file("toxval", "diagnostics.R", package = "ComptoxR"))
 #
-# Requires: a built ToxValDB (run tox_install() first)
+# Requires: a built ToxValDB (run toxval_install() first)
 
 # --- Schema & Column Coverage ------------------------------------------------
 
@@ -295,7 +295,7 @@ toxval_diag_freshness <- function() {
   cli::cli_alert_info("File age: {round(file_age)} days (threshold: 180)")
 
   if (file_age > 180) {
-    cli::cli_alert_warning("Database is stale. Run {.code tox_install(build = TRUE, overwrite = TRUE)} to rebuild.")
+    cli::cli_alert_warning("Database is stale. Run {.code toxval_install(build = TRUE, overwrite = TRUE)} to rebuild.")
   } else {
     cli::cli_alert_success("Database is fresh.")
   }

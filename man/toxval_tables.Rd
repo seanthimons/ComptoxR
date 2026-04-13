@@ -18,7 +18,7 @@ List tables in the ToxValDB database
 }
 \examples{
 \dontrun{
-tox_tables()
+toxval_tables()
 }
 }
 \seealso{
