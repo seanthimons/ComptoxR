@@ -8,18 +8,25 @@
 # Prerequisites:
 #   - DSSTox database installed (dss_install())
 #   - Valid ctx_api_key set (Sys.setenv(ctx_api_key = "..."))
-#   - Packages: tidyverse, rvest, polite, duckdb, usethis
+#   - Packages: dplyr, tidyr, stringr, purrr, tibble, rvest, duckdb, usethis
 #
 # NOTE: This script opens a read-write connection to the DSSTox DuckDB file
 # (for temporary table support). Do not run while a package session has an
 # active dss_connect() open — disconnect first with dss_disconnect().
 
 # packages ----------------------------------------------------------------
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(purrr)
+library(tibble)
 library(rvest)
-library(polite)
 library(duckdb)
 library(ComptoxR)
+
+if (!nzchar(Sys.getenv("ctx_api_key"))) {
+  stop("ctx_api_key not set. Run: Sys.setenv(ctx_api_key = 'YOUR_KEY')")
+}
 
 `%ni%` <- Negate(`%in%`)
 
@@ -43,11 +50,11 @@ pt <- list()
 
 # Oxidation states --------------------------------------------------------
 ind_html <-
-  polite::bow(
-    'https://en.wikipedia.org/wiki/Oxidation_state#List_of_oxidation_states_of_the_elements'
-  ) %>%
-  polite::scrape(.) %>%
-  rvest::html_nodes("table.wikitable") %>%
+  httr2::request("https://en.wikipedia.org/wiki/Oxidation_state#List_of_oxidation_states_of_the_elements") |>
+  httr2::req_user_agent("ComptoxR data-raw script; https://github.com/seanthimons/ComptoxR") |>
+  httr2::req_perform() |>
+  httr2::resp_body_html() |>
+  rvest::html_nodes("table.wikitable") |>
   rvest::html_table()
 
 pt$oxidation_state <- ind_html[[3]] %>%
@@ -95,12 +102,12 @@ pt$oxidation_state <- left_join(
 rm(ind_html)
 
 # Elements table ----------------------------------------------------------
-pt$elements <- polite::bow(
-  'https://en.wikipedia.org/wiki/List_of_chemical_elements'
-) %>%
-  polite::scrape(content = "text/html; charset=UTF-8") %>%
-  rvest::html_nodes(".wikitable") %>%
-  rvest::html_table() %>%
+pt$elements <- httr2::request("https://en.wikipedia.org/wiki/List_of_chemical_elements") |>
+  httr2::req_user_agent("ComptoxR data-raw script; https://github.com/seanthimons/ComptoxR") |>
+  httr2::req_perform() |>
+  httr2::resp_body_html() |>
+  rvest::html_nodes(".wikitable") |>
+  rvest::html_table() |>
   pluck(1) %>%
   unname() %>%
   tibble::as_tibble(.name_repair = 'universal') %>%
@@ -134,8 +141,10 @@ pt$elements <-
 rm(element_list)
 
 # Nuclides and isotopes ---------------------------------------------------
-nuc_page <- polite::bow('https://en.wikipedia.org/wiki/Table_of_nuclides') %>%
-  polite::scrape(content = "text/html; charset=UTF-8")
+nuc_page <- httr2::request("https://en.wikipedia.org/wiki/Table_of_nuclides") |>
+  httr2::req_user_agent("ComptoxR data-raw script; https://github.com/seanthimons/ComptoxR") |>
+  httr2::req_perform() |>
+  httr2::resp_body_html()
 
 nuc_cells <- nuc_page %>%
   rvest::html_nodes(".wikitable") %>%
