@@ -747,10 +747,47 @@ reset_servers <- function() {
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
+	# Server URLs and defaults are now set in .onLoad() so they're available
+	# even when using namespace access (ComptoxR::function) without library().
+	# .onAttach() only handles startup messages.
 
-	# Conditionally swap to DEV / STAG environments if in the DEV version
-	# Only set default servers if they haven't been explicitly configured
-	# Suppress messages during package attach to comply with CRAN policy
+	# Conditionally display startup message based on verbosity
+	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
+		# Use cli's message handler to preserve ANSI formatting while remaining CRAN compliant
+		# cli outputs through message() by default, which packageStartupMessage wraps
+		withCallingHandlers(
+			.header(),
+			message = function(m) {
+				# Strip trailing newline to preserve original spacing
+				msg <- sub("\n$", "", conditionMessage(m))
+				packageStartupMessage(msg)
+				invokeRestart("muffleMessage")
+			}
+		)
+	}
+
+}
+
+# Load -------------------------------------------------------------------
+
+# .extractor <- NULL
+# .classifier <- NULL
+
+# .onLoad is a special function that R runs when a package is loaded.
+# This runs for BOTH library() and namespace access (ComptoxR::function).
+.onLoad <- function(libname, pkgname) {
+	# Call the factory ONCE and assign the result to our placeholder.
+
+  .ComptoxREnv$extractor <- create_formula_extractor_final()
+	.ComptoxREnv$classifier <- create_compound_classifier()
+
+	# Load hook configuration from YAML
+	load_hook_config()
+
+	# Set up server URLs and defaults - must be in .onLoad() so they're
+	# available when using namespace access (e.g., ComptoxR::ct_hazard())
+	# without calling library(ComptoxR) first.
+	# Suppress messages during package load to comply with CRAN policy
 	suppressMessages({
 		if (is.na(utils::packageDate('ComptoxR'))) {
 			# DEV version defaults (only if not already set)
@@ -792,38 +829,6 @@ reset_servers <- function() {
 			batch_limit(limit = 200)
 		}
 	})
-
-# Conditionally display startup message based on verbosity
-	if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
-		# Use cli's message handler to preserve ANSI formatting while remaining CRAN compliant
-		# cli outputs through message() by default, which packageStartupMessage wraps
-		withCallingHandlers(
-			.header(),
-			message = function(m) {
-				# Strip trailing newline to preserve original spacing
-				msg <- sub("\n$", "", conditionMessage(m))
-				packageStartupMessage(msg)
-				invokeRestart("muffleMessage")
-			}
-		)
-	}
-
-}
-
-# Load -------------------------------------------------------------------
-
-# .extractor <- NULL
-# .classifier <- NULL
-
-# .onLoad is a special function that R runs when a package is loaded.
-.onLoad <- function(libname, pkgname) {
-	# Call the factory ONCE and assign the result to our placeholder.
-
-  .ComptoxREnv$extractor <- create_formula_extractor_final()
-	.ComptoxREnv$classifier <- create_compound_classifier()
-
-	# Load hook configuration from YAML
-	load_hook_config()
 
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
