@@ -164,7 +164,11 @@ run_setup <- function() {
 
     if (nzchar(eco_url) && grepl("\\.duckdb$", eco_url)) {
       # Local DuckDB mode
-      eco_status <- cli::col_cyan("local DuckDB")
+      if (file.exists(eco_url)) {
+        eco_status <- cli::col_cyan("local DuckDB")
+      } else {
+        eco_status <- cli::col_red("not installed")
+      }
     } else if (nzchar(eco_url) && grepl("127\\.0\\.0\\.1", eco_url)) {
       # Plumber mode — ping health-check
       tryCatch({
@@ -212,7 +216,11 @@ run_setup <- function() {
     toxval_latency_fmt <- ""
 
     if (nzchar(toxval_url) && grepl("\\.duckdb$", toxval_url)) {
-      toxval_status <- cli::col_cyan("local DuckDB")
+      if (file.exists(toxval_url)) {
+        toxval_status <- cli::col_cyan("local DuckDB")
+      } else {
+        toxval_status <- cli::col_red("not installed")
+      }
     } else if (nzchar(toxval_url) && grepl("127\\.0\\.0\\.1", toxval_url)) {
       # Plumber mode — ping health-check
       tryCatch({

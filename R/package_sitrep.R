@@ -13,9 +13,9 @@
 #' @examples
 #' \dontrun{
 #' # Generate diagnostic report
-#' package_sitrep()
+#' ComptoxR_package_sitrep()
 #' }
-package_sitrep <- function() {
+ComptoxR_package_sitrep <- function() {
   # Generate timestamp for log file
   timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
   log_filename <- paste0("comptoxr_sitrep_", timestamp, ".log")
@@ -74,11 +74,13 @@ package_sitrep <- function() {
   
   servers <- list(
     "CompTox Dashboard API" = "ctx_burl",
-    "Cheminformatics API" = "chemi_burl",
-    "ECOTOX API" = "eco_burl",
-    "EPI Suite API" = "epi_burl",
-    "Natural Products API" = "np_burl",
-    "Common Chemistry API" = "cc_burl"
+    "Cheminformatics API"   = "chemi_burl",
+    "ECOTOX API"            = "eco_burl",
+    "ToxValDB"              = "toxval_burl",
+    "EPI Suite API"         = "epi_burl",
+    "Natural Products API"  = "np_burl",
+    "Common Chemistry API"  = "cc_burl",
+    "PubChem PUG REST"      = "pubchem_burl"
   )
   
   server_paths <- list()
@@ -100,10 +102,6 @@ package_sitrep <- function() {
       url = Sys.getenv("ctx_burl"),
       ping_path = "chemical/health"
     ),
-    "ECOTOX" = list(
-      url = Sys.getenv("eco_burl"),
-      ping_path = ""
-    ),
     "EPI Suite API" = list(
       url = Sys.getenv("epi_burl"),
       ping_path = ""
@@ -111,6 +109,10 @@ package_sitrep <- function() {
     "Common Chemistry API" = list(
       url = Sys.getenv("cc_burl"),
       ping_path = ""
+    ),
+    "PubChem PUG REST" = list(
+      url = Sys.getenv("pubchem_burl"),
+      ping_path = "compound/cid/2244/property/MolecularFormula/JSON"
     )
   )
   
@@ -244,24 +246,99 @@ package_sitrep <- function() {
   })
   
   ping_results[["Cheminformatics API"]] <- chemi_result
-  
+
   latency_str <- if (is.finite(chemi_result$latency)) {
     sprintf("%.0fms", chemi_result$latency * 1000)
   } else {
     ""
   }
-  
-  add_log(sprintf("%-30s: %-10s %-30s %s", 
-                  chemi_result$name, 
-                  chemi_result$status, 
+
+  add_log(sprintf("%-30s: %-10s %-30s %s",
+                  chemi_result$name,
+                  chemi_result$status,
                   chemi_result$message,
                   latency_str))
+
+  # ECOTOX — only ping when in Plumber mode (DuckDB handled via local DB section)
+  eco_url_ping <- Sys.getenv("eco_burl")
+  if (nzchar(eco_url_ping) && grepl("127\\.0\\.0\\.1", eco_url_ping)) {
+    eco_ping_result <- tryCatch({
+      start_time <- Sys.time()
+      resp <- httr2::request(paste0(eco_url_ping, "/health-check")) %>%
+        httr2::req_timeout(5) %>%
+        httr2::req_error(is_error = function(resp) FALSE) %>%
+        httr2::req_perform()
+      end_time <- Sys.time()
+      lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      sc <- httr2::resp_status(resp)
+      list(
+        name = "ECOTOX",
+        status = if (sc >= 200 && sc < 400) "OK" else "WARNING",
+        message = paste0("HTTP ", sc),
+        latency = lat
+      )
+    }, error = function(e) {
+      list(name = "ECOTOX", status = "ERROR", message = "Connection failed", latency = NA_real_)
+    })
+    ping_results[["ECOTOX"]] <- eco_ping_result
+    lat_s <- if (is.finite(eco_ping_result$latency)) sprintf("%.0fms", eco_ping_result$latency * 1000) else ""
+    add_log(sprintf("%-30s: %-10s %-30s %s", "ECOTOX", eco_ping_result$status, eco_ping_result$message, lat_s))
+  }
+
+  # ToxValDB — only ping when in Plumber mode (DuckDB handled via local DB section)
+  toxval_url_ping <- Sys.getenv("toxval_burl")
+  if (nzchar(toxval_url_ping) && grepl("127\\.0\\.0\\.1", toxval_url_ping)) {
+    toxval_ping_result <- tryCatch({
+      start_time <- Sys.time()
+      resp <- httr2::request(paste0(toxval_url_ping, "/health-check")) %>%
+        httr2::req_timeout(5) %>%
+        httr2::req_error(is_error = function(resp) FALSE) %>%
+        httr2::req_perform()
+      end_time <- Sys.time()
+      lat <- as.numeric(difftime(end_time, start_time, units = "secs"))
+      sc <- httr2::resp_status(resp)
+      list(
+        name = "ToxValDB",
+        status = if (sc >= 200 && sc < 400) "OK" else "WARNING",
+        message = paste0("HTTP ", sc),
+        latency = lat
+      )
+    }, error = function(e) {
+      list(name = "ToxValDB", status = "ERROR", message = "Connection failed", latency = NA_real_)
+    })
+    ping_results[["ToxValDB"]] <- toxval_ping_result
+    lat_s <- if (is.finite(toxval_ping_result$latency)) sprintf("%.0fms", toxval_ping_result$latency * 1000) else ""
+    add_log(sprintf("%-30s: %-10s %-30s %s", "ToxValDB", toxval_ping_result$status, toxval_ping_result$message, lat_s))
+  }
+
   add_log("")
-  
-  # Local Fallback Implementation (Future Development)
-  add_log("LOCAL FALLBACK IMPLEMENTATION")
+
+  # Local Database Status
+  add_log("LOCAL DATABASES")
   add_log(paste0(rep("-", 70), collapse = ""))
-  add_log("Status: Not yet implemented (future development)")
+
+  local_dbs <- list(
+    list(label = "DSSTox",   path = dss_path()),
+    list(label = "ECOTOX",   path = eco_path()),
+    list(label = "ToxValDB", path = toxval_path())
+  )
+
+  local_db_status <- list()
+  for (db in local_dbs) {
+    installed <- file.exists(db$path)
+    size_str <- if (installed) {
+      sz_mb <- file.size(db$path) / 1024^2
+      sprintf("%.1f MB", sz_mb)
+    } else {
+      "not installed"
+    }
+    local_db_status[[db$label]] <- list(
+      path      = db$path,
+      installed = installed,
+      size_str  = size_str
+    )
+    add_log(sprintf("%-30s: %-15s %s", db$label, size_str, db$path))
+  }
   add_log("")
   
   # Footer
@@ -318,6 +395,16 @@ package_sitrep <- function() {
     cli::cli_alert_info("{.strong {name}}: {status_color} - {result$message} {latency_display}")
   }
   
+  cli::cli_h2("Local Databases")
+  for (label in names(local_db_status)) {
+    db_info <- local_db_status[[label]]
+    if (db_info$installed) {
+      cli::cli_alert_success("{.strong {label}}: {.path {db_info$path}} ({db_info$size_str})")
+    } else {
+      cli::cli_alert_warning("{.strong {label}}: not installed")
+    }
+  }
+
   cli::cli_rule()
   cli::cli_alert_success("Full diagnostic report saved to: {.file {log_filename}}")
   
@@ -333,6 +420,10 @@ package_sitrep <- function() {
     ),
     server_paths = server_paths,
     ping_results = ping_results,
-    local_fallback = "Not yet implemented"
+    local_databases = list(
+      dsstox   = list(path = dss_path(),    installed = file.exists(dss_path())),
+      ecotox   = list(path = eco_path(),    installed = file.exists(eco_path())),
+      toxvaldb = list(path = toxval_path(), installed = file.exists(toxval_path()))
+    )
   ))
 }

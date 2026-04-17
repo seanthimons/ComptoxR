@@ -163,17 +163,10 @@ dss_install <- function(source = NULL, build = FALSE, tag = "latest",
 #' @keywords internal
 #' @noRd
 .dss_build_from_source <- function(dest) {
-  build_script <- system.file("data-raw", "dsstox.R", package = "ComptoxR")
-  if (!nzchar(build_script)) {
-    # Fallback for development (not yet installed)
-    build_script <- file.path(
-      system.file(package = "ComptoxR"),
-      "..", "data-raw", "dsstox.R"
-    )
-  }
-  if (!file.exists(build_script)) {
+  build_script <- system.file("dsstox", "dsstox_build.R", package = "ComptoxR")
+  if (!nzchar(build_script) || !file.exists(build_script)) {
     cli::cli_abort(c(
-      "Build script not found.",
+      "Build script not found. Build-from-source requires a development install.",
       "i" = "Provide a {.arg source} path to a pre-built database instead."
     ))
   }
