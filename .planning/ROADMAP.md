@@ -14,7 +14,8 @@
 - v1.9 Schema Check Workflow Fix — Phases 16-18 (shipped 2026-02-12)
 - v2.0 Paginated Requests — Phases 19-21 (shipped 2026-02-24)
 - v2.1 Test Infrastructure — Phases 23-26 (shipped 2026-03-02, verified 2026-03-09)
-- v2.2 Package Stabilization — Phases 27-30 (active)
+- v2.2 Package Stabilization — Phases 27-30 (shipped 2026-03-11)
+- **v2.3 ECOTOX Lifestage Harmonization** — Phases 31-33 (active)
 
 ## Phases
 
@@ -66,75 +67,74 @@
 
 </details>
 
-### v2.2 Package Stabilization (Phases 27-30) — ACTIVE
+<details>
+<summary>v2.2 Package Stabilization (Phases 27-30) — SHIPPED 2026-03-11</summary>
 
-**Goal:** Migrate all user-facing ct_* functions to use generated stubs via generic_request(), classify functions by complexity, and get the package to a clean build + passing test state.
+- [x] Phase 27: Test Infrastructure Stabilization (3/3 plans) — completed 2026-03-10
+- [x] Phase 28: Thin Wrapper Migration (5/5 plans) — completed 2026-03-11
+- [x] Phase 29: Direct Template Migration (2/2 plans) — completed 2026-03-11
+- [x] Phase 30: Build Quality Validation (1/1 plan) — completed 2026-03-11
 
-- [x] Phase 27: Test Infrastructure Stabilization (completed 2026-03-10)
-  - **Goal:** Fix mechanical test blockers (VCR key sanitization, purrr::flatten warning, cassette re-recording) so tests can run reliably
-  - **Depends on:** v2.1 verification complete
-  - **Requirements:** [INFRA-27-01, INFRA-27-02, INFRA-27-03, INFRA-27-04, INFRA-27-05, INFRA-27-06]
-  - **Plans:** 3 plans
-    - [ ] 27-01-PLAN.md — NAMESPACE selective imports (eliminate purrr/jsonlite @import)
-    - [ ] 27-02-PLAN.md — VCR sanitization, health check script, and parallel recording script
-    - [ ] 27-03-PLAN.md — Execute cassette re-recording and validate results
+</details>
 
-- [x] Phase 28: Thin Wrapper Migration (1/5 complete) (completed 2026-03-11)
-  - **Goal:** Build hook injection system and migrate all hand-written ct_* wrappers to generated stubs + hooks, deleting old wrapper files
-  - **Depends on:** Phase 27
-  - **Requirements:** [HOOK-28-01, HOOK-28-02, HOOK-28-03, HOOK-28-04, HOOK-28-05, HOOK-28-06, HOOK-28-07, HOOK-28-08, HOOK-28-09, HOOK-28-10]
-  - **Plans:** 5 plans
-    - [x] 28-01-PLAN.md — Hook registry foundation (.HookRegistry, run_hook, YAML config, .onLoad)
-    - [ ] 28-02-PLAN.md — Hook primitive functions and unit tests
-    - [ ] 28-03-PLAN.md — Delete pure pass-through wrappers and deprecated code
-    - [ ] 28-04-PLAN.md — Generator hook parameter injection and remaining wrapper deletion
-    - [ ] 28-05-PLAN.md — Stub regeneration, test generator update, full validation
+### v2.3 ECOTOX Lifestage Harmonization (Phases 31-33) — ACTIVE
 
-- [x] Phase 29: Direct Template Migration (completed 2026-03-11)
-  - **Goal:** Migrate medium-complexity functions (ct_prop, ct_related) that use raw httr2 to generic_request()
-  - **Depends on:** Phase 28
-  - **Requirements:** [PROP-COERCE, PROP-DELETE, PROP-IDS, REL-MIGRATE, REL-VALIDATE, NEWS-DOC]
-  - **Plans:** 2 plans
-    - [ ] 29-01-PLAN.md — Property coerce hook, delete ct_properties and .prop_ids
-    - [ ] 29-02-PLAN.md — Migrate ct_related to generic_request
+**Milestone Goal:** Replace the static 2-column lifestage dictionary with an ontology-backed 5-column schema featuring a two-axis design (developmental stage + reproductive flag), keyword regex fallback classifier, and a hard blocking build gate.
 
-- [x] Phase 30: Build Quality Validation (completed 2026-03-11)
-  - **Goal:** R CMD check produces 0 errors (warnings and notes acceptable)
-  - **Depends on:** Phase 29
-  - **Requirements:** [BUILD-CLEAN, YAML-DEP, DUP-ARG]
-  - **Plans:** 1 plan
-    - [ ] 30-01-PLAN.md — Add yaml dependency, fix duplicate endpoint argument, verify build
+- [ ] **Phase 31: Standalone Validation** (2 plans) - Define classifier + dictionary, validate against live ECOTOX DB read-only, prove all assertions pass
+- [ ] **Phase 32: Build Pipeline Integration** - Integrate validated code into ecotox_build.R and eco_functions.R
+- [ ] **Phase 33: Build Confirmation** - Run full ECOTOX build with gate active, verify outputs, pass devtools::check()
+
+## Phase Details
+
+### Phase 31: Standalone Validation
+**Goal**: Dictionary schema, keyword classifier, and data corrections are proven correct in complete isolation before touching any production code
+**Depends on**: Nothing (first phase of v2.3; reads existing ECOTOX DuckDB read-only)
+**Requirements**: DICT-01, DICT-02, DICT-03, DICT-04, KWCL-01, KWCL-02, KWCL-03, CORR-01, CORR-02, CORR-03, VALD-01, VALD-02
+**Success Criteria** (what must be TRUE):
+  1. A self-contained validation script defines the complete 5-column lifestage dictionary tribble (144+ rows) with columns `org_lifestage`, `harmonized_life_stage`, `ontology_id`, `reproductive_stage`, `classification_source`
+  2. `.classify_lifestage_keywords()` function classifies arbitrary character input via priority-ordered regex and achieves at least 130/144 non-Other/Unknown matches on known descriptions
+  3. Reproductive flag fires independently of developmental stage (e.g., "Reproductive adult" gets Adult + reproductive_stage=TRUE)
+  4. All 10 two-axis deterministic assertions pass (6 misclassification fixes verified, Larva/Juvenile split correct, Reproductive category eliminated, column completeness, full coverage)
+  5. All 144 current org_lifestage values from the existing ECOTOX DB are present in the new dictionary with zero regressions
+**Plans:** 2 plans
+Plans:
+- [ ] 31-01-PLAN.md — Create classifier function + 5-column dictionary tribble with all corrections
+- [ ] 31-02-PLAN.md — Add assertions, DB validation, diff output, and run validation
+
+### Phase 32: Build Pipeline Integration
+**Goal**: Validated dictionary, classifier, and gate logic are wired into the ECOTOX build pipeline and package source in a single mechanical integration
+**Depends on**: Phase 31
+**Requirements**: GATE-01, GATE-02, GATE-03, GATE-04, INTG-01, INTG-02, INTG-03, INTG-04
+**Success Criteria** (what must be TRUE):
+  1. Build aborts with `cli::cli_abort()` when a truly unknown lifestage term appears (no keyword match at all)
+  2. Build warns with `cli::cli_alert_warning()` and writes keyword-classified terms to `lifestage_review` staging table (never to canonical dictionary)
+  3. `.eco_enrich_metadata()` joins only against `lifestage_dictionary` and its relocate call includes the 3 new columns (`ontology_id`, `reproductive_stage`, `classification_source`)
+  4. `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R` section 16 contain identical gate + dictionary logic
+  5. `devtools::document()` regenerates man pages without errors after roxygen `@return` updated for new columns
+**Plans**: TBD
+
+### Phase 33: Build Confirmation
+**Goal**: Full ECOTOX build runs successfully with the gate active, producing correct output tables, and the package passes R CMD check
+**Depends on**: Phase 32
+**Requirements**: VALD-03, VALD-04, VALD-05
+**Success Criteria** (what must be TRUE):
+  1. Gate correctly aborts for a truly unknown term (e.g., injecting "Xylophage" into test data triggers cli_abort)
+  2. Gate correctly warns and quarantines for a keyword-classifiable unmapped term (e.g., "Proto-larva" lands in lifestage_review with correct classification)
+  3. `devtools::check()` returns 0 errors after full integration
+**Plans**: TBD
 
 ## Progress
 
+**Execution Order:**
+Phases execute in numeric order: 31 -> 32 -> 33
+
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Fix Body Parameter Extraction | v1.0 | 2/2 | Complete | 2026-01-27 |
-| 2. Validate and Regenerate | v1.0 | 2/2 | Complete | 2026-01-27 |
-| 3. Raw Text Body | v1.1 | 2/2 | Complete | 2026-01-27 |
-| 4. JSON Body Default | v1.2 | 3/3 | Complete | 2026-01-28 |
-| 5. Resolver Integration Fix | v1.3 | 1/1 | Complete | 2026-01-28 |
-| 6. Empty POST Detection | v1.4 | 1/1 | Complete | 2026-01-29 |
-| 7. Version Detection | v1.5 | 2/2 | Complete | 2026-01-29 |
-| 8. Reference Resolution | v1.5 | 2/2 | Complete | 2026-01-29 |
-| 9. Integration Validation | v1.5 | 1/1 | Complete | 2026-01-29 |
-| 10. Pipeline Consolidation | v1.6 | 1/1 | Complete | 2026-01-30 |
-| 11. Documentation Update | v1.7 | 1/1 | Complete | 2026-01-29 |
-| 12. Test Infrastructure Setup | v1.8 | 1/1 | Complete | 2026-01-30 |
-| 13. Unit Tests | v1.8 | 2/2 | Complete | 2026-01-31 |
-| 14. Integration CI | v1.8 | 2/2 | Complete | 2026-01-31 |
-| 15. Integration Test Fixes | v1.8 | 1/1 | Complete | 2026-01-31 |
-| 16. CI Fix | v1.9 | 1/1 | Complete | 2026-02-12 |
-| 17. Schema Diffing | v1.9 | 2/2 | Complete | 2026-02-12 |
-| 18. Reliability | v1.9 | 1/1 | Complete | 2026-02-12 |
-| 19. Pagination Detection | v2.0 | 1/1 | Complete | 2026-02-24 |
-| 20. Auto-Pagination Engine | v2.0 | 2/2 | Complete | 2026-02-24 |
-| 21. Stub Generation Integration | v2.0 | 1/1 | Complete | 2026-02-24 |
-| 23. Build Fixes & Test Generator Core | v2.1 | 5/5 | Complete | 2026-02-27 |
-| 24. VCR Cassette Cleanup | v2.1 | 3/3 | Complete | 2026-02-27 |
-| 25. Automated Test Generation Pipeline | v2.1 | 3/3 | Complete | 2026-03-01 |
-| 26. Pagination Tests & Coverage Hardening | v2.1 | 2/2 | Complete | 2026-03-01 |
-| 27. Test Infrastructure Stabilization | 2/3 | Complete    | 2026-03-10 | — |
-| 28. Thin Wrapper Migration | 5/5 | Complete    | 2026-03-11 | — |
-| 29. Direct Template Migration | 2/2 | Complete    | 2026-03-11 | — |
-| 30. Build Quality Validation | 1/1 | Complete    | 2026-03-11 | — |
+| 1-18 | v1.0-v1.9 | 25/25 | Complete | 2026-02-12 |
+| 19-21 | v2.0 | 4/4 | Complete | 2026-02-24 |
+| 23-26 | v2.1 | 13/13 | Complete | 2026-03-02 |
+| 27-30 | v2.2 | 11/11 | Complete | 2026-03-11 |
+| 31. Standalone Validation | v2.3 | 0/2 | Not started | - |
+| 32. Build Pipeline Integration | v2.3 | 0/TBD | Not started | - |
+| 33. Build Confirmation | v2.3 | 0/TBD | Not started | - |
