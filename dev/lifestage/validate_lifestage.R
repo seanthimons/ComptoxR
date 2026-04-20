@@ -244,8 +244,12 @@ if (!file.exists(db_path)) {
 }
 cli::cli_alert_info("DB path: {db_path}")
 
-eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
-on.exit(DBI::dbDisconnect(eco_con, shutdown = TRUE), add = TRUE)
+drv <- duckdb::duckdb()
+eco_con <- DBI::dbConnect(drv, dbdir = db_path, read_only = TRUE)
+on.exit({
+  DBI::dbDisconnect(eco_con, shutdown = TRUE)
+  duckdb::duckdb_shutdown(drv)
+}, add = TRUE)
 
 db_lifestages <- DBI::dbGetQuery(
   eco_con,
