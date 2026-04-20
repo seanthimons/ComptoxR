@@ -33,14 +33,14 @@ suppressPackageStartupMessages({
   # Reproductive status is captured independently via the reproductive_stage flag.
   #fmt: off
   rules <- tibble::tribble(
-    ~priority , ~pattern                                                                                                                                                                                                                   , ~harmonized_life_stage ,
-     1L       , "(?i)egg(?!.?laying)|embryo|blastula|gastrula|morula|zygot|oocyte|cleavage|neurula"                                                                                                                                         , "Egg/Embryo"           ,
-     2L       , "(?i)larva|fry|naupli|nymph|tadpole|veliger|zoea|instar|pupa|prepupal|protozoea|mysis|glochidia|trochophore|caterpillar|maggot"                                                                                            , "Larva"                ,
-     3L       , "(?i)fingerling|froglet|smolt|parr|seedling|elver|alevin|juvenile|weanling|yearling|pullet|young(?!.*adult)|post-larva|post-smolt|copepodid|copepodite|swim-up|underyearling|spat|sapling"                                 , "Juvenile"             ,
-     4L       , "(?i)subadult|immature|peripubertal|sexually immature|pre-.*adult|young adult"                                                                                                                                             , "Subadult"             ,
-     5L       , "(?i)adult|mature(?!.*dormant)|bloom|boot|heading|tiller|jointing|internode|shoot|imago|post-emergence|sexually mature|spawn|reproduct|gestat|lactat|gamete|gametophyte|pollen|partum|F\\d+\\s*gen|flower|prebloom|laying" , "Adult"                ,
-     6L       , "(?i)dormant|senescen|cyst|stationary.*phase|\\bseed\\b|\\bspore\\b|\\bcorm\\b|\\bcocoon\\b|\\btuber\\b"                                                                                                                   , "Senescent/Dormant"    ,
-    99L       , ".*"                                                                                                                                                                                                                       , "Other/Unknown"
+    ~priority , ~pattern                                                                                                                                                                                                                                                               , ~harmonized_life_stage ,
+     1L       , "(?i)egg(?!.?laying)|embryo|blastula|gastrula|morula|zygot|oocyte|cleavage|neurula|neurala|zygospore"                                                                                                                                                                  , "Egg/Embryo"           ,
+     2L       , "(?i)larva|fry|naupli|nymph|tadpole|veliger|zoea|instar|pupa|prepupal|protozoea|mysis|glochidia|trochophore|caterpillar|maggot|megalopa|newborn|naiad|neonate|hatch|trophozoite"                                                                                       , "Larva"                ,
+     3L       , "(?i)fingerling|froglet|smolt|parr|seedling|elver|alevin|juvenile|weanling|yearling|pullet|young(?!.*adult)|post-larva|post-smolt|copepodid|copepodite|swim-up|underyearling|spat|sapling|sporeling"                                                                   , "Juvenile"             ,
+     4L       , "(?i)subadult|immature|peripubertal|sexually immature|pre-.*adult|young adult"                                                                                                                                                                                         , "Subadult"             ,
+     5L       , "(?i)adult|mature(?!.*dormant)|bloom|boot|heading|tiller|jointing|internode|shoot|imago|post-emergence|sexually mature|spawn|reproduct|gestat|lactat|gamete|gametophyte|pollen|partum|F\\d+\\s*gen|flower|prebloom|laying|\\bbud\\b|rhizome|cutting|scape|\\bsperm\\b" , "Adult"                ,
+     6L       , "(?i)dormant|senescen|cyst|stationary.*phase|\\bseed\\b|\\bspore\\b|\\bcorm\\b|\\bcocoon\\b|\\btuber\\b|turion"                                                                                                                                                        , "Senescent/Dormant"    ,
+    99L       , ".*"                                                                                                                                                                                                                                                                   , "Other/Unknown"
   )
   #fmt: on
 
@@ -271,7 +271,9 @@ assert <- function(label, condition, detail = "") {
       "FAIL: {label}{if (nzchar(detail)) paste0(' \\u2014 ', detail) else ''}"
     )
     results[[length(results) + 1]] <<- list(
-      label = label, pass = FALSE, detail = detail
+      label = label,
+      pass = FALSE,
+      detail = detail
     )
   }
 }
@@ -288,7 +290,7 @@ assert(
 )
 assert(
   "A1: 'Spawning adult' -> reproductive",
-  a1$reproductive_stage == TRUE,
+  a1$reproductive_stage,
   paste0("got: ", a1$reproductive_stage)
 )
 
@@ -300,7 +302,7 @@ assert(
 )
 assert(
   "A2: 'Mature female' -> not reproductive",
-  a2$reproductive_stage == FALSE,
+  !a2$reproductive_stage,
   paste0("got: ", a2$reproductive_stage)
 )
 
@@ -312,7 +314,7 @@ assert(
 )
 assert(
   "A3: 'Reproductive adult' -> reproductive",
-  a3$reproductive_stage == TRUE,
+  a3$reproductive_stage,
   paste0("got: ", a3$reproductive_stage)
 )
 
@@ -324,7 +326,7 @@ assert(
 )
 assert(
   "A4: 'Post-spawning adult' -> reproductive",
-  a4$reproductive_stage == TRUE,
+  a4$reproductive_stage,
   paste0("got: ", a4$reproductive_stage)
 )
 
@@ -336,7 +338,7 @@ assert(
 )
 assert(
   "A5: 'Gestating juvenile' -> reproductive",
-  a5$reproductive_stage == TRUE,
+  a5$reproductive_stage,
   paste0("got: ", a5$reproductive_stage)
 )
 
@@ -348,7 +350,7 @@ assert(
 )
 assert(
   "A6: 'Flowering seedling' -> reproductive",
-  a6$reproductive_stage == TRUE,
+  a6$reproductive_stage,
   paste0("got: ", a6$reproductive_stage)
 )
 
@@ -360,7 +362,7 @@ assert(
 )
 assert(
   "A7: 'Larva' -> not reproductive",
-  a7$reproductive_stage == FALSE,
+  !a7$reproductive_stage,
   paste0("got: ", a7$reproductive_stage)
 )
 
@@ -372,7 +374,7 @@ assert(
 )
 assert(
   "A8: 'Egg-laying female' -> reproductive",
-  a8$reproductive_stage == TRUE,
+  a8$reproductive_stage,
   paste0("got: ", a8$reproductive_stage)
 )
 
@@ -384,7 +386,7 @@ assert(
 )
 assert(
   "A9: 'Dormant seed' -> not reproductive",
-  a9$reproductive_stage == FALSE,
+  !a9$reproductive_stage,
   paste0("got: ", a9$reproductive_stage)
 )
 
@@ -396,7 +398,7 @@ assert(
 )
 assert(
   "A10: 'Pollen' -> reproductive",
-  a10$reproductive_stage == TRUE,
+  a10$reproductive_stage,
   paste0("got: ", a10$reproductive_stage)
 )
 
@@ -409,7 +411,9 @@ assert(
   "A11: All DB lifestage_codes present in dictionary",
   length(missing_terms) == 0,
   paste0(
-    length(missing_terms), " missing: ", paste(missing_terms, collapse = ", ")
+    length(missing_terms),
+    " missing: ",
+    paste(missing_terms, collapse = ", ")
   )
 )
 
@@ -428,8 +432,11 @@ assert(
   identical(
     names(life_stage_new),
     c(
-      "org_lifestage", "harmonized_life_stage", "ontology_id",
-      "reproductive_stage", "classification_source"
+      "org_lifestage",
+      "harmonized_life_stage",
+      "ontology_id",
+      "reproductive_stage",
+      "classification_source"
     )
   ),
   paste0("got: ", paste(names(life_stage_new), collapse = ", "))
@@ -452,10 +459,14 @@ assert(
   "A18: No NAs in required columns",
   na_org == 0 && na_hls == 0 && na_cs == 0 && na_rs == 0,
   paste0(
-    "NA counts: org_lifestage=", na_org,
-    ", harmonized_life_stage=", na_hls,
-    ", classification_source=", na_cs,
-    ", reproductive_stage=", na_rs
+    "NA counts: org_lifestage=",
+    na_org,
+    ", harmonized_life_stage=",
+    na_hls,
+    ", classification_source=",
+    na_cs,
+    ", reproductive_stage=",
+    na_rs
   )
 )
 
@@ -509,3 +520,69 @@ assert(
   kw_non_other >= 125,
   paste0("got: ", kw_non_other, "/", nrow(life_stage_new))
 )
+
+# ==============================================================================
+# 6. Classification Diff (current 2-col vs proposed 5-col)
+# ==============================================================================
+
+cli::cli_h2("Classification Changes")
+
+diff_rows <- dplyr::left_join(
+  life_stage_new,
+  current_dict,
+  by = "org_lifestage",
+  suffix = c(".new", ".old")
+) |>
+  dplyr::filter(harmonized_life_stage.new != harmonized_life_stage.old) |>
+  dplyr::select(
+    org_lifestage,
+    old_category = harmonized_life_stage.old,
+    new_category = harmonized_life_stage.new,
+    reproductive_stage
+  )
+
+if (nrow(diff_rows) > 0) {
+  cli::cli_alert_info("{nrow(diff_rows)} term(s) changed classification:")
+  print(diff_rows, n = Inf)
+} else {
+  cli::cli_alert_info("No classification changes detected.")
+}
+
+new_terms <- dplyr::anti_join(life_stage_new, current_dict, by = "org_lifestage")
+if (nrow(new_terms) > 0) {
+  cli::cli_alert_info("{nrow(new_terms)} new term(s) added to dictionary:")
+  print(
+    dplyr::select(
+      new_terms,
+      org_lifestage,
+      harmonized_life_stage,
+      reproductive_stage
+    ),
+    n = Inf
+  )
+}
+
+# ==============================================================================
+# 7. Summary
+# ==============================================================================
+
+cli::cli_h2("Summary")
+
+n_pass <- sum(vapply(results, `[[`, logical(1), "pass"))
+n_fail <- length(results) - n_pass
+
+cli::cli_alert_info("Total assertions: {length(results)}")
+cli::cli_alert_info("Passed: {n_pass}")
+cli::cli_alert_info("Failed: {n_fail}")
+cli::cli_alert_info("Dictionary rows: {nrow(life_stage_new)}")
+cli::cli_alert_info("DB lifestage_codes: {length(db_lifestages)}")
+
+if (n_fail > 0) {
+  cli::cli_alert_danger(
+    "{n_fail} assertion(s) FAILED \u2014 review output above"
+  )
+  quit(status = 1)
+} else {
+  cli::cli_alert_success("All assertions passed.")
+  quit(status = 0)
+}
