@@ -1,107 +1,77 @@
-# Requirements: ComptoxR v2.1 Test Infrastructure
+# Requirements: ComptoxR
 
-**Defined:** 2026-02-26
-**Core Value:** Every exported function has a correct, passing test — and the pipeline keeps it that way automatically.
+**Defined:** 2026-04-20
+**Core Value:** Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
 
-## v2.1 Requirements
+## v2.3 Requirements
 
-### Build Fixes
+Requirements for ECOTOX Lifestage Harmonization. Each maps to roadmap phases.
 
-- [x] **BUILD-01**: R CMD check produces 0 errors after fixing stub generator syntax bugs (`"RF" <- model = "RF"`, duplicate `endpoint` args)
-- [x] **BUILD-02**: All unused/undeclared imports resolved (devtools, magick, usethis removed or moved to Suggests; ggplot2, janitor removed from Imports)
-- [x] **BUILD-03**: Non-ASCII characters in `R/extract_mol_formula.R` replaced with `\uxxxx` escapes
-- [x] **BUILD-04**: `jsonlite::flatten` vs `purrr::flatten` import collision resolved
-- [x] **BUILD-05**: httr2 compatibility fixed — either update minimum version or replace missing `resp_is_transient`/`resp_status_class` calls
-- [x] **BUILD-06**: Roxygen `@param` documentation matches actual function signatures across all generated stubs
-- [x] **BUILD-07**: Non-standard license in DESCRIPTION replaced with valid CRAN-compatible license specification
-- [x] **BUILD-08**: Partial argument match `body` → `body_type` fixed in `ct_chemical_msready_by_mass` and `ct_chemical_msready_search_by_mass_bulk`
+### Dictionary Schema
 
-### Test Generator
+- [x] **DICT-01**: Lifestage dictionary expanded to 5 columns: `org_lifestage`, `harmonized_life_stage`, `ontology_id`, `reproductive_stage`, `classification_source`
+- [x] **DICT-02**: 7 harmonized categories grounded in UBERON/PO/BODC S11 ontologies (Egg/Embryo, Larva, Juvenile, Subadult, Adult, Senescent/Dormant, Other/Unknown)
+- [x] **DICT-03**: `reproductive_stage` boolean flag set independently of developmental classification
+- [x] **DICT-04**: All `classification_source` values in canonical dictionary are `"dictionary"`
 
-- [x] **TGEN-01**: Test generator reads actual parameter names and types from function signatures, mapping each to appropriate test values (DTXSID for query, integer for limit, string for search_type, etc.)
-- [x] **TGEN-02**: Test generator reads `tidy` flag from `generic_request()`/`generic_chemi_request()` calls and asserts list or tibble accordingly
-- [x] **TGEN-03**: Test generator handles functions with no parameters (static endpoints) by generating parameterless test calls
-- [x] **TGEN-04**: Test generator handles functions with `path_params` by generating appropriate test values per parameter name
-- [x] **TGEN-05**: Generated tests use unique cassette names per test variant (single, batch, error, example) to enable isolated re-recording
+### Keyword Classifier
 
-### Pagination Tests (carried from v2.0 Phase 22)
+- [x] **KWCL-01**: `.classify_lifestage_keywords()` internal function classifies character vector via priority-ordered regex
+- [x] **KWCL-02**: Reproductive flag regex fires independently of developmental stage classification
+- [ ] **KWCL-03**: Classifier achieves ≥130/144 non-Other/Unknown matches on known descriptions
 
-- [x] **PAG-20**: Unit tests verify regex detection catches all 5 known pagination patterns from real schemas
-- [ ] **PAG-21**: Unit tests verify each pagination strategy (offset/limit, page/size, cursor, path-based) with mocked responses
-- [ ] **PAG-22**: At least one integration test runs a paginated stub end-to-end with VCR cassettes
-- [ ] **PAG-23**: All existing non-pagination tests continue to pass (no regression)
+### Build Gate
 
-### VCR Cassette Management
+- [ ] **GATE-01**: Build aborts with `cli::cli_abort()` when truly unknown terms detected (no keyword match)
+- [ ] **GATE-02**: Build warns with `cli::cli_alert_warning()` for keyword-classifiable unmapped terms
+- [ ] **GATE-03**: Keyword-classified terms written to `lifestage_review` staging table (not canonical dictionary)
+- [ ] **GATE-04**: `.eco_enrich_metadata()` joins only against `lifestage_dictionary`, never `lifestage_review`
 
-- [x] **VCR-01**: All 673 untracked cassettes recorded with wrong parameters are deleted
-- [x] **VCR-02**: `delete_all_cassettes()` function implemented in helper-vcr.R for bulk cassette deletion
-- [x] **VCR-03**: `delete_cassettes(pattern)` function implemented for pattern-based cassette deletion
-- [x] **VCR-04**: `list_cassettes()` function implemented to enumerate existing cassettes
-- [x] **VCR-05**: `check_cassette_safety()` function implemented to scan cassettes for leaked API keys
-- [x] **VCR-06**: Security audit confirms all committed cassettes are API-key filtered (show `<<<API_KEY>>>` not actual keys)
-- [x] **VCR-07**: Cassette re-recording script supports batched execution (20-50 at a time) with rate-limit delays
+### Data Corrections
 
-### Automation & CI
+- [x] **CORR-01**: 6 misclassifications fixed (Germinated seed, Spat, Seed, Sapling, Cocoon, Corm)
+- [x] **CORR-02**: Larva/Juvenile split applied (~30 rows reassigned per ontology-backed criteria)
+- [x] **CORR-03**: "Reproductive" category eliminated — former terms reclassified to developmental stage with `reproductive_stage = TRUE`
 
-- [x] **AUTO-01**: `dev/detect_test_gaps.R` script identifies functions in R/ without corresponding test files
-- [x] **AUTO-02**: `dev/generate_tests.R` script generates tests for all detected gaps using the fixed test generator
-- [x] **AUTO-03**: GitHub Action workflow detects new/changed stubs and generates corresponding test files
-- [x] **AUTO-04**: CI reports test gap count and coverage metrics in workflow summary
-- [x] **AUTO-05**: Coverage thresholds tuned for generated code (exclude auto-generated stubs from strict thresholds or use tiered rates)
-- [x] **AUTO-06**: Test generation is integrated into stub generation pipeline — running `dev/generate_stubs.R` followed by `dev/generate_tests.R` produces matched stub+test pairs
+### Integration
 
-## v2.0 Requirements (validated)
+- [ ] **INTG-01**: `.eco_enrich_metadata()` relocate call updated to include 3 new columns
+- [ ] **INTG-02**: `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R` section 16 kept in sync
+- [ ] **INTG-03**: roxygen `@return` block for `eco_results()` documents new columns
+- [ ] **INTG-04**: `devtools::document()` regenerates man pages without errors
 
-### Pagination Pattern Detection — shipped Phase 19
+### Validation
 
-- [x] **PAG-01**: Stub generator detects pagination parameters using regex patterns
-- [x] **PAG-02**: Detection patterns are configurable via a central registry
-- [x] **PAG-03**: Detected pagination metadata stored in endpoint spec
-- [x] **PAG-04**: Stub generator classifies endpoints into pagination strategies
-
-### Auto-Pagination in Request Templates — shipped Phases 20-21
-
-- [x] **PAG-05**: `generic_request()` accepts `paginate` parameter
-- [x] **PAG-06**: `generic_chemi_request()` accepts `paginate` parameter
-- [x] **PAG-07**: `generic_cc_request()` accepts `paginate` parameter
-- [x] **PAG-08**: Offset/limit pagination auto-increments
-- [x] **PAG-09**: Page/size pagination auto-increments
-- [x] **PAG-10**: Cursor-based pagination follows tokens
-- [x] **PAG-11**: Path-based AMOS pagination increments offset
-- [x] **PAG-12**: All strategies combine results into single tibble/list
-- [x] **PAG-13**: Progress feedback via cli in verbose mode
-- [x] **PAG-14**: Generated stubs call with `paginate = TRUE` by default
-- [x] **PAG-15**: Generated stubs retain individual pagination params
-- [x] **PAG-16**: Generated stubs include `all_pages` parameter
-- [x] **PAG-17**: Max page count (default 100) prevents runaway loops
-- [x] **PAG-18**: Sequential requests with configurable delay
-- [x] **PAG-19**: Empty/error responses stop loop gracefully
+- [ ] **VALD-01**: Standalone validation script passes all 10 two-axis deterministic assertions
+- [ ] **VALD-02**: All 144 current `org_lifestage` values present in new dictionary
+- [ ] **VALD-03**: Gate correctly aborts for truly unknown term (e.g., "Xylophage")
+- [ ] **VALD-04**: Gate correctly warns and quarantines for keyword-classifiable term (e.g., "Proto-larva")
+- [ ] **VALD-05**: `devtools::check()` returns 0 errors after integration
 
 ## Future Requirements
 
-### Advanced Testing (v2.2+)
+Deferred to future milestone. Tracked but not in current roadmap.
 
-- **ADV-TEST-01**: Snapshot testing for complex return structures
-- **ADV-TEST-02**: Performance benchmarking tests for pagination
-- **ADV-TEST-03**: Contract testing for API versioning
-- **ADV-TEST-04**: Test data factories for parameterized inputs at scale
+### ECOTOX Extended
+
+- **ECOX-01**: Embedding-based classification for novel terms (BioPortal Annotator hybrid layer)
+- **ECOX-02**: Automated ontology version tracking and update detection
 
 ### Deferred from Previous Milestones
 
 - **ADV-01-04**: Advanced schema handling (content-type extraction, primitive types, nested arrays)
 - **S7-01**: S7 class implementation (#29)
-- **SCHEMA-01-04**: Schema-check workflow improvements (#96)
+- **ADV-TEST-01-04**: Advanced testing (snapshot, performance, contract, data factories)
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| New API endpoint wrappers | Focus is test infrastructure, not coverage expansion |
-| httptest2 migration | Would require rewriting 706+ cassettes; vcr is working |
-| xpectr/patrick adoption | Custom generator already tailored to API wrapper patterns |
-| Parallel page fetching | Rate limits make sequential safer; separate concern |
-| 100% test coverage | Diminishing returns above 90%; target high coverage badge |
-| Live API testing in CI | Use VCR cassettes; scheduled weekly validation is separate |
+| BioPortal Annotator API integration | Adds API dependency for ~1-3 new terms per release cycle; non-deterministic |
+| Embedding-based classification | Dictionary layer is prerequisite; can be added later without breaking static layer |
+| Other ECOTOX dictionary expansions (species, media) | Separate milestone scope |
+| EPI Suite / GenRA integration | Separate milestone scope |
+| Real-time ontology version checking | Static mappings are sufficient for regulatory-grade auditability |
 
 ## Traceability
 
@@ -109,49 +79,35 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BUILD-01 | Phase 23 | Complete |
-| BUILD-02 | Phase 23 | Complete |
-| BUILD-03 | Phase 23 | Complete |
-| BUILD-04 | Phase 23 | Complete |
-| BUILD-05 | Phase 23 | Complete |
-| BUILD-06 | Phase 23 | Complete |
-| BUILD-07 | Phase 23 | Complete |
-| BUILD-08 | Phase 23 | Complete |
-| TGEN-01 | Phase 23 | Complete |
-| TGEN-02 | Phase 23 | Complete |
-| TGEN-03 | Phase 23 | Complete |
-| TGEN-04 | Phase 23 | Complete |
-| TGEN-05 | Phase 23 | Complete |
-| VCR-01 | Phase 24 | Complete |
-| VCR-02 | Phase 24 | Complete |
-| VCR-03 | Phase 24 | Complete |
-| VCR-04 | Phase 24 | Complete |
-| VCR-05 | Phase 24 | Complete |
-| VCR-06 | Phase 24 | Complete |
-| VCR-07 | Phase 24 | Complete |
-| AUTO-01 | Phase 25 | Complete |
-| AUTO-02 | Phase 25 | Complete |
-| AUTO-03 | Phase 25 | Complete |
-| AUTO-04 | Phase 25 | Complete |
-| AUTO-05 | Phase 25 | Complete |
-| AUTO-06 | Phase 25 | Complete |
-| PAG-20 | Phase 26 | Complete |
-| PAG-21 | Phase 26 | Pending |
-| PAG-22 | Phase 26 | Pending |
-| PAG-23 | Phase 26 | Pending |
+| DICT-01 | Phase 31 | Complete |
+| DICT-02 | Phase 31 | Complete |
+| DICT-03 | Phase 31 | Complete |
+| DICT-04 | Phase 31 | Complete |
+| KWCL-01 | Phase 31 | Complete |
+| KWCL-02 | Phase 31 | Complete |
+| KWCL-03 | Phase 31 | Pending |
+| GATE-01 | Phase 32 | Pending |
+| GATE-02 | Phase 32 | Pending |
+| GATE-03 | Phase 32 | Pending |
+| GATE-04 | Phase 32 | Pending |
+| CORR-01 | Phase 31 | Complete |
+| CORR-02 | Phase 31 | Complete |
+| CORR-03 | Phase 31 | Complete |
+| INTG-01 | Phase 32 | Pending |
+| INTG-02 | Phase 32 | Pending |
+| INTG-03 | Phase 32 | Pending |
+| INTG-04 | Phase 32 | Pending |
+| VALD-01 | Phase 31 | Pending |
+| VALD-02 | Phase 31 | Pending |
+| VALD-03 | Phase 33 | Pending |
+| VALD-04 | Phase 33 | Pending |
+| VALD-05 | Phase 33 | Pending |
 
 **Coverage:**
-- v2.1 requirements: 30 total
-- Mapped to phases: 30 ✓
-- Unmapped: 0 ✓
-
-**Validation:**
-- All BUILD requirements (8) → Phase 23
-- All TGEN requirements (5) → Phase 23
-- All VCR requirements (7) → Phase 24
-- All AUTO requirements (6) → Phase 25
-- All PAG requirements (4) → Phase 26
+- v2.3 requirements: 23 total
+- Mapped to phases: 23
+- Unmapped: 0
 
 ---
-*Requirements defined: 2026-02-26*
-*Last updated: 2026-02-26 after roadmap creation*
+*Requirements defined: 2026-04-20*
+*Last updated: 2026-04-20 — Traceability updated after roadmap creation*

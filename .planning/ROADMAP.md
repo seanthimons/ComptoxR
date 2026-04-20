@@ -97,9 +97,9 @@
   3. Reproductive flag fires independently of developmental stage (e.g., "Reproductive adult" gets Adult + reproductive_stage=TRUE)
   4. All 10 two-axis deterministic assertions pass (6 misclassification fixes verified, Larva/Juvenile split correct, Reproductive category eliminated, column completeness, full coverage)
   5. All 144 current org_lifestage values from the existing ECOTOX DB are present in the new dictionary with zero regressions
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 31-01-PLAN.md — Create classifier function + 5-column dictionary tribble with all corrections
+- [x] 31-01-PLAN.md — Create classifier function + 5-column dictionary tribble with all corrections
 - [ ] 31-02-PLAN.md — Add assertions, DB validation, diff output, and run validation
 
 ### Phase 32: Build Pipeline Integration
@@ -135,6 +135,6 @@ Phases execute in numeric order: 31 -> 32 -> 33
 | 19-21 | v2.0 | 4/4 | Complete | 2026-02-24 |
 | 23-26 | v2.1 | 13/13 | Complete | 2026-03-02 |
 | 27-30 | v2.2 | 11/11 | Complete | 2026-03-11 |
-| 31. Standalone Validation | v2.3 | 0/2 | Not started | - |
+| 31. Standalone Validation | v2.3 | 1/2 | In Progress|  |
 | 32. Build Pipeline Integration | v2.3 | 0/TBD | Not started | - |
 | 33. Build Confirmation | v2.3 | 0/TBD | Not started | - |
