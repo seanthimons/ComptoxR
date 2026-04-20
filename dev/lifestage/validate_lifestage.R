@@ -34,7 +34,7 @@ suppressPackageStartupMessages({
   #fmt: off
   rules <- tibble::tribble(
     ~priority , ~pattern                                                                                                                                                                                                                   , ~harmonized_life_stage ,
-     1L       , "(?i)egg|embryo|blastula|gastrula|morula|zygot|oocyte|cleavage|neurula"                                                                                                                                                    , "Egg/Embryo"           ,
+     1L       , "(?i)egg(?!.?laying)|embryo|blastula|gastrula|morula|zygot|oocyte|cleavage|neurula"                                                                                                                                         , "Egg/Embryo"           ,
      2L       , "(?i)larva|fry|naupli|nymph|tadpole|veliger|zoea|instar|pupa|prepupal|protozoea|mysis|glochidia|trochophore|caterpillar|maggot"                                                                                            , "Larva"                ,
      3L       , "(?i)fingerling|froglet|smolt|parr|seedling|elver|alevin|juvenile|weanling|yearling|pullet|young(?!.*adult)|post-larva|post-smolt|copepodid|copepodite|swim-up|underyearling|spat|sapling"                                 , "Juvenile"             ,
      4L       , "(?i)subadult|immature|peripubertal|sexually immature|pre-.*adult|young adult"                                                                                                                                             , "Subadult"             ,
@@ -227,3 +227,285 @@ life_stage_new <- tibble::tribble(
   "Turion"                                         , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"
 )
 #fmt: on
+
+# ==============================================================================
+# 4. Database Connection
+# ==============================================================================
+
+cli::cli_h1("Lifestage Standalone Validation")
+
+db_path <- file.path(tools::R_user_dir("ComptoxR", "data"), "ecotox.duckdb")
+if (!file.exists(db_path)) {
+  cli::cli_abort(c(
+    "ECOTOX DuckDB not found at expected path.",
+    "i" = "Path: {db_path}",
+    "i" = "Run the ECOTOX build first to create the database."
+  ))
+}
+cli::cli_alert_info("DB path: {db_path}")
+
+eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
+on.exit(DBI::dbDisconnect(eco_con, shutdown = TRUE), add = TRUE)
+
+db_lifestages <- DBI::dbGetQuery(
+  eco_con,
+  "SELECT DISTINCT description FROM lifestage_codes ORDER BY description"
+)$description
+cli::cli_alert_info("lifestage_codes descriptions: {length(db_lifestages)}")
+
+current_dict <- DBI::dbReadTable(eco_con, "lifestage_dictionary")
+cli::cli_alert_info("Current dictionary rows: {nrow(current_dict)}")
+
+# ==============================================================================
+# 5. Assertion Battery
+# ==============================================================================
+
+results <- list()
+
+assert <- function(label, condition, detail = "") {
+  if (isTRUE(condition)) {
+    cli::cli_alert_success("PASS: {label}")
+    results[[length(results) + 1]] <<- list(label = label, pass = TRUE)
+  } else {
+    cli::cli_alert_danger(
+      "FAIL: {label}{if (nzchar(detail)) paste0(' \\u2014 ', detail) else ''}"
+    )
+    results[[length(results) + 1]] <<- list(
+      label = label, pass = FALSE, detail = detail
+    )
+  }
+}
+
+# -- Group 1: Two-Axis Classifier Assertions (A1-A10) -------------------------
+
+cli::cli_h2("Group 1: Two-Axis Classifier Assertions (A1-A10)")
+
+a1 <- .classify_lifestage_keywords("Spawning adult")
+assert(
+  "A1: 'Spawning adult' -> Adult",
+  a1$harmonized_life_stage == "Adult",
+  paste0("got: ", a1$harmonized_life_stage)
+)
+assert(
+  "A1: 'Spawning adult' -> reproductive",
+  a1$reproductive_stage == TRUE,
+  paste0("got: ", a1$reproductive_stage)
+)
+
+a2 <- .classify_lifestage_keywords("Mature female")
+assert(
+  "A2: 'Mature female' -> Adult",
+  a2$harmonized_life_stage == "Adult",
+  paste0("got: ", a2$harmonized_life_stage)
+)
+assert(
+  "A2: 'Mature female' -> not reproductive",
+  a2$reproductive_stage == FALSE,
+  paste0("got: ", a2$reproductive_stage)
+)
+
+a3 <- .classify_lifestage_keywords("Reproductive adult")
+assert(
+  "A3: 'Reproductive adult' -> Adult",
+  a3$harmonized_life_stage == "Adult",
+  paste0("got: ", a3$harmonized_life_stage)
+)
+assert(
+  "A3: 'Reproductive adult' -> reproductive",
+  a3$reproductive_stage == TRUE,
+  paste0("got: ", a3$reproductive_stage)
+)
+
+a4 <- .classify_lifestage_keywords("Post-spawning adult")
+assert(
+  "A4: 'Post-spawning adult' -> Adult",
+  a4$harmonized_life_stage == "Adult",
+  paste0("got: ", a4$harmonized_life_stage)
+)
+assert(
+  "A4: 'Post-spawning adult' -> reproductive",
+  a4$reproductive_stage == TRUE,
+  paste0("got: ", a4$reproductive_stage)
+)
+
+a5 <- .classify_lifestage_keywords("Gestating juvenile")
+assert(
+  "A5: 'Gestating juvenile' -> Juvenile",
+  a5$harmonized_life_stage == "Juvenile",
+  paste0("got: ", a5$harmonized_life_stage)
+)
+assert(
+  "A5: 'Gestating juvenile' -> reproductive",
+  a5$reproductive_stage == TRUE,
+  paste0("got: ", a5$reproductive_stage)
+)
+
+a6 <- .classify_lifestage_keywords("Flowering seedling")
+assert(
+  "A6: 'Flowering seedling' -> Juvenile",
+  a6$harmonized_life_stage == "Juvenile",
+  paste0("got: ", a6$harmonized_life_stage)
+)
+assert(
+  "A6: 'Flowering seedling' -> reproductive",
+  a6$reproductive_stage == TRUE,
+  paste0("got: ", a6$reproductive_stage)
+)
+
+a7 <- .classify_lifestage_keywords("Larva")
+assert(
+  "A7: 'Larva' -> Larva",
+  a7$harmonized_life_stage == "Larva",
+  paste0("got: ", a7$harmonized_life_stage)
+)
+assert(
+  "A7: 'Larva' -> not reproductive",
+  a7$reproductive_stage == FALSE,
+  paste0("got: ", a7$reproductive_stage)
+)
+
+a8 <- .classify_lifestage_keywords("Egg-laying female")
+assert(
+  "A8: 'Egg-laying female' -> Adult",
+  a8$harmonized_life_stage == "Adult",
+  paste0("got: ", a8$harmonized_life_stage)
+)
+assert(
+  "A8: 'Egg-laying female' -> reproductive",
+  a8$reproductive_stage == TRUE,
+  paste0("got: ", a8$reproductive_stage)
+)
+
+a9 <- .classify_lifestage_keywords("Dormant seed")
+assert(
+  "A9: 'Dormant seed' -> Senescent/Dormant",
+  a9$harmonized_life_stage == "Senescent/Dormant",
+  paste0("got: ", a9$harmonized_life_stage)
+)
+assert(
+  "A9: 'Dormant seed' -> not reproductive",
+  a9$reproductive_stage == FALSE,
+  paste0("got: ", a9$reproductive_stage)
+)
+
+a10 <- .classify_lifestage_keywords("Pollen")
+assert(
+  "A10: 'Pollen' -> Adult",
+  a10$harmonized_life_stage == "Adult",
+  paste0("got: ", a10$harmonized_life_stage)
+)
+assert(
+  "A10: 'Pollen' -> reproductive",
+  a10$reproductive_stage == TRUE,
+  paste0("got: ", a10$reproductive_stage)
+)
+
+# -- Group 2: Dictionary Structure (A11-A15, A18) -----------------------------
+
+cli::cli_h2("Group 2: Dictionary Structure (A11-A15, A18)")
+
+missing_terms <- setdiff(db_lifestages, life_stage_new$org_lifestage)
+assert(
+  "A11: All DB lifestage_codes present in dictionary",
+  length(missing_terms) == 0,
+  paste0(
+    length(missing_terms), " missing: ", paste(missing_terms, collapse = ", ")
+  )
+)
+
+assert(
+  "A12: No 'Reproductive' category in dictionary",
+  !"Reproductive" %in% life_stage_new$harmonized_life_stage
+)
+
+assert(
+  "A13: No 'Larva/Juvenile' category in dictionary",
+  !"Larva/Juvenile" %in% life_stage_new$harmonized_life_stage
+)
+
+assert(
+  "A14: Column completeness (exactly 5 columns)",
+  identical(
+    names(life_stage_new),
+    c(
+      "org_lifestage", "harmonized_life_stage", "ontology_id",
+      "reproductive_stage", "classification_source"
+    )
+  ),
+  paste0("got: ", paste(names(life_stage_new), collapse = ", "))
+)
+
+assert(
+  "A15: classification_source uniformity (all 'dictionary')",
+  all(life_stage_new$classification_source == "dictionary"),
+  paste0(
+    "non-dictionary: ",
+    sum(life_stage_new$classification_source != "dictionary")
+  )
+)
+
+na_org <- sum(is.na(life_stage_new$org_lifestage))
+na_hls <- sum(is.na(life_stage_new$harmonized_life_stage))
+na_cs <- sum(is.na(life_stage_new$classification_source))
+na_rs <- sum(is.na(life_stage_new$reproductive_stage))
+assert(
+  "A18: No NAs in required columns",
+  na_org == 0 && na_hls == 0 && na_cs == 0 && na_rs == 0,
+  paste0(
+    "NA counts: org_lifestage=", na_org,
+    ", harmonized_life_stage=", na_hls,
+    ", classification_source=", na_cs,
+    ", reproductive_stage=", na_rs
+  )
+)
+
+# -- Group 3: Misclassification Fixes (A16) -----------------------------------
+
+cli::cli_h2("Group 3: Misclassification Fixes (A16)")
+
+lookup <- function(term) {
+  life_stage_new$harmonized_life_stage[life_stage_new$org_lifestage == term]
+}
+
+assert(
+  "A16a: 'Germinated seed' -> Juvenile",
+  lookup("Germinated seed") == "Juvenile",
+  paste0("got: ", lookup("Germinated seed"))
+)
+assert(
+  "A16b: 'Spat' -> Juvenile",
+  lookup("Spat") == "Juvenile",
+  paste0("got: ", lookup("Spat"))
+)
+assert(
+  "A16c: 'Seed' -> Senescent/Dormant",
+  lookup("Seed") == "Senescent/Dormant",
+  paste0("got: ", lookup("Seed"))
+)
+assert(
+  "A16d: 'Sapling' -> Juvenile",
+  lookup("Sapling") == "Juvenile",
+  paste0("got: ", lookup("Sapling"))
+)
+assert(
+  "A16e: 'Cocoon' -> Senescent/Dormant",
+  lookup("Cocoon") == "Senescent/Dormant",
+  paste0("got: ", lookup("Cocoon"))
+)
+assert(
+  "A16f: 'Corm' -> Senescent/Dormant",
+  lookup("Corm") == "Senescent/Dormant",
+  paste0("got: ", lookup("Corm"))
+)
+
+# -- Group 4: Keyword Classifier Coverage (A17) -------------------------------
+
+cli::cli_h2("Group 4: Keyword Classifier Coverage (A17)")
+
+kw_results <- .classify_lifestage_keywords(life_stage_new$org_lifestage)
+kw_non_other <- sum(kw_results$harmonized_life_stage != "Other/Unknown")
+assert(
+  "A17: Keyword classifier coverage >= 125/139 non-Other/Unknown",
+  kw_non_other >= 125,
+  paste0("got: ", kw_non_other, "/", nrow(life_stage_new))
+)
