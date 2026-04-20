@@ -83,7 +83,7 @@
 
 - [x] **Phase 31: Standalone Validation** (2 plans) - Define classifier + dictionary, validate against live ECOTOX DB read-only, prove all assertions pass (completed 2026-04-20)
 - [x] **Phase 32: Build Pipeline Integration** (2 plans) - Integrate validated code into ecotox_build.R and eco_functions.R (completed 2026-04-20)
-- [ ] **Phase 33: Build Confirmation** (2 plans) - Run full ECOTOX build with gate active, verify outputs, pass devtools::check()
+- [x] **Phase 33: Build Confirmation** (2 plans) - Run full ECOTOX build with gate active, verify outputs, pass devtools::check() (completed 2026-04-20)
 
 ## Phase Details
 
@@ -125,10 +125,10 @@ Plans:
   1. Gate correctly aborts for a truly unknown term (e.g., injecting "Xylophage" into test data triggers cli_abort)
   2. Gate correctly warns and quarantines for a keyword-classifiable unmapped term (e.g., "Proto-larva" lands in lifestage_review with correct classification)
   3. `devtools::check()` returns 0 errors after full integration
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
-- [ ] 33-01-PLAN.md — Create dev confirmation script and testthat gate regression tests
-- [ ] 33-02-PLAN.md — Run scoped devtools::check() to confirm 0 errors
+- [x] 33-01-PLAN.md — Create dev confirmation script and testthat gate regression tests
+- [x] 33-02-PLAN.md — Run scoped devtools::check() to confirm 0 errors
 
 ## Progress
 
@@ -143,4 +143,4 @@ Phases execute in numeric order: 31 -> 32 -> 33
 | 27-30 | v2.2 | 11/11 | Complete | 2026-03-11 |
 | 31. Standalone Validation | v2.3 | 2/2 | Complete    | 2026-04-20 |
 | 32. Build Pipeline Integration | v2.3 | 2/2 | Complete    | 2026-04-20 |
-| 33. Build Confirmation | v2.3 | 0/2 | Not started | - |
+| 33. Build Confirmation | v2.3 | 2/2 | Complete    | 2026-04-20 |
