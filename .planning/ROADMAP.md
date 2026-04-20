@@ -81,7 +81,7 @@
 
 **Milestone Goal:** Replace the static 2-column lifestage dictionary with an ontology-backed 5-column schema featuring a two-axis design (developmental stage + reproductive flag), keyword regex fallback classifier, and a hard blocking build gate.
 
-- [ ] **Phase 31: Standalone Validation** (2 plans) - Define classifier + dictionary, validate against live ECOTOX DB read-only, prove all assertions pass
+- [x] **Phase 31: Standalone Validation** (2 plans) - Define classifier + dictionary, validate against live ECOTOX DB read-only, prove all assertions pass (completed 2026-04-20)
 - [ ] **Phase 32: Build Pipeline Integration** - Integrate validated code into ecotox_build.R and eco_functions.R
 - [ ] **Phase 33: Build Confirmation** - Run full ECOTOX build with gate active, verify outputs, pass devtools::check()
 
@@ -97,10 +97,10 @@
   3. Reproductive flag fires independently of developmental stage (e.g., "Reproductive adult" gets Adult + reproductive_stage=TRUE)
   4. All 10 two-axis deterministic assertions pass (6 misclassification fixes verified, Larva/Juvenile split correct, Reproductive category eliminated, column completeness, full coverage)
   5. All 144 current org_lifestage values from the existing ECOTOX DB are present in the new dictionary with zero regressions
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [x] 31-01-PLAN.md — Create classifier function + 5-column dictionary tribble with all corrections
-- [ ] 31-02-PLAN.md — Add assertions, DB validation, diff output, and run validation
+- [x] 31-02-PLAN.md — Add assertions, DB validation, diff output, and run validation
 
 ### Phase 32: Build Pipeline Integration
 **Goal**: Validated dictionary, classifier, and gate logic are wired into the ECOTOX build pipeline and package source in a single mechanical integration
@@ -135,6 +135,6 @@ Phases execute in numeric order: 31 -> 32 -> 33
 | 19-21 | v2.0 | 4/4 | Complete | 2026-02-24 |
 | 23-26 | v2.1 | 13/13 | Complete | 2026-03-02 |
 | 27-30 | v2.2 | 11/11 | Complete | 2026-03-11 |
-| 31. Standalone Validation | v2.3 | 1/2 | In Progress|  |
+| 31. Standalone Validation | v2.3 | 2/2 | Complete   | 2026-04-20 |
 | 32. Build Pipeline Integration | v2.3 | 0/TBD | Not started | - |
 | 33. Build Confirmation | v2.3 | 0/TBD | Not started | - |
