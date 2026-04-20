@@ -246,6 +246,10 @@ cli::cli_alert_info("DB path: {db_path}")
 
 drv <- duckdb::duckdb()
 eco_con <- DBI::dbConnect(drv, dbdir = db_path, read_only = TRUE)
+if (!DBI::dbIsValid(eco_con)) {
+  drv <- duckdb::duckdb()
+  eco_con <- DBI::dbConnect(drv, dbdir = db_path, read_only = TRUE)
+}
 on.exit({
   DBI::dbDisconnect(eco_con, shutdown = TRUE)
   duckdb::duckdb_shutdown(drv)
