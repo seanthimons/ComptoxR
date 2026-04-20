@@ -82,7 +82,7 @@
 **Milestone Goal:** Replace the static 2-column lifestage dictionary with an ontology-backed 5-column schema featuring a two-axis design (developmental stage + reproductive flag), keyword regex fallback classifier, and a hard blocking build gate.
 
 - [x] **Phase 31: Standalone Validation** (2 plans) - Define classifier + dictionary, validate against live ECOTOX DB read-only, prove all assertions pass (completed 2026-04-20)
-- [ ] **Phase 32: Build Pipeline Integration** - Integrate validated code into ecotox_build.R and eco_functions.R
+- [ ] **Phase 32: Build Pipeline Integration** (2 plans) - Integrate validated code into ecotox_build.R and eco_functions.R
 - [ ] **Phase 33: Build Confirmation** - Run full ECOTOX build with gate active, verify outputs, pass devtools::check()
 
 ## Phase Details
@@ -112,7 +112,10 @@ Plans:
   3. `.eco_enrich_metadata()` joins only against `lifestage_dictionary` and its relocate call includes the 3 new columns (`ontology_id`, `reproductive_stage`, `classification_source`)
   4. `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R` section 16 contain identical gate + dictionary logic
   5. `devtools::document()` regenerates man pages without errors after roxygen `@return` updated for new columns
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 32-01-PLAN.md — Replace section 16 in both build scripts with classifier + dictionary + gate
+- [ ] 32-02-PLAN.md — Update eco_functions.R relocate + roxygen and regenerate man pages
 
 ### Phase 33: Build Confirmation
 **Goal**: Full ECOTOX build runs successfully with the gate active, producing correct output tables, and the package passes R CMD check
@@ -136,5 +139,5 @@ Phases execute in numeric order: 31 -> 32 -> 33
 | 23-26 | v2.1 | 13/13 | Complete | 2026-03-02 |
 | 27-30 | v2.2 | 11/11 | Complete | 2026-03-11 |
 | 31. Standalone Validation | v2.3 | 2/2 | Complete    | 2026-04-20 |
-| 32. Build Pipeline Integration | v2.3 | 0/TBD | Not started | - |
+| 32. Build Pipeline Integration | v2.3 | 0/2 | Not started | - |
 | 33. Build Confirmation | v2.3 | 0/TBD | Not started | - |
