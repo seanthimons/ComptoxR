@@ -147,9 +147,7 @@ eco_health <- function(con = NULL) {
     # Try to get version date from versions table
     version_date <- tryCatch(
       {
-        v <- DBI::dbGetQuery(con,
-          "SELECT date FROM versions WHERE latest = TRUE LIMIT 1"
-        )
+        v <- DBI::dbGetQuery(con, "SELECT date FROM versions WHERE latest = TRUE LIMIT 1")
         if (nrow(v) > 0) v$date[[1]] else NA_character_
       },
       error = function(e) NA_character_
@@ -193,9 +191,7 @@ eco_health <- function(con = NULL) {
 #' eco_species("Rainbow%")
 #' eco_species("Oncorhynchus%", field = "latin_name")
 #' }
-eco_species <- function(query,
-                        field = c("common_name", "latin_name", "eco_group"),
-                        con = NULL) {
+eco_species <- function(query, field = c("common_name", "latin_name", "eco_group"), con = NULL) {
   field <- match.arg(field)
   route <- .eco_route()
 
@@ -205,8 +201,10 @@ eco_species <- function(query,
       httr2::req_url_path_append("species") |>
       httr2::req_url_query(query = query, field = field) |>
       httr2::req_perform()
-    return(httr2::resp_body_json(resp, simplifyVector = TRUE) |>
-      tibble::as_tibble())
+    return(
+      httr2::resp_body_json(resp, simplifyVector = TRUE) |>
+        tibble::as_tibble()
+    )
   }
 
   con <- .eco_get_con(con)
@@ -245,7 +243,21 @@ eco_species <- function(query,
 #'   select from the `results` table.
 #' @param con An optional `DBI::DBIConnection`.
 #' @return A tibble of enriched test results with concentration and duration
-#'   conversions applied.
+#'   conversions applied. Lifestage columns included:
+#'   \describe{
+#'     \item{org_lifestage}{Original ECOTOX lifestage description.}
+#'     \item{harmonized_life_stage}{One of 7 harmonized categories:
+#'       `"Egg/Embryo"`, `"Larva"`, `"Juvenile"`, `"Subadult"`, `"Adult"`,
+#'       `"Senescent/Dormant"`, `"Other/Unknown"`.}
+#'     \item{ontology_id}{UBERON/PO/BODC S11 ontology term ID where a 1:1
+#'       mapping exists; `NA` otherwise.}
+#'     \item{reproductive_stage}{`TRUE` when the lifestage description
+#'       indicates active reproductive activity (spawning, gestation,
+#'       flowering, etc.), independent of developmental classification.}
+#'     \item{classification_source}{Always `"dictionary"` for canonical
+#'       entries. Keyword-fallback rows appear only in the `lifestage_review`
+#'       staging table, never in query results.}
+#'   }
 #' @export
 #' @family ecotox
 #' @examples
@@ -259,17 +271,19 @@ eco_species <- function(query,
 #' # Query by eco group with custom endpoints
 #' eco_results(eco_group = "Fish", endpoint = c("LC50", "EC50"))
 #' }
-eco_results <- function(casrn = NULL,
-                        common_name = NULL,
-                        latin_name = NULL,
-                        endpoint = NULL,
-                        eco_group = NULL,
-                        invasive = FALSE,
-                        standard = FALSE,
-                        threatened = FALSE,
-                        test_cols = NULL,
-                        results_cols = NULL,
-                        con = NULL) {
+eco_results <- function(
+  casrn = NULL,
+  common_name = NULL,
+  latin_name = NULL,
+  endpoint = NULL,
+  eco_group = NULL,
+  invasive = FALSE,
+  standard = FALSE,
+  threatened = FALSE,
+  test_cols = NULL,
+  results_cols = NULL,
+  con = NULL
+) {
   # Guard clause — prevent full-table scans
   if (
     is.null(casrn) &&
@@ -290,10 +304,16 @@ eco_results <- function(casrn = NULL,
 
   if (route == "plumber") {
     return(.eco_results_plumber(
-      casrn = casrn, common_name = common_name, latin_name = latin_name,
-      endpoint = endpoint, eco_group = eco_group,
-      invasive = invasive, standard = standard, threatened = threatened,
-      test_cols = test_cols, results_cols = results_cols
+      casrn = casrn,
+      common_name = common_name,
+      latin_name = latin_name,
+      endpoint = endpoint,
+      eco_group = eco_group,
+      invasive = invasive,
+      standard = standard,
+      threatened = threatened,
+      test_cols = test_cols,
+      results_cols = results_cols
     ))
   }
 
@@ -302,10 +322,16 @@ eco_results <- function(casrn = NULL,
 
   query <- .eco_base_query(
     con,
-    casrn = casrn, common_name = common_name, latin_name = latin_name,
-    endpoint = endpoint, eco_group = eco_group,
-    invasive = invasive, standard = standard, threatened = threatened,
-    test_cols = test_cols, results_cols = results_cols
+    casrn = casrn,
+    common_name = common_name,
+    latin_name = latin_name,
+    endpoint = endpoint,
+    eco_group = eco_group,
+    invasive = invasive,
+    standard = standard,
+    threatened = threatened,
+    test_cols = test_cols,
+    results_cols = results_cols
   )
 
   query <- .eco_enrich_metadata(query, con)
@@ -319,10 +345,18 @@ eco_results <- function(casrn = NULL,
 #' Send results query to Plumber API
 #' @keywords internal
 #' @noRd
-.eco_results_plumber <- function(casrn, common_name, latin_name,
-                                  endpoint, eco_group,
-                                  invasive, standard, threatened,
-                                  test_cols, results_cols) {
+.eco_results_plumber <- function(
+  casrn,
+  common_name,
+  latin_name,
+  endpoint,
+  eco_group,
+  invasive,
+  standard,
+  threatened,
+  test_cols,
+  results_cols
+) {
   burl <- Sys.getenv("eco_burl")
 
   body <- list(
@@ -364,11 +398,19 @@ eco_results <- function(casrn = NULL,
 #' Build the base query: tests + species + chemicals + results with filters
 #' @keywords internal
 #' @noRd
-.eco_base_query <- function(con,
-                            casrn, common_name, latin_name,
-                            endpoint, eco_group,
-                            invasive, standard, threatened,
-                            test_cols, results_cols) {
+.eco_base_query <- function(
+  con,
+  casrn,
+  common_name,
+  latin_name,
+  endpoint,
+  eco_group,
+  invasive,
+  standard,
+  threatened,
+  test_cols,
+  results_cols
+) {
   base_test_cols <- c(
     "reference_number",
     "test_id",
@@ -409,9 +451,15 @@ eco_results <- function(casrn = NULL,
     dplyr::inner_join(
       dplyr::tbl(con, "species") |>
         dplyr::select(
-          "species_number", "common_name", "latin_name",
-          "family", "genus", "species", "eco_group",
-          "standard_test_species", "invasive_species",
+          "species_number",
+          "common_name",
+          "latin_name",
+          "family",
+          "genus",
+          "species",
+          "eco_group",
+          "standard_test_species",
+          "invasive_species",
           "endangered_threatened_species"
         ),
       by = "species_number"
@@ -430,13 +478,17 @@ eco_results <- function(casrn = NULL,
     dplyr::left_join(
       dplyr::tbl(con, "chemicals") |>
         dplyr::select(
-          "cas_number", "chemical_name", "dtxsid",
+          "cas_number",
+          "chemical_name",
+          "dtxsid",
           chemical_group = "ecotox_group"
         ),
       by = dplyr::join_by("test_cas" == "cas_number")
     ) |>
     dplyr::relocate(
-      "chemical_name", "dtxsid", "chemical_group",
+      "chemical_name",
+      "dtxsid",
+      "chemical_group",
       .after = "test_cas"
     )
 
@@ -533,11 +585,11 @@ eco_results <- function(casrn = NULL,
         ~ stringr::str_remove_all(., "\\/|\\*|\\~")
       ),
       obs_duration_mean = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_mean, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
-      obs_duration_min  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
-      obs_duration_max  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      obs_duration_min = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      obs_duration_max = dplyr::sql("TRY_CAST(REGEXP_REPLACE(obs_duration_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
       conc1_mean = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_mean, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
-      conc1_min  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
-      conc1_max  = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)")
+      conc1_min = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_min, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)"),
+      conc1_max = dplyr::sql("TRY_CAST(REGEXP_REPLACE(conc1_max, '[\\*\\+]|\\s', '', 'g') AS DOUBLE)")
     )
 
   # Exposure types
@@ -545,7 +597,8 @@ eco_results <- function(casrn = NULL,
     dplyr::left_join(
       dplyr::tbl(con, "app_exposure_types") |>
         dplyr::select(
-          "exposure_group", "term",
+          "exposure_group",
+          "term",
           exposure_description = "description"
         ),
       by = dplyr::join_by("exposure_type" == "term")
@@ -556,7 +609,9 @@ eco_results <- function(casrn = NULL,
       by = dplyr::join_by("exposure_group" == "term")
     ) |>
     dplyr::relocate(
-      "exposure_group", "exposure_description", "exposure_name",
+      "exposure_group",
+      "exposure_description",
+      "exposure_name",
       .after = "exposure_type"
     )
 
@@ -565,8 +620,10 @@ eco_results <- function(casrn = NULL,
     dplyr::left_join(
       dplyr::tbl(con, "app_effect_groups_and_measurements") |>
         dplyr::select(
-          "measurement_term", "measurement_name",
-          "effect_code", effect_name = "effect"
+          "measurement_term",
+          "measurement_name",
+          "effect_code",
+          effect_name = "effect"
         ),
       by = dplyr::join_by(
         "effect" == "effect_code",
@@ -576,15 +633,20 @@ eco_results <- function(casrn = NULL,
     dplyr::left_join(
       dplyr::tbl(con, "effect_groups_dictionary") |>
         dplyr::select(
-          effect = "term", "effect_group",
+          effect = "term",
+          "effect_group",
           "super_effect_description"
         ),
       by = dplyr::join_by("effect" == "effect")
     ) |>
     dplyr::rename(effect_group_name = "super_effect_description") |>
     dplyr::relocate(
-      "effect_group", "effect_group_name", "effect", "effect_name",
-      "measurement", "measurement_name",
+      "effect_group",
+      "effect_group_name",
+      "effect",
+      "effect_name",
+      "measurement",
+      "measurement_name",
       .after = "endpoint"
     )
 
@@ -600,7 +662,11 @@ eco_results <- function(casrn = NULL,
       by = dplyr::join_by("org_lifestage" == "org_lifestage")
     ) |>
     dplyr::relocate(
-      "org_lifestage", "harmonized_life_stage",
+      "org_lifestage",
+      "harmonized_life_stage",
+      "ontology_id",
+      "reproductive_stage",
+      "classification_source",
       .after = "organism_lifestage"
     )
 
@@ -653,11 +719,15 @@ eco_results <- function(casrn = NULL,
         .data$obs_duration_mean,
         .data$obs_duration_min,
         .data$obs_duration_max
-      ) |> as.numeric(),
+      ) |>
+        as.numeric(),
       final_obs_duration = .data$obs_duration * .data$conversion_factor_duration
     ) |>
     dplyr::relocate(
-      "reference_number", "test_id", "result_id", "species_number",
+      "reference_number",
+      "test_id",
+      "result_id",
+      "species_number",
       .before = "test_cas"
     )
 }
