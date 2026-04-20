@@ -48,7 +48,21 @@ select from the \code{results} table.}
 }
 \value{
 A tibble of enriched test results with concentration and duration
-conversions applied.
+conversions applied. Lifestage columns included:
+\describe{
+\item{org_lifestage}{Original ECOTOX lifestage description.}
+\item{harmonized_life_stage}{One of 7 harmonized categories:
+\code{"Egg/Embryo"}, \code{"Larva"}, \code{"Juvenile"}, \code{"Subadult"}, \code{"Adult"},
+\code{"Senescent/Dormant"}, \code{"Other/Unknown"}.}
+\item{ontology_id}{UBERON/PO/BODC S11 ontology term ID where a 1:1
+mapping exists; \code{NA} otherwise.}
+\item{reproductive_stage}{\code{TRUE} when the lifestage description
+indicates active reproductive activity (spawning, gestation,
+flowering, etc.), independent of developmental classification.}
+\item{classification_source}{Always \code{"dictionary"} for canonical
+entries. Keyword-fallback rows appear only in the \code{lifestage_review}
+staging table, never in query results.}
+}
 }
 \description{
 The primary query function for the ECOTOX database. Filters test results
