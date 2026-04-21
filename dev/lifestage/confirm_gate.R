@@ -41,11 +41,14 @@ if (!file.exists(db_path)) {
 cli::cli_alert_info("DB path: {db_path}")
 
 eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path)
+cli::cli_alert_success("Connected to ecotox.duckdb (valid: {DBI::dbIsValid(eco_con)})")
 
 on.exit({
-  DBI::dbExecute(eco_con, "DELETE FROM lifestage_codes WHERE description IN ('Xylophage', 'Proto-larva')")
-  DBI::dbExecute(eco_con, "DROP TABLE IF EXISTS lifestage_review")
-  DBI::dbDisconnect(eco_con, shutdown = TRUE)
+  if (DBI::dbIsValid(eco_con)) {
+    DBI::dbExecute(eco_con, "DELETE FROM lifestage_codes WHERE description IN ('Xylophage', 'Proto-larva')")
+    DBI::dbExecute(eco_con, "DROP TABLE IF EXISTS lifestage_review")
+    DBI::dbDisconnect(eco_con, shutdown = TRUE)
+  }
 }, add = TRUE)
 
 results <- list()
@@ -261,6 +264,11 @@ cli::cli_alert_success("Classifier function and dictionary loaded ({nrow(life_st
 # ==============================================================================
 
 cli::cli_h2("Scenario A: Xylophage (expect abort)")
+
+if (!DBI::dbIsValid(eco_con)) {
+  cli::cli_alert_warning("Connection went stale during setup — reconnecting")
+  eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path)
+}
 
 DBI::dbExecute(eco_con, "INSERT INTO lifestage_codes (code, description) VALUES ('XT', 'Xylophage')")
 cli::cli_alert_info("Injected 'Xylophage' into lifestage_codes")
