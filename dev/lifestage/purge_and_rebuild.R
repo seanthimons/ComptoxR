@@ -45,9 +45,11 @@ cli::cli_alert_info("Review rows: {result$review_rows}")
 cli::cli_alert_info("Refresh mode: {result$refresh_mode}")
 
 # Step 3: Schema assertion
+# Note: use shutdown = FALSE on the read-only assertion connection to avoid
+# triggering a DuckDB engine shutdown that could revert the write connection's WAL.
 .eco_close_con()
 con2 <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
-on.exit(DBI::dbDisconnect(con2, shutdown = TRUE), add = TRUE)
+on.exit(DBI::dbDisconnect(con2, shutdown = FALSE), add = TRUE)
 
 actual_cols <- DBI::dbListFields(con2, "lifestage_dictionary")
 expected_cols <- names(.eco_lifestage_dictionary_schema())
