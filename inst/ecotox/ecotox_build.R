@@ -1,11 +1,11 @@
-# ECOTOX Build Pipeline
+﻿# ECOTOX Build Pipeline
 # --------------------
 # Downloads EPA ECOTOX ASCII data from FTP, processes into a DuckDB database
 # with enrichment tables (unit conversion, lifestage, risk binning, etc.).
 #
 # Usage:
 #   eco_install()  # locates and sources this script automatically
-#   — or, from a development checkout —
+#   â€” or, from a development checkout â€”
 #   source("data-raw/ecotox.R")
 #
 # Requires Suggests: arrow, janitor, lubridate, readr, readxl, rvest
@@ -90,6 +90,9 @@
   raw_dir <- tempfile("ecotox_raw_")
   dir.create(raw_dir, recursive = TRUE)
   on.exit(unlink(raw_dir, recursive = TRUE), add = TRUE)
+  old_timeout <- getOption("timeout")
+  options(timeout = 3600)
+  on.exit(options(timeout = old_timeout), add = TRUE)
 
   zip_dest <- file.path(raw_dir, "ecotox.zip")
   cli::cli_alert_info("Downloading ECOTOX data (~500 MB)...")
@@ -132,7 +135,7 @@
   on.exit(DBI::dbDisconnect(eco_con, shutdown = TRUE), add = TRUE)
 
   # 6. Main file processing ----------------------------------------------------
-  # Pipe-delimited .txt → Parquet → DuckDB
+  # Pipe-delimited .txt â†’ Parquet â†’ DuckDB
 
   cli::cli_alert_info("Removing release/readme files...")
   release_files <- list.files(eco_files_dir, pattern = "release|ASCII|Ascii", full.names = TRUE)
@@ -588,30 +591,30 @@
     c("Birds", "Amphibians", "Reptiles")  , "acute"          , "MOR"                 , c("ORAL", NA)   , "g/g"           , "LD50"                       , NULL                                 ,
     c("Birds", "Amphibians", "Reptiles")  , "chronic"        , "MOR"                 , c("ORAL", NA)   , "g/g/d"         , c("NOEL", "NR-ZERO")         , NULL                                 ,
     # Fish
-    "Fish"                                , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , expr(new_dur == 96)                  ,
-    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , expr(new_dur >= 144)                 ,
-    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , expr(new_dur == 504)                 ,
+    "Fish"                                , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur == 96)           ,
+    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur >= 144)          ,
+    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 504)          ,
     # Bees
-    "Bees"                                , "acute"          , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , expr(new_dur %in% c(24, 28, 72))     ,
-    "Bees"                                , "chronic"        , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , expr(new_dur == 240)                 ,
+    "Bees"                                , "acute"          , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur %in% c(24, 28, 72)),
+    "Bees"                                , "chronic"        , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur == 240)          ,
     # Insects/Spiders
-    "Insects/Spiders"                     , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , expr(new_dur %in% c(24, 48, 72))     ,
-    "Insects/Spiders"                     , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("NOEL", "NOEC", "NR-ZERO") , expr(new_dur %in% c(504, 672))       ,
+    "Insects/Spiders"                     , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72)),
+    "Insects/Spiders"                     , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("NOEL", "NOEC", "NR-ZERO") , rlang::expr(new_dur %in% c(504, 672)),
     # Invertebrates, Molluscs
-    c("Invertebrates", "Molluscs")        , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , expr(new_dur %in% c(24, 48, 72, 96)) ,
-    c("Invertebrates", "Molluscs")        , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , expr(new_dur %in% c(504, 672))       ,
+    c("Invertebrates", "Molluscs")        , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72, 96)),
+    c("Invertebrates", "Molluscs")        , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(504, 672)),
     # Worms
-    "Worms"                               , "acute"          , "MOR"                 , NULL            , "g/g"           , c("LD50", "LC50", "EC50")    , expr(new_dur == 336)                 ,
-    "Worms"                               , "chronic"        , "MOR"                 , NULL            , "g/g"           , c("NOEC", "NOEL", "NR-ZERO") , expr(new_dur <= 336)                 ,
+    "Worms"                               , "acute"          , "MOR"                 , NULL            , "g/g"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur == 336)          ,
+    "Worms"                               , "chronic"        , "MOR"                 , NULL            , "g/g"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur <= 336)          ,
     # Crustaceans
-    "Crustaceans"                         , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , expr(new_dur <= 96)                  ,
-    "Crustaceans"                         , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , expr(new_dur >= 672)                 ,
+    "Crustaceans"                         , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 96)           ,
+    "Crustaceans"                         , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur >= 672)          ,
     # Algae, Fungi, Moss, Hornworts
-    c("Algae", "Fungi", "Moss/Hornworts") , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , expr(new_dur <= 168)                 ,
-    c("Algae", "Fungi", "Moss/Hornworts") , "chronic"        , NULL                  , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , expr(new_dur == 96)                  ,
+    c("Algae", "Fungi", "Moss/Hornworts") , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)          ,
+    c("Algae", "Fungi", "Moss/Hornworts") , "chronic"        , NULL                  , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 96)           ,
     # Flowers, Trees, Shrubs, Ferns
-    "Flowers/Trees/Shrubs/Ferns"          , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , expr(new_dur <= 168)                 ,
-    "Flowers/Trees/Shrubs/Ferns"          , "chronic"        , expr(effect != "MOR") , NULL            , NULL            , c("NOEC", "NOEL", "NR-ZERO") , NULL
+    "Flowers/Trees/Shrubs/Ferns"          , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)          ,
+    "Flowers/Trees/Shrubs/Ferns"          , "chronic"        , rlang::expr(effect != "MOR"), NULL         , NULL            , c("NOEC", "NOEL", "NR-ZERO") , NULL
   ) |>
     dplyr::relocate(final_test_type, .after = dplyr::last_col())
 
@@ -970,50 +973,54 @@
 
   # 16. Lifestage dictionary ---------------------------------------------------
 
-  cli::cli_alert_info("Writing lifestage dictionary via v2.4 source-backed pipeline...")
+  cli::cli_alert_info("Writing lifestage dictionary...")
 
-  # v2.4: source-backed lifestage resolution via .eco_lifestage_materialize_tables().
-  # The v2.3 regex-first classifier and 5-column tribble have been removed.
-  # All resolution is handled by the shared helper layer in R/eco_lifestage_patch.R.
-
-  # Locate and source the patch helpers (available when package is loaded or in
-  # development via explicit source).
   if (!exists(".eco_lifestage_materialize_tables", mode = "function")) {
-    patch_file <- system.file("R/eco_lifestage_patch.R", package = "ComptoxR")
-    if (!nzchar(patch_file)) {
-      patch_file <- file.path(
-        dirname(dirname(sys.frame(1)$ofile %||% "")),
-        "R",
-        "eco_lifestage_patch.R"
-      )
-    }
-    if (file.exists(patch_file)) {
-      source(patch_file)
+    helper_path <- file.path(getwd(), "R", "eco_lifestage_patch.R")
+
+    if (file.exists(helper_path)) {
+      source(helper_path, local = environment())
+    } else if ("ComptoxR" %in% loadedNamespaces()) {
+      ns <- asNamespace("ComptoxR")
+      for (fn in c(".eco_lifestage_release_id", ".eco_lifestage_materialize_tables")) {
+        assign(fn, get(fn, envir = ns), envir = environment())
+      }
     } else {
-      cli::cli_abort(
-        "Cannot locate R/eco_lifestage_patch.R; run from the package root directory."
-      )
+      cli::cli_abort("Shared lifestage helper layer not available.")
     }
   }
 
-  org_lifestages <- DBI::dbGetQuery(
+  db_lifestages <- DBI::dbGetQuery(
     eco_con,
     "SELECT DISTINCT description FROM lifestage_codes ORDER BY description"
   )$description
 
-  materialized <- .eco_lifestage_materialize_tables(
-    org_lifestages = org_lifestages,
-    ecotox_release = latest_zip,
-    refresh = "baseline",
-    write_cache = FALSE
+  lifestage_tables <- .eco_lifestage_materialize_tables(
+    org_lifestages = db_lifestages,
+    ecotox_release = .eco_lifestage_release_id(latest_zip),
+    refresh = "auto",
+    force = FALSE,
+    write_cache = TRUE
   )
 
-  DBI::dbWriteTable(eco_con, "lifestage_dictionary", materialized$dictionary, overwrite = TRUE)
-  DBI::dbWriteTable(eco_con, "lifestage_review", materialized$review, overwrite = TRUE)
-
-  cli::cli_alert_success(
-    "Lifestage dictionary written: {nrow(materialized$dictionary)} rows ({nrow(materialized$review)} in review)"
+  DBI::dbWriteTable(
+    eco_con,
+    "lifestage_dictionary",
+    lifestage_tables$dictionary,
+    overwrite = TRUE
   )
+  DBI::dbWriteTable(
+    eco_con,
+    "lifestage_review",
+    lifestage_tables$review,
+    overwrite = TRUE
+  )
+
+  if (nrow(lifestage_tables$review) > 0) {
+    cli::cli_alert_warning(
+      "{nrow(lifestage_tables$review)} lifestage row(s) quarantined in lifestage_review."
+    )
+  }
 
   # 17. Effects super-group ----------------------------------------------------
 
@@ -1092,3 +1099,4 @@
   invisible(output_path)
 }
 .build_ecotox_db()
+

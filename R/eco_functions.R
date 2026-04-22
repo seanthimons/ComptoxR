@@ -246,14 +246,22 @@ eco_species <- function(query, field = c("common_name", "latin_name", "eco_group
 #'   conversions applied. Lifestage columns included:
 #'   \describe{
 #'     \item{org_lifestage}{Original ECOTOX lifestage description.}
+#'     \item{source_ontology}{Source ontology used for the canonical
+#'       lifestage resolution (`UBERON`, `PO`, or `S11`) when available.}
+#'     \item{source_term_id}{Provider term identifier for the resolved
+#'       lifestage concept.}
+#'     \item{source_term_label}{Provider label for the resolved lifestage
+#'       concept.}
+#'     \item{source_match_status}{Resolution status recorded in the canonical
+#'       lifestage dictionary.}
 #'     \item{harmonized_life_stage}{One of 7 harmonized categories:
 #'       `"Egg/Embryo"`, `"Larva"`, `"Juvenile"`, `"Subadult"`, `"Adult"`,
 #'       `"Senescent/Dormant"`, `"Other/Unknown"`.}
-#'     \item{reproductive_stage}{`TRUE` when the lifestage description
+#'     \item{reproductive_stage}{`TRUE` when the resolved source concept
 #'       indicates active reproductive activity (spawning, gestation,
 #'       flowering, etc.), independent of developmental classification.}
-#'     \item{derivation_source}{Source used to derive harmonized category and
-#'       reproductive flag; `"baseline"` for committed CSV entries.}
+#'     \item{derivation_source}{Curated source-ID rule used to derive the
+#'       harmonized lifestage fields.}
 #'   }
 #' @export
 #' @family ecotox
@@ -660,6 +668,10 @@ eco_results <- function(
     ) |>
     dplyr::relocate(
       "org_lifestage",
+      "source_ontology",
+      "source_term_id",
+      "source_term_label",
+      "source_match_status",
       "harmonized_life_stage",
       "reproductive_stage",
       "derivation_source",
