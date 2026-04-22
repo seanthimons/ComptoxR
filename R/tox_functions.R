@@ -29,33 +29,54 @@
 
 #' Default columns returned by toxval_results()
 #'
-#' Returns the curated set of ~45 default columns: 35 universal + 10 key
+#' Returns the curated set of ~32 default columns: 22 universal + 10 key
 #' moderate coverage columns.
 #' @return A character vector of column names.
 #' @keywords internal
 .tox_default_cols <- function() {
   c(
-    "dtxsid", "casrn", "name",
-    "source", "sub_source", "source_url",
-    "qc_status", "qc_category",
-    "toxval_type", "toxval_type_original", "toxval_type_supercategory",
-    "toxval_subtype", "toxval_subtype_original",
+    "dtxsid",
+    "casrn",
+    "name",
+    "source",
+    "sub_source",
+    "source_url",
+    "qc_status",
+    "qc_category",
+    "toxval_type",
+    #"toxval_type_original",
+    "toxval_type_supercategory",
+    "toxval_subtype",
+    #"toxval_subtype_original",
     "qualifier",
-    "toxval_numeric", "toxval_numeric_original",
-    "toxval_units", "toxval_units_original",
-    "study_type", "study_type_original",
+    "toxval_numeric",
+    #"toxval_numeric_original",
+    "toxval_units",
+    #"toxval_units_original",
+    "study_type",
+    #"study_type_original",
     "study_duration_class",
-    "study_duration_value", "study_duration_value_original",
-    "study_duration_units", "study_duration_units_original",
+    "study_duration_value",
+    #"study_duration_value_original",
+    "study_duration_units",
+    #"study_duration_units_original",
     "risk_assessment_class",
-    "species_common", "latin_name", "species_supercategory", "species_original",
+    "species_common",
+    "latin_name",
+    "species_supercategory",
+    #"species_original",
     "strain",
-    "sex", "sex_original",
-    "exposure_route", "exposure_route_original",
-    "exposure_method", "exposure_method_original",
-    "toxicological_effect", "toxicological_effect_category",
+    "sex",
+    #"sex_original",
+    "exposure_route",
+    #"exposure_route_original",
+    "exposure_method",
+    #"exposure_method_original",
+    "toxicological_effect",
+    "toxicological_effect_category",
     "lifestage",
-    "year", "original_year",
+    "year",
+    #"original_year",
     "experimental_record",
     "source_hash",
     "study_group"
@@ -146,9 +167,7 @@ toxval_health <- function(con = NULL) {
 
     meta <- tryCatch(
       {
-        DBI::dbGetQuery(con,
-          "SELECT version_label, row_count FROM _metadata WHERE is_latest = TRUE LIMIT 1"
-        )
+        DBI::dbGetQuery(con, "SELECT version_label, row_count FROM _metadata WHERE is_latest = TRUE LIMIT 1")
       },
       error = function(e) data.frame(version_label = NA_character_, row_count = NA_integer_)
     )
@@ -215,9 +234,7 @@ toxval_sources <- function(con = NULL) {
 #' toxval_search("DTXSID7020182")
 #' toxval_search(c("DTXSID7020182", "DTXSID3021392"))
 #' }
-toxval_search <- function(dtxsid,
-                       limit = 1e5L,
-                       con = NULL) {
+toxval_search <- function(dtxsid, limit = 1e5L, con = NULL) {
   if (!is.character(dtxsid) || length(dtxsid) == 0L || !all(nzchar(dtxsid))) {
     cli::cli_abort("{.arg dtxsid} must be a non-empty character vector.")
   }
@@ -231,8 +248,10 @@ toxval_search <- function(dtxsid,
       httr2::req_url_path_append("search") |>
       httr2::req_body_json(list(dtxsid = dtxsid, limit = as.integer(limit))) |>
       httr2::req_perform()
-    return(httr2::resp_body_json(resp, simplifyVector = TRUE) |>
-      tibble::as_tibble())
+    return(
+      httr2::resp_body_json(resp, simplifyVector = TRUE) |>
+        tibble::as_tibble()
+    )
   }
 
   con <- .tox_get_con(con)
@@ -242,7 +261,11 @@ toxval_search <- function(dtxsid,
 
   placeholders <- paste(rep("?", length(dtxsid)), collapse = ", ")
   sql <- paste0(
-    "SELECT ", col_select, " FROM toxval WHERE dtxsid IN (", placeholders, ") LIMIT ?"
+    "SELECT ",
+    col_select,
+    " FROM toxval WHERE dtxsid IN (",
+    placeholders,
+    ") LIMIT ?"
   )
   result <- DBI::dbGetQuery(con, sql, params = c(as.list(dtxsid), list(as.integer(limit))))
   tibble::as_tibble(result)
@@ -286,24 +309,26 @@ toxval_search <- function(dtxsid,
 #' # Query by DTXSID with all columns
 #' toxval_results(dtxsid = "DTXSID7020182", cols = "all")
 #' }
-toxval_results <- function(dtxsid = NULL,
-                        casrn = NULL,
-                        source = NULL,
-                        toxval_type = NULL,
-                        species = NULL,
-                        qc_status = c("pass_or_not_determined", "pass", "all"),
-                        cols = c("default", "all"),
-                        con = NULL) {
+toxval_results <- function(
+  dtxsid = NULL,
+  casrn = NULL,
+  source = NULL,
+  toxval_type = NULL,
+  species = NULL,
+  qc_status = c("pass_or_not_determined", "pass", "all"),
+  cols = c("default", "all"),
+  con = NULL
+) {
   qc_status <- match.arg(qc_status)
   cols <- match.arg(cols)
 
   # Guard clause — prevent full-table scans
   if (
     is.null(dtxsid) &&
-    is.null(casrn) &&
-    is.null(source) &&
-    is.null(toxval_type) &&
-    is.null(species)
+      is.null(casrn) &&
+      is.null(source) &&
+      is.null(toxval_type) &&
+      is.null(species)
   ) {
     cli::cli_abort(
       "At least one filter parameter must be provided to avoid returning the entire database."
@@ -314,9 +339,13 @@ toxval_results <- function(dtxsid = NULL,
 
   if (route == "plumber") {
     return(.tox_results_plumber(
-      dtxsid = dtxsid, casrn = casrn, source = source,
-      toxval_type = toxval_type, species = species,
-      qc_status = qc_status, cols = cols
+      dtxsid = dtxsid,
+      casrn = casrn,
+      source = source,
+      toxval_type = toxval_type,
+      species = species,
+      qc_status = qc_status,
+      cols = cols
     ))
   }
 
@@ -330,7 +359,7 @@ toxval_results <- function(dtxsid = NULL,
     query <- query |>
       dplyr::filter(
         is.na(.data$qc_status) |
-        !stringr::str_starts(.data$qc_status, "fail")
+          !stringr::str_starts(.data$qc_status, "fail")
       )
   } else if (qc_status == "pass") {
     query <- query |>
@@ -367,8 +396,7 @@ toxval_results <- function(dtxsid = NULL,
     species_vals <- unique(species)
     query <- query |>
       dplyr::filter(
-        .data$species_common %in% species_vals |
-        .data$latin_name %in% species_vals
+        .data$species_common %in% species_vals | .data$latin_name %in% species_vals
       )
   }
 
@@ -387,8 +415,7 @@ toxval_results <- function(dtxsid = NULL,
 #' Send results query to ToxValDB Plumber API
 #' @keywords internal
 #' @noRd
-.tox_results_plumber <- function(dtxsid, casrn, source, toxval_type,
-                                  species, qc_status, cols) {
+.tox_results_plumber <- function(dtxsid, casrn, source, toxval_type, species, qc_status, cols) {
   burl <- Sys.getenv("toxval_burl")
 
   body <- list(

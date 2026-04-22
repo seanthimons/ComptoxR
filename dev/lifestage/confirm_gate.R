@@ -1,408 +1,54 @@
 #!/usr/bin/env Rscript
-# ==============================================================================
-# Lifestage Gate Confirmation
-# ==============================================================================
-#
-# Injects synthetic test terms into ecotox.duckdb, runs the gate logic, and
-# confirms abort/warn behavior.
-#
-# Usage:
-#   Rscript dev/lifestage/confirm_gate.R
-#
-# Exit codes:
-#   0 -- all scenarios passed
-#   1 -- one or more failed
-# ==============================================================================
 
 suppressPackageStartupMessages({
   library(DBI)
   library(duckdb)
-  library(tibble)
   library(dplyr)
   library(cli)
-  library(here)
 })
 
-# ==============================================================================
-# Section 1: Setup
-# ==============================================================================
+source("R/eco_connection.R")
+source("R/eco_lifestage_patch.R")
 
-cli::cli_h1("Lifestage Gate Confirmation")
-cli::cli_h2("Section 1: Setup")
-
-db_path <- file.path(tools::R_user_dir("ComptoxR", "data"), "ecotox.duckdb")
-if (!file.exists(db_path)) {
-  cli::cli_abort(c(
-    "ECOTOX DuckDB not found at expected path.",
-    "i" = "Path: {db_path}",
-    "i" = "Run the ECOTOX build first to create the database."
-  ))
-}
-cli::cli_alert_info("DB path: {db_path}")
-
-eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path)
-cli::cli_alert_success("Connected to ecotox.duckdb (valid: {DBI::dbIsValid(eco_con)})")
-
-on.exit({
-  if (DBI::dbIsValid(eco_con)) {
-    DBI::dbExecute(eco_con, "DELETE FROM lifestage_codes WHERE description IN ('Xylophage', 'Proto-larva')")
-    DBI::dbExecute(eco_con, "DROP TABLE IF EXISTS lifestage_review")
-    DBI::dbDisconnect(eco_con, shutdown = TRUE)
-  }
-}, add = TRUE)
-
-results <- list()
-
-assert <- function(label, condition, detail = "") {
-  if (isTRUE(condition)) {
-    cli::cli_alert_success("PASS: {label}")
-    results[[length(results) + 1]] <<- list(label = label, pass = TRUE)
-  } else {
-    cli::cli_alert_danger(
-      "FAIL: {label}{if (nzchar(detail)) paste0(' \\u2014 ', detail) else ''}"
-    )
-    results[[length(results) + 1]] <<- list(
-      label = label,
-      pass = FALSE,
-      detail = detail
-    )
-  }
+source_db <- eco_path()
+if (!file.exists(source_db)) {
+  cli::cli_abort("ECOTOX DuckDB not found at {.path {source_db}}.")
 }
 
-# ==============================================================================
-# Section 2: Inline Definitions
-# ==============================================================================
+tmp_db <- tempfile(fileext = ".duckdb")
+file.copy(source_db, tmp_db, overwrite = TRUE)
+on.exit(unlink(tmp_db), add = TRUE)
 
-cli::cli_h2("Section 2: Inline Definitions")
+.eco_close_con()
 
-#fmt: off
-.classify_lifestage_keywords <- function(descriptions) {
-  # Developmental stage rules -- no "Reproductive" category.
-  # Reproductive status is captured independently via the reproductive_stage flag.
-  rules <- tibble::tribble(
-    ~priority , ~pattern                                                                                                                                                                                                                                                                                                    , ~harmonized_life_stage ,
-     1L       , "(?i)egg(?!.?laying)|(?<!post-)embryo|blastula|gastrula|morula|zygot|oocyte|cleavage|neurula|neurala|zygospore"                                                                                                                                                                                             , "Egg/Embryo"           ,
-     2L       , "(?i)larva|fry|naupli|nymph|tadpole|veliger|zoea|instar|pupa|prepupal|protozoea|mysis|glochidia|trochophore|caterpillar|maggot|megalopa|newborn|naiad|neonate|(?<!pre-)(?<!post-)hatch|alevin"                                                                                                              , "Larva"                ,
-     3L       , "(?i)fingerling|froglet|smolt|parr|seedling|elver|juvenile|weanling|yearling|pullet|young(?!.*adult)|post-larva|post-smolt|copepodid|copepodite|swim-up|underyearling|spat|sapling|sporeling"                                                                                                               , "Juvenile"             ,
-     4L       , "(?i)subadult|immature|peripubertal|sexually immature|pre-.*adult|young adult"                                                                                                                                                                                                                              , "Subadult"             ,
-     5L       , "(?i)adult|mature(?!.*dormant)(?!.*vegetative)|bloom|boot|heading|tiller|jointing|internode|shoot|imago|post-emergence|sexually mature|spawn|reproduct|gestat|lactat|gamete|gametophyte|pollen|partum|F\\d+\\s*gen|flower|prebloom|laying|\\bbud\\b(?!\\s+or\\s+budding)|rhizome|cutting|scape|\\bsperm\\b" , "Adult"                ,
-     6L       , "(?i)dormant|senescen|cyst|stationary.*phase|\\bseed\\b|\\bspore\\b|\\bcorm\\b|\\bcocoon\\b|\\btuber\\b|turion"                                                                                                                                                                                             , "Senescent/Dormant"    ,
-    99L       , ".*"                                                                                                                                                                                                                                                                                                        , "Other/Unknown"
-  )
+con <- DBI::dbConnect(duckdb::duckdb(), dbdir = tmp_db, read_only = FALSE)
+on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
 
-  # Reproductive flag -- set independently of developmental classification
-  repro_pattern <- "(?i)spawn|reproduct|gestat|lactat|gamete|gametophyte|pollen|partum|F\\d+\\s*gen|flower|prebloom|laying"
-
-  tibble::tibble(
-    org_lifestage = descriptions,
-    harmonized_life_stage = vapply(
-      descriptions,
-      function(desc) {
-        for (i in seq_len(nrow(rules))) {
-          if (grepl(rules$pattern[i], desc, perl = TRUE)) {
-            return(rules$harmonized_life_stage[i])
-          }
-        }
-        "Other/Unknown"
-      },
-      character(1)
-    ),
-    ontology_id = NA_character_,
-    reproductive_stage = grepl(repro_pattern, descriptions, perl = TRUE),
-    classification_source = "keyword_fallback"
-  )
-}
-
-life_stage <- tibble::tribble(
-  ~org_lifestage                                   , ~harmonized_life_stage , ~ontology_id     , ~reproductive_stage , ~classification_source ,
-  "Unspecified"                                    , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Adult"                                          , "Adult"                , "UBERON:0000113" , FALSE               , "dictionary"           ,
-  "Alevin"                                         , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Bud or Budding"                                 , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Blastula"                                       , "Egg/Embryo"           , "UBERON:0000108" , FALSE               , "dictionary"           ,
-  "Bud blast stage"                                , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Boot"                                           , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Cocoon"                                         , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Corm"                                           , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Copepodid"                                      , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Copepodite"                                     , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Cleavage stage"                                 , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "Cyst"                                           , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Egg"                                            , "Egg/Embryo"           , "UBERON:0000068" , FALSE               , "dictionary"           ,
-  "Elver"                                          , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Embryo"                                         , "Egg/Embryo"           , "UBERON:0000068" , FALSE               , "dictionary"           ,
-  "Exponential growth phase (log)"                 , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Eyed egg or stage, eyed embryo"                 , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "F0 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F1 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F11 generation"                                 , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F2 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F3 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F6 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "F7 generation"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Mature (full-bloom stage) organism"             , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Female gametophyte"                             , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Fingerling"                                     , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Flower opening"                                 , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Froglet"                                        , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Fry"                                            , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Gastrula"                                       , "Egg/Embryo"           , "UBERON:0000109" , FALSE               , "dictionary"           ,
-  "Gestation"                                      , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Glochidia"                                      , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Gamete"                                         , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Lag growth phase"                               , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Grain or seed formation stage"                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Germinated seed"                                , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Heading"                                        , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Incipient bud"                                  , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Internode elongation"                           , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Imago"                                          , "Adult"                , "UBERON:0000066" , FALSE               , "dictionary"           ,
-  "Immature"                                       , "Subadult"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Instar"                                         , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Intermolt"                                      , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Jointing"                                       , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Juvenile"                                       , "Juvenile"             , "UBERON:0034919" , FALSE               , "dictionary"           ,
-  "Lactational"                                    , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Egg laying"                                     , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Larva-pupa"                                     , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Prolarva"                                       , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Larva"                                          , "Larva"                , "UBERON:0000069" , FALSE               , "dictionary"           ,
-  "Mature"                                         , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Mature dormant"                                 , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Megalopa"                                       , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Male gametophyte"                               , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Morula"                                         , "Egg/Embryo"           , "UBERON:0000085" , FALSE               , "dictionary"           ,
-  "Mid-neurula"                                    , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "Molt"                                           , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Multiple"                                       , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Mysis"                                          , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Newborn"                                        , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Naiad"                                          , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Neonate"                                        , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "New, newly or recent hatch"                     , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Neurala"                                        , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "Not intact"                                     , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Not reported"                                   , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Nauplii"                                        , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Nymph"                                          , "Larva"                , "UBERON:0014405" , FALSE               , "dictionary"           ,
-  "Oocyte, ova"                                    , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "Parr"                                           , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Mature, post-bloom stage (fruit trees)"         , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Pre-hatch"                                      , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Pre-molt"                                       , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-emergence"                                 , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-spawning"                                  , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Mature, pit-hardening stage (fruit trees)"      , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-hatch"                                     , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-molt"                                      , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Pre-, sub-, semi-, near adult, or peripubertal" , "Subadult"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-smolt"                                     , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Pullet"                                         , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Post-nauplius"                                  , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Pollen, pollen grain"                           , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Postpartum"                                     , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Prepupal"                                       , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Pre-larva"                                      , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Prebloom"                                       , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Pre-smolt"                                      , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Protolarvae"                                    , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Pupa"                                           , "Larva"                , "UBERON:0003143" , FALSE               , "dictionary"           ,
-  "Post-larva"                                     , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Pre-spawning"                                   , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Post-embryo"                                    , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Protozoea"                                      , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Rooted cuttings"                                , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Rhizome"                                        , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Mature reproductive"                            , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Rootstock"                                      , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Subadult"                                       , "Subadult"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Shoot"                                          , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Yolk sac larvae, sac larvae"                    , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Senescence"                                     , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Seed"                                           , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Scape elongation"                               , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Sac fry, yolk sac fry"                          , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Mature, side-green stage (fruit trees)"         , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Sexually immature"                              , "Subadult"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Seedling"                                       , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Sexually mature"                                , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Smolt"                                          , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Sapling"                                        , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Sporeling"                                      , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Sperm"                                          , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Spore"                                          , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Spat"                                           , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Swim-up"                                        , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Spawning"                                       , "Adult"                , NA_character_    , TRUE                , "dictionary"           ,
-  "Stationary growth phase"                        , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Tadpole"                                        , "Larva"                , "UBERON:0002548" , FALSE               , "dictionary"           ,
-  "Tissue culture callus"                          , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Tiller stage"                                   , "Adult"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Tuber"                                          , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"           ,
-  "Trophozoite"                                    , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Underyearling"                                  , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Veliger"                                        , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Mature vegetative"                              , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Virgin"                                         , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Weanling"                                       , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Young adult"                                    , "Subadult"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Yearling"                                       , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Young"                                          , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Young of year"                                  , "Juvenile"             , NA_character_    , FALSE               , "dictionary"           ,
-  "Zoea"                                           , "Larva"                , NA_character_    , FALSE               , "dictionary"           ,
-  "Zygospore"                                      , "Egg/Embryo"           , NA_character_    , FALSE               , "dictionary"           ,
-  "Zygote"                                         , "Egg/Embryo"           , "UBERON:0000106" , FALSE               , "dictionary"           ,
-  "Not coded"                                      , "Other/Unknown"        , NA_character_    , FALSE               , "dictionary"           ,
-  "Turion"                                         , "Senescent/Dormant"    , NA_character_    , FALSE               , "dictionary"
+DBI::dbExecute(
+  con,
+  "INSERT INTO lifestage_codes (code, description) VALUES ('XT', 'Xylophage'), ('PL', 'Proto-larva')"
 )
-#fmt: on
+DBI::dbDisconnect(con, shutdown = TRUE)
 
-cli::cli_alert_success("Classifier function and dictionary loaded ({nrow(life_stage)} rows)")
+cli::cli_h1("Lifestage Patch Smoke Check")
+cli::cli_alert_info("Working copy: {.path {tmp_db}}")
 
-# ==============================================================================
-# Section 3: Scenario A -- Xylophage (expect abort)
-# ==============================================================================
-
-cli::cli_h2("Scenario A: Xylophage (expect abort)")
-
-if (!DBI::dbIsValid(eco_con)) {
-  cli::cli_alert_warning("Connection went stale during setup — reconnecting")
-  eco_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path)
-}
-
-DBI::dbExecute(eco_con, "INSERT INTO lifestage_codes (code, description) VALUES ('XT', 'Xylophage')")
-cli::cli_alert_info("Injected 'Xylophage' into lifestage_codes")
-
-gate_result <- tryCatch(
-  {
-    db_lifestages <- DBI::dbGetQuery(
-      eco_con,
-      "SELECT DISTINCT description FROM lifestage_codes ORDER BY description"
-    )$description
-
-    unmapped <- setdiff(db_lifestages, life_stage$org_lifestage)
-    if (length(unmapped) > 0) {
-      keyword_mapped <- .classify_lifestage_keywords(unmapped)
-      truly_unknown <- unmapped[keyword_mapped$harmonized_life_stage == "Other/Unknown"]
-      if (length(truly_unknown) > 0) {
-        cli::cli_abort(c(
-          "ECOTOX lifestage dictionary is incomplete.",
-          "i" = "{length(truly_unknown)} lifestage(s) could not be classified:",
-          "*" = "{truly_unknown}",
-          "i" = "Add these to the lifestage dictionary in ecotox_build.R section 16."
-        ))
-      }
-      cli::cli_alert_warning(
-        "{length(unmapped)} new lifestage(s) classified via keyword fallback. Written to lifestage_review table for manual promotion."
-      )
-      DBI::dbWriteTable(eco_con, "lifestage_review", keyword_mapped, overwrite = TRUE)
-    }
-    "no_abort"
-  },
-  error = function(e) {
-    list(error = conditionMessage(e), class = class(e))
-  }
+result <- .eco_patch_lifestage(
+  db_path = tmp_db,
+  refresh = "live",
+  force = FALSE
 )
 
-assert(
-  "A: Gate aborted (returned error list)",
-  is.list(gate_result) && "rlang_error" %in% gate_result$class,
-  paste0("got: ", if (is.list(gate_result)) paste(gate_result$class, collapse = ", ") else gate_result)
+cli::cli_alert_success("Dictionary rows: {result$dictionary_rows}")
+cli::cli_alert_info("Review rows: {result$review_rows}")
+
+check_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = tmp_db, read_only = TRUE)
+on.exit(DBI::dbDisconnect(check_con, shutdown = TRUE), add = TRUE)
+
+review <- tibble::as_tibble(DBI::dbReadTable(check_con, "lifestage_review"))
+
+print(
+  review |>
+    filter(org_lifestage %in% c("Xylophage", "Proto-larva")) |>
+    arrange(org_lifestage, desc(candidate_score))
 )
-
-assert(
-  "A: Abort message mentions 'Xylophage'",
-  is.list(gate_result) && grepl("Xylophage", gate_result$error),
-  paste0("message: ", if (is.list(gate_result)) gate_result$error else "N/A")
-)
-
-# Clean up Scenario A before Scenario B
-DBI::dbExecute(eco_con, "DELETE FROM lifestage_codes WHERE description = 'Xylophage'")
-DBI::dbExecute(eco_con, "DROP TABLE IF EXISTS lifestage_review")
-cli::cli_alert_info("Cleaned up Scenario A artifacts")
-
-# ==============================================================================
-# Section 4: Scenario B -- Proto-larva (expect warn + quarantine)
-# ==============================================================================
-
-cli::cli_h2("Scenario B: Proto-larva (expect warn + quarantine)")
-
-DBI::dbExecute(eco_con, "INSERT INTO lifestage_codes (code, description) VALUES ('PL', 'Proto-larva')")
-cli::cli_alert_info("Injected 'Proto-larva' into lifestage_codes")
-
-# Run gate logic directly -- should NOT abort
-db_lifestages <- DBI::dbGetQuery(
-  eco_con,
-  "SELECT DISTINCT description FROM lifestage_codes ORDER BY description"
-)$description
-
-unmapped <- setdiff(db_lifestages, life_stage$org_lifestage)
-if (length(unmapped) > 0) {
-  keyword_mapped <- .classify_lifestage_keywords(unmapped)
-  truly_unknown <- unmapped[keyword_mapped$harmonized_life_stage == "Other/Unknown"]
-  if (length(truly_unknown) > 0) {
-    cli::cli_abort(c(
-      "ECOTOX lifestage dictionary is incomplete.",
-      "i" = "{length(truly_unknown)} lifestage(s) could not be classified:",
-      "*" = "{truly_unknown}",
-      "i" = "Add these to the lifestage dictionary in ecotox_build.R section 16."
-    ))
-  }
-  cli::cli_alert_warning(
-    "{length(unmapped)} new lifestage(s) classified via keyword fallback. Written to lifestage_review table for manual promotion."
-  )
-  DBI::dbWriteTable(eco_con, "lifestage_review", keyword_mapped, overwrite = TRUE)
-}
-
-assert(
-  "B: Gate did not abort (reached this line)",
-  TRUE
-)
-
-assert(
-  "B: lifestage_review table exists",
-  DBI::dbExistsTable(eco_con, "lifestage_review")
-)
-
-review <- DBI::dbReadTable(eco_con, "lifestage_review")
-
-assert(
-  "B: 'Proto-larva' in review table",
-  "Proto-larva" %in% review$org_lifestage,
-  paste0("org_lifestage values: ", paste(review$org_lifestage, collapse = ", "))
-)
-
-assert(
-  "B: Proto-larva classified as 'Larva'",
-  review$harmonized_life_stage[review$org_lifestage == "Proto-larva"] == "Larva",
-  paste0("got: ", review$harmonized_life_stage[review$org_lifestage == "Proto-larva"])
-)
-
-assert(
-  "B: classification_source is 'keyword_fallback'",
-  review$classification_source[review$org_lifestage == "Proto-larva"] == "keyword_fallback",
-  paste0("got: ", review$classification_source[review$org_lifestage == "Proto-larva"])
-)
-
-# ==============================================================================
-# Section 5: Summary
-# ==============================================================================
-
-cli::cli_h2("Summary")
-
-n_pass <- sum(vapply(results, `[[`, logical(1), "pass"))
-n_fail <- length(results) - n_pass
-
-cli::cli_alert_info("Total assertions: {length(results)}")
-cli::cli_alert_info("Passed: {n_pass}")
-cli::cli_alert_info("Failed: {n_fail}")
-
-if (n_fail > 0) {
-  cli::cli_alert_danger(
-    "{n_fail} assertion(s) FAILED \u2014 review output above"
-  )
-  quit(status = 1)
-} else {
-  cli::cli_alert_success("All scenarios passed.")
-  quit(status = 0)
-}

@@ -1,52 +1,47 @@
 # Requirements: ComptoxR
 
-**Defined:** 2026-04-20
+**Defined:** 2026-04-22
 **Core Value:** Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
 
-## v2.3 Requirements
+## v2.4 Requirements
 
-Requirements for ECOTOX Lifestage Harmonization. Each maps to roadmap phases.
+Requirements for Source-Backed Lifestage Resolution. Each maps to roadmap phases.
 
-### Dictionary Schema
+### Teardown & Cleanup
 
-- [x] **DICT-01**: Lifestage dictionary expanded to 5 columns: `org_lifestage`, `harmonized_life_stage`, `ontology_id`, `reproductive_stage`, `classification_source`
-- [x] **DICT-02**: 7 harmonized categories grounded in UBERON/PO/BODC S11 ontologies (Egg/Embryo, Larva, Juvenile, Subadult, Adult, Senescent/Dormant, Other/Unknown)
-- [x] **DICT-03**: `reproductive_stage` boolean flag set independently of developmental classification
-- [x] **DICT-04**: All `classification_source` values in canonical dictionary are `"dictionary"`
+- [ ] **TEAR-01**: Remove `.classify_lifestage_keywords()` regex classifier and all references
+- [ ] **TEAR-02**: Remove `ontology_id` column from all code paths, docs, and tests
+- [ ] **TEAR-03**: Purge `lifestage_dictionary` and `lifestage_review` tables from existing `ecotox.duckdb`; rebuild on-demand via patch
 
-### Keyword Classifier
+### Provider Resolution
 
-- [x] **KWCL-01**: `.classify_lifestage_keywords()` internal function classifies character vector via priority-ordered regex
-- [x] **KWCL-02**: Reproductive flag regex fires independently of developmental stage classification
-- [ ] **KWCL-03**: Classifier achieves ≥130/144 non-Other/Unknown matches on known descriptions
+- [ ] **PROV-01**: OLS4 query adapter for UBERON and PO with `obo_id` prefix post-filtering
+- [ ] **PROV-02**: NVS SPARQL query adapter for BODC S11 with graceful degradation on endpoint failure
+- [ ] **PROV-03**: Scoring/ranking layer (100 exact, 90 normalized, 75 token/substring; resolved/ambiguous/unresolved status)
+- [ ] **PROV-04**: BioPortal Annotator as fallback provider when OLS4 returns unresolved or ambiguous terms
 
-### Build Gate
+### Data Artifacts
 
-- [ ] **GATE-01**: Build aborts with `cli::cli_abort()` when truly unknown terms detected (no keyword match)
-- [ ] **GATE-02**: Build warns with `cli::cli_alert_warning()` for keyword-classifiable unmapped terms
-- [ ] **GATE-03**: Keyword-classified terms written to `lifestage_review` staging table (not canonical dictionary)
-- [ ] **GATE-04**: `.eco_enrich_metadata()` joins only against `lifestage_dictionary`, never `lifestage_review`
+- [ ] **DATA-01**: `lifestage_baseline.csv` committed to `inst/extdata/ecotox/` covering current ECOTOX release
+- [ ] **DATA-02**: `lifestage_derivation.csv` mapping `source_ontology + source_term_id` to `harmonized_life_stage` and `reproductive_stage`
+- [ ] **DATA-03**: Cross-check gate — every resolved baseline row must have a matching derivation row before commit
 
-### Data Corrections
+### Build & Patch Integration
 
-- [x] **CORR-01**: 6 misclassifications fixed (Germinated seed, Spat, Seed, Sapling, Cocoon, Corm)
-- [x] **CORR-02**: Larva/Juvenile split applied (~30 rows reassigned per ontology-backed criteria)
-- [x] **CORR-03**: "Reproductive" category eliminated — former terms reclassified to developmental stage with `reproductive_stage = TRUE`
+- [ ] **INTG-01**: Build script section 16 in both `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` calls shared helpers identically
+- [ ] **INTG-02**: `.eco_patch_lifestage()` supports 4 refresh modes (auto/cache/baseline/live) for in-place DB patching
+- [ ] **INTG-03**: DuckDB Windows write-connection retry loop (3 attempts, 200ms back-off)
+- [ ] **INTG-04**: Patch metadata written to `_metadata` table (version, release, method, timestamp)
 
-### Integration
+### Runtime API
 
-- [ ] **INTG-01**: `.eco_enrich_metadata()` relocate call updated to include 3 new columns
-- [ ] **INTG-02**: `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R` section 16 kept in sync
-- [ ] **INTG-03**: roxygen `@return` block for `eco_results()` documents new columns
-- [ ] **INTG-04**: `devtools::document()` regenerates man pages without errors
+- [ ] **RUNT-01**: `eco_results()` exposes 8 new lifestage columns after `organism_lifestage`
+- [ ] **RUNT-02**: `ontology_id` absent from all `eco_results()` output
+- [ ] **RUNT-03**: Runtime enrichment joins only `lifestage_dictionary`, never `lifestage_review`
 
-### Validation
+### Quality
 
-- [ ] **VALD-01**: Standalone validation script passes all 10 two-axis deterministic assertions
-- [ ] **VALD-02**: All 144 current `org_lifestage` values present in new dictionary
-- [ ] **VALD-03**: Gate correctly aborts for truly unknown term (e.g., "Xylophage")
-- [ ] **VALD-04**: Gate correctly warns and quarantines for keyword-classifiable term (e.g., "Proto-larva")
-- [ ] **VALD-05**: `devtools::check()` returns 0 errors after integration
+- [ ] **QUAL-01**: Minimal mocked provider tests via `with_mocked_bindings()` for OLS4, NVS, and BioPortal adapters
 
 ## Future Requirements
 
@@ -54,8 +49,9 @@ Deferred to future milestone. Tracked but not in current roadmap.
 
 ### ECOTOX Extended
 
-- **ECOX-01**: Embedding-based classification for novel terms (BioPortal Annotator hybrid layer)
-- **ECOX-02**: Automated ontology version tracking and update detection
+- **ECOX-01**: Automated ontology version tracking and update detection
+- **ECOX-02**: Public `.eco_patch_lifestage()` API (currently internal-only)
+- **ECOX-03**: NVS `owl:sameAs` to UBERON cross-reference extraction
 
 ### Deferred from Previous Milestones
 
@@ -67,11 +63,12 @@ Deferred to future milestone. Tracked but not in current roadmap.
 
 | Feature | Reason |
 |---------|--------|
-| BioPortal Annotator API integration | Adds API dependency for ~1-3 new terms per release cycle; non-deterministic |
-| Embedding-based classification | Dictionary layer is prerequisite; can be added later without breaking static layer |
+| Full test suite for lifestage pipeline | Minimal tests only per user direction |
+| Embedding-based classification | Source-backed resolution supersedes regex approach |
 | Other ECOTOX dictionary expansions (species, media) | Separate milestone scope |
 | EPI Suite / GenRA integration | Separate milestone scope |
-| Real-time ontology version checking | Static mappings are sufficient for regulatory-grade auditability |
+| SPARQL-based OLS4 ancestor traversal | Defer to v2.5+ |
+| `.planning/phases/01-30` deletion review | Separate review item |
 
 ## Traceability
 
@@ -79,35 +76,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DICT-01 | Phase 31 | Complete |
-| DICT-02 | Phase 31 | Complete |
-| DICT-03 | Phase 31 | Complete |
-| DICT-04 | Phase 31 | Complete |
-| KWCL-01 | Phase 31 | Complete |
-| KWCL-02 | Phase 31 | Complete |
-| KWCL-03 | Phase 31 | Pending |
-| GATE-01 | Phase 32 | Pending |
-| GATE-02 | Phase 32 | Pending |
-| GATE-03 | Phase 32 | Pending |
-| GATE-04 | Phase 32 | Pending |
-| CORR-01 | Phase 31 | Complete |
-| CORR-02 | Phase 31 | Complete |
-| CORR-03 | Phase 31 | Complete |
-| INTG-01 | Phase 32 | Pending |
-| INTG-02 | Phase 32 | Pending |
-| INTG-03 | Phase 32 | Pending |
-| INTG-04 | Phase 32 | Pending |
-| VALD-01 | Phase 31 | Pending |
-| VALD-02 | Phase 31 | Pending |
-| VALD-03 | Phase 33 | Pending |
-| VALD-04 | Phase 33 | Pending |
-| VALD-05 | Phase 33 | Pending |
+| TEAR-01 | Phase 34 | Pending |
+| TEAR-02 | Phase 34 | Pending |
+| TEAR-03 | Phase 34 | Pending |
+| PROV-01 | Phase 35 | Pending |
+| PROV-02 | Phase 35 | Pending |
+| PROV-03 | Phase 35 | Pending |
+| PROV-04 | Phase 35 | Pending |
+| DATA-01 | Phase 36 | Pending |
+| DATA-02 | Phase 36 | Pending |
+| DATA-03 | Phase 36 | Pending |
+| INTG-01 | Phase 37 | Pending |
+| INTG-02 | Phase 37 | Pending |
+| INTG-03 | Phase 37 | Pending |
+| INTG-04 | Phase 37 | Pending |
+| RUNT-01 | Phase 38 | Pending |
+| RUNT-02 | Phase 38 | Pending |
+| RUNT-03 | Phase 38 | Pending |
+| QUAL-01 | Phase 39 | Pending |
 
 **Coverage:**
-- v2.3 requirements: 23 total
-- Mapped to phases: 23
-- Unmapped: 0
+- v2.4 requirements: 18 total
+- Mapped to phases: 18
+- Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 — Traceability updated after roadmap creation*
+*Requirements defined: 2026-04-22*
+*Last updated: 2026-04-22 — traceability filled after roadmap creation*

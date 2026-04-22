@@ -10,7 +10,7 @@
 A character vector of column names.
 }
 \description{
-Returns the curated set of ~45 default columns: 35 universal + 10 key
+Returns the curated set of ~32 default columns: 22 universal + 10 key
 moderate coverage columns.
 }
 \keyword{internal}

@@ -8,22 +8,27 @@ ComptoxR is an R package providing wrappers for USEPA CompTox Chemical Dashboard
 
 Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
 
-## Current Milestone: v2.2 Package Stabilization
+## Current Milestone: v2.4 Source-Backed Lifestage Resolution
 
-**Goal:** Migrate all user-facing ct_* functions to use generated stubs via `generic_request()`, classify functions by complexity, and get the package to a clean build + passing test state.
-
-**Approach (from structured debate analysis):** Modified B+C hybrid — fix mechanical blockers first, classify remaining functions by complexity, migrate thin ones as wrappers, vertical-slice complex ones, defer post-processing recipe system until concrete need surfaces.
+**Goal:** Replace the v2.3 regex-first lifestage harmonization with a source-backed ontology resolution pipeline, adding in-place patch support and real provenance tracking.
 
 **Target features:**
-- All ct_* functions migrated to generic_request() or delegating to generated stubs
-- R CMD check passes with 0 errors/warnings on current branch
-- Test generator produces correct tests for migrated functions
-- User-facing functions promoted to `@lifecycle stable`
+- Tear out v2.3 regex classifier, manual ontology IDs, and 5-column tribble
+- OLS4 (UBERON, PO) + NERC NVS (BODC S11) provider resolution with scoring
+- 13-column `lifestage_dictionary` with full source provenance chain
+- 9-column `lifestage_review` quarantine for ambiguous/unresolved terms
+- `.eco_patch_lifestage()` internal function for in-place DB patching without full rebuild
+- Release-scoped cache/baseline system with 4 refresh modes (auto/cache/baseline/live)
+- Committed baseline CSV for cold-start
+- Shared helper layer in `R/eco_lifestage_patch.R`
+- Derived fields (`harmonized_life_stage`, `reproductive_stage`) keyed from curated source IDs only
+- `eco_results()` updated: new source-backed columns, `ontology_id` removed
+- Purge existing lifestage tables from DB; rebuild on-demand
 
 ## Current State
 
-**Latest shipped:** v2.1 Test Infrastructure (2026-03-02, verified 2026-03-09)
-**Active:** v2.2 Package Stabilization — phases 27-30 created, not yet planned
+**Latest shipped:** v2.3 ECOTOX Lifestage Harmonization (2026-04-21)
+**Active:** v2.4 Source-Backed Lifestage Resolution — defining requirements
 
 **Stub generation pipeline (v1.0-v2.1) — ON HOLD:**
 The pipeline is fully functional and automated. Resuming pipeline work (advanced schema handling, S7 classes, etc.) is deferred until package stabilization is complete.
@@ -42,9 +47,9 @@ Key pipeline capabilities:
 - S7 class implementation (#29)
 - Schema-check workflow improvements (#96)
 
-**Package work (deferred past v2.2):**
+**Package work (deferred past v2.4):**
 - Post-processing recipe system (#120) — defer until concrete need surfaces
-- EPI Suite / ECOTOX / GenRA integration
+- EPI Suite / GenRA integration
 
 ## Requirements
 
@@ -103,7 +108,7 @@ Key pipeline capabilities:
 
 ### Active
 
-(Defining for v2.2 — see REQUIREMENTS.md)
+(Defining for v2.4 — see REQUIREMENTS.md)
 
 ### Out of Scope
 
@@ -115,13 +120,14 @@ Key pipeline capabilities:
 
 ## Context
 
-**v2.2 context:**
-- 40% of user-facing functions already migrated (14/35 using generic templates)
-- Current branch `feat/migrate-ct-functions` has 10+ functions partially migrated (uncommitted)
-- Functions range from trivial 1-line wrappers (ct_hazard) to complex dispatchers (ct_bioactivity with search_type switch + annotation join) to post-processors (ct_lists_all with coerce/split logic)
-- 297 pre-existing test failures from VCR/API key issues
-- Only 33 of 256 API wrappers have recorded VCR cassettes
-- Stable functions protected from stub generator overwrite via lifecycle tags (#95)
+**v2.4 context:**
+- v2.3 shipped a regex-first lifestage harmonization with manual ontology IDs — approach was wrong, provenance is cosmetic not source-backed
+- v2.4 tears out v2.3 implementation and replaces with source-backed ontology resolution via OLS4 + NERC NVS
+- Existing lifestage tables purged from DB and rebuilt on-demand
+- Target 7 harmonized categories (Egg/Embryo, Larva, Juvenile, Subadult, Adult, Senescent/Dormant, Other/Unknown) but final set adjusts based on provider API results
+- Minimal test coverage — no full test suite needed
+- Key files: `inst/ecotox/ecotox_build.R`, `data-raw/ecotox.R`, `R/eco_functions.R`, new `R/eco_lifestage_patch.R`
+- Implementation plan: LIFESTAGE_HARMONIZATION_PLAN2.md
 
 **Shipped pipeline versions (v1.0-v2.1):**
 - v1.0-v1.9: Schema parsing, stub generation, test infrastructure (2026-01-27 to 2026-02-12)
@@ -183,7 +189,9 @@ Key pipeline capabilities:
 | v1.9 | Schema check workflow fix | Complete |
 | v2.0 | Paginated requests | Complete |
 | v2.1 | Test infrastructure | Complete |
-| v2.2 | Package stabilization | Active |
+| v2.2 | Package stabilization | Complete |
+| v2.3 | ECOTOX Lifestage Harmonization | Complete |
+| v2.4 | Source-Backed Lifestage Resolution | Active |
 
 ---
-*Last updated: 2026-03-09 after doc realignment with disk state*
+*Last updated: 2026-04-22 — Milestone v2.4 started*

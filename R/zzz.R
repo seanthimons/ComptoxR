@@ -808,16 +808,16 @@ reset_servers <- function() {
 			}
 			batch_limit(limit = 200)
 
-		} else if (Sys.getenv('ctx_burl') == "") {
+		} else {
 			# Production version defaults (only if not already set)
-			ctx_server(server = 1)
-			chemi_server(server = 1)
-			epi_server(server = 1)
-			eco_server(server = 1)
-			toxval_server(server = 1)
-			np_server(server = 1)
-			cc_server(server = 1)
-			pubchem_server(server = 1)
+			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 1)
+			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 1)
+			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
+			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
+			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
+			if (Sys.getenv("np_burl") == "") np_server(server = 1)
+			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
+			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
 			# Only set verbose if not already configured
 			if (Sys.getenv("run_verbose") == "") {
 				run_verbose(verbose = FALSE)
@@ -832,6 +832,9 @@ reset_servers <- function() {
 
 	#message("Is .extractor a function? ", is.function(.extractor))
 	#message("Is .classifier a function? ", is.function(.classifier))
+
+	# Silence R CMD check "no visible binding" notes
+	utils::globalVariables(c(".ComptoxREnv"))
 }
 
 .onUnload <- function(libpath) {
@@ -843,9 +846,6 @@ reset_servers <- function() {
 	.eco_close_con()
 	.tox_close_con()
 }
-
-	# (Optional) Silence R CMD check "no visible binding" notes
-	utils::globalVariables(c(".ComptoxREnv"))
 
 # Header -----------------------------------------------------------------
 

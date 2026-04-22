@@ -51,17 +51,22 @@ A tibble of enriched test results with concentration and duration
 conversions applied. Lifestage columns included:
 \describe{
 \item{org_lifestage}{Original ECOTOX lifestage description.}
+\item{source_ontology}{Source ontology used for the canonical
+lifestage resolution (\code{UBERON}, \code{PO}, or \code{S11}) when available.}
+\item{source_term_id}{Provider term identifier for the resolved
+lifestage concept.}
+\item{source_term_label}{Provider label for the resolved lifestage
+concept.}
+\item{source_match_status}{Resolution status recorded in the canonical
+lifestage dictionary.}
 \item{harmonized_life_stage}{One of 7 harmonized categories:
 \code{"Egg/Embryo"}, \code{"Larva"}, \code{"Juvenile"}, \code{"Subadult"}, \code{"Adult"},
 \code{"Senescent/Dormant"}, \code{"Other/Unknown"}.}
-\item{ontology_id}{UBERON/PO/BODC S11 ontology term ID where a 1:1
-mapping exists; \code{NA} otherwise.}
-\item{reproductive_stage}{\code{TRUE} when the lifestage description
+\item{reproductive_stage}{\code{TRUE} when the resolved source concept
 indicates active reproductive activity (spawning, gestation,
 flowering, etc.), independent of developmental classification.}
-\item{classification_source}{Always \code{"dictionary"} for canonical
-entries. Keyword-fallback rows appear only in the \code{lifestage_review}
-staging table, never in query results.}
+\item{derivation_source}{Curated source-ID rule used to derive the
+harmonized lifestage fields.}
 }
 }
 \description{
