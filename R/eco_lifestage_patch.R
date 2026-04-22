@@ -281,7 +281,11 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
-.eco_lifestage_load_seed_cache <- function(ecotox_release, refresh = c("auto", "cache", "baseline", "live"), force = FALSE) {
+.eco_lifestage_load_seed_cache <- function(
+  ecotox_release,
+  refresh = c("auto", "cache", "baseline", "live"),
+  force = FALSE
+) {
   refresh <- rlang::arg_match(refresh)
 
   baseline <- NULL
@@ -454,16 +458,33 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     sep = "\n"
   )
 
-  payload <- httr2::request("https://vocab.nerc.ac.uk/sparql/sparql") |>
-    httr2::req_body_form(query = query) |>
-    httr2::req_headers(Accept = "application/sparql-results+json") |>
-    httr2::req_perform() |>
-    httr2::resp_body_string() |>
-    jsonlite::fromJSON(simplifyDataFrame = TRUE)
+  payload <- tryCatch(
+    {
+      httr2::request("https://vocab.nerc.ac.uk/sparql/sparql") |>
+        httr2::req_body_form(query = query) |>
+        httr2::req_headers(Accept = "application/sparql-results+json") |>
+        httr2::req_perform() |>
+        httr2::resp_body_string() |>
+        jsonlite::fromJSON(simplifyDataFrame = TRUE)
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "NVS S11 SPARQL endpoint unreachable.",
+        "i" = "NVS candidates will be skipped for this resolution run.",
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (is.null(payload)) {
+    return(tibble::tibble())
+  }
 
   bindings <- payload$results$bindings
   if (is.null(bindings) || nrow(bindings) == 0) {
-    cli::cli_abort("NVS S11 lookup returned no concepts.")
+    cli::cli_warn("NVS S11 lookup returned no concepts.")
+    return(tibble::tibble())
   }
 
   index <- tibble::tibble(
@@ -498,15 +519,31 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 .eco_lifestage_query_ols4 <- function(term, ontology = c("UBERON", "PO")) {
   ontology <- rlang::arg_match(ontology)
 
-  response <- httr2::request("https://www.ebi.ac.uk/ols4/api/search") |>
-    httr2::req_url_query(
-      q = term,
-      ontology = tolower(ontology),
-      rows = 25
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_string() |>
-    jsonlite::fromJSON(simplifyDataFrame = TRUE)
+  response <- tryCatch(
+    {
+      httr2::request("https://www.ebi.ac.uk/ols4/api/search") |>
+        httr2::req_url_query(
+          q = term,
+          ontology = tolower(ontology),
+          rows = 25
+        ) |>
+        httr2::req_perform() |>
+        httr2::resp_body_string() |>
+        jsonlite::fromJSON(simplifyDataFrame = TRUE)
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "OLS4 endpoint unreachable for {ontology}.",
+        "i" = "OLS4 candidates will be skipped for this resolution run.",
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (is.null(response)) {
+    return(tibble::tibble())
+  }
 
   docs <- response$response$docs
   if (is.null(docs) || is.null(nrow(docs)) || nrow(docs) == 0) {
@@ -541,7 +578,11 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     source_release = "current",
     source_match_method = "ols4_search"
   ) |>
-    dplyr::filter(!is.na(.data$source_term_id), !is.na(.data$source_term_label))
+    dplyr::filter(
+      !is.na(.data$source_term_id),
+      !is.na(.data$source_term_label),
+      startsWith(.data$source_term_id, paste0(toupper(ontology), ":"))
+    )
 }
 
 #' @keywords internal
@@ -571,16 +612,18 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 #' @keywords internal
 .eco_lifestage_rank_candidates <- function(org_lifestage, candidates) {
   if (nrow(candidates) == 0) {
-    return(.eco_lifestage_cache_schema() |>
-      dplyr::add_row(
-        org_lifestage = org_lifestage,
-        source_match_method = "provider_rank",
-        source_match_status = "unresolved",
-        candidate_rank = 1L,
-        candidate_score = 0,
-        candidate_reason = "no_provider_candidates",
-        ecotox_release = NA_character_
-      ))
+    return(
+      .eco_lifestage_cache_schema() |>
+        dplyr::add_row(
+          org_lifestage = org_lifestage,
+          source_match_method = "provider_rank",
+          source_match_status = "unresolved",
+          candidate_rank = 1L,
+          candidate_score = 0,
+          candidate_reason = "no_provider_candidates",
+          ecotox_release = NA_character_
+        )
+    )
   }
 
   candidates <- tibble::as_tibble(candidates) |>
@@ -588,14 +631,16 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
   ranked <- purrr::pmap_dfr(
     candidates,
-    function(source_provider,
-             source_ontology,
-             source_term_id,
-             source_term_label,
-             source_term_definition,
-             candidate_aliases,
-             source_release,
-             source_match_method) {
+    function(
+      source_provider,
+      source_ontology,
+      source_term_id,
+      source_term_label,
+      source_term_definition,
+      candidate_aliases,
+      source_release,
+      source_match_method
+    ) {
       alias_text <- if (is.null(candidate_aliases) || is.na(candidate_aliases)) "" else candidate_aliases
       texts <- c(source_term_label, unlist(strsplit(alias_text, "\\s*\\|\\s*")))
       texts <- unique(stats::na.omit(texts[nzchar(texts)]))
@@ -630,15 +675,17 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     dplyr::filter(.data$candidate_score >= 75)
 
   if (!nrow(accepted)) {
-    return(.eco_lifestage_cache_schema() |>
-      dplyr::add_row(
-        org_lifestage = org_lifestage,
-        source_match_method = "provider_rank",
-        source_match_status = "unresolved",
-        candidate_rank = 1L,
-        candidate_score = 0,
-        candidate_reason = "no_candidate_ge75"
-      ))
+    return(
+      .eco_lifestage_cache_schema() |>
+        dplyr::add_row(
+          org_lifestage = org_lifestage,
+          source_match_method = "provider_rank",
+          source_match_status = "unresolved",
+          candidate_rank = 1L,
+          candidate_score = 0,
+          candidate_reason = "no_candidate_ge75"
+        )
+    )
   }
 
   resolved <- top_score >= 90 && sum(ranked$candidate_score == top_score) == 1
@@ -711,11 +758,13 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
-.eco_lifestage_materialize_tables <- function(org_lifestages,
-                                              ecotox_release,
-                                              refresh = c("auto", "cache", "baseline", "live"),
-                                              force = FALSE,
-                                              write_cache = TRUE) {
+.eco_lifestage_materialize_tables <- function(
+  org_lifestages,
+  ecotox_release,
+  refresh = c("auto", "cache", "baseline", "live"),
+  force = FALSE,
+  write_cache = TRUE
+) {
   refresh <- rlang::arg_match(refresh)
   org_lifestages <- sort(unique(stats::na.omit(as.character(org_lifestages))))
 
@@ -822,9 +871,11 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 #' @return Invisibly, patch metadata.
 #' @keywords internal
 #' @noRd
-.eco_patch_lifestage <- function(db_path = eco_path(),
-                                 refresh = c("auto", "cache", "baseline", "live"),
-                                 force = FALSE) {
+.eco_patch_lifestage <- function(
+  db_path = eco_path(),
+  refresh = c("auto", "cache", "baseline", "live"),
+  force = FALSE
+) {
   refresh <- rlang::arg_match(refresh)
 
   if (!file.exists(db_path)) {
@@ -843,12 +894,15 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     }
   )
 
-  on.exit({
-    if (DBI::dbIsValid(con)) {
-      DBI::dbDisconnect(con, shutdown = TRUE)
-    }
-    .eco_close_con()
-  }, add = TRUE)
+  on.exit(
+    {
+      if (DBI::dbIsValid(con)) {
+        DBI::dbDisconnect(con, shutdown = TRUE)
+      }
+      .eco_close_con()
+    },
+    add = TRUE
+  )
 
   if (!DBI::dbExistsTable(con, "_metadata")) {
     cli::cli_abort("Missing {.code _metadata}; cannot patch lifestage tables.")
