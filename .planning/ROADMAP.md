@@ -91,8 +91,8 @@
 
 **Milestone Goal:** Replace v2.3 regex-first harmonization with a source-backed ontology resolution pipeline: real OLS4 + NVS provider IDs, committed baseline/derivation CSVs, in-place patch support with 4 refresh modes, and correct 8-column runtime output from `eco_results()`.
 
-- [ ] **Phase 34: Teardown** - Remove v2.3 regex classifier, ontology_id column, and purge lifestage tables from DB
-- [ ] **Phase 35: Shared Helper Layer Validation** - Confirm all 14 helper functions in eco_lifestage_patch.R load and behave correctly (OLS4, NVS, BioPortal, scoring)
+- [x] **Phase 34: Teardown** - Remove v2.3 regex classifier, ontology_id column, and purge lifestage tables from DB (completed 2026-04-22)
+- [x] **Phase 35: Shared Helper Layer Validation** - Confirm all 14 helper functions in eco_lifestage_patch.R load and behave correctly (OLS4, NVS, BioPortal, scoring) (completed 2026-04-22)
 - [ ] **Phase 36: Bootstrap Data Artifacts** - Validate and commit lifestage_baseline.csv and lifestage_derivation.csv with cross-check gate
 - [ ] **Phase 37: Build & Patch Integration** - Verify section 16 sync across both build scripts; confirm 4 refresh modes, Windows retry loop, and patch metadata
 - [ ] **Phase 38: Runtime API Finalization** - Verify eco_results() exposes 8 new columns, ontology_id is absent, and runtime join targets only lifestage_dictionary
@@ -153,7 +153,7 @@ Plans:
   3. Running `.eco_patch_lifestage(refresh = "baseline")` on a cold DB creates the `lifestage_dictionary` and `lifestage_review` tables from scratch (confirms purge-on-rebuild path is live)
 **Plans**: 1 plan
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [x] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
 
 ### Phase 35: Shared Helper Layer Validation
 **Goal**: All 14 helper functions in `R/eco_lifestage_patch.R` load cleanly and produce correct output shapes for each adapter and internal stage
@@ -165,9 +165,10 @@ Plans:
   3. NVS SPARQL adapter returns an empty tibble with a `cli_warn()` (not an abort) when the endpoint is unreachable
   4. BioPortal adapter is invoked only when OLS4 returns unresolved or ambiguous status for a term, never as a first-pass provider
   5. Scoring layer assigns tier scores (100 exact / 90 normalized / 75 token-substring) and correctly classifies candidates into resolved / ambiguous / unresolved status
-**Plans**: 1 plan
+**Plans**: 2 plans
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [x] 35-01-PLAN.md — Fix NVS/OLS4 adapter resilience (tryCatch + cli_warn) and OLS4 prefix post-filter; add PROV-02 unit test
+- [x] 35-02-PLAN.md — Create dev/lifestage/validate_35.R validation script exercising all 14 functions with scoring, failure simulation, and live prefix check
 
 ### Phase 36: Bootstrap Data Artifacts
 **Goal**: Both committed CSV artifacts are complete, internally consistent, and included in the installed package
@@ -234,8 +235,8 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 ->
 | 31. Standalone Validation | v2.3 | 2/2 | Complete | 2026-04-20 |
 | 32. Build Pipeline Integration | v2.3 | 2/2 | Complete | 2026-04-20 |
 | 33. Build Confirmation | v2.3 | 2/2 | Complete | 2026-04-20 |
-| 34. Teardown | v2.4 | 0/1 | Not started | - |
-| 35. Shared Helper Layer Validation | v2.4 | 0/? | Not started | - |
+| 34. Teardown | v2.4 | 1/1 | Complete    | 2026-04-22 |
+| 35. Shared Helper Layer Validation | v2.4 | 2/2 | Complete    | 2026-04-22 |
 | 36. Bootstrap Data Artifacts | v2.4 | 0/? | Not started | - |
 | 37. Build & Patch Integration | v2.4 | 0/? | Not started | - |
 | 38. Runtime API Finalization | v2.4 | 0/? | Not started | - |
