@@ -477,14 +477,25 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     }
   )
 
+  nvs_empty <- tibble::tibble(
+    source_provider = character(),
+    source_ontology = character(),
+    source_term_id = character(),
+    source_term_label = character(),
+    source_term_definition = character(),
+    candidate_aliases = character(),
+    source_release = character(),
+    source_match_method = character()
+  )
+
   if (is.null(payload)) {
-    return(tibble::tibble())
+    return(nvs_empty)
   }
 
   bindings <- payload$results$bindings
   if (is.null(bindings) || nrow(bindings) == 0) {
     cli::cli_warn("NVS S11 lookup returned no concepts.")
-    return(tibble::tibble())
+    return(nvs_empty)
   }
 
   index <- tibble::tibble(
@@ -588,6 +599,9 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 #' @keywords internal
 .eco_lifestage_query_nvs <- function(term) {
   index <- .eco_lifestage_nvs_index()
+  if (nrow(index) == 0) {
+    return(tibble::tibble())
+  }
   term_loose <- .eco_lifestage_normalize_term(term, mode = "loose")
   term_tokens <- unique(strsplit(term_loose, " ", fixed = TRUE)[[1]])
   term_tokens <- term_tokens[nzchar(term_tokens)]
