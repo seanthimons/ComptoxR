@@ -1,19 +1,21 @@
 # Tests for source-backed ECOTOX lifestage patching
 # -------------------------------------------------
 
-make_lifestage_cache_row <- function(org_lifestage,
-                                     ecotox_release,
-                                     source_provider = NA_character_,
-                                     source_ontology = NA_character_,
-                                     source_term_id = NA_character_,
-                                     source_term_label = NA_character_,
-                                     source_term_definition = NA_character_,
-                                     source_release = NA_character_,
-                                     source_match_method = "provider_rank",
-                                     source_match_status = "resolved",
-                                     candidate_rank = 1L,
-                                     candidate_score = 100,
-                                     candidate_reason = "exact_normalized_label") {
+make_lifestage_cache_row <- function(
+  org_lifestage,
+  ecotox_release,
+  source_provider = NA_character_,
+  source_ontology = NA_character_,
+  source_term_id = NA_character_,
+  source_term_label = NA_character_,
+  source_term_definition = NA_character_,
+  source_release = NA_character_,
+  source_match_method = "provider_rank",
+  source_match_status = "resolved",
+  candidate_rank = 1L,
+  candidate_score = 100,
+  candidate_reason = "exact_normalized_label"
+) {
   .eco_lifestage_cache_schema() |>
     dplyr::add_row(
       org_lifestage = org_lifestage,
@@ -37,14 +39,16 @@ write_lifestage_csv <- function(x, path) {
   utils::write.csv(x, path, row.names = FALSE, na = "")
 }
 
-make_provider_row <- function(source_provider,
-                              source_ontology,
-                              source_term_id,
-                              source_term_label,
-                              source_term_definition = NA_character_,
-                              candidate_aliases = NA_character_,
-                              source_release = "current",
-                              source_match_method = "provider_search") {
+make_provider_row <- function(
+  source_provider,
+  source_ontology,
+  source_term_id,
+  source_term_label,
+  source_term_definition = NA_character_,
+  candidate_aliases = NA_character_,
+  source_release = "current",
+  source_match_method = "provider_search"
+) {
   tibble::tibble(
     source_provider = source_provider,
     source_ontology = source_ontology,
@@ -77,10 +81,12 @@ mock_nvs_query <- function(rows) {
   }
 }
 
-make_patch_db <- function(descriptions = "Adult",
-                          release = "ecotox_ascii_03_12_2026.zip",
-                          with_query_tables = FALSE,
-                          include_release = TRUE) {
+make_patch_db <- function(
+  descriptions = "Adult",
+  release = "ecotox_ascii_03_12_2026.zip",
+  with_query_tables = FALSE,
+  include_release = TRUE
+) {
   path <- tempfile(fileext = ".duckdb")
   con <- DBI::dbConnect(duckdb::duckdb(), dbdir = path, read_only = FALSE)
 
@@ -487,7 +493,8 @@ test_that("patch updates only lifestage tables and _metadata", {
           "lifestage_patch_release",
           "lifestage_patch_method",
           "lifestage_patch_version"
-        ) %in% meta$key
+        ) %in%
+          meta$key
       ))
     },
     baseline = .eco_lifestage_cache_schema(),
@@ -542,7 +549,8 @@ test_that("patched DB is readable via eco_results() with new lifestage columns",
             "harmonized_life_stage",
             "reproductive_stage",
             "derivation_source"
-          ) %in% names(result)
+          ) %in%
+            names(result)
         ))
         testthat::expect_false("ontology_id" %in% names(result))
       })
@@ -551,6 +559,39 @@ test_that("patched DB is readable via eco_results() with new lifestage columns",
     derivation = derivation,
     cache = cache
   )
+})
+
+test_that("NVS failure emits warning and returns empty tibble", {
+  nvs_empty_index <- tibble::tibble(
+    source_provider = character(),
+    source_ontology = character(),
+    source_term_id = character(),
+    source_term_label = character(),
+    source_term_definition = character(),
+    source_release = character(),
+    source_match_method = character(),
+    candidate_aliases = character()
+  )
+  warned <- FALSE
+  result <- withCallingHandlers(
+    testthat::with_mocked_bindings(
+      .eco_lifestage_nvs_index = function(refresh = FALSE) {
+        cli::cli_warn("NVS S11 SPARQL endpoint unreachable. [TEST]")
+        nvs_empty_index
+      },
+      .package = "ComptoxR",
+      .eco_lifestage_query_nvs("Adult")
+    ),
+    warning = function(w) {
+      if (grepl("NVS S11 SPARQL", conditionMessage(w))) {
+        warned <<- TRUE
+      }
+      invokeRestart("muffleWarning")
+    }
+  )
+  testthat::expect_true(warned)
+  testthat::expect_s3_class(result, "tbl_df")
+  testthat::expect_equal(nrow(result), 0L)
 })
 
 test_that("section 16 remains identical in both ECOTOX build scripts", {
