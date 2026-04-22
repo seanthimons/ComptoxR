@@ -54,6 +54,8 @@ temp.R
 
 *.xlsx
 *.csv
+!inst/extdata/ecotox/lifestage_baseline.csv
+!inst/extdata/ecotox/lifestage_derivation.csv
 *.duckdb
 
 /roadmap/

@@ -249,14 +249,11 @@ eco_species <- function(query, field = c("common_name", "latin_name", "eco_group
 #'     \item{harmonized_life_stage}{One of 7 harmonized categories:
 #'       `"Egg/Embryo"`, `"Larva"`, `"Juvenile"`, `"Subadult"`, `"Adult"`,
 #'       `"Senescent/Dormant"`, `"Other/Unknown"`.}
-#'     \item{ontology_id}{UBERON/PO/BODC S11 ontology term ID where a 1:1
-#'       mapping exists; `NA` otherwise.}
 #'     \item{reproductive_stage}{`TRUE` when the lifestage description
 #'       indicates active reproductive activity (spawning, gestation,
 #'       flowering, etc.), independent of developmental classification.}
-#'     \item{classification_source}{Always `"dictionary"` for canonical
-#'       entries. Keyword-fallback rows appear only in the `lifestage_review`
-#'       staging table, never in query results.}
+#'     \item{derivation_source}{Source used to derive harmonized category and
+#'       reproductive flag; `"baseline"` for committed CSV entries.}
 #'   }
 #' @export
 #' @family ecotox
@@ -664,9 +661,8 @@ eco_results <- function(
     dplyr::relocate(
       "org_lifestage",
       "harmonized_life_stage",
-      "ontology_id",
       "reproductive_stage",
-      "classification_source",
+      "derivation_source",
       .after = "organism_lifestage"
     )
 
