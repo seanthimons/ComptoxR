@@ -1,459 +1,352 @@
 # Pitfalls Research
 
-**Domain:** R API wrapper package function migration and stabilization
-**Researched:** 2026-03-04 (updated from 2026-02-26)
+**Domain:** Ontology API resolution + DuckDB in-place patching + release-scoped caching in an existing R package
+**Researched:** 2026-04-22
 **Confidence:** HIGH
+
+---
 
 ## Critical Pitfalls
 
-### Pitfall 1: Poisoned VCR Cassettes
+### Pitfall 1: DuckDB Read-Only Handle Blocks Write Connection on Windows
 
 **What goes wrong:**
-Tests record HTTP error responses (401, 403, 500, 503) into cassettes, then replay those failures forever. Functions appear broken when they're actually fine — the cassette contains a stale error response.
+`.eco_patch_lifestage()` calls `.eco_close_con()` to release the cached read-only connection, then immediately opens a read-write connection. On Windows, the OS file lock from the read-only connection can persist for a short window after `dbDisconnect(con, shutdown = TRUE)`, so the subsequent `dbConnect(..., read_only = FALSE)` throws `IO Error: Cannot open file ... used by another process`.
 
 **Why it happens:**
-- API key expires or is not set during initial recording
-- API endpoint returns transient error (rate limit, server downtime) during cassette recording
-- Parameter mismatch sends invalid request that gets recorded with its error response
-- VCR records whatever happens first — if that's an error, that's what gets saved
+DuckDB uses OS-level file locks. On Windows, `BufferedFileWriter` takes an exclusive lock every time it opens a file (GitHub issue #17418, May 2025). Even after `shutdown = TRUE`, the Windows handle release is not always synchronous — the lock may linger one OS tick. The problem is aggravated if the R session is running inside RStudio, which can hold implicit file handles through its environment pane.
 
 **How to avoid:**
-- **Before first recording:** Verify API key is valid with manual test call
-- **Check cassette status codes:** Run `check_cassette_errors()` helper after recording
-- **Delete bad cassettes immediately:** Use `check_cassette_errors(delete = TRUE)` to remove 4xx/5xx cassettes
-- **Two-run verification:** After recording, run tests twice — first to record, second to verify playback works
+- In `.eco_patch_lifestage()`, after `.eco_close_con()`, wrap the `dbConnect(..., read_only = FALSE)` call in a retry loop with short back-off (e.g., 3 attempts × 200 ms sleep), not a bare `tryCatch`.
+- Always call `DBI::dbDisconnect(con, shutdown = TRUE)` — not the default `dbDisconnect()` — to trigger WAL checkpoint and release the lock fully.
+- Never open a read-write connection without first explicitly calling `.eco_close_con()`.
+- Document in the patch function that callers should not hold active DuckDB connections.
 
 **Warning signs:**
-- All tests for a function fail with same error
-- Test failures mention 401/403/5xx status codes
-- Cassette YAML contains `status: 403` or `status: 500`
-- Tests pass once (during recording) but fail on subsequent runs
+- `IO Error: Cannot open file ... used by another process` on the first `dbConnect` attempt in `.eco_patch_lifestage()`
+- Error only appears on Windows, not macOS/Linux
+- Error disappears if you wait a second and retry manually
+- RStudio environment pane shows DBI connection objects that haven't been invalidated
 
 **Phase to address:**
-Phase 1 (Test audit and cleanup) — scan all 717 cassettes with `check_cassette_errors()`, delete poisoned ones before migration
+Shared helper layer phase — `.eco_patch_lifestage()` connection-open sequence must include retry logic from the start.
 
 ---
 
-### Pitfall 2: Parameter Type Mismatch in Auto-Generated Tests
+### Pitfall 2: Stale Cached Read-Only Connection Survives Patch
 
 **What goes wrong:**
-Test generator blindly passes DTXSIDs to every first parameter regardless of type. Results in nonsense like `limit = "DTXSID7020182"` or `search_type = "DTXSID7020182"`. Tests run but exercise wrong code paths, giving false sense of coverage.
+`.eco_patch_lifestage()` closes the cached connection, patches the DB, then returns. The caller or a subsequent `eco_results()` call invokes `.eco_get_con()`, which opens a new read-only connection. But if the internal cache slot `.ComptoxREnv$ecotox_db` was not cleared before the patch opened its write connection, and the write connection is still the last thing stored in that slot, the next `.eco_get_con()` call returns a read-write connection rather than opening a fresh read-only one — or, worse, returns an invalid connection that triggers a DBI error.
 
 **Why it happens:**
-- Generator uses fallback logic: "If I don't know the parameter type, use a DTXSID"
-- Most API wrapper functions DO take DTXSID as first parameter (query, dtxsid)
-- Pattern works 90% of the time, fails silently 10% of the time
-- No validation that test value matches parameter semantics
+`.eco_close_con()` sets `.ComptoxREnv$ecotox_db <- NULL`. If `.eco_patch_lifestage()` forgets the second `.eco_close_con()` call at the end (step 10 in the plan), the internal slot is empty but the file still has a lock from the write connection that `on.exit` closed. The next `.eco_get_con()` opens correctly. But if an error path bypasses `on.exit`, the slot is left with a closed-but-not-nulled reference, and `DBI::dbIsValid()` may return `FALSE` rather than throwing — silently returning a dead connection object.
 
 **How to avoid:**
-- **Enhance test generator priority:** Check parameter NAME before falling back to DTXSID
-- **Use parameter name patterns:** If name contains "limit|count|size" → integer; "type|mode" → string enum
-- **Manual review:** Audit generated tests before first cassette recording
-- **Type checking:** Add assertion in test template to verify parameter type matches expected
+- Use `on.exit(.eco_close_con(), add = TRUE)` at the very start of `.eco_patch_lifestage()`, before opening the write connection. This ensures the session cache is always cleared even on error paths.
+- Call `.eco_close_con()` again explicitly after `DBI::dbDisconnect(con, shutdown = TRUE)` to null the slot regardless of whether `on.exit` already ran.
+- Test: after a successful patch, call `.eco_get_con()` and assert `DBI::dbIsValid()` returns `TRUE` and `DBI::dbGetQuery(con, "SELECT 1")` succeeds.
 
 **Warning signs:**
-- Test calls succeed but return empty results
-- Function signature takes `limit` but test passes `"DTXSID7020182"`
-- Cassette shows GET request with nonsense query parameters
-- Function has no `query` or `dtxsid` parameter but test generator used DTXSID anyway
+- `eco_results()` silently returns 0 rows after a patch
+- `DBI::dbIsValid(.ComptoxREnv$ecotox_db)` returns `FALSE` without error
+- Queries after patching throw `Invalid connection` rather than running
+- Second patch attempt fails with "file already open"
 
 **Phase to address:**
-Phase 1 (Fix test generator) — improve `get_test_value_for_param()` pattern matching before generating new tests for migrated functions
+Shared helper layer phase — connection lifecycle in `.eco_patch_lifestage()` must be fully specified in the first implementation.
 
 ---
 
-### Pitfall 3: Tidy Flag Mismatch
+### Pitfall 3: OLS4 Search Returns Out-of-Ontology Terms (local=true Ignored)
 
 **What goes wrong:**
-Function returns a list (`tidy = FALSE`) but test asserts `expect_s3_class(result, "tbl_df")`. Or vice versa. Test fails even though function works correctly. Currently affects 122 functions.
+`.eco_lifestage_query_ols4()` searches with `ontology = "uberon"` but receives UBERON terms mixed with terms from imported ontologies like CL, GO, or BFO. These cross-ontology hits score above the true UBERON match, causing a term to resolve to the wrong ontology ID — or to "ambiguous" when it should resolve cleanly.
 
 **Why it happens:**
-- Test generator defaults to `tidy = TRUE` assumption (most common case)
-- Generator's `extract_tidy_flag()` doesn't catch all patterns:
-  - Pass-through: `tidy = tidy` (function forwards its own parameter)
-  - Conditional: `if (annotate) tidy = TRUE else tidy = FALSE`
-  - Implicit: `generic_request()` defaults to `TRUE` when not specified
-- Generated stubs sometimes use `tidy = FALSE` for endpoints that return complex nested structures
+OLS4 GitHub issue #623: the `local=true` query parameter (which limits results to the specified ontology only) is ignored. Queries against UBERON with `local=true` and `local=false` return identical result sets. The current implementation does not pass `local=true`, so it is already getting cross-ontology results — but the scoring layer may not filter them correctly if a CL or BFO term ranks higher than the correct UBERON term for a given query.
 
 **How to avoid:**
-- **Read the actual call:** Generator must parse `generic_request()` call in function body
-- **Default to TRUE correctly:** If tidy parameter absent from generic_request call, it defaults to TRUE
-- **Handle pass-through:** If function signature has `tidy` parameter with no default, assume TRUE
-- **Manual override:** Test manifest should allow `tidy_override: false` for known list-return functions
+- Filter `docs` in `.eco_lifestage_query_ols4()` by `ontology_name` or `obo_id` prefix: keep only rows where `obo_id` starts with the expected prefix (e.g., `"UBERON:"` for UBERON, `"PO:"` for PO).
+- This is a post-filter on the response, independent of the `local` parameter bug.
+- Add the filter before passing candidates to `.eco_lifestage_rank_candidates()`.
 
 **Warning signs:**
-- Test expects tibble but gets list error
-- Test expects list but gets tibble error
-- Function documentation says "returns list" but test asserts tibble
-- Batch of new tests all fail with same assertion error
+- `source_term_id` values in the cache CSV contain prefixes other than `UBERON:` or `PO:` when querying those ontologies
+- A lifestage term resolves to a CL (cell line) or GO (gene ontology) term
+- `source_ontology` column says "UBERON" but `source_term_id` starts with "CL:" or "BFO:"
 
 **Phase to address:**
-Phase 2 (Thin wrapper migration) — verify tidy flag for each migrated function before generating tests
+Provider resolution phase — add prefix filter as a defense-in-depth measure regardless of OLS4 bug status.
 
 ---
 
-### Pitfall 4: Cassette Name Collisions
+### Pitfall 4: OLS4 Search Relevance Ranking Does Not Prioritize Exact Matches
 
 **What goes wrong:**
-Multiple test variants (single, batch, with annotate) overwrite each other's cassettes. Second test to run gets the wrong cached response. Or wrapper function and stub function both use same cassette name, causing cross-contamination.
+OLS4 GitHub issue #860 (Feb 2025, closed with fix in PR #1138): the search API returns more-specific subclasses ranked above the exact parent concept. For a query like `"adult"`, OLS4 may rank `"adult organism stage"` (UBERON:0000113) below `"post-juvenile adult stage"` or a more specific term. The scoring layer in `.eco_lifestage_score_text()` relies on OLS4 returning the most relevant candidate in the top rows — if the exact match is buried at row 15 out of 25, it may be missed entirely.
 
 **Why it happens:**
-- Default cassette naming: `"{function_name}_single"`, `"{function_name}_batch"`
-- Doesn't account for parameter variants: `ct_bioactivity(annotate = TRUE)` vs `ct_bioactivity(annotate = FALSE)`
-- Wrapper delegates to stub but both use cassettes named after same endpoint
-- Re-recording one test variant accidentally overwrites cassette from different variant
+OLS4 uses Solr full-text search ranking, which boosts specificity. The fix was merged but whether it is deployed on the production instance at the time of implementation is not guaranteed — EBI deploys on their own schedule.
 
 **How to avoid:**
-- **Include parameter variants in name:** `"{function_name}_{variant}_single"` where variant = "annotate" or "dtxsid_search"
-- **Namespace by function type:** User-facing wrappers use `ct_bioactivity_*`, stubs use `ct_bioactivity_data_search_*`
-- **Check manifest before recording:** If cassette exists, compare parameter signature
-- **Unique names for dispatch patterns:** `ct_bioactivity(search_type = "aeid")` → `"ct_bioactivity_aeid_single"`
+- `.eco_lifestage_query_ols4()` already fetches `rows = 25`. Do not reduce this. The scoring layer must evaluate all 25 results, not just the first.
+- `.eco_lifestage_rank_candidates()` already applies `.eco_lifestage_score_text()` across all candidates — this is the correct architecture. Do not short-circuit on the first candidate.
+- Score all 25 OLS4 results before ranking; do not trust OLS4's native ordering as a proxy for relevance.
 
 **Warning signs:**
-- Test passes individually but fails when run as suite
-- Cassette contains request for wrong parameters
-- Request body shows DTXSIDs when test called with AEID
-- Recording second test causes first test to fail
+- Exact lifestage label like `"Adult"` resolves to a specific sub-stage term instead of the parent
+- The correct term ID appears in `lifestage_review` as ambiguous rather than in `lifestage_dictionary` as resolved
+- Manually querying `https://www.ebi.ac.uk/ols4/api/search?q=adult&ontology=uberon&rows=25` shows the exact term is not in position 1
 
 **Phase to address:**
-Phase 2 (Thin wrappers) and Phase 3 (Complex dispatchers) — establish cassette naming convention before migrating dispatch functions
+Provider resolution phase — the current design of scoring all candidates is correct; verify it is not short-circuiting before writing tests.
 
 ---
 
-### Pitfall 5: Post-Processing Logic Lost in Regeneration
+### Pitfall 5: NVS SPARQL Endpoint Unavailability Silently Empties the Index
 
 **What goes wrong:**
-User-facing function has valuable post-processing (coerce lists, join annotations, filter results) but stub regeneration overwrites it. Post-processing must be manually re-added after every schema update.
+`.eco_lifestage_nvs_index()` makes a SPARQL POST to `https://vocab.nerc.ac.uk/sparql/sparql`. If the NVS endpoint is down or returns an unexpected content type, `httr2::resp_body_string()` may succeed (returning an HTML error page), and `jsonlite::fromJSON()` will throw a parse error. The current implementation aborts with `"NVS S11 lookup returned no concepts"` — but only if `bindings` is NULL or empty. An HTML error page parsed as string may not reach `fromJSON` at all, instead throwing a condition that propagates uncaught.
 
 **Why it happens:**
-- Generated stubs are pure API wrappers (query → request → response)
-- User-facing functions add value on top: `ct_bioactivity()` can join assay annotations, `ct_lists_all()` can coerce comma-separated strings
-- Lifecycle protection prevents STABLE functions from being overwritten
-- But during migration, functions are still EXPERIMENTAL — one schema update could wipe post-processing
+The NVS SPARQL endpoint at BODC is a research infrastructure service without a published SLA. The ARGO monitoring probe (`ARGOeu/sdc-nerc-spqrql`) exists precisely because the endpoint has known availability concerns. An HTML 503 or maintenance page passes httr2's HTTP status check if the server returns 200 with an error body.
 
 **How to avoid:**
-- **Promote to STABLE early:** As soon as post-processing is added and tested, add `@lifecycle stable`
-- **Separate wrapper from stub:** User function `ct_bioactivity()` delegates to generated `ct_bioactivity_data_search_bulk()`, never calls `generic_request()` directly
-- **Deferred recipe system:** Track post-processing recipes in separate YAML, auto-apply during generation (deferred to post-v2.2)
-- **Test the delta:** Tests should verify post-processing (annotation join, coercion) not just that API call succeeds
+- Wrap the entire NVS request in `tryCatch`, catching both HTTP errors and JSON parse errors. On failure, return an empty tibble with a `cli::cli_warn()` rather than aborting.
+- When the NVS index is empty (0 rows), log a warning but allow OLS4-only resolution to proceed rather than aborting the entire patch.
+- The session cache in `.ComptoxREnv$eco_lifestage_nvs_index` should only be written on a successful non-empty response. A failed or empty response must not overwrite a previously cached index.
 
 **Warning signs:**
-- Schema update PR shows diff removing coerce/split logic
-- Function suddenly returns raw API response instead of processed tibble
-- Conditional projection logic (`if (return_dtxsid) projection = "withdtxsids"`) gets removed
-- User reports "function used to join annotations, now it doesn't"
+- All lifestage terms suddenly have no NVS candidates
+- `source_provider` column in the cache contains only `"OLS4"` entries after a fresh live lookup
+- `cli_warn` message about NVS during patch that was not present in earlier runs
+- `jsonlite::fromJSON` error in stack trace during `.eco_lifestage_nvs_index()`
 
 **Phase to address:**
-Phase 3 (Complex functions) — ensure lifecycle badges added BEFORE adding post-processing logic
+Provider resolution phase — NVS query function must handle endpoint failures gracefully before the function is used in the patch path.
 
 ---
 
-### Pitfall 6: Premature Lifecycle Promotion
+### Pitfall 6: Cross-Release Cache Contamination
 
 **What goes wrong:**
-Function promoted to `@lifecycle stable` before it's truly stable. Now stuck supporting incomplete implementation or awkward API because breaking changes require deprecation cycle.
+A user runs `.eco_patch_lifestage(refresh = "cache")` against a DB with `ecotox_release = "2024-12"` but their user cache directory contains a file named `ecotox_lifestage_2024_12.csv` that was actually generated against a different DB build (same release identifier, different content). The cache validation in `.eco_lifestage_validate_cache()` passes because the `ecotox_release` column values match — but the `org_lifestage` terms in the cache do not match the current DB's `lifestage_codes.description` values.
 
 **Why it happens:**
-- Pressure to show progress: "We migrated 14 functions to stable!"
-- Misunderstanding lifecycle promise: STABLE means "breaking changes need deprecation", not "code is bug-free"
-- Function appears complete (tests pass, docs exist) but edge cases not considered
-- Eager to protect from stub regeneration — use STABLE as protection mechanism
+The release ID is derived from the ZIP filename (e.g., `ecotox_ascii_12_2024.zip` → `ecotox_ascii_12_2024`), not from a content hash. If the user downloaded two different ECOTOX builds that both produced the same release string, the cache file is the same path, and the second build silently uses the first build's resolution results. This is most likely when ECOTOX posts a corrected release with the same date code.
 
 **How to avoid:**
-- **Stable checklist:**
-  - [ ] All parameters tested (not just happy path)
-  - [ ] Error handling verified (API errors, network failures)
-  - [ ] Return type won't change (tibble vs list decided)
-  - [ ] Parameter names final (won't rename `query` to `dtxsid`)
-  - [ ] Post-processing complete (won't add new transformations)
-  - [ ] Documentation reviewed by user
-- **Use maturing as transition:** Functions can be `@lifecycle maturing` — users can rely on them, but breaking changes possible
-- **Separate protection from stability:** Stub generator protects maturing AND stable, not just stable
-- **User testing period:** Keep experimental/maturing for at least one release cycle
+- After loading the cache, validate that every `org_lifestage` value in the cache is present in the DB's current `lifestage_codes.description` set. Log a warning (not an abort) for any cache entries with no corresponding DB row.
+- After patching, validate that every distinct `lifestage_codes.description` in the DB has a corresponding row in `lifestage_dictionary` or `lifestage_review`. Missing terms indicate the cache was stale.
+- Document the release ID derivation so users understand it is not content-addressed.
 
 **Warning signs:**
-- Function promoted to stable same day as migration PR
-- No user testing between experimental and stable
-- Debate about whether to add new parameter: "But it's already stable!"
-- Documentation says stable but has TODOs or "not yet implemented"
+- `lifestage_dictionary` + `lifestage_review` row count after patch does not equal the count of distinct `lifestage_codes.description`
+- Terms present in `lifestage_codes` but absent from both tables after patch
+- `_metadata.lifestage_patch_method` shows `"cache"` but user reports unexpected classification for a known term
 
 **Phase to address:**
-Phase 4 (Lifecycle review) — audit STABLE candidates, demote any that don't meet checklist
+In-place patch function phase — post-patch completeness check must be part of the patch function's success criteria.
 
 ---
 
-### Pitfall 7: Test Manifest Ignored During Regeneration
+### Pitfall 7: `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` Section 16 Drift
 
 **What goes wrong:**
-Test generator creates `test-ct_function.R`, developer manually improves it (adds edge cases, better assertions), marks protected in manifest, but later regeneration script doesn't check manifest and overwrites manual improvements.
+A developer modifies section 16 in one file but not the other. Both files are in version control and both are tested, but the test only runs one of them. After the next full ECOTOX build, the lifestage tables are built from the diverged version, producing different results than the patch path — which always uses the shared helper layer.
 
 **Why it happens:**
-- Manifest check happens in `generate_test_file()` but not in calling scripts
-- CI automation runs `generate_all_tests(force = TRUE)` ignoring protection
-- Developer doesn't know manifest exists or how to mark tests protected
-- Regeneration scripts bypass manifest (direct file writes)
+Keeping two copies of the same logic synchronized is inherently fragile. The plan explicitly requires "both section 16 copies must remain identical after implementation" but provides no mechanical enforcement. A future contributor fixing a bug in `data-raw/ecotox.R` has no automated reminder to apply the same fix to `inst/ecotox/ecotox_build.R`.
 
 **How to avoid:**
-- **Enforce manifest in CI:** `generate_all_tests()` must respect `status: protected` in manifest
-- **Never use force=TRUE in CI:** Force flag should only be used in manual regeneration after schema update
-- **Auto-protect on edit:** Git pre-commit hook detects manual test edits, adds to manifest
-- **Visual indication:** Test file header comment shows: `# Status: protected (last edited 2026-03-01)`
+- Add a CI check (or a `devtools::check()` custom lint) that diffs the two section 16 blocks and fails if they diverge. Even a simple `diff` check in a GitHub Actions step is sufficient.
+- Alternatively, factor section 16 into the shared helper layer completely so neither script contains the logic inline — both scripts just call `.eco_lifestage_materialize_tables()` with the same arguments, and section 16 becomes a 5-line call site in each.
+- The current implementation already calls `.eco_lifestage_materialize_tables()` from section 16 — verify the call sites are identical and add the diff check.
 
 **Warning signs:**
-- Developer complains "I fixed this test yesterday, why is it broken again?"
-- Test file diff shows reversion to auto-generated version
-- Manifest has `status: protected` but file was regenerated anyway
-- CI log shows "Generated X tests" including files that should be protected
+- Full-build lifestage tables differ from patch-produced tables for the same release
+- Git blame shows section 16 in one file modified more recently than the other
+- `diff data-raw/ecotox.R inst/ecotox/ecotox_build.R` produces section 16 differences
+- A bug fix PR touches only one of the two files
 
 **Phase to address:**
-Phase 1 (Test infrastructure audit) — verify manifest protection works, add pre-commit hook
+Build script integration phase — add the diff check to the verification step, not as a post-merge afterthought.
 
 ---
 
-### Pitfall 8: 297 Pre-Existing Failures Mask New Failures
+### Pitfall 8: Derivation Map Miss Sends Resolved Terms to Review
 
 **What goes wrong:**
-Test suite already has 297 failures. New migration breaks 5 more tests but no one notices because test failure count is always high. Regression goes undetected until user reports bug.
+A term resolves cleanly to `UBERON:0000113` (adult) with `source_match_status = "resolved"`, but `lifestage_derivation.csv` has no row for `(UBERON, UBERON:0000113)`. Per the plan: "If a source-backed resolved row lacks a derivation mapping, it is quarantined as review data instead of entering `lifestage_dictionary`." The patch completes with a warning, but the caller of `eco_results()` sees a row with `source_match_status = "resolved"` that has no `harmonized_life_stage` — because the join to `lifestage_dictionary` found nothing for that term.
 
 **Why it happens:**
-- "Some tests fail" becomes normalized — team stops investigating failures
-- CI shows red but PR gets merged anyway
-- New failures hidden in noise: 297 → 302 doesn't trigger alarm
-- No baseline: "Is this new or was it already broken?"
+The derivation map (`lifestage_derivation.csv`) is a manually curated file. It must be populated before the patch runs. If the committed baseline CSV covers 139 terms but the derivation map covers only 120, the 19 missing terms will always be quarantined — silently, with only a `cli_alert_warning()` count.
 
 **How to avoid:**
-- **Quarantine broken tests:** Move to `tests/testthat/broken/` directory (not run by default)
-- **Track failure count:** CI fails if failure count INCREASES from baseline
-- **Fix in stages:** Phase 1 = audit (categorize failures), Phase 2 = fix VCR issues, Phase 3 = fix code issues
-- **Per-function CI:** Migration PR for `ct_hazard()` must pass `test-ct_hazard.R` even if other tests fail
-- **Protected functions:** STABLE functions must have passing tests, EXPERIMENTAL can be broken
+- During the baseline CSV generation, cross-check every `resolved` entry against the derivation map and abort if any resolved term has no derivation row.
+- The warning message from `.eco_lifestage_materialize_tables()` should print the specific `org_lifestage` terms that were quarantined due to missing derivation, not just the count.
+- Before committing `lifestage_baseline.csv`, run a local patch against the current DB with `refresh = "baseline"` and assert that `nrow(lifestage_review) == 0` for expected-clean terms.
 
 **Warning signs:**
-- PR review comment: "Tests were already failing, not my problem"
-- Test failure count steadily increases over time
-- Developer runs `devtools::test()` and immediately Ctrl+C because "it'll fail anyway"
-- No one knows which tests are expected to fail
+- Patch completes but `nrow(lifestage_review) > 0` for terms that were previously in `lifestage_dictionary`
+- `eco_results()` returns `NA` for `harmonized_life_stage` on terms that have `source_match_status = "resolved"`
+- Warning: "X lifestage row(s) quarantined" after a patch where X was 0 in the previous run
+- `lifestage_dictionary` row count is lower than expected after patch
 
 **Phase to address:**
-Phase 1 (Test audit) — categorize all 297 failures, quarantine unfixable ones, prioritize fixable ones
+Bootstrap artifact phase (baseline CSV generation) and derivation map population — these must be built and cross-checked together.
 
 ---
 
-### Pitfall 9: Cassette Re-recording with Wrong Parameters
+### Pitfall 9: `system.file()` Returns Empty String for Missing Baseline
 
 **What goes wrong:**
-Original test had parameter bug (wrong type, wrong value), cassette recorded bad request, developer fixes parameter but re-runs test without deleting cassette. VCR replays old request, test still fails, developer confused why fix didn't work.
+`.eco_lifestage_baseline_path()` calls `system.file("extdata", "ecotox", "lifestage_baseline.csv", package = "ComptoxR")`. If the file was not included in the built package (missing from `inst/extdata/ecotox/`), `system.file()` returns `""` — not an error. The function then tries the dev path `inst/extdata/ecotox/lifestage_baseline.csv`, which also doesn't exist, and finally aborts. But in a user's installed package, the abort message says "Committed lifestage baseline CSV not found" with no indication of what went wrong at install time.
 
 **Why it happens:**
-- VCR matches on request signature (method + URI + body by default)
-- Fixed parameter changes request body → no longer matches cassette
-- VCR tries to make real HTTP call, but API key not set in CI environment
-- Or VCR's "if cassette exists, must use it" rule prevents new recording
-- Developer doesn't realize cassette must be deleted for fix to work
+`system.file()` silently returns `""` for missing files unless `mustWork = TRUE` is set. Files under `inst/` are only included in the installed package if they were present at `R CMD build` time. A `.Rbuildignore` entry, a missing `inst/extdata/ecotox/` directory, or a forgotten `git add` will silently exclude the baseline from the installed package.
 
 **How to avoid:**
-- **Document re-recording workflow:**
-  1. Fix parameter bug in test code
-  2. Delete cassette: `delete_cassettes("function_name*")`
-  3. Verify API key set: `Sys.getenv("ctx_api_key")`
-  4. Run test to record: `testthat::test_file("test-ct_function.R")`
-  5. Verify cassette: `check_cassette_safety("ct_function")`
-- **Use record mode once:** `vcr::use_cassette("name", record = "once")` won't re-record if cassette exists
-- **CI re-recording:** Separate workflow for "re-record all cassettes" with API key secret
+- Use `system.file(..., mustWork = FALSE)` and check `nzchar()` explicitly — the current implementation does this correctly — but add a `cli::cli_abort()` message that includes the expected installed path so users can diagnose installation issues.
+- In `devtools::check()` output, verify the baseline CSV appears in the installed package by checking `list.files(system.file("extdata", "ecotox", package = "ComptoxR"))`.
+- Add `inst/extdata/ecotox/` to `.gitkeep` tracking so the directory is never accidentally absent from the repo.
 
 **Warning signs:**
-- Developer says "I fixed the parameter but test still fails"
-- Error message: "Could not find cassette matching request"
-- Cassette modification time older than test file modification time
-- Test passes locally (developer has API key) but fails in CI (no key, tries to use cassette)
+- `system.file("extdata", "ecotox", "lifestage_baseline.csv", package = "ComptoxR")` returns `""` in a freshly installed package
+- `.eco_lifestage_baseline_path()` aborts in a user environment that does not have the dev tree
+- `refresh = "baseline"` always falls through to `refresh = "auto"` with `force = TRUE` because baseline is never found
 
 **Phase to address:**
-Phase 1 (Documentation) — write re-recording workflow, add to CLAUDE.md and README
+Bootstrap artifact phase — verify the baseline CSV is included in `devtools::check()` output before committing.
 
 ---
 
-### Pitfall 10: Dispatch Pattern Cassette Explosion
+### Pitfall 10: Windows Temp Path in R Network Calls During Live Lookup
 
 **What goes wrong:**
-Function like `ct_bioactivity()` dispatches to 4 different endpoints based on `search_type` parameter. Each combination needs cassette: single+dtxsid, batch+dtxsid, single+aeid, batch+aeid, single+spid... = 12+ cassettes for one function. Recording/maintaining becomes overwhelming.
+On Windows, httr2 and jsonlite may use `tempdir()` internally for response buffering. If `tempdir()` resolves to a path with spaces (e.g., `C:\Users\John Smith\AppData\Local\Temp`) or to a network-mapped drive, the response buffer write can fail or R can segfault during `jsonlite::fromJSON()` on the buffered response.
 
 **Why it happens:**
-- Dispatch pattern multiplies test variants: 4 search types × 3 test variants (single/batch/error) = 12 cassettes
-- Each cassette must be recorded, verified, maintained
-- Schema update may affect only one endpoint but all cassettes must be re-checked
-- Easy to forget a variant: "Did I test annotate=TRUE with search_type='spid'?"
+R on Windows has documented issues with temp paths containing spaces (known since at least 2019). The CLAUDE.md for this project explicitly notes: "R on Windows may segfault on network calls. If an R network fetch fails or segfaults, fall back to downloading via curl first." The live lookup path in `.eco_lifestage_query_ols4()` and `.eco_lifestage_nvs_index()` makes multiple sequential HTTP requests — increasing exposure to this failure mode.
 
 **How to avoid:**
-- **Minimal cassette strategy:** Only record happy path for each search_type, skip batch variants for dispatch tests
-- **Separate dispatch from execution:** Test dispatch logic (which function gets called) without cassettes, test execution with cassettes in stub tests
-- **Parameterized tests:** Use `testthat::test_that()` with loop over search_types, single cassette per type
-- **Stub testing priority:** User-facing function tests dispatch, generated stub tests test API interaction
+- The live lookup functions already use `httr2::req_perform() |> httr2::resp_body_string() |> jsonlite::fromJSON()` — this is the correct in-memory pipeline that avoids temp file writes.
+- Do not switch to response body save-to-file patterns unless forced to by memory constraints.
+- If a user reports segfaults during live lookup, the recovery is: download the OLS4 response via `curl`, save to a temp file using `tempfile()` (which uses R's `tempdir()`, not shell temp), and parse from the file.
+- The cache/baseline modes avoid all network calls entirely — this is one reason those modes are preferable for CI.
 
 **Warning signs:**
-- Test file has 15+ `use_cassette()` blocks
-- Developer avoids adding test variant because "too many cassettes"
-- Test failure in one variant, unclear if other variants broken too
-- CI takes 10+ minutes to record cassettes for one function
+- Segfaults only occur on live lookup, not cache or baseline modes
+- Segfaults correlate with Windows usernames containing spaces
+- `tempdir()` in the user's session returns a path with spaces
+- Error: `cannot open file '...' for writing`
 
 **Phase to address:**
-Phase 3 (Complex dispatchers) — establish cassette strategy for dispatch patterns before migrating `ct_bioactivity()`
+Provider resolution phase — document in `.eco_lifestage_query_ols4()` that it must not use temp files for response handling.
 
 ---
 
 ## Technical Debt Patterns
 
-Shortcuts that seem reasonable but create long-term problems.
-
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
 |----------|-------------------|----------------|-----------------|
-| Skip VCR cassette for "simple" functions | Tests run fast without API key | Silent breakage when API response format changes | Never — even simple endpoints need cassette verification |
-| Copy-paste test from similar function | Fast test creation | Wrong assertions, parameter types; spreads bugs to new tests | Acceptable for rapid prototyping IF reviewed before commit |
-| Mark all functions STABLE to prevent regeneration | Protection from stub overwrite | Stuck supporting half-baked API, can't iterate without deprecation | Never — use `maturing` or improve stub generator protection |
-| Use generic DTXSID test value for all functions | Generator logic simple, works 90% of time | 10% silent failures (wrong parameter types) | Acceptable as fallback IF name-based matching tried first |
-| Commit cassettes without safety check | Fast iteration | Leak API keys, credentials | Never — must run `check_cassette_safety()` before commit |
-| Defer fixing pre-existing test failures | Can focus on new features | New failures hidden in noise, regression detection impossible | Acceptable short-term IF failures tracked and quarantined |
-| Use same cassette name for wrapper and stub | Simpler organization | Cross-contamination, test failures when both run | Never — must namespace by function type |
+| Using OLS4 native ranking order instead of scoring all results | Faster scoring logic | Misses exact match buried below specific subclasses (OLS4 issue #860) | Never — score all returned rows |
+| Skipping prefix filter on OLS4 results | Fewer lines of code | Cross-ontology term IDs in lifestage_dictionary (CL:, BFO:, GO: in UBERON slot) | Never — filter by obo_id prefix |
+| Single `.eco_close_con()` call before write | Simpler code | Windows file lock race condition on re-open | Never — use retry loop |
+| Release ID from ZIP filename only | Simple derivation | Cache reuse across corrected builds with same date code | Acceptable if post-patch completeness check is in place |
+| Keeping section 16 logic inline in both scripts | No refactor needed | Drift between build and patch paths | Never — call shared helper from both |
+| Committing baseline CSV without cross-checking derivation map | Faster initial setup | Resolved terms quarantined silently at every patch | Never — cross-check before commit |
+| NVS failure aborts the entire patch | Simpler error handling | Patch fails when NVS is temporarily down; OLS4-only resolution is viable fallback | Never — degrade gracefully to OLS4-only |
+
+---
 
 ## Integration Gotchas
 
-Common mistakes when connecting VCR, testthat, generic_request, and stub generator.
-
 | Integration | Common Mistake | Correct Approach |
 |-------------|----------------|------------------|
-| VCR + httr2 | Assume VCR auto-detects parameter changes | Must manually delete cassettes after fixing parameter bugs, VCR won't auto-invalidate |
-| testthat + auto-generation | Overwrite manually-improved tests | Check test manifest for `status: protected` before regeneration |
-| generic_request + tidy flag | Test assumes `tidy = TRUE` (default) but function passes `tidy = FALSE` | Generator must read actual `tidy` parameter from `generic_request()` call |
-| Stub regeneration + lifecycle | Regenerate STABLE function, lose post-processing | Stub generator must check for `@lifecycle stable` and skip, or use wrapper pattern |
-| VCR + API errors | Record 403/500 error, replay forever | Check cassettes with `check_cassette_errors()`, delete bad ones before committing |
-| Test generator + dispatch | Generate one cassette name for function with multiple search_type variants | Include variant in cassette name: `ct_bioactivity_dtxsid_single` |
-| CI + re-recording | Try to re-record cassettes without API key | Either: (1) skip cassette tests in CI if API key missing, or (2) provide key as secret |
-| Wrapper + stub testing | Test both in isolation, cassette names collide | Use different cassette prefixes: `ct_bioactivity_*` for wrapper, `ct_bioactivity_data_search_*` for stub |
+| OLS4 + ontology filter | Passing `local=true` and trusting it works | Post-filter by `obo_id` prefix after receiving results (OLS4 issue #623 — `local=true` is ignored) |
+| OLS4 + scoring | Trusting rank position 1 is the exact match | Score all returned rows; exact match may be at position 15+ due to OLS4 relevance bug |
+| NVS SPARQL + error handling | Letting JSON parse error propagate uncaught from HTML 503 body | Wrap in `tryCatch`; return empty tibble with warning on any failure |
+| DuckDB read-write + Windows | Opening write connection immediately after `dbDisconnect` | Retry loop with 200 ms back-off; always `shutdown = TRUE` on disconnect |
+| Cache + release ID | Assuming same release string = same content | Post-patch completeness check: every `lifestage_codes.description` must appear in dictionary or review |
+| `system.file()` + baseline CSV | Trusting empty string return to be caught | Check `nzchar()` and abort with diagnostic path; verify file presence in `devtools::check()` |
+| Derivation map + resolved terms | Building baseline before derivation map is complete | Cross-check resolved baseline entries against derivation map rows before committing either |
+| Build scripts + shared helper | Calling shared helper differently from each script | Both section 16 call sites must be textually identical; enforce with CI diff check |
+
+---
 
 ## Performance Traps
 
-Patterns that work at small scale but fail as usage grows.
-
 | Trap | Symptoms | Prevention | When It Breaks |
 |------|----------|------------|----------------|
-| Record cassette for every test variant | Test recording takes 30+ minutes with 1000+ cassettes | Use parameterized tests, reduce cassette count, test dispatch logic separately | >500 cassettes or >100 endpoints |
-| Re-record ALL cassettes after every schema change | Hours-long CI runs, developer avoidance | Detect which endpoints changed, only re-record affected cassettes | >200 cassettes |
-| Test generator parses every R file on every run | Slow test generation (>5 minutes) | Cache parsed metadata, only re-parse changed files | >300 R files |
-| Commit all 717 cassettes to repo | Git slow, PRs huge, merge conflicts frequent | Use Git LFS for cassettes, or store cassettes in CI artifacts | >500 cassettes or >50 MB total |
-| Run full test suite on every commit | CI takes 20+ minutes, developers stop using CI | Split into fast unit tests (no cassettes) and slow integration tests (with cassettes) | >1000 tests or >297 failures |
+| Per-term OLS4 requests for 139 terms | Live lookup takes 5–10 minutes; 139 sequential HTTP calls | Cache/baseline modes avoid all live calls; live mode is a one-time cost per release | Acceptable for live mode; CI must always use cache or baseline |
+| NVS index fetched per term | 139 SPARQL calls to BODC | Session-level cache in `.ComptoxREnv$eco_lifestage_nvs_index` — fetch once, reuse | Currently handled correctly; do not remove the session cache |
+| Scoring all 25 OLS4 results × 3 providers × 139 terms | Noticeable but not blocking (~40k string comparisons) | R vectorized string ops; acceptable cost | Only breaks at thousands of terms, not 139 |
+| Reading derivation CSV on every patch | Minor I/O overhead | Acceptable; file is small | Not a real concern at current scale |
 
-## Security Mistakes
-
-Domain-specific security issues beyond general web security.
-
-| Mistake | Risk | Prevention |
-|---------|------|------------|
-| Commit cassette without filtering API key | Key leaked in public repo | Always configure `filter_sensitive_data` in vcr_configure(), verify with `check_cassette_safety()` |
-| Hard-code API key in test | Key in version control, exposed to all contributors | Use environment variable, document in .env.example (not .env) |
-| Include PII in cassette | GDPR/HIPAA violation, chemical data exposure | Filter query parameters, use synthetic test data (DTXSID7020182 = Bisphenol A, public) |
-| Record production API calls with real user data | Expose confidential research | Use staging API for recording, or use synthetic/public chemical identifiers |
-| Share cassettes with API errors containing auth details | Error messages may contain token fragments | Check cassettes for `Authorization:` headers, `Bearer` tokens before committing |
+---
 
 ## "Looks Done But Isn't" Checklist
 
-Things that appear complete but are missing critical pieces.
+- [ ] **Patch function:** Closes read-only connection before opening write connection AND reopens read-only after patching — verify both `.eco_close_con()` calls are present
+- [ ] **OLS4 query:** Results filtered by `obo_id` prefix to exclude cross-ontology hits — verify no `CL:`, `GO:`, or `BFO:` prefixes appear in a test result set
+- [ ] **NVS query:** Wrapped in `tryCatch` that returns empty tibble with warning rather than aborting — verify behavior when endpoint is unreachable
+- [ ] **Baseline CSV:** Every resolved entry has a matching row in `lifestage_derivation.csv` — verify cross-check passes before committing
+- [ ] **Section 16 sync:** Both build scripts call shared helper identically — run `diff` and verify 0 differences in the section 16 call site
+- [ ] **Post-patch completeness:** Row count in `lifestage_dictionary + lifestage_review` equals distinct `lifestage_codes.description` count — verify in test
+- [ ] **Windows retry loop:** Write connection open includes retry logic — verify on Windows by simulating delayed lock release
+- [ ] **`inst/extdata` inclusion:** `lifestage_baseline.csv` and `lifestage_derivation.csv` appear in `devtools::check()` installed file listing — verify before tagging release
 
-- [ ] **Migrated function:** Tests pass but cassettes recorded with wrong parameters — verify parameter types match function signature
-- [ ] **Lifecycle badge:** Function marked STABLE but post-processing not complete — verify all planned features implemented
-- [ ] **Test coverage:** Function has tests but only happy path — verify error cases, edge cases, batch requests tested
-- [ ] **VCR cassettes:** Cassettes exist but contain HTTP errors — run `check_cassette_errors()` to verify clean responses
-- [ ] **Documentation:** Roxygen docs exist but examples not tested — run examples manually, verify outputs correct
-- [ ] **Wrapper function:** Delegates to stub but doesn't add value — verify post-processing, parameter validation, or user-friendly errors added
-- [ ] **Dispatch pattern:** Switch statement routes to stubs but variants not all tested — verify cassette per search_type
-- [ ] **Test manifest:** File marked protected but not in manifest — verify entry in `dev/test_manifest.json` with status and date
-- [ ] **API key filtering:** Cassette recorded but VCR filter not configured — verify `<<<API_KEY>>>` placeholder in YAML, not actual key
-- [ ] **Lifecycle protection:** Function STABLE but stub generator can still overwrite — verify generator checks for `@lifecycle stable` tag
+---
 
 ## Recovery Strategies
 
-When pitfalls occur despite prevention, how to recover.
-
 | Pitfall | Recovery Cost | Recovery Steps |
 |---------|---------------|----------------|
-| Poisoned cassettes | LOW | (1) Run `check_cassette_errors(delete = TRUE)`, (2) verify API key set, (3) re-run tests to record clean cassettes |
-| Parameter type mismatch | LOW | (1) Fix test to use correct parameter type, (2) delete cassette, (3) re-record with correct request |
-| Tidy flag mismatch | LOW | (1) Check actual `tidy` parameter in function, (2) update test assertion (tibble vs list), (3) no cassette change needed |
-| Cassette name collision | MEDIUM | (1) Rename cassettes to include variant, (2) update test to use new names, (3) delete old cassettes, (4) re-record |
-| Post-processing lost | MEDIUM | (1) Restore from git history, (2) add `@lifecycle stable` to prevent future loss, (3) add test for post-processing logic |
-| Premature lifecycle promotion | HIGH | (1) Assess breaking change need, (2) if YES: add deprecation warnings, plan migration in next version, (3) if NO: keep as-is, document limitations |
-| Test manifest ignored | LOW | (1) Restore protected tests from git, (2) verify manifest entries exist, (3) update generator to check manifest |
-| Pre-existing failures mask new failures | HIGH | (1) Quarantine broken tests, (2) establish baseline failure count, (3) CI fails on increase from baseline, (4) fix in phases |
-| Re-recording with wrong parameters | LOW | (1) Delete cassettes, (2) fix parameters in test, (3) verify API key set, (4) re-record |
-| Cassette explosion | MEDIUM | (1) Reduce cassette count (test dispatch separately from execution), (2) use parameterized tests, (3) focus on critical variants |
+| Windows write connection blocked | LOW | Retry automatically via loop in patch function; if still blocked, user must restart R session |
+| Stale cache contamination | LOW | Delete cache file at `.eco_lifestage_cache_path(ecotox_release)`; re-run with `refresh = "live"` |
+| Section 16 drift | MEDIUM | Diff both files; manually reconcile; add CI check to prevent recurrence |
+| Derivation map miss | MEDIUM | Add missing rows to `lifestage_derivation.csv`; re-run patch with `refresh = "cache"` (no new live lookup needed) |
+| Baseline CSV missing from installed package | HIGH | Reinstall package from source; add file to `inst/extdata/ecotox/`; rebuild |
+| Cross-ontology term in dictionary | LOW | Delete user cache; re-run with `refresh = "live"` after adding prefix filter to query function |
+| NVS unavailable during live lookup | LOW | Re-run with `refresh = "cache"` or `refresh = "baseline"` to bypass live lookup entirely |
+
+---
 
 ## Pitfall-to-Phase Mapping
 
-How roadmap phases should address these pitfalls.
-
 | Pitfall | Prevention Phase | Verification |
 |---------|------------------|--------------|
-| Poisoned cassettes | Phase 1: Test audit | Run `check_cassette_errors()`, count = 0 |
-| Parameter type mismatch | Phase 1: Fix test generator | Audit generated tests, verify correct parameter types in all 7 affected files |
-| Tidy flag mismatch | Phase 2: Thin wrappers | Each migrated function has test matching actual tidy flag |
-| Cassette name collision | Phase 2-3: Migration | No cassette name conflicts between wrappers/stubs or variants |
-| Post-processing lost | Phase 3: Complex functions | All functions with post-processing have `@lifecycle stable` before merge |
-| Premature lifecycle promotion | Phase 4: Lifecycle review | STABLE checklist verified for each promoted function |
-| Test manifest ignored | Phase 1: Test infrastructure | CI logs show "Skipping protected file" when appropriate |
-| Pre-existing failures mask new failures | Phase 1: Test audit | Failure count baseline established, CI tracks delta |
-| Re-recording workflow | Phase 1: Documentation | Re-recording workflow documented in CLAUDE.md, tested by contributor |
-| Cassette explosion | Phase 3: Complex dispatchers | Dispatch functions have ≤3 cassettes per search_type variant |
+| Windows write-connection race | Shared helper layer (eco_lifestage_patch.R) | Test: patch succeeds on Windows without manual retry |
+| Stale connection in cache slot | Shared helper layer (eco_lifestage_patch.R) | Test: `eco_results()` works immediately after patch |
+| OLS4 cross-ontology hits | Provider resolution implementation | Assert: no non-UBERON prefixes in UBERON query results |
+| OLS4 relevance ranking | Provider resolution implementation | Assert: scoring layer evaluates all 25 rows, not just position 1 |
+| NVS endpoint failure | Provider resolution implementation | Test: `tryCatch` returns empty tibble when NVS URL unreachable |
+| Cross-release cache contamination | In-place patch function | Test: post-patch row count == distinct lifestage_codes count |
+| Build script drift | Build script integration phase | CI diff check: `diff` of section 16 in both scripts returns 0 |
+| Derivation map miss | Bootstrap artifact phase | Assert: every resolved baseline entry has derivation row before commit |
+| Baseline CSV not installed | Bootstrap artifact phase | `devtools::check()` installed file list includes baseline CSV |
+| Windows temp path in network calls | Provider resolution implementation | Use `resp_body_string()` pipeline; no temp file writes |
 
-## Research-Specific Insights
-
-**From project context:**
-- **297 pre-existing failures:** Not technical debt — these are from VCR/API key issues in CI environment. Real tests pass locally with API key. Quarantine strategy more appropriate than mass fixing.
-- **122 tidy flag mismatches:** Root cause = test generator defaults to `TRUE` but many generated stubs use `tidy = FALSE` for complex nested responses. Fix generator before migrating more functions.
-- **33/256 functions have cassettes:** 87% of API wrappers never had tests. Not a "cassette management" problem — it's a test coverage problem. Focus test generation on newly-migrated functions, defer backfilling old untested functions.
-- **Lifecycle protection (#95) already implemented:** Generator checks for `@lifecycle stable` and skips. Pattern validated. Use confidently.
-- **Wrapper vs stub pattern working:** `ct_hazard()` (wrapper) delegates to `ct_hazard_search_bulk()` (stub). Post-processing in wrapper, API call in stub. This works — extend to complex functions.
-
-**From VCR research:**
-- **Request matching critical:** Default = method + URI only. If tests fail after parameter fix, likely need to match on body too: `match_requests_on = c("method", "uri", "body_json")`. Or delete cassette and re-record.
-- **Nondeterministic parameters:** If API uses nonce/timestamp, cassette matching will never work. Filter those parameters: `filter_query_parameters = c("timestamp", "nonce")`.
-- **Record mode strategies:** Use `:once` for normal development (replay existing), `:new_episodes` to add new interactions without re-recording old ones, `:all` to force complete re-record (dangerous — use only when necessary).
-
-**From httr2 API wrapper research:**
-- **User agent politeness:** Generated stubs should set `req_user_agent("ComptoxR/2.2 (https://github.com/...")` — if package causes issues, API maintainers can contact. Currently not implemented — add to stub generator.
-- **Credentials security:** Never put API keys in URL parameters, VCR won't redact them. Always use headers. Current implementation correct (`x-api-key` header, filtered in vcr config).
-- **Built-in retry/rate-limiting:** httr2 has `req_retry()` and `req_throttle()`. Current implementation uses `req_retry(max_tries = 3, is_transient = is_transient_error)` — good. Not using `req_throttle()` — could add if rate limiting becomes issue.
-
-**From lifecycle research:**
-- **Two key promises for STABLE:** (1) Breaking changes avoided where possible, (2) deprecation cycle when needed. Don't promote until both promises can be kept.
-- **Maturing is underused:** Many functions marked experimental but are actually maturing (users rely on them, but API might change). Use maturing more liberally.
-- **Deprecation cycle = soft-deprecated → deprecated → defunct:** Takes 2-3 releases. Plan timeline before making breaking changes.
+---
 
 ## Sources
 
-### VCR and Testing
-- [Managing cassettes | HTTP testing in R](https://books.ropensci.org/http-testing/managing-cassettes.html) — cassette naming, re-recording strategies
-- [3 tips to tune your VCR in tests | Arkency Blog](https://blog.arkency.com/3-tips-to-tune-your-vcr-in-tests/) — cassette editing pitfalls, workflow best practices
-- [VCR returns responses from other cassettes instead of recording new interactions](https://github.com/vcr/vcr/issues/425) — cassette poisoning issue, known bug
-- [New record mode "re_record"](https://github.com/vcr/vcr/discussions/864) — re-recording interval strategy
-- [Getting started with vcr](https://docs.ropensci.org/vcr/articles/vcr.html) — vcr configuration, filter_sensitive_data
-- [Debugging vcr failures](https://docs.ropensci.org/vcr/articles/debugging) — request matching, logging strategy
-
-### R Package Lifecycle
-- [Lifecycle stages • lifecycle](https://lifecycle.r-lib.org/articles/stages.html) — experimental/stable/deprecated stages
-- [21 Lifecycle – R Packages (2e)](https://r-pkgs.org/lifecycle.html) — lifecycle badge usage, deprecation cycle
-
-### httr2 API Wrappers
-- [Wrapping APIs • httr2](https://httr2.r-lib.org/articles/wrapping-apis.html) — user agent, credentials security, rate limiting
-- [Best practices for API packages • httr](https://httr.r-lib.org/articles/api-packages.html) — error handling, authentication patterns
-
-### R CMD Check
-- [Appendix A — R CMD check – R Packages (2e)](https://r-pkgs.org/R-CMD-check.html) — check errors, warnings, notes
-
-### Project-Specific
-- ComptoxR TODO.md (lines 1-100) — 834+ test failures, tidy flag mismatches, parameter type issues
-- ComptoxR dev/generate_tests.R — test generator implementation, parameter mapping logic
-- ComptoxR tests/testthat/helper-vcr.R — cassette management helpers (delete, check_safety, check_errors)
-- ComptoxR R/ct_bioactivity.R — dispatch pattern example (search_type switch)
-- ComptoxR R/ct_lists_all.R — post-processing pattern example (coerce/split)
+- [DuckDB Concurrency](https://duckdb.org/docs/current/connect/concurrency) — single-writer model, read-only vs read-write modes
+- [DuckDB R issue #56 — Windows file locking](https://github.com/duckdb/duckdb-r/issues/56) — "used by another process" error pattern and workarounds
+- [DuckDB issue #17418 — FileLockType Windows semantics](https://github.com/duckdb/duckdb/issues/17158) — `BufferedFileWriter` exclusive lock on Windows
+- [OLS4 issue #623 — local=true ignored](https://github.com/EBISPOT/ols4/issues/623) — cross-ontology results in single-ontology queries
+- [OLS4 issue #860 — misleading search ranking](https://github.com/EBISPOT/ols4/issues/860) — exact match not ranked first; Feb 2025, closed with fix
+- [OLS4 GitHub](https://github.com/EBISPOT/ols4) — issues list for current known bugs
+- [NERC NVS SPARQL endpoint](https://vocab.nerc.ac.uk/sparql) — BODC-hosted service, no published SLA
+- [ARGO NVS SPARQL probe](https://github.com/ARGOeu/sdc-nerc-spqrql) — existence confirms endpoint availability monitoring is needed
+- [R Packages (2e) — inst/extdata](https://r-pkgs.org/misc.html) — `system.file()` silent empty-string return behavior
+- [DuckDB R issue #1088 — read_only flag](https://github.com/duckdb/duckdb-r/issues/1088) — `read_only=TRUE` not always applied correctly
+- ComptoxR CLAUDE.md — Windows R segfault guidance for network calls, `/tmp/` path restrictions
+- ComptoxR `R/eco_connection.R` — `.eco_get_con()` / `.eco_close_con()` implementation
+- ComptoxR `R/eco_lifestage_patch.R` — existing provider query and scoring implementation
+- LIFESTAGE_HARMONIZATION_PLAN2.md — patch safety checks, table contract, refresh mode semantics
 
 ---
-*Pitfalls research for: R API wrapper package function migration and stabilization*
-*Researched: 2026-03-04 (updated from 2026-02-26)*
+*Pitfalls research for: Ontology API resolution + DuckDB in-place patching in ComptoxR v2.4*
+*Researched: 2026-04-22*

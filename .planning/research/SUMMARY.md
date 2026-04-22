@@ -1,243 +1,279 @@
 # Project Research Summary
 
-**Project:** ComptoxR v2.2 Package Stabilization
-**Domain:** R API wrapper package function migration and stabilization
-**Researched:** 2026-03-04
+**Project:** ComptoxR v2.4 Source-Backed Lifestage Resolution
+**Domain:** R package ETL + runtime enrichment with external ontology APIs
+**Researched:** 2026-04-22
 **Confidence:** HIGH
 
 ## Executive Summary
 
-ComptoxR v2.2 is a stabilization milestone for an R package that wraps EPA CompTox Dashboard APIs. The project migrates 20+ user-facing functions from custom httr2 implementations to centralized request templates (`generic_request()` and `generic_chemi_request()`), while adding lifecycle badges to signal API stability. This is NOT a feature expansion — it's architectural consolidation. The existing technology stack is complete and proven; migration requires workflow discipline rather than new dependencies.
+ComptoxR v2.4 replaces the v2.3 regex-first lifestage harmonization system with a
+source-backed resolution pipeline that assigns real ontology identifiers (UBERON, PO, NERC
+NVS S11) to each distinct ECOTOX lifestage term. The work is primarily a replacement of
+existing behavior, not greenfield development: the shared helper layer
+(`R/eco_lifestage_patch.R`) is already implemented and fully covers the resolution pipeline,
+both build scripts already contain identical section 16 replacements, and the runtime join in
+`eco_functions.R` already carries the new column structure. The primary challenge is
+validation and wiring, not writing new code.
 
-The recommended approach follows a thin wrapper pattern: user-facing functions (e.g., `ct_hazard()`) delegate to auto-generated API stubs (e.g., `ct_hazard_toxval_search_bulk()`). Generated stubs handle HTTP details through `generic_request()`, while user-facing wrappers add post-processing, parameter validation, or multi-endpoint dispatching. Lifecycle badges protect stable wrappers from regeneration when OpenAPI schemas update. The pattern is proven with 14 existing functions; v2.2 extends it to the remaining unmigrated functions.
+The recommended approach is sequenced around dependency order: confirm the shared helper
+layer loads cleanly, verify that both committed data artifacts (`lifestage_baseline.csv` and
+`lifestage_derivation.csv`) are complete and cross-checked against each other, then verify
+the build script and runtime join correctness, and finally validate the in-place patch path
+end-to-end. Zero new R package dependencies are required — the entire feature composes
+existing `httr2`, `jsonlite`, `dplyr`, `stringr`, `DBI`, and `duckdb` infrastructure.
 
-Key risks center on test infrastructure fragility: 297 pre-existing test failures (from VCR cassette/API key issues), 122 tests with tidy flag mismatches (expecting tibbles but getting lists), and 673 untracked cassettes recorded with wrong parameters. Mitigation strategy: fix test generator parameter detection, quarantine broken tests, establish cassette quality gates, and use two-phase recording (initial capture → fix errors → re-record clean). Migration complexity splits into four patterns with 10-60 min effort per function, totaling ~15 hours for v2.2 scope (Patterns 1-2 only, deferring complex dispatchers to v2.3).
+The dominant risks are Windows-specific (DuckDB file lock race on write connection open),
+OLS4 API behavior quirks (cross-ontology term leakage, exact-match ranking not guaranteed),
+and silent data gaps (derivation map misses sending resolved terms to quarantine). All three
+risks have concrete mitigation strategies already identified: retry loop in the patch
+function, post-filter by `obo_id` prefix on OLS4 results, and mandatory cross-check of
+`lifestage_baseline.csv` rows against `lifestage_derivation.csv` before committing either
+file.
+
+---
 
 ## Key Findings
 
 ### Recommended Stack
 
-The stack is complete — all required dependencies are already in `DESCRIPTION` and functional. No new packages needed. Migration leverages existing infrastructure: httr2 1.2.1 for HTTP, dplyr/tidyr/purrr for post-processing, lifecycle 1.0.5 for stability badges, testthat 3.2.3 + vcr 2.1.0 for testing, roxygen2 7.3.3 for documentation. Generic request templates (`R/z_generic_request.R`) handle batching, authentication, retries, and tidy conversion — migration delegates to them.
+The v2.4 feature requires **no changes to `DESCRIPTION`**. Every package needed is already
+in `Imports`. The HTTP stack (`httr2` + `jsonlite`) handles OLS4 REST GET and NVS SPARQL
+POST without any additional wrapper package. Cache I/O uses base R (`tools::R_user_dir()`,
+`utils::read.csv()`, `utils::write.csv()`), which is correct for a CRAN-targeted package.
+DuckDB write operations use the existing `DBI::dbWriteTable(..., overwrite = TRUE)` pattern
+already established in the build scripts.
+
+Packages explicitly evaluated and rejected: `rols` (deprecated Bioconductor, adds complexity
+with no benefit over direct `httr2` calls), `memoise`/`cachem` (release-scoped CSV
+invalidation covers all requirements without auto-pruning), `rappdirs` (superseded by
+`tools::R_user_dir()` in base R since R 4.0), `ontologyIndex` (full OBO graph download is
+overkill when only top-N API search is needed), `readr` (base R `utils::read.csv()` is
+sufficient for a fixed flat schema).
 
 **Core technologies:**
-- **httr2 1.2.1**: Modern HTTP client with retry/rate-limit support — powers `generic_request()` which handles all API calls
-- **lifecycle 1.0.5**: Function lifecycle badges (experimental/stable/deprecated) — already used in 409 functions, protects stable code from stub regeneration
-- **vcr 2.1.0**: HTTP replay via YAML cassettes — enables testing without live API calls; 33 cassettes recorded, needs quality audit
-- **testthat 3.2.3**: Unit testing with parallel execution — test generator creates metadata-driven tests from function signatures
-- **dplyr/tidyr/purrr**: Tidyverse for post-processing — used in complex wrappers (`ct_bioactivity()`, `ct_lists_all()`) for joins, list operations, string splitting
+- `httr2` (1.2.1): OLS4 REST GET + NVS SPARQL POST — already used for all EPA API calls; no new patterns needed
+- `jsonlite` (>=1.8.8): Parses both OLS4 `application/json` and NVS `application/sparql-results+json` responses
+- `dplyr` (>=1.1.4): Score ranking, candidate deduplication, derivation join — already in `Imports`
+- `purrr` (>=1.0.2): Sequential per-term live resolution loop via `map_dfr()` — must stay sequential; parallel risks OLS4 rate limits
+- `stringr` (>=1.5.1): Term normalization, boundary regex matching in scoring layer
+- `DBI` + `duckdb`: Read-write patch writes; single-writer constraint is the critical operating constraint
+- `tools::R_user_dir()` (base R): CRAN-compliant cache directory; release-encoded filename provides automatic invalidation
+- `utils::read.csv()` / `write.csv()` (base R): Flat fixed-schema CSV I/O for cache and baseline artifacts
 
-**Critical finding:** The stub generation pipeline (v1.0-v2.1) produces working stubs; test generator (v2.1) has metadata extraction bugs (assumes all parameters are DTXSIDs, doesn't read tidy flag). Fix test generator before migrating more functions.
+**API details confirmed via live calls:**
+- OLS4: `https://www.ebi.ac.uk/ols4/api/search` — no auth, GET, Solr-style JSON, `response.docs[]` per document
+- NVS SPARQL: `https://vocab.nerc.ac.uk/sparql/sparql` — no auth, POST form body, SPARQL 1.1 JSON bindings; S11 collection covers ~130 marine/aquatic lifestage terms
 
 ### Expected Features
 
-**Must have (table stakes):**
-- User-facing functions delegate to templates — architectural requirement, all ct_* functions call `generic_request()` or generated stubs
-- Lifecycle badges on all exported functions — CRAN expectation, enables stub protection (#95)
-- Consistent function signatures — all similar endpoints use same parameter names (e.g., `query`)
-- VCR test cassettes for all functions — rOpenSci testing standard, prevents live API calls during CI
-- R CMD check passes cleanly — CRAN requirement (0 errors/warnings) before release
-- Parameter validation — check query types, validate enums with `match.arg()`
+The v2.4 deliverable is a correctness replacement: v2.3's `ontology_id` column was fabricated
+from manual regex classification with no real ontology backing. v2.4 replaces it with eight
+traceable columns: `source_term_id`, `source_term_label`, `source_ontology`,
+`source_match_status`, `source_match_method`, `harmonized_life_stage`, `reproductive_stage`,
+and `derivation_source` — all backed by provider-issued identifiers and a curated derivation
+map.
 
-**Should have (competitive):**
-- Thin wrapper layer pattern — user-friendly names (`ct_hazard()`) over verbose generated names (`ct_hazard_toxval_search_bulk()`)
-- Multi-endpoint dispatcher pattern — single function routes to multiple endpoints (e.g., `ct_bioactivity(search_type = "dtxsid|aeid|spid")`)
-- Post-processing layer pattern — transform API responses for R workflows (`ct_lists_all(coerce = TRUE)` splits comma-separated strings)
-- Secondary annotation join pattern — enrich data automatically (`ct_bioactivity(annotate = TRUE)` joins assay details)
-- Lifecycle-protected stub regeneration — prevents overwriting stable functions during schema updates (#95 already implemented)
+**Must have (table stakes for v2.4.0):**
+- Tear out v2.3 regex classifier and `ontology_id` from all code paths — removes false provenance
+- `lifestage_baseline.csv` committed to `inst/extdata/ecotox/` — cold-start capability; CI runs without live API
+- `lifestage_derivation.csv` committed to `inst/extdata/ecotox/` — sole source of `harmonized_life_stage` values
+- Build script section 16 replacement in both `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` — identical call sites
+- `eco_results()` updated for 8-column output; `ontology_id` removed — API contract change
+- All existing tests updated for new column schema
+- `devtools::check()` passing at 0 errors, 0 new warnings
 
-**Defer (v2+):**
-- S7 class implementation (#29) — return type refactoring, would break user code
-- Post-processing recipe system (#120) — wait for pattern to emerge from 5+ functions, currently only 3-4 have complex logic
-- Advanced schema handling (ADV-01-04) — nested schemas, discriminators not needed for current APIs
-- Session-level result caching — user space concern, package already caches compiled regex in `.ComptoxREnv`
+**Should have (quality gates for v2.4.x):**
+- Mocked provider adapter tests using `testthat::with_mocked_bindings()` — CI-safe, no VCR cassettes for external ontology APIs
+- `NEWS.md` breaking change documentation for `ontology_id` removal
+- `dev/lifestage/` validation scripts updated for new column layout
+
+**Defer to v2.5+:**
+- NVS `owl:sameAs` to UBERON cross-reference extraction (triangulation confidence boost)
+- Public `.eco_patch_lifestage()` API (currently internal-only by design)
+- SPARQL-based OLS4 queries for structured ancestor traversal
 
 ### Architecture Approach
 
-ComptoxR uses a three-layer architecture: (1) auto-generated stubs from OpenAPI schemas handle HTTP mechanics via `generic_request()`, (2) user-facing wrappers delegate to stubs while adding validation/post-processing/dispatching, (3) lifecycle badges protect layer 2 from layer 1 regeneration. Test infrastructure mirrors this: metadata-driven test generator reads function signatures to create cassette-based tests, VCR records API interactions on first run with API key. Integration challenges arise from asynchronous workflows: stub generation runs in CI but test generation is manual, leading to stub-test gaps.
+The architecture connects three already-implemented contexts through a single shared helper
+layer: (1) the ETL build pipeline (`ecotox_build.R` / `data-raw/ecotox.R` section 16),
+which creates the DB tables from scratch during a full ECOTOX build; (2) the in-place patch
+path (`.eco_patch_lifestage()`), which updates an existing DB without a full rebuild; and
+(3) the query-time runtime join in `.eco_enrich_metadata()`, which enriches `eco_results()`
+output via a DuckDB join against the already-built `lifestage_dictionary` table. All three
+share the 14-function helper layer in `R/eco_lifestage_patch.R`. The only architectural
+constraint requiring care is DuckDB's single-writer model: the patch path must evict the
+cached read-only connection before opening a write connection, and restore it afterward.
 
 **Major components:**
-1. **Generic Request Templates** (`R/z_generic_request.R`) — centralized HTTP handling with batching (default 200 items/POST), authentication (x-api-key header), retries (exponential backoff), tidy conversion via `safe_tidy_bind()`
-2. **Stub Generation Pipeline** (`dev/endpoint_eval/`) — parses OpenAPI schemas, generates function stubs with roxygen docs, protects functions marked `@lifecycle stable` from overwrite
-3. **Test Generator v2** (`tests/testthat/tools/helper-test-generator-v2.R`) — extracts metadata from function signatures (parameters, return types), generates 4 test types (basic, batch, error, example), creates VCR cassettes with unique names per variant
-4. **User-Facing Wrappers** (Pattern library) — Thin Delegation (1-line stub call), Direct Template (calls `generic_request()` with projection), Multi-Endpoint Dispatcher (switch on `search_type`), Post-Processing Transform (conditional logic + data manipulation)
-
-**Integration gap:** Stub generation and test generation are decoupled — no automated trigger to generate tests when stubs are created. Leads to 223 functions without tests (87% untested). Recommended fix: CI workflow that detects stub-test gaps, auto-generates tests, commits both together.
+1. `R/eco_lifestage_patch.R` — 14 internal functions: schema helpers, path/I/O, validation, cache read/write, seed resolution, text normalization and scoring, provider queries (OLS4 + NVS), ranking, output construction, table materialization, and patch entrypoint
+2. `inst/extdata/ecotox/lifestage_baseline.csv` + `lifestage_derivation.csv` — committed data artifacts; baseline seeds user cache on cold start, derivation map drives all derived field population
+3. Build script section 16 (both scripts, must be identical) — calls `.eco_lifestage_materialize_tables()` with `refresh="auto"`, writes `lifestage_dictionary` and `lifestage_review` via `DBI::dbWriteTable`
+4. `.eco_enrich_metadata()` in `eco_functions.R` (lines 659-679) — runtime two-step join: `lifestage_codes` to `org_lifestage` description, then `lifestage_dictionary` on `org_lifestage` to expose 8 new columns
+5. `R/eco_connection.R` — `.eco_close_con()` / `.eco_get_con()` pair manages the session cache; patch function depends on this contract remaining stable
 
 ### Critical Pitfalls
 
-1. **Poisoned VCR Cassettes** — tests record HTTP errors (401, 403, 500) into cassettes, then replay failures forever. Function appears broken when it's fine. Fix: run `check_cassette_errors(delete = TRUE)` after recording, verify API key valid, use two-run verification (record → replay).
+1. **DuckDB Windows write-connection race condition** — After `.eco_close_con()`, the Windows OS file lock may linger one OS tick after `shutdown = TRUE`. The subsequent `dbConnect(..., read_only = FALSE)` throws `IO Error: Cannot open file ... used by another process`. Mitigation: wrap the write-connection open in a retry loop (3 attempts, 200 ms back-off); always use `DBI::dbDisconnect(con, shutdown = TRUE)`.
 
-2. **Parameter Type Mismatch in Auto-Generated Tests** — test generator passes DTXSIDs to all parameters; results in `limit = "DTXSID7020182"` or `search_type = "DTXSID7020182"`. Tests run but exercise wrong code paths. Fix: enhance generator to check parameter NAME patterns (`limit|count|size` → integer, `type|mode` → string enum) before defaulting to DTXSID.
+2. **OLS4 returns cross-ontology terms (`local=true` ignored, issue #623)** — Queries against `uberon` receive CL, GO, and BFO terms in the result set. Mitigation: post-filter `docs` by `obo_id` prefix (`"UBERON:"` for UBERON queries, `"PO:"` for PO queries) before passing candidates to scoring. This must be verified in the provider query function.
 
-3. **Tidy Flag Mismatch** — function returns list (`tidy = FALSE`) but test expects tibble, or vice versa. Currently affects 122 functions. Fix: test generator must read actual `tidy` parameter from `generic_request()` call in function body, not assume default.
+3. **OLS4 relevance ranking does not guarantee exact match at position 1 (issue #860)** — Exact parent concept may rank below more-specific subclasses. Mitigation: the current design already scores all `rows=25` results; do not short-circuit on position 1. Verify this behavior is not inadvertently bypassed.
 
-4. **Cassette Name Collisions** — multiple test variants (single, batch, annotate=TRUE) overwrite each other's cassettes. Fix: include parameter variants in cassette names (`ct_bioactivity_dtxsid_single` vs `ct_bioactivity_aeid_single`).
+4. **Derivation map miss silently quarantines resolved terms** — A term that resolves cleanly to an ontology ID but has no row in `lifestage_derivation.csv` is routed to `lifestage_review` rather than `lifestage_dictionary`. Mitigation: cross-check every resolved entry in `lifestage_baseline.csv` against `lifestage_derivation.csv` before committing either file. The two artifacts must be built and verified together.
 
-5. **297 Pre-Existing Failures Mask New Failures** — test suite always red, new regressions hidden in noise. Fix: quarantine broken tests to `tests/testthat/broken/`, track failure count baseline, CI fails if count INCREASES.
+5. **Build script section 16 drift** — Modifying one build script without updating the other produces different lifestage tables from build vs. patch paths. Mitigation: add a CI diff check (or test assertion) that fails if section 16 of `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` diverge.
+
+---
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure prioritizes fixing test infrastructure before migration, then migrating simple patterns first, deferring complex patterns to v2.3.
+The research reveals this milestone is primarily a validation and wiring task, not a build
+task. The code is already written. The risk is in verification order and data artifact
+completeness. Phase structure follows the dependency chain: helpers must work before build
+scripts can call them, data artifacts must be complete before patch can produce correct
+output, and the runtime join must be verified against a correctly-patched DB.
 
-### Phase 1: Test Infrastructure Stabilization
-**Rationale:** Can't migrate functions confidently with broken test generator. 297 failures and 122 tidy mismatches create noise that masks real issues. Fix foundations first.
+### Phase 1: Shared Helper Layer Validation
 
-**Delivers:**
-- Test generator correctly detects parameter types (no more DTXSID→limit bugs)
-- Test generator reads tidy flag from function body (correct tibble vs list expectations)
-- Cassette quality gates (run `check_cassette_errors()`, reject commits with bad cassettes)
-- Failure baseline established (quarantine unfixable tests, track delta)
-- Re-recording workflow documented (when to delete cassettes, how to verify API key)
+**Rationale:** All other phases depend on `R/eco_lifestage_patch.R` loading without errors
+and its 14 functions behaving as documented. This must be confirmed before anything else.
+**Delivers:** Confirmed `devtools::load_all()` loads cleanly; schema functions return correct
+zero-row tibbles; OLS4 and NVS query functions return correct response shapes; scoring layer
+evaluates all candidates with correct tier thresholds; `obo_id` prefix filter present in OLS4
+query function.
+**Addresses:** Shared helper layer correctness (table stakes foundation for all features)
+**Avoids:** OLS4 cross-ontology hits (Pitfall 2), OLS4 ranking trust (Pitfall 3), NVS endpoint failure graceful degradation
+**Research flag:** Standard patterns — no additional research phase needed; implementation already exists on disk
 
-**Addresses (table stakes):**
-- R CMD check passes cleanly — requires resolving syntax errors in generated stubs (TODO.md line 8-9)
-- VCR test cassettes for all functions — requires clean cassettes, not poisoned ones
+### Phase 2: Bootstrap Data Artifacts
 
-**Avoids (pitfalls):**
-- Poisoned cassettes (#1) — quality gates prevent committing error responses
-- Parameter type mismatch (#2) — generator fixes before creating new tests
-- Tidy flag mismatch (#3) — generator reads actual parameter values
-- Pre-existing failures masking new failures (#5) — baseline tracking catches regressions
+**Rationale:** `lifestage_baseline.csv` and `lifestage_derivation.csv` are the two committed
+data files that all resolution paths depend on. They must be complete, mutually consistent,
+and verified to be included in the installed package.
+**Delivers:** Committed baseline CSV covering current ECOTOX release (13-column cache schema,
+all distinct `lifestage_codes.description` values); committed derivation map (5-column schema,
+covering all resolved entries in the baseline); both verified present via `devtools::check()`
+installed file listing.
+**Addresses:** Cold-start capability (table stakes), derivation map completeness (differentiator)
+**Avoids:** Derivation map miss (Pitfall 4), `system.file()` silent empty string (Pitfall 9 in PITFALLS.md)
+**Research flag:** Human curation required — the cross-check between baseline and derivation map is a data-curation task; plan explicit acceptance criteria (every `resolved` baseline row has a matching derivation row)
 
-**Estimated effort:** 2-3 days
+### Phase 3: Build Script Integration
 
-### Phase 2: Thin Wrapper Migration (Pattern 1)
-**Rationale:** Simplest pattern, highest coverage (~60% of functions), lowest risk. Validates migration workflow before tackling complex patterns.
+**Rationale:** Verify section 16 in both build scripts calls the shared helper correctly and
+identically. This is the integration point where ETL build output and patch output converge.
+**Delivers:** Both section 16 call sites confirmed identical; a diff check (test or CI
+assertion) added; a full build produces a `lifestage_dictionary` that matches what
+`.eco_patch_lifestage()` would produce for the same release.
+**Addresses:** Section 16 sync requirement (table stakes)
+**Avoids:** Build script drift (Pitfall 5 above / Pitfall 7 in PITFALLS.md)
+**Research flag:** Standard patterns — diff check is mechanical; no research needed
 
-**Delivers:**
-- ~21 functions migrated to thin delegation pattern (1-line stub calls)
-- Lifecycle badges added (`@lifecycle stable`)
-- VCR cassettes recorded for all migrated functions
-- Documentation complete (@param, @return, @examples)
-- R CMD check passes for migrated functions
+### Phase 4: In-Place Patch Function Validation
 
-**Addresses (table stakes):**
-- User-facing functions delegate to templates
-- Lifecycle badges on all exported functions
-- Consistent function signatures
+**Rationale:** `.eco_patch_lifestage()` is the most complex execution path because it
+coordinates the DuckDB connection lifecycle, writes two tables and `_metadata`, and must
+return a correct completeness count. Windows-specific retry logic must be validated here.
+**Delivers:** Confirmed patch function behavior: closes and reopens connections correctly;
+retry loop present for Windows write-connection race; post-patch completeness check passes
+(dictionary + review row count equals distinct `lifestage_codes` description count); patch
+metadata written correctly; four refresh modes cascade as documented.
+**Addresses:** In-place patch capability (differentiator), four refresh modes (differentiator)
+**Avoids:** Windows write-connection race (Pitfall 1), stale cached connection (Pitfall 2 in PITFALLS.md), cross-release cache contamination (Pitfall 6 in PITFALLS.md)
+**Research flag:** Platform-specific validation required — the DuckDB file lock race is Windows-specific; must be tested on Windows, not just macOS/Linux
 
-**Uses (stack):**
-- lifecycle 1.0.5 for badges
-- vcr 2.1.0 for cassette recording
-- roxygen2 7.3.3 for documentation regeneration via `devtools::document()`
+### Phase 5: Runtime Join and API Contract Finalization
 
-**Avoids (pitfalls):**
-- Premature lifecycle promotion (#6) — use STABLE checklist before promotion
-- Test manifest ignored (#7) — verify protection works for manually-improved tests
+**Rationale:** The runtime join in `eco_results()` is the user-facing surface of all prior
+work. After Phase 4 confirms a correctly-patched DB, this phase verifies that `eco_results()`
+returns the new 8-column output, that `ontology_id` is absent, and that all existing tests
+are updated for the new schema.
+**Delivers:** `eco_results()` output contains all 8 new lifestage columns after
+`organism_lifestage`; `ontology_id` absent from all output; all existing test assertions
+updated; `devtools::check()` at 0 errors, 0 new warnings.
+**Addresses:** API contract change (table stakes), `eco_results()` column update (P1 from FEATURES.md), test schema updates
+**Avoids:** Runtime join to `lifestage_review` (anti-pattern 4 in ARCHITECTURE.md)
+**Research flag:** Standard patterns — join structure is already implemented; validation is mechanical
 
-**Estimated effort:** 5.25 hours (21 functions × 15 min each)
+### Phase 6: Quality Gates and Documentation
 
-### Phase 3: Direct Template Migration (Pattern 2)
-**Rationale:** Second-simplest pattern, ~20% of functions. Requires projection testing and parameter mapping but no complex post-processing.
-
-**Delivers:**
-- ~7 functions migrated to direct template pattern (calls `generic_request()` with endpoint-specific parameters)
-- Projection values tested with live API
-- VCR cassettes for all projection variants
-- Documentation with projection parameter examples
-
-**Addresses (should-have differentiators):**
-- Projection-aware wrappers — fine-grained control of API response fields
-
-**Uses (stack):**
-- generic_request() with projection parameters
-- VCR for multi-variant cassettes (one per projection value)
-
-**Avoids (pitfalls):**
-- Cassette name collisions (#4) — include projection in cassette names
-- Post-processing lost in regeneration (#5) — add `@lifecycle stable` immediately after post-processing added
-
-**Estimated effort:** 4 hours (7 functions × 35 min each)
-
-### Phase 4: Lifecycle Review and Documentation
-**Rationale:** Before release, audit all STABLE promotions and document migration patterns for maintainers.
-
-**Delivers:**
-- STABLE checklist verified for all promoted functions
-- Migration patterns documented (thin wrapper, direct template examples)
-- Troubleshooting guide for test failures
-- Cassette re-recording workflow in CLAUDE.md
-
-**Addresses (table stakes):**
-- R CMD check passes cleanly (final validation)
-- Phased deprecation when renaming (ensure proper lifecycle transitions)
-
-**Avoids (pitfalls):**
-- Premature lifecycle promotion (#6) — audit catches functions promoted too early
-- Re-recording workflow confusion (#9) — documentation prevents mistakes
-
-**Estimated effort:** 1-2 days
+**Rationale:** After integration passes, add mocked provider tests for CI safety, document
+the breaking `ontology_id` removal, and update `dev/lifestage/` scripts.
+**Delivers:** `testthat::with_mocked_bindings()` unit tests for OLS4 and NVS adapters;
+`NEWS.md` entry for `ontology_id` removal as a breaking change; `dev/lifestage/confirm_gate.R`
+and `validate_lifestage.R` updated for new column layout.
+**Addresses:** Mocked provider tests (P2), NEWS.md breaking change (P2), dev scripts (P2)
+**Avoids:** VCR cassette brittleness for external ontology APIs (anti-feature from FEATURES.md)
+**Research flag:** Standard patterns — `with_mocked_bindings()` is well-documented in testthat; no research needed
 
 ### Phase Ordering Rationale
 
-- **Test infrastructure first** because migrating with broken tests is building on quicksand. Current state: 297 failures, 122 tidy mismatches, 673 bad cassettes. Can't trust test outcomes.
-- **Simple patterns before complex** to validate workflow and uncover edge cases early. Pattern 1 (thin wrappers) = 10 min/function; Pattern 3 (dispatchers) = 45 min/function. Learn cheap, scale proven patterns.
-- **Defer complex patterns (3-4) to v2.3** because they require deeper testing strategy (cassette explosion for dispatchers, recipe system design for post-processing). v2.2 targets 80% coverage with Patterns 1-2, deferring 20% that needs more design work.
-- **Architecture grouping** mirrors migration risk: Pattern 1 has zero post-processing (no regeneration risk), Pattern 2 has simple projection (low risk), Pattern 3 has dispatch logic (medium risk), Pattern 4 has transformation chains (high risk from schema changes).
-
-**Dependency flow:**
-```
-Phase 1 (test fixes) → enables → Phase 2 (thin wrappers) → validates → Phase 3 (direct templates) → informs → Phase 4 (review)
-                                                    ↓
-                                          Defer to v2.3: Patterns 3-4 (dispatchers, post-processing)
-```
+- Phase 1 before Phase 2: Cannot validate data artifacts without confirming schema functions return correct shapes
+- Phase 2 before Phase 3: Build script section 16 needs complete baseline/derivation artifacts to produce a verifiable `lifestage_dictionary`
+- Phase 3 before Phase 4: In-place patch and full build must produce equivalent tables; this equivalence can only be asserted after Phase 3 is verified
+- Phase 4 before Phase 5: Runtime join validation requires a correctly-patched DB to query against
+- Phase 6 last: Quality gates and docs are polish; no other phase depends on them
 
 ### Research Flags
 
-Phases likely needing deeper research during planning:
-- **None for v2.2 scope** — patterns proven, stack complete, architecture stable. Execution is workflow discipline, not discovery.
+Phases needing extra care during planning (human-intensive verification, not additional research):
+- **Phase 2 (Bootstrap Data Artifacts):** The baseline CSV / derivation map cross-check is manual data curation. Plan explicit acceptance criteria: every `resolved` row in the baseline must have a matching `(source_ontology, source_term_id)` row in the derivation map before either file is committed.
+- **Phase 4 (Patch Function Validation):** The Windows DuckDB write-connection retry loop must be tested on Windows. The failure mode (`IO Error: Cannot open file ... used by another process`) only reproduces on Windows; do not rely on macOS/Linux test runs for this acceptance criterion.
 
-Phases with standard patterns (skip research-phase):
-- **Phase 1** — test generator fixes are debugging, not research. Root causes known (TODO.md documents bugs).
-- **Phase 2-3** — migration patterns documented in FEATURES.md (thin wrapper, direct template). Execute, don't research.
-- **Phase 4** — lifecycle review uses existing STABLE checklist. Documentation work, not research.
+Phases with standard patterns (verification is mechanical):
+- **Phase 1:** `devtools::load_all()` + function existence + output shape assertions
+- **Phase 3:** `diff` of section 16 in both build scripts returns 0 differences
+- **Phase 5:** Column presence/absence assertions in existing test suite
+- **Phase 6:** Standard `testthat::with_mocked_bindings()` test setup
 
-**Future research needs (v2.3+):**
-- **Pattern 3 (dispatchers)** — cassette strategy for multi-endpoint functions needs design exploration. How to test 4 search_types × 3 variants without 12 cassettes per function?
-- **Pattern 4 (post-processing)** — recipe system architecture (#120) needs concrete examples from 5+ functions before generalizing. Current 3-4 examples insufficient for pattern extraction.
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All dependencies in DESCRIPTION and proven in production. httr2 1.2.1 shipped, lifecycle 1.0.5 used in 409 functions, vcr 2.1.0 has 33 working cassettes. No unknowns. |
-| Features | HIGH | Table stakes clear from R package standards (CRAN requirements, rOpenSci testing practices). Differentiators proven in existing functions (thin wrapper pattern in `ct_hazard()`, dispatcher in `ct_bioactivity()`). |
-| Architecture | HIGH | Three-layer pattern (stubs → wrappers → lifecycle protection) validated in v1.0-v2.1. Test infrastructure gaps documented with solutions (detection-then-generation, metadata-driven tests). |
-| Pitfalls | HIGH | Root causes known from TODO.md (297 failures from VCR/API key, 122 from tidy mismatches, 673 bad cassettes from parameter bugs). Recovery strategies tested (check_cassette_errors helper works, manual cassette deletion verified). |
+| Stack | HIGH | Both external APIs verified via live calls; all packages already in `Imports`; rejected packages evaluated with specific rationale tied to CRAN policy and deprecation records |
+| Features | HIGH | API response schemas confirmed field-by-field via live calls; UBERON `obo_id` values verified; S11 SKOS fields verified against real term (S1130 nauplius) |
+| Architecture | HIGH | Implementation already exists on disk; component boundaries derived from reading actual source files (`eco_lifestage_patch.R` 926 lines, `eco_functions.R` lines 659-679); not speculative |
+| Pitfalls | HIGH | All 10 pitfalls backed by specific GitHub issues (OLS4 #623, #860; DuckDB-R #56, #17418), DuckDB concurrency docs, and project-specific CLAUDE.md platform guidance |
 
 **Overall confidence:** HIGH
 
-Research based on actual codebase analysis (TODO.md, existing functions, test generator source), official documentation (vcr, httr2, lifecycle packages), and proven patterns (14 functions already migrated). No speculation or untested assumptions.
-
 ### Gaps to Address
 
-**Test generator metadata extraction robustness:** Current implementation has brittle parsing (assumes `generic_request()` always on one line, doesn't handle pass-through `tidy = tidy` parameter). Need to strengthen AST parsing or use formal code analysis (e.g., `codetools::findGlobals()` to detect function calls). Handle during Phase 1 by testing against all existing migrated functions, fixing edge cases before generating new tests.
+- **OLS4 rate limiting:** No published rate limit found for EMBL-EBI OLS4. The conservative sequential request strategy (one per term, no parallelism) is correct and sufficient. If live resolution time becomes a user complaint, empirical rate limit discovery would be needed.
+- **NVS SPARQL endpoint SLA:** BODC does not publish an uptime SLA. The existence of the ARGO monitoring probe confirms known availability concerns. Graceful fallback to empty index with `cli_warn()` (rather than abort) is specified and must be verified in Phase 1.
+- **Windows retry timing:** The 200 ms back-off for the DuckDB write-connection retry is a community-derived heuristic, not a vendor-specified value. If Phase 4 testing reveals it is insufficient, increase incrementally (try 500 ms / 5 attempts before escalating).
+- **ECOTOX release string uniqueness:** The release ID is derived from ZIP filename, not a content hash. If ECOTOX posts a corrected build with the same date code, the cache would be reused without detection. The post-patch completeness check (row count parity between dictionary + review and distinct `lifestage_codes`) partially mitigates this but does not catch value-level differences within existing terms.
 
-**Cassette storage scalability:** At 717 cassettes (target: 256 functions × 3 variants = 768 cassettes), approaching Git repository limits (~50 MB cassette directory). Consider Git LFS or CI artifact storage. Defer decision until cassette count confirmed after migration — may be <500 if dispatch patterns use minimal cassette strategy (test dispatch separately from execution).
-
-**Lifecycle protection verification:** Stub generator claims to respect `@lifecycle stable` (#95) but no automated tests verify this works. Could accidentally overwrite stable function during schema update. Handle during Phase 4 by adding integration test: mark test function STABLE, run stub generator, verify function not overwritten.
-
-**API key management in CI:** Current VCR tests require API key for first recording. CI workflows lack documentation on how to provide key securely (GitHub secrets? Environment variable?). Document in Phase 1 as part of re-recording workflow. Verify cassette filtering works (`check_cassette_safety()` should catch leaked keys).
+---
 
 ## Sources
 
-### Primary (HIGH confidence)
-- **ComptoxR codebase** (TODO.md, R/ct_*.R, dev/generate_stubs.R, tests/testthat/tools/) — actual bugs, working patterns, proven architecture
-- [R Packages (2e)](https://r-pkgs.org/) — R package development standards (lifecycle, testing, documentation, R CMD check)
-- [lifecycle package CRAN](https://cran.r-project.org/package=lifecycle) + [Lifecycle stages](https://lifecycle.r-lib.org/articles/stages.html) — badge types, protection patterns
-- [vcr package documentation](https://docs.ropensci.org/vcr/) + [HTTP testing in R](https://books.ropensci.org/http-testing/) — cassette recording, management, quality checks
-- [httr2 wrapping APIs guide](https://httr2.r-lib.org/articles/wrapping-apis.html) — API wrapper best practices, post-processing patterns
-- [testthat package](https://testthat.r-lib.org/) — testing framework, parallel execution
+### Primary (HIGH confidence — verified via live API calls or official documentation)
+- OLS4 production API: `https://www.ebi.ac.uk/ols4/api/search` — response envelope, per-doc fields, pagination params
+- OLS4 paper: [PMC12094816](https://pmc.ncbi.nlm.nih.gov/articles/PMC12094816/) — architecture, deployment scale
+- OLS4 GitHub: [EBISPOT/ols4](https://github.com/EBISPOT/ols4) — issues #623 (`local=true` ignored) and #860 (relevance ranking)
+- NVS SPARQL endpoint: `https://vocab.nerc.ac.uk/sparql/sparql` — SPARQL 1.1 JSON bindings format confirmed
+- NVS S11 collection: `https://vocab.nerc.ac.uk/collection/S11/current/` — term S1130 (nauplius) JSON-LD field structure verified
+- DuckDB concurrency docs: `https://duckdb.org/docs/current/connect/concurrency` — single-writer model
+- DuckDB issue #17418: Windows `BufferedFileWriter` exclusive lock behavior
+- R-hub caching blog: `https://blog.r-hub.io/2021/07/30/cache/` — `tools::R_user_dir()` as CRAN-compliant cache location
+- R Packages (2e): `https://r-pkgs.org/data.html` — `inst/extdata` + `system.file()` patterns
+- ComptoxR source (as of 2026-04-22): `R/eco_lifestage_patch.R` (926 lines), `R/eco_connection.R`, `R/eco_functions.R` (lines 659-679), `inst/ecotox/ecotox_build.R` (lines 974-1023), `data-raw/ecotox.R` (lines 975-1024)
 
 ### Secondary (MEDIUM confidence)
-- [Tidy design principles](https://design.tidyverse.org/) — package design patterns (used to validate thin wrapper approach)
-- [Managing cassettes | HTTP testing in R](https://books.ropensci.org/http-testing/managing-cassettes.html) — cassette naming, re-recording strategies
-- [3 tips to tune your VCR in tests | Arkency Blog](https://blog.arkency.com/3-tips-to-tune-your-vcr-in-tests/) — cassette poisoning pitfalls, workflow best practices
-- [Code generation in R packages - R-hub blog](https://blog.r-hub.io/2020/02/10/code-generation/) — validation of stub generation approach
+- ARGO NVS SPARQL probe: [ARGOeu/sdc-nerc-spqrql](https://github.com/ARGOeu/sdc-nerc-spqrql) — confirms NVS availability monitoring exists; infers availability concerns are real
+- DuckDB R issue #56: Windows "used by another process" error pattern and retry workaround community reports
+- Bioconductor removed packages page: `rols` deprecated status in 3.23 confirmed
 
-### Tertiary (LOW confidence)
-- [nycOpenData: A unified R interface to NYC Open Data APIs](https://www.r-bloggers.com/2026/01/nycopendata-a-unified-r-interface-to-nyc-open-data-apis/) — 2026 example of wrapper pattern (used to confirm thin wrapper is industry standard, not unique to ComptoxR)
+### Tertiary (LOW confidence — heuristics only)
+- OLS4 rate limiting: no published limit found; 200 ms sequential delay is a conservative heuristic derived from general API etiquette
+- NVS SPARQL rate limiting: no published limit; single full-collection fetch per session mitigates exposure
+- Windows DuckDB retry timing: 200 ms / 3 attempts derived from DuckDB community issue reports, not a vendor specification
 
 ---
-*Research completed: 2026-03-04*
+
+*Research completed: 2026-04-22*
 *Ready for roadmap: yes*

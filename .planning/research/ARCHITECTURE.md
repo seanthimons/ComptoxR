@@ -1,870 +1,448 @@
-# Architecture Patterns: Test Infrastructure Integration
+# Architecture Patterns: ECOTOX Source-Backed Lifestage Resolution
 
-**Domain:** R package test infrastructure
-**Researched:** 2026-02-26
+**Domain:** R package ECOTOX ETL and runtime enrichment
+**Researched:** 2026-04-22
+**Milestone:** v2.4 Source-Backed Lifestage Resolution
 
 ## Executive Summary
 
-ComptoxR's test infrastructure must integrate three automated workflows: stub generation → test generation → VCR cassette recording. The current architecture has separate pipelines for stub creation (`dev/generate_stubs.R`) and test generation (`tests/testthat/tools/helper-test-generator-v2.R`), with no automated coordination between them. VCR cassettes are manually managed via helper functions. CI workflows check coverage but don't detect stub-test gaps.
+The v2.4 lifestage resolution system integrates three contexts that share a single helper
+layer: the ETL build pipeline, the in-place patch path, and the query-time runtime join in
+`eco_results()`. All three contexts already exist on disk in their target form — the shared
+helper file `R/eco_lifestage_patch.R` is fully implemented, both build scripts have
+identical section 16 replacements, and `eco_functions.R` already carries the new join
+structure. The primary architectural challenge is therefore not "what to build" but "in what
+order to validate and wire together what already exists."
 
-The integration challenge is synchronizing these three pipelines while respecting existing architecture constraints: stub generation runs in CI via GitHub Actions, test files live in `tests/testthat/`, cassettes record on first run requiring API keys, and R CMD check excludes `dev/` from built packages.
+The central connection management constraint is that DuckDB allows only one active
+connection per file when write access is involved. The patch path must close the package's
+cached read-only connection before opening a read-write connection, and must relinquish
+the read-write connection before the cached handle can be reinstated. The existing
+`.eco_close_con()` / `.eco_get_con()` pair in `eco_connection.R` already supports this
+protocol; `.eco_patch_lifestage()` calls `.eco_close_con()` before opening its own
+connection and again via `on.exit()` after disconnecting, so the next normal query gets
+a fresh cached handle automatically.
 
-**Recommended architecture:** Event-driven pipeline with detection-then-generation pattern. After stubs are generated, detect which functions lack tests, generate test files for those functions, commit both stubs and tests together, then cassettes record on CI's first test run with API key. Test generator reads function metadata directly from generated stubs to produce correct parameter types and return type assertions.
+The build pipeline (both `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R`) never
+holds a cached read-only connection — it manages its own `eco_con` handle — so it opens
+a standard read-write connection throughout the ETL and writes `lifestage_dictionary` and
+`lifestage_review` exactly like any other build-time table.
 
 ## Component Boundaries
 
-### Existing Components (No Changes Required)
+### Existing Components — No Changes Required
 
-| Component | Responsibility | Location | Stability |
-|-----------|---------------|----------|-----------|
-| **Stub Generation Pipeline** | Parse OpenAPI schemas, generate R function stubs with roxygen docs | `dev/endpoint_eval/` (8 files) + `dev/generate_stubs.R` | **Stable** - v1.9 shipped, comprehensive test coverage (95+ tests), lifecycle guards in place |
-| **Generic Request Templates** | Execute HTTP requests with batching, auth, retry logic | `R/z_generic_request.R` | **Stable** - Core infrastructure used by all wrappers |
-| **VCR Configuration** | Configure vcr for cassette recording/playback | `tests/testthat/helper-vcr.R` | **Stable** - 13 lines, basic config |
-| **CI Workflows** | Run tests, check coverage, trigger stub generation | `.github/workflows/` | **Stable** - 4 workflows (test-coverage.yml, pipeline-tests.yml, R-CMD-check.yml, test-quick.yml) |
+| Component | File | Responsibility | Status |
+|-----------|------|---------------|--------|
+| Connection cache | `R/eco_connection.R` | Manages read-only cached `ecotox_db` in `.ComptoxREnv`, exposes `.eco_get_con()` / `.eco_close_con()` | Stable — v2.3 shipped |
+| DB path resolver | `R/eco_connection.R` — `eco_path()` | Returns `tools::R_user_dir("ComptoxR","data")/ecotox.duckdb` or option override | Stable |
+| Query pipeline | `R/eco_functions.R` — `.eco_base_query()` / `.eco_apply_conversions()` / `.eco_post_process()` | Build and execute the DuckDB query chain | Stable |
+| Baseline CSV | `inst/extdata/ecotox/lifestage_baseline.csv` | Committed seed covering one ECOTOX release; 13-column cache schema | In place |
+| Derivation map | `inst/extdata/ecotox/lifestage_derivation.csv` | Curated `source_ontology + source_term_id` → harmonized fields lookup | In place |
 
-### Existing Components (Require Modifications)
+### Existing Components — Already Modified for v2.4
 
-| Component | Current State | Required Changes | Integration Point |
-|-----------|---------------|------------------|-------------------|
-| **Test Generator v2** | Exists at `tests/testthat/tools/helper-test-generator-v2.R` (421 lines). Extracts metadata from function files, generates 4 test types (basic, example, batch, error). Uses `determine_test_input_type()` to map parameters to appropriate test data. | Must read `tidy` parameter from stub to assert correct return type (tibble vs list). Must parse function signature more robustly to avoid DTXSID→non-DTXSID parameter errors. Needs batch detection from `generic_request` metadata. | Reads: `R/*.R` files (stubs)<br>Writes: `tests/testthat/test-*.R` files |
-| **Function Metadata Extractor** | Exists at `tests/testthat/tools/helper-function-metadata.R` (150+ lines). Parses roxygen comments, function signatures, examples. Extracts `generic_request()` call details. | Must reliably extract `tidy` parameter value from `generic_request()` call. Must handle `path_params`, `batch_limit`, `method` metadata for correct test generation. | Used by: Test Generator v2 |
-| **VCR Cassette Helpers** | Exists at `tests/testthat/helper-vcr.R` (13 lines config) + `helper-api.R` has cassette management functions. | No code changes needed. May need orchestration script for mass deletion/re-recording. | Interacts with: VCR package during test runs |
+| Component | File | Change | Verification Needed |
+|-----------|------|--------|---------------------|
+| Runtime enrichment join | `R/eco_functions.R` — `.eco_enrich_metadata()` (lines 659-679) | Replaced v2.3 `ontology_id` join with two-step join: `lifestage_codes` then `lifestage_dictionary` on `org_lifestage`; relocates 8 new source columns | Confirm column order and that `ontology_id` is absent from output |
+| roxygen docs | `R/eco_functions.R` — `eco_results()` (lines 247-265) | Documents 8 new `@return` fields; `ontology_id` removed | Confirm `man/eco_results.Rd` regenerates cleanly |
+| Build section 16 — install | `inst/ecotox/ecotox_build.R` (lines 974-1023) | Replaces v2.3 tribble with shared helper call pattern | Confirm identical to `data-raw/ecotox.R` section 16 |
+| Build section 16 — dev | `data-raw/ecotox.R` (lines 975-1024) | Mirror of above | Confirm identical to `inst/ecotox/ecotox_build.R` section 16 |
 
-### New Components (Need to Build)
+### New Component — Fully Implemented
 
-| Component | Purpose | Location | Inputs | Outputs |
-|-----------|---------|----------|--------|---------|
-| **Test Gap Detector** | Scan `R/` for functions without corresponding test files. Identify stubs that need tests generated. | `dev/detect_test_gaps.R` (new script, ~100 lines) | **In:** `R/ct_*.R`, `R/chemi_*.R`, `R/cc_*.R` stubs<br>**In:** `tests/testthat/test-*.R` existing tests<br>**In:** Stub generation result from `dev/generate_stubs.R` (GITHUB_OUTPUT: `stubs_generated=N`) | **Out:** List of function names needing tests<br>**Out:** GITHUB_OUTPUT: `missing_tests=N`<br>**Out:** `dev/logs/test-gaps-YYYY-MM-DD.txt` (log file) |
-| **Batch Test Generator** | Generate test files for multiple functions at once. Wrapper around test-generator-v2. | `dev/generate_tests.R` (new orchestrator, ~150 lines) | **In:** List of function names from Test Gap Detector<br>**In:** Metadata from Function Metadata Extractor | **Out:** `tests/testthat/test-*.R` files<br>**Out:** Summary report (created N tests, skipped M) |
-| **Cassette Cleanup Script** | Delete cassettes for functions with incorrect parameters (identified by test failures). Option to delete all cassettes for re-recording. | `dev/cleanup_cassettes.R` (new utility, ~80 lines) | **In:** Test failure logs (optional)<br>**In:** Function name patterns to target | **Out:** Deleted cassette files<br>**Out:** Summary log |
-| **CI Test Generation Workflow** | Detect stub-test gaps after stub generation, trigger test generation, commit results. | `.github/workflows/generate-tests.yml` (new workflow, ~120 lines YAML) | **Trigger:** After `generate_stubs.R` runs OR manual workflow_dispatch<br>**In:** Stub generation output (stubs_generated count) | **Out:** Commit with new test files<br>**Out:** PR comment with summary |
+| Component | File | Responsibility |
+|-----------|------|---------------|
+| Shared helper layer | `R/eco_lifestage_patch.R` | 14 internal functions covering cache I/O, baseline loading, OLS4/NVS provider queries, scoring, ranking, table materialization, and in-place DB patching |
 
 ## Data Flow
 
-### Current Flow (Before Integration)
+### Build Path (Full ETL)
 
 ```
-┌─────────────────┐
-│ OpenAPI Schemas │
-└────────┬────────┘
-         │
-         v
-┌─────────────────────────┐
-│ dev/generate_stubs.R    │  (Runs in CI or manually)
-│ • Parse schemas         │
-│ • Generate R stubs      │
-│ • Write to R/           │
-└────────┬────────────────┘
-         │
-         │ (Manual step - user notices new stubs)
-         │
-         v
-┌─────────────────────────────────────┐
-│ tests/testthat/tools/               │
-│   helper-test-generator-v2.R        │  (Run manually)
-│ • Extract function metadata         │
-│ • Generate test code                │
-└────────┬────────────────────────────┘
-         │
-         │ (Manual file creation)
-         │
-         v
-┌─────────────────────────────────────┐
-│ tests/testthat/test-*.R             │
-└────────┬────────────────────────────┘
-         │
-         │ (First test run with API key)
-         │
-         v
-┌─────────────────────────────────────┐
-│ tests/testthat/fixtures/*.yml       │  (VCR cassettes)
-└─────────────────────────────────────┘
-
-⚠️ GAPS:
-- No automatic test generation after stub creation
-- Manual orchestration required
-- 673 untracked cassettes with bad parameters (TODO.md line 33)
-- CI doesn't report stub-test gaps
+ecotox_build.R / data-raw/ecotox.R
+  |
+  | 1. ETL creates eco_con (read-write, not cached)
+  | 2. Section 16: check helper availability
+  |      if .eco_lifestage_materialize_tables() not in scope:
+  |        source("R/eco_lifestage_patch.R", local = env)  [dev checkout]
+  |        OR copy from ComptoxR namespace                  [installed pkg]
+  | 3. Query: SELECT DISTINCT description FROM lifestage_codes
+  | 4. Compute ecotox_release via .eco_lifestage_release_id(latest_zip)
+  | 5. Call .eco_lifestage_materialize_tables(
+  |      org_lifestages, ecotox_release, refresh="auto", write_cache=TRUE)
+  |       |
+  |       | -> .eco_lifestage_load_seed_cache()   [cache / baseline / live]
+  |       | -> live: .eco_lifestage_resolve_term() per missing term
+  |       |     -> .eco_lifestage_query_ols4("UBERON")
+  |       |     -> .eco_lifestage_query_ols4("PO")
+  |       |     -> .eco_lifestage_query_nvs()  [uses .ComptoxREnv NVS index]
+  |       |     -> .eco_lifestage_rank_candidates()
+  |       | -> .eco_lifestage_cache_write()
+  |       | -> .eco_lifestage_derive_fields()   [join derivation CSV]
+  |       | -> returns list(cache, dictionary, review, refresh_mode)
+  | 6. DBI::dbWriteTable eco_con "lifestage_dictionary" overwrite=TRUE
+  | 7. DBI::dbWriteTable eco_con "lifestage_review"     overwrite=TRUE
+  | 8. cli warning if review rows > 0
+  v
+  ecotox.duckdb written by normal ETL shutdown
 ```
 
-### Proposed Integrated Flow
+### Patch Path (In-Place Update)
 
 ```
-┌─────────────────┐
-│ OpenAPI Schemas │
-└────────┬────────┘
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ CI: Schema Check Workflow                                │
-│ • Download schemas                                       │
-│ • Detect changes                                         │
-│ • Trigger stub generation if changes detected            │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ dev/generate_stubs.R                                     │
-│ • Parse schemas → endpoint specs                         │
-│ • Generate function stubs                                │
-│ • Write to R/ (with lifecycle protection)                │
-│ • Output: GITHUB_OUTPUT: stubs_generated=N              │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         │ (Automated trigger)
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ dev/detect_test_gaps.R (NEW)                             │
-│ • Scan R/ for all ct_*/chemi_*/cc_* functions            │
-│ • Check tests/testthat/ for corresponding test-*.R       │
-│ • Output: List of functions without tests                │
-│ • Output: GITHUB_OUTPUT: missing_tests=N                 │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         │ (If missing_tests > 0)
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ dev/generate_tests.R (NEW)                               │
-│ For each function without tests:                         │
-│   1. Call extract_function_metadata(R/fn.R)              │
-│   2. Call create_metadata_based_test_file()              │
-│   3. Write tests/testthat/test-fn.R                      │
-│ Output: Summary report (N tests created)                 │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         │ (Automated commit in CI)
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ Git Commit                                               │
-│ • Commit new test files                                  │
-│ • PR comment: "Generated tests for N new functions"      │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         │ (CI runs tests on PR)
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ CI: Test Workflow                                        │
-│ • First run: vcr records cassettes (requires API key)    │
-│ • Tests may fail if parameters wrong (expected)          │
-│ • Artifacts uploaded: failure logs                       │
-└────────┬─────────────────────────────────────────────────┘
-         │
-         │ (If test failures due to bad parameters)
-         │
-         v
-┌──────────────────────────────────────────────────────────┐
-│ Manual Fix Loop                                          │
-│ 1. dev/cleanup_cassettes.R (delete bad cassettes)        │
-│ 2. Fix test generator parameter logic                    │
-│ 3. Re-run dev/generate_tests.R (overwrite bad tests)     │
-│ 4. Re-run tests (re-record cassettes)                    │
-└──────────────────────────────────────────────────────────┘
-
-✅ IMPROVEMENTS:
-- Automated test generation after stub creation
-- CI reports test coverage gaps
-- Cassette re-recording via cleanup script
-- Test generator fixes reduce bad parameter errors
+.eco_patch_lifestage(db_path, refresh, force)
+  |
+  | 1. Validate db_path exists
+  | 2. .eco_close_con()  — evict cached read-only handle
+  | 3. DBI::dbConnect(duckdb, dbdir=db_path, read_only=FALSE)  — read-write
+  | 4. on.exit: disconnect + .eco_close_con()
+  | 5. Safety checks:
+  |      _metadata exists and has ecotox_release key
+  |      lifestage_codes exists with description column
+  | 6. Query: SELECT DISTINCT description FROM lifestage_codes
+  | 7. .eco_lifestage_materialize_tables(...)  [same as build path]
+  | 8. DBI::dbWriteTable "lifestage_dictionary" overwrite=TRUE
+  | 9. DBI::dbWriteTable "lifestage_review"     overwrite=TRUE
+  | 10. Upsert patch keys in _metadata:
+  |       lifestage_patch_applied_at
+  |       lifestage_patch_release
+  |       lifestage_patch_method
+  |       lifestage_patch_version
+  | 11. Disconnect read-write con
+  | 12. .eco_close_con()  — clear .ComptoxREnv$ecotox_db (already NULL)
+  v
+  Returns invisible list(db_path, ecotox_release, dictionary_rows,
+                          review_rows, refresh_mode)
+  Next .eco_get_con() call reopens as read-only and re-caches
 ```
 
-## Integration Points
+### Runtime Path (Query Enrichment)
 
-### 1. Stub Generation → Test Gap Detection
-
-**Trigger:** `dev/generate_stubs.R` completes and writes GITHUB_OUTPUT.
-
-**Data passed:**
-- `stubs_generated=N` (integer count from GITHUB_OUTPUT)
-- Modified files list (from git diff)
-
-**Implementation:**
-```yaml
-# .github/workflows/generate-tests.yml
-steps:
-  - name: Generate stubs
-    id: stubs
-    run: Rscript dev/generate_stubs.R
-
-  - name: Detect test gaps
-    id: gaps
-    if: steps.stubs.outputs.stubs_generated > 0
-    run: Rscript dev/detect_test_gaps.R
+```
+eco_results(casrn="50-29-3", ...)
+  |
+  | .eco_get_con()  — returns cached read-only connection
+  | .eco_base_query()
+  | .eco_enrich_metadata(query, con)
+  |   |
+  |   | LEFT JOIN lifestage_codes ON organism_lifestage = code
+  |   |   -> exposes: org_lifestage (renamed from description)
+  |   | LEFT JOIN lifestage_dictionary ON org_lifestage = org_lifestage
+  |   |   -> exposes: source_ontology, source_term_id, source_term_label,
+  |   |               source_match_status, harmonized_life_stage,
+  |   |               reproductive_stage, derivation_source
+  |   | dplyr::relocate places all 8 fields after organism_lifestage
+  |   | lifestage_review is NEVER joined at runtime
+  v
+  Collected tibble with new columns, ontology_id absent
 ```
 
-**Contract:**
-- Stub generator MUST write `stubs_generated` to GITHUB_OUTPUT
-- Test gap detector reads git diff to find new R files
-- Test gap detector outputs `missing_tests` count to GITHUB_OUTPUT
+### Cache / Baseline Resolution Order
 
-### 2. Test Gap Detection → Test Generation
+```
+.eco_lifestage_load_seed_cache(ecotox_release, refresh)
 
-**Trigger:** Test gap detector finds `missing_tests > 0`.
+refresh = "auto"
+  1. User cache exists for release?  YES -> use it
+  2. Committed baseline matches release?  YES -> seed user cache from it, use it
+  3. Neither -> live lookup, write user cache
 
-**Data passed:**
-- List of function names (written to temp file: `dev/logs/functions-needing-tests.txt`)
-- Each line: function name (e.g., `ct_hazard`)
+refresh = "cache"
+  1. User cache exists?  YES -> use it
+  2. NO + force=TRUE  -> fall back to "auto"
+  3. NO + force=FALSE -> abort
 
-**Implementation:**
-```r
-# dev/generate_tests.R reads list
-functions <- readLines("dev/logs/functions-needing-tests.txt")
-for (fn_name in functions) {
-  metadata <- extract_function_metadata(file.path("R", paste0(fn_name, ".R")))
-  create_metadata_based_test_file(
-    metadata = metadata,
-    output_file = file.path("tests/testthat", paste0("test-", fn_name, ".R"))
-  )
-}
+refresh = "baseline"
+  1. Committed baseline matches release?  YES -> seed user cache, use it
+  2. NO + force=TRUE  -> fall back to "auto"
+  3. NO + force=FALSE -> abort
+
+refresh = "live"
+  1. Skip all cache/baseline reads
+  2. Resolve all terms from providers
+  3. Overwrite user cache with fresh results
 ```
 
-**Contract:**
-- Test gap detector writes function list to `dev/logs/functions-needing-tests.txt`
-- Test generator reads list, generates tests for each
-- Test generator reports success/failure counts
+## Connection Management Pattern
 
-### 3. Test Generation → VCR Cassette Recording
+DuckDB enforces a single-writer constraint per database file. The package maintains one
+cached read-only connection in `.ComptoxREnv$ecotox_db`. The patch function needs
+read-write access. These cannot coexist on the same file.
 
-**Trigger:** New test files committed, CI runs test suite.
-
-**Data passed:**
-- Test files with `vcr::use_cassette()` calls
-- Cassette names follow pattern: `{function_name}_{variant}` (e.g., `ct_hazard_single`, `ct_hazard_batch`)
-
-**Implementation:**
-```r
-# In generated test file
-test_that("ct_hazard works with single input", {
-  vcr::use_cassette("ct_hazard_single", {
-    result <- ct_hazard("DTXSID7020182")
-    expect_s3_class(result, "tbl_df")
-  })
-})
-```
-
-**First run behavior:**
-- VCR detects missing cassette
-- Makes live API request (requires API key in CI secrets)
-- Records response to `tests/testthat/fixtures/ct_hazard_single.yml`
-- Test passes/fails based on actual response
-
-**Subsequent runs:**
-- VCR loads cassette from fixtures/
-- No API request made
-- Test runs against recorded response
-
-**Contract:**
-- Test generator produces unique cassette names per test
-- CI environment has `ctx_api_key` secret configured
-- First run may fail (expected if API returns errors)
-- Failed cassettes can be deleted and re-recorded
-
-### 4. Test Failures → Cassette Cleanup
-
-**Trigger:** Test failures due to incorrect parameters (manual analysis).
-
-**Data passed:**
-- Test failure logs (from CI artifacts)
-- Cassette names extracted from logs
-
-**Implementation:**
-```r
-# dev/cleanup_cassettes.R
-delete_cassettes_for_function <- function(function_name) {
-  pattern <- paste0("^", function_name, "_.*\\.yml$")
-  cassettes <- list.files("tests/testthat/fixtures", pattern = pattern, full.names = TRUE)
-  file.remove(cassettes)
-  cli::cli_alert_info("Deleted {length(cassettes)} cassette(s) for {function_name}")
-}
-
-# Usage
-delete_cassettes_for_function("ct_chemical_list_search_by_type")  # Wrong param error
-```
-
-**Contract:**
-- Cassette cleanup script takes function name or pattern
-- Deletes matching cassettes from fixtures/
-- Next test run re-records from live API
-- Cleanup script logs actions to `dev/logs/cassette-cleanup-YYYY-MM-DD.txt`
-
-### 5. CI Workflow → Gap Reporting
-
-**Trigger:** Any commit to main/PR branches.
-
-**Data passed:**
-- Count of functions without tests (from detect_test_gaps.R)
-- Coverage percentage (from covr)
-
-**Implementation:**
-```yaml
-# .github/workflows/generate-tests.yml
-- name: Report test gaps
-  if: always()
-  run: |
-    echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
-    echo "" >> $GITHUB_STEP_SUMMARY
-    echo "**Functions without tests:** ${{ steps.gaps.outputs.missing_tests }}" >> $GITHUB_STEP_SUMMARY
-    echo "**R/ coverage:** ${{ steps.coverage.outputs.r_pct }}%" >> $GITHUB_STEP_SUMMARY
-```
-
-**Contract:**
-- CI workflow writes summary to GitHub Actions summary
-- PR comments show test gap count
-- Coverage enforcement remains at 75% (rOpenSci requirement)
-
-## Architecture Patterns
-
-### Pattern 1: Detection-Then-Generation
-
-**What:** Separate detection phase from generation phase. Don't generate tests blindly; first check what's missing.
-
-**Why:** Avoids overwriting existing tests, respects manually written tests, enables incremental generation.
-
-**When:** After stub generation completes, before test generation starts.
-
-**Example:**
-```r
-# dev/detect_test_gaps.R
-detect_test_gaps <- function() {
-  # 1. Find all exported functions in R/
-  r_files <- list.files("R", pattern = "^(ct|chemi|cc)_.*\\.R$", full.names = TRUE)
-  functions <- purrr::map_chr(r_files, ~ {
-    tools::file_path_sans_ext(basename(.x))
-  })
-
-  # 2. Check which have corresponding test files
-  test_files <- list.files("tests/testthat", pattern = "^test-.*\\.R$")
-  tested_functions <- stringr::str_remove(test_files, "^test-") %>%
-    stringr::str_remove("\\.R$")
-
-  # 3. Return gap
-  missing <- setdiff(functions, tested_functions)
-
-  list(
-    total_functions = length(functions),
-    tested_functions = length(tested_functions),
-    missing_tests = missing
-  )
-}
-```
-
-### Pattern 2: Metadata-Driven Test Generation
-
-**What:** Generate tests based on actual function metadata (parameters, return types) extracted from source files, not assumptions.
-
-**Why:** Prevents type mismatches (DTXSID passed to `limit` parameter), return type assertion errors (tibble vs list), wrong test patterns for GET vs POST.
-
-**When:** Test generator reads function metadata before generating test code.
-
-**Example:**
-```r
-# tests/testthat/tools/helper-test-generator-v2.R
-generate_basic_test <- function(metadata, test_inputs) {
-  # Read actual tidy parameter from function
-  tidy_value <- metadata$generic_request$tidy  # Extract from function body
-
-  # Generate correct expectations
-  if (tidy_value == TRUE || is.null(tidy_value)) {  # Default is TRUE
-    expectations <- quote({
-      expect_s3_class(result, "tbl_df")
-    })
-  } else {
-    expectations <- quote({
-      expect_type(result, "list")
-    })
-  }
-
-  # Rest of test generation...
-}
-```
-
-**Current bug:** Test generator doesn't read `tidy` parameter, always assumes tibble return. Causes 122 test failures (TODO.md line 23).
-
-### Pattern 3: Cassette-Per-Test-Variant
-
-**What:** Each test variant (single, batch, error, example) gets its own uniquely named cassette.
-
-**Why:** Isolates request/response pairs, enables selective re-recording, prevents cassette conflicts.
-
-**When:** Test generator creates tests with `vcr::use_cassette()`.
-
-**Example:**
-```r
-# Generated test structure
-test_that("ct_hazard works with single input", {
-  vcr::use_cassette("ct_hazard_single", {  # Unique cassette
-    result <- ct_hazard("DTXSID7020182")
-    expect_s3_class(result, "tbl_df")
-  })
-})
-
-test_that("ct_hazard handles batch requests", {
-  vcr::use_cassette("ct_hazard_batch", {  # Different cassette
-    result <- ct_hazard(c("DTXSID7020182", "DTXSID5032381"))
-    expect_s3_class(result, "tbl_df")
-  })
-})
-```
-
-**Cassette naming convention:**
-- `{function_name}_single` - Single input test
-- `{function_name}_batch` - Batch input test
-- `{function_name}_error` - Error handling test
-- `{function_name}_example` - Example-based test
-- `{function_name}_basic` - No-parameter functions
-
-**Benefits:**
-- Easy to identify which test a cassette belongs to
-- Can delete cassettes by pattern (e.g., all `*_batch` cassettes)
-- Enables incremental re-recording (just batch tests, just error tests)
-
-### Pattern 4: Lifecycle Protection Guard
-
-**What:** Prevent automated tools from overwriting stable/maturing functions.
-
-**Why:** Functions marked `@lifecycle stable` are production code that should not be touched by stub generators or test generators.
-
-**When:** Before writing any file, check for lifecycle badges.
-
-**Existing implementation:**
-```r
-# dev/endpoint_eval/05_file_scaffold.R
-has_protected_lifecycle <- function(path) {
-  protected_statuses <- c("stable", "maturing", "superseded", "deprecated", "defunct")
-  lines <- readLines(path, warn = FALSE)
-
-  badges <- str_extract_all(lines, 'lifecycle::badge\\("([^"]+)"\\)')
-  statuses <- str_extract(unlist(badges), '(?<=badge\\(")[^"]+')
-
-  any(tolower(statuses) %in% protected_statuses)
-}
-
-scaffold_files <- function(..., overwrite = FALSE, append = FALSE) {
-  # ...
-  if (existed && (overwrite || append)) {
-    if (has_protected_lifecycle(path)) {
-      return(tibble(action = "skipped_lifecycle", ...))
-    }
-  }
-  # ...
-}
-```
-
-**Application to test generator:**
-Test generator should also check lifecycle before overwriting test files. If a test file has `# Protected by lifecycle badge` comment at top, skip generation.
+**Protocol used by `.eco_patch_lifestage()`:**
 
 ```r
-# dev/generate_tests.R
-has_protected_test <- function(test_file) {
-  if (!file.exists(test_file)) return(FALSE)
-  lines <- readLines(test_file, n = 5, warn = FALSE)
-  any(grepl("# Protected|# Do not auto-generate", lines))
-}
+# Step 1 — evict cached read-only handle before touching the file
+.eco_close_con()
+
+# Step 2 — open read-write
+con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = FALSE)
+
+# Step 3 — guarantee cleanup even on error
+on.exit({
+  if (DBI::dbIsValid(con)) DBI::dbDisconnect(con, shutdown = TRUE)
+  .eco_close_con()  # clears .ComptoxREnv$ecotox_db (set to NULL by disconnect above)
+}, add = TRUE)
+
+# ... do work ...
+
+# Explicit disconnect before on.exit fires is NOT needed — on.exit handles it
+# After on.exit: .ComptoxREnv$ecotox_db is NULL
+# Next .eco_get_con() call opens a fresh read-only handle and caches it
 ```
 
-### Pattern 5: Two-Phase Cassette Recording
+**Why `.eco_close_con()` is called twice:**
 
-**What:** Separate cassette recording into two phases: initial recording (may fail), then fix and re-record.
+The first call (before opening read-write) ensures the file has zero active handles so
+DuckDB grants write access. The second call (in `on.exit`) is defensive: if an error path
+between steps leaves `.ComptoxREnv$ecotox_db` non-NULL somehow, the second call clears it
+so the next query does not try to reuse a stale or invalid handle.
 
-**Why:** First API requests may return errors, bad parameters, or unexpected formats. Don't commit bad cassettes. Fix tests, delete cassettes, re-record clean.
+**Build-time context:** `ecotox_build.R` never calls `.eco_get_con()`. It manages its own
+`eco_con` handle (`DBI::dbConnect` at the start, `DBI::dbDisconnect` at the end) and
+writes tables directly through that handle. No conflict with the cached connection arises
+because the cached connection is only created when user code calls into the package via
+`eco_results()` et al., which does not happen during an ETL build.
 
-**When:** First CI run after test generation records cassettes. Manual intervention fixes bad tests, then re-runs.
+## Shared Helper Layer Structure
 
-**Flow:**
+`R/eco_lifestage_patch.R` defines 14 internal functions in dependency order:
+
 ```
-Phase 1: Initial Recording (CI)
-├─ Test generated with wrong parameters
-├─ VCR records error response
-├─ Test fails (expected)
-└─ Cassette committed (intentionally, for debugging)
+Schema helpers (no dependencies)
+  .eco_lifestage_cache_schema()
+  .eco_lifestage_dictionary_schema()
+  .eco_lifestage_review_schema()
 
-Phase 2: Fix and Re-record (Manual)
-├─ Developer reviews failure logs
-├─ Identifies parameter error in test generator
-├─ Runs: dev/cleanup_cassettes.R "function_name"
-├─ Fixes test generator logic
-├─ Re-runs: dev/generate_tests.R (overwrites bad test)
-├─ CI re-runs tests (re-records clean cassette)
-└─ Test passes, clean cassette committed
+Path and I/O helpers (depend on R_user_dir / system.file)
+  .eco_lifestage_release_id(x)      -- accepts DBIConnection, file path, or zip name
+  .eco_lifestage_cache_path(release)
+  .eco_lifestage_baseline_path()
+  .eco_lifestage_derivation_path()
+  .eco_lifestage_read_csv(path)
+  .eco_lifestage_json_col()         -- safe column extraction from JSON docs
+  .eco_lifestage_json_binding_value()
+  .eco_lifestage_json_list_col()
+
+Validation helper
+  .eco_lifestage_validate_cache(x, expected_release, source_name)
+
+Cache read / write
+  .eco_lifestage_cache_read(release, required)
+  .eco_lifestage_cache_write(x, release)
+  .eco_lifestage_derivation_map()
+
+Seed resolution (selects cache source by refresh mode)
+  .eco_lifestage_load_seed_cache(release, refresh, force)
+
+Text normalization and scoring
+  .eco_lifestage_normalize_term(x, mode)
+  .eco_lifestage_regex_escape(x)
+  .eco_lifestage_token_score(term, candidate)
+  .eco_lifestage_score_text(term, candidate)
+
+Provider queries (depend on httr2, jsonlite)
+  .eco_lifestage_nvs_index(refresh)    -- caches in .ComptoxREnv
+  .eco_lifestage_query_ols4(term, ontology)
+  .eco_lifestage_query_nvs(term)
+
+Ranking and resolution
+  .eco_lifestage_rank_candidates(org_lifestage, candidates)
+  .eco_lifestage_resolve_term(org_lifestage, ecotox_release)
+
+Output construction
+  .eco_lifestage_review_from_cache(cache_rows)
+  .eco_lifestage_derive_fields(resolved_rows)
+
+Table materialization (called by both build and patch)
+  .eco_lifestage_materialize_tables(org_lifestages, ecotox_release,
+                                    refresh, force, write_cache)
+
+Patch entrypoint (depends on all above + eco_connection.R functions)
+  .eco_patch_lifestage(db_path, refresh, force)
 ```
 
-**Cassette quality check:**
-```r
-# tests/testthat/helper-api.R (existing)
-check_cassette_safety <- function(cassette_name) {
-  file <- file.path("tests/testthat/fixtures", paste0(cassette_name, ".yml"))
-  content <- readLines(file, warn = FALSE)
+The file begins with a guard that creates `.ComptoxREnv` if sourced standalone (i.e. in
+the build script context where the package is not loaded). This lets the NVS index cache
+work identically whether called from `ecotox_build.R` or from inside a loaded package
+session.
 
-  # Check for sensitive data
-  if (any(grepl("api[_-]?key", content, ignore.case = TRUE))) {
-    warning("Cassette contains potential API key: ", cassette_name)
-  }
+## Build and Validation Order
 
-  # Check for error responses
-  if (any(grepl("error|invalid|failed", content, ignore.case = TRUE))) {
-    message("Cassette may contain error response: ", cassette_name)
-  }
-}
-```
+The dependency chain dictates this sequence for v2.4 implementation verification:
+
+**Step 1 — Shared helpers exist and are self-consistent**
+- `R/eco_lifestage_patch.R` exists (confirmed)
+- All 14+ functions defined in dependency order
+- Schema functions return correct zero-row tibbles
+- `devtools::load_all()` loads without errors
+
+**Step 2 — Baseline and derivation artifacts are present**
+- `inst/extdata/ecotox/lifestage_baseline.csv` exists (confirmed)
+- `inst/extdata/ecotox/lifestage_derivation.csv` exists (confirmed)
+- Baseline uses the 13-column cache schema
+- Derivation uses the 5-column key schema (`source_ontology`, `source_term_id`,
+  `harmonized_life_stage`, `reproductive_stage`, `derivation_source`)
+- Both cover at least one common ECOTOX release
+
+**Step 3 — Runtime join in eco_functions.R is correct**
+- `.eco_enrich_metadata()` lines 659-679: `lifestage_codes` join then
+  `lifestage_dictionary` join on `org_lifestage`
+- Eight columns relocated after `organism_lifestage`
+- `ontology_id` absent from all `dplyr::select` / `dplyr::relocate` calls
+- `devtools::document()` regenerates `man/eco_results.Rd` with new field docs
+
+**Step 4 — Build script section 16 is identical in both files**
+- `inst/ecotox/ecotox_build.R` lines 974-1023
+- `data-raw/ecotox.R` lines 975-1024
+- Both use the same helper availability check pattern:
+  `exists(".eco_lifestage_materialize_tables")` -> source or namespace copy
+- Both call `.eco_lifestage_materialize_tables(refresh="auto", write_cache=TRUE)`
+- Both write with `overwrite=TRUE`
+- Both emit `cli::cli_alert_warning` on quarantine rows
+
+**Step 5 — Patch function safety checks pass**
+- `.eco_patch_lifestage()` aborts on missing `_metadata`
+- Aborts on missing `ecotox_release` key
+- Aborts on missing `lifestage_codes` or `description` column
+- Writes only `lifestage_dictionary`, `lifestage_review`, `_metadata`
+- Returns invisible named list
+
+**Step 6 — Integration: patch then query**
+- After `.eco_patch_lifestage()`, `.eco_get_con()` returns a fresh handle
+- `eco_results(casrn="50-29-3")` returns expected columns
+- `ontology_id` absent from output
+- `harmonized_life_stage` populated for resolved terms
+
+**Step 7 — Build integration: fresh DB has matching tables**
+- Full build via `eco_install(build=TRUE)` produces a DB whose
+  `lifestage_dictionary` matches what `.eco_patch_lifestage()` would produce
+  for the same ECOTOX release
+
+## Integration Points with Existing Code
+
+### eco_functions.R — `.eco_enrich_metadata()` (lines 659-679)
+
+The join is already implemented. The two-step structure (codes then dictionary) is
+deliberate: `lifestage_codes` translates the raw ECOTOX code to a human-readable
+description (`org_lifestage`), which is the join key for `lifestage_dictionary`. Skipping
+the `lifestage_codes` join would leave only a bare code that cannot match the dictionary.
+
+The `relocate()` call places all 8 new columns immediately after `organism_lifestage`
+in output column order. The `lifestage_review` table is never referenced at runtime; it
+is a quarantine artifact for developer inspection only.
+
+### eco_connection.R — Connection cache
+
+`.eco_patch_lifestage()` depends on both `.eco_close_con()` and the fact that
+`.ComptoxREnv$ecotox_db` is the single source of truth for the cached handle. Any future
+refactoring of the connection cache must preserve this contract or update the patch
+function's preamble.
+
+`eco_path()` provides the default `db_path` argument to `.eco_patch_lifestage()`. If a
+user has set `options(ComptoxR.ecotox_path = ...)`, the patch function will target that
+path automatically. This is correct behavior.
+
+### ecotox_build.R / data-raw/ecotox.R — Section 16 helper availability
+
+The build script runs in a `local(new.env())` context (via `source(build_script, local =
+new.env(parent = globalenv()))`). The `.ComptoxREnv` guard at the top of
+`eco_lifestage_patch.R` ensures the NVS index cache works in that context. The
+`exists(".eco_lifestage_materialize_tables", mode="function")` check allows the build to
+work whether the helper was sourced directly (dev checkout) or copied from the installed
+namespace.
+
+### _metadata table
+
+The build script writes `_metadata` at section 22 (after all ETL tables). The patch
+function reads `_metadata` to extract `ecotox_release` before doing any work. If patch is
+called on a DB that was built with v2.4 code, the metadata key `ecotox_release` is
+guaranteed to exist. On a DB built by an older version, the key may be absent and the
+patch aborts with an informative message.
 
 ## Anti-Patterns to Avoid
 
-### Anti-Pattern 1: Assume All Parameters Are DTXSIDs
+### Anti-Pattern 1: Holding cached connection during patch
 
-**What:** Test generator blindly uses DTXSIDs for every function's first parameter.
+**What goes wrong:** Calling `.eco_patch_lifestage()` without first calling
+`.eco_close_con()`. DuckDB will refuse the read-write open while a read-only handle to
+the same file is active, producing an opaque connection error.
 
-**Why bad:** Many functions take non-DTXSID parameters (list names, formulas, property names, pagination limits). Causes test failures and bad cassettes.
+**Prevention:** `.eco_patch_lifestage()` calls `.eco_close_con()` as its first side
+effect before attempting `dbConnect`. The `on.exit` handler ensures the cached handle is
+cleared even if the read-write open fails.
 
-**Current evidence:** TODO.md line 24 lists 7 functions with wrong parameter types:
-- `chemi_amos_method_pagination` - `limit = "DTXSID7020182"` (should be numeric)
-- `ct_chemical_list_search_by_type` - `search_type = "DTXSID7020182"` (should be "Public")
+### Anti-Pattern 2: Cross-release cache reuse
 
-**Instead:**
-```r
-# tests/testthat/tools/helper-test-generator-v2.R
-determine_test_input_type <- function(param_name, metadata) {
-  # Map parameter name to appropriate test data type
-  param_map <- list(
-    query = "query_dtxsid",
-    list_name = "list_name",
-    dtxsid = "dtxsid",
-    limit = "pagination_limit",  # NEW
-    offset = "pagination_offset", # NEW
-    search_type = "list_type"     # NEW
-  )
+**What goes wrong:** A user cache from release `2024-06` is reused when the installed DB
+is release `2024-09`. The dictionary would contain terms from the wrong release.
 
-  param_map[[param_name]] %||% "query_dtxsid"
-}
+**Prevention:** `.eco_lifestage_validate_cache()` checks that all rows in the cache have
+`ecotox_release` matching the expected release and aborts with an informative mismatch
+error. Patch metadata in `_metadata` records the release that was actually applied.
 
-# Add pagination test inputs
-get_standard_test_inputs <- function() {
-  list(
-    # ... existing ...
-    pagination_limit = list(single = 10, batch = 50),
-    pagination_offset = list(single = 0, batch = 20),
-    list_type = list(single = "Public", batch = c("Public", "Private"))
-  )
-}
-```
+### Anti-Pattern 3: Divergent build-script section 16 copies
 
-### Anti-Pattern 2: Commit All Cassettes Immediately
+**What goes wrong:** `inst/ecotox/ecotox_build.R` and `data-raw/ecotox.R` section 16
+drift apart. The development build (data-raw) produces different tables than the
+installed build (inst/ecotox), breaking reproducibility.
 
-**What:** Git tracks all cassettes including ones with bad parameters or error responses.
+**Prevention:** Both files must have byte-identical section 16 bodies. The acceptance
+criterion in `LIFESTAGE_HARMONIZATION_PLAN2.md` explicitly requires this. A test
+(`test-eco_lifestage_gate.R`) should assert the sections are identical using a diff-based
+check on the file text.
 
-**Why bad:** Bad cassettes pollute the repository, make it hard to identify clean test data, cause tests to pass when they shouldn't (testing against error responses).
+### Anti-Pattern 4: Runtime join to lifestage_review
 
-**Current evidence:** TODO.md line 33: "673 untracked VCR cassettes — many were recorded with wrong parameter values".
+**What goes wrong:** Joining `lifestage_review` at query time leaks quarantine rows
+(ambiguous, unresolved, needs-derivation) into user results, polluting the harmonized
+output.
 
-**Instead:**
-```bash
-# .gitignore approach (selective ignoring)
-tests/testthat/fixtures/*_error.yml  # Ignore error cassettes until verified
+**Prevention:** `.eco_enrich_metadata()` joins only `lifestage_codes` and
+`lifestage_dictionary`. The `lifestage_review` table is read-only from a developer
+workflow perspective and is never referenced in the runtime query path.
 
-# OR: Manual review before commit
-dev/cleanup_cassettes.R --review  # Shows cassettes with error responses
-# Developer reviews, deletes bad ones, commits clean ones
-```
+### Anti-Pattern 5: Regex over raw ECOTOX terms in derived fields
 
-**Workflow:**
-1. First test run generates cassettes (all untracked)
-2. CI uploads cassettes as artifacts (not committed)
-3. Developer reviews artifacts, identifies bad cassettes
-4. Runs cleanup script to delete bad cassettes
-5. Re-records clean cassettes
-6. Commits only clean cassettes
+**What goes wrong:** Applying regex patterns to `organism_lifestage` codes or
+`org_lifestage` descriptions to infer `harmonized_life_stage` or `reproductive_stage`.
+This was the v2.3 approach and it is explicitly torn out in v2.4.
 
-### Anti-Pattern 3: Overwrite Manually Written Tests
+**Prevention:** Derived fields come exclusively from the `lifestage_derivation.csv` lookup
+keyed on `source_ontology + source_term_id`. Terms without a derivation entry are
+quarantined in `lifestage_review` with `review_status = "needs_derivation"` rather than
+receiving a regex-guessed category.
 
-**What:** Test generator overwrites tests that developers have manually refined (better assertions, edge cases, comments).
+### Anti-Pattern 6: Live provider calls without session cache
 
-**Why bad:** Loss of manual test improvements, discourages manual test writing.
+**What goes wrong:** Each call to `.eco_lifestage_query_nvs()` makes a full SPARQL query
+to the NVS endpoint, multiplying network round-trips by the number of ECOTOX terms (~120+
+distinct lifestage descriptions).
 
-**Prevention:**
-```r
-# dev/generate_tests.R
-generate_test_file <- function(metadata, output_file) {
-  if (file.exists(output_file)) {
-    # Check if manually protected
-    if (has_protected_test(output_file)) {
-      cli::cli_alert_warning("Skipping protected test: {basename(output_file)}")
-      return(NULL)
-    }
-
-    # Check if modified recently (assume manual edits)
-    mtime <- file.mtime(output_file)
-    if (difftime(Sys.time(), mtime, units = "days") < 7) {
-      cli::cli_alert_warning("Skipping recently modified test: {basename(output_file)}")
-      return(NULL)
-    }
-  }
-
-  # Generate test...
-}
-```
-
-**Protection mechanism:**
-- Add comment at top of auto-generated tests: `# AUTO-GENERATED - DO NOT EDIT MANUALLY`
-- If developer removes comment, test generator skips file (assumes manual refinement)
-- Lifecycle badge in test file: `# Protected by lifecycle badge` (future enhancement)
-
-### Anti-Pattern 4: Generate Tests Before Stubs Are Stable
-
-**What:** Run test generator immediately after stub generator, before stubs are reviewed or fixed.
-
-**Why bad:** Generated stubs may have syntax errors (e.g., `"RF" <- model = "RF"` in TODO.md line 8), duplicate parameters, missing required params. Tests against bad stubs will fail or crash.
-
-**Current evidence:** TODO.md lines 7-9 list build errors from stub generator producing invalid R code.
-
-**Instead:**
-```yaml
-# .github/workflows/generate-tests.yml
-- name: Validate generated stubs
-  id: validate
-  run: |
-    # Syntax check all generated stubs
-    Rscript -e '
-      stubs <- list.files("R", pattern = "^(ct|chemi|cc)_.*\\.R$", full.names = TRUE)
-      errors <- purrr::map_lgl(stubs, ~ {
-        tryCatch({
-          parse(.x)
-          FALSE
-        }, error = function(e) TRUE)
-      })
-      if (any(errors)) {
-        cat("Syntax errors in generated stubs:\n")
-        print(stubs[errors])
-        quit(status = 1)
-      }
-    '
-
-- name: Generate tests
-  if: steps.validate.outcome == 'success'
-  run: Rscript dev/generate_tests.R
-```
-
-**Validation steps:**
-1. Parse all generated R files (check syntax)
-2. Check for duplicate parameters in function signatures
-3. Check for invalid assignment operators
-4. Check for missing required dependencies
-
-### Anti-Pattern 5: No Test-to-Function Traceability
-
-**What:** Tests don't clearly indicate which function they test, making it hard to track coverage gaps.
-
-**Why bad:** Can't easily answer "does function X have tests?" without scanning test file contents.
-
-**Instead:**
-```r
-# Strict naming convention
-# R/ct_hazard.R → tests/testthat/test-ct_hazard.R
-
-# Test file header (auto-generated)
-# Tests for ct_hazard
-# Generated: 2026-02-26
-# Source: R/ct_hazard.R
-# Return type: tibble
-# Parameters: query (DTXSIDs)
-```
-
-**Detection script uses this:**
-```r
-# dev/detect_test_gaps.R
-detect_test_gaps <- function() {
-  r_files <- list.files("R", pattern = "^(ct|chemi|cc)_.*\\.R$")
-  function_names <- tools::file_path_sans_ext(r_files)
-
-  test_files <- list.files("tests/testthat", pattern = "^test-.*\\.R$")
-  tested_names <- stringr::str_remove(test_files, "^test-") %>%
-    stringr::str_remove("\\.R$")
-
-  missing <- setdiff(function_names, tested_names)
-
-  tibble::tibble(
-    function_name = missing,
-    source_file = file.path("R", paste0(missing, ".R")),
-    expected_test = file.path("tests/testthat", paste0("test-", missing, ".R"))
-  )
-}
-```
+**Prevention:** `.eco_lifestage_nvs_index()` fetches the entire S11 collection once per
+session and caches the result in `.ComptoxREnv$eco_lifestage_nvs_index`. Subsequent calls
+to `.eco_lifestage_query_nvs()` filter the in-memory index. The `refresh=TRUE` argument
+forces a re-fetch if the session cache is suspected stale.
 
 ## Scalability Considerations
 
-### At Current Scale (371 functions)
+| Concern | Current (~120 ECOTOX lifestage terms) | Future |
+|---------|---------------------------------------|--------|
+| Live resolution time | 120 terms x 3 providers = 360 HTTP calls; ~5-10 min | Cache/baseline eliminates this for normal use |
+| User cache size | One CSV per release, ~120 rows x 13 cols; negligible | Stable — ECOTOX lifestage vocabulary grows slowly |
+| DB write during patch | Overwrites 2 tables + _metadata; sub-second for ~120 rows | Stable at this scale |
+| NVS index memory | Full S11 collection; ~300 concepts, trivial memory | Stable |
+| Connection re-open cost | `dbConnect` read-only after patch; ~10-50ms | Acceptable |
 
-| Concern | Approach |
-|---------|----------|
-| Test generation time | Sequential generation acceptable (~1-2 min for all functions). Metadata extraction is fast (parse R code). |
-| Cassette storage | 673 cassettes × ~5KB avg = ~3.4MB. Git handles this fine. VCR uses YAML (text), compresses well. |
-| CI test runtime | 324 test files take ~10-15 min with cassettes (no API calls). First run slower (recording). |
-| Test maintenance | Test generator handles 90% of cases. Manual refinement for edge cases (10%). |
+## Sources
 
-### At 1000+ Functions
-
-| Concern | Approach |
-|---------|----------|
-| Test generation time | Parallelize: Use `future` package to generate tests in parallel. Estimated 5-10 functions/sec → ~3-5 min for 1000. |
-| Cassette storage | 1000 functions × 4 test variants × 5KB = ~20MB cassettes. Consider compression or external storage. |
-| CI test runtime | Split into parallel jobs: Run 100 functions per job × 10 jobs = ~15 min total. |
-| Test maintenance | Category-based generation: Generate tests by API domain (ct_*, chemi_*, cc_*) separately. Easier to review. |
-
-### At 5000+ Functions (Enterprise Scale)
-
-| Concern | Approach |
-|---------|----------|
-| Test generation time | Incremental generation: Only generate tests for changed functions. Cache metadata extraction. |
-| Cassette storage | External storage: Move cassettes to S3/artifact storage, download on-demand during tests. Git LFS for large cassettes. |
-| CI test runtime | Distributed testing: Use GitHub Actions matrix strategy, run 500 functions per job × 10 parallel jobs. |
-| Test maintenance | Automated test repair: Detect failing tests, auto-regenerate, auto-fix parameter types. ML-based test generation (future). |
-
-## Build Order and Dependencies
-
-### Phase 1: Fix Existing Blockers (Before Integration)
-
-**Prerequisites:** None (fixes existing code)
-
-**Tasks:**
-1. Fix stub generator syntax errors (TODO.md line 8-9)
-2. Fix duplicate parameter bugs in generated stubs
-3. Fix test generator to respect `tidy` parameter
-4. Fix test generator parameter type detection
-
-**Outcome:** Clean baseline for integration work
-
-**Estimated effort:** 2-3 days
-
-### Phase 2: Build New Components (Core Integration)
-
-**Prerequisites:** Phase 1 complete
-
-**Tasks:**
-1. Create `dev/detect_test_gaps.R` (detection script)
-2. Create `dev/generate_tests.R` (batch orchestrator)
-3. Update `helper-test-generator-v2.R` to fix parameter type detection
-4. Update `helper-function-metadata.R` to extract `tidy` parameter
-
-**Dependencies:**
-- `detect_test_gaps.R` → uses existing R/ files
-- `generate_tests.R` → uses `helper-test-generator-v2.R`
-- Test generator updates → use `helper-function-metadata.R`
-
-**Outcome:** Can generate tests for gap list manually
-
-**Estimated effort:** 3-4 days
-
-### Phase 3: CI Workflow Integration (Automation)
-
-**Prerequisites:** Phase 2 complete, test generator working correctly
-
-**Tasks:**
-1. Create `.github/workflows/generate-tests.yml`
-2. Update `generate_stubs.R` to output gap detection trigger
-3. Add gap reporting to CI summary
-4. Test full pipeline in staging branch
-
-**Dependencies:**
-- Workflow → calls `detect_test_gaps.R` → calls `generate_tests.R`
-- Requires GitHub Actions secrets (API key for cassette recording)
-
-**Outcome:** Automated end-to-end pipeline
-
-**Estimated effort:** 2-3 days
-
-### Phase 4: Cassette Management (Cleanup and Quality)
-
-**Prerequisites:** Phase 3 complete, tests running in CI
-
-**Tasks:**
-1. Create `dev/cleanup_cassettes.R` (deletion utility)
-2. Review 673 untracked cassettes, delete bad ones
-3. Re-run tests to re-record clean cassettes
-4. Commit clean cassettes
-
-**Dependencies:**
-- Requires test failures to identify bad cassettes
-- Needs API key for re-recording
-
-**Outcome:** Clean cassette set, quality standards established
-
-**Estimated effort:** 2-3 days
-
-### Phase 5: Documentation and Refinement (Polish)
-
-**Prerequisites:** Phase 4 complete, pipeline proven in production
-
-**Tasks:**
-1. Document test generation workflow in CLAUDE.md
-2. Add CI workflow documentation (README for workflows)
-3. Create troubleshooting guide for test failures
-4. Refine test generator based on edge cases
-
-**Outcome:** Production-ready, documented system
-
-**Estimated effort:** 1-2 days
-
-### Total Timeline
-
-**Estimated:** 10-15 days for full integration
-
-**Critical path:**
-Phase 1 (blockers) → Phase 2 (components) → Phase 3 (CI) → Phase 4 (cassettes)
-
-**Parallelizable:**
-- Documentation can start in Phase 2
-- Cassette cleanup can start early if test generation is manual
-
-**Risks:**
-- Stub generator fixes may reveal deeper issues (add 2-3 days)
-- CI workflow debugging can be time-consuming (add 1-2 days)
-- Bad cassette cleanup may take longer if many need manual review (add 2-3 days)
-
-## New vs Modified Components
-
-### Modified Components
-
-| Component | File | Change Type | Lines Changed |
-|-----------|------|-------------|---------------|
-| Test Generator v2 | `tests/testthat/tools/helper-test-generator-v2.R` | **Fix** parameter type detection, **Add** tidy parameter reading | ~50 lines modified, ~30 lines added |
-| Function Metadata Extractor | `tests/testthat/tools/helper-function-metadata.R` | **Add** `tidy` parameter extraction to `extract_generic_request_info()` | ~20 lines added |
-| Stub Generator | `dev/generate_stubs.R` | **Add** GITHUB_OUTPUT for gap detection trigger | ~10 lines added |
-
-### New Components
-
-| Component | File | Purpose | Lines Estimated |
-|-----------|------|---------|-----------------|
-| Test Gap Detector | `dev/detect_test_gaps.R` | Scan R/ for functions without tests, output list | ~100 lines |
-| Batch Test Orchestrator | `dev/generate_tests.R` | Generate tests for multiple functions, wrap test-generator-v2 | ~150 lines |
-| Cassette Cleanup Script | `dev/cleanup_cassettes.R` | Delete cassettes by pattern or function name | ~80 lines |
-| CI Test Generation Workflow | `.github/workflows/generate-tests.yml` | Automate detection → generation → commit flow | ~120 lines YAML |
-
-### Unchanged Components (Zero Modifications)
-
-| Component | Rationale |
-|-----------|-----------|
-| Stub generation pipeline (`dev/endpoint_eval/`) | Already stable (v1.9), comprehensive tests, lifecycle guards work |
-| Generic request templates (`R/z_generic_request.R`) | Core infrastructure, no changes needed |
-| VCR configuration (`tests/testthat/helper-vcr.R`) | Simple config, works correctly |
-| CI test workflows (test-coverage.yml, R-CMD-check.yml) | Coverage enforcement and R CMD check don't need changes |
-
-## References and Sources
-
-**R package testing best practices:**
-- [Getting started with vcr](https://cran.r-project.org/web/packages/vcr/vignettes/vcr.html) - Official vcr documentation for cassette management
-- [Managing cassettes | HTTP testing in R](https://books.ropensci.org/http-testing/managing-cassettes.html) - rOpenSci guide to VCR cassette organization
-- [Package 'vcr' CRAN](https://cran.r-project.org/web/packages/vcr/vcr.pdf) - vcr package reference manual
-
-**Project-specific context:**
-- `TODO.md` lines 23-33: Test infrastructure blockers (tidy mismatches, parameter type errors, 673 bad cassettes)
-- `.planning/PROJECT.md`: Stub generation pipeline architecture (v1.0-v1.9 history)
-- `dev/generate_stubs.R`: Existing orchestration pattern for stub generation
-- `tests/testthat/tools/helper-test-generator-v2.R`: Current test generation logic (needs fixes)
-
-**Key architectural decisions:**
-- Detection-then-generation pattern avoids overwriting manual tests
-- Metadata-driven generation prevents parameter type mismatches
-- Cassette-per-test-variant enables selective re-recording
-- Lifecycle protection guards prevent stable function overwrites
-- Two-phase cassette recording separates initial capture from quality validation
+- `R/eco_connection.R` — Connection cache implementation (.eco_get_con, .eco_close_con)
+- `R/eco_functions.R` — `.eco_enrich_metadata()` lifestage join (lines 659-679)
+- `R/eco_lifestage_patch.R` — Complete shared helper layer (926 lines)
+- `inst/ecotox/ecotox_build.R` — Build pipeline section 16 (lines 974-1023)
+- `data-raw/ecotox.R` — Dev build pipeline section 16 (lines 975-1024)
+- `inst/extdata/ecotox/lifestage_baseline.csv` — Committed seed artifact
+- `inst/extdata/ecotox/lifestage_derivation.csv` — Curated derivation map
+- `LIFESTAGE_HARMONIZATION_PLAN2.md` — Authoritative implementation plan
+- DuckDB single-writer constraint: https://duckdb.org/docs/connect/concurrency
