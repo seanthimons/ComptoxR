@@ -2,6 +2,7 @@
 # -----------------------------------------------------------
 
 test_that("lifestage_baseline.csv has correct schema columns", {
+  testthat::skip_if_not_installed("readr")
   path <- system.file(
     "extdata",
     "ecotox",
@@ -32,6 +33,7 @@ test_that("lifestage_baseline.csv has correct schema columns", {
 })
 
 test_that("lifestage_derivation.csv has correct schema columns", {
+  testthat::skip_if_not_installed("readr")
   path <- system.file(
     "extdata",
     "ecotox",
@@ -54,6 +56,7 @@ test_that("lifestage_derivation.csv has correct schema columns", {
 })
 
 test_that("every resolved baseline key has a derivation partner (cross-check gate)", {
+  testthat::skip_if_not_installed("readr")
   baseline_path <- system.file(
     "extdata",
     "ecotox",
@@ -95,6 +98,7 @@ test_that("every resolved baseline key has a derivation partner (cross-check gat
 })
 
 test_that("lifestage_baseline.csv has non-zero rows", {
+  testthat::skip_if_not_installed("readr")
   path <- system.file(
     "extdata",
     "ecotox",
@@ -110,6 +114,7 @@ test_that("lifestage_baseline.csv has non-zero rows", {
 })
 
 test_that("lifestage_derivation.csv has non-zero rows", {
+  testthat::skip_if_not_installed("readr")
   path <- system.file(
     "extdata",
     "ecotox",
