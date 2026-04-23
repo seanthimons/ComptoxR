@@ -149,3 +149,59 @@ test_that("lifestage_derivation.csv has non-zero rows", {
   df <- readr::read_csv(path, show_col_types = FALSE)
   testthat::expect_gt(nrow(df), 0L)
 })
+
+test_that("lifestage_audit.csv has correct schema columns", {
+  testthat::skip_if_not_installed("readr")
+  path <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_audit.csv",
+    package = "ComptoxR"
+  )
+  testthat::skip_if(
+    nchar(path) == 0,
+    "lifestage_audit.csv not found in installed package"
+  )
+  df <- readr::read_csv(path, show_col_types = FALSE)
+  expected_cols <- c(
+    "candidate_source",
+    "notes",
+    "org_lifestage",
+    "resolution_path",
+    "triage_bucket"
+  )
+  testthat::expect_equal(sort(names(df)), sort(expected_cols))
+})
+
+test_that("every unresolved baseline term has an audit classification", {
+  testthat::skip_if_not_installed("readr")
+  baseline_path <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_baseline.csv",
+    package = "ComptoxR"
+  )
+  audit_path <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_audit.csv",
+    package = "ComptoxR"
+  )
+  testthat::skip_if(
+    nchar(baseline_path) == 0 || nchar(audit_path) == 0,
+    "CSV artifacts not found in installed package"
+  )
+  baseline <- readr::read_csv(baseline_path, show_col_types = FALSE)
+  audit <- readr::read_csv(audit_path, show_col_types = FALSE)
+  unresolved <- dplyr::filter(baseline, source_match_status == "unresolved")
+  gaps <- dplyr::anti_join(unresolved, audit, by = "org_lifestage")
+  testthat::expect_equal(
+    nrow(gaps),
+    0L,
+    label = paste0(
+      nrow(gaps),
+      " unresolved term(s) have no audit classification: ",
+      paste(unique(gaps$org_lifestage), collapse = ", ")
+    )
+  )
+})

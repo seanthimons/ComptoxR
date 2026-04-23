@@ -817,6 +817,29 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   cache_rows <- cache_rows |>
     dplyr::arrange(.data$org_lifestage, .data$candidate_rank)
 
+  # -- Audit coverage gate (D-10): warn for unclassified unresolved terms ------
+  audit_path <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_audit.csv",
+    package = "ComptoxR"
+  )
+  if (nzchar(audit_path) && file.exists(audit_path)) {
+    audit <- readr::read_csv(audit_path, show_col_types = FALSE)
+    unresolved_terms <- cache_rows |>
+      dplyr::filter(.data$source_match_status == "unresolved") |>
+      dplyr::pull(.data$org_lifestage) |>
+      unique()
+    unclassified <- setdiff(unresolved_terms, audit$org_lifestage)
+    if (length(unclassified) > 0) {
+      cli::cli_warn(c(
+        "{length(unclassified)} unresolved term(s) not found in lifestage audit CSV.",
+        "i" = "Terms: {.val {unclassified}}",
+        "i" = "Edit {.path {audit_path}} to classify these terms."
+      ))
+    }
+  }
+
   if (isTRUE(write_cache)) {
     .eco_lifestage_cache_write(cache_rows, ecotox_release)
   }
