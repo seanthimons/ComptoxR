@@ -1,0 +1,70 @@
+org_lifestage,triage_bucket,resolution_path,candidate_source,notes
+Alevin,alias_synonym,pending_probe,NA,Fish juvenile stage (pre-feeding salmon/trout after hatching)
+Copepodid,alias_synonym,pending_probe,NA,Invertebrate larval stage (copepod development after nauplius)
+Elver,alias_synonym,pending_probe,NA,Fish juvenile stage (young eel synonym)
+Exponential growth phase (log),out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
+F0 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F1 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F11 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F2 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F3 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F6 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+F7 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+Fingerling,alias_synonym,pending_probe,NA,Fish juvenile stage (small freshwater fish synonym)
+Froglet,alias_synonym,pending_probe,NA,Amphibian metamorphic stage (juvenile frog after tail resorption)
+Fry,alias_synonym,pending_probe,NA,Fish juvenile stage (newly hatched fish synonym)
+Glochidia,alias_synonym,pending_probe,NA,Bivalve larval stage (parasitic mussel larvae)
+Grain or seed formation stage,needs_ontology_expansion,pending_probe,NA,Plant reproductive stage (grain fill); needs PO grain-specific expansion
+Heading,needs_ontology_expansion,pending_probe,NA,Grass reproductive stage (ear emergence); needs PO/AGROVOC expansion
+Imago,alias_synonym,pending_probe,NA,Insect adult stage synonym (final imago stage)
+Intermolt,alias_synonym,pending_probe,NA,Arthropod stage between molts synonym
+Jointing,needs_ontology_expansion,pending_probe,NA,Grass vegetative stage (internode elongation); needs PO expansion
+Lactational,out_of_scope_biology,manual_curator,NA,"Reproductive physiological state; reproductive-adjacent, not a life stage"
+Lag growth phase,out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
+Mature (full-bloom stage) organism,needs_ontology_expansion,pending_probe,NA,Plant full bloom qualifier; ambiguous organism-level term needing expansion
+Mature dormant,needs_ontology_expansion,pending_probe,NA,Plant dormancy qualifier; needs PO/AGROVOC expansion
+Mature reproductive,needs_ontology_expansion,pending_probe,NA,Reproductive-phase qualifier; needs ontology expansion
+Mature vegetative,needs_ontology_expansion,pending_probe,NA,Vegetative-phase qualifier; needs PO expansion
+Mid-neurula,alias_synonym,pending_probe,NA,Amphibian embryo stage (mid-neurulation phase synonym)
+Molt,alias_synonym,pending_probe,NA,Arthropod ecdysis event synonym
+Naiad,alias_synonym,pending_probe,NA,Insect aquatic nymph synonym (Odonata/Ephemeroptera)
+Neurala,alias_synonym,pending_probe,NA,Amphibian embryo stage (neurula stage variant spelling)
+"New, newly or recent hatch",ambiguous,pending_probe,NA,Ambiguous across fish/amphibian/invertebrate hatchling stages
+Not coded,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
+Not intact,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
+Not reported,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
+Parr,alias_synonym,pending_probe,NA,Fish juvenile stage (salmon parr with finger-mark patterns)
+Post-emergence,alias_synonym,pending_probe,NA,Insect post-emergence stage synonym (after adult emerges)
+Post-hatch,alias_synonym,pending_probe,NA,General post-hatching stage synonym
+Post-molt,alias_synonym,pending_probe,NA,Arthropod post-ecdysis stage synonym
+Post-spawning,out_of_scope_biology,manual_curator,NA,"Post-reproductive event; reproductive-adjacent, not a developmental stage"
+Postpartum,out_of_scope_biology,manual_curator,NA,"Post-birth physiological period; reproductive-adjacent, not a life stage"
+Pre-hatch,alias_synonym,pending_probe,NA,General pre-hatching stage synonym
+Pre-molt,alias_synonym,pending_probe,NA,Arthropod pre-ecdysis stage synonym
+Pre-spawning,out_of_scope_biology,manual_curator,NA,"Pre-reproductive event; reproductive-adjacent, not a developmental stage"
+Prebloom,alias_synonym,pending_probe,NA,Plant pre-flowering stage synonym
+Prepupal,alias_synonym,pending_probe,NA,Insect prepupal stage synonym (before pupal stage)
+Prolarva,alias_synonym,pending_probe,NA,Fish early larval stage synonym (pre-larva variant)
+Protolarvae,alias_synonym,pending_probe,NA,Fish early larval stage synonym (proto-larva variant)
+Pullet,alias_synonym,pending_probe,NA,Poultry juvenile stage synonym (young hen before first egg)
+Rooted cuttings,alias_synonym,pending_probe,NA,Plant vegetative propagule stage synonym
+Rootstock,needs_ontology_expansion,pending_probe,NA,Plant propagation material; needs PO/AGROVOC expansion
+Sapling,alias_synonym,pending_probe,NA,Plant juvenile stage synonym (young tree)
+Scape elongation,needs_ontology_expansion,pending_probe,NA,Plant bolt stage (scape = flowering stem); needs PO expansion
+Sexually mature,ambiguous,pending_probe,NA,Ambiguous across taxa; overlaps Adult/Subadult/Reproductive categories
+Spawning,alias_synonym,pending_probe,NA,Fish reproductive activity synonym (often conflated with adult stage)
+Sporeling,alias_synonym,pending_probe,NA,Plant/algae juvenile stage (young plant from spore)
+Stationary growth phase,out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
+Subadult,alias_synonym,pending_probe,NA,Pre-adult stage synonym (sexually immature but near adult size)
+Swim-up,alias_synonym,pending_probe,NA,Fish larval stage synonym (sac fry beginning active swimming)
+Tiller stage,needs_ontology_expansion,pending_probe,NA,Grass vegetative stage (lateral shoot development); needs AGROVOC expansion
+Trophozoite,alias_synonym,pending_probe,NA,Protozoan active feeding stage synonym
+Turion,alias_synonym,pending_probe,NA,Plant dormant propagule stage synonym (overwintering bud)
+Underyearling,alias_synonym,pending_probe,NA,Fish juvenile stage synonym (less than 1 year old)
+Unspecified,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
+Virgin,alias_synonym,pending_probe,NA,Invertebrate reproductive stage synonym (unmated adult female)
+Weanling,alias_synonym,pending_probe,NA,Mammal juvenile stage synonym (recently weaned offspring)
+Yearling,alias_synonym,pending_probe,NA,Animal juvenile stage synonym (1-2 years old)
+Young,alias_synonym,pending_probe,NA,General juvenile stage synonym
+Young of year,ambiguous,pending_probe,NA,Ambiguous age qualifier (< 1 year) across taxa
+Zygospore,alias_synonym,pending_probe,NA,Fungal/algal resting spore stage synonym
