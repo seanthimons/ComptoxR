@@ -93,7 +93,7 @@
 
 - [x] **Phase 34: Teardown** - Remove v2.3 regex classifier, ontology_id column, and purge lifestage tables from DB (completed 2026-04-22)
 - [x] **Phase 35: Shared Helper Layer Validation** - Confirm all 14 helper functions in eco_lifestage_patch.R load and behave correctly (OLS4, NVS, BioPortal, scoring) (completed 2026-04-22)
-- [ ] **Phase 36: Bootstrap Data Artifacts** - Validate and commit lifestage_baseline.csv and lifestage_derivation.csv with cross-check gate
+- [x] **Phase 36: Bootstrap Data Artifacts** - Validate and commit lifestage_baseline.csv and lifestage_derivation.csv with cross-check gate (completed 2026-04-23)
 - [ ] **Phase 37: Build & Patch Integration** - Verify section 16 sync across both build scripts; confirm 4 refresh modes, Windows retry loop, and patch metadata
 - [ ] **Phase 38: Runtime API Finalization** - Verify eco_results() exposes 8 new columns, ontology_id is absent, and runtime join targets only lifestage_dictionary
 - [ ] **Phase 39: Quality Gates** - Mocked provider tests for OLS4, NVS, and BioPortal adapters; NEWS.md breaking change entry; dev script updates
@@ -180,8 +180,35 @@ Plans:
   3. Every row in `lifestage_baseline.csv` with `source_match_status == "resolved"` has a matching `(source_ontology, source_term_id)` row in `lifestage_derivation.csv` — cross-check passes with zero gaps
 **Plans**: 2 plans
 Plans:
-- [ ] 36-01-PLAN.md — Fix baseline GO:0040007 contamination, hand-author 6 derivation rows, create testthat cross-check gate
-- [ ] 36-02-PLAN.md — Create validate_36.R verification script, refresh_baseline.R dev script, and curator README
+- [x] 36-01-PLAN.md — Fix baseline GO:0040007 contamination, hand-author 6 derivation rows, create testthat cross-check gate
+- [x] 36-02-PLAN.md — Create validate_36.R verification script, refresh_baseline.R dev script, and curator README
+
+### Phase 36.1: Unresolved Coverage Audit (INSERTED)
+
+**Goal:** Classify every unresolved lifestage term into a triage bucket, prototype 4 external data sources to determine programmatic resolution viability, and produce a committed audit artifact with CI enforcement and runtime warning gate
+**Depends on:** Phase 36
+**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12, D-13, D-14
+**Success Criteria** (what must be TRUE):
+  1. `lifestage_audit.csv` exists with 69 rows, each having a non-empty `triage_bucket` from the 5 allowed values
+  2. CI anti-join test fails if any unresolved baseline term is missing from the audit CSV
+  3. `.eco_lifestage_materialize_tables()` emits `cli_warn` (never `cli_abort`) for unclassified terms
+  4. 4 administrative derivation rows appended to `lifestage_derivation.csv`
+  5. 4 probe scripts at `dev/lifestage/probe_*.R` test external sources with simple and complex terms
+**Plans:** 2/2 plans complete
+
+Plans:
+- [x] 36.1-01-PLAN.md — Create audit CSV, admin derivation rows, CI tests, cli_warn gate, validation script
+- [x] 36.1-02-PLAN.md — Create 4 probe scripts for OLS4, BioPortal, Wikidata, AGROVOC
+
+### Phase 36.2: Dictionary Rebuild (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 36.1
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 36.2 to break down)
 
 ### Phase 37: Build & Patch Integration
 **Goal**: The build path and in-place patch path both produce a correct `lifestage_dictionary`, with Windows-safe connection handling and patch metadata tracked
@@ -238,7 +265,8 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 ->
 | 33. Build Confirmation | v2.3 | 2/2 | Complete | 2026-04-20 |
 | 34. Teardown | v2.4 | 1/1 | Complete    | 2026-04-22 |
 | 35. Shared Helper Layer Validation | v2.4 | 2/2 | Complete    | 2026-04-22 |
-| 36. Bootstrap Data Artifacts | v2.4 | 0/2 | Not started | - |
+| 36. Bootstrap Data Artifacts | v2.4 | 2/2 | Complete   | 2026-04-23 |
+| 36.1. Unresolved Coverage Audit | v2.4 | 2/2 | Complete    | 2026-04-23 |
 | 37. Build & Patch Integration | v2.4 | 0/? | Not started | - |
 | 38. Runtime API Finalization | v2.4 | 0/? | Not started | - |
 | 39. Quality Gates | v2.4 | 0/? | Not started | - |

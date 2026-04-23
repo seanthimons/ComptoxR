@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.4
 milestone_name: Source-Backed Lifestage Resolution
 status: executing
-last_updated: "2026-04-23T14:50:36.754Z"
-last_activity: 2026-04-22
+last_updated: "2026-04-23T20:56:08.184Z"
+last_activity: 2026-04-23
 progress:
-  total_phases: 9
-  completed_phases: 2
-  total_plans: 3
-  completed_plans: 3
+  total_phases: 11
+  completed_phases: 4
+  total_plans: 7
+  completed_plans: 7
   percent: 100
 ---
 
@@ -20,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
-**Current focus:** Phase 35 — shared-helper-layer-validation
+**Current focus:** Phase 36.1 — unresolved-coverage-audit
 
 ## Current Position
 
-Phase: 36
+Phase: 36.2
 Plan: Not started
-Status: Executing Phase 35
-Last activity: 2026-04-22
+Status: Executing Phase 36.1
+Last activity: 2026-04-23
 
 ```
 Progress: [                    ] 0% (0/6 phases)
@@ -57,6 +57,11 @@ Progress: [                    ] 0% (0/6 phases)
 ### Pending Todos
 
 - Run /gsd-plan-phase 34 to plan the Teardown phase
+
+### Roadmap Evolution
+
+- Phase 36.1 inserted after Phase 36: Unresolved Coverage Audit (URGENT)
+- Phase 36.2 inserted after Phase 36.1: Dictionary Rebuild (URGENT)
 
 ### Blockers/Concerns
 
