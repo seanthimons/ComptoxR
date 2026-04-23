@@ -178,9 +178,10 @@ Plans:
   1. `system.file("extdata/ecotox/lifestage_baseline.csv", package = "ComptoxR")` returns a non-empty path and the file loads as a 13-column tibble covering all distinct `lifestage_codes.description` values in the current ECOTOX release
   2. `system.file("extdata/ecotox/lifestage_derivation.csv", package = "ComptoxR")` returns a non-empty path and the file loads as a 5-column tibble (source_ontology, source_term_id, harmonized_life_stage, reproductive_stage, derivation_source)
   3. Every row in `lifestage_baseline.csv` with `source_match_status == "resolved"` has a matching `(source_ontology, source_term_id)` row in `lifestage_derivation.csv` — cross-check passes with zero gaps
-**Plans**: 1 plan
+**Plans**: 2 plans
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [ ] 36-01-PLAN.md — Fix baseline GO:0040007 contamination, hand-author 6 derivation rows, create testthat cross-check gate
+- [ ] 36-02-PLAN.md — Create validate_36.R verification script, refresh_baseline.R dev script, and curator README
 
 ### Phase 37: Build & Patch Integration
 **Goal**: The build path and in-place patch path both produce a correct `lifestage_dictionary`, with Windows-safe connection handling and patch metadata tracked
@@ -237,7 +238,7 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 ->
 | 33. Build Confirmation | v2.3 | 2/2 | Complete | 2026-04-20 |
 | 34. Teardown | v2.4 | 1/1 | Complete    | 2026-04-22 |
 | 35. Shared Helper Layer Validation | v2.4 | 2/2 | Complete    | 2026-04-22 |
-| 36. Bootstrap Data Artifacts | v2.4 | 0/? | Not started | - |
+| 36. Bootstrap Data Artifacts | v2.4 | 0/2 | Not started | - |
 | 37. Build & Patch Integration | v2.4 | 0/? | Not started | - |
 | 38. Runtime API Finalization | v2.4 | 0/? | Not started | - |
 | 39. Quality Gates | v2.4 | 0/? | Not started | - |
