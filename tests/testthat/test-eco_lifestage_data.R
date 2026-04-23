@@ -97,6 +97,27 @@ test_that("every resolved baseline key has a derivation partner (cross-check gat
   )
 })
 
+test_that("lifestage_baseline.csv has no GO:0040007 contamination", {
+  testthat::skip_if_not_installed("readr")
+  path <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_baseline.csv",
+    package = "ComptoxR"
+  )
+  testthat::skip_if(
+    nchar(path) == 0,
+    "lifestage_baseline.csv not found in installed package"
+  )
+  df <- readr::read_csv(path, show_col_types = FALSE)
+  go_rows <- df[!is.na(df$source_term_id) & df$source_term_id == "GO:0040007", ]
+  testthat::expect_equal(
+    nrow(go_rows),
+    0L,
+    info = "GO:0040007 (growth) is a biological process, not a life stage"
+  )
+})
+
 test_that("lifestage_baseline.csv has non-zero rows", {
   testthat::skip_if_not_installed("readr")
   path <- system.file(
