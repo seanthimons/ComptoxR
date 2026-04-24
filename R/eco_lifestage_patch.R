@@ -800,9 +800,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     dplyr::filter(.data$org_lifestage %in% org_lifestages)
 
   missing_terms <- setdiff(org_lifestages, unique(cache_rows$org_lifestage))
-  strict_seed <- seed$cache_source %in% c("cache", "baseline") &&
-    refresh %in% c("cache", "baseline") &&
-    !isTRUE(force)
+  strict_seed <- seed$cache_source %in% c("cache", "baseline") && refresh %in% c("cache", "baseline") && !isTRUE(force)
 
   if (length(missing_terms) > 0 && identical(refresh, "live")) {
     cache_rows <- purrr::map_dfr(
