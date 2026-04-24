@@ -832,6 +832,9 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     "lifestage_audit.csv",
     package = "ComptoxR"
   )
+  if (!nzchar(audit_path)) {
+    audit_path <- file.path("inst", "extdata", "ecotox", "lifestage_audit.csv")
+  }
   if (nzchar(audit_path) && file.exists(audit_path)) {
     audit <- readr::read_csv(audit_path, show_col_types = FALSE)
     unresolved_terms <- cache_rows |>
