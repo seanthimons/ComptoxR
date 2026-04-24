@@ -688,7 +688,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   accepted <- ranked |>
     dplyr::filter(.data$candidate_score >= 75)
 
-  if (!nrow(accepted)) {
+  if (nrow(accepted) == 0L) {
     return(
       .eco_lifestage_cache_schema() |>
         dplyr::add_row(
