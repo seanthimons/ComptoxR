@@ -202,13 +202,24 @@ Plans:
 
 ### Phase 36.2: Dictionary Rebuild (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
+**Goal:** Full 139-term re-resolution of lifestage_baseline.csv through an expanded 6-source provider pipeline (Alias normalization + OLS4-broader + BioPortal + NVS + Wikidata + AGROVOC), with auto-derived lifestage_derivation.csv rows using ontology-driven category mapping. Ship gate: 100% coverage.
+**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11, D-12, D-13, D-14
 **Depends on:** Phase 36.1
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. `lifestage_aliases.csv` exists at `inst/extdata/ecotox/` with 69 rows mapping unresolved terms to enriched search queries
+  2. `.eco_lifestage_resolve_term()` uses alias normalization + 5 providers (OLS4, BioPortal, NVS, Wikidata, AGROVOC) in permanent pipeline
+  3. All 4 new adapters follow tryCatch + cli_warn resilience pattern with per-adapter rate limiting
+  4. Regenerated `lifestage_baseline.csv` has 139 rows with higher than 50.4% resolution coverage
+  5. Auto-derived `lifestage_derivation.csv` has 100% coverage: every term resolved or has explicit derivation reason
+  6. Curator has reviewed and approved the final derivation CSV
+  7. CI tests pass with alias CSV schema validation and updated expectations
+**Plans:** 4 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 36.2 to break down)
+- [ ] 36.2-01-PLAN.md — Create alias CSV, alias lookup function, and ontology-to-category mapping function
+- [ ] 36.2-02-PLAN.md — Broaden OLS4 adapter and create BioPortal, Wikidata, AGROVOC adapters
+- [ ] 36.2-03-PLAN.md — Wire resolve_term with alias lookup + 5-provider pipeline, create auto-derivation, update refresh script
+- [ ] 36.2-04-PLAN.md — Create validation script, update CI tests, execute 139-term re-resolution, curator checkpoint
 
 ### Phase 37: Build & Patch Integration
 **Goal**: The build path and in-place patch path both produce a correct `lifestage_dictionary`, with Windows-safe connection handling and patch metadata tracked
@@ -267,6 +278,7 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 ->
 | 35. Shared Helper Layer Validation | v2.4 | 2/2 | Complete    | 2026-04-22 |
 | 36. Bootstrap Data Artifacts | v2.4 | 2/2 | Complete   | 2026-04-23 |
 | 36.1. Unresolved Coverage Audit | v2.4 | 2/2 | Complete    | 2026-04-23 |
+| 36.2. Dictionary Rebuild | v2.4 | 0/4 | Not started | - |
 | 37. Build & Patch Integration | v2.4 | 0/? | Not started | - |
 | 38. Runtime API Finalization | v2.4 | 0/? | Not started | - |
 | 39. Quality Gates | v2.4 | 0/? | Not started | - |
