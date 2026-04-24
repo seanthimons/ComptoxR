@@ -300,7 +300,15 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     )
     baseline_available <- nrow(baseline) > 0
     baseline_releases <- unique(stats::na.omit(baseline$ecotox_release))
-    baseline_matches <- identical(baseline_releases, ecotox_release)
+    if (length(baseline_releases) > 1) {
+      cli::cli_abort(c(
+        "Committed lifestage baseline contains rows from multiple releases.",
+        "x" = "Releases found: {.val {paste(baseline_releases, collapse = ', ')}}",
+        "i" = "Re-generate the baseline for a single ECOTOX release."
+      ))
+    }
+    baseline_matches <- length(baseline_releases) == 1L &&
+      identical(baseline_releases, ecotox_release)
   }
 
   cache_path <- .eco_lifestage_cache_path(ecotox_release)
