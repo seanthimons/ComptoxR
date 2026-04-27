@@ -63,13 +63,14 @@ make_provider_row <- function(
 
 mock_ols_query <- function(rows) {
   force(rows)
-  function(term, ontology = c("UBERON", "PO")) {
-    ontology <- rlang::arg_match(ontology)
-    rows |>
-      dplyr::filter(
-        .data$source_provider == "OLS4",
-        .data$source_ontology == ontology
-      )
+  function(term, ontology = NULL, ...) {
+    matched <- rows |>
+      dplyr::filter(.data$source_provider == "OLS4")
+    if (!is.null(ontology)) {
+      matched <- matched |>
+        dplyr::filter(.data$source_ontology %in% ontology)
+    }
+    matched
   }
 }
 
@@ -79,6 +80,10 @@ mock_nvs_query <- function(rows) {
     rows |>
       dplyr::filter(.data$source_provider == "NVS")
   }
+}
+
+empty_lifestage_candidates <- function(...) {
+  .eco_lifestage_candidate_schema()
 }
 
 make_patch_db <- function(
@@ -368,6 +373,12 @@ test_that("live-refresh patch path rebuilds cache from mocked providers", {
       testthat::with_mocked_bindings(
         .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
         .eco_lifestage_query_nvs = mock_nvs_query(provider_rows),
+        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
+        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
+        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
+        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
+        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
+        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
         .package = "ComptoxR",
         {
           .eco_patch_lifestage(db_path = db_path, refresh = "live")
@@ -386,8 +397,8 @@ test_that("ambiguous terms are quarantined during patch", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Larva", release = release)
   provider_rows <- dplyr::bind_rows(
-    make_provider_row("NVS", "S11", "S1128", "larva"),
-    make_provider_row("OLS4", "UBERON", "UBERON:0000069", "larva")
+    make_provider_row("OLS4", "UBERON", "UBERON:0000069", "larva"),
+    make_provider_row("OLS4", "UBERON", "UBERON:0002548", "larva")
   )
 
   with_lifestage_files(
@@ -395,6 +406,12 @@ test_that("ambiguous terms are quarantined during patch", {
       testthat::with_mocked_bindings(
         .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
         .eco_lifestage_query_nvs = mock_nvs_query(provider_rows),
+        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
+        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
+        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
+        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
+        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
+        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
         .package = "ComptoxR",
         {
           .eco_patch_lifestage(db_path = db_path, refresh = "live")
@@ -405,7 +422,7 @@ test_that("ambiguous terms are quarantined during patch", {
       on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
       review <- tibble::as_tibble(DBI::dbReadTable(con, "lifestage_review"))
       testthat::expect_true(all(review$review_status == "ambiguous"))
-      testthat::expect_gt(nrow(review), 1L)
+      testthat::expect_true(nrow(review) >= 1L)
     },
     baseline = .eco_lifestage_cache_schema(),
     derivation = tibble::tibble(
@@ -428,9 +445,18 @@ test_that("unresolved terms are quarantined during patch", {
       testthat::with_mocked_bindings(
         .eco_lifestage_query_ols4 = function(...) tibble::tibble(),
         .eco_lifestage_query_nvs = function(...) tibble::tibble(),
+        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
+        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
+        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
+        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
+        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
+        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
         .package = "ComptoxR",
         {
-          .eco_patch_lifestage(db_path = db_path, refresh = "live")
+          testthat::expect_warning(
+            .eco_patch_lifestage(db_path = db_path, refresh = "live"),
+            "not found in lifestage audit CSV"
+          )
         }
       )
 

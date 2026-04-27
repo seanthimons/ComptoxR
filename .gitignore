@@ -57,6 +57,10 @@ temp.R
 !inst/extdata/ecotox/lifestage_baseline.csv
 !inst/extdata/ecotox/lifestage_derivation.csv
 !inst/extdata/ecotox/lifestage_audit.csv
+!inst/extdata/ecotox/lifestage_curated_candidates.csv
+!inst/extdata/ecotox/lifestage_forced_unresolved.csv
+!inst/extdata/ecotox/lifestage_domain_patterns.csv
+!inst/extdata/ecotox/lifestage_taxon_route_families.csv
 *.duckdb
 
 /roadmap/

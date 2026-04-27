@@ -129,6 +129,70 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_curated_candidates_path <- function() {
+  installed <- system.file(
+    "extdata",
+    "ecotox",
+    "lifestage_curated_candidates.csv",
+    package = "ComptoxR"
+  )
+  if (nzchar(installed) && file.exists(installed)) {
+    return(installed)
+  }
+
+  dev_path <- file.path("inst", "extdata", "ecotox", "lifestage_curated_candidates.csv")
+  if (file.exists(dev_path)) {
+    return(dev_path)
+  }
+
+  cli::cli_abort("Committed lifestage curated candidates CSV not found.")
+}
+
+#' @keywords internal
+.eco_lifestage_policy_path <- function(filename, label) {
+  installed <- system.file(
+    "extdata",
+    "ecotox",
+    filename,
+    package = "ComptoxR"
+  )
+  if (nzchar(installed) && file.exists(installed)) {
+    return(installed)
+  }
+
+  dev_path <- file.path("inst", "extdata", "ecotox", filename)
+  if (file.exists(dev_path)) {
+    return(dev_path)
+  }
+
+  cli::cli_abort("Committed lifestage {label} CSV not found.")
+}
+
+#' @keywords internal
+.eco_lifestage_forced_unresolved_path <- function() {
+  .eco_lifestage_policy_path(
+    "lifestage_forced_unresolved.csv",
+    "forced unresolved"
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_domain_patterns_path <- function() {
+  .eco_lifestage_policy_path(
+    "lifestage_domain_patterns.csv",
+    "domain patterns"
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_taxon_route_families_path <- function() {
+  .eco_lifestage_policy_path(
+    "lifestage_taxon_route_families.csv",
+    "taxon route families"
+  )
+}
+
+#' @keywords internal
 .eco_lifestage_read_csv <- function(path) {
   if (!file.exists(path)) {
     return(NULL)
@@ -139,6 +203,123 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     stringsAsFactors = FALSE,
     na.strings = c("", "NA")
   )
+}
+
+#' @keywords internal
+.eco_lifestage_forced_unresolved_policy <- function() {
+  path <- .eco_lifestage_forced_unresolved_path()
+  policy <- readr::read_csv(path, show_col_types = FALSE)
+  required <- c("org_lifestage", "reason", "triage_bucket", "resolution_path")
+  missing_cols <- setdiff(required, names(policy))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage forced unresolved schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  duplicate_terms <- unique(policy$org_lifestage[duplicated(policy$org_lifestage)])
+  if (length(duplicate_terms) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage forced unresolved policy.",
+      "x" = "Duplicate org_lifestage value(s): {duplicate_terms}."
+    ))
+  }
+
+  policy
+}
+
+#' @keywords internal
+.eco_lifestage_domain_pattern_policy <- function() {
+  path <- .eco_lifestage_domain_patterns_path()
+  policy <- readr::read_csv(path, show_col_types = FALSE)
+  required <- c("domain", "pattern")
+  valid_domains <- c("aquatic", "amphibian", "plant")
+  missing_cols <- setdiff(required, names(policy))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage domain pattern schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  invalid_domains <- setdiff(unique(policy$domain), valid_domains)
+  if (length(invalid_domains) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage domain pattern policy.",
+      "x" = "Unknown domain value(s): {invalid_domains}."
+    ))
+  }
+
+  duplicate_keys <- duplicated(policy[c("domain", "pattern")])
+  if (any(duplicate_keys)) {
+    keys <- paste(policy$domain[duplicate_keys], policy$pattern[duplicate_keys], sep = ":")
+    cli::cli_abort(c(
+      "Invalid lifestage domain pattern policy.",
+      "x" = "Duplicate domain/pattern key(s): {unique(keys)}."
+    ))
+  }
+
+  policy$pattern <- vapply(
+    policy$pattern,
+    .eco_lifestage_normalize_term,
+    character(1),
+    mode = "loose"
+  )
+  policy
+}
+
+#' @keywords internal
+.eco_lifestage_taxon_route_family_policy <- function() {
+  path <- .eco_lifestage_taxon_route_families_path()
+  policy <- readr::read_csv(path, show_col_types = FALSE)
+  required <- c("field", "value", "route_family")
+  valid_fields <- c("eco_group", "kingdom", "class_name")
+  valid_route_families <- c(
+    "plant",
+    "aquatic",
+    "invertebrate",
+    "amphibian",
+    "vertebrate",
+    "fungi",
+    "algae"
+  )
+  missing_cols <- setdiff(required, names(policy))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage taxon route family schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  invalid_fields <- setdiff(unique(policy$field), valid_fields)
+  if (length(invalid_fields) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage taxon route family policy.",
+      "x" = "Unknown field value(s): {invalid_fields}."
+    ))
+  }
+
+  invalid_route_families <- setdiff(unique(policy$route_family), valid_route_families)
+  if (length(invalid_route_families) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage taxon route family policy.",
+      "x" = "Unknown route_family value(s): {invalid_route_families}."
+    ))
+  }
+
+  uppercase_fields <- policy$field %in% c("kingdom", "class_name")
+  policy$value[uppercase_fields] <- toupper(policy$value[uppercase_fields])
+  duplicate_keys <- duplicated(policy[c("field", "value")])
+  if (any(duplicate_keys)) {
+    keys <- paste(policy$field[duplicate_keys], policy$value[duplicate_keys], sep = ":")
+    cli::cli_abort(c(
+      "Invalid lifestage taxon route family policy.",
+      "x" = "Duplicate field/value key(s): {unique(keys)}."
+    ))
+  }
+
+  policy
 }
 
 #' @keywords internal
@@ -166,6 +347,475 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     return(vector("list", nrow(x)))
   }
   value
+}
+
+#' @keywords internal
+.eco_lifestage_candidate_schema <- function() {
+  tibble::tibble(
+    source_provider = character(),
+    source_ontology = character(),
+    source_term_id = character(),
+    source_term_label = character(),
+    source_term_definition = character(),
+    candidate_aliases = character(),
+    source_release = character(),
+    source_match_method = character()
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_apply_query_alias <- function(candidates, org_lifestage, query_term) {
+  candidates <- tibble::as_tibble(candidates)
+  if (nrow(candidates) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  org_lifestage <- as.character(org_lifestage[[1]])
+  query_term <- as.character(query_term[[1]])
+  if (!nzchar(query_term) || identical(org_lifestage, query_term)) {
+    return(candidates)
+  }
+
+  query_match_score <- function(label, aliases) {
+    alias_texts <- if (!is.na(aliases) && nzchar(aliases)) {
+      unlist(strsplit(aliases, "\\s*\\|\\s*"))
+    } else {
+      character()
+    }
+    texts <- unique(c(label, alias_texts))
+    texts <- texts[nzchar(texts)]
+    if (length(texts) == 0) {
+      return(0)
+    }
+    scores <- vapply(
+      texts,
+      function(text) .eco_lifestage_score_text(query_term, text)$score,
+      numeric(1)
+    )
+    max(scores, na.rm = TRUE)
+  }
+
+  candidates <- candidates |>
+    dplyr::mutate(
+      query_match_score = purrr::map2_dbl(
+        .data$source_term_label,
+        .data$candidate_aliases,
+        query_match_score
+      )
+    ) |>
+    dplyr::filter(.data$query_match_score >= 75) |>
+    dplyr::select(-.data$query_match_score)
+
+  if (nrow(candidates) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  candidates |>
+    dplyr::mutate(
+      candidate_aliases = vapply(
+        .data$candidate_aliases,
+        function(existing_aliases) {
+          alias_parts <- c(org_lifestage, query_term)
+          if (!is.na(existing_aliases) && nzchar(existing_aliases)) {
+            alias_parts <- c(alias_parts, unlist(strsplit(existing_aliases, "\\s*\\|\\s*")))
+          }
+          paste(unique(alias_parts[nzchar(alias_parts)]), collapse = " | ")
+        },
+        character(1)
+      )
+    )
+}
+
+#' @keywords internal
+.eco_lifestage_devstage_obo_url <- function() {
+  "https://raw.githubusercontent.com/obophenotype/developmental-stage-ontologies/master/life-stages.obo"
+}
+
+#' @keywords internal
+.eco_lifestage_devstage_obo_path <- function() {
+  dir <- tools::R_user_dir("ComptoxR", "cache")
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  file.path(dir, "developmental-stage-ontologies_life-stages.obo")
+}
+
+#' @keywords internal
+.eco_lifestage_devstage_obo_lines <- function(force_refresh = FALSE) {
+  cache_key <- "eco_lifestage_devstage_obo_lines"
+  cache_path <- .eco_lifestage_devstage_obo_path()
+
+  if (!force_refresh && exists(cache_key, envir = .ComptoxREnv, inherits = FALSE)) {
+    return(get(cache_key, envir = .ComptoxREnv, inherits = FALSE))
+  }
+
+  needs_refresh <- force_refresh || !file.exists(cache_path)
+  if (!needs_refresh) {
+    age_hours <- as.numeric(difftime(Sys.time(), file.info(cache_path)$mtime, units = "hours"))
+    needs_refresh <- is.na(age_hours) || age_hours > 24
+  }
+
+  if (needs_refresh) {
+    response <- tryCatch(
+      {
+        httr2::request(.eco_lifestage_devstage_obo_url()) |>
+          httr2::req_headers(Accept = "text/plain") |>
+          httr2::req_perform()
+      },
+      error = function(e) {
+        cli::cli_warn(c(
+          "Developmental-stage ontology endpoint unreachable.",
+          "i" = "Falling back to cached ontology snapshot if available.",
+          "x" = conditionMessage(e)
+        ))
+        NULL
+      }
+    )
+
+    if (!is.null(response)) {
+      writeLines(httr2::resp_body_string(response), cache_path, useBytes = TRUE)
+    }
+  }
+
+  if (!file.exists(cache_path)) {
+    return(character())
+  }
+
+  lines <- readLines(cache_path, warn = FALSE, encoding = "UTF-8")
+  assign(cache_key, lines, envir = .ComptoxREnv)
+  lines
+}
+
+#' @keywords internal
+.eco_lifestage_devstage_index <- function(force_refresh = FALSE) {
+  cache_key <- "eco_lifestage_devstage_index"
+  if (!force_refresh && exists(cache_key, envir = .ComptoxREnv, inherits = FALSE)) {
+    return(get(cache_key, envir = .ComptoxREnv, inherits = FALSE))
+  }
+
+  lines <- .eco_lifestage_devstage_obo_lines(force_refresh = force_refresh)
+  if (length(lines) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  flush_term <- function(term, out) {
+    if (is.null(term$id) || isTRUE(term$is_obsolete)) {
+      return(out)
+    }
+
+    label <- if (length(term$name) > 0) term$name[[1]] else NA_character_
+    aliases <- unique(c(term$synonym, term$xref))
+    aliases <- aliases[!is.na(aliases) & nzchar(aliases)]
+
+    dplyr::bind_rows(
+      out,
+      tibble::tibble(
+        source_provider = "DevStageOntologies",
+        source_ontology = sub(":.*", "", term$id[[1]]),
+        source_term_id = term$id[[1]],
+        source_term_label = label,
+        source_term_definition = if (length(term$def) > 0) term$def[[1]] else NA_character_,
+        candidate_aliases = if (length(aliases) > 0) paste(aliases, collapse = " | ") else NA_character_,
+        source_release = "obophenotype_life_stages_current",
+        source_match_method = "dev_stage_ontology_obo"
+      )
+    )
+  }
+
+  terms <- .eco_lifestage_candidate_schema()
+  current <- list(
+    id = NULL,
+    name = NULL,
+    def = character(),
+    synonym = character(),
+    xref = character(),
+    is_obsolete = FALSE
+  )
+
+  for (line in lines) {
+    if (identical(line, "[Term]")) {
+      terms <- flush_term(current, terms)
+      current <- list(
+        id = NULL,
+        name = NULL,
+        def = character(),
+        synonym = character(),
+        xref = character(),
+        is_obsolete = FALSE
+      )
+      next
+    }
+    if (startsWith(line, "[Typedef]")) {
+      terms <- flush_term(current, terms)
+      break
+    }
+    if (!nzchar(line)) {
+      next
+    }
+    if (startsWith(line, "id: ")) {
+      current$id <- sub("^id: ", "", line)
+    } else if (startsWith(line, "name: ")) {
+      current$name <- sub("^name: ", "", line)
+    } else if (startsWith(line, "def: ")) {
+      current$def <- sub('^def: "([^"]*)".*$', "\\1", line)
+    } else if (startsWith(line, "synonym: ")) {
+      synonym_value <- sub('^synonym: "([^"]*)".*$', "\\1", line)
+      current$synonym <- c(current$synonym, synonym_value)
+    } else if (startsWith(line, "xref: ")) {
+      current$xref <- c(current$xref, sub("^xref: ", "", line))
+    } else if (startsWith(line, "is_obsolete: ")) {
+      current$is_obsolete <- identical(sub("^is_obsolete: ", "", line), "true")
+    }
+  }
+
+  terms <- terms |>
+    dplyr::mutate(
+      normalized_label = .eco_lifestage_normalize_term(.data$source_term_label, mode = "loose"),
+      normalized_aliases = vapply(
+        .data$candidate_aliases,
+        function(x) {
+          if (is.na(x) || !nzchar(x)) {
+            return("")
+          }
+          aliases <- unlist(strsplit(x, "\\s*\\|\\s*"))
+          aliases <- aliases[nzchar(aliases)]
+          paste(
+            unique(vapply(aliases, .eco_lifestage_normalize_term, character(1), mode = "loose")),
+            collapse = " | "
+          )
+        },
+        character(1)
+      )
+    )
+
+  assign(cache_key, terms, envir = .ComptoxREnv)
+  terms
+}
+
+#' @keywords internal
+.eco_lifestage_query_devstage_ontology <- function(term) {
+  index <- .eco_lifestage_devstage_index()
+  if (nrow(index) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  lookup_term <- as.character(term[[1]])
+  normalized_term <- .eco_lifestage_normalize_term(lookup_term, mode = "loose")
+  contains_term <- function(x) {
+    if (is.na(x) || !nzchar(x)) {
+      return(FALSE)
+    }
+    stringr::str_detect(x, stringr::fixed(normalized_term))
+  }
+
+  matched <- index |>
+    dplyr::filter(
+      .data$normalized_label == normalized_term |
+        vapply(.data$normalized_aliases, contains_term, logical(1)) |
+        vapply(.data$normalized_label, contains_term, logical(1))
+    ) |>
+    dplyr::select(-dplyr::any_of(c("normalized_label", "normalized_aliases"))) |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE)
+
+  if (nrow(matched) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  matched
+}
+
+#' @keywords internal
+.eco_lifestage_po_obo_url <- function() {
+  "http://purl.obolibrary.org/obo/po.obo"
+}
+
+#' @keywords internal
+.eco_lifestage_po_obo_path <- function() {
+  dir <- tools::R_user_dir("ComptoxR", "cache")
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  file.path(dir, "plant-ontology_po.obo")
+}
+
+#' @keywords internal
+.eco_lifestage_po_obo_lines <- function(force_refresh = FALSE) {
+  cache_key <- "eco_lifestage_po_obo_lines"
+  cache_path <- .eco_lifestage_po_obo_path()
+
+  if (!force_refresh && exists(cache_key, envir = .ComptoxREnv, inherits = FALSE)) {
+    return(get(cache_key, envir = .ComptoxREnv, inherits = FALSE))
+  }
+
+  needs_refresh <- force_refresh || !file.exists(cache_path)
+  if (!needs_refresh) {
+    age_hours <- as.numeric(difftime(Sys.time(), file.info(cache_path)$mtime, units = "hours"))
+    needs_refresh <- is.na(age_hours) || age_hours > 24
+  }
+
+  if (needs_refresh) {
+    response <- tryCatch(
+      {
+        httr2::request(.eco_lifestage_po_obo_url()) |>
+          httr2::req_headers(Accept = "text/plain") |>
+          httr2::req_perform()
+      },
+      error = function(e) {
+        cli::cli_warn(c(
+          "Plant Ontology endpoint unreachable.",
+          "i" = "Falling back to cached PO snapshot if available.",
+          "x" = conditionMessage(e)
+        ))
+        NULL
+      }
+    )
+
+    if (!is.null(response)) {
+      writeLines(httr2::resp_body_string(response), cache_path, useBytes = TRUE)
+    }
+  }
+
+  if (!file.exists(cache_path)) {
+    return(character())
+  }
+
+  lines <- readLines(cache_path, warn = FALSE, encoding = "UTF-8")
+  assign(cache_key, lines, envir = .ComptoxREnv)
+  lines
+}
+
+#' @keywords internal
+.eco_lifestage_po_index <- function(force_refresh = FALSE) {
+  cache_key <- "eco_lifestage_po_index"
+  if (!force_refresh && exists(cache_key, envir = .ComptoxREnv, inherits = FALSE)) {
+    return(get(cache_key, envir = .ComptoxREnv, inherits = FALSE))
+  }
+
+  lines <- .eco_lifestage_po_obo_lines(force_refresh = force_refresh)
+  if (length(lines) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  flush_term <- function(term, out) {
+    if (is.null(term$id) || isTRUE(term$is_obsolete) || !startsWith(term$id[[1]], "PO:")) {
+      return(out)
+    }
+
+    label <- if (length(term$name) > 0) term$name[[1]] else NA_character_
+    aliases <- unique(c(term$synonym, term$xref))
+    aliases <- aliases[!is.na(aliases) & nzchar(aliases)]
+
+    dplyr::bind_rows(
+      out,
+      tibble::tibble(
+        source_provider = "PlantOntologyOBO",
+        source_ontology = "PO",
+        source_term_id = term$id[[1]],
+        source_term_label = label,
+        source_term_definition = if (length(term$def) > 0) term$def[[1]] else NA_character_,
+        candidate_aliases = if (length(aliases) > 0) paste(aliases, collapse = " | ") else NA_character_,
+        source_release = "po_current",
+        source_match_method = "plant_ontology_obo"
+      )
+    )
+  }
+
+  terms <- .eco_lifestage_candidate_schema()
+  current <- list(
+    id = NULL,
+    name = NULL,
+    def = character(),
+    synonym = character(),
+    xref = character(),
+    is_obsolete = FALSE
+  )
+
+  for (line in lines) {
+    if (identical(line, "[Term]")) {
+      terms <- flush_term(current, terms)
+      current <- list(
+        id = NULL,
+        name = NULL,
+        def = character(),
+        synonym = character(),
+        xref = character(),
+        is_obsolete = FALSE
+      )
+      next
+    }
+    if (startsWith(line, "[Typedef]")) {
+      terms <- flush_term(current, terms)
+      break
+    }
+    if (!nzchar(line)) {
+      next
+    }
+    if (startsWith(line, "id: ")) {
+      current$id <- sub("^id: ", "", line)
+    } else if (startsWith(line, "name: ")) {
+      current$name <- sub("^name: ", "", line)
+    } else if (startsWith(line, "def: ")) {
+      current$def <- sub('^def: "([^"]*)".*$', "\\1", line)
+    } else if (startsWith(line, "synonym: ")) {
+      synonym_value <- sub('^synonym: "([^"]*)".*$', "\\1", line)
+      current$synonym <- c(current$synonym, synonym_value)
+    } else if (startsWith(line, "xref: ")) {
+      current$xref <- c(current$xref, sub("^xref: ", "", line))
+    } else if (startsWith(line, "is_obsolete: ")) {
+      current$is_obsolete <- identical(sub("^is_obsolete: ", "", line), "true")
+    }
+  }
+
+  terms <- terms |>
+    dplyr::mutate(
+      normalized_label = .eco_lifestage_normalize_term(.data$source_term_label, mode = "loose"),
+      normalized_aliases = vapply(
+        .data$candidate_aliases,
+        function(x) {
+          if (is.na(x) || !nzchar(x)) {
+            return("")
+          }
+          aliases <- unlist(strsplit(x, "\\s*\\|\\s*"))
+          aliases <- aliases[nzchar(aliases)]
+          paste(
+            unique(vapply(aliases, .eco_lifestage_normalize_term, character(1), mode = "loose")),
+            collapse = " | "
+          )
+        },
+        character(1)
+      )
+    )
+
+  assign(cache_key, terms, envir = .ComptoxREnv)
+  terms
+}
+
+#' @keywords internal
+.eco_lifestage_query_po_obo <- function(term) {
+  index <- .eco_lifestage_po_index()
+  if (nrow(index) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  lookup_term <- as.character(term[[1]])
+  normalized_term <- .eco_lifestage_normalize_term(lookup_term, mode = "loose")
+  contains_term <- function(x) {
+    if (is.na(x) || !nzchar(x)) {
+      return(FALSE)
+    }
+    stringr::str_detect(x, stringr::fixed(normalized_term))
+  }
+
+  matched <- index |>
+    dplyr::filter(
+      .data$normalized_label == normalized_term |
+        vapply(.data$normalized_aliases, contains_term, logical(1)) |
+        vapply(.data$normalized_label, contains_term, logical(1))
+    ) |>
+    dplyr::select(-dplyr::any_of(c("normalized_label", "normalized_aliases"))) |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE)
+
+  if (nrow(matched) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  matched
 }
 
 #' @keywords internal
@@ -278,6 +928,11 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
       reproductive_stage = as.logical(.data$reproductive_stage)
     ) |>
     dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE)
+}
+
+#' @keywords internal
+.eco_lifestage_derivation_coverage_report_path <- function() {
+  file.path("dev", "lifestage", "lifestage_derivation_coverage_report.csv")
 }
 
 #' @keywords internal
@@ -402,6 +1057,8 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_token_score <- function(term, candidate) {
+  term <- as.character(term[[1]])
+  candidate <- as.character(candidate[[1]])
   term_loose <- .eco_lifestage_normalize_term(term, mode = "loose")
   candidate_loose <- .eco_lifestage_normalize_term(candidate, mode = "loose")
 
@@ -432,6 +1089,8 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_score_text <- function(term, candidate) {
+  term <- as.character(term[[1]])
+  candidate <- as.character(candidate[[1]])
   term_strict <- .eco_lifestage_normalize_term(term, mode = "strict")
   term_loose <- .eco_lifestage_normalize_term(term, mode = "loose")
   candidate_strict <- .eco_lifestage_normalize_term(candidate, mode = "strict")
@@ -485,16 +1144,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     }
   )
 
-  nvs_empty <- tibble::tibble(
-    source_provider = character(),
-    source_ontology = character(),
-    source_term_id = character(),
-    source_term_label = character(),
-    source_term_definition = character(),
-    candidate_aliases = character(),
-    source_release = character(),
-    source_match_method = character()
-  )
+  nvs_empty <- .eco_lifestage_candidate_schema()
 
   if (is.null(payload)) {
     return(nvs_empty)
@@ -535,15 +1185,177 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
-.eco_lifestage_query_ols4 <- function(term, ontology = c("UBERON", "PO")) {
-  ontology <- rlang::arg_match(ontology)
+.eco_lifestage_alias_lookup <- function(org_lifestage) {
+  alias_path <- file.path("inst", "extdata", "ecotox", "lifestage_aliases.csv")
+  if (!file.exists(alias_path)) {
+    alias_path <- system.file(
+      "extdata",
+      "ecotox",
+      "lifestage_aliases.csv",
+      package = "ComptoxR"
+    )
+  }
+  if (!nzchar(alias_path) || !file.exists(alias_path)) {
+    return(org_lifestage)
+  }
 
+  aliases <- readr::read_csv(alias_path, show_col_types = FALSE)
+  lookup_key <- as.character(org_lifestage[[1]])
+  match_idx <- match(lookup_key, aliases$org_lifestage)
+  if (is.na(match_idx) || is.na(aliases$normalized_query[[match_idx]])) {
+    return(org_lifestage)
+  }
+
+  aliases$normalized_query[[match_idx]]
+}
+
+#' @keywords internal
+.eco_lifestage_taxon_profile_path <- function() {
+  dev_path <- file.path("dev", "lifestage", "lifestage_taxon_profile.csv")
+  if (file.exists(dev_path)) {
+    return(dev_path)
+  }
+
+  cache_path <- file.path(tools::R_user_dir("ComptoxR", "cache"), "lifestage_taxon_profile.csv")
+  if (file.exists(cache_path)) {
+    return(cache_path)
+  }
+
+  ""
+}
+
+#' @keywords internal
+.eco_lifestage_taxon_route_family <- function(
+  eco_group = NA_character_,
+  kingdom = NA_character_,
+  class_name = NA_character_
+) {
+  route_families <- .eco_lifestage_taxon_route_family_policy()
+  eco_group <- as.character(eco_group[[1]])
+  kingdom <- toupper(as.character(kingdom[[1]]))
+  class_name <- toupper(as.character(class_name[[1]]))
+
+  route_inputs <- list(
+    eco_group = eco_group,
+    kingdom = kingdom,
+    class_name = class_name
+  )
+
+  for (field in names(route_inputs)) {
+    value <- route_inputs[[field]]
+    if (is.na(value) || !nzchar(value)) {
+      next
+    }
+    matches <- route_families$field == field & route_families$value == value
+    if (any(matches)) {
+      return(route_families$route_family[which(matches)[[1]]])
+    }
+  }
+  NA_character_
+}
+
+#' @keywords internal
+.eco_lifestage_taxon_route_lookup <- function(org_lifestage) {
+  profile_path <- .eco_lifestage_taxon_profile_path()
+  if (!nzchar(profile_path) || !file.exists(profile_path)) {
+    return(tibble::tibble())
+  }
+
+  profile <- readr::read_csv(profile_path, show_col_types = FALSE)
+  lookup_key <- as.character(org_lifestage[[1]])
+  match_idx <- match(lookup_key, profile$org_lifestage)
+  if (is.na(match_idx)) {
+    return(tibble::tibble())
+  }
+
+  row <- profile[match_idx, , drop = FALSE]
+  row$route_family <- dplyr::coalesce(
+    row$route_family,
+    .eco_lifestage_taxon_route_family(
+      eco_group = row$eco_group[[1]],
+      kingdom = row$kingdom[[1]],
+      class_name = row$class_name[[1]]
+    )
+  )
+  tibble::as_tibble(row)
+}
+
+#' @keywords internal
+.eco_lifestage_forced_unresolved_terms <- function() {
+  policy <- .eco_lifestage_forced_unresolved_policy()
+  as.character(policy$org_lifestage)
+}
+
+#' @keywords internal
+.eco_lifestage_detect_domains <- function(org_lifestage, query_term = org_lifestage) {
+  text <- paste(as.character(org_lifestage[[1]]), as.character(query_term[[1]]))
+  text <- .eco_lifestage_normalize_term(text, mode = "loose")
+
+  patterns <- .eco_lifestage_domain_pattern_policy()
+  matches <- vapply(
+    patterns$pattern,
+    function(pattern) stringr::str_detect(text, stringr::fixed(pattern)),
+    logical(1)
+  )
+  unique(as.character(patterns$domain[matches]))
+}
+
+#' @keywords internal
+.eco_lifestage_curated_candidates <- function(org_lifestage) {
+  path <- .eco_lifestage_curated_candidates_path()
+  curated <- readr::read_csv(path, show_col_types = FALSE)
+  required <- c(
+    "org_lifestage",
+    "source_ontology",
+    "source_term_id",
+    "source_term_label",
+    "candidate_aliases"
+  )
+  missing_cols <- setdiff(required, names(curated))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage curated candidates schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  hit <- curated |>
+    dplyr::filter(.data$org_lifestage == !!org_lifestage)
+
+  if (nrow(hit) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  hit |>
+    dplyr::transmute(
+      source_provider = "Curated",
+      source_ontology = .data$source_ontology,
+      source_term_id = .data$source_term_id,
+      source_term_label = .data$source_term_label,
+      source_term_definition = NA_character_,
+      candidate_aliases = .data$candidate_aliases,
+      source_release = "curated",
+      source_match_method = "curated_synonym_bridge"
+    )
+}
+
+.eco_lifestage_query_ols4 <- function(term) {
+  relevant_prefixes <- c(
+    "UBERON:",
+    "PO:",
+    "XAO:",
+    "ECOCORE:",
+    "EFO:",
+    "ZFA:",
+    "FBdv:",
+    "MeSH:"
+  )
   response <- tryCatch(
     {
       httr2::request("https://www.ebi.ac.uk/ols4/api/search") |>
         httr2::req_url_query(
           q = term,
-          ontology = tolower(ontology),
+          queryFields = "label,synonym,description",
           rows = 25
         ) |>
         httr2::req_perform() |>
@@ -552,7 +1364,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     },
     error = function(e) {
       cli::cli_warn(c(
-        "OLS4 endpoint unreachable for {ontology}.",
+        "OLS4 endpoint unreachable for {.val {term}}.",
         "i" = "OLS4 candidates will be skipped for this resolution run.",
         "x" = conditionMessage(e)
       ))
@@ -561,17 +1373,19 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   )
 
   if (is.null(response)) {
-    return(tibble::tibble())
+    Sys.sleep(0.3)
+    return(.eco_lifestage_candidate_schema())
   }
 
   docs <- response$response$docs
   if (is.null(docs) || is.null(nrow(docs)) || nrow(docs) == 0) {
-    return(tibble::tibble())
+    Sys.sleep(0.3)
+    return(.eco_lifestage_candidate_schema())
   }
 
-  tibble::tibble(
+  result <- tibble::tibble(
     source_provider = "OLS4",
-    source_ontology = toupper(ontology),
+    source_ontology = sub(":.*", "", .eco_lifestage_json_col(docs, "obo_id")),
     source_term_id = .eco_lifestage_json_col(docs, "obo_id"),
     source_term_label = .eco_lifestage_json_col(docs, "label"),
     source_term_definition = vapply(
@@ -600,8 +1414,389 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     dplyr::filter(
       !is.na(.data$source_term_id),
       !is.na(.data$source_term_label),
-      startsWith(.data$source_term_id, paste0(toupper(ontology), ":"))
+      purrr::map_lgl(
+        .data$source_term_id,
+        function(id) {
+          any(startsWith(id, relevant_prefixes))
+        }
+      )
     )
+
+  Sys.sleep(0.3)
+  result
+}
+
+#' @keywords internal
+.eco_lifestage_query_xao <- function(term) {
+  response <- tryCatch(
+    {
+      httr2::request("https://www.ebi.ac.uk/ols4/api/search") |>
+        httr2::req_url_query(
+          q = term,
+          ontology = "xao",
+          queryFields = "label,synonym,description",
+          rows = 25
+        ) |>
+        httr2::req_perform() |>
+        httr2::resp_body_string() |>
+        jsonlite::fromJSON(simplifyDataFrame = TRUE)
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "XAO endpoint unreachable for {.val {term}}.",
+        "i" = "XAO candidates will be skipped for this resolution run.",
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (is.null(response)) {
+    Sys.sleep(0.2)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  docs <- response$response$docs
+  if (is.null(docs) || is.null(nrow(docs)) || nrow(docs) == 0) {
+    Sys.sleep(0.2)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  result <- tibble::tibble(
+    source_provider = "XAO",
+    source_ontology = "XAO",
+    source_term_id = .eco_lifestage_json_col(docs, "obo_id"),
+    source_term_label = .eco_lifestage_json_col(docs, "label"),
+    source_term_definition = vapply(
+      .eco_lifestage_json_list_col(docs, "description"),
+      function(x) {
+        if (length(x) == 0) {
+          return(NA_character_)
+        }
+        as.character(x[[1]])
+      },
+      character(1)
+    ),
+    candidate_aliases = vapply(
+      .eco_lifestage_json_list_col(docs, "exact_synonyms"),
+      function(x) {
+        if (length(x) == 0) {
+          return(NA_character_)
+        }
+        paste(unique(as.character(x)), collapse = " | ")
+      },
+      character(1)
+    ),
+    source_release = "current",
+    source_match_method = "xao_ols4_search"
+  ) |>
+    dplyr::filter(
+      !is.na(.data$source_term_id),
+      !is.na(.data$source_term_label),
+      startsWith(.data$source_term_id, "XAO:")
+    )
+
+  Sys.sleep(0.2)
+  result
+}
+
+#' @keywords internal
+.eco_lifestage_query_bioportal <- function(term) {
+  bioportal_key <- Sys.getenv("BIOPORTAL_API_KEY")
+  if (!nzchar(bioportal_key)) {
+    cli::cli_warn(c(
+      "BIOPORTAL_API_KEY is not set.",
+      "i" = "BioPortal candidates will be skipped.",
+      "i" = "Obtain a free key at {.url https://bioportal.bioontology.org}"
+    ))
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  response <- tryCatch(
+    {
+      httr2::request("https://data.bioontology.org/search") |>
+        httr2::req_url_query(
+          q = term,
+          ontologies = "UBERON,ZFA,ECOCORE,EFO,XAO",
+          include = "prefLabel,synonym,definition,notation",
+          apikey = bioportal_key
+        ) |>
+        httr2::req_headers(Accept = "application/json") |>
+        httr2::req_perform() |>
+        httr2::resp_body_json()
+    },
+    error = function(e) {
+      status_code <- NA_integer_
+      if (!is.null(e$response) && !is.null(e$response$status_code)) {
+        status_code <- e$response$status_code
+      }
+      auth_hint <- if (identical(status_code, 401L)) {
+        "BioPortal rejected the configured API key."
+      } else {
+        "BioPortal candidates will be skipped for this resolution run."
+      }
+      cli::cli_warn(c(
+        "BioPortal endpoint unreachable for {.val {term}}.",
+        "i" = auth_hint,
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (is.null(response) || length(response) == 0) {
+    Sys.sleep(0.5)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  records <- response$collection
+  if (is.null(records) || length(records) == 0) {
+    Sys.sleep(0.5)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  rows <- purrr::compact(purrr::map(records, function(record) {
+    tryCatch(
+      {
+        class_id_raw <- record$`@id`
+        if (is.null(class_id_raw)) {
+          return(NULL)
+        }
+
+        obo_id <- if (grepl("obo/", class_id_raw, fixed = TRUE)) {
+          id_part <- sub(".*obo/", "", class_id_raw)
+          sub("_", ":", id_part)
+        } else if (!is.null(record$notation) && nzchar(record$notation)) {
+          as.character(record$notation)
+        } else {
+          class_id_raw
+        }
+
+        ontology_acronym <- if (!is.null(record$links$ontology)) {
+          sub(".*ontologies/([^/]+).*", "\\1", record$links$ontology)
+        } else {
+          sub(":.*", "", obo_id)
+        }
+
+        label <- if (!is.null(record$prefLabel)) {
+          as.character(record$prefLabel)
+        } else {
+          NA_character_
+        }
+
+        aliases <- if (!is.null(record$synonym) && length(record$synonym) > 0) {
+          paste(unique(as.character(unlist(record$synonym))), collapse = " | ")
+        } else {
+          NA_character_
+        }
+
+        definition <- if (!is.null(record$definition) && length(record$definition) > 0) {
+          as.character(unlist(record$definition)[[1]])
+        } else {
+          NA_character_
+        }
+
+        tibble::tibble(
+          source_provider = "BioPortal",
+          source_ontology = ontology_acronym,
+          source_term_id = obo_id,
+          source_term_label = label,
+          source_term_definition = definition,
+          candidate_aliases = aliases,
+          source_release = "current",
+          source_match_method = "bioportal_search"
+        )
+      },
+      error = function(e) NULL
+    )
+  }))
+
+  Sys.sleep(0.5)
+
+  if (length(rows) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  dplyr::bind_rows(rows) |>
+    dplyr::filter(!is.na(.data$source_term_id), !is.na(.data$source_term_label))
+}
+
+#' @keywords internal
+.eco_lifestage_query_wikidata <- function(term) {
+  escaped_term <- gsub('"', '\\"', tolower(term), fixed = TRUE)
+  uberon_sparql <- glue::glue(
+    'SELECT ?item ?itemLabel ?uberonId WHERE {{
+      ?item wdt:P1554 ?uberonId .
+      ?item rdfs:label ?itemLabel .
+      FILTER(LANG(?itemLabel) = "en")
+      FILTER(CONTAINS(LCASE(?itemLabel), "{escaped_term}"))
+    }}
+    LIMIT 10'
+  )
+  adw_sparql <- glue::glue(
+    'SELECT ?item ?itemLabel ?adwId WHERE {{
+      ?item wdt:P3841 ?adwId .
+      ?item rdfs:label ?itemLabel .
+      FILTER(LANG(?itemLabel) = "en")
+      FILTER(CONTAINS(LCASE(?itemLabel), "{escaped_term}"))
+    }}
+    LIMIT 10'
+  )
+
+  query_wikidata <- function(sparql) {
+    tryCatch(
+      {
+        httr2::request("https://query.wikidata.org/sparql") |>
+          httr2::req_url_query(query = sparql) |>
+          httr2::req_headers(
+            Accept = "application/sparql-results+json",
+            `User-Agent` = "ComptoxR/dev lifestage resolver (verfassergeist@gmail.com)"
+          ) |>
+          httr2::req_perform() |>
+          httr2::resp_body_string() |>
+          jsonlite::fromJSON(simplifyDataFrame = TRUE)
+      },
+      error = function(e) {
+        cli::cli_warn(c(
+          "Wikidata SPARQL endpoint unreachable for {.val {term}}.",
+          "i" = "Wikidata candidates will be skipped for this resolution run.",
+          "x" = conditionMessage(e)
+        ))
+        NULL
+      }
+    )
+  }
+
+  uberon_payload <- query_wikidata(uberon_sparql)
+  uberon_rows <- .eco_lifestage_candidate_schema()
+  if (!is.null(uberon_payload)) {
+    bindings <- uberon_payload$results$bindings
+    if (is.data.frame(bindings) && nrow(bindings) > 0 && "uberonId" %in% names(bindings)) {
+      uberon_rows <- tibble::tibble(
+        source_provider = "Wikidata",
+        source_ontology = "UBERON",
+        source_term_id = paste0("UBERON:", bindings$uberonId$value),
+        source_term_label = bindings$itemLabel$value,
+        source_term_definition = NA_character_,
+        candidate_aliases = NA_character_,
+        source_release = "current",
+        source_match_method = "wikidata_sparql_P1554"
+      )
+    }
+  }
+
+  Sys.sleep(1)
+
+  adw_payload <- query_wikidata(adw_sparql)
+  adw_rows <- .eco_lifestage_candidate_schema()
+  if (!is.null(adw_payload)) {
+    bindings <- adw_payload$results$bindings
+    if (is.data.frame(bindings) && nrow(bindings) > 0) {
+      adw_rows <- tibble::tibble(
+        source_provider = "Wikidata",
+        source_ontology = "ADW",
+        source_term_id = if ("adwId" %in% names(bindings)) {
+          paste0("ADW:", bindings$adwId$value)
+        } else {
+          NA_character_
+        },
+        source_term_label = bindings$itemLabel$value,
+        source_term_definition = NA_character_,
+        candidate_aliases = NA_character_,
+        source_release = "current",
+        source_match_method = "wikidata_sparql_P3841"
+      )
+    }
+  }
+
+  Sys.sleep(1)
+
+  dplyr::bind_rows(uberon_rows, adw_rows)
+}
+
+#' @keywords internal
+.eco_lifestage_query_agrovoc <- function(term) {
+  search_result <- tryCatch(
+    {
+      httr2::request("https://agrovoc.fao.org/browse/rest/v1/search/") |>
+        httr2::req_url_query(query = term, lang = "en") |>
+        httr2::req_perform() |>
+        httr2::resp_body_json()
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "AGROVOC search endpoint unreachable for {.val {term}}.",
+        "i" = "AGROVOC candidates will be skipped for this resolution run.",
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (is.null(search_result)) {
+    Sys.sleep(0.5)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  results_list <- search_result$results
+  if (is.null(results_list) || length(results_list) == 0) {
+    Sys.sleep(0.5)
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  first_result <- results_list[[1]]
+  concept_uri <- first_result$uri
+  preferred_label <- if (!is.null(first_result$prefLabel)) {
+    first_result$prefLabel
+  } else {
+    NA_character_
+  }
+
+  broader_labels <- character(0)
+  detail <- tryCatch(
+    {
+      httr2::request("https://agrovoc.fao.org/browse/rest/v1/data/") |>
+        httr2::req_url_query(uri = concept_uri) |>
+        httr2::req_perform() |>
+        httr2::resp_body_json()
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "AGROVOC detail endpoint unreachable for {.val {term}}.",
+        "x" = conditionMessage(e)
+      ))
+      NULL
+    }
+  )
+
+  if (!is.null(detail)) {
+    broader_raw <- detail$broader
+    if (!is.null(broader_raw) && length(broader_raw) > 0) {
+      broader_labels <- vapply(
+        broader_raw,
+        function(b) if (!is.null(b$prefLabel)) b$prefLabel else NA_character_,
+        character(1)
+      )
+      broader_labels <- broader_labels[!is.na(broader_labels)]
+    }
+  }
+
+  Sys.sleep(0.5)
+
+  tibble::tibble(
+    source_provider = "AGROVOC",
+    source_ontology = "AGROVOC",
+    source_term_id = concept_uri,
+    source_term_label = preferred_label,
+    source_term_definition = NA_character_,
+    candidate_aliases = if (length(broader_labels) > 0) {
+      paste(broader_labels, collapse = " | ")
+    } else {
+      NA_character_
+    },
+    source_release = "current",
+    source_match_method = "agrovoc_rest_search"
+  )
 }
 
 #' @keywords internal
@@ -649,8 +1844,18 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   }
 
   candidates <- tibble::as_tibble(candidates) |>
-    dplyr::distinct(.data$source_provider, .data$source_ontology, .data$source_term_id, .keep_all = TRUE)
+    dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE)
 
+  domain_tags <- .eco_lifestage_detect_domains(org_lifestage)
+  taxon_route <- .eco_lifestage_taxon_route_lookup(org_lifestage)
+  route_family <- if (nrow(taxon_route) > 0 && "route_family" %in% names(taxon_route)) {
+    as.character(taxon_route$route_family[[1]])
+  } else {
+    NA_character_
+  }
+  is_aquatic <- "aquatic" %in% domain_tags
+  is_amphibian <- "amphibian" %in% domain_tags
+  is_plant <- "plant" %in% domain_tags
   ranked <- purrr::pmap_dfr(
     candidates,
     function(
@@ -689,7 +1894,55 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
       )
     }
   ) |>
-    dplyr::arrange(dplyr::desc(.data$candidate_score), .data$source_ontology, .data$source_term_id) |>
+    dplyr::mutate(
+      ontology_priority = dplyr::case_when(
+        .data$source_provider == "Curated" ~ 0L,
+        identical(route_family, "plant") & .data$source_provider == "PlantOntologyOBO" ~ 1L,
+        identical(route_family, "plant") & .data$source_ontology == "PO" ~ 2L,
+        identical(route_family, "plant") & .data$source_ontology == "AGROVOC" ~ 3L,
+        identical(route_family, "plant") & .data$source_provider == "DevStageOntologies" ~ 4L,
+        identical(route_family, "amphibian") & .data$source_ontology == "XAO" ~ 1L,
+        identical(route_family, "amphibian") & .data$source_provider == "DevStageOntologies" ~ 2L,
+        identical(route_family, "amphibian") & .data$source_ontology == "UBERON" ~ 3L,
+        identical(route_family, "aquatic") & .data$source_provider == "DevStageOntologies" ~ 1L,
+        identical(route_family, "aquatic") & .data$source_ontology == "S11" ~ 2L,
+        identical(route_family, "aquatic") & .data$source_ontology == "UBERON" ~ 3L,
+        identical(route_family, "invertebrate") & .data$source_provider == "DevStageOntologies" ~ 1L,
+        identical(route_family, "invertebrate") & .data$source_ontology == "S11" ~ 2L,
+        identical(route_family, "invertebrate") & .data$source_ontology == "UBERON" ~ 3L,
+        identical(route_family, "vertebrate") & .data$source_provider == "DevStageOntologies" ~ 1L,
+        identical(route_family, "vertebrate") & .data$source_ontology == "UBERON" ~ 2L,
+        identical(route_family, "fungi") & .data$source_ontology == "AGROVOC" ~ 1L,
+        identical(route_family, "algae") & .data$source_ontology == "AGROVOC" ~ 1L,
+        is_aquatic & .data$source_ontology == "S11" ~ 1L,
+        is_aquatic & .data$source_ontology == "UBERON" ~ 2L,
+        is_amphibian & .data$source_ontology == "XAO" ~ 1L,
+        is_amphibian & .data$source_ontology == "UBERON" ~ 2L,
+        is_plant & .data$source_provider == "PlantOntologyOBO" ~ 1L,
+        is_plant & .data$source_ontology == "PO" ~ 2L,
+        is_plant & .data$source_ontology == "AGROVOC" ~ 3L,
+        .data$source_ontology == "S11" ~ 1L,
+        .data$source_provider == "PlantOntologyOBO" ~ 2L,
+        .data$source_provider == "DevStageOntologies" ~ 3L,
+        .data$source_ontology == "XAO" ~ 4L,
+        .data$source_ontology == "UBERON" ~ 5L,
+        .data$source_ontology == "PO" ~ 6L,
+        .data$source_ontology == "ZFA" ~ 7L,
+        .data$source_ontology == "FBdv" ~ 8L,
+        .data$source_ontology == "ECOCORE" ~ 9L,
+        .data$source_ontology == "AGROVOC" ~ 10L,
+        .data$source_ontology == "MeSH" ~ 11L,
+        .data$source_ontology == "EFO" ~ 12L,
+        .data$source_ontology == "ADW" ~ 13L,
+        TRUE ~ 99L
+      )
+    ) |>
+    dplyr::arrange(
+      dplyr::desc(.data$candidate_score),
+      .data$ontology_priority,
+      .data$source_ontology,
+      .data$source_term_id
+    ) |>
     dplyr::mutate(candidate_rank = dplyr::row_number())
 
   top_score <- ranked$candidate_score[[1]]
@@ -710,11 +1963,18 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     )
   }
 
-  resolved <- top_score >= 90 && sum(ranked$candidate_score == top_score) == 1
+  top_candidates <- accepted |>
+    dplyr::filter(.data$candidate_score == top_score)
+  top_candidates <- top_candidates |>
+    dplyr::filter(.data$ontology_priority == min(.data$ontology_priority))
+  trusted_boundary <- c("S11", "XAO", "UBERON", "PO", "ZFA", "FBdv", "AGROVOC")
+  resolved <- nrow(top_candidates) == 1 &&
+    (top_score >= 90 ||
+      (top_score == 75 && top_candidates$source_ontology[[1]] %in% trusted_boundary))
   status <- if (resolved) "resolved" else "ambiguous"
 
   output <- if (resolved) {
-    ranked |>
+    top_candidates |>
       dplyr::slice(1)
   } else {
     accepted
@@ -734,11 +1994,58 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 #' @keywords internal
 .eco_lifestage_resolve_term <- function(org_lifestage, ecotox_release) {
   release_id <- ecotox_release
-  candidates <- dplyr::bind_rows(
-    .eco_lifestage_query_ols4(org_lifestage, "UBERON"),
-    .eco_lifestage_query_ols4(org_lifestage, "PO"),
-    .eco_lifestage_query_nvs(org_lifestage)
-  )
+  if (org_lifestage %in% .eco_lifestage_forced_unresolved_terms()) {
+    return(
+      .eco_lifestage_cache_schema() |>
+        dplyr::add_row(
+          org_lifestage = org_lifestage,
+          source_match_method = "forced_unresolved",
+          source_match_status = "unresolved",
+          candidate_rank = 1L,
+          candidate_score = 0,
+          candidate_reason = "forced_unresolved_nonstage",
+          ecotox_release = release_id
+        )
+    )
+  }
+  query_term <- .eco_lifestage_alias_lookup(org_lifestage)
+  domain_tags <- .eco_lifestage_detect_domains(org_lifestage, query_term)
+  taxon_route <- .eco_lifestage_taxon_route_lookup(org_lifestage)
+  route_family <- if (nrow(taxon_route) > 0 && "route_family" %in% names(taxon_route)) {
+    as.character(taxon_route$route_family[[1]])
+  } else {
+    NA_character_
+  }
+  is_plant_route <- identical(route_family, "plant") || "plant" %in% domain_tags
+  candidates <- if (is_plant_route) {
+    dplyr::bind_rows(
+      .eco_lifestage_curated_candidates(org_lifestage),
+      .eco_lifestage_query_po_obo(org_lifestage),
+      .eco_lifestage_apply_query_alias(
+        .eco_lifestage_query_po_obo(query_term),
+        org_lifestage = org_lifestage,
+        query_term = query_term
+      ),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_ols4(query_term), org_lifestage, query_term),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_agrovoc(query_term), org_lifestage, query_term)
+    )
+  } else {
+    dplyr::bind_rows(
+      .eco_lifestage_curated_candidates(org_lifestage),
+      .eco_lifestage_query_devstage_ontology(org_lifestage),
+      .eco_lifestage_apply_query_alias(
+        .eco_lifestage_query_devstage_ontology(query_term),
+        org_lifestage = org_lifestage,
+        query_term = query_term
+      ),
+      if ("amphibian" %in% domain_tags) .eco_lifestage_query_xao(query_term) else .eco_lifestage_candidate_schema(),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_ols4(query_term), org_lifestage, query_term),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_bioportal(query_term), org_lifestage, query_term),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_nvs(query_term), org_lifestage, query_term),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_wikidata(query_term), org_lifestage, query_term),
+      .eco_lifestage_apply_query_alias(.eco_lifestage_query_agrovoc(query_term), org_lifestage, query_term)
+    )
+  }
 
   .eco_lifestage_rank_candidates(org_lifestage, candidates) |>
     dplyr::mutate(ecotox_release = release_id)
@@ -770,13 +2077,150 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_derive_fields <- function(resolved_rows) {
-  derivation_map <- .eco_lifestage_derivation_map()
+  derivation_map <- .eco_lifestage_auto_derive(resolved_rows)
 
   resolved_rows |>
     dplyr::left_join(
       derivation_map,
       by = c("source_ontology", "source_term_id")
     )
+}
+
+#' @keywords internal
+.eco_lifestage_derivation_coverage_report <- function(
+  baseline,
+  derivation_map = .eco_lifestage_derivation_map()
+) {
+  resolved <- baseline |>
+    dplyr::filter(.data$source_match_status == "resolved") |>
+    dplyr::group_by(.data$org_lifestage) |>
+    dplyr::slice(1) |>
+    dplyr::ungroup() |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE)
+
+  derivation_keys <- derivation_map |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id) |>
+    dplyr::mutate(in_derivation_csv = TRUE)
+
+  resolved |>
+    dplyr::left_join(
+      derivation_keys,
+      by = c("source_ontology", "source_term_id")
+    ) |>
+    dplyr::mutate(
+      in_derivation_csv = dplyr::coalesce(.data$in_derivation_csv, FALSE),
+      coverage_source = dplyr::case_when(
+        .data$in_derivation_csv ~ "derivation_csv_only",
+        TRUE ~ "missing_both"
+      )
+    ) |>
+    dplyr::arrange(.data$coverage_source, .data$source_ontology, .data$source_term_id)
+}
+
+#' @keywords internal
+.eco_lifestage_write_derivation_coverage_report <- function(baseline) {
+  report <- .eco_lifestage_derivation_coverage_report(baseline)
+  path <- .eco_lifestage_derivation_coverage_report_path()
+  utils::write.csv(report, path, row.names = FALSE, na = "")
+  list(
+    path = path,
+    rows = nrow(report),
+    derivation_csv_only = sum(report$coverage_source == "derivation_csv_only", na.rm = TRUE),
+    missing_both = sum(report$coverage_source == "missing_both", na.rm = TRUE)
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_auto_derive <- function(baseline, audit = NULL) {
+  existing_derivation <- .eco_lifestage_derivation_map()
+
+  resolved <- baseline |>
+    dplyr::filter(.data$source_match_status == "resolved") |>
+    dplyr::group_by(.data$org_lifestage) |>
+    dplyr::slice(1) |>
+    dplyr::ungroup()
+
+  resolved_keys <- resolved |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id)
+
+  existing_keys <- dplyr::semi_join(
+    existing_derivation,
+    resolved_keys,
+    by = c("source_ontology", "source_term_id")
+  )
+
+  new_keys <- dplyr::anti_join(
+    resolved_keys,
+    existing_derivation,
+    by = c("source_ontology", "source_term_id")
+  )
+
+  auto_derived <- new_keys |>
+    dplyr::mutate(
+      harmonized_life_stage = "Other/Unknown",
+      reproductive_stage = FALSE,
+      derivation_source = "auto_unmatched_needs_review"
+    )
+
+  unresolvable_rows <- tibble::tibble(
+    source_ontology = character(),
+    source_term_id = character(),
+    harmonized_life_stage = character(),
+    reproductive_stage = logical(),
+    derivation_source = character()
+  )
+  if (!is.null(audit) && nrow(audit) > 0) {
+    unresolved_terms <- baseline |>
+      dplyr::filter(.data$source_match_status != "resolved") |>
+      dplyr::distinct(.data$org_lifestage)
+
+    unresolvable_rows <- audit |>
+      dplyr::inner_join(unresolved_terms, by = "org_lifestage") |>
+      dplyr::transmute(
+        source_ontology = "ECOTOX_UNRESOLVED",
+        source_term_id = .data$org_lifestage,
+        harmonized_life_stage = dplyr::case_when(
+          .data$triage_bucket == "administrative_noise" ~ "Unspecified",
+          TRUE ~ "Other/Unknown"
+        ),
+        reproductive_stage = FALSE,
+        derivation_source = dplyr::case_when(
+          .data$resolution_path %in%
+            c("manual_curator", "manual_derivation", "permanently_unresolved") ~ .data$resolution_path,
+          .data$triage_bucket == "out_of_scope_biology" ~ "auto_triage_out_of_scope",
+          .data$triage_bucket == "administrative_noise" ~ "administrative_noise_audit",
+          .data$triage_bucket == "ambiguous" ~ "auto_triage_ambiguous",
+          .data$triage_bucket == "alias_synonym" ~ "auto_triage_alias_synonym",
+          .data$triage_bucket == "needs_ontology_expansion" ~ "auto_triage_needs_expansion",
+          TRUE ~ "auto_triage_needs_review"
+        )
+      )
+  }
+
+  missing_audit_rows <- baseline |>
+    dplyr::filter(.data$source_match_status != "resolved") |>
+    dplyr::distinct(.data$org_lifestage) |>
+    dplyr::anti_join(
+      unresolvable_rows |>
+        dplyr::transmute(org_lifestage = .data$source_term_id),
+      by = "org_lifestage"
+    ) |>
+    dplyr::transmute(
+      source_ontology = "ECOTOX_UNRESOLVED",
+      source_term_id = .data$org_lifestage,
+      harmonized_life_stage = "Other/Unknown",
+      reproductive_stage = FALSE,
+      derivation_source = "auto_triage_missing_audit"
+    )
+
+  dplyr::bind_rows(
+    existing_keys,
+    auto_derived,
+    unresolvable_rows,
+    missing_audit_rows
+  ) |>
+    dplyr::distinct(.data$source_ontology, .data$source_term_id, .keep_all = TRUE) |>
+    dplyr::arrange(.data$source_ontology, .data$source_term_id)
 }
 
 #' @keywords internal
