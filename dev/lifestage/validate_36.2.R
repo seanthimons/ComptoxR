@@ -184,5 +184,170 @@ cli::cli_h2("8. GO:0040007 Contamination Check")
 stopifnot(sum(baseline$source_term_id == "GO:0040007", na.rm = TRUE) == 0L)
 cli::cli_alert_success("No GO:0040007 contamination in the regenerated baseline.")
 
+# -- Section 9: Semantic Adjudication Gate ----------------------------------
+
+cli::cli_h2("9. Semantic Adjudication Gate")
+
+semantic_adjudication <- readr::read_csv(
+  csv_path("lifestage_semantic_adjudication.csv"),
+  show_col_types = FALSE
+)
+taxon_intersections <- readr::read_csv(
+  csv_path("lifestage_taxon_intersections.csv"),
+  show_col_types = FALSE
+)
+curated_exceptions <- readr::read_csv(
+  csv_path("lifestage_curated_exceptions.csv"),
+  show_col_types = FALSE
+)
+
+required_adjudication_cols <- c(
+  "org_lifestage",
+  "source_ontology",
+  "source_term_id",
+  "harmonized_life_stage",
+  "reproductive_stage",
+  "route_family",
+  "adjudication_status",
+  "adjudication_reason"
+)
+missing_adjudication_cols <- setdiff(required_adjudication_cols, names(semantic_adjudication))
+if (length(missing_adjudication_cols) > 0) {
+  cli::cli_abort(
+    "Semantic adjudication artifact is missing required column(s): {.val {missing_adjudication_cols}}"
+  )
+}
+
+allowed_adjudication_status <- c(
+  "approved_same_semantics",
+  "approved_exception",
+  "policy_hold_unresolved",
+  "needs_context_aware_derivation",
+  "needs_manual_review"
+)
+invalid_status <- setdiff(
+  unique(semantic_adjudication$adjudication_status),
+  allowed_adjudication_status
+)
+if (length(invalid_status) > 0) {
+  cli::cli_abort("Invalid adjudication status value(s): {.val {invalid_status}}")
+}
+
+allowed_adjudication_reason <- c(
+  "unchanged_harmonized_semantics",
+  "semantic_change",
+  "ambiguous_route",
+  "no_source_backed_candidate",
+  "broad_source_concept",
+  "missing_derivation",
+  "unresolved_policy_tail"
+)
+invalid_reason <- setdiff(
+  unique(semantic_adjudication$adjudication_reason),
+  allowed_adjudication_reason
+)
+if (length(invalid_reason) > 0) {
+  cli::cli_abort("Invalid adjudication reason value(s): {.val {invalid_reason}}")
+}
+
+missing_term_adjudication <- resolved_rows |>
+  dplyr::distinct(.data$org_lifestage) |>
+  dplyr::anti_join(
+    semantic_adjudication |> dplyr::distinct(.data$org_lifestage),
+    by = "org_lifestage"
+  )
+if (nrow(missing_term_adjudication) > 0) {
+  cli::cli_abort(
+    "{nrow(missing_term_adjudication)} resolved baseline term(s) lack semantic adjudication: {.val {missing_term_adjudication$org_lifestage}}"
+  )
+}
+
+resolved_contexts <- taxon_intersections |>
+  dplyr::filter(.data$source_match_status == "resolved") |>
+  dplyr::distinct(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name)
+missing_context_adjudication <- resolved_contexts |>
+  dplyr::anti_join(
+    semantic_adjudication |>
+      dplyr::distinct(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name),
+    by = c("org_lifestage", "eco_group", "kingdom", "class_name")
+  )
+duplicate_context_adjudication <- semantic_adjudication |>
+  dplyr::semi_join(
+    resolved_contexts,
+    by = c("org_lifestage", "eco_group", "kingdom", "class_name")
+  ) |>
+  dplyr::count(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name) |>
+  dplyr::filter(.data$n != 1L)
+if (nrow(missing_context_adjudication) > 0) {
+  cli::cli_abort(
+    "{nrow(missing_context_adjudication)} resolved lifestage/species-group context(s) lack semantic adjudication."
+  )
+}
+if (nrow(duplicate_context_adjudication) > 0) {
+  cli::cli_abort(
+    "{nrow(duplicate_context_adjudication)} resolved lifestage/species-group context(s) have duplicate semantic adjudication rows."
+  )
+}
+
+manual_review_rows <- semantic_adjudication |>
+  dplyr::semi_join(
+    resolved_contexts,
+    by = c("org_lifestage", "eco_group", "kingdom", "class_name")
+  ) |>
+  dplyr::filter(.data$adjudication_status == "needs_manual_review")
+if (nrow(manual_review_rows) > 0) {
+  cli::cli_abort(
+    "{nrow(manual_review_rows)} resolved lifestage/species-group context(s) still need manual semantic review."
+  )
+}
+
+context_derivation_rows <- semantic_adjudication |>
+  dplyr::filter(.data$adjudication_status == "needs_context_aware_derivation")
+if (nrow(context_derivation_rows) > 0) {
+  cli::cli_warn(
+    "{nrow(context_derivation_rows)} semantic adjudication row(s) need context-aware derivation review."
+  )
+}
+
+changed_exceptions <- curated_exceptions |>
+  dplyr::filter(
+    !is.na(.data$replacement_harmonized_life_stage),
+    .data$replacement_harmonized_life_stage != .data$harmonized_life_stage |
+      .data$replacement_reproductive_stage != .data$reproductive_stage
+  )
+changed_exception_bad_status <- changed_exceptions |>
+  dplyr::inner_join(
+    semantic_adjudication,
+    by = c("org_lifestage", "source_ontology", "source_term_id"),
+    suffix = c("_exception", "_adjudication")
+  ) |>
+  dplyr::filter(.data$adjudication_status == "approved_same_semantics")
+changed_exception_gaps <- changed_exceptions |>
+  dplyr::anti_join(
+    semantic_adjudication,
+    by = c("org_lifestage", "source_ontology", "source_term_id")
+  )
+if (nrow(changed_exception_gaps) > 0) {
+  cli::cli_abort(
+    "{nrow(changed_exception_gaps)} changed-semantics exception row(s) lack semantic adjudication."
+  )
+}
+if (nrow(changed_exception_bad_status) > 0) {
+  cli::cli_abort(
+    "{nrow(changed_exception_bad_status)} changed-semantics exception row(s) are marked approved_same_semantics."
+  )
+}
+
+cli::cli_alert_success("Semantic adjudication covers all resolved terms and lifestage/species-group contexts.")
+
+cli::cli_h3("Semantic adjudication counts")
+print(
+  semantic_adjudication |>
+    dplyr::count(.data$adjudication_status, .data$adjudication_reason, sort = TRUE)
+)
+if ("context_scope" %in% names(semantic_adjudication)) {
+  print(semantic_adjudication |> dplyr::count(.data$context_scope, sort = TRUE))
+}
+
 cli::cli_h1("Phase 36.2 Validation Complete")
 cli::cli_alert_success("All checks passed.")
