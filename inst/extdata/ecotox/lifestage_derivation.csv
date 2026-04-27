@@ -89,7 +89,6 @@
 "UBERON","UBERON:0000113","Adult",FALSE,"auto_ontology_category_map"
 "UBERON","UBERON:0000307","Egg/Embryo",FALSE,"auto_ontology_category_map"
 "UBERON","UBERON:0002547","Larva",FALSE,"auto_ontology_category_map"
-"UBERON","UBERON:0002548","Larva",FALSE,"manual_derivation"
 "UBERON","UBERON:0003142","Larva",FALSE,"baseline_curated_source_id"
 "UBERON","UBERON:0004734","Egg/Embryo",FALSE,"auto_ontology_category_map"
 "UBERON","UBERON:0007221","Larva",FALSE,"auto_ontology_category_map"

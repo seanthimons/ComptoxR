@@ -35,6 +35,19 @@ lifestage_function_body <- function(function_name) {
   lines[start:end]
 }
 
+lifestage_candidate <- function(source_provider, source_ontology, source_term_id, source_term_label) {
+  tibble::tibble(
+    source_provider = source_provider,
+    source_ontology = source_ontology,
+    source_term_id = source_term_id,
+    source_term_label = source_term_label,
+    source_term_definition = NA_character_,
+    candidate_aliases = source_term_label,
+    source_release = "test",
+    source_match_method = "test"
+  )
+}
+
 test_that("lifestage_baseline.csv has correct schema columns", {
   testthat::skip_if_not_installed("readr")
   path <- system.file(
@@ -361,7 +374,8 @@ test_that("lifestage_taxon_route_families.csv has valid policy data", {
     "amphibian",
     "vertebrate",
     "fungi",
-    "algae"
+    "algae",
+    "unknown"
   )
 
   testthat::expect_equal(sort(names(routes)), sort(expected_cols))
@@ -375,6 +389,131 @@ test_that("lifestage_taxon_route_families.csv has valid policy data", {
     nrow(dplyr::distinct(routes, field, value)),
     label = "lifestage_taxon_route_families.csv should have no duplicate field/value keys"
   )
+})
+
+test_that("lifestage_route_ontology_priorities.csv has valid policy data", {
+  priorities <- lifestage_read_extdata("lifestage_route_ontology_priorities.csv")
+  expected_cols <- c("route_family", "source_provider", "source_ontology", "ontology_priority")
+  valid_route_families <- c(
+    "plant",
+    "aquatic",
+    "invertebrate",
+    "amphibian",
+    "vertebrate",
+    "fungi",
+    "algae",
+    "unknown",
+    "default"
+  )
+
+  testthat::expect_equal(sort(names(priorities)), sort(expected_cols))
+  testthat::expect_equal(
+    setdiff(unique(priorities$route_family), valid_route_families),
+    character()
+  )
+  testthat::expect_true(all(!is.na(priorities$ontology_priority)))
+  testthat::expect_true("default" %in% priorities$route_family)
+  testthat::expect_equal(
+    nrow(priorities),
+    nrow(dplyr::distinct(priorities, route_family, source_provider, source_ontology)),
+    label = "lifestage_route_ontology_priorities.csv should have no duplicate route/provider/ontology keys"
+  )
+})
+
+test_that("lifestage_taxon_intersections.csv has auditable ECOTOX route evidence", {
+  intersections <- lifestage_read_extdata("lifestage_taxon_intersections.csv")
+  baseline <- lifestage_read_extdata("lifestage_baseline.csv")
+  expected_cols <- c(
+    "org_lifestage",
+    "eco_group",
+    "kingdom",
+    "class_name",
+    "route_family",
+    "compound_count",
+    "species_count",
+    "citation_count",
+    "test_count",
+    "taxon_signal_score",
+    "total_taxon_signal",
+    "taxon_signal_share",
+    "dominant_route",
+    "source_match_status",
+    "source_ontology",
+    "source_term_id",
+    "source_term_label",
+    "candidate_score"
+  )
+  valid_route_families <- c(
+    "plant",
+    "aquatic",
+    "invertebrate",
+    "amphibian",
+    "vertebrate",
+    "fungi",
+    "algae",
+    "unknown"
+  )
+
+  testthat::expect_equal(sort(names(intersections)), sort(expected_cols))
+  testthat::expect_equal(
+    nrow(intersections),
+    nrow(dplyr::distinct(intersections, org_lifestage, eco_group, kingdom, class_name)),
+    label = "lifestage_taxon_intersections.csv should have unique lifestage/taxon intersections"
+  )
+  testthat::expect_equal(
+    setdiff(unique(intersections$route_family), valid_route_families),
+    character()
+  )
+  testthat::expect_equal(
+    setdiff(baseline$org_lifestage, intersections$org_lifestage),
+    character()
+  )
+
+  dominant_counts <- intersections |>
+    dplyr::filter(.data$dominant_route) |>
+    dplyr::count(.data$org_lifestage)
+  testthat::expect_equal(nrow(dominant_counts), nrow(baseline))
+  testthat::expect_true(all(dominant_counts$n == 1L))
+})
+
+test_that("lifestage_curated_exceptions.csv documents retained curated rows", {
+  exceptions <- lifestage_read_extdata("lifestage_curated_exceptions.csv")
+  curated <- lifestage_read_extdata("lifestage_curated_candidates.csv")
+  expected_cols <- c(
+    "org_lifestage",
+    "source_ontology",
+    "source_term_id",
+    "source_term_label",
+    "exception_reason",
+    "replacement_status",
+    "replacement_source_ontology",
+    "replacement_source_term_id",
+    "replacement_source_term_label",
+    "replacement_candidate_score",
+    "harmonized_life_stage",
+    "reproductive_stage",
+    "replacement_harmonized_life_stage",
+    "replacement_reproductive_stage",
+    "notes"
+  )
+  valid_reasons <- c("semantic_change", "ambiguous_route", "no_source_backed_candidate")
+
+  testthat::expect_equal(sort(names(exceptions)), sort(expected_cols))
+  testthat::expect_equal(setdiff(unique(exceptions$exception_reason), valid_reasons), character())
+  testthat::expect_equal(
+    nrow(dplyr::anti_join(curated, exceptions, by = c("org_lifestage", "source_ontology", "source_term_id"))),
+    0L
+  )
+
+  sapling <- dplyr::filter(exceptions, org_lifestage == "Sapling")
+  testthat::expect_equal(sapling$exception_reason, "semantic_change")
+  testthat::expect_equal(sapling$source_ontology, "S11")
+  testthat::expect_equal(sapling$source_term_id, "S1127")
+  testthat::expect_equal(sapling$replacement_source_ontology, "PO")
+  testthat::expect_equal(sapling$replacement_source_term_id, "PO:0007134")
+  testthat::expect_equal(sapling$harmonized_life_stage, "Juvenile")
+  testthat::expect_false(sapling$reproductive_stage)
+  testthat::expect_equal(sapling$replacement_harmonized_life_stage, "Adult")
 })
 
 test_that("every unresolved baseline term has an audit classification", {
@@ -550,10 +689,40 @@ test_that("high-risk lifestage policy decisions are locked", {
   testthat::expect_equal(unique(forced_rows$source_match_method), "forced_unresolved")
   testthat::expect_equal(sapling$source_ontology, "S11")
   testthat::expect_equal(sapling$source_term_id, "S1127")
+  sapling_derivation <- derivation |>
+    dplyr::filter(source_ontology == "S11", source_term_id == "S1127")
+  po_vegetative <- derivation |>
+    dplyr::filter(source_ontology == "PO", source_term_id == "PO:0007134")
+  testthat::expect_equal(sapling_derivation$harmonized_life_stage, "Juvenile")
+  testthat::expect_false(sapling_derivation$reproductive_stage)
+  testthat::expect_equal(po_vegetative$harmonized_life_stage, "Adult")
   testthat::expect_false(reproductive_flags$reproductive_stage[reproductive_flags$key == "UBERON:UBERON:0000113"])
   testthat::expect_false(reproductive_flags$reproductive_stage[reproductive_flags$key == "PO:PO:0025528"])
   testthat::expect_true(reproductive_flags$reproductive_stage[reproductive_flags$key == "PO:PO:0025279"])
   testthat::expect_true(reproductive_flags$reproductive_stage[reproductive_flags$key == "PO:PO:0025280"])
+})
+
+test_that("curated minimization promotes only unchanged harmonized semantics", {
+  report_path <- file.path("dev", "lifestage", "minimized_curated_candidates_report.csv")
+  if (!file.exists(report_path)) {
+    report_path <- file.path("..", "..", "dev", "lifestage", "minimized_curated_candidates_report.csv")
+  }
+  testthat::skip_if_not(
+    file.exists(report_path),
+    "minimized_curated_candidates_report.csv not available in installed package"
+  )
+
+  report <- readr::read_csv(report_path, show_col_types = FALSE)
+  promoted <- report |>
+    dplyr::filter(.data$action == "promoted_non_curated")
+  semantic_changes <- promoted |>
+    dplyr::filter(
+      .data$current_stage != .data$rerun_stage |
+        .data$current_rep != .data$rerun_rep
+    )
+
+  testthat::expect_gt(nrow(promoted), 0L)
+  testthat::expect_equal(nrow(semantic_changes), 0L)
 })
 
 test_that("forced-unresolved behavior is preserved from CSV policy", {
@@ -591,6 +760,60 @@ test_that("taxon route family behavior is preserved from CSV policy", {
     .eco_lifestage_taxon_route_family(eco_group = NA, class_name = "Amphibia"),
     "amphibian"
   )
+})
+
+test_that("route family ontology priorities resolve representative candidates deterministically", {
+  testthat::skip_if_not(exists(".eco_lifestage_rank_candidates"))
+
+  cases <- list(
+    plant = list(
+      term = "Seedling",
+      winner = c("PO", "PO:test"),
+      candidates = dplyr::bind_rows(
+        lifestage_candidate("PlantOntologyOBO", "PO", "PO:test", "Seedling"),
+        lifestage_candidate("NVS", "S11", "S11:test", "Seedling")
+      )
+    ),
+    aquatic = list(
+      term = "Fingerling",
+      winner = c("S11", "S11:test"),
+      candidates = dplyr::bind_rows(
+        lifestage_candidate("NVS", "S11", "S11:test", "Fingerling"),
+        lifestage_candidate("OLS4", "UBERON", "UBERON:test", "Fingerling")
+      )
+    ),
+    invertebrate = list(
+      term = "Adult",
+      winner = c("S11", "S11:test"),
+      candidates = dplyr::bind_rows(
+        lifestage_candidate("NVS", "S11", "S11:test", "Adult"),
+        lifestage_candidate("OLS4", "UBERON", "UBERON:test", "Adult")
+      )
+    ),
+    amphibian = list(
+      term = "Tadpole",
+      winner = c("XAO", "XAO:test"),
+      candidates = dplyr::bind_rows(
+        lifestage_candidate("OLS4", "XAO", "XAO:test", "Tadpole"),
+        lifestage_candidate("OLS4", "UBERON", "UBERON:test", "Tadpole")
+      )
+    ),
+    vertebrate = list(
+      term = "Gestation",
+      winner = c("UBERON", "UBERON:test"),
+      candidates = dplyr::bind_rows(
+        lifestage_candidate("OLS4", "UBERON", "UBERON:test", "Gestation"),
+        lifestage_candidate("NVS", "S11", "S11:test", "Gestation")
+      )
+    )
+  )
+
+  for (case in cases) {
+    ranked <- .eco_lifestage_rank_candidates(case$term, case$candidates)
+    testthat::expect_equal(ranked$source_match_status[[1]], "resolved")
+    testthat::expect_equal(ranked$source_ontology[[1]], case$winner[[1]])
+    testthat::expect_equal(ranked$source_term_id[[1]], case$winner[[2]])
+  }
 })
 
 test_that("lifestage policy literals are not reintroduced in target helpers", {

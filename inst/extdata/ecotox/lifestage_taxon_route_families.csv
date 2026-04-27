@@ -14,5 +14,7 @@
 "eco_group","Mammals","vertebrate"
 "eco_group","Fungi","fungi"
 "eco_group","Algae","algae"
+"eco_group","Miscellaneous","unknown"
+"eco_group","Unknown","unknown"
 "kingdom","PLANTAE","plant"
 "class_name","AMPHIBIA","amphibian"

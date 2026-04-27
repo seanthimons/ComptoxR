@@ -193,6 +193,22 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_taxon_intersections_path <- function() {
+  .eco_lifestage_policy_path(
+    "lifestage_taxon_intersections.csv",
+    "taxon intersections"
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_route_ontology_priorities_path <- function() {
+  .eco_lifestage_policy_path(
+    "lifestage_route_ontology_priorities.csv",
+    "route ontology priorities"
+  )
+}
+
+#' @keywords internal
 .eco_lifestage_read_csv <- function(path) {
   if (!file.exists(path)) {
     return(NULL)
@@ -282,7 +298,8 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     "amphibian",
     "vertebrate",
     "fungi",
-    "algae"
+    "algae",
+    "unknown"
   )
   missing_cols <- setdiff(required, names(policy))
   if (length(missing_cols) > 0) {
@@ -320,6 +337,114 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   }
 
   policy
+}
+
+#' @keywords internal
+.eco_lifestage_route_ontology_priority_policy <- function() {
+  path <- .eco_lifestage_route_ontology_priorities_path()
+  policy <- readr::read_csv(path, show_col_types = FALSE)
+  required <- c("route_family", "source_provider", "source_ontology", "ontology_priority")
+  valid_route_families <- c(
+    "plant",
+    "aquatic",
+    "invertebrate",
+    "amphibian",
+    "vertebrate",
+    "fungi",
+    "algae",
+    "unknown",
+    "default"
+  )
+  missing_cols <- setdiff(required, names(policy))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage route ontology priority schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  invalid_route_families <- setdiff(unique(policy$route_family), valid_route_families)
+  if (length(invalid_route_families) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage route ontology priority policy.",
+      "x" = "Unknown route_family value(s): {invalid_route_families}."
+    ))
+  }
+
+  policy <- policy |>
+    dplyr::mutate(
+      dplyr::across(
+        c("route_family", "source_provider", "source_ontology"),
+        ~ dplyr::if_else(is.na(.x) | !nzchar(.x), "*", as.character(.x))
+      ),
+      ontology_priority = as.integer(.data$ontology_priority)
+    )
+
+  if (any(is.na(policy$ontology_priority))) {
+    cli::cli_abort("Invalid lifestage route ontology priority policy: ontology_priority must be integer.")
+  }
+
+  duplicate_keys <- duplicated(policy[c("route_family", "source_provider", "source_ontology")])
+  if (any(duplicate_keys)) {
+    keys <- paste(
+      policy$route_family[duplicate_keys],
+      policy$source_provider[duplicate_keys],
+      policy$source_ontology[duplicate_keys],
+      sep = ":"
+    )
+    cli::cli_abort(c(
+      "Invalid lifestage route ontology priority policy.",
+      "x" = "Duplicate route/provider/ontology key(s): {unique(keys)}."
+    ))
+  }
+
+  policy |>
+    dplyr::arrange(.data$route_family, .data$ontology_priority)
+}
+
+#' @keywords internal
+.eco_lifestage_candidate_ontology_priority <- function(source_provider, source_ontology, route_family) {
+  policy <- .eco_lifestage_route_ontology_priority_policy()
+  route_family <- as.character(route_family[[1]])
+  if (is.na(route_family) || !nzchar(route_family)) {
+    route_family <- "default"
+  }
+  if (identical(route_family, "unknown")) {
+    route_family <- "default"
+  }
+  provider <- as.character(source_provider[[1]])
+  ontology <- as.character(source_ontology[[1]])
+
+  match_policy <- function(policy_rows) {
+    matches <- policy_rows |>
+      dplyr::filter(
+        (.data$source_provider == "*" | .data$source_provider == provider),
+        (.data$source_ontology == "*" | .data$source_ontology == ontology)
+      ) |>
+      dplyr::arrange(
+        .data$ontology_priority,
+        .data$source_provider == "*",
+        .data$source_ontology == "*"
+      )
+    if (nrow(matches) == 0L) {
+      return(NA_integer_)
+    }
+    matches$ontology_priority[[1]]
+  }
+
+  route_policy <- dplyr::filter(policy, .data$route_family == !!route_family)
+  priority <- match_policy(route_policy)
+  if (!is.na(priority)) {
+    return(priority)
+  }
+  if (nrow(route_policy) > 0L && !identical(route_family, "default")) {
+    return(99L)
+  }
+  priority <- match_policy(dplyr::filter(policy, .data$route_family == "default"))
+  if (!is.na(priority)) {
+    return(priority)
+  }
+  99L
 }
 
 #' @keywords internal
@@ -1256,6 +1381,66 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_taxon_route_lookup <- function(org_lifestage) {
+  intersection_path <- .eco_lifestage_taxon_intersections_path()
+  if (nzchar(intersection_path) && file.exists(intersection_path)) {
+    intersections <- readr::read_csv(intersection_path, show_col_types = FALSE)
+    required <- c(
+      "org_lifestage",
+      "eco_group",
+      "kingdom",
+      "class_name",
+      "route_family",
+      "compound_count",
+      "species_count",
+      "citation_count",
+      "test_count",
+      "taxon_signal_score",
+      "taxon_signal_share",
+      "dominant_route"
+    )
+    missing_cols <- setdiff(required, names(intersections))
+    if (length(missing_cols) > 0) {
+      cli::cli_abort(c(
+        "Invalid lifestage taxon intersections schema.",
+        "x" = "Missing column(s): {missing_cols}."
+      ))
+    }
+
+    lookup_key <- as.character(org_lifestage[[1]])
+    hit <- intersections |>
+      dplyr::filter(.data$org_lifestage == !!lookup_key)
+    if (nrow(hit) > 0L) {
+      row <- hit |>
+        dplyr::mutate(
+          dominant_route = dplyr::coalesce(as.logical(.data$dominant_route), FALSE),
+          route_family = dplyr::coalesce(
+            .data$route_family,
+            vapply(
+              seq_len(dplyr::n()),
+              function(i) {
+                .eco_lifestage_taxon_route_family(
+                  eco_group = .data$eco_group[[i]],
+                  kingdom = .data$kingdom[[i]],
+                  class_name = .data$class_name[[i]]
+                )
+              },
+              character(1)
+            )
+          )
+        ) |>
+        dplyr::arrange(
+          dplyr::desc(.data$dominant_route),
+          dplyr::desc(.data$taxon_signal_score),
+          dplyr::desc(.data$compound_count),
+          dplyr::desc(.data$citation_count),
+          dplyr::desc(.data$species_count),
+          .data$eco_group
+        ) |>
+        dplyr::slice(1)
+      return(tibble::as_tibble(row))
+    }
+  }
+
   profile_path <- .eco_lifestage_taxon_profile_path()
   if (!nzchar(profile_path) || !file.exists(profile_path)) {
     return(tibble::tibble())
@@ -1895,57 +2080,19 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     }
   ) |>
     dplyr::mutate(
-      ontology_priority = dplyr::case_when(
-        .data$source_provider == "Curated" ~ 0L,
-        identical(route_family, "plant") & .data$source_provider == "PlantOntologyOBO" ~ 1L,
-        identical(route_family, "plant") & .data$source_ontology == "PO" ~ 2L,
-        identical(route_family, "plant") & .data$source_ontology == "AGROVOC" ~ 3L,
-        identical(route_family, "plant") & .data$source_provider == "DevStageOntologies" ~ 4L,
-        identical(route_family, "amphibian") & .data$source_ontology == "XAO" ~ 1L,
-        identical(route_family, "amphibian") & .data$source_provider == "DevStageOntologies" ~ 2L,
-        identical(route_family, "amphibian") & .data$source_ontology == "UBERON" ~ 3L,
-        identical(route_family, "aquatic") & .data$source_provider == "DevStageOntologies" ~ 1L,
-        identical(route_family, "aquatic") & .data$source_ontology == "S11" ~ 2L,
-        identical(route_family, "aquatic") & .data$source_ontology == "UBERON" ~ 3L,
-        identical(route_family, "invertebrate") & .data$source_provider == "DevStageOntologies" ~ 1L,
-        identical(route_family, "invertebrate") & .data$source_ontology == "S11" ~ 2L,
-        identical(route_family, "invertebrate") & .data$source_ontology == "UBERON" ~ 3L,
-        identical(route_family, "vertebrate") & .data$source_provider == "DevStageOntologies" ~ 1L,
-        identical(route_family, "vertebrate") & .data$source_ontology == "UBERON" ~ 2L,
-        identical(route_family, "fungi") & .data$source_ontology == "AGROVOC" ~ 1L,
-        identical(route_family, "algae") & .data$source_ontology == "AGROVOC" ~ 1L,
-        is_aquatic & .data$source_ontology == "S11" ~ 1L,
-        is_aquatic & .data$source_ontology == "UBERON" ~ 2L,
-        is_amphibian & .data$source_ontology == "XAO" ~ 1L,
-        is_amphibian & .data$source_ontology == "UBERON" ~ 2L,
-        is_plant & .data$source_provider == "PlantOntologyOBO" ~ 1L,
-        is_plant & .data$source_ontology == "PO" ~ 2L,
-        is_plant & .data$source_ontology == "AGROVOC" ~ 3L,
-        .data$source_ontology == "S11" ~ 1L,
-        .data$source_provider == "PlantOntologyOBO" ~ 2L,
-        .data$source_provider == "DevStageOntologies" ~ 3L,
-        .data$source_ontology == "XAO" ~ 4L,
-        .data$source_ontology == "UBERON" ~ 5L,
-        .data$source_ontology == "PO" ~ 6L,
-        .data$source_ontology == "ZFA" ~ 7L,
-        .data$source_ontology == "FBdv" ~ 8L,
-        .data$source_ontology == "ECOCORE" ~ 9L,
-        .data$source_ontology == "AGROVOC" ~ 10L,
-        .data$source_ontology == "MeSH" ~ 11L,
-        .data$source_ontology == "EFO" ~ 12L,
-        .data$source_ontology == "ADW" ~ 13L,
-        TRUE ~ 99L
+      ontology_priority = purrr::pmap_int(
+        list(.data$source_provider, .data$source_ontology),
+        ~ .eco_lifestage_candidate_ontology_priority(..1, ..2, route_family)
       )
     ) |>
     dplyr::arrange(
-      dplyr::desc(.data$candidate_score),
       .data$ontology_priority,
+      dplyr::desc(.data$candidate_score),
       .data$source_ontology,
       .data$source_term_id
     ) |>
     dplyr::mutate(candidate_rank = dplyr::row_number())
 
-  top_score <- ranked$candidate_score[[1]]
   accepted <- ranked |>
     dplyr::filter(.data$candidate_score >= 75)
 
@@ -1964,9 +2111,10 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   }
 
   top_candidates <- accepted |>
-    dplyr::filter(.data$candidate_score == top_score)
-  top_candidates <- top_candidates |>
     dplyr::filter(.data$ontology_priority == min(.data$ontology_priority))
+  top_score <- max(top_candidates$candidate_score, na.rm = TRUE)
+  top_candidates <- top_candidates |>
+    dplyr::filter(.data$candidate_score == top_score)
   trusted_boundary <- c("S11", "XAO", "UBERON", "PO", "ZFA", "FBdv", "AGROVOC")
   resolved <- nrow(top_candidates) == 1 &&
     (top_score >= 90 ||
