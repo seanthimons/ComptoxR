@@ -476,6 +476,142 @@ test_that("lifestage_taxon_intersections.csv has auditable ECOTOX route evidence
   testthat::expect_true(all(dominant_counts$n == 1L))
 })
 
+test_that("lifestage_semantic_adjudication.csv has valid schema columns", {
+  adjudication <- lifestage_read_extdata("lifestage_semantic_adjudication.csv")
+  expected_cols <- c(
+    "org_lifestage",
+    "source_ontology",
+    "source_term_id",
+    "source_term_label",
+    "harmonized_life_stage",
+    "reproductive_stage",
+    "derivation_source",
+    "route_family",
+    "eco_group",
+    "kingdom",
+    "class_name",
+    "dominant_route",
+    "taxon_signal_score",
+    "taxon_signal_share",
+    "adjudication_status",
+    "adjudication_reason",
+    "exception_reason",
+    "replacement_status",
+    "replacement_source_ontology",
+    "replacement_source_term_id",
+    "replacement_source_term_label",
+    "replacement_harmonized_life_stage",
+    "replacement_reproductive_stage",
+    "context_scope",
+    "reviewer_notes"
+  )
+
+  testthat::expect_equal(sort(names(adjudication)), sort(expected_cols))
+})
+
+test_that("every resolved baseline term has semantic adjudication", {
+  baseline <- lifestage_read_extdata("lifestage_baseline.csv")
+  adjudication <- lifestage_read_extdata("lifestage_semantic_adjudication.csv")
+  resolved_terms <- baseline |>
+    dplyr::filter(.data$source_match_status == "resolved") |>
+    dplyr::distinct(.data$org_lifestage)
+  gaps <- resolved_terms |>
+    dplyr::anti_join(
+      adjudication |> dplyr::distinct(.data$org_lifestage),
+      by = "org_lifestage"
+    )
+
+  testthat::expect_equal(
+    nrow(gaps),
+    0L,
+    label = paste0(
+      nrow(gaps),
+      " resolved baseline term(s) lack semantic adjudication: ",
+      paste(unique(gaps$org_lifestage), collapse = ", ")
+    )
+  )
+})
+
+test_that("every resolved lifestage species-group context has semantic adjudication", {
+  intersections <- lifestage_read_extdata("lifestage_taxon_intersections.csv")
+  adjudication <- lifestage_read_extdata("lifestage_semantic_adjudication.csv")
+  resolved_contexts <- intersections |>
+    dplyr::filter(.data$source_match_status == "resolved") |>
+    dplyr::distinct(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name)
+  adjudicated_contexts <- adjudication |>
+    dplyr::distinct(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name)
+  gaps <- resolved_contexts |>
+    dplyr::anti_join(
+      adjudicated_contexts,
+      by = c("org_lifestage", "eco_group", "kingdom", "class_name")
+    )
+  duplicates <- adjudication |>
+    dplyr::semi_join(
+      resolved_contexts,
+      by = c("org_lifestage", "eco_group", "kingdom", "class_name")
+    ) |>
+    dplyr::count(.data$org_lifestage, .data$eco_group, .data$kingdom, .data$class_name) |>
+    dplyr::filter(.data$n != 1L)
+
+  testthat::expect_equal(nrow(gaps), 0L)
+  testthat::expect_equal(nrow(duplicates), 0L)
+})
+
+test_that("semantic adjudication status and reason codes are constrained", {
+  adjudication <- lifestage_read_extdata("lifestage_semantic_adjudication.csv")
+  allowed_status <- c(
+    "approved_same_semantics",
+    "approved_exception",
+    "policy_hold_unresolved",
+    "needs_context_aware_derivation",
+    "needs_manual_review"
+  )
+  allowed_reason <- c(
+    "unchanged_harmonized_semantics",
+    "semantic_change",
+    "ambiguous_route",
+    "no_source_backed_candidate",
+    "broad_source_concept",
+    "missing_derivation",
+    "unresolved_policy_tail"
+  )
+
+  testthat::expect_equal(setdiff(unique(adjudication$adjudication_status), allowed_status), character())
+  testthat::expect_equal(setdiff(unique(adjudication$adjudication_reason), allowed_reason), character())
+  testthat::expect_equal(
+    nrow(dplyr::filter(adjudication, adjudication_status == "needs_manual_review")),
+    0L
+  )
+})
+
+test_that("semantic changes require explicit adjudication", {
+  adjudication <- lifestage_read_extdata("lifestage_semantic_adjudication.csv")
+  exceptions <- lifestage_read_extdata("lifestage_curated_exceptions.csv")
+  changed_exceptions <- exceptions |>
+    dplyr::filter(
+      !is.na(.data$replacement_harmonized_life_stage),
+      .data$replacement_harmonized_life_stage != .data$harmonized_life_stage |
+        .data$replacement_reproductive_stage != .data$reproductive_stage
+    )
+  changed_adjudication <- changed_exceptions |>
+    dplyr::inner_join(
+      adjudication,
+      by = c("org_lifestage", "source_ontology", "source_term_id"),
+      suffix = c("_exception", "_adjudication")
+    )
+  changed_gaps <- changed_exceptions |>
+    dplyr::anti_join(
+      adjudication,
+      by = c("org_lifestage", "source_ontology", "source_term_id")
+    )
+  unchanged_approvals <- changed_adjudication |>
+    dplyr::filter(.data$adjudication_status == "approved_same_semantics")
+
+  testthat::expect_equal(nrow(changed_gaps), 0L)
+  testthat::expect_gt(nrow(changed_adjudication), 0L)
+  testthat::expect_equal(nrow(unchanged_approvals), 0L)
+})
+
 test_that("lifestage_curated_exceptions.csv documents retained curated rows", {
   exceptions <- lifestage_read_extdata("lifestage_curated_exceptions.csv")
   curated <- lifestage_read_extdata("lifestage_curated_candidates.csv")
