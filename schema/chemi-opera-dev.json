@@ -235,11 +235,32 @@
                               "conf_index"
                             ]
                           }
+                        },
+                        "error": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message"
+                          ]
                         }
                       },
                       "required": [
-                        "chemical",
-                        "result"
+                        "chemical"
+                      ]
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "message"
                       ]
                     }
                   },
@@ -532,11 +553,21 @@
                                 "conf_index"
                               ]
                             }
+                          },
+                          "error": {
+                            "type": "object",
+                            "properties": {
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "message"
+                            ]
                           }
                         },
                         "required": [
-                          "chemical",
-                          "result"
+                          "chemical"
                         ]
                       }
                     },
@@ -1187,11 +1218,21 @@
                       "conf_index"
                     ]
                   }
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
                 }
               },
               "required": [
-                "chemical",
-                "result"
+                "chemical"
               ]
             }
           },
@@ -1414,11 +1455,32 @@
                     "conf_index"
                   ]
                 }
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ]
               }
             },
             "required": [
-              "chemical",
-              "result"
+              "chemical"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
             ]
           }
         },
@@ -1635,11 +1697,32 @@
                 "conf_index"
               ]
             }
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ]
           }
         },
         "required": [
-          "chemical",
-          "result"
+          "chemical"
+        ]
+      },
+      "PredictionError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
         ]
       },
       "PredictionEndpoint": {
