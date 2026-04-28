@@ -1068,6 +1068,14 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 ) {
   refresh <- rlang::arg_match(refresh)
 
+  if (isTRUE(force)) {
+    return(list(
+      seed_cache = .eco_lifestage_cache_schema(),
+      refresh_mode = "live",
+      cache_source = "live"
+    ))
+  }
+
   baseline <- NULL
   baseline_available <- FALSE
   baseline_matches <- FALSE
@@ -1104,9 +1112,6 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
   if (refresh == "cache") {
     if (!cache_available) {
-      if (isTRUE(force)) {
-        return(.eco_lifestage_load_seed_cache(ecotox_release, refresh = "auto", force = FALSE))
-      }
       cli::cli_abort("Release-matched lifestage cache is required for {.code refresh = 'cache'}.")
     }
 
@@ -1119,9 +1124,6 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
   if (refresh == "baseline") {
     if (!baseline_available || !baseline_matches) {
-      if (isTRUE(force)) {
-        return(.eco_lifestage_load_seed_cache(ecotox_release, refresh = "auto", force = FALSE))
-      }
       cli::cli_abort(c(
         "Matching committed lifestage baseline is required for {.code refresh = 'baseline'}.",
         "x" = "Expected baseline release {.val {ecotox_release}}."
@@ -1153,11 +1155,10 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     ))
   }
 
-  list(
-    seed_cache = .eco_lifestage_cache_schema(),
-    refresh_mode = "auto",
-    cache_source = "live"
-  )
+  cli::cli_abort(c(
+    "No local lifestage seed artifacts match ECOTOX release {.val {ecotox_release}}.",
+    "i" = "Use {.code refresh = 'live'} or {.code force = TRUE} to resolve lifestages through live providers."
+  ))
 }
 
 #' @keywords internal
@@ -2387,31 +2388,25 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     refresh = refresh,
     force = force
   )
+  effective_refresh <- seed$refresh_mode
 
   cache_rows <- seed$seed_cache |>
     dplyr::filter(.data$org_lifestage %in% org_lifestages)
 
   missing_terms <- setdiff(org_lifestages, unique(cache_rows$org_lifestage))
-  strict_seed <- seed$cache_source %in% c("cache", "baseline") && refresh %in% c("cache", "baseline") && !isTRUE(force)
 
-  if (length(missing_terms) > 0 && identical(refresh, "live")) {
+  if (length(missing_terms) > 0 && identical(effective_refresh, "live")) {
     cache_rows <- purrr::map_dfr(
       org_lifestages,
       .eco_lifestage_resolve_term,
       ecotox_release = ecotox_release
     )
-  } else if (length(missing_terms) > 0 && strict_seed) {
+  } else if (length(missing_terms) > 0) {
     cli::cli_abort(c(
       "Lifestage {.val {seed$cache_source}} is incomplete for release {.val {ecotox_release}}.",
-      "x" = "Missing term(s): {missing_terms}."
+      "x" = "Missing term(s): {missing_terms}.",
+      "i" = "Use {.code refresh = 'live'} or {.code force = TRUE} to resolve missing lifestages through live providers."
     ))
-  } else if (length(missing_terms) > 0) {
-    live_rows <- purrr::map_dfr(
-      missing_terms,
-      .eco_lifestage_resolve_term,
-      ecotox_release = ecotox_release
-    )
-    cache_rows <- dplyr::bind_rows(cache_rows, live_rows)
   }
 
   cache_rows <- cache_rows |>
@@ -2499,15 +2494,50 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     cache = dplyr::bind_rows(.eco_lifestage_cache_schema(), cache_rows),
     dictionary = dplyr::bind_rows(.eco_lifestage_dictionary_schema(), dictionary),
     review = dplyr::bind_rows(.eco_lifestage_review_schema(), review),
-    refresh_mode = refresh
+    refresh_mode = effective_refresh
   )
+}
+
+#' @keywords internal
+.eco_lifestage_open_patch_connection <- function(db_path, attempts = 3L, backoff = 0.2) {
+  attempts <- suppressWarnings(as.integer(attempts[[1]]))
+  backoff <- suppressWarnings(as.numeric(backoff[[1]]))
+
+  if (is.na(attempts) || attempts < 1L) {
+    attempts <- 3L
+  }
+  if (is.na(backoff) || backoff < 0) {
+    backoff <- 0.2
+  }
+
+  last_error <- NULL
+  for (attempt in seq_len(attempts)) {
+    .eco_close_con()
+    con <- tryCatch(
+      DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = FALSE),
+      error = function(e) {
+        last_error <<- e
+        NULL
+      }
+    )
+    if (!is.null(con)) {
+      return(con)
+    }
+    if (attempt < attempts && backoff > 0) {
+      Sys.sleep(backoff)
+    }
+  }
+
+  cli::cli_abort(c(
+    "Unable to open ECOTOX database read-write for lifestage patch.",
+    "x" = conditionMessage(last_error)
+  ))
 }
 
 #' Patch ECOTOX lifestage tables in place
 #' @param db_path Path to the installed ECOTOX DuckDB file.
 #' @param refresh Lifestage refresh mode.
-#' @param force Fallback to {.code refresh = "auto"} when strict cache or
-#'   baseline inputs are unavailable?
+#' @param force Force live provider lookup even when local seed artifacts exist?
 #' @return Invisibly, patch metadata.
 #' @keywords internal
 #' @noRd
@@ -2522,17 +2552,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     cli::cli_abort("ECOTOX database not found at {.path {db_path}}.")
   }
 
-  .eco_close_con()
-
-  con <- tryCatch(
-    DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = FALSE),
-    error = function(e) {
-      cli::cli_abort(c(
-        "Unable to open ECOTOX database read-write.",
-        "x" = conditionMessage(e)
-      ))
-    }
-  )
+  con <- .eco_lifestage_open_patch_connection(db_path)
 
   on.exit(
     {

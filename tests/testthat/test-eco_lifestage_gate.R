@@ -262,6 +262,82 @@ with_lifestage_files <- function(code, baseline, derivation, cache = NULL) {
   )
 }
 
+test_that("patch write-open retries close/connect boundary before succeeding", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  cache <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = release,
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    source_term_label = "adult",
+    source_term_definition = "An animal that has reached sexual maturity",
+    source_release = "current"
+  )
+  derivation <- tibble::tibble(
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    harmonized_life_stage = "Adult",
+    reproductive_stage = FALSE,
+    derivation_source = "test_derivation"
+  )
+  original_db_connect <- DBI::dbConnect
+  attempts <- 0L
+
+  with_lifestage_files(
+    {
+      testthat::with_mocked_bindings(
+        dbConnect = function(drv, dbdir, read_only = FALSE, ...) {
+          if (!isFALSE(read_only)) {
+            return(original_db_connect(drv, dbdir = dbdir, read_only = read_only, ...))
+          }
+          attempts <<- attempts + 1L
+          if (attempts < 3L) {
+            stop("simulated stale handle")
+          }
+          original_db_connect(drv, dbdir = dbdir, read_only = read_only, ...)
+        },
+        .package = "DBI",
+        {
+          result <- .eco_patch_lifestage(db_path = db_path, refresh = "cache")
+          testthat::expect_equal(result$dictionary_rows, 1L)
+        }
+      )
+    },
+    baseline = .eco_lifestage_cache_schema(),
+    derivation = derivation,
+    cache = cache
+  )
+
+  testthat::expect_equal(attempts, 3L)
+})
+
+test_that("patch write-open retry exhaustion reports final DBI error", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  attempts <- 0L
+
+  testthat::with_mocked_bindings(
+    dbConnect = function(drv, dbdir, read_only = FALSE, ...) {
+      if (!isFALSE(read_only)) {
+        return(DBI::dbConnect(drv, dbdir = dbdir, read_only = read_only, ...))
+      }
+      attempts <<- attempts + 1L
+      stop("simulated final DuckDB failure")
+    },
+    .package = "DBI",
+    {
+      testthat::expect_error(
+        .eco_patch_lifestage(db_path = db_path, refresh = "cache"),
+        "Unable to open ECOTOX database read-write for lifestage patch.*simulated final DuckDB failure"
+      )
+    }
+  )
+
+  testthat::expect_equal(attempts, 3L)
+})
+
 test_that("cache-hit patch path rewrites from cache only", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release)
@@ -310,6 +386,51 @@ test_that("cache-hit patch path rewrites from cache only", {
   )
 })
 
+test_that("auto patch uses matching committed baseline without live lookup", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = release,
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    source_term_label = "adult",
+    source_term_definition = "An animal that has reached sexual maturity",
+    source_release = "current"
+  )
+  derivation <- tibble::tibble(
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    harmonized_life_stage = "Adult",
+    reproductive_stage = FALSE,
+    derivation_source = "test_derivation"
+  )
+
+  with_lifestage_files(
+    {
+      testthat::with_mocked_bindings(
+        .eco_lifestage_query_ols4 = function(...) stop("live lookup should not run"),
+        .eco_lifestage_query_nvs = function(...) stop("live lookup should not run"),
+        .package = "ComptoxR",
+        {
+          result <- .eco_patch_lifestage(db_path = db_path, refresh = "auto")
+          testthat::expect_equal(result$dictionary_rows, 1L)
+          testthat::expect_equal(result$refresh_mode, "auto")
+        }
+      )
+
+      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
+      on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+      dict <- tibble::as_tibble(DBI::dbReadTable(con, "lifestage_dictionary"))
+      testthat::expect_equal(dict$org_lifestage, "Adult")
+    },
+    baseline = baseline,
+    derivation = derivation,
+    cache = NULL
+  )
+})
+
 test_that("baseline-seeded patch path writes cache and dictionary", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release)
@@ -346,6 +467,46 @@ test_that("baseline-seeded patch path writes cache and dictionary", {
     },
     baseline = baseline,
     derivation = derivation,
+    cache = NULL
+  )
+})
+
+test_that("baseline patch aborts on release mismatch without live lookup", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = "ecotox_ascii_01_01_2020.zip",
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    source_term_label = "adult",
+    source_term_definition = "An animal that has reached sexual maturity",
+    source_release = "current"
+  )
+
+  with_lifestage_files(
+    {
+      testthat::with_mocked_bindings(
+        .eco_lifestage_query_ols4 = function(...) stop("live lookup should not run"),
+        .eco_lifestage_query_nvs = function(...) stop("live lookup should not run"),
+        .package = "ComptoxR",
+        {
+          testthat::expect_error(
+            .eco_patch_lifestage(db_path = db_path, refresh = "baseline"),
+            "Matching committed lifestage baseline is required"
+          )
+        }
+      )
+    },
+    baseline = baseline,
+    derivation = tibble::tibble(
+      source_ontology = character(),
+      source_term_id = character(),
+      harmonized_life_stage = character(),
+      reproductive_stage = logical(),
+      derivation_source = character()
+    ),
     cache = NULL
   )
 })
@@ -391,6 +552,77 @@ test_that("live-refresh patch path rebuilds cache from mocked providers", {
     derivation = derivation,
     cache = NULL
   )
+})
+
+test_that("force patch bypasses local seeds and uses live providers", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  cache <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = release,
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "STALE",
+    source_term_label = "stale adult",
+    source_release = "old"
+  )
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = release,
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "STALE_BASELINE",
+    source_term_label = "stale baseline adult",
+    source_release = "old"
+  )
+  derivation <- tibble::tibble(
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    harmonized_life_stage = "Adult",
+    reproductive_stage = FALSE,
+    derivation_source = "test_derivation"
+  )
+  provider_rows <- make_provider_row(
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    source_term_label = "adult",
+    source_term_definition = "An animal that has reached sexual maturity"
+  )
+  nvs_calls <- 0L
+
+  with_lifestage_files(
+    {
+      testthat::with_mocked_bindings(
+        .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
+        .eco_lifestage_query_nvs = function(...) {
+          nvs_calls <<- nvs_calls + 1L
+          mock_nvs_query(provider_rows)(...)
+        },
+        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
+        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
+        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
+        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
+        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
+        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
+        .package = "ComptoxR",
+        {
+          result <- .eco_patch_lifestage(db_path = db_path, refresh = "baseline", force = TRUE)
+          testthat::expect_equal(result$refresh_mode, "live")
+        }
+      )
+
+      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
+      on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+      dict <- tibble::as_tibble(DBI::dbReadTable(con, "lifestage_dictionary"))
+      testthat::expect_equal(dict$source_term_id, "S1116")
+    },
+    baseline = baseline,
+    derivation = derivation,
+    cache = cache
+  )
+
+  testthat::expect_gt(nvs_calls, 0L)
 })
 
 test_that("ambiguous terms are quarantined during patch", {
@@ -505,7 +737,18 @@ test_that("patch updates only lifestage tables and _metadata", {
       before_sentinel <- tibble::as_tibble(DBI::dbReadTable(con_before, "sentinel_table"))
       DBI::dbDisconnect(con_before, shutdown = TRUE)
 
-      .eco_patch_lifestage(db_path = db_path, refresh = "cache")
+      con_stale <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = FALSE)
+      stale_meta <- dplyr::bind_rows(
+        tibble::as_tibble(DBI::dbReadTable(con_stale, "_metadata")),
+        tibble::tibble(
+          key = c("lifestage_patch_applied_at", "lifestage_patch_release", "lifestage_patch_method"),
+          value = c("stale", "stale", "stale")
+        )
+      )
+      DBI::dbWriteTable(con_stale, "_metadata", stale_meta, overwrite = TRUE)
+      DBI::dbDisconnect(con_stale, shutdown = TRUE)
+
+      result <- .eco_patch_lifestage(db_path = db_path, refresh = "cache")
 
       con_after <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
       on.exit(DBI::dbDisconnect(con_after, shutdown = TRUE), add = TRUE)
@@ -522,6 +765,24 @@ test_that("patch updates only lifestage tables and _metadata", {
         ) %in%
           meta$key
       ))
+      patch_meta <- meta |>
+        dplyr::filter(grepl("^lifestage_patch_", .data$key))
+      testthat::expect_equal(nrow(patch_meta), 4L)
+      testthat::expect_false(any(duplicated(patch_meta$key)))
+      testthat::expect_true(all(nzchar(patch_meta$value)))
+      testthat::expect_equal(
+        patch_meta$value[patch_meta$key == "lifestage_patch_release"],
+        release
+      )
+      testthat::expect_equal(
+        patch_meta$value[patch_meta$key == "lifestage_patch_method"],
+        result$refresh_mode
+      )
+      testthat::expect_equal(
+        patch_meta$value[patch_meta$key == "lifestage_patch_version"],
+        as.character(utils::packageVersion("ComptoxR"))
+      )
+      testthat::expect_equal(meta$value[meta$key == "builder"], "test")
     },
     baseline = .eco_lifestage_cache_schema(),
     derivation = derivation,
