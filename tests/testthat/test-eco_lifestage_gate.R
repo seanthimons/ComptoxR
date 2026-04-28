@@ -799,7 +799,7 @@ test_that("patch requires valid release metadata", {
   )
 })
 
-test_that("patched DB is readable via eco_results() with new lifestage columns", {
+test_that("patched DB uses compact default and detailed lifestage output contracts", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release, with_query_tables = TRUE)
   cache <- make_lifestage_cache_row(
@@ -824,28 +824,104 @@ test_that("patched DB is readable via eco_results() with new lifestage columns",
     {
       .eco_patch_lifestage(db_path = db_path, refresh = "cache")
 
+      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
+      on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+
       withr::with_envvar(c(eco_burl = db_path), {
-        result <- eco_results(casrn = "50-29-3")
+        result <- eco_results(casrn = "50-29-3", con = con)
+        compact_cols <- c(
+          "org_lifestage",
+          "harmonized_life_stage",
+          "reproductive_stage"
+        )
+        detail_only_cols <- c(
+          "organism_lifestage",
+          "source_term_label",
+          "source_ontology",
+          "source_term_id",
+          "source_match_status",
+          "source_match_method",
+          "derivation_source",
+          "ontology_id"
+        )
+
         testthat::expect_true(all(
-          c(
-            "org_lifestage",
-            "source_ontology",
-            "source_term_id",
-            "source_term_label",
-            "source_match_status",
-            "harmonized_life_stage",
-            "reproductive_stage",
-            "derivation_source"
-          ) %in%
-            names(result)
+          compact_cols %in% names(result)
         ))
+        compact_positions <- match(compact_cols, names(result))
+        testthat::expect_equal(
+          compact_positions,
+          seq.int(compact_positions[[1]], length.out = length(compact_cols))
+        )
+        testthat::expect_false(any(detail_only_cols %in% names(result)))
+
+        detailed <- eco_results(casrn = "50-29-3", lifestage_details = TRUE, con = con)
+        detailed_cols <- c(
+          "org_lifestage",
+          "harmonized_life_stage",
+          "reproductive_stage",
+          "organism_lifestage",
+          "source_term_label",
+          "source_ontology",
+          "source_term_id",
+          "source_match_status",
+          "source_match_method",
+          "derivation_source"
+        )
+        testthat::expect_true(all(detailed_cols %in% names(detailed)))
+        detailed_positions <- match(detailed_cols, names(detailed))
+        testthat::expect_equal(
+          detailed_positions,
+          seq.int(detailed_positions[[1]], length.out = length(detailed_cols))
+        )
+        testthat::expect_equal(detailed$source_match_method, "provider_rank")
+        testthat::expect_equal(detailed$source_term_label, "adult")
         testthat::expect_false("ontology_id" %in% names(result))
+        testthat::expect_false("ontology_id" %in% names(detailed))
       })
     },
     baseline = .eco_lifestage_cache_schema(),
     derivation = derivation,
     cache = cache
   )
+})
+
+test_that("eco_results() aborts clearly for stale lifestage runtime schema", {
+  release <- "ecotox_ascii_03_12_2026.zip"
+  missing_dictionary <- make_patch_db("Adult", release = release, with_query_tables = TRUE)
+  missing_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = missing_dictionary, read_only = TRUE)
+  on.exit(DBI::dbDisconnect(missing_con, shutdown = TRUE), add = TRUE)
+
+  withr::with_envvar(c(eco_burl = missing_dictionary), {
+    testthat::expect_error(
+      eco_results(casrn = "50-29-3", con = missing_con),
+      "patch or rebuild"
+    )
+  })
+
+  stale_dictionary <- make_patch_db("Adult", release = release, with_query_tables = TRUE)
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = stale_dictionary, read_only = FALSE)
+  DBI::dbWriteTable(
+    con,
+    "lifestage_dictionary",
+    dplyr::select(.eco_lifestage_dictionary_schema(), -dplyr::all_of("source_match_method")),
+    overwrite = TRUE
+  )
+  DBI::dbDisconnect(con, shutdown = TRUE)
+  stale_con <- DBI::dbConnect(duckdb::duckdb(), dbdir = stale_dictionary, read_only = TRUE)
+  on.exit(DBI::dbDisconnect(stale_con, shutdown = TRUE), add = TRUE)
+
+  withr::with_envvar(c(eco_burl = stale_dictionary), {
+    testthat::expect_error(
+      eco_results(casrn = "50-29-3", con = stale_con),
+      "source_match_method.*patch or rebuild"
+    )
+  })
+})
+
+test_that(".eco_enrich_metadata() does not reference lifestage_review", {
+  enrich_source <- paste(deparse(body(.eco_enrich_metadata)), collapse = "\n")
+  testthat::expect_false(grepl("lifestage_review", enrich_source, fixed = TRUE))
 })
 
 test_that("NVS failure emits warning and returns empty tibble", {

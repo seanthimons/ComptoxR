@@ -15,6 +15,7 @@ eco_results(
   threatened = FALSE,
   test_cols = NULL,
   results_cols = NULL,
+  lifestage_details = FALSE,
   con = NULL
 )
 }
@@ -44,30 +45,44 @@ from the \code{tests} table.}
 \item{results_cols}{Optional character vector of additional columns to
 select from the \code{results} table.}
 
+\item{lifestage_details}{Logical; include source-backed lifestage
+provenance and join/debug columns? The default \code{FALSE} returns the compact
+lifestage block: \code{org_lifestage}, \code{harmonized_life_stage}, and
+\code{reproductive_stage}.}
+
 \item{con}{An optional \code{DBI::DBIConnection}.}
 }
 \value{
 A tibble of enriched test results with concentration and duration
-conversions applied. Lifestage columns included:
+conversions applied. By default, lifestage output is compact:
 \describe{
 \item{org_lifestage}{Original ECOTOX lifestage description.}
-\item{source_ontology}{Source ontology used for the canonical
-lifestage resolution (\code{UBERON}, \code{PO}, or \code{S11}) when available.}
-\item{source_term_id}{Provider term identifier for the resolved
-lifestage concept.}
-\item{source_term_label}{Provider label for the resolved lifestage
-concept.}
-\item{source_match_status}{Resolution status recorded in the canonical
-lifestage dictionary.}
 \item{harmonized_life_stage}{One of 7 harmonized categories:
 \code{"Egg/Embryo"}, \code{"Larva"}, \code{"Juvenile"}, \code{"Subadult"}, \code{"Adult"},
 \code{"Senescent/Dormant"}, \code{"Other/Unknown"}.}
 \item{reproductive_stage}{\code{TRUE} when the resolved source concept
 indicates active reproductive activity (spawning, gestation,
 flowering, etc.), independent of developmental classification.}
+}
+With \code{lifestage_details = TRUE}, additional source-backed columns are
+included:
+\describe{
+\item{organism_lifestage}{Original ECOTOX lifestage code used for
+joining to the lifestage dictionary.}
+\item{source_term_label}{Provider label for the resolved lifestage
+concept.}
+\item{source_ontology}{Source ontology used for the canonical
+lifestage resolution (\code{UBERON}, \code{PO}, or \code{S11}) when available.}
+\item{source_term_id}{Provider term identifier for the resolved
+lifestage concept.}
+\item{source_match_status}{Resolution status recorded in the canonical
+lifestage dictionary.}
+\item{source_match_method}{Method used to select or derive the source
+lifestage match.}
 \item{derivation_source}{Curated source-ID rule used to derive the
 harmonized lifestage fields.}
 }
+\code{ontology_id} is not part of the runtime output contract in either mode.
 }
 \description{
 The primary query function for the ECOTOX database. Filters test results

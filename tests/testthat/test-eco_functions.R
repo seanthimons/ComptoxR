@@ -40,6 +40,7 @@ if (db_available) {
       "source_ontology",
       "source_term_id",
       "source_term_label",
+      "source_match_method",
       "source_match_status",
       "derivation_source"
     ) %in% DBI::dbListFields(con, "lifestage_dictionary"))
@@ -58,15 +59,34 @@ test_that("eco_results() returns enriched tibble for DDT", {
   expect_true(all(c("test_cas", "endpoint", "final_conc") %in% names(result)))
   expect_true(all(c(
     "org_lifestage",
+    "harmonized_life_stage",
+    "reproductive_stage"
+  ) %in% names(result)))
+  expect_false(any(c(
+    "organism_lifestage",
     "source_ontology",
     "source_term_id",
     "source_term_label",
     "source_match_status",
-    "harmonized_life_stage",
-    "reproductive_stage",
+    "source_match_method",
     "derivation_source"
   ) %in% names(result)))
+
+  detailed <- eco_results(casrn = "50-29-3", lifestage_details = TRUE)
+  expect_true(all(c(
+    "org_lifestage",
+    "harmonized_life_stage",
+    "reproductive_stage",
+    "organism_lifestage",
+    "source_ontology",
+    "source_term_id",
+    "source_term_label",
+    "source_match_status",
+    "source_match_method",
+    "derivation_source"
+  ) %in% names(detailed)))
   expect_false("ontology_id" %in% names(result))
+  expect_false("ontology_id" %in% names(detailed))
 })
 
 test_that("eco_results() filters by common_name", {
