@@ -22,13 +22,13 @@ Researchers can query EPA CompTox APIs through stable, well-tested R functions t
 - Committed baseline CSV for cold-start
 - Shared helper layer in `R/eco_lifestage_patch.R`
 - Derived fields (`harmonized_life_stage`, `reproductive_stage`) keyed from curated source IDs only
-- `eco_results()` updated: new source-backed columns, `ontology_id` removed
+- `eco_results()` updated: compact default lifestage columns, detailed source-backed columns via `lifestage_details = TRUE`, and `ontology_id` removed
 - Purge existing lifestage tables from DB; rebuild on-demand
 
 ## Current State
 
 **Latest shipped:** v2.3 ECOTOX Lifestage Harmonization (2026-04-21)
-**Active:** v2.4 Source-Backed Lifestage Resolution — defining requirements
+**Active:** v2.4 Source-Backed Lifestage Resolution - Phase 38 complete, Phase 39 quality gates next
 
 **Stub generation pipeline (v1.0-v2.1) — ON HOLD:**
 The pipeline is fully functional and automated. Resuming pipeline work (advanced schema handling, S7 classes, etc.) is deferred until package stabilization is complete.

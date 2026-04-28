@@ -22,22 +22,22 @@ Requirements for Source-Backed Lifestage Resolution. Each maps to roadmap phases
 
 ### Data Artifacts
 
-- [ ] **DATA-01**: `lifestage_baseline.csv` committed to `inst/extdata/ecotox/` covering current ECOTOX release
-- [ ] **DATA-02**: `lifestage_derivation.csv` mapping `source_ontology + source_term_id` to `harmonized_life_stage` and `reproductive_stage`
-- [ ] **DATA-03**: Cross-check gate — every resolved baseline row must have a matching derivation row before commit
+- [x] **DATA-01**: `lifestage_baseline.csv` committed to `inst/extdata/ecotox/` covering current ECOTOX release
+- [x] **DATA-02**: `lifestage_derivation.csv` mapping `source_ontology + source_term_id` to `harmonized_life_stage` and `reproductive_stage`
+- [x] **DATA-03**: Cross-check gate — every resolved baseline row must have a matching derivation row before commit
 
 ### Build & Patch Integration
 
-- [ ] **INTG-01**: Build script section 16 in both `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` calls shared helpers identically
-- [ ] **INTG-02**: `.eco_patch_lifestage()` supports 4 refresh modes (auto/cache/baseline/live) for in-place DB patching
-- [ ] **INTG-03**: DuckDB Windows write-connection retry loop (3 attempts, 200ms back-off)
-- [ ] **INTG-04**: Patch metadata written to `_metadata` table (version, release, method, timestamp)
+- [x] **INTG-01**: Build script section 16 in both `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` calls shared helpers identically
+- [x] **INTG-02**: `.eco_patch_lifestage()` supports 4 refresh modes (auto/cache/baseline/live) for in-place DB patching
+- [x] **INTG-03**: DuckDB Windows write-connection retry loop (3 attempts, 200ms back-off)
+- [x] **INTG-04**: Patch metadata written to `_metadata` table (version, release, method, timestamp)
 
 ### Runtime API
 
-- [ ] **RUNT-01**: `eco_results()` exposes 8 new lifestage columns after `organism_lifestage`
-- [ ] **RUNT-02**: `ontology_id` absent from all `eco_results()` output
-- [ ] **RUNT-03**: Runtime enrichment joins only `lifestage_dictionary`, never `lifestage_review`
+- [x] **RUNT-01**: `eco_results()` exposes compact default lifestage output and detailed source-backed lifestage columns via `lifestage_details = TRUE`
+- [x] **RUNT-02**: `ontology_id` absent from all `eco_results()` output
+- [x] **RUNT-03**: Runtime enrichment joins only `lifestage_dictionary`, never `lifestage_review`
 
 ### Quality
 
@@ -83,16 +83,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROV-02 | Phase 35 | Pending |
 | PROV-03 | Phase 35 | Pending |
 | PROV-04 | Phase 35 | Pending |
-| DATA-01 | Phase 36 | Pending |
-| DATA-02 | Phase 36 | Pending |
-| DATA-03 | Phase 36 | Pending |
-| INTG-01 | Phase 37 | Pending |
-| INTG-02 | Phase 37 | Pending |
-| INTG-03 | Phase 37 | Pending |
-| INTG-04 | Phase 37 | Pending |
-| RUNT-01 | Phase 38 | Pending |
-| RUNT-02 | Phase 38 | Pending |
-| RUNT-03 | Phase 38 | Pending |
+| DATA-01 | Phase 36 / 36.2 | Complete |
+| DATA-02 | Phase 36 / 36.2 | Complete |
+| DATA-03 | Phase 36 / 36.2 | Complete |
+| INTG-01 | Phase 37 | Complete |
+| INTG-02 | Phase 37 | Complete |
+| INTG-03 | Phase 37 | Complete |
+| INTG-04 | Phase 37 | Complete |
+| RUNT-01 | Phase 38 | Complete |
+| RUNT-02 | Phase 38 | Complete |
+| RUNT-03 | Phase 38 | Complete |
 | QUAL-01 | Phase 39 | Pending |
 
 **Coverage:**
@@ -102,4 +102,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-04-22*
-*Last updated: 2026-04-22 — traceability filled after roadmap creation*
+*Last updated: 2026-04-28 - RUNT requirements verified in Phase 38*

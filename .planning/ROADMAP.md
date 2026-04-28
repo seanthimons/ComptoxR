@@ -94,8 +94,9 @@
 - [x] **Phase 34: Teardown** - Remove v2.3 regex classifier, ontology_id column, and purge lifestage tables from DB (completed 2026-04-22)
 - [x] **Phase 35: Shared Helper Layer Validation** - Confirm all 14 helper functions in eco_lifestage_patch.R load and behave correctly (OLS4, NVS, BioPortal, scoring) (completed 2026-04-22)
 - [x] **Phase 36: Bootstrap Data Artifacts** - Validate and commit lifestage_baseline.csv and lifestage_derivation.csv with cross-check gate (completed 2026-04-23)
-- [ ] **Phase 37: Build & Patch Integration** - Verify section 16 sync across both build scripts; confirm 4 refresh modes, Windows retry loop, and patch metadata
-- [ ] **Phase 38: Runtime API Finalization** - Verify eco_results() exposes 8 new columns, ontology_id is absent, and runtime join targets only lifestage_dictionary
+- [x] **Phase 36.2: Dictionary Rebuild Validation (INSERTED)** - Validate the regenerated lifestage dictionary artifacts, alias coverage, explicit unresolved derivation placeholders, and no orphaned derivation rows (completed 2026-04-27)
+- [x] **Phase 37: Build & Patch Integration** - Verify section 16 sync across both build scripts; confirm 4 refresh modes, Windows retry loop, and patch metadata (completed 2026-04-28)
+- [x] **Phase 38: Runtime API Finalization** - Finalize compact/default and detailed `eco_results()` lifestage output, keep `ontology_id` absent, and target only `lifestage_dictionary` at runtime (completed 2026-04-28)
 - [ ] **Phase 39: Quality Gates** - Mocked provider tests for OLS4, NVS, and BioPortal adapters; NEWS.md breaking change entry; dev script updates
 
 ## Phase Details
@@ -200,9 +201,30 @@ Plans:
 - [x] 36.1-01-PLAN.md — Create audit CSV, admin derivation rows, CI tests, cli_warn gate, validation script
 - [x] 36.1-02-PLAN.md — Create 4 probe scripts for OLS4, BioPortal, Wikidata, AGROVOC
 
+### Phase 36.2: Dictionary Rebuild Validation (INSERTED)
+
+**Goal:** Validate the regenerated source-backed lifestage dictionary artifacts after the unresolved coverage audit, including alias coverage, explicit unresolved derivation placeholders, derivation coverage reporting, and orphan detection
+**Depends on:** Phase 36.1
+**Requirements**: DATA-01, DATA-02, DATA-03
+**Success Criteria** (what must be TRUE):
+  1. `dev/lifestage/validate_36.2.R` passes from the project root
+  2. `lifestage_baseline.csv` has the expected 13-column schema and covers the current regenerated ECOTOX lifestage terms
+  3. `lifestage_aliases.csv` has no duplicate `org_lifestage` keys and supports normalized query routing
+  4. Every unresolved baseline term has both an audit row and an explicit `ECOTOX_UNRESOLVED` row in `lifestage_derivation.csv`
+  5. Resolved baseline source IDs have derivation coverage, no resolved keys remain marked `auto_unmatched_needs_review`, and GO:0040007 contamination is absent
+**Plans**: 2 plans
+Plans:
+- [x] **Wave 1** - 36.2-01-PLAN.md - Create semantic adjudication artifact and normalize derivation metadata
+- [x] **Wave 2** *(blocked on Wave 1 completion)* - 36.2-02-PLAN.md - Enforce semantic adjudication in validation and CI tests
+
+Cross-cutting constraints:
+- Every resolved baseline source key must have explicit semantic adjudication for its ECOTOX context.
+- Generated reports are planning/audit evidence; only deliberately promoted stable artifacts become package data.
+- The unresolved tail remains policy-held unless case-by-case gap analysis proves a source-backed promotion is warranted.
+
 ### Phase 37: Build & Patch Integration
 **Goal**: The build path and in-place patch path both produce a correct `lifestage_dictionary`, with Windows-safe connection handling and patch metadata tracked
-**Depends on**: Phase 36
+**Depends on**: Phase 36.2
 **Requirements**: INTG-01, INTG-02, INTG-03, INTG-04
 **Success Criteria** (what must be TRUE):
   1. A character diff of section 16 in `data-raw/ecotox.R` and `inst/ecotox/ecotox_build.R` returns zero differences (both call shared helpers identically)
@@ -211,20 +233,20 @@ Plans:
   4. The `_metadata` table in `ecotox.duckdb` contains a row with version, release, method, and timestamp fields after any patch run
 **Plans**: 1 plan
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [x] 37-01-PLAN.md - Harden build and patch lifestage integration, retry behavior, refresh modes, and patch metadata
 
 ### Phase 38: Runtime API Finalization
-**Goal**: `eco_results()` exposes the new 8-column lifestage output contract; `ontology_id` is absent from all output; the runtime join never touches `lifestage_review`
+**Goal**: `eco_results()` exposes compact default lifestage columns plus detailed source-backed lifestage output via `lifestage_details = TRUE`; `ontology_id` is absent from all output; the runtime join never touches `lifestage_review`
 **Depends on**: Phase 37
 **Requirements**: RUNT-01, RUNT-02, RUNT-03
 **Success Criteria** (what must be TRUE):
-  1. A call to `eco_results()` against a patched DB returns a tibble containing `source_term_id`, `source_term_label`, `source_ontology`, `source_match_status`, `source_match_method`, `harmonized_life_stage`, `reproductive_stage`, and `derivation_source` columns positioned after `organism_lifestage`
+  1. A default call to `eco_results()` against a patched DB returns compact lifestage output with `org_lifestage`, `harmonized_life_stage`, and `reproductive_stage`, while `lifestage_details = TRUE` returns the detailed source-backed lifestage block including `source_match_method`
   2. `"ontology_id"` is absent from the column names of any `eco_results()` output tibble
   3. The SQL join in `.eco_enrich_metadata()` references `lifestage_dictionary` exclusively — no join or reference to `lifestage_review` exists in the runtime path
-  4. `devtools::check()` completes with 0 errors and 0 new warnings after all existing tests are updated for the new column schema
+  4. Targeted testthat checks for `eco_results()` and lifestage runtime behavior pass after documentation is regenerated
 **Plans**: 1 plan
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [x] 38-01-PLAN.md - Finalize compact/detailed `eco_results()` lifestage API, tests, and docs
 **UI hint**: no
 
 ### Phase 39: Quality Gates
@@ -242,7 +264,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 -> 39
+Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 36.1 -> 36.2 -> 37 -> 38 -> 39
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -257,6 +279,7 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 37 -> 38 ->
 | 35. Shared Helper Layer Validation | v2.4 | 2/2 | Complete    | 2026-04-22 |
 | 36. Bootstrap Data Artifacts | v2.4 | 2/2 | Complete   | 2026-04-23 |
 | 36.1. Unresolved Coverage Audit | v2.4 | 2/2 | Complete    | 2026-04-23 |
-| 37. Build & Patch Integration | v2.4 | 0/? | Not started | - |
-| 38. Runtime API Finalization | v2.4 | 0/? | Not started | - |
+| 36.2. Dictionary Rebuild Validation | v2.4 | 2/2 | Complete | 2026-04-27 |
+| 37. Build & Patch Integration | v2.4 | 1/1 | Complete | 2026-04-28 |
+| 38. Runtime API Finalization | v2.4 | 1/1 | Complete | 2026-04-28 |
 | 39. Quality Gates | v2.4 | 0/? | Not started | - |
