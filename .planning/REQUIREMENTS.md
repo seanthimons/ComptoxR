@@ -41,7 +41,7 @@ Requirements for Source-Backed Lifestage Resolution. Each maps to roadmap phases
 
 ### Quality
 
-- [ ] **QUAL-01**: Minimal mocked provider tests via `with_mocked_bindings()` for OLS4, NVS, and BioPortal adapters
+- [x] **QUAL-01**: Minimal mocked provider tests via `with_mocked_bindings()` for OLS4, NVS, and BioPortal adapters
 
 ## Future Requirements
 
@@ -93,7 +93,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RUNT-01 | Phase 38 | Complete |
 | RUNT-02 | Phase 38 | Complete |
 | RUNT-03 | Phase 38 | Complete |
-| QUAL-01 | Phase 39 | Pending |
+| QUAL-01 | Phase 39 | Complete |
 
 **Coverage:**
 - v2.4 requirements: 18 total

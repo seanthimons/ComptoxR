@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v2.4
 milestone_name: Source-Backed Lifestage Resolution
-status: planning
-last_updated: "2026-04-28T17:58:00-04:00"
-last_activity: 2026-04-28
+status: milestone_ready_to_complete
+last_updated: "2026-04-29T15:52:00-04:00"
+last_activity: 2026-04-29
 progress:
   total_phases: 11
-  completed_phases: 7
-  total_plans: 11
-  completed_plans: 11
+  completed_phases: 8
+  total_plans: 12
+  completed_plans: 12
   percent: 100
 ---
 
@@ -20,23 +20,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Researchers can query EPA CompTox APIs through stable, well-tested R functions that handle authentication, batching, pagination, and result formatting automatically.
-**Current focus:** Phase 39 - Quality Gates
+**Current focus:** v2.4 milestone completion
 
 ## Current Position
 
-Phase: 39 (Quality Gates) - READY TO PLAN
-Plan: pending
-Status: Phase 38 verified complete; Phase 39 quality gates are next
-Last activity: 2026-04-28
+Phase: 39 (Quality Gates) - COMPLETE
+Plan: 39-01-PLAN.md
+Status: Phase 39 verified; v2.4 is ready for milestone completion
+Last activity: 2026-04-29
 
 ```
-Progress: [====================] 100% (1/1 plans)
+Progress: [====================] 100% (12/12 plans complete)
 ```
 
 ## Performance Metrics
 
-- Phases complete: 6/6
-- Plans complete: 1/1 for Phase 38
+- Phases complete: 8/8 for v2.4
+- Plans complete: 1/1 for Phase 39
 
 ## Accumulated Context
 
@@ -60,10 +60,12 @@ Progress: [====================] 100% (1/1 plans)
 - Phase 37 added a patch write-open retry boundary: 3 close/connect attempts with 200 ms back-off before a patch-specific read-write-open error.
 - Phase 38 finalized `eco_results()` lifestage runtime output: compact by default, detailed provenance via `lifestage_details = TRUE`, and no `ontology_id` output.
 - Phase 38 added a stale lifestage runtime schema guard that points users to patch or rebuild the ECOTOX DB.
+- Phase 39 added direct mocked provider adapter tests for OLS4, NVS, and BioPortal without live provider calls, real API keys, cassettes, or external fixtures.
+- Valid empty NVS S11 responses are silent empty candidate schemas; NVS empty-index, blank-query, and no-match paths return the shared candidate schema.
 
 ### Pending Todos
 
-- Plan Phase 39 Quality Gates
+None.
 
 ### Roadmap Evolution
 

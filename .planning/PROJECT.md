@@ -28,7 +28,7 @@ Researchers can query EPA CompTox APIs through stable, well-tested R functions t
 ## Current State
 
 **Latest shipped:** v2.3 ECOTOX Lifestage Harmonization (2026-04-21)
-**Active:** v2.4 Source-Backed Lifestage Resolution - Phase 38 complete, Phase 39 quality gates next
+**Active:** v2.4 Source-Backed Lifestage Resolution - all planned phases complete; ready for milestone completion
 
 **Stub generation pipeline (v1.0-v2.1) — ON HOLD:**
 The pipeline is fully functional and automated. Resuming pipeline work (advanced schema handling, S7 classes, etc.) is deferred until package stabilization is complete.
@@ -54,6 +54,8 @@ Key pipeline capabilities:
 ## Requirements
 
 ### Validated
+
+- Mocked provider adapter quality gates cover OLS4, NVS, and BioPortal without live calls or real provider API keys - v2.4 Phase 39
 
 - Query parameters from OpenAPI specs appear in generated function signatures — v1.0
 - Generated functions work correctly when called with query parameters — v1.0
@@ -191,7 +193,7 @@ Key pipeline capabilities:
 | v2.1 | Test infrastructure | Complete |
 | v2.2 | Package stabilization | Complete |
 | v2.3 | ECOTOX Lifestage Harmonization | Complete |
-| v2.4 | Source-Backed Lifestage Resolution | Active |
+| v2.4 | Source-Backed Lifestage Resolution | Ready for completion |
 
 ---
-*Last updated: 2026-04-22 — Milestone v2.4 started*
+*Last updated: 2026-04-29 - Phase 39 quality gates verified*

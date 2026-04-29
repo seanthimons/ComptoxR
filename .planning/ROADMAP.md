@@ -97,7 +97,7 @@
 - [x] **Phase 36.2: Dictionary Rebuild Validation (INSERTED)** - Validate the regenerated lifestage dictionary artifacts, alias coverage, explicit unresolved derivation placeholders, and no orphaned derivation rows (completed 2026-04-27)
 - [x] **Phase 37: Build & Patch Integration** - Verify section 16 sync across both build scripts; confirm 4 refresh modes, Windows retry loop, and patch metadata (completed 2026-04-28)
 - [x] **Phase 38: Runtime API Finalization** - Finalize compact/default and detailed `eco_results()` lifestage output, keep `ontology_id` absent, and target only `lifestage_dictionary` at runtime (completed 2026-04-28)
-- [ ] **Phase 39: Quality Gates** - Mocked provider tests for OLS4, NVS, and BioPortal adapters; NEWS.md breaking change entry; dev script updates
+- [x] **Phase 39: Quality Gates** - Mocked provider tests for OLS4, NVS, and BioPortal adapters; NEWS.md breaking change entry; dev script updates (completed 2026-04-29)
 
 ## Phase Details
 
@@ -259,7 +259,8 @@ Plans:
   3. `devtools::test()` runs the mocked adapter tests without hitting any live external API (confirmed by running with no network or API key)
 **Plans**: 1 plan
 Plans:
-- [ ] 34-01-PLAN.md — Verify source tree clean, create purge-and-rebuild script, execute DB rebuild
+- [x] **Wave 1**
+- [x] 39-01-PLAN.md - Add CI-safe mocked OLS4, NVS, and BioPortal provider adapter tests
 
 ## Progress
 
@@ -282,4 +283,4 @@ Phases execute in numeric order: 31 -> 32 -> 33 -> 34 -> 35 -> 36 -> 36.1 -> 36.
 | 36.2. Dictionary Rebuild Validation | v2.4 | 2/2 | Complete | 2026-04-27 |
 | 37. Build & Patch Integration | v2.4 | 1/1 | Complete | 2026-04-28 |
 | 38. Runtime API Finalization | v2.4 | 1/1 | Complete | 2026-04-28 |
-| 39. Quality Gates | v2.4 | 0/? | Not started | - |
+| 39. Quality Gates | v2.4 | 1/1 | Complete | 2026-04-29 |
