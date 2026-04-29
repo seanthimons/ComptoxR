@@ -86,6 +86,227 @@ empty_lifestage_candidates <- function(...) {
   .eco_lifestage_candidate_schema()
 }
 
+expect_candidate_schema <- function(x) {
+  testthat::expect_s3_class(x, "tbl_df")
+  testthat::expect_identical(names(x), names(.eco_lifestage_candidate_schema()))
+}
+
+expect_empty_candidate_schema <- function(x) {
+  expect_candidate_schema(x)
+  testthat::expect_equal(nrow(x), 0L)
+}
+
+with_nvs_index_reset <- function(code) {
+  had_index <- exists("eco_lifestage_nvs_index", envir = .ComptoxREnv, inherits = FALSE)
+  old_index <- if (had_index) {
+    get("eco_lifestage_nvs_index", envir = .ComptoxREnv, inherits = FALSE)
+  } else {
+    NULL
+  }
+  on.exit({
+    if (had_index) {
+      assign("eco_lifestage_nvs_index", old_index, envir = .ComptoxREnv)
+    } else if (exists("eco_lifestage_nvs_index", envir = .ComptoxREnv, inherits = FALSE)) {
+      rm("eco_lifestage_nvs_index", envir = .ComptoxREnv)
+    }
+  }, add = TRUE)
+  force(code)
+}
+
+test_that("OLS4 adapter parses accepted lifestage docs and filters unsupported prefixes", {
+  ols_payload <- paste(
+    '{"response":{"docs":[',
+    '{"obo_id":"UBERON:0000069","label":"larva","description":["A juvenile animal stage."],"exact_synonyms":["larval stage"]},',
+    '{"obo_id":"CHEBI:12345","label":"chemical larva","description":["Not a lifestage ontology."],"exact_synonyms":["not accepted"]}',
+    ']}}'
+  )
+
+  result <- testthat::with_mocked_bindings(
+    req_perform = function(req, ...) list(provider = "OLS4"),
+    resp_body_string = function(resp, ...) ols_payload,
+    .package = "httr2",
+    .eco_lifestage_query_ols4("larva")
+  )
+
+  expect_candidate_schema(result)
+  testthat::expect_equal(nrow(result), 1L)
+  testthat::expect_equal(result$source_provider, "OLS4")
+  testthat::expect_equal(result$source_ontology, "UBERON")
+  testthat::expect_equal(result$source_term_id, "UBERON:0000069")
+  testthat::expect_equal(result$source_term_label, "larva")
+  testthat::expect_equal(result$source_match_method, "ols4_search")
+  testthat::expect_false(any(grepl("^CHEBI:", result$source_term_id)))
+})
+
+test_that("OLS4 adapter warns on request failure and is silent for valid empty results", {
+  failed <- NULL
+  testthat::expect_warning(
+    failed <- testthat::with_mocked_bindings(
+      req_perform = function(req, ...) stop("simulated OLS4 outage"),
+      .package = "httr2",
+      .eco_lifestage_query_ols4("larva")
+    ),
+    "OLS4 endpoint unreachable"
+  )
+  expect_empty_candidate_schema(failed)
+
+  empty <- testthat::expect_silent(
+    testthat::with_mocked_bindings(
+      req_perform = function(req, ...) list(provider = "OLS4"),
+      resp_body_string = function(resp, ...) '{"response":{"docs":[]}}',
+      .package = "httr2",
+      .eco_lifestage_query_ols4("larva")
+    )
+  )
+  expect_empty_candidate_schema(empty)
+})
+
+test_that("NVS adapter parses S11 index and query matches labels and aliases", {
+  nvs_payload <- paste(
+    '{"results":{"bindings":[',
+    '{"term":{"value":"http://vocab.nerc.ac.uk/collection/S11/current/S1116/"},"label":{"value":"adult"},"altLabel":{"value":"mature adult"},"definition":{"value":"An animal that has reached sexual maturity."}}',
+    ']}}'
+  )
+
+  with_nvs_index_reset({
+    index <- testthat::with_mocked_bindings(
+      req_perform = function(req, ...) list(provider = "NVS"),
+      resp_body_string = function(resp, ...) nvs_payload,
+      .package = "httr2",
+      .eco_lifestage_nvs_index(refresh = TRUE)
+    )
+
+    expect_candidate_schema(index)
+    testthat::expect_equal(nrow(index), 1L)
+    testthat::expect_equal(index$source_provider, "NVS")
+    testthat::expect_equal(index$source_ontology, "S11")
+    testthat::expect_equal(index$source_term_id, "S1116")
+    testthat::expect_equal(index$source_term_label, "adult")
+    testthat::expect_equal(index$source_match_method, "nvs_sparql")
+
+    result <- .eco_lifestage_query_nvs("mature adult")
+    expect_candidate_schema(result)
+    testthat::expect_equal(result$source_term_id, "S1116")
+  })
+})
+
+test_that("NVS adapter separates endpoint failures from valid empty or unmatched results", {
+  with_nvs_index_reset({
+    failed <- NULL
+    testthat::expect_warning(
+      failed <- testthat::with_mocked_bindings(
+        req_perform = function(req, ...) stop("simulated NVS outage"),
+        .package = "httr2",
+        .eco_lifestage_nvs_index(refresh = TRUE)
+      ),
+      "NVS S11 SPARQL endpoint unreachable"
+    )
+    expect_empty_candidate_schema(failed)
+  })
+
+  with_nvs_index_reset({
+    empty <- testthat::expect_silent(
+      testthat::with_mocked_bindings(
+        req_perform = function(req, ...) list(provider = "NVS"),
+        resp_body_string = function(resp, ...) '{"results":{"bindings":[]}}',
+        .package = "httr2",
+        .eco_lifestage_nvs_index(refresh = TRUE)
+      )
+    )
+    expect_empty_candidate_schema(empty)
+  })
+
+  with_nvs_index_reset({
+    assign("eco_lifestage_nvs_index", .eco_lifestage_candidate_schema(), envir = .ComptoxREnv)
+    expect_empty_candidate_schema(.eco_lifestage_query_nvs("adult"))
+    expect_empty_candidate_schema(.eco_lifestage_query_nvs("   "))
+  })
+
+  with_nvs_index_reset({
+    assign(
+      "eco_lifestage_nvs_index",
+      make_provider_row("NVS", "S11", "S1116", "adult", candidate_aliases = "mature adult"),
+      envir = .ComptoxREnv
+    )
+    expect_empty_candidate_schema(.eco_lifestage_query_nvs("larva"))
+  })
+})
+
+test_that("BioPortal adapter parses keyed collection records without a real API key", {
+  response <- list(
+    collection = list(
+      list(
+        `@id` = "http://purl.obolibrary.org/obo/UBERON_0000069",
+        prefLabel = "larva",
+        synonym = list("larval stage"),
+        definition = list("A juvenile animal stage."),
+        links = list(ontology = "https://data.bioontology.org/ontologies/UBERON")
+      )
+    )
+  )
+
+  result <- withr::with_envvar(
+    c(BIOPORTAL_API_KEY = "fake-test-key"),
+    testthat::with_mocked_bindings(
+      req_perform = function(req, ...) list(provider = "BioPortal"),
+      resp_body_json = function(resp, ...) response,
+      .package = "httr2",
+      .eco_lifestage_query_bioportal("larva")
+    )
+  )
+
+  expect_candidate_schema(result)
+  testthat::expect_equal(nrow(result), 1L)
+  testthat::expect_equal(result$source_provider, "BioPortal")
+  testthat::expect_equal(result$source_ontology, "UBERON")
+  testthat::expect_equal(result$source_term_id, "UBERON:0000069")
+  testthat::expect_equal(result$source_term_label, "larva")
+  testthat::expect_equal(result$source_match_method, "bioportal_search")
+})
+
+test_that("BioPortal adapter handles missing keys, request failures, and empty collections", {
+  missing_key <- NULL
+  testthat::expect_warning(
+    missing_key <- withr::with_envvar(
+      c(BIOPORTAL_API_KEY = NA),
+      testthat::with_mocked_bindings(
+        req_perform = function(req, ...) stop("BioPortal request should not run without a key"),
+        .package = "httr2",
+        .eco_lifestage_query_bioportal("larva")
+      )
+    ),
+    "BIOPORTAL_API_KEY is not set"
+  )
+  expect_empty_candidate_schema(missing_key)
+
+  failed <- NULL
+  testthat::expect_warning(
+    failed <- withr::with_envvar(
+      c(BIOPORTAL_API_KEY = "fake-test-key"),
+      testthat::with_mocked_bindings(
+        req_perform = function(req, ...) stop("simulated BioPortal auth failure"),
+        .package = "httr2",
+        .eco_lifestage_query_bioportal("larva")
+      )
+    ),
+    "BioPortal endpoint unreachable"
+  )
+  expect_empty_candidate_schema(failed)
+
+  empty <- testthat::expect_silent(
+    withr::with_envvar(
+      c(BIOPORTAL_API_KEY = "fake-test-key"),
+      testthat::with_mocked_bindings(
+        req_perform = function(req, ...) list(provider = "BioPortal"),
+        resp_body_json = function(resp, ...) list(collection = list()),
+        .package = "httr2",
+        .eco_lifestage_query_bioportal("larva")
+      )
+    )
+  )
+  expect_empty_candidate_schema(empty)
+})
+
 make_patch_db <- function(
   descriptions = "Adult",
   release = "ecotox_ascii_03_12_2026.zip",

@@ -1277,8 +1277,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   }
 
   bindings <- payload$results$bindings
-  if (is.null(bindings) || nrow(bindings) == 0) {
-    cli::cli_warn("NVS S11 lookup returned no concepts.")
+  if (is.null(bindings) || is.null(nrow(bindings)) || nrow(bindings) == 0) {
     return(nvs_empty)
   }
 
@@ -1304,7 +1303,8 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     dplyr::summarise(
       candidate_aliases = paste(unique(stats::na.omit(.data$candidate_aliases)), collapse = " | "),
       .groups = "drop"
-    )
+    ) |>
+    dplyr::select(dplyr::all_of(names(.eco_lifestage_candidate_schema())))
 
   .ComptoxREnv$eco_lifestage_nvs_index <- index
   index
@@ -1989,17 +1989,17 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 .eco_lifestage_query_nvs <- function(term) {
   index <- .eco_lifestage_nvs_index()
   if (nrow(index) == 0) {
-    return(tibble::tibble())
+    return(.eco_lifestage_candidate_schema())
   }
   term_loose <- .eco_lifestage_normalize_term(term, mode = "loose")
   term_tokens <- unique(strsplit(term_loose, " ", fixed = TRUE)[[1]])
   term_tokens <- term_tokens[nzchar(term_tokens)]
 
   if (length(term_tokens) == 0) {
-    return(tibble::tibble())
+    return(.eco_lifestage_candidate_schema())
   }
 
-  index |>
+  matches <- index |>
     dplyr::filter(
       purrr::map_lgl(
         paste(.data$source_term_label, .data$candidate_aliases),
@@ -2010,6 +2010,12 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
         }
       )
     )
+
+  if (nrow(matches) == 0) {
+    return(.eco_lifestage_candidate_schema())
+  }
+
+  matches
 }
 
 #' @keywords internal
