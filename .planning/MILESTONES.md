@@ -1,4 +1,39 @@
-# Project Milestones: ComptoxR Stub Generation Pipeline
+# Project Milestones: ComptoxR
+
+## v2.4 Source-Backed Lifestage Resolution (Shipped: 2026-05-05)
+
+**Delivered:** Source-backed ECOTOX lifestage resolution with a shipped patch seed, deterministic in-place patching, provenance-aware maintainer workflow, compact/detailed runtime output, and mocked provider quality gates.
+
+**Phases completed:** 34-39, including inserted phases 36.1 and 36.2 (8 phases, 12 plans)
+
+**Key accomplishments:**
+
+- Removed the v2.3 regex classifier path and the `ontology_id` runtime output surface.
+- Shipped `inst/extdata/ecotox/lifestage_patch_seed.csv` as the deterministic installed seed.
+- Moved source/provenance CSVs under `dev/lifestage/` and added curation/rebuild/refresh scripts.
+- Hardened `.eco_patch_lifestage()` for baseline/cache/live refresh behavior and Windows DuckDB write-open retries.
+- Finalized `eco_results()` lifestage output: compact by default, detailed provenance via `lifestage_details = TRUE`.
+- Added CI-safe mocked provider tests for OLS4, NVS, and BioPortal adapters without live provider calls.
+- Confirmed targeted CASRN validation for 123-91-1 and 1071-83-6; missing enriched lifestages are ECOTOX source blanks, not a join-field failure.
+
+**Stats:**
+
+- 8 phases, 12 plans complete.
+- Local patch validation produced 101 resolved dictionary rows and 38 quarantined review rows for the current ECOTOX release.
+- Limited CASRN validation returned 7,716 result rows with `ontology_id` absent from runtime output.
+
+**Known deferred work:**
+
+- Blank ECOTOX `tests.organism_lifestage` rows remain a source-data limitation and need a separate imputation/curation milestone if desired.
+- One older tooling todo remains pending: check whether stub generation captures API schema descriptions.
+- The 38 lifestage review rows are quarantined by design, pending maintainer policy decisions.
+
+**Archives:**
+
+- `.planning/milestones/v2.4-ROADMAP.md`
+- `.planning/milestones/v2.4-REQUIREMENTS.md`
+
+---
 
 ## v2.1 Test Infrastructure (Shipped: 2026-03-02)
 
