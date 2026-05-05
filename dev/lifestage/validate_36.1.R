@@ -10,15 +10,7 @@ cli::cli_h1("Phase 36.1 Validation")
 
 cli::cli_h2("1. Audit CSV Schema Check")
 
-audit_path <- system.file(
-  "extdata",
-  "ecotox",
-  "lifestage_audit.csv",
-  package = "ComptoxR"
-)
-if (!nzchar(audit_path)) {
-  audit_path <- file.path("inst", "extdata", "ecotox", "lifestage_audit.csv")
-}
+audit_path <- file.path("dev", "lifestage", "source", "lifestage_audit.csv")
 stopifnot(file.exists(audit_path))
 
 audit <- readr::read_csv(audit_path, show_col_types = FALSE)
@@ -40,15 +32,7 @@ cli::cli_alert_success(
 
 cli::cli_h2("2. 100% Classification Coverage (D-03)")
 
-baseline_path <- system.file(
-  "extdata",
-  "ecotox",
-  "lifestage_baseline.csv",
-  package = "ComptoxR"
-)
-if (!nzchar(baseline_path)) {
-  baseline_path <- file.path("inst", "extdata", "ecotox", "lifestage_baseline.csv")
-}
+baseline_path <- file.path("dev", "lifestage", "source", "lifestage_baseline.csv")
 stopifnot(file.exists(baseline_path))
 
 baseline <- readr::read_csv(baseline_path, show_col_types = FALSE)
@@ -76,15 +60,7 @@ for (bucket in names(bucket_counts)) {
 
 cli::cli_h2("3. Administrative Derivation Rows (D-02)")
 
-derivation_path <- system.file(
-  "extdata",
-  "ecotox",
-  "lifestage_derivation.csv",
-  package = "ComptoxR"
-)
-if (!nzchar(derivation_path)) {
-  derivation_path <- file.path("inst", "extdata", "ecotox", "lifestage_derivation.csv")
-}
+derivation_path <- file.path("dev", "lifestage", "source", "lifestage_derivation.csv")
 stopifnot(file.exists(derivation_path))
 
 derivation <- readr::read_csv(derivation_path, show_col_types = FALSE)

@@ -54,16 +54,10 @@ temp.R
 
 *.xlsx
 *.csv
-!inst/extdata/ecotox/lifestage_baseline.csv
-!inst/extdata/ecotox/lifestage_derivation.csv
-!inst/extdata/ecotox/lifestage_audit.csv
-!inst/extdata/ecotox/lifestage_curated_candidates.csv
-!inst/extdata/ecotox/lifestage_forced_unresolved.csv
-!inst/extdata/ecotox/lifestage_domain_patterns.csv
-!inst/extdata/ecotox/lifestage_taxon_route_families.csv
-!inst/extdata/ecotox/lifestage_taxon_intersections.csv
-!inst/extdata/ecotox/lifestage_route_ontology_priorities.csv
-!inst/extdata/ecotox/lifestage_curated_exceptions.csv
+!inst/extdata/ecotox/lifestage_patch_seed.csv
+!dev/lifestage/source/*.csv
+!dev/lifestage/provenance/*.csv
+!dev/lifestage/curation/*.csv
 *.duckdb
 
 /roadmap/

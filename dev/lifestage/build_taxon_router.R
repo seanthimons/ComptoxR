@@ -1,18 +1,14 @@
 #!/usr/bin/env Rscript
 # Build lifestage taxon inference artifacts from ECOTOX usage counts.
 # Produces:
-#   - inst/extdata/ecotox/lifestage_taxon_intersections.csv
+#   - dev/lifestage/provenance/lifestage_taxon_intersections.csv
 #   - dev/lifestage/lifestage_taxon_profile.csv
 #   - dev/lifestage/lifestage_taxon_priority_nonresolved.csv
 
 suppressPackageStartupMessages(devtools::load_all(".", quiet = TRUE))
 
 csv_path <- function(filename) {
-  path <- file.path("inst", "extdata", "ecotox", filename)
-  if (!file.exists(path)) {
-    path <- system.file("extdata", "ecotox", filename, package = "ComptoxR")
-  }
-  path
+  file.path("dev", "lifestage", "source", filename)
 }
 
 cli::cli_h1("Lifestage Taxon Router Build")
@@ -197,7 +193,7 @@ nonresolved_priority <- profile |>
 
 profile_path <- file.path("dev", "lifestage", "lifestage_taxon_profile.csv")
 priority_path <- file.path("dev", "lifestage", "lifestage_taxon_priority_nonresolved.csv")
-intersections_path <- file.path("inst", "extdata", "ecotox", "lifestage_taxon_intersections.csv")
+intersections_path <- file.path("dev", "lifestage", "provenance", "lifestage_taxon_intersections.csv")
 
 utils::write.csv(taxon_intersections, intersections_path, row.names = FALSE, na = "")
 utils::write.csv(profile, profile_path, row.names = FALSE, na = "")

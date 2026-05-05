@@ -5,12 +5,13 @@
 suppressPackageStartupMessages(devtools::load_all(".", quiet = TRUE))
 
 csv_path <- function(filename) {
-  path <- file.path("inst", "extdata", "ecotox", filename)
-  if (!file.exists(path)) {
-    path <- system.file("extdata", "ecotox", filename, package = "ComptoxR")
+  source_path <- file.path("dev", "lifestage", "source", filename)
+  if (file.exists(source_path)) {
+    return(source_path)
   }
-  stopifnot(file.exists(path))
-  path
+  provenance_path <- file.path("dev", "lifestage", "provenance", filename)
+  stopifnot(file.exists(provenance_path))
+  provenance_path
 }
 
 cli::cli_h1("Phase 36.2 Semantic Adjudication Build")
@@ -259,9 +260,9 @@ action_report <- adjudication |>
   )
 
 adjudication_path <- file.path(
-  "inst",
-  "extdata",
-  "ecotox",
+  "dev",
+  "lifestage",
+  "provenance",
   "lifestage_semantic_adjudication.csv"
 )
 action_report_path <- file.path("dev", "lifestage", "semantic_derivation_action_report.csv")
@@ -284,4 +285,3 @@ print(adjudication |> dplyr::count(.data$adjudication_reason, sort = TRUE))
 
 cli::cli_h2("Context Scope Counts")
 print(adjudication |> dplyr::count(.data$context_scope, sort = TRUE))
-

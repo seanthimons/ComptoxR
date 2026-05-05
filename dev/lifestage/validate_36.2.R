@@ -5,12 +5,13 @@
 suppressPackageStartupMessages(devtools::load_all(".", quiet = TRUE))
 
 csv_path <- function(filename) {
-  path <- file.path("inst", "extdata", "ecotox", filename)
-  if (!file.exists(path)) {
-    path <- system.file("extdata", "ecotox", filename, package = "ComptoxR")
+  source_path <- file.path("dev", "lifestage", "source", filename)
+  if (file.exists(source_path)) {
+    return(source_path)
   }
-  stopifnot(file.exists(path))
-  path
+  provenance_path <- file.path("dev", "lifestage", "provenance", filename)
+  stopifnot(file.exists(provenance_path))
+  provenance_path
 }
 
 cli::cli_h1("Phase 36.2 Validation")

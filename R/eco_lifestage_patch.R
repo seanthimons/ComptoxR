@@ -24,6 +24,18 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_patch_seed_schema <- function() {
+  dplyr::bind_cols(
+    .eco_lifestage_cache_schema(),
+    tibble::tibble(
+      harmonized_life_stage = character(),
+      reproductive_stage = logical(),
+      derivation_source = character()
+    )
+  )
+}
+
+#' @keywords internal
 .eco_lifestage_dictionary_schema <- function() {
   tibble::tibble(
     org_lifestage = character(),
@@ -89,18 +101,28 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
-.eco_lifestage_baseline_path <- function() {
+.eco_lifestage_patch_seed_path <- function() {
   installed <- system.file(
     "extdata",
     "ecotox",
-    "lifestage_baseline.csv",
+    "lifestage_patch_seed.csv",
     package = "ComptoxR"
   )
   if (nzchar(installed) && file.exists(installed)) {
     return(installed)
   }
 
-  dev_path <- file.path("inst", "extdata", "ecotox", "lifestage_baseline.csv")
+  dev_path <- file.path("inst", "extdata", "ecotox", "lifestage_patch_seed.csv")
+  if (file.exists(dev_path)) {
+    return(dev_path)
+  }
+
+  cli::cli_abort("Committed lifestage patch seed CSV not found.")
+}
+
+#' @keywords internal
+.eco_lifestage_baseline_path <- function() {
+  dev_path <- file.path("dev", "lifestage", "source", "lifestage_baseline.csv")
   if (file.exists(dev_path)) {
     return(dev_path)
   }
@@ -110,17 +132,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_derivation_path <- function() {
-  installed <- system.file(
-    "extdata",
-    "ecotox",
-    "lifestage_derivation.csv",
-    package = "ComptoxR"
-  )
-  if (nzchar(installed) && file.exists(installed)) {
-    return(installed)
-  }
-
-  dev_path <- file.path("inst", "extdata", "ecotox", "lifestage_derivation.csv")
+  dev_path <- file.path("dev", "lifestage", "source", "lifestage_derivation.csv")
   if (file.exists(dev_path)) {
     return(dev_path)
   }
@@ -130,17 +142,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_curated_candidates_path <- function() {
-  installed <- system.file(
-    "extdata",
-    "ecotox",
-    "lifestage_curated_candidates.csv",
-    package = "ComptoxR"
-  )
-  if (nzchar(installed) && file.exists(installed)) {
-    return(installed)
-  }
-
-  dev_path <- file.path("inst", "extdata", "ecotox", "lifestage_curated_candidates.csv")
+  dev_path <- file.path("dev", "lifestage", "source", "lifestage_curated_candidates.csv")
   if (file.exists(dev_path)) {
     return(dev_path)
   }
@@ -150,17 +152,10 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_policy_path <- function(filename, label) {
-  installed <- system.file(
-    "extdata",
-    "ecotox",
-    filename,
-    package = "ComptoxR"
-  )
-  if (nzchar(installed) && file.exists(installed)) {
-    return(installed)
+  dev_path <- file.path("dev", "lifestage", "source", filename)
+  if (!file.exists(dev_path) && identical(filename, "lifestage_taxon_intersections.csv")) {
+    dev_path <- file.path("dev", "lifestage", "provenance", filename)
   }
-
-  dev_path <- file.path("inst", "extdata", "ecotox", filename)
   if (file.exists(dev_path)) {
     return(dev_path)
   }
@@ -1025,6 +1020,97 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_validate_patch_seed <- function(x, expected_release = NULL) {
+  if (is.null(x)) {
+    return(.eco_lifestage_patch_seed_schema())
+  }
+
+  required <- names(.eco_lifestage_patch_seed_schema())
+  missing_cols <- setdiff(required, names(x))
+  if (length(missing_cols) > 0) {
+    cli::cli_abort(c(
+      "Invalid lifestage patch seed schema.",
+      "x" = "Missing column(s): {missing_cols}."
+    ))
+  }
+
+  x <- tibble::as_tibble(x[, required, drop = FALSE]) |>
+    dplyr::mutate(
+      dplyr::across(
+        c(
+          "org_lifestage",
+          "source_provider",
+          "source_ontology",
+          "source_term_id",
+          "source_term_label",
+          "source_term_definition",
+          "source_release",
+          "source_match_method",
+          "source_match_status",
+          "candidate_reason",
+          "ecotox_release",
+          "harmonized_life_stage",
+          "derivation_source"
+        ),
+        ~ dplyr::na_if(as.character(.x), "")
+      ),
+      candidate_rank = as.integer(.data$candidate_rank),
+      candidate_score = as.numeric(.data$candidate_score),
+      reproductive_stage = as.logical(.data$reproductive_stage)
+    )
+
+  releases <- unique(stats::na.omit(x$ecotox_release))
+  if (length(releases) != 1L) {
+    cli::cli_abort(c(
+      "Lifestage patch seed must contain exactly one ECOTOX release.",
+      "x" = "Releases found: {.val {paste(releases, collapse = ', ')}}."
+    ))
+  }
+  if (!is.null(expected_release) && !identical(releases, expected_release)) {
+    cli::cli_abort(c(
+      "Release mismatch in lifestage patch seed.",
+      "x" = "Expected {.val {expected_release}} but found {.val {releases}}."
+    ))
+  }
+
+  resolved_missing <- x |>
+    dplyr::filter(
+      .data$source_match_status == "resolved",
+      is.na(.data$harmonized_life_stage) |
+        is.na(.data$reproductive_stage) |
+        is.na(.data$derivation_source)
+    )
+  if (nrow(resolved_missing) > 0L) {
+    cli::cli_abort(c(
+      "Resolved lifestage patch seed row(s) are missing derivation fields.",
+      "x" = "Term(s): {.val {unique(resolved_missing$org_lifestage)}}."
+    ))
+  }
+
+  review_missing <- x |>
+    dplyr::filter(
+      is.na(.data$source_match_status) | .data$source_match_status != "resolved",
+      is.na(.data$source_match_status) | is.na(.data$candidate_reason)
+    )
+  if (nrow(review_missing) > 0L) {
+    cli::cli_abort(c(
+      "Review lifestage patch seed row(s) are missing explicit status or reason.",
+      "x" = "Term(s): {.val {unique(review_missing$org_lifestage)}}."
+    ))
+  }
+
+  x
+}
+
+#' @keywords internal
+.eco_lifestage_patch_seed_read <- function(ecotox_release = NULL) {
+  .eco_lifestage_validate_patch_seed(
+    .eco_lifestage_read_csv(.eco_lifestage_patch_seed_path()),
+    expected_release = ecotox_release
+  )
+}
+
+#' @keywords internal
 .eco_lifestage_derivation_map <- function() {
   path <- .eco_lifestage_derivation_path()
   x <- .eco_lifestage_read_csv(path)
@@ -1068,47 +1154,16 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 ) {
   refresh <- rlang::arg_match(refresh)
 
-  if (isTRUE(force)) {
-    return(list(
-      seed_cache = .eco_lifestage_cache_schema(),
-      refresh_mode = "live",
-      cache_source = "live"
+  if (identical(refresh, "live") || isTRUE(force)) {
+    cli::cli_abort(c(
+      "Live lifestage refresh is a maintainer-only workflow.",
+      "i" = "End-user patching uses the release-matched {.file lifestage_patch_seed.csv} shipped with the package.",
+      "i" = "Maintainers should update {.path dev/lifestage/curation/lifestage_curation_queue.csv} and run {.code Rscript dev/lifestage/rebuild_lifestage_patch_seed.R}."
     ))
-  }
-
-  baseline <- NULL
-  baseline_available <- FALSE
-  baseline_matches <- FALSE
-  baseline_path <- .eco_lifestage_baseline_path()
-
-  if (file.exists(baseline_path)) {
-    baseline <- .eco_lifestage_validate_cache(
-      .eco_lifestage_read_csv(baseline_path),
-      source_name = "baseline"
-    )
-    baseline_available <- nrow(baseline) > 0
-    baseline_releases <- unique(stats::na.omit(baseline$ecotox_release))
-    if (length(baseline_releases) > 1) {
-      cli::cli_abort(c(
-        "Committed lifestage baseline contains rows from multiple releases.",
-        "x" = "Releases found: {.val {paste(baseline_releases, collapse = ', ')}}",
-        "i" = "Re-generate the baseline for a single ECOTOX release."
-      ))
-    }
-    baseline_matches <- length(baseline_releases) == 1L &&
-      identical(baseline_releases, ecotox_release)
   }
 
   cache_path <- .eco_lifestage_cache_path(ecotox_release)
   cache_available <- file.exists(cache_path)
-
-  if (refresh == "live") {
-    return(list(
-      seed_cache = .eco_lifestage_cache_schema(),
-      refresh_mode = "live",
-      cache_source = "live"
-    ))
-  }
 
   if (refresh == "cache") {
     if (!cache_available) {
@@ -1122,43 +1177,29 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     ))
   }
 
+  seed <- .eco_lifestage_patch_seed_read(ecotox_release)
+
   if (refresh == "baseline") {
-    if (!baseline_available || !baseline_matches) {
-      cli::cli_abort(c(
-        "Matching committed lifestage baseline is required for {.code refresh = 'baseline'}.",
-        "x" = "Expected baseline release {.val {ecotox_release}}."
-      ))
-    }
-
-    .eco_lifestage_cache_write(baseline, ecotox_release)
+    .eco_lifestage_cache_write(
+      dplyr::select(seed, dplyr::all_of(names(.eco_lifestage_cache_schema()))),
+      ecotox_release
+    )
     return(list(
-      seed_cache = baseline,
+      seed_cache = seed,
       refresh_mode = "baseline",
-      cache_source = "baseline"
+      cache_source = "patch seed"
     ))
   }
 
-  if (cache_available) {
-    return(list(
-      seed_cache = .eco_lifestage_cache_read(ecotox_release, required = TRUE),
-      refresh_mode = "auto",
-      cache_source = "cache"
-    ))
-  }
-
-  if (baseline_available && baseline_matches) {
-    .eco_lifestage_cache_write(baseline, ecotox_release)
-    return(list(
-      seed_cache = baseline,
-      refresh_mode = "auto",
-      cache_source = "baseline"
-    ))
-  }
-
-  cli::cli_abort(c(
-    "No local lifestage seed artifacts match ECOTOX release {.val {ecotox_release}}.",
-    "i" = "Use {.code refresh = 'live'} or {.code force = TRUE} to resolve lifestages through live providers."
-  ))
+  .eco_lifestage_cache_write(
+    dplyr::select(seed, dplyr::all_of(names(.eco_lifestage_cache_schema()))),
+    ecotox_release
+  )
+  list(
+    seed_cache = seed,
+    refresh_mode = "auto",
+    cache_source = "patch seed"
+  )
 }
 
 #' @keywords internal
@@ -1312,7 +1353,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
 #' @keywords internal
 .eco_lifestage_alias_lookup <- function(org_lifestage) {
-  alias_path <- file.path("inst", "extdata", "ecotox", "lifestage_aliases.csv")
+  alias_path <- file.path("dev", "lifestage", "source", "lifestage_aliases.csv")
   if (!file.exists(alias_path)) {
     alias_path <- system.file(
       "extdata",
@@ -2401,51 +2442,22 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 
   missing_terms <- setdiff(org_lifestages, unique(cache_rows$org_lifestage))
 
-  if (length(missing_terms) > 0 && identical(effective_refresh, "live")) {
-    cache_rows <- purrr::map_dfr(
-      org_lifestages,
-      .eco_lifestage_resolve_term,
-      ecotox_release = ecotox_release
-    )
-  } else if (length(missing_terms) > 0) {
+  if (length(missing_terms) > 0) {
     cli::cli_abort(c(
       "Lifestage {.val {seed$cache_source}} is incomplete for release {.val {ecotox_release}}.",
       "x" = "Missing term(s): {missing_terms}.",
-      "i" = "Use {.code refresh = 'live'} or {.code force = TRUE} to resolve missing lifestages through live providers."
+      "i" = "Maintainers should update {.path dev/lifestage/curation/lifestage_curation_queue.csv} and rebuild {.file lifestage_patch_seed.csv}."
     ))
   }
 
   cache_rows <- cache_rows |>
     dplyr::arrange(.data$org_lifestage, .data$candidate_rank)
 
-  # -- Audit coverage gate (D-10): warn for unclassified unresolved terms ------
-  audit_path <- system.file(
-    "extdata",
-    "ecotox",
-    "lifestage_audit.csv",
-    package = "ComptoxR"
-  )
-  if (!nzchar(audit_path)) {
-    audit_path <- file.path("inst", "extdata", "ecotox", "lifestage_audit.csv")
-  }
-  if (nzchar(audit_path) && file.exists(audit_path)) {
-    audit <- readr::read_csv(audit_path, show_col_types = FALSE)
-    unresolved_terms <- cache_rows |>
-      dplyr::filter(.data$source_match_status == "unresolved") |>
-      dplyr::pull(.data$org_lifestage) |>
-      unique()
-    unclassified <- setdiff(unresolved_terms, audit$org_lifestage)
-    if (length(unclassified) > 0) {
-      cli::cli_warn(c(
-        "{length(unclassified)} unresolved term(s) not found in lifestage audit CSV.",
-        "i" = "Terms: {.val {unclassified}}",
-        "i" = "Edit {.path {audit_path}} to classify these terms."
-      ))
-    }
-  }
-
   if (isTRUE(write_cache)) {
-    .eco_lifestage_cache_write(cache_rows, ecotox_release)
+    .eco_lifestage_cache_write(
+      dplyr::select(cache_rows, dplyr::all_of(names(.eco_lifestage_cache_schema()))),
+      ecotox_release
+    )
   }
 
   resolved <- cache_rows |>
@@ -2453,8 +2465,11 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     dplyr::arrange(.data$org_lifestage, .data$candidate_rank) |>
     dplyr::group_by(.data$org_lifestage) |>
     dplyr::slice(1) |>
-    dplyr::ungroup() |>
-    .eco_lifestage_derive_fields()
+    dplyr::ungroup()
+
+  if (!all(c("harmonized_life_stage", "reproductive_stage", "derivation_source") %in% names(resolved))) {
+    resolved <- .eco_lifestage_derive_fields(resolved)
+  }
 
   needs_derivation <- resolved |>
     dplyr::filter(is.na(.data$harmonized_life_stage) | is.na(.data$derivation_source)) |>

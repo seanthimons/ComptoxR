@@ -464,10 +464,50 @@ make_patch_db <- function(
 }
 
 with_lifestage_files <- function(code, baseline, derivation, cache = NULL) {
+  seed_path <- tempfile(fileext = ".csv")
   baseline_path <- tempfile(fileext = ".csv")
   derivation_path <- tempfile(fileext = ".csv")
   cache_path <- tempfile(fileext = ".csv")
+  unresolved_derivation <- derivation |>
+    dplyr::filter(.data$source_ontology == "ECOTOX_UNRESOLVED") |>
+    dplyr::transmute(
+      org_lifestage = .data$source_term_id,
+      unresolved_harmonized_life_stage = .data$harmonized_life_stage,
+      unresolved_reproductive_stage = .data$reproductive_stage,
+      unresolved_derivation_source = .data$derivation_source
+    )
+  seed <- baseline |>
+    dplyr::left_join(
+      dplyr::filter(derivation, .data$source_ontology != "ECOTOX_UNRESOLVED"),
+      by = c("source_ontology", "source_term_id")
+    ) |>
+    dplyr::left_join(unresolved_derivation, by = "org_lifestage") |>
+    dplyr::mutate(
+      harmonized_life_stage = dplyr::if_else(
+        .data$source_match_status != "resolved" & is.na(.data$harmonized_life_stage),
+        .data$unresolved_harmonized_life_stage,
+        .data$harmonized_life_stage
+      ),
+      reproductive_stage = dplyr::if_else(
+        .data$source_match_status != "resolved" & is.na(.data$reproductive_stage),
+        .data$unresolved_reproductive_stage,
+        .data$reproductive_stage
+      ),
+      derivation_source = dplyr::if_else(
+        .data$source_match_status != "resolved" & is.na(.data$derivation_source),
+        .data$unresolved_derivation_source,
+        .data$derivation_source
+      ),
+      candidate_reason = dplyr::coalesce(.data$candidate_reason, .data$source_match_status, "needs_review")
+    ) |>
+    dplyr::select(
+      dplyr::all_of(names(.eco_lifestage_cache_schema())),
+      "harmonized_life_stage",
+      "reproductive_stage",
+      "derivation_source"
+    )
 
+  write_lifestage_csv(seed, seed_path)
   write_lifestage_csv(baseline, baseline_path)
   write_lifestage_csv(derivation, derivation_path)
   if (!is.null(cache)) {
@@ -475,6 +515,7 @@ with_lifestage_files <- function(code, baseline, derivation, cache = NULL) {
   }
 
   testthat::with_mocked_bindings(
+    .eco_lifestage_patch_seed_path = function() seed_path,
     .eco_lifestage_baseline_path = function() baseline_path,
     .eco_lifestage_derivation_path = function() derivation_path,
     .eco_lifestage_cache_path = function(ecotox_release) cache_path,
@@ -715,7 +756,7 @@ test_that("baseline patch aborts on release mismatch without live lookup", {
         {
           testthat::expect_error(
             .eco_patch_lifestage(db_path = db_path, refresh = "baseline"),
-            "Matching committed lifestage baseline is required"
+            "Release mismatch in lifestage patch seed"
           )
         }
       )
@@ -732,61 +773,19 @@ test_that("baseline patch aborts on release mismatch without live lookup", {
   )
 })
 
-test_that("live-refresh patch path rebuilds cache from mocked providers", {
+test_that("live-refresh patch path is maintainer-only", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release)
-  derivation <- tibble::tibble(
-    source_ontology = "S11",
-    source_term_id = "S1116",
-    harmonized_life_stage = "Adult",
-    reproductive_stage = FALSE,
-    derivation_source = "test_derivation"
-  )
-  provider_rows <- make_provider_row(
-    source_provider = "NVS",
-    source_ontology = "S11",
-    source_term_id = "S1116",
-    source_term_label = "adult",
-    source_term_definition = "An animal that has reached sexual maturity"
-  )
 
-  with_lifestage_files(
-    {
-      testthat::with_mocked_bindings(
-        .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
-        .eco_lifestage_query_nvs = mock_nvs_query(provider_rows),
-        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
-        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
-        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
-        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
-        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
-        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
-        .package = "ComptoxR",
-        {
-          .eco_patch_lifestage(db_path = db_path, refresh = "live")
-          seeded <- .eco_lifestage_cache_read(release, required = TRUE)
-          testthat::expect_equal(seeded$source_term_id, "S1116")
-        }
-      )
-    },
-    baseline = .eco_lifestage_cache_schema(),
-    derivation = derivation,
-    cache = NULL
+  testthat::expect_error(
+    .eco_patch_lifestage(db_path = db_path, refresh = "live"),
+    "Live lifestage refresh is a maintainer-only workflow"
   )
 })
 
-test_that("force patch bypasses local seeds and uses live providers", {
+test_that("force patch does not bypass the release seed", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release)
-  cache <- make_lifestage_cache_row(
-    org_lifestage = "Adult",
-    ecotox_release = release,
-    source_provider = "NVS",
-    source_ontology = "S11",
-    source_term_id = "STALE",
-    source_term_label = "stale adult",
-    source_release = "old"
-  )
   baseline <- make_lifestage_cache_row(
     org_lifestage = "Adult",
     ecotox_release = release,
@@ -803,73 +802,37 @@ test_that("force patch bypasses local seeds and uses live providers", {
     reproductive_stage = FALSE,
     derivation_source = "test_derivation"
   )
-  provider_rows <- make_provider_row(
-    source_provider = "NVS",
-    source_ontology = "S11",
-    source_term_id = "S1116",
-    source_term_label = "adult",
-    source_term_definition = "An animal that has reached sexual maturity"
-  )
-  nvs_calls <- 0L
 
   with_lifestage_files(
     {
-      testthat::with_mocked_bindings(
-        .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
-        .eco_lifestage_query_nvs = function(...) {
-          nvs_calls <<- nvs_calls + 1L
-          mock_nvs_query(provider_rows)(...)
-        },
-        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
-        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
-        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
-        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
-        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
-        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
-        .package = "ComptoxR",
-        {
-          result <- .eco_patch_lifestage(db_path = db_path, refresh = "baseline", force = TRUE)
-          testthat::expect_equal(result$refresh_mode, "live")
-        }
+      testthat::expect_error(
+        .eco_patch_lifestage(db_path = db_path, refresh = "baseline", force = TRUE),
+        "Live lifestage refresh is a maintainer-only workflow"
       )
-
-      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
-      on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
-      dict <- tibble::as_tibble(DBI::dbReadTable(con, "lifestage_dictionary"))
-      testthat::expect_equal(dict$source_term_id, "S1116")
     },
     baseline = baseline,
     derivation = derivation,
-    cache = cache
+    cache = NULL
   )
-
-  testthat::expect_gt(nvs_calls, 0L)
 })
 
-test_that("ambiguous terms are quarantined during patch", {
+test_that("ambiguous seed terms are quarantined during patch", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Larva", release = release)
-  provider_rows <- dplyr::bind_rows(
-    make_provider_row("OLS4", "UBERON", "UBERON:0000069", "larva"),
-    make_provider_row("OLS4", "UBERON", "UBERON:0002548", "larva")
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Larva",
+    ecotox_release = release,
+    source_provider = "OLS4",
+    source_ontology = "UBERON",
+    source_term_id = "UBERON:0000069",
+    source_term_label = "larva",
+    source_match_status = "ambiguous",
+    candidate_reason = "multiple_equal_candidates"
   )
 
   with_lifestage_files(
     {
-      testthat::with_mocked_bindings(
-        .eco_lifestage_query_ols4 = mock_ols_query(provider_rows),
-        .eco_lifestage_query_nvs = mock_nvs_query(provider_rows),
-        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
-        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
-        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
-        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
-        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
-        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
-        .package = "ComptoxR",
-        {
-          .eco_patch_lifestage(db_path = db_path, refresh = "live")
-        }
-      )
+      .eco_patch_lifestage(db_path = db_path, refresh = "baseline")
 
       con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
       on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
@@ -877,7 +840,7 @@ test_that("ambiguous terms are quarantined during patch", {
       testthat::expect_true(all(review$review_status == "ambiguous"))
       testthat::expect_true(nrow(review) >= 1L)
     },
-    baseline = .eco_lifestage_cache_schema(),
+    baseline = baseline,
     derivation = tibble::tibble(
       source_ontology = character(),
       source_term_id = character(),
@@ -889,29 +852,20 @@ test_that("ambiguous terms are quarantined during patch", {
   )
 })
 
-test_that("unresolved terms are quarantined during patch", {
+test_that("unresolved seed terms are quarantined during patch", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Xylophage", release = release)
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Xylophage",
+    ecotox_release = release,
+    source_match_status = "unresolved",
+    candidate_score = 0,
+    candidate_reason = "no_provider_candidates"
+  )
 
   with_lifestage_files(
     {
-      testthat::with_mocked_bindings(
-        .eco_lifestage_query_ols4 = function(...) tibble::tibble(),
-        .eco_lifestage_query_nvs = function(...) tibble::tibble(),
-        .eco_lifestage_query_devstage_ontology = empty_lifestage_candidates,
-        .eco_lifestage_query_po_obo = empty_lifestage_candidates,
-        .eco_lifestage_query_bioportal = empty_lifestage_candidates,
-        .eco_lifestage_query_wikidata = empty_lifestage_candidates,
-        .eco_lifestage_query_agrovoc = empty_lifestage_candidates,
-        .eco_lifestage_curated_candidates = empty_lifestage_candidates,
-        .package = "ComptoxR",
-        {
-          testthat::expect_warning(
-            .eco_patch_lifestage(db_path = db_path, refresh = "live"),
-            "not found in lifestage audit CSV"
-          )
-        }
-      )
+      .eco_patch_lifestage(db_path = db_path, refresh = "baseline")
 
       con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
       on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
@@ -919,7 +873,7 @@ test_that("unresolved terms are quarantined during patch", {
       testthat::expect_equal(review$review_status, "unresolved")
       testthat::expect_equal(review$candidate_reason, "no_provider_candidates")
     },
-    baseline = .eco_lifestage_cache_schema(),
+    baseline = baseline,
     derivation = tibble::tibble(
       source_ontology = character(),
       source_term_id = character(),

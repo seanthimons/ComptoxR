@@ -117,15 +117,7 @@ cli::cli_alert_info(
 
 cli::cli_h2("Step 3: Auto-Derive Derivation Rows")
 
-audit_path <- system.file(
-  "extdata",
-  "ecotox",
-  "lifestage_audit.csv",
-  package = "ComptoxR"
-)
-if (!nzchar(audit_path)) {
-  audit_path <- file.path("inst", "extdata", "ecotox", "lifestage_audit.csv")
-}
+audit_path <- file.path("dev", "lifestage", "source", "lifestage_audit.csv")
 audit <- if (file.exists(audit_path)) {
   readr::read_csv(audit_path, show_col_types = FALSE)
 } else {
@@ -134,7 +126,7 @@ audit <- if (file.exists(audit_path)) {
 
 new_derivation <- .eco_lifestage_auto_derive(baseline_rows, audit)
 
-derivation_path <- file.path("inst", "extdata", "ecotox", "lifestage_derivation.csv")
+derivation_path <- .eco_lifestage_derivation_path()
 utils::write.csv(
   new_derivation,
   derivation_path,
