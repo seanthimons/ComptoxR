@@ -1,0 +1,19 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/get_info_by_id/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Mon, 27 Apr 2026 14:28:38 GMT
+      Content-Type: application/json
+      Content-Length: '16'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"result":null}
+  recorded_at: 2026-04-27 14:28:38
+recorded_with: VCR-vcr/2.1.0

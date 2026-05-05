@@ -1,0 +1,50 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/get_ir_spectrum/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Mon, 27 Apr 2026 14:28:40 GMT
+      Content-Type: text/html; charset=utf-8
+      Content-Length: '27'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: 'Error: invalid internal id.'
+  recorded_at: 2026-04-27 14:28:40
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/get_ir_spectrum/DTXSID5032381
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Mon, 27 Apr 2026 14:28:40 GMT
+      Content-Type: text/html; charset=utf-8
+      Content-Length: '27'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: 'Error: invalid internal id.'
+  recorded_at: 2026-04-27 14:28:40
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/get_ir_spectrum/DTXSID8024291
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Mon, 27 Apr 2026 14:28:40 GMT
+      Content-Type: text/html; charset=utf-8
+      Content-Length: '27'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: 'Error: invalid internal id.'
+  recorded_at: 2026-04-27 14:28:40
+recorded_with: VCR-vcr/2.1.0

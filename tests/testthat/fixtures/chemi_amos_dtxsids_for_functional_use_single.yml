@@ -1,0 +1,19 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/dtxsids_for_functional_use/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.21.4
+      Date: Thu, 23 Apr 2026 16:14:54 GMT
+      Content-Type: application/json
+      Content-Length: '15'
+      Connection: keep-alive
+      Access-Control-Allow-Origin: '*'
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"dtxsids":[]}
+  recorded_at: 2026-04-23 16:14:55
+recorded_with: VCR-vcr/2.1.0
