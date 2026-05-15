@@ -32,14 +32,14 @@ dss_search("50-\%", cols = "CASRN", limit = 10)
 }
 }
 \seealso{
-Other dsstox: 
-\code{\link{dss_cas}()},
-\code{\link{dss_connect}()},
-\code{\link{dss_disconnect}()},
-\code{\link{dss_fuzzy}()},
-\code{\link{dss_install}()},
-\code{\link{dss_query}()},
-\code{\link{dss_resolve}()},
-\code{\link{dss_synonyms}()}
+Other dsstox:
+\code{\link[=dss_cas]{dss_cas()}},
+\code{\link[=dss_connect]{dss_connect()}},
+\code{\link[=dss_disconnect]{dss_disconnect()}},
+\code{\link[=dss_fuzzy]{dss_fuzzy()}},
+\code{\link[=dss_install]{dss_install()}},
+\code{\link[=dss_query]{dss_query()}},
+\code{\link[=dss_resolve]{dss_resolve()}},
+\code{\link[=dss_synonyms]{dss_synonyms()}}
 }
 \concept{dsstox}

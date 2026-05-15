@@ -2233,6 +2233,12 @@
           },
           "name": {
             "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SectionInfo"
+            }
           }
         }
       },

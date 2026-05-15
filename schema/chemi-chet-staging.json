@@ -766,7 +766,7 @@
     "/chemicals/database-old": {
       "get": {
         "summary": "List all chemicals (legacy)",
-        "operationId": "api.chemicals.database_old",
+        "operationId": "api.legacy.chemicals.database_old",
         "responses": {
           "200": {
             "description": "Chemical list",
@@ -815,7 +815,23 @@
           },
           {
             "in": "query",
+            "name": "exact_search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "lib_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "only_in_reactions",
             "required": false,
             "schema": {
               "type": "string"
@@ -1541,7 +1557,7 @@
     "/reaction/database_old": {
       "get": {
         "summary": "List all reactions (legacy)",
-        "operationId": "api.reaction.database_old",
+        "operationId": "api.legacy.reaction.database_old",
         "responses": {
           "200": {
             "description": "Reaction list",
@@ -1562,7 +1578,7 @@
     "/reaction/database-old/{pagenum}/{searchterm}": {
       "get": {
         "summary": "Search reactions (legacy)",
-        "operationId": "api.reaction.database_old_search",
+        "operationId": "api.legacy.reaction.database_old_search",
         "parameters": [
           {
             "in": "path",
@@ -1694,7 +1710,7 @@
         "parameters": [
           {
             "in": "query",
-            "name": "parent_id",
+            "name": "reaction_id",
             "required": false,
             "schema": {
               "type": "string"
@@ -1762,7 +1778,72 @@
         }
       }
     },
+    "/reaction/batchsearch": {
+      "options": {
+        "summary": "CORS preflight for batch search",
+        "operationId": "api.reaction.map_dl_options",
+        "responses": {
+          "200": {
+            "description": "Preflight response"
+          }
+        }
+      },
+      "post": {
+        "summary": "Batch search reactions and chemicals",
+        "operationId": "api.reaction.batchsearch",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "dtxsids",
+                  "search_level"
+                ],
+                "properties": {
+                  "dtxsids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "search_level": {
+                    "type": "string",
+                    "enum": [
+                      "chemical",
+                      "reaction"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Batch search response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/reaction/reaction_dl": {
+      "options": {
+        "summary": "CORS preflight for map download",
+        "operationId": "api.reaction.map_dl_options",
+        "responses": {
+          "200": {
+            "description": "Preflight response"
+          }
+        }
+      },
       "post": {
         "summary": "Download reaction list",
         "operationId": "api.reaction.reaction_dl",

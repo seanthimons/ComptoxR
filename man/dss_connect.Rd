@@ -19,14 +19,14 @@ If \code{path} is provided it is saved as the default for the session via
 \code{options(ComptoxR.dsstox_path = path)}.
 }
 \seealso{
-Other dsstox: 
-\code{\link{dss_cas}()},
-\code{\link{dss_disconnect}()},
-\code{\link{dss_fuzzy}()},
-\code{\link{dss_install}()},
-\code{\link{dss_query}()},
-\code{\link{dss_resolve}()},
-\code{\link{dss_search}()},
-\code{\link{dss_synonyms}()}
+Other dsstox:
+\code{\link[=dss_cas]{dss_cas()}},
+\code{\link[=dss_disconnect]{dss_disconnect()}},
+\code{\link[=dss_fuzzy]{dss_fuzzy()}},
+\code{\link[=dss_install]{dss_install()}},
+\code{\link[=dss_query]{dss_query()}},
+\code{\link[=dss_resolve]{dss_resolve()}},
+\code{\link[=dss_search]{dss_search()}},
+\code{\link[=dss_synonyms]{dss_synonyms()}}
 }
 \concept{dsstox}

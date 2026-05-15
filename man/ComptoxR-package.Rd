@@ -11,5 +11,10 @@ ComptoxR provides access to the US EPA's CompTox Chemical Dashboard APIs and rel
 \author{
 \strong{Maintainer}: Sean Thimons \email{thimons.sean@epa.gov}
 
+Authors:
+\itemize{
+  \item Sean Thimons \email{thimons.sean@epa.gov}
+}
+
 }
 \keyword{internal}

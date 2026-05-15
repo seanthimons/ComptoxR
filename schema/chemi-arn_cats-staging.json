@@ -237,100 +237,30 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "smiles": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "Array of SMILES strings, same input style as amnb_nate."
-                      },
-                      "model": {
-                        "type": "string",
-                        "enum": [
-                          "RF",
-                          "NN"
-                        ],
-                        "default": "RF"
-                      }
+                "type": "object",
+                "properties": {
+                  "smiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     },
-                    "required": [
-                      "smiles"
-                    ],
-                    "additionalProperties": false
+                    "description": "Array of SMILES strings, same input style as amnb_nate."
                   },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "chemicals": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "oneOf": [
-                                {
-                                  "type": "integer"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "smiles": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "smiles"
-                          ],
-                          "additionalProperties": false
-                        },
-                        "description": "Array of objects with required id and smiles."
-                      },
-                      "model": {
-                        "type": "string",
-                        "enum": [
-                          "RF",
-                          "NN"
-                        ],
-                        "default": "RF"
-                      }
-                    },
-                    "required": [
-                      "chemicals"
-                    ],
-                    "additionalProperties": false
+                  "chemicals": {
+                    "type": "array",
+                    "items": {},
+                    "description": "Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility."
                   },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "chemicals": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "description": "Array of SMILES strings accepted through the legacy chemicals field for backward compatibility."
-                      },
-                      "model": {
-                        "type": "string",
-                        "enum": [
-                          "RF",
-                          "NN"
-                        ],
-                        "default": "RF"
-                      }
-                    },
-                    "required": [
-                      "chemicals"
+                  "model": {
+                    "type": "string",
+                    "enum": [
+                      "RF",
+                      "NN"
                     ],
-                    "additionalProperties": false
+                    "default": "RF"
                   }
-                ]
+                },
+                "additionalProperties": false
               },
               "examples": {
                 "smilesRequest": {
@@ -540,6 +470,32 @@
   },
   "components": {
     "schemas": {
+      "Request": {
+        "type": "object",
+        "properties": {
+          "smiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of SMILES strings, same input style as amnb_nate."
+          },
+          "chemicals": {
+            "type": "array",
+            "items": {},
+            "description": "Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "RF",
+              "NN"
+            ],
+            "default": "RF"
+          }
+        },
+        "additionalProperties": false
+      },
       "PredictionItem": {
         "type": "object",
         "properties": {

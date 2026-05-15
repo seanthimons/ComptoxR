@@ -22,12 +22,12 @@ eco_tables()
 }
 }
 \seealso{
-Other ecotox: 
-\code{\link{eco_fields}()},
-\code{\link{eco_health}()},
-\code{\link{eco_install}()},
-\code{\link{eco_inventory}()},
-\code{\link{eco_results}()},
-\code{\link{eco_species}()}
+Other ecotox:
+\code{\link[=eco_fields]{eco_fields()}},
+\code{\link[=eco_health]{eco_health()}},
+\code{\link[=eco_install]{eco_install()}},
+\code{\link[=eco_inventory]{eco_inventory()}},
+\code{\link[=eco_results]{eco_results()}},
+\code{\link[=eco_species]{eco_species()}}
 }
 \concept{ecotox}
