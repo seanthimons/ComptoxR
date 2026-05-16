@@ -584,7 +584,7 @@
   "paths": {
     "/api/amos/add_new_fact_sheet/": {
       "post": {
-        "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf<br/>",
+        "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf",
         "parameters": [
           {
             "in": "body",
@@ -688,7 +688,7 @@
     },
     "/api/amos/analytical_qc_batch_search": {
       "post": {
-        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.  Analytical QC data can be found in the general batch search, but will lack some domain-specific information that this search supplies.",
+        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.<br/>Analytical QC data can be found in the general batch search, but will lack some domain-specific information that<br/>this search supplies.",
         "parameters": [
           {
             "in": "body",
@@ -731,33 +731,6 @@
           }
         },
         "summary": "Returns information on a batch of Analytical QC documents using keyset pagination."
-      }
-    },
-    "/api/amos/analytical_qc_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of the records to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of information on Analytical QC documents."
-          }
-        },
-        "summary": "Returns information on a batch of Analytical QC documents.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction."
       }
     },
     "/api/amos/batch_search": {
@@ -872,33 +845,6 @@
           }
         },
         "summary": "Returns information on a batch of fact sheets using keyset pagination."
-      }
-    },
-    "/api/amos/fact_sheet_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of fact sheets to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of fact sheets."
-          }
-        },
-        "summary": "Returns information on a batch of fact sheets.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction."
       }
     },
     "/api/amos/find_dtxsids/{internal_id}": {
@@ -1033,29 +979,6 @@
           }
         },
         "summary": "Retrieves metadata from the database about a single fact sheet.  This is not necessarily just the metadata that"
-      }
-    },
-    "/api/amos/get_image_for_dtxsid/{dtxsid}": {
-      "get": {
-        "description": "<br/>Only substance images not available through the main CompTox API are stored in the database.",
-        "parameters": [
-          {
-            "description": "The DTXSID for the substance of interest.",
-            "in": "path",
-            "name": "dtxsid",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The PNG image of the substance."
-          },
-          "204": {
-            "description": "No image matching the DTXSID was found."
-          }
-        },
-        "summary": "Retrieves a substance's image from the database."
       }
     },
     "/api/amos/get_info_by_id/{internal_id}": {
@@ -1434,7 +1357,7 @@
     },
     "/api/amos/mass_spectra_for_substances/": {
       "post": {
-        "description": "<br/>This endpoint will not return mass spectra stored as PDFs or ones that are only externally linked.<br/><br/>IMPORTANT -- Some substances can potentially have a multiple hundreds of spectra associated with them.  Submitting large numbers of substances in an individual transaction is not advised due to potential lag.",
+        "description": "<br/>This endpoint will not return mass spectra stored as PDFs or ones that are only externally linked.<br/><br/>IMPORTANT -- Some substances can potentially have a multiple hundreds of spectra associated with them.  Submitting<br/>large numbers of substances in an individual transaction is not advised due to potential lag.",
         "parameters": [
           {
             "in": "body",
@@ -1519,33 +1442,6 @@
         "summary": "Returns information on a batch of methods using keyset pagination."
       }
     },
-    "/api/amos/method_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of method records to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of methods."
-          }
-        },
-        "summary": "Returns information on a batch of methods.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction."
-      }
-    },
     "/api/amos/method_with_spectra/{search_type}/{internal_id}": {
       "get": {
         "description": "",
@@ -1618,33 +1514,6 @@
           }
         },
         "summary": "Returns information on a batch of product declarations using keyset pagination."
-      }
-    },
-    "/api/amos/product_declaration_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of product declarations to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of product declarations."
-          }
-        },
-        "summary": "Returns information on a batch of product declarations.  Used for sending chunks of the table at a time instead of"
       }
     },
     "/api/amos/record_counts_by_dtxsid/": {
@@ -1835,33 +1704,6 @@
         "summary": "Returns information on a batch of safety data sheets using keyset pagination."
       }
     },
-    "/api/amos/safety_data_sheet_pagination/{limit}/{offset}": {
-      "get": {
-        "description": "trying to transfer all the information in one transaction.",
-        "parameters": [
-          {
-            "description": "Limit of records to return.",
-            "in": "path",
-            "name": "limit",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "description": "Offset of safety data sheets to return.",
-            "in": "path",
-            "name": "offset",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of information on a batch of safety data sheets."
-          }
-        },
-        "summary": "Returns information on a batch of safety data sheets.  Used for sending chunks of the table at a time instead of"
-      }
-    },
     "/api/amos/search/{dtxsid}": {
       "get": {
         "description": "",
@@ -1934,7 +1776,7 @@
           }
         ],
         "responses": {},
-        "summary": "Runs searches for document IDs that pass a list of submitted filters, including document metadata, substance"
+        "summary": "Runs a search for document IDs that pass a list of submitted filters, including document metadata, substance"
       }
     },
     "/api/amos/spectral_entropy/": {
@@ -1975,26 +1817,6 @@
           }
         },
         "summary": "Returns the number of spectra that have a specified methodology."
-      }
-    },
-    "/api/amos/substance_similarity_search/{dtxsid}": {
-      "get": {
-        "description": "<br/>This endpoint hits an endpoint on another API for retrieving similarity information.  This endpoint is primarily called by the get_similar_structures() endpoint, and has its similarity threshold hardcoded at 0.8.",
-        "parameters": [
-          {
-            "description": "The DTXSID for the substance of interest.",
-            "in": "path",
-            "name": "dtxsid",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of similar substances, or None if none were found."
-          }
-        },
-        "summary": "Returns a list of similar substances to a given DTXSID."
       }
     },
     "/api/amos/substances_for_classification/": {
@@ -2055,6 +1877,29 @@
           }
         },
         "summary": "Returns information on substances where the specified substring is in or equal to a name."
+      }
+    },
+    "/api/amos/update_analytical_qc_pdf_info/{internal_id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Unique ID of the fact sheet of interest.",
+            "in": "path",
+            "name": "internal_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database was updated successfully."
+          },
+          "409": {
+            "description": "Some of the new data was invalid; a list of issues will be returned."
+          }
+        },
+        "summary": "Attempts to use the submitted data to update the information related to a single spectrum PDF from Analytical QC."
       }
     },
     "/api/amos/update_fact_sheet_info/{internal_id}": {

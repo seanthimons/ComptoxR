@@ -198,41 +198,82 @@
                               "endpoint_id": {
                                 "type": "string"
                               },
-                              "value": {
-                                "oneOf": [
-                                  {
-                                    "type": "number"
+                              "model_id": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "predicted": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "oneOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      }
+                                    ],
+                                    "nullable": true
                                   },
-                                  {
-                                    "type": "boolean"
+                                  "range": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "ad": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "ad_index": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "conf_index": {
+                                    "type": "number",
+                                    "nullable": true
                                   }
-                                ],
-                                "nullable": true
+                                },
+                                "required": [
+                                  "value",
+                                  "range",
+                                  "ad",
+                                  "ad_index",
+                                  "conf_index"
+                                ]
                               },
-                              "range": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "ad": {
-                                "type": "number",
-                                "nullable": true
-                              },
-                              "ad_index": {
-                                "type": "number",
-                                "nullable": true
-                              },
-                              "conf_index": {
-                                "type": "number",
-                                "nullable": true
+                              "experimental": {
+                                "type": "object",
+                                "nullable": true,
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "oneOf": [
+                                          {
+                                            "type": "number"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ]
+                                  }
+                                ]
                               }
                             },
                             "required": [
                               "endpoint_id",
-                              "value",
-                              "range",
-                              "ad",
-                              "ad_index",
-                              "conf_index"
+                              "predicted",
+                              "experimental"
                             ]
                           }
                         },
@@ -516,41 +557,82 @@
                                 "endpoint_id": {
                                   "type": "string"
                                 },
-                                "value": {
-                                  "oneOf": [
-                                    {
-                                      "type": "number"
+                                "model_id": {
+                                  "type": "integer",
+                                  "nullable": true
+                                },
+                                "predicted": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "boolean"
+                                        }
+                                      ],
+                                      "nullable": true
                                     },
-                                    {
-                                      "type": "boolean"
+                                    "range": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "ad": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "ad_index": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "conf_index": {
+                                      "type": "number",
+                                      "nullable": true
                                     }
-                                  ],
-                                  "nullable": true
+                                  },
+                                  "required": [
+                                    "value",
+                                    "range",
+                                    "ad",
+                                    "ad_index",
+                                    "conf_index"
+                                  ]
                                 },
-                                "range": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "ad": {
-                                  "type": "number",
-                                  "nullable": true
-                                },
-                                "ad_index": {
-                                  "type": "number",
-                                  "nullable": true
-                                },
-                                "conf_index": {
-                                  "type": "number",
-                                  "nullable": true
+                                "experimental": {
+                                  "type": "object",
+                                  "nullable": true,
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "oneOf": [
+                                            {
+                                              "type": "number"
+                                            },
+                                            {
+                                              "type": "boolean"
+                                            },
+                                            {
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "nullable": true
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ]
+                                    }
+                                  ]
                                 }
                               },
                               "required": [
                                 "endpoint_id",
-                                "value",
-                                "range",
-                                "ad",
-                                "ad_index",
-                                "conf_index"
+                                "predicted",
+                                "experimental"
                               ]
                             }
                           },
@@ -849,6 +931,67 @@
           },
           "400": {
             "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/opera/report": {
+      "get": {
+        "operationId": "app.get_report_html",
+        "summary": "Generate a standalone OPERA calculation report",
+        "description": "Generates an OPERA report from the Mongo report cache",
+        "parameters": [
+          {
+            "name": "dtxsid",
+            "in": "query",
+            "description": "DSSTox substance identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "DTXSID7020182"
+          },
+          {
+            "name": "modelId",
+            "in": "query",
+            "description": "Dashboard model ID for the OPERA endpoint",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1169
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OPERA report HTML",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Report data not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Mongo report cache unavailable",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -1181,41 +1324,82 @@
                       "endpoint_id": {
                         "type": "string"
                       },
-                      "value": {
-                        "oneOf": [
-                          {
-                            "type": "number"
+                      "model_id": {
+                        "type": "integer",
+                        "nullable": true
+                      },
+                      "predicted": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "oneOf": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ],
+                            "nullable": true
                           },
-                          {
-                            "type": "boolean"
+                          "range": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "ad": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "ad_index": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "conf_index": {
+                            "type": "number",
+                            "nullable": true
                           }
-                        ],
-                        "nullable": true
+                        },
+                        "required": [
+                          "value",
+                          "range",
+                          "ad",
+                          "ad_index",
+                          "conf_index"
+                        ]
                       },
-                      "range": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "ad": {
-                        "type": "number",
-                        "nullable": true
-                      },
-                      "ad_index": {
-                        "type": "number",
-                        "nullable": true
-                      },
-                      "conf_index": {
-                        "type": "number",
-                        "nullable": true
+                      "experimental": {
+                        "type": "object",
+                        "nullable": true,
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ]
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "endpoint_id",
-                      "value",
-                      "range",
-                      "ad",
-                      "ad_index",
-                      "conf_index"
+                      "predicted",
+                      "experimental"
                     ]
                   }
                 },
@@ -1418,41 +1602,82 @@
                     "endpoint_id": {
                       "type": "string"
                     },
-                    "value": {
-                      "oneOf": [
-                        {
-                          "type": "number"
+                    "model_id": {
+                      "type": "integer",
+                      "nullable": true
+                    },
+                    "predicted": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ],
+                          "nullable": true
                         },
-                        {
-                          "type": "boolean"
+                        "range": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "ad": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "ad_index": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "conf_index": {
+                          "type": "number",
+                          "nullable": true
                         }
-                      ],
-                      "nullable": true
+                      },
+                      "required": [
+                        "value",
+                        "range",
+                        "ad",
+                        "ad_index",
+                        "conf_index"
+                      ]
                     },
-                    "range": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "ad": {
-                      "type": "number",
-                      "nullable": true
-                    },
-                    "ad_index": {
-                      "type": "number",
-                      "nullable": true
-                    },
-                    "conf_index": {
-                      "type": "number",
-                      "nullable": true
+                    "experimental": {
+                      "type": "object",
+                      "nullable": true,
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ]
+                        }
+                      ]
                     }
                   },
                   "required": [
                     "endpoint_id",
-                    "value",
-                    "range",
-                    "ad",
-                    "ad_index",
-                    "conf_index"
+                    "predicted",
+                    "experimental"
                   ]
                 }
               },
@@ -1660,41 +1885,82 @@
                 "endpoint_id": {
                   "type": "string"
                 },
-                "value": {
-                  "oneOf": [
-                    {
-                      "type": "number"
+                "model_id": {
+                  "type": "integer",
+                  "nullable": true
+                },
+                "predicted": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "oneOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        }
+                      ],
+                      "nullable": true
                     },
-                    {
-                      "type": "boolean"
+                    "range": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "ad": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "ad_index": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "conf_index": {
+                      "type": "number",
+                      "nullable": true
                     }
-                  ],
-                  "nullable": true
+                  },
+                  "required": [
+                    "value",
+                    "range",
+                    "ad",
+                    "ad_index",
+                    "conf_index"
+                  ]
                 },
-                "range": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "ad": {
-                  "type": "number",
-                  "nullable": true
-                },
-                "ad_index": {
-                  "type": "number",
-                  "nullable": true
-                },
-                "conf_index": {
-                  "type": "number",
-                  "nullable": true
+                "experimental": {
+                  "type": "object",
+                  "nullable": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  ]
                 }
               },
               "required": [
                 "endpoint_id",
-                "value",
-                "range",
-                "ad",
-                "ad_index",
-                "conf_index"
+                "predicted",
+                "experimental"
               ]
             }
           },
@@ -1731,6 +1997,87 @@
           "endpoint_id": {
             "type": "string"
           },
+          "model_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "predicted": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "nullable": true
+              },
+              "range": {
+                "type": "string",
+                "nullable": true
+              },
+              "ad": {
+                "type": "number",
+                "nullable": true
+              },
+              "ad_index": {
+                "type": "number",
+                "nullable": true
+              },
+              "conf_index": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value",
+              "range",
+              "ad",
+              "ad_index",
+              "conf_index"
+            ]
+          },
+          "experimental": {
+            "type": "object",
+            "nullable": true,
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "endpoint_id",
+          "predicted",
+          "experimental"
+        ]
+      },
+      "PredictionEndpointPredicted": {
+        "type": "object",
+        "properties": {
           "value": {
             "oneOf": [
               {
@@ -1760,12 +2107,33 @@
           }
         },
         "required": [
-          "endpoint_id",
           "value",
           "range",
           "ad",
           "ad_index",
           "conf_index"
+        ]
+      },
+      "PredictionEndpointExperimental": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "value"
         ]
       },
       "Chemical": {

@@ -26,14 +26,14 @@ dss_resolve(c("Formaldehyde", "7440-38-2", "DTXSID7020637"))
 }
 }
 \seealso{
-Other dsstox: 
-\code{\link{dss_cas}()},
-\code{\link{dss_connect}()},
-\code{\link{dss_disconnect}()},
-\code{\link{dss_fuzzy}()},
-\code{\link{dss_install}()},
-\code{\link{dss_query}()},
-\code{\link{dss_search}()},
-\code{\link{dss_synonyms}()}
+Other dsstox:
+\code{\link[=dss_cas]{dss_cas()}},
+\code{\link[=dss_connect]{dss_connect()}},
+\code{\link[=dss_disconnect]{dss_disconnect()}},
+\code{\link[=dss_fuzzy]{dss_fuzzy()}},
+\code{\link[=dss_install]{dss_install()}},
+\code{\link[=dss_query]{dss_query()}},
+\code{\link[=dss_search]{dss_search()}},
+\code{\link[=dss_synonyms]{dss_synonyms()}}
 }
 \concept{dsstox}

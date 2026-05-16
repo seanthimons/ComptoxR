@@ -419,8 +419,8 @@
                           "pfasCatsSkipMessage": "Chemical does not contain fluorine atoms and was skipped by PFAS Cats"
                         }
                       },
-                      "result": {
-                        "categories": []
+                      "error": {
+                        "message": "Chemical does not contain fluorine atoms and was skipped by PFAS Cats"
                       }
                     }
                   ]
