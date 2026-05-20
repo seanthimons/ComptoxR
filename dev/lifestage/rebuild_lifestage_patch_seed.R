@@ -24,6 +24,7 @@ required_queue_cols <- c(
   "source_ontology",
   "source_term_id",
   "source_term_label",
+  "source_term_definition",
   "harmonized_life_stage",
   "reproductive_stage",
   "reviewer",
@@ -117,14 +118,32 @@ seed <- baseline |>
     "derivation_source"
   )
 
-queue_terms <- queue |>
-  distinct(.data$org_lifestage)
-unresolved_terms <- seed |>
-  filter(.data$source_match_status != "resolved") |>
-  distinct(.data$org_lifestage)
-missing_queue <- anti_join(unresolved_terms, queue_terms, by = "org_lifestage")
-if (nrow(missing_queue) > 0L) {
-  abort(paste("Unresolved lifestage row(s) missing from curation queue:", paste(missing_queue$org_lifestage, collapse = ", ")))
+unresolved_decisions <- queue |>
+  filter(.data$proposed_action %in% c("accept_unresolved", "force_unresolved")) |>
+  transmute(
+    org_lifestage = .data$org_lifestage,
+    source_provider = if_else(!is.na(.data$source_ontology) & nzchar(.data$source_ontology), "Curated", NA_character_),
+    source_ontology = .data$source_ontology,
+    source_term_id = .data$source_term_id,
+    source_term_label = .data$source_term_label,
+    source_term_definition = .data$source_term_definition,
+    source_release = "curation_queue",
+    source_match_method = .data$proposed_action,
+    source_match_status = "unresolved",
+    candidate_rank = 1L,
+    candidate_score = 0,
+    candidate_reason = .data$decision_notes,
+    ecotox_release = seed$ecotox_release[[1]],
+    harmonized_life_stage = .data$harmonized_life_stage,
+    reproductive_stage = as.logical(.data$reproductive_stage),
+    derivation_source = "curation_queue"
+  )
+
+if (nrow(unresolved_decisions) > 0L) {
+  seed <- seed |>
+    filter(!.data$org_lifestage %in% unresolved_decisions$org_lifestage) |>
+    bind_rows(unresolved_decisions) |>
+    arrange(.data$org_lifestage, .data$candidate_rank)
 }
 
 force_candidates <- queue |>
@@ -135,7 +154,7 @@ force_candidates <- queue |>
     source_ontology = .data$source_ontology,
     source_term_id = .data$source_term_id,
     source_term_label = .data$source_term_label,
-    source_term_definition = NA_character_,
+    source_term_definition = .data$source_term_definition,
     source_release = "curation_queue",
     source_match_method = "curation_queue",
     source_match_status = "resolved",
@@ -180,6 +199,16 @@ if (nrow(change_derivation) > 0L) {
       )
     ) |>
     select(-dplyr::ends_with("_queue"), -"decision_notes")
+}
+
+queue_terms <- queue |>
+  distinct(.data$org_lifestage)
+unresolved_terms <- seed |>
+  filter(.data$source_match_status != "resolved") |>
+  distinct(.data$org_lifestage)
+missing_queue <- anti_join(unresolved_terms, queue_terms, by = "org_lifestage")
+if (nrow(missing_queue) > 0L) {
+  abort(paste("Unresolved lifestage row(s) missing from curation queue:", paste(missing_queue$org_lifestage, collapse = ", ")))
 }
 
 dir.create(dirname(seed_path), recursive = TRUE, showWarnings = FALSE)

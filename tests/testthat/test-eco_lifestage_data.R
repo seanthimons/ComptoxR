@@ -95,6 +95,39 @@ test_that("resolved seed rows have complete derivation fields", {
   testthat::expect_equal(nrow(gaps), 0L)
 })
 
+test_that("curation queue source definitions are preserved in manual seed rows", {
+  queue_path <- lifestage_project_file(
+    "dev",
+    "lifestage",
+    "curation",
+    "lifestage_curation_queue.csv"
+  )
+  testthat::skip_if_not(file.exists(queue_path), "lifestage curation queue not available")
+  seed <- lifestage_read_seed()
+  queue <- readr::read_csv(queue_path, show_col_types = FALSE)
+
+  queue_defined <- queue |>
+    dplyr::filter(
+      .data$proposed_action == "force_candidate",
+      !is.na(.data$source_term_definition),
+      nzchar(.data$source_term_definition)
+    ) |>
+    dplyr::select("org_lifestage", queue_definition = "source_term_definition")
+  seeded <- seed |>
+    dplyr::filter(.data$source_match_method == "curation_queue") |>
+    dplyr::select("org_lifestage", seed_definition = "source_term_definition")
+
+  definition_mismatches <- queue_defined |>
+    dplyr::left_join(seeded, by = "org_lifestage") |>
+    dplyr::filter(
+      is.na(.data$seed_definition) |
+        .data$queue_definition != .data$seed_definition
+    )
+
+  testthat::expect_gt(nrow(queue_defined), 0L)
+  testthat::expect_equal(nrow(definition_mismatches), 0L)
+})
+
 test_that("review seed rows have explicit status and reason", {
   seed <- lifestage_read_seed()
   review <- dplyr::filter(seed, .data$source_match_status != "resolved")
@@ -105,8 +138,53 @@ test_that("review seed rows have explicit status and reason", {
       !nzchar(.data$candidate_reason)
   )
 
-  testthat::expect_equal(nrow(review), 38L)
+  testthat::expect_equal(nrow(review), 36L)
   testthat::expect_equal(nrow(gaps), 0L)
+})
+
+test_that("curation queue force-unresolved decisions override baseline resolution", {
+  queue_path <- lifestage_project_file(
+    "dev",
+    "lifestage",
+    "curation",
+    "lifestage_curation_queue.csv"
+  )
+  testthat::skip_if_not(file.exists(queue_path), "lifestage curation queue not available")
+  seed <- lifestage_read_seed()
+  queue <- readr::read_csv(queue_path, show_col_types = FALSE)
+
+  force_unresolved_terms <- queue |>
+    dplyr::filter(.data$proposed_action == "force_unresolved") |>
+    dplyr::select("org_lifestage")
+  seeded <- seed |>
+    dplyr::semi_join(force_unresolved_terms, by = "org_lifestage")
+
+  testthat::expect_gt(nrow(force_unresolved_terms), 0L)
+  testthat::expect_equal(nrow(seeded), nrow(force_unresolved_terms))
+  testthat::expect_true(all(seeded$source_match_status == "unresolved"))
+  testthat::expect_true(all(seeded$source_match_method == "force_unresolved"))
+})
+
+test_that("reproductive-state quarantines retain reproductive metadata", {
+  seed <- lifestage_read_seed()
+  reproductive_state_terms <- c(
+    "Gestation",
+    "Lactational",
+    "Post-spawning",
+    "Postpartum",
+    "Pre-spawning",
+    "Spawning"
+  )
+  reproductive_state_rows <- seed |>
+    dplyr::filter(.data$org_lifestage %in% reproductive_state_terms)
+
+  testthat::expect_equal(
+    sort(reproductive_state_rows$org_lifestage),
+    sort(reproductive_state_terms)
+  )
+  testthat::expect_true(all(reproductive_state_rows$source_match_status == "unresolved"))
+  testthat::expect_true(all(reproductive_state_rows$harmonized_life_stage == "Other/Unknown"))
+  testthat::expect_true(all(reproductive_state_rows$reproductive_stage))
 })
 
 test_that("lifestage curation queue covers unresolved and disputed rows", {
@@ -127,6 +205,7 @@ test_that("lifestage curation queue covers unresolved and disputed rows", {
     "source_ontology",
     "source_term_id",
     "source_term_label",
+    "source_term_definition",
     "harmonized_life_stage",
     "reproductive_stage",
     "reviewer",
@@ -148,7 +227,7 @@ test_that("lifestage curation queue covers unresolved and disputed rows", {
 
   testthat::expect_equal(names(queue), required_cols)
   testthat::expect_equal(setdiff(unique(queue$proposed_action), allowed_actions), character())
-  testthat::expect_equal(nrow(unresolved_terms), 38L)
+  testthat::expect_equal(nrow(unresolved_terms), 36L)
   testthat::expect_equal(
     sort(queue_unresolved$org_lifestage),
     sort(unresolved_terms$org_lifestage)

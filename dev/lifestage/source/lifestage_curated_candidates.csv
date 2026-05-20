@@ -1,25 +1,28 @@
-"org_lifestage","source_ontology","source_term_id","source_term_label","candidate_aliases"
-"Eyed egg or stage, eyed embryo","S11","S1106","embryo","Eyed egg or stage, eyed embryo | eyed egg eyed embryo developing embryo"
-"Fry","S11","S115","fry","Fry | fry young fish hatched"
-"Grain or seed formation stage","PO","PO:0007042","whole plant fruit formation stage","Grain or seed formation stage | whole plant fruit formation stage"
-"Heading","PO","PO:0007041","inflorescence emergence stage","Heading | inflorescence emergence stage"
-"Mature","UBERON","UBERON:0000113","post-juvenile adult stage","Mature | mature adult fully developed"
-"Mature dormant","PO","PO:0007132","sporophyte dormant stage","Mature dormant | dormancy mature plant quiescent"
-"Mature vegetative","PO","PO:0007134","sporophyte vegetative stage","Mature vegetative | vegetative growth mature plant"
-"Mature, pit-hardening stage (fruit trees)","PO","PO:0007042","whole plant fruit formation stage","Mature, pit-hardening stage (fruit trees) | whole plant fruit formation stage"
-"Mature, post-bloom stage (fruit trees)","PO","PO:0007042","whole plant fruit formation stage","Mature, post-bloom stage (fruit trees) | whole plant fruit formation stage"
-"Mature, side-green stage (fruit trees)","PO","PO:0007042","whole plant fruit formation stage","Mature, side-green stage (fruit trees) | whole plant fruit formation stage"
-"New, newly or recent hatch","UBERON","UBERON:0007221","neonate stage","New, newly or recent hatch | hatchling newly hatched neonatal"
-"Post-emergence","UBERON","UBERON:0000113","post-juvenile adult stage","Post-emergence | post-emergence insect adult emerged"
-"Post-hatch","UBERON","UBERON:0000092","post-embryonic stage","Post-hatch | post-hatching hatchling"
-"Prepupal","UBERON","UBERON:0003142","prepupa","Prepupal | prepupa insect pupal stage"
-"Protolarvae","UBERON","UBERON:0000069","larval stage","Protolarvae | protolarva fish early larval stage"
-"Sac fry, yolk sac fry","S11","S115","fry","Sac fry, yolk sac fry | sac fry yolk sac fry fish larva"
-"Sapling","S11","S1127","juvenile","Sapling | young tree juvenile plant"
-"Sporeling","PO","PO:0008037","juvenile vascular leaf stage","Sporeling | sporeling young plant spore germination"
-"Subadult","UBERON","UBERON:0000112","sexually immature stage","Subadult | subadult pre-adult sexually immature"
-"Swim-up","S11","S115","fry","Swim-up | swim-up fry fish larval swimming"
-"Tiller stage","PO","PO:0007073","2 formation of axillary shoot stage","Tiller stage | tillering grass lateral shoot vegetative"
-"Yolk sac larvae, sac larvae","S11","S1187","yolk-sac larva","Yolk sac larvae, sac larvae | yolk-sac larva fish early larva"
-"Young","S11","S1127","juvenile","Young | young juvenile immature"
-"Zygospore","S11","S1134","resting spore","Zygospore | zygospore fungal algal resting spore"
+org_lifestage,source_ontology,source_term_id,source_term_label,candidate_aliases
+Bud blast stage,PO,PO:0025532,bud burst stage,Bud blast stage | bud burst stage
+"Eyed egg or stage, eyed embryo",S11,S1106,embryo,"Eyed egg or stage, eyed embryo | eyed egg eyed embryo developing embryo"
+Fry,FOODON,FOODON:00004318,fry (fish),Fry | fry young fish hatched | fish fry
+Grain or seed formation stage,PO,PO:0007042,whole plant fruit formation stage,Grain or seed formation stage | whole plant fruit formation stage
+Heading,PO,PO:0007041,inflorescence emergence stage,Heading | inflorescence emergence stage
+Mature,UBERON,UBERON:0000113,post-juvenile adult stage,Mature | mature adult fully developed
+Mature dormant,PO,PO:0007132,sporophyte dormant stage,Mature dormant | dormancy mature plant quiescent
+Mature vegetative,PO,PO:0007134,sporophyte vegetative stage,Mature vegetative | vegetative growth mature plant
+"Mature, pit-hardening stage (fruit trees)",PO,PO:0007042,whole plant fruit formation stage,"Mature, pit-hardening stage (fruit trees) | whole plant fruit formation stage"
+"Mature, post-bloom stage (fruit trees)",PO,PO:0007042,whole plant fruit formation stage,"Mature, post-bloom stage (fruit trees) | whole plant fruit formation stage"
+"Mature, side-green stage (fruit trees)",PO,PO:0007042,whole plant fruit formation stage,"Mature, side-green stage (fruit trees) | whole plant fruit formation stage"
+Mid-neurula,AMPHX,AMPHX:0000043,neurula-N3 stage,Mid-neurula | neurula-N3 stage
+Neurala,UBERON,UBERON:0000110,neurula stage,Neurala | neurula stage
+"New, newly or recent hatch",FOODON,FOODON:00004300,hatchling,"New, newly or recent hatch | hatchling newly hatched neonatal"
+Post-emergence,UBERON,UBERON:0000113,post-juvenile adult stage,Post-emergence | post-emergence insect adult emerged
+Post-hatch,FOODON,FOODON:00004300,hatchling,Post-hatch | post-hatching hatchling
+Prepupal,UBERON,UBERON:0003142,prepupa,Prepupal | prepupa insect pupal stage
+Protolarvae,UBERON,UBERON:0000069,larval stage,Protolarvae | protolarva fish early larval stage
+"Sac fry, yolk sac fry",S11,S1187,yolk-sac larva,"Sac fry, yolk sac fry | sac fry yolk sac fry fish larva | yolk-sac larva"
+Sapling,S11,S1127,juvenile,Sapling | young tree juvenile plant
+Sporeling,PO,PO:0008037,juvenile vascular leaf stage,Sporeling | sporeling young plant spore germination
+Subadult,UBERON,UBERON:0000112,sexually immature stage,Subadult | subadult pre-adult sexually immature
+Swim-up,FOODON,FOODON:00004318,fry (fish),Swim-up | swim-up fry fish larval swimming | fish fry
+Tiller stage,PO,PO:0007073,2 formation of axillary shoot stage,Tiller stage | tillering grass lateral shoot vegetative
+"Yolk sac larvae, sac larvae",S11,S1187,yolk-sac larva,"Yolk sac larvae, sac larvae | yolk-sac larva fish early larva"
+Young,S11,S1127,juvenile,Young | young juvenile immature
+Zygospore,S11,S1134,resting spore,Zygospore | zygospore fungal algal resting spore

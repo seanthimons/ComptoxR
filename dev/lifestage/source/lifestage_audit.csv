@@ -1,76 +1,76 @@
 org_lifestage,triage_bucket,resolution_path,candidate_source,notes
 Alevin,alias_synonym,manual_derivation,S11:S115,Fish juvenile stage (pre-feeding salmon/trout after hatching)
-Bud blast stage,needs_ontology_expansion,manual_curator,NA,Plant bud-break phenology stage; no accepted ontology mapping under current source set
+Bud blast stage,alias_synonym,manual_derivation,PO:0025532,OLS4 Plant Ontology exact bud burst stage provides a source-backed phenology mapping; promote from requery with conservative plant adult-stage harmonization.
 Copepodid,alias_synonym,manual_derivation,UBERON:0014858,Invertebrate larval stage (copepod development after nauplius)
 Elver,alias_synonym,manual_derivation,S11:S1127,Fish juvenile stage (young eel synonym)
-Exponential growth phase (log),out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
-F0 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F1 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F11 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F2 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F3 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F6 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
-F7 generation,out_of_scope_biology,permanently_unresolved,NA,"Generational designation, not a developmental stage"
+Exponential growth phase (log),out_of_scope_biology,permanently_unresolved,,"Microbial growth phase, not a life stage"
+F0 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F1 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F11 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F2 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F3 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F6 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
+F7 generation,out_of_scope_biology,permanently_unresolved,,"Generational designation, not a developmental stage"
 Fingerling,alias_synonym,manual_derivation,S11:S1170,Fish juvenile stage (small freshwater fish synonym)
 Froglet,alias_synonym,manual_derivation,UBERON:0000112,Amphibian metamorphic stage (juvenile frog after tail resorption)
-Fry,alias_synonym,manual_derivation,S11:S115,Fish juvenile stage (newly hatched fish synonym)
-Gamete,out_of_scope_biology,permanently_unresolved,NA,"Gamete/cell-type label, not a developmental life stage"
-Gestation,out_of_scope_biology,permanently_unresolved,NA,"Pregnancy physiological process, not a developmental life stage"
+Fry,alias_synonym,manual_derivation,FOODON:00004318,Fish fry source term with exact broad fry semantics; harmonizes to Juvenile.
+Gamete,out_of_scope_biology,permanently_unresolved,,"Gamete/cell-type label, not a developmental life stage"
+Gestation,out_of_scope_biology,permanently_unresolved,,"Pregnancy physiological process, not a developmental life stage"
 Glochidia,alias_synonym,manual_derivation,UBERON:0002548,Bivalve larval stage (parasitic mussel larvae)
 Grain or seed formation stage,needs_ontology_expansion,manual_derivation,PO:0007042,Plant reproductive stage (grain fill); needs PO grain-specific expansion
 Heading,needs_ontology_expansion,manual_derivation,PO:0007041,Grass reproductive stage (ear emergence); needs PO/AGROVOC expansion
 Imago,alias_synonym,manual_derivation,S11:S1116,Insect adult stage synonym (final imago stage)
-Intermolt,ambiguous,manual_curator,NA,Arthropod state between molts; biologically meaningful but not a clean harmonized life-stage mapping
+Intermolt,ambiguous,manual_curator,,Arthropod state between molts; biologically meaningful but not a clean harmonized life-stage mapping
 Jointing,needs_ontology_expansion,manual_derivation,PO:0007079,Grass vegetative stage (internode elongation); needs PO expansion
-Lactational,out_of_scope_biology,permanently_unresolved,NA,"Reproductive physiological state; reproductive-adjacent, not a life stage"
-Lag growth phase,out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
-Larva-pupa,ambiguous,manual_curator,NA,Mixed metamorphic label spanning larval and pupal stages; not a single harmonized stage
+Lactational,out_of_scope_biology,permanently_unresolved,,"Reproductive physiological state; reproductive-adjacent, not a life stage"
+Lag growth phase,out_of_scope_biology,permanently_unresolved,,"Microbial growth phase, not a life stage"
+Larva-pupa,ambiguous,manual_curator,,Mixed metamorphic label spanning larval and pupal stages; not a single harmonized stage
 Mature (full-bloom stage) organism,needs_ontology_expansion,manual_derivation,PO:0007016,Plant full bloom qualifier; ambiguous organism-level term needing expansion
 Mature dormant,needs_ontology_expansion,manual_derivation,PO:0007132,Plant dormancy qualifier; needs PO/AGROVOC expansion
 Mature reproductive,needs_ontology_expansion,manual_derivation,S11:S1116,Reproductive-phase qualifier; needs ontology expansion
 Mature vegetative,needs_ontology_expansion,manual_derivation,PO:0007134,Vegetative-phase qualifier; needs PO expansion
-Mid-neurula,alias_synonym,manual_curator,NA,Amphibian embryo stage (mid-neurulation phase synonym)
-Molt,ambiguous,manual_curator,NA,Arthropod ecdysis event/state; not a single harmonized developmental stage
-Multiple,ambiguous,manual_curator,NA,Multiple life stages combined; not a single resolvable developmental stage
+Mid-neurula,alias_synonym,manual_derivation,AMPHX:0000043,OLS4 AMPHX gives a specific mid-neurula amphibian stage; promote from requery as embryo-stage source-backed mapping.
+Molt,ambiguous,manual_curator,,Arthropod ecdysis event/state; not a single harmonized developmental stage
+Multiple,ambiguous,manual_curator,,Multiple life stages combined; not a single resolvable developmental stage
 Naiad,alias_synonym,manual_derivation,UBERON:0002548,Insect aquatic nymph synonym (Odonata/Ephemeroptera)
-Neurala,alias_synonym,manual_curator,NA,Amphibian embryo stage (neurula stage variant spelling)
-"New, newly or recent hatch",ambiguous,manual_derivation,UBERON:0007221,Ambiguous across fish/amphibian/invertebrate hatchling stages
-Not coded,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
-Not intact,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
-Not reported,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
-"Oocyte, ova",out_of_scope_biology,permanently_unresolved,NA,"Gamete/cell-type label, not a developmental life stage"
+Neurala,alias_synonym,manual_derivation,UBERON:0000110,Treat ECOTOX spelling variant as neurula stage; OLS4/UBERON provides stable source-backed embryo-stage mapping.
+"New, newly or recent hatch",ambiguous,manual_derivation,FOODON:00004300,"General newly hatched animal label; exact hatchling source, still taxonomically broad."
+Not coded,administrative_noise,manual_derivation,,Maps to Unspecified; no ontology source; data quality artifact
+Not intact,administrative_noise,manual_derivation,,Maps to Unspecified; no ontology source; data quality artifact
+Not reported,administrative_noise,manual_derivation,,Maps to Unspecified; no ontology source; data quality artifact
+"Oocyte, ova",out_of_scope_biology,permanently_unresolved,,"Gamete/cell-type label, not a developmental life stage"
 Parr,alias_synonym,manual_derivation,S11:S1127,Fish juvenile stage (salmon parr with finger-mark patterns)
 Post-emergence,alias_synonym,manual_derivation,UBERON:0000113,Insect post-emergence stage synonym (after adult emerges)
-Post-hatch,alias_synonym,manual_derivation,UBERON:0000092,General post-hatching stage synonym
-Post-molt,ambiguous,manual_curator,NA,Arthropod post-ecdysis state; not a single harmonized developmental stage
-Post-spawning,out_of_scope_biology,permanently_unresolved,NA,"Post-reproductive event; reproductive-adjacent, not a developmental stage"
-Postpartum,out_of_scope_biology,permanently_unresolved,NA,"Post-birth physiological period; reproductive-adjacent, not a life stage"
+Post-hatch,alias_synonym,manual_derivation,FOODON:00004300,General post-hatching/hatchling stage synonym; use hatchling source instead of post-embryonic stage.
+Post-molt,ambiguous,manual_curator,,Arthropod post-ecdysis state; not a single harmonized developmental stage
+Post-spawning,out_of_scope_biology,permanently_unresolved,,"Post-reproductive event; reproductive-adjacent, not a developmental stage"
+Postpartum,out_of_scope_biology,permanently_unresolved,,"Post-birth physiological period; reproductive-adjacent, not a life stage"
 Pre-hatch,alias_synonym,manual_derivation,S11:S1106,General pre-hatching stage synonym
-Pre-molt,ambiguous,manual_curator,NA,Arthropod pre-ecdysis state; not a single harmonized developmental stage
-Pre-spawning,out_of_scope_biology,permanently_unresolved,NA,"Pre-reproductive event; reproductive-adjacent, not a developmental stage"
+Pre-molt,ambiguous,manual_curator,,Arthropod pre-ecdysis state; not a single harmonized developmental stage
+Pre-spawning,out_of_scope_biology,permanently_unresolved,,"Pre-reproductive event; reproductive-adjacent, not a developmental stage"
 Prebloom,alias_synonym,manual_derivation,PO:0025528,Plant pre-flowering stage synonym
 Prepupal,alias_synonym,manual_derivation,UBERON:0003142,Insect prepupal stage synonym (before pupal stage)
 Prolarva,alias_synonym,manual_derivation,S11:S1128,Fish early larval stage synonym (pre-larva variant)
 Protolarvae,alias_synonym,manual_derivation,UBERON:0000069,Fish early larval stage synonym (proto-larva variant)
 Pullet,alias_synonym,manual_derivation,S11:S1127,Poultry juvenile stage synonym (young hen before first egg)
-"Pollen, pollen grain",out_of_scope_biology,permanently_unresolved,NA,"Plant gametophyte structure/cell-type label, not an organism developmental life stage"
-Rooted cuttings,out_of_scope_biology,permanently_unresolved,NA,"Plant propagation material, not a developmental life stage"
-Rootstock,out_of_scope_biology,permanently_unresolved,NA,"Plant propagation material or structure, not a developmental life stage"
+"Pollen, pollen grain",out_of_scope_biology,permanently_unresolved,,"Plant gametophyte structure/cell-type label, not an organism developmental life stage"
+Rooted cuttings,out_of_scope_biology,permanently_unresolved,,"Plant propagation material, not a developmental life stage"
+Rootstock,out_of_scope_biology,permanently_unresolved,,"Plant propagation material or structure, not a developmental life stage"
 Sapling,alias_synonym,manual_derivation,S11:S1127,Plant juvenile stage synonym (young tree)
 Scape elongation,needs_ontology_expansion,manual_derivation,PO:0007089,Plant bolt stage (scape = flowering stem); needs PO expansion
 Sexually mature,ambiguous,manual_derivation,S11:S1116,Ambiguous across taxa; overlaps Adult/Subadult/Reproductive categories
-Shoot,out_of_scope_biology,permanently_unresolved,NA,"Plant structure label, not a developmental life stage"
-Spawning,out_of_scope_biology,permanently_unresolved,NA,"Reproductive event/activity, not a developmental life stage"
-Sperm,out_of_scope_biology,permanently_unresolved,NA,"Gamete or cell-type label, not a developmental life stage"
+Shoot,out_of_scope_biology,permanently_unresolved,,"Plant structure label, not a developmental life stage"
+Spawning,out_of_scope_biology,permanently_unresolved,,"Reproductive event/activity, not a developmental life stage"
+Sperm,out_of_scope_biology,permanently_unresolved,,"Gamete or cell-type label, not a developmental life stage"
 Sporeling,alias_synonym,manual_derivation,PO:0008037,Plant/algae juvenile stage (young plant from spore)
-Stationary growth phase,out_of_scope_biology,permanently_unresolved,NA,"Microbial growth phase, not a life stage"
+Stationary growth phase,out_of_scope_biology,permanently_unresolved,,"Microbial growth phase, not a life stage"
 Subadult,alias_synonym,manual_derivation,UBERON:0000112,Pre-adult stage synonym (sexually immature but near adult size)
-Swim-up,alias_synonym,manual_derivation,S11:S115,Fish larval stage synonym (sac fry beginning active swimming)
+Swim-up,alias_synonym,manual_derivation,FOODON:00004318,Fish swim-up/free-feeding fry stage; use broad fish fry source term.
 Tiller stage,needs_ontology_expansion,manual_derivation,PO:0007073,Grass vegetative stage (lateral shoot development); needs AGROVOC expansion
-Trophozoite,ambiguous,manual_curator,NA,Protozoan feeding-form stage; biologically real but not a clean fit to the harmonized stage model
-Turion,ambiguous,manual_curator,NA,Plant dormant propagule term with competing PO shoot-system candidates; not yet a clean single-source mapping
+Trophozoite,ambiguous,manual_curator,,Protozoan feeding-form stage; biologically real but not a clean fit to the harmonized stage model
+Turion,ambiguous,manual_curator,,Plant dormant propagule term with competing PO shoot-system candidates; not yet a clean single-source mapping
 Underyearling,alias_synonym,manual_derivation,S11:S1127,Fish juvenile stage synonym (less than 1 year old)
-Unspecified,administrative_noise,manual_derivation,NA,Maps to Unspecified; no ontology source; data quality artifact
+Unspecified,administrative_noise,manual_derivation,,Maps to Unspecified; no ontology source; data quality artifact
 Virgin,alias_synonym,manual_derivation,UBERON:0000113,Invertebrate reproductive stage synonym (unmated adult female)
 Weanling,alias_synonym,manual_derivation,S11:S1127,Mammal juvenile stage synonym (recently weaned offspring)
 Yearling,alias_synonym,manual_derivation,S11:S1127,Animal juvenile stage synonym (1-2 years old)

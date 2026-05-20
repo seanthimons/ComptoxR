@@ -1,63 +1,63 @@
-org_lifestage,current_status,proposed_action,query_override,source_ontology,source_term_id,source_term_label,harmonized_life_stage,reproductive_stage,reviewer,decision_notes
-Bud blast stage,unresolved,requery,,,,,Other/Unknown,FALSE,,Plant bud-break phenology stage; no accepted ontology mapping under current source set
-Exponential growth phase (log),unresolved,requery,,,,,Other/Unknown,FALSE,,"Microbial growth phase, not a life stage"
-"Eyed egg or stage, eyed embryo",disputed_ambiguous_route,force_candidate,,S11,S1106,embryo,Egg/Embryo,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-F0 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F1 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F11 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F2 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F3 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F6 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-F7 generation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Generational designation, not a developmental stage"
-Fry,disputed_ambiguous_route,force_candidate,,SsalDv,SsalDv:0000039,alevin stage,Juvenile,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Gamete,unresolved,requery,,,,,Other/Unknown,FALSE,,"Gamete/cell-type label, not a developmental life stage"
-Gestation,unresolved,requery,,,,,Other/Unknown,FALSE,,"Pregnancy physiological process, not a developmental life stage"
-Grain or seed formation stage,disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Heading,disputed_ambiguous_route,force_candidate,,PO,PO:0007008,IE.02 1/2 of inflorescence emerged from flag leaf sheath stage,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Intermolt,unresolved,requery,,,,,Other/Unknown,FALSE,,Arthropod state between molts; biologically meaningful but not a clean harmonized life-stage mapping
-Lactational,unresolved,requery,,,,,Other/Unknown,FALSE,,"Reproductive physiological state; reproductive-adjacent, not a life stage"
-Lag growth phase,unresolved,requery,,,,,Other/Unknown,FALSE,,"Microbial growth phase, not a life stage"
-Larva-pupa,unresolved,requery,,,,,Other/Unknown,FALSE,,Mixed metamorphic label spanning larval and pupal stages; not a single harmonized stage
-Mature,disputed_ambiguous_route,force_candidate,,PO,PO:0001016,L mature pollen stage,Adult,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Mature dormant,disputed_no_source_backed_candidate,force_unresolved,,PO,PO:0007132,sporophyte dormant stage,Senescent/Dormant,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Mature vegetative,disputed_no_source_backed_candidate,force_unresolved,,PO,PO:0007134,sporophyte vegetative stage,Adult,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-"Mature, pit-hardening stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-"Mature, post-bloom stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-"Mature, side-green stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Mid-neurula,unresolved,requery,,,,,Other/Unknown,FALSE,,Amphibian embryo stage (mid-neurulation phase synonym)
-Molt,unresolved,requery,,,,,Other/Unknown,FALSE,,Arthropod ecdysis event/state; not a single harmonized developmental stage
-Multiple,unresolved,requery,,,,,Other/Unknown,FALSE,,Multiple life stages combined; not a single resolvable developmental stage
-Neurala,unresolved,requery,,,,,Other/Unknown,FALSE,,Amphibian embryo stage (neurula stage variant spelling)
-"New, newly or recent hatch",disputed_no_source_backed_candidate,force_unresolved,,UBERON,UBERON:0007221,neonate stage,Larva,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Not coded,unresolved,requery,,,,,Unspecified,FALSE,,Maps to Unspecified; no ontology source; data quality artifact
-Not intact,unresolved,requery,,,,,Unspecified,FALSE,,Maps to Unspecified; no ontology source; data quality artifact
-Not reported,unresolved,requery,,,,,Unspecified,FALSE,,Maps to Unspecified; no ontology source; data quality artifact
-"Oocyte, ova",unresolved,requery,,,,,Other/Unknown,FALSE,,"Gamete/cell-type label, not a developmental life stage"
-"Pollen, pollen grain",unresolved,requery,,,,,Other/Unknown,FALSE,,"Plant gametophyte structure/cell-type label, not an organism developmental life stage"
-Post-emergence,disputed_no_source_backed_candidate,force_unresolved,,UBERON,UBERON:0000113,post-juvenile adult stage,Adult,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Post-hatch,disputed_no_source_backed_candidate,force_unresolved,,UBERON,UBERON:0000092,post-embryonic stage,Egg/Embryo,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Post-molt,unresolved,requery,,,,,Other/Unknown,FALSE,,Arthropod post-ecdysis state; not a single harmonized developmental stage
-Post-spawning,unresolved,requery,,,,,Other/Unknown,FALSE,,"Post-reproductive event; reproductive-adjacent, not a developmental stage"
-Postpartum,unresolved,requery,,,,,Other/Unknown,FALSE,,"Post-birth physiological period; reproductive-adjacent, not a life stage"
-Pre-molt,unresolved,requery,,,,,Other/Unknown,FALSE,,Arthropod pre-ecdysis state; not a single harmonized developmental stage
-Pre-spawning,unresolved,requery,,,,,Other/Unknown,FALSE,,"Pre-reproductive event; reproductive-adjacent, not a developmental stage"
-Prepupal,disputed_ambiguous_route,force_candidate,,UBERON,UBERON:0000070,pupal stage,Larva,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Protolarvae,disputed_ambiguous_route,force_candidate,,DpseDv,DpseDv:0000003,larval stage,Larva,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Rooted cuttings,unresolved,requery,,,,,Other/Unknown,FALSE,,"Plant propagation material, not a developmental life stage"
-Rootstock,unresolved,requery,,,,,Other/Unknown,FALSE,,"Plant propagation material or structure, not a developmental life stage"
-"Sac fry, yolk sac fry",disputed_no_source_backed_candidate,force_unresolved,,S11,S115,fry,Juvenile,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Sapling,disputed_semantic_change,force_candidate,,PO,PO:0007134,sporophyte vegetative stage,Adult,FALSE,baseline_curation,Automated replacement changes harmonized semantics; retain curated source-backed bridge.
-Shoot,unresolved,requery,,,,,Other/Unknown,FALSE,,"Plant structure label, not a developmental life stage"
-Spawning,unresolved,requery,,,,,Other/Unknown,FALSE,,"Reproductive event/activity, not a developmental life stage"
-Sperm,unresolved,requery,,,,,Other/Unknown,FALSE,,"Gamete or cell-type label, not a developmental life stage"
-Sporeling,disputed_no_source_backed_candidate,force_unresolved,,PO,PO:0008037,juvenile vascular leaf stage,Juvenile,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Stationary growth phase,unresolved,requery,,,,,Other/Unknown,FALSE,,"Microbial growth phase, not a life stage"
-Subadult,disputed_ambiguous_route,force_candidate,,S11,S1116,adult,Juvenile,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Swim-up,disputed_no_source_backed_candidate,force_unresolved,,S11,S115,fry,Juvenile,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Tiller stage,disputed_no_source_backed_candidate,force_unresolved,,PO,PO:0007073,2 formation of axillary shoot stage,Adult,FALSE,baseline_curation,Automated run produced no resolved source-backed candidate; retain curated source-backed bridge.
-Trophozoite,unresolved,requery,,,,,Other/Unknown,FALSE,,Protozoan feeding-form stage; biologically real but not a clean fit to the harmonized stage model
-Turion,unresolved,requery,,,,,Other/Unknown,FALSE,,Plant dormant propagule term with competing PO shoot-system candidates; not yet a clean single-source mapping
-Unspecified,unresolved,requery,,,,,Unspecified,FALSE,,Maps to Unspecified; no ontology source; data quality artifact
-"Yolk sac larvae, sac larvae",disputed_ambiguous_route,force_candidate,,S11,S1128,larva,Larva,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Young,disputed_ambiguous_route,force_candidate,,S11,S1127,juvenile,Juvenile,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
-Zygospore,disputed_ambiguous_route,force_candidate,,S11,S1134,resting spore,Senescent/Dormant,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+org_lifestage,current_status,proposed_action,query_override,source_ontology,source_term_id,source_term_label,source_term_definition,harmonized_life_stage,reproductive_stage,reviewer,decision_notes
+Bud blast stage,unresolved,force_candidate,bud burst stage,PO,PO:0025532,bud burst stage,A shoot system development stage during which a shoot system emerges from the bud.,Adult,FALSE,baseline_curation,OLS4 Plant Ontology exact bud burst stage provides a source-backed phenology mapping; promote from requery with conservative plant adult-stage harmonization.
+Exponential growth phase (log),unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Microbial growth phase, not a life stage"
+"Eyed egg or stage, eyed embryo",disputed_ambiguous_route,force_candidate,,S11,S1106,embryo,The developing unborn or unhatched offspring of a multicellular organism.,Egg/Embryo,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+F0 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F1 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F11 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F2 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F3 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F6 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+F7 generation,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Generational designation, not a developmental stage"
+Fry,disputed_ambiguous_route,force_candidate,,FOODON,FOODON:00004318,fry (fish),A fish that is recently hatched and has reached the stage where its yolk-sac has almost disappeared and its swim bladder is operational to the point where the fish can actively feed for itself.,Juvenile,FALSE,baseline_curation,Usage-priority review: replace narrow salmon alevin bridge with exact broad fish fry source; harmonized stage remains Juvenile.
+Gamete,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Gamete/cell-type label, not a developmental life stage"
+Gestation,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Pregnancy reproductive physiological state; quarantined because it is not a developmental life stage"
+Grain or seed formation stage,disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,A whole plant fruit formation stage that spans the interval when the average size of fruits on a whole plant has reached 50% to 70% of its final size.,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Heading,disputed_ambiguous_route,force_candidate,,PO,PO:0007008,IE.02 1/2 of inflorescence emerged from flag leaf sheath stage,The stage at which 1/2 of inflorescence has emerged from flag leaf sheath.,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Intermolt,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Arthropod state between molts; biologically meaningful but not a clean harmonized life-stage mapping
+Lactational,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Lactational reproductive physiological state; quarantined because it is not a developmental life stage"
+Lag growth phase,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Microbial growth phase, not a life stage"
+Larva-pupa,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Mixed metamorphic label spanning larval and pupal stages; not a single harmonized stage
+Mature,disputed_ambiguous_route,force_candidate,,PO,PO:0001016,L mature pollen stage,Stage of microgametophyte development during which the pollen reaches mature stage and desiccates.,Adult,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Mature dormant,disputed_no_source_backed_candidate,force_candidate,,PO,PO:0007132,sporophyte dormant stage,A sporophyte development stage during which a sporophyte participates in a dormancy process.,Senescent/Dormant,FALSE,baseline_curation,Audit and curated-candidate artifacts provide a stable source-backed ontology term; promote to manual force_candidate with definition preserved.
+Mature vegetative,disputed_no_source_backed_candidate,force_candidate,,PO,PO:0007134,sporophyte vegetative stage,A sporophyte development stage that occurs during the interval between the first division of a plant zygote and the formation of a sporangium.,Adult,FALSE,baseline_curation,Audit and curated-candidate artifacts provide a stable source-backed ontology term; promote to manual force_candidate with definition preserved.
+"Mature, pit-hardening stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,A whole plant fruit formation stage that spans the interval when the average size of fruits on a whole plant has reached 50% to 70% of its final size.,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+"Mature, post-bloom stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,A whole plant fruit formation stage that spans the interval when the average size of fruits on a whole plant has reached 50% to 70% of its final size.,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+"Mature, side-green stage (fruit trees)",disputed_ambiguous_route,force_candidate,,PO,PO:0007007,whole plant fruit formation stage 50 to 70%,A whole plant fruit formation stage that spans the interval when the average size of fruits on a whole plant has reached 50% to 70% of its final size.,Adult,TRUE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Mid-neurula,unresolved,force_candidate,mid neurula,AMPHX,AMPHX:0000043,neurula-N3 stage,6-7 somite pairs,Egg/Embryo,FALSE,baseline_curation,OLS4 AMPHX gives a specific mid-neurula amphibian stage; promote from requery as embryo-stage source-backed mapping.
+Molt,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Arthropod ecdysis event/state; not a single harmonized developmental stage
+Multiple,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Multiple life stages combined; not a single resolvable developmental stage
+Neurala,unresolved,force_candidate,neurula stage,UBERON,UBERON:0000110,neurula stage,A chordate developmental stage defined by formation of the neural tube from the neural plate.,Egg/Embryo,FALSE,baseline_curation,Treat ECOTOX spelling variant as neurula stage; OLS4/UBERON provides stable source-backed embryo-stage mapping.
+"New, newly or recent hatch",disputed_no_source_backed_candidate,force_candidate,,FOODON,FOODON:00004300,hatchling,A newly hatched animal.,Larva,FALSE,baseline_curation,Usage-priority review: replace overbroad neonate bridge with exact hatchling source; retain Larva harmonization used for newly hatched stages.
+Not coded,unresolved,accept_unresolved,,,,,,Unspecified,FALSE,baseline_curation,Maps to Unspecified; no ontology source; data quality artifact
+Not intact,unresolved,accept_unresolved,,,,,,Unspecified,FALSE,baseline_curation,Maps to Unspecified; no ontology source; data quality artifact
+Not reported,unresolved,accept_unresolved,,,,,,Unspecified,FALSE,baseline_curation,Maps to Unspecified; no ontology source; data quality artifact
+"Oocyte, ova",unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Gamete/cell-type label, not a developmental life stage"
+"Pollen, pollen grain",unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Plant gametophyte structure/cell-type label, not an organism developmental life stage"
+Post-emergence,disputed_no_source_backed_candidate,force_candidate,,UBERON,UBERON:0000113,post-juvenile adult stage,The stage of being a sexually mature adult animal.,Adult,FALSE,baseline_curation,Audit and curated-candidate artifacts provide a stable source-backed ontology term; promote to manual force_candidate with definition preserved.
+Post-hatch,disputed_no_source_backed_candidate,force_candidate,,FOODON,FOODON:00004300,hatchling,A newly hatched animal.,Larva,FALSE,baseline_curation,Usage-priority review: replace post-embryonic source that harmonized to Egg/Embryo with hatchling source and Larva harmonization.
+Post-molt,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Arthropod post-ecdysis state; not a single harmonized developmental stage
+Post-spawning,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Post-reproductive event/state; quarantined because it is not a developmental stage"
+Postpartum,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Post-birth reproductive physiological period; quarantined because it is not a developmental life stage"
+Pre-molt,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Arthropod pre-ecdysis state; not a single harmonized developmental stage
+Pre-spawning,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Pre-reproductive event/state; quarantined because it is not a developmental stage"
+Prepupal,disputed_ambiguous_route,force_candidate,,UBERON,UBERON:0000070,pupal stage,A life cycle stage of holometabolous insects in which the organism is a pupa and starts with larval-pupal apolysis and ends with pupal-adult apolysis.,Larva,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Protolarvae,disputed_ambiguous_route,force_candidate,,DpseDv,DpseDv:0000003,larval stage,A distinct juvenile stage many animals undergo before metamorphosis into adults.,Larva,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Rooted cuttings,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Plant propagation material, not a developmental life stage"
+Rootstock,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Plant propagation material or structure, not a developmental life stage"
+"Sac fry, yolk sac fry",disputed_no_source_backed_candidate,force_candidate,,S11,S1187,yolk-sac larva,A fish life stage between hatching and until complete absorption of yolk-sac.,Larva,FALSE,baseline_curation,Usage-priority review: raw term explicitly indicates sac/yolk-sac fry; use NVS yolk-sac larva instead of invalid S11:S115 fry bridge.
+Sapling,disputed_semantic_change,force_candidate,,PO,PO:0007134,sporophyte vegetative stage,A sporophyte development stage that occurs during the interval between the first division of a plant zygote and the formation of a sporangium.,Adult,FALSE,baseline_curation,Automated replacement changes harmonized semantics; retain curated source-backed bridge.
+Shoot,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Plant structure label, not a developmental life stage"
+Spawning,unresolved,accept_unresolved,,,,,,Other/Unknown,TRUE,baseline_curation,"Reproductive event/activity; quarantined because it is not a developmental life stage"
+Sperm,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Gamete or cell-type label, not a developmental life stage"
+Sporeling,disputed_no_source_backed_candidate,force_unresolved,,PO,PO:0008037,juvenile vascular leaf stage,,Juvenile,FALSE,baseline_curation,Retain candidate metadata for review only; do not ship as a resolved dictionary mapping without source-backed support.
+Stationary growth phase,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,"Microbial growth phase, not a life stage"
+Subadult,disputed_ambiguous_route,force_candidate,,S11,S1116,adult,An animal that has reached sexual maturity,Juvenile,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Swim-up,disputed_no_source_backed_candidate,force_candidate,,FOODON,FOODON:00004318,fry (fish),A fish that is recently hatched and has reached the stage where its yolk-sac has almost disappeared and its swim bladder is operational to the point where the fish can actively feed for itself.,Juvenile,FALSE,baseline_curation,Usage-priority review: swim-up is a free-feeding fry state; use exact broad fish fry source and keep Juvenile harmonization.
+Tiller stage,disputed_no_source_backed_candidate,force_candidate,,PO,PO:0007073,2 formation of axillary shoot stage,The stage at which the axillary shoots are forming.,Adult,FALSE,baseline_curation,Audit and curated-candidate artifacts provide a stable source-backed ontology term; promote to manual force_candidate with definition preserved.
+Trophozoite,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Protozoan feeding-form stage; biologically real but not a clean fit to the harmonized stage model
+Turion,unresolved,accept_unresolved,,,,,,Other/Unknown,FALSE,baseline_curation,Plant dormant propagule term with competing PO shoot-system candidates; not yet a clean single-source mapping
+Unspecified,unresolved,accept_unresolved,,,,,,Unspecified,FALSE,baseline_curation,Maps to Unspecified; no ontology source; data quality artifact
+"Yolk sac larvae, sac larvae",disputed_ambiguous_route,force_candidate,,S11,S1187,yolk-sac larva,A fish life stage between hatching and until complete absorption of yolk-sac.,Larva,FALSE,baseline_curation,Usage-priority review: keep exact NVS yolk-sac larva instead of broader larva replacement.
+Young,disputed_ambiguous_route,force_candidate,,S11,S1127,juvenile,An animal that has not yet reached sexual maturity,Juvenile,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
+Zygospore,disputed_ambiguous_route,force_candidate,,S11,S1134,resting spore,"A resting spore is a dormant, environmentally resistant spore stage.",Senescent/Dormant,FALSE,baseline_curation,Automated run produced ambiguous candidates; retain curated source-backed bridge.
