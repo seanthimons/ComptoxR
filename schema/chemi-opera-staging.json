@@ -202,75 +202,78 @@
                                 "type": "integer",
                                 "nullable": true
                               },
-                              "value": {
-                                "oneOf": [
-                                  {
-                                    "type": "number"
+                              "predicted": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "oneOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      }
+                                    ],
+                                    "nullable": true
                                   },
-                                  {
-                                    "type": "boolean"
-                                  }
-                                ],
-                                "nullable": true
-                              },
-                              "range": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "ad": {
-                                "type": "number",
-                                "nullable": true
-                              },
-                              "ad_index": {
-                                "type": "number",
-                                "nullable": true
-                              },
-                              "conf_index": {
-                                "type": "number",
-                                "nullable": true
-                              },
-                              "experimental_value": {
-                                "oneOf": [
-                                  {
-                                    "type": "number"
+                                  "range": {
+                                    "type": "string",
+                                    "nullable": true
                                   },
-                                  {
-                                    "type": "boolean"
+                                  "ad": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "ad_index": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "conf_index": {
+                                    "type": "number",
+                                    "nullable": true
                                   }
-                                ],
+                                },
+                                "required": [
+                                  "value",
+                                  "range",
+                                  "ad",
+                                  "ad_index",
+                                  "conf_index"
+                                ]
+                              },
+                              "experimental": {
+                                "type": "object",
                                 "nullable": true,
-                                "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-                              },
-                              "experimental_string": {
-                                "type": "string",
-                                "nullable": true,
-                                "description": "Cached OPERA experimental text/class label, when available."
-                              },
-                              "experimental_raw_value": {
-                                "type": "number",
-                                "nullable": true,
-                                "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-                              },
-                              "experimental_source": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "experimental_source_name": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "experimental_prediction_id": {
-                                "type": "integer",
-                                "nullable": true
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "oneOf": [
+                                          {
+                                            "type": "number"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ],
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ]
+                                  }
+                                ]
                               }
                             },
                             "required": [
                               "endpoint_id",
-                              "value",
-                              "range",
-                              "ad",
-                              "ad_index",
-                              "conf_index"
+                              "predicted",
+                              "experimental"
                             ]
                           }
                         },
@@ -558,75 +561,78 @@
                                   "type": "integer",
                                   "nullable": true
                                 },
-                                "value": {
-                                  "oneOf": [
-                                    {
-                                      "type": "number"
+                                "predicted": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "boolean"
+                                        }
+                                      ],
+                                      "nullable": true
                                     },
-                                    {
-                                      "type": "boolean"
-                                    }
-                                  ],
-                                  "nullable": true
-                                },
-                                "range": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "ad": {
-                                  "type": "number",
-                                  "nullable": true
-                                },
-                                "ad_index": {
-                                  "type": "number",
-                                  "nullable": true
-                                },
-                                "conf_index": {
-                                  "type": "number",
-                                  "nullable": true
-                                },
-                                "experimental_value": {
-                                  "oneOf": [
-                                    {
-                                      "type": "number"
+                                    "range": {
+                                      "type": "string",
+                                      "nullable": true
                                     },
-                                    {
-                                      "type": "boolean"
+                                    "ad": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "ad_index": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "conf_index": {
+                                      "type": "number",
+                                      "nullable": true
                                     }
-                                  ],
+                                  },
+                                  "required": [
+                                    "value",
+                                    "range",
+                                    "ad",
+                                    "ad_index",
+                                    "conf_index"
+                                  ]
+                                },
+                                "experimental": {
+                                  "type": "object",
                                   "nullable": true,
-                                  "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-                                },
-                                "experimental_string": {
-                                  "type": "string",
-                                  "nullable": true,
-                                  "description": "Cached OPERA experimental text/class label, when available."
-                                },
-                                "experimental_raw_value": {
-                                  "type": "number",
-                                  "nullable": true,
-                                  "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-                                },
-                                "experimental_source": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "experimental_source_name": {
-                                  "type": "string",
-                                  "nullable": true
-                                },
-                                "experimental_prediction_id": {
-                                  "type": "integer",
-                                  "nullable": true
+                                  "allOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "oneOf": [
+                                            {
+                                              "type": "number"
+                                            },
+                                            {
+                                              "type": "boolean"
+                                            },
+                                            {
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "nullable": true
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ]
+                                    }
+                                  ]
                                 }
                               },
                               "required": [
                                 "endpoint_id",
-                                "value",
-                                "range",
-                                "ad",
-                                "ad_index",
-                                "conf_index"
+                                "predicted",
+                                "experimental"
                               ]
                             }
                           },
@@ -1322,75 +1328,78 @@
                         "type": "integer",
                         "nullable": true
                       },
-                      "value": {
-                        "oneOf": [
-                          {
-                            "type": "number"
+                      "predicted": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "oneOf": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ],
+                            "nullable": true
                           },
-                          {
-                            "type": "boolean"
-                          }
-                        ],
-                        "nullable": true
-                      },
-                      "range": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "ad": {
-                        "type": "number",
-                        "nullable": true
-                      },
-                      "ad_index": {
-                        "type": "number",
-                        "nullable": true
-                      },
-                      "conf_index": {
-                        "type": "number",
-                        "nullable": true
-                      },
-                      "experimental_value": {
-                        "oneOf": [
-                          {
-                            "type": "number"
+                          "range": {
+                            "type": "string",
+                            "nullable": true
                           },
-                          {
-                            "type": "boolean"
+                          "ad": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "ad_index": {
+                            "type": "number",
+                            "nullable": true
+                          },
+                          "conf_index": {
+                            "type": "number",
+                            "nullable": true
                           }
-                        ],
+                        },
+                        "required": [
+                          "value",
+                          "range",
+                          "ad",
+                          "ad_index",
+                          "conf_index"
+                        ]
+                      },
+                      "experimental": {
+                        "type": "object",
                         "nullable": true,
-                        "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-                      },
-                      "experimental_string": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "Cached OPERA experimental text/class label, when available."
-                      },
-                      "experimental_raw_value": {
-                        "type": "number",
-                        "nullable": true,
-                        "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-                      },
-                      "experimental_source": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "experimental_source_name": {
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "experimental_prediction_id": {
-                        "type": "integer",
-                        "nullable": true
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ],
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ]
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "endpoint_id",
-                      "value",
-                      "range",
-                      "ad",
-                      "ad_index",
-                      "conf_index"
+                      "predicted",
+                      "experimental"
                     ]
                   }
                 },
@@ -1597,75 +1606,78 @@
                       "type": "integer",
                       "nullable": true
                     },
-                    "value": {
-                      "oneOf": [
-                        {
-                          "type": "number"
+                    "predicted": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ],
+                          "nullable": true
                         },
-                        {
-                          "type": "boolean"
-                        }
-                      ],
-                      "nullable": true
-                    },
-                    "range": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "ad": {
-                      "type": "number",
-                      "nullable": true
-                    },
-                    "ad_index": {
-                      "type": "number",
-                      "nullable": true
-                    },
-                    "conf_index": {
-                      "type": "number",
-                      "nullable": true
-                    },
-                    "experimental_value": {
-                      "oneOf": [
-                        {
-                          "type": "number"
+                        "range": {
+                          "type": "string",
+                          "nullable": true
                         },
-                        {
-                          "type": "boolean"
+                        "ad": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "ad_index": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "conf_index": {
+                          "type": "number",
+                          "nullable": true
                         }
-                      ],
+                      },
+                      "required": [
+                        "value",
+                        "range",
+                        "ad",
+                        "ad_index",
+                        "conf_index"
+                      ]
+                    },
+                    "experimental": {
+                      "type": "object",
                       "nullable": true,
-                      "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-                    },
-                    "experimental_string": {
-                      "type": "string",
-                      "nullable": true,
-                      "description": "Cached OPERA experimental text/class label, when available."
-                    },
-                    "experimental_raw_value": {
-                      "type": "number",
-                      "nullable": true,
-                      "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-                    },
-                    "experimental_source": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "experimental_source_name": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "experimental_prediction_id": {
-                      "type": "integer",
-                      "nullable": true
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ]
+                        }
+                      ]
                     }
                   },
                   "required": [
                     "endpoint_id",
-                    "value",
-                    "range",
-                    "ad",
-                    "ad_index",
-                    "conf_index"
+                    "predicted",
+                    "experimental"
                   ]
                 }
               },
@@ -1877,75 +1889,78 @@
                   "type": "integer",
                   "nullable": true
                 },
-                "value": {
-                  "oneOf": [
-                    {
-                      "type": "number"
+                "predicted": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "oneOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        }
+                      ],
+                      "nullable": true
                     },
-                    {
-                      "type": "boolean"
-                    }
-                  ],
-                  "nullable": true
-                },
-                "range": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "ad": {
-                  "type": "number",
-                  "nullable": true
-                },
-                "ad_index": {
-                  "type": "number",
-                  "nullable": true
-                },
-                "conf_index": {
-                  "type": "number",
-                  "nullable": true
-                },
-                "experimental_value": {
-                  "oneOf": [
-                    {
-                      "type": "number"
+                    "range": {
+                      "type": "string",
+                      "nullable": true
                     },
-                    {
-                      "type": "boolean"
+                    "ad": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "ad_index": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "conf_index": {
+                      "type": "number",
+                      "nullable": true
                     }
-                  ],
+                  },
+                  "required": [
+                    "value",
+                    "range",
+                    "ad",
+                    "ad_index",
+                    "conf_index"
+                  ]
+                },
+                "experimental": {
+                  "type": "object",
                   "nullable": true,
-                  "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-                },
-                "experimental_string": {
-                  "type": "string",
-                  "nullable": true,
-                  "description": "Cached OPERA experimental text/class label, when available."
-                },
-                "experimental_raw_value": {
-                  "type": "number",
-                  "nullable": true,
-                  "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-                },
-                "experimental_source": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "experimental_source_name": {
-                  "type": "string",
-                  "nullable": true
-                },
-                "experimental_prediction_id": {
-                  "type": "integer",
-                  "nullable": true
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  ]
                 }
               },
               "required": [
                 "endpoint_id",
-                "value",
-                "range",
-                "ad",
-                "ad_index",
-                "conf_index"
+                "predicted",
+                "experimental"
               ]
             }
           },
@@ -1986,6 +2001,83 @@
             "type": "integer",
             "nullable": true
           },
+          "predicted": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "nullable": true
+              },
+              "range": {
+                "type": "string",
+                "nullable": true
+              },
+              "ad": {
+                "type": "number",
+                "nullable": true
+              },
+              "ad_index": {
+                "type": "number",
+                "nullable": true
+              },
+              "conf_index": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "value",
+              "range",
+              "ad",
+              "ad_index",
+              "conf_index"
+            ]
+          },
+          "experimental": {
+            "type": "object",
+            "nullable": true,
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "value"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "endpoint_id",
+          "predicted",
+          "experimental"
+        ]
+      },
+      "PredictionEndpointPredicted": {
+        "type": "object",
+        "properties": {
           "value": {
             "oneOf": [
               {
@@ -2012,49 +2104,36 @@
           "conf_index": {
             "type": "number",
             "nullable": true
-          },
-          "experimental_value": {
+          }
+        },
+        "required": [
+          "value",
+          "range",
+          "ad",
+          "ad_index",
+          "conf_index"
+        ]
+      },
+      "PredictionEndpointExperimental": {
+        "type": "object",
+        "properties": {
+          "value": {
             "oneOf": [
               {
                 "type": "number"
               },
               {
                 "type": "boolean"
+              },
+              {
+                "type": "string"
               }
             ],
-            "nullable": true,
-            "description": "Cached OPERA experimental value in the same display units as `value`, when available."
-          },
-          "experimental_string": {
-            "type": "string",
-            "nullable": true,
-            "description": "Cached OPERA experimental text/class label, when available."
-          },
-          "experimental_raw_value": {
-            "type": "number",
-            "nullable": true,
-            "description": "Raw numeric experimental value from the QSAR PostgreSQL dashboard table."
-          },
-          "experimental_source": {
-            "type": "string",
-            "nullable": true
-          },
-          "experimental_source_name": {
-            "type": "string",
-            "nullable": true
-          },
-          "experimental_prediction_id": {
-            "type": "integer",
             "nullable": true
           }
         },
         "required": [
-          "endpoint_id",
-          "value",
-          "range",
-          "ad",
-          "ad_index",
-          "conf_index"
+          "value"
         ]
       },
       "Chemical": {

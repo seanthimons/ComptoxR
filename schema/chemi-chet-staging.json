@@ -852,6 +852,115 @@
         }
       }
     },
+    "/chemicals/suggest": {
+      "get": {
+        "summary": "Suggest CheT chemicals for look-ahead search",
+        "operationId": "api.chemicals.suggest",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "User-entered chemical name, DTXSID, CASRN, or resolver-supported identifier."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 8,
+              "minimum": 1,
+              "maximum": 25
+            }
+          },
+          {
+            "in": "query",
+            "name": "only_in_reactions",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "true"
+            },
+            "description": "If true, only suggest chemicals that participate in at least one reaction."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chemical suggestion response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "chemical_ID": {
+                            "type": "integer"
+                          },
+                          "dtxsid": {
+                            "type": "string"
+                          },
+                          "primary_name": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "casrn": {
+                            "type": "string"
+                          },
+                          "smiles": {
+                            "type": "string"
+                          },
+                          "inchi": {
+                            "type": "string"
+                          },
+                          "representative": {
+                            "type": "string"
+                          },
+                          "reaction_count": {
+                            "type": "integer"
+                          },
+                          "matched_by": {
+                            "type": "string",
+                            "enum": [
+                              "resolver",
+                              "dtxsid",
+                              "casrn",
+                              "name",
+                              "local"
+                            ]
+                          },
+                          "in_chet": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    },
+                    "length": {
+                      "type": "integer"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "resolver_available": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/chemicals/database/stats": {
       "get": {
         "summary": "Chemical stats and library names",

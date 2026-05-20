@@ -678,10 +678,10 @@
           "unit": {
             "type": "string"
           },
-          "headerNameWithUnits": {
+          "fullName": {
             "type": "string"
           },
-          "fullName": {
+          "headerNameWithUnits": {
             "type": "string"
           }
         }
