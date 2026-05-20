@@ -1230,7 +1230,9 @@
       "ProtocolRecord": {
         "type": "object",
         "properties": {
-          "parent": {},
+          "parent": {
+            "$ref": "#/components/schemas/ProtocolRecord"
+          },
           "original": {
             "$ref": "#/components/schemas/ChemicalRecord"
           },
@@ -1471,6 +1473,12 @@
         "properties": {
           "id": {
             "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HazardTestType"
+            }
           }
         }
       }
