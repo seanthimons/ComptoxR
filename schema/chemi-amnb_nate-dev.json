@@ -272,58 +272,38 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "smiles": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "required": [
-                      "smiles"
-                    ],
-                    "additionalProperties": false
+                "type": "object",
+                "properties": {
+                  "smiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "chemicals": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "oneOf": [
-                                {
-                                  "type": "integer"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
+                  "chemicals": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "oneOf": [
+                            {
+                              "type": "integer"
                             },
-                            "smiles": {
+                            {
                               "type": "string"
                             }
-                          },
-                          "required": [
-                            "id",
-                            "smiles"
-                          ],
-                          "additionalProperties": false
+                          ]
+                        },
+                        "smiles": {
+                          "type": "string"
                         }
-                      }
-                    },
-                    "required": [
-                      "chemicals"
-                    ],
-                    "additionalProperties": false
+                      },
+                      "additionalProperties": false
+                    }
                   }
-                ]
+                },
+                "additionalProperties": false
               },
               "examples": {
                 "smilesRequest": {
@@ -586,58 +566,38 @@
   "components": {
     "schemas": {
       "Request": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "smiles": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            },
-            "required": [
-              "smiles"
-            ],
-            "additionalProperties": false
+        "type": "object",
+        "properties": {
+          "smiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          {
-            "type": "object",
-            "properties": {
-              "chemicals": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "oneOf": [
-                        {
-                          "type": "integer"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
+          "chemicals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
                     },
-                    "smiles": {
+                    {
                       "type": "string"
                     }
-                  },
-                  "required": [
-                    "id",
-                    "smiles"
-                  ],
-                  "additionalProperties": false
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
                 }
-              }
-            },
-            "required": [
-              "chemicals"
-            ],
-            "additionalProperties": false
+              },
+              "additionalProperties": false
+            }
           }
-        ]
+        },
+        "additionalProperties": false
       },
       "SmilesRequest": {
         "type": "object",

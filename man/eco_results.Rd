@@ -104,12 +104,12 @@ eco_results(eco_group = "Fish", endpoint = c("LC50", "EC50"))
 }
 }
 \seealso{
-Other ecotox: 
-\code{\link{eco_fields}()},
-\code{\link{eco_health}()},
-\code{\link{eco_install}()},
-\code{\link{eco_inventory}()},
-\code{\link{eco_species}()},
-\code{\link{eco_tables}()}
+Other ecotox:
+\code{\link[=eco_fields]{eco_fields()}},
+\code{\link[=eco_health]{eco_health()}},
+\code{\link[=eco_install]{eco_install()}},
+\code{\link[=eco_inventory]{eco_inventory()}},
+\code{\link[=eco_species]{eco_species()}},
+\code{\link[=eco_tables]{eco_tables()}}
 }
 \concept{ecotox}

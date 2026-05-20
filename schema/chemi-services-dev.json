@@ -734,14 +734,14 @@
           "message": {
             "type": "string"
           },
+          "modelName": {
+            "type": "string"
+          },
           "dataColumns": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PassedColumn"
             }
-          },
-          "modelName": {
-            "type": "string"
           }
         }
       },

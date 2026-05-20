@@ -23,12 +23,12 @@ toxval_fields("toxval")
 }
 }
 \seealso{
-Other toxval: 
-\code{\link{toxval_health}()},
-\code{\link{toxval_install}()},
-\code{\link{toxval_results}()},
-\code{\link{toxval_search}()},
-\code{\link{toxval_sources}()},
-\code{\link{toxval_tables}()}
+Other toxval:
+\code{\link[=toxval_health]{toxval_health()}},
+\code{\link[=toxval_install]{toxval_install()}},
+\code{\link[=toxval_results]{toxval_results()}},
+\code{\link[=toxval_search]{toxval_search()}},
+\code{\link[=toxval_sources]{toxval_sources()}},
+\code{\link[=toxval_tables]{toxval_tables()}}
 }
 \concept{toxval}

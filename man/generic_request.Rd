@@ -47,15 +47,19 @@ Cannot be used with batching (batch_limit > 1).}
 
 \item{content_type}{Expected response content type. Defaults to "application/json".
 Supported types:
-- "application/json": Parses response as JSON (default behavior)
-- "text/plain": Returns response as character string
-- "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image}
+\itemize{
+\item "application/json": Parses response as JSON (default behavior)
+\item "text/plain": Returns response as character string
+\item "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
+}}
 
 \item{body_type}{How to encode the request body for POST requests. Defaults to "json".
 Supported types:
-- "json": Send as JSON array via \code{httr2::req_body_json()} (default)
-- "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
-with content type "text/plain". Used for endpoints like /chemical/search/equal/.}
+\itemize{
+\item "json": Send as JSON array via \code{httr2::req_body_json()} (default)
+\item "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
+with content type "text/plain". Used for endpoints like /chemical/search/equal/.
+}}
 
 \item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
 Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
@@ -69,9 +73,11 @@ Acts as a safety limit to prevent runaway pagination loops.}
 Usually set by generated stubs from Phase 19 metadata.}
 
 \item{...}{Additional parameters:
-- If method is "POST": Added as query parameters to the URL.
-- If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
-- If method is "GET" and batch_limit > 1: Added as query parameters to the URL.}
+\itemize{
+\item If method is "POST": Added as query parameters to the URL.
+\item If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
+\item If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
+}}
 }
 \value{
 Depends on content_type:
