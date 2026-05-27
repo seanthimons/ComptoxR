@@ -151,6 +151,58 @@
         }
       }
     },
+    "NewAnalyticalQCSpectrum": {
+      "properties": {
+        "annotation": {
+          "description": "Annotation for the spectrum.  Can be empty.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "description": "DTXSID for the spectrum.  Required.",
+          "type": "string"
+        },
+        "file": {
+          "description": "Spectrum to add.  Should be a file with an extension of .jdx, .json, or .pdf.",
+          "type": "file"
+        },
+        "first_timepoint": {
+          "description": "Quality descriptor for the sample at the initial timepoint.",
+          "type": "string"
+        },
+        "flags": {
+          "description": "List of substance flags pertaining to the spectrum's substance.  Can be empty but should not be null.",
+          "type": "array"
+        },
+        "last_timepoint": {
+          "description": "Quality descriptor for the sample at the measured timepoint.",
+          "type": "string"
+        },
+        "lcms_amen_neg_true": {
+          "description": "Substance level (?) amenability flag for ESI- work.",
+          "type": "string"
+        },
+        "lcms_amen_pos_true": {
+          "description": "Substance level (?) amenability flag for ESI+ work.",
+          "type": "string"
+        },
+        "methodology": {
+          "description": "Analytical methodology for the spectrum.  Should be either GC/MS, LC/MS, or NMR.  Required.",
+          "type": "string"
+        },
+        "sample_id": {
+          "description": "ID of the tested sample.",
+          "type": "string"
+        },
+        "stability_call": {
+          "description": "Stability call for the sample at the time of measurement.",
+          "type": "string"
+        },
+        "timepoint": {
+          "description": "Elapsed time (in months) that the sample has been at room temperature.  Should be formatted as \"T[# of months]\".",
+          "type": "string"
+        }
+      }
+    },
     "NewDocument": {
       "properties": {
         "file": {
@@ -582,6 +634,22 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/amos/add_aqc_spectrum/": {
+      "post": {
+        "description": "(.jdx), and a specific form of JSON.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/NewAnalyticalQCSpectrum"
+            }
+          }
+        ],
+        "responses": {},
+        "summary": "Loads a new spectrum into the database for Analytical QC.  This is intended to accept only PDFs, JCAMP-DX files"
+      }
+    },
     "/api/amos/add_new_fact_sheet/": {
       "post": {
         "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf",
