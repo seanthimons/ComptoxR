@@ -686,6 +686,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "toxicity": {
+            "type": "integer",
+            "format": "int32"
+          },
           "stereo": {
             "type": "integer",
             "format": "int32"
