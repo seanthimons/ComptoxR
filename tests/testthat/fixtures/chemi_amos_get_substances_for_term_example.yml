@@ -1,0 +1,21 @@
+http_interactions:
+- request:
+    method: GET
+    uri: https://hcd.rtpnc.epa.gov/api/amos/get_substances_for_search_term/DTXSID7020182
+  response:
+    status: 200
+    headers:
+      Server: nginx/1.30.0
+      Date: Mon, 08 Jun 2026 20:16:01 GMT
+      Content-Type: application/json
+      Transfer-Encoding: chunked
+      Connection: keep-alive
+      Vary: Accept-Encoding
+      Access-Control-Allow-Origin: '*'
+      Content-Encoding: gzip
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+    body:
+      string: |
+        {"ambiguity":null,"substances":{"casrn":"80-05-7","dtxcid":"DTXCID30182","dtxsid":"DTXSID7020182","image_in_comptox":true,"indigo_inchikey":"IISBACLAFKSPIT-UHFFFAOYSA-N","jchem_inchikey":"IISBACLAFKSPIT-UHFFFAOYSA-N","molecular_formula":"C15H16O2","monoisotopic_mass":228.11504,"preferred_name":"Bisphenol A","smiles":"CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1"}}
+  recorded_at: 2026-06-08 20:16:03
+recorded_with: VCR-vcr/2.1.0

@@ -14,6 +14,7 @@ Sys.setenv("run_verbose" = "FALSE")
 # Set server URLs directly as environment variables
 Sys.setenv("ctx_burl" = "https://comptox.epa.gov/ctx-api/")
 Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api")
+Sys.setenv("cts_burl" = "https://qed.epa.gov/cts/rest")
 Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api")
 Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm")
 

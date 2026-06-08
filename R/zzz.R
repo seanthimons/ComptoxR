@@ -28,6 +28,10 @@ run_setup <- function() {
 			display_url = Sys.getenv("cc_burl"),
 			ping_url = Sys.getenv("cc_burl")
 		),
+		"CTS API" = list(
+			display_url = Sys.getenv("cts_burl"),
+			ping_url = paste0(Sys.getenv("cts_burl"), "/cts")
+		),
 		"PubChem PUG REST" = list(
 			display_url = Sys.getenv("pubchem_burl"),
 			ping_url = paste0(Sys.getenv("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
@@ -404,6 +408,38 @@ chemi_server <- function(server = NULL) {
 	}
 }
 
+#' Set API endpoint for Chemical Transformation Simulator (CTS)
+#'
+#' @param server Defines what server to target. If `NULL`, the server URL is
+#'   reset. Valid options are:
+#'   \itemize{
+#'     \item Production: 1
+#'   }
+#'
+#' @return Should return the Sys Env variable `cts_burl`
+#' @export
+cts_server <- function(server = NULL) {
+	if (is.null(server)) {
+		{
+			cli::cli_alert_danger("Server URL reset!")
+			Sys.setenv("cts_burl" = "")
+		}
+	} else {
+		switch(
+			as.character(server),
+			"1" = Sys.setenv("cts_burl" = "https://qed.epa.gov/cts/rest"),
+			{
+				cli::cli_alert_warning("Invalid server option selected!")
+				cli::cli_alert_info("Valid option is 1 (Production).")
+				cli::cli_alert_warning("Server URL reset!")
+				Sys.setenv("cts_burl" = "")
+			}
+		)
+
+		Sys.getenv("cts_burl")
+	}
+}
+
 #' Set API endpoints for EPI Suite API endpoints
 #'
 #' @param server Defines what server to target
@@ -730,6 +766,8 @@ reset_servers <- function() {
 	ctx_server()
 	# Reset Cheminformatics server URL
 	chemi_server()
+	# Reset CTS server URL
+	cts_server()
 	# Reset EPI Suite server URL
 	epi_server()
 	# Reset ECOTOX server URL
@@ -793,6 +831,7 @@ reset_servers <- function() {
 			# DEV version defaults (only if not already set)
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
+			if (Sys.getenv("cts_burl") == "") cts_server(server = 1)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
 			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
@@ -812,6 +851,7 @@ reset_servers <- function() {
 			# Production version defaults (only if not already set)
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 1)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 1)
+			if (Sys.getenv("cts_burl") == "") cts_server(server = 1)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
 			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
