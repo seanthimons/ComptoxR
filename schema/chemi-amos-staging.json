@@ -1,5 +1,92 @@
 {
   "definitions": {
+    "AnalyticalQCFilteredListRequest": {
+      "example": {
+        "cursor": "",
+        "dtxsid": "",
+        "filters": {
+          "study": {
+            "filterType": "set",
+            "values": [
+              "OPANS LCMS"
+            ]
+          },
+          "timepoint": {
+            "filterType": "set",
+            "values": [
+              "T0"
+            ]
+          }
+        },
+        "full_table": "",
+        "include_total": false,
+        "sortModel": [
+          {
+            "colId": "study",
+            "sort": "asc"
+          }
+        ]
+      },
+      "properties": {
+        "cursor": {
+          "default": "",
+          "description": "Optional keyset cursor returned by a previous response.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "default": "",
+          "description": "Optional DTXSID substance filter.",
+          "type": "string"
+        },
+        "filterModel": {
+          "default": {},
+          "description": "Alias for filters.",
+          "type": "object"
+        },
+        "filters": {
+          "default": {},
+          "description": "AG Grid filter model keyed by table field name.",
+          "type": "object"
+        },
+        "full_table": {
+          "default": "",
+          "description": "Text to match across searchable table columns.",
+          "type": "string"
+        },
+        "include_total": {
+          "default": false,
+          "description": "If true, include total filtered record count in pagination.",
+          "type": "boolean"
+        },
+        "quickFilter": {
+          "default": "",
+          "description": "Alias for full_table.",
+          "type": "string"
+        },
+        "sortModel": {
+          "default": [],
+          "description": "Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request.",
+          "items": {
+            "properties": {
+              "colId": {
+                "description": "Field to sort by.",
+                "type": "string"
+              },
+              "sort": {
+                "description": "Sort direction.",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      }
+    },
     "BatchSearchAdditionalMassSpectrumInfo": {
       "properties": {
         "all": {
@@ -137,6 +224,92 @@
         }
       }
     },
+    "FactSheetFilteredListRequest": {
+      "example": {
+        "cursor": "",
+        "document_text": "",
+        "dtxsid": "",
+        "filters": {
+          "internal_id": {
+            "filter": "FS-",
+            "filterType": "text",
+            "type": "startsWith"
+          }
+        },
+        "full_table": "",
+        "include_total": false,
+        "sortModel": [
+          {
+            "colId": "year_published",
+            "sort": "desc"
+          }
+        ]
+      },
+      "properties": {
+        "cursor": {
+          "default": "",
+          "description": "Optional keyset cursor returned by a previous response.",
+          "type": "string"
+        },
+        "document_text": {
+          "default": "",
+          "description": "Optional full-text document search.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "default": "",
+          "description": "Optional DTXSID substance filter.",
+          "type": "string"
+        },
+        "filterModel": {
+          "default": {},
+          "description": "Alias for filters.",
+          "type": "object"
+        },
+        "filters": {
+          "default": {},
+          "description": "AG Grid filter model keyed by table field name.",
+          "type": "object"
+        },
+        "full_table": {
+          "default": "",
+          "description": "Text to match across searchable table columns.",
+          "type": "string"
+        },
+        "include_total": {
+          "default": false,
+          "description": "If true, include total filtered record count in pagination.",
+          "type": "boolean"
+        },
+        "quickFilter": {
+          "default": "",
+          "description": "Alias for full_table.",
+          "type": "string"
+        },
+        "sortModel": {
+          "default": [],
+          "description": "Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request.",
+          "items": {
+            "properties": {
+              "colId": {
+                "description": "Field to sort by.",
+                "type": "string"
+              },
+              "sort": {
+                "description": "Sort direction.",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      }
+    },
     "MassRangeSubstanceSearchRequest": {
       "properties": {
         "lower_mass_limit": {
@@ -148,6 +321,92 @@
           "description": "Upper limit of the mass range to search for.",
           "example": 194.2,
           "type": "number"
+        }
+      }
+    },
+    "MethodFilteredListRequest": {
+      "example": {
+        "cursor": "",
+        "document_text": "",
+        "dtxsid": "",
+        "filters": {
+          "internal_id": {
+            "filter": "GJ-",
+            "filterType": "text",
+            "type": "startsWith"
+          }
+        },
+        "full_table": "",
+        "include_total": false,
+        "sortModel": [
+          {
+            "colId": "method_name",
+            "sort": "asc"
+          }
+        ]
+      },
+      "properties": {
+        "cursor": {
+          "default": "",
+          "description": "Optional keyset cursor returned by a previous response.",
+          "type": "string"
+        },
+        "document_text": {
+          "default": "",
+          "description": "Optional full-text document search.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "default": "",
+          "description": "Optional DTXSID substance filter.",
+          "type": "string"
+        },
+        "filterModel": {
+          "default": {},
+          "description": "Alias for filters.",
+          "type": "object"
+        },
+        "filters": {
+          "default": {},
+          "description": "AG Grid filter model keyed by table field name.",
+          "type": "object"
+        },
+        "full_table": {
+          "default": "",
+          "description": "Text to match across searchable table columns.",
+          "type": "string"
+        },
+        "include_total": {
+          "default": false,
+          "description": "If true, include total filtered record count in pagination.",
+          "type": "boolean"
+        },
+        "quickFilter": {
+          "default": "",
+          "description": "Alias for full_table.",
+          "type": "string"
+        },
+        "sortModel": {
+          "default": [],
+          "description": "Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request.",
+          "items": {
+            "properties": {
+              "colId": {
+                "description": "Field to sort by.",
+                "type": "string"
+              },
+              "sort": {
+                "description": "Sort direction.",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
         }
       }
     },
@@ -255,6 +514,92 @@
         }
       }
     },
+    "ProductDeclarationFilteredListRequest": {
+      "example": {
+        "cursor": "",
+        "document_text": "",
+        "dtxsid": "",
+        "filters": {
+          "internal_id": {
+            "filter": "PD-",
+            "filterType": "text",
+            "type": "startsWith"
+          }
+        },
+        "full_table": "",
+        "include_total": false,
+        "sortModel": [
+          {
+            "colId": "manufacturer",
+            "sort": "asc"
+          }
+        ]
+      },
+      "properties": {
+        "cursor": {
+          "default": "",
+          "description": "Optional keyset cursor returned by a previous response.",
+          "type": "string"
+        },
+        "document_text": {
+          "default": "",
+          "description": "Optional full-text document search.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "default": "",
+          "description": "Optional DTXSID substance filter.",
+          "type": "string"
+        },
+        "filterModel": {
+          "default": {},
+          "description": "Alias for filters.",
+          "type": "object"
+        },
+        "filters": {
+          "default": {},
+          "description": "AG Grid filter model keyed by table field name.",
+          "type": "object"
+        },
+        "full_table": {
+          "default": "",
+          "description": "Text to match across searchable table columns.",
+          "type": "string"
+        },
+        "include_total": {
+          "default": false,
+          "description": "If true, include total filtered record count in pagination.",
+          "type": "boolean"
+        },
+        "quickFilter": {
+          "default": "",
+          "description": "Alias for full_table.",
+          "type": "string"
+        },
+        "sortModel": {
+          "default": [],
+          "description": "Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request.",
+          "items": {
+            "properties": {
+              "colId": {
+                "description": "Field to sort by.",
+                "type": "string"
+              },
+              "sort": {
+                "description": "Sort direction.",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      }
+    },
     "RecordCountsByDTXSIDRequest": {
       "properties": {
         "dtxsids": {
@@ -265,6 +610,92 @@
           ],
           "items": {
             "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "SafetyDataSheetFilteredListRequest": {
+      "example": {
+        "cursor": "",
+        "document_text": "",
+        "dtxsid": "",
+        "filters": {
+          "internal_id": {
+            "filter": "SDS-",
+            "filterType": "text",
+            "type": "startsWith"
+          }
+        },
+        "full_table": "",
+        "include_total": false,
+        "sortModel": [
+          {
+            "colId": "sds_name",
+            "sort": "asc"
+          }
+        ]
+      },
+      "properties": {
+        "cursor": {
+          "default": "",
+          "description": "Optional keyset cursor returned by a previous response.",
+          "type": "string"
+        },
+        "document_text": {
+          "default": "",
+          "description": "Optional full-text document search.",
+          "type": "string"
+        },
+        "dtxsid": {
+          "default": "",
+          "description": "Optional DTXSID substance filter.",
+          "type": "string"
+        },
+        "filterModel": {
+          "default": {},
+          "description": "Alias for filters.",
+          "type": "object"
+        },
+        "filters": {
+          "default": {},
+          "description": "AG Grid filter model keyed by table field name.",
+          "type": "object"
+        },
+        "full_table": {
+          "default": "",
+          "description": "Text to match across searchable table columns.",
+          "type": "string"
+        },
+        "include_total": {
+          "default": false,
+          "description": "If true, include total filtered record count in pagination.",
+          "type": "boolean"
+        },
+        "quickFilter": {
+          "default": "",
+          "description": "Alias for full_table.",
+          "type": "string"
+        },
+        "sortModel": {
+          "default": [],
+          "description": "Optional AG Grid sort model. The first entry is used; internal_id is always used as a stable tie-breaker. Send the same sortModel with each cursor request.",
+          "items": {
+            "properties": {
+              "colId": {
+                "description": "Field to sort by.",
+                "type": "string"
+              },
+              "sort": {
+                "description": "Sort direction.",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
           },
           "type": "array"
         }
@@ -799,6 +1230,35 @@
           }
         },
         "summary": "Returns information on a batch of Analytical QC documents using keyset pagination."
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AnalyticalQCFilteredListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered keyset-paginated Analytical QC records."
+          },
+          "400": {
+            "description": "Invalid cursor or unsupported sort."
+          }
+        },
+        "summary": "Returns filtered Analytical QC records using keyset pagination."
       }
     },
     "/api/amos/batch_search": {
@@ -913,6 +1373,35 @@
           }
         },
         "summary": "Returns information on a batch of fact sheets using keyset pagination."
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/FactSheetFilteredListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered keyset-paginated fact sheets."
+          },
+          "400": {
+            "description": "Invalid cursor or unsupported sort."
+          }
+        },
+        "summary": "Returns filtered fact sheets using keyset pagination."
       }
     },
     "/api/amos/find_dtxsids/{internal_id}": {
@@ -940,7 +1429,7 @@
         "description": "<br/>The molecular formula is assumed to be in Hill form, which simply counts the number of atoms of each element that are present, and orders them alphabetically.  The exception is substances with carbon, where the atoms will be listed in the order of carbon, hydrogen, and then alphabetical order of everything else (e.g., C8H14ClN5 for atrazine).",
         "parameters": [
           {
-            "description": "Molecular furmula to search by.  Formula should be in Hill form.",
+            "description": "Molecular formula to search by.  Formula should be in Hill form.",
             "in": "path",
             "name": "formula",
             "required": true,
@@ -1181,6 +1670,29 @@
         "summary": "Endpoint for retrieving a specified NMR spectrum from the database."
       }
     },
+    "/api/amos/get_nmr_spectrum_editor_info/{internal_id}": {
+      "get": {
+        "description": "information relating to NMR spectra for Analytical QC.",
+        "parameters": [
+          {
+            "description": "Unique ID of the NMR spectrum.",
+            "in": "path",
+            "name": "internal_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON structure containing the information about the NMR spectrum."
+          },
+          "204": {
+            "description": "A message that no NMR spectrum was found for the submitted internal_id value."
+          }
+        },
+        "summary": "Retrieves metadata from the database about a single NMR spectrum.  It is currently intended only to retrieve"
+      }
+    },
     "/api/amos/get_pdf/{record_type}/{internal_id}": {
       "get": {
         "description": "",
@@ -1239,6 +1751,9 @@
           },
           "204": {
             "description": "No record of the specified type was found for the specified ID."
+          },
+          "404": {
+            "description": "Invalid record type."
           }
         },
         "summary": "Retrieves metadata associated with a PDF record."
@@ -1508,6 +2023,35 @@
           }
         },
         "summary": "Returns information on a batch of methods using keyset pagination."
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/MethodFilteredListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered keyset-paginated methods."
+          },
+          "400": {
+            "description": "Invalid cursor or unsupported sort."
+          }
+        },
+        "summary": "Returns filtered methods using keyset pagination."
       }
     },
     "/api/amos/method_with_spectra/{search_type}/{internal_id}": {
@@ -1582,6 +2126,35 @@
           }
         },
         "summary": "Returns information on a batch of product declarations using keyset pagination."
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ProductDeclarationFilteredListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered keyset-paginated product declarations."
+          },
+          "400": {
+            "description": "Invalid cursor or unsupported sort."
+          }
+        },
+        "summary": "Returns filtered product declarations using keyset pagination."
       }
     },
     "/api/amos/record_counts_by_dtxsid/": {
@@ -1770,6 +2343,35 @@
           }
         },
         "summary": "Returns information on a batch of safety data sheets using keyset pagination."
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "Limit of records to return.",
+            "in": "path",
+            "name": "limit",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/SafetyDataSheetFilteredListRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filtered keyset-paginated safety data sheets."
+          },
+          "400": {
+            "description": "Invalid cursor or unsupported sort."
+          }
+        },
+        "summary": "Returns filtered safety data sheets using keyset pagination."
       }
     },
     "/api/amos/search/{dtxsid}": {
@@ -2014,6 +2616,29 @@
           }
         },
         "summary": "Attempts to use the submitted data to update the information related to a single method.  Some basic validation is"
+      }
+    },
+    "/api/amos/update_nmr_spectrum_info/{internal_id}": {
+      "put": {
+        "description": "the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
+        "parameters": [
+          {
+            "description": "Unique ID of the NMR spectrum to update.",
+            "in": "path",
+            "name": "internal_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database was updated successfully."
+          },
+          "409": {
+            "description": "Some of the new data was invalid; a list of issues will be returned."
+          }
+        },
+        "summary": "Attempts to update metadata and other information for the specified NMR spectrum.  Some validation is performed; if"
       }
     },
     "/api/amos/update_product_declaration_info/{internal_id}": {
