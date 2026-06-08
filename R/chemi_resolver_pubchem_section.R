@@ -16,10 +16,16 @@
 chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(idType)) options[['idType']] <- idType
-  if (!is.null(section)) options[['section']] <- section
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(idType)) {
+    options[['idType']] <- idType
+  }
+  if (!is.null(section)) {
+    options[['section']] <- section
+  }
+  result <- generic_request(
     endpoint = "resolver/pubchem-section",
     method = "GET",
     batch_limit = 0,
@@ -35,14 +41,12 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 }
 
 
-
-
 #' Resolver Pubchem Section
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function first resolves chemical identifiers using `chemi_resolver_lookup`,
+#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #' then sends the resolved Chemical objects to the API endpoint.
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
@@ -56,38 +60,45 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 #' chemi_resolver_pubchem_section_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
 chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section = NULL) {
-  # Resolve identifiers to Chemical objects
-	resolved <- tryCatch(
-    chemi_resolver_lookup(query = query, idType = idType),
+  # Resolve identifiers to Chemical objects via bulk POST endpoint
+  resolved <- tryCatch(
+    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
     error = function(e) {
       tryCatch(
-        chemi_resolver_lookup(query = query),
-        error = function(e2) stop("chemi_resolver_lookup failed: ", e2$message)
+        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
+        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
       )
     }
   )
+
+  # Keep only successfully resolved entries
+  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
 
   if (length(resolved) == 0) {
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }
 
-  # Transform resolved list to Chemical object format expected by endpoint
-  chemicals <- purrr::map(resolved, function(chem) {
+  # Transform resolved list to ChemicalRecord format expected by endpoint
+  chemicals <- purrr::map(resolved, function(item) {
+    chem <- item$chemical
     list(
-      sid = chem$dtxsid %||% chem$sid,
-      smiles = chem$smiles,
-      casrn = chem$casrn,
-      inchi = chem$inchi,
-      inchiKey = chem$inchiKey,
-      name = chem$name,
-      mol = chem$mol
+      chemical = list(
+        sid = chem$chemId %||% chem$sid,
+        smiles = chem$canonicalSmiles %||% chem$smiles,
+        casrn = chem$casrn,
+        inchi = chem$inchi,
+        inchiKey = chem$inchiKey,
+        name = chem$name
+      )
     )
   })
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) extra_options$section <- section
+  if (!is.null(section)) {
+    extra_options$section <- section
+  }
 
   result <- generic_chemi_request(
     query = NULL,
@@ -101,5 +112,3 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
 
   return(result)
 }
-
-

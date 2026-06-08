@@ -4,7 +4,12 @@
 \alias{chemi_resolver_getpubchemlist}
 \title{Resolver Getpubchemlist}
 \usage{
-chemi_resolver_getpubchemlist(query, idType = "AnyId", section = NULL)
+chemi_resolver_getpubchemlist(
+  query,
+  idType = "AnyId",
+  section = NULL,
+  all_pages = TRUE
+)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
@@ -12,6 +17,8 @@ chemi_resolver_getpubchemlist(query, idType = "AnyId", section = NULL)
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{section}{Optional parameter}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a list with result object
@@ -19,7 +26,7 @@ Returns a list with result object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup},
+This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
 then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{

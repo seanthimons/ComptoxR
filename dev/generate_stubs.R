@@ -58,6 +58,14 @@ cc_config <- list(
   batch_limit = 1
 )
 
+# Chemical Transformation Simulator (cts_*) function generation configuration
+cts_config <- list(
+  wrapper_function = "generic_cts_request",
+  param_strategy = "extra_params",
+  example_query = "CCCC",
+  lifecycle_badge = "experimental"
+)
+
 # ==============================================================================
 # Load Utilities
 # ==============================================================================
@@ -76,6 +84,9 @@ source(file.path(utils_dir, "05_file_scaffold.R"))
 source(file.path(utils_dir, "06_param_parsing.R"))
 source(file.path(utils_dir, "07_stub_generation.R"))
 source(file.path(utils_dir, "08_drift_detection.R"))
+
+# Source CTS helper functions used by the generator blacklist.
+source(here::here("R", "cts.R"))
 
 # Reset endpoint tracking at start of generation run
 reset_endpoint_tracking()
@@ -425,6 +436,115 @@ generate_cc_stubs <- function() {
   )
 }
 
+#' Generate stubs for CTS API
+#' @return tibble with scaffold results
+generate_cts_stubs <- function() {
+  cli_h2("Chemical Transformation Simulator (cts_*)")
+
+  cts_schema_path <- here::here("schema", "cts-prod.json")
+  cts_schema <- tryCatch({
+    if (file.exists(cts_schema_path)) {
+      cli_alert_info("Using local CTS schema: {cts_schema_path}")
+      jsonlite::fromJSON(cts_schema_path, simplifyVector = FALSE)
+    } else {
+      cli_alert_info("No local CTS schema found; fetching https://qed.epa.gov/cts/rest/swag")
+      jsonlite::fromJSON("https://qed.epa.gov/cts/rest/swag", simplifyVector = FALSE)
+    }
+  }, error = function(e) {
+    cli_alert_warning("Could not load CTS schema: {e$message}")
+    return(NULL)
+  })
+
+  if (is.null(cts_schema)) {
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = tibble()
+    ))
+  }
+
+  endpoints <- tryCatch({
+    openapi_to_spec(cts_schema) %>%
+      filter(str_detect(method, "GET|POST")) %>%
+      mutate(
+        route = strip_curly_params(route, leading_slash = "remove"),
+        is_blacklisted = .cts_endpoint_blacklisted(route)
+      ) %>%
+      filter(!is_blacklisted) %>%
+      select(-is_blacklisted) %>%
+      mutate(
+        name = route %>%
+          str_replace_all("[/]+", " ") %>%
+          str_squish() %>%
+          str_replace_all("\\s", "_") %>%
+          str_replace_all("-", "_"),
+        file = paste0("cts_", name, ".R"),
+        fn = tools::file_path_sans_ext(file),
+        batch_limit = case_when(
+          method == "GET" & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+          method == "GET" & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+          .default = NULL
+        )
+      ) %>%
+      distinct(route, method, .keep_all = TRUE)
+  }, error = function(e) {
+    cli_alert_warning("Error parsing CTS schema: {e$message}")
+    return(tibble())
+  })
+
+  if (nrow(endpoints) == 0) {
+    cli_alert_warning("No CTS endpoints parsed")
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = tibble()
+    ))
+  }
+
+  cli_alert_info("Parsed {nrow(endpoints)} CTS endpoint(s) after blacklist filtering")
+
+  cts_res <- find_endpoint_usages_base(
+    endpoints$route,
+    pkg_dir = here::here("R"),
+    files_regex = "^cts_.*\\.R$",
+    expected_files = endpoints$file
+  )
+
+  cts_drift <- detect_parameter_drift(
+    endpoints = endpoints,
+    usage_summary = cts_res$summary %>% filter(n_hits > 0),
+    pkg_dir = here::here("R")
+  )
+
+  endpoints_to_build <- endpoints %>%
+    filter(route %in% {cts_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+
+  if (nrow(endpoints_to_build) == 0) {
+    cli_alert_success("All cts_* endpoints already implemented")
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = cts_drift
+    ))
+  }
+
+  cli_alert_info("Found {nrow(endpoints_to_build)} CTS endpoint(s) to generate")
+
+  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = cts_config)
+
+  if (nrow(spec_with_text) == 0) {
+    cli_alert_warning("No CTS stubs generated (all skipped)")
+    return(list(
+      scaffold = tibble(action = character(), file = character()),
+      drift = cts_drift
+    ))
+  }
+
+  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
+
+  list(
+    scaffold = scaffold_result,
+    drift = cts_drift
+  )
+}
+
 # ==============================================================================
 # Main Execution
 # ==============================================================================
@@ -436,28 +556,33 @@ cli_alert_info("Working directory: {getwd()}")
 ct_results <- generate_ct_stubs()
 chemi_results <- generate_chemi_stubs()
 cc_results <- generate_cc_stubs()
+cts_results <- generate_cts_stubs()
 
 # Extract scaffold and drift results
 ct_scaffold <- if (is.list(ct_results) && "scaffold" %in% names(ct_results)) ct_results$scaffold else ct_results
 chemi_scaffold <- if (is.list(chemi_results) && "scaffold" %in% names(chemi_results)) chemi_results$scaffold else chemi_results
 cc_scaffold <- if (is.list(cc_results) && "scaffold" %in% names(cc_results)) cc_results$scaffold else cc_results
+cts_scaffold <- if (is.list(cts_results) && "scaffold" %in% names(cts_results)) cts_results$scaffold else cts_results
 
 ct_drift <- if (is.list(ct_results) && "drift" %in% names(ct_results)) ct_results$drift else tibble()
 chemi_drift <- if (is.list(chemi_results) && "drift" %in% names(chemi_results)) chemi_results$drift else tibble()
 cc_drift <- if (is.list(cc_results) && "drift" %in% names(cc_results)) cc_results$drift else tibble()
+cts_drift <- if (is.list(cts_results) && "drift" %in% names(cts_results)) cts_results$drift else tibble()
 
 # Combine scaffold results
 all_results <- bind_rows(
   ct_scaffold %>% mutate(api = "ct"),
   chemi_scaffold %>% mutate(api = "chemi"),
-  cc_scaffold %>% mutate(api = "cc")
+  cc_scaffold %>% mutate(api = "cc"),
+  cts_scaffold %>% mutate(api = "cts")
 )
 
 # Combine drift results
 all_drift <- bind_rows(
   ct_drift %>% mutate(api = "ct"),
   chemi_drift %>% mutate(api = "chemi"),
-  cc_drift %>% mutate(api = "cc")
+  cc_drift %>% mutate(api = "cc"),
+  cts_drift %>% mutate(api = "cts")
 )
 
 # Report skipped/suspicious endpoints

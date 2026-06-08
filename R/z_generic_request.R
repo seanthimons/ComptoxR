@@ -12,7 +12,9 @@
 #' @return A tibble.
 #' @noRd
 safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
-  if (length(body_list) == 0) return(tibble::tibble())
+  if (length(body_list) == 0) {
+    return(tibble::tibble())
+  }
 
   # Phase 1: Coerce each record to a single-row all-character tibble
 
@@ -36,12 +38,16 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
     # Preserve query attribute
     q_attr <- attr(x, "query")
 
-    if (is.null(x) || length(x) == 0) return(NULL)
+    if (is.null(x) || length(x) == 0) {
+      return(NULL)
+    }
 
     # Primitive (non-list) value
     if (!is.list(x)) {
       row <- tibble::tibble(value = as.character(x))
-      if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+      if (!is.null(q_attr)) {
+        row <- dplyr::bind_cols(query = q_attr, row)
+      }
       return(row)
     }
 
@@ -61,32 +67,44 @@ safe_tidy_bind <- function(body_list, type_convert = TRUE, names_to = NULL) {
       }
     })
     row <- tibble::as_tibble(row)
-    if (!is.null(q_attr)) row <- dplyr::bind_cols(query = q_attr, row)
+    if (!is.null(q_attr)) {
+      row <- dplyr::bind_cols(query = q_attr, row)
+    }
     row
   })
 
   res <- purrr::list_rbind(rows, names_to = names_to)
 
-  if (nrow(res) == 0) return(tibble::tibble())
+  if (nrow(res) == 0) {
+    return(tibble::tibble())
+  }
 
   # Phase 2: Collapse list-columns into semicolon-separated strings
   list_cols <- names(res)[purrr::map_lgl(res, is.list)]
   if (length(list_cols) > 0) {
-    res <- dplyr::mutate(res, dplyr::across(
-      dplyr::all_of(list_cols),
-      ~ purrr::map_chr(.x, function(val) {
-        if (is.null(val) || length(val) == 0) return(NA_character_)
-        paste(as.character(unlist(val)), collapse = "; ")
-      })
-    ))
+    res <- dplyr::mutate(
+      res,
+      dplyr::across(
+        dplyr::all_of(list_cols),
+        ~ purrr::map_chr(.x, function(val) {
+          if (is.null(val) || length(val) == 0) {
+            return(NA_character_)
+          }
+          paste(as.character(unlist(val)), collapse = "; ")
+        })
+      )
+    )
   }
 
   # Phase 3: Type recovery on character columns
   if (type_convert) {
-    res <- dplyr::mutate(res, dplyr::across(
-      dplyr::where(is.character),
-      ~ utils::type.convert(.x, as.is = TRUE)
-    ))
+    res <- dplyr::mutate(
+      res,
+      dplyr::across(
+        dplyr::where(is.character),
+        ~ utils::type.convert(.x, as.is = TRUE)
+      )
+    )
   }
 
   res
@@ -151,18 +169,34 @@ is_transient_error <- function(resp) {
 #'         - image/*: Raw bytes, or a magick image object if the magick package is available.
 #'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
-generic_request <- function(query = NULL, endpoint, method = "POST", server = 'ctx_burl', batch_limit = NULL, auth = TRUE, tidy = TRUE, path_params = NULL, content_type = "application/json", body_type = "json", paginate = FALSE, max_pages = 100, pagination_strategy = NULL, ...) {
-
+generic_request <- function(
+  query = NULL,
+  endpoint,
+  method = "POST",
+  server = 'ctx_burl',
+  batch_limit = NULL,
+  auth = TRUE,
+  tidy = TRUE,
+  path_params = NULL,
+  content_type = "application/json",
+  body_type = "json",
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
+  ...
+) {
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
   # If it doesn't exist, we assume 'server' is the literal URL.
   base_url <- Sys.getenv(server, unset = server)
-  if (base_url == "") base_url <- server
+  if (base_url == "") {
+    base_url <- server
+  }
 
   # --- 2. Input Normalization ---
   # Ensure the query is a unique character vector without NAs or empty strings.
   # Special case: if batch_limit is 0, this is a static endpoint (no query needed)
-  if (is.null(batch_limit)|| batch_limit == "NA") {
+  if (is.null(batch_limit) || batch_limit == "NA") {
     batch_limit <- as.numeric(Sys.getenv("batch_limit", "1000"))
   }
 
@@ -176,13 +210,15 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
   } else {
     original_query <- NULL
     # Standard query handling
-    if(purrr::is_list(query) && !is.data.frame(query)) {
+    if (purrr::is_list(query) && !is.data.frame(query)) {
       query <- as.character(unlist(query, use.names = FALSE))
     }
     query <- unique(as.vector(query))
     query <- query[!is.na(query) & query != ""]
 
-    if (length(query) == 0) cli::cli_abort("Query must be a character vector.")
+    if (length(query) == 0) {
+      cli::cli_abort("Query must be a character vector.")
+    }
 
     # --- 3. Batching Preparation ---
     # API endpoints often have limits (e.g., 200 or 1000 items per POST).
@@ -275,9 +311,8 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 
         # Add ellipsis arguments as query params (e.g., projection="all")
         req <- req %>% httr2::req_url_query(!!!ellipsis_args)
-      }
-      # Implementation for GET requests
-      else {
+      } else {
+        # Implementation for GET requests
         req <- req %>% httr2::req_method("GET")
 
         # Scenario A: Static endpoint (no query appending)
@@ -288,12 +323,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           }
           # Only add named arguments as query parameters
           req <- req %>% httr2::req_url_query(!!!ellipsis_args)
-        }
-        # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
-        else if (batch_limit == 1) {
-          req <- req %>% httr2::req_url_path_append(
-            curl::curl_escape(as.character(query_part))
-          )
+        } else if (batch_limit == 1) {
+          # Scenario B: Path-based GET (one item at a time, e.g., /assay/ID)
+          req <- req %>%
+            httr2::req_url_path_append(
+              curl::curl_escape(as.character(query_part))
+            )
 
           # Append additional path parameters if provided
           if (!is.null(path_params) && length(path_params) > 0) {
@@ -320,18 +355,18 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           if (any(named_indices)) {
             req <- req %>% httr2::req_url_query(!!!ellipsis_args[named_indices])
           }
-        }
-        # Scenario C: Parameter-based GET (bulk fetch via query string)
-        else {
+        } else {
+          # Scenario C: Parameter-based GET (bulk fetch via query string)
           req <- req %>% httr2::req_url_query(search = paste(query_part, collapse = ","), !!!ellipsis_args)
         }
       }
 
       # Add retry with exponential backoff for transient errors (429, 5xx)
-      req <- req %>% httr2::req_retry(
-        max_tries = 3,
-        is_transient = is_transient_error
-      )
+      req <- req %>%
+        httr2::req_retry(
+          max_tries = 3,
+          is_transient = is_transient_error
+        )
 
       return(req)
     }
@@ -364,7 +399,9 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           body
         }
         # Done if fewer records than limit returned
-        if (length(records) < page_limit || length(records) == 0) return(NULL)
+        if (length(records) < page_limit || length(records) == 0) {
+          return(NULL)
+        }
 
         # Calculate new offset
         prev_url <- httr2::url_parse(req$url)
@@ -378,7 +415,6 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
         req$url <- httr2::url_modify(req$url, path = new_path)
         req
       }
-
     } else if (pagination_strategy == "page_number") {
       # CTX-style: pageNumber as query parameter, starts at 1
       next_req <- httr2::iterate_with_offset(
@@ -390,7 +426,6 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           length(body) == 0
         }
       )
-
     } else if (pagination_strategy == "page_size") {
       # Spring Boot Pageable: page + size as query params, 0-indexed
       start_page <- as.numeric(ellipsis_args[["page"]] %||% 0)
@@ -405,7 +440,6 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           isTRUE(httr2::resp_body_json(resp, simplifyVector = FALSE)[["last"]])
         }
       )
-
     } else if (pagination_strategy == "offset_limit" && is.null(path_params)) {
       # Offset/limit via query params (e.g., Common Chemistry offset+size)
       offset_name <- "offset"
@@ -420,14 +454,16 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
         resp_complete = function(resp) {
           body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
           # Check various response shapes for exhaustion
-          records <- body[["results"]] %||% body[["data"]] %||%
+          records <- body[["results"]] %||%
+            body[["data"]] %||%
             (if (is.list(body) && is.null(names(body))) body else NULL)
-          if (is.null(records)) return(TRUE)
+          if (is.null(records)) {
+            return(TRUE)
+          }
           # Done if fewer records than page size
           length(records) < page_size || length(records) == 0
         }
       )
-
     } else if (pagination_strategy == "cursor") {
       # Cursor/keyset: cursor value in query param
       next_req <- httr2::iterate_with_cursor(
@@ -437,7 +473,6 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
           body[["cursor"]] %||% body[["nextCursor"]] %||% body[["next"]]
         }
       )
-
     } else {
       cli::cli_abort("Unknown pagination_strategy: {.val {pagination_strategy}}")
     }
@@ -493,7 +528,8 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
       }
 
       records
-    }) |> purrr::list_flatten()
+    }) |>
+      purrr::list_flatten()
 
     if (length(body_list) == 0) {
       cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
@@ -502,11 +538,15 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 
     # Apply same output formatting as non-paginated path
     if (!tidy) {
-      return(body_list |>
-        purrr::map(function(x) {
-          if (is.list(x) && length(x) > 0) x[purrr::map_lgl(x, is.null)] <- NA
-          x
-        }))
+      return(
+        body_list |>
+          purrr::map(function(x) {
+            if (is.list(x) && length(x) > 0) {
+              x[purrr::map_lgl(x, is.null)] <- NA
+            }
+            x
+          })
+      )
     }
 
     return(safe_tidy_bind(body_list))
@@ -535,8 +575,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
     # Image responses: return raw bytes or magick image
     body_list <- resp_list %>%
       purrr::map2(query_list, function(r, qp) {
-        if (inherits(r, "httr2_error")) r <- r$resp
-        if (!inherits(r, "httr2_response")) return(NULL)
+        if (inherits(r, "httr2_error")) {
+          r <- r$resp
+        }
+        if (!inherits(r, "httr2_response")) {
+          return(NULL)
+        }
 
         status <- httr2::resp_status(r)
         if (status < 200 || status >= 300) {
@@ -568,8 +612,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
     # Text responses: return as character string
     body_list <- resp_list %>%
       purrr::map2(query_list, function(r, qp) {
-        if (inherits(r, "httr2_error")) r <- r$resp
-        if (!inherits(r, "httr2_response")) return(NULL)
+        if (inherits(r, "httr2_error")) {
+          r <- r$resp
+        }
+        if (!inherits(r, "httr2_response")) {
+          return(NULL)
+        }
 
         status <- httr2::resp_status(r)
         if (status < 200 || status >= 300) {
@@ -591,8 +639,12 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
   body_list <- resp_list %>%
     purrr::map2(query_list, function(r, qp) {
       # Handle potential httr2 error objects
-      if (inherits(r, "httr2_error")) r <- r$resp
-      if (!inherits(r, "httr2_response")) return(NULL)
+      if (inherits(r, "httr2_error")) {
+        r <- r$resp
+      }
+      if (!inherits(r, "httr2_response")) {
+        return(NULL)
+      }
 
       status <- httr2::resp_status(r)
       if (status < 200 || status >= 300) {
@@ -604,8 +656,8 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 
       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
       if (length(qp) == 1 && is.list(body)) {
-         # We add the query as a named attribute so it can be picked up during flattening
-         attr(body, "query") <- qp[1]
+        # We add the query as a named attribute so it can be picked up during flattening
+        attr(body, "query") <- qp[1]
       }
 
       # Wrap single-object responses (named lists) so list_flatten preserves
@@ -680,15 +732,28 @@ generic_request <- function(query = NULL, endpoint, method = "POST", server = 'c
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a raw list.
 #' @export
-generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_label = "sid",
-                                  server = "chemi_burl", auth = FALSE, pluck_res = NULL,
-                                  wrap = TRUE, array_payload = FALSE, tidy = TRUE,
-                                  chemicals = NULL, paginate = FALSE, max_pages = 100,
-                                  pagination_strategy = NULL, ...) {
-  
+generic_chemi_request <- function(
+  query = NULL,
+  endpoint,
+  options = list(),
+  sid_label = "sid",
+  server = "chemi_burl",
+  auth = FALSE,
+  pluck_res = NULL,
+  wrap = TRUE,
+  array_payload = FALSE,
+  tidy = TRUE,
+  chemicals = NULL,
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
+  ...
+) {
   # 1. Base URL Resolution
   base_url <- Sys.getenv(server, unset = server)
-  if (base_url == "") base_url <- server
+  if (base_url == "") {
+    base_url <- server
+  }
 
   # 2. Input Normalization
   # If pre-resolved chemicals are provided, use them directly
@@ -699,11 +764,18 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
     # Standard query handling
     query <- unique(as.vector(query))
     query <- query[!is.na(query) & query != ""]
-    if (length(query) == 0) cli::cli_abort("Either query or chemicals parameter must be provided.")
+    if (length(query) == 0) {
+      cli::cli_abort("Either query or chemicals parameter must be provided.")
+    }
     resolved_chemicals <- NULL
   }
 
   # 3. Payload Construction
+  # Ensure options serializes as {} (object) not [] (array) when empty
+  if (length(options) == 0) {
+    options <- setNames(list(), character(0))
+  }
+
   if (!is.null(resolved_chemicals)) {
     # Pre-resolved chemicals provided - use them directly
     if (wrap) {
@@ -717,11 +789,12 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
   } else if (array_payload) {
     # Array format: {"ids": ["ID1", "ID2"], "option1": "value1", ...}
     # Put identifiers directly as an array, merge options at top level
-    payload <- c(set_names(list(query), sid_label), options)
+    # I() prevents jsonlite from auto-unboxing length-1 vectors to scalars
+    payload <- c(set_names(list(I(query)), sid_label), options)
   } else {
     # Standard format with wrap parameter
     chemicals_list <- purrr::map(query, ~ set_names(list(.x), sid_label))
-    
+
     if (wrap) {
       payload <- list(
         chemicals = chemicals_list,
@@ -757,10 +830,11 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
   }
 
   # Add retry with exponential backoff for transient errors (429, 5xx)
-  req <- req %>% httr2::req_retry(
-    max_tries = 3,
-    is_transient = is_transient_error
-  )
+  req <- req %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = is_transient_error
+    )
 
   # 5. Debugging
   if (run_debug) {
@@ -781,7 +855,9 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
       records_count <- body[["recordsCount"]] %||% length(body[["records"]] %||% list())
 
       # Done if we've fetched all records or got an empty page
-      if (records_count == 0 || (current_offset + records_count) >= total) return(NULL)
+      if (records_count == 0 || (current_offset + records_count) >= total) {
+        return(NULL)
+      }
 
       new_offset <- current_offset + records_count
       req %>% httr2::req_body_json_modify(offset = new_offset)
@@ -813,13 +889,16 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
         records <- purrr::map(records, ~ purrr::pluck(.x, pluck_res))
       }
       records
-    }) %>% purrr::list_flatten()
+    }) %>%
+      purrr::list_flatten()
 
     if (length(body_list) == 0) {
       if (tidy) return(tibble::tibble()) else return(list())
     }
 
-    if (!tidy) return(body_list)
+    if (!tidy) {
+      return(body_list)
+    }
 
     return(safe_tidy_bind(body_list))
   }
@@ -833,7 +912,7 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
   }
 
   body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
-  
+
   if (!is.null(pluck_res)) {
     body <- purrr::pluck(body, pluck_res)
   }
@@ -842,7 +921,9 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
     if (tidy) return(tibble::tibble()) else return(list())
   }
 
-  if (!tidy) return(body)
+  if (!tidy) {
+    return(body)
+  }
 
   # 8. Tidy Conversion
   # Handle cases where body is a named list of results (keyed by query)
@@ -854,7 +935,7 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
     # If the results match the query length, add the query column
     # Only do this when query (not chemicals) was provided
     if (!is.null(query) && length(query) > 0 && nrow(res) == length(query) && !"dtxsid" %in% colnames(res)) {
-       res <- dplyr::bind_cols(dtxsid = query, res)
+      res <- dplyr::bind_cols(dtxsid = query, res)
     }
   }
 
@@ -877,17 +958,19 @@ generic_chemi_request <- function(query = NULL, endpoint, options = list(), sid_
 #' @return The parsed JSON response body (list structure).
 #' @keywords internal
 generic_search_request <- function(
-    search_type,
-    input_type = "MOL",
-    query = NULL,
-    params = list(),
-    endpoint = "search",
-    server = "chemi_burl",
-    tidy = TRUE
+  search_type,
+  input_type = "MOL",
+  query = NULL,
+  params = list(),
+  endpoint = "search",
+  server = "chemi_burl",
+  tidy = TRUE
 ) {
   # 1. Base URL Resolution
   base_url <- Sys.getenv(server, unset = server)
-  if (base_url == "") base_url <- server
+  if (base_url == "") {
+    base_url <- server
+  }
 
   # 2. Payload Construction
   payload <- list(
@@ -947,6 +1030,95 @@ generic_search_request <- function(
   return(body)
 }
 
+#' Generic CTS API Request Function
+#'
+#' Specialized request helper for the EPA Chemical Transformation Simulator
+#' REST API. CTS endpoints accept named JSON object bodies and do not use an
+#' API key.
+#'
+#' @param endpoint The CTS endpoint path (e.g., `"metabolizer/run"`).
+#' @param body Named list to send as a JSON object body. Empty bodies are sent
+#'   as `{}` rather than `[]`.
+#' @param method HTTP method. Defaults to `"POST"`.
+#' @param server Environment variable name for the base URL. Defaults to
+#'   `"cts_burl"`.
+#' @param tidy Boolean; whether to convert simple list results to a tibble.
+#'   Defaults to `FALSE` to preserve nested CTS trees.
+#'
+#' @return Parsed JSON response as a list by default, or a tibble when
+#'   `tidy = TRUE`.
+#' @keywords internal
+generic_cts_request <- function(endpoint, body = list(), method = "POST", server = "cts_burl", tidy = FALSE) {
+  base_url <- Sys.getenv(server, unset = NA_character_)
+  if (is.na(base_url) || base_url == "") {
+    base_url <- if (identical(server, "cts_burl")) {
+      "https://qed.epa.gov/cts/rest"
+    } else {
+      server
+    }
+  }
+
+  if (!is.list(body) || is.data.frame(body)) {
+    cli::cli_abort("{.arg body} must be a named list.")
+  }
+
+  if (length(body) == 0) {
+    body <- structure(list(), names = character())
+  } else if (is.null(names(body)) || any(!nzchar(names(body)))) {
+    cli::cli_abort("{.arg body} must be a named list so CTS receives a JSON object.")
+  }
+
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste("Generic CTS Request:", endpoint))
+    cli::cli_dl(c("Method" = "{method}"))
+    cli::cli_rule()
+    cli::cli_end()
+  }
+
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_method(toupper(method)) %>%
+    httr2::req_headers(Accept = "application/json")
+
+  if (toupper(method) == "POST") {
+    req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
+  } else if (length(body) > 0) {
+    req <- req %>% httr2::req_url_query(!!!body)
+  }
+
+  req <- req %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = is_transient_error
+    )
+
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  resp <- httr2::req_perform(req)
+  status <- httr2::resp_status(resp)
+
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("CTS API request to {.val {endpoint}} failed with status {status}")
+  }
+
+  parsed <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  if (!tidy) {
+    return(parsed)
+  }
+
+  if (is.list(parsed) && !is.null(names(parsed))) {
+    return(safe_tidy_bind(list(parsed)))
+  }
+
+  safe_tidy_bind(parsed)
+}
+
 #' Generic CAS Common Chemistry API Request Function
 #'
 #' This is a specialized wrapper for CAS Common Chemistry API requests.
@@ -971,49 +1143,60 @@ generic_search_request <- function(
 #'         - text/plain: A character string.
 #'         If no results are found, returns an empty tibble or list.
 #' @export
-generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
-                               auth = TRUE, tidy = TRUE, content_type = "application/json",
-                               paginate = FALSE, max_pages = 100, pagination_strategy = NULL, ...) {
-  
+generic_cc_request <- function(
+  endpoint,
+  method = "GET",
+  server = "cc_burl",
+  auth = TRUE,
+  tidy = TRUE,
+  content_type = "application/json",
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
+  ...
+) {
   # --- 1. Base URL Resolution ---
   base_url <- Sys.getenv(server, unset = server)
-  if (base_url == "") base_url <- server
-  
+  if (base_url == "") {
+    base_url <- server
+  }
+
   # Check environment flags for logging/debugging
   run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
-  
+
   if (run_verbose) {
     cli::cli_rule(left = paste('Generic CC Request:', endpoint))
     cli::cli_dl(c('Method' = '{method}'))
     cli::cli_rule()
     cli::cli_end()
   }
-  
+
   # --- 2. Capture ellipsis arguments ---
   ellipsis_args <- list(...)
-  
+
   # --- 3. Request Construction ---
   req <- httr2::request(base_url) %>%
     httr2::req_url_path_append(endpoint) %>%
     httr2::req_method(toupper(method)) %>%
     httr2::req_headers(Accept = content_type)
-  
+
   # Add CC API key authentication
   if (auth) {
     req <- req %>% httr2::req_headers(`x-api-key` = cc_api_key())
   }
-  
+
   # Add query parameters
   if (length(ellipsis_args) > 0) {
     req <- req %>% httr2::req_url_query(!!!ellipsis_args)
   }
 
   # Add retry with exponential backoff for transient errors (429, 5xx)
-  req <- req %>% httr2::req_retry(
-    max_tries = 3,
-    is_transient = is_transient_error
-  )
+  req <- req %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = is_transient_error
+    )
 
   # --- 4. Debugging Hook ---
   if (run_debug) {
@@ -1062,7 +1245,8 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
     body_list <- purrr::map(resps, function(resp) {
       body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
       body[["results"]] %||% list()
-    }) |> purrr::list_flatten()
+    }) |>
+      purrr::list_flatten()
 
     if (length(body_list) == 0) {
       cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
@@ -1070,10 +1254,15 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
     }
 
     if (!tidy) {
-      return(body_list |> purrr::map(function(x) {
-        if (is.list(x) && length(x) > 0) x[purrr::map_lgl(x, is.null)] <- NA
-        x
-      }))
+      return(
+        body_list |>
+          purrr::map(function(x) {
+            if (is.list(x) && length(x) > 0) {
+              x[purrr::map_lgl(x, is.null)] <- NA
+            }
+            x
+          })
+      )
     }
 
     res <- body_list |>
@@ -1100,18 +1289,18 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
   if (status < 200 || status >= 300) {
     cli::cli_abort("CAS Common Chemistry API request to {.val {endpoint}} failed with status {status}")
   }
-  
+
   # Handle different content types
   is_text <- grepl("^text/plain", content_type)
   is_json <- !is_text
-  
+
   if (is_text) {
     return(httr2::resp_body_string(resp))
   }
-  
+
   # JSON response handling
   body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
-  
+
   if (length(body) == 0) {
     cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
     if (tidy) {
@@ -1120,7 +1309,7 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
       return(list())
     }
   }
-  
+
   # --- 7. Output Formatting ---
   if (!tidy) {
     # Basic cleanup: replace NULLs with NA in list elements
@@ -1129,7 +1318,7 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
     }
     return(body)
   }
-  
+
   # --- 8. Tidy Conversion ---
   if (is.list(body) && !is.null(names(body))) {
     # Single object response — wrap in list for safe_tidy_bind
@@ -1163,15 +1352,15 @@ generic_cc_request <- function(endpoint, method = "GET", server = "cc_burl",
 # @return A tibble or list depending on tidy parameter.
 # @noRd
 generic_pubchem_request <- function(
-    query = NULL,
-    namespace = "cid",
-    operation,
-    output = "JSON",
-    server = "pubchem_burl",
-    method = "GET",
-    body = NULL,
-    pluck_path = NULL,
-    tidy = TRUE
+  query = NULL,
+  namespace = "cid",
+  operation,
+  output = "JSON",
+  server = "pubchem_burl",
+  method = "GET",
+  body = NULL,
+  pluck_path = NULL,
+  tidy = TRUE
 ) {
   # --- 1. Base URL Resolution ---
   base_url <- Sys.getenv(server, unset = server)
@@ -1213,8 +1402,7 @@ generic_pubchem_request <- function(
       req <- req |> httr2::req_url_path_append(curl::curl_escape(as.character(query)))
     }
 
-    req <- req |> httr2::req_url_path_append(operation, output) |>
-      httr2::req_method("GET")
+    req <- req |> httr2::req_url_path_append(operation, output) |> httr2::req_method("GET")
   }
 
   # User-Agent per NCBI guidelines
@@ -1230,10 +1418,11 @@ generic_pubchem_request <- function(
   req <- req |> httr2::req_throttle(capacity = 4, fill_time_s = 1)
 
   # Retry for transient errors (429, 5xx) but NOT 404
-  req <- req |> httr2::req_retry(
-    max_tries = 4,
-    is_transient = function(resp) httr2::resp_status(resp) %in% c(429L, 500L, 503L, 504L)
-  )
+  req <- req |>
+    httr2::req_retry(
+      max_tries = 4,
+      is_transient = function(resp) httr2::resp_status(resp) %in% c(429L, 500L, 503L, 504L)
+    )
 
   # Suppress auto-throw to parse Fault envelope manually
   req <- req |> httr2::req_error(is_error = function(r) FALSE)
@@ -1292,7 +1481,9 @@ generic_pubchem_request <- function(
   }
 
   # --- 7. Output Formatting ---
-  if (!tidy) return(result)
+  if (!tidy) {
+    return(result)
+  }
 
   # Convert to tibble
   if (is.list(result) && length(result) > 0) {

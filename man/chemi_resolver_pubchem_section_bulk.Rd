@@ -19,7 +19,7 @@ Returns a tibble with results (array of objects)
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function first resolves chemical identifiers using \code{chemi_resolver_lookup},
+This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
 then sends the resolved Chemical objects to the API endpoint.
 }
 \examples{
