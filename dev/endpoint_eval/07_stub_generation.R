@@ -551,6 +551,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     fn_signature_resolver <- paste0('query, idType = "AnyId"', additional_sig)
 
+    # Append all_pages param when pagination is active
+    if (nzchar(pagination_call_params)) {
+      fn_signature_resolver <- paste0(fn_signature_resolver, ", all_pages = TRUE")
+      resolver_pagination_param_doc <- "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n"
+    } else {
+      resolver_pagination_param_doc <- ""
+    }
+
     # Build options list from additional body params
     options_assembly <- if (length(body_params_vec) > 0) {
       lines <- c("  # Build options from additional parameters", "  extra_options <- list()")
@@ -572,6 +580,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         resolver_param_docs <- paste0(resolver_param_docs, "#' @param ", p, " Optional parameter\n")
       }
     }
+    resolver_param_docs <- paste0(resolver_param_docs, resolver_pagination_param_doc)
 
     # Update roxygen header with resolver-specific docs
     roxygen_header <- glue::glue('
@@ -580,7 +589,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @description
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
-#\' This function first resolves chemical identifiers using `chemi_resolver_lookup`,
+#\' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #\' then sends the resolved Chemical objects to the API endpoint.
 #\'
 {resolver_param_docs}#\' @return {return_doc}
@@ -594,33 +603,36 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Generate resolver-wrapped function body using generic_chemi_request
     fn_body <- glue::glue('
 {fn} <- function({fn_signature_resolver}) {{
-  # Resolve identifiers to Chemical objects
-	resolved <- tryCatch(
-    chemi_resolver_lookup(query = query, idType = idType),
+  # Resolve identifiers to Chemical objects via bulk POST endpoint
+  resolved <- tryCatch(
+    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
     error = function(e) {{
       tryCatch(
-        chemi_resolver_lookup(query = query),
-        error = function(e2) stop("chemi_resolver_lookup failed: ", e2$message)
+        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
+        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
       )
     }}
   )
+
+  # Keep only successfully resolved entries
+  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
 
   if (length(resolved) == 0) {{
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }}
 
-  # Transform resolved list to Chemical object format expected by endpoint
-  chemicals <- purrr::map(resolved, function(chem) {{
-    list(
-      sid = chem$dtxsid %||% chem$sid,
-      smiles = chem$smiles,
+  # Transform resolved list to ChemicalRecord format expected by endpoint
+  chemicals <- purrr::map(resolved, function(item) {{
+    chem <- item$chemical
+    list(chemical = list(
+      sid = chem$chemId %||% chem$sid,
+      smiles = chem$canonicalSmiles %||% chem$smiles,
       casrn = chem$casrn,
       inchi = chem$inchi,
       inchiKey = chem$inchiKey,
-      name = chem$name,
-      mol = chem$mol
-    )
+      name = chem$name
+    ))
   }})
 
 {options_assembly}
@@ -931,6 +943,49 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 }}
 
 ')
+    } else if (wrapper_fn == "generic_cts_request") {
+      param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      param_vec <- trimws(param_vec)
+      param_vec <- gsub("\\s*=\\s*.*$", "", param_vec)
+
+      sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
+      sig_parts <- trimws(sig_parts)
+      required_params_mask <- !grepl("=", sig_parts)
+      required_params <- param_vec[required_params_mask]
+      optional_params <- param_vec[!required_params_mask]
+
+      body_code_lines <- c(
+        "  # Build request body",
+        "  body <- list()"
+      )
+
+      for (p in required_params) {
+        body_code_lines <- c(body_code_lines, paste0("  body$", p, " <- ", p))
+      }
+
+      for (p in optional_params) {
+        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) body$", p, " <- ", p))
+      }
+
+      body_assembly <- paste(body_code_lines, collapse = "\n")
+
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{body_assembly}
+{hook_pre_request}
+  result <- generic_cts_request(
+    endpoint = "{endpoint}",
+    body = body,
+    method = "{method}",
+    tidy = FALSE
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -974,6 +1029,22 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 {query_param_info$params_code}  result <- generic_cc_request(
     endpoint = "{endpoint}",
     method = "{method}"{combined_calls}{pagination_call_params}
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
+    } else if (wrapper_fn == "generic_cts_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
+    endpoint = "{endpoint}",
+    method = "{method}",
+    body = list(),
+    tidy = FALSE
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1066,6 +1137,22 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 }}
 
 ')
+    } else if (wrapper_fn == "generic_cts_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_signature}) {{
+{query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
+    endpoint = "{endpoint}",
+    method = "{method}",
+    body = list(),
+    tidy = FALSE
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1118,6 +1205,22 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE{pagination_call_params}
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+')
+    } else if (wrapper_fn == "generic_cts_request") {
+      fn_body <- glue::glue('
+{fn} <- function({fn_arg}) {{
+{hook_pre_request}  result <- generic_cts_request(
+    endpoint = "{endpoint}",
+    method = "{method}",
+    body = list(),
+    tidy = FALSE
   )
 
   {hook_post_response}# Additional post-processing can be added here
