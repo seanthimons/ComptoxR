@@ -49,6 +49,13 @@
             "type": "boolean",
             "required": false,
             "default": false
+          },
+          {
+            "name": "inchi",
+            "in": "query",
+            "type": "boolean",
+            "required": false,
+            "default": true
           }
         ],
         "responses": {
@@ -74,7 +81,17 @@
                   "type": "array"
                 },
                 "options": {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "headers": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "inchi": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
                 }
               }
             }
@@ -99,7 +116,17 @@
           "type": "array"
         },
         "options": {
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "headers": {
+              "type": "boolean",
+              "default": false
+            },
+            "inchi": {
+              "type": "boolean",
+              "default": true
+            }
+          }
         }
       }
     }
