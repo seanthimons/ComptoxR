@@ -1,4 +1,4 @@
-# CompToxR <img src="man/figures/logo.png" align="right" height="139" alt="CompToxR hex sticker" />
+# ComptoxR <img src="man/figures/logo.png" align="right" height="139" alt="ComptoxR hex sticker" />
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml)
