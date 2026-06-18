@@ -185,6 +185,8 @@
 
 #### Docs
 
+- add CompToxR hex sticker logo
+  ([0119ab0](https://github.com/seanthimons/ComptoxR/tree/0119ab0a8803a05b288c0a01aad0971e350c764f))
 - Update progress document with Phase 6 blocking issue
   ([312cadd](https://github.com/seanthimons/ComptoxR/tree/312caddc13cc24fe1d19358162b0accc0e277625))
 - Update Phase 5 status with test results
@@ -196,6 +198,8 @@
 
 #### Other changes
 
+- Update NEWS.md \[skip ci\]
+  ([c21a52c](https://github.com/seanthimons/ComptoxR/tree/c21a52c1d65ec153be9e89d4d5a8b14cfd59221f))
 - update schema coverage badges \[skip ci\]
   ([ed5b2b9](https://github.com/seanthimons/ComptoxR/tree/ed5b2b90aa38d1e97176ae5231cba3b817c3bab7))
 - update schema coverage badges \[skip ci\]
@@ -257,7 +261,7 @@
   ([de08440](https://github.com/seanthimons/ComptoxR/tree/de08440ce6c952fc7b2a01b9bc73d5bfde12cfbb))
 
 Full set of changes:
-[`v1.3.0...d7f0d35`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...d7f0d35)
+[`v1.3.0...48bf92b`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...48bf92b)
 
 ## v1.3.0 (2025-10-02)
 
