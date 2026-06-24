@@ -1308,13 +1308,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "image/svg+xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              },
-              "image/png": {
+              "*/*": {
                 "schema": {
                   "type": "string",
                   "format": "byte"
