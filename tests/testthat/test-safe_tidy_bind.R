@@ -1,3 +1,5 @@
+safe_tidy_bind <- get("safe_tidy_bind", envir = asNamespace("ComptoxR"))
+
 test_that("safe_tidy_bind returns empty tibble for empty list", {
   res <- safe_tidy_bind(list())
   expect_s3_class(res, "tbl_df")

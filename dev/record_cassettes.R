@@ -1,14 +1,25 @@
 #!/usr/bin/env Rscript
 # Parallel cassette recording script using mirai
-# Re-records all VCR cassettes from production API
+# Re-records all VCR cassettes from production API.
+#
+# Usage:
+#   DRY_RUN=true Rscript dev/record_cassettes.R
+#   Rscript dev/record_cassettes.R --record-live
 
 library(cli)
 library(mirai)
 library(fs)
+library(here)
+
+source(file.path("dev", "test_generation", "00_config.R"))
+source(file.path("dev", "test_generation", "07_token_preflight.R"))
 
 # Configuration
 N_WORKERS <- 4  # Conservative to avoid EPA API rate limiting
 FAILURE_THRESHOLD <- 0.15  # Halt if >15% fail (systemic issue detection)
+
+args <- commandArgs(trailingOnly = TRUE)
+RECORD_LIVE <- "--record-live" %in% args
 
 # Dry-run mode check
 DRY_RUN <- tolower(Sys.getenv("DRY_RUN")) == "true"
@@ -24,15 +35,17 @@ if (DRY_RUN) {
 cli_h1("Pre-flight Checks")
 
 # Check 1: API key
-cli_alert_info("Checking API key...")
-if (!nzchar(Sys.getenv("ctx_api_key"))) {
+if (!DRY_RUN && !RECORD_LIVE) {
   cli_abort(c(
-    "x" = "ctx_api_key environment variable not set",
-    "i" = "Request API key from ccte_api@epa.gov",
-    "i" = "Set with: Sys.setenv(ctx_api_key = 'YOUR_KEY')"
+    "x" = "Live cassette recording requires --record-live",
+    "i" = "This prevents accidental cassette deletion and production API calls."
   ))
 }
-cli_alert_success("API key found")
+
+if (!DRY_RUN) {
+  cli_alert_info("Checking API key...")
+  ctx_api_key_preflight()
+}
 
 # Check 2: mirai availability
 cli_alert_info("Checking mirai package...")
@@ -384,6 +397,33 @@ if (fs::file_exists(health_check_script)) {
 } else {
   cli_alert_warning("Health check script not found: {health_check_script}")
 }
+
+cli_h1("Running Cassette Safety Checks")
+source(file.path("tests", "testthat", "helper-vcr.R"))
+safety_issues <- check_cassette_safety()
+if (length(safety_issues) > 0) {
+  cli_abort("Cassette safety check failed. Do not commit recorded fixtures.")
+}
+
+yaml_errors <- list()
+recorded_cassettes <- fs::dir_ls(fixtures_dir, glob = "*.yml")
+if (length(recorded_cassettes) > 0 && requireNamespace("yaml", quietly = TRUE)) {
+  for (cassette in recorded_cassettes) {
+    tryCatch(
+      yaml::read_yaml(cassette),
+      error = function(e) yaml_errors[[fs::path_file(cassette)]] <<- conditionMessage(e)
+    )
+  }
+}
+
+if (length(yaml_errors) > 0) {
+  for (name in names(yaml_errors)) {
+    cli_alert_danger("{name}: {yaml_errors[[name]]}")
+  }
+  cli_abort("One or more recorded cassettes failed YAML parsing.")
+}
+
+cli_alert_success("Cassette safety and YAML parse checks passed")
 
 cli_rule()
 cli_alert_success("Recording complete!")

@@ -34,7 +34,7 @@
 
 **API Key Leakage in VCR Cassettes:**
 - Risk: API keys could be recorded in cassette files if VCR sanitization fails
-- Files: `tests/testthat/helper-vcr.R` (lines 9-11), `tests/check_cassettes.R` (line 44)
+- Files: `tests/testthat/helper-vcr.R`
 - Current mitigation: VCR configured to filter `ctx_api_key` environment variable and replace with `<<<API_KEY>>>` marker
 - Recommendations:
   - Before committing cassettes, run `check_cassette_safety()` helper to verify no real keys are present
@@ -79,13 +79,13 @@
 ## Fragile Areas
 
 **VCR Cassette Dependency:**
-- Files: `tests/testthat/fixtures/` (323 test files depend on cassettes)
-- Why fragile: Tests fail if cassettes are deleted or out of sync with API responses. First test run requires valid API key to record cassettes. Cassette schema is tightly coupled to API response structure
+- Files: `tests/testthat/fixtures/`
+- Why fragile: Integration tests fail if cassettes are deleted or out of sync with API responses. First recording requires a valid API key, and cassette schema is tightly coupled to API response structure
 - Safe modification:
   - Before modifying any API wrapper, regenerate affected cassettes by running tests with valid API key
   - Use `vcr::use_cassette(..., record = "new_episodes")` for partial re-recording
   - Never manually edit cassettes - regenerate them
-- Test coverage: 323 test files exist; verify no orphaned cassettes via `source("tests/check_cassettes.R")`
+- Test coverage: Default generated wrapper tests are offline contracts. Verify cassette safety through `tests/testthat/helper-vcr.R` only when cassette changes are intentional.
 
 **Generic Request Path Parameter Validation:**
 - Files: `R/z_generic_request.R` (lines 91-99)

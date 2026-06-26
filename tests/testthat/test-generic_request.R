@@ -215,15 +215,18 @@ test_that("generic_request pagination respects max_pages limit", {
     },
     .package = "httr2",
     {
-      res <- generic_request(
-        query = "DEV",
-        endpoint = "hazard/toxref/search/by-study-type/",
-        method = "GET",
-        batch_limit = 1,
-        paginate = TRUE,
-        pagination_strategy = "page_number",
-        max_pages = 3,
-        pageNumber = 1
+      expect_warning(
+        res <- generic_request(
+          query = "DEV",
+          endpoint = "hazard/toxref/search/by-study-type/",
+          method = "GET",
+          batch_limit = 1,
+          paginate = TRUE,
+          pagination_strategy = "page_number",
+          max_pages = 3,
+          pageNumber = 1
+        ),
+        "max_pages"
       )
       # Should stop at 3 pages even though responses never empty
       expect_true(call_count <= 3)
