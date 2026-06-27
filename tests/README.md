@@ -30,6 +30,12 @@ Generated files have this header:
 
 They mock shared request helpers such as `generic_request()`, `generic_chemi_request()`, `generic_cc_request()`, `generic_cts_request()`, and `generic_pubchem_request()`. They should not contain `vcr::use_cassette()` calls or backticked endpoint-slug calls.
 
+The canonical Wrapper Test Rubric is in `dev/TESTING_GUIDE.md`. Default wrapper coverage is CRAN-safe generated contract
+testing that calls exported R functions and asserts helper boundary, endpoint/path, method, query/body parameters,
+relevant options/server/key behavior, and pass-through of mocked helper return values. Replay tests must be committed
+fixture replay classified in `dev/vcr_test_classification.json`; live recording requires `--record-live` and a real
+`ctx_api_key`. Export exclusions belong in `dev/export_test_exclusions.json`.
+
 ## Handwritten Tests
 
 Keep handwritten tests for behavior the generator cannot model:

@@ -59,6 +59,21 @@ Generated tests are created from exported API wrapper functions, not endpoint sl
 
 The generator owns ordinary API-wrapper request-contract coverage. Handwritten tests should remain for shared helpers, algorithms, local-data behavior, generator/audit tooling, and edge cases that need bespoke assertions.
 
+## Wrapper Test Rubric
+
+The canonical wrapper rubric is in `dev/TESTING_GUIDE.md`. In short, default API-wrapper coverage is CRAN-safe generated
+contract testing that calls exported R functions, not endpoint slugs or backticked generated names.
+
+Generated contract tests should assert helper boundary, endpoint/path, method, query/body parameters, relevant
+options/server/key behavior, and pass-through of mocked helper return values. Handwritten CRAN-safe wrapper tests are
+only for preprocessing, branching, validation, pagination, error behavior, or response shaping the generator cannot
+model.
+
+Replay/fixture wrapper tests must use committed fixtures only and be classified in `dev/vcr_test_classification.json`.
+Live or recording tests require explicit opt-in, a real `ctx_api_key`, and `--record-live`; they are not default
+readiness evidence. Export exclusions go in `dev/export_test_exclusions.json` with `export`, `reason`, `owner`, and
+`issue`.
+
 ## Mocking
 
 Use `testthat::local_mocked_bindings()` or `testthat::with_mocked_bindings()` for package-local dependencies and HTTP helper boundaries.

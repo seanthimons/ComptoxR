@@ -63,6 +63,32 @@ Generated tests:
 
 Generated tests must not use `vcr::use_cassette()` and must not call backticked hyphenated endpoint names.
 
+## Wrapper Test Rubric
+
+Default API-wrapper coverage is CRAN-safe generated contract testing. Generated wrapper tests call exported R functions
+directly; they must not call endpoint slugs or backticked generated names.
+
+Minimum generated-contract assertions:
+
+- the wrapper crosses the expected shared helper boundary, such as `generic_request()` or service-specific helpers
+- the expected endpoint or path and HTTP method are passed to the helper
+- query and body parameters are mapped from wrapper arguments, including omitted or defaulted parameters when relevant
+- relevant options, server selection, and API-key behavior are passed through or intentionally absent
+- the mocked helper return value is passed through unchanged unless the wrapper owns response shaping
+
+Handwritten CRAN-safe wrapper tests are reserved for behavior the generator cannot model: preprocessing, branching,
+validation, pagination, error behavior, or response shaping. They should still use mocks or deterministic local fixtures
+by default.
+
+Replay/fixture wrapper tests are integration tests that replay committed fixtures only. Any test file using
+`vcr::use_cassette()` must be classified in `dev/vcr_test_classification.json`.
+
+Live or recording wrapper tests require explicit opt-in, a real `ctx_api_key`, and `--record-live`. They are not default
+readiness evidence.
+
+Export exclusions are recorded in `dev/export_test_exclusions.json`. Each exclusion must include `export`, `reason`,
+`owner`, and `issue`.
+
 ## Handwritten Tests
 
 Use handwritten tests for behavior outside the generator model:
