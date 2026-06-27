@@ -5,19 +5,6 @@
 # (import(httr2)) verbs, so the httr2 functions are mocked in the ComptoxR
 # namespace; nothing hits the network.
 
-if (!exists("generated_contract_ensure_package", mode = "function")) {
-  helper <- file.path("tests", "testthat", "helper-generated-contracts.R")
-  if (!file.exists(helper)) {
-    helper <- "helper-generated-contracts.R"
-  }
-  if (file.exists(helper)) {
-    source(helper)
-  }
-}
-if (exists("generated_contract_ensure_package", mode = "function")) {
-  generated_contract_ensure_package()
-}
-
 # Build a minimal httr2 response with a JSON body.
 chemi_predict_mock_response <- function(status, payload) {
   httr2::response(
