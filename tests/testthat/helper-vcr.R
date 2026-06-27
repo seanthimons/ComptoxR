@@ -1,20 +1,57 @@
 library(vcr)
 
 # Configure vcr
-vcr_dir <- "../testthat/fixtures"
+vcr_dir <- if (requireNamespace("here", quietly = TRUE)) {
+  here::here("tests", "testthat", "fixtures")
+} else {
+  file.path("tests", "testthat", "fixtures")
+}
 if (!dir.exists(vcr_dir)) dir.create(vcr_dir, recursive = TRUE)
+
+comptoxr_vcr_cran_safe_tests <- function() {
+  if (exists("comptoxr_cran_safe_tests", mode = "function")) {
+    return(comptoxr_cran_safe_tests())
+  }
+
+  cran_safe <- tolower(trimws(Sys.getenv("COMPTOXR_CRAN_SAFE_TESTS", unset = "")))
+  if (cran_safe %in% c("true", "1", "yes")) {
+    return(TRUE)
+  }
+
+  not_cran <- tolower(trimws(Sys.getenv("NOT_CRAN", unset = "")))
+  !identical(not_cran, "true")
+}
+
+comptoxr_vcr_record_mode <- function() {
+  if (comptoxr_vcr_cran_safe_tests()) {
+    return("none")
+  }
+
+  NULL
+}
+
+comptoxr_vcr_config <- function(dir = vcr_dir, api_key = Sys.getenv("ctx_api_key")) {
+  config <- list(
+    dir = dir,
+    filter_sensitive_data = list(
+      "<<<API_KEY>>>" = api_key
+      # TODO: Add EPA internal URL patterns when provided (see Phase 27 CONTEXT.md)
+      # Example: "<<<INTERNAL_URL>>>" = "https://internal.epa.gov/pattern"
+    )
+  )
+
+  record_mode <- comptoxr_vcr_record_mode()
+  if (!is.null(record_mode)) {
+    config$record <- record_mode
+  }
+
+  config
+}
 
 # VCR configuration with API key sanitization
 # Note: Cheminformatics endpoints (chemi_*) are unauthenticated (auth=FALSE),
 #       so no key filtering is needed for those cassettes.
-vcr::vcr_configure(
-  dir = vcr_dir,
-  filter_sensitive_data = list(
-    "<<<API_KEY>>>" = Sys.getenv("ctx_api_key")
-    # TODO: Add EPA internal URL patterns when provided (see Phase 27 CONTEXT.md)
-    # Example: "<<<INTERNAL_URL>>>" = "https://internal.epa.gov/pattern"
-  )
-)
+do.call(vcr::vcr_configure, comptoxr_vcr_config(vcr_dir))
 
 # Cassette Management Helpers ------------------------------------------------
 

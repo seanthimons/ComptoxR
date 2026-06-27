@@ -73,7 +73,7 @@ tg_check_generated_tests_current <- function(desired, root = ".") {
       next
     }
 
-    if (!identical(tg_read_text(path), spec$text)) {
+    if (!tg_generated_text_identical(tg_read_text(path), spec$text)) {
       mismatches[[spec$function_name]] <- list(
         function_name = spec$function_name,
         file = spec$file,

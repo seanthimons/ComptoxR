@@ -1,0 +1,59 @@
+name: CRAN Readiness
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cran-readiness:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    name: CRAN-safe Test Readiness
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      COMPTOXR_CRAN_SAFE_TESTS: "true"
+      COMPTOXR_CRAN_READINESS_CPUS: "2"
+      NOT_CRAN: "false"
+      TESTTHAT_CPUS: "2"
+      TESTTHAT_PARALLEL: "TRUE"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Setup R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::devtools
+            any::jsonlite
+            any::pkgload
+            any::testthat
+            any::vcr
+            any::withr
+          needs: check
+
+      - name: Generated-test smoke check
+        run: |
+          Rscript dev/generate_tests.R --check
+          Rscript -e '
+            files <- c(
+              "tests/testthat/test-cc_search.R",
+              "tests/testthat/test-chemi_search.R",
+              "tests/testthat/test-ct_chemical_detail_search.R",
+              "tests/testthat/test-pubchem_search.R"
+            )
+            for (file in files) {
+              testthat::test_file(file)
+            }
+          '
+
+      - name: Run CRAN readiness
+        run: Rscript dev/cran_readiness.R

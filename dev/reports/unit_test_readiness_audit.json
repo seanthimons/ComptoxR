@@ -1,9 +1,9 @@
 {
   "artifact_schema": "unit_test_readiness_audit/v1",
   "metadata": {
-    "generated_at_utc": "2026-06-26T21:51:54Z",
+    "generated_at_utc": "2026-06-27T20:55:04Z",
     "source_branch": "feature/comptoxr-epem-unit-test-readiness",
-    "source_commit": "dfb31fd3bcd227bc190f09a709fd04af3e0bbe69",
+    "source_commit": "93313b852def1c0be52245b283283a027d750aa6",
     "issue": {
       "github_issue": 180,
       "bean": "ComptoxR-wsxo",
@@ -17,6 +17,7 @@
     "test_helpers": ["tests/testthat/helper-api.R", "tests/testthat/helper-generated-contracts.R", "tests/testthat/helper-pipeline.R", "tests/testthat/helper-vcr.R", "tests/testthat/setup.R"],
     "test_tools": [],
     "export_exclusions": "dev/export_test_exclusions.json",
+    "vcr_test_classification": "dev/vcr_test_classification.json",
     "manifest": {
       "path": "dev/test_manifest.json",
       "exists": false,
@@ -28,7 +29,7 @@
       "parse_error": null
     },
     "fixtures": "tests/testthat/fixtures/**/*.yml",
-    "workflows": [".github/workflows/coverage-check.yml", ".github/workflows/db-dsstox.yml", ".github/workflows/db-ecotox.yml", ".github/workflows/db-toxval.yml", ".github/workflows/gitleaks.yml", ".github/workflows/pipeline-tests.yml", ".github/workflows/R-CMD-check.yml", ".github/workflows/rebase-WIP-branches.yml", ".github/workflows/record-cassettes.yml", ".github/workflows/release.yml", ".github/workflows/schema-check.yml", ".github/workflows/test-coverage.yml", ".github/workflows/test-quick.yml", ".github/workflows/update-coverage-badges.yml", ".github/workflows/update-news.yml"],
+    "workflows": [".github/workflows/coverage-check.yml", ".github/workflows/cran-readiness.yml", ".github/workflows/db-dsstox.yml", ".github/workflows/db-ecotox.yml", ".github/workflows/db-toxval.yml", ".github/workflows/gitleaks.yml", ".github/workflows/pipeline-tests.yml", ".github/workflows/R-CMD-check.yml", ".github/workflows/rebase-WIP-branches.yml", ".github/workflows/record-cassettes.yml", ".github/workflows/release.yml", ".github/workflows/schema-check.yml", ".github/workflows/test-coverage.yml", ".github/workflows/test-quick.yml", ".github/workflows/update-coverage-badges.yml", ".github/workflows/update-news.yml"],
     "coverage_files": [".github/badges/ccd-coverage.json", ".github/badges/chemi-coverage.json", "codecov.yml", "schema/coverage_baseline.json"],
     "docs": [".planning/codebase/TESTING.md", "dev/TESTING_GUIDE.md"]
   },
@@ -43,15 +44,15 @@
     "files": {
       "r_files": 320,
       "rd_files": 437,
-      "test_files": 343,
+      "test_files": 345,
       "test_helpers": 5,
       "test_tool_files": 0,
       "fixture_yaml_files": 0,
-      "workflow_files": 15
+      "workflow_files": 16
     },
     "test_style": {
       "generated_header_test_files": 324,
-      "non_generated_header_test_files": 19,
+      "non_generated_header_test_files": 21,
       "backticked_endpoint_call_files": 4,
       "generated_backticked_endpoint_call_files": 0,
       "non_generated_backticked_endpoint_call_files": 4,
@@ -63,11 +64,12 @@
       "non_generated_files_using_vcr": 0,
       "files_using_mocked_bindings": 333,
       "files_using_skip_on_cran": 0,
-      "files_using_skip_if_no_key": 0,
-      "files_using_skip_if_offline": 1,
-      "files_mentioning_ctx_api_key": 5,
+      "files_using_skip_if_no_key": 1,
+      "files_using_skip_if_offline": 2,
+      "files_mentioning_ctx_api_key": 8,
       "unique_cassette_references": 0,
       "generated_backticked_endpoint_call_file_names": [],
+      "files_using_vcr_names": [],
       "generated_files_using_vcr_names": []
     },
     "by_prefix": {
@@ -82,7 +84,9 @@
         "generic": 2,
         "tox": 2,
         "clean": 1,
+        "cran": 1,
         "dss": 1,
+        "exported": 1,
         "generate": 1,
         "package": 1,
         "safe": 1,
@@ -122,18 +126,18 @@
       "function_exports": 391,
       "exports_with_named_test_file": 331,
       "exports_without_named_test_file": 60,
-      "exports_with_test_reference": 363,
-      "exports_without_test_reference": 28,
+      "exports_with_test_reference": 391,
+      "exports_without_test_reference": 0,
       "intentionally_excluded_exports": 0,
-      "export_gaps_after_exclusions": 28,
+      "export_gaps_after_exclusions": 0,
       "family_summary": {
         "as": {
           "exports": 1,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 1,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "batch": {
           "exports": 1,
@@ -146,18 +150,18 @@
         "cc": {
           "exports": 5,
           "named_test_files": 3,
-          "test_references": 4,
+          "test_references": 5,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "chemi": {
           "exports": 187,
           "named_test_files": 181,
-          "test_references": 181,
+          "test_references": 187,
           "intentionally_excluded": 0,
-          "without_test_reference": 6,
-          "gaps_after_exclusions": 6
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "clean": {
           "exports": 1,
@@ -170,18 +174,18 @@
         "ComptoxR": {
           "exports": 1,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 1,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "ct": {
           "exports": 136,
           "named_test_files": 134,
-          "test_references": 134,
+          "test_references": 136,
           "intentionally_excluded": 0,
-          "without_test_reference": 2,
-          "gaps_after_exclusions": 2
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "cts": {
           "exports": 5,
@@ -194,18 +198,18 @@
         "ctx": {
           "exports": 1,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 1,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "dss": {
           "exports": 9,
           "named_test_files": 0,
-          "test_references": 8,
+          "test_references": 9,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "eco": {
           "exports": 8,
@@ -218,18 +222,18 @@
         "epi": {
           "exports": 2,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 2,
           "intentionally_excluded": 0,
-          "without_test_reference": 2,
-          "gaps_after_exclusions": 2
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "extract": {
           "exports": 3,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 3,
           "intentionally_excluded": 0,
-          "without_test_reference": 3,
-          "gaps_after_exclusions": 3
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "generic": {
           "exports": 3,
@@ -250,10 +254,10 @@
         "geometric": {
           "exports": 1,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 1,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "is": {
           "exports": 1,
@@ -266,34 +270,34 @@
         "min2": {
           "exports": 1,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 1,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "pretty": {
           "exports": 4,
           "named_test_files": 0,
-          "test_references": 0,
+          "test_references": 4,
           "intentionally_excluded": 0,
-          "without_test_reference": 4,
-          "gaps_after_exclusions": 4
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "pubchem": {
           "exports": 4,
           "named_test_files": 3,
-          "test_references": 3,
+          "test_references": 4,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "run": {
           "exports": 3,
           "named_test_files": 0,
-          "test_references": 1,
+          "test_references": 3,
           "intentionally_excluded": 0,
-          "without_test_reference": 2,
-          "gaps_after_exclusions": 2
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         },
         "toxval": {
           "exports": 8,
@@ -306,24 +310,24 @@
         "util": {
           "exports": 2,
           "named_test_files": 1,
-          "test_references": 1,
+          "test_references": 2,
           "intentionally_excluded": 0,
-          "without_test_reference": 1,
-          "gaps_after_exclusions": 1
+          "without_test_reference": 0,
+          "gaps_after_exclusions": 0
         }
       },
       "exports_without_named_test_file_names": ["as_cas", "batch_limit", "cc_api_key", "cc_server", "chemi_cluster", "chemi_cluster_sim_list", "chemi_functional_use", "chemi_predict", "chemi_safety_section", "chemi_server", "ComptoxR_package_sitrep", "ct_api_key", "ct_classify", "cts_flatten_metabolizer_tree", "cts_server", "ctx_server", "dss_cas", "dss_connect", "dss_disconnect", "dss_fuzzy", "dss_install", "dss_query", "dss_resolve", "dss_search", "dss_synonyms", "eco_fields", "eco_health", "eco_install", "eco_inventory", "eco_results", "eco_server", "eco_species", "eco_tables", "epi_server", "epi_suite_pull_data", "extract_cas", "extract_formulas", "extract_mixture", "generic_cc_request", "genra_get_tox_data", "geometric.mean", "is_cas", "min2", "pretty_casewhen", "pretty_list", "pretty_print", "pretty_rename", "pubchem_server", "run_debug", "run_setup", "run_verbose", "toxval_fields", "toxval_health", "toxval_install", "toxval_results", "toxval_search", "toxval_server", "toxval_sources", "toxval_tables", "util_classyfire"],
-      "exports_without_test_reference_names": ["as_cas", "cc_server", "chemi_cluster", "chemi_cluster_sim_list", "chemi_functional_use", "chemi_predict", "chemi_safety_section", "chemi_server", "ComptoxR_package_sitrep", "ct_api_key", "ct_classify", "ctx_server", "dss_install", "epi_server", "epi_suite_pull_data", "extract_cas", "extract_formulas", "extract_mixture", "geometric.mean", "min2", "pretty_casewhen", "pretty_list", "pretty_print", "pretty_rename", "pubchem_server", "run_setup", "run_verbose", "util_classyfire"],
+      "exports_without_test_reference_names": [],
       "intentionally_excluded_export_names": [],
-      "export_gaps": ["as_cas", "cc_server", "chemi_cluster", "chemi_cluster_sim_list", "chemi_functional_use", "chemi_predict", "chemi_safety_section", "chemi_server", "ComptoxR_package_sitrep", "ct_api_key", "ct_classify", "ctx_server", "dss_install", "epi_server", "epi_suite_pull_data", "extract_cas", "extract_formulas", "extract_mixture", "geometric.mean", "min2", "pretty_casewhen", "pretty_list", "pretty_print", "pretty_rename", "pubchem_server", "run_setup", "run_verbose", "util_classyfire"],
+      "export_gaps": [],
       "export_inventory": [
         {
           "export": "as_cas",
           "family": "as",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -343,7 +347,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": ["tests/testthat/test-generic_request.R", "tests/testthat/test-package_sitrep.R"],
+          "literal_reference_files": ["tests/testthat/test-exported_utility_contracts.R", "tests/testthat/test-generic_request.R", "tests/testthat/test-package_sitrep.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -382,8 +386,8 @@
           "family": "cc",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1282,8 +1286,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1292,8 +1296,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1322,8 +1326,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1482,8 +1486,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1693,7 +1697,7 @@
           "named_test_file": true,
           "named_test_files": "tests/testthat/test-chemi_resolver_lookup.R",
           "literal_test_reference": true,
-          "literal_reference_files": ["tests/testthat/test-chemi_resolver_lookup.R", "tests/testthat/test-cts.R"],
+          "literal_reference_files": "tests/testthat/test-chemi_resolver_lookup.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1862,8 +1866,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -1942,8 +1946,8 @@
           "family": "chemi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -2272,8 +2276,8 @@
           "family": "ComptoxR",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-package_sitrep.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -2282,8 +2286,8 @@
           "family": "ct",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3062,8 +3066,8 @@
           "family": "ct",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3692,8 +3696,8 @@
           "family": "ctx",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3742,8 +3746,8 @@
           "family": "dss",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3872,8 +3876,8 @@
           "family": "epi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3882,8 +3886,8 @@
           "family": "epi",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3892,8 +3896,8 @@
           "family": "extract",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3902,8 +3906,8 @@
           "family": "extract",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3912,8 +3916,8 @@
           "family": "extract",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3943,7 +3947,7 @@
           "named_test_file": true,
           "named_test_files": "tests/testthat/test-generic_request.R",
           "literal_test_reference": true,
-          "literal_reference_files": ["tests/testthat/test-chemi_alerts_alerts.R", "tests/testthat/test-chemi_alerts_groups.R", "tests/testthat/test-chemi_alerts_operations.R", "tests/testthat/test-chemi_amnb_nate.R", "tests/testthat/test-chemi_amos.R", "tests/testthat/test-chemi_amos_analytical_qc_list.R", "tests/testthat/test-chemi_amos_analytical_qc_pagination.R", "tests/testthat/test-chemi_amos_database.R", "tests/testthat/test-chemi_amos_dtxsids_for_functional_use.R", "tests/testthat/test-chemi_amos_fact_sheet_list.R", "tests/testthat/test-chemi_amos_fact_sheet_pagination.R", "tests/testthat/test-chemi_amos_fact_sheets_for_substance.R", "tests/testthat/test-chemi_amos_find_dtxsids.R", "tests/testthat/test-chemi_amos_formula.R", "tests/testthat/test-chemi_amos_functional_uses_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_classification_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_data_source_info.R", "tests/testthat/test-chemi_amos_get_image_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_info_by_id.R", "tests/testthat/test-chemi_amos_get_ir_spectrum.R", "tests/testthat/test-chemi_amos_get_mass_spectrum.R", "tests/testthat/test-chemi_amos_get_ms_ready_methods.R", "tests/testthat/test-chemi_amos_get_nmr_spectrum.R", "tests/testthat/test-chemi_amos_get_pdf.R", "tests/testthat/test-chemi_amos_get_similar_structures.R", "tests/testthat/test-chemi_amos_get_substances_for_term.R", "tests/testthat/test-chemi_amos_inchikey_first_block.R", "tests/testthat/test-chemi_amos_method_list.R", "tests/testthat/test-chemi_amos_method_pagination.R", "tests/testthat/test-chemi_amos_method_with_spectra.R", "tests/testthat/test-chemi_amos_record_id.R", "tests/testthat/test-chemi_amos_record_type_count.R", "tests/testthat/test-chemi_amos_substance_similarity.R", "tests/testthat/test-chemi_amos_substring.R", "tests/testthat/test-chemi_arn_cats.R", "tests/testthat/test-chemi_chet_chemicals_alias.R", "tests/testthat/test-chemi_chet_chemicals_chemdelete.R", "tests/testthat/test-chemi_chet_chemicals_chemical_DL.R", "tests/testthat/test-chemi_chet_chemicals_chemset.R", "tests/testthat/test-chemi_chet_chemicals_chemtemp.R", "tests/testthat/test-chemi_chet_chemicals_counts.R", "tests/testthat/test-chemi_chet_chemicals_database.R", "tests/testthat/test-chemi_chet_chemicals_database_old.R", "tests/testthat/test-chemi_chet_chemicals_database_stats.R", "tests/testthat/test-chemi_chet_chemicals_image.R", "tests/testthat/test-chemi_chet_chemicals_maps.R", "tests/testthat/test-chemi_chet_chemicals_singlechemical.R", "tests/testthat/test-chemi_chet_chemicals_suggest.R", "tests/testthat/test-chemi_chet_chemicals_verify.R", "tests/testthat/test-chemi_chet_curators_me.R", "tests/testthat/test-chemi_chet_reaction.R", "tests/testthat/test-chemi_chet_reaction_database.R", "tests/testthat/test-chemi_chet_reaction_database_old.R", "tests/testthat/test-chemi_chet_reaction_database_stats.R", "tests/testthat/test-chemi_chet_reaction_dbcounts.R", "tests/testthat/test-chemi_chet_reaction_details.R", "tests/testthat/test-chemi_chet_reaction_editor.R", "tests/testthat/test-chemi_chet_reaction_libraries.R", "tests/testthat/test-chemi_chet_reaction_mapid.R", "tests/testthat/test-chemi_chet_reaction_mappositions.R", "tests/testthat/test-chemi_chet_reaction_maps.R", "tests/testthat/test-chemi_chet_reaction_react_maps.R", "tests/testthat/test-chemi_chet_reaction_reactionmap.R", "tests/testthat/test-chemi_chet_reaction_searchcounts.R", "tests/testthat/test-chemi_chet_reaction_singlereaction.R", "tests/testthat/test-chemi_chet_reaction_table.R", "tests/testthat/test-chemi_classyfire.R", "tests/testthat/test-chemi_descriptors.R", "tests/testthat/test-chemi_descriptors_bulk.R", "tests/testthat/test-chemi_hazard.R", "tests/testthat/test-chemi_mordred.R", "tests/testthat/test-chemi_ncc_cats.R", "tests/testthat/test-chemi_opera.R", "tests/testthat/test-chemi_opera_report.R", "tests/testthat/test-chemi_padel.R", "tests/testthat/test-chemi_padel_bulk.R", "tests/testthat/test-chemi_pfas_atlas.R", "tests/testthat/test-chemi_pfas_cats.R", "tests/testthat/test-chemi_predictor_models_predict.R", "tests/testthat/test-chemi_predictor_modelset_report.R", "tests/testthat/test-chemi_predictor_qmrf.R", "tests/testthat/test-chemi_predictor_report.R", "tests/testthat/test-chemi_rdkit.R", "tests/testthat/test-chemi_resolver_ccte_list.R", "tests/testthat/test-chemi_resolver_ccte_lists.R", "tests/testthat/test-chemi_resolver_classyfire.R", "tests/testthat/test-chemi_resolver_getallannotations.R", "tests/testthat/test-chemi_resolver_getannotation.R", "tests/testthat/test-chemi_resolver_getannotationslist.R", "tests/testthat/test-chemi_resolver_getdatasources.R", "tests/testthat/test-chemi_resolver_getsubstance.R", "tests/testthat/test-chemi_resolver_links.R", "tests/testthat/test-chemi_resolver_lookup.R", "tests/testthat/test-chemi_resolver_lookupCASRN.R", "tests/testthat/test-chemi_resolver_mesh.R", "tests/testthat/test-chemi_resolver_pubchem_section.R", "tests/testthat/test-chemi_resolver_safety_flags.R", "tests/testthat/test-chemi_safety_classes.R", "tests/testthat/test-chemi_safety_hcodes.R", "tests/testthat/test-chemi_safety_pcodes.R", "tests/testthat/test-chemi_safety_statements.R", "tests/testthat/test-chemi_search_exact.R", "tests/testthat/test-chemi_search_gethazard.R", "tests/testthat/test-chemi_search_similar.R", "tests/testthat/test-chemi_search_substructure.R", "tests/testthat/test-chemi_services_layout.R", "tests/testthat/test-chemi_services_smirks2rxn.R", "tests/testthat/test-chemi_stdizer.R", "tests/testthat/test-chemi_stdizer_groups.R", "tests/testthat/test-chemi_stdizer_groups_recursive.R", "tests/testthat/test-chemi_stdizer_operations.R", "tests/testthat/test-chemi_stdizer_workflows.R", "tests/testthat/test-chemi_toxprints.R", "tests/testthat/test-chemi_toxprints_assays.R", "tests/testthat/test-chemi_toxprints_assays_check.R", "tests/testthat/test-chemi_toxprints_bulk.R", "tests/testthat/test-chemi_toxprints_calculate.R", "tests/testthat/test-chemi_toxprints_enrichments.R", "tests/testthat/test-chemi_toxprints_global_assays.R", "tests/testthat/test-chemi_toxprints_global_toxprints.R", "tests/testthat/test-chemi_toxprints_toxprints.R", "tests/testthat/test-chemi_webtest.R", "tests/testthat/test-chemi_webtest_bulk.R", "tests/testthat/test-chemi_webtest_predict.R", "tests/testthat/test-chemi_webtest_report.R", "tests/testthat/test-ct_bioactivity_analyticalqc_search.R", "tests/testthat/test-ct_bioactivity_aop_search_by_entrez_gene_id.R", "tests/testthat/test-ct_bioactivity_aop_search_by_event_number.R", "tests/testthat/test-ct_bioactivity_aop_search_by_toxcast_aeid.R", "tests/testthat/test-ct_bioactivity_assay.R", "tests/testthat/test-ct_bioactivity_assay_chemicals_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_assay_count.R", "tests/testthat/test-ct_bioactivity_assay_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_assay_search_by_aeid_bulk.R", "tests/testthat/test-ct_bioactivity_assay_search_by_endpoint.R", "tests/testthat/test-ct_bioactivity_assay_search_by_gene.R", "tests/testthat/test-ct_bioactivity_assay_single_conc_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_data_aed_search.R", "tests/testthat/test-ct_bioactivity_data_aed_search_bulk.R", "tests/testthat/test-ct_bioactivity_data_search.R", "tests/testthat/test-ct_bioactivity_data_search_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_data_search_by_aeid_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_m4id.R", "tests/testthat/test-ct_bioactivity_data_search_by_m4id_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_spid.R", "tests/testthat/test-ct_bioactivity_data_search_by_spid_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_tissue.R", "tests/testthat/test-ct_bioactivity_models_search.R", "tests/testthat/test-ct_bioactivity_search_contain.R", "tests/testthat/test-ct_bioactivity_search_equal.R", "tests/testthat/test-ct_bioactivity_search_start_with.R", "tests/testthat/test-ct_chemical_count_by_exact_formula.R", "tests/testthat/test-ct_chemical_count_by_msready_formula.R", "tests/testthat/test-ct_chemical_detail_search.R", "tests/testthat/test-ct_chemical_detail_search_bulk.R", "tests/testthat/test-ct_chemical_detail_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_detail_search_by_dtxcid_bulk.R", "tests/testthat/test-ct_chemical_detail_search_by_smiles.R", "tests/testthat/test-ct_chemical_extra_data_search.R", "tests/testthat/test-ct_chemical_extra_data_search_bulk.R", "tests/testthat/test-ct_chemical_fate_experimental_search.R", "tests/testthat/test-ct_chemical_fate_predicted_search.R", "tests/testthat/test-ct_chemical_fate_search.R", "tests/testthat/test-ct_chemical_fate_search_bulk.R", "tests/testthat/test-ct_chemical_file_image_search.R", "tests/testthat/test-ct_chemical_file_image_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_file_image_search_by_gsid.R", "tests/testthat/test-ct_chemical_file_mol_search.R", "tests/testthat/test-ct_chemical_file_mol_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_list_all.R", "tests/testthat/test-ct_chemical_list_chemicals_search_by_listname.R", "tests/testthat/test-ct_chemical_list_chemicals_search_contain.R", "tests/testthat/test-ct_chemical_list_chemicals_search_equal.R", "tests/testthat/test-ct_chemical_list_chemicals_search_start_with.R", "tests/testthat/test-ct_chemical_list_search.R", "tests/testthat/test-ct_chemical_list_search_by_name.R", "tests/testthat/test-ct_chemical_list_search_by_type.R", "tests/testthat/test-ct_chemical_list_type.R", "tests/testthat/test-ct_chemical_msready_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_msready_search_by_dtxcid_bulk.R", "tests/testthat/test-ct_chemical_msready_search_by_formula.R", "tests/testthat/test-ct_chemical_msready_search_by_mass.R", "tests/testthat/test-ct_chemical_msready_search_by_mass_bulk.R", "tests/testthat/test-ct_chemical_property_experimental_name.R", "tests/testthat/test-ct_chemical_property_experimental_search.R", "tests/testthat/test-ct_chemical_property_experimental_search_bulk.R", "tests/testthat/test-ct_chemical_property_experimental_search_by_range.R", "tests/testthat/test-ct_chemical_property_predicted_name.R", "tests/testthat/test-ct_chemical_property_predicted_search.R", "tests/testthat/test-ct_chemical_property_predicted_search_bulk.R", "tests/testthat/test-ct_chemical_property_predicted_search_by_range.R", "tests/testthat/test-ct_chemical_property_search.R", "tests/testthat/test-ct_chemical_search_by_exact_formula.R", "tests/testthat/test-ct_chemical_search_by_msready_formula.R", "tests/testthat/test-ct_chemical_search_by_msready_formula_bulk.R", "tests/testthat/test-ct_chemical_search_contain.R", "tests/testthat/test-ct_chemical_search_equal.R", "tests/testthat/test-ct_chemical_search_equal_bulk.R", "tests/testthat/test-ct_chemical_search_start_with.R", "tests/testthat/test-ct_chemical_synonym_search.R", "tests/testthat/test-ct_chemical_synonym_search_bulk.R", "tests/testthat/test-ct_exposure_ccd_chem_weight_fractions_search.R", "tests/testthat/test-ct_exposure_ccd_functional_use_search.R", "tests/testthat/test-ct_exposure_ccd_keywords_search.R", "tests/testthat/test-ct_exposure_ccd_monitoring_data_search.R", "tests/testthat/test-ct_exposure_ccd_production_volume_search.R", "tests/testthat/test-ct_exposure_ccd_puc_search.R", "tests/testthat/test-ct_exposure_functional_use_category.R", "tests/testthat/test-ct_exposure_functional_use_probability_search.R", "tests/testthat/test-ct_exposure_functional_use_search.R", "tests/testthat/test-ct_exposure_functional_use_search_bulk.R", "tests/testthat/test-ct_exposure_httk_search.R", "tests/testthat/test-ct_exposure_httk_search_bulk.R", "tests/testthat/test-ct_exposure_list_presence_search.R", "tests/testthat/test-ct_exposure_list_presence_search_bulk.R", "tests/testthat/test-ct_exposure_list_presence_tags.R", "tests/testthat/test-ct_exposure_mmdb_aggregate.R", "tests/testthat/test-ct_exposure_mmdb_aggregate_by_medium.R", "tests/testthat/test-ct_exposure_mmdb_mediums.R", "tests/testthat/test-ct_exposure_mmdb_single_sample.R", "tests/testthat/test-ct_exposure_mmdb_single_sample_by_medium.R", "tests/testthat/test-ct_exposure_product_data_puc.R", "tests/testthat/test-ct_exposure_product_data_search.R", "tests/testthat/test-ct_exposure_product_data_search_bulk.R", "tests/testthat/test-ct_exposure_seem_demographic_search.R", "tests/testthat/test-ct_exposure_seem_demographic_search_bulk.R", "tests/testthat/test-ct_exposure_seem_general_search.R", "tests/testthat/test-ct_exposure_seem_general_search_bulk.R", "tests/testthat/test-ct_hazard_adme_ivive_search.R", "tests/testthat/test-ct_hazard_cancer_search.R", "tests/testthat/test-ct_hazard_cancer_search_bulk.R", "tests/testthat/test-ct_hazard_genetox_details_search.R", "tests/testthat/test-ct_hazard_genetox_details_search_bulk.R", "tests/testthat/test-ct_hazard_genetox_search.R", "tests/testthat/test-ct_hazard_genetox_search_bulk.R", "tests/testthat/test-ct_hazard_hawc_search.R", "tests/testthat/test-ct_hazard_iris_search.R", "tests/testthat/test-ct_hazard_pprtv_search.R", "tests/testthat/test-ct_hazard_skin_eye_search.R", "tests/testthat/test-ct_hazard_skin_eye_search_bulk.R", "tests/testthat/test-ct_hazard_toxref_data_search.R", "tests/testthat/test-ct_hazard_toxref_data_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_data_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_effects_search.R", "tests/testthat/test-ct_hazard_toxref_effects_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_effects_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_observations_search.R", "tests/testthat/test-ct_hazard_toxref_observations_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_observations_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_search.R", "tests/testthat/test-ct_hazard_toxref_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxval_search.R", "tests/testthat/test-ct_hazard_toxval_search_bulk.R", "tests/testthat/test-ct_hazard_toxval_search_by_category.R", "tests/testthat/test-ct_hazard_toxval_supercategory_search.R", "tests/testthat/test-ct_related.R", "tests/testthat/test-ct_similar.R", "tests/testthat/test-generate_tests_pipeline.R", "tests/testthat/test-generic_request.R"],
+          "literal_reference_files": ["tests/testthat/test-chemi_alerts_alerts.R", "tests/testthat/test-chemi_alerts_groups.R", "tests/testthat/test-chemi_alerts_operations.R", "tests/testthat/test-chemi_amnb_nate.R", "tests/testthat/test-chemi_amos.R", "tests/testthat/test-chemi_amos_analytical_qc_list.R", "tests/testthat/test-chemi_amos_analytical_qc_pagination.R", "tests/testthat/test-chemi_amos_database.R", "tests/testthat/test-chemi_amos_dtxsids_for_functional_use.R", "tests/testthat/test-chemi_amos_fact_sheet_list.R", "tests/testthat/test-chemi_amos_fact_sheet_pagination.R", "tests/testthat/test-chemi_amos_fact_sheets_for_substance.R", "tests/testthat/test-chemi_amos_find_dtxsids.R", "tests/testthat/test-chemi_amos_formula.R", "tests/testthat/test-chemi_amos_functional_uses_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_classification_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_data_source_info.R", "tests/testthat/test-chemi_amos_get_image_for_dtxsid.R", "tests/testthat/test-chemi_amos_get_info_by_id.R", "tests/testthat/test-chemi_amos_get_ir_spectrum.R", "tests/testthat/test-chemi_amos_get_mass_spectrum.R", "tests/testthat/test-chemi_amos_get_ms_ready_methods.R", "tests/testthat/test-chemi_amos_get_nmr_spectrum.R", "tests/testthat/test-chemi_amos_get_pdf.R", "tests/testthat/test-chemi_amos_get_similar_structures.R", "tests/testthat/test-chemi_amos_get_substances_for_term.R", "tests/testthat/test-chemi_amos_inchikey_first_block.R", "tests/testthat/test-chemi_amos_method_list.R", "tests/testthat/test-chemi_amos_method_pagination.R", "tests/testthat/test-chemi_amos_method_with_spectra.R", "tests/testthat/test-chemi_amos_record_id.R", "tests/testthat/test-chemi_amos_record_type_count.R", "tests/testthat/test-chemi_amos_substance_similarity.R", "tests/testthat/test-chemi_amos_substring.R", "tests/testthat/test-chemi_arn_cats.R", "tests/testthat/test-chemi_chet_chemicals_alias.R", "tests/testthat/test-chemi_chet_chemicals_chemdelete.R", "tests/testthat/test-chemi_chet_chemicals_chemical_DL.R", "tests/testthat/test-chemi_chet_chemicals_chemset.R", "tests/testthat/test-chemi_chet_chemicals_chemtemp.R", "tests/testthat/test-chemi_chet_chemicals_counts.R", "tests/testthat/test-chemi_chet_chemicals_database.R", "tests/testthat/test-chemi_chet_chemicals_database_old.R", "tests/testthat/test-chemi_chet_chemicals_database_stats.R", "tests/testthat/test-chemi_chet_chemicals_image.R", "tests/testthat/test-chemi_chet_chemicals_maps.R", "tests/testthat/test-chemi_chet_chemicals_singlechemical.R", "tests/testthat/test-chemi_chet_chemicals_suggest.R", "tests/testthat/test-chemi_chet_chemicals_verify.R", "tests/testthat/test-chemi_chet_curators_me.R", "tests/testthat/test-chemi_chet_reaction.R", "tests/testthat/test-chemi_chet_reaction_database.R", "tests/testthat/test-chemi_chet_reaction_database_old.R", "tests/testthat/test-chemi_chet_reaction_database_stats.R", "tests/testthat/test-chemi_chet_reaction_dbcounts.R", "tests/testthat/test-chemi_chet_reaction_details.R", "tests/testthat/test-chemi_chet_reaction_editor.R", "tests/testthat/test-chemi_chet_reaction_libraries.R", "tests/testthat/test-chemi_chet_reaction_mapid.R", "tests/testthat/test-chemi_chet_reaction_mappositions.R", "tests/testthat/test-chemi_chet_reaction_maps.R", "tests/testthat/test-chemi_chet_reaction_react_maps.R", "tests/testthat/test-chemi_chet_reaction_reactionmap.R", "tests/testthat/test-chemi_chet_reaction_searchcounts.R", "tests/testthat/test-chemi_chet_reaction_singlereaction.R", "tests/testthat/test-chemi_chet_reaction_table.R", "tests/testthat/test-chemi_classyfire.R", "tests/testthat/test-chemi_descriptors.R", "tests/testthat/test-chemi_descriptors_bulk.R", "tests/testthat/test-chemi_hazard.R", "tests/testthat/test-chemi_mordred.R", "tests/testthat/test-chemi_ncc_cats.R", "tests/testthat/test-chemi_opera.R", "tests/testthat/test-chemi_opera_report.R", "tests/testthat/test-chemi_padel.R", "tests/testthat/test-chemi_padel_bulk.R", "tests/testthat/test-chemi_pfas_atlas.R", "tests/testthat/test-chemi_pfas_cats.R", "tests/testthat/test-chemi_predictor_models_predict.R", "tests/testthat/test-chemi_predictor_modelset_report.R", "tests/testthat/test-chemi_predictor_qmrf.R", "tests/testthat/test-chemi_predictor_report.R", "tests/testthat/test-chemi_rdkit.R", "tests/testthat/test-chemi_resolver_ccte_list.R", "tests/testthat/test-chemi_resolver_ccte_lists.R", "tests/testthat/test-chemi_resolver_classyfire.R", "tests/testthat/test-chemi_resolver_getallannotations.R", "tests/testthat/test-chemi_resolver_getannotation.R", "tests/testthat/test-chemi_resolver_getannotationslist.R", "tests/testthat/test-chemi_resolver_getdatasources.R", "tests/testthat/test-chemi_resolver_getsubstance.R", "tests/testthat/test-chemi_resolver_links.R", "tests/testthat/test-chemi_resolver_lookup.R", "tests/testthat/test-chemi_resolver_lookupCASRN.R", "tests/testthat/test-chemi_resolver_mesh.R", "tests/testthat/test-chemi_resolver_pubchem_section.R", "tests/testthat/test-chemi_resolver_safety_flags.R", "tests/testthat/test-chemi_safety_classes.R", "tests/testthat/test-chemi_safety_hcodes.R", "tests/testthat/test-chemi_safety_pcodes.R", "tests/testthat/test-chemi_safety_statements.R", "tests/testthat/test-chemi_search_exact.R", "tests/testthat/test-chemi_search_gethazard.R", "tests/testthat/test-chemi_search_similar.R", "tests/testthat/test-chemi_search_substructure.R", "tests/testthat/test-chemi_services_layout.R", "tests/testthat/test-chemi_services_smirks2rxn.R", "tests/testthat/test-chemi_stdizer.R", "tests/testthat/test-chemi_stdizer_groups.R", "tests/testthat/test-chemi_stdizer_groups_recursive.R", "tests/testthat/test-chemi_stdizer_operations.R", "tests/testthat/test-chemi_stdizer_workflows.R", "tests/testthat/test-chemi_toxprints.R", "tests/testthat/test-chemi_toxprints_assays.R", "tests/testthat/test-chemi_toxprints_assays_check.R", "tests/testthat/test-chemi_toxprints_bulk.R", "tests/testthat/test-chemi_toxprints_calculate.R", "tests/testthat/test-chemi_toxprints_enrichments.R", "tests/testthat/test-chemi_toxprints_global_assays.R", "tests/testthat/test-chemi_toxprints_global_toxprints.R", "tests/testthat/test-chemi_toxprints_toxprints.R", "tests/testthat/test-chemi_webtest.R", "tests/testthat/test-chemi_webtest_bulk.R", "tests/testthat/test-chemi_webtest_predict.R", "tests/testthat/test-chemi_webtest_report.R", "tests/testthat/test-ct_bioactivity_analyticalqc_search.R", "tests/testthat/test-ct_bioactivity_aop_search_by_entrez_gene_id.R", "tests/testthat/test-ct_bioactivity_aop_search_by_event_number.R", "tests/testthat/test-ct_bioactivity_aop_search_by_toxcast_aeid.R", "tests/testthat/test-ct_bioactivity_assay.R", "tests/testthat/test-ct_bioactivity_assay_chemicals_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_assay_count.R", "tests/testthat/test-ct_bioactivity_assay_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_assay_search_by_aeid_bulk.R", "tests/testthat/test-ct_bioactivity_assay_search_by_endpoint.R", "tests/testthat/test-ct_bioactivity_assay_search_by_gene.R", "tests/testthat/test-ct_bioactivity_assay_single_conc_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_data_aed_search.R", "tests/testthat/test-ct_bioactivity_data_aed_search_bulk.R", "tests/testthat/test-ct_bioactivity_data_search.R", "tests/testthat/test-ct_bioactivity_data_search_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_aeid.R", "tests/testthat/test-ct_bioactivity_data_search_by_aeid_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_m4id.R", "tests/testthat/test-ct_bioactivity_data_search_by_m4id_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_spid.R", "tests/testthat/test-ct_bioactivity_data_search_by_spid_bulk.R", "tests/testthat/test-ct_bioactivity_data_search_by_tissue.R", "tests/testthat/test-ct_bioactivity_models_search.R", "tests/testthat/test-ct_bioactivity_search_contain.R", "tests/testthat/test-ct_bioactivity_search_equal.R", "tests/testthat/test-ct_bioactivity_search_start_with.R", "tests/testthat/test-ct_chemical_count_by_exact_formula.R", "tests/testthat/test-ct_chemical_count_by_msready_formula.R", "tests/testthat/test-ct_chemical_detail_search.R", "tests/testthat/test-ct_chemical_detail_search_bulk.R", "tests/testthat/test-ct_chemical_detail_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_detail_search_by_dtxcid_bulk.R", "tests/testthat/test-ct_chemical_detail_search_by_smiles.R", "tests/testthat/test-ct_chemical_extra_data_search.R", "tests/testthat/test-ct_chemical_extra_data_search_bulk.R", "tests/testthat/test-ct_chemical_fate_experimental_search.R", "tests/testthat/test-ct_chemical_fate_predicted_search.R", "tests/testthat/test-ct_chemical_fate_search.R", "tests/testthat/test-ct_chemical_fate_search_bulk.R", "tests/testthat/test-ct_chemical_file_image_search.R", "tests/testthat/test-ct_chemical_file_image_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_file_image_search_by_gsid.R", "tests/testthat/test-ct_chemical_file_mol_search.R", "tests/testthat/test-ct_chemical_file_mol_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_list_all.R", "tests/testthat/test-ct_chemical_list_chemicals_search_by_listname.R", "tests/testthat/test-ct_chemical_list_chemicals_search_contain.R", "tests/testthat/test-ct_chemical_list_chemicals_search_equal.R", "tests/testthat/test-ct_chemical_list_chemicals_search_start_with.R", "tests/testthat/test-ct_chemical_list_search.R", "tests/testthat/test-ct_chemical_list_search_by_name.R", "tests/testthat/test-ct_chemical_list_search_by_type.R", "tests/testthat/test-ct_chemical_list_type.R", "tests/testthat/test-ct_chemical_msready_search_by_dtxcid.R", "tests/testthat/test-ct_chemical_msready_search_by_dtxcid_bulk.R", "tests/testthat/test-ct_chemical_msready_search_by_formula.R", "tests/testthat/test-ct_chemical_msready_search_by_mass.R", "tests/testthat/test-ct_chemical_msready_search_by_mass_bulk.R", "tests/testthat/test-ct_chemical_property_experimental_name.R", "tests/testthat/test-ct_chemical_property_experimental_search.R", "tests/testthat/test-ct_chemical_property_experimental_search_bulk.R", "tests/testthat/test-ct_chemical_property_experimental_search_by_range.R", "tests/testthat/test-ct_chemical_property_predicted_name.R", "tests/testthat/test-ct_chemical_property_predicted_search.R", "tests/testthat/test-ct_chemical_property_predicted_search_bulk.R", "tests/testthat/test-ct_chemical_property_predicted_search_by_range.R", "tests/testthat/test-ct_chemical_property_search.R", "tests/testthat/test-ct_chemical_search_by_exact_formula.R", "tests/testthat/test-ct_chemical_search_by_msready_formula.R", "tests/testthat/test-ct_chemical_search_by_msready_formula_bulk.R", "tests/testthat/test-ct_chemical_search_contain.R", "tests/testthat/test-ct_chemical_search_equal.R", "tests/testthat/test-ct_chemical_search_equal_bulk.R", "tests/testthat/test-ct_chemical_search_start_with.R", "tests/testthat/test-ct_chemical_synonym_search.R", "tests/testthat/test-ct_chemical_synonym_search_bulk.R", "tests/testthat/test-ct_exposure_ccd_chem_weight_fractions_search.R", "tests/testthat/test-ct_exposure_ccd_functional_use_search.R", "tests/testthat/test-ct_exposure_ccd_keywords_search.R", "tests/testthat/test-ct_exposure_ccd_monitoring_data_search.R", "tests/testthat/test-ct_exposure_ccd_production_volume_search.R", "tests/testthat/test-ct_exposure_ccd_puc_search.R", "tests/testthat/test-ct_exposure_functional_use_category.R", "tests/testthat/test-ct_exposure_functional_use_probability_search.R", "tests/testthat/test-ct_exposure_functional_use_search.R", "tests/testthat/test-ct_exposure_functional_use_search_bulk.R", "tests/testthat/test-ct_exposure_httk_search.R", "tests/testthat/test-ct_exposure_httk_search_bulk.R", "tests/testthat/test-ct_exposure_list_presence_search.R", "tests/testthat/test-ct_exposure_list_presence_search_bulk.R", "tests/testthat/test-ct_exposure_list_presence_tags.R", "tests/testthat/test-ct_exposure_mmdb_aggregate.R", "tests/testthat/test-ct_exposure_mmdb_aggregate_by_medium.R", "tests/testthat/test-ct_exposure_mmdb_mediums.R", "tests/testthat/test-ct_exposure_mmdb_single_sample.R", "tests/testthat/test-ct_exposure_mmdb_single_sample_by_medium.R", "tests/testthat/test-ct_exposure_product_data_puc.R", "tests/testthat/test-ct_exposure_product_data_search.R", "tests/testthat/test-ct_exposure_product_data_search_bulk.R", "tests/testthat/test-ct_exposure_seem_demographic_search.R", "tests/testthat/test-ct_exposure_seem_demographic_search_bulk.R", "tests/testthat/test-ct_exposure_seem_general_search.R", "tests/testthat/test-ct_exposure_seem_general_search_bulk.R", "tests/testthat/test-ct_hazard_adme_ivive_search.R", "tests/testthat/test-ct_hazard_cancer_search.R", "tests/testthat/test-ct_hazard_cancer_search_bulk.R", "tests/testthat/test-ct_hazard_genetox_details_search.R", "tests/testthat/test-ct_hazard_genetox_details_search_bulk.R", "tests/testthat/test-ct_hazard_genetox_search.R", "tests/testthat/test-ct_hazard_genetox_search_bulk.R", "tests/testthat/test-ct_hazard_hawc_search.R", "tests/testthat/test-ct_hazard_iris_search.R", "tests/testthat/test-ct_hazard_pprtv_search.R", "tests/testthat/test-ct_hazard_skin_eye_search.R", "tests/testthat/test-ct_hazard_skin_eye_search_bulk.R", "tests/testthat/test-ct_hazard_toxref_data_search.R", "tests/testthat/test-ct_hazard_toxref_data_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_data_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_effects_search.R", "tests/testthat/test-ct_hazard_toxref_effects_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_effects_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_observations_search.R", "tests/testthat/test-ct_hazard_toxref_observations_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_observations_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxref_search.R", "tests/testthat/test-ct_hazard_toxref_search_by_study_id.R", "tests/testthat/test-ct_hazard_toxref_search_by_study_type.R", "tests/testthat/test-ct_hazard_toxval_search.R", "tests/testthat/test-ct_hazard_toxval_search_bulk.R", "tests/testthat/test-ct_hazard_toxval_search_by_category.R", "tests/testthat/test-ct_hazard_toxval_supercategory_search.R", "tests/testthat/test-ct_related.R", "tests/testthat/test-ct_similar.R", "tests/testthat/test-cts.R", "tests/testthat/test-generate_tests_pipeline.R", "tests/testthat/test-generic_request.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3992,8 +3996,8 @@
           "family": "geometric",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4012,8 +4016,8 @@
           "family": "min2",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4022,8 +4026,8 @@
           "family": "pretty",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4032,8 +4036,8 @@
           "family": "pretty",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4042,8 +4046,8 @@
           "family": "pretty",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4052,8 +4056,8 @@
           "family": "pretty",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4082,8 +4086,8 @@
           "family": "pubchem",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4112,8 +4116,8 @@
           "family": "run",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4122,8 +4126,8 @@
           "family": "run",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4212,8 +4216,8 @@
           "family": "util",
           "named_test_file": false,
           "named_test_files": [],
-          "literal_test_reference": false,
-          "literal_reference_files": [],
+          "literal_test_reference": true,
+          "literal_reference_files": "tests/testthat/test-exported_utility_contracts.R",
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4235,6 +4239,25 @@
       "errors": [],
       "required_fields": ["export", "reason", "owner", "issue"],
       "exclusions": []
+    },
+    "vcr_classification": {
+      "artifact_schema": "vcr_test_classification/v1",
+      "valid": true,
+      "status": "ok",
+      "errors": [],
+      "gap_errors": [],
+      "allowed_tiers": ["replay_fixture_integration", "live_only", "recorder_only"],
+      "required_fields": ["test_file", "tier", "reason", "owner", "issue"],
+      "current_vcr_test_files_total": 0,
+      "current_vcr_test_files": [],
+      "classified_files_total": 0,
+      "classified_files": null,
+      "unclassified_files_total": 0,
+      "unclassified_files": [],
+      "stale_classifications_total": 0,
+      "stale_classification_files": null,
+      "stale_classification_entries": [],
+      "classifications": []
     },
     "manifest": {
       "path": "dev/test_manifest.json",
@@ -4271,6 +4294,18 @@
           "has_workflow_dispatch": true,
           "has_pull_request": true,
           "has_push": true,
+          "has_matrix": false
+        },
+        {
+          "file": ".github/workflows/cran-readiness.yml",
+          "runs_devtools_test": false,
+          "runs_targeted_test_file": true,
+          "runs_package_check": false,
+          "uses_covr": false,
+          "uses_ctx_api_key_secret": false,
+          "has_workflow_dispatch": true,
+          "has_pull_request": true,
+          "has_push": false,
           "has_matrix": false
         },
         {
@@ -4443,7 +4478,7 @@
         }
       ],
       "workflows_running_devtools_test": 2,
-      "workflows_running_targeted_test_file": 1,
+      "workflows_running_targeted_test_file": 2,
       "workflows_running_package_check": 3,
       "workflows_using_covr": 3,
       "workflows_using_ctx_api_key_secret": 5
@@ -4497,5 +4532,22 @@
       "issues": []
     }
   ],
-  "cran_readiness_criteria": ["All CRAN-run tests pass without real ctx_api_key, live EPA services, local database downloads, or cassette recording.", "Tests that require secrets, network, production APIs, or cassette recording are explicitly skipped on CRAN and isolated from default CRAN checks.", "Every exported function has at least one intentional test reference or documented exclusion.", "dev/test_manifest.json remains absent or retired in favor of dev/reports/unit_test_readiness_audit.json.", "All committed cassettes pass safety checks, parse checks, and an agreed policy for expected error-response cassettes.", "CI exposes one blocking CRAN-readiness path and one integration path with explicit coverage thresholds and no contradictory badge/baseline ownership."]
+  "test_tiers": {
+    "cran_safe_unit_contract": {
+      "label": "CRAN-safe unit/contract",
+      "requirements": ["No real ctx_api_key.", "No live network dependency.", "No local database requirement.", "No cassette recording."],
+      "activation": ["COMPTOXR_CRAN_SAFE_TESTS=true", "CRAN-like environment where NOT_CRAN is not true"]
+    },
+    "replay_fixture_integration": {
+      "label": "Replay/fixture integration",
+      "requirements": ["Committed fixtures only.", "No live cassette recording."],
+      "activation": "Local or CI integration lanes with fixtures already present"
+    },
+    "live_recording": {
+      "label": "Live recording",
+      "requirements": ["Explicit opt-in only.", "Requires a real ctx_api_key.", "Runs through isolated scripts or workflows."],
+      "activation": ["Rscript dev/rerecord_cassettes.R --record-live", "Record VCR Cassettes workflow"]
+    }
+  },
+  "cran_readiness_criteria": ["CRAN-safe unit/contract tests pass without real ctx_api_key, live network dependency, local database requirement, or cassette recording.", "Replay/fixture integration tests use committed fixtures only and do not perform live cassette recording.", "Live recording tests are explicit opt-in only, require a real ctx_api_key, and run through isolated scripts or workflows.", "Every exported function has at least one intentional test reference or documented exclusion.", "Every current VCR test file is classified in dev/vcr_test_classification.json, and stale classifications are removed.", "dev/test_manifest.json remains absent or retired in favor of dev/reports/unit_test_readiness_audit.json.", "All committed cassettes pass safety checks, parse checks, and an agreed policy for expected error-response cassettes.", "CI exposes one blocking CRAN-readiness path and one integration path with explicit coverage thresholds and no contradictory badge/baseline ownership."]
 }

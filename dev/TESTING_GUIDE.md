@@ -2,16 +2,22 @@
 
 ## Overview
 
-ComptoxR has two test lanes:
+ComptoxR has three test lanes:
 
-- Offline unit and generated contract tests, which are the default and must not require live services, API keys, downloads, or cassette recording.
-- Explicit integration recording, which may call live APIs and update VCR cassettes only when requested.
+- CRAN-safe unit/contract tests are the default release lane. They must not require a real `ctx_api_key`, live network access, local database downloads, or cassette recording.
+- Replay/fixture integration tests use committed fixtures only. They may replay existing VCR cassettes, but they must not record new live responses.
+- Live recording tests are explicit opt-in only. They require a real `ctx_api_key` and must run through isolated recording scripts or the manual Record VCR Cassettes workflow.
 
-The canonical inventory is `dev/reports/unit_test_readiness_audit.json`, regenerated with:
+`COMPTOXR_CRAN_SAFE_TESTS=true` forces the CRAN-safe lane. A CRAN-like environment where `NOT_CRAN` is not `true` is also treated as CRAN-safe by the test helpers. Tests that need external services should call `skip_if_offline()`, `skip_if_no_key()`, or `skip_if_cran_safe_external()` instead of assuming network, credentials, or local databases are available.
+
+The canonical inventory is `dev/reports/unit_test_readiness_audit.json`, validated with:
 
 ```bash
-Rscript dev/unit_test_readiness_audit.R
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 ```
+
+Use `--output <temp-path-outside-repo>` when validating documentation-only changes without regenerating the canonical report.
+`dev/vcr_test_classification.json` is the VCR classification gate. Every current test file containing `vcr::use_cassette()` must be classified there, and stale classifications fail the readiness audit. The current classification set is empty because the current branch has no VCR test files.
 
 `dev/test_manifest.json` is retired and should be absent. It is not used for readiness counts, generated-test authority, or gap suppression.
 
@@ -26,12 +32,16 @@ Rscript dev/generate_tests.R --dry-run
 # Regenerate the read-only readiness audit
 Rscript dev/unit_test_readiness_audit.R
 Rscript dev/unit_test_readiness_audit.R --check-exports
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 
 # Run targeted tests
 Rscript -e "testthat::test_file('tests/testthat/test-generic_request.R')"
 Rscript -e "devtools::test(filter = 'generic_request')"
 
-# Run the whole test suite when the change has broad impact
+# Run the CRAN-safe readiness lane when the change has broad impact
+Rscript dev/cran_readiness.R
+
+# Run the whole package test suite only when the change has broad package impact
 Rscript -e "devtools::test()"
 
 # Record cassettes intentionally from live APIs
@@ -68,7 +78,14 @@ Delete or replace handwritten VCR tests that only duplicate ordinary wrapper req
 
 ## VCR Policy
 
-VCR cassettes live under `tests/testthat/fixtures/` and are for integration replay. Existing cassettes should be used for targeted validation when they are present and relevant. Do not re-record cassettes unless the task explicitly requires live recording.
+VCR cassettes live under `tests/testthat/fixtures/` and are for replay/fixture integration. Existing cassettes should be used for targeted validation when they are present and relevant. Missing cassettes must not cause CI or routine local tests to hit production APIs or auto-record responses.
+
+Live recording is manual and isolated:
+
+- Use the Record VCR Cassettes workflow, or
+- Run `Rscript dev/rerecord_cassettes.R --record-live`.
+
+Recording requires a real `ctx_api_key`; placeholder, empty, dummy, or redacted-looking keys fail preflight. Never write real credentials into tests, fixtures, logs, examples, or docs.
 
 Before accepting cassette changes:
 
@@ -78,7 +95,7 @@ check_cassette_errors()
 check_cassette_safety()
 ```
 
-Recording requires a real `ctx_api_key`; placeholder, empty, dummy, or redacted-looking keys fail preflight. Never write real credentials into tests, fixtures, logs, examples, or docs.
+Any test file using `vcr::use_cassette()` must have an entry in `dev/vcr_test_classification.json` with an allowed tier such as `replay_fixture_integration`, `live_only`, or `recorder_only`.
 
 ## File Layout
 
@@ -96,6 +113,8 @@ dev/
   generate_tests.R                  # Active generated-test entrypoint
   test_generation/                  # Generator modules
   unit_test_readiness_audit.R       # Canonical readiness inventory
+  reports/unit_test_readiness_audit.json # Canonical readiness report
+  vcr_test_classification.json      # VCR test classification gate
   export_test_exclusions.json       # Intentional export-gap exclusions
   detect_test_gaps.R                # Legacy gap scan without manifest authority
   rerecord_cassettes.R              # Explicit live cassette recording

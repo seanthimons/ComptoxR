@@ -74,6 +74,8 @@ test_that(".db_download_release() aborts on 404 / missing asset", {
 })
 
 test_that("toxval_install() default path calls .db_download_release", {
+  skip_if_cran_safe_external("ToxValDB install download path requires external release behavior.")
+
   download_called <- FALSE
 
   local_mocked_bindings(
@@ -83,7 +85,8 @@ test_that("toxval_install() default path calls .db_download_release", {
       expect_equal(tag, "latest")
       # Simulate successful download by writing a tiny file
       writeBin(raw(0), dest_path)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()
@@ -94,6 +97,8 @@ test_that("toxval_install() default path calls .db_download_release", {
 })
 
 test_that("toxval_install(build = TRUE) skips download", {
+  skip_if_cran_safe_external("ToxValDB source build is not part of CRAN-safe tests.")
+
   download_called <- FALSE
 
   local_mocked_bindings(
@@ -102,7 +107,8 @@ test_that("toxval_install(build = TRUE) skips download", {
     },
     .tox_build_from_source = function(dest) {
       writeBin(raw(0), dest)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()
@@ -113,6 +119,8 @@ test_that("toxval_install(build = TRUE) skips download", {
 })
 
 test_that("toxval_install() falls back to build on download failure", {
+  skip_if_cran_safe_external("ToxValDB install fallback exercises the external download/build path.")
+
   build_called <- FALSE
 
   local_mocked_bindings(
@@ -122,7 +130,8 @@ test_that("toxval_install() falls back to build on download failure", {
     .tox_build_from_source = function(dest) {
       build_called <<- TRUE
       writeBin(raw(0), dest)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()
@@ -133,6 +142,20 @@ test_that("toxval_install() falls back to build on download failure", {
     "Could not download"
   )
   expect_true(build_called)
+})
+
+test_that("toxval_install(source=) copies a local database file", {
+  source_dir <- withr::local_tempdir()
+  dest_dir <- withr::local_tempdir()
+  source <- file.path(source_dir, "toxval.duckdb")
+  dest <- file.path(dest_dir, "toxval.duckdb")
+  writeBin(as.raw(c(1L, 2L, 3L)), source)
+  withr::local_options(ComptoxR.toxval_path = dest)
+
+  result <- toxval_install(source = source)
+
+  expect_equal(result, dest)
+  expect_identical(readBin(dest, "raw", n = 3L), as.raw(c(1L, 2L, 3L)))
 })
 
 # Build pipeline tests ---------------------------------------------------
@@ -153,6 +176,8 @@ test_that("toxval_install() falls back to build on download failure", {
 }
 
 test_that("build script self-invokes when sourced into isolated env", {
+  skip_if_cran_safe_external("ToxValDB source build script may query external Clowder data.")
+
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
   skip_if(!nzchar(build_script), "Build script not found (not dev install)")
 
@@ -199,6 +224,8 @@ test_that(".build_toxval_db staleness check skips fresh database", {
 })
 
 test_that(".build_toxval_db force=TRUE bypasses staleness", {
+  skip_if_cran_safe_external("Forced ToxValDB source builds may query external Clowder data.")
+
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
   skip_if(!nzchar(build_script), "Build script not found (not dev install)")
   .load_build_defs()

@@ -101,6 +101,24 @@ test_that("static validation rejects retired generated-test patterns", {
   expect_true(any(grepl("backticked", invalid$errors)))
 })
 
+test_that("generated-test check tolerates terminal newline differences", {
+  root <- make_generation_repo()
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+
+  metadata <- tg_collect_wrapper_metadata(root)
+  specs <- tg_render_all_tests(metadata)
+  alpha_idx <- which(vapply(specs, function(spec) identical(spec$function_name, "alpha"), logical(1)))
+  alpha <- specs[[alpha_idx]]
+  path <- file.path(root, alpha$file)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  writeLines(tg_without_terminal_newline(alpha$text), path, useBytes = TRUE)
+
+  check <- tg_check_generated_tests_current(list(alpha), root = root)
+
+  expect_true(check$current)
+  expect_length(check$mismatches, 0)
+})
+
 test_that("token preflight rejects empty placeholder and redacted-looking values", {
   expect_false(ctx_api_key_status("")$valid)
   expect_false(ctx_api_key_status("dummy_ctx_key")$valid)

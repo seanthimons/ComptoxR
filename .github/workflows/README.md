@@ -1,242 +1,135 @@
 # GitHub Actions Workflows
 
-This directory contains CI/CD workflows for automated testing and coverage reporting.
+This directory contains CI, coverage, data, release, and manual recording workflows. Testing workflows follow the same three-lane model documented in `dev/TESTING_GUIDE.md`, `.planning/codebase/TESTING.md`, and `tests/README.md`.
 
-## Workflows
+## Test Lanes
 
-### 1. `test-coverage.yml` - Comprehensive Test Suite
-**Triggers:** Push to main/dev branches, PRs to main/dev
+- CRAN-safe unit/contract tests: no real `ctx_api_key`, no live network dependency, no local database requirement, and no cassette recording. This lane is active when `COMPTOXR_CRAN_SAFE_TESTS=true` or when `NOT_CRAN` is anything other than `true`.
+- Replay/fixture integration tests: committed fixtures only. These tests may replay existing fixtures but must not record new responses.
+- Live recording tests: explicit opt-in only, require a real `ctx_api_key`, and run through isolated entrypoints such as the Record VCR Cassettes workflow or `Rscript dev/rerecord_cassettes.R --record-live`.
 
-Runs the full test suite across multiple platforms and R versions:
-- **Platforms:** Ubuntu, Windows, macOS
-- **R Versions:** release, devel
-- **Actions:**
-  - R CMD check (comprehensive package validation)
-  - Run all tests
-  - Calculate coverage (Ubuntu + release only)
-  - Upload to Codecov
+Tests that need external services should use `skip_if_offline()`, `skip_if_no_key()`, or `skip_if_cran_safe_external()` so CRAN-safe runs do not depend on secrets, network access, local downloads, or production APIs.
 
-**Badge:**
-```markdown
-[![Test Coverage](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/test-coverage.yml)
-```
+## Main Testing Workflows
 
-### 2. `coverage-check.yml` - Coverage Threshold Enforcement
-**Triggers:** Push to main/dev, PRs to main
+### `cran-readiness.yml`
 
-Enforces minimum coverage requirements:
-- **Minimum:** 70% (fails CI if below)
-- **Warning:** 80% (passes but warns)
-- **Target:** 90% (ideal coverage)
+Blocking CRAN-safe readiness workflow for pull requests and manual runs.
 
-Also posts coverage report as PR comment.
+- Sets `COMPTOXR_CRAN_SAFE_TESTS=true` and `NOT_CRAN=false`.
+- Runs generated-test smoke checks.
+- Runs `Rscript dev/cran_readiness.R`.
+- Does not rely on a real `ctx_api_key`, local database downloads, live APIs, or cassette recording.
 
-**Badge:**
-```markdown
-[![Coverage Check](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/coverage-check.yml/badge.svg)](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/coverage-check.yml)
-```
+### `R-CMD-check.yml`
 
-### 3. `test-quick.yml` - Quick Tests
-**Triggers:** PRs to main/dev, push to dev-* branches
+Standard package check on pull requests and pushes to `main`.
 
-Runs fast subset of tests for quick feedback:
-- Only core template tests
-- Syntax checking
-- No multi-platform testing
-- ~2-3 minutes vs. 15-20 minutes
+### `test-coverage.yml`
 
-## Setup Requirements
+Cross-platform package test and coverage workflow.
 
-### 1. GitHub Secrets
+- Runs on Ubuntu, Windows, and macOS for release and devel R.
+- Runs `devtools::test()`.
+- Calculates and uploads coverage on Ubuntu release R.
+- Must not auto-record cassettes from production APIs.
 
-Add these secrets to your repository:
+### `coverage-check.yml`
+
+Informational coverage workflow.
+
+- Calculates package coverage and comments on pull requests.
+- Warns when coverage is below the target threshold.
+- Does not block merges on coverage percentage.
+- Must not auto-record cassettes from production APIs.
+
+### `record-cassettes.yml`
+
+Manual live-recording workflow named Record VCR Cassettes.
+
+- Triggered only with `workflow_dispatch`.
+- Requires the `CTX_API_KEY` secret, exposed to R as `ctx_api_key`.
+- Runs `dev/rerecord_cassettes.R --record-live`.
+- Supports `priority`, `all`, and `failures` modes.
+- Uploads recorded fixtures and logs as workflow artifacts.
+
+This workflow is the CI-side path for intentional live recording. Missing cassettes must not make ordinary CI hit production APIs or record responses automatically.
+
+## Readiness Artifacts
+
+The canonical test inventory is `dev/reports/unit_test_readiness_audit.json`, produced and validated by:
 
 ```bash
-Settings → Secrets and variables → Actions → New repository secret
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 ```
 
-**Required Secrets:**
+For documentation-only validation, write to a temporary path with `--output <temp-path-outside-repo>` instead of regenerating the canonical report.
 
-1. **`CTX_API_KEY`** - CompTox Dashboard API key
-   - Get from: ccte_api@epa.gov
-   - Used to record VCR cassettes in CI
-   - Falls back to cassettes if not set
+`dev/vcr_test_classification.json` is the VCR classification gate. Every current test file containing `vcr::use_cassette()` must be classified there, and stale classifications fail the readiness audit. The current classification set is empty because the current branch has no VCR test files.
 
-2. **`CODECOV_TOKEN`** (Optional) - Codecov upload token
-   - Get from: https://codecov.io/
-   - Only needed if using Codecov for coverage reporting
-   - Can be omitted if not using Codecov
-
-**To add secrets:**
-1. Go to: `https://github.com/YOUR_USERNAME/ComptoxR/settings/secrets/actions`
-2. Click "New repository secret"
-3. Name: `CTX_API_KEY`, Value: `your_api_key_here`
-4. Click "Add secret"
-
-### 2. Codecov Integration (Optional)
-
-If you want coverage badges and reports:
-
-1. Go to https://codecov.io/
-2. Sign in with GitHub
-3. Enable Codecov for ComptoxR repo
-4. Copy the upload token
-5. Add as `CODECOV_TOKEN` secret in GitHub
-
-### 3. Badge Setup
-
-Add badges to your `README.md`:
-
-```markdown
-# ComptoxR
-
-[![R-CMD-check](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/test-coverage.yml/badge.svg)](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/test-coverage.yml)
-[![codecov](https://codecov.io/gh/YOUR_USERNAME/ComptoxR/branch/main/graph/badge.svg)](https://codecov.io/gh/YOUR_USERNAME/ComptoxR)
-[![Coverage Check](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/coverage-check.yml/badge.svg)](https://github.com/YOUR_USERNAME/ComptoxR/actions/workflows/coverage-check.yml)
-```
-
-## Usage
-
-### Automatic Triggers
-
-Workflows run automatically on:
-- Push to `main` or `dev` branches
-- Pull requests to `main` or `dev`
-- Push to any `dev-*` branch (quick tests only)
-
-### Manual Triggers
-
-Run workflows manually:
-1. Go to Actions tab
-2. Select workflow
-3. Click "Run workflow"
-4. Choose branch
-5. Click "Run workflow"
-
-### Local Simulation
-
-Test locally before pushing:
+Before accepting any cassette changes:
 
 ```r
-# Run what CI will run
-devtools::check()
-devtools::test()
-cov <- covr::package_coverage()
-print(cov)
+source("tests/testthat/helper-vcr.R")
+check_cassette_errors()
+check_cassette_safety()
 ```
 
-## Workflow Behavior
+## Secrets
 
-### With VCR Cassettes (Normal)
+### `CTX_API_KEY`
 
-If cassettes exist in `tests/testthat/fixtures/`:
-- Tests use recorded responses
-- No API key needed
-- Fast execution
-- Consistent results
+CompTox Dashboard API key. It is required only for intentional live recording through `record-cassettes.yml` or a local `dev/rerecord_cassettes.R --record-live` run. Routine CRAN-safe testing must pass without it.
 
-### Without Cassettes (First Run)
+### `CODECOV_TOKEN`
 
-If cassettes don't exist:
-- Tests hit production API
-- Requires `CTX_API_KEY` secret
-- Records responses to cassettes
-- Slower first run
+Optional Codecov upload token used by coverage workflows.
 
-**To re-record cassettes:**
-1. Delete cassettes: `git rm tests/testthat/fixtures/*.yml`
-2. Commit and push
-3. CI will re-record from production
+## Local Equivalents
 
-### Coverage Thresholds
+Run targeted tests during development:
 
-| Coverage | Status | CI Behavior |
-|----------|--------|-------------|
-| < 70% | ❌ Fail | Build fails, blocks merge |
-| 70-79% | ⚠️ Warning | Build passes, shows warning |
-| 80-89% | ✅ Pass | Build passes |
-| ≥ 90% | 🎉 Excellent | Build passes with praise |
+```r
+testthat::test_file("tests/testthat/test-generic_request.R")
+devtools::test(filter = "generic_request")
+```
+
+Run the readiness audit:
+
+```bash
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
+```
+
+Run the CRAN-safe readiness lane when a change has broad package impact:
+
+```bash
+Rscript dev/cran_readiness.R
+```
+
+Record cassettes only when explicitly required:
+
+```bash
+Rscript dev/rerecord_cassettes.R --record-live --all
+Rscript dev/rerecord_cassettes.R --record-live --failures
+```
 
 ## Troubleshooting
 
-### Tests fail with "No API key"
+### A CRAN-safe run tries to call an external service
 
-**Problem:** Tests try to hit API but no key set
+Add or fix the appropriate skip helper: `skip_if_offline()`, `skip_if_no_key()`, or `skip_if_cran_safe_external()`. The CRAN-safe lane must not require a real `ctx_api_key`, live network access, local database downloads, or cassette recording.
 
-**Solution:**
-1. Add `CTX_API_KEY` secret to GitHub
-2. Or commit VCR cassettes so tests don't need API
+### A replay test is missing a cassette
 
-### Cassettes not found in CI
+Do not make CI re-record from production. Either adjust the test to stay in the CRAN-safe unit/contract lane, or run an intentional live-recording task through the Record VCR Cassettes workflow or `dev/rerecord_cassettes.R --record-live`, then inspect the artifact and run cassette safety checks before accepting fixture changes.
 
-**Problem:** Cassettes not committed to repo
+### Live recording fails with "No real API key"
 
-**Solution:**
-```bash
-git add tests/testthat/fixtures/*.yml
-git commit -m "Add VCR cassettes for CI"
-git push
-```
-
-### Coverage not uploading to Codecov
-
-**Problem:** Codecov token not set or incorrect
-
-**Solution:**
-1. Verify `CODECOV_TOKEN` secret exists
-2. Check token is correct at https://codecov.io/
-3. Or remove Codecov step if not using it
-
-### Workflow taking too long
-
-**Problem:** Full test suite on all platforms is slow
-
-**Solution:**
-- Push to `dev-*` branch to trigger only quick tests
-- Or use draft PRs to skip CI initially
-- Or disable matrix testing for dev branches:
-
-```yaml
-strategy:
-  matrix:
-    os: [ubuntu-latest]  # Only one platform for dev
-```
-
-## Maintenance
-
-### Updating R Version
-
-Edit workflow files to change R version:
-
-```yaml
-matrix:
-  r-version: ['4.3', '4.4', 'devel']  # Specific versions
-  # or
-  r-version: ['release', 'devel']     # Latest release + devel
-```
-
-### Adjusting Coverage Thresholds
-
-Edit `coverage-check.yml`:
-
-```r
-MINIMUM_COVERAGE <- 70  # Fail if below this
-WARNING_COVERAGE <- 80  # Warn if below this
-TARGET_COVERAGE <- 90   # Ideal target
-```
-
-### Adding More Platforms
-
-Add to matrix in `test-coverage.yml`:
-
-```yaml
-matrix:
-  os: [ubuntu-latest, windows-latest, macOS-latest, ubuntu-20.04]
-```
+Set a real `ctx_api_key` locally or configure the `CTX_API_KEY` GitHub secret for the manual Record VCR Cassettes workflow. Dummy, placeholder, empty, and redacted-looking values are rejected.
 
 ## Resources
 
 - [GitHub Actions for R](https://github.com/r-lib/actions)
-- [R-CMD-check Documentation](https://r-pkgs.org/r-cmd-check.html)
-- [VCR Package](https://docs.ropensci.org/vcr/)
+- [R Packages: R CMD check](https://r-pkgs.org/R-CMD-check.html)
+- [vcr for R](https://docs.ropensci.org/vcr/)
 - [Codecov Documentation](https://docs.codecov.com/)

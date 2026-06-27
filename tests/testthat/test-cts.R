@@ -78,12 +78,14 @@ test_that("cts_resolve_smiles passes through SMILES when resolve is FALSE", {
 
 test_that("cts_resolve_smiles resolves identifiers to one SMILES per query", {
   local_mocked_bindings(
-    chemi_resolver_lookup = function(query, idType = "AnyId", mol = FALSE) {
+    generic_request = function(query, endpoint = NULL, ...) {
+      expect_equal(endpoint, "resolver/lookup")
       tibble::tibble(
         query = query,
         smiles = if (query == "DTXSID7020182") "c1ccccc1" else "CCO"
       )
-    }
+    },
+    .package = "ComptoxR"
   )
 
   result <- cts_resolve_smiles(c("DTXSID7020182", "ethanol"))
@@ -94,7 +96,8 @@ test_that("cts_resolve_smiles resolves identifiers to one SMILES per query", {
 
 test_that("cts_resolve_smiles extracts SMILES from compact resolver chemical field", {
   local_mocked_bindings(
-    chemi_resolver_lookup = function(query, idType = "AnyId", mol = FALSE) {
+    generic_request = function(query, endpoint = NULL, ...) {
+      expect_equal(endpoint, "resolver/lookup")
       tibble::tibble(
         chemical = paste(
           query,
@@ -108,7 +111,8 @@ test_that("cts_resolve_smiles extracts SMILES from compact resolver chemical fie
         result = "FOUND",
         query = query
       )
-    }
+    },
+    .package = "ComptoxR"
   )
 
   result <- cts_resolve_smiles("DTXSID7020182")
@@ -118,9 +122,11 @@ test_that("cts_resolve_smiles extracts SMILES from compact resolver chemical fie
 
 test_that("cts_resolve_smiles aborts on unresolved or missing SMILES", {
   testthat::with_mocked_bindings(
-    chemi_resolver_lookup = function(query, idType = "AnyId", mol = FALSE) {
+    generic_request = function(query, endpoint = NULL, ...) {
+      expect_equal(endpoint, "resolver/lookup")
       tibble::tibble(query = query, smiles = NA_character_)
     },
+    .package = "ComptoxR",
     {
       expect_error(
         cts_resolve_smiles("missing"),
@@ -130,9 +136,11 @@ test_that("cts_resolve_smiles aborts on unresolved or missing SMILES", {
   )
 
   testthat::with_mocked_bindings(
-    chemi_resolver_lookup = function(query, idType = "AnyId", mol = FALSE) {
+    generic_request = function(query, endpoint = NULL, ...) {
+      expect_equal(endpoint, "resolver/lookup")
       tibble::tibble(query = query)
     },
+    .package = "ComptoxR",
     {
       expect_error(
         cts_resolve_smiles("no-smiles-column"),
@@ -144,12 +152,14 @@ test_that("cts_resolve_smiles aborts on unresolved or missing SMILES", {
 
 test_that("cts_resolve_smiles aborts on ambiguous SMILES", {
   local_mocked_bindings(
-    chemi_resolver_lookup = function(query, idType = "AnyId", mol = FALSE) {
+    generic_request = function(query, endpoint = NULL, ...) {
+      expect_equal(endpoint, "resolver/lookup")
       tibble::tibble(
         query = query,
         smiles = c("CCC", "CCO")
       )
-    }
+    },
+    .package = "ComptoxR"
   )
 
   expect_error(

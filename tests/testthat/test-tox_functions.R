@@ -31,7 +31,7 @@ test_that(".tox_route() returns 'duckdb' for .duckdb paths", {
 test_that(".tox_default_cols() returns expected column count", {
   cols <- .tox_default_cols()
   expect_type(cols, "character")
-  expect_true(length(cols) >= 40)
+  expect_equal(length(cols), 33L)
   expect_true("dtxsid" %in% cols)
   expect_true("casrn" %in% cols)
   expect_true("source" %in% cols)
@@ -50,8 +50,8 @@ test_that("toxval_results(casrn) returns tibble with default columns", {
 
   # Should have approximately the default column set
   default_cols <- .tox_default_cols()
-  present <- intersect(default_cols, names(result))
-  expect_true(length(present) >= 35)
+  missing <- setdiff(default_cols, names(result))
+  expect_length(missing, 0)
 })
 
 test_that("toxval_results(source) filters correctly", {

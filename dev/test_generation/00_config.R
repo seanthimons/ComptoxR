@@ -51,6 +51,14 @@ tg_read_text <- function(path) {
   paste(tg_read_lines(path), collapse = "\n")
 }
 
+tg_without_terminal_newline <- function(text) {
+  sub("\\n\\z", "", text, perl = TRUE)
+}
+
+tg_generated_text_identical <- function(current, expected) {
+  identical(tg_without_terminal_newline(current), tg_without_terminal_newline(expected))
+}
+
 tg_text_header_lines <- function(text, n = 5L) {
   lines <- strsplit(text, "\n", fixed = TRUE)[[1]]
   if (length(lines) == 0) {

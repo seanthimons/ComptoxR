@@ -61,6 +61,15 @@ preflight_checks <- function(record_live = FALSE) {
   # Check API key before any cassette deletion or live calls.
   ctx_api_key_preflight()
 
+  forced_cran_safe <- tolower(trimws(Sys.getenv("COMPTOXR_CRAN_SAFE_TESTS", unset = "")))
+  if (forced_cran_safe %in% c("true", "1", "yes")) {
+    cli::cli_abort(c(
+      "x" = "Live cassette recording cannot run with COMPTOXR_CRAN_SAFE_TESTS=true",
+      "i" = "Unset COMPTOXR_CRAN_SAFE_TESTS before using --record-live."
+    ))
+  }
+  Sys.setenv(NOT_CRAN = "true")
+
   # Check mirai
   if (!requireNamespace("mirai", quietly = TRUE)) {
     cli::cli_abort(c(

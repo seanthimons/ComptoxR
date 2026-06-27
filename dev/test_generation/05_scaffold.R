@@ -62,7 +62,7 @@ tg_write_generated_tests <- function(desired, root = ".", dry_run = FALSE, force
     }
 
     current <- if (existed) tg_read_text(path) else ""
-    changed <- isTRUE(force) || !identical(current, spec$text)
+    changed <- isTRUE(force) || !tg_generated_text_identical(current, spec$text)
     action <- if (!existed) {
       "created"
     } else if (isTRUE(force) && !identical(status, "manual")) {

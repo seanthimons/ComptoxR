@@ -1,10 +1,27 @@
 # Tests for package_sitrep
 # This function generates diagnostic reports
 
+local_sitrep_env <- function() {
+  withr::local_envvar(
+    c(
+      ctx_burl = "",
+      chemi_burl = "",
+      eco_burl = "",
+      toxval_burl = "",
+      epi_burl = "",
+      np_burl = "",
+      cc_burl = "",
+      pubchem_burl = ""
+    ),
+    .local_envir = parent.frame()
+  )
+}
+
 test_that("package_sitrep runs without errors", {
   # Run the function in a temporary directory
   withr::with_tempdir({
-    result <- package_sitrep()
+    local_sitrep_env()
+    result <- ComptoxR_package_sitrep()
     
     # Check that result is a list
     expect_type(result, "list")
@@ -17,7 +34,7 @@ test_that("package_sitrep runs without errors", {
     expect_true("api_tokens" %in% names(result))
     expect_true("server_paths" %in% names(result))
     expect_true("ping_results" %in% names(result))
-    expect_true("local_fallback" %in% names(result))
+    expect_true("local_databases" %in% names(result))
     
     # Check that log file was created
     expect_true(file.exists(result$log_file))
@@ -28,13 +45,14 @@ test_that("package_sitrep runs without errors", {
     expect_true(any(grepl("API TOKENS STATUS", log_content)))
     expect_true(any(grepl("CONFIGURED SERVER PATHS", log_content)))
     expect_true(any(grepl("PING TEST RESULTS", log_content)))
-    expect_true(any(grepl("LOCAL FALLBACK IMPLEMENTATION", log_content)))
+    expect_true(any(grepl("LOCAL DATABASES", log_content)))
   })
 })
 
 test_that("package_sitrep creates timestamped log file", {
   withr::with_tempdir({
-    result <- package_sitrep()
+    local_sitrep_env()
+    result <- ComptoxR_package_sitrep()
     
     # Check log file naming pattern (use basename to handle full paths)
     expect_match(basename(result$log_file), "^comptoxr_sitrep_\\d{8}_\\d{6}\\.log$")
@@ -43,6 +61,7 @@ test_that("package_sitrep creates timestamped log file", {
 
 test_that("package_sitrep detects API token status correctly", {
   withr::with_tempdir({
+    local_sitrep_env()
     # Save original env vars
     orig_ctx <- Sys.getenv("ctx_api_key", unset = NA)
     orig_cc <- Sys.getenv("cc_api_key", unset = NA)
@@ -51,7 +70,7 @@ test_that("package_sitrep detects API token status correctly", {
     Sys.unsetenv("ctx_api_key")
     Sys.unsetenv("cc_api_key")
     
-    result <- package_sitrep()
+    result <- ComptoxR_package_sitrep()
     expect_false(result$api_tokens$ctx_api_key)
     expect_false(result$api_tokens$cc_api_key)
     
@@ -59,7 +78,7 @@ test_that("package_sitrep detects API token status correctly", {
     Sys.setenv(ctx_api_key = "test_token_123")
     Sys.setenv(cc_api_key = "test_cc_token_456")
     
-    result <- package_sitrep()
+    result <- ComptoxR_package_sitrep()
     expect_true(result$api_tokens$ctx_api_key)
     expect_true(result$api_tokens$cc_api_key)
     
@@ -71,7 +90,8 @@ test_that("package_sitrep detects API token status correctly", {
 
 test_that("package_sitrep captures server paths", {
   withr::with_tempdir({
-    result <- package_sitrep()
+    local_sitrep_env()
+    result <- ComptoxR_package_sitrep()
     
     # Check that server_paths is a list
     expect_type(result$server_paths, "list")
@@ -85,7 +105,8 @@ test_that("package_sitrep captures server paths", {
 
 test_that("package_sitrep returns ping results", {
   withr::with_tempdir({
-    result <- package_sitrep()
+    local_sitrep_env()
+    result <- ComptoxR_package_sitrep()
     
     # Check that ping_results is a list
     expect_type(result$ping_results, "list")

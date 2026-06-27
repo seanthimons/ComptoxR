@@ -2,6 +2,16 @@
 
 ComptoxR uses `testthat` for package tests. The default wrapper-contract tests are generated offline and do not use VCR or live API calls.
 
+## Test Tiers
+
+ComptoxR test runs are split into three lanes:
+
+- CRAN-safe unit/contract tests: no real `ctx_api_key`, no live network dependency, no local database requirement, and no cassette recording. This lane is active when `COMPTOXR_CRAN_SAFE_TESTS=true` or when `NOT_CRAN` is anything other than `true`.
+- Replay/fixture integration tests: committed fixtures only, with VCR configured for playback and no live cassette recording.
+- Live recording tests: explicit opt-in only, require a real `ctx_api_key`, and run through isolated recording scripts or workflows such as `Rscript dev/rerecord_cassettes.R --record-live`.
+
+Use `skip_if_offline()`, `skip_if_no_key()`, and `skip_if_cran_safe_external()` for tests that require network access, credentials, local database downloads, or live services.
+
 ## Generated Wrapper Tests
 
 The active generator is `dev/generate_tests.R`.
@@ -35,6 +45,17 @@ Avoid handwritten API-wrapper tests that only assert ordinary request constructi
 
 ## Running Tests
 
+Run the local CRAN-readiness command:
+
+```bash
+Rscript dev/cran_readiness.R
+```
+
+The command runs `testthat` in parallel by default, using about three quarters of detected logical cores and capped at 12
+workers. If a worker cannot start or crashes, the command retries with fewer workers. Override the worker count with
+`COMPTOXR_CRAN_READINESS_CPUS` or force a sequential run with `COMPTOXR_CRAN_READINESS_SEQUENTIAL=true`.
+The readiness script runs a small set of state-sensitive tests sequentially after the broad parallel phase.
+
 Run one test file:
 
 ```r
@@ -55,13 +76,15 @@ devtools::test()
 
 ## VCR Cassettes
 
-VCR is an explicit integration lane, not the default generated-test path. Do not re-record cassettes during normal unit-test cleanup.
+VCR replay is an explicit integration lane, not the default generated-test path. Replay/fixture tests use committed fixtures only. Missing cassettes must not make CI or routine local tests hit production APIs or auto-record responses.
 
 When cassette recording is intentionally required:
 
 ```bash
 Rscript dev/rerecord_cassettes.R --record-live --all
 ```
+
+The manual Record VCR Cassettes workflow runs the same live-recording lane and uploads recorded fixtures as an artifact. Live recording requires a real `ctx_api_key`; placeholder, dummy, empty, or redacted-looking values fail preflight.
 
 Before accepting cassette changes, run the safety helpers in `tests/testthat/helper-vcr.R`:
 
@@ -71,6 +94,8 @@ check_cassette_errors()
 check_cassette_safety()
 ```
 
+Any test file using `vcr::use_cassette()` must be classified in `dev/vcr_test_classification.json` as `replay_fixture_integration`, `live_only`, or `recorder_only`. The current classification set is empty because the current branch has no VCR test files.
+
 Use a real `ctx_api_key` only for intentional live recording. Never commit real API keys, tokens, or private URLs.
 
 ## Readiness Audit
@@ -79,6 +104,9 @@ The current test inventory is produced by:
 
 ```bash
 Rscript dev/unit_test_readiness_audit.R
+Rscript dev/unit_test_readiness_audit.R --check-exports --fail-on-gaps
 ```
 
-The audit writes `dev/reports/unit_test_readiness_audit.json`. The old `dev/test_manifest.json` artifact is retired and is not kept as an authority or compatibility shim.
+The audit writes `dev/reports/unit_test_readiness_audit.json`. For documentation-only validation, write to a temporary path with `--output <temp-path-outside-repo>` instead of regenerating the canonical report. The audit also validates `dev/vcr_test_classification.json`.
+
+The old `dev/test_manifest.json` artifact is retired and is not kept as an authority or compatibility shim.

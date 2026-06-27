@@ -10,6 +10,9 @@
 
 audit_schema <- "unit_test_readiness_audit/v1"
 export_exclusion_schema <- "export_test_exclusions/v1"
+vcr_classification_schema <- "vcr_test_classification/v1"
+vcr_classification_allowed_tiers <- c("replay_fixture_integration", "live_only", "recorder_only")
+vcr_classification_required_fields <- c("test_file", "tier", "reason", "owner", "issue")
 
 audit_norm_path <- function(path) {
   normalizePath(path, winslash = "/", mustWork = FALSE)
@@ -66,6 +69,22 @@ audit_strip_namespace_quotes <- function(x) {
   x <- trimws(x)
   x <- sub('^"(.*)"$', "\\1", x)
   x <- sub("^'(.*)'$", "\\1", x)
+  x
+}
+
+audit_json_string_vector <- function(x) {
+  if (is.null(x)) {
+    return(character(0))
+  }
+  if (is.character(x)) {
+    return(x)
+  }
+  if (is.list(x) && all(vapply(x, function(value) {
+    length(value) == 1 && is.character(value)
+  }, logical(1)))) {
+    return(unlist(x, use.names = FALSE))
+  }
+
   x
 }
 
@@ -188,6 +207,7 @@ audit_test_style <- function(root = ".", test_files = NULL) {
     files_mentioning_ctx_api_key = sum(mentioning_ctx_api_key),
     unique_cassette_references = length(unique_refs),
     generated_backticked_endpoint_call_file_names = unname(test_files[generated & backticked_endpoint]),
+    files_using_vcr_names = unname(test_files[using_vcr]),
     generated_files_using_vcr_names = unname(test_files[generated & using_vcr]),
     cassette_references = unique_refs,
     cassette_reference_files = reference_files
@@ -271,6 +291,197 @@ validate_export_exclusions <- function(exclusions, known_exports = NULL) {
     errors = errors,
     entries = unname(cleaned),
     excluded_exports = sort(names(cleaned))
+  )
+}
+
+read_vcr_test_classification <- function(root = ".", path = audit_file_path(root, "dev/vcr_test_classification.json")) {
+  data <- audit_read_json(path)
+  if (is.null(data)) {
+    return(list(
+      artifact_schema = vcr_classification_schema,
+      description = paste(
+        "Machine-readable classification for tests that call vcr::use_cassette().",
+        "Every current VCR test file must have one entry."
+      ),
+      issue = list(
+        github_issue = 202,
+        bean = "ComptoxR-uvdd",
+        title = "VCR Test Classification Gate"
+      ),
+      allowed_tiers = vcr_classification_allowed_tiers,
+      required_fields = vcr_classification_required_fields,
+      classifications = list()
+    ))
+  }
+
+  data
+}
+
+audit_normalize_rel_file <- function(path) {
+  gsub("\\\\", "/", path)
+}
+
+validate_vcr_test_classification <- function(
+  classification,
+  current_vcr_test_files = character(0),
+  current_test_files = NULL
+) {
+  current_vcr_test_files <- sort(unique(audit_normalize_rel_file(current_vcr_test_files)))
+  current_test_files <- sort(unique(audit_normalize_rel_file(current_test_files %audit||% current_vcr_test_files)))
+  required <- vcr_classification_required_fields
+  errors <- character(0)
+
+  if (!identical(classification$artifact_schema, vcr_classification_schema)) {
+    errors <- c(errors, sprintf("artifact_schema must be %s", vcr_classification_schema))
+  }
+
+  issue <- classification$issue %audit||% list()
+  if (
+    !is.list(issue) ||
+      length(issue$github_issue) != 1 ||
+      !is.numeric(issue$github_issue) ||
+      !identical(as.integer(issue$github_issue), 202L) ||
+      !identical(issue$bean, "ComptoxR-uvdd")
+  ) {
+    errors <- c(errors, "issue metadata must reference GitHub issue 202 and bean ComptoxR-uvdd")
+  }
+
+  allowed_tiers <- audit_json_string_vector(classification$allowed_tiers)
+  if (
+    !is.character(allowed_tiers) ||
+      !identical(sort(unique(allowed_tiers)), sort(vcr_classification_allowed_tiers))
+  ) {
+    errors <- c(
+      errors,
+      sprintf(
+        "allowed_tiers must contain exactly: %s",
+        paste(vcr_classification_allowed_tiers, collapse = ", ")
+      )
+    )
+    allowed_tiers <- vcr_classification_allowed_tiers
+  }
+
+  declared_required <- audit_json_string_vector(classification$required_fields)
+  if (!is.character(declared_required) || !identical(sort(unique(declared_required)), sort(required))) {
+    errors <- c(
+      errors,
+      sprintf("required_fields must contain exactly: %s", paste(required, collapse = ", "))
+    )
+  }
+
+  entries <- classification$classifications %audit||% list()
+  if (!is.list(entries)) {
+    errors <- c(errors, "classifications must be a list")
+    entries <- list()
+  }
+
+  cleaned <- list()
+  seen <- character(0)
+  for (i in seq_along(entries)) {
+    entry <- entries[[i]]
+    if (!is.list(entry)) {
+      errors <- c(errors, sprintf("classifications[%d] must be an object", i))
+      next
+    }
+
+    missing <- required[!required %in% names(entry)]
+    if (length(missing) > 0) {
+      errors <- c(errors, sprintf(
+        "classifications[%d] missing required field(s): %s",
+        i,
+        paste(missing, collapse = ", ")
+      ))
+      next
+    }
+
+    empty <- required[vapply(required, function(field) {
+      value <- entry[[field]]
+      length(value) != 1 || !is.character(value) || !nzchar(value)
+    }, logical(1))]
+    if (length(empty) > 0) {
+      errors <- c(errors, sprintf(
+        "classifications[%d] has empty/non-scalar field(s): %s",
+        i,
+        paste(empty, collapse = ", ")
+      ))
+      next
+    }
+
+    entry$test_file <- audit_normalize_rel_file(entry$test_file)
+
+    if (!(entry$tier %in% allowed_tiers)) {
+      errors <- c(errors, sprintf(
+        "classifications[%d] has invalid tier '%s'; expected one of: %s",
+        i,
+        entry$tier,
+        paste(allowed_tiers, collapse = ", ")
+      ))
+    }
+
+    if (entry$test_file %in% seen) {
+      errors <- c(errors, sprintf("duplicate VCR classification for test file: %s", entry$test_file))
+      next
+    }
+
+    seen <- c(seen, entry$test_file)
+    cleaned[[entry$test_file]] <- entry[required]
+  }
+
+  cleaned <- cleaned[sort(names(cleaned))]
+  classified_files <- sort(names(cleaned))
+  unclassified_files <- sort(setdiff(current_vcr_test_files, classified_files))
+  stale_files <- sort(setdiff(classified_files, current_vcr_test_files))
+  stale_entries <- lapply(stale_files, function(file) {
+    list(
+      test_file = file,
+      reason = if (file %in% current_test_files) {
+        "file no longer uses vcr::use_cassette()"
+      } else {
+        "file is not a current tests/testthat/test-*.R file"
+      }
+    )
+  })
+
+  gap_errors <- character(0)
+  if (length(unclassified_files) > 0) {
+    gap_errors <- c(gap_errors, sprintf(
+      "unclassified VCR test file(s): %s",
+      paste(unclassified_files, collapse = ", ")
+    ))
+  }
+  if (length(stale_files) > 0) {
+    gap_errors <- c(gap_errors, sprintf(
+      "stale VCR classification file(s): %s",
+      paste(stale_files, collapse = ", ")
+    ))
+  }
+
+  status <- if (length(errors) > 0) {
+    "invalid"
+  } else if (length(gap_errors) > 0) {
+    "gaps"
+  } else {
+    "ok"
+  }
+
+  list(
+    artifact_schema = classification$artifact_schema %audit||% NULL,
+    valid = identical(status, "ok"),
+    status = status,
+    errors = errors,
+    gap_errors = gap_errors,
+    allowed_tiers = vcr_classification_allowed_tiers,
+    required_fields = required,
+    current_vcr_test_files_total = length(current_vcr_test_files),
+    current_vcr_test_files = current_vcr_test_files,
+    classified_files_total = length(classified_files),
+    classified_files = classified_files,
+    unclassified_files_total = length(unclassified_files),
+    unclassified_files = unclassified_files,
+    stale_classifications_total = length(stale_files),
+    stale_classification_files = stale_files,
+    stale_classification_entries = stale_entries,
+    classifications = unname(cleaned)
   )
 }
 
@@ -523,6 +734,46 @@ audit_testing_docs <- function(root = ".", current_test_files = NULL, generated_
   unname(records[sort(names(records))])
 }
 
+audit_test_tiers <- function() {
+  list(
+    cran_safe_unit_contract = list(
+      label = "CRAN-safe unit/contract",
+      requirements = c(
+        "No real ctx_api_key.",
+        "No live network dependency.",
+        "No local database requirement.",
+        "No cassette recording."
+      ),
+      activation = c(
+        "COMPTOXR_CRAN_SAFE_TESTS=true",
+        "CRAN-like environment where NOT_CRAN is not true"
+      )
+    ),
+    replay_fixture_integration = list(
+      label = "Replay/fixture integration",
+      requirements = c(
+        "Committed fixtures only.",
+        "No live cassette recording."
+      ),
+      activation = c(
+        "Local or CI integration lanes with fixtures already present"
+      )
+    ),
+    live_recording = list(
+      label = "Live recording",
+      requirements = c(
+        "Explicit opt-in only.",
+        "Requires a real ctx_api_key.",
+        "Runs through isolated scripts or workflows."
+      ),
+      activation = c(
+        "Rscript dev/rerecord_cassettes.R --record-live",
+        "Record VCR Cassettes workflow"
+      )
+    )
+  )
+}
+
 audit_git_value <- function(root, args) {
   old <- getwd()
   on.exit(setwd(old), add = TRUE)
@@ -570,6 +821,12 @@ build_unit_test_readiness_audit <- function(root = ".") {
   style <- audit_test_style(root, test_files)
   exclusions <- read_export_exclusions(root)
   exclusion_validation <- validate_export_exclusions(exclusions, namespace$function_exports)
+  vcr_classification <- read_vcr_test_classification(root)
+  vcr_classification_validation <- validate_vcr_test_classification(
+    vcr_classification,
+    current_vcr_test_files = style$files_using_vcr_names,
+    current_test_files = test_files
+  )
   export_comparison <- classify_exports_against_tests(
     namespace$function_exports,
     test_files,
@@ -604,6 +861,7 @@ build_unit_test_readiness_audit <- function(root = ".") {
       test_helpers = test_helpers,
       test_tools = test_tool_files,
       export_exclusions = "dev/export_test_exclusions.json",
+      vcr_test_classification = "dev/vcr_test_classification.json",
       manifest = manifest_status,
       fixtures = "tests/testthat/fixtures/**/*.yml",
       workflows = workflow_files,
@@ -643,16 +901,20 @@ build_unit_test_readiness_audit <- function(root = ".") {
         required_fields = c("export", "reason", "owner", "issue"),
         exclusions = exclusion_validation$entries
       ),
+      vcr_classification = vcr_classification_validation,
       manifest = manifest_status,
       fixtures = fixture_scan,
       workflows = workflow_scan
     ),
     coverage_signals = audit_coverage_signals(root),
     testing_docs = audit_testing_docs(root, length(test_files), style$generated_header_test_files),
+    test_tiers = audit_test_tiers(),
     cran_readiness_criteria = c(
-      "All CRAN-run tests pass without real ctx_api_key, live EPA services, local database downloads, or cassette recording.",
-      "Tests that require secrets, network, production APIs, or cassette recording are explicitly skipped on CRAN and isolated from default CRAN checks.",
+      "CRAN-safe unit/contract tests pass without real ctx_api_key, live network dependency, local database requirement, or cassette recording.",
+      "Replay/fixture integration tests use committed fixtures only and do not perform live cassette recording.",
+      "Live recording tests are explicit opt-in only, require a real ctx_api_key, and run through isolated scripts or workflows.",
       "Every exported function has at least one intentional test reference or documented exclusion.",
+      "Every current VCR test file is classified in dev/vcr_test_classification.json, and stale classifications are removed.",
       "dev/test_manifest.json remains absent or retired in favor of dev/reports/unit_test_readiness_audit.json.",
       "All committed cassettes pass safety checks, parse checks, and an agreed policy for expected error-response cassettes.",
       "CI exposes one blocking CRAN-readiness path and one integration path with explicit coverage thresholds and no contradictory badge/baseline ownership."
@@ -693,10 +955,15 @@ unit_test_readiness_audit_main <- function(args = commandArgs(trailingOnly = TRU
   report <- write_unit_test_readiness_audit(root, output)
   export_gaps <- report$comparisons$exports_vs_tests$export_gaps
   exclusion_errors <- report$comparisons$export_exclusion_validation$errors
+  vcr_classification <- report$comparisons$vcr_classification
+  vcr_classification_errors <- vcr_classification$errors
+  vcr_classification_gap_errors <- vcr_classification$gap_errors
 
   cat(sprintf("Wrote %s\n", audit_rel_path(output, root)))
   cat(sprintf("Function exports: %d\n", report$comparisons$exports_vs_tests$function_exports))
   cat(sprintf("Export gaps after exclusions: %d\n", length(export_gaps)))
+  cat(sprintf("VCR test files: %d\n", vcr_classification$current_vcr_test_files_total))
+  cat(sprintf("VCR classification status: %s\n", vcr_classification$status))
 
   if (parsed$check_exports || parsed$fail_on_gaps) {
     if (length(export_gaps) > 0) {
@@ -713,7 +980,19 @@ unit_test_readiness_audit_main <- function(args = commandArgs(trailingOnly = TRU
     quit(status = 1)
   }
 
+  if (length(vcr_classification_errors) > 0) {
+    cat("VCR test classification file is invalid:\n")
+    cat(paste0("  - ", vcr_classification_errors, collapse = "\n"), "\n", sep = "")
+    quit(status = 1)
+  }
+
   if (parsed$fail_on_gaps && length(export_gaps) > 0) {
+    quit(status = 1)
+  }
+
+  if (parsed$fail_on_gaps && length(vcr_classification_gap_errors) > 0) {
+    cat("VCR classification gaps detected:\n")
+    cat(paste0("  - ", vcr_classification_gap_errors, collapse = "\n"), "\n", sep = "")
     quit(status = 1)
   }
 
