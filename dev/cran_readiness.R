@@ -102,6 +102,7 @@ cran_readiness_sequential_test_filter <- function() {
       c(
         "eco_lifestage_gate",
         "genra_predict",
+        "cts",
         "util_pubchem_resolve_dtxsid"
       ),
       collapse = "|"

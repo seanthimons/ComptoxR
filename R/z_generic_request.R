@@ -441,7 +441,7 @@ generic_request <- function(
         }
       )
     } else if (pagination_strategy == "offset_limit" && is.null(path_params)) {
-      # Offset/limit via query params.
+      # Offset/limit via query params (e.g., Common Chemistry offset+size)
       offset_name <- "offset"
       size_name <- if ("size" %in% names(ellipsis_args)) "size" else "limit"
       initial_offset <- as.numeric(ellipsis_args[[offset_name]] %||% 0)
@@ -515,7 +515,7 @@ generic_request <- function(
         # Spring Boot wraps in "content"
         body[["content"]] %||% list()
       } else if (!is.null(body[["results"]])) {
-        # Some APIs wrap records in "results".
+        # Common Chemistry wraps in "results"
         body[["results"]]
       } else if (!is.null(body[["records"]])) {
         # Chemi Search wraps in "records"
@@ -1028,6 +1028,310 @@ generic_search_request <- function(
   body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
 
   return(body)
+}
+
+#' Generic CTS API Request Function
+#'
+#' Specialized request helper for the EPA Chemical Transformation Simulator
+#' REST API. CTS endpoints accept named JSON object bodies and do not use an
+#' API key.
+#'
+#' @param endpoint The CTS endpoint path (e.g., `"metabolizer/run"`).
+#' @param body Named list to send as a JSON object body. Empty bodies are sent
+#'   as `{}` rather than `[]`.
+#' @param method HTTP method. Defaults to `"POST"`.
+#' @param server Environment variable name for the base URL. Defaults to
+#'   `"cts_burl"`.
+#' @param tidy Boolean; whether to convert simple list results to a tibble.
+#'   Defaults to `FALSE` to preserve nested CTS trees.
+#'
+#' @return Parsed JSON response as a list by default, or a tibble when
+#'   `tidy = TRUE`.
+#' @keywords internal
+generic_cts_request <- function(endpoint, body = list(), method = "POST", server = "cts_burl", tidy = FALSE) {
+  base_url <- Sys.getenv(server, unset = NA_character_)
+  if (is.na(base_url) || base_url == "") {
+    base_url <- if (identical(server, "cts_burl")) {
+      "https://qed.epa.gov/cts/rest"
+    } else {
+      server
+    }
+  }
+
+  if (!is.list(body) || is.data.frame(body)) {
+    cli::cli_abort("{.arg body} must be a named list.")
+  }
+
+  if (length(body) == 0) {
+    body <- structure(list(), names = character())
+  } else if (is.null(names(body)) || any(!nzchar(names(body)))) {
+    cli::cli_abort("{.arg body} must be a named list so CTS receives a JSON object.")
+  }
+
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste("Generic CTS Request:", endpoint))
+    cli::cli_dl(c("Method" = "{method}"))
+    cli::cli_rule()
+    cli::cli_end()
+  }
+
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_method(toupper(method)) %>%
+    httr2::req_headers(Accept = "application/json")
+
+  if (toupper(method) == "POST") {
+    req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
+  } else if (length(body) > 0) {
+    req <- req %>% httr2::req_url_query(!!!body)
+  }
+
+  req <- req %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = is_transient_error
+    )
+
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  resp <- httr2::req_perform(req)
+  status <- httr2::resp_status(resp)
+
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("CTS API request to {.val {endpoint}} failed with status {status}")
+  }
+
+  parsed <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  if (!tidy) {
+    return(parsed)
+  }
+
+  if (is.list(parsed) && !is.null(names(parsed))) {
+    return(safe_tidy_bind(list(parsed)))
+  }
+
+  safe_tidy_bind(parsed)
+}
+
+#' Generic CAS Common Chemistry API Request Function
+#'
+#' This is a specialized wrapper for CAS Common Chemistry API requests.
+#' It handles the specific authentication (cc_api_key) and server configuration
+#' for the Common Chemistry API endpoints.
+#'
+#' @param endpoint The API endpoint path (e.g., "detail", "search", "export").
+#' @param method The HTTP method to use: "GET" (default) or "POST".
+#' @param server Environment variable name for the base URL. Defaults to "cc_burl".
+#' @param auth Boolean; whether to include the API key header. Defaults to TRUE.
+#' @param tidy Boolean; whether to convert the result to a tidy tibble. Defaults to TRUE.
+#'        If FALSE, returns a cleaned list structure.
+#' @param content_type Expected response content type. Defaults to "application/json".
+#' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+#' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
+#' @param pagination_strategy Pagination strategy (usually "offset_limit" for CC). Defaults to NULL.
+#' @param ... Additional parameters passed as query parameters to the API.
+#'
+#' @return Depends on content_type and tidy parameter:
+#'         - JSON with tidy=TRUE: A tidy tibble.
+#'         - JSON with tidy=FALSE: A cleaned list structure.
+#'         - text/plain: A character string.
+#'         If no results are found, returns an empty tibble or list.
+#' @export
+generic_cc_request <- function(
+  endpoint,
+  method = "GET",
+  server = "cc_burl",
+  auth = TRUE,
+  tidy = TRUE,
+  content_type = "application/json",
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
+  ...
+) {
+  # --- 1. Base URL Resolution ---
+  base_url <- Sys.getenv(server, unset = server)
+  if (base_url == "") {
+    base_url <- server
+  }
+
+  # Check environment flags for logging/debugging
+  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+
+  if (run_verbose) {
+    cli::cli_rule(left = paste('Generic CC Request:', endpoint))
+    cli::cli_dl(c('Method' = '{method}'))
+    cli::cli_rule()
+    cli::cli_end()
+  }
+
+  # --- 2. Capture ellipsis arguments ---
+  ellipsis_args <- list(...)
+
+  # --- 3. Request Construction ---
+  req <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_method(toupper(method)) %>%
+    httr2::req_headers(Accept = content_type)
+
+  # Add CC API key authentication
+  if (auth) {
+    req <- req %>% httr2::req_headers(`x-api-key` = cc_api_key())
+  }
+
+  # Add query parameters
+  if (length(ellipsis_args) > 0) {
+    req <- req %>% httr2::req_url_query(!!!ellipsis_args)
+  }
+
+  # Add retry with exponential backoff for transient errors (429, 5xx)
+  req <- req %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = is_transient_error
+    )
+
+  # --- 4. Debugging Hook ---
+  if (run_debug) {
+    return(httr2::req_dry_run(req))
+  }
+
+  # --- 4.5. Pagination ---
+  if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
+    # Common Chemistry uses offset/size query params
+    # Response: {count: "N", results: [...]}
+    offset_val <- as.numeric(ellipsis_args[["offset"]] %||% 0)
+    size_val <- as.numeric(ellipsis_args[["size"]] %||% 100)
+
+    next_req <- httr2::iterate_with_offset(
+      "offset",
+      start = offset_val,
+      offset = size_val,
+      resp_complete = function(resp) {
+        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        total <- as.numeric(body[["count"]] %||% 0)
+        results <- body[["results"]] %||% list()
+        length(results) == 0 || length(results) < size_val
+      }
+    )
+
+    resps <- httr2::req_perform_iterative(
+      req,
+      next_req = next_req,
+      max_reqs = max_pages,
+      on_error = "return",
+      progress = run_verbose
+    )
+
+    resps <- httr2::resps_successes(resps)
+
+    if (length(resps) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (run_verbose) {
+      cli::cli_alert_success("CC pagination complete: {length(resps)} pages fetched.")
+    }
+
+    # Extract records from "results" field of each page
+    body_list <- purrr::map(resps, function(resp) {
+      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      body[["results"]] %||% list()
+    }) |>
+      purrr::list_flatten()
+
+    if (length(body_list) == 0) {
+      cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+      if (tidy) return(tibble::tibble()) else return(list())
+    }
+
+    if (!tidy) {
+      return(
+        body_list |>
+          purrr::map(function(x) {
+            if (is.list(x) && length(x) > 0) {
+              x[purrr::map_lgl(x, is.null)] <- NA
+            }
+            x
+          })
+      )
+    }
+
+    res <- body_list |>
+      purrr::map(function(x) {
+        if (is.list(x) && length(x) > 0) {
+          x[purrr::map_lgl(x, is.null)] <- NA
+          tryCatch(tibble::as_tibble(x), error = function(e) tibble::tibble(data = list(x)))
+        } else if (is.null(x) || length(x) == 0) {
+          NULL
+        } else {
+          tibble::tibble(value = x)
+        }
+      }) |>
+      purrr::list_rbind()
+
+    return(res)
+  }
+
+  # --- 5. Execution ---
+  resp <- httr2::req_perform(req)
+
+  # --- 6. Response Processing ---
+  status <- httr2::resp_status(resp)
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("CAS Common Chemistry API request to {.val {endpoint}} failed with status {status}")
+  }
+
+  # Handle different content types
+  is_text <- grepl("^text/plain", content_type)
+  is_json <- !is_text
+
+  if (is_text) {
+    return(httr2::resp_body_string(resp))
+  }
+
+  # JSON response handling
+  body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+
+  if (length(body) == 0) {
+    cli::cli_warn("No results found for the given query in {.val {endpoint}}.")
+    if (tidy) {
+      return(tibble::tibble())
+    } else {
+      return(list())
+    }
+  }
+
+  # --- 7. Output Formatting ---
+  if (!tidy) {
+    # Basic cleanup: replace NULLs with NA in list elements
+    if (is.list(body) && length(body) > 0) {
+      body[purrr::map_lgl(body, is.null)] <- NA
+    }
+    return(body)
+  }
+
+  # --- 8. Tidy Conversion ---
+  if (is.list(body) && !is.null(names(body))) {
+    # Single object response — wrap in list for safe_tidy_bind
+    res <- safe_tidy_bind(list(body))
+  } else if (is.list(body)) {
+    # Array of objects
+    res <- safe_tidy_bind(body)
+  } else {
+    # Primitive value
+    res <- tibble::tibble(value = body)
+  }
+
+  return(res)
 }
 
 # Generic PubChem PUG REST API Request Function

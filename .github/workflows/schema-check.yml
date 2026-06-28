@@ -86,6 +86,10 @@ jobs:
             cli::cli_alert_warning("chemi_schema failed: {conditionMessage(e)}")
             download_ok <<- FALSE
           })
+          tryCatch(cc_schema(timeout = 60), error = function(e) {
+            cli::cli_alert_warning("cc_schema failed: {conditionMessage(e)}")
+            download_ok <<- FALSE
+          })
           if (!download_ok) {
             cli::cli_alert_warning("One or more schema downloads failed - workflow will continue with available schemas")
           }

@@ -3,6 +3,7 @@ test_that("server helpers set and reset exported API base URLs", {
     ctx_burl = "",
     chemi_burl = "",
     epi_burl = "",
+    cc_burl = "",
     pubchem_burl = ""
   ))
 
@@ -21,6 +22,11 @@ test_that("server helpers set and reset exported API base URLs", {
   suppressMessages(epi_server(NULL))
   expect_equal(Sys.getenv("epi_burl"), "")
 
+  suppressMessages(cc_server(1))
+  expect_equal(Sys.getenv("cc_burl"), "https://commonchemistry.cas.org/api/")
+  suppressMessages(cc_server(NULL))
+  expect_equal(Sys.getenv("cc_burl"), "")
+
   suppressMessages(pubchem_server(1))
   expect_equal(Sys.getenv("pubchem_burl"), "https://pubchem.ncbi.nlm.nih.gov/rest/pug/")
   suppressMessages(pubchem_server(NULL))
@@ -33,10 +39,13 @@ test_that("run_verbose and run_setup have offline-safe configuration contracts",
     ctx_burl = "",
     chemi_burl = "",
     epi_burl = "",
+    cc_burl = "",
+    cts_burl = "",
     pubchem_burl = "",
     eco_burl = "",
     toxval_burl = "",
-    ctx_api_key = ""
+    ctx_api_key = "",
+    cc_api_key = ""
   ))
 
   suppressMessages(run_verbose(TRUE))
