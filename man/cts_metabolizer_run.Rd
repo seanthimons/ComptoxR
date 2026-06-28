@@ -6,8 +6,11 @@
 \usage{
 cts_metabolizer_run(
   structure = "CCCC",
-  generationLimit = 1,
-  transformationLibraries = list("hydrolysis")
+  generationLimit = 1L,
+  transformationLibraries = list("hydrolysis"),
+  resolve = FALSE,
+  id_type = "AnyId",
+  tidy = FALSE
 )
 }
 \arguments{
@@ -16,9 +19,15 @@ cts_metabolizer_run(
 \item{generationLimit}{Number of generations for structure's transformation products. (default: 1)}
 
 \item{transformationLibraries}{Optional parameter (default: hydrolysis)}
+
+\item{resolve}{Logical; whether to resolve identifiers to SMILES before submitting to CTS. Defaults to \code{FALSE}.}
+
+\item{id_type}{Identifier type passed to the resolver when \code{resolve = TRUE}.}
+
+\item{tidy}{Logical; whether to flatten the CTS metabolizer tree into a tibble.}
 }
 \value{
-Returns a list with result object
+Returns a list with result object, or a tibble when \code{tidy = TRUE}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
