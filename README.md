@@ -1,12 +1,10 @@
-# ComptoxR <img src="man/figures/logo.png" align="right" height="139" alt="ComptoxR logo" />
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/seanthimons/comptoxr/badge)](https://www.codefactor.io/repository/github/seanthimons/comptoxr)
-[![CCD Coverage](https://img.shields.io/badge/CCD_coverage-79.3%25-green.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/update-coverage-badges.yml)
-[![Cheminformatic Coverage](https://img.shields.io/badge/Cheminformatic_coverage-75.5%25-green.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/update-coverage-badges.yml)
-<!-- badges: end -->
+# ComptoxR <img src="man/figures/logo.png" alt="ComptoxR logo" align="right" height="139"/>
 
+<!-- badges: start -->
+
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml) [![CodeFactor](https://www.codefactor.io/repository/github/seanthimons/comptoxr/badge)](https://www.codefactor.io/repository/github/seanthimons/comptoxr) [![CCD Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/ccd-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml) [![Cheminformatic Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/chemi-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml)
+
+<!-- badges: end -->
 
 # Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
 
@@ -14,51 +12,51 @@ ComptoxR provides access to the US EPA's CompTox Chemical Dashboard APIs and rel
 
 ## Main Purpose
 
-ComptoxR enables researchers to query and analyze chemical hazard, toxicity, and environmental data from EPA databases for:
-- Rapid chemical risk screening and prioritization
-- Regulatory compliance assessment
-- Chemical hazard prioritization studies
-- Environmental fate and exposure modeling
-- Toxicity prediction and bioactivity screening
-- Chemical structure and property analysis
+ComptoxR enables researchers to query and analyze chemical hazard, toxicity, and environmental data from EPA databases for: - Rapid chemical risk screening and prioritization - Regulatory compliance assessment - Chemical hazard prioritization studies - Environmental fate and exposure modeling - Toxicity prediction and bioactivity screening - Chemical structure and property analysis
 
 ## Key Capabilities
 
 ### Chemical Identification & Search
-- Resolve chemical identifiers (DTXSID, DTXCID, CAS, SMILES, InChI, InChIKey, chemical names) with fuzzy or exact matching
-- Search chemicals by string matching (exact, starts-with, or contains)
-- Retrieve detailed compound information with various projection options
-- Classify compounds as organic, inorganic, isotope, or Markush structures
+
+-   Resolve chemical identifiers (DTXSID, DTXCID, CAS, SMILES, InChI, InChIKey, chemical names) with fuzzy or exact matching
+-   Search chemicals by string matching (exact, starts-with, or contains)
+-   Retrieve detailed compound information with various projection options
+-   Classify compounds as organic, inorganic, isotope, or Markush structures
 
 ### Hazard & Safety Assessment
-- Generate hazard comparison data with multiple coercion methods
-- Retrieve GHS codes and NFPA 704 safety diamond information
-- Access Toxprint molecular fingerprint analysis
-- Query cancer endpoints, genotoxicity data, skin/eye irritation information
-- Get GHS classifications and regulatory hazard data
+
+-   Generate hazard comparison data with multiple coercion methods
+-   Retrieve GHS codes and NFPA 704 safety diamond information
+-   Access Toxprint molecular fingerprint analysis
+-   Query cancer endpoints, genotoxicity data, skin/eye irritation information
+-   Get GHS classifications and regulatory hazard data
 
 ### Bioactivity & Toxicity Data
-- Query bioactivity and toxicity screening models
-- Access environmental degradation and fate data
-- Retrieve exposure information from multiple sources
-- Get QSAR model predictions
+
+-   Query bioactivity and toxicity screening models
+-   Access environmental degradation and fate data
+-   Retrieve exposure information from multiple sources
+-   Get QSAR model predictions
 
 ### Chemical Properties & Descriptors
-- Access molecular descriptors and chemical properties
-- Retrieve EPI Suite environmental partition predictions
-- Get molecular classifications using ClassyFire chemical taxonomy
-- Find similar or related compounds
-- Perform chemical clustering and similarity analysis
+
+-   Access molecular descriptors and chemical properties
+-   Retrieve EPI Suite environmental partition predictions
+-   Get molecular classifications using ClassyFire chemical taxonomy
+-   Find similar or related compounds
+-   Perform chemical clustering and similarity analysis
 
 ### Risk Screening & Prioritization
-- Chemical risk prioritization queries
-- Regulatory list associations
-- Functional use information
-- Analog searches for hazard comparison
+
+-   Chemical risk prioritization queries
+-   Regulatory list associations
+-   Functional use information
+-   Analog searches for hazard comparison
 
 ### Batch Processing
-- Automatic batch processing for large queries (default 200 compounds per batch)
-- Support for multiple server environments (Production, Staging, Development)
+
+-   Automatic batch processing for large queries (default 200 compounds per batch)
+-   Support for multiple server environments (Production, Staging, Development)
 
 An API Key is needed to access some of these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
 

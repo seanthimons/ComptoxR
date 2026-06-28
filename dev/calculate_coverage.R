@@ -30,23 +30,31 @@ source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
 #' @param exclude_pattern Regex to exclude from endpoint routes
 #' @return Integer count of unique endpoints
 count_endpoints_from_schemas <- function(schema_files, exclude_pattern = ENDPOINT_PATTERNS_TO_EXCLUDE) {
-  if (length(schema_files) == 0) return(0L)
+  if (length(schema_files) == 0) {
+    return(0L)
+  }
 
-  endpoints <- tryCatch({
-    map(schema_files, ~ {
-      openapi <- jsonlite::fromJSON(here::here("schema", .x), simplifyVector = FALSE)
-      suppressMessages(openapi_to_spec(openapi))
-    }) %>%
-      list_rbind() %>%
-      filter(
-        str_detect(method, "GET|POST"),
-        !str_detect(route, exclude_pattern)
+  endpoints <- tryCatch(
+    {
+      map(
+        schema_files,
+        ~ {
+          openapi <- jsonlite::fromJSON(here::here("schema", .x), simplifyVector = FALSE)
+          suppressMessages(openapi_to_spec(openapi))
+        }
       ) %>%
-      distinct(route, method)
-  }, error = function(e) {
-    cli_alert_warning("Error parsing schemas: {e$message}")
-    tibble()
-  })
+        list_rbind() %>%
+        filter(
+          str_detect(method, "GET|POST"),
+          !str_detect(route, exclude_pattern)
+        ) %>%
+        distinct(route, method)
+    },
+    error = function(e) {
+      cli_alert_warning("Error parsing schemas: {e$message}")
+      tibble()
+    }
+  )
 
   nrow(endpoints)
 }
@@ -117,15 +125,43 @@ cat(sprintf("Cheminformatic Coverage: %.1f%%\n\n", chemi_coverage))
 # ==============================================================================
 
 get_badge_color <- function(coverage) {
-  if (coverage >= 80) "brightgreen"
-  else if (coverage >= 60) "green"
-  else if (coverage >= 40) "yellow"
-  else if (coverage >= 20) "orange"
-  else "red"
+  if (coverage >= 80) {
+    "brightgreen"
+  } else if (coverage >= 60) {
+    "green"
+  } else if (coverage >= 40) {
+    "yellow"
+  } else if (coverage >= 20) {
+    "orange"
+  } else {
+    "red"
+  }
 }
 
 ccd_color <- get_badge_color(ccd_coverage)
 chemi_color <- get_badge_color(chemi_coverage)
+
+# ==============================================================================
+# Badge JSON (consumed by README shields.io endpoint badges)
+# ==============================================================================
+
+write_badge <- function(path, label, coverage, color) {
+  jsonlite::write_json(
+    list(
+      schemaVersion = 1,
+      label = label,
+      message = sprintf("%.1f%%", coverage),
+      color = color
+    ),
+    path,
+    auto_unbox = TRUE,
+    pretty = TRUE
+  )
+}
+
+write_badge(here::here(".github/badges/ccd-coverage.json"), "CCD coverage", ccd_coverage, ccd_color)
+write_badge(here::here(".github/badges/chemi-coverage.json"), "Cheminformatic coverage", chemi_coverage, chemi_color)
+cat("Badge JSON updated: .github/badges/{ccd,chemi}-coverage.json\n")
 
 # ==============================================================================
 # Coverage deltas (vs baseline)
@@ -142,12 +178,19 @@ baseline <- if (file.exists(baseline_path)) {
 }
 
 format_delta <- function(current, baseline_val) {
-  if (is.null(baseline_val) || is.na(baseline_val)) return("")
+  if (is.null(baseline_val) || is.na(baseline_val)) {
+    return("")
+  }
   diff <- current - baseline_val
-  if (abs(diff) < 1e-9) return("")
+  if (abs(diff) < 1e-9) {
+    return("")
+  }
   is_whole <- abs(current - round(current)) < 1e-9
-  if (is_whole) sprintf(" (%+d)", as.integer(round(diff)))
-  else sprintf(" (%+.1f)", diff)
+  if (is_whole) {
+    sprintf(" (%+d)", as.integer(round(diff)))
+  } else {
+    sprintf(" (%+.1f)", diff)
+  }
 }
 
 ccd_coverage_fmt <- paste0(sprintf("%.1f%%", ccd_coverage), format_delta(ccd_coverage, baseline$ccd_coverage))
@@ -159,7 +202,12 @@ chemi_functions_fmt <- paste0(chemi_functions, format_delta(chemi_functions, bas
 
 cat("\nCoverage deltas (vs baseline):\n")
 cat(sprintf("  CCD:   %s | %s endpoints | %s functions\n", ccd_coverage_fmt, ccd_endpoints_fmt, ccd_functions_fmt))
-cat(sprintf("  Chemi: %s | %s endpoints | %s functions\n", chemi_coverage_fmt, chemi_endpoints_fmt, chemi_functions_fmt))
+cat(sprintf(
+  "  Chemi: %s | %s endpoints | %s functions\n",
+  chemi_coverage_fmt,
+  chemi_endpoints_fmt,
+  chemi_functions_fmt
+))
 
 # Write updated baseline
 new_baseline <- list(
@@ -200,7 +248,11 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
 }
 
 cat("\n=== Summary ===\n")
-cat(sprintf("CCD Coverage: %.1f%% (%d/%d) - Color: %s\n",
-            ccd_coverage, ccd_functions, ccd_endpoints, ccd_color))
-cat(sprintf("Cheminformatic Coverage: %.1f%% (%d/%d) - Color: %s\n",
-            chemi_coverage, chemi_functions, chemi_endpoints, chemi_color))
+cat(sprintf("CCD Coverage: %.1f%% (%d/%d) - Color: %s\n", ccd_coverage, ccd_functions, ccd_endpoints, ccd_color))
+cat(sprintf(
+  "Cheminformatic Coverage: %.1f%% (%d/%d) - Color: %s\n",
+  chemi_coverage,
+  chemi_functions,
+  chemi_endpoints,
+  chemi_color
+))

@@ -68,6 +68,7 @@ temp.R
 .*
 !.github
 !.gitignore
+!.pre-commit-config.yaml
 
 # Log files from package_sitrep
 *.log

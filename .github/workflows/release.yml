@@ -34,7 +34,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::usethis, any::devtools, any::autonewsmd, any::here, any::rcmdcheck
+          extra-packages: any::desc, any::devtools, any::autonewsmd, any::here, any::rcmdcheck
 
       - name: Git identity
         run: |
@@ -44,26 +44,27 @@ jobs:
       - name: Bump version and document
         if: github.event.inputs.version_type != 'none'
         run: |
-          # Bump version
-          #usethis::use_version(which = "${{ github.event.inputs.version_type }}")
-          
+          # Non-interactive bump (desc avoids usethis's interactive .9000 dev-version behavior)
+          desc::desc_bump_version("${{ github.event.inputs.version_type }}")
           # Document (NEWS.md will be generated after tagging)
           devtools::document()
         shell: Rscript {0}
 
+      - name: Resolve version and guard against existing tag
+        run: |
+          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
+          echo "Resolved version: $VERSION"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
+            echo "::error::Tag v$VERSION already exists on origin. Choose a higher bump type (patch/minor/major) or delete the stale tag."
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Commit version bump
         if: github.event.inputs.version_type != 'none'
         run: |
-          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
           git add DESCRIPTION man/ NAMESPACE
-          git commit -m "chore: bump version to $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Get current version
-        if: github.event.inputs.version_type == 'none'
-        run: |
-          VERSION=$(grep -m 1 '^Version:' DESCRIPTION | cut -d ' ' -f 2)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          git commit -m "chore: bump version to ${{ env.VERSION }}"
 
       - name: Check package
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
