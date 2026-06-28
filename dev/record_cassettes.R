@@ -15,8 +15,8 @@ source(file.path("dev", "test_generation", "00_config.R"))
 source(file.path("dev", "test_generation", "07_token_preflight.R"))
 
 # Configuration
-N_WORKERS <- 4  # Conservative to avoid EPA API rate limiting
-FAILURE_THRESHOLD <- 0.15  # Halt if >15% fail (systemic issue detection)
+N_WORKERS <- 4 # Conservative to avoid EPA API rate limiting
+FAILURE_THRESHOLD <- 0.15 # Halt if >15% fail (systemic issue detection)
 
 args <- commandArgs(trailingOnly = TRUE)
 RECORD_LIVE <- "--record-live" %in% args
@@ -100,7 +100,7 @@ extract_major_family <- function(cassette_path) {
   if (length(parts) >= 2) {
     paste(parts[1], parts[2], sep = "_")
   } else {
-    parts[1]  # Fallback for single-part names
+    parts[1] # Fallback for single-part names
   }
 }
 
@@ -154,7 +154,7 @@ find_test_for_cassette <- function(cassette_path) {
     }
   }
 
-  NULL  # No test file found
+  NULL # No test file found
 }
 
 # Build mapping
@@ -243,7 +243,9 @@ for (family in families) {
   # Running a test file once records ALL its cassettes
   unique_test_files <- unique(unlist(cassette_to_test[cassettes_to_record]))
 
-  cli_alert_info("Recording {length(cassettes_to_record)} cassette{?s} via {length(unique_test_files)} test file{?s} ({n_skipped} skipped)")
+  cli_alert_info(
+    "Recording {length(cassettes_to_record)} cassette{?s} via {length(unique_test_files)} test file{?s} ({n_skipped} skipped)"
+  )
 
   # Delete existing cassettes for this family so VCR re-records them
   for (cassette in cassettes_to_record) {
@@ -257,31 +259,34 @@ for (family in families) {
   family_results <- mirai_map(
     unique_test_files,
     function(test_file) {
-      tryCatch({
-        # Set working directory to package root so VCR helper finds fixtures
-        setwd(pkg_dir)
+      tryCatch(
+        {
+          # Set working directory to package root so VCR helper finds fixtures
+          setwd(pkg_dir)
 
-        # Source VCR helper to configure cassette dir and sanitization
-        source(file.path(pkg_dir, "tests/testthat/helper-vcr.R"), local = TRUE)
+          # Source VCR helper to configure cassette dir and sanitization
+          source(file.path(pkg_dir, "tests/testthat/helper-vcr.R"), local = TRUE)
 
-        # Run the test file — VCR records any missing cassettes
-        test_result <- testthat::test_file(
-          test_file,
-          reporter = testthat::MinimalReporter$new()
-        )
+          # Run the test file — VCR records any missing cassettes
+          test_result <- testthat::test_file(
+            test_file,
+            reporter = testthat::MinimalReporter$new()
+          )
 
-        list(
-          success = TRUE,
-          test_file = test_file,
-          n_tests = sum(vapply(test_result, function(r) length(r$results), integer(1)))
-        )
-      }, error = function(e) {
-        list(
-          success = FALSE,
-          test_file = test_file,
-          error = e$message
-        )
-      })
+          list(
+            success = TRUE,
+            test_file = test_file,
+            n_tests = sum(vapply(test_result, function(r) length(r$results), integer(1)))
+          )
+        },
+        error = function(e) {
+          list(
+            success = FALSE,
+            test_file = test_file,
+            error = e$message
+          )
+        }
+      )
     },
     .args = list(pkg_dir = pkg_dir)
   )
@@ -340,7 +345,9 @@ for (family in families) {
 
   # Check failure threshold
   if (failure_rate > FAILURE_THRESHOLD) {
-    cli_alert_danger("Failure rate {sprintf('%.1f%%', failure_rate * 100)} exceeds threshold ({sprintf('%.1f%%', FAILURE_THRESHOLD * 100)})")
+    cli_alert_danger(
+      "Failure rate {sprintf('%.1f%%', failure_rate * 100)} exceeds threshold ({sprintf('%.1f%%', FAILURE_THRESHOLD * 100)})"
+    )
     cli_alert_warning("Halting - likely systemic issue (expired key, API outage, schema change)")
 
     writeLines("", log_conn)

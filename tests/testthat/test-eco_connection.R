@@ -24,10 +24,13 @@ test_that(".eco_get_con() aborts when DB missing", {
     .ComptoxREnv$ecotox_db <- NULL
     # Set eco_burl to non-duckdb value so it falls through to eco_path()
     Sys.setenv("eco_burl" = "http://example.com")
-    on.exit({
-      .ComptoxREnv$ecotox_db <- old_con
-      Sys.setenv("eco_burl" = old_burl)
-    }, add = TRUE)
+    on.exit(
+      {
+        .ComptoxREnv$ecotox_db <- old_con
+        Sys.setenv("eco_burl" = old_burl)
+      },
+      add = TRUE
+    )
 
     expect_error(.eco_get_con(), "not found")
   })
@@ -228,11 +231,14 @@ test_that(".eco_get_con() returns valid connection", {
   skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
-  on.exit({
-    .eco_close_con()
-    .ComptoxREnv$ecotox_db <- old_con
-    Sys.setenv("eco_burl" = old_burl)
-  }, add = TRUE)
+  on.exit(
+    {
+      .eco_close_con()
+      .ComptoxREnv$ecotox_db <- old_con
+      Sys.setenv("eco_burl" = old_burl)
+    },
+    add = TRUE
+  )
 
   .ComptoxREnv$ecotox_db <- NULL
   suppressMessages(eco_server(1))
@@ -245,11 +251,14 @@ test_that(".eco_get_con() reuses cached connection", {
   skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
-  on.exit({
-    .eco_close_con()
-    .ComptoxREnv$ecotox_db <- old_con
-    Sys.setenv("eco_burl" = old_burl)
-  }, add = TRUE)
+  on.exit(
+    {
+      .eco_close_con()
+      .ComptoxREnv$ecotox_db <- old_con
+      Sys.setenv("eco_burl" = old_burl)
+    },
+    add = TRUE
+  )
 
   .ComptoxREnv$ecotox_db <- NULL
   suppressMessages(eco_server(1))
@@ -262,10 +271,13 @@ test_that(".eco_close_con() disconnects and clears cache", {
   skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
-  on.exit({
-    .ComptoxREnv$ecotox_db <- old_con
-    Sys.setenv("eco_burl" = old_burl)
-  }, add = TRUE)
+  on.exit(
+    {
+      .ComptoxREnv$ecotox_db <- old_con
+      Sys.setenv("eco_burl" = old_burl)
+    },
+    add = TRUE
+  )
 
   .ComptoxREnv$ecotox_db <- NULL
   suppressMessages(eco_server(1))
@@ -281,11 +293,14 @@ test_that("eco_server() mode switch closes existing connection", {
   skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
-  on.exit({
-    .eco_close_con()
-    .ComptoxREnv$ecotox_db <- old_con
-    Sys.setenv("eco_burl" = old_burl)
-  }, add = TRUE)
+  on.exit(
+    {
+      .eco_close_con()
+      .ComptoxREnv$ecotox_db <- old_con
+      Sys.setenv("eco_burl" = old_burl)
+    },
+    add = TRUE
+  )
 
   .ComptoxREnv$ecotox_db <- NULL
   suppressMessages(eco_server(1))

@@ -85,7 +85,9 @@ util_pubchem_resolve_dtxsid <- function(cid, cache = TRUE) {
     synonyms_to_search <- utils::head(info$Synonym, 500)
     matches <- grep(dtxsid_pattern, synonyms_to_search, value = TRUE)
 
-    if (length(matches) == 1) return(matches)
+    if (length(matches) == 1) {
+      return(matches)
+    }
     if (length(matches) > 1) {
       cli::cli_warn("Multiple DTXSIDs for CID {info$CID}: {.val {matches}}. Using first.")
       return(matches[1])
@@ -105,23 +107,26 @@ util_pubchem_resolve_dtxsid <- function(cid, cache = TRUE) {
 
     valid_cas <- cas_candidates[!is.na(cas_candidates)]
     if (length(valid_cas) > 0) {
-      tryCatch({
-        ct_results <- ct_chemical_search_equal_bulk(valid_cas)
-        if (!is.null(ct_results) && nrow(ct_results) > 0) {
-          # Extract DTXSID and CASRN columns
-          if ("dtxsid" %in% names(ct_results) && "casrn" %in% names(ct_results)) {
-            cas_to_dtxsid <- stats::setNames(ct_results$dtxsid, ct_results$casrn)
-            for (i in seq_along(unresolved_idx)) {
-              cas <- cas_candidates[i]
-              if (!is.na(cas) && cas %in% names(cas_to_dtxsid)) {
-                resolved[unresolved_idx[i]] <- cas_to_dtxsid[[cas]]
+      tryCatch(
+        {
+          ct_results <- ct_chemical_search_equal_bulk(valid_cas)
+          if (!is.null(ct_results) && nrow(ct_results) > 0) {
+            # Extract DTXSID and CASRN columns
+            if ("dtxsid" %in% names(ct_results) && "casrn" %in% names(ct_results)) {
+              cas_to_dtxsid <- stats::setNames(ct_results$dtxsid, ct_results$casrn)
+              for (i in seq_along(unresolved_idx)) {
+                cas <- cas_candidates[i]
+                if (!is.na(cas) && cas %in% names(cas_to_dtxsid)) {
+                  resolved[unresolved_idx[i]] <- cas_to_dtxsid[[cas]]
+                }
               }
             }
           }
+        },
+        error = function(e) {
+          cli::cli_warn("CompTox CAS fallback failed: {e$message}")
         }
-      }, error = function(e) {
-        cli::cli_warn("CompTox CAS fallback failed: {e$message}")
-      })
+      )
     }
   }
 

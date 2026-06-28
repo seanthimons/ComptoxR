@@ -58,147 +58,172 @@ classify_param_change <- function(old_params, new_params) {
 #' @return List with schema_file, added (tibble), removed (tibble), modified (tibble)
 diff_single_schema <- function(old_path, new_path) {
   # Handle errors gracefully
-  tryCatch({
-    # Source the openapi parser and its dependencies if not already loaded
-    if (!exists("openapi_to_spec")) {
-      suppressMessages({
-        source(here::here("dev/endpoint_eval/00_config.R"))
-        source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
-        source(here::here("dev/endpoint_eval/06_param_parsing.R"))
-        source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
-      })
-    }
-
-    # Parse both schemas
-    old_json <- jsonlite::fromJSON(old_path, simplifyVector = FALSE)
-    new_json <- jsonlite::fromJSON(new_path, simplifyVector = FALSE)
-
-    old_spec <- suppressMessages(openapi_to_spec(old_json))
-    new_spec <- suppressMessages(openapi_to_spec(new_json))
-
-    # Filter out admin/auth/metadata/version endpoints
-    if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
-      old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
-      new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
-    }
-
-    # Create endpoint keys as "{METHOD} {route}"
-    old_spec <- old_spec %>%
-      mutate(endpoint_key = paste(method, route))
-    new_spec <- new_spec %>%
-      mutate(endpoint_key = paste(method, route))
-
-    old_keys <- old_spec$endpoint_key
-    new_keys <- new_spec$endpoint_key
-
-    # Detect changes
-    added_keys <- setdiff(new_keys, old_keys)
-    removed_keys <- setdiff(old_keys, new_keys)
-    common_keys <- intersect(old_keys, new_keys)
-
-    # Build added tibble
-    added <- new_spec %>%
-      filter(endpoint_key %in% added_keys) %>%
-      select(route, method, summary) %>%
-      arrange(route, method)
-
-    # Build removed tibble
-    removed <- old_spec %>%
-      filter(endpoint_key %in% removed_keys) %>%
-      select(route, method, summary) %>%
-      arrange(route, method)
-
-    # Build modified tibble
-    modified_rows <- list()
-    for (key in common_keys) {
-      old_row <- old_spec %>% filter(endpoint_key == key)
-      new_row <- new_spec %>% filter(endpoint_key == key)
-
-      changes <- list()
-
-      # Compare params
-      if (!identical(old_row$params, new_row$params)) {
-        param_change <- classify_param_change(old_row$params, new_row$params)
-        changes <- c(changes, list(list(
-          type = "params",
-          breaking = param_change$breaking,
-          detail = param_change$detail
-        )))
+  tryCatch(
+    {
+      # Source the openapi parser and its dependencies if not already loaded
+      if (!exists("openapi_to_spec")) {
+        suppressMessages({
+          source(here::here("dev/endpoint_eval/00_config.R"))
+          source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
+          source(here::here("dev/endpoint_eval/06_param_parsing.R"))
+          source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
+        })
       }
 
-      # Compare body_params
-      if (!identical(old_row$body_params, new_row$body_params)) {
-        param_change <- classify_param_change(old_row$body_params, new_row$body_params)
-        changes <- c(changes, list(list(
-          type = "body_params",
-          breaking = param_change$breaking,
-          detail = sprintf("body %s", param_change$detail)
-        )))
+      # Parse both schemas
+      old_json <- jsonlite::fromJSON(old_path, simplifyVector = FALSE)
+      new_json <- jsonlite::fromJSON(new_path, simplifyVector = FALSE)
+
+      old_spec <- suppressMessages(openapi_to_spec(old_json))
+      new_spec <- suppressMessages(openapi_to_spec(new_json))
+
+      # Filter out admin/auth/metadata/version endpoints
+      if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+        old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+        new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
       }
 
-      # Compare has_body
-      if (!identical(old_row$has_body, new_row$has_body)) {
-        if (new_row$has_body && !old_row$has_body) {
-          changes <- c(changes, list(list(
-            type = "body_added",
-            breaking = TRUE,
-            detail = "request body added"
-          )))
-        } else {
-          changes <- c(changes, list(list(
-            type = "body_removed",
-            breaking = TRUE,
-            detail = "request body removed"
-          )))
+      # Create endpoint keys as "{METHOD} {route}"
+      old_spec <- old_spec %>%
+        mutate(endpoint_key = paste(method, route))
+      new_spec <- new_spec %>%
+        mutate(endpoint_key = paste(method, route))
+
+      old_keys <- old_spec$endpoint_key
+      new_keys <- new_spec$endpoint_key
+
+      # Detect changes
+      added_keys <- setdiff(new_keys, old_keys)
+      removed_keys <- setdiff(old_keys, new_keys)
+      common_keys <- intersect(old_keys, new_keys)
+
+      # Build added tibble
+      added <- new_spec %>%
+        filter(endpoint_key %in% added_keys) %>%
+        select(route, method, summary) %>%
+        arrange(route, method)
+
+      # Build removed tibble
+      removed <- old_spec %>%
+        filter(endpoint_key %in% removed_keys) %>%
+        select(route, method, summary) %>%
+        arrange(route, method)
+
+      # Build modified tibble
+      modified_rows <- list()
+      for (key in common_keys) {
+        old_row <- old_spec %>% filter(endpoint_key == key)
+        new_row <- new_spec %>% filter(endpoint_key == key)
+
+        changes <- list()
+
+        # Compare params
+        if (!identical(old_row$params, new_row$params)) {
+          param_change <- classify_param_change(old_row$params, new_row$params)
+          changes <- c(
+            changes,
+            list(list(
+              type = "params",
+              breaking = param_change$breaking,
+              detail = param_change$detail
+            ))
+          )
+        }
+
+        # Compare body_params
+        if (!identical(old_row$body_params, new_row$body_params)) {
+          param_change <- classify_param_change(old_row$body_params, new_row$body_params)
+          changes <- c(
+            changes,
+            list(list(
+              type = "body_params",
+              breaking = param_change$breaking,
+              detail = sprintf("body %s", param_change$detail)
+            ))
+          )
+        }
+
+        # Compare has_body
+        if (!identical(old_row$has_body, new_row$has_body)) {
+          if (new_row$has_body && !old_row$has_body) {
+            changes <- c(
+              changes,
+              list(list(
+                type = "body_added",
+                breaking = TRUE,
+                detail = "request body added"
+              ))
+            )
+          } else {
+            changes <- c(
+              changes,
+              list(list(
+                type = "body_removed",
+                breaking = TRUE,
+                detail = "request body removed"
+              ))
+            )
+          }
+        }
+
+        # Compare deprecated status
+        if (!identical(old_row$deprecated, new_row$deprecated)) {
+          if (new_row$deprecated && !old_row$deprecated) {
+            changes <- c(
+              changes,
+              list(list(
+                type = "deprecated",
+                breaking = FALSE,
+                detail = "endpoint deprecated"
+              ))
+            )
+          }
+        }
+
+        # If any changes detected, add to modified list
+        if (length(changes) > 0) {
+          for (change in changes) {
+            modified_rows <- c(
+              modified_rows,
+              list(tibble(
+                route = new_row$route,
+                method = new_row$method,
+                change_type = change$type,
+                detail = change$detail,
+                breaking = change$breaking
+              ))
+            )
+          }
         }
       }
 
-      # Compare deprecated status
-      if (!identical(old_row$deprecated, new_row$deprecated)) {
-        if (new_row$deprecated && !old_row$deprecated) {
-          changes <- c(changes, list(list(
-            type = "deprecated",
-            breaking = FALSE,
-            detail = "endpoint deprecated"
-          )))
-        }
+      # Combine modified rows into a tibble
+      modified <- if (length(modified_rows) > 0) {
+        bind_rows(modified_rows) %>% arrange(route, method)
+      } else {
+        tibble(
+          route = character(),
+          method = character(),
+          change_type = character(),
+          detail = character(),
+          breaking = logical()
+        )
       }
 
-      # If any changes detected, add to modified list
-      if (length(changes) > 0) {
-        for (change in changes) {
-          modified_rows <- c(modified_rows, list(tibble(
-            route = new_row$route,
-            method = new_row$method,
-            change_type = change$type,
-            detail = change$detail,
-            breaking = change$breaking
-          )))
-        }
-      }
+      list(
+        schema_file = basename(new_path),
+        added = added,
+        removed = removed,
+        modified = modified
+      )
+    },
+    error = function(e) {
+      list(
+        schema_file = basename(new_path),
+        error = as.character(e$message)
+      )
     }
-
-    # Combine modified rows into a tibble
-    modified <- if (length(modified_rows) > 0) {
-      bind_rows(modified_rows) %>% arrange(route, method)
-    } else {
-      tibble(route = character(), method = character(), change_type = character(),
-             detail = character(), breaking = logical())
-    }
-
-    list(
-      schema_file = basename(new_path),
-      added = added,
-      removed = removed,
-      modified = modified
-    )
-
-  }, error = function(e) {
-    list(
-      schema_file = basename(new_path),
-      error = as.character(e$message)
-    )
-  })
+  )
 }
 
 # ------------------------------------------------------------------------------
@@ -256,64 +281,78 @@ diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$", stage_priority 
 
     if (!file.exists(old_path)) {
       # Entire file is new - all endpoints are "added"
-      tryCatch({
-        if (!exists("openapi_to_spec")) {
-          suppressMessages({
-            source(here::here("dev/endpoint_eval/00_config.R"))
-            source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
-            source(here::here("dev/endpoint_eval/06_param_parsing.R"))
-            source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
-          })
+      tryCatch(
+        {
+          if (!exists("openapi_to_spec")) {
+            suppressMessages({
+              source(here::here("dev/endpoint_eval/00_config.R"))
+              source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
+              source(here::here("dev/endpoint_eval/06_param_parsing.R"))
+              source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
+            })
+          }
+          new_json <- jsonlite::fromJSON(new_path, simplifyVector = FALSE)
+          new_spec <- suppressMessages(openapi_to_spec(new_json))
+
+          # Filter out admin/auth/metadata/version endpoints
+          if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+            new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+          }
+
+          results[[file]] <- list(
+            schema_file = file,
+            added = new_spec %>% select(route, method, summary),
+            removed = tibble(route = character(), method = character(), summary = character()),
+            modified = tibble(
+              route = character(),
+              method = character(),
+              change_type = character(),
+              detail = character(),
+              breaking = logical()
+            )
+          )
+        },
+        error = function(e) {
+          results[[file]] <<- list(schema_file = file, error = as.character(e$message))
         }
-        new_json <- jsonlite::fromJSON(new_path, simplifyVector = FALSE)
-        new_spec <- suppressMessages(openapi_to_spec(new_json))
-
-        # Filter out admin/auth/metadata/version endpoints
-        if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
-          new_spec <- new_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
-        }
-
-        results[[file]] <- list(
-          schema_file = file,
-          added = new_spec %>% select(route, method, summary),
-          removed = tibble(route = character(), method = character(), summary = character()),
-          modified = tibble(route = character(), method = character(), change_type = character(),
-                           detail = character(), breaking = logical())
-        )
-      }, error = function(e) {
-        results[[file]] <<- list(schema_file = file, error = as.character(e$message))
-      })
-
+      )
     } else if (!file.exists(new_path)) {
       # Entire file removed - all endpoints are "removed"
-      tryCatch({
-        if (!exists("openapi_to_spec")) {
-          suppressMessages({
-            source(here::here("dev/endpoint_eval/00_config.R"))
-            source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
-            source(here::here("dev/endpoint_eval/06_param_parsing.R"))
-            source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
-          })
+      tryCatch(
+        {
+          if (!exists("openapi_to_spec")) {
+            suppressMessages({
+              source(here::here("dev/endpoint_eval/00_config.R"))
+              source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
+              source(here::here("dev/endpoint_eval/06_param_parsing.R"))
+              source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
+            })
+          }
+          old_json <- jsonlite::fromJSON(old_path, simplifyVector = FALSE)
+          old_spec <- suppressMessages(openapi_to_spec(old_json))
+
+          # Filter out admin/auth/metadata/version endpoints
+          if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
+            old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
+          }
+
+          results[[file]] <- list(
+            schema_file = file,
+            added = tibble(route = character(), method = character(), summary = character()),
+            removed = old_spec %>% select(route, method, summary),
+            modified = tibble(
+              route = character(),
+              method = character(),
+              change_type = character(),
+              detail = character(),
+              breaking = logical()
+            )
+          )
+        },
+        error = function(e) {
+          results[[file]] <<- list(schema_file = file, error = as.character(e$message))
         }
-        old_json <- jsonlite::fromJSON(old_path, simplifyVector = FALSE)
-        old_spec <- suppressMessages(openapi_to_spec(old_json))
-
-        # Filter out admin/auth/metadata/version endpoints
-        if (exists("ENDPOINT_PATTERNS_TO_EXCLUDE")) {
-          old_spec <- old_spec %>% filter(!stringr::str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE))
-        }
-
-        results[[file]] <- list(
-          schema_file = file,
-          added = tibble(route = character(), method = character(), summary = character()),
-          removed = old_spec %>% select(route, method, summary),
-          modified = tibble(route = character(), method = character(), change_type = character(),
-                           detail = character(), breaking = logical())
-        )
-      }, error = function(e) {
-        results[[file]] <<- list(schema_file = file, error = as.character(e$message))
-      })
-
+      )
     } else {
       # Both exist - run diff
       results[[file]] <- diff_single_schema(old_path, new_path)
@@ -322,7 +361,9 @@ diff_schemas <- function(old_dir, new_dir, pattern = "\\.json$", stage_priority 
 
   # Filter out schemas with zero changes
   results <- purrr::keep(results, function(r) {
-    if (!is.null(r$error)) return(TRUE)  # Keep errors
+    if (!is.null(r$error)) {
+      return(TRUE)
+    } # Keep errors
     nrow(r$added) > 0 || nrow(r$removed) > 0 || nrow(r$modified) > 0
   })
 
@@ -356,36 +397,45 @@ format_diff_markdown <- function(diff_results) {
 
     # Handle errors
     if (!is.null(result$error)) {
-      breaking_changes <- c(breaking_changes, list(tibble(
-        schema = schema_name,
-        endpoint = "ERROR",
-        change = "Parse error",
-        detail = result$error
-      )))
+      breaking_changes <- c(
+        breaking_changes,
+        list(tibble(
+          schema = schema_name,
+          endpoint = "ERROR",
+          change = "Parse error",
+          detail = result$error
+        ))
+      )
       next
     }
 
     # Removed endpoints are breaking
     if (nrow(result$removed) > 0) {
       for (i in seq_len(nrow(result$removed))) {
-        breaking_changes <- c(breaking_changes, list(tibble(
-          schema = schema_name,
-          endpoint = paste(result$removed$method[i], result$removed$route[i]),
-          change = "Removed",
-          detail = "Endpoint no longer exists"
-        )))
+        breaking_changes <- c(
+          breaking_changes,
+          list(tibble(
+            schema = schema_name,
+            endpoint = paste(result$removed$method[i], result$removed$route[i]),
+            change = "Removed",
+            detail = "Endpoint no longer exists"
+          ))
+        )
       }
     }
 
     # Added endpoints are non-breaking
     if (nrow(result$added) > 0) {
       for (i in seq_len(nrow(result$added))) {
-        nonbreaking_changes <- c(nonbreaking_changes, list(tibble(
-          schema = schema_name,
-          endpoint = paste(result$added$method[i], result$added$route[i]),
-          change = "Added",
-          detail = "New endpoint"
-        )))
+        nonbreaking_changes <- c(
+          nonbreaking_changes,
+          list(tibble(
+            schema = schema_name,
+            endpoint = paste(result$added$method[i], result$added$route[i]),
+            change = "Added",
+            detail = "New endpoint"
+          ))
+        )
       }
     }
 
@@ -412,8 +462,16 @@ format_diff_markdown <- function(diff_results) {
   md <- character()
 
   md <- c(md, "### Endpoint Changes\n")
-  md <- c(md, sprintf("**Summary:** %d endpoints added, %d removed, %d modified across %d schemas\n",
-                      total_added, total_removed, total_modified, length(diff_results)))
+  md <- c(
+    md,
+    sprintf(
+      "**Summary:** %d endpoints added, %d removed, %d modified across %d schemas\n",
+      total_added,
+      total_removed,
+      total_modified,
+      length(diff_results)
+    )
+  )
 
   # Breaking changes section
   if (length(breaking_changes) > 0) {
@@ -423,11 +481,16 @@ format_diff_markdown <- function(diff_results) {
 
     breaking_df <- bind_rows(breaking_changes)
     for (i in seq_len(nrow(breaking_df))) {
-      md <- c(md, sprintf("| %s | %s | %s | %s |",
-                          breaking_df$schema[i],
-                          breaking_df$endpoint[i],
-                          breaking_df$change[i],
-                          breaking_df$detail[i]))
+      md <- c(
+        md,
+        sprintf(
+          "| %s | %s | %s | %s |",
+          breaking_df$schema[i],
+          breaking_df$endpoint[i],
+          breaking_df$change[i],
+          breaking_df$detail[i]
+        )
+      )
     }
   }
 
@@ -439,11 +502,16 @@ format_diff_markdown <- function(diff_results) {
 
     nonbreaking_df <- bind_rows(nonbreaking_changes)
     for (i in seq_len(nrow(nonbreaking_df))) {
-      md <- c(md, sprintf("| %s | %s | %s | %s |",
-                          nonbreaking_df$schema[i],
-                          nonbreaking_df$endpoint[i],
-                          nonbreaking_df$change[i],
-                          nonbreaking_df$detail[i]))
+      md <- c(
+        md,
+        sprintf(
+          "| %s | %s | %s | %s |",
+          nonbreaking_df$schema[i],
+          nonbreaking_df$endpoint[i],
+          nonbreaking_df$change[i],
+          nonbreaking_df$detail[i]
+        )
+      )
     }
   }
 

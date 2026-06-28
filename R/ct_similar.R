@@ -14,10 +14,8 @@
 #' ct_similar(query = "DTXSID7020182", similarity = 0.8)
 #' }
 ct_similar <- function(query, similarity = 0.8) {
-
   # Run pre-request hooks (validates similarity range)
-  hook_data <- run_hook("ct_similar", "pre_request",
-    list(params = list(query = query, similarity = similarity)))
+  hook_data <- run_hook("ct_similar", "pre_request", list(params = list(query = query, similarity = similarity)))
   query <- hook_data$params$query
   similarity <- hook_data$params$similarity
 

@@ -92,8 +92,7 @@ toxval_path <- function() {
 #' @return Invisibly, the destination path.
 #' @export
 #' @family toxval
-toxval_install <- function(source = NULL, build = FALSE, tag = "latest",
-                        overwrite = FALSE) {
+toxval_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
   dest <- toxval_path()
   dest_dir <- dirname(dest)
 

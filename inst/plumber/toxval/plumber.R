@@ -64,14 +64,19 @@ function(dtxsid, limit = 1000L, res) {
     res$status <- 400
     return(list(error = "dtxsid is required"))
   }
-  if (is.na(limit_int) || limit_int < 1L) limit_int <- 1000L
+  if (is.na(limit_int) || limit_int < 1L) {
+    limit_int <- 1000L
+  }
   if (limit_int > 10000L) {
     res$status <- 400
     return(list(error = "limit exceeds maximum of 10000"))
   }
   tryCatch(
     toxval_search(dtxsid, limit = limit_int),
-    error = function(e) { res$status <- 500; list(error = conditionMessage(e)) }
+    error = function(e) {
+      res$status <- 500
+      list(error = conditionMessage(e))
+    }
   )
 }
 
@@ -84,15 +89,29 @@ function(dtxsid, limit = 1000L, res) {
 #* @param qc_status QC filter mode
 #* @param cols Column selection mode
 #* @post /results
-function(dtxsid = NULL, casrn = NULL, source = NULL,
-         toxval_type = NULL, species = NULL,
-         qc_status = "pass_or_not_determined", cols = "default", res) {
+function(
+  dtxsid = NULL,
+  casrn = NULL,
+  source = NULL,
+  toxval_type = NULL,
+  species = NULL,
+  qc_status = "pass_or_not_determined",
+  cols = "default",
+  res
+) {
   tryCatch(
     toxval_results(
-      dtxsid = dtxsid, casrn = casrn, source = source,
-      toxval_type = toxval_type, species = species,
-      qc_status = qc_status, cols = cols
+      dtxsid = dtxsid,
+      casrn = casrn,
+      source = source,
+      toxval_type = toxval_type,
+      species = species,
+      qc_status = qc_status,
+      cols = cols
     ),
-    error = function(e) { res$status <- 500; list(error = conditionMessage(e)) }
+    error = function(e) {
+      res$status <- 500
+      list(error = conditionMessage(e))
+    }
   )
 }

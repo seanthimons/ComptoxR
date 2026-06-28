@@ -124,16 +124,22 @@ pubchem_synonyms <- function(cid, tidy = TRUE, cache = TRUE) {
   }
 
   if (length(all_info) == 0) {
-    if (tidy) return(tibble::tibble(cid = integer(0), synonym = character(0)))
+    if (tidy) {
+      return(tibble::tibble(cid = integer(0), synonym = character(0)))
+    }
     return(list())
   }
 
-  if (!tidy) return(all_info)
+  if (!tidy) {
+    return(all_info)
+  }
 
   # Convert to long-format tibble
   purrr::map_dfr(all_info, function(info) {
     synonyms <- info$Synonym %||% character(0)
-    if (length(synonyms) == 0) return(tibble::tibble(cid = integer(0), synonym = character(0)))
+    if (length(synonyms) == 0) {
+      return(tibble::tibble(cid = integer(0), synonym = character(0)))
+    }
     tibble::tibble(
       cid = as.integer(info$CID),
       synonym = as.character(synonyms)

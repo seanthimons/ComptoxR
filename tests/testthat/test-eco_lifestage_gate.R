@@ -103,13 +103,16 @@ with_nvs_index_reset <- function(code) {
   } else {
     NULL
   }
-  on.exit({
-    if (had_index) {
-      assign("eco_lifestage_nvs_index", old_index, envir = .ComptoxREnv)
-    } else if (exists("eco_lifestage_nvs_index", envir = .ComptoxREnv, inherits = FALSE)) {
-      rm("eco_lifestage_nvs_index", envir = .ComptoxREnv)
-    }
-  }, add = TRUE)
+  on.exit(
+    {
+      if (had_index) {
+        assign("eco_lifestage_nvs_index", old_index, envir = .ComptoxREnv)
+      } else if (exists("eco_lifestage_nvs_index", envir = .ComptoxREnv, inherits = FALSE)) {
+        rm("eco_lifestage_nvs_index", envir = .ComptoxREnv)
+      }
+    },
+    add = TRUE
+  )
   force(code)
 }
 

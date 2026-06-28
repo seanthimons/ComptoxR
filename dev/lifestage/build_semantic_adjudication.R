@@ -44,10 +44,8 @@ dominant_route_family <- taxon_intersections |>
 exception_metadata <- exceptions |>
   dplyr::mutate(
     exception_changes_semantics = !is.na(.data$replacement_harmonized_life_stage) &
-      (
-        .data$replacement_harmonized_life_stage != .data$harmonized_life_stage |
-          .data$replacement_reproductive_stage != .data$reproductive_stage
-      )
+      (.data$replacement_harmonized_life_stage != .data$harmonized_life_stage |
+        .data$replacement_reproductive_stage != .data$reproductive_stage)
   ) |>
   dplyr::select(
     "org_lifestage",
@@ -101,11 +99,12 @@ adjudication <- taxon_intersections |>
       TRUE ~ "non_dominant_different_route_family"
     ),
     adjudication_status = dplyr::case_when(
-      .data$exception_reason %in% c(
-        "semantic_change",
-        "ambiguous_route",
-        "no_source_backed_candidate"
-      ) ~ "approved_exception",
+      .data$exception_reason %in%
+        c(
+          "semantic_change",
+          "ambiguous_route",
+          "no_source_backed_candidate"
+        ) ~ "approved_exception",
       is.na(.data$harmonized_life_stage) | is.na(.data$reproductive_stage) ~ "needs_manual_review",
       .data$broad_source_concept ~ "needs_context_aware_derivation",
       TRUE ~ "approved_same_semantics"
@@ -245,10 +244,11 @@ if (nrow(changed_exception_bad_status) > 0) {
 
 action_report <- adjudication |>
   dplyr::filter(
-    .data$adjudication_status %in% c(
-      "needs_context_aware_derivation",
-      "needs_manual_review"
-    ) |
+    .data$adjudication_status %in%
+      c(
+        "needs_context_aware_derivation",
+        "needs_manual_review"
+      ) |
       .data$context_scope == "non_dominant_different_route_family"
   ) |>
   dplyr::arrange(

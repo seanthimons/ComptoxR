@@ -21,7 +21,10 @@ test_that("ct_bioactivity_data_search_by_spid passes request metadata to helper"
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_data_search_by_spid(spid = 1L))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_data_search_by_spid(spid = 1L))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

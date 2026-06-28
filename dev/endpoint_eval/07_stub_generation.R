@@ -47,7 +47,6 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
   # Check for no path params
   has_path_params <- !is.null(path_params) && nzchar(path_params %||% "")
 
-
   # Check for empty body schema
 
   # Empty body conditions:
@@ -89,8 +88,7 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 
         # Primitive array items (string, integer, number, boolean) with no properties/ref
         # cannot produce named function parameters
-        if (items_type %in% c("string", "integer", "number", "boolean") &&
-            !items_has_properties && !items_has_ref) {
+        if (items_type %in% c("string", "integer", "number", "boolean") && !items_has_properties && !items_has_ref) {
           is_body_empty <- TRUE
           body_empty_reason <- paste0("array of ", items_type, " (no named parameters)")
         }
@@ -150,8 +148,28 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 #' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, config, needs_resolver = FALSE, body_schema_type = "unknown", deprecated = FALSE, response_schema_type = "unknown", request_type = NULL, pagination_strategy = "none", pagination_metadata = NULL) {
-  if (!requireNamespace("glue", quietly = TRUE)) stop("Package 'glue' is required.")
+build_function_stub <- function(
+  fn,
+  endpoint,
+  method,
+  title,
+  batch_limit,
+  path_param_info,
+  query_param_info,
+  body_param_info,
+  content_type,
+  config,
+  needs_resolver = FALSE,
+  body_schema_type = "unknown",
+  deprecated = FALSE,
+  response_schema_type = "unknown",
+  request_type = NULL,
+  pagination_strategy = "none",
+  pagination_metadata = NULL
+) {
+  if (!requireNamespace("glue", quietly = TRUE)) {
+    stop("Package 'glue' is required.")
+  }
 
   # Format batch_limit for code
   # For POST methods with bulk requests, use environment variable for runtime configuration
@@ -180,12 +198,13 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     content_type_call <- ',\n    content_type = "text/plain"'
   } else {
     # Enhance based on response_schema_type
-    return_doc <- switch(response_schema_type,
+    return_doc <- switch(
+      response_schema_type,
       "array" = "Returns a tibble with results (array of objects)",
       "object" = "Returns a list with result object",
       "scalar" = "Returns a scalar value",
       "binary" = "Returns binary data",
-      "Returns a tibble with results"  # default
+      "Returns a tibble with results" # default
     )
     content_type_call <- ""
   }
@@ -206,7 +225,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   is_chemi_get <- FALSE
   if (isTRUE(toupper(method) == "GET") && wrapper_fn == "generic_chemi_request") {
     wrapper_fn <- "generic_request"
-    is_chemi_get <- TRUE  # Track this to set correct server/auth
+    is_chemi_get <- TRUE # Track this to set correct server/auth
   }
 
   # Build server and auth params for chemi GET endpoints
@@ -215,8 +234,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
   chemi_tidy_param <- if (isTRUE(is_chemi_get)) ',\n    tidy = FALSE' else ""
 
-	# Build server and auth params for common_chemistry (cc_) GET endpoints 
-	cc_server_params <- if (isTRUE(grepl("^cc_", fn))) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
+  # Build server and auth params for common_chemistry (cc_) GET endpoints
+  cc_server_params <- if (isTRUE(grepl("^cc_", fn))) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
 
   # Check endpoint type using request_type if available, otherwise use legacy detection
   # This provides cleaner, more explicit endpoint classification
@@ -228,16 +247,18 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     is_body_only <- request_type == "json"
     # NEW: Simple body types are also body-only
     is_simple_body <- body_schema_type %in% c("string", "string_array")
-    is_query_only <- request_type == "query_only"  # "path" falls through to standard case
+    is_query_only <- request_type == "query_only" # "path" falls through to standard case
   } else {
     # Legacy detection for backward compatibility
-    is_query_only <- (!is.null(batch_limit) && !is.na(batch_limit) && batch_limit == 0 &&
-                      isTRUE(query_param_info$has_params) &&
-                      !is.null(query_param_info$primary_param))
+    is_query_only <- (!is.null(batch_limit) &&
+      !is.na(batch_limit) &&
+      batch_limit == 0 &&
+      isTRUE(query_param_info$has_params) &&
+      !is.null(query_param_info$primary_param))
 
     is_body_only <- (isTRUE(body_param_info$has_params) &&
-                     !isTRUE(path_param_info$has_path_params) &&
-                     nchar(path_param_info$fn_signature %|NA|% "") == 0)
+      !isTRUE(path_param_info$has_path_params) &&
+      nchar(path_param_info$fn_signature %|NA|% "") == 0)
 
     # NEW: Simple body types are body-only even if body_param_info$has_params is FALSE
     is_simple_body <- body_schema_type %in% c("string", "string_array")
@@ -247,15 +268,19 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
     primary_param <- body_param_info$primary_param %||% "data"
     fn_signature <- body_param_info$fn_signature
-    combined_calls <- ""  # Body params handled differently
+    combined_calls <- "" # Body params handled differently
     param_docs <- body_param_info$param_docs
 
     # Example value from body param metadata
     example_value <- example_query
-    if (!is.null(body_param_info$primary_example) && length(body_param_info$primary_example) > 0 && !is.na(body_param_info$primary_example[1])) {
+    if (
+      !is.null(body_param_info$primary_example) &&
+        length(body_param_info$primary_example) > 0 &&
+        !is.na(body_param_info$primary_example[1])
+    ) {
       example_value <- as.character(body_param_info$primary_example[1])
     }
-    
+
     # Build example_value_vec for example call generation
     if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
@@ -277,10 +302,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
     # Example value from query param metadata
     example_value <- example_query
-    if (!is.null(query_param_info$primary_example) && length(query_param_info$primary_example) > 0 && !is.na(query_param_info$primary_example[1])) {
+    if (
+      !is.null(query_param_info$primary_example) &&
+        length(query_param_info$primary_example) > 0 &&
+        !is.na(query_param_info$primary_example[1])
+    ) {
       example_value <- as.character(query_param_info$primary_example[1])
     }
-    
+
     # Build example_value_vec for example call generation
     example_value_vec <- paste0('"', example_value, '"')
   } else {
@@ -328,13 +357,16 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       combined_calls <- paste0(combined_calls, query_param_info$params_call)
     }
 
-
     # Determine example value from path param metadata
     example_value <- example_query
-    if (!is.null(path_param_info$primary_example) && length(path_param_info$primary_example) > 0 && !is.na(path_param_info$primary_example[1])) {
+    if (
+      !is.null(path_param_info$primary_example) &&
+        length(path_param_info$primary_example) > 0 &&
+        !is.na(path_param_info$primary_example[1])
+    ) {
       example_value <- as.character(path_param_info$primary_example[1])
     }
-    
+
     # For POST requests, use sample from testing_chemicals
     if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
@@ -368,7 +400,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       fn_signature <- gsub("\\boffset\\s*=\\s*NULL", "offset = 0", fn_signature, perl = TRUE)
       fn_signature <- gsub("\\boffset(?!\\s*=)", "offset = 0", fn_signature, perl = TRUE)
     }
-    if ("page" %in% pag_params && grepl("\\bpage\\b", fn_signature_safe_pag) && !grepl("\\bpageNumber\\b", fn_signature_safe_pag)) {
+    if (
+      "page" %in%
+        pag_params &&
+        grepl("\\bpage\\b", fn_signature_safe_pag) &&
+        !grepl("\\bpageNumber\\b", fn_signature_safe_pag)
+    ) {
       # Replace bare "page" or "page = NULL" with "page = 0"
       fn_signature <- gsub("\\bpage\\s*=\\s*NULL", "page = 0", fn_signature, perl = TRUE)
       fn_signature <- gsub("\\bpage(?!\\s*=|Number)", "page = 0", fn_signature, perl = TRUE)
@@ -397,7 +434,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     pagination_call_params <- paste0(
       ",\n    paginate = all_pages",
       ",\n    max_pages = 100",
-      ',\n    pagination_strategy = "', pagination_strategy, '"'
+      ',\n    pagination_strategy = "',
+      pagination_strategy,
+      '"'
     )
   }
 
@@ -430,7 +469,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
           # 2. Add @param doc
           param_docs <- paste0(
             param_docs,
-            "#' @param ", param_name, " ", param_spec$description, "\n"
+            "#' @param ",
+            param_name,
+            " ",
+            param_spec$description,
+            "\n"
           )
 
           # Track for hook call generation
@@ -474,7 +517,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       # They receive list(params = list(query = ..., extra_param1 = ..., ...))
       # and return modified data
       hook_pre_request <- paste0(
-        "  req_data <- run_hook(\"", fn, "\", \"pre_request\", list(params = list(query = query", hook_param_list_str, ")))\n",
+        "  req_data <- run_hook(\"",
+        fn,
+        "\", \"pre_request\", list(params = list(query = query",
+        hook_param_list_str,
+        ")))\n",
         "  query <- req_data$params$query\n"
       )
     }
@@ -490,7 +537,9 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         ""
       }
       hook_post_response <- paste0(
-        "  result <- run_hook(\"", fn, "\", \"post_response\", list(result = result, params = list(",
+        "  result <- run_hook(\"",
+        fn,
+        "\", \"post_response\", list(result = result, params = list(",
         hook_params_inner,
         ")))\n"
       )
@@ -508,7 +557,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   }
 
   # Build roxygen header with parameter descriptions from metadata
-  roxygen_header <- glue::glue('
+  roxygen_header <- glue::glue(
+    '
 #\' {title}
 #\'
 #\' @description
@@ -520,7 +570,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @examples
 #\' \\dontrun{{
 #\' {example_call}
-#\' }}')
+#\' }}'
+  )
 
   # Build function body based on endpoint type
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
@@ -583,7 +634,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     resolver_param_docs <- paste0(resolver_param_docs, resolver_pagination_param_doc)
 
     # Update roxygen header with resolver-specific docs
-    roxygen_header <- glue::glue('
+    roxygen_header <- glue::glue(
+      '
 #\' {title}
 #\'
 #\' @description
@@ -598,10 +650,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @examples
 #\' \\dontrun{{
 #\' {fn}(query = c("50-00-0", "DTXSID7020182"))
-#\' }}')
+#\' }}'
+    )
 
     # Generate resolver-wrapped function body using generic_chemi_request
-    fn_body <- glue::glue('
+    fn_body <- glue::glue(
+      '
 {fn} <- function({fn_signature_resolver}) {{
   # Resolve identifiers to Chemical objects via bulk POST endpoint
   resolved <- tryCatch(
@@ -650,7 +704,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+    )
 
     # Combine header and body and return
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
@@ -672,16 +727,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   # Handle raw text body endpoints (body_schema_type == "string" for POST)
   # These endpoints expect newline-delimited plain text, not JSON
   # IMPORTANT: Only /chemical/search/equal/ uses this pattern
-  is_raw_text_body <- (
-    body_schema_type == "string" &&
+  is_raw_text_body <- (body_schema_type == "string" &&
     toupper(method) == "POST" &&
     wrapper_fn == "generic_request" &&
-    (endpoint == "chemical/search/equal/" || grepl("chemical/search/equal/$", endpoint))
-  )
+    (endpoint == "chemical/search/equal/" || grepl("chemical/search/equal/$", endpoint)))
 
   if (isTRUE(is_raw_text_body)) {
     # Build roxygen header for raw text body endpoint
-    roxygen_header <- glue::glue('
+    roxygen_header <- glue::glue(
+      '
 #\' {title}
 #\'
 #\' @description
@@ -694,10 +748,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @examples
 #\' \\dontrun{{
 #\' {fn}(query = c("DTXSID7020182", "DTXSID9020112"))
-#\' }}')
+#\' }}'
+    )
 
     # Generate function body using generic_request with body_type = "raw_text"
-    fn_body <- glue::glue('
+    fn_body <- glue::glue(
+      '
 {fn} <- function(query) {{
 {hook_pre_request}  result <- generic_request(
     query = query,
@@ -710,7 +766,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+    )
 
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
@@ -756,7 +813,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     }
 
     # Build roxygen header
-    roxygen_header <- glue::glue('
+    roxygen_header <- glue::glue(
+      '
 #\' {title}
 #\'
 #\' @description
@@ -768,12 +826,14 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #\' @examples
 #\' \\dontrun{{
 #\' {fn}(query = {example_value_vec})
-#\' }}')
+#\' }}'
+    )
 
     # Generate function body based on body schema type
     if (body_schema_type == "string_array") {
       # Array body: pass directly, generic_request() handles JSON encoding
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_params_code}{hook_pre_request}  result <- generic_request(
     query = query,
@@ -785,10 +845,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else {
       # Simple string body: pass directly
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_params_code}{hook_pre_request}  result <- generic_request(
     query = query,
@@ -800,7 +862,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     }
 
     # Return early with generated stub
@@ -815,7 +878,7 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
       param_vec <- trimws(param_vec)
       # BUILD-01 FIX: Remove ALL default values, not just " = NULL"
       # This ensures param_vec contains only parameter names (e.g., "model" not "model = \"RF\"")
-      param_vec <- gsub("\\s*=\\s*.*$", "", param_vec)  # Remove " = <anything>" suffix
+      param_vec <- gsub("\\s*=\\s*.*$", "", param_vec) # Remove " = <anything>" suffix
 
       # Identify required params (no "=" in original signature)
       sig_parts <- strsplit(body_param_info$fn_signature, ",")[[1]]
@@ -837,11 +900,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         # Body schema has properties but none could be extracted as function params
         # (e.g., array-only properties). Skip gracefully and track for reporting.
         cli::cli_alert_warning("Skipping body-only endpoint {fn}: body schema has no extractable parameters")
-        .StubGenEnv$skipped <- c(.StubGenEnv$skipped, list(tibble::tibble(
-          route = endpoint, method = method,
-          skip_reason = "Body properties not extractable as function parameters",
-          source_file = NA_character_
-        )))
+        .StubGenEnv$skipped <- c(
+          .StubGenEnv$skipped,
+          list(tibble::tibble(
+            route = endpoint,
+            method = method,
+            skip_reason = "Body properties not extractable as function parameters",
+            source_file = NA_character_
+          ))
+        )
         return(NA_character_)
       }
 
@@ -882,7 +949,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         ""
       }
 
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {options_assembly}{hook_pre_request}
   result <- generic_chemi_request(
@@ -896,7 +964,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_request") {
       # Similar logic for generic_request
       param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
@@ -925,7 +994,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
       body_assembly <- paste(body_code_lines, collapse = "\n")
 
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {body_assembly}
 {hook_pre_request}
@@ -942,7 +1012,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_cts_request") {
       param_vec <- strsplit(body_param_info$fn_signature, ",")[[1]]
       param_vec <- trimws(param_vec)
@@ -969,7 +1040,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 
       body_assembly <- paste(body_code_lines, collapse = "\n")
 
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {body_assembly}
 {hook_pre_request}
@@ -985,7 +1057,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -993,9 +1066,10 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
     # Query-only endpoint: all params via ellipsis, no query parameter needed
     # For query-only endpoints, batch_limit should be 0 (static endpoint)
     effective_batch_limit <- if (batch_limit_code == "NULL") "0" else batch_limit_code
-    
+
     if (wrapper_fn == "generic_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_request(
     endpoint = "{endpoint}",
@@ -1008,9 +1082,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_chemi_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
     endpoint = "{endpoint}"{combined_calls},
@@ -1022,9 +1098,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_cc_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}  result <- generic_cc_request(
     endpoint = "{endpoint}",
@@ -1036,9 +1114,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_cts_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
     endpoint = "{endpoint}",
@@ -1052,7 +1132,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
@@ -1090,7 +1171,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         )
 
         # For query-only endpoints, don't include query as formal param - all params via ellipsis
-        fn_body <- glue::glue('
+        fn_body <- glue::glue(
+          '
 {fn} <- function({fn_signature}) {{
   result <- generic_request(
     endpoint = "{endpoint}",
@@ -1103,10 +1185,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+        )
       } else {
         # Standard generation with existing logic
-        fn_body <- glue::glue('
+        fn_body <- glue::glue(
+          '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_request(
     query = {effective_query},
@@ -1120,10 +1204,12 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+        )
       }
     } else if (wrapper_fn == "generic_chemi_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
     query = {primary_param},
@@ -1136,9 +1222,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_cts_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_signature}) {{
 {query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
     endpoint = "{endpoint}",
@@ -1152,14 +1240,15 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
   } else {
     # No extra params: simple call with just primary param
     fn_arg <- if (primary_param == "NULL") "" else primary_param
-    
+
     if (wrapper_fn == "generic_request") {
       # For chemi GET endpoints, determine batch_limit based on path params
       if (isTRUE(is_chemi_get)) {
@@ -1181,7 +1270,8 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         extra_params <- ""
       }
 
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_arg}) {{
 {hook_pre_request}  result <- generic_request(
     query = {effective_query},
@@ -1195,9 +1285,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_chemi_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_arg}) {{
 {hook_pre_request}  result <- generic_chemi_request(
     query = {primary_param},
@@ -1212,9 +1304,11 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else if (wrapper_fn == "generic_cts_request") {
-      fn_body <- glue::glue('
+      fn_body <- glue::glue(
+        '
 {fn} <- function({fn_arg}) {{
 {hook_pre_request}  result <- generic_cts_request(
     endpoint = "{endpoint}",
@@ -1228,35 +1322,43 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
   return(result)
 }}
 
-')
+'
+      )
     } else {
       stop("Unknown wrapper function: ", wrapper_fn)
     }
   }
 
   # Combine header and body
-  result <- paste0(roxygen_header,"\n", fn_body, "\n\n")
+  result <- paste0(roxygen_header, "\n", fn_body, "\n\n")
 
   # BUILD-01 FIX: Validate syntax before returning
   # This catches syntax errors at generation time rather than at runtime
-  parsed <- tryCatch({
-    parse(text = result)
-  }, error = function(e) {
-    cli::cli_abort(c(
-      "x" = "Generated invalid R syntax for function {.fn {fn}}",
-      "i" = "Parse error: {e$message}",
-      "i" = "Endpoint: {endpoint}",
-      "i" = "Check parameter defaults and assignment operators in generated code"
-    ))
-  })
+  parsed <- tryCatch(
+    {
+      parse(text = result)
+    },
+    error = function(e) {
+      cli::cli_abort(c(
+        "x" = "Generated invalid R syntax for function {.fn {fn}}",
+        "i" = "Parse error: {e$message}",
+        "i" = "Endpoint: {endpoint}",
+        "i" = "Check parameter defaults and assignment operators in generated code"
+      ))
+    }
+  )
 
   # BUILD-06 FIX: Validate @param tags match function formals
   # Extract formals from parsed function
   fn_expr <- NULL
   for (i in seq_along(parsed)) {
     expr <- parsed[[i]]
-    if (is.call(expr) && as.character(expr[[1]]) == "<-" &&
-        is.call(expr[[3]]) && as.character(expr[[3]][[1]]) == "function") {
+    if (
+      is.call(expr) &&
+        as.character(expr[[1]]) == "<-" &&
+        is.call(expr[[3]]) &&
+        as.character(expr[[3]][[1]]) == "function"
+    ) {
       fn_expr <- expr[[3]]
       break
     }
@@ -1279,8 +1381,10 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
         "!" = "Roxygen @param mismatch for function {.fn {fn}}",
         "i" = if (length(missing_docs) > 0) paste0("Missing docs: ", paste(missing_docs, collapse = ", ")),
         "i" = if (length(extra_docs) > 0) paste0("Extra docs: ", paste(extra_docs, collapse = ", ")),
-        "i" = "Function formals: ", paste(actual_formals, collapse = ", "),
-        "i" = "Documented params: ", paste(documented_params, collapse = ", ")
+        "i" = "Function formals: ",
+        paste(actual_formals, collapse = ", "),
+        "i" = "Documented params: ",
+        paste(documented_params, collapse = ", ")
       ))
     }
   }
@@ -1300,48 +1404,57 @@ build_function_stub <- function(fn, endpoint, method, title, batch_limit, path_p
 #' @param fn_transform Function to derive R function name from file name (default sanitizes basename).
 #' @return The spec tibble with additional columns: fn, endpoint, title, text (rendered R code).
 #' @export
-render_endpoint_stubs <- function(spec,
-                                   config,
-                                   fn_transform = function(x) {
-                                     nm <- tools::file_path_sans_ext(basename(x))
-                                     nm <- gsub("-", "_", nm, fixed = TRUE)
-                                     nm
-                                   }) {
+render_endpoint_stubs <- function(
+  spec,
+  config,
+  fn_transform = function(x) {
+    nm <- tools::file_path_sans_ext(basename(x))
+    nm <- gsub("-", "_", nm, fixed = TRUE)
+    nm
+  }
+) {
   stopifnot(is.data.frame(spec))
-  if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
-  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is required.")
+  }
+  if (!requireNamespace("purrr", quietly = TRUE)) {
+    stop("Package 'purrr' is required.")
+  }
 
   # Extract strategy from config
   param_strategy <- config$param_strategy %||% "extra_params"
 
   # Ensure all necessary columns exist with defaults
-  spec <- ensure_cols(spec, list(
-    fn = NA_character_,
-    file = "unknown.R",
-    route = "/unknown",
-    summary = "",
-    method = "GET",
-    batch_limit = NA_integer_,
-    path_params = "",
-    query_params = "",
-    body_params = "",
-    num_path_params = 0L,
-    num_body_params = 0L,
-    path_param_metadata = list(NULL),
-    query_param_metadata = list(NULL),
-    body_param_metadata = list(NULL),
-    content_type = "",
-    needs_resolver = FALSE,
-    body_schema_type = "unknown",
-    deprecated = FALSE,
-    response_schema_type = "unknown",
-    request_type = NA_character_,
-    body_schema_full = list(list()),
-    body_item_type = NA_character_,
-    source_file = NA_character_,
-    pagination_strategy = "none",
-    pagination_metadata = list(NULL)
-  ))
+  spec <- ensure_cols(
+    spec,
+    list(
+      fn = NA_character_,
+      file = "unknown.R",
+      route = "/unknown",
+      summary = "",
+      method = "GET",
+      batch_limit = NA_integer_,
+      path_params = "",
+      query_params = "",
+      body_params = "",
+      num_path_params = 0L,
+      num_body_params = 0L,
+      path_param_metadata = list(NULL),
+      query_param_metadata = list(NULL),
+      body_param_metadata = list(NULL),
+      content_type = "",
+      needs_resolver = FALSE,
+      body_schema_type = "unknown",
+      deprecated = FALSE,
+      response_schema_type = "unknown",
+      request_type = NA_character_,
+      body_schema_full = list(list()),
+      body_item_type = NA_character_,
+      source_file = NA_character_,
+      pagination_strategy = "none",
+      pagination_metadata = list(NULL)
+    )
+  )
 
   # ===========================================================================
   # Empty POST Detection and Filtering
@@ -1383,10 +1496,13 @@ render_endpoint_stubs <- function(spec,
   spec <- spec %>% dplyr::filter(!skip_endpoint)
 
   # Early return if all endpoints were skipped
- if (nrow(spec) == 0) {
+  if (nrow(spec) == 0) {
     cli::cli_alert_warning("All endpoints were skipped (empty POST schemas)")
     return(tibble::tibble(
-      fn = character(), endpoint = character(), title = character(), text = character()
+      fn = character(),
+      endpoint = character(),
+      title = character(),
+      text = character()
     ))
   }
 
@@ -1417,15 +1533,25 @@ render_endpoint_stubs <- function(spec,
     function(pp, qp, bp, npp, ppm, qpm, bpm) {
       list(
         path_info = parse_path_parameters(pp, strategy = param_strategy, metadata = ppm %||% list()),
-        query_info = parse_function_params(qp, strategy = param_strategy, metadata = qpm %||% list(), has_path_params = (npp %||% 0 > 0)),
-        body_info = parse_function_params(bp, strategy = param_strategy, metadata = bpm %||% list(), has_path_params = (npp %||% 0 > 0))
+        query_info = parse_function_params(
+          qp,
+          strategy = param_strategy,
+          metadata = qpm %||% list(),
+          has_path_params = (npp %||% 0 > 0)
+        ),
+        body_info = parse_function_params(
+          bp,
+          strategy = param_strategy,
+          metadata = bpm %||% list(),
+          has_path_params = (npp %||% 0 > 0)
+        )
       )
     }
   )
 
-  spec$path_param_info  <- purrr::map(parsed_params, "path_info")
+  spec$path_param_info <- purrr::map(parsed_params, "path_info")
   spec$query_param_info <- purrr::map(parsed_params, "query_info")
-  spec$body_param_info  <- purrr::map(parsed_params, "body_info")
+  spec$body_param_info <- purrr::map(parsed_params, "body_info")
 
   # Generate text row by row
   spec$text <- purrr::pmap_chr(
@@ -1447,7 +1573,24 @@ render_endpoint_stubs <- function(spec,
       pagination_strategy = spec$pagination_strategy,
       pagination_metadata = spec$pagination_metadata
     ),
-    function(fn, endpoint, method, title, batch_limit, path_param_info, query_param_info, body_param_info, content_type, needs_resolver, body_schema_type, deprecated, response_schema_type, request_type, pagination_strategy, pagination_metadata) {
+    function(
+      fn,
+      endpoint,
+      method,
+      title,
+      batch_limit,
+      path_param_info,
+      query_param_info,
+      body_param_info,
+      content_type,
+      needs_resolver,
+      body_schema_type,
+      deprecated,
+      response_schema_type,
+      request_type,
+      pagination_strategy,
+      pagination_metadata
+    ) {
       build_function_stub(
         fn = fn,
         endpoint = endpoint,
@@ -1546,7 +1689,10 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
     log_lines <- c(log_lines, "SKIPPED ENDPOINTS:", "")
     for (i in seq_len(n_skipped)) {
       source_info <- if (!is.na(skipped$source_file[i])) paste0(" [", skipped$source_file[i], "]") else ""
-      log_lines <- c(log_lines, paste0("  ", skipped$method[i], " ", skipped$route[i], source_info, " - ", skipped$skip_reason[i]))
+      log_lines <- c(
+        log_lines,
+        paste0("  ", skipped$method[i], " ", skipped$route[i], source_info, " - ", skipped$skip_reason[i])
+      )
     }
     log_lines <- c(log_lines, "")
   }
@@ -1555,7 +1701,18 @@ report_skipped_endpoints <- function(log_dir = "dev/logs") {
     log_lines <- c(log_lines, "SUSPICIOUS ENDPOINTS:", "")
     for (i in seq_len(n_suspicious)) {
       source_info <- if (!is.na(suspicious$source_file[i])) paste0(" [", suspicious$source_file[i], "]") else ""
-      log_lines <- c(log_lines, paste0("  ", suspicious$method[i], " ", suspicious$route[i], source_info, " - ", suspicious$suspicious_reason[i]))
+      log_lines <- c(
+        log_lines,
+        paste0(
+          "  ",
+          suspicious$method[i],
+          " ",
+          suspicious$route[i],
+          source_info,
+          " - ",
+          suspicious$suspicious_reason[i]
+        )
+      )
     }
   }
 

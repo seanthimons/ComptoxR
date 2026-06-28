@@ -22,15 +22,20 @@ method_path_name <- function(route, method) {
 }
 
 dedup_params <- function(params) {
-  if (!length(params)) return(list())
+  if (!length(params)) {
+    return(list())
+  }
   keys <- purrr::map_chr(params, ~ paste(.x[["name"]] %||% "", .x[["in"]] %||% "", sep = "@"))
   params[!duplicated(keys)]
 }
 
 param_names <- function(params, where, exclude_pattern = "^files\\[\\]$") {
   purrr::map_chr(
-    purrr::keep(params, ~ identical(.x[["in"]], where) &&
-                          !grepl(exclude_pattern, .x[["name"]] %||% "")),
+    purrr::keep(
+      params,
+      ~ identical(.x[["in"]], where) &&
+        !grepl(exclude_pattern, .x[["name"]] %||% "")
+    ),
     ~ .x[["name"]] %||% ""
   ) -> nm
   nm[nzchar(nm)]
@@ -38,21 +43,26 @@ param_names <- function(params, where, exclude_pattern = "^files\\[\\]$") {
 
 # Extract parameter metadata (examples, descriptions, defaults, enums, types, required status)
 param_metadata <- function(params, where, exclude_pattern = "^files\\[\\]$") {
-  relevant_params <- purrr::keep(params, ~ identical(.x[["in"]], where) &&
-                                            !grepl(exclude_pattern, .x[["name"]] %||% ""))
-  if (length(relevant_params) == 0) return(list())
+  relevant_params <- purrr::keep(
+    params,
+    ~ identical(.x[["in"]], where) &&
+      !grepl(exclude_pattern, .x[["name"]] %||% "")
+  )
+  if (length(relevant_params) == 0) {
+    return(list())
+  }
 
   metadata <- purrr::map(relevant_params, function(p) {
     schema <- p[["schema"]] %||% list()
 
     list(
       name = p[["name"]] %||% "",
-      example = p[["example"]] %||% schema[["default"]] %||% NA,  # Fallback to default
-      description = p[["description"]] %||% schema[["description"]] %||% "",  # Check schema too
-      default = schema[["default"]] %||% NA,  # Explicit default field
-      enum = schema[["enum"]] %||% NULL,  # Allowed values
-      type = schema[["type"]] %||% NA,  # Data type
-      required = p[["required"]] %||% FALSE  # Required status
+      example = p[["example"]] %||% schema[["default"]] %||% NA, # Fallback to default
+      description = p[["description"]] %||% schema[["description"]] %||% "", # Check schema too
+      default = schema[["default"]] %||% NA, # Explicit default field
+      enum = schema[["enum"]] %||% NULL, # Allowed values
+      type = schema[["type"]] %||% NA, # Data type
+      required = p[["required"]] %||% FALSE # Required status
     )
   })
 
@@ -67,7 +77,9 @@ param_metadata <- function(params, where, exclude_pattern = "^files\\[\\]$") {
 # Check if a request body uses the Chemical schema pattern
 # Returns TRUE if the request body contains Chemical objects that should be resolved first
 uses_chemical_schema <- function(request_body, openapi_spec) {
-  if (is.null(request_body) || !is.list(request_body)) return(FALSE)
+  if (is.null(request_body) || !is.list(request_body)) {
+    return(FALSE)
+  }
 
   # Navigate: requestBody -> content -> application/json -> schema -> $ref
   content <- request_body[["content"]] %||% list()
@@ -75,7 +87,9 @@ uses_chemical_schema <- function(request_body, openapi_spec) {
 
   # Get the schema reference
   ref <- json_schema[["$ref"]]
-  if (is.null(ref) || !nzchar(ref)) return(FALSE)
+  if (is.null(ref) || !nzchar(ref)) {
+    return(FALSE)
+  }
 
   # Parse the reference
   ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
@@ -90,7 +104,9 @@ uses_chemical_schema <- function(request_body, openapi_spec) {
   schemas <- components[["schemas"]] %||% list()
   schema_def <- schemas[[schema_name]]
 
-  if (is.null(schema_def) || !is.list(schema_def)) return(FALSE)
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    return(FALSE)
+  }
 
   # Check if the schema has a 'chemicals' property that references Chemical, ChemicalRecord, or ResolvedChemical
   properties <- schema_def[["properties"]] %||% list()
@@ -126,7 +142,9 @@ uses_chemical_schema <- function(request_body, openapi_spec) {
 # Determine the body schema type for code generation
 # Returns: "chemical_array" (needs resolver), "string_array" (SMILES), "object_array" (inline objects), "string", "simple_object", or "unknown"
 get_body_schema_type <- function(request_body, openapi_spec) {
-  if (is.null(request_body) || !is.list(request_body)) return("unknown")
+  if (is.null(request_body) || !is.list(request_body)) {
+    return("unknown")
+  }
 
   # Navigate: requestBody -> content -> application/json -> schema
   content <- request_body[["content"]] %||% list()
@@ -156,7 +174,9 @@ get_body_schema_type <- function(request_body, openapi_spec) {
 
   # Get the schema reference
   ref <- json_schema[["$ref"]]
-  if (is.null(ref) || !nzchar(ref)) return("unknown")
+  if (is.null(ref) || !nzchar(ref)) {
+    return("unknown")
+  }
 
   # Parse the reference
   ref_parts <- strsplit(ref, "/", fixed = TRUE)[[1]]
@@ -171,7 +191,9 @@ get_body_schema_type <- function(request_body, openapi_spec) {
   schemas <- components[["schemas"]] %||% list()
   schema_def <- schemas[[schema_name]]
 
-  if (is.null(schema_def) || !is.list(schema_def)) return("unknown")
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    return("unknown")
+  }
 
   # Check 'chemicals' property
   properties <- schema_def[["properties"]] %||% list()
@@ -200,27 +222,33 @@ get_body_schema_type <- function(request_body, openapi_spec) {
 # Determine the response schema type for code generation
 # Returns: "array", "object", "scalar", "binary", or "unknown"
 get_response_schema_type <- function(responses, openapi_spec) {
-  if (is.null(responses) || !is.list(responses)) return("unknown")
-  
+  if (is.null(responses) || !is.list(responses)) {
+    return("unknown")
+  }
+
   # Look for successful response codes
   success_codes <- intersect(names(responses), c("200", "201", "202", "204", "default"))
-  if (length(success_codes) == 0) return("unknown")
-  
+  if (length(success_codes) == 0) {
+    return("unknown")
+  }
+
   # Check first successful response
   resp <- responses[[success_codes[1]]]
   content <- resp$content %||% list()
-  
+
   # Check for binary/image content types first
   if (any(grepl("^image/", names(content))) || any(grepl("octet-stream", names(content)))) {
     return("binary")
   }
-  
+
   # Check application/json response
   json_schema <- content[["application/json"]]$schema %||% list()
-  
+
   # If no JSON schema, return unknown
-  if (length(json_schema) == 0) return("unknown")
-  
+  if (length(json_schema) == 0) {
+    return("unknown")
+  }
+
   # Check for $ref - need to resolve it
   if (!is.null(json_schema[["$ref"]])) {
     ref <- json_schema[["$ref"]]
@@ -232,14 +260,20 @@ get_response_schema_type <- function(responses, openapi_spec) {
       json_schema <- schemas[[schema_name]] %||% list()
     }
   }
-  
+
   # Determine type from schema
   schema_type <- json_schema[["type"]] %||% ""
-  
-  if (schema_type == "array") return("array")
-  if (schema_type == "object") return("object")
-  if (schema_type %in% c("string", "number", "integer", "boolean")) return("scalar")
-  
+
+  if (schema_type == "array") {
+    return("array")
+  }
+  if (schema_type == "object") {
+    return("object")
+  }
+  if (schema_type %in% c("string", "number", "integer", "boolean")) {
+    return("scalar")
+  }
+
   # Default to unknown
   return("unknown")
 }
@@ -247,7 +281,9 @@ get_response_schema_type <- function(responses, openapi_spec) {
 # Extract metadata from request body schema reference
 # Parses POST endpoint request bodies that reference schemas in #/components/schemas
 extract_body_schema_metadata <- function(request_body, openapi_spec) {
-  if (is.null(request_body) || !is.list(request_body)) return(list())
+  if (is.null(request_body) || !is.list(request_body)) {
+    return(list())
+  }
 
   # Navigate: requestBody -> content -> application/json -> schema -> $ref
   content <- request_body[["content"]] %||% list()
@@ -255,7 +291,9 @@ extract_body_schema_metadata <- function(request_body, openapi_spec) {
 
   # Check if this is a schema reference
   ref <- json_schema[["$ref"]]
-  if (is.null(ref) || !nzchar(ref)) return(list())
+  if (is.null(ref) || !nzchar(ref)) {
+    return(list())
+  }
 
   # Parse the reference (e.g., "#/components/schemas/LookupRequest")
   # Format: #/components/schemas/{SchemaName}
@@ -271,7 +309,9 @@ extract_body_schema_metadata <- function(request_body, openapi_spec) {
   schemas <- components[["schemas"]] %||% list()
   schema_def <- schemas[[schema_name]]
 
-  if (is.null(schema_def) || !is.list(schema_def)) return(list())
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    return(list())
+  }
 
   # Extract properties
   properties <- schema_def[["properties"]] %||% list()
@@ -297,7 +337,9 @@ extract_body_schema_metadata <- function(request_body, openapi_spec) {
 }
 
 order_path_by_route <- function(path_names, route) {
-  if (!length(path_names)) return(character(0))
+  if (!length(path_names)) {
+    return(character(0))
+  }
   m <- stringr::str_match_all(route, "\\{([^}]+)\\}")
   if (length(m) >= 1 && length(m[[1]]) && nrow(m[[1]]) > 0) {
     in_route <- m[[1]][, 2]
@@ -318,17 +360,18 @@ order_path_by_route <- function(path_names, route) {
 # @param body_params Character; comma-separated body parameter names
 # @param registry List; pagination registry (default: PAGINATION_REGISTRY from 00_config.R)
 # @return A list with strategy, registry_key, params, param_location, description
-detect_pagination <- function(route, path_params, query_params, body_params,
-                              registry = PAGINATION_REGISTRY) {
+detect_pagination <- function(route, path_params, query_params, body_params, registry = PAGINATION_REGISTRY) {
   # Split comma-separated param strings into character vectors
   split_params <- function(x) {
-    if (is.null(x) || !nzchar(x)) return(character(0))
+    if (is.null(x) || !nzchar(x)) {
+      return(character(0))
+    }
     trimws(strsplit(x, ",")[[1]])
   }
 
-  path_vec  <- split_params(path_params)
+  path_vec <- split_params(path_params)
   query_vec <- split_params(query_params)
-  body_vec  <- split_params(body_params)
+  body_vec <- split_params(body_params)
 
   for (entry_name in names(registry)) {
     entry <- registry[[entry_name]]
@@ -379,8 +422,20 @@ detect_pagination <- function(route, path_params, query_params, body_params,
 
   # No match found - check if params resemble pagination
   pagination_like_params <- c(
-    "page", "pageNumber", "pageSize", "offset", "limit", "size", "cursor",
-    "itemsPerPage", "skip", "top", "after", "before", "startIndex", "count"
+    "page",
+    "pageNumber",
+    "pageSize",
+    "offset",
+    "limit",
+    "size",
+    "cursor",
+    "itemsPerPage",
+    "skip",
+    "top",
+    "after",
+    "before",
+    "startIndex",
+    "count"
   )
 
   all_params <- c(path_vec, query_vec, body_vec)
@@ -422,12 +477,18 @@ openapi_to_spec <- function(
   name_strategy = c("operationId", "method_path"),
   preprocess = TRUE
 ) {
-  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
-  if (!requireNamespace("tibble", quietly = TRUE)) stop("Package 'tibble' is required.")
-  if (!requireNamespace("stringr", quietly = TRUE)) stop("Package 'stringr' is required.")
+  if (!requireNamespace("purrr", quietly = TRUE)) {
+    stop("Package 'purrr' is required.")
+  }
+  if (!requireNamespace("tibble", quietly = TRUE)) {
+    stop("Package 'tibble' is required.")
+  }
+  if (!requireNamespace("stringr", quietly = TRUE)) {
+    stop("Package 'stringr' is required.")
+  }
 
   name_strategy <- match.arg(name_strategy)
-  
+
   # Preprocess schema if requested
   if (preprocess && is.character(openapi) && file.exists(openapi)) {
     openapi <- preprocess_schema(openapi)
@@ -442,19 +503,22 @@ openapi_to_spec <- function(
   if (identical(schema_version$type, "swagger")) {
     definitions <- openapi[["definitions"]] %||% list()
     # For Swagger 2.0, we'll pass definitions to body extraction
-    components <- list(schemas = definitions)  # Normalize for resolve_schema_ref compatibility
+    components <- list(schemas = definitions) # Normalize for resolve_schema_ref compatibility
   } else {
     definitions <- NULL
     components <- openapi[["components"]] %||% list()
   }
 
-  base_url <- default_base_url %||% {
-    srv <- openapi$servers
-    if (is.list(srv) && length(srv) && !is.null(srv[[1]]$url)) srv[[1]]$url else "https://example.com"
-  }
+  base_url <- default_base_url %||%
+    {
+      srv <- openapi$servers
+      if (is.list(srv) && length(srv) && !is.null(srv[[1]]$url)) srv[[1]]$url else "https://example.com"
+    }
 
   paths <- openapi$paths
-  if (!is.list(paths) || !length(paths)) stop("OpenAPI object has no 'paths'.")
+  if (!is.list(paths) || !length(paths)) {
+    stop("OpenAPI object has no 'paths'.")
+  }
 
   purrr::imap_dfr(paths, function(path_item, route) {
     path_level_params <- path_item$parameters %||% list()
@@ -465,16 +529,16 @@ openapi_to_spec <- function(
       op_params <- op$parameters %||% list()
       parameters <- dedup_params(c(path_level_params, op_params))
 
-      path_names  <- order_path_by_route(param_names(parameters, "path"), route)
-      
+      path_names <- order_path_by_route(param_names(parameters, "path"), route)
+
       # Extract query parameters with $ref resolution
       components <- openapi[["components"]] %||% list()
       query_result <- extract_query_params_with_refs(parameters, components, schema_version)
-      query_names <- query_result$names  # Use resolved/flattened parameter names
-      query_meta <- query_result$metadata  # Use enhanced metadata from resolved schemas
-      
+      query_names <- query_result$names # Use resolved/flattened parameter names
+      query_meta <- query_result$metadata # Use enhanced metadata from resolved schemas
+
       # Extract parameter metadata (examples and descriptions)
-      path_meta  <- param_metadata(parameters, "path")
+      path_meta <- param_metadata(parameters, "path")
 
       # Extract request body schema metadata for POST/PUT/PATCH
       body_props <- if (method %in% c("post", "put", "patch")) {
@@ -530,7 +594,6 @@ openapi_to_spec <- function(
       }
       names(body_meta) <- body_names
 
-
       # Combine all parameters (path parameters first, then query parameters)
       combined <- c(path_names, query_names)
 
@@ -544,10 +607,10 @@ openapi_to_spec <- function(
       }
       operationId <- op$operationId %||% paste(method, route)
       summary <- op$summary %||% ""
-      
+
       # Extract deprecated status
       deprecated <- op$deprecated %||% FALSE
-      
+
       # Extract description for enhanced documentation
       description <- op$description %||% ""
 
@@ -575,7 +638,7 @@ openapi_to_spec <- function(
       } else {
         "unknown"
       }
-      
+
       # Detect response schema type for enhanced documentation
       response_schema_type <- get_response_schema_type(op$responses, openapi)
 
@@ -606,7 +669,11 @@ openapi_to_spec <- function(
         body_params = if (length(body_names) > 0) paste(body_names, collapse = ",") else ""
       )
 
-      fn <- if (name_strategy == "operationId") sanitize_name(operationId) else sanitize_name(method_path_name(route, method))
+      fn <- if (name_strategy == "operationId") {
+        sanitize_name(operationId)
+      } else {
+        sanitize_name(method_path_name(route, method))
+      }
 
       tibble::tibble(
         route = route,
@@ -663,4 +730,3 @@ openapi_to_spec <- function(
     })
   })
 }
-

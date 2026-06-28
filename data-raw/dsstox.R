@@ -9,184 +9,196 @@
 #   dss_install()  (from within ComptoxR)
 
 .build_dsstox_db <- function() {
+  # -- Configuration ----------------------------------------------------------
 
-# -- Configuration ----------------------------------------------------------
+  output_dir <- tools::R_user_dir("ComptoxR", "data")
+  output_path <- file.path(output_dir, "dsstox.duckdb")
 
-output_dir <- tools::R_user_dir("ComptoxR", "data")
-output_path <- file.path(output_dir, "dsstox.duckdb")
-
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE)
-}
-
-# -- Staleness check --------------------------------------------------------
-
-if (file.exists(output_path)) {
-  file_age_days <- as.numeric(
-    difftime(Sys.time(), file.info(output_path)$mtime, units = "days")
-  )
-  if (file_age_days <= 180) {
-    cli::cli_alert_success(
-      "DSSTox database is up-to-date ({round(file_age_days)} days old). Skipping rebuild."
-    )
-    # Early exit — nothing to do
-    return(invisible(output_path))
-  } else {
-    cli::cli_alert_warning(
-      "DSSTox database is {round(file_age_days)} days old. Rebuilding."
-    )
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
   }
-}
 
-# -- Download from Clowder -------------------------------------------------
+  # -- Staleness check --------------------------------------------------------
 
-cli::cli_alert_info("Fetching file list from Clowder...")
+  if (file.exists(output_path)) {
+    file_age_days <- as.numeric(
+      difftime(Sys.time(), file.info(output_path)$mtime, units = "days")
+    )
+    if (file_age_days <= 180) {
+      cli::cli_alert_success(
+        "DSSTox database is up-to-date ({round(file_age_days)} days old). Skipping rebuild."
+      )
+      # Early exit — nothing to do
+      return(invisible(output_path))
+    } else {
+      cli::cli_alert_warning(
+        "DSSTox database is {round(file_age_days)} days old. Rebuilding."
+      )
+    }
+  }
 
-clowder_list <- httr2::request(
-  "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
-) |>
-  httr2::req_perform() |>
-  httr2::resp_body_json()
+  # -- Download from Clowder -------------------------------------------------
 
-dss_entry <- clowder_list |>
-  purrr::map(\(x) x[c("id", "filename", "date-created", "contentType")]) |>
-  purrr::keep(\(x) {
-    grepl("multi/files-zipped", x$contentType) &&
-      grepl("DSSTox_", x$filename) &&
-      grepl("\\.zip$", x$filename) &&
-      !grepl("SDF", x$filename)
-  }) |>
-  purrr::map(tibble::as_tibble) |>
-  dplyr::bind_rows() |>
-  dplyr::mutate(
-    `date-created` = lubridate::parse_date_time(`date-created`, orders = "a b d HMS Y")
+  cli::cli_alert_info("Fetching file list from Clowder...")
+
+  clowder_list <- httr2::request(
+    "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
   ) |>
-  dplyr::arrange(dplyr::desc(`date-created`)) |>
-  dplyr::slice_head(n = 1)
+    httr2::req_perform() |>
+    httr2::resp_body_json()
 
-if (nrow(dss_entry) == 0) {
-  cli::cli_abort("No DSSTox ZIP files found on Clowder.")
-}
+  dss_entry <- clowder_list |>
+    purrr::map(\(x) x[c("id", "filename", "date-created", "contentType")]) |>
+    purrr::keep(\(x) {
+      grepl("multi/files-zipped", x$contentType) &&
+        grepl("DSSTox_", x$filename) &&
+        grepl("\\.zip$", x$filename) &&
+        !grepl("SDF", x$filename)
+    }) |>
+    purrr::map(tibble::as_tibble) |>
+    dplyr::bind_rows() |>
+    dplyr::mutate(
+      `date-created` = lubridate::parse_date_time(`date-created`, orders = "a b d HMS Y")
+    ) |>
+    dplyr::arrange(dplyr::desc(`date-created`)) |>
+    dplyr::slice_head(n = 1)
 
-# -- Download & extract -----------------------------------------------------
+  if (nrow(dss_entry) == 0) {
+    cli::cli_abort("No DSSTox ZIP files found on Clowder.")
+  }
 
-raw_dir <- tempfile("dsstox_raw_")
-if (!dir.create(raw_dir, recursive = TRUE, showWarnings = FALSE)) {
-  cli::cli_abort(c(
-    "Failed to create temporary work directory.",
-    "x" = "Path: {.path {raw_dir}}",
-    "i" = "Check Windows temp directory permissions or antivirus settings.",
-    "i" = "You can also provide a pre-built file: {.code dss_install(source = 'path/to/dsstox.duckdb')}"
-  ))
-}
-on.exit(unlink(raw_dir, recursive = TRUE), add = TRUE)
+  # -- Download & extract -----------------------------------------------------
 
-zip_path <- file.path(raw_dir, "dsstox.zip")
-old_timeout <- getOption("timeout")
-options(timeout = 3600)
-on.exit(options(timeout = old_timeout), add = TRUE)
-download.file(
-  url = paste0("https://clowder.edap-cluster.com/api/files/", dss_entry$id, "/blob"),
-  destfile = zip_path,
-  mode = "wb",
-  quiet = FALSE
-)
+  raw_dir <- tempfile("dsstox_raw_")
+  if (!dir.create(raw_dir, recursive = TRUE, showWarnings = FALSE)) {
+    cli::cli_abort(c(
+      "Failed to create temporary work directory.",
+      "x" = "Path: {.path {raw_dir}}",
+      "i" = "Check Windows temp directory permissions or antivirus settings.",
+      "i" = "You can also provide a pre-built file: {.code dss_install(source = 'path/to/dsstox.duckdb')}"
+    ))
+  }
+  on.exit(unlink(raw_dir, recursive = TRUE), add = TRUE)
 
-utils::unzip(zip_path, exdir = raw_dir)
-file.remove(zip_path)
-
-# -- Resolve data files -----------------------------------------------------
-
-all_data_files <- list.files(
-  raw_dir,
-  pattern = "\\.(csv|xlsx?|tsv)$",
-  full.names = TRUE,
-  recursive = TRUE,
-  ignore.case = TRUE
-)
-
-if (length(all_data_files) == 0) {
-  cli::cli_abort("No data files found in extracted archive.")
-}
-
-# Prefer split files over monolithic dump to avoid double-counting
-file_basenames <- tools::file_path_sans_ext(basename(all_data_files))
-is_split <- grepl("\\d+$", file_basenames)
-
-if (any(is_split) && any(!is_split)) {
-  cli::cli_alert_info(
-    "Found both aggregate and split files. Using {sum(is_split)} split files."
+  zip_path <- file.path(raw_dir, "dsstox.zip")
+  old_timeout <- getOption("timeout")
+  options(timeout = 3600)
+  on.exit(options(timeout = old_timeout), add = TRUE)
+  download.file(
+    url = paste0("https://clowder.edap-cluster.com/api/files/", dss_entry$id, "/blob"),
+    destfile = zip_path,
+    mode = "wb",
+    quiet = FALSE
   )
-  data_files <- all_data_files[is_split]
-} else {
-  data_files <- all_data_files
-}
 
-# Partition by format
-file_exts <- tolower(tools::file_ext(data_files))
-csv_files <- data_files[file_exts %in% c("csv", "tsv")]
-xlsx_files <- data_files[file_exts %in% c("xlsx", "xls")]
+  utils::unzip(zip_path, exdir = raw_dir)
+  file.remove(zip_path)
 
-# Convert XLSX/XLS to temp CSVs
-if (length(xlsx_files) > 0) {
-  cli::cli_alert_info("Converting {length(xlsx_files)} Excel file(s) to CSV.")
-  converted_csvs <- vapply(xlsx_files, function(f) {
-    tmp <- tempfile(fileext = ".csv")
-    df <- readxl::read_excel(f, col_types = "text", na = c("-", ""))
-    readr::write_csv(df, tmp)
-    tmp
-  }, character(1), USE.NAMES = FALSE)
-  csv_files <- c(csv_files, converted_csvs)
-}
+  # -- Resolve data files -----------------------------------------------------
 
-if (length(csv_files) == 0) {
-  cli::cli_abort("No ingestible data files found after format resolution.")
-}
+  all_data_files <- list.files(
+    raw_dir,
+    pattern = "\\.(csv|xlsx?|tsv)$",
+    full.names = TRUE,
+    recursive = TRUE,
+    ignore.case = TRUE
+  )
 
-cli::cli_alert_info("Ingesting {length(csv_files)} file(s) via DuckDB.")
+  if (length(all_data_files) == 0) {
+    cli::cli_abort("No data files found in extracted archive.")
+  }
 
-# -- DuckDB pipeline --------------------------------------------------------
+  # Prefer split files over monolithic dump to avoid double-counting
+  file_basenames <- tools::file_path_sans_ext(basename(all_data_files))
+  is_split <- grepl("\\d+$", file_basenames)
 
-# Remove existing DB if present (we're rebuilding)
-if (file.exists(output_path)) file.remove(output_path)
+  if (any(is_split) && any(!is_split)) {
+    cli::cli_alert_info(
+      "Found both aggregate and split files. Using {sum(is_split)} split files."
+    )
+    data_files <- all_data_files[is_split]
+  } else {
+    data_files <- all_data_files
+  }
 
-dsstox_db <- DBI::dbConnect(
-  duckdb::duckdb(),
-  dbdir = output_path,
-  read_only = FALSE
-)
-on.exit(DBI::dbDisconnect(dsstox_db, shutdown = TRUE), add = TRUE)
+  # Partition by format
+  file_exts <- tolower(tools::file_ext(data_files))
+  csv_files <- data_files[file_exts %in% c("csv", "tsv")]
+  xlsx_files <- data_files[file_exts %in% c("xlsx", "xls")]
 
-# Read all CSVs into staging table
-csv_list_sql <- paste0("'", gsub("\\\\", "/", csv_files), "'", collapse = ", ")
+  # Convert XLSX/XLS to temp CSVs
+  if (length(xlsx_files) > 0) {
+    cli::cli_alert_info("Converting {length(xlsx_files)} Excel file(s) to CSV.")
+    converted_csvs <- vapply(
+      xlsx_files,
+      function(f) {
+        tmp <- tempfile(fileext = ".csv")
+        df <- readxl::read_excel(f, col_types = "text", na = c("-", ""))
+        readr::write_csv(df, tmp)
+        tmp
+      },
+      character(1),
+      USE.NAMES = FALSE
+    )
+    csv_files <- c(csv_files, converted_csvs)
+  }
 
-DBI::dbExecute(dsstox_db, paste0(
-  "CREATE TABLE dsstox_raw AS
+  if (length(csv_files) == 0) {
+    cli::cli_abort("No ingestible data files found after format resolution.")
+  }
+
+  cli::cli_alert_info("Ingesting {length(csv_files)} file(s) via DuckDB.")
+
+  # -- DuckDB pipeline --------------------------------------------------------
+
+  # Remove existing DB if present (we're rebuilding)
+  if (file.exists(output_path)) {
+    file.remove(output_path)
+  }
+
+  dsstox_db <- DBI::dbConnect(
+    duckdb::duckdb(),
+    dbdir = output_path,
+    read_only = FALSE
+  )
+  on.exit(DBI::dbDisconnect(dsstox_db, shutdown = TRUE), add = TRUE)
+
+  # Read all CSVs into staging table
+  csv_list_sql <- paste0("'", gsub("\\\\", "/", csv_files), "'", collapse = ", ")
+
+  DBI::dbExecute(
+    dsstox_db,
+    paste0(
+      "CREATE TABLE dsstox_raw AS
    SELECT * FROM read_csv(
-     [", csv_list_sql, "],
+     [",
+      csv_list_sql,
+      "],
      all_varchar = true,
      union_by_name = true,
      parallel = false,
      null_padding = true,
      nullstr = ['-', '']
    )"
-))
+    )
+  )
 
-raw_count <- DBI::dbGetQuery(dsstox_db, "SELECT count(*) AS n FROM dsstox_raw")$n
-cli::cli_alert_success("Loaded {format(raw_count, big.mark = ',')} raw rows.")
+  raw_count <- DBI::dbGetQuery(dsstox_db, "SELECT count(*) AS n FROM dsstox_raw")$n
+  cli::cli_alert_success("Loaded {format(raw_count, big.mark = ',')} raw rows.")
 
-expected_min <- length(csv_files) * 10000L
-if (raw_count < expected_min) {
-  cli::cli_abort(c(
-    "Row count sanity check failed.",
-    "x" = "Loaded {format(raw_count, big.mark=',')} rows from {length(csv_files)} files.",
-    "i" = "Expected at least {format(expected_min, big.mark=',')}."
-  ))
-}
+  expected_min <- length(csv_files) * 10000L
+  if (raw_count < expected_min) {
+    cli::cli_abort(c(
+      "Row count sanity check failed.",
+      "x" = "Loaded {format(raw_count, big.mark=',')} rows from {length(csv_files)} files.",
+      "i" = "Expected at least {format(expected_min, big.mark=',')}."
+    ))
+  }
 
-# Transform to long form
-DBI::dbExecute(dsstox_db,
-  "CREATE TABLE dsstox AS
+  # Transform to long form
+  DBI::dbExecute(
+    dsstox_db,
+    "CREATE TABLE dsstox AS
    WITH
    base AS (
      SELECT DTXSID, PREFERRED_NAME, CASRN, INCHIKEY, IUPAC_NAME,
@@ -240,19 +252,21 @@ DBI::dbExecute(dsstox_db,
      END AS sort_order
    FROM unpivoted
    ORDER BY DTXSID, sort_order"
-)
+  )
 
-final_count <- DBI::dbGetQuery(dsstox_db, "SELECT count(*) AS n FROM dsstox")$n
-cli::cli_alert_success("Built dsstox table: {format(final_count, big.mark = ',')} rows.")
+  final_count <- DBI::dbGetQuery(dsstox_db, "SELECT count(*) AS n FROM dsstox")$n
+  cli::cli_alert_success("Built dsstox table: {format(final_count, big.mark = ',')} rows.")
 
-DBI::dbExecute(dsstox_db, "DROP TABLE dsstox_raw")
+  DBI::dbExecute(dsstox_db, "DROP TABLE dsstox_raw")
 
-# Clean up temp XLSX conversions
-if (length(xlsx_files) > 0) file.remove(converted_csvs)
+  # Clean up temp XLSX conversions
+  if (length(xlsx_files) > 0) {
+    file.remove(converted_csvs)
+  }
 
-cli::cli_alert_success("DSSTox database saved to {.path {output_path}}")
+  cli::cli_alert_success("DSSTox database saved to {.path {output_path}}")
 
-invisible(output_path)
+  invisible(output_path)
 }
 
 .build_dsstox_db()

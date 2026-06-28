@@ -21,7 +21,10 @@ test_that("ct_exposure_ccd_production_volume_search passes request metadata to h
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_exposure_ccd_production_volume_search(dtxsid = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_exposure_ccd_production_volume_search(dtxsid = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

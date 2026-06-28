@@ -21,7 +21,12 @@ test_that("ct_hazard_toxref_observations_search_by_study_type passes request met
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_hazard_toxref_observations_search_by_study_type(studyType = "acute"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_hazard_toxref_observations_search_by_study_type(
+      studyType = "acute"
+    ))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

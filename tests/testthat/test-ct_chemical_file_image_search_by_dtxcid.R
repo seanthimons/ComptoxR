@@ -21,7 +21,10 @@ test_that("ct_chemical_file_image_search_by_dtxcid passes request metadata to he
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_chemical_file_image_search_by_dtxcid(dtxcid = "DTXCID30182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_chemical_file_image_search_by_dtxcid(dtxcid = "DTXCID30182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

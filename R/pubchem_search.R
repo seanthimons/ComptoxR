@@ -46,8 +46,7 @@
 #' }
 #'
 #' @export
-pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey", "formula"),
-                           cache = TRUE) {
+pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey", "formula"), cache = TRUE) {
   type <- match.arg(type)
 
   if (!is.character(query) || length(query) != 1 || is.na(query) || !nzchar(query)) {
@@ -89,7 +88,9 @@ pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey"
   if (length(result) == 0) {
     cli::cli_warn("No PubChem CIDs found for {.val {query}} (type: {type})")
     out <- tibble::tibble(cid = integer(0))
-    if (cache) assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+    if (cache) {
+      assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+    }
     return(out)
   }
 
@@ -100,6 +101,8 @@ pubchem_search <- function(query, type = c("name", "smiles", "inchi", "inchikey"
   }
 
   out <- tibble::tibble(cid = cids)
-  if (cache) assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+  if (cache) {
+    assign(cache_key, out, envir = .ComptoxREnv$pubchem_search_cache)
+  }
   out
 }

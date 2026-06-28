@@ -75,14 +75,28 @@ function(query, field = "common_name") {
 #* @param test_cols Additional test table columns
 #* @param results_cols Additional results table columns
 #* @post /results
-function(casrn = NULL, common_name = NULL, latin_name = NULL,
-         endpoint = NULL, eco_group = NULL,
-         invasive = FALSE, standard = FALSE, threatened = FALSE,
-         test_cols = NULL, results_cols = NULL) {
+function(
+  casrn = NULL,
+  common_name = NULL,
+  latin_name = NULL,
+  endpoint = NULL,
+  eco_group = NULL,
+  invasive = FALSE,
+  standard = FALSE,
+  threatened = FALSE,
+  test_cols = NULL,
+  results_cols = NULL
+) {
   eco_results(
-    casrn = casrn, common_name = common_name, latin_name = latin_name,
-    endpoint = endpoint, eco_group = eco_group,
-    invasive = invasive, standard = standard, threatened = threatened,
-    test_cols = test_cols, results_cols = results_cols
+    casrn = casrn,
+    common_name = common_name,
+    latin_name = latin_name,
+    endpoint = endpoint,
+    eco_group = eco_group,
+    invasive = invasive,
+    standard = standard,
+    threatened = threatened,
+    test_cols = test_cols,
+    results_cols = results_cols
   )
 }

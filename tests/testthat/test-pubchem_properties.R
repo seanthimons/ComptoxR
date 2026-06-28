@@ -21,7 +21,10 @@ test_that("pubchem_properties passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::pubchem_properties(cid = c(2244L, 6623L), cache = FALSE))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::pubchem_properties(cid = c(2244L, 6623L), cache = FALSE))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

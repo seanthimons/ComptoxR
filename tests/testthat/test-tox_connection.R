@@ -164,12 +164,16 @@ test_that("toxval_install(source=) copies a local database file", {
 # Parses the build script and evaluates only the function/constant definitions.
 .load_build_defs <- function(env = parent.frame()) {
   build_script <- system.file("toxval", "toxval_build.R", package = "ComptoxR")
-  if (!nzchar(build_script)) return(invisible(FALSE))
+  if (!nzchar(build_script)) {
+    return(invisible(FALSE))
+  }
   exprs <- parse(build_script)
   # Evaluate everything except the bare .build_toxval_db() call at the end
   for (expr in exprs) {
     txt <- deparse(expr, width.cutoff = 500L)
-    if (identical(trimws(paste(txt, collapse = "")), ".build_toxval_db()")) next
+    if (identical(trimws(paste(txt, collapse = "")), ".build_toxval_db()")) {
+      next
+    }
     eval(expr, envir = env)
   }
   invisible(TRUE)

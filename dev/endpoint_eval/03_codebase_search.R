@@ -161,13 +161,19 @@ find_endpoint_usages_base <- function(
       for (i in seq_len(nrow(summary_missing))) {
         ep <- summary_missing$endpoint[i]
         ef <- ep_to_expected[ep]
-        if (is.na(ef) || is.null(ef)) next
+        if (is.na(ef) || is.null(ef)) {
+          next
+        }
 
         candidate <- file.path(pkg_dir, ef)
-        if (!file.exists(candidate)) next
+        if (!file.exists(candidate)) {
+          next
+        }
 
         lines <- tryCatch(readLines(candidate, warn = FALSE), error = function(e) character())
-        if (length(lines) == 0) next
+        if (length(lines) == 0) {
+          next
+        }
 
         # Derive expected function name from the filename (e.g., ct_hazard.R -> ct_hazard)
         fn_name <- tools::file_path_sans_ext(basename(ef))

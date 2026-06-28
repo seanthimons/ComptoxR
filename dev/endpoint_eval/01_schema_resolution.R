@@ -8,13 +8,16 @@ resolve_stack <- new.env(hash = TRUE)
 # Extract all schema references from paths
 extract_referenced_schemas <- function(paths) {
   refs <- character(0)
-  
+
   for (route in names(paths)) {
     path_item <- paths[[route]]
-    
-    for (method in intersect(names(path_item), c("get", "post", "put", "patch", "delete", "head", "options", "trace"))) {
+
+    for (method in intersect(
+      names(path_item),
+      c("get", "post", "put", "patch", "delete", "head", "options", "trace")
+    )) {
       op <- path_item[[method]]
-      
+
       # Extract from requestBody
       if (!is.null(op$requestBody) && is.list(op$requestBody)) {
         content <- op$requestBody[["content"]] %||% list()
@@ -27,17 +30,17 @@ extract_referenced_schemas <- function(paths) {
       }
     }
   }
-  
+
   unique(refs)
 }
 
 # Filter components to keep only referenced schemas
 filter_components_by_refs <- function(components, refs) {
   schemas <- components[["schemas"]] %||% list()
-  
+
   # Keep only schemas that match refs
   keep_schemas <- intersect(names(schemas), refs)
-  
+
   # Update components
   components$schemas <- schemas[keep_schemas]
   components
@@ -56,7 +59,6 @@ preprocess_schema <- function(schema_file, exclude_endpoints = ENDPOINT_PATTERNS
     openapi$paths <- paths[keep_paths]
   }
 
-
   # Keep all components/definitions intact - aggressive filtering caused
 
   # regression issues with nested references (e.g., array items, response schemas)
@@ -72,7 +74,11 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
   if (!is.character(ref) || !nzchar(ref)) {
     cli::cli_abort(c(
       "x" = "Invalid schema reference: empty or non-character",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
@@ -82,7 +88,11 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
       "x" = "Invalid reference format: {.val {ref}}",
       "i" = "References must start with {.code #/}",
       "i" = "External file references are not supported",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
@@ -91,7 +101,11 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
     cli::cli_abort(c(
       "x" = "External file reference not supported: {.val {ref}}",
       "i" = "All schemas must be in single file",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
@@ -113,7 +127,11 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
     cli::cli_abort(c(
       "x" = "Missing schema name in reference: {.val {ref}}",
       "i" = "Reference path is incomplete (trailing slash only)",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
@@ -122,7 +140,14 @@ validate_schema_ref <- function(ref, endpoint_context = NULL) {
 
 # Resolve schema reference to actual schema definition
 # Enhanced with version-aware fallback chain (REF-01), version context (REF-02), and depth limit 3 (REF-03)
-resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, max_depth = 3, depth = 0, endpoint_context = NULL) {
+resolve_schema_ref <- function(
+  schema_ref,
+  components,
+  schema_version = NULL,
+  max_depth = 3,
+  depth = 0,
+  endpoint_context = NULL
+) {
   # If schema_ref is actual schema (not a reference), just return it
   if (!is.character(schema_ref)) {
     return(schema_ref)
@@ -137,7 +162,11 @@ resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, ma
       "x" = "Reference depth limit exceeded: {.val {max_depth}}",
       "i" = "Current reference: {.val {schema_ref}}",
       "i" = "This may indicate circular references or overly complex schema",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
@@ -159,11 +188,14 @@ resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, ma
 
   # Track reference for cleanup on exit
   assign(sanitized_key, depth, envir = resolve_stack)
-  on.exit({
-    if (exists(sanitized_key, envir = resolve_stack)) {
-      rm(list = sanitized_key, envir = resolve_stack)
-    }
-  }, add = TRUE)
+  on.exit(
+    {
+      if (exists(sanitized_key, envir = resolve_stack)) {
+        rm(list = sanitized_key, envir = resolve_stack)
+      }
+    },
+    add = TRUE
+  )
 
   # Determine primary and secondary paths based on version (REF-01)
   if (!is.null(schema_version) && identical(schema_version$type, "swagger")) {
@@ -171,14 +203,14 @@ resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, ma
     primary_path <- "#/definitions/"
     secondary_path <- "#/components/schemas/"
     # For Swagger 2.0, components may be normalized definitions (from 07-02)
-    primary_container <- components  # May be definitions directly or components$schemas
+    primary_container <- components # May be definitions directly or components$schemas
     secondary_container <- components[["schemas"]] %||% list()
   } else {
     # OpenAPI 3.0 or unknown: components first, then definitions
     primary_path <- "#/components/schemas/"
     secondary_path <- "#/definitions/"
     primary_container <- components[["schemas"]] %||% list()
-    secondary_container <- components  # May have definitions at root
+    secondary_container <- components # May have definitions at root
   }
 
   # Extract schema name from reference
@@ -219,12 +251,19 @@ resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, ma
       "x" = "Cannot resolve schema reference: {.val {schema_ref}}",
       "i" = "Tried: {.path {primary_path}{schema_name}}, {.path {secondary_path}{schema_name}}",
       "i" = "Available in primary: {.val {names(primary_container)}}",
-      "i" = if (!is.null(endpoint_context)) paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route) else NULL
+      "i" = if (!is.null(endpoint_context)) {
+        paste0("Endpoint: ", endpoint_context$method, " ", endpoint_context$route)
+      } else {
+        NULL
+      }
     ))
   }
 
   # Warn if resolved schema is empty
-  if (length(schema_def) == 0 || (is.null(schema_def$type) && is.null(schema_def$properties) && is.null(schema_def[["$ref"]]))) {
+  if (
+    length(schema_def) == 0 ||
+      (is.null(schema_def$type) && is.null(schema_def$properties) && is.null(schema_def[["$ref"]]))
+  ) {
     cli::cli_warn(c(
       "!" = "Resolved schema is empty: {.val {schema_ref}}",
       "i" = "Schema exists but has no type, properties, or nested $ref",
@@ -234,7 +273,14 @@ resolve_schema_ref <- function(schema_ref, components, schema_version = NULL, ma
 
   # Handle schema composition (allOf, oneOf, anyOf) - recurse with depth tracking
   if (!is.null(schema_def[["allOf"]])) {
-    return(resolve_schema_ref(schema_def[["allOf"]][[1]], components, schema_version, max_depth, depth + 1, endpoint_context))
+    return(resolve_schema_ref(
+      schema_def[["allOf"]][[1]],
+      components,
+      schema_version,
+      max_depth,
+      depth + 1,
+      endpoint_context
+    ))
   }
 
   # Handle nested $ref in resolved schema
@@ -277,12 +323,16 @@ extract_swagger2_body_schema <- function(parameters, definitions) {
 
   # BODY-06: Validate body/formData mutual exclusivity
   if (length(body_params) > 0 && length(formData_params) > 0) {
-    cli::cli_alert_warning("Swagger 2.0 spec violation: both body and formData parameters present. Using body parameter.")
+    cli::cli_alert_warning(
+      "Swagger 2.0 spec violation: both body and formData parameters present. Using body parameter."
+    )
   }
 
   # BODY-05: Validate single body parameter constraint
   if (length(body_params) > 1) {
-    cli::cli_alert_warning("Swagger 2.0 spec violation: multiple body parameters found ({length(body_params)}). Using first body parameter.")
+    cli::cli_alert_warning(
+      "Swagger 2.0 spec violation: multiple body parameters found ({length(body_params)}). Using first body parameter."
+    )
   }
 
   if (length(body_params) == 0) {
@@ -406,7 +456,9 @@ extract_swagger2_body_schema <- function(parameters, definitions) {
 # Resolve Swagger 2.0 definition reference
 # Swagger 2.0 uses #/definitions/{SchemaName} (not #/components/schemas/)
 resolve_swagger2_definition_ref <- function(ref, definitions) {
-  if (is.null(ref) || !nzchar(ref)) return(NULL)
+  if (is.null(ref) || !nzchar(ref)) {
+    return(NULL)
+  }
 
   # Parse #/definitions/{SchemaName}
   if (!grepl("^#/definitions/", ref)) {
@@ -415,17 +467,23 @@ resolve_swagger2_definition_ref <- function(ref, definitions) {
 
   schema_name <- stringr::str_replace(ref, "#/definitions/", "")
 
-  if (is.null(definitions) || !is.list(definitions)) return(NULL)
+  if (is.null(definitions) || !is.list(definitions)) {
+    return(NULL)
+  }
 
   schema_def <- definitions[[schema_name]]
-  if (is.null(schema_def) || !is.list(schema_def)) return(NULL)
+  if (is.null(schema_def) || !is.list(schema_def)) {
+    return(NULL)
+  }
 
   schema_def
 }
 
 # Extract body properties from request body
 extract_body_properties <- function(request_body, components, schema_version = NULL) {
-  if (is.null(request_body) || !is.list(request_body)) return(list())
+  if (is.null(request_body) || !is.list(request_body)) {
+    return(list())
+  }
 
   # If schema_version indicates Swagger 2.0 and request_body is parameters array,
   # delegate to Swagger 2.0 extraction and return early
@@ -433,18 +491,20 @@ extract_body_properties <- function(request_body, components, schema_version = N
     # For Swagger 2.0: request_body is actually parameters, components is definitions
     return(extract_swagger2_body_schema(request_body, components))
   }
-  
+
   # Navigate: requestBody -> content -> application/json -> schema
   content <- request_body[["content"]] %||% list()
   json_schema <- content[["application/json"]][["schema"]] %||% list()
-  
-  if (length(json_schema) == 0) return(list())
-  
+
+  if (length(json_schema) == 0) {
+    return(list())
+  }
+
   # Resolve reference if present
   if (!is.null(json_schema[["$ref"]])) {
     json_schema <- resolve_schema_ref(json_schema[["$ref"]], components, schema_version, max_depth = 3)
   }
-  
+
   # Check schema type
   type <- json_schema[["type"]] %||% NA
 
@@ -473,11 +533,11 @@ extract_body_properties <- function(request_body, components, schema_version = N
   # If array, extract item type
   if (type == "array" && !is.null(json_schema[["items"]])) {
     items <- json_schema[["items"]]
-    
+
     # If items is a reference, resolve it
     if (!is.null(items[["$ref"]])) {
       resolved <- resolve_schema_ref(items[["$ref"]], components, schema_version, max_depth = 3)
-      
+
       # If resolved is object with properties, extract them
       if (!is.null(resolved[["properties"]])) {
         required_fields <- resolved[["required"]] %||% character(0)
@@ -561,11 +621,11 @@ extract_body_properties <- function(request_body, components, schema_version = N
       properties = list()
     ))
   }
-  
+
   # If object, extract properties
   if (type == "object" && !is.null(json_schema[["properties"]])) {
     required_fields <- json_schema[["required"]] %||% character(0)
-    
+
     metadata <- purrr::imap(json_schema[["properties"]], function(prop, prop_name) {
       list(
         name = prop_name,
@@ -578,14 +638,14 @@ extract_body_properties <- function(request_body, components, schema_version = N
         example = prop[["example"]] %||% prop[["default"]] %||% NA
       )
     })
-    
+
     names(metadata) <- purrr::map_chr(metadata, ~ .x$name)
     return(list(
       type = "object",
       properties = metadata
     ))
   }
-  
+
   # Unknown schema type
   list(type = "unknown", properties = list())
 }
@@ -611,19 +671,25 @@ select_schema_files <- function(
   stage_priority = NULL,
   schema_dir = NULL
 ) {
-  if (is.null(schema_dir)) schema_dir <- here::here("schema")
+  if (is.null(schema_dir)) {
+    schema_dir <- here::here("schema")
+  }
 
   # List matching files
   files <- list.files(path = schema_dir, pattern = pattern, full.names = FALSE)
 
-  if (length(files) == 0) return(character(0))
+  if (length(files) == 0) {
+    return(character(0))
+  }
 
   # Apply exclusion filter
   if (!is.null(exclude_pattern) && nzchar(exclude_pattern)) {
     files <- files[!grepl(exclude_pattern, files, ignore.case = TRUE)]
   }
 
-  if (length(files) == 0) return(character(0))
+  if (length(files) == 0) {
+    return(character(0))
+  }
 
   # Stage-based selection (if stage_priority provided)
   # STAGE PRIORITY LOGIC:
@@ -638,13 +704,13 @@ select_schema_files <- function(
         delim = "-",
         names = c("origin", "domain", "stage"),
         cols_remove = FALSE,
-        too_few = "align_start",  # Handle files with < 3 hyphen-delimited parts
-        too_many = "merge"        # Handle files with > 3 hyphen-delimited parts
+        too_few = "align_start", # Handle files with < 3 hyphen-delimited parts
+        too_many = "merge" # Handle files with > 3 hyphen-delimited parts
       ) %>%
-      dplyr::filter(!is.na(stage)) %>%  # Drop files without stage component
+      dplyr::filter(!is.na(stage)) %>% # Drop files without stage component
       dplyr::mutate(
         stage = stringr::str_remove(stage, "\\.json$"),
-        stage = factor(stage, levels = stage_priority)  # Factor ordering = priority
+        stage = factor(stage, levels = stage_priority) # Factor ordering = priority
       )
 
     # Files that couldn't be parsed (no stage) are included as-is
@@ -654,7 +720,7 @@ select_schema_files <- function(
     files <- schema_meta %>%
       dplyr::group_by(domain) %>%
       dplyr::arrange(stage, .by_group = TRUE) %>%
-      dplyr::slice(1) %>%  # Take highest priority stage per domain
+      dplyr::slice(1) %>% # Take highest priority stage per domain
       dplyr::ungroup() %>%
       dplyr::pull(file)
 
@@ -669,29 +735,33 @@ select_schema_files <- function(
 extract_query_params_with_refs <- function(parameters, components, schema_version = NULL, max_depth = 3) {
   result_names <- character(0)
   result_metadata <- list()
-  
+
   for (param in parameters) {
-    if (is.null(param) || !is.list(param)) next
-    
+    if (is.null(param) || !is.list(param)) {
+      next
+    }
+
     param_name <- param[["name"]] %||% ""
     param_in <- param[["in"]] %||% ""
-    
+
     # Only process query parameters
-    if (param_in != "query") next
-    
+    if (param_in != "query") {
+      next
+    }
+
     schema <- param[["schema"]] %||% list()
-    
+
     # Check if parameter has $ref
     schema_ref <- schema[["$ref"]]
-    
+
     if (!is.null(schema_ref) && nzchar(schema_ref)) {
       # Resolve the schema reference
       resolved <- resolve_schema_ref(schema_ref, components, schema_version, max_depth, depth = 0)
-      
+
       # Check if resolved schema has properties (object)
       properties <- resolved[["properties"]] %||% list()
       required_fields <- resolved[["required"]] %||% character(0)
-      
+
       if (length(properties) == 0) {
         # Simple type (string, integer, boolean, etc.)
         result_names <- c(result_names, param_name)
@@ -710,14 +780,14 @@ extract_query_params_with_refs <- function(parameters, components, schema_versio
         # Use dot notation for nested properties
         for (prop_name in names(properties)) {
           prop <- properties[[prop_name]]
-          
+
           # Check if property has $ref and resolve it
           prop_ref <- prop[["$ref"]]
           if (!is.null(prop_ref) && nzchar(prop_ref)) {
             # Resolve the nested $ref
             prop <- resolve_schema_ref(prop_ref, components, schema_version, max_depth, 1)
           }
-          
+
           # Extract property metadata first
           prop_type <- prop[["type"]] %||% NA
           prop_format <- prop[["format"]] %||% NA
@@ -726,19 +796,19 @@ extract_query_params_with_refs <- function(parameters, components, schema_versio
           prop_default <- prop[["default"]] %||% NA
           prop_required <- prop_name %in% required_fields
           prop_example <- prop[["example"]] %||% prop_default %||% NA
-          
+
           # Handle nested objects with dot notation
           if (!is.na(prop_type) && prop_type == "object" && !is.null(prop[["properties"]])) {
             # This is a nested object - recurse with dot notation
             # DON'T add the parent object to result_names, only the nested properties
             nested_props <- prop[["properties"]]
             nested_required <- prop[["required"]] %||% character(0)
-            
+
             for (nested_name in names(nested_props)) {
               nested_prop <- nested_props[[nested_name]]
               nested_flat_name <- paste0(param_name, ".", prop_name, ".", nested_name)
               result_names <- c(result_names, nested_flat_name)
-              
+
               result_metadata[[nested_flat_name]] <- list(
                 name = nested_flat_name,
                 type = nested_prop[["type"]] %||% NA,
@@ -753,19 +823,19 @@ extract_query_params_with_refs <- function(parameters, components, schema_versio
           } else {
             # Simple property or array (not an object with nested properties)
             flat_name <- paste0(param_name, ".", prop_name)
-            
+
             # Check if array type and reject binary arrays
             if (!is.na(prop_type) && prop_type == "array") {
               items <- prop[["items"]] %||% list()
               items_type <- items[["type"]] %||% NA
               items_format <- items[["format"]] %||% NA
-              
+
               # REJECT binary arrays (e.g., files[])
               if (!is.na(items_format) && items_format == "binary") {
                 # Skip binary arrays - don't include in query params
                 next
               }
-              
+
               # Support non-binary arrays
               result_names <- c(result_names, flat_name)
               result_metadata[[flat_name]] <- list(
@@ -809,7 +879,7 @@ extract_query_params_with_refs <- function(parameters, components, schema_versio
           next
         }
       }
-      
+
       result_names <- c(result_names, param_name)
       result_metadata[[param_name]] <- list(
         name = param_name,
@@ -823,6 +893,6 @@ extract_query_params_with_refs <- function(parameters, components, schema_versio
       )
     }
   }
-  
+
   list(names = result_names, metadata = result_metadata)
 }

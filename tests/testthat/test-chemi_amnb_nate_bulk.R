@@ -33,4 +33,3 @@ test_that("chemi_amnb_nate_bulk passes request metadata to helper", {
   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
   expect_equal(call[["tidy"]], FALSE)
 })
-

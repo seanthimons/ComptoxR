@@ -109,8 +109,7 @@ dss_disconnect <- function() {
 #' @return Invisibly, the destination path.
 #' @export
 #' @family dsstox
-dss_install <- function(source = NULL, build = FALSE, tag = "latest",
-                        overwrite = FALSE) {
+dss_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
   dest <- dss_path()
   dest_dir <- dirname(dest)
 
@@ -154,7 +153,9 @@ dss_install <- function(source = NULL, build = FALSE, tag = "latest",
     }
   )
 
-  if (!file.exists(dest)) cli::cli_abort("Installation failed: database not found at {.path {dest}}")
+  if (!file.exists(dest)) {
+    cli::cli_abort("Installation failed: database not found at {.path {dest}}")
+  }
   invisible(dest)
 }
 

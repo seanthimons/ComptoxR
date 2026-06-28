@@ -87,10 +87,21 @@ test_that("genra_predict builds a prediction object from mocked analogues and ac
   ))
 
   expect_s3_class(result, "genra_prediction")
-  expect_named(result, c(
-    "target", "prediction", "predicted_class", "auc", "p_value",
-    "threshold", "n_analogues", "n_analogues_found", "analogues", "parameters"
-  ))
+  expect_named(
+    result,
+    c(
+      "target",
+      "prediction",
+      "predicted_class",
+      "auc",
+      "p_value",
+      "threshold",
+      "n_analogues",
+      "n_analogues_found",
+      "analogues",
+      "parameters"
+    )
+  )
   expect_equal(result$target, "DTXSID7020182")
   expect_equal(result$n_analogues_found, 2L)
   expect_equal(result$n_analogues, 2L)

@@ -4,12 +4,12 @@
 {
   # Define the paths and constraints for this project
   config <- list(
-    raw_dir      = here::here("schema"),        # Where raw files live
-    hash_file    = here::here("schema_hashes.csv"), # Where to store hash history
-    max_age_days = 90,                               # Rebuild trigger age
-    file_pattern = NULL                              # NULL for all, or regex like "\\.csv$"
+    raw_dir = here::here("schema"), # Where raw files live
+    hash_file = here::here("schema_hashes.csv"), # Where to store hash history
+    max_age_days = 90, # Rebuild trigger age
+    file_pattern = NULL # NULL for all, or regex like "\\.csv$"
   )
-  
+
   if (!dir.exists(config$raw_dir)) dir.create(config$raw_dir, recursive = TRUE)
 }
 
@@ -27,23 +27,26 @@ deploy <- FALSE
     stop("load_packages.R not found. Please ensure the package loader is present.")
   }
 
-	if (!requireNamespace("cli", quietly = TRUE)) install.packages("cli")
+  if (!requireNamespace("cli", quietly = TRUE)) install.packages("cli")
 }
 
 # 3. Helper Functions -----------------------------------------------------
 
 get_file_hashes <- function(dir, pattern = NULL) {
   files <- fs::dir_ls(dir, type = "file", regexp = pattern)
-  
-  if (length(files) == 0) return(tibble(file = character(), hash = character()))
-  
+
+  if (length(files) == 0) {
+    return(tibble(file = character(), hash = character()))
+  }
+
   map(files, function(f) {
     tibble(
       file = fs::path_file(f),
       hash = digest::digest(f, file = TRUE, algo = "md5"),
       mtime = fs::file_info(f)$modification_time
     )
-  }) %>% list_rbind()
+  }) %>%
+    list_rbind()
 }
 
 # 4. Checkpoint Logic -----------------------------------------------------
@@ -132,42 +135,38 @@ if (nrow(current_status) == 0) {
 
 if (run_rebuild) {
   cli::cli_rule(left = "Action Required: REBUILDING")
-  
-	invisible(ComptoxR::run_verbose(FALSE))
-  
-	devtools::load_all()
 
-	ct_schema()
+  invisible(ComptoxR::run_verbose(FALSE))
 
-	chemi_schema()
-  
-	invisible(ComptoxR::run_verbose(FALSE))
+  devtools::load_all()
+
+  ct_schema()
+
+  chemi_schema()
+
+  invisible(ComptoxR::run_verbose(FALSE))
 
   cli::cli_alert_info("Rebuild logic executed, schema files rebuilt.")
 
-  
   # Update hashes after rebuild
   cli::cli_alert_info("Updating hash records...")
   new_status <- get_file_hashes(config$raw_dir, config$file_pattern)
-  new_status %>% 
-    select(file, hash) %>% 
+  new_status %>%
+    select(file, hash) %>%
     readr::write_csv(config$hash_file)
-  
+
   cli::cli_alert_success("Rebuild complete and hashes updated.")
-  
 } else {
   if (deploy) {
-  cli::cli_alert_success(
-	'Deploying API + Documentation'
-	)
-  
-  rm(deploy)
-	
-	} else {
-  #cli::cli_alert_success('Deploying local connection')
-  rm(deploy)
-		
-	}
+    cli::cli_alert_success(
+      'Deploying API + Documentation'
+    )
+
+    rm(deploy)
+  } else {
+    #cli::cli_alert_success('Deploying local connection')
+    rm(deploy)
+  }
 }
 
 # Cleanup

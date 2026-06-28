@@ -58,7 +58,8 @@ skip_if_no_key <- function() {
 
 #' Skip tests that require external services in the CRAN-safe lane
 skip_if_cran_safe_external <- function(
-    reason = "Test requires secrets, network, local services, or live APIs") {
+  reason = "Test requires secrets, network, local services, or live APIs"
+) {
   if (comptoxr_cran_safe_tests()) {
     testthat::skip(reason)
   }

@@ -69,14 +69,20 @@ force_candidate_gaps <- queue |>
       is.na(.data$reproductive_stage)
   )
 if (nrow(force_candidate_gaps) > 0L) {
-  abort(paste("force_candidate row(s) missing required source/derivation fields:", paste(force_candidate_gaps$org_lifestage, collapse = ", ")))
+  abort(paste(
+    "force_candidate row(s) missing required source/derivation fields:",
+    paste(force_candidate_gaps$org_lifestage, collapse = ", ")
+  ))
 }
 
 unresolved_note_gaps <- queue |>
   filter(.data$proposed_action %in% c("accept_unresolved", "force_unresolved")) |>
   filter(is.na(.data$reviewer) | is.na(.data$decision_notes) | !nzchar(.data$decision_notes))
 if (nrow(unresolved_note_gaps) > 0L) {
-  abort(paste("unresolved decision row(s) missing reviewer notes:", paste(unresolved_note_gaps$org_lifestage, collapse = ", ")))
+  abort(paste(
+    "unresolved decision row(s) missing reviewer notes:",
+    paste(unresolved_note_gaps$org_lifestage, collapse = ", ")
+  ))
 }
 
 resolved_derivation <- derivation |>
@@ -208,7 +214,10 @@ unresolved_terms <- seed |>
   distinct(.data$org_lifestage)
 missing_queue <- anti_join(unresolved_terms, queue_terms, by = "org_lifestage")
 if (nrow(missing_queue) > 0L) {
-  abort(paste("Unresolved lifestage row(s) missing from curation queue:", paste(missing_queue$org_lifestage, collapse = ", ")))
+  abort(paste(
+    "Unresolved lifestage row(s) missing from curation queue:",
+    paste(missing_queue$org_lifestage, collapse = ", ")
+  ))
 }
 
 dir.create(dirname(seed_path), recursive = TRUE, showWarnings = FALSE)

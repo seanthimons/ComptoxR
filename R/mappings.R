@@ -1,4 +1,3 @@
-
 .search_mappings <- list(
   searchType = c(
     "exact" = "EXACT",

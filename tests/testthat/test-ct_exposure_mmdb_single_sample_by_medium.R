@@ -21,7 +21,10 @@ test_that("ct_exposure_mmdb_single_sample_by_medium passes request metadata to h
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_exposure_mmdb_single_sample_by_medium(medium = "water"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_exposure_mmdb_single_sample_by_medium(medium = "water"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

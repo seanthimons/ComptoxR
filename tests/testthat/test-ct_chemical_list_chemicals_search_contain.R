@@ -21,7 +21,10 @@ test_that("ct_chemical_list_chemicals_search_contain passes request metadata to 
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_chemical_list_chemicals_search_contain(list = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_chemical_list_chemicals_search_contain(list = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

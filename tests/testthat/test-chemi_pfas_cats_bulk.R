@@ -33,4 +33,3 @@ test_that("chemi_pfas_cats_bulk passes request metadata to helper", {
   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
   expect_equal(call[["tidy"]], FALSE)
 })
-

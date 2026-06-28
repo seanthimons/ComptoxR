@@ -1,4 +1,4 @@
-﻿# ECOTOX Build Pipeline
+# ECOTOX Build Pipeline
 # --------------------
 # Downloads EPA ECOTOX ASCII data from FTP, processes into a DuckDB database
 # with enrichment tables (unit conversion, lifestage, risk binning, etc.).
@@ -583,38 +583,38 @@
   cli::cli_alert_info("Writing test-result duration dictionary...")
   #fmt: table
   test_result_duration_dictionary <- tibble::tribble(
-    ~eco_group                            , ~final_test_type , ~effect               , ~exposure_group , ~unit           , ~endpoint                    , ~duration                            ,
+    ~eco_group                            , ~final_test_type , ~effect                      , ~exposure_group , ~unit           , ~endpoint                    , ~duration                                   ,
     # Mammals
-    "Mammals"                             , "acute"          , "MOR"                 , c("ORAL", NA)   , "g/g"           , "LD50"                       , NULL                                 ,
-    "Mammals"                             , "chronic"        , "MOR"                 , c("ORAL", NA)   , "g/g/d"         , c("NOEL", "NR-ZERO")         , NULL                                 ,
+    "Mammals"                             , "acute"          , "MOR"                        , c("ORAL", NA)   , "g/g"           , "LD50"                       , NULL                                        ,
+    "Mammals"                             , "chronic"        , "MOR"                        , c("ORAL", NA)   , "g/g/d"         , c("NOEL", "NR-ZERO")         , NULL                                        ,
     # Birds, Amphibians, Reptiles
-    c("Birds", "Amphibians", "Reptiles")  , "acute"          , "MOR"                 , c("ORAL", NA)   , "g/g"           , "LD50"                       , NULL                                 ,
-    c("Birds", "Amphibians", "Reptiles")  , "chronic"        , "MOR"                 , c("ORAL", NA)   , "g/g/d"         , c("NOEL", "NR-ZERO")         , NULL                                 ,
+    c("Birds", "Amphibians", "Reptiles")  , "acute"          , "MOR"                        , c("ORAL", NA)   , "g/g"           , "LD50"                       , NULL                                        ,
+    c("Birds", "Amphibians", "Reptiles")  , "chronic"        , "MOR"                        , c("ORAL", NA)   , "g/g/d"         , c("NOEL", "NR-ZERO")         , NULL                                        ,
     # Fish
-    "Fish"                                , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur == 96)           ,
-    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur >= 144)          ,
-    "Fish"                                , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 504)          ,
+    "Fish"                                , "acute"          , "MOR"                        , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur == 96)                  ,
+    "Fish"                                , "chronic"        , "MOR"                        , NULL            , "g/L"           , c("LD50", "EC50", "LC50")    , rlang::expr(new_dur >= 144)                 ,
+    "Fish"                                , "chronic"        , "MOR"                        , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 504)                 ,
     # Bees
-    "Bees"                                , "acute"          , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur %in% c(24, 28, 72)),
-    "Bees"                                , "chronic"        , "MOR"                 , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur == 240)          ,
+    "Bees"                                , "acute"          , "MOR"                        , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur %in% c(24, 28, 72))     ,
+    "Bees"                                , "chronic"        , "MOR"                        , NULL            , "g/bee"         , c("LD50", "LC50")            , rlang::expr(new_dur == 240)                 ,
     # Insects/Spiders
-    "Insects/Spiders"                     , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72)),
-    "Insects/Spiders"                     , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("NOEL", "NOEC", "NR-ZERO") , rlang::expr(new_dur %in% c(504, 672)),
+    "Insects/Spiders"                     , "acute"          , "MOR"                        , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72))     ,
+    "Insects/Spiders"                     , "chronic"        , "MOR"                        , NULL            , c("g/L", "g/g") , c("NOEL", "NOEC", "NR-ZERO") , rlang::expr(new_dur %in% c(504, 672))       ,
     # Invertebrates, Molluscs
-    c("Invertebrates", "Molluscs")        , "acute"          , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72, 96)),
-    c("Invertebrates", "Molluscs")        , "chronic"        , "MOR"                 , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(504, 672)),
+    c("Invertebrates", "Molluscs")        , "acute"          , "MOR"                        , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(24, 48, 72, 96)) ,
+    c("Invertebrates", "Molluscs")        , "chronic"        , "MOR"                        , NULL            , c("g/L", "g/g") , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur %in% c(504, 672))       ,
     # Worms
-    "Worms"                               , "acute"          , "MOR"                 , NULL            , "g/g"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur == 336)          ,
-    "Worms"                               , "chronic"        , "MOR"                 , NULL            , "g/g"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur <= 336)          ,
+    "Worms"                               , "acute"          , "MOR"                        , NULL            , "g/g"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur == 336)                 ,
+    "Worms"                               , "chronic"        , "MOR"                        , NULL            , "g/g"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur <= 336)                 ,
     # Crustaceans
-    "Crustaceans"                         , "acute"          , "MOR"                 , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 96)           ,
-    "Crustaceans"                         , "chronic"        , "MOR"                 , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur >= 672)          ,
+    "Crustaceans"                         , "acute"          , "MOR"                        , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 96)                  ,
+    "Crustaceans"                         , "chronic"        , "MOR"                        , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur >= 672)                 ,
     # Algae, Fungi, Moss, Hornworts
-    c("Algae", "Fungi", "Moss/Hornworts") , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)          ,
-    c("Algae", "Fungi", "Moss/Hornworts") , "chronic"        , NULL                  , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 96)           ,
+    c("Algae", "Fungi", "Moss/Hornworts") , "acute"          , NULL                         , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)                 ,
+    c("Algae", "Fungi", "Moss/Hornworts") , "chronic"        , NULL                         , NULL            , "g/L"           , c("NOEC", "NOEL", "NR-ZERO") , rlang::expr(new_dur == 96)                  ,
     # Flowers, Trees, Shrubs, Ferns
-    "Flowers/Trees/Shrubs/Ferns"          , "acute"          , NULL                  , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)          ,
-    "Flowers/Trees/Shrubs/Ferns"          , "chronic"        , rlang::expr(effect != "MOR"), NULL         , NULL            , c("NOEC", "NOEL", "NR-ZERO") , NULL
+    "Flowers/Trees/Shrubs/Ferns"          , "acute"          , NULL                         , NULL            , "g/L"           , c("LD50", "LC50", "EC50")    , rlang::expr(new_dur <= 168)                 ,
+    "Flowers/Trees/Shrubs/Ferns"          , "chronic"        , rlang::expr(effect != "MOR") , NULL            , NULL            , c("NOEC", "NOEL", "NR-ZERO") , NULL
   ) |>
     dplyr::relocate(final_test_type, .after = dplyr::last_col())
 
@@ -1099,4 +1099,3 @@
   invisible(output_path)
 }
 .build_ecotox_db()
-

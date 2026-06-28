@@ -33,4 +33,3 @@ test_that("chemi_chet_reaction_database_old passes request metadata to helper", 
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })
-

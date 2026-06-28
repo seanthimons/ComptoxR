@@ -21,7 +21,10 @@ test_that("chemi_chet_chemicals_verify passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_chet_chemicals_verify(dtxsid = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_chet_chemicals_verify(dtxsid = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

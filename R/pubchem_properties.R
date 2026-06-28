@@ -2,24 +2,63 @@
 
 # All valid PubChem computed property names (prevents path injection)
 .pubchem_valid_properties <- c(
-  "MolecularFormula", "MolecularWeight", "CanonicalSMILES", "IsomericSMILES",
-  "InChI", "InChIKey", "IUPACName", "XLogP", "ExactMass", "MonoisotopicMass",
-  "TPSA", "Complexity", "Charge", "HBondDonorCount", "HBondAcceptorCount",
-  "RotatableBondCount", "HeavyAtomCount", "IsotopeAtomCount", "AtomStereoCount",
-  "DefinedAtomStereoCount", "UndefinedAtomStereoCount", "BondStereoCount",
-  "DefinedBondStereoCount", "UndefinedBondStereoCount", "CovalentUnitCount",
-  "Volume3D", "XStericQuadrupole3D", "YStericQuadrupole3D", "ZStericQuadrupole3D",
-  "FeatureCount3D", "FeatureAcceptorCount3D", "FeatureDonorCount3D",
-  "FeatureAnionCount3D", "FeatureCationCount3D", "FeatureRingCount3D",
-  "FeatureHydrophobeCount3D", "ConformerModelRMSD3D", "EffectiveRotorCount3D",
-  "ConformerCount3D", "Fingerprint2D"
+  "MolecularFormula",
+  "MolecularWeight",
+  "CanonicalSMILES",
+  "IsomericSMILES",
+  "InChI",
+  "InChIKey",
+  "IUPACName",
+  "XLogP",
+  "ExactMass",
+  "MonoisotopicMass",
+  "TPSA",
+  "Complexity",
+  "Charge",
+  "HBondDonorCount",
+  "HBondAcceptorCount",
+  "RotatableBondCount",
+  "HeavyAtomCount",
+  "IsotopeAtomCount",
+  "AtomStereoCount",
+  "DefinedAtomStereoCount",
+  "UndefinedAtomStereoCount",
+  "BondStereoCount",
+  "DefinedBondStereoCount",
+  "UndefinedBondStereoCount",
+  "CovalentUnitCount",
+  "Volume3D",
+  "XStericQuadrupole3D",
+  "YStericQuadrupole3D",
+  "ZStericQuadrupole3D",
+  "FeatureCount3D",
+  "FeatureAcceptorCount3D",
+  "FeatureDonorCount3D",
+  "FeatureAnionCount3D",
+  "FeatureCationCount3D",
+  "FeatureRingCount3D",
+  "FeatureHydrophobeCount3D",
+  "ConformerModelRMSD3D",
+  "EffectiveRotorCount3D",
+  "ConformerCount3D",
+  "Fingerprint2D"
 )
 
 # Default property set for pubchem_properties()
 .pubchem_default_properties <- c(
-  "MolecularFormula", "MolecularWeight", "CanonicalSMILES", "InChI", "InChIKey",
-  "XLogP", "TPSA", "HBondDonorCount", "HBondAcceptorCount", "Complexity",
-  "ExactMass", "MonoisotopicMass", "HeavyAtomCount"
+  "MolecularFormula",
+  "MolecularWeight",
+  "CanonicalSMILES",
+  "InChI",
+  "InChIKey",
+  "XLogP",
+  "TPSA",
+  "HBondDonorCount",
+  "HBondAcceptorCount",
+  "Complexity",
+  "ExactMass",
+  "MonoisotopicMass",
+  "HeavyAtomCount"
 )
 
 #' Fetch computed properties from PubChem

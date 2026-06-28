@@ -19,17 +19,18 @@ error_cassettes <- check_cassette_errors(delete = FALSE)
 # Check 3: Parse validity (can YAML be read?)
 cli_h2("Checking YAML parse validity")
 fixtures_dir <- here::here("tests/testthat/fixtures")
-cassettes <- list.files(fixtures_dir,
-                       pattern = "\\.yml$",
-                       full.names = TRUE)
+cassettes <- list.files(fixtures_dir, pattern = "\\.yml$", full.names = TRUE)
 
 parse_errors <- list()
 for (cassette in cassettes) {
-  tryCatch({
-    yaml::read_yaml(cassette)
-  }, error = function(e) {
-    parse_errors[[basename(cassette)]] <<- e$message
-  })
+  tryCatch(
+    {
+      yaml::read_yaml(cassette)
+    },
+    error = function(e) {
+      parse_errors[[basename(cassette)]] <<- e$message
+    }
+  )
 }
 
 if (length(parse_errors) > 0) {
@@ -49,9 +50,11 @@ cli_alert_info("Safety issues: {length(safety_issues)}")
 cli_alert_info("Error responses: {nrow(error_cassettes)}")
 cli_alert_info("Parse errors: {length(parse_errors)}")
 
-if (length(safety_issues) == 0 &&
+if (
+  length(safety_issues) == 0 &&
     nrow(error_cassettes) == 0 &&
-    length(parse_errors) == 0) {
+    length(parse_errors) == 0
+) {
   cli_alert_success("All health checks passed!")
   quit(status = 0)
 } else {

@@ -21,7 +21,12 @@ test_that("ct_bioactivity_aop_search_by_event_number passes request metadata to 
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_aop_search_by_event_number(eventNumber = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_aop_search_by_event_number(
+      eventNumber = "DTXSID7020182"
+    ))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

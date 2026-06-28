@@ -21,7 +21,10 @@ test_that("chemi_stdizer passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_stdizer(workflow = "DTXSID7020182", smiles = "CCCC"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_stdizer(workflow = "DTXSID7020182", smiles = "CCCC"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

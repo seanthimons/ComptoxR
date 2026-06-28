@@ -92,8 +92,7 @@ eco_path <- function() {
 #' @return Invisibly, the destination path.
 #' @export
 #' @family ecotox
-eco_install <- function(source = NULL, build = FALSE, tag = "latest",
-                        overwrite = FALSE) {
+eco_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
   dest <- eco_path()
   dest_dir <- dirname(dest)
 
@@ -137,7 +136,9 @@ eco_install <- function(source = NULL, build = FALSE, tag = "latest",
     }
   )
 
-  if (!file.exists(dest)) cli::cli_abort("Installation failed: database not found at {.path {dest}}")
+  if (!file.exists(dest)) {
+    cli::cli_abort("Installation failed: database not found at {.path {dest}}")
+  }
   invisible(dest)
 }
 

@@ -21,7 +21,10 @@ test_that("chemi_amos_fact_sheets_for_substance passes request metadata to helpe
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_amos_fact_sheets_for_substance(dtxsid = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_amos_fact_sheets_for_substance(dtxsid = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

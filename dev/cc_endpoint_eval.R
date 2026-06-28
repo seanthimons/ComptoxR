@@ -34,7 +34,7 @@ cc_config <- list(
   param_strategy = "extra_params",
   example_query = "123-91-1",
   lifecycle_badge = "experimental",
-	batch_limit = 1
+  batch_limit = 1
 )
 
 #==============================================================================
@@ -56,7 +56,7 @@ endpoints <- map(
   },
   .progress = TRUE
 ) %>%
-  list_rbind() %>% 
+  list_rbind() %>%
   mutate(
     # Clean route: remove {param} placeholders, leading slashes
     route = strip_curly_params(route, leading_slash = 'remove'),
@@ -107,15 +107,20 @@ endpoints <- map(
 
 # Search R/ directory for existing endpoint implementations
 cc_res <- find_endpoint_usages_base(
-	endpoints$route, 
-	pkg_dir = here::here("R"),
-	files_regex = "^cc_.*\\.R$",
-	expected_files = endpoints$file
+  endpoints$route,
+  pkg_dir = here::here("R"),
+  files_regex = "^cc_.*\\.R$",
+  expected_files = endpoints$file
 )
 
 # Filter to endpoints with no hits (not yet implemented)
 endpoints_to_build <- endpoints %>%
-  filter(route %in% {cc_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+  filter(
+    route %in%
+      {
+        cc_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)
+      }
+  )
 
 # ==============================================================================
 # Generate Function Stubs
@@ -141,8 +146,8 @@ spec_with_text <- render_endpoint_stubs(
 scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = FALSE)
 
 # Inspect results (which files were created/skipped/errored):
-scaffold_result %>% filter(action == "skipped")  # Files that already existed
-scaffold_result %>% filter(action == "error")    # Files that failed to write
+scaffold_result %>% filter(action == "skipped") # Files that already existed
+scaffold_result %>% filter(action == "error") # Files that failed to write
 
 # ==============================================================================
 # Cleanup

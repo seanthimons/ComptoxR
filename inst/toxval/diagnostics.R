@@ -28,9 +28,14 @@ toxval_diag_columns <- function(con = NULL) {
   cli::cli_h1("ToxValDB Column Coverage ({total} rows)")
 
   results <- purrr::map_dfr(cols, function(col) {
-    nn <- DBI::dbGetQuery(con, sprintf(
-      'SELECT count("%s") AS n FROM toxval WHERE "%s" IS NOT NULL', col, col
-    ))$n
+    nn <- DBI::dbGetQuery(
+      con,
+      sprintf(
+        'SELECT count("%s") AS n FROM toxval WHERE "%s" IS NOT NULL',
+        col,
+        col
+      )
+    )$n
     tibble::tibble(
       column = col,
       non_null = nn,
@@ -131,9 +136,7 @@ toxval_diag_quality <- function(con = NULL) {
 
   # Metadata
   meta <- tryCatch(
-    DBI::dbGetQuery(con,
-      "SELECT version_label, row_count, loaded_at FROM _metadata WHERE is_latest = TRUE"
-    ),
+    DBI::dbGetQuery(con, "SELECT version_label, row_count, loaded_at FROM _metadata WHERE is_latest = TRUE"),
     error = function(e) data.frame()
   )
   if (nrow(meta) > 0) {
@@ -145,9 +148,7 @@ toxval_diag_quality <- function(con = NULL) {
   cli::cli_alert_info("Actual row count: {total}")
 
   # Source distribution
-  sources <- DBI::dbGetQuery(con,
-    "SELECT source, count(*) AS n FROM toxval GROUP BY source ORDER BY n DESC LIMIT 10"
-  )
+  sources <- DBI::dbGetQuery(con, "SELECT source, count(*) AS n FROM toxval GROUP BY source ORDER BY n DESC LIMIT 10")
   cli::cli_h2("Top 10 Sources")
   for (i in seq_len(nrow(sources))) {
     cli::cli_alert("{sources$source[i]}: {sources$n[i]} rows")
@@ -157,9 +158,7 @@ toxval_diag_quality <- function(con = NULL) {
   cli::cli_alert_info("Total distinct sources: {n_sources}")
 
   # QC status breakdown
-  qc <- DBI::dbGetQuery(con,
-    "SELECT qc_status, count(*) AS n FROM toxval GROUP BY qc_status ORDER BY n DESC"
-  )
+  qc <- DBI::dbGetQuery(con, "SELECT qc_status, count(*) AS n FROM toxval GROUP BY qc_status ORDER BY n DESC")
   cli::cli_h2("QC Status Distribution")
   for (i in seq_len(nrow(qc))) {
     label <- if (is.na(qc$qc_status[i])) "<NA>" else qc$qc_status[i]
@@ -169,9 +168,13 @@ toxval_diag_quality <- function(con = NULL) {
   # Key identifier coverage
   cli::cli_h2("Key Identifier Coverage")
   for (col in c("dtxsid", "casrn", "name", "human_eco")) {
-    nn <- DBI::dbGetQuery(con, sprintf(
-      'SELECT count(*) AS n FROM toxval WHERE "%s" IS NOT NULL', col
-    ))$n
+    nn <- DBI::dbGetQuery(
+      con,
+      sprintf(
+        'SELECT count(*) AS n FROM toxval WHERE "%s" IS NOT NULL',
+        col
+      )
+    )$n
     pct <- round(100 * nn / total, 1)
     if (pct > 95) {
       cli::cli_alert_success("{col}: {pct}%")
@@ -183,9 +186,7 @@ toxval_diag_quality <- function(con = NULL) {
   }
 
   # human_eco distribution (design decision: is this a useful filter?)
-  he <- DBI::dbGetQuery(con,
-    "SELECT human_eco, count(*) AS n FROM toxval GROUP BY human_eco ORDER BY n DESC"
-  )
+  he <- DBI::dbGetQuery(con, "SELECT human_eco, count(*) AS n FROM toxval GROUP BY human_eco ORDER BY n DESC")
   cli::cli_h2("human_eco Distribution (filter param validation)")
   for (i in seq_len(nrow(he))) {
     label <- if (is.na(he$human_eco[i])) "<NA>" else he$human_eco[i]
@@ -221,7 +222,9 @@ toxval_diag_clowder <- function() {
     }
   )
 
-  if (is.null(resp)) return(invisible(NULL))
+  if (is.null(resp)) {
+    return(invisible(NULL))
+  }
 
   files <- httr2::resp_body_json(resp)
   cli::cli_alert_info("Total items in dataset: {length(files)}")

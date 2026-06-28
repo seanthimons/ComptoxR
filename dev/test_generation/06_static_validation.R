@@ -18,18 +18,23 @@ tg_validate_generated_text <- function(text, file = "<memory>") {
   if (grepl("works without parameters", text, fixed = TRUE)) {
     errors <- c(errors, "contains retired no-parameter test wording")
   }
-  if (!grepl("\\blocal_mocked_bindings\\s*\\(", text, perl = TRUE) &&
-      !grepl("\\bwith_mocked_bindings\\s*\\(", text, perl = TRUE)) {
+  if (
+    !grepl("\\blocal_mocked_bindings\\s*\\(", text, perl = TRUE) &&
+      !grepl("\\bwith_mocked_bindings\\s*\\(", text, perl = TRUE)
+  ) {
     errors <- c(errors, "does not mock request helper bindings")
   }
 
-  parse_ok <- tryCatch({
-    parse(text = text)
-    TRUE
-  }, error = function(e) {
-    errors <<- c(errors, paste("parse error:", conditionMessage(e)))
-    FALSE
-  })
+  parse_ok <- tryCatch(
+    {
+      parse(text = text)
+      TRUE
+    },
+    error = function(e) {
+      errors <<- c(errors, paste("parse error:", conditionMessage(e)))
+      FALSE
+    }
+  )
 
   list(
     file = file,

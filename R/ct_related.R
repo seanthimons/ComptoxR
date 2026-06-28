@@ -57,7 +57,7 @@ ct_related <- function(query, inclusive = FALSE) {
         batch_limit = 0,
         auth = FALSE,
         tidy = FALSE,
-        id = dtxsid  # Named parameter becomes query parameter
+        id = dtxsid # Named parameter becomes query parameter
       )
     },
     .progress = TRUE
@@ -85,7 +85,7 @@ ct_related <- function(query, inclusive = FALSE) {
 
   data <- data %>%
     dplyr::rename(child = dtxsid) %>%
-    dplyr::filter(child != query)  # Remove parent compound
+    dplyr::filter(child != query) # Remove parent compound
 
   # Apply inclusive filtering if requested
   if (inclusive == TRUE) {

@@ -21,7 +21,10 @@ test_that("chemi_amos_analytical_qc_pagination passes request metadata to helper
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_amos_analytical_qc_pagination(limit = 1L))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_amos_analytical_qc_pagination(limit = 1L))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

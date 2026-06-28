@@ -23,81 +23,92 @@ extract_function_params <- function(file_path, function_name) {
   }
 
   # Try parse-based approach first (robust for complete files)
-  tryCatch({
-    parsed <- parse(file = file_path)
+  tryCatch(
+    {
+      parsed <- parse(file = file_path)
 
-    for (i in seq_along(parsed)) {
-      expr <- parsed[[i]]
-      # Look for: function_name <- function(...)
-      if (is.call(expr) && as.character(expr[[1]]) == "<-" &&
-          is.name(expr[[2]]) && as.character(expr[[2]]) == function_name &&
-          is.call(expr[[3]]) && as.character(expr[[3]][[1]]) == "function") {
-        fn_expr <- expr[[3]]
-        return(names(formals(eval(fn_expr))))
+      for (i in seq_along(parsed)) {
+        expr <- parsed[[i]]
+        # Look for: function_name <- function(...)
+        if (
+          is.call(expr) &&
+            as.character(expr[[1]]) == "<-" &&
+            is.name(expr[[2]]) &&
+            as.character(expr[[2]]) == function_name &&
+            is.call(expr[[3]]) &&
+            as.character(expr[[3]][[1]]) == "function"
+        ) {
+          fn_expr <- expr[[3]]
+          return(names(formals(eval(fn_expr))))
+        }
       }
-    }
 
-    # Function not found in parsed expressions
-    return(NULL)
-  }, error = function(e) {
-    # Parse failed - fall back to regex
-    NULL
-  })
+      # Function not found in parsed expressions
+      return(NULL)
+    },
+    error = function(e) {
+      # Parse failed - fall back to regex
+      NULL
+    }
+  )
 
   # Regex fallback for incomplete/non-parseable files
-  tryCatch({
-    content <- readLines(file_path, warn = FALSE)
+  tryCatch(
+    {
+      content <- readLines(file_path, warn = FALSE)
 
-    # Find function definition: function_name <- function(...)
-    fn_pattern <- paste0("^\\s*", function_name, "\\s*<-\\s*function\\s*\\(")
-    fn_line_idx <- grep(fn_pattern, content)
+      # Find function definition: function_name <- function(...)
+      fn_pattern <- paste0("^\\s*", function_name, "\\s*<-\\s*function\\s*\\(")
+      fn_line_idx <- grep(fn_pattern, content)
 
-    if (length(fn_line_idx) == 0) {
+      if (length(fn_line_idx) == 0) {
+        return(NULL)
+      }
+
+      # Extract function signature (may span multiple lines)
+      start_idx <- fn_line_idx[1]
+      sig_text <- content[start_idx]
+
+      # Find matching closing parenthesis
+      open_count <- stringr::str_count(sig_text, "\\(")
+      close_count <- stringr::str_count(sig_text, "\\)")
+
+      idx <- start_idx
+      while (open_count > close_count && idx < length(content)) {
+        idx <- idx + 1
+        sig_text <- paste(sig_text, content[idx])
+        open_count <- open_count + stringr::str_count(content[idx], "\\(")
+        close_count <- close_count + stringr::str_count(content[idx], "\\)")
+      }
+
+      # Extract parameters from signature
+      # Match: function(...params...)
+      sig_match <- stringr::str_match(sig_text, "function\\s*\\(([^\\)]*)\\)")
+      if (is.na(sig_match[1, 2])) {
+        return(character(0)) # No params (function())
+      }
+
+      params_str <- sig_match[1, 2]
+
+      # Split by comma and extract parameter names
+      params <- strsplit(params_str, ",")[[1]]
+      params <- trimws(params)
+      params <- params[nzchar(params)]
+
+      # Remove defaults (everything after =)
+      params <- gsub("\\s*=\\s*.*$", "", params)
+      params <- trimws(params)
+
+      return(params)
+    },
+    error = function(e) {
+      cli::cli_warn(c(
+        "!" = "Failed to extract parameters for {.fn {function_name}} in {.file {basename(file_path)}}",
+        "i" = "Parse error: {e$message}"
+      ))
       return(NULL)
     }
-
-    # Extract function signature (may span multiple lines)
-    start_idx <- fn_line_idx[1]
-    sig_text <- content[start_idx]
-
-    # Find matching closing parenthesis
-    open_count <- stringr::str_count(sig_text, "\\(")
-    close_count <- stringr::str_count(sig_text, "\\)")
-
-    idx <- start_idx
-    while (open_count > close_count && idx < length(content)) {
-      idx <- idx + 1
-      sig_text <- paste(sig_text, content[idx])
-      open_count <- open_count + stringr::str_count(content[idx], "\\(")
-      close_count <- close_count + stringr::str_count(content[idx], "\\)")
-    }
-
-    # Extract parameters from signature
-    # Match: function(...params...)
-    sig_match <- stringr::str_match(sig_text, "function\\s*\\(([^\\)]*)\\)")
-    if (is.na(sig_match[1, 2])) {
-      return(character(0))  # No params (function())
-    }
-
-    params_str <- sig_match[1, 2]
-
-    # Split by comma and extract parameter names
-    params <- strsplit(params_str, ",")[[1]]
-    params <- trimws(params)
-    params <- params[nzchar(params)]
-
-    # Remove defaults (everything after =)
-    params <- gsub("\\s*=\\s*.*$", "", params)
-    params <- trimws(params)
-
-    return(params)
-  }, error = function(e) {
-    cli::cli_warn(c(
-      "!" = "Failed to extract parameters for {.fn {function_name}} in {.file {basename(file_path)}}",
-      "i" = "Parse error: {e$message}"
-    ))
-    return(NULL)
-  })
+  )
 }
 
 #' Detect parameter drift between schema and codebase
@@ -111,9 +122,15 @@ extract_function_params <- function(file_path, function_name) {
 #' @return Tibble with columns: endpoint, file, function_name, drift_type, param_name, schema_value, code_value
 #' @export
 detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
-  if (!requireNamespace("here", quietly = TRUE)) stop("Package 'here' is required.")
-  if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
-  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
+  if (!requireNamespace("here", quietly = TRUE)) {
+    stop("Package 'here' is required.")
+  }
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is required.")
+  }
+  if (!requireNamespace("purrr", quietly = TRUE)) {
+    stop("Package 'purrr' is required.")
+  }
 
   # Filter to implemented endpoints only
   implemented <- usage_summary %>%
@@ -143,7 +160,7 @@ detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
       dplyr::slice(1)
 
     if (nrow(endpoint_row) == 0) {
-      next  # Schema not found for this endpoint (shouldn't happen)
+      next # Schema not found for this endpoint (shouldn't happen)
     }
 
     # Build full path
@@ -152,7 +169,7 @@ detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
     } else if (here::here(pkg_dir, file_path) %>% file.exists()) {
       here::here(pkg_dir, file_path)
     } else {
-      next  # File not found
+      next # File not found
     }
 
     # Derive function name from file path
@@ -171,24 +188,21 @@ detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
     schema_params <- character()
 
     # Path parameters
-    if (!is.null(endpoint_row$path_params) && !is.na(endpoint_row$path_params) &&
-        nzchar(endpoint_row$path_params)) {
+    if (!is.null(endpoint_row$path_params) && !is.na(endpoint_row$path_params) && nzchar(endpoint_row$path_params)) {
       path_p <- strsplit(endpoint_row$path_params, ",")[[1]]
       path_p <- trimws(path_p)
       schema_params <- c(schema_params, path_p)
     }
 
     # Query parameters
-    if (!is.null(endpoint_row$query_params) && !is.na(endpoint_row$query_params) &&
-        nzchar(endpoint_row$query_params)) {
+    if (!is.null(endpoint_row$query_params) && !is.na(endpoint_row$query_params) && nzchar(endpoint_row$query_params)) {
       query_p <- strsplit(endpoint_row$query_params, ",")[[1]]
       query_p <- trimws(query_p)
       schema_params <- c(schema_params, query_p)
     }
 
     # Body parameters
-    if (!is.null(endpoint_row$body_params) && !is.na(endpoint_row$body_params) &&
-        nzchar(endpoint_row$body_params)) {
+    if (!is.null(endpoint_row$body_params) && !is.na(endpoint_row$body_params) && nzchar(endpoint_row$body_params)) {
       body_p <- strsplit(endpoint_row$body_params, ",")[[1]]
       body_p <- trimws(body_p)
       schema_params <- c(schema_params, body_p)
@@ -197,13 +211,18 @@ detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
     schema_params <- unique(schema_params[nzchar(schema_params)])
 
     # Sanitize schema params (match what the generator would do)
-    schema_params_sanitized <- vapply(schema_params, function(x) {
-      if (grepl("^[0-9]", x)) {
-        paste0("x", x)
-      } else {
-        make.names(x)
-      }
-    }, character(1), USE.NAMES = FALSE)
+    schema_params_sanitized <- vapply(
+      schema_params,
+      function(x) {
+        if (grepl("^[0-9]", x)) {
+          paste0("x", x)
+        } else {
+          make.names(x)
+        }
+      },
+      character(1),
+      USE.NAMES = FALSE
+    )
 
     # Remove framework parameters from code_params
     code_params_filtered <- setdiff(code_params, FRAMEWORK_PARAMS)
@@ -220,36 +239,48 @@ detect_parameter_drift <- function(endpoints, usage_summary, pkg_dir = "R") {
 
       # Get type from metadata if available
       param_type <- "unknown"
-      if (!is.null(endpoint_row$path_param_metadata[[1]]) && orig_name %in% names(endpoint_row$path_param_metadata[[1]])) {
+      if (
+        !is.null(endpoint_row$path_param_metadata[[1]]) && orig_name %in% names(endpoint_row$path_param_metadata[[1]])
+      ) {
         param_type <- endpoint_row$path_param_metadata[[1]][[orig_name]]$type %||% "unknown"
-      } else if (!is.null(endpoint_row$query_param_metadata[[1]]) && orig_name %in% names(endpoint_row$query_param_metadata[[1]])) {
+      } else if (
+        !is.null(endpoint_row$query_param_metadata[[1]]) && orig_name %in% names(endpoint_row$query_param_metadata[[1]])
+      ) {
         param_type <- endpoint_row$query_param_metadata[[1]][[orig_name]]$type %||% "unknown"
-      } else if (!is.null(endpoint_row$body_param_metadata[[1]]) && orig_name %in% names(endpoint_row$body_param_metadata[[1]])) {
+      } else if (
+        !is.null(endpoint_row$body_param_metadata[[1]]) && orig_name %in% names(endpoint_row$body_param_metadata[[1]])
+      ) {
         param_type <- endpoint_row$body_param_metadata[[1]][[orig_name]]$type %||% "unknown"
       }
 
-      drift_results <- c(drift_results, list(tibble::tibble(
-        endpoint = endpoint_route,
-        file = file_path,
-        function_name = function_name,
-        drift_type = "param_added",
-        param_name = param,
-        schema_value = paste0("type: ", param_type),
-        code_value = NA_character_
-      )))
+      drift_results <- c(
+        drift_results,
+        list(tibble::tibble(
+          endpoint = endpoint_route,
+          file = file_path,
+          function_name = function_name,
+          drift_type = "param_added",
+          param_name = param,
+          schema_value = paste0("type: ", param_type),
+          code_value = NA_character_
+        ))
+      )
     }
 
     # Record removed parameters
     for (param in removed_from_schema) {
-      drift_results <- c(drift_results, list(tibble::tibble(
-        endpoint = endpoint_route,
-        file = file_path,
-        function_name = function_name,
-        drift_type = "param_removed",
-        param_name = param,
-        schema_value = NA_character_,
-        code_value = "present in function"
-      )))
+      drift_results <- c(
+        drift_results,
+        list(tibble::tibble(
+          endpoint = endpoint_route,
+          file = file_path,
+          function_name = function_name,
+          drift_type = "param_removed",
+          param_name = param,
+          schema_value = NA_character_,
+          code_value = "present in function"
+        ))
+      )
     }
   }
 

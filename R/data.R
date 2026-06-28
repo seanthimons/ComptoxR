@@ -68,7 +68,7 @@
 'cust_pal'
 
 #' Cheminformatics hazard comparison palette
-#' 
+#'
 #' Five colors from website
-#' 
+#'
 'cheminformatics_hazard_pal'

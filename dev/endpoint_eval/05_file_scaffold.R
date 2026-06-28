@@ -14,7 +14,9 @@
 has_protected_lifecycle <- function(path) {
   protected_statuses <- c("stable", "maturing", "superseded", "deprecated", "defunct")
   lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) character())
-  if (length(lines) == 0) return(FALSE)
+  if (length(lines) == 0) {
+    return(FALSE)
+  }
 
   # Match lifecycle::badge("status") patterns
   badges <- stringr::str_extract_all(
@@ -23,7 +25,9 @@ has_protected_lifecycle <- function(path) {
   )
 
   statuses <- unlist(badges, use.names = FALSE)
-  if (length(statuses) == 0) return(FALSE)
+  if (length(statuses) == 0) {
+    return(FALSE)
+  }
 
   # Extract just the status string from the badge call
   statuses <- stringr::str_extract(statuses, '(?<=badge\\(")[^"]+')
@@ -68,13 +72,25 @@ scaffold_files <- function(
   quiet = FALSE
 ) {
   stopifnot(is.data.frame(data))
-  if (!requireNamespace("fs", quietly = TRUE)) stop("Package 'fs' is required.")
-  if (!requireNamespace("readr", quietly = TRUE)) stop("Package 'readr' is required.")
-  if (!requireNamespace("dplyr", quietly = TRUE)) stop("Package 'dplyr' is required.")
-  if (!requireNamespace("purrr", quietly = TRUE)) stop("Package 'purrr' is required.")
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("Package 'fs' is required.")
+  }
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("Package 'readr' is required.")
+  }
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is required.")
+  }
+  if (!requireNamespace("purrr", quietly = TRUE)) {
+    stop("Package 'purrr' is required.")
+  }
 
-  if (!path_col %in% names(data)) stop(sprintf("Column '%s' not found in data.", path_col))
-  if (!text_col %in% names(data)) stop(sprintf("Column '%s' not found in data.", text_col))
+  if (!path_col %in% names(data)) {
+    stop(sprintf("Column '%s' not found in data.", path_col))
+  }
+  if (!text_col %in% names(data)) {
+    stop(sprintf("Column '%s' not found in data.", text_col))
+  }
 
   # Normalize and join paths with base_dir (if relative)
   paths <- purrr::map_chr(data[[path_col]], function(p) {
@@ -83,8 +99,8 @@ scaffold_files <- function(
 
   jobs <- dplyr::tibble(
     index = seq_len(nrow(data)),
-    path  = paths,
-    text  = data[[text_col]]
+    path = paths,
+    text = data[[text_col]]
   )
 
   write_one <- function(index, path, text) {
@@ -95,7 +111,9 @@ scaffold_files <- function(
 
     # Ensure directory exists
     dir_path <- fs::path_dir(path)
-    if (!fs::dir_exists(dir_path)) fs::dir_create(dir_path, recurse = TRUE)
+    if (!fs::dir_exists(dir_path)) {
+      fs::dir_create(dir_path, recurse = TRUE)
+    }
 
     existed <- fs::file_exists(path)
 
@@ -112,43 +130,73 @@ scaffold_files <- function(
           )
         }
         return(dplyr::tibble(
-          index = index, path = path, action = "skipped_lifecycle",
-          existed = TRUE, written = FALSE, size_bytes = file.size(path)
+          index = index,
+          path = path,
+          action = "skipped_lifecycle",
+          existed = TRUE,
+          written = FALSE,
+          size_bytes = file.size(path)
         ))
       }
     }
 
     # Decide whether to skip, append, or write fresh/overwrite
     if (existed && !overwrite && !append) {
-      if (!quiet) message(sprintf("Skipping (exists): %s", path))
+      if (!quiet) {
+        message(sprintf("Skipping (exists): %s", path))
+      }
       return(dplyr::tibble(
-        index = index, path = path, action = "skipped_exists",
-        existed = TRUE, written = FALSE, size_bytes = if (existed) file.size(path) else NA_real_
+        index = index,
+        path = path,
+        action = "skipped_exists",
+        existed = TRUE,
+        written = FALSE,
+        size_bytes = if (existed) file.size(path) else NA_real_
       ))
     }
 
-    action <- if (append && existed) "appended" else if (existed) "overwritten" else "created"
+    action <- if (append && existed) {
+      "appended"
+    } else if (existed) {
+      "overwritten"
+    } else {
+      "created"
+    }
 
-    out <- tryCatch({
-      if (length(text) > 1) {
-        readr::write_lines(text, path, append = append)
-      } else {
-        readr::write_file(as.character(text %||% ""), path, append = append)
-      }
-      TRUE
-    }, error = function(e) e)
+    out <- tryCatch(
+      {
+        if (length(text) > 1) {
+          readr::write_lines(text, path, append = append)
+        } else {
+          readr::write_file(as.character(text %||% ""), path, append = append)
+        }
+        TRUE
+      },
+      error = function(e) e
+    )
 
     if (isTRUE(out)) {
-      if (!quiet) message(sprintf("%s: %s", action, path))
+      if (!quiet) {
+        message(sprintf("%s: %s", action, path))
+      }
       dplyr::tibble(
-        index = index, path = path, action = action,
-        existed = existed, written = TRUE, size_bytes = file.size(path)
+        index = index,
+        path = path,
+        action = action,
+        existed = existed,
+        written = TRUE,
+        size_bytes = file.size(path)
       )
     } else {
-      if (!quiet) message(sprintf("Error writing %s: %s", path, out$message))
+      if (!quiet) {
+        message(sprintf("Error writing %s: %s", path, out$message))
+      }
       dplyr::tibble(
-        index = index, path = path, action = "error",
-        existed = existed, written = FALSE,
+        index = index,
+        path = path,
+        action = "error",
+        existed = existed,
+        written = FALSE,
         size_bytes = if (fs::file_exists(path)) file.size(path) else NA_real_
       )
     }
@@ -156,8 +204,12 @@ scaffold_files <- function(
 
   if (nrow(jobs) == 0) {
     return(dplyr::tibble(
-      index = integer(), path = character(), action = character(),
-      existed = logical(), written = logical(), size_bytes = numeric()
+      index = integer(),
+      path = character(),
+      action = character(),
+      existed = logical(),
+      written = logical(),
+      size_bytes = numeric()
     ))
   }
 

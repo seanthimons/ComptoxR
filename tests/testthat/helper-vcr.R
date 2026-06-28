@@ -6,7 +6,9 @@ vcr_dir <- if (requireNamespace("here", quietly = TRUE)) {
 } else {
   file.path("tests", "testthat", "fixtures")
 }
-if (!dir.exists(vcr_dir)) dir.create(vcr_dir, recursive = TRUE)
+if (!dir.exists(vcr_dir)) {
+  dir.create(vcr_dir, recursive = TRUE)
+}
 
 comptoxr_vcr_cran_safe_tests <- function() {
   if (exists("comptoxr_cran_safe_tests", mode = "function")) {
@@ -235,11 +237,14 @@ check_cassette_errors <- function(delete = FALSE) {
     codes <- as.integer(gsub("\\D", "", status_lines))
     error_codes <- codes[codes >= 400]
     if (length(error_codes) > 0) {
-      bad <- rbind(bad, data.frame(
-        cassette = fs::path_file(cassette),
-        status = error_codes[1],
-        stringsAsFactors = FALSE
-      ))
+      bad <- rbind(
+        bad,
+        data.frame(
+          cassette = fs::path_file(cassette),
+          status = error_codes[1],
+          stringsAsFactors = FALSE
+        )
+      )
     }
   }
 

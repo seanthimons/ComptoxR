@@ -90,18 +90,20 @@ util_classyfire <- function(query) {
       # --- Validate submission response ---
       submission_status <- httr2::resp_status(resp_classify)
       if (submission_status != 200) {
-          cli::cli_alert_danger("Unexpected HTTP status {submission_status} during submission for SMILES: {current_query}")
-          if (submission_status != 429) { # 429 is handled by httr2::req_retry
-              return(NULL)
-          }
+        cli::cli_alert_danger(
+          "Unexpected HTTP status {submission_status} during submission for SMILES: {current_query}"
+        )
+        if (submission_status != 429) {
+          # 429 is handled by httr2::req_retry
+          return(NULL)
+        }
       }
-  
-      
+
       job_id <- httr2::resp_body_json(resp_classify)$id
 
       # ! Temporary: print job_id
       print(paste("Job ID:", job_id))
-      
+
       if (is.null(job_id)) {
         cli::cli_alert_danger("Could not find job ID in submission response for SMILES: {current_query}")
         return(NULL)
@@ -117,9 +119,11 @@ util_classyfire <- function(query) {
       poll_interval <- 3
 
       for (i in seq_len(max_polls)) {
-          if (run_verbose) {
-          cli::cli_alert("({current_index}/{total_queries}) Polling for results for job ID: {job_id} (Attempt {i}/{max_polls})")
-          }
+        if (run_verbose) {
+          cli::cli_alert(
+            "({current_index}/{total_queries}) Polling for results for job ID: {job_id} (Attempt {i}/{max_polls})"
+          )
+        }
         req_result <-
           httr2::request(ctx_burl) %>%
           httr2::req_url_path_append(path = glue::glue("chem/classyfire/{job_id}/result")) %>%
@@ -134,7 +138,9 @@ util_classyfire <- function(query) {
         #print(paste("Polling Status Code:", status_code))
         if (status_code == 200) {
           if (run_verbose) {
-            cli::cli_alert_success("({current_index}/{total_queries}) Successfully retrieved result for job ID {job_id}")
+            cli::cli_alert_success(
+              "({current_index}/{total_queries}) Successfully retrieved result for job ID {job_id}"
+            )
           }
           return(httr2::resp_body_json(resp_result))
         } else if (status_code == 202) {
@@ -149,7 +155,9 @@ util_classyfire <- function(query) {
           cli::cli_alert_danger("Job ID {job_id} not found (404). It may have expired or never existed.")
           return(NULL)
         } else if (status_code == 422) {
-          cli::cli_alert_danger("Unprocessable entity (422) for job ID {job_id}. The SMILES string may be invalid for classification.")
+          cli::cli_alert_danger(
+            "Unprocessable entity (422) for job ID {job_id}. The SMILES string may be invalid for classification."
+          )
           return(NULL)
         } else {
           cli::cli_alert_danger("Unexpected HTTP error {status_code} when retrieving result for job ID {job_id}")

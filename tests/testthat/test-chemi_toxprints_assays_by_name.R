@@ -21,7 +21,10 @@ test_that("chemi_toxprints_assays_by_name passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_toxprints_assays_by_name(name = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_toxprints_assays_by_name(name = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
@@ -34,4 +37,3 @@ test_that("chemi_toxprints_assays_by_name passes request metadata to helper", {
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })
-

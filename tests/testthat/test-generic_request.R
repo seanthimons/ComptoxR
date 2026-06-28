@@ -6,7 +6,7 @@ test_that("generic_request dry run works independently of network", {
     Sys.setenv(run_debug = "FALSE")
     # Restore dummy key if needed, though setup.R handles it usually
   })
-  
+
   # Test POST request construction
   output <- capture_output(
     dry_run <- generic_request(
@@ -15,7 +15,7 @@ test_that("generic_request dry run works independently of network", {
       method = "POST"
     )
   )
-  
+
   expect_match(output, "POST")
   expect_match(output, "hazard")
   expect_match(output, "x-api-key: logic_test_key")
@@ -26,7 +26,7 @@ test_that("generic_request dry run works independently of network", {
 test_that("generic_request respects different server environments", {
   Sys.setenv(run_debug = "TRUE")
   on.exit(Sys.setenv(run_debug = "FALSE"))
-  
+
   # Custom server via literal URL
   output_custom <- capture_output(generic_request("A", "endpoint", server = "http://test.com/api"))
   expect_match(output_custom, "POST /api/endpoint")
@@ -39,7 +39,7 @@ test_that("generic_request handles batching logic correctly", {
     Sys.setenv(run_debug = "FALSE")
     Sys.setenv(batch_limit = "100")
   })
-  
+
   output <- capture_output(
     dry_run <- generic_request(
       query = c("A", "B", "C", "D", "E"),
@@ -47,14 +47,14 @@ test_that("generic_request handles batching logic correctly", {
       method = "POST"
     )
   )
-  
+
   expect_match(output, "\\[\\s*\"A\",\\s*\"B\"\\s*\\]")
 })
 
 test_that("generic_request tidies simple results into tibbles", {
   # Let's mock a simple list response
   test_data <- list(list(id = 1, name = "Test1"), list(id = 2, name = "Test2"))
-  
+
   testthat::with_mocked_bindings(
     req_perform = function(req) {
       httr2::response(
@@ -110,8 +110,13 @@ test_that("generic_request with paginate=FALSE preserves existing behavior", {
     },
     .package = "httr2",
     {
-      res <- generic_request("DTXSID7020182", "hazard", method = "POST",
-                             paginate = FALSE, pagination_strategy = "page_number")
+      res <- generic_request(
+        "DTXSID7020182",
+        "hazard",
+        method = "POST",
+        paginate = FALSE,
+        pagination_strategy = "page_number"
+      )
       expect_s3_class(res, "tbl_df")
       expect_equal(nrow(res), 1)
     }
@@ -154,7 +159,7 @@ test_that("generic_request with paginate=TRUE and page_number fetches multiple p
       )
       expect_s3_class(res, "tbl_df")
       expect_equal(nrow(res), 2)
-      expect_true(call_count >= 3)  # At least 3 calls (2 with data + 1 empty)
+      expect_true(call_count >= 3) # At least 3 calls (2 with data + 1 empty)
     }
   )
 })

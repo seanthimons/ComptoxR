@@ -70,8 +70,12 @@ PAGINATION_REGISTRY <- list(
 
 # Helper: NULL-coalesce
 `%||%` <- function(x, y) {
-  if (is.null(x)) return(y)
-  if (length(x) == 1 && is.na(x)) return(y)
+  if (is.null(x)) {
+    return(y)
+  }
+  if (length(x) == 1 && is.na(x)) {
+    return(y)
+  }
   x
 }
 

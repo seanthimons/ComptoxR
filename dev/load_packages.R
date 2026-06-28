@@ -46,107 +46,107 @@
   } else {
     ## Packages ----
 
-		booster_pack <- c(
-			### IO ----
+    booster_pack <- c(
+      ### IO ----
 
-			'fs',
-			'here',
-			'janitor',
-			'rio',
-			'tidyverse',
-			# 'data.table',
-			'mirai',
-			'parallel',
-			# 'targets',
-			# 'crew',
-			'digest', # file/ object hashing
+      'fs',
+      'here',
+      'janitor',
+      'rio',
+      'tidyverse',
+      # 'data.table',
+      'mirai',
+      'parallel',
+      # 'targets',
+      # 'crew',
+      'digest', # file/ object hashing
 
-			### DB ----
+      ### DB ----
 
-			# 'arrow',
-			'nanoparquet',
-			# 'duckdb',
-			# 'duckplyr',
-			# 'dbplyr',
+      # 'arrow',
+      'nanoparquet',
+      # 'duckdb',
+      # 'duckplyr',
+      # 'dbplyr',
 
-			### EDA ----
+      ### EDA ----
 
-			# 'skimr',
+      # 'skimr',
 
-			### Web ----
+      ### Web ----
 
-			'rvest',
-			'polite',
-			# 'plumber',
-			# 'plumber2', #Still experimental
-			'httr2',
-			# 'V8',
+      'rvest',
+      'polite',
+      # 'plumber',
+      # 'plumber2', #Still experimental
+      'httr2',
+      # 'V8',
 
-			### Plot ----
+      ### Plot ----
 
-			# 'paletteer',
-			# 'ragg',
-			# 'camcorder',
-			# 'esquisse',
-			# 'geofacet',
-			# 'patchwork',
-			# 'ggpubr', # Alternative to patchwork
-			# 'marquee',
-			# 'ggiraph',
-			# 'geomtextpath',
-			# 'ggpattern',
-			# 'ggbump',
-			# 'gghighlight',
-			# 'ggdist',
-			# 'ggforce',
-			# 'gghalves',
-			# 'ggtext',
-			# 'ggrepel', # Suggested for non-overlapping labels
-			# 'gganimate', # Suggested for animations
-			# 'ggsignif',
-			# 'ggTimeSeries',
-			# 'tidyheatmaps',
-			# 'ggdendro',
-			# 'ggstatsplot',
+      # 'paletteer',
+      # 'ragg',
+      # 'camcorder',
+      # 'esquisse',
+      # 'geofacet',
+      # 'patchwork',
+      # 'ggpubr', # Alternative to patchwork
+      # 'marquee',
+      # 'ggiraph',
+      # 'geomtextpath',
+      # 'ggpattern',
+      # 'ggbump',
+      # 'gghighlight',
+      # 'ggdist',
+      # 'ggforce',
+      # 'gghalves',
+      # 'ggtext',
+      # 'ggrepel', # Suggested for non-overlapping labels
+      # 'gganimate', # Suggested for animations
+      # 'ggsignif',
+      # 'ggTimeSeries',
+      # 'tidyheatmaps',
+      # 'ggdendro',
+      # 'ggstatsplot',
 
-			### Modeling ----
+      ### Modeling ----
 
-			# 'tidymodels',
-			# 'MuMIn',
+      # 'tidymodels',
+      # 'MuMIn',
 
-			### Shiny ----
+      ### Shiny ----
 
-			# 'shiny',
-			# 'bslib',
-			# 'DT',
-			# 'plotly',
+      # 'shiny',
+      # 'bslib',
+      # 'DT',
+      # 'plotly',
 
-			### Reporting ----
+      ### Reporting ----
 
-			# 'quarto',
-			# 'gt',
-			# 'gtsummary',
+      # 'quarto',
+      # 'gt',
+      # 'gtsummary',
 
-			### Spatial ----
+      ### Spatial ----
 
-			# 'sf',
-			# 'geoarrow',
-			# 'duckdbfs',
-			# 'duckspatial',
-			# 'ducksf',
-			# 'tidycensus', # Needs API
-			# 'mapgl',
-			# 'dataRetrieval', # Needs API
-			# 'StreamCatTools',
+      # 'sf',
+      # 'geoarrow',
+      # 'duckdbfs',
+      # 'duckspatial',
+      # 'ducksf',
+      # 'tidycensus', # Needs API
+      # 'mapgl',
+      # 'dataRetrieval', # Needs API
+      # 'StreamCatTools',
 
-			### Misc ----
+      ### Misc ----
 
-			'devtools',
-			# 'usethis',
-			'remotes'
-		)
+      'devtools',
+      # 'usethis',
+      'remotes'
+    )
 
-		# ! Change load flag to load packages
+    # ! Change load flag to load packages
     install_booster_pack(package = booster_pack, load = TRUE)
     rm(install_booster_pack, booster_pack)
   }
@@ -177,67 +177,67 @@
 
   # rm(github_packages, pkg, pkg_name)
 
-	# Custom Functions ----
+  # Custom Functions ----
 
-	`%ni%` <- Negate(`%in%`)
+  `%ni%` <- Negate(`%in%`)
 
-	# geometric_mean <- function(x) {
-	#   exp(mean(log(x[x > 0])))
-	# }
+  # geometric_mean <- function(x) {
+  #   exp(mean(log(x[x > 0])))
+  # }
 
-	# my_skim <- skim_with(
-	#   numeric = sfl(
-	#     n = length,
-	#     min = ~ min(.x, na.rm = TRUE),
-	#     p25 = ~ stats::quantile(., probs = .25, na.rm = TRUE, names = FALSE),
-	#     med = ~ median(.x, na.rm = TRUE),
-	#     p75 = ~ stats::quantile(., probs = .75, na.rm = TRUE, names = FALSE),
-	#     max = ~ max(.x, na.rm = TRUE),
-	#     mean = ~ mean(.x, na.rm = TRUE),
-	#     geo_mean = ~ geometric_mean(.x),
-	#     sd = ~ stats::sd(., na.rm = TRUE),
-	#     hist = ~ inline_hist(., 5)
-	#   ),
-	#   append = FALSE
-	# )
+  # my_skim <- skim_with(
+  #   numeric = sfl(
+  #     n = length,
+  #     min = ~ min(.x, na.rm = TRUE),
+  #     p25 = ~ stats::quantile(., probs = .25, na.rm = TRUE, names = FALSE),
+  #     med = ~ median(.x, na.rm = TRUE),
+  #     p75 = ~ stats::quantile(., probs = .75, na.rm = TRUE, names = FALSE),
+  #     max = ~ max(.x, na.rm = TRUE),
+  #     mean = ~ mean(.x, na.rm = TRUE),
+  #     geo_mean = ~ geometric_mean(.x),
+  #     sd = ~ stats::sd(., na.rm = TRUE),
+  #     hist = ~ inline_hist(., 5)
+  #   ),
+  #   append = FALSE
+  # )
 
-	# Mirai ----
+  # Mirai ----
 
-	# daemons(n = parallel::detectCores() - 2)
+  # daemons(n = parallel::detectCores() - 2)
 
-	# Camcorder ----
+  # Camcorder ----
 
-	# if(!dir.exists(here::here('output'))) {
-	#   dir.create(here::here('output'))
-	# }
+  # if(!dir.exists(here::here('output'))) {
+  #   dir.create(here::here('output'))
+  # }
 
-	# gg_record(
-	# 	here::here('output'),
-	# 	device = "png",
-	# 	width = 10,
-	# 	height = 7,
-	# 	units = "in",
-	# 	dpi = 320
-	# )
+  # gg_record(
+  # 	here::here('output'),
+  # 	device = "png",
+  # 	width = 10,
+  # 	height = 7,
+  # 	units = "in",
+  # 	dpi = 320
+  # )
 
-	# Theme ----
+  # Theme ----
 
-	# theme_custom <- function() {
-	# 	theme_minimal() +
-	# 		theme(
-	# 			plot.background = element_rect(colour = "white"),
-	# 			panel.grid.major = element_blank(),
-	# 			panel.grid.minor = element_blank(),
-	# 			strip.background = element_rect(colour = "white"),
-	# 			axis.text.x = element_text(angle = 90L)
-	# 		)
-	# }
-	
-	# Air TOML file setup -------------------------------------------------------------------
+  # theme_custom <- function() {
+  # 	theme_minimal() +
+  # 		theme(
+  # 			plot.background = element_rect(colour = "white"),
+  # 			panel.grid.major = element_blank(),
+  # 			panel.grid.minor = element_blank(),
+  # 			strip.background = element_rect(colour = "white"),
+  # 			axis.text.x = element_text(angle = 90L)
+  # 		)
+  # }
+
+  # Air TOML file setup -------------------------------------------------------------------
 
   if (!file.exists("air.toml")) {
     writeLines(
-		"[format]
+      "[format]
 		line-width = 120
 		indent-width = 2
 		indent-style = \"space\"

@@ -35,8 +35,7 @@ if (!nzchar(Sys.getenv("ctx_api_key"))) {
 # Temporary tables (for nuclide joins) require a non-read-only connection.
 dsstox_path_val <- file.path(tools::R_user_dir("ComptoxR", "data"), "dsstox.duckdb")
 if (!file.exists(dsstox_path_val)) {
-  stop("DSSTox database not found at: ", dsstox_path_val,
-       "\nRun dss_install() first.")
+  stop("DSSTox database not found at: ", dsstox_path_val, "\nRun dss_install() first.")
 }
 
 dsstox_db <- DBI::dbConnect(
@@ -88,7 +87,8 @@ pt$oxidation_state <- ind_html[[3]] %>%
       oxidation_state == '+2' | oxidation_state == '-2' ~ paste0("[", symbol, ox_symbol, ox_symbol, "]"),
       .default = paste0("[", symbol, oxidation_state, "]")
     ),
-  ) %>% select(!c(oxs, ox_symbol, charge_number))
+  ) %>%
+  select(!c(oxs, ox_symbol, charge_number))
 
 ox_dsstox <- dss_query(query = pt$oxidation_state$smiles, con = dsstox_db) %>%
   select(dtxsid = DTXSID, values)
@@ -125,9 +125,8 @@ element_list <- ct_chemical_list_search_by_name(
   ct_chemical_detail_search_bulk(query = ., projection = 'chemicaldetailall') %>%
   select(dtxsid, inchikey, inchiString, smiles) %>%
   mutate(
-    molFormula =
-      str_remove_all(inchiString, pattern = "InChI=1S/") %>%
-        str_remove_all(., pattern = '\\n|.\\d+H|.H|\\/i1\\+0')
+    molFormula = str_remove_all(inchiString, pattern = "InChI=1S/") %>%
+      str_remove_all(., pattern = '\\n|.\\d+H|.H|\\/i1\\+0')
   )
 
 pt$elements <-
@@ -165,7 +164,8 @@ nuclides <- tibble(
     isomer_hl = str_extract(title, "Nuclear isomer: (.+)$", group = 1) %>% str_trim()
   ) %>%
   filter(
-    isotope_hl != "< 1 day" & isotope_hl != "<1 day" |
+    isotope_hl != "< 1 day" &
+      isotope_hl != "<1 day" |
       (!is.na(isomer_hl) & isomer_hl != "< 1 day" & isomer_hl != "<1 day")
   ) %>%
   mutate(
@@ -202,14 +202,14 @@ nuc_missing <- nuc_good %>% filter(is.na(DTXSID))
 
 if (nrow(nuc_missing) > 0) {
   pubchem_name_fix <- c(
-    "Caesium"   = "Cesium",
+    "Caesium" = "Cesium",
     "Aluminium" = "Aluminum",
-    "Sulphur"   = "Sulfur"
+    "Sulphur" = "Sulfur"
   )
 
   nuc_missing <- nuc_missing %>%
     mutate(
-      pc_name    = str_replace_all(Name, pubchem_name_fix),
+      pc_name = str_replace_all(Name, pubchem_name_fix),
       search_name = paste0(pc_name, "-", Z)
     )
 
@@ -230,7 +230,7 @@ if (nrow(nuc_missing) > 0) {
     slice_min(cid, by = smiles, n = 1)
 
   # Step 2: SMILES fallback for name misses
-  name_hit_smiles  <- pc_name_cids$smiles
+  name_hit_smiles <- pc_name_cids$smiles
   smiles_to_search <- nuc_missing %>%
     filter(smiles %ni% name_hit_smiles) %>%
     pull(smiles)

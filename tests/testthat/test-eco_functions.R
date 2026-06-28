@@ -33,18 +33,24 @@ db_available <- file.exists(eco_path())
 live_schema_ready <- FALSE
 
 if (db_available) {
-  live_schema_ready <- tryCatch({
-    con <- DBI::dbConnect(duckdb::duckdb(), dbdir = eco_path(), read_only = TRUE)
-    on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
-    all(c(
-      "source_ontology",
-      "source_term_id",
-      "source_term_label",
-      "source_match_method",
-      "source_match_status",
-      "derivation_source"
-    ) %in% DBI::dbListFields(con, "lifestage_dictionary"))
-  }, error = function(e) FALSE)
+  live_schema_ready <- tryCatch(
+    {
+      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = eco_path(), read_only = TRUE)
+      on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+      all(
+        c(
+          "source_ontology",
+          "source_term_id",
+          "source_term_label",
+          "source_match_method",
+          "source_match_status",
+          "derivation_source"
+        ) %in%
+          DBI::dbListFields(con, "lifestage_dictionary")
+      )
+    },
+    error = function(e) FALSE
+  )
 }
 
 test_that("eco_results() returns enriched tibble for DDT", {
@@ -57,34 +63,43 @@ test_that("eco_results() returns enriched tibble for DDT", {
   expect_s3_class(result, "tbl_df")
   expect_gt(nrow(result), 0)
   expect_true(all(c("test_cas", "endpoint", "final_conc") %in% names(result)))
-  expect_true(all(c(
-    "org_lifestage",
-    "harmonized_life_stage",
-    "reproductive_stage"
-  ) %in% names(result)))
-  expect_false(any(c(
-    "organism_lifestage",
-    "source_ontology",
-    "source_term_id",
-    "source_term_label",
-    "source_match_status",
-    "source_match_method",
-    "derivation_source"
-  ) %in% names(result)))
+  expect_true(all(
+    c(
+      "org_lifestage",
+      "harmonized_life_stage",
+      "reproductive_stage"
+    ) %in%
+      names(result)
+  ))
+  expect_false(any(
+    c(
+      "organism_lifestage",
+      "source_ontology",
+      "source_term_id",
+      "source_term_label",
+      "source_match_status",
+      "source_match_method",
+      "derivation_source"
+    ) %in%
+      names(result)
+  ))
 
   detailed <- eco_results(casrn = "50-29-3", lifestage_details = TRUE)
-  expect_true(all(c(
-    "org_lifestage",
-    "harmonized_life_stage",
-    "reproductive_stage",
-    "organism_lifestage",
-    "source_ontology",
-    "source_term_id",
-    "source_term_label",
-    "source_match_status",
-    "source_match_method",
-    "derivation_source"
-  ) %in% names(detailed)))
+  expect_true(all(
+    c(
+      "org_lifestage",
+      "harmonized_life_stage",
+      "reproductive_stage",
+      "organism_lifestage",
+      "source_ontology",
+      "source_term_id",
+      "source_term_label",
+      "source_match_status",
+      "source_match_method",
+      "derivation_source"
+    ) %in%
+      names(detailed)
+  ))
   expect_false("ontology_id" %in% names(result))
   expect_false("ontology_id" %in% names(detailed))
 })
@@ -104,7 +119,6 @@ test_that("eco_results() filters by common_name", {
 })
 
 test_that("eco_results() default endpoints match curated regex", {
-
   skip_if_not(db_available && live_schema_ready, "ECOTOX database not installed or not lifestage-patched")
   old_burl <- Sys.getenv("eco_burl")
   suppressMessages(eco_server(1))

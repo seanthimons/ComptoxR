@@ -43,7 +43,7 @@ clean_unicode.character <- function(x, ...) {
     # Fallback if internal data is not loaded (e.g. during development if not using load_all)
     return(x)
   }
-  
+
   # Perform replacements in a single pass for each string
   # vectorize_all = FALSE ensures that ALL patterns in unicode_map are applied to each string
   y <- stringi::stri_replace_all_fixed(
@@ -52,10 +52,10 @@ clean_unicode.character <- function(x, ...) {
     replacement = unicode_map,
     vectorize_all = FALSE
   )
-  
+
   # Check for any remaining unicode and warn the user
   check_unhandled(y)
-  
+
   return(y)
 }
 
@@ -80,17 +80,19 @@ clean_unicode.data.frame <- function(x, ...) {
 #' @keywords internal
 check_unhandled <- function(x) {
   # Avoid processing NA
-  if (all(is.na(x))) return(NULL)
-  
+  if (all(is.na(x))) {
+    return(NULL)
+  }
+
   # Escape to find \uXXXX patterns
   # We use na.omit to avoid issues with escaped NA strings
   escaped <- stringi::stri_escape_unicode(stats::na.omit(x))
-  
+
   # Find patterns like \u03b1 or \U00000000
   unhandled <- unique(unlist(stringr::str_extract_all(escaped, "\\\\[uU][0-9a-fA-F]{4,8}")))
-  
+
   # Filter out some common escaped characters that are NOT symbols if any (usually none in stri_escape_unicode)
-  
+
   if (length(unhandled) > 0) {
     cli::cli_warn("{length(unhandled)} unhandled Unicode symbol(s) detected:")
     cli::cli_bullets(setNames(unhandled, rep("*", length(unhandled))))

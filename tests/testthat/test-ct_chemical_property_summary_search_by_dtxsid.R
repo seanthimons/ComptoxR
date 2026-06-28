@@ -21,7 +21,12 @@ test_that("ct_chemical_property_summary_search_by_dtxsid passes request metadata
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_chemical_property_summary_search_by_dtxsid(dtxsid = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::ct_chemical_property_summary_search_by_dtxsid(
+      dtxsid = "DTXSID7020182"
+    ))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
@@ -31,4 +36,3 @@ test_that("ct_chemical_property_summary_search_by_dtxsid passes request metadata
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
 })
-

@@ -12,10 +12,7 @@
 #' @param repo GitHub repository in `"owner/repo"` format.
 #' @return The downloaded file path (invisibly), or aborts on failure.
 #' @keywords internal
-.db_download_release <- function(db_name,
-                                 dest_path,
-                                 tag = "latest",
-                                 repo = "seanthimons/ComptoxR") {
+.db_download_release <- function(db_name, dest_path, tag = "latest", repo = "seanthimons/ComptoxR") {
   asset_name <- paste0(db_name, ".duckdb")
 
   # Build GitHub API URL
@@ -84,7 +81,9 @@
     httr2::req_perform(dl_req, path = dest_path),
     error = function(e) {
       # Clean up partial download
-      if (file.exists(dest_path)) unlink(dest_path)
+      if (file.exists(dest_path)) {
+        unlink(dest_path)
+      }
       cli::cli_abort(c(
         "Failed to download {.file {asset_name}}.",
         "x" = conditionMessage(e)

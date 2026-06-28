@@ -1,4 +1,3 @@
-
 #' Checks if a string is a syntactically and algorithmically valid CASRN
 #'
 #' A valid CAS Registry Number (CASRN) is a string in the format "dd...d-dd-d",
@@ -24,38 +23,42 @@
 is_cas <- function(x) {
   # The check-digit algorithm needs to be applied to each element.
   # vapply is a safe and efficient way to do this.
-  vapply(x, FUN = function(cas_str) {
-    # Immediately return NA for NA inputs
-    if (is.na(cas_str)) {
-      return(NA)
-    }
+  vapply(
+    x,
+    FUN = function(cas_str) {
+      # Immediately return NA for NA inputs
+      if (is.na(cas_str)) {
+        return(NA)
+      }
 
-    # 1. Check the basic format: xx-yy-z with 2-7 digits in the first part.
-    # This is a fast way to reject clearly invalid strings.
-    format_regex <- "^\\d{2,7}-\\d{2}-\\d$"
-    if (!stringr::str_detect(cas_str, format_regex)) {
-      return(FALSE)
-    }
+      # 1. Check the basic format: xx-yy-z with 2-7 digits in the first part.
+      # This is a fast way to reject clearly invalid strings.
+      format_regex <- "^\\d{2,7}-\\d{2}-\\d$"
+      if (!stringr::str_detect(cas_str, format_regex)) {
+        return(FALSE)
+      }
 
-    # 2. Perform the check-digit calculation.
-    # Get the provided check-digit (the last character).
-    expected_check_digit <- as.integer(stringr::str_split_i(cas_str, "-", 3))
+      # 2. Perform the check-digit calculation.
+      # Get the provided check-digit (the last character).
+      expected_check_digit <- as.integer(stringr::str_split_i(cas_str, "-", 3))
 
-    # Get the number part (everything before the last digit and hyphen).
-    number_part <- stringr::str_remove_all(cas_str, "-\\d$")
-    number_part <- stringr::str_remove_all(number_part, "-")
+      # Get the number part (everything before the last digit and hyphen).
+      number_part <- stringr::str_remove_all(cas_str, "-\\d$")
+      number_part <- stringr::str_remove_all(number_part, "-")
 
-    # Split into individual digits, reverse, and calculate.
-    digits <- as.integer(strsplit(number_part, "")[[1]])
-    reversed_digits <- rev(digits)
-    
-    # The check-digit is the sum of (digit * position) modulo 10
-    calculated_check_digit <- sum(reversed_digits * seq_along(reversed_digits)) %% 10
-    
-    # Return TRUE only if the calculation matches the provided check-digit.
-    return(calculated_check_digit == expected_check_digit)
-    
-  }, FUN.VALUE = logical(1), USE.NAMES = FALSE)
+      # Split into individual digits, reverse, and calculate.
+      digits <- as.integer(strsplit(number_part, "")[[1]])
+      reversed_digits <- rev(digits)
+
+      # The check-digit is the sum of (digit * position) modulo 10
+      calculated_check_digit <- sum(reversed_digits * seq_along(reversed_digits)) %% 10
+
+      # Return TRUE only if the calculation matches the provided check-digit.
+      return(calculated_check_digit == expected_check_digit)
+    },
+    FUN.VALUE = logical(1),
+    USE.NAMES = FALSE
+  )
 }
 
 #' Coerces and validates a string to a standard CASRN format
@@ -91,45 +94,49 @@ is_cas <- function(x) {
 #' as_cas("50-00-1") # Invalid check digit
 #' as_cas("not-a-casrn")
 as_cas <- function(x) {
-  vapply(x, FUN = function(cas_str) {
-    if (is.na(cas_str)) {
-      return(NA_character_)
-    }
+  vapply(
+    x,
+    FUN = function(cas_str) {
+      if (is.na(cas_str)) {
+        return(NA_character_)
+      }
 
-    # 1. Extract only the digits from the string.
-    digits_only <- stringr::str_remove_all(cas_str, "[^0-9]")
+      # 1. Extract only the digits from the string.
+      digits_only <- stringr::str_remove_all(cas_str, "[^0-9]")
 
-    # If no digits were found, it's invalid.
-    if (nchar(digits_only) == 0) {
-      return(NA_character_)
-    }
-    
-    # --- NEW STEP: Trim leading zeros ---
-    # The as.numeric -> as.character trick is a robust way to do this.
-    # It correctly handles "0050" -> "50" and "0" -> "0".
-    digits_only <- as.character(as.numeric(digits_only))
-    
-    # 2. A CASRN must have between 5 and 10 digits *after trimming*.
-    n <- nchar(digits_only)
-    if (n < 5 || n > 10) {
-      return(NA_character_)
-    }
+      # If no digits were found, it's invalid.
+      if (nchar(digits_only) == 0) {
+        return(NA_character_)
+      }
 
-    # 3. Reconstruct the string in the standard format.
-    first_part <- stringr::str_sub(digits_only, 1, n - 3)
-    middle_part <- stringr::str_sub(digits_only, n - 2, n - 1)
-    check_digit <- stringr::str_sub(digits_only, n, n)
-    
-    formatted_cas <- paste(first_part, middle_part, check_digit, sep = "-")
-    
-    # 4. Use our strict validator function to check the result.
-    if (isTRUE(is_cas(formatted_cas))) {
-      return(formatted_cas)
-    } else {
-      return(NA_character_)
-    }
-    
-  }, FUN.VALUE = character(1), USE.NAMES = FALSE)
+      # --- NEW STEP: Trim leading zeros ---
+      # The as.numeric -> as.character trick is a robust way to do this.
+      # It correctly handles "0050" -> "50" and "0" -> "0".
+      digits_only <- as.character(as.numeric(digits_only))
+
+      # 2. A CASRN must have between 5 and 10 digits *after trimming*.
+      n <- nchar(digits_only)
+      if (n < 5 || n > 10) {
+        return(NA_character_)
+      }
+
+      # 3. Reconstruct the string in the standard format.
+      first_part <- stringr::str_sub(digits_only, 1, n - 3)
+      middle_part <- stringr::str_sub(digits_only, n - 2, n - 1)
+      check_digit <- stringr::str_sub(digits_only, n, n)
+
+      formatted_cas <- paste(first_part, middle_part, check_digit, sep = "-")
+
+      # 4. Use our strict validator function to check the result.
+      if (isTRUE(is_cas(formatted_cas))) {
+        return(formatted_cas)
+      } else {
+        return(NA_character_)
+      }
+    },
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
 }
 
 #' Extracts all valid CASRNs from a character vector
@@ -181,7 +188,7 @@ extract_cas <- function(x) {
   # of 5 to 12 digits and hyphens. This will capture well-formatted CASRNs,
   # those with missing hyphens, and padded ones.
   candidate_regex <- "\\b[0-9-]{5,12}\\b"
-  
+
   # Extract all candidates into a list of character vectors.
   candidates_list <- stringr::str_extract_all(x, candidate_regex)
 
@@ -192,11 +199,11 @@ extract_cas <- function(x) {
     if (length(candidates) == 0) {
       return(character(0))
     }
-    
+
     # as_cas() will clean, format, and validate each candidate.
     # It returns a valid CASRN string or NA.
     validated_results <- as_cas(candidates)
-    
+
     # Remove the NAs to keep only the successfully validated CASRNs.
     validated_results[!is.na(validated_results)]
   })

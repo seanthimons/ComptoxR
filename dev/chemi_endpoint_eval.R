@@ -46,8 +46,9 @@ chemi_config <- list(
 chemi_endpoints <- parse_chemi_schemas() %>%
   # Filter out PATCH, DELETE methods and render endpoints
   filter(
-		str_detect(method, 'GET|POST'),
-		!str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download|export|protocols')) %>% 
+    str_detect(method, 'GET|POST'),
+    !str_detect(route, 'render|replace|add|freeze|metadata|version|reports|download|export|protocols')
+  ) %>%
   mutate(
     # Clean route: remove {param} placeholders, leading slashes
     route = strip_curly_params(route, leading_slash = 'remove'),
@@ -82,45 +83,45 @@ chemi_endpoints <- parse_chemi_schemas() %>%
       # Trim and normalize whitespace
       str_squish() %>%
       # Replace spaces with underscores
-      str_replace_all(., pattern = "\\s", replacement = "_") %>% 
+      str_replace_all(., pattern = "\\s", replacement = "_") %>%
       # Replace hyphens with underscores
       str_replace_all(., pattern = "-", replacement = "_"),
 
-		#Build full file name with prefix
-		file = case_when(
-			nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
-			str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
-			.default = paste0("chemi_", domain, "_", name, ".R")
-		),
+    #Build full file name with prefix
+    file = case_when(
+      nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
+      str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
+      .default = paste0("chemi_", domain, "_", name, ".R")
+    ),
 
     # Set batch_limit: NULL for chemi endpoints (no batching for cheminformatics API)
     batch_limit = 0,
-		# Seems to be needed to be at the end for this mutate to work properly
-		route = str_remove_all(string = route, pattern = "^api/")
+    # Seems to be needed to be at the end for this mutate to work properly
+    route = str_remove_all(string = route, pattern = "^api/")
   ) %>%
   # Sort by domain, route, method
   # arrange(
   #   forcats::fct_inorder(domain),
   #   route,
   #   #factor(method, levels = c('POST', 'GET'))
-	# 	factor(method, levels = c('GET', 'POST'))
+  # 	factor(method, levels = c('GET', 'POST'))
   # ) %>%
   # # Remove duplicates (prefer first occurrence per route)
-  # distinct(route, .keep_all = TRUE) %>% 
+  # distinct(route, .keep_all = TRUE) %>%
   # Detect GET/POST collisions on same route and generate unique function names
-	group_by(file) %>%
-	mutate(
-		method_count = n(),
-		# Generate function name: append _post for POST when collision exists
-		fn = case_when(
-			method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-			method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-			method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-			.default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
-		)
-	) %>%
-	ungroup() %>%
-	select(-method_count)
+  group_by(file) %>%
+  mutate(
+    method_count = n(),
+    # Generate function name: append _post for POST when collision exists
+    fn = case_when(
+      method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
+      method == "GET" ~ tools::file_path_sans_ext(basename(file)),
+      method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
+      .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+    )
+  ) %>%
+  ungroup() %>%
+  select(-method_count)
 
 # ==============================================================================
 # Find Missing Endpoints
@@ -130,15 +131,20 @@ chemi_endpoints <- parse_chemi_schemas() %>%
 # Pass expected_files to only count hits in the correct target file for each endpoint
 # This prevents false positives when an endpoint is used by a different wrapper function
 res_chemi <- find_endpoint_usages_base(
-	chemi_endpoints$route, 
-	pkg_dir = here::here("R"), 
-	files_regex = "^chemi_.*\\.R$",
-	expected_files = chemi_endpoints$file
+  chemi_endpoints$route,
+  pkg_dir = here::here("R"),
+  files_regex = "^chemi_.*\\.R$",
+  expected_files = chemi_endpoints$file
 )
 
 # Filter to endpoints with no hits (not yet implemented)
 chemi_endpoints_to_build <- chemi_endpoints %>%
-  filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+  filter(
+    route %in%
+      {
+        res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)
+      }
+  )
 
 # ==============================================================================
 # Generate Function Stubs
@@ -148,7 +154,7 @@ chemi_endpoints_to_build <- chemi_endpoints %>%
 chemi_spec_with_text <- render_endpoint_stubs(
   chemi_endpoints_to_build,
   config = chemi_config
-) 
+)
 
 # ==============================================================================
 # Write Files to Disk
@@ -168,8 +174,8 @@ chemi_spec_aggregated <- chemi_spec_with_text %>%
 scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = TRUE, append = TRUE)
 
 # Inspect results (which files were created/skipped/errored):
-scaffold_result %>% filter(str_detect(action, pattern = "skipped"))  # Files that already existed
-scaffold_result %>% filter(action == "error")    # Files that failed to write
+scaffold_result %>% filter(str_detect(action, pattern = "skipped")) # Files that already existed
+scaffold_result %>% filter(action == "error") # Files that failed to write
 
 # ==============================================================================
 # Cleanup
@@ -177,11 +183,11 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 # Remove intermediate variables (keep chemi_spec_with_text for inspection)
 rm(
-	chemi_config, 
-	chemi_schema_files, 
-	chemi_endpoints, 
-	res_chemi,
-	chemi_endpoints_to_build
+  chemi_config,
+  chemi_schema_files,
+  chemi_endpoints,
+  res_chemi,
+  chemi_endpoints_to_build
 )
 
 # ==============================================================================

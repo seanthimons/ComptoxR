@@ -94,8 +94,7 @@ tg_build_wrapper_call_args <- function(metadata) {
   # PubChem wrappers contain conditional GET/POST branches. Metadata extraction
   # records the first helper call in the function body, so choose inputs that
   # exercise that branch in the generated offline contract.
-  if (metadata$function_name %in% c("pubchem_properties", "pubchem_synonyms") &&
-      "cid" %in% names(metadata$formals)) {
+  if (metadata$function_name %in% c("pubchem_properties", "pubchem_synonyms") && "cid" %in% names(metadata$formals)) {
     values[["cid"]] <- c(2244L, 6623L)
     args[["cid"]] <- "c(2244L, 6623L)"
   }

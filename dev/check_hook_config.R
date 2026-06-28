@@ -48,10 +48,18 @@ for (fn_name in names(hook_config)) {
 
         # Check if hook function exists
         if (!exists(hook_fn, mode = "function")) {
-          errors <- c(errors, paste0(
-            "Function ", fn_name, " references missing hook: ", hook_fn,
-            " (type: ", hook_type, ")"
-          ))
+          errors <- c(
+            errors,
+            paste0(
+              "Function ",
+              fn_name,
+              " references missing hook: ",
+              hook_fn,
+              " (type: ",
+              hook_type,
+              ")"
+            )
+          )
         }
       }
     }
@@ -82,10 +90,18 @@ for (fn_name in names(hook_config)) {
           # Pattern: param_name = <default_value>
           param_pattern <- paste0("\\b", param_name, "\\s*=")
           if (!grepl(param_pattern, stub_text)) {
-            errors <- c(errors, paste0(
-              "Function ", fn_name, " declares extra_param '", param_name,
-              "' but it's not in generated stub signature (file: ", basename(fn_file), ")"
-            ))
+            errors <- c(
+              errors,
+              paste0(
+                "Function ",
+                fn_name,
+                " declares extra_param '",
+                param_name,
+                "' but it's not in generated stub signature (file: ",
+                basename(fn_file),
+                ")"
+              )
+            )
           }
         }
         break

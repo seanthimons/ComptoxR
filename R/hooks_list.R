@@ -33,7 +33,9 @@ extract_dtxsids_if_requested <- function(data) {
   # Guard: check if dtxsids field exists in response
   has_dtxsids <- "dtxsids" %in% names(dat)
   if (!has_dtxsids) {
-    cli::cli_warn("No {.field dtxsids} field found in response. Use {.code projection = 'chemicallistwithdtxsids'} to include DTXSIDs.")
+    cli::cli_warn(
+      "No {.field dtxsids} field found in response. Use {.code projection = 'chemicallistwithdtxsids'} to include DTXSIDs."
+    )
     return(dat)
   }
 
@@ -98,11 +100,14 @@ lists_all_transform <- function(data) {
     df <- df %>%
       split(.$listName) %>%
       purrr::map(., as.list) %>%
-      purrr::map(., ~ {
-        .x$dtxsids <- stringr::str_split(.x$dtxsids, pattern = ",") %>%
-          purrr::pluck(1)
-        .x
-      })
+      purrr::map(
+        .,
+        ~ {
+          .x$dtxsids <- stringr::str_split(.x$dtxsids, pattern = ",") %>%
+            purrr::pluck(1)
+          .x
+        }
+      )
   } else if (!isTRUE(data$params$return_dtxsid) && isTRUE(data$params$coerce)) {
     cli::cli_alert_warning("You need to request DTXSIDs to coerce!")
   }
@@ -124,16 +129,18 @@ format_compound_list_result <- function(data) {
 
   # Extract the first element from each result (list of list names)
   df <- results %>%
-    purrr::map(~ {
-      if (is.list(.x) && length(.x) > 0) {
-        list_names <- purrr::pluck(.x, 1)
-        cli::cli_alert_success('{length(list_names)} lists found!')
-        return(list_names)
-      } else {
-        cli::cli_alert_warning('No lists found')
-        return(NULL)
+    purrr::map(
+      ~ {
+        if (is.list(.x) && length(.x) > 0) {
+          list_names <- purrr::pluck(.x, 1)
+          cli::cli_alert_success('{length(list_names)} lists found!')
+          return(list_names)
+        } else {
+          cli::cli_alert_warning('No lists found')
+          return(NULL)
+        }
       }
-    }) %>%
+    ) %>%
     purrr::set_names(query) %>%
     purrr::compact()
 

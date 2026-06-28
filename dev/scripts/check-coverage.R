@@ -58,7 +58,9 @@ if (!is.na(dev_pct) && dev_pct < DEV_THRESHOLD) {
 
 if (length(failures) > 0) {
   cat("\n❌ FAILED:\n")
-  for (f in failures) cat("   -", f, "\n")
+  for (f in failures) {
+    cat("   -", f, "\n")
+  }
   quit(status = 1)
 } else {
   cat("\n✅ All coverage thresholds met\n")

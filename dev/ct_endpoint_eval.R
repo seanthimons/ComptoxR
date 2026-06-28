@@ -72,25 +72,26 @@ endpoints <- map(
       # 1) Remove tokens with optional left separator, only when delimited on the right
       str_remove_all(
         # regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")
-				regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid|ccd)(?=$|[/_-])")
-
-			) %>%
+        regex(
+          "(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid|ccd)(?=$|[/_-])"
+        )
+      ) %>%
       str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
       # 2) Collapse any remaining separators to spaces
       str_replace_all("[/]+", " ") %>%
       # Trim and normalize whitespace
       str_squish() %>%
       # Replace spaces with underscores
-      str_replace_all(., pattern = "\\s", replacement = "_") %>% 
+      str_replace_all(., pattern = "\\s", replacement = "_") %>%
       # Replace hyphens with underscores
       str_replace_all(., pattern = "-", replacement = "_"),
 
     # Build full file name with prefix
     file = case_when(
-			nchar(name) == 0 ~ paste0("ct_", domain, ".R"),
-			str_detect(name, pattern = domain) ~ paste0("ct_", name, ".R"),
-			.default = paste0("ct_", domain, "_", name, ".R")
-		),
+      nchar(name) == 0 ~ paste0("ct_", domain, ".R"),
+      str_detect(name, pattern = domain) ~ paste0("ct_", name, ".R"),
+      .default = paste0("ct_", domain, "_", name, ".R")
+    ),
 
     # Set batch_limit:
     # - GET with path params: 1 (single item appended to path)
@@ -110,19 +111,19 @@ endpoints <- map(
   ) %>%
   # # Remove duplicates (prefer first occurrence per route)
   # distinct(route, .keep_all = TRUE)
-	group_by(file) %>%
-	mutate(
-		method_count = n(),
-		# Generate function name: append _post for POST when collision exists
-		fn = case_when(
-			method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-			method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-			method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-			.default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
-		)
-	) %>%
-	ungroup() %>%
-	select(-method_count)
+  group_by(file) %>%
+  mutate(
+    method_count = n(),
+    # Generate function name: append _post for POST when collision exists
+    fn = case_when(
+      method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
+      method == "GET" ~ tools::file_path_sans_ext(basename(file)),
+      method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
+      .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+    )
+  ) %>%
+  ungroup() %>%
+  select(-method_count)
 
 # ==============================================================================
 # Find Missing Endpoints
@@ -130,19 +131,29 @@ endpoints <- map(
 
 # Search R/ directory for existing endpoint implementations
 res <- find_endpoint_usages_base(
-	endpoints$route, 
-	pkg_dir = here::here("R"),
-	files_regex = "^ct_.*\\.R$",
-	expected_files = endpoints$file
+  endpoints$route,
+  pkg_dir = here::here("R"),
+  files_regex = "^ct_.*\\.R$",
+  expected_files = endpoints$file
 )
 
 # Filter to endpoints with no hits (not yet implemented)
 endpoints_to_build <- endpoints %>%
-  filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+  filter(
+    route %in%
+      {
+        res$summary %>% filter(n_hits == 0) %>% pull(endpoint)
+      }
+  )
 
 # Filter to endpoints with hits (already implemented)
 endpoints_already_implemented <- endpoints %>%
-  filter(route %in% {res$summary %>% filter(n_hits > 0) %>% pull(endpoint)})
+  filter(
+    route %in%
+      {
+        res$summary %>% filter(n_hits > 0) %>% pull(endpoint)
+      }
+  )
 
 
 # ==============================================================================
@@ -169,8 +180,8 @@ spec_with_text <- render_endpoint_stubs(
 scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE)
 
 # Inspect results (which files were created/skipped/errored):
-scaffold_result %>% filter(action == "skipped")  # Files that already existed
-scaffold_result %>% filter(action == "error")    # Files that failed to write
+scaffold_result %>% filter(action == "skipped") # Files that already existed
+scaffold_result %>% filter(action == "error") # Files that failed to write
 
 # ==============================================================================
 # Cleanup
@@ -191,4 +202,3 @@ scaffold_result %>% filter(action == "error")    # Files that failed to write
 
 devtools::document()
 #devtools::load_all()
-

@@ -53,7 +53,9 @@
   on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
 
   # 5. Create metadata table
-  DBI::dbExecute(con, "
+  DBI::dbExecute(
+    con,
+    "
     CREATE TABLE IF NOT EXISTS _metadata (
       version VARCHAR,
       version_label VARCHAR,
@@ -61,7 +63,8 @@
       loaded_at TIMESTAMP,
       is_latest BOOLEAN
     )
-  ")
+  "
+  )
 
   # 6. Clowder API discovery (hardened)
   cli::cli_alert_info("Querying Clowder API for ToxValDB files...")
@@ -69,7 +72,7 @@
   file_list <- tryCatch(
     {
       resp <- httr2::request(.TOXVAL_CLOWDER_DATASET) |>
-        httr2::req_retry(max_tries = 3, backoff = ~ 2) |>
+        httr2::req_retry(max_tries = 3, backoff = ~2) |>
         httr2::req_timeout(30) |>
         httr2::req_perform()
       httr2::resp_body_json(resp)
@@ -92,7 +95,6 @@
     ))
   }
 
-
   # Filter for latest-version toxval per-source Excel files.
   # Dataset contains multiple versions (v92..v97) and QC-fail files —
   # keep only toxval_all_res_toxval_v9*_*.xlsx (the per-source data files).
@@ -103,9 +105,12 @@
 
   # Keep only the latest version present
   if (length(toxval_files) > 0) {
-    all_versions <- purrr::map_chr(toxval_files, ~ {
-      stringr::str_extract(.x$filename, "v\\d{2,3}_\\d+") %||% ""
-    })
+    all_versions <- purrr::map_chr(
+      toxval_files,
+      ~ {
+        stringr::str_extract(.x$filename, "v\\d{2,3}_\\d+") %||% ""
+      }
+    )
     latest_ver <- sort(unique(all_versions), decreasing = TRUE)[1]
     toxval_files <- purrr::keep(toxval_files, function(f) {
       grepl(latest_ver, f$filename, fixed = TRUE)
@@ -129,16 +134,19 @@
   }
 
   # Flexible label: "v97_0" -> "9.7.0", "v100_1" -> "10.0.1"
-  version_label <- tryCatch({
-    parts <- regmatches(version_raw, regexec("v(\\d+)_(\\d+)", version_raw))[[1]]
-    if (length(parts) == 3) {
-      major_raw <- as.integer(parts[2])
-      minor <- as.integer(parts[3])
-      sprintf("%d.%d.%d", major_raw %/% 10, major_raw %% 10, minor)
-    } else {
-      version_raw
-    }
-  }, error = function(e) version_raw)
+  version_label <- tryCatch(
+    {
+      parts <- regmatches(version_raw, regexec("v(\\d+)_(\\d+)", version_raw))[[1]]
+      if (length(parts) == 3) {
+        major_raw <- as.integer(parts[2])
+        minor <- as.integer(parts[3])
+        sprintf("%d.%d.%d", major_raw %/% 10, major_raw %% 10, minor)
+      } else {
+        version_raw
+      }
+    },
+    error = function(e) version_raw
+  )
 
   cli::cli_alert_info(
     "Found {length(toxval_files)} source file{?s} for ToxValDB {version_label}."
@@ -164,10 +172,12 @@
     dl_ok <- tryCatch(
       {
         dl_url <- paste0(
-          "https://clowder.edap-cluster.com/api/files/", fid, "/blob"
+          "https://clowder.edap-cluster.com/api/files/",
+          fid,
+          "/blob"
         )
         httr2::request(dl_url) |>
-          httr2::req_retry(max_tries = 3, backoff = ~ 2) |>
+          httr2::req_retry(max_tries = 3, backoff = ~2) |>
           httr2::req_timeout(120) |>
           httr2::req_perform(path = dest_file)
         TRUE
@@ -235,9 +245,15 @@
   }
 
   # 11. Type casting (R-side before DuckDB write)
-  numeric_cols <- c("toxval_numeric", "toxval_numeric_original",
-                    "study_duration_value", "study_duration_value_original",
-                    "mw", "year", "original_year")
+  numeric_cols <- c(
+    "toxval_numeric",
+    "toxval_numeric_original",
+    "study_duration_value",
+    "study_duration_value_original",
+    "mw",
+    "year",
+    "original_year"
+  )
 
   for (col in intersect(numeric_cols, names(stacked))) {
     stacked[[col]] <- suppressWarnings(as.numeric(stacked[[col]]))
@@ -249,7 +265,8 @@
 
   # 13. Update metadata
   DBI::dbExecute(con, "UPDATE _metadata SET is_latest = FALSE")
-  DBI::dbExecute(con,
+  DBI::dbExecute(
+    con,
     "INSERT INTO _metadata (version, version_label, row_count, loaded_at, is_latest) VALUES (?, ?, ?, ?, TRUE)",
     params = list(version_raw, version_label, nrow(stacked), Sys.time())
   )
@@ -264,9 +281,13 @@
 
   # Windows path fix for DuckDB ATTACH
   safe_path <- gsub("\\\\", "/", output_path)
-  DBI::dbExecute(con, sprintf(
-    "ATTACH '%s' AS persist", safe_path
-  ))
+  DBI::dbExecute(
+    con,
+    sprintf(
+      "ATTACH '%s' AS persist",
+      safe_path
+    )
+  )
   DBI::dbExecute(con, "COPY FROM DATABASE memory TO persist")
   DBI::dbExecute(con, "DETACH persist")
 

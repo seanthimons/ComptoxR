@@ -19,7 +19,7 @@ get_mol_for_search <- function(query, search_type) {
   }
 
   # If query is NULL or empty, abort
-	if (is.null(query) || length(query) == 0 || query == "") {
+  if (is.null(query) || length(query) == 0 || query == "") {
     cli::cli_abort("Query is required for {search_type} searches")
   }
 
@@ -56,21 +56,21 @@ get_mol_for_search <- function(query, search_type) {
 #' @return Named list of API parameters
 #' @keywords internal
 build_search_params <- function(
-    search_type,
-    similarity_type = NULL,
-    min_similarity = NULL,
-    hazard_name = NULL,
-    min_toxicity = NULL,
-    min_authority = NULL,
-    mass_type = NULL,
-    min_mass = NULL,
-    max_mass = NULL,
-    filter_features = FALSE,
-    feature_filters = NULL,
-    element_include = NULL,
-    element_exclude = NULL,
-    exclude_all_others = FALSE,
-    limit = 50
+  search_type,
+  similarity_type = NULL,
+  min_similarity = NULL,
+  hazard_name = NULL,
+  min_toxicity = NULL,
+  min_authority = NULL,
+  mass_type = NULL,
+  min_mass = NULL,
+  max_mass = NULL,
+  filter_features = FALSE,
+  feature_filters = NULL,
+  element_include = NULL,
+  element_exclude = NULL,
+  exclude_all_others = FALSE,
+  limit = 50
 ) {
   params <- list(limit = limit)
 

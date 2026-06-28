@@ -33,9 +33,9 @@ source(file.path("dev", "test_generation", "00_config.R"))
 source(file.path("dev", "test_generation", "07_token_preflight.R"))
 
 # Configuration ----------------------------------------------------------------
-N_WORKERS <- 8                          # Number of parallel workers
-BATCH_SIZE <- 20                        # Files per batch (20-50 range)
-BASE_DELAY <- 0.5                       # Seconds between batch submissions
+N_WORKERS <- 8 # Number of parallel workers
+BATCH_SIZE <- 20 # Files per batch (20-50 range)
+BASE_DELAY <- 0.5 # Seconds between batch submissions
 CASSETTE_DIR <- here::here("tests/testthat/fixtures")
 TEST_DIR <- here::here("tests/testthat")
 LOG_FILE <- here::here("dev/logs/rerecord_failures.log")
@@ -109,21 +109,18 @@ get_test_files <- function(mode = "priority") {
       ))
     }
     files <- readLines(LOG_FILE)
-    files <- files[nchar(files) > 0]  # Remove empty lines
+    files <- files[nchar(files) > 0] # Remove empty lines
     return(files)
-
   } else if (mode == "all") {
     # All test files
     files <- fs::dir_ls(TEST_DIR, regexp = "^test-.*\\.R$")
     return(as.character(files))
-
   } else if (mode == "priority") {
     # Priority patterns only
     all_files <- fs::dir_ls(TEST_DIR, regexp = "^test-.*\\.R$")
     pattern <- paste(PRIORITY_PATTERNS, collapse = "|")
     files <- all_files[grepl(pattern, fs::path_file(all_files))]
     return(as.character(files))
-
   } else {
     cli::cli_abort("Unknown mode: {mode}")
   }
@@ -147,9 +144,7 @@ delete_cassettes <- function(test_file) {
 }
 
 # Re-record cassettes in batches ----------------------------------------------
-rerecord_batch <- function(test_files, n_workers = N_WORKERS,
-                           batch_size = BATCH_SIZE, base_delay = BASE_DELAY) {
-
+rerecord_batch <- function(test_files, n_workers = N_WORKERS, batch_size = BATCH_SIZE, base_delay = BASE_DELAY) {
   # Split into batches
   n_files <- length(test_files)
   n_batches <- ceiling(n_files / batch_size)
@@ -183,16 +178,22 @@ rerecord_batch <- function(test_files, n_workers = N_WORKERS,
       file <- batch_files[i]
 
       # Submit async task with error handling
-      tasks[[i]] <- mirai::mirai({
-        result <- tryCatch({
-          # Run test file (will trigger VCR recording)
-          testthat::test_file(file, reporter = "minimal")
-          list(file = file, success = TRUE, error = NULL)
-        }, error = function(e) {
-          list(file = file, success = FALSE, error = as.character(e$message))
-        })
-        result
-      }, file = file)
+      tasks[[i]] <- mirai::mirai(
+        {
+          result <- tryCatch(
+            {
+              # Run test file (will trigger VCR recording)
+              testthat::test_file(file, reporter = "minimal")
+              list(file = file, success = TRUE, error = NULL)
+            },
+            error = function(e) {
+              list(file = file, success = FALSE, error = as.character(e$message))
+            }
+          )
+          result
+        },
+        file = file
+      )
     }
 
     # Collect results
@@ -227,7 +228,9 @@ rerecord_batch <- function(test_files, n_workers = N_WORKERS,
     all_successes <- c(all_successes, batch_successes)
 
     # Batch summary
-    cli::cli_alert_success("Batch {batch_idx} complete: {length(batch_successes)} success, {length(batch_failures)} failure{?s}")
+    cli::cli_alert_success(
+      "Batch {batch_idx} complete: {length(batch_successes)} success, {length(batch_failures)} failure{?s}"
+    )
 
     # Delay between batches (except last)
     if (batch_idx < n_batches) {
@@ -257,27 +260,22 @@ parse_args <- function() {
 
     if (arg == "--all") {
       mode <- "all"
-
     } else if (arg == "--record-live") {
       record_live <- TRUE
-
     } else if (arg == "--failures") {
       mode <- "failures"
-
     } else if (arg == "--batch-size") {
       if (i == length(args)) {
         cli::cli_abort("--batch-size requires a value")
       }
       batch_size <- as.integer(args[i + 1])
       i <- i + 1
-
     } else if (arg == "--workers") {
       if (i == length(args)) {
         cli::cli_abort("--workers requires a value")
       }
       n_workers <- as.integer(args[i + 1])
       i <- i + 1
-
     } else {
       cli::cli_abort("Unknown argument: {arg}")
     }

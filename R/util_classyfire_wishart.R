@@ -27,7 +27,7 @@ util_classyfire_wishart <- function(query, path = "entities") {
   # ---------------------------------------------------------------------------
   # --- Get environment variables
   # ---------------------------------------------------------------------------
- 
+
   run_debug <- as.logical(Sys.getenv("run_debug", unset = "FALSE"))
   run_verbose <- as.logical(Sys.getenv("run_verbose", unset = "FALSE"))
 
@@ -63,9 +63,9 @@ util_classyfire_wishart <- function(query, path = "entities") {
         ) %>%
         #httr2::req_timeout(10) %>% # Increased timeout for potential large responses
         httr2::req_retry(
-          retry_on_failure = TRUE # Retry on failure
-          ,max_tries = 5,
-         # is_transient = ~ httr2::resp_is_transient(.x) || httr2::resp_status_class(.x) == "server"
+          retry_on_failure = TRUE, # Retry on failure
+          max_tries = 5,
+          # is_transient = ~ httr2::resp_is_transient(.x) || httr2::resp_status_class(.x) == "server"
         )
 
       # --- Handle debug mode (dry run) ---
@@ -81,13 +81,17 @@ util_classyfire_wishart <- function(query, path = "entities") {
       # --- Validate response ---
       if (httr2::resp_is_error(resp)) {
         status_code <- httr2::resp_status(resp)
-        cli::cli_alert_danger("({current_index}/{total_queries}) HTTP error {status_code} for InChlKey: {current_query}")
+        cli::cli_alert_danger(
+          "({current_index}/{total_queries}) HTTP error {status_code} for InChlKey: {current_query}"
+        )
         cli::cli_alert_info("Response body: {.val {httr2::resp_body_string(resp)}}")
         return(NULL)
       }
 
       if (run_verbose) {
-        cli::cli_alert_success("({current_index}/{total_queries}) Successfully retrieved result for InChlKey: {current_query}")
+        cli::cli_alert_success(
+          "({current_index}/{total_queries}) Successfully retrieved result for InChlKey: {current_query}"
+        )
       }
 
       httr2::resp_body_json(resp)

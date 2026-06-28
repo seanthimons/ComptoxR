@@ -2,7 +2,7 @@ test_that("generic_chemi_request construction is correct", {
   Sys.setenv(run_debug = "TRUE")
   Sys.setenv(ctx_api_key = "logic_test_key")
   on.exit(Sys.setenv(run_debug = "FALSE"))
-  
+
   # Test the nested chemicals/options structure
   output <- capture_output(
     dry_run <- generic_chemi_request(
@@ -12,7 +12,7 @@ test_that("generic_chemi_request construction is correct", {
       auth = TRUE
     )
   )
-  
+
   expect_match(output, "POST")
   expect_match(output, "toxprints/calculate")
   expect_match(output, "x-api-key: logic_test_key")
@@ -24,7 +24,7 @@ test_that("generic_chemi_request construction is correct", {
 test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
   Sys.setenv(run_debug = "TRUE")
   on.exit(Sys.setenv(run_debug = "FALSE"))
-  
+
   output <- capture_output(
     dry_run <- generic_chemi_request(
       query = "DTXSID7020182",
@@ -32,7 +32,7 @@ test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
       wrap = FALSE
     )
   )
-  
+
   # Should be an array of objects directly: [{"sid": "..."}]
   expect_match(output, "\\[\\s*\\{\\s*\"sid\"\\s*:\\s*\"DTXSID7020182\"\\s*\\}\\s*\\]")
 })
@@ -43,7 +43,7 @@ test_that("generic_chemi_request tidies results with matching query IDs", {
     list(dtxsid = "ID1", val = 10),
     list(dtxsid = "ID2", val = 20)
   )
-  
+
   testthat::with_mocked_bindings(
     req_perform = function(req) {
       httr2::response(
@@ -112,7 +112,7 @@ test_that("generic_chemi_request with paginate=TRUE fetches multiple pages (offs
       )
       expect_s3_class(res, "tbl_df")
       expect_equal(nrow(res), 3)
-      expect_equal(call_count, 2)  # 2 pages: offset=0 (2 records) + offset=2 (1 record, total reached)
+      expect_equal(call_count, 2) # 2 pages: offset=0 (2 records) + offset=2 (1 record, total reached)
     }
   )
 })

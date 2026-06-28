@@ -5,33 +5,41 @@ make_generation_repo <- function() {
   root <- tempfile("test-generation-")
   dir.create(file.path(root, "R"), recursive = TRUE)
   dir.create(file.path(root, "tests", "testthat"), recursive = TRUE)
-  writeLines(c(
-    "export(alpha)",
-    "export(beta)",
-    "export(gamma)",
-    "export(\"%>%\")"
-  ), file.path(root, "NAMESPACE"), useBytes = TRUE)
-  writeLines(c(
-    "alpha <- function(query, projection = \"all\") {",
-    "  generic_request(",
-    "    query = query,",
-    "    endpoint = \"chemical/detail\",",
-    "    method = \"GET\",",
-    "    batch_limit = 1,",
-    "    projection = projection",
-    "  )",
-    "}",
-    "",
-    "beta <- function() {",
-    "  generic_request(",
-    "    endpoint = \"chemical/list/type\",",
-    "    method = \"GET\",",
-    "    batch_limit = 0",
-    "  )",
-    "}",
-    "",
-    "gamma <- function() TRUE"
-  ), file.path(root, "R", "wrappers.R"), useBytes = TRUE)
+  writeLines(
+    c(
+      "export(alpha)",
+      "export(beta)",
+      "export(gamma)",
+      "export(\"%>%\")"
+    ),
+    file.path(root, "NAMESPACE"),
+    useBytes = TRUE
+  )
+  writeLines(
+    c(
+      "alpha <- function(query, projection = \"all\") {",
+      "  generic_request(",
+      "    query = query,",
+      "    endpoint = \"chemical/detail\",",
+      "    method = \"GET\",",
+      "    batch_limit = 1,",
+      "    projection = projection",
+      "  )",
+      "}",
+      "",
+      "beta <- function() {",
+      "  generic_request(",
+      "    endpoint = \"chemical/list/type\",",
+      "    method = \"GET\",",
+      "    batch_limit = 0",
+      "  )",
+      "}",
+      "",
+      "gamma <- function() TRUE"
+    ),
+    file.path(root, "R", "wrappers.R"),
+    useBytes = TRUE
+  )
   root
 }
 

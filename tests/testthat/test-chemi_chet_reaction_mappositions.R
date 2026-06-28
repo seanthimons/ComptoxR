@@ -21,7 +21,10 @@ test_that("chemi_chet_reaction_mappositions passes request metadata to helper", 
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_chet_reaction_mappositions(map_id = 1L))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_chet_reaction_mappositions(map_id = 1L))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

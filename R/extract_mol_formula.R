@@ -29,7 +29,7 @@ create_formula_extractor_final <- function() {
   # --- ONE-TIME EXPENSIVE SETUP ---
 
   # Periodic table symbols (including lanthanides/actinides + common elements)
-	#fmt:skip
+  #fmt:skip
   elements_list <- c(
     'He','Li','Be','Ne','Na','Mg','Al','Si','Cl','Ar','Ca','Sc','Ti','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se',
     'Br','Kr','Rb','Sr','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','Xe','Cs','Ba','La','Ce','Pr','Nd',
@@ -39,32 +39,34 @@ create_formula_extractor_final <- function() {
   )
   elements_pattern <- paste(elements_list, collapse = "|")
 
-  element_chunk   <- glue::glue("(?:{elements_pattern})\\d*")
-  group_chunk     <- glue::glue("(?:\\((?:{element_chunk})+\\)\\d*|\\[(?:{element_chunk})+\\]\\d*)")
+  element_chunk <- glue::glue("(?:{elements_pattern})\\d*")
+  group_chunk <- glue::glue("(?:\\((?:{element_chunk})+\\)\\d*|\\[(?:{element_chunk})+\\]\\d*)")
   validator_regex <- glue::glue("^(?:{element_chunk}|{group_chunk})+(?:[+-]\\d*)?$")
 
   # FIX: Do NOT allow '(' or ')' inside the (...) alternative; allow them inside [...] only.
   candidate_regex <- "(\\([A-Za-z0-9+\\-\\.\\u00b7\\s]*\\)|\\[[A-Za-z0-9()+\\-\\.\\u00b7\\s]*\\])"
 
   roman_numeral_regex <- "(?i)^\\s*(?:i|v|x|l|c|d|m)+\\s*$"
-  carbon_range_regex  <- "^\\s*C\\d+\\s*[-\\u2013]\\s*\\d+\\s*$"
+  carbon_range_regex <- "^\\s*C\\d+\\s*[-\\u2013]\\s*\\d+\\s*$"
 
   function(text_vector) {
     candidates <- stringr::str_extract_all(text_vector, candidate_regex)
     lapply(candidates, function(cand_list) {
-      if (length(cand_list) == 0) return(character(0))
+      if (length(cand_list) == 0) {
+        return(character(0))
+      }
 
       trimmed <- stringr::str_sub(cand_list, 2, -2)
       trimmed <- stringr::str_squish(trimmed)
 
-      keep_roman  <- !stringr::str_detect(trimmed, roman_numeral_regex)
+      keep_roman <- !stringr::str_detect(trimmed, roman_numeral_regex)
       keep_carbon <- !stringr::str_detect(trimmed, carbon_range_regex)
 
-      cleaned     <- stringr::str_replace_all(trimmed, "[\\u00b7\\.\\s]+", "")
-      is_formula  <- stringr::str_detect(cleaned, validator_regex)
+      cleaned <- stringr::str_replace_all(trimmed, "[\\u00b7\\.\\s]+", "")
+      is_formula <- stringr::str_detect(cleaned, validator_regex)
 
       res <- trimmed[keep_roman & keep_carbon & is_formula]
-      unique(res)  # de-duplicate while preserving order
+      unique(res) # de-duplicate while preserving order
     })
   }
 }
@@ -99,8 +101,7 @@ create_formula_extractor_final <- function() {
 #' )
 #' extract_formulas(texts)
 extract_formulas <- function(text_vector) {
-
-	.extractor <- .ComptoxREnv$extractor
+  .extractor <- .ComptoxREnv$extractor
   if (is.null(.extractor)) {
     .extractor <- create_formula_extractor_final()
     .ComptoxREnv$extractor <- .extractor

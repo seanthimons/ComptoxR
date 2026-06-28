@@ -10,35 +10,38 @@
 #' @return Invisible TRUE on success
 #' @export
 source_pipeline_files <- function() {
-  tryCatch({
-    # Get package root directory
-    pkg_root <- here::here()
+  tryCatch(
+    {
+      # Get package root directory
+      pkg_root <- here::here()
 
-    # Define pipeline files in dependency order
-    pipeline_files <- c(
-      "dev/endpoint_eval/00_config.R",           # No dependencies
-      "dev/endpoint_eval/01_schema_resolution.R", # Depends on 00
-      "dev/endpoint_eval/02_path_utils.R",        # Depends on 00
-      "dev/endpoint_eval/03_codebase_search.R",   # Depends on 00, 02
-      "dev/endpoint_eval/04_openapi_parser.R",    # Depends on 00, 01
-      "dev/endpoint_eval/05_file_scaffold.R",     # Depends on 00
-      "dev/endpoint_eval/06_param_parsing.R",     # Depends on 00, 01, 04
-      "dev/endpoint_eval/07_stub_generation.R"    # Depends on all above
-    )
+      # Define pipeline files in dependency order
+      pipeline_files <- c(
+        "dev/endpoint_eval/00_config.R", # No dependencies
+        "dev/endpoint_eval/01_schema_resolution.R", # Depends on 00
+        "dev/endpoint_eval/02_path_utils.R", # Depends on 00
+        "dev/endpoint_eval/03_codebase_search.R", # Depends on 00, 02
+        "dev/endpoint_eval/04_openapi_parser.R", # Depends on 00, 01
+        "dev/endpoint_eval/05_file_scaffold.R", # Depends on 00
+        "dev/endpoint_eval/06_param_parsing.R", # Depends on 00, 01, 04
+        "dev/endpoint_eval/07_stub_generation.R" # Depends on all above
+      )
 
-    # Source each file
-    for (file in pipeline_files) {
-      file_path <- file.path(pkg_root, file)
-      if (!file.exists(file_path)) {
-        stop("Pipeline file not found: ", file_path)
+      # Source each file
+      for (file in pipeline_files) {
+        file_path <- file.path(pkg_root, file)
+        if (!file.exists(file_path)) {
+          stop("Pipeline file not found: ", file_path)
+        }
+        source(file_path, local = FALSE)
       }
-      source(file_path, local = FALSE)
-    }
 
-    invisible(TRUE)
-  }, error = function(e) {
-    stop("Failed to source pipeline files: ", conditionMessage(e), call. = FALSE)
-  })
+      invisible(TRUE)
+    },
+    error = function(e) {
+      stop("Failed to source pipeline files: ", conditionMessage(e), call. = FALSE)
+    }
+  )
 }
 
 #' Clear stub generation environment state

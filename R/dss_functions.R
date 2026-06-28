@@ -5,8 +5,13 @@
 
 # Column allowlist for validation
 .DSS_VALID_COLS <- c(
-  "PREFERRED_NAME", "CASRN", "IDENTIFIER",
-  "SMILES", "MOLECULAR_FORMULA", "INCHIKEY", "IUPAC_NAME"
+  "PREFERRED_NAME",
+  "CASRN",
+  "IDENTIFIER",
+  "SMILES",
+  "MOLECULAR_FORMULA",
+  "INCHIKEY",
+  "IUPAC_NAME"
 )
 
 #' Validate column names against the DSSTox allowlist
@@ -47,9 +52,7 @@ dss_query <- function(query, con = NULL) {
   query <- unique(as.character(query))
   input_df <- data.frame(value = query, stringsAsFactors = FALSE)
 
-  DBI::dbWriteTable(con, "dss_query_input", input_df,
-    temporary = TRUE, overwrite = TRUE
-  )
+  DBI::dbWriteTable(con, "dss_query_input", input_df, temporary = TRUE, overwrite = TRUE)
   on.exit(
     tryCatch(
       DBI::dbExecute(con, "DROP TABLE IF EXISTS dss_query_input"),
@@ -58,7 +61,8 @@ dss_query <- function(query, con = NULL) {
     add = TRUE
   )
 
-  result <- DBI::dbGetQuery(con,
+  result <- DBI::dbGetQuery(
+    con,
     "SELECT d.DTXSID, d.parent_col, d.values, d.sort_order
      FROM dss_query_input i
      INNER JOIN dsstox d ON d.values = i.value"
@@ -87,9 +91,7 @@ dss_synonyms <- function(query, con = NULL) {
   query <- unique(as.character(query))
   input_df <- data.frame(dtxsid = query, stringsAsFactors = FALSE)
 
-  DBI::dbWriteTable(con, "dss_syn_input", input_df,
-    temporary = TRUE, overwrite = TRUE
-  )
+  DBI::dbWriteTable(con, "dss_syn_input", input_df, temporary = TRUE, overwrite = TRUE)
   on.exit(
     tryCatch(
       DBI::dbExecute(con, "DROP TABLE IF EXISTS dss_syn_input"),
@@ -98,7 +100,8 @@ dss_synonyms <- function(query, con = NULL) {
     add = TRUE
   )
 
-  result <- DBI::dbGetQuery(con,
+  result <- DBI::dbGetQuery(
+    con,
     "SELECT d.DTXSID, d.parent_col, d.values, d.sort_order
      FROM dss_syn_input i
      INNER JOIN dsstox d ON d.DTXSID = i.dtxsid
@@ -129,9 +132,7 @@ dss_resolve <- function(query, con = NULL) {
   query <- unique(as.character(query))
   input_df <- data.frame(input = query, stringsAsFactors = FALSE)
 
-  DBI::dbWriteTable(con, "dss_resolve_input", input_df,
-    temporary = TRUE, overwrite = TRUE
-  )
+  DBI::dbWriteTable(con, "dss_resolve_input", input_df, temporary = TRUE, overwrite = TRUE)
   on.exit(
     tryCatch(
       DBI::dbExecute(con, "DROP TABLE IF EXISTS dss_resolve_input"),
@@ -140,7 +141,8 @@ dss_resolve <- function(query, con = NULL) {
     add = TRUE
   )
 
-  result <- DBI::dbGetQuery(con,
+  result <- DBI::dbGetQuery(
+    con,
     "WITH matched AS (
        SELECT i.input, d.DTXSID, d.parent_col
        FROM dss_resolve_input i
@@ -197,9 +199,7 @@ dss_cas <- function(query, con = NULL) {
   query <- unique(as.character(query))
   input_df <- data.frame(input = query, stringsAsFactors = FALSE)
 
-  DBI::dbWriteTable(con, "dss_cas_input", input_df,
-    temporary = TRUE, overwrite = TRUE
-  )
+  DBI::dbWriteTable(con, "dss_cas_input", input_df, temporary = TRUE, overwrite = TRUE)
   on.exit(
     tryCatch(
       DBI::dbExecute(con, "DROP TABLE IF EXISTS dss_cas_input"),
@@ -208,7 +208,8 @@ dss_cas <- function(query, con = NULL) {
     add = TRUE
   )
 
-  result <- DBI::dbGetQuery(con,
+  result <- DBI::dbGetQuery(
+    con,
     "WITH
      by_value AS (
        SELECT DISTINCT i.input, d.DTXSID
@@ -280,7 +281,8 @@ dss_search <- function(pattern, cols = NULL, limit = 100L, con = NULL) {
     "WHERE values ILIKE ?",
     col_clause,
     " ORDER BY sort_order, values",
-    " LIMIT ", limit
+    " LIMIT ",
+    limit
   )
 
   result <- DBI::dbGetQuery(con, sql, params = list(pattern))
@@ -313,15 +315,19 @@ dss_search <- function(pattern, cols = NULL, limit = 100L, con = NULL) {
 #' dss_fuzzy("Clorpyrifos", threshold = 0.75)
 #' dss_fuzzy("CC(=O)O", method = "levenshtein", cols = "SMILES", threshold = 2)
 #' }
-dss_fuzzy <- function(query,
-                      method = c(
-                        "jaro_winkler", "levenshtein",
-                        "damerau_levenshtein", "jaccard"
-                      ),
-                      threshold = NULL,
-                      cols = "PREFERRED_NAME",
-                      limit = 20L,
-                      con = NULL) {
+dss_fuzzy <- function(
+  query,
+  method = c(
+    "jaro_winkler",
+    "levenshtein",
+    "damerau_levenshtein",
+    "jaccard"
+  ),
+  threshold = NULL,
+  cols = "PREFERRED_NAME",
+  limit = 20L,
+  con = NULL
+) {
   con <- dss_get_con(con)
   method <- match.arg(method)
 
@@ -337,27 +343,23 @@ dss_fuzzy <- function(query,
 
   # Default thresholds per method
   if (is.null(threshold)) {
-    threshold <- switch(method,
-      jaro_winkler = 0.85,
-      jaccard = 0.85,
-      levenshtein = 3L,
-      damerau_levenshtein = 3L
-    )
+    threshold <- switch(method, jaro_winkler = 0.85, jaccard = 0.85, levenshtein = 3L, damerau_levenshtein = 3L)
   }
   threshold <- as.numeric(threshold)
 
   # Map method to DuckDB function name (hardcoded — no user input in SQL)
-  sql_fn <- switch(method,
-    jaro_winkler       = "jaro_winkler_similarity",
-    jaccard            = "jaccard",
-    levenshtein        = "levenshtein",
+  sql_fn <- switch(
+    method,
+    jaro_winkler = "jaro_winkler_similarity",
+    jaccard = "jaccard",
+    levenshtein = "levenshtein",
     damerau_levenshtein = "damerau_levenshtein"
   )
 
   is_similarity <- method %in% c("jaro_winkler", "jaccard")
-  filter_op     <- if (is_similarity) ">=" else "<="
-  order_dir     <- if (is_similarity) "DESC" else "ASC"
-  score_alias   <- if (is_similarity) "similarity" else "distance"
+  filter_op <- if (is_similarity) ">=" else "<="
+  order_dir <- if (is_similarity) "DESC" else "ASC"
+  score_alias <- if (is_similarity) "similarity" else "distance"
 
   qlen <- nchar(query)
 
@@ -384,15 +386,36 @@ dss_fuzzy <- function(query,
   sql <- paste0(
     "WITH scored AS (\n",
     "  SELECT DTXSID, parent_col, values,\n",
-    "         ", sql_fn, "(LOWER(values), LOWER(?)) AS ", score_alias, "\n",
+    "         ",
+    sql_fn,
+    "(LOWER(values), LOWER(?)) AS ",
+    score_alias,
+    "\n",
     "  FROM dsstox\n",
-    "  WHERE 1=1 ", col_clause, "\n",
-    "    AND LENGTH(values) BETWEEN ", len_min, " AND ", len_max, "\n",
+    "  WHERE 1=1 ",
+    col_clause,
+    "\n",
+    "    AND LENGTH(values) BETWEEN ",
+    len_min,
+    " AND ",
+    len_max,
+    "\n",
     ")\n",
     "SELECT * FROM scored\n",
-    "WHERE ", score_alias, " ", filter_op, " ", threshold, "\n",
-    "ORDER BY ", score_alias, " ", order_dir, "\n",
-    "LIMIT ", limit
+    "WHERE ",
+    score_alias,
+    " ",
+    filter_op,
+    " ",
+    threshold,
+    "\n",
+    "ORDER BY ",
+    score_alias,
+    " ",
+    order_dir,
+    "\n",
+    "LIMIT ",
+    limit
   )
 
   result <- DBI::dbGetQuery(con, sql, params = list(query))

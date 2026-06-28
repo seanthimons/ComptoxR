@@ -10,9 +10,7 @@
 #' @return A `tibble` containing the aggregated functional use data
 #' @export
 
-
 chemi_functional_use <- function(query) {
-
   if (!is.character(query) || length(query) == 0) {
     cli_abort("{.arg query} must be a non-empty character vector of DTXSIDs.")
   }
@@ -20,33 +18,29 @@ chemi_functional_use <- function(query) {
   cli::cli_rule(left = "Functional Use options")
   cli::cli_dl(c("Number of compounds" = "{length(query)}"))
   cli::cli_rule()
-	cli::cli_end()
+  cli::cli_end()
 
-	req_list <- query %>% 
-		map(., function(dtxsid) {
-			request(Sys.getenv('chemi_burl')) %>%
-			req_url_path_append("amos/functional_uses_for_dtxsid", dtxsid)})
+  req_list <- query %>%
+    map(., function(dtxsid) {
+      request(Sys.getenv('chemi_burl')) %>%
+        req_url_path_append("amos/functional_uses_for_dtxsid", dtxsid)
+    })
 
   if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
     cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
-		return(req_list[[1]] %>% req_dry_run())
+    return(req_list[[1]] %>% req_dry_run())
   }
 
-	resp_list <- req_list %>% 
-		req_perform_sequential(on_error = 'continue', progress = TRUE) %>% 
-		set_names(query)
+  resp_list <- req_list %>%
+    req_perform_sequential(on_error = 'continue', progress = TRUE) %>%
+    set_names(query)
 
-	result <- resp_list %>% 
-		resps_successes() %>% 
-    map(.,
-			~ resp_body_json(.x) %>% jsonlite::flatten()
-			) %>%
-		compact() %>% 
-		map(., ~list_c(.x) %>% tibble::as_tibble_col('functional_classes')) %>% 
-		list_rbind(names_to = 'dtxsid')
+  result <- resp_list %>%
+    resps_successes() %>%
+    map(., ~ resp_body_json(.x) %>% jsonlite::flatten()) %>%
+    compact() %>%
+    map(., ~ list_c(.x) %>% tibble::as_tibble_col('functional_classes')) %>%
+    list_rbind(names_to = 'dtxsid')
 
-
-	return(result)  
+  return(result)
 }
-
-

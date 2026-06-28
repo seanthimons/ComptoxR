@@ -46,21 +46,24 @@ read_test_manifest <- function() {
     ))
   }
 
-  tryCatch({
-    manifest <- jsonlite::fromJSON(manifest_path, simplifyVector = FALSE)
-    manifest$exists <- TRUE
-    manifest
-  }, error = function(e) {
-    cli::cli_alert_warning("Error reading manifest: {e$message}, using default")
-    list(
-      artifact_schema = "test_manifest_retired/v1",
-      retired = TRUE,
-      authority = FALSE,
-      replacement = "dev/reports/unit_test_readiness_audit.json",
-      exists = TRUE,
-      files = list()
-    )
-  })
+  tryCatch(
+    {
+      manifest <- jsonlite::fromJSON(manifest_path, simplifyVector = FALSE)
+      manifest$exists <- TRUE
+      manifest
+    },
+    error = function(e) {
+      cli::cli_alert_warning("Error reading manifest: {e$message}, using default")
+      list(
+        artifact_schema = "test_manifest_retired/v1",
+        retired = TRUE,
+        authority = FALSE,
+        replacement = "dev/reports/unit_test_readiness_audit.json",
+        exists = TRUE,
+        files = list()
+      )
+    }
+  )
 }
 
 #' Write test manifest
@@ -106,26 +109,28 @@ is_protected <- function(test_filename, manifest) {
 #' @return Logical indicating if file calls generic request functions
 #' @export
 calls_generic_request <- function(file_path) {
-  tryCatch({
-    # Parse the R file
-    exprs <- parse(file = file_path)
+  tryCatch(
+    {
+      # Parse the R file
+      exprs <- parse(file = file_path)
 
-    # Extract all names (function calls) from all expressions
-    all_names_in_file <- character(0)
-    for (expr in exprs) {
-      names_in_expr <- all.names(expr, functions = TRUE)
-      all_names_in_file <- c(all_names_in_file, names_in_expr)
+      # Extract all names (function calls) from all expressions
+      all_names_in_file <- character(0)
+      for (expr in exprs) {
+        names_in_expr <- all.names(expr, functions = TRUE)
+        all_names_in_file <- c(all_names_in_file, names_in_expr)
+      }
+
+      # Check if any generic request function is present
+      generic_funcs <- tg_config$helper_names
+      any(generic_funcs %in% all_names_in_file)
+    },
+    error = function(e) {
+      # If file can't be parsed, assume it doesn't call generic_request
+      cli::cli_alert_warning("Could not parse {file_path}: {e$message}")
+      FALSE
     }
-
-    # Check if any generic request function is present
-    generic_funcs <- tg_config$helper_names
-    any(generic_funcs %in% all_names_in_file)
-
-  }, error = function(e) {
-    # If file can't be parsed, assume it doesn't call generic_request
-    cli::cli_alert_warning("Could not parse {file_path}: {e$message}")
-    FALSE
-  })
+  )
 }
 
 #' Check if test file has real test_that() blocks
@@ -141,13 +146,16 @@ has_real_tests <- function(test_file_path) {
     return(FALSE)
   }
 
-  tryCatch({
-    lines <- readLines(test_file_path, warn = FALSE)
-    any(grepl("test_that\\s*\\(", lines))
-  }, error = function(e) {
-    cli::cli_alert_warning("Could not read {test_file_path}: {e$message}")
-    FALSE
-  })
+  tryCatch(
+    {
+      lines <- readLines(test_file_path, warn = FALSE)
+      any(grepl("test_that\\s*\\(", lines))
+    },
+    error = function(e) {
+      cli::cli_alert_warning("Could not read {test_file_path}: {e$message}")
+      FALSE
+    }
+  )
 }
 
 #' Detect stale protected entries in manifest
@@ -303,10 +311,8 @@ detect_gaps <- function() {
   # Write GITHUB_OUTPUT if in CI
   if (Sys.getenv("GITHUB_OUTPUT") != "") {
     output_file <- Sys.getenv("GITHUB_OUTPUT")
-    cat(sprintf("gaps_found=%s\n", ifelse(length(gaps) > 0, "true", "false")),
-        file = output_file, append = TRUE)
-    cat(sprintf("gaps_count=%d\n", length(gaps)),
-        file = output_file, append = TRUE)
+    cat(sprintf("gaps_found=%s\n", ifelse(length(gaps) > 0, "true", "false")), file = output_file, append = TRUE)
+    cat(sprintf("gaps_count=%d\n", length(gaps)), file = output_file, append = TRUE)
     cli::cli_alert_success("GITHUB_OUTPUT variables written")
   }
 
