@@ -1,6 +1,17 @@
 # Global test configuration
 library(testthat)
-if (nzchar(Sys.getenv("GITHUB_ACTIONS"))) { devtools::load_all() } else { library(ComptoxR) }
+# Only load if nothing has loaded the package yet. Under
+# test_dir(load_package = "source") / devtools::test the namespace is already
+# live; a second devtools::load_all() here rebuilds it mid-suite and detaches the
+# attached env, after which local_mocked_bindings() can no longer intercept
+# unqualified internal calls (see helper-generated-contracts.R for the same trap).
+if (!isNamespaceLoaded("ComptoxR")) {
+  if (nzchar(Sys.getenv("GITHUB_ACTIONS"))) {
+    devtools::load_all()
+  } else {
+    library(ComptoxR)
+  }
+}
 
 # Set up dummy environment variables for tests
 # This ensures tests can run even if the user hasn't set up their keys locally
