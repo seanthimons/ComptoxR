@@ -26,6 +26,15 @@ generated_contract_package_root <- function(package = "ComptoxR") {
 }
 
 generated_contract_ensure_package <- function(package = "ComptoxR") {
+  # When the suite already loaded the package (test_dir(load_package = "source"),
+  # devtools::test, etc.) the namespace is live. Re-running pkgload::load_all here
+  # rebuilds the namespace mid-suite and detaches it from the already-attached
+  # package env, so later local_mocked_bindings() can no longer intercept internal
+  # calls. Only load when nothing has loaded the package yet (true standalone run).
+  if (isNamespaceLoaded(package)) {
+    return(invisible(package))
+  }
+
   root <- generated_contract_package_root(package)
   if (requireNamespace("pkgload", quietly = TRUE) && !is.null(root)) {
     suppressPackageStartupMessages(pkgload::load_all(root, quiet = TRUE))
