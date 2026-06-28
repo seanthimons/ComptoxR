@@ -4,6 +4,11 @@ name: Pipeline Integration Tests
 on:
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'NEWS.md'
+      - '**/*.md'
+      - '.github/**'
+      - '.planning/**'
   workflow_dispatch:
     inputs:
       rerecord_cassettes:
