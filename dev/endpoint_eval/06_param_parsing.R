@@ -400,36 +400,40 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 #' @param custom_list Optional custom vector of DTXSIDs to sample from
 #' @return Character vector of DTXSIDs
 sample_test_dtxsids <- function(n = 3, custom_list = NULL) {
-  # If custom list provided, use it
+  # Deterministic: take the first n of a stable source (not sample()) so
+  # regenerated @examples are reproducible across runs and environments.
   if (!is.null(custom_list) && length(custom_list) >= n) {
-    return(sample(custom_list, size = n))
+    return(utils::head(custom_list, n))
   }
-  
-  default_dtxsid <- "DTXSID7020182"
-  
-  tryCatch({
-    # Try to load testing_chemicals from package data
-    chems <- NULL
-    if (requireNamespace("ComptoxR", quietly = TRUE)) {
-      if (exists("testing_chemicals", envir = asNamespace("ComptoxR"))) {
-        chems <- get("testing_chemicals", envir = asNamespace("ComptoxR"))
+
+  # Fixed multi-DTXSID fallback so examples never degrade to a single id when
+  # testing_chemicals is unreachable (e.g. generate run without ComptoxR loaded).
+  default_dtxsids <- c(
+    "DTXSID7020182", "DTXSID9020112", "DTXSID3020035",
+    "DTXSID5020023", "DTXSID0020232"
+  )
+
+  chems <- tryCatch(
+    {
+      if (
+        requireNamespace("ComptoxR", quietly = TRUE) &&
+          exists("testing_chemicals", envir = asNamespace("ComptoxR"))
+      ) {
+        get("testing_chemicals", envir = asNamespace("ComptoxR"))
+      } else if (file.exists("data/testing_chemicals.rda")) {
+        e <- new.env()
+        load("data/testing_chemicals.rda", envir = e)
+        e$testing_chemicals
+      } else {
+        NULL
       }
-    }
-    
-    # Fallback: try to load from data/ directory
-    if (is.null(chems)) {
-      data_path <- "data/testing_chemicals.rda"
-      if (file.exists(data_path)) {
-        load(data_path)
-      }
-    }
-    
-    if (!is.null(chems) && "dtxsid" %in% names(chems) && nrow(chems) >= n) {
-      sample(chems$dtxsid, size = n)
-    } else {
-      default_dtxsid
-    }
-  }, error = function(e) {
-    default_dtxsid  # fallback to default
-  })
+    },
+    error = function(e) NULL
+  )
+
+  if (!is.null(chems) && "dtxsid" %in% names(chems) && nrow(chems) >= n) {
+    utils::head(chems$dtxsid, n)
+  } else {
+    utils::head(default_dtxsids, n)
+  }
 }

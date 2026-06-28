@@ -105,6 +105,56 @@ reset_endpoint_tracking()
 
 empty_scaffold <- function() tibble(action = character(), file = character())
 
+# ==============================================================================
+# Collision-only disambiguation (issue #214)
+# ==============================================================================
+# The route -> file/fn derivation strips distinguishing tokens (summary,
+# by-dtxsid, trailing-slash, path-params), so several DISTINCT (route, method)
+# pairs can collapse to one file + fn. The append-only scaffold then writes all
+# defs and the LAST one wins, silently dropping the earlier, richer definitions.
+#
+# Fix: compute BOTH the existing "short" file/fn and a "full" file/fn that keeps
+# the distinguishing tokens. Where a short fn is unique we keep it (idempotent);
+# only the rows whose short fn collides (>= 2 distinct route+method map to it)
+# fall back to the full name so every endpoint gets a unique file + fn.
+
+#' Derive the per-row function name from a file column using the existing
+#' bulk/method-suffix convention (grouped per file). Returns a character vector
+#' aligned with the input rows.
+derive_fn_from_file <- function(df, file_col) {
+  df %>%
+    mutate(.fn_file = .data[[file_col]]) %>%
+    group_by(.fn_file) %>%
+    mutate(
+      .mc = n(),
+      .fn = case_when(
+        .mc == 1 ~ tools::file_path_sans_ext(basename(.fn_file)),
+        method == "GET" ~ tools::file_path_sans_ext(basename(.fn_file)),
+        method == "POST" ~ paste0(tools::file_path_sans_ext(basename(.fn_file)), "_bulk"),
+        .default = paste0(tools::file_path_sans_ext(basename(.fn_file)), "_", tolower(method))
+      )
+    ) %>%
+    ungroup() %>%
+    pull(.fn)
+}
+
+#' Collision-only fallback. Expects columns file_short/file_full/fn_short/fn_full.
+#' Keeps the short names where the short fn is unique; rows whose short fn
+#' collides fall back to the full file/fn. Drops all helper columns (file_short,
+#' file_full, fn_short, fn_full, and any starting with ".").
+resolve_collisions <- function(df) {
+  df %>%
+    add_count(fn_short, name = "n_short_count") %>%
+    mutate(
+      file = if_else(n_short_count > 1, file_full, file_short),
+      fn = if_else(n_short_count > 1, fn_full, fn_short)
+    ) %>%
+    select(
+      -any_of(c("file_short", "file_full", "fn_short", "fn_full", "n_short_count")),
+      -starts_with(".")
+    )
+}
+
 #' Run the shared stub-generation pipeline for one API spec.
 #' @param spec list with prefix, heading, build_endpoints(), config, and
 #'   optional post() hook.
@@ -203,7 +253,9 @@ ct_spec <- list(
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),
         domain = route %>% str_extract("^[^/]+"),
-        file = route %>%
+        # "short" core: strips domain-ish noise AND the distinguishing tokens
+        # (summary, by-dtxsid). This is today's logic, kept for idempotency.
+        .core_short = route %>%
           str_remove_all(regex(
             "(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])"
           )) %>%
@@ -212,7 +264,19 @@ ct_spec <- list(
           str_squish() %>%
           str_replace_all("\\s", "_") %>%
           str_replace_all("-", "_"),
-        file = paste0("ct_", domain, "_", file, ".R"),
+        # "full" core: strips ONLY the domain-ish noise, retaining the
+        # distinguishing tokens (summary, by-dtxsid, by-aeid) so colliding
+        # endpoints get unique names.
+        .core_full = route %>%
+          str_remove_all(regex(
+            "(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies))(?=$|[/_-])"
+          )) %>%
+          str_replace_all("[/]+", " ") %>%
+          str_squish() %>%
+          str_replace_all("\\s", "_") %>%
+          str_replace_all("-", "_"),
+        file_short = paste0("ct_", domain, "_", .core_short, ".R"),
+        file_full = paste0("ct_", domain, "_", .core_full, ".R"),
         batch_limit = case_when(
           method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
           method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
@@ -220,19 +284,11 @@ ct_spec <- list(
         )
       ) %>%
       arrange(forcats::fct_inorder(domain), route, factor(method, levels = c('POST', 'GET'))) %>%
-      distinct(route, method, .keep_all = TRUE) %>%
-      group_by(file) %>%
-      mutate(
-        method_count = n(),
-        fn = case_when(
-          method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-          method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-          method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-          .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
-        )
-      ) %>%
-      ungroup() %>%
-      select(-method_count)
+      distinct(route, method, .keep_all = TRUE)
+
+    endpoints$fn_short <- derive_fn_from_file(endpoints, "file_short")
+    endpoints$fn_full <- derive_fn_from_file(endpoints, "file_full")
+    endpoints <- resolve_collisions(endpoints)
 
     cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
     endpoints
@@ -262,7 +318,7 @@ chemi_spec <- list(
     # the same way generate_ct_stubs and generate_cc_stubs do (v1.6 UNIFY-CHEMI).
     chemi_endpoints <- tryCatch(
       {
-        map(
+        ep <- map(
           chemi_schema_files,
           ~ {
             openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
@@ -295,26 +351,36 @@ chemi_spec <- list(
               str_squish() %>%
               str_replace_all("\\s", "_") %>%
               str_replace_all("-", "_"),
-            file = case_when(
+            # First path-param name, used as a disambiguating marker for
+            # trailing-slash / path-param GET variants that share a short name.
+            .first_pp = path_params %>%
+              str_extract("^[^,]+") %>%
+              str_replace_all("[^A-Za-z0-9]+", "_") %>%
+              str_to_lower() %>%
+              coalesce(""),
+            .name_full = if_else(
+              num_path_params > 0 & nzchar(.first_pp) & !str_detect(name, fixed(.first_pp)),
+              paste0(name, "_by_", .first_pp),
+              name
+            ),
+            file_short = case_when(
               nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
               str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
               .default = paste0("chemi_", domain, "_", name, ".R")
             ),
+            file_full = case_when(
+              nchar(.name_full) == 0 ~ paste0("chemi_", domain, ".R"),
+              str_detect(.name_full, pattern = domain) ~ paste0("chemi_", .name_full, ".R"),
+              .default = paste0("chemi_", domain, "_", .name_full, ".R")
+            ),
             batch_limit = 0,
             route = str_remove_all(route, "^api/")
           ) %>%
-          group_by(file) %>%
-          mutate(
-            method_count = n(),
-            fn = case_when(
-              method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-              method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-              method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-              .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
-            )
-          ) %>%
-          ungroup() %>%
-          select(-method_count)
+          distinct(route, method, .keep_all = TRUE)
+
+        ep$fn_short <- derive_fn_from_file(ep, "file_short")
+        ep$fn_full <- derive_fn_from_file(ep, "file_full")
+        resolve_collisions(ep)
       },
       error = function(e) {
         cli_alert_warning("Error parsing chemi schemas: {e$message}")
