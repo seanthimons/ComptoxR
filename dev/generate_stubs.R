@@ -3,9 +3,10 @@
 # Automated Function Stub Generation for CI
 # ==============================================================================
 #
-# This script generates R function stubs from OpenAPI schemas for active APIs:
+# This script generates R function stubs from OpenAPI schemas for all APIs:
 #   - CompTox Dashboard (ct_*)
 #   - Cheminformatics (chemi_*)
+#   - Common Chemistry (cc_*)
 #
 # Designed to be run in CI after schema downloads to automatically create
 # function stubs for any new or changed API endpoints.
@@ -48,6 +49,23 @@ chemi_config <- list(
   lifecycle_badge = "experimental"
 )
 
+# Common Chemistry (cc_*) function generation configuration
+cc_config <- list(
+  wrapper_function = "generic_cc_request",
+  param_strategy = "extra_params",
+  example_query = "123-91-1",
+  lifecycle_badge = "experimental",
+  batch_limit = 1
+)
+
+# Chemical Transformation Simulator (cts_*) function generation configuration
+cts_config <- list(
+  wrapper_function = "generic_cts_request",
+  param_strategy = "extra_params",
+  example_query = "CCCC",
+  lifecycle_badge = "experimental"
+)
+
 # ==============================================================================
 # Load Utilities
 # ==============================================================================
@@ -67,13 +85,16 @@ source(file.path(utils_dir, "06_param_parsing.R"))
 source(file.path(utils_dir, "07_stub_generation.R"))
 source(file.path(utils_dir, "08_drift_detection.R"))
 
+# Source CTS helper functions used by the generator blacklist.
+source(here::here("R", "cts.R"))
+
 # Reset endpoint tracking at start of generation run
 reset_endpoint_tracking()
 
 # ==============================================================================
 # Generic Runner
 # ==============================================================================
-# The active APIs (ct/chemi) share one pipeline. Only three things vary per
+# The four APIs (ct/chemi/cc/cts) share one pipeline. Only three things vary per
 # API: which schema files to read, how routes map to file/fn names, and an
 # optional route filter. Those live in each spec's `build_endpoints()` closure
 # (preserved verbatim from the original per-API functions). Everything from
@@ -383,6 +404,121 @@ chemi_spec <- list(
   }
 )
 
+cc_spec <- list(
+  prefix = "cc",
+  heading = "Common Chemistry (cc_*)",
+  config = cc_config,
+  build_endpoints = function() {
+    cc_schema_files <- list.files(
+      path = here::here('schema'),
+      pattern = "^commonchemistry-prod\\.json$",
+      full.names = FALSE
+    )
+
+    if (length(cc_schema_files) == 0) {
+      cli_alert_warning("No Common Chemistry schema file found, skipping cc_* generation")
+      return(NULL)
+    }
+
+    cli_alert_info("Found {length(cc_schema_files)} cc schema file(s)")
+
+    endpoints <- map(
+      cc_schema_files,
+      ~ {
+        openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+        openapi_to_spec(openapi)
+      },
+      .progress = FALSE
+    ) %>%
+      list_rbind() %>%
+      mutate(
+        route = strip_curly_params(route, leading_slash = 'remove'),
+        file = route %>%
+          str_replace_all("[/]+", " ") %>%
+          str_squish() %>%
+          str_replace_all("\\s", "_"),
+        file = paste0("cc_", file, ".R"),
+        batch_limit = case_when(
+          method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+          method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+          .default = NULL
+        )
+      ) %>%
+      distinct(route, .keep_all = TRUE)
+
+    cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
+    endpoints
+  }
+)
+
+cts_spec <- list(
+  prefix = "cts",
+  heading = "Chemical Transformation Simulator (cts_*)",
+  config = cts_config,
+  build_endpoints = function() {
+    cts_schema_path <- here::here("schema", "cts-prod.json")
+    cts_schema <- tryCatch(
+      {
+        if (file.exists(cts_schema_path)) {
+          cli_alert_info("Using local CTS schema: {cts_schema_path}")
+          jsonlite::fromJSON(cts_schema_path, simplifyVector = FALSE)
+        } else {
+          cli_alert_info("No local CTS schema found; fetching https://qed.epa.gov/cts/rest/swag")
+          jsonlite::fromJSON("https://qed.epa.gov/cts/rest/swag", simplifyVector = FALSE)
+        }
+      },
+      error = function(e) {
+        cli_alert_warning("Could not load CTS schema: {e$message}")
+        return(NULL)
+      }
+    )
+
+    if (is.null(cts_schema)) {
+      return(NULL)
+    }
+
+    endpoints <- tryCatch(
+      {
+        openapi_to_spec(cts_schema) %>%
+          filter(str_detect(method, "GET|POST")) %>%
+          mutate(
+            route = strip_curly_params(route, leading_slash = "remove"),
+            is_blacklisted = .cts_endpoint_blacklisted(route)
+          ) %>%
+          filter(!is_blacklisted) %>%
+          select(-is_blacklisted) %>%
+          mutate(
+            name = route %>%
+              str_replace_all("[/]+", " ") %>%
+              str_squish() %>%
+              str_replace_all("\\s", "_") %>%
+              str_replace_all("-", "_"),
+            file = paste0("cts_", name, ".R"),
+            fn = tools::file_path_sans_ext(file),
+            batch_limit = case_when(
+              method == "GET" & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+              method == "GET" & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+              .default = NULL
+            )
+          ) %>%
+          distinct(route, method, .keep_all = TRUE)
+      },
+      error = function(e) {
+        cli_alert_warning("Error parsing CTS schema: {e$message}")
+        return(tibble())
+      }
+    )
+
+    if (nrow(endpoints) == 0) {
+      cli_alert_warning("No CTS endpoints parsed")
+      return(NULL)
+    }
+
+    cli_alert_info("Parsed {nrow(endpoints)} CTS endpoint(s) after blacklist filtering")
+    endpoints
+  }
+)
+
 # ==============================================================================
 # Main Execution
 # ==============================================================================
@@ -390,7 +526,7 @@ chemi_spec <- list(
 cli_h1("Function Stub Generation")
 cli_alert_info("Working directory: {getwd()}")
 
-api_specs <- list(ct = ct_spec, chemi = chemi_spec)
+api_specs <- list(ct = ct_spec, chemi = chemi_spec, cc = cc_spec, cts = cts_spec)
 
 # Each result is list(scaffold = <tibble>, drift = <tibble>) — uniform shape.
 results <- map(api_specs, run_generator)
