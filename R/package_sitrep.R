@@ -63,9 +63,6 @@ ComptoxR_package_sitrep <- function() {
   ctx_key_set <- nzchar(ctx_api_key) && !is.na(ctx_api_key)
   add_log("CompTox API Key: ", if (ctx_key_set) "SET" else "NOT SET")
   
-  cc_api_key <- Sys.getenv("cc_api_key")
-  cc_key_set <- nzchar(cc_api_key) && !is.na(cc_api_key)
-  add_log("Common Chemistry API Key: ", if (cc_key_set) "SET" else "NOT SET")
   add_log("")
   
   # Server Paths
@@ -79,7 +76,6 @@ ComptoxR_package_sitrep <- function() {
     "ToxValDB"              = "toxval_burl",
     "EPI Suite API"         = "epi_burl",
     "Natural Products API"  = "np_burl",
-    "Common Chemistry API"  = "cc_burl",
     "PubChem PUG REST"      = "pubchem_burl"
   )
   
@@ -104,10 +100,6 @@ ComptoxR_package_sitrep <- function() {
     ),
     "EPI Suite API" = list(
       url = Sys.getenv("epi_burl"),
-      ping_path = ""
-    ),
-    "Common Chemistry API" = list(
-      url = Sys.getenv("cc_burl"),
       ping_path = ""
     ),
     "PubChem PUG REST" = list(
@@ -369,11 +361,6 @@ ComptoxR_package_sitrep <- function() {
   } else {
     cli::cli_li("{.strong CompTox API Key}: {cli::col_red('NOT SET')}")
   }
-  if (cc_key_set) {
-    cli::cli_li("{.strong Common Chemistry API Key}: {cli::col_green('SET')}")
-  } else {
-    cli::cli_li("{.strong Common Chemistry API Key}: {cli::col_red('NOT SET')}")
-  }
   cli::cli_end()
   
   cli::cli_h2("Server Status")
@@ -415,8 +402,7 @@ ComptoxR_package_sitrep <- function() {
     package_version = pkg_version,
     package_date = pkg_date,
     api_tokens = list(
-      ctx_api_key = ctx_key_set,
-      cc_api_key = cc_key_set
+      ctx_api_key = ctx_key_set
     ),
     server_paths = server_paths,
     ping_results = ping_results,

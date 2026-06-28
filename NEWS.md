@@ -6,6 +6,12 @@
 
 #### Breaking changes
 
+* CTS and CAS Common Chemistry wrappers are deferred from the CRAN submission
+  surface. This temporarily removes the `cc_*()`, `cts_*()`, `cc_server()`,
+  `cts_server()`, `cc_schema()`, `generic_cc_request()`, and
+  `generic_cts_request()` surfaces until the post-CRAN restoration branch
+  reintroduces the family.
+
 * **Phase 28 Thin Wrapper Migration Complete:** This release completes the migration of
   hand-written wrapper functions to generated stubs with declarative hook-based customization.
   All user-facing ct_* functions now use the same underlying generic_request() template,

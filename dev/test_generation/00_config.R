@@ -15,8 +15,6 @@ tg_config <- list(
   helper_names = c(
     "generic_request",
     "generic_chemi_request",
-    "generic_cc_request",
-    "generic_cts_request",
     "generic_pubchem_request"
   ),
   resolver_helper_names = c(

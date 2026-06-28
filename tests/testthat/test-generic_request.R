@@ -72,7 +72,6 @@ test_that("generic_request tidies simple results into tibbles", {
     }
   )
 })
-
 test_that("generic_request handles empty results gracefully", {
   testthat::with_mocked_bindings(
     req_perform = function(req) {
@@ -340,53 +339,6 @@ test_that("generic_request with paginate=TRUE and cursor follows cursor tokens",
       )
       # Should get records from 2 pages (cursor NULL on page 2 stops iteration)
       expect_type(res, "list")
-    }
-  )
-})
-
-test_that("generic_cc_request with paginate=TRUE fetches multiple pages", {
-  call_count <- 0
-  testthat::with_mocked_bindings(
-    req_perform = function(req, ...) {
-      call_count <<- call_count + 1
-      if (call_count == 1) {
-        # Page 1: return full page (size=1, 1 result = full page)
-        data <- list(
-          count = "3",
-          results = list(list(rn = "50-01-0", name = "Chem1"))
-        )
-      } else if (call_count == 2) {
-        # Page 2: return full page
-        data <- list(
-          count = "3",
-          results = list(list(rn = "50-02-0", name = "Chem2"))
-        )
-      } else {
-        # Page 3: empty results signals end
-        data <- list(count = "3", results = list())
-      }
-      httr2::response(
-        status_code = 200,
-        headers = list(`Content-Type` = "application/json"),
-        body = charToRaw(jsonlite::toJSON(data, auto_unbox = TRUE))
-      )
-    },
-    .package = "httr2",
-    {
-      Sys.setenv(cc_api_key = "test_cc_key")
-      res <- generic_cc_request(
-        endpoint = "search",
-        method = "GET",
-        paginate = TRUE,
-        pagination_strategy = "offset_limit",
-        max_pages = 10,
-        q = "formaldehyde",
-        offset = 0,
-        size = 1
-      )
-      expect_s3_class(res, "tbl_df")
-      expect_equal(nrow(res), 2)
-      expect_true(call_count >= 3)
     }
   )
 })

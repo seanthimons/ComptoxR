@@ -10,7 +10,6 @@ local_sitrep_env <- function() {
       toxval_burl = "",
       epi_burl = "",
       np_burl = "",
-      cc_burl = "",
       pubchem_burl = ""
     ),
     .local_envir = parent.frame()
@@ -64,27 +63,20 @@ test_that("package_sitrep detects API token status correctly", {
     local_sitrep_env()
     # Save original env vars
     orig_ctx <- Sys.getenv("ctx_api_key", unset = NA)
-    orig_cc <- Sys.getenv("cc_api_key", unset = NA)
-    
     # Test with no tokens set
     Sys.unsetenv("ctx_api_key")
-    Sys.unsetenv("cc_api_key")
     
     result <- ComptoxR_package_sitrep()
     expect_false(result$api_tokens$ctx_api_key)
-    expect_false(result$api_tokens$cc_api_key)
     
     # Test with tokens set
     Sys.setenv(ctx_api_key = "test_token_123")
-    Sys.setenv(cc_api_key = "test_cc_token_456")
     
     result <- ComptoxR_package_sitrep()
     expect_true(result$api_tokens$ctx_api_key)
-    expect_true(result$api_tokens$cc_api_key)
     
     # Restore original env vars
     if (!is.na(orig_ctx)) Sys.setenv(ctx_api_key = orig_ctx) else Sys.unsetenv("ctx_api_key")
-    if (!is.na(orig_cc)) Sys.setenv(cc_api_key = orig_cc) else Sys.unsetenv("cc_api_key")
   })
 })
 
@@ -99,7 +91,6 @@ test_that("package_sitrep captures server paths", {
     # Check that expected servers are present
     expect_true("CompTox Dashboard API" %in% names(result$server_paths))
     expect_true("Cheminformatics API" %in% names(result$server_paths))
-    expect_true("Common Chemistry API" %in% names(result$server_paths))
   })
 })
 

@@ -24,14 +24,6 @@ run_setup <- function() {
     	display_url = Sys.getenv("epi_burl"),
     	ping_url = Sys.getenv("epi_burl")
     ),
-		"Common Chemistry API" = list(
-			display_url = Sys.getenv("cc_burl"),
-			ping_url = Sys.getenv("cc_burl")
-		),
-		"CTS API" = list(
-			display_url = Sys.getenv("cts_burl"),
-			ping_url = paste0(Sys.getenv("cts_burl"), "/cts")
-		),
 		"PubChem PUG REST" = list(
 			display_url = Sys.getenv("pubchem_burl"),
 			ping_url = paste0(Sys.getenv("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
@@ -313,13 +305,6 @@ run_setup <- function() {
   } else {
     cli::cli_alert_success(cli::col_green("CompTox API Key: {.strong SET}."))
   }
-	api_key <- Sys.getenv("cc_api_key")
-  if (api_key == "") {
-    cli::cli_alert_warning("Common Chemistry API Key: {.strong NOT SET}. Use {.run Sys.setenv(cc_api_key= 'YOUR_KEY_HERE')} to set it.")
-  } else {
-    cli::cli_alert_success(cli::col_green("Common Chemistry API Key: {.strong SET}."))
-  }
-  
   invisible(NULL)
 }
 
@@ -405,38 +390,6 @@ chemi_server <- function(server = NULL) {
 		)
 
 		Sys.getenv("chemi_burl")
-	}
-}
-
-#' Set API endpoint for Chemical Transformation Simulator (CTS)
-#'
-#' @param server Defines what server to target. If `NULL`, the server URL is
-#'   reset. Valid options are:
-#'   \itemize{
-#'     \item Production: 1
-#'   }
-#'
-#' @return Should return the Sys Env variable `cts_burl`
-#' @export
-cts_server <- function(server = NULL) {
-	if (is.null(server)) {
-		{
-			cli::cli_alert_danger("Server URL reset!")
-			Sys.setenv("cts_burl" = "")
-		}
-	} else {
-		switch(
-			as.character(server),
-			"1" = Sys.setenv("cts_burl" = "https://qed.epa.gov/cts/rest"),
-			{
-				cli::cli_alert_warning("Invalid server option selected!")
-				cli::cli_alert_info("Valid option is 1 (Production).")
-				cli::cli_alert_warning("Server URL reset!")
-				Sys.setenv("cts_burl" = "")
-			}
-		)
-
-		Sys.getenv("cts_burl")
 	}
 }
 
@@ -598,35 +551,6 @@ np_server <- function(server = NULL){
 	}
 }
 
-#' Set API endpoints for CAS Common Chemistry API
-#' 
-#' @param server Defines what server to target
-#' 
-#' @return Should return the Sys Env variable `cc_server`
-#' @export
-
-cc_server <- function(server = NULL){
-if (is.null(server)) {
-		{
-			cli::cli_alert_danger("Server URL reset!")
-			Sys.setenv("cc_burl" = "")
-		}
-	} else {
-		switch(
-			as.character(server),
-			"1" = Sys.setenv("cc_burl" = "https://commonchemistry.cas.org/api/"),
-			{
-				cli::cli_alert_warning("Invalid server option selected!")
-				cli::cli_alert_info("Valid options are 1 (Production).")
-				cli::cli_alert_warning("Server URL reset!")
-				Sys.setenv("cc_burl" = "")
-			}
-		)
-
-		Sys.getenv("cc_burl")
-	}
-}
-
 #' Set API endpoint for PubChem PUG REST API
 #'
 #' PubChem only has a production endpoint (no staging or development).
@@ -766,8 +690,6 @@ reset_servers <- function() {
 	ctx_server()
 	# Reset Cheminformatics server URL
 	chemi_server()
-	# Reset CTS server URL
-	cts_server()
 	# Reset EPI Suite server URL
 	epi_server()
 	# Reset ECOTOX server URL
@@ -776,8 +698,6 @@ reset_servers <- function() {
 	toxval_server()
 	# Reset Natural Products server URL
 	np_server()
-	# Reset Common Chemistry server URL
-	cc_server()
 	# Reset PubChem PUG REST server URL
 	pubchem_server()
 }
@@ -831,12 +751,10 @@ reset_servers <- function() {
 			# DEV version defaults (only if not already set)
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 2)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 3)
-			if (Sys.getenv("cts_burl") == "") cts_server(server = 1)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
 			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
-			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
 			# Only set verbose if not already configured
 			if (Sys.getenv("run_verbose") == "") {
@@ -851,12 +769,10 @@ reset_servers <- function() {
 			# Production version defaults (only if not already set)
 			if (Sys.getenv("ctx_burl") == "") ctx_server(server = 1)
 			if (Sys.getenv("chemi_burl") == "") chemi_server(server = 1)
-			if (Sys.getenv("cts_burl") == "") cts_server(server = 1)
 			if (Sys.getenv("epi_burl") == "") epi_server(server = 1)
 			if (Sys.getenv("eco_burl") == "") eco_server(server = 1)
 			if (Sys.getenv("toxval_burl") == "") toxval_server(server = 1)
 			if (Sys.getenv("np_burl") == "") np_server(server = 1)
-			if (Sys.getenv("cc_burl") == "") cc_server(server = 1)
 			if (Sys.getenv("pubchem_burl") == "") pubchem_server(server = 1)
 			# Only set verbose if not already configured
 			if (Sys.getenv("run_verbose") == "") {
