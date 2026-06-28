@@ -48,42 +48,6 @@ ct_chemical_list:
   post_response:
     - format_compound_list_result
 
-ct_bioactivity_data_bulk:
-  extra_params:
-    annotate:
-      default: "FALSE"
-      type: "logical"
-      description: "Join assay annotations by aeid"
-  post_response:
-    - annotate_assay_if_requested
-
-ct_bioactivity_data_by_aeid_bulk:
-  extra_params:
-    annotate:
-      default: "FALSE"
-      type: "logical"
-      description: "Join assay annotations by aeid"
-  post_response:
-    - annotate_assay_if_requested
-
-ct_bioactivity_data_by_spid_bulk:
-  extra_params:
-    annotate:
-      default: "FALSE"
-      type: "logical"
-      description: "Join assay annotations by aeid"
-  post_response:
-    - annotate_assay_if_requested
-
-ct_bioactivity_data_by_m4id_bulk:
-  extra_params:
-    annotate:
-      default: "FALSE"
-      type: "logical"
-      description: "Join assay annotations by aeid"
-  post_response:
-    - annotate_assay_if_requested
-
 ct_chemical_property_experimental_bulk:
   extra_params:
     coerce:
