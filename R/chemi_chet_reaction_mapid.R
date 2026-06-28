@@ -14,8 +14,10 @@
 chemi_chet_reaction_mapid <- function(map_id = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(map_id)) options[['map_id']] <- map_id
-    result <- generic_request(
+  if (!is.null(map_id)) {
+    options[['map_id']] <- map_id
+  }
+  result <- generic_request(
     endpoint = "reaction/mapid",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_reaction_mapid <- function(map_id = NULL) {
 
   return(result)
 }
-
-

@@ -23,5 +23,3 @@ ct_chemical_list_chemicals_search_by_listname <- function(list) {
 
   return(result)
 }
-
-

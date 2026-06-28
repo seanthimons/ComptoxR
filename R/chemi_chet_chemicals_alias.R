@@ -14,8 +14,10 @@
 chemi_chet_chemicals_alias <- function(dtxsid = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(dtxsid)) options[['dtxsid']] <- dtxsid
-    result <- generic_request(
+  if (!is.null(dtxsid)) {
+    options[['dtxsid']] <- dtxsid
+  }
+  result <- generic_request(
     endpoint = "chemicals/alias",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_chemicals_alias <- function(dtxsid = NULL) {
 
   return(result)
 }
-
-

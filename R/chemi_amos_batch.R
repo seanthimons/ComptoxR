@@ -18,20 +18,49 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_batch(additional_record_info = "DTXSID7020182")
+#' chemi_amos_batch(additional_record_info = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_amos_batch <- function(additional_record_info = NULL, always_download_file = NULL, base_url = NULL, dtxsids = NULL, include_classyfire = NULL, include_external_links = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL, record_types = NULL) {
+chemi_amos_batch <- function(
+  additional_record_info = NULL,
+  always_download_file = NULL,
+  base_url = NULL,
+  dtxsids = NULL,
+  include_classyfire = NULL,
+  include_external_links = NULL,
+  include_functional_uses = NULL,
+  include_source_counts = NULL,
+  methodologies = NULL,
+  record_types = NULL
+) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(always_download_file)) options$always_download_file <- always_download_file
-  if (!is.null(base_url)) options$base_url <- base_url
-  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
-  if (!is.null(include_classyfire)) options$include_classyfire <- include_classyfire
-  if (!is.null(include_external_links)) options$include_external_links <- include_external_links
-  if (!is.null(include_functional_uses)) options$include_functional_uses <- include_functional_uses
-  if (!is.null(include_source_counts)) options$include_source_counts <- include_source_counts
-  if (!is.null(methodologies)) options$methodologies <- methodologies
-  if (!is.null(record_types)) options$record_types <- record_types
+  if (!is.null(always_download_file)) {
+    options$always_download_file <- always_download_file
+  }
+  if (!is.null(base_url)) {
+    options$base_url <- base_url
+  }
+  if (!is.null(dtxsids)) {
+    options$dtxsids <- dtxsids
+  }
+  if (!is.null(include_classyfire)) {
+    options$include_classyfire <- include_classyfire
+  }
+  if (!is.null(include_external_links)) {
+    options$include_external_links <- include_external_links
+  }
+  if (!is.null(include_functional_uses)) {
+    options$include_functional_uses <- include_functional_uses
+  }
+  if (!is.null(include_source_counts)) {
+    options$include_source_counts <- include_source_counts
+  }
+  if (!is.null(methodologies)) {
+    options$methodologies <- methodologies
+  }
+  if (!is.null(record_types)) {
+    options$record_types <- record_types
+  }
   result <- generic_chemi_request(
     query = additional_record_info,
     endpoint = "amos/batch_search",
@@ -43,5 +72,3 @@ chemi_amos_batch <- function(additional_record_info = NULL, always_download_file
 
   return(result)
 }
-
-

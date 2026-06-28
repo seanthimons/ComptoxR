@@ -28,4 +28,8 @@ test_that("cts_metabolizer passes request metadata to helper", {
   expect_equal(call$.helper, "generic_cts_request")
   expect_equal(call[["endpoint"]], "metabolizer")
   expect_equal(call[["method"]], "GET")
+  expect_true("body" %in% names(call))
+  expect_true(is.null(call[["body"]]) || length(call[["body"]]) >= 0)
+  expect_equal(call[["tidy"]], FALSE)
 })
+

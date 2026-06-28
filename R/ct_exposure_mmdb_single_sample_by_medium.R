@@ -29,5 +29,3 @@ ct_exposure_mmdb_single_sample_by_medium <- function(medium, pageNumber = 1, all
 
   return(result)
 }
-
-

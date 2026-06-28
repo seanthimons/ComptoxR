@@ -16,9 +16,13 @@
 chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(page)) options[['page']] <- page
-  if (!is.null(size)) options[['size']] <- size
-    result <- generic_request(
+  if (!is.null(page)) {
+    options[['page']] <- page
+  }
+  if (!is.null(size)) {
+    options[['size']] <- size
+  }
+  result <- generic_request(
     endpoint = "chemicals/counts",
     method = "GET",
     batch_limit = 0,
@@ -35,5 +39,3 @@ chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE)
 
   return(result)
 }
-
-

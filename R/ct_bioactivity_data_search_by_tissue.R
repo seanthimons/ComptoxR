@@ -25,5 +25,3 @@ ct_bioactivity_data_search_by_tissue <- function(dtxsid, tissue) {
 
   return(result)
 }
-
-

@@ -1,25 +1,31 @@
-#' Generate categories for one molecule
+#' Generate NCC categories for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles SMILES string of the molecule
+#' @param smiles SMILES to generate NCC categories for
 #' @param logp Octanol-water partition coefficient
 #' @param ws Water solubility (mg/L)
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
+#' chemi_ncc_cats(smiles = "DTXSID7020182")
 #' }
-chemi_ncc_cats <- function(smiles, logp, ws) {
+chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(logp)) options[['logp']] <- logp
-  if (!is.null(ws)) options[['ws']] <- ws
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(logp)) {
+    options[['logp']] <- logp
+  }
+  if (!is.null(ws)) {
+    options[['ws']] <- ws
+  }
+  result <- generic_request(
     endpoint = "ncc_cats",
     method = "GET",
     batch_limit = 0,
@@ -35,32 +41,24 @@ chemi_ncc_cats <- function(smiles, logp, ws) {
 }
 
 
-
-
-#' Generate categories for multiple molecules
+#' Generate NCC categories for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param logp Required parameter
-#' @param ws Required parameter
-#' @return Returns a tibble with results
+#' @param chemicals Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors.
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(smiles = "DTXSID7020182")
+#' chemi_ncc_cats_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_ncc_cats_bulk <- function(smiles, logp, ws) {
-  # Build options list for additional parameters
-  options <- list()
-  options$logp <- logp
-  options$ws <- ws
+chemi_ncc_cats_bulk <- function(chemicals = NULL) {
   result <- generic_chemi_request(
-    query = smiles,
+    query = chemicals,
     endpoint = "ncc_cats",
-    options = options,
+    wrap = FALSE,
     tidy = FALSE
   )
 
@@ -68,5 +66,3 @@ chemi_ncc_cats_bulk <- function(smiles, logp, ws) {
 
   return(result)
 }
-
-

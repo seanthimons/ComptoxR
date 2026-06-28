@@ -25,5 +25,3 @@ ct_chemical_list_search <- function(dtxsid, projection = "chemicallistall") {
 
   return(result)
 }
-
-

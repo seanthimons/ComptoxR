@@ -2,48 +2,29 @@
 % Please edit documentation in R/cts_metabolizer_run.R
 \name{cts_metabolizer_run}
 \alias{cts_metabolizer_run}
-\title{Run CTS Metabolizer}
+\title{Run metabolizer calculator for p-chem data.}
 \usage{
 cts_metabolizer_run(
-  query,
-  id_type = "AnyId",
-  generation_limit = 1,
-  transformation_libraries = "hydrolysis",
-  resolve = TRUE,
-  tidy = FALSE
+  structure = "CCCC",
+  generationLimit = 1,
+  transformationLibraries = list("hydrolysis")
 )
 }
 \arguments{
-\item{query}{Chemical identifier or SMILES string.}
+\item{structure}{Chemical for metabolizer in smiles format. (default: CCCC)}
 
-\item{id_type}{Identifier type passed to \code{chemi_resolver_lookup()}. Defaults
-to \code{"AnyId"}.}
+\item{generationLimit}{Number of generations for structure's transformation products. (default: 1)}
 
-\item{generation_limit}{Number of transformation generations to request.
-Defaults to \code{1}.}
-
-\item{transformation_libraries}{Character vector of CTS transformation
-libraries. Defaults to \code{"hydrolysis"}.}
-
-\item{resolve}{Logical; if \code{TRUE}, resolve \code{query} through
-\code{chemi_resolver_lookup()}. If \code{FALSE}, treat \code{query} as SMILES.}
-
-\item{tidy}{Logical; if \code{TRUE}, flatten the metabolizer tree to a tibble.
-Defaults to \code{FALSE}, returning the parsed nested CTS response unchanged.}
+\item{transformationLibraries}{Optional parameter (default: hydrolysis)}
 }
 \value{
-Parsed CTS response when \code{tidy = FALSE}; a flattened tibble when
-\code{tidy = TRUE}.
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Runs CTS metabolizer transformation tree prediction. Identifier inputs are
-resolved to one SMILES string per query by default.
 }
 \examples{
 \dontrun{
-cts_metabolizer_run("DTXSID7020182")
-cts_metabolizer_run("CCCC", resolve = FALSE, tidy = TRUE)
+cts_metabolizer_run(structure = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

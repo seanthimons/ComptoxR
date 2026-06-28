@@ -9,10 +9,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_count_substances_in_ids(internal_id_list = "DTXSID7020182")
+#' chemi_amos_count_substances_in_ids(internal_id_list = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_amos_count_substances_in_ids <- function(internal_id_list = NULL) {
-
   result <- generic_chemi_request(
     query = internal_id_list,
     endpoint = "amos/count_substances_in_ids/",
@@ -24,5 +23,3 @@ chemi_amos_count_substances_in_ids <- function(internal_id_list = NULL) {
 
   return(result)
 }
-
-

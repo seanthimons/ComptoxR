@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_list_presence_search_bulk(query = c("DTXSID00330354", "DTXSID80218080", "DTXSID80505725"))
+#' ct_exposure_list_presence_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_exposure_list_presence_search_bulk <- function(query) {
   result <- generic_request(
@@ -48,5 +48,3 @@ ct_exposure_list_presence_search <- function(dtxsid) {
 
   return(result)
 }
-
-

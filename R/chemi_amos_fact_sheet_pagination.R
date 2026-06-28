@@ -32,5 +32,3 @@ chemi_amos_fact_sheet_pagination <- function(limit, offset = 0, all_pages = TRUE
 
   return(result)
 }
-
-

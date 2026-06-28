@@ -33,7 +33,7 @@
 #' }
 genra_swa <- function(activities, similarities) {
   # Input validation
- if (length(activities) != length(similarities)) {
+  if (length(activities) != length(similarities)) {
     cli::cli_abort(
       "Length of {.arg activities} ({length(activities)}) must match
        length of {.arg similarities} ({length(similarities)})."
@@ -49,7 +49,7 @@ genra_swa <- function(activities, similarities) {
   }
 
   # Filter to valid (non-NA) observations
- valid_idx <- !is.na(activities)
+  valid_idx <- !is.na(activities)
   activities <- activities[valid_idx]
   similarities <- similarities[valid_idx]
 

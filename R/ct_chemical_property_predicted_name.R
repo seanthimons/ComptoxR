@@ -21,5 +21,3 @@ ct_chemical_property_predicted_name <- function() {
 
   return(result)
 }
-
-

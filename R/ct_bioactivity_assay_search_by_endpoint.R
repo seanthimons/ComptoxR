@@ -23,5 +23,3 @@ ct_bioactivity_assay_search_by_endpoint <- function(endpoint) {
 
   return(result)
 }
-
-

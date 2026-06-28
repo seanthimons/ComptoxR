@@ -10,12 +10,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_resolve(queries = "DTXSID7020182")
+#' chemi_resolver_resolve(queries = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_resolver_resolve <- function(queries = NULL, mol = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(mol)) options$mol <- mol
+  if (!is.null(mol)) {
+    options$mol <- mol
+  }
   result <- generic_chemi_request(
     query = queries,
     endpoint = "resolver/resolve",
@@ -27,5 +29,3 @@ chemi_resolver_resolve <- function(queries = NULL, mol = NULL) {
 
   return(result)
 }
-
-

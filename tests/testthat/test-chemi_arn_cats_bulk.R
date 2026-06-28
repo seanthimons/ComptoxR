@@ -21,14 +21,16 @@ test_that("chemi_arn_cats_bulk passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_arn_cats_bulk(chemicals = "DTXSID7020182"))), silent = TRUE)
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_arn_cats_bulk())), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_chemi_request")
-  expect_equal(call[["query"]], "DTXSID7020182")
+  expect_true("query" %in% names(call))
+  expect_true(is.null(call[["query"]]) || length(call[["query"]]) >= 0)
   expect_equal(call[["endpoint"]], "arn_cats")
   expect_true("options" %in% names(call))
   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
   expect_equal(call[["tidy"]], FALSE)
 })
+

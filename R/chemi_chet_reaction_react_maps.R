@@ -14,8 +14,10 @@
 chemi_chet_reaction_react_maps <- function(react_id = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(react_id)) options[['react_id']] <- react_id
-    result <- generic_request(
+  if (!is.null(react_id)) {
+    options[['react_id']] <- react_id
+  }
+  result <- generic_request(
     endpoint = "reaction/react_maps",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_reaction_react_maps <- function(react_id = NULL) {
 
   return(result)
 }
-
-

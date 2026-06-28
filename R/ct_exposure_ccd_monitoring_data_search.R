@@ -25,5 +25,3 @@ ct_exposure_ccd_monitoring_data_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
-
-

@@ -25,5 +25,3 @@ ct_chemical_list_chemicals_search_equal <- function(list, word = NULL) {
 
   return(result)
 }
-
-

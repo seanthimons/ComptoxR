@@ -2,17 +2,17 @@
 % Please edit documentation in R/chemi_arn_cats.R
 \name{chemi_arn_cats}
 \alias{chemi_arn_cats}
-\title{Generate descriptors for one molecule}
+\title{Generate an ARN category for one molecule}
 \usage{
 chemi_arn_cats(smiles, model = "RF")
 }
 \arguments{
 \item{smiles}{SMILES to generate groups for}
 
-\item{model}{Model to use for group prediction (default: RF)}
+\item{model}{Model to use for group prediction. Options: RF, NN (default: RF)}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

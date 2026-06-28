@@ -14,8 +14,10 @@
 chemi_resolver_lookupCASRN <- function(query) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  result <- generic_request(
     endpoint = "resolver/lookupCASRN",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_resolver_lookupCASRN <- function(query) {
 
   return(result)
 }
-
-

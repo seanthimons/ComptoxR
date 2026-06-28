@@ -30,4 +30,6 @@ test_that("cts_metabolizer_inputs passes request metadata to helper", {
   expect_true("body" %in% names(call))
   expect_true(is.null(call[["body"]]) || length(call[["body"]]) >= 0)
   expect_equal(call[["method"]], "POST")
+  expect_equal(call[["tidy"]], FALSE)
 })
+

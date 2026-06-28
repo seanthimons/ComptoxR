@@ -14,8 +14,10 @@
 chemi_services_layout <- function(smiles) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  result <- generic_request(
     endpoint = "services/layout",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_services_layout <- function(smiles) {
 
   return(result)
 }
-
-

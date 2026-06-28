@@ -23,5 +23,3 @@ ct_hazard_toxref_observations_search <- function(dtxsid) {
 
   return(result)
 }
-
-

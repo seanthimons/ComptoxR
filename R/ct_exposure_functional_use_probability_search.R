@@ -23,5 +23,3 @@ ct_exposure_functional_use_probability_search <- function(dtxsid) {
 
   return(result)
 }
-
-

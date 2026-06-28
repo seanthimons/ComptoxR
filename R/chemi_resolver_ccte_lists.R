@@ -24,5 +24,3 @@ chemi_resolver_ccte_lists <- function() {
 
   return(result)
 }
-
-

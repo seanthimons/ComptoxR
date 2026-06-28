@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_search_bulk(query = c("DTXSID6020692", "DTXSID40911863", "DTXSID8047004"))
+ct_bioactivity_data_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

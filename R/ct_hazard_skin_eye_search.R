@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_skin_eye_search_bulk(query = c("DTXSID1049641", "DTXSID9032537", "DTXSID2033314"))
+#' ct_hazard_skin_eye_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_hazard_skin_eye_search_bulk <- function(query) {
   result <- generic_request(
@@ -48,5 +48,3 @@ ct_hazard_skin_eye_search <- function(dtxsid) {
 
   return(result)
 }
-
-

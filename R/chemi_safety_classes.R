@@ -24,5 +24,3 @@ chemi_safety_classes <- function() {
 
   return(result)
 }
-
-

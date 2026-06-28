@@ -23,5 +23,3 @@ ct_hazard_toxref_search_by_study_id <- function(studyId) {
 
   return(result)
 }
-
-

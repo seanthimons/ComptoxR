@@ -24,5 +24,3 @@ chemi_chet_chemicals_chemical_DL <- function() {
 
   return(result)
 }
-
-

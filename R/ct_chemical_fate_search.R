@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_fate_search_bulk(query = c("DTXSID9024938", "DTXSID6026296", "DTXSID7020182"))
+#' ct_chemical_fate_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_chemical_fate_search_bulk <- function(query) {
   result <- generic_request(
@@ -21,88 +21,3 @@ ct_chemical_fate_search_bulk <- function(query) {
 
   return(result)
 }
-
-
-#' Get fate data by DTXSID
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param dtxsid DSSTox Substance Identifier. Type: string
-#' @return Returns a scalar value
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ct_chemical_fate_search(dtxsid = "DTXSID7020182")
-#' }
-ct_chemical_fate_search <- function(dtxsid) {
-  result <- generic_request(
-    query = dtxsid,
-    endpoint = "chemical/fate/search/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-
-#' Get fate summary by DTXSID and property
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param dtxsid Required parameter
-#' @param propName Required parameter
-#' @return Returns a scalar value
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ct_chemical_fate_search(dtxsid = "DTXSID7020182")
-#' }
-ct_chemical_fate_search <- function(dtxsid, propName) {
-  result <- generic_request(
-    endpoint = "chemical/fate/summary/search/",
-    method = "GET",
-    batch_limit = 0,
-    `dtxsid` = dtxsid,
-    `propName` = propName
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-
-#' Get fate summary by DTXSID
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param dtxsid DSSTox Substance Identifier. Type: string
-#' @return Returns a scalar value
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ct_chemical_fate_search(dtxsid = "DTXSID7020182")
-#' }
-ct_chemical_fate_search <- function(dtxsid) {
-  result <- generic_request(
-    query = dtxsid,
-    endpoint = "chemical/fate/summary/search/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-

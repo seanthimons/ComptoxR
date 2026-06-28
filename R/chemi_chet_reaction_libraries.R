@@ -24,5 +24,3 @@ chemi_chet_reaction_libraries <- function() {
 
   return(result)
 }
-
-

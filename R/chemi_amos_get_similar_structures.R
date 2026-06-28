@@ -26,5 +26,3 @@ chemi_amos_get_similar_structures <- function(dtxsid) {
 
   return(result)
 }
-
-

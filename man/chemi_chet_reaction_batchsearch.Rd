@@ -19,6 +19,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_batchsearch(dtxsids = "DTXSID7020182")
+chemi_chet_reaction_batchsearch(dtxsids = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

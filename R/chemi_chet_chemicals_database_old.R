@@ -24,5 +24,3 @@ chemi_chet_chemicals_database_old <- function() {
 
   return(result)
 }
-
-

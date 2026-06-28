@@ -87,10 +87,14 @@ genra_uncertainty <- function(activities, similarities, n_permutations = 100L) {
   observed_swa <- genra_swa(activities, similarities)
 
   # Permutation test for p-value
-  perm_swa <- vapply(seq_len(n_permutations), function(i) {
-    perm_activities <- sample(activities)
-    genra_swa(perm_activities, similarities)
-  }, FUN.VALUE = numeric(1))
+  perm_swa <- vapply(
+    seq_len(n_permutations),
+    function(i) {
+      perm_activities <- sample(activities)
+      genra_swa(perm_activities, similarities)
+    },
+    FUN.VALUE = numeric(1)
+  )
 
   # Two-tailed p-value: how often is permuted as extreme as observed?
   if (observed_swa >= 0.5) {
@@ -105,18 +109,21 @@ genra_uncertainty <- function(activities, similarities, n_permutations = 100L) {
   auc <- NA_real_
   if (n_active >= 1 && n_inactive >= 1) {
     if (requireNamespace("pROC", quietly = TRUE)) {
-      tryCatch({
-        roc_obj <- pROC::roc(
-          response = activities,
-          predictor = similarities,
-          levels = c(0L, 1L),
-          direction = "<",
-          quiet = TRUE
-        )
-        auc <- as.numeric(pROC::auc(roc_obj))
-      }, error = function(e) {
-        # Keep NA on error
-      })
+      tryCatch(
+        {
+          roc_obj <- pROC::roc(
+            response = activities,
+            predictor = similarities,
+            levels = c(0L, 1L),
+            direction = "<",
+            quiet = TRUE
+          )
+          auc <- as.numeric(pROC::auc(roc_obj))
+        },
+        error = function(e) {
+          # Keep NA on error
+        }
+      )
     }
   }
 

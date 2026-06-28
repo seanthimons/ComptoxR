@@ -23,5 +23,3 @@ ct_bioactivity_aop_search_by_entrez_gene_id <- function(entrezGeneId) {
 
   return(result)
 }
-
-

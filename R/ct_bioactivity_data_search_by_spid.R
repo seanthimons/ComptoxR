@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data_search_by_spid_bulk(query = c("DTXSID2021731", "DTXSID80505725", "DTXSID10895040"))
+#' ct_bioactivity_data_search_by_spid_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_bioactivity_data_search_by_spid_bulk <- function(query) {
   result <- generic_request(
@@ -48,5 +48,3 @@ ct_bioactivity_data_search_by_spid <- function(spid) {
 
   return(result)
 }
-
-

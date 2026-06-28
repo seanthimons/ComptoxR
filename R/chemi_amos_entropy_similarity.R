@@ -12,14 +12,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_entropy_similarity(spectrum_1 = "DTXSID7020182")
+#' chemi_amos_entropy_similarity(spectrum_1 = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_amos_entropy_similarity <- function(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(spectrum_2)) options$spectrum_2 <- spectrum_2
-  if (!is.null(type)) options$type <- type
-  if (!is.null(window)) options$window <- window
+  if (!is.null(spectrum_2)) {
+    options$spectrum_2 <- spectrum_2
+  }
+  if (!is.null(type)) {
+    options$type <- type
+  }
+  if (!is.null(window)) {
+    options$window <- window
+  }
   result <- generic_chemi_request(
     query = spectrum_1,
     endpoint = "amos/entropy_similarity/",
@@ -31,5 +37,3 @@ chemi_amos_entropy_similarity <- function(spectrum_1 = NULL, spectrum_2 = NULL, 
 
   return(result)
 }
-
-

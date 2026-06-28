@@ -26,5 +26,3 @@ chemi_amos_substring <- function(substring) {
 
   return(result)
 }
-
-

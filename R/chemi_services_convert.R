@@ -10,12 +10,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_services_convert(content = "DTXSID7020182")
+#' chemi_services_convert(content = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_services_convert <- function(content = NULL, type = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(type)) options$type <- type
+  if (!is.null(type)) {
+    options$type <- type
+  }
   result <- generic_chemi_request(
     query = content,
     endpoint = "services/convert",
@@ -27,5 +29,3 @@ chemi_services_convert <- function(content = NULL, type = NULL) {
 
   return(result)
 }
-
-

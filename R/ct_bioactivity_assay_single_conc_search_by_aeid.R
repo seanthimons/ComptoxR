@@ -25,5 +25,3 @@ ct_bioactivity_assay_single_conc_search_by_aeid <- function(aeid, projection = "
 
   return(result)
 }
-
-

@@ -27,7 +27,8 @@ test_that("ct_bioactivity_data_search_by_aeid passes request metadata to helper"
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
   expect_equal(call[["query"]], 1L)
-  expect_equal(call[["endpoint"]], "bioactivity/data/summary/search/by-aeid/")
+  expect_equal(call[["endpoint"]], "bioactivity/data/search/by-aeid/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
 })
+

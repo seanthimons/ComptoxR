@@ -28,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_entropy_similarity(spectrum_1 = "DTXSID7020182")
+chemi_amos_entropy_similarity(spectrum_1 = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

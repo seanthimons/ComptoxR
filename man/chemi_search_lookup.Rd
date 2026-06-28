@@ -31,6 +31,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search_lookup(searchType = "DTXSID7020182")
+chemi_search_lookup(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

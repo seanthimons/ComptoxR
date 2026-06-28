@@ -14,8 +14,10 @@
 chemi_services_smirks2rxn <- function(smirks) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smirks)) options[['smirks']] <- smirks
-    result <- generic_request(
+  if (!is.null(smirks)) {
+    options[['smirks']] <- smirks
+  }
+  result <- generic_request(
     endpoint = "services/smirks2rxn",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_services_smirks2rxn <- function(smirks) {
 
   return(result)
 }
-
-

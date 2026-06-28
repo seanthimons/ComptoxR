@@ -12,14 +12,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_substances_for_classification(kingdom = "DTXSID7020182")
+#' chemi_amos_substances_for_classification(kingdom = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(klass)) options$klass <- klass
-  if (!is.null(subklass)) options$subklass <- subklass
-  if (!is.null(superklass)) options$superklass <- superklass
+  if (!is.null(klass)) {
+    options$klass <- klass
+  }
+  if (!is.null(subklass)) {
+    options$subklass <- subklass
+  }
+  if (!is.null(superklass)) {
+    options$superklass <- superklass
+  }
   result <- generic_chemi_request(
     query = kingdom,
     endpoint = "amos/substances_for_classification/",
@@ -31,5 +37,3 @@ chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NUL
 
   return(result)
 }
-
-

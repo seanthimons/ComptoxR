@@ -23,5 +23,3 @@ ct_chemical_detail_search_by_smiles <- function(smiles) {
 
   return(result)
 }
-
-

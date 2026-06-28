@@ -23,5 +23,3 @@ ct_exposure_ccd_production_volume_search <- function(dtxsid) {
 
   return(result)
 }
-
-

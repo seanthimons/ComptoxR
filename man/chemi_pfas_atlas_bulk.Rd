@@ -2,21 +2,23 @@
 % Please edit documentation in R/chemi_pfas_atlas.R
 \name{chemi_pfas_atlas_bulk}
 \alias{chemi_pfas_atlas_bulk}
-\title{Generate categories for multiple molecules}
+\title{Generate PFAS Atlas categories for multiple molecules}
 \usage{
-chemi_pfas_atlas_bulk(smiles)
+chemi_pfas_atlas_bulk(smiles = NULL, chemicals = NULL)
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{Array of SMILES strings, kept for backward compatibility with the previous PFAS Atlas POST format.}
+
+\item{chemicals}{Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility.}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_pfas_atlas_bulk(smiles = "DTXSID7020182")
+chemi_pfas_atlas_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

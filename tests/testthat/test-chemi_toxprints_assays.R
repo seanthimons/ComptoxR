@@ -21,16 +21,18 @@ test_that("chemi_toxprints_assays passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_toxprints_assays(name = "DTXSID7020182"))), silent = TRUE)
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_toxprints_assays())), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
-  expect_equal(call[["query"]], "DTXSID7020182")
-  expect_equal(call[["endpoint"]], "toxprints/assays/")
+  expect_equal(call[["endpoint"]], "toxprints/assays")
   expect_equal(call[["method"]], "GET")
-  expect_equal(call[["batch_limit"]], 1)
+  expect_equal(call[["batch_limit"]], 0)
   expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
+  expect_true("options" %in% names(call))
+  expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
 })
+

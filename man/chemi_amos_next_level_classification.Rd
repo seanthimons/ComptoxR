@@ -25,6 +25,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_next_level_classification(kingdom = "DTXSID7020182")
+chemi_amos_next_level_classification(kingdom = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

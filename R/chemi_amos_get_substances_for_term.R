@@ -26,5 +26,3 @@ chemi_amos_get_substances_for_term <- function(search_term) {
 
   return(result)
 }
-
-

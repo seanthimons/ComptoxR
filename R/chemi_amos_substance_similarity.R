@@ -26,5 +26,3 @@ chemi_amos_substance_similarity <- function(dtxsid) {
 
   return(result)
 }
-
-

@@ -24,5 +24,3 @@ chemi_amos_method_list <- function() {
 
   return(result)
 }
-
-

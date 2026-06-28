@@ -23,5 +23,3 @@ ct_chemical_msready_search_by_formula <- function(formula) {
 
   return(result)
 }
-
-

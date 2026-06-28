@@ -21,5 +21,3 @@ ct_exposure_product_data_puc <- function() {
 
   return(result)
 }
-
-

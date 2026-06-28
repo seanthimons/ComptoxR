@@ -19,6 +19,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-ct_chemical_msready_search_by_mass_bulk(masses = c("DTXSID70475221", "DTXSID8031865", "DTXSID901314916"))
+ct_chemical_msready_search_by_mass_bulk(masses = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

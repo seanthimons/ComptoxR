@@ -26,5 +26,3 @@ chemi_amos_record_id <- function(internal_id) {
 
   return(result)
 }
-
-

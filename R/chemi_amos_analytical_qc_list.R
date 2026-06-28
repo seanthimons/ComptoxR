@@ -24,5 +24,3 @@ chemi_amos_analytical_qc_list <- function() {
 
   return(result)
 }
-
-

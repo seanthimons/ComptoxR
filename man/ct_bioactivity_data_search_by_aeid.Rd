@@ -5,26 +5,17 @@
 \title{Get data by AEID}
 \usage{
 ct_bioactivity_data_search_by_aeid(aeid)
-
-ct_bioactivity_data_search_by_aeid(aeid)
 }
 \arguments{
 \item{aeid}{ToxCast assay component endpoint ID (AEID). Type: integer}
 }
 \value{
 Returns a tibble with results (array of objects)
-
-Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\dontrun{
-ct_bioactivity_data_search_by_aeid(aeid = "3032")
-}
 \dontrun{
 ct_bioactivity_data_search_by_aeid(aeid = "3032")
 }

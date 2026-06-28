@@ -4,32 +4,21 @@
 \alias{chemi_toxprints_assays}
 \title{Toxprints Assays}
 \usage{
-chemi_toxprints_assays(name)
-
-chemi_toxprints_assays(name)
+chemi_toxprints_assays(category = NULL, label = NULL)
 }
 \arguments{
-\item{name}{Primary query parameter. Type: string}
-
 \item{category}{Optional parameter}
 
 \item{label}{Optional parameter}
 }
 \value{
 Returns a list with result object
-
-Returns a list with result object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 chemi_toxprints_assays(category = "DTXSID7020182")
-}
-\dontrun{
-chemi_toxprints_assays(name = "DTXSID7020182")
 }
 }

@@ -26,5 +26,3 @@ chemi_chet_chemicals_verify <- function(dtxsid) {
 
   return(result)
 }
-
-

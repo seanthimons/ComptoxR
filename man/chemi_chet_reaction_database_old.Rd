@@ -4,30 +4,16 @@
 \alias{chemi_chet_reaction_database_old}
 \title{List all reactions (legacy)}
 \usage{
-chemi_chet_reaction_database_old(pagenum, searchterm = NULL)
-
-chemi_chet_reaction_database_old(pagenum, searchterm = NULL)
-}
-\arguments{
-\item{pagenum}{Primary query parameter. Type: integer}
-
-\item{searchterm}{Optional parameter. Type: string}
+chemi_chet_reaction_database_old()
 }
 \value{
 Returns a tibble with results (array of objects)
-
-Returns a list with result object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
 chemi_chet_reaction_database_old()
-}
-\dontrun{
-chemi_chet_reaction_database_old(pagenum = "DTXSID7020182")
 }
 }

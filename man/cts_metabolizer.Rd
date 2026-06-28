@@ -2,21 +2,15 @@
 % Please edit documentation in R/cts_metabolizer.R
 \name{cts_metabolizer}
 \alias{cts_metabolizer}
-\title{CTS Metabolizer Endpoints}
+\title{Transformation pathways predictions.}
 \usage{
-cts_metabolizer(tidy = FALSE)
-}
-\arguments{
-\item{tidy}{Logical; if \code{TRUE}, convert the response to a tibble where
-possible. Defaults to \code{FALSE}.}
+cts_metabolizer()
 }
 \value{
-Parsed CTS metabolizer endpoint metadata.
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Returns CTS metabolizer endpoint metadata.
 }
 \examples{
 \dontrun{

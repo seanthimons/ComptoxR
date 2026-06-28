@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_chet_reaction_batchsearch(dtxsids = "DTXSID7020182")
+#' chemi_chet_reaction_batchsearch(dtxsids = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
   # Build options list for additional parameters
@@ -27,5 +27,3 @@ chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
 
   return(result)
 }
-
-

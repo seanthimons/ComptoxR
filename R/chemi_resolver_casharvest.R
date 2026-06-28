@@ -14,8 +14,10 @@
 chemi_resolver_casharvest <- function(request.filesInfo = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(request.filesInfo)) options[['request.filesInfo']] <- request.filesInfo
-    result <- generic_chemi_request(
+  if (!is.null(request.filesInfo)) {
+    options[['request.filesInfo']] <- request.filesInfo
+  }
+  result <- generic_chemi_request(
     endpoint = "resolver/casharvest",
     options = options,
     tidy = FALSE
@@ -25,5 +27,3 @@ chemi_resolver_casharvest <- function(request.filesInfo = NULL) {
 
   return(result)
 }
-
-

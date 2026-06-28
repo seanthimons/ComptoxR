@@ -19,6 +19,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_resolve(queries = "DTXSID7020182")
+chemi_resolver_resolve(queries = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

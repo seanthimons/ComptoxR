@@ -4,10 +4,10 @@
 \alias{chemi_chet_reaction_database_stats}
 \title{Reaction stats and filters}
 \usage{
-chemi_chet_reaction_database_stats(parent_id = NULL)
+chemi_chet_reaction_database_stats(reaction_id = NULL)
 }
 \arguments{
-\item{parent_id}{Optional parameter}
+\item{reaction_id}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -17,6 +17,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_chet_reaction_database_stats(parent_id = "DTXSID7020182")
+chemi_chet_reaction_database_stats(reaction_id = "DTXSID7020182")
 }
 }

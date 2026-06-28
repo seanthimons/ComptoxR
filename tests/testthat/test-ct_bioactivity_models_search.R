@@ -21,13 +21,15 @@ test_that("ct_bioactivity_models_search passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_models_search(dtxsid = "DTXSID7020182"))), silent = TRUE)
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_bioactivity_models_search(dtxsid = "DTXSID7020182", model = "general"))), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
-  expect_equal(call[["query"]], "DTXSID7020182")
-  expect_equal(call[["endpoint"]], "bioactivity/models/search/by-dtxsid/")
+  expect_equal(call[["endpoint"]], "bioactivity/models/search/")
   expect_equal(call[["method"]], "GET")
-  expect_equal(call[["batch_limit"]], 1)
+  expect_equal(call[["batch_limit"]], 0)
+  expect_equal(call[["dtxsid"]], "DTXSID7020182")
+  expect_equal(call[["model"]], "general")
 })
+

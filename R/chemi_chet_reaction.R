@@ -16,10 +16,16 @@
 chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(searchType)) options[['searchType']] <- searchType
-  if (!is.null(substringTF)) options[['substringTF']] <- substringTF
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(searchType)) {
+    options[['searchType']] <- searchType
+  }
+  if (!is.null(substringTF)) {
+    options[['substringTF']] <- substringTF
+  }
+  result <- generic_request(
     endpoint = "reaction/search",
     method = "GET",
     batch_limit = 0,
@@ -33,5 +39,3 @@ chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = N
 
   return(result)
 }
-
-

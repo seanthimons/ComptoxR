@@ -26,5 +26,3 @@ chemi_amos_get_ms_ready_methods <- function(inchikey) {
 
   return(result)
 }
-
-

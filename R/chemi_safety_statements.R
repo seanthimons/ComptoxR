@@ -24,5 +24,3 @@ chemi_safety_statements <- function() {
 
   return(result)
 }
-
-

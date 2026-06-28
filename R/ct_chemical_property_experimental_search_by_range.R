@@ -26,5 +26,3 @@ ct_chemical_property_experimental_search_by_range <- function(propertyName, star
 
   return(result)
 }
-
-

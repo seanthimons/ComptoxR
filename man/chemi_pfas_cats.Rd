@@ -2,21 +2,21 @@
 % Please edit documentation in R/chemi_pfas_cats.R
 \name{chemi_pfas_cats}
 \alias{chemi_pfas_cats}
-\title{Generate descriptors for one molecule}
+\title{Generate PFAS categories for one molecule}
 \usage{
 chemi_pfas_cats(smiles)
 }
 \arguments{
-\item{smiles}{SMILES to generate categories for}
+\item{smiles}{SMILES string of the molecule}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_pfas_cats(smiles = "DTXSID7020182")
+chemi_pfas_cats(smiles = "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F")
 }
 }

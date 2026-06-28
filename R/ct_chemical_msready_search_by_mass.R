@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_msready_search_by_mass_bulk(masses = c("DTXSID70475221", "DTXSID8031865", "DTXSID901314916"))
+#' ct_chemical_msready_search_by_mass_bulk(masses = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_chemical_msready_search_by_mass_bulk <- function(masses, error) {
   # Build request body
@@ -59,5 +59,3 @@ ct_chemical_msready_search_by_mass <- function(start, end = NULL) {
 
   return(result)
 }
-
-

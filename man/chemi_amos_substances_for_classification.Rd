@@ -28,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_classification(kingdom = "DTXSID7020182")
+chemi_amos_substances_for_classification(kingdom = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

@@ -32,5 +32,3 @@ chemi_amos_analytical_qc_pagination <- function(limit, offset = 0, all_pages = T
 
   return(result)
 }
-
-

@@ -7,7 +7,8 @@
   metadata_routes <- c("", "cts", "swag", "swagger", "openapi", "docs")
   pchem_domains <- c("chemaxon", "epi", "test", "testws", "opera", "measured")
 
-  route %in% metadata_routes |
+  route %in%
+    metadata_routes |
     route == "envipath/run" |
     stringr::str_detect(route, paste0("^(", paste(pchem_domains, collapse = "|"), ")(/|$)"))
 }
@@ -26,14 +27,17 @@ cts_extract_smiles <- function(x) {
     }
 
     if ("chemical" %in% names(x)) {
-      smiles <- c(smiles, purrr::map_chr(as.character(x$chemical), function(chemical) {
-        fields <- trimws(strsplit(chemical, ";", fixed = TRUE)[[1]])
-        if (length(fields) >= 6) {
-          fields[[6]]
-        } else {
-          NA_character_
-        }
-      }))
+      smiles <- c(
+        smiles,
+        purrr::map_chr(as.character(x$chemical), function(chemical) {
+          fields <- trimws(strsplit(chemical, ";", fixed = TRUE)[[1]])
+          if (length(fields) >= 6) {
+            fields[[6]]
+          } else {
+            NA_character_
+          }
+        })
+      )
     }
 
     return(smiles)
@@ -75,7 +79,9 @@ cts_resolve_smiles <- function(query, id_type = "AnyId", resolve = TRUE) {
     }
 
     if (length(candidates) > 1) {
-      cli::cli_abort("Resolved {.val {q}} to multiple SMILES strings; provide a SMILES string with {.code resolve = FALSE}.")
+      cli::cli_abort(
+        "Resolved {.val {q}} to multiple SMILES strings; provide a SMILES string with {.code resolve = FALSE}."
+      )
     }
 
     candidates[[1]]

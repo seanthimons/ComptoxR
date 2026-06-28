@@ -24,5 +24,3 @@ chemi_chet_curators_me <- function() {
 
   return(result)
 }
-
-

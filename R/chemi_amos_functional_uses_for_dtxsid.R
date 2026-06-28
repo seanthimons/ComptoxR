@@ -26,5 +26,3 @@ chemi_amos_functional_uses_for_dtxsid <- function(dtxsid) {
 
   return(result)
 }
-
-

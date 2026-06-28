@@ -14,7 +14,7 @@ chemi_opera(smiles, format = "json", standardize = FALSE)
 \item{standardize}{Standardize chemical before calculating predictions (default: FALSE)}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

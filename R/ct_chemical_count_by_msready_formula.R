@@ -25,5 +25,3 @@ ct_chemical_count_by_msready_formula <- function(formula, projection = "count") 
 
   return(result)
 }
-
-

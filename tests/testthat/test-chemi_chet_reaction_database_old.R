@@ -21,18 +21,16 @@ test_that("chemi_chet_reaction_database_old passes request metadata to helper", 
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_chet_reaction_database_old(pagenum = 1L))), silent = TRUE)
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_chet_reaction_database_old())), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
   expect_equal(call$.helper, "generic_request")
-  expect_equal(call[["query"]], 1L)
-  expect_equal(call[["endpoint"]], "reaction/database-old/")
+  expect_equal(call[["endpoint"]], "reaction/database_old")
   expect_equal(call[["method"]], "GET")
-  expect_equal(call[["batch_limit"]], 1)
+  expect_equal(call[["batch_limit"]], 0)
   expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
-  expect_true("path_params" %in% names(call))
-  expect_true(is.null(call[["path_params"]]) || length(call[["path_params"]]) >= 0)
 })
+

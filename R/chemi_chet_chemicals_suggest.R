@@ -16,10 +16,16 @@
 chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(limit)) options[['limit']] <- limit
-  if (!is.null(only_in_reactions)) options[['only_in_reactions']] <- only_in_reactions
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(limit)) {
+    options[['limit']] <- limit
+  }
+  if (!is.null(only_in_reactions)) {
+    options[['only_in_reactions']] <- only_in_reactions
+  }
+  result <- generic_request(
     endpoint = "chemicals/suggest",
     method = "GET",
     batch_limit = 0,
@@ -33,5 +39,3 @@ chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "
 
   return(result)
 }
-
-

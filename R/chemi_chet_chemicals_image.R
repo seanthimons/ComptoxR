@@ -17,10 +17,16 @@
 chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
   # Collect optional parameters
   options <- list()
-  if (!is.null(width)) options[['width']] <- width
-  if (!is.null(height)) options[['height']] <- height
-  if (!is.null(format)) options[['format']] <- format
-    result <- generic_request(
+  if (!is.null(width)) {
+    options[['width']] <- width
+  }
+  if (!is.null(height)) {
+    options[['height']] <- height
+  }
+  if (!is.null(format)) {
+    options[['format']] <- format
+  }
+  result <- generic_request(
     query = chemical_id,
     endpoint = "chemicals/image",
     method = "GET",
@@ -36,5 +42,3 @@ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL,
 
   return(result)
 }
-
-

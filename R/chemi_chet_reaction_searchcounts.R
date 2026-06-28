@@ -28,5 +28,3 @@ chemi_chet_reaction_searchcounts <- function(search_input, search_type = NULL) {
 
   return(result)
 }
-
-

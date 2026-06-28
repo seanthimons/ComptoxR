@@ -21,5 +21,3 @@ ct_chemical_list_type <- function() {
 
   return(result)
 }
-
-

@@ -24,5 +24,3 @@ chemi_amos_database <- function() {
 
   return(result)
 }
-
-

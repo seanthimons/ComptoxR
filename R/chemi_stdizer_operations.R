@@ -24,5 +24,3 @@ chemi_stdizer_operations <- function() {
 
   return(result)
 }
-
-

@@ -14,8 +14,10 @@
 chemi_chet_chemicals_database_stats <- function(total = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(total)) options[['total']] <- total
-    result <- generic_request(
+  if (!is.null(total)) {
+    options[['total']] <- total
+  }
+  result <- generic_request(
     endpoint = "chemicals/database/stats",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_chemicals_database_stats <- function(total = NULL) {
 
   return(result)
 }
-
-

@@ -28,5 +28,3 @@ chemi_chet_chemicals_chemtemp <- function(type, value = NULL) {
 
   return(result)
 }
-
-

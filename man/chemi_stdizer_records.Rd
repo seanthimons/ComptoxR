@@ -21,6 +21,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_records(options = "DTXSID7020182")
+chemi_stdizer_records(options = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

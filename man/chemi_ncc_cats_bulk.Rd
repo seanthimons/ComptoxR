@@ -2,25 +2,21 @@
 % Please edit documentation in R/chemi_ncc_cats.R
 \name{chemi_ncc_cats_bulk}
 \alias{chemi_ncc_cats_bulk}
-\title{Generate categories for multiple molecules}
+\title{Generate NCC categories for multiple molecules}
 \usage{
-chemi_ncc_cats_bulk(smiles, logp, ws)
+chemi_ncc_cats_bulk(chemicals = NULL)
 }
 \arguments{
-\item{smiles}{Required parameter}
-
-\item{logp}{Required parameter}
-
-\item{ws}{Required parameter}
+\item{chemicals}{Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors.}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk(smiles = "DTXSID7020182")
+chemi_ncc_cats_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

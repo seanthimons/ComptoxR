@@ -8,7 +8,9 @@ chemi_chet_chemicals_database(
   page = 0,
   size = NULL,
   query = NULL,
+  exact_search = NULL,
   lib_name = NULL,
+  only_in_reactions = NULL,
   all_pages = TRUE
 )
 }
@@ -19,7 +21,11 @@ chemi_chet_chemicals_database(
 
 \item{query}{Optional parameter}
 
+\item{exact_search}{Optional parameter}
+
 \item{lib_name}{Optional parameter}
+
+\item{only_in_reactions}{Optional parameter}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_pfas_atlas.R
 \name{chemi_pfas_atlas}
 \alias{chemi_pfas_atlas}
-\title{Generate categories for one molecule}
+\title{Generate PFAS Atlas categories for one molecule}
 \usage{
 chemi_pfas_atlas(smiles)
 }
@@ -10,13 +10,13 @@ chemi_pfas_atlas(smiles)
 \item{smiles}{SMILES string of the molecule}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_pfas_atlas(smiles = "Fc1c(F)c(F)c2c(c1F)C(F)(F)C(F)(Br)C2(Cl)Cl")
+chemi_pfas_atlas(smiles = "O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F")
 }
 }

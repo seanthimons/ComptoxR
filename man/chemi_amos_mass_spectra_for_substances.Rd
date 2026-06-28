@@ -17,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID7020182")
+chemi_amos_mass_spectra_for_substances(dtxsids = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }
