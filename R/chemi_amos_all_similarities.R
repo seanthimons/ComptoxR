@@ -14,16 +14,33 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_all_similarities(da_window = "DTXSID7020182")
+#' chemi_amos_all_similarities(da_window = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_amos_all_similarities <- function(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
+chemi_amos_all_similarities <- function(
+  da_window = NULL,
+  dtxsids = NULL,
+  min_intensity = NULL,
+  ms_level = NULL,
+  ppm_window = NULL,
+  spectra = NULL
+) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
-  if (!is.null(min_intensity)) options$min_intensity <- min_intensity
-  if (!is.null(ms_level)) options$ms_level <- ms_level
-  if (!is.null(ppm_window)) options$ppm_window <- ppm_window
-  if (!is.null(spectra)) options$spectra <- spectra
+  if (!is.null(dtxsids)) {
+    options$dtxsids <- dtxsids
+  }
+  if (!is.null(min_intensity)) {
+    options$min_intensity <- min_intensity
+  }
+  if (!is.null(ms_level)) {
+    options$ms_level <- ms_level
+  }
+  if (!is.null(ppm_window)) {
+    options$ppm_window <- ppm_window
+  }
+  if (!is.null(spectra)) {
+    options$spectra <- spectra
+  }
   result <- generic_chemi_request(
     query = da_window,
     endpoint = "amos/all_similarities_by_dtxsid/",
@@ -35,5 +52,3 @@ chemi_amos_all_similarities <- function(da_window = NULL, dtxsids = NULL, min_in
 
   return(result)
 }
-
-

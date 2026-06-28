@@ -18,12 +18,22 @@
 chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", timeout = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(type)) options[['type']] <- type
-  if (!is.null(headers)) options[['headers']] <- headers
-  if (!is.null(format)) options[['format']] <- format
-  if (!is.null(timeout)) options[['timeout']] <- timeout
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(type)) {
+    options[['type']] <- type
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  if (!is.null(format)) {
+    options[['format']] <- format
+  }
+  if (!is.null(timeout)) {
+    options[['timeout']] <- timeout
+  }
+  result <- generic_request(
     endpoint = "descriptors",
     method = "GET",
     batch_limit = 0,
@@ -39,8 +49,6 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
 }
 
 
-
-
 #' Descriptors
 #'
 #' @description
@@ -52,7 +60,7 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
 #'
 #' @examples
 #' \dontrun{
-#' chemi_descriptors_bulk(query = "DTXSID7020182")
+#' chemi_descriptors_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_descriptors_bulk <- function(query) {
   result <- generic_request(
@@ -64,5 +72,3 @@ chemi_descriptors_bulk <- function(query) {
 
   return(result)
 }
-
-

@@ -24,5 +24,3 @@ chemi_resolver_getallannotations <- function() {
 
   return(result)
 }
-
-

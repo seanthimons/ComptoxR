@@ -23,5 +23,3 @@ ct_hazard_hawc_search <- function(dtxsid) {
 
   return(result)
 }
-
-

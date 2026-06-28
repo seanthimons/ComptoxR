@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_httk_search_bulk(query = c("DTXSID30203567", "DTXSID40292184", "DTXSID5064889"))
+#' ct_exposure_httk_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_exposure_httk_search_bulk <- function(query) {
   result <- generic_request(
@@ -48,5 +48,3 @@ ct_exposure_httk_search <- function(dtxsid) {
 
   return(result)
 }
-
-

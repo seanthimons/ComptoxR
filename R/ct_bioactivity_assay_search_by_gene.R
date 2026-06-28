@@ -23,5 +23,3 @@ ct_bioactivity_assay_search_by_gene <- function(geneSymbol) {
 
   return(result)
 }
-
-

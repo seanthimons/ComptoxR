@@ -11,13 +11,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_stdizer_records(options = "DTXSID7020182")
+#' chemi_stdizer_records(options = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_stdizer_records <- function(options = NULL, records = NULL, full = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(records)) options$records <- records
-  if (!is.null(full)) options$full <- full
+  if (!is.null(records)) {
+    options$records <- records
+  }
+  if (!is.null(full)) {
+    options$full <- full
+  }
   result <- generic_chemi_request(
     query = options,
     endpoint = "stdizer/records",
@@ -29,5 +33,3 @@ chemi_stdizer_records <- function(options = NULL, records = NULL, full = NULL) {
 
   return(result)
 }
-
-

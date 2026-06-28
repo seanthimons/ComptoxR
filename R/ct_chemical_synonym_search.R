@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_synonym_search_bulk(query = c("DTXSID7043792", "DTXSID2057574", "DTXSID90486733"))
+#' ct_chemical_synonym_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_chemical_synonym_search_bulk <- function(query) {
   result <- generic_request(
@@ -50,5 +50,3 @@ ct_chemical_synonym_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
-
-

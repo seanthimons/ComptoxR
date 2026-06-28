@@ -45,5 +45,5 @@ pubchem_properties(c(2244, 6623), properties = c("MolecularWeight", "XLogP"))
 }
 \seealso{
 \code{\link[=pubchem_search]{pubchem_search()}} to find CIDs by name/structure,
-\code{\link[=ct_chemical_property_search]{ct_chemical_property_search()}} for CompTox Dashboard properties.
+\code{\link[=ct_chemical_property_summary_search]{ct_chemical_property_summary_search()}} for CompTox Dashboard properties.
 }

@@ -23,5 +23,3 @@ ct_bioactivity_assay <- function(projection = "assay-all") {
 
   return(result)
 }
-
-

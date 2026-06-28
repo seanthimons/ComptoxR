@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_data_search_by_aeid_bulk(query = c("DTXSID401336719", "DTXSID3060245", "DTXSID10894750"))
+#' ct_bioactivity_data_search_by_aeid_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_bioactivity_data_search_by_aeid_bulk <- function(query) {
   result <- generic_request(
@@ -48,32 +48,3 @@ ct_bioactivity_data_search_by_aeid <- function(aeid) {
 
   return(result)
 }
-
-
-#' Get summary data by AEID
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' @param aeid ToxCast assay component endpoint ID (AEID). Type: integer
-#' @return Returns a scalar value
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ct_bioactivity_data_search_by_aeid(aeid = "3032")
-#' }
-ct_bioactivity_data_search_by_aeid <- function(aeid) {
-  result <- generic_request(
-    query = aeid,
-    endpoint = "bioactivity/data/summary/search/by-aeid/",
-    method = "GET",
-    batch_limit = 1
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-

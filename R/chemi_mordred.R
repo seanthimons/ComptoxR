@@ -5,6 +5,7 @@
 #'
 #' @param smiles Required parameter
 #' @param headers Optional parameter
+#' @param inchi Optional parameter
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -12,12 +13,19 @@
 #' \dontrun{
 #' chemi_mordred(smiles = "DTXSID7020182")
 #' }
-chemi_mordred <- function(smiles, headers = NULL) {
+chemi_mordred <- function(smiles, headers = NULL, inchi = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(headers)) options[['headers']] <- headers
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  if (!is.null(inchi)) {
+    options[['inchi']] <- inchi
+  }
+  result <- generic_request(
     endpoint = "mordred",
     method = "GET",
     batch_limit = 0,
@@ -33,8 +41,6 @@ chemi_mordred <- function(smiles, headers = NULL) {
 }
 
 
-
-
 #' Generate descriptors for multiple molecules
 #'
 #' @description
@@ -47,12 +53,14 @@ chemi_mordred <- function(smiles, headers = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_mordred_bulk(chemicals = "DTXSID7020182")
+#' chemi_mordred_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_mordred_bulk <- function(chemicals, options = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(options)) options$options <- options
+  if (!is.null(options)) {
+    options$options <- options
+  }
   result <- generic_chemi_request(
     query = chemicals,
     endpoint = "mordred",
@@ -64,5 +72,3 @@ chemi_mordred_bulk <- function(chemicals, options = NULL) {
 
   return(result)
 }
-
-

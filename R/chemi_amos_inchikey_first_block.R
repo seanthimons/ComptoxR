@@ -26,5 +26,3 @@ chemi_amos_inchikey_first_block <- function(first_block) {
 
   return(result)
 }
-
-

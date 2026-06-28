@@ -47,7 +47,7 @@
 #' (PubChem's documented limit for list-based requests).
 #'
 #' @seealso [pubchem_search()] to find CIDs by name/structure,
-#'   [ct_chemical_property_search()] for CompTox Dashboard properties.
+#'   [ct_chemical_property_summary_search()] for CompTox Dashboard properties.
 #'
 #' @examples
 #' \dontrun{

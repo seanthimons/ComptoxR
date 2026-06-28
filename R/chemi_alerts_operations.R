@@ -24,5 +24,3 @@ chemi_alerts_operations <- function() {
 
   return(result)
 }
-
-

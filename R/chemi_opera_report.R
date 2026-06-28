@@ -15,9 +15,13 @@
 chemi_opera_report <- function(dtxsid, modelId) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(dtxsid)) options[['dtxsid']] <- dtxsid
-  if (!is.null(modelId)) options[['modelId']] <- modelId
-    result <- generic_request(
+  if (!is.null(dtxsid)) {
+    options[['dtxsid']] <- dtxsid
+  }
+  if (!is.null(modelId)) {
+    options[['modelId']] <- modelId
+  }
+  result <- generic_request(
     endpoint = "opera/report",
     method = "GET",
     batch_limit = 0,
@@ -31,5 +35,3 @@ chemi_opera_report <- function(dtxsid, modelId) {
 
   return(result)
 }
-
-

@@ -23,5 +23,3 @@ ct_bioactivity_aop_search_by_event_number <- function(eventNumber) {
 
   return(result)
 }
-
-

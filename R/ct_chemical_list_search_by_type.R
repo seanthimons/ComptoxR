@@ -25,5 +25,3 @@ ct_chemical_list_search_by_type <- function(type, projection = "chemicallistall"
 
   return(result)
 }
-
-

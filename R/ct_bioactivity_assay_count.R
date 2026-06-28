@@ -21,5 +21,3 @@ ct_bioactivity_assay_count <- function() {
 
   return(result)
 }
-
-

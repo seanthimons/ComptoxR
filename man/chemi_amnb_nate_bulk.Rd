@@ -4,19 +4,21 @@
 \alias{chemi_amnb_nate_bulk}
 \title{Generate predictions for multiple molecules}
 \usage{
-chemi_amnb_nate_bulk(smiles)
+chemi_amnb_nate_bulk(smiles = NULL, chemicals = NULL)
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{Optional parameter}
+
+\item{chemicals}{Optional parameter}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_amnb_nate_bulk(smiles = "DTXSID7020182")
+chemi_amnb_nate_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

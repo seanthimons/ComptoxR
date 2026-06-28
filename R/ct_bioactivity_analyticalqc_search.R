@@ -23,5 +23,3 @@ ct_bioactivity_analyticalqc_search <- function(dtxsid) {
 
   return(result)
 }
-
-

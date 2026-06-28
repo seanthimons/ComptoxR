@@ -2,21 +2,23 @@
 % Please edit documentation in R/chemi_pfas_cats.R
 \name{chemi_pfas_cats_bulk}
 \alias{chemi_pfas_cats_bulk}
-\title{Generate categories for multiple molecules}
+\title{Generate PFAS categories for multiple molecules}
 \usage{
-chemi_pfas_cats_bulk(chemicals)
+chemi_pfas_cats_bulk(smiles = NULL, chemicals = NULL)
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{smiles}{Array of SMILES strings, kept for backward compatibility with the previous PFAS Cats POST format.}
+
+\item{chemicals}{Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility.}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_pfas_cats_bulk(chemicals = "DTXSID7020182")
+chemi_pfas_cats_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

@@ -66,11 +66,7 @@
 #' # View analogue details
 #' pred$analogues
 #' }
-genra_predict <- function(target,
-                          k = 10L,
-                          min_similarity = 0.5,
-                          study_filter = NULL,
-                          n_permutations = 100L) {
+genra_predict <- function(target, k = 10L, min_similarity = 0.5, study_filter = NULL, n_permutations = 100L) {
   # Input validation
   if (length(target) != 1 || !is.character(target)) {
     cli::cli_abort("{.arg target} must be a single DTXSID character string.")
@@ -217,9 +213,18 @@ genra_predict <- function(target,
 #'
 #' @keywords internal
 #' @noRd
-.build_genra_result <- function(target, prediction, predicted_class, auc, p_value,
-                                 threshold, n_analogues, n_analogues_found,
-                                 analogues, parameters) {
+.build_genra_result <- function(
+  target,
+  prediction,
+  predicted_class,
+  auc,
+  p_value,
+  threshold,
+  n_analogues,
+  n_analogues_found,
+  analogues,
+  parameters
+) {
   structure(
     list(
       target = target,

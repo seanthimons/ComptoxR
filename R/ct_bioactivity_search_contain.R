@@ -25,5 +25,3 @@ ct_bioactivity_search_contain <- function(value, top = 0) {
 
   return(result)
 }
-
-

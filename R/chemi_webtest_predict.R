@@ -17,11 +17,19 @@
 chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus", format = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(endpoint)) options[['endpoint']] <- endpoint
-  if (!is.null(method)) options[['method']] <- method
-  if (!is.null(format)) options[['format']] <- format
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(endpoint)) {
+    options[['endpoint']] <- endpoint
+  }
+  if (!is.null(method)) {
+    options[['method']] <- method
+  }
+  if (!is.null(format)) {
+    options[['format']] <- format
+  }
+  result <- generic_request(
     endpoint = "webtest/predict",
     method = "GET",
     batch_limit = 0,
@@ -35,8 +43,6 @@ chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus",
 
   return(result)
 }
-
-
 
 
 #' Webtest Predict
@@ -53,14 +59,18 @@ chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus",
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict_bulk(structures = "DTXSID7020182")
+#' chemi_webtest_predict_bulk(structures = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = NULL) {
   # Build options list for additional parameters
   options <- list()
   options$endpoints <- endpoints
-  if (!is.null(methods)) options$methods <- methods
-  if (!is.null(format)) options$format <- format
+  if (!is.null(methods)) {
+    options$methods <- methods
+  }
+  if (!is.null(format)) {
+    options$format <- format
+  }
   result <- generic_chemi_request(
     query = structures,
     endpoint = "webtest/predict",
@@ -72,5 +82,3 @@ chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, fo
 
   return(result)
 }
-
-

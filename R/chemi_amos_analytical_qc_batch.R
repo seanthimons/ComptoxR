@@ -14,16 +14,33 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_analytical_qc_batch(base_url = "DTXSID7020182")
+#' chemi_amos_analytical_qc_batch(base_url = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_amos_analytical_qc_batch <- function(base_url = NULL, dtxsids = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL) {
+chemi_amos_analytical_qc_batch <- function(
+  base_url = NULL,
+  dtxsids = NULL,
+  include_classyfire = NULL,
+  include_functional_uses = NULL,
+  include_source_counts = NULL,
+  methodologies = NULL
+) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
-  if (!is.null(include_classyfire)) options$include_classyfire <- include_classyfire
-  if (!is.null(include_functional_uses)) options$include_functional_uses <- include_functional_uses
-  if (!is.null(include_source_counts)) options$include_source_counts <- include_source_counts
-  if (!is.null(methodologies)) options$methodologies <- methodologies
+  if (!is.null(dtxsids)) {
+    options$dtxsids <- dtxsids
+  }
+  if (!is.null(include_classyfire)) {
+    options$include_classyfire <- include_classyfire
+  }
+  if (!is.null(include_functional_uses)) {
+    options$include_functional_uses <- include_functional_uses
+  }
+  if (!is.null(include_source_counts)) {
+    options$include_source_counts <- include_source_counts
+  }
+  if (!is.null(methodologies)) {
+    options$methodologies <- methodologies
+  }
   result <- generic_chemi_request(
     query = base_url,
     endpoint = "amos/analytical_qc_batch_search",
@@ -35,5 +52,3 @@ chemi_amos_analytical_qc_batch <- function(base_url = NULL, dtxsids = NULL, incl
 
   return(result)
 }
-
-

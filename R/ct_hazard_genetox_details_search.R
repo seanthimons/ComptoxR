@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_hazard_genetox_details_search_bulk(query = c("DTXSID90873482", "DTXSID40292184", "DTXSID20152651"))
+#' ct_hazard_genetox_details_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_hazard_genetox_details_search_bulk <- function(query) {
   result <- generic_request(
@@ -50,5 +50,3 @@ ct_hazard_genetox_details_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
-
-

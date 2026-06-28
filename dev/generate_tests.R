@@ -1,624 +1,180 @@
-# Test Generator - Metadata-Aware Test Generation for ComptoxR
-#
-# This script generates unit tests for API wrapper functions by reading actual
-# function signatures and extracting the tidy flag from function bodies.
-#
-# Addresses TGEN-01 through TGEN-05:
-# - TGEN-01: Read parameter names and types from function signatures
-# - TGEN-02: Read tidy flag from function bodies
-# - TGEN-03: Handle functions with no parameters (static endpoints)
-# - TGEN-04: Handle functions with path_params
-# - TGEN-05: Use unique cassette names per variant
+#!/usr/bin/env Rscript
+# Parent entrypoint for generated offline wrapper contract tests.
 
-library(glue)
-library(purrr)
-library(stringr)
-library(cli)
-library(jsonlite)
-library(here)
-
-# Manifest helpers (shared pattern with detect_test_gaps.R)
-#' Read test manifest
-#' @noRd
-read_test_manifest <- function() {
-  manifest_path <- file.path(here::here(), "dev", "test_manifest.json")
-  if (!file.exists(manifest_path)) {
-    return(list(version = "1.0", updated = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ"), files = list()))
+suppressPackageStartupMessages({
+  if (requireNamespace("cli", quietly = TRUE)) {
+    library(cli)
   }
-  jsonlite::fromJSON(manifest_path, simplifyVector = FALSE)
-}
+})
 
-#' Write test manifest
-#' @noRd
-write_test_manifest <- function(manifest) {
-  manifest_path <- file.path(here::here(), "dev", "test_manifest.json")
-  jsonlite::write_json(manifest, manifest_path, pretty = TRUE, auto_unbox = TRUE)
-}
-
-#' Check if function calls generic_request
-#' @noRd
-calls_generic_request <- function(file_path) {
-  tryCatch({
-    expr <- parse(file = file_path)
-    all_calls <- unlist(lapply(expr, all.names))
-    any(c("generic_request", "generic_chemi_request", "generic_cc_request") %in% all_calls)
-  }, error = function(e) FALSE)
-}
-
-#' Extract function formals (parameters) from R source file
-#'
-#' @description
-#' Reads an R source file and extracts the formal parameters of a named function.
-#' Uses parse() for robust extraction, with regex-based fallback for unparseable files.
-#' Filters out framework parameters (tidy, verbose, ...).
-#'
-#' @param file_path Path to R source file
-#' @param function_name Name of function to extract formals from
-#' @return Named list of formal parameters, or NULL if function not found
-#' @export
-extract_function_formals <- function(file_path, function_name) {
-  tryCatch({
-    # Parse the file
-    expr <- parse(file = file_path)
-
-    # Find function assignment
-    for (e in expr) {
-      if (is.call(e) && identical(e[[1]], as.name("<-"))) {
-        lhs <- e[[2]]
-        rhs <- e[[3]]
-
-        if (identical(lhs, as.name(function_name)) && is.call(rhs)) {
-          # Extract formals
-          if (identical(rhs[[1]], as.name("function"))) {
-            params <- formals(eval(rhs))
-
-            # Filter out framework parameters
-            framework_params <- c("tidy", "verbose", "...")
-            params <- params[!names(params) %in% framework_params]
-
-            return(params)
-          }
-        }
-      }
-    }
-
-    NULL
-  }, error = function(e) {
-    # Fallback: regex-based extraction for unparseable files
-    cli::cli_alert_warning("Parse failed for {file_path}, using regex fallback")
-    extract_formals_regex(file_path, function_name)
-  })
-}
-
-#' Regex-based fallback for extracting function parameters
-#' @noRd
-extract_formals_regex <- function(file_path, function_name) {
-  lines <- readLines(file_path, warn = FALSE)
-
-  # Find function definition line
-  fn_pattern <- paste0("^", function_name, "\\s*<-\\s*function\\s*\\(")
-  fn_line_idx <- grep(fn_pattern, lines)
-
-  if (length(fn_line_idx) == 0) return(NULL)
-
-  # Extract signature (may span multiple lines until closing paren)
-  sig_start <- fn_line_idx[1]
-  sig_lines <- lines[sig_start]
-
-  # Find closing paren (handle multi-line signatures)
-  open_count <- str_count(sig_lines, "\\(")
-  close_count <- str_count(sig_lines, "\\)")
-
-  line_idx <- sig_start
-  while (open_count > close_count && line_idx < length(lines)) {
-    line_idx <- line_idx + 1
-    sig_lines <- paste(sig_lines, lines[line_idx])
-    open_count <- open_count + str_count(lines[line_idx], "\\(")
-    close_count <- close_count + str_count(lines[line_idx], "\\)")
-  }
-
-  # Extract parameter text between function( and )
-  param_text <- str_extract(sig_lines, "function\\s*\\(([^)]+)\\)", group = 1)
-  if (is.na(param_text)) return(NULL)
-
-  # Split by comma, extract parameter names (ignore defaults)
-  params <- str_split(param_text, ",")[[1]]
-  params <- str_trim(params)
-  param_names <- str_extract(params, "^[a-zA-Z_][a-zA-Z0-9_]*")
-  param_names <- param_names[!is.na(param_names)]
-
-  # Filter out framework parameters
-  framework_params <- c("tidy", "verbose", "...")
-  param_names <- param_names[!param_names %in% framework_params]
-
-  # Return as named list with NULL defaults (we don't parse defaults in regex mode)
-  result <- as.list(rep(list(NULL), length(param_names)))
-  names(result) <- param_names
-  result
-}
-
-#' Extract tidy flag from function body
-#'
-#' @description
-#' Reads function source and searches for tidy parameter in generic_request(),
-#' generic_chemi_request(), or generic_cc_request() calls.
-#'
-#' Handles three cases:
-#' 1. Explicit tidy = TRUE/FALSE in request call
-#' 2. Pass-through: tidy = tidy (function forwards its own tidy parameter)
-#' 3. Missing: defaults to TRUE
-#'
-#' @param file_path Path to R source file
-#' @return Logical indicating tidy flag value (default TRUE)
-#' @export
-extract_tidy_flag <- function(file_path) {
-  lines <- readLines(file_path, warn = FALSE)
-
-  # Find the start of generic request calls
-  request_patterns <- c(
-    "generic_request\\(",
-    "generic_chemi_request\\(",
-    "generic_cc_request\\("
+source_test_generation_pipeline <- function(root = ".") {
+  module_dir <- file.path(root, "dev", "test_generation")
+  modules <- c(
+    "00_config.R",
+    "01_inventory.R",
+    "02_wrapper_metadata.R",
+    "03_test_values.R",
+    "04_renderer.R",
+    "05_scaffold.R",
+    "06_static_validation.R",
+    "07_token_preflight.R"
   )
 
-  # Collect all lines from start of call to its closing paren
-  call_blocks <- character(0)
-  for (pattern in request_patterns) {
-    start_indices <- grep(pattern, lines)
-    if (length(start_indices) == 0) next
-
-    for (start_idx in start_indices) {
-      # Read lines until we find the matching closing paren
-      block <- lines[start_idx]
-      open_count <- str_count(block, "\\(")
-      close_count <- str_count(block, "\\)")
-
-      idx <- start_idx
-      while (open_count > close_count && idx < length(lines)) {
-        idx <- idx + 1
-        block <- paste(block, lines[idx])
-        open_count <- open_count + str_count(lines[idx], "\\(")
-        close_count <- close_count + str_count(lines[idx], "\\)")
-      }
-
-      call_blocks <- c(call_blocks, block)
+  for (module in modules) {
+    path <- file.path(module_dir, module)
+    if (!file.exists(path)) {
+      stop("Missing test generation module: ", path, call. = FALSE)
     }
+    source(path, local = FALSE)
   }
 
-  if (length(call_blocks) == 0) {
-    # No generic request call found - default to TRUE
-    return(TRUE)
-  }
-
-  # Search for explicit tidy = TRUE/FALSE in the complete call blocks
-  for (block in call_blocks) {
-    # Look for explicit tidy = TRUE or tidy = FALSE
-    if (grepl("tidy\\s*=\\s*TRUE", block, ignore.case = TRUE)) {
-      return(TRUE)
-    }
-    if (grepl("tidy\\s*=\\s*FALSE", block, ignore.case = TRUE)) {
-      return(FALSE)
-    }
-    # Look for pass-through: tidy = tidy
-    if (grepl("tidy\\s*=\\s*tidy", block)) {
-      # Check function signature for tidy default
-      # If function has tidy parameter, need to check its default
-      # For now, assume TRUE (most common case)
-      return(TRUE)
-    }
-  }
-
-  # Default to TRUE if tidy param not found
-  TRUE
+  invisible(TRUE)
 }
 
-#' Get appropriate test value for a parameter name
-#'
-#' @description
-#' Maps parameter names to appropriate test values based on:
-#' 1. Priority 1: param_examples (from roxygen @examples) if provided
-#' 2. Priority 2: Exact match in mapping table
-#' 3. Priority 3: Pattern matching (numeric, boolean indicators)
-#' 4. Priority 4: Canonical DTXSID fallback
-#'
-#' @param param_name Parameter name from function signature
-#' @param param_examples Optional vector of example values from roxygen
-#' @return Test value of appropriate type
-#' @export
-get_test_value_for_param <- function(param_name, param_examples = NULL) {
-  # Priority 1: Use roxygen examples if available
-  if (!is.null(param_examples) && length(param_examples) > 0) {
-    return(param_examples[1])
+parse_generate_tests_args <- function(args = commandArgs(trailingOnly = TRUE)) {
+  mode_flags <- intersect(args, c("--generate", "--check", "--dry-run"))
+  if (length(mode_flags) > 1) {
+    stop("Choose only one mode: --generate, --check, or --dry-run", call. = FALSE)
   }
 
-  # Priority 2: Exact match in mapping table
-  mapping <- list(
-    # Identifiers
-    query = "DTXSID7020182",
-    dtxsid = "DTXSID7020182",
-    dtxcid = "DTXCID30182",
-    casrn = "80-05-7",
-    cas = "80-05-7",
-    smiles = "c1ccccc1",
-    inchi = "InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H",
-    inchikey = "UHOVQNZJYSORNB-UHFFFAOYSA-N",
-
-    # Numeric parameters
-    limit = 100L,
-    offset = 0L,
-    page = 1L,
-    top = 10L,
-    skip = 0L,
-    count = 100L,
-    size = 100L,
-    start = 0L,
-    end = 100L,
-
-    # Chemical properties
-    formula = "C15H14O",
-    mass = 210.0,
-    property_name = "MolWeight",
-
-    # String parameters
-    search_type = "equals",
-    list_name = "PRODWATER",
-    domain = "hazard",
-    aeid = 42L,
-    model = "RF",
-    idType = "AnyId",
-
-    # Path parameters
-    medium = "water",
-    study_id = "12345",
-    study_type = "acute",
-
-    # Boolean
-    verbose = FALSE,
-    extract_dtxsids = TRUE,
-    coerce = FALSE,
-    return_dtxsid = FALSE
+  list(
+    mode = if (length(mode_flags) == 0) "generate" else sub("^--", "", mode_flags[[1]]),
+    force = "--force" %in% args,
+    help = any(args %in% c("--help", "-h"))
   )
-
-  # Check exact match
-  if (param_name %in% names(mapping)) {
-    return(mapping[[param_name]])
-  }
-
-  # Priority 3: Pattern matching
-  if (grepl("limit|count|size|top", param_name, ignore.case = TRUE)) {
-    return(100L)
-  }
-  if (grepl("offset|skip|start", param_name, ignore.case = TRUE)) {
-    return(0L)
-  }
-  if (grepl("page", param_name, ignore.case = TRUE)) {
-    return(1L)
-  }
-  if (grepl("verbose|extract|coerce|return", param_name, ignore.case = TRUE)) {
-    return(FALSE)
-  }
-
-  # Priority 4: Canonical DTXSID fallback
-  "DTXSID7020182"
 }
 
-#' Get batch test values for a parameter
-#'
-#' @description
-#' Returns a vector of 2-3 test values for batch testing.
-#'
-#' @param param_name Parameter name from function signature
-#' @return Character or numeric vector with 2-3 test values
-#' @export
-get_batch_test_values <- function(param_name) {
-  single_val <- get_test_value_for_param(param_name)
-
-  # For DTXSIDs, use canonical set
-  if (is.character(single_val) && grepl("DTXSID", single_val)) {
-    return(c("DTXSID7020182", "DTXSID3060245"))
-  }
-
-  # For DTXCIDs
-  if (is.character(single_val) && grepl("DTXCID", single_val)) {
-    return(c("DTXCID30182", "DTXCID2060245"))
-  }
-
-  # For SMILES
-  if (param_name == "smiles") {
-    return(c("c1ccccc1", "CC(C)O"))
-  }
-
-  # For CAS
-  if (param_name %in% c("casrn", "cas")) {
-    return(c("80-05-7", "67-64-1"))
-  }
-
-  # For formula
-  if (param_name == "formula") {
-    return(c("C15H14O", "C6H6"))
-  }
-
-  # For list names
-  if (param_name == "list_name") {
-    return(c("PRODWATER", "CWA311HS"))
-  }
-
-  # For integers, return range
-  if (is.integer(single_val)) {
-    return(c(single_val, single_val + 10L))
-  }
-
-  # For numeric, return range
-  if (is.numeric(single_val)) {
-    return(c(single_val, single_val + 10))
-  }
-
-  # Default: duplicate single value
-  c(single_val, single_val)
+print_generate_tests_help <- function() {
+  cat(
+    "Usage:\n",
+    "  Rscript dev/generate_tests.R --generate\n",
+    "  Rscript dev/generate_tests.R --check\n",
+    "  Rscript dev/generate_tests.R --dry-run\n",
+    "  Rscript dev/generate_tests.R --generate --force\n",
+    "\n",
+    "Generated tests are offline mocked contract tests. Hand-written tests are not overwritten.\n",
+    sep = ""
+  )
 }
 
-#' Generate test file for a function
-#'
-#' @description
-#' Generates a complete test file with three test variants:
-#' - single: one valid input with VCR cassette
-#' - batch: 2-3 inputs with VCR cassette (skipped for static endpoints)
-#' - error: missing required params, no cassette
-#' - hook variants: additional tests for hook parameters if function has hooks
-#'
-#' @param function_name Name of function to generate tests for
-#' @param function_file Path to R source file containing function
-#' @param output_dir Path to tests/testthat directory
-#' @return Path to generated test file
-#' @export
-generate_test_file <- function(function_name, function_file, output_dir = "tests/testthat") {
-  # Extract function metadata
-  params <- extract_function_formals(function_file, function_name)
-  tidy_flag <- extract_tidy_flag(function_file)
+build_generated_test_specs <- function(root = ".") {
+  metadata <- tg_collect_wrapper_metadata(root)
+  tg_render_all_tests(metadata)
+}
 
-  # Check for hook configuration (Phase 28)
-  hook_config_path <- file.path(here::here(), "inst", "hook_config.yml")
-  hook_params <- NULL
-  if (file.exists(hook_config_path)) {
-    tryCatch({
-      hook_config <- yaml::read_yaml(hook_config_path)
-      fn_config <- hook_config[[function_name]]
-      if (!is.null(fn_config) && !is.null(fn_config$extra_params)) {
-        hook_params <- fn_config$extra_params
-      }
-    }, error = function(e) {
-      cli::cli_alert_warning("Failed to read hook_config.yml: {e$message}")
-    })
-  }
+summarise_scaffold <- function(scaffold) {
+  actions <- vapply(scaffold$writes, `[[`, character(1), "action")
+  list(
+    tests_generated = sum(actions %in% c("created", "updated")),
+    tests_created = sum(actions == "created"),
+    tests_updated = sum(actions == "updated"),
+    tests_skipped = sum(actions == "skipped_manual"),
+    tests_unchanged = sum(actions == "unchanged"),
+    tests_removed = length(scaffold$removed)
+  )
+}
 
-  # Determine return assertion based on tidy flag
-  return_assertion <- if (tidy_flag) {
-    'expect_s3_class(result, "tbl_df")'
-  } else {
-    'expect_type(result, "list")'
-  }
-
-  # Handle different function types
-  if (length(params) == 0) {
-    # Static endpoint (no parameters)
-    single_call <- glue("{function_name}()")
-    batch_test <- NULL  # Skip batch test for static endpoints
-
-    error_test <- glue('
-test_that("{function_name} handles invalid arguments", {{
-  # Static endpoint - no required parameters
-  # Test with invalid argument
-  expect_error({function_name}(invalid_arg = "test"))
-}})')
-
-  } else {
-    # Has parameters
-    param_names <- names(params)
-    primary_param <- param_names[1]
-
-    # Get test values
-    single_val <- get_test_value_for_param(primary_param)
-    batch_vals <- get_batch_test_values(primary_param)
-
-    # Build function calls
-    if (is.character(single_val)) {
-      single_call <- glue('{function_name}({primary_param} = "{single_val}")')
-      batch_val_str <- paste0('"', batch_vals, '"', collapse = ", ")
-      batch_call <- glue('{function_name}({primary_param} = c({batch_val_str}))')
-    } else {
-      single_call <- glue('{function_name}({primary_param} = {single_val})')
-      batch_val_str <- paste(batch_vals, collapse = ", ")
-      batch_call <- glue('{function_name}({primary_param} = c({batch_val_str}))')
-    }
-
-    # Batch test
-    batch_test <- glue('
-test_that("{function_name} handles batch requests", {{
-  vcr::use_cassette("{function_name}_batch", {{
-    result <- {batch_call}
-    {return_assertion}
-  }})
-}})')
-
-    # Error test
-    error_test <- glue('
-test_that("{function_name} handles errors gracefully", {{
-  expect_error({function_name}())
-}})')
-  }
-
-  # Build test file content
-  test_content <- glue('
-# Tests for {function_name}
-# Generated using metadata-based test generator
-
-test_that("{function_name} works with single input", {{
-  vcr::use_cassette("{function_name}_single", {{
-    result <- {single_call}
-    {return_assertion}
-  }})
-}})
-')
-
-  # Add batch test if applicable
-  if (!is.null(batch_test)) {
-    test_content <- paste0(test_content, "\n", batch_test)
-  }
-
-  # Add error test
-  test_content <- paste0(test_content, "\n", error_test)
-
-  # Add hook parameter variant tests (Phase 28)
-  if (!is.null(hook_params) && length(hook_params) > 0) {
-    for (param_name in names(hook_params)) {
-      param_spec <- hook_params[[param_name]]
-
-      # Generate test variant with hook param enabled
-      # For boolean params, test with TRUE; for numeric, use non-default value
-      test_value <- if (param_spec$type == "logical") {
-        "TRUE"
-      } else if (param_spec$type == "numeric") {
-        "0.9"
-      } else {
-        param_spec$default
-      }
-
-      # Build function call with hook param
-      if (length(params) == 0) {
-        # Static endpoint
-        hook_call <- glue('{function_name}({param_name} = {test_value})')
-      } else {
-        # Has primary parameter
-        primary_param <- names(params)[1]
-        single_val <- get_test_value_for_param(primary_param)
-        if (is.character(single_val)) {
-          hook_call <- glue('{function_name}({primary_param} = "{single_val}", {param_name} = {test_value})')
-        } else {
-          hook_call <- glue('{function_name}({primary_param} = {single_val}, {param_name} = {test_value})')
-        }
-      }
-
-      # Generate hook variant test
-      hook_test <- glue('
-test_that("{function_name} works with {param_name} = {test_value}", {{
-  vcr::use_cassette("{function_name}_{param_name}", {{
-    result <- {hook_call}
-    {return_assertion}
-  }})
-}})')
-
-      test_content <- paste0(test_content, "\n", hook_test)
-    }
-  }
-
-  # Check manifest for protection
-  test_file <- file.path(output_dir, paste0("test-", function_name, ".R"))
-  test_basename <- basename(test_file)
-  manifest <- read_test_manifest()
-
-  if (!is.null(manifest$files[[test_basename]]) &&
-      identical(manifest$files[[test_basename]]$status, "protected")) {
-    cli::cli_alert_warning("Skipping protected file: {test_basename}")
+generate_tests_main <- function(args = commandArgs(trailingOnly = TRUE), root = ".") {
+  parsed <- parse_generate_tests_args(args)
+  if (parsed$help) {
+    print_generate_tests_help()
     return(invisible(NULL))
   }
 
-  # Write to file
-  writeLines(test_content, test_file)
-
-  # Register in manifest
-  manifest <- read_test_manifest()
-  manifest$files[[test_basename]] <- list(
-    status = "generated",
-    generated_date = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ")
-  )
-  manifest$updated <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ")
-  write_test_manifest(manifest)
-
-  cli::cli_alert_success("Generated {test_file}")
-  invisible(test_file)
-}
-
-#' Main entry point: Scan R/ and generate tests for gaps
-#'
-#' @description
-#' When sourced as a script, scans R/ for ct_*, chemi_*, cc_* functions,
-#' detects which ones lack test files, and generates tests for them.
-#'
-#' @param r_dir Path to R/ directory
-#' @param test_dir Path to tests/testthat/ directory
-#' @param force Regenerate all tests even if they exist
-#' @export
-generate_all_tests <- function(r_dir = "R", test_dir = "tests/testthat", force = FALSE) {
-  # Find all API wrapper function files
-  function_files <- list.files(
-    r_dir,
-    pattern = "^(ct_|chemi_|cc_)[^.]+\\.R$",
-    full.names = TRUE
-  )
-
-  cli::cli_h1("Test Generation Summary")
-  cli::cli_alert_info("Found {length(function_files)} candidate files matching ct_/chemi_/cc_ pattern")
-
-  generated_count <- 0
-  skipped_count <- 0
-  api_wrapper_count <- 0
-  skipped_non_api <- 0
-
-  for (file in function_files) {
-    # Skip non-API functions (those that don't call generic_request)
-    if (!calls_generic_request(file)) {
-      skipped_non_api <- skipped_non_api + 1
-      next
-    }
-
-    api_wrapper_count <- api_wrapper_count + 1
-
-    # Extract function name from filename
-    function_name <- tools::file_path_sans_ext(basename(file))
-
-    # Check if test file already exists
-    test_file <- file.path(test_dir, paste0("test-", function_name, ".R"))
-
-    if (file.exists(test_file) && !force) {
-      skipped_count <- skipped_count + 1
-      next
-    }
-
-    # Generate test
-    tryCatch({
-      generate_test_file(function_name, file, test_dir)
-      generated_count <- generated_count + 1
-    }, error = function(e) {
-      cli::cli_alert_danger("Failed to generate test for {function_name}: {e$message}")
-    })
+  source_test_generation_pipeline(root)
+  if (requireNamespace("cli", quietly = TRUE)) {
+    cli::cli_h1("Generated Wrapper Contract Tests")
   }
 
-  cli::cli_alert_info("Skipped {skipped_non_api} non-API files (no generic_request call)")
-  cli::cli_alert_info("Found {api_wrapper_count} API wrapper functions")
-  cli::cli_alert_success("Generated {generated_count} test files")
-  cli::cli_alert_info("Skipped {skipped_count} existing test files")
+  specs <- build_generated_test_specs(root)
+  tg_cli_info(sprintf("Discovered %d exported API wrapper function(s)", length(specs)))
 
-  # Calculate gaps remaining (API wrapper count minus tests with real content)
-  gaps_remaining <- api_wrapper_count - (generated_count + skipped_count)
-
-  # Write GITHUB_OUTPUT variables if in CI
-  gh_output <- Sys.getenv("GITHUB_OUTPUT")
-  if (nzchar(gh_output)) {
-    cat(sprintf("tests_generated=%d\n", generated_count), file = gh_output, append = TRUE)
-    cat(sprintf("tests_skipped=%d\n", skipped_count), file = gh_output, append = TRUE)
-    cat(sprintf("gaps_remaining=%d\n", gaps_remaining), file = gh_output, append = TRUE)
+  if (identical(parsed$mode, "dry-run")) {
+    scaffold <- tg_scaffold_generated_tests(specs, root = root, dry_run = TRUE, force = parsed$force)
+    summary <- summarise_scaffold(scaffold)
+    tg_cli_info("Dry run only. No files were changed.")
+    tg_cli_info(sprintf("Would generate/update: %d", summary$tests_generated))
+    tg_cli_info(sprintf("Would skip manual tests: %d", summary$tests_skipped))
+    tg_cli_info(sprintf("Would remove generated files: %d", summary$tests_removed))
+    tg_write_github_outputs(c(
+      tests_generated = summary$tests_generated,
+      tests_skipped = summary$tests_skipped,
+      tests_removed = summary$tests_removed,
+      check_status = "dry_run",
+      gaps_remaining = 0
+    ))
+    return(invisible(list(specs = specs, scaffold = scaffold, summary = summary)))
   }
 
-  invisible(list(
-    generated = generated_count,
-    skipped = skipped_count,
-    total = length(function_files),
-    api_wrappers = api_wrapper_count,
-    gaps_remaining = gaps_remaining
+  if (identical(parsed$mode, "check")) {
+    check <- tg_check_generated_tests_current(specs, root = root)
+    status <- if (isTRUE(check$current)) "pass" else "fail"
+    tg_write_github_outputs(c(
+      tests_generated = 0,
+      tests_skipped = 0,
+      tests_removed = 0,
+      check_status = status,
+      gaps_remaining = 0
+    ))
+
+    if (!isTRUE(check$current)) {
+      if (length(check$mismatches) > 0) {
+        tg_cli_warning(sprintf("Generated tests are missing or out of date: %d", length(check$mismatches)))
+        for (item in head(check$mismatches, 20)) {
+          tg_cli_warning(sprintf("%s: %s", item$file, item$reason))
+        }
+      }
+      if (!isTRUE(check$static$valid)) {
+        tg_cli_warning("Static validation failed for generated tests")
+        for (failure in check$static$failures) {
+          tg_cli_warning(sprintf("%s: %s", failure$file, paste(failure$errors, collapse = "; ")))
+        }
+      }
+      quit(save = "no", status = 1)
+    }
+
+    tg_cli_success("Generated tests are current and passed static validation")
+    return(invisible(check))
+  }
+
+  scaffold <- tg_scaffold_generated_tests(specs, root = root, dry_run = FALSE, force = parsed$force)
+  summary <- summarise_scaffold(scaffold)
+  check <- tg_check_generated_tests_current(specs, root = root)
+  status <- if (isTRUE(check$current)) "pass" else "fail"
+
+  tg_cli_success(sprintf("Generated or updated %d test file(s)", summary$tests_generated))
+  tg_cli_info(sprintf("Skipped %d hand-written test file(s)", summary$tests_skipped))
+  tg_cli_info(sprintf("Removed %d retired generated test file(s)", summary$tests_removed))
+
+  tg_write_github_outputs(c(
+    tests_generated = summary$tests_generated,
+    tests_created = summary$tests_created,
+    tests_updated = summary$tests_updated,
+    tests_skipped = summary$tests_skipped,
+    tests_removed = summary$tests_removed,
+    check_status = status,
+    gaps_remaining = 0
   ))
+
+  if (!isTRUE(check$current)) {
+    tg_cli_abort(c(
+      "x" = "Generated-test static validation failed after generation",
+      "i" = "Run Rscript dev/generate_tests.R --check for details."
+    ))
+  }
+
+  invisible(list(specs = specs, scaffold = scaffold, summary = summary, check = check))
 }
 
-# Auto-run when sourced as a script (for CI)
-if (!interactive()) {
-  generate_all_tests()
+generate_tests_is_entrypoint <- function() {
+  file_args <- grep("^--file=", commandArgs(FALSE), value = TRUE)
+  if (length(file_args) == 0) {
+    return(FALSE)
+  }
+
+  identical(basename(sub("^--file=", "", file_args[[length(file_args)]])), "generate_tests.R")
+}
+
+if (generate_tests_is_entrypoint()) {
+  generate_tests_main()
 }

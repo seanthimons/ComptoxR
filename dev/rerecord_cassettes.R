@@ -13,10 +13,10 @@
 #   - Required packages: mirai, cli, fs, here, testthat
 #
 # USAGE:
-#   Rscript dev/rerecord_cassettes.R              # Priority batch (default)
-#   Rscript dev/rerecord_cassettes.R --all        # All test files
-#   Rscript dev/rerecord_cassettes.R --failures   # Re-run failed files only
-#   Rscript dev/rerecord_cassettes.R --batch-size 30 --workers 4  # Custom config
+#   Rscript dev/rerecord_cassettes.R --record-live              # Priority batch
+#   Rscript dev/rerecord_cassettes.R --record-live --all        # All test files
+#   Rscript dev/rerecord_cassettes.R --record-live --failures   # Re-run failed files only
+#   Rscript dev/rerecord_cassettes.R --record-live --batch-size 30 --workers 4
 #
 # ==============================================================================
 
@@ -28,6 +28,9 @@ suppressPackageStartupMessages({
   library(testthat)
   library(mirai)
 })
+
+source(file.path("dev", "test_generation", "00_config.R"))
+source(file.path("dev", "test_generation", "07_token_preflight.R"))
 
 # Configuration ----------------------------------------------------------------
 N_WORKERS <- 8                          # Number of parallel workers
@@ -45,19 +48,27 @@ PRIORITY_PATTERNS <- c(
 )
 
 # Pre-flight checks ------------------------------------------------------------
-preflight_checks <- function() {
+preflight_checks <- function(record_live = FALSE) {
   cli::cli_h1("Pre-flight Checks")
 
-  # Check API key
-  api_key <- Sys.getenv("ctx_api_key")
-  if (api_key == "" || nchar(api_key) == 0) {
+  if (!isTRUE(record_live)) {
     cli::cli_abort(c(
-      "x" = "No API key found",
-      "i" = "Set ctx_api_key environment variable",
-      "i" = "Request keys via email to ccte_api@epa.gov"
+      "x" = "Live cassette recording requires --record-live",
+      "i" = "This prevents accidental cassette deletion and production API calls."
     ))
   }
-  cli::cli_alert_success("API key found")
+
+  # Check API key before any cassette deletion or live calls.
+  ctx_api_key_preflight()
+
+  forced_cran_safe <- tolower(trimws(Sys.getenv("COMPTOXR_CRAN_SAFE_TESTS", unset = "")))
+  if (forced_cran_safe %in% c("true", "1", "yes")) {
+    cli::cli_abort(c(
+      "x" = "Live cassette recording cannot run with COMPTOXR_CRAN_SAFE_TESTS=true",
+      "i" = "Unset COMPTOXR_CRAN_SAFE_TESTS before using --record-live."
+    ))
+  }
+  Sys.setenv(NOT_CRAN = "true")
 
   # Check mirai
   if (!requireNamespace("mirai", quietly = TRUE)) {
@@ -238,6 +249,7 @@ parse_args <- function() {
   mode <- "priority"
   n_workers <- N_WORKERS
   batch_size <- BATCH_SIZE
+  record_live <- FALSE
 
   i <- 1
   while (i <= length(args)) {
@@ -245,6 +257,9 @@ parse_args <- function() {
 
     if (arg == "--all") {
       mode <- "all"
+
+    } else if (arg == "--record-live") {
+      record_live <- TRUE
 
     } else if (arg == "--failures") {
       mode <- "failures"
@@ -270,7 +285,39 @@ parse_args <- function() {
     i <- i + 1
   }
 
-  list(mode = mode, n_workers = n_workers, batch_size = batch_size)
+  list(mode = mode, n_workers = n_workers, batch_size = batch_size, record_live = record_live)
+}
+
+# Post-recording safety checks -------------------------------------------------
+post_recording_checks <- function() {
+  cli::cli_h1("Post-recording Safety Checks")
+
+  source(file.path("tests", "testthat", "helper-vcr.R"))
+  safety_issues <- check_cassette_safety()
+  if (length(safety_issues) > 0) {
+    cli::cli_abort("Cassette safety check failed. Do not commit recorded fixtures.")
+  }
+
+  cassettes <- fs::dir_ls(CASSETTE_DIR, glob = "*.yml")
+  yaml_errors <- list()
+  if (length(cassettes) > 0 && requireNamespace("yaml", quietly = TRUE)) {
+    for (cassette in cassettes) {
+      tryCatch(
+        yaml::read_yaml(cassette),
+        error = function(e) yaml_errors[[fs::path_file(cassette)]] <<- conditionMessage(e)
+      )
+    }
+  }
+
+  if (length(yaml_errors) > 0) {
+    for (name in names(yaml_errors)) {
+      cli::cli_alert_danger("{name}: {yaml_errors[[name]]}")
+    }
+    cli::cli_abort("One or more recorded cassettes failed YAML parsing.")
+  }
+
+  cli::cli_alert_success("Cassette safety and YAML parse checks passed")
+  invisible(TRUE)
 }
 
 # Main execution ---------------------------------------------------------------
@@ -281,7 +328,7 @@ main <- function() {
   config <- parse_args()
 
   # Pre-flight checks
-  preflight_checks()
+  preflight_checks(config$record_live)
 
   # Get test files
   test_files <- get_test_files(config$mode)
@@ -306,6 +353,8 @@ main <- function() {
     n_workers = config$n_workers,
     batch_size = config$batch_size
   )
+
+  post_recording_checks()
 
   # Calculate elapsed time
   elapsed_time <- difftime(Sys.time(), start_time, units = "mins")

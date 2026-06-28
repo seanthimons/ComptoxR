@@ -30,5 +30,3 @@ cc_search <- function(q = NULL, offset = 0, size = NULL, all_pages = TRUE) {
 
   return(result)
 }
-
-

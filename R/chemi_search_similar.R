@@ -16,16 +16,35 @@
 #' \dontrun{
 #' chemi_search_similar(smiles = "DTXSID7020182")
 #' }
-chemi_search_similar <- function(smiles, exportSmiles = NULL, exportMol = NULL, min = NULL, max = NULL, similarityType = NULL) {
+chemi_search_similar <- function(
+  smiles,
+  exportSmiles = NULL,
+  exportMol = NULL,
+  min = NULL,
+  max = NULL,
+  similarityType = NULL
+) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(exportSmiles)) options[['exportSmiles']] <- exportSmiles
-  if (!is.null(exportMol)) options[['exportMol']] <- exportMol
-  if (!is.null(min)) options[['min']] <- min
-  if (!is.null(max)) options[['max']] <- max
-  if (!is.null(similarityType)) options[['similarityType']] <- similarityType
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(exportSmiles)) {
+    options[['exportSmiles']] <- exportSmiles
+  }
+  if (!is.null(exportMol)) {
+    options[['exportMol']] <- exportMol
+  }
+  if (!is.null(min)) {
+    options[['min']] <- min
+  }
+  if (!is.null(max)) {
+    options[['max']] <- max
+  }
+  if (!is.null(similarityType)) {
+    options[['similarityType']] <- similarityType
+  }
+  result <- generic_request(
     endpoint = "search/similar",
     method = "GET",
     batch_limit = 0,
@@ -39,5 +58,3 @@ chemi_search_similar <- function(smiles, exportSmiles = NULL, exportMol = NULL, 
 
   return(result)
 }
-
-

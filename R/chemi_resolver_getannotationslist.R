@@ -14,8 +14,10 @@
 chemi_resolver_getannotationslist <- function(name) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(name)) options[['name']] <- name
-    result <- generic_request(
+  if (!is.null(name)) {
+    options[['name']] <- name
+  }
+  result <- generic_request(
     endpoint = "resolver/getannotationslist",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_resolver_getannotationslist <- function(name) {
 
   return(result)
 }
-
-

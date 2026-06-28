@@ -92,458 +92,432 @@ source(here::here("R", "cts.R"))
 reset_endpoint_tracking()
 
 # ==============================================================================
-# Helper Functions
+# Generic Runner
 # ==============================================================================
-# Note: select_schema_files() has been moved to dev/endpoint_eval/01_schema_resolution.R
-# for shared use between generate_stubs.R and diff_schemas.R
+# The four APIs (ct/chemi/cc/cts) share one pipeline. Only three things vary per
+# API: which schema files to read, how routes map to file/fn names, and an
+# optional route filter. Those live in each spec's `build_endpoints()` closure
+# (preserved verbatim from the original per-API functions). Everything from
+# usage detection onward is identical and lives here, in run_generator().
+#
+# Note: select_schema_files() lives in dev/endpoint_eval/01_schema_resolution.R
+# for shared use between generate_stubs.R and diff_schemas.R.
 
-#' Generate stubs for CompTox Dashboard API
-#' @return tibble with scaffold results
-generate_ct_stubs <- function() {
-  cli_h2("CompTox Dashboard (ct_*)")
+empty_scaffold <- function() tibble(action = character(), file = character())
 
-  ctx_schema_files <- list.files(
-    path = here::here('schema'),
-    pattern = "^ctx-.*-prod\\.json$",
-    full.names = FALSE
-  )
+# ==============================================================================
+# Collision-only disambiguation (issue #214)
+# ==============================================================================
+# The route -> file/fn derivation strips distinguishing tokens (summary,
+# by-dtxsid, trailing-slash, path-params), so several DISTINCT (route, method)
+# pairs can collapse to one file + fn. The append-only scaffold then writes all
+# defs and the LAST one wins, silently dropping the earlier, richer definitions.
+#
+# Fix: compute BOTH the existing "short" file/fn and a "full" file/fn that keeps
+# the distinguishing tokens. Where a short fn is unique we keep it (idempotent);
+# only the rows whose short fn collides (>= 2 distinct route+method map to it)
+# fall back to the full name so every endpoint gets a unique file + fn.
 
-  if (length(ctx_schema_files) == 0) {
-    cli_alert_warning("No ctx schema files found, skipping ct_* generation")
-    return(tibble(action = character(), file = character()))
-  }
-
-  cli_alert_info("Found {length(ctx_schema_files)} ctx schema file(s)")
-
-  # Parse all schemas
-  endpoints <- map(
-    ctx_schema_files,
-    ~ {
-      openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
-      openapi_to_spec(openapi)
-    },
-    .progress = FALSE
-  ) %>%
-    list_rbind() %>%
+#' Derive the per-row function name from a file column using the existing
+#' bulk/method-suffix convention (grouped per file). Returns a character vector
+#' aligned with the input rows.
+derive_fn_from_file <- function(df, file_col) {
+  df %>%
+    mutate(.fn_file = .data[[file_col]]) %>%
+    group_by(.fn_file) %>%
     mutate(
-      route = strip_curly_params(route, leading_slash = 'remove'),
-      domain = route %>% str_extract("^[^/]+"),
-      file = route %>%
-        str_remove_all(regex("(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
-        str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
-        str_replace_all("[/]+", " ") %>%
-        str_squish() %>%
-        str_replace_all("\\s", "_") %>%
-        str_replace_all("-", "_"),
-      file = paste0("ct_", domain, "_", file, ".R"),
-      batch_limit = case_when(
-        method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
-        method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
-        .default = NULL
-      )
-    ) %>%
-    arrange(forcats::fct_inorder(domain), route, factor(method, levels = c('POST', 'GET'))) %>%
-    distinct(route, method, .keep_all = TRUE) %>%
-    group_by(file) %>%
-    mutate(
-      method_count = n(),
-      fn = case_when(
-        method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-        method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-        method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-        .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
+      .mc = n(),
+      .fn = case_when(
+        .mc == 1 ~ tools::file_path_sans_ext(basename(.fn_file)),
+        method == "GET" ~ tools::file_path_sans_ext(basename(.fn_file)),
+        method == "POST" ~ paste0(tools::file_path_sans_ext(basename(.fn_file)), "_bulk"),
+        .default = paste0(tools::file_path_sans_ext(basename(.fn_file)), "_", tolower(method))
       )
     ) %>%
     ungroup() %>%
-    select(-method_count)
+    pull(.fn)
+}
 
-  cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
+#' Collision-only fallback. Expects columns file_short/file_full/fn_short/fn_full.
+#' Keeps the short names where the short fn is unique; rows whose short fn
+#' collides fall back to the full file/fn. Drops all helper columns (file_short,
+#' file_full, fn_short, fn_full, and any starting with ".").
+resolve_collisions <- function(df) {
+  df %>%
+    add_count(fn_short, name = "n_short_count") %>%
+    mutate(
+      file = if_else(n_short_count > 1, file_full, file_short),
+      fn = if_else(n_short_count > 1, fn_full, fn_short)
+    ) %>%
+    select(
+      -any_of(c("file_short", "file_full", "fn_short", "fn_full", "n_short_count")),
+      -starts_with(".")
+    )
+}
+
+#' Run the shared stub-generation pipeline for one API spec.
+#' @param spec list with prefix, heading, build_endpoints(), config, and
+#'   optional post() hook.
+#' @return list(scaffold = <scaffold tibble>, drift = <drift tibble>)
+run_generator <- function(spec) {
+  cli_h2(spec$heading)
+
+  endpoints <- spec$build_endpoints()
+
+  if (is.null(endpoints) || nrow(endpoints) == 0) {
+    return(list(scaffold = empty_scaffold(), drift = tibble()))
+  }
 
   # Find missing endpoints
   res <- find_endpoint_usages_base(
     endpoints$route,
     pkg_dir = here::here("R"),
-    files_regex = "^ct_.*\\.R$",
+    files_regex = sprintf("^%s_.*\\.R$", spec$prefix),
     expected_files = endpoints$file
   )
 
   # Detect parameter drift for existing endpoints
-  ct_drift <- detect_parameter_drift(
+  drift <- detect_parameter_drift(
     endpoints = endpoints,
     usage_summary = res$summary %>% filter(n_hits > 0),
     pkg_dir = here::here("R")
   )
 
   endpoints_to_build <- endpoints %>%
-    filter(route %in% {res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+    filter(
+      route %in%
+        {
+          res$summary %>% filter(n_hits == 0) %>% pull(endpoint)
+        }
+    )
 
   if (nrow(endpoints_to_build) == 0) {
-    cli_alert_success("All ct_* endpoints already implemented")
-    # Return drift results even if no new stubs
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = ct_drift
-    ))
+    cli_alert_success("All {spec$prefix}_* endpoints already implemented")
+    return(list(scaffold = empty_scaffold(), drift = drift))
   }
 
   cli_alert_info("Found {nrow(endpoints_to_build)} endpoint(s) to generate")
 
   # Generate stubs
-  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = ct_config)
+  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = spec$config)
 
-  # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
+  # Optional per-API post-processing (e.g. chemi aggregates by file)
+  if (!is.null(spec$post)) {
+    spec_with_text <- spec$post(spec_with_text)
+  }
 
-  # Return both scaffold and drift results
+  if (nrow(spec_with_text) == 0) {
+    cli_alert_warning("No {spec$prefix} stubs generated (all skipped)")
+    return(list(scaffold = empty_scaffold(), drift = drift))
+  }
+
   list(
-    scaffold = scaffold_result,
-    drift = ct_drift
+    scaffold = scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE),
+    drift = drift
   )
 }
 
-#' Generate stubs for Cheminformatics API
-#' @return tibble with scaffold results
-generate_chemi_stubs <- function() {
-  cli_h2("Cheminformatics (chemi_*)")
+# ==============================================================================
+# Per-API Specs
+# ==============================================================================
+# Each build_endpoints() is the original per-API function's parse + derive logic
+# verbatim; it returns the endpoints tibble (or NULL when no schemas/endpoints).
 
-  # Select schema files with stage prioritization
-  chemi_schema_files <- select_schema_files(
-    pattern = "^chemi-.*\\.json$",
-    exclude_pattern = "ui",
-    stage_priority = c("prod", "staging", "dev")
-  )
+ct_spec <- list(
+  prefix = "ct",
+  heading = "CompTox Dashboard (ct_*)",
+  config = ct_config,
+  build_endpoints = function() {
+    ctx_schema_files <- list.files(
+      path = here::here('schema'),
+      pattern = "^ctx-.*-prod\\.json$",
+      full.names = FALSE
+    )
 
-  if (length(chemi_schema_files) == 0) {
-    cli_alert_warning("No chemi schema files found, skipping chemi_* generation")
-    return(tibble(action = character(), file = character()))
-  }
+    if (length(ctx_schema_files) == 0) {
+      cli_alert_warning("No ctx schema files found, skipping ct_* generation")
+      return(NULL)
+    }
 
-  cli_alert_info("Found {length(chemi_schema_files)} chemi schema file(s)")
+    cli_alert_info("Found {length(ctx_schema_files)} ctx schema file(s)")
 
-  # Parse all schemas using openapi_to_spec directly
-  # UNIFIED PIPELINE (v1.6 - UNIFY-CHEMI decision):
-  # Previously used parse_chemi_schemas() which was chemi-specific.
-  # Now calls openapi_to_spec() directly, same as generate_ct_stubs() and generate_cc_stubs().
-  # This ensures consistent Swagger 2.0 handling across all generators.
-  chemi_endpoints <- tryCatch({
-    map(
-      chemi_schema_files,
+    endpoints <- map(
+      ctx_schema_files,
       ~ {
         openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
-        # openapi_to_spec handles both Swagger 2.0 (amos, rdkit, mordred) and OpenAPI 3.0
-        spec <- openapi_to_spec(openapi)
-        spec$source_file <- .x
-        spec
+        openapi_to_spec(openapi)
       },
       .progress = FALSE
     ) %>%
       list_rbind() %>%
-      filter(
-        str_detect(method, 'GET|POST'),
-        !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE)  # Exclude admin/UI routes
-      ) %>%
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),
-        # Extract service slug from source filename (e.g., "chemi-chet-dev.json" -> "chet")
-        service_slug = source_file %>% str_extract("^chemi-([^-]+)") %>% str_remove("^chemi-"),
-        # Use route domain when route has api/ prefix, otherwise fall back to service slug
-        domain = if_else(
-          str_starts(route, "api/"),
-          route %>% str_remove("^api/") %>% str_extract("^[^/]+"),
-          service_slug
-        ),
-        name = route %>%
-          str_remove_all("^api/") %>%
-          str_remove_all(regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
+        domain = route %>% str_extract("^[^/]+"),
+        # "short" core: strips domain-ish noise AND the distinguishing tokens
+        # (summary, by-dtxsid). This is today's logic, kept for idempotency.
+        .core_short = route %>%
+          str_remove_all(regex(
+            "(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies)|summary|by[/_-]dtxsid)(?=$|[/_-])"
+          )) %>%
           str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
           str_replace_all("[/]+", " ") %>%
           str_squish() %>%
           str_replace_all("\\s", "_") %>%
           str_replace_all("-", "_"),
-        file = case_when(
-          nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
-          str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
-          .default = paste0("chemi_", domain, "_", name, ".R")
-        ),
-        batch_limit = 0,
-        route = str_remove_all(route, "^api/")
-      ) %>%
-      group_by(file) %>%
-      mutate(
-        method_count = n(),
-        fn = case_when(
-          method_count == 1 ~ tools::file_path_sans_ext(basename(file)),
-          method == "GET" ~ tools::file_path_sans_ext(basename(file)),
-          method == "POST" ~ paste0(tools::file_path_sans_ext(basename(file)), "_bulk"),
-          .default = paste0(tools::file_path_sans_ext(basename(file)), "_", tolower(method))
-        )
-      ) %>%
-      ungroup() %>%
-      select(-method_count)
-  }, error = function(e) {
-    cli_alert_warning("Error parsing chemi schemas: {e$message}")
-    return(tibble())
-  })
-
-  if (nrow(chemi_endpoints) == 0) {
-    cli_alert_warning("No chemi endpoints parsed")
-    return(tibble(action = character(), file = character()))
-  }
-
-  cli_alert_info("Parsed {nrow(chemi_endpoints)} endpoint(s) from schemas")
-
-  # Find missing endpoints
-  res_chemi <- find_endpoint_usages_base(
-    chemi_endpoints$route,
-    pkg_dir = here::here("R"),
-    files_regex = "^chemi_.*\\.R$",
-    expected_files = chemi_endpoints$file
-  )
-
-  # Detect parameter drift for existing endpoints
-  chemi_drift <- detect_parameter_drift(
-    endpoints = chemi_endpoints,
-    usage_summary = res_chemi$summary %>% filter(n_hits > 0),
-    pkg_dir = here::here("R")
-  )
-
-  chemi_endpoints_to_build <- chemi_endpoints %>%
-    filter(route %in% {res_chemi$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
-
-  if (nrow(chemi_endpoints_to_build) == 0) {
-    cli_alert_success("All chemi_* endpoints already implemented")
-    # Return drift results even if no new stubs
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = chemi_drift
-    ))
-  }
-
-  cli_alert_info("Found {nrow(chemi_endpoints_to_build)} endpoint(s) to generate")
-
-  # Generate stubs
-  chemi_spec_with_text <- render_endpoint_stubs(chemi_endpoints_to_build, config = chemi_config)
-
-  # Check if any stubs were generated (render may skip endpoints with empty schemas)
-  if (nrow(chemi_spec_with_text) == 0) {
-    cli_alert_warning("No chemi stubs generated (all skipped)")
-    # Return drift results even if no stubs
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = chemi_drift
-    ))
-  }
-
-  # Aggregate by file (multiple functions per file)
-  chemi_spec_aggregated <- chemi_spec_with_text %>%
-    group_by(file) %>%
-    summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
-
-  # Write files
-  scaffold_result <- scaffold_files(chemi_spec_aggregated, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
-
-  # Return both scaffold and drift results
-  list(
-    scaffold = scaffold_result,
-    drift = chemi_drift
-  )
-}
-
-#' Generate stubs for Common Chemistry API
-#' @return tibble with scaffold results
-generate_cc_stubs <- function() {
-  cli_h2("Common Chemistry (cc_*)")
-
-  cc_schema_files <- list.files(
-    path = here::here('schema'),
-    pattern = "^commonchemistry-prod\\.json$",
-    full.names = FALSE
-  )
-
-  if (length(cc_schema_files) == 0) {
-    cli_alert_warning("No Common Chemistry schema file found, skipping cc_* generation")
-    return(tibble(action = character(), file = character()))
-  }
-
-  cli_alert_info("Found {length(cc_schema_files)} cc schema file(s)")
-
-  # Parse schemas
-  endpoints <- map(
-    cc_schema_files,
-    ~ {
-      openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
-      openapi_to_spec(openapi)
-    },
-    .progress = FALSE
-  ) %>%
-    list_rbind() %>%
-    mutate(
-      route = strip_curly_params(route, leading_slash = 'remove'),
-      file = route %>%
-        str_replace_all("[/]+", " ") %>%
-        str_squish() %>%
-        str_replace_all("\\s", "_"),
-      file = paste0("cc_", file, ".R"),
-      batch_limit = case_when(
-        method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
-        method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
-        .default = NULL
-      )
-    ) %>%
-    distinct(route, .keep_all = TRUE)
-
-  cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
-
-  # Find missing endpoints
-  cc_res <- find_endpoint_usages_base(
-    endpoints$route,
-    pkg_dir = here::here("R"),
-    files_regex = "^cc_.*\\.R$",
-    expected_files = endpoints$file
-  )
-
-  # Detect parameter drift for existing endpoints
-  cc_drift <- detect_parameter_drift(
-    endpoints = endpoints,
-    usage_summary = cc_res$summary %>% filter(n_hits > 0),
-    pkg_dir = here::here("R")
-  )
-
-  endpoints_to_build <- endpoints %>%
-    filter(route %in% {cc_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
-
-  if (nrow(endpoints_to_build) == 0) {
-    cli_alert_success("All cc_* endpoints already implemented")
-    # Return drift results even if no new stubs
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = cc_drift
-    ))
-  }
-
-  cli_alert_info("Found {nrow(endpoints_to_build)} endpoint(s) to generate")
-
-  # Generate stubs
-  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = cc_config)
-
-  # Write files
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
-
-  # Return both scaffold and drift results
-  list(
-    scaffold = scaffold_result,
-    drift = cc_drift
-  )
-}
-
-#' Generate stubs for CTS API
-#' @return tibble with scaffold results
-generate_cts_stubs <- function() {
-  cli_h2("Chemical Transformation Simulator (cts_*)")
-
-  cts_schema_path <- here::here("schema", "cts-prod.json")
-  cts_schema <- tryCatch({
-    if (file.exists(cts_schema_path)) {
-      cli_alert_info("Using local CTS schema: {cts_schema_path}")
-      jsonlite::fromJSON(cts_schema_path, simplifyVector = FALSE)
-    } else {
-      cli_alert_info("No local CTS schema found; fetching https://qed.epa.gov/cts/rest/swag")
-      jsonlite::fromJSON("https://qed.epa.gov/cts/rest/swag", simplifyVector = FALSE)
-    }
-  }, error = function(e) {
-    cli_alert_warning("Could not load CTS schema: {e$message}")
-    return(NULL)
-  })
-
-  if (is.null(cts_schema)) {
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = tibble()
-    ))
-  }
-
-  endpoints <- tryCatch({
-    openapi_to_spec(cts_schema) %>%
-      filter(str_detect(method, "GET|POST")) %>%
-      mutate(
-        route = strip_curly_params(route, leading_slash = "remove"),
-        is_blacklisted = .cts_endpoint_blacklisted(route)
-      ) %>%
-      filter(!is_blacklisted) %>%
-      select(-is_blacklisted) %>%
-      mutate(
-        name = route %>%
+        # "full" core: strips ONLY the domain-ish noise, retaining the
+        # distinguishing tokens (summary, by-dtxsid, by-aeid) so colliding
+        # endpoints get unique names.
+        .core_full = route %>%
+          str_remove_all(regex(
+            "(?i)(?:^|[/_-])(?:hazards?|chemical?|exposures?|bioactivit(?:y|ies))(?=$|[/_-])"
+          )) %>%
           str_replace_all("[/]+", " ") %>%
           str_squish() %>%
           str_replace_all("\\s", "_") %>%
           str_replace_all("-", "_"),
-        file = paste0("cts_", name, ".R"),
-        fn = tools::file_path_sans_ext(file),
+        file_short = paste0("ct_", domain, "_", .core_short, ".R"),
+        file_full = paste0("ct_", domain, "_", .core_full, ".R"),
         batch_limit = case_when(
-          method == "GET" & !is.na(num_path_params) & num_path_params > 0 ~ 1,
-          method == "GET" & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+          method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+          method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
           .default = NULL
         )
       ) %>%
+      arrange(forcats::fct_inorder(domain), route, factor(method, levels = c('POST', 'GET'))) %>%
       distinct(route, method, .keep_all = TRUE)
-  }, error = function(e) {
-    cli_alert_warning("Error parsing CTS schema: {e$message}")
-    return(tibble())
-  })
 
-  if (nrow(endpoints) == 0) {
-    cli_alert_warning("No CTS endpoints parsed")
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = tibble()
-    ))
+    endpoints$fn_short <- derive_fn_from_file(endpoints, "file_short")
+    endpoints$fn_full <- derive_fn_from_file(endpoints, "file_full")
+    endpoints <- resolve_collisions(endpoints)
+
+    cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
+    endpoints
   }
+)
 
-  cli_alert_info("Parsed {nrow(endpoints)} CTS endpoint(s) after blacklist filtering")
+chemi_spec <- list(
+  prefix = "chemi",
+  heading = "Cheminformatics (chemi_*)",
+  config = chemi_config,
+  build_endpoints = function() {
+    # Select schema files with stage prioritization
+    chemi_schema_files <- select_schema_files(
+      pattern = "^chemi-.*\\.json$",
+      exclude_pattern = "ui",
+      stage_priority = c("prod", "staging", "dev")
+    )
 
-  cts_res <- find_endpoint_usages_base(
-    endpoints$route,
-    pkg_dir = here::here("R"),
-    files_regex = "^cts_.*\\.R$",
-    expected_files = endpoints$file
-  )
+    if (length(chemi_schema_files) == 0) {
+      cli_alert_warning("No chemi schema files found, skipping chemi_* generation")
+      return(NULL)
+    }
 
-  cts_drift <- detect_parameter_drift(
-    endpoints = endpoints,
-    usage_summary = cts_res$summary %>% filter(n_hits > 0),
-    pkg_dir = here::here("R")
-  )
+    cli_alert_info("Found {length(chemi_schema_files)} chemi schema file(s)")
 
-  endpoints_to_build <- endpoints %>%
-    filter(route %in% {cts_res$summary %>% filter(n_hits == 0) %>% pull(endpoint)})
+    # openapi_to_spec handles both Swagger 2.0 (amos, rdkit, mordred) and OpenAPI 3.0,
+    # the same way generate_ct_stubs and generate_cc_stubs do (v1.6 UNIFY-CHEMI).
+    chemi_endpoints <- tryCatch(
+      {
+        ep <- map(
+          chemi_schema_files,
+          ~ {
+            openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+            spec <- openapi_to_spec(openapi)
+            spec$source_file <- .x
+            spec
+          },
+          .progress = FALSE
+        ) %>%
+          list_rbind() %>%
+          filter(
+            str_detect(method, 'GET|POST'),
+            !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE) # Exclude admin/UI routes
+          ) %>%
+          mutate(
+            route = strip_curly_params(route, leading_slash = 'remove'),
+            # Extract service slug from source filename (e.g., "chemi-chet-dev.json" -> "chet")
+            service_slug = source_file %>% str_extract("^chemi-([^-]+)") %>% str_remove("^chemi-"),
+            # Use route domain when route has api/ prefix, otherwise fall back to service slug
+            domain = if_else(
+              str_starts(route, "api/"),
+              route %>% str_remove("^api/") %>% str_extract("^[^/]+"),
+              service_slug
+            ),
+            name = route %>%
+              str_remove_all("^api/") %>%
+              str_remove_all(regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
+              str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
+              str_replace_all("[/]+", " ") %>%
+              str_squish() %>%
+              str_replace_all("\\s", "_") %>%
+              str_replace_all("-", "_"),
+            # First path-param name, used as a disambiguating marker for
+            # trailing-slash / path-param GET variants that share a short name.
+            .first_pp = path_params %>%
+              str_extract("^[^,]+") %>%
+              str_replace_all("[^A-Za-z0-9]+", "_") %>%
+              str_to_lower() %>%
+              coalesce(""),
+            .name_full = if_else(
+              num_path_params > 0 & nzchar(.first_pp) & !str_detect(name, fixed(.first_pp)),
+              paste0(name, "_by_", .first_pp),
+              name
+            ),
+            file_short = case_when(
+              nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
+              str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
+              .default = paste0("chemi_", domain, "_", name, ".R")
+            ),
+            file_full = case_when(
+              nchar(.name_full) == 0 ~ paste0("chemi_", domain, ".R"),
+              str_detect(.name_full, pattern = domain) ~ paste0("chemi_", .name_full, ".R"),
+              .default = paste0("chemi_", domain, "_", .name_full, ".R")
+            ),
+            batch_limit = 0,
+            route = str_remove_all(route, "^api/")
+          ) %>%
+          distinct(route, method, .keep_all = TRUE)
 
-  if (nrow(endpoints_to_build) == 0) {
-    cli_alert_success("All cts_* endpoints already implemented")
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = cts_drift
-    ))
+        ep$fn_short <- derive_fn_from_file(ep, "file_short")
+        ep$fn_full <- derive_fn_from_file(ep, "file_full")
+        resolve_collisions(ep)
+      },
+      error = function(e) {
+        cli_alert_warning("Error parsing chemi schemas: {e$message}")
+        return(tibble())
+      }
+    )
+
+    if (nrow(chemi_endpoints) == 0) {
+      cli_alert_warning("No chemi endpoints parsed")
+      return(NULL)
+    }
+
+    cli_alert_info("Parsed {nrow(chemi_endpoints)} endpoint(s) from schemas")
+    chemi_endpoints
+  },
+  # Aggregate by file (multiple functions per file) before scaffolding.
+  post = function(spec_with_text) {
+    spec_with_text %>%
+      group_by(file) %>%
+      summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
   }
+)
 
-  cli_alert_info("Found {nrow(endpoints_to_build)} CTS endpoint(s) to generate")
+cc_spec <- list(
+  prefix = "cc",
+  heading = "Common Chemistry (cc_*)",
+  config = cc_config,
+  build_endpoints = function() {
+    cc_schema_files <- list.files(
+      path = here::here('schema'),
+      pattern = "^commonchemistry-prod\\.json$",
+      full.names = FALSE
+    )
 
-  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = cts_config)
+    if (length(cc_schema_files) == 0) {
+      cli_alert_warning("No Common Chemistry schema file found, skipping cc_* generation")
+      return(NULL)
+    }
 
-  if (nrow(spec_with_text) == 0) {
-    cli_alert_warning("No CTS stubs generated (all skipped)")
-    return(list(
-      scaffold = tibble(action = character(), file = character()),
-      drift = cts_drift
-    ))
+    cli_alert_info("Found {length(cc_schema_files)} cc schema file(s)")
+
+    endpoints <- map(
+      cc_schema_files,
+      ~ {
+        openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+        openapi_to_spec(openapi)
+      },
+      .progress = FALSE
+    ) %>%
+      list_rbind() %>%
+      mutate(
+        route = strip_curly_params(route, leading_slash = 'remove'),
+        file = route %>%
+          str_replace_all("[/]+", " ") %>%
+          str_squish() %>%
+          str_replace_all("\\s", "_"),
+        file = paste0("cc_", file, ".R"),
+        batch_limit = case_when(
+          method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+          method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+          .default = NULL
+        )
+      ) %>%
+      distinct(route, .keep_all = TRUE)
+
+    cli_alert_info("Parsed {nrow(endpoints)} endpoint(s) from schemas")
+    endpoints
   }
+)
 
-  scaffold_result <- scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE)
+cts_spec <- list(
+  prefix = "cts",
+  heading = "Chemical Transformation Simulator (cts_*)",
+  config = cts_config,
+  build_endpoints = function() {
+    cts_schema_path <- here::here("schema", "cts-prod.json")
+    cts_schema <- tryCatch(
+      {
+        if (file.exists(cts_schema_path)) {
+          cli_alert_info("Using local CTS schema: {cts_schema_path}")
+          jsonlite::fromJSON(cts_schema_path, simplifyVector = FALSE)
+        } else {
+          cli_alert_info("No local CTS schema found; fetching https://qed.epa.gov/cts/rest/swag")
+          jsonlite::fromJSON("https://qed.epa.gov/cts/rest/swag", simplifyVector = FALSE)
+        }
+      },
+      error = function(e) {
+        cli_alert_warning("Could not load CTS schema: {e$message}")
+        return(NULL)
+      }
+    )
 
-  list(
-    scaffold = scaffold_result,
-    drift = cts_drift
-  )
-}
+    if (is.null(cts_schema)) {
+      return(NULL)
+    }
+
+    endpoints <- tryCatch(
+      {
+        openapi_to_spec(cts_schema) %>%
+          filter(str_detect(method, "GET|POST")) %>%
+          mutate(
+            route = strip_curly_params(route, leading_slash = "remove"),
+            is_blacklisted = .cts_endpoint_blacklisted(route)
+          ) %>%
+          filter(!is_blacklisted) %>%
+          select(-is_blacklisted) %>%
+          mutate(
+            name = route %>%
+              str_replace_all("[/]+", " ") %>%
+              str_squish() %>%
+              str_replace_all("\\s", "_") %>%
+              str_replace_all("-", "_"),
+            file = paste0("cts_", name, ".R"),
+            fn = tools::file_path_sans_ext(file),
+            batch_limit = case_when(
+              method == "GET" & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+              method == "GET" & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+              .default = NULL
+            )
+          ) %>%
+          distinct(route, method, .keep_all = TRUE)
+      },
+      error = function(e) {
+        cli_alert_warning("Error parsing CTS schema: {e$message}")
+        return(tibble())
+      }
+    )
+
+    if (nrow(endpoints) == 0) {
+      cli_alert_warning("No CTS endpoints parsed")
+      return(NULL)
+    }
+
+    cli_alert_info("Parsed {nrow(endpoints)} CTS endpoint(s) after blacklist filtering")
+    endpoints
+  }
+)
 
 # ==============================================================================
 # Main Execution
@@ -552,38 +526,14 @@ generate_cts_stubs <- function() {
 cli_h1("Function Stub Generation")
 cli_alert_info("Working directory: {getwd()}")
 
-# Generate stubs for all APIs
-ct_results <- generate_ct_stubs()
-chemi_results <- generate_chemi_stubs()
-cc_results <- generate_cc_stubs()
-cts_results <- generate_cts_stubs()
+api_specs <- list(ct = ct_spec, chemi = chemi_spec, cc = cc_spec, cts = cts_spec)
 
-# Extract scaffold and drift results
-ct_scaffold <- if (is.list(ct_results) && "scaffold" %in% names(ct_results)) ct_results$scaffold else ct_results
-chemi_scaffold <- if (is.list(chemi_results) && "scaffold" %in% names(chemi_results)) chemi_results$scaffold else chemi_results
-cc_scaffold <- if (is.list(cc_results) && "scaffold" %in% names(cc_results)) cc_results$scaffold else cc_results
-cts_scaffold <- if (is.list(cts_results) && "scaffold" %in% names(cts_results)) cts_results$scaffold else cts_results
+# Each result is list(scaffold = <tibble>, drift = <tibble>) — uniform shape.
+results <- map(api_specs, run_generator)
 
-ct_drift <- if (is.list(ct_results) && "drift" %in% names(ct_results)) ct_results$drift else tibble()
-chemi_drift <- if (is.list(chemi_results) && "drift" %in% names(chemi_results)) chemi_results$drift else tibble()
-cc_drift <- if (is.list(cc_results) && "drift" %in% names(cc_results)) cc_results$drift else tibble()
-cts_drift <- if (is.list(cts_results) && "drift" %in% names(cts_results)) cts_results$drift else tibble()
-
-# Combine scaffold results
-all_results <- bind_rows(
-  ct_scaffold %>% mutate(api = "ct"),
-  chemi_scaffold %>% mutate(api = "chemi"),
-  cc_scaffold %>% mutate(api = "cc"),
-  cts_scaffold %>% mutate(api = "cts")
-)
-
-# Combine drift results
-all_drift <- bind_rows(
-  ct_drift %>% mutate(api = "ct"),
-  chemi_drift %>% mutate(api = "chemi"),
-  cc_drift %>% mutate(api = "cc"),
-  cts_drift %>% mutate(api = "cts")
-)
+# Combine scaffold and drift results, tagging each row with its API.
+all_results <- imap(results, ~ .x$scaffold %>% mutate(api = .y)) %>% list_rbind()
+all_drift <- imap(results, ~ .x$drift %>% mutate(api = .y)) %>% list_rbind()
 
 # Report skipped/suspicious endpoints
 report_skipped_endpoints(log_dir = here::here("dev", "logs"))
@@ -639,7 +589,9 @@ if (nrow(all_results) == 0) {
 
 if (nrow(all_drift) > 0) {
   cli_h2("Parameter Drift Detected")
-  cli_alert_warning("{nrow(all_drift)} parameter drift(s) detected across {length(unique(all_drift$endpoint))} endpoint(s)")
+  cli_alert_warning(
+    "{nrow(all_drift)} parameter drift(s) detected across {length(unique(all_drift$endpoint))} endpoint(s)"
+  )
 
   # Group by endpoint
   for (ep in unique(all_drift$endpoint)) {

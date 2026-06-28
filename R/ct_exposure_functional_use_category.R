@@ -21,5 +21,3 @@ ct_exposure_functional_use_category <- function() {
 
   return(result)
 }
-
-

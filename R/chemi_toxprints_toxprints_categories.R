@@ -9,10 +9,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_toxprints_categories(chemical = "DTXSID7020182")
+#' chemi_toxprints_toxprints_categories(chemical = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_toxprints_toxprints_categories <- function(chemical = NULL) {
-
   result <- generic_chemi_request(
     query = chemical,
     endpoint = "toxprints/toxprints_categories",
@@ -24,5 +23,3 @@ chemi_toxprints_toxprints_categories <- function(chemical = NULL) {
 
   return(result)
 }
-
-

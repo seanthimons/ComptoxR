@@ -17,11 +17,19 @@
 chemi_webtest_report <- function(structure, endpoint, method = "consensus", format = "HTML") {
   # Collect optional parameters
   options <- list()
-  if (!is.null(structure)) options[['structure']] <- structure
-  if (!is.null(endpoint)) options[['endpoint']] <- endpoint
-  if (!is.null(method)) options[['method']] <- method
-  if (!is.null(format)) options[['format']] <- format
-    result <- generic_request(
+  if (!is.null(structure)) {
+    options[['structure']] <- structure
+  }
+  if (!is.null(endpoint)) {
+    options[['endpoint']] <- endpoint
+  }
+  if (!is.null(method)) {
+    options[['method']] <- method
+  }
+  if (!is.null(format)) {
+    options[['format']] <- format
+  }
+  result <- generic_request(
     endpoint = "webtest/report",
     method = "GET",
     batch_limit = 0,
@@ -35,5 +43,3 @@ chemi_webtest_report <- function(structure, endpoint, method = "consensus", form
 
   return(result)
 }
-
-

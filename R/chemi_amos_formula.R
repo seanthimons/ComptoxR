@@ -26,5 +26,3 @@ chemi_amos_formula <- function(formula) {
 
   return(result)
 }
-
-

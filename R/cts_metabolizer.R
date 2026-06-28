@@ -1,24 +1,24 @@
-#' CTS Metabolizer Endpoints
+#' Transformation pathways predictions.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Returns CTS metabolizer endpoint metadata.
-#'
-#' @param tidy Logical; if `TRUE`, convert the response to a tibble where
-#'   possible. Defaults to `FALSE`.
-#'
-#' @return Parsed CTS metabolizer endpoint metadata.
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' cts_metabolizer()
 #' }
-cts_metabolizer <- function(tidy = FALSE) {
-  generic_cts_request(
+cts_metabolizer <- function() {
+  result <- generic_cts_request(
     endpoint = "metabolizer",
     method = "GET",
-    tidy = tidy
+    body = list(),
+    tidy = FALSE
   )
+
+  # Additional post-processing can be added here
+
+  return(result)
 }

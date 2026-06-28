@@ -24,5 +24,3 @@ chemi_chet_reaction_maps <- function() {
 
   return(result)
 }
-
-

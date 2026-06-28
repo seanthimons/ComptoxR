@@ -25,5 +25,3 @@ ct_bioactivity_search_start_with <- function(value, top = 500) {
 
   return(result)
 }
-
-

@@ -25,5 +25,3 @@ ct_hazard_toxval_search_by_category <- function(dtxsid, category) {
 
   return(result)
 }
-
-

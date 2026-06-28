@@ -26,5 +26,3 @@ chemi_amos_record_type_count <- function(record_type) {
 
   return(result)
 }
-
-

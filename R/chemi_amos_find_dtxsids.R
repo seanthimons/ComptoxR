@@ -26,5 +26,3 @@ chemi_amos_find_dtxsids <- function(internal_id) {
 
   return(result)
 }
-
-

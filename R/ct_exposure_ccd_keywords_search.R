@@ -23,5 +23,3 @@ ct_exposure_ccd_keywords_search <- function(dtxsid) {
 
   return(result)
 }
-
-

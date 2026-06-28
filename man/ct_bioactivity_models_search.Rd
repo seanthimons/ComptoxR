@@ -4,29 +4,20 @@
 \alias{ct_bioactivity_models_search}
 \title{Get predictions by DTXSID and model}
 \usage{
-ct_bioactivity_models_search(dtxsid)
-
-ct_bioactivity_models_search(dtxsid)
+ct_bioactivity_models_search(dtxsid, model)
 }
 \arguments{
-\item{dtxsid}{dtxsid. Type: string}
+\item{dtxsid}{dtxsid}
 
 \item{model}{model}
 }
 \value{
 Returns a tibble with results (array of objects)
-
-Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\dontrun{
-ct_bioactivity_models_search(dtxsid = "DTXSID7020182")
-}
 \dontrun{
 ct_bioactivity_models_search(dtxsid = "DTXSID7020182")
 }

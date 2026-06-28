@@ -25,5 +25,3 @@ ct_chemical_fate_experimental_search <- function(dtxsid, propName) {
 
   return(result)
 }
-
-

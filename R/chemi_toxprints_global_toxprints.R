@@ -15,9 +15,13 @@
 chemi_toxprints_global_toxprints <- function(category = NULL, label = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(category)) options[['category']] <- category
-  if (!is.null(label)) options[['label']] <- label
-    result <- generic_request(
+  if (!is.null(category)) {
+    options[['category']] <- category
+  }
+  if (!is.null(label)) {
+    options[['label']] <- label
+  }
+  result <- generic_request(
     endpoint = "toxprints/global_toxprints",
     method = "GET",
     batch_limit = 0,
@@ -31,5 +35,3 @@ chemi_toxprints_global_toxprints <- function(category = NULL, label = NULL) {
 
   return(result)
 }
-
-

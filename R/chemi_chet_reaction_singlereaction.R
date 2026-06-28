@@ -14,8 +14,10 @@
 chemi_chet_reaction_singlereaction <- function(reaction_id = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(reaction_id)) options[['reaction_id']] <- reaction_id
-    result <- generic_request(
+  if (!is.null(reaction_id)) {
+    options[['reaction_id']] <- reaction_id
+  }
+  result <- generic_request(
     endpoint = "reaction/singlereaction",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_reaction_singlereaction <- function(reaction_id = NULL) {
 
   return(result)
 }
-
-

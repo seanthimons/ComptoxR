@@ -23,5 +23,3 @@ ct_hazard_toxval_supercategory_search <- function(dtxsid) {
 
   return(result)
 }
-
-

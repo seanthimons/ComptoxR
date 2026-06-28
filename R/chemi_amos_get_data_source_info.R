@@ -24,5 +24,3 @@ chemi_amos_get_data_source_info <- function() {
 
   return(result)
 }
-
-

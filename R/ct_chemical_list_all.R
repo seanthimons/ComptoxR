@@ -25,5 +25,3 @@ ct_chemical_list_all <- function(projection = "chemicallistall", return_dtxsid =
 
   return(result)
 }
-
-

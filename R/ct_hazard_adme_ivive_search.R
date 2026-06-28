@@ -25,5 +25,3 @@ ct_hazard_adme_ivive_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
-
-

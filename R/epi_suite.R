@@ -89,10 +89,10 @@ epi_suite_analysis <- function(query) {
 }
 
 #' Pull EPI-Suite response by endpoints
-#' 
+#'
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param epi_obj A EPI-Suite response object 
+#' @param epi_obj A EPI-Suite response object
 #' @param endpoints Endpoints to filter for
 #'
 #' @returns A list

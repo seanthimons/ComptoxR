@@ -24,5 +24,3 @@ chemi_amos_fact_sheet_list <- function() {
 
   return(result)
 }
-
-

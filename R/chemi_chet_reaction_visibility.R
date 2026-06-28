@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_chet_reaction_visibility(reaction_id = "DTXSID7020182")
+#' chemi_chet_reaction_visibility(reaction_id = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_chet_reaction_visibility <- function(reaction_id, internal_only) {
   # Build options list for additional parameters
@@ -27,5 +27,3 @@ chemi_chet_reaction_visibility <- function(reaction_id, internal_only) {
 
   return(result)
 }
-
-

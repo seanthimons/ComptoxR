@@ -26,5 +26,3 @@ chemi_amos_get_image_for_dtxsid <- function(dtxsid) {
 
   return(result)
 }
-
-

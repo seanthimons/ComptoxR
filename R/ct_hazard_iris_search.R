@@ -23,5 +23,3 @@ ct_hazard_iris_search <- function(dtxsid) {
 
   return(result)
 }
-
-

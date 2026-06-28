@@ -26,5 +26,3 @@ chemi_stdizer_groups_recursive <- function(id) {
 
   return(result)
 }
-
-

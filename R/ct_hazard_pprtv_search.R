@@ -23,5 +23,3 @@ ct_hazard_pprtv_search <- function(dtxsid) {
 
   return(result)
 }
-
-

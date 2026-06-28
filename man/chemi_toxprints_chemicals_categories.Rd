@@ -17,6 +17,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_chemicals_categories(chemicals = "DTXSID7020182")
+chemi_toxprints_chemicals_categories(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

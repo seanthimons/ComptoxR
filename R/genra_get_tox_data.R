@@ -133,9 +133,17 @@ genra_get_tox_data <- function(dtxsids, study_filter = NULL) {
 
   # Define effect type categories
   adverse_types <- c(
-    "LOAEL", "LOAEC", "LOEL", "LOEC",
-    "LD50", "LC50", "ED50", "EC50",
-    "BMD", "BMDL", "FEL"
+    "LOAEL",
+    "LOAEC",
+    "LOEL",
+    "LOEC",
+    "LD50",
+    "LC50",
+    "ED50",
+    "EC50",
+    "BMD",
+    "BMDL",
+    "FEL"
   )
   no_adverse_types <- c("NOAEL", "NOAEC", "NOEL", "NOEC")
 

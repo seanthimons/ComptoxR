@@ -4,12 +4,14 @@
 \alias{chemi_mordred}
 \title{Generate descriptors for one molecule}
 \usage{
-chemi_mordred(smiles, headers = NULL)
+chemi_mordred(smiles, headers = NULL, inchi = NULL)
 }
 \arguments{
 \item{smiles}{Required parameter}
 
 \item{headers}{Optional parameter}
+
+\item{inchi}{Optional parameter}
 }
 \value{
 Returns a tibble with results

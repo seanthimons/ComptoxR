@@ -15,8 +15,10 @@
 chemi_chet_reaction_editor <- function(reaction_id, lib_id = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(lib_id)) options[['lib_id']] <- lib_id
-    result <- generic_request(
+  if (!is.null(lib_id)) {
+    options[['lib_id']] <- lib_id
+  }
+  result <- generic_request(
     query = reaction_id,
     endpoint = "reaction/editor/",
     method = "GET",
@@ -31,5 +33,3 @@ chemi_chet_reaction_editor <- function(reaction_id, lib_id = NULL) {
 
   return(result)
 }
-
-

@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_hazard_toxval_search_bulk(query = c("DTXSID50220251", "DTXSID30203567", "DTXSID7025508"))
+ct_hazard_toxval_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

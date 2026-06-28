@@ -14,8 +14,10 @@
 chemi_chet_reaction_details <- function(lib_id = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(lib_id)) options[['lib_id']] <- lib_id
-    result <- generic_request(
+  if (!is.null(lib_id)) {
+    options[['lib_id']] <- lib_id
+  }
+  result <- generic_request(
     endpoint = "reaction/details",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_reaction_details <- function(lib_id = NULL) {
 
   return(result)
 }
-
-

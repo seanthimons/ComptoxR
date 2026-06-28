@@ -4,21 +4,23 @@
 \alias{chemi_arn_cats_bulk}
 \title{Generate groups for multiple molecules}
 \usage{
-chemi_arn_cats_bulk(chemicals, model = "RF")
+chemi_arn_cats_bulk(smiles = NULL, chemicals = NULL, model = "RF")
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{smiles}{Array of SMILES strings, same input style as amnb_nate.}
+
+\item{chemicals}{Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility.}
 
 \item{model}{Optional parameter. Options: RF, NN (default: RF)}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk(chemicals = "DTXSID7020182")
+chemi_arn_cats_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

@@ -14,8 +14,10 @@
 chemi_chet_chemicals_chemset <- function(setid = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(setid)) options[['setid']] <- setid
-    result <- generic_request(
+  if (!is.null(setid)) {
+    options[['setid']] <- setid
+  }
+  result <- generic_request(
     endpoint = "chemicals/chemset",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_chemicals_chemset <- function(setid = NULL) {
 
   return(result)
 }
-
-

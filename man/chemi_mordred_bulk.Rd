@@ -19,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_mordred_bulk(chemicals = "DTXSID7020182")
+chemi_mordred_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

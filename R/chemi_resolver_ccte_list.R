@@ -14,8 +14,10 @@
 chemi_resolver_ccte_list <- function(name) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(name)) options[['name']] <- name
-    result <- generic_request(
+  if (!is.null(name)) {
+    options[['name']] <- name
+  }
+  result <- generic_request(
     endpoint = "resolver/ccte-list",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_resolver_ccte_list <- function(name) {
 
   return(result)
 }
-
-

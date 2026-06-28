@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_assay_search_by_aeid_bulk(query = c("DTXSID9064922", "DTXSID9020584", "DTXSID90937533"))
+#' ct_bioactivity_assay_search_by_aeid_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_bioactivity_assay_search_by_aeid_bulk <- function(query) {
   result <- generic_request(
@@ -50,5 +50,3 @@ ct_bioactivity_assay_search_by_aeid <- function(aeid, projection = NULL) {
 
   return(result)
 }
-
-

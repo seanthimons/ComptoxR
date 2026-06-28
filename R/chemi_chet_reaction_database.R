@@ -20,19 +20,48 @@
 #' \dontrun{
 #' chemi_chet_reaction_database(page = "DTXSID7020182")
 #' }
-chemi_chet_reaction_database <- function(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE) {
+chemi_chet_reaction_database <- function(
+  page = 0,
+  size = NULL,
+  query = NULL,
+  lib_name = NULL,
+  reaction_process = NULL,
+  reaction_type = NULL,
+  reaction_scheme = NULL,
+  reaction_phase = NULL,
+  craccm_id = NULL,
+  all_pages = TRUE
+) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(page)) options[['page']] <- page
-  if (!is.null(size)) options[['size']] <- size
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(lib_name)) options[['lib_name']] <- lib_name
-  if (!is.null(reaction_process)) options[['reaction_process']] <- reaction_process
-  if (!is.null(reaction_type)) options[['reaction_type']] <- reaction_type
-  if (!is.null(reaction_scheme)) options[['reaction_scheme']] <- reaction_scheme
-  if (!is.null(reaction_phase)) options[['reaction_phase']] <- reaction_phase
-  if (!is.null(craccm_id)) options[['craccm_id']] <- craccm_id
-    result <- generic_request(
+  if (!is.null(page)) {
+    options[['page']] <- page
+  }
+  if (!is.null(size)) {
+    options[['size']] <- size
+  }
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(lib_name)) {
+    options[['lib_name']] <- lib_name
+  }
+  if (!is.null(reaction_process)) {
+    options[['reaction_process']] <- reaction_process
+  }
+  if (!is.null(reaction_type)) {
+    options[['reaction_type']] <- reaction_type
+  }
+  if (!is.null(reaction_scheme)) {
+    options[['reaction_scheme']] <- reaction_scheme
+  }
+  if (!is.null(reaction_phase)) {
+    options[['reaction_phase']] <- reaction_phase
+  }
+  if (!is.null(craccm_id)) {
+    options[['craccm_id']] <- craccm_id
+  }
+  result <- generic_request(
     endpoint = "reaction/database",
     method = "GET",
     batch_limit = 0,
@@ -49,5 +78,3 @@ chemi_chet_reaction_database <- function(page = 0, size = NULL, query = NULL, li
 
   return(result)
 }
-
-

@@ -85,31 +85,67 @@ test_that("eco_server() with invalid string path aborts", {
   )
 })
 
-test_that("eco_install() aborts when no source provided", {
-  # If DB already exists, get "already exists" error; otherwise "source" error
-  expect_error(eco_install(), "source|already exists")
+test_that("eco_install() reports fallback build failure when release download is unavailable", {
+  skip_if_cran_safe_external("ECOTOX install fallback exercises the external download/build path.")
+
+  testthat::local_mocked_bindings(
+    .db_download_release = function(...) {
+      cli::cli_abort("No assets found")
+    },
+    .eco_build_from_source = function(...) {
+      cli::cli_abort("Build from source unavailable in this test")
+    },
+    .package = "ComptoxR"
+  )
+
+  dest <- withr::local_tempdir()
+  withr::local_options(ComptoxR.ecotox_path = file.path(dest, "ecotox.duckdb"))
+
+  expect_warning(
+    expect_error(eco_install(overwrite = TRUE), "Build from source unavailable"),
+    "Could not download"
+  )
+})
+
+test_that("eco_install(source=) copies a local database file", {
+  source_dir <- withr::local_tempdir()
+  dest_dir <- withr::local_tempdir()
+  source <- file.path(source_dir, "ecotox.duckdb")
+  dest <- file.path(dest_dir, "ecotox.duckdb")
+  writeBin(as.raw(c(1L, 2L, 3L)), source)
+  withr::local_options(ComptoxR.ecotox_path = dest)
+
+  result <- eco_install(source = source)
+
+  expect_equal(result, dest)
+  expect_identical(readBin(dest, "raw", n = 3L), as.raw(c(1L, 2L, 3L)))
 })
 
 test_that("eco_install() aborts when source file missing", {
-  # If DB already exists, get "already exists" error; otherwise "not found" error
+  dest <- file.path(withr::local_tempdir(), "ecotox.duckdb")
+  withr::local_options(ComptoxR.ecotox_path = dest)
+
   expect_error(
     eco_install(source = "/nonexistent/ecotox.duckdb"),
-    "not found|already exists"
+    "not found"
   )
 })
 
 # -- Download path tests ---------------------------------------------------
 
 test_that("eco_install() default path calls .db_download_release", {
+  skip_if_cran_safe_external("ECOTOX install download path requires external release behavior.")
+
   download_called <- FALSE
 
-  local_mocked_bindings(
+  testthat::local_mocked_bindings(
     .db_download_release = function(db_name, dest_path, tag, ...) {
       download_called <<- TRUE
       expect_equal(db_name, "ecotox")
       expect_equal(tag, "latest")
       writeBin(raw(0), dest_path)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()
@@ -120,15 +156,18 @@ test_that("eco_install() default path calls .db_download_release", {
 })
 
 test_that("eco_install(build = TRUE) skips download", {
+  skip_if_cran_safe_external("ECOTOX source build is not part of CRAN-safe tests.")
+
   download_called <- FALSE
 
-  local_mocked_bindings(
+  testthat::local_mocked_bindings(
     .db_download_release = function(...) {
       download_called <<- TRUE
     },
     .eco_build_from_source = function(dest) {
       writeBin(raw(0), dest)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()
@@ -139,16 +178,19 @@ test_that("eco_install(build = TRUE) skips download", {
 })
 
 test_that("eco_install() falls back to build on download failure", {
+  skip_if_cran_safe_external("ECOTOX install fallback exercises the external download/build path.")
+
   build_called <- FALSE
 
-  local_mocked_bindings(
+  testthat::local_mocked_bindings(
     .db_download_release = function(...) {
       cli::cli_abort("No assets found")
     },
     .eco_build_from_source = function(dest) {
       build_called <<- TRUE
       writeBin(raw(0), dest)
-    }
+    },
+    .package = "ComptoxR"
   )
 
   dest <- withr::local_tempdir()

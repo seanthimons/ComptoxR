@@ -28,5 +28,3 @@ chemi_amos_method_with_spectra <- function(search_type, internal_id = NULL) {
 
   return(result)
 }
-
-

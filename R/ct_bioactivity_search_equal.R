@@ -23,5 +23,3 @@ ct_bioactivity_search_equal <- function(value) {
 
   return(result)
 }
-
-

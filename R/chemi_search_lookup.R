@@ -13,15 +13,23 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_search_lookup(searchType = "DTXSID7020182")
+#' chemi_search_lookup(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_search_lookup <- function(searchType = NULL, inputType = NULL, query = NULL, limit = NULL, params = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(inputType)) options$inputType <- inputType
-  if (!is.null(query)) options$query <- query
-  if (!is.null(limit)) options$limit <- limit
-  if (!is.null(params)) options$params <- params
+  if (!is.null(inputType)) {
+    options$inputType <- inputType
+  }
+  if (!is.null(query)) {
+    options$query <- query
+  }
+  if (!is.null(limit)) {
+    options$limit <- limit
+  }
+  if (!is.null(params)) {
+    options$params <- params
+  }
   result <- generic_chemi_request(
     query = searchType,
     endpoint = "search/lookup",
@@ -33,5 +41,3 @@ chemi_search_lookup <- function(searchType = NULL, inputType = NULL, query = NUL
 
   return(result)
 }
-
-

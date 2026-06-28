@@ -26,5 +26,3 @@ chemi_chet_reaction_mappositions <- function(map_id) {
 
   return(result)
 }
-
-

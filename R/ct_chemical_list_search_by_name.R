@@ -22,10 +22,12 @@ ct_chemical_list_search_by_name <- function(listName, projection = "chemicallist
     `projection` = projection
   )
 
-    result <- run_hook("ct_chemical_list_search_by_name", "post_response", list(result = result, params = list(extract_dtxsids = extract_dtxsids)))
-# Additional post-processing can be added here
+  result <- run_hook(
+    "ct_chemical_list_search_by_name",
+    "post_response",
+    list(result = result, params = list(extract_dtxsids = extract_dtxsids))
+  )
+  # Additional post-processing can be added here
 
   return(result)
 }
-
-

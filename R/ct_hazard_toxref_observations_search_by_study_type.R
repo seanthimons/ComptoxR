@@ -29,5 +29,3 @@ ct_hazard_toxref_observations_search_by_study_type <- function(studyType, pageNu
 
   return(result)
 }
-
-

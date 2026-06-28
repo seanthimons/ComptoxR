@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_chet_curators_change_password(current_password = "DTXSID7020182")
+#' chemi_chet_curators_change_password(current_password = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_chet_curators_change_password <- function(current_password, new_password) {
   # Build options list for additional parameters
@@ -27,5 +27,3 @@ chemi_chet_curators_change_password <- function(current_password, new_password) 
 
   return(result)
 }
-
-

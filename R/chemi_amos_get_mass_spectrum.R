@@ -26,5 +26,3 @@ chemi_amos_get_mass_spectrum <- function(internal_id) {
 
   return(result)
 }
-
-

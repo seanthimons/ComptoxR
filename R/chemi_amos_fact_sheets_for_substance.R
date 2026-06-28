@@ -26,5 +26,3 @@ chemi_amos_fact_sheets_for_substance <- function(dtxsid) {
 
   return(result)
 }
-
-

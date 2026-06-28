@@ -25,5 +25,3 @@ chemi_chet_chemicals_chemdelete <- function() {
 
   return(result)
 }
-
-

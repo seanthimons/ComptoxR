@@ -26,5 +26,3 @@ ct_chemical_property_predicted_search_by_range <- function(propertyId, start = N
 
   return(result)
 }
-
-

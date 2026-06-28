@@ -23,5 +23,3 @@ ct_bioactivity_aop_search_by_toxcast_aeid <- function(toxcastAeid) {
 
   return(result)
 }
-
-

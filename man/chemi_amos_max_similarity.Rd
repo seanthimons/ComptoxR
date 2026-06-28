@@ -31,6 +31,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_max_similarity(da_window = "DTXSID7020182")
+chemi_amos_max_similarity(da_window = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

@@ -10,12 +10,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID7020182")
+#' chemi_amos_spectrum_count_for_methodology(dtxsid = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_type = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(spectrum_type)) options$spectrum_type <- spectrum_type
+  if (!is.null(spectrum_type)) {
+    options$spectrum_type <- spectrum_type
+  }
   result <- generic_chemi_request(
     query = dtxsid,
     endpoint = "amos/spectrum_count_for_methodology/",
@@ -27,5 +29,3 @@ chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_ty
 
   return(result)
 }
-
-

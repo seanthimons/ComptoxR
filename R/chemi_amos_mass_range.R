@@ -10,12 +10,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_range(lower_mass_limit = "DTXSID7020182")
+#' chemi_amos_mass_range(lower_mass_limit = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NULL) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(upper_mass_limit)) options$upper_mass_limit <- upper_mass_limit
+  if (!is.null(upper_mass_limit)) {
+    options$upper_mass_limit <- upper_mass_limit
+  }
   result <- generic_chemi_request(
     query = lower_mass_limit,
     endpoint = "amos/mass_range_search/",
@@ -27,5 +29,3 @@ chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NU
 
   return(result)
 }
-
-

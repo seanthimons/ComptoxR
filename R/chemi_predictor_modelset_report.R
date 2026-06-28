@@ -1,4 +1,4 @@
-#' Predictor Modelset Report 
+#' Predictor Modelset Report
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -26,5 +26,3 @@ chemi_predictor_modelset_report <- function(report_id) {
 
   return(result)
 }
-
-

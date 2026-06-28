@@ -15,9 +15,13 @@
 chemi_chet_reaction_reactionmap <- function(id = NULL, searchtype = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(id)) options[['id']] <- id
-  if (!is.null(searchtype)) options[['searchtype']] <- searchtype
-    result <- generic_request(
+  if (!is.null(id)) {
+    options[['id']] <- id
+  }
+  if (!is.null(searchtype)) {
+    options[['searchtype']] <- searchtype
+  }
+  result <- generic_request(
     endpoint = "reaction/reactionmap",
     method = "GET",
     batch_limit = 0,
@@ -31,5 +35,3 @@ chemi_chet_reaction_reactionmap <- function(id = NULL, searchtype = NULL) {
 
   return(result)
 }
-
-

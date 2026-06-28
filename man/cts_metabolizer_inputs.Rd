@@ -2,25 +2,21 @@
 % Please edit documentation in R/cts_metabolizer_inputs.R
 \name{cts_metabolizer_inputs}
 \alias{cts_metabolizer_inputs}
-\title{CTS Metabolizer Input Schema}
+\title{Metabolizer input schema}
 \usage{
-cts_metabolizer_inputs(tidy = FALSE)
+cts_metabolizer_inputs(chemical = "CCCC")
 }
 \arguments{
-\item{tidy}{Logical; if \code{TRUE}, convert the response to a tibble where
-possible. Defaults to \code{FALSE}.}
+\item{chemical}{Optional parameter (default: CCCC)}
 }
 \value{
-Parsed CTS metabolizer input metadata.
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Returns the CTS metabolizer input schema and default transformation library
-options.
 }
 \examples{
 \dontrun{
-cts_metabolizer_inputs()
+cts_metabolizer_inputs(chemical = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

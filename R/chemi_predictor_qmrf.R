@@ -1,4 +1,4 @@
-#' Predictor Qmrf 
+#' Predictor Qmrf
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -26,5 +26,3 @@ chemi_predictor_qmrf <- function(qmrf_id) {
 
   return(result)
 }
-
-

@@ -24,5 +24,3 @@ chemi_toxprints_enrichments <- function() {
 
   return(result)
 }
-
-

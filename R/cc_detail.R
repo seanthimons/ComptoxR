@@ -36,7 +36,7 @@ cc_detail <- function(cas_rn, uri = NULL) {
 		pluck(., 'results', 1)
 
 		if('images' %in% names(result)){
-		result <- discard_at(result, 'images') %>% 
+		result <- purrr::discard_at(result, 'images') %>%
 			as_tibble()
 		}
 

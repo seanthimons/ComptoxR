@@ -14,8 +14,10 @@
 chemi_chet_chemicals_maps <- function(chemid = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(chemid)) options[['chemid']] <- chemid
-    result <- generic_request(
+  if (!is.null(chemid)) {
+    options[['chemid']] <- chemid
+  }
+  result <- generic_request(
     endpoint = "chemicals/maps",
     method = "GET",
     batch_limit = 0,
@@ -29,5 +31,3 @@ chemi_chet_chemicals_maps <- function(chemid = NULL) {
 
   return(result)
 }
-
-

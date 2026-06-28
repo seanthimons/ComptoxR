@@ -28,5 +28,3 @@ chemi_amos_get_pdf <- function(record_type, internal_id = NULL) {
 
   return(result)
 }
-
-

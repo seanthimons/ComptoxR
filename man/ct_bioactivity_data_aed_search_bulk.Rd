@@ -17,6 +17,6 @@ Returns a tibble with results (array of objects)
 }
 \examples{
 \dontrun{
-ct_bioactivity_data_aed_search_bulk(query = c("DTXSID90143672", "DTXSID5029683", "DTXSID2021731"))
+ct_bioactivity_data_aed_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

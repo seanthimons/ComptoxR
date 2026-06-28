@@ -16,10 +16,16 @@
 chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(headers)) options[['headers']] <- headers
-  if (!is.null(profile)) options[['profile']] <- profile
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  if (!is.null(profile)) {
+    options[['profile']] <- profile
+  }
+  result <- generic_request(
     endpoint = "toxprints",
     method = "GET",
     batch_limit = 0,
@@ -35,8 +41,6 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 }
 
 
-
-
 #' Toxprints
 #'
 #' @description
@@ -48,7 +52,7 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_bulk(query = "DTXSID7020182")
+#' chemi_toxprints_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_toxprints_bulk <- function(query) {
   result <- generic_request(
@@ -60,5 +64,3 @@ chemi_toxprints_bulk <- function(query) {
 
   return(result)
 }
-
-

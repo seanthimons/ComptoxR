@@ -15,9 +15,13 @@
 chemi_webtest <- function(smiles, headers = FALSE) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(headers)) options[['headers']] <- headers
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  result <- generic_request(
     endpoint = "webtest",
     method = "GET",
     batch_limit = 0,
@@ -33,8 +37,6 @@ chemi_webtest <- function(smiles, headers = FALSE) {
 }
 
 
-
-
 #' Webtest
 #'
 #' @description
@@ -46,7 +48,7 @@ chemi_webtest <- function(smiles, headers = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_bulk(query = "DTXSID7020182")
+#' chemi_webtest_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 chemi_webtest_bulk <- function(query) {
   result <- generic_request(
@@ -58,5 +60,3 @@ chemi_webtest_bulk <- function(query) {
 
   return(result)
 }
-
-

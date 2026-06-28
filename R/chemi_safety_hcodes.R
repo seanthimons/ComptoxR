@@ -24,5 +24,3 @@ chemi_safety_hcodes <- function() {
 
   return(result)
 }
-
-

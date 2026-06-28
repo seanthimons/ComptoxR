@@ -27,5 +27,3 @@ ct_chemical_search_contain <- function(word, top = 0, projection = "chemicalsear
 
   return(result)
 }
-
-

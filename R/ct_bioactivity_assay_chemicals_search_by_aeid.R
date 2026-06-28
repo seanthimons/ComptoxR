@@ -25,5 +25,3 @@ ct_bioactivity_assay_chemicals_search_by_aeid <- function(aeid, projection = "dt
 
   return(result)
 }
-
-

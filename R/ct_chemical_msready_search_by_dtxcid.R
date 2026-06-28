@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_msready_search_by_dtxcid_bulk(query = c("DTXSID10185731", "DTXSID3060245", "DTXSID10894891"))
+#' ct_chemical_msready_search_by_dtxcid_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
 ct_chemical_msready_search_by_dtxcid_bulk <- function(query) {
   result <- generic_request(
@@ -48,5 +48,3 @@ ct_chemical_msready_search_by_dtxcid <- function(dtxcid) {
 
   return(result)
 }
-
-
