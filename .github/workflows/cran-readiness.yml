@@ -2,6 +2,11 @@ name: CRAN Readiness
 
 on:
   pull_request:
+    paths-ignore:
+      - 'NEWS.md'
+      - '**/*.md'
+      - '.github/**'
+      - '.planning/**'
   workflow_dispatch:
 
 jobs:

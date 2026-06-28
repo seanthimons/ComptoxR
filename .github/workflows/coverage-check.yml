@@ -5,8 +5,18 @@ on:
   workflow_dispatch:
   push:
     branches: [main, dev]
+    paths-ignore:
+      - 'NEWS.md'
+      - '**/*.md'
+      - '.github/**'
+      - '.planning/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'NEWS.md'
+      - '**/*.md'
+      - '.github/**'
+      - '.planning/**'
 
 jobs:
   coverage-check:
