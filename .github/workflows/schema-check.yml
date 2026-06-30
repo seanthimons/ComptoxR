@@ -93,10 +93,21 @@ jobs:
 
       - name: Pretty-print schemas
         run: |
+          # Recursively sort JSON object keys so upstream key-ordering changes
+          # (EPA serializers don't guarantee stable order) produce identical bytes.
+          # Array element order is preserved (unnamed lists are left untouched).
+          sort_keys <- function(x) {
+            if (is.list(x)) {
+              x <- lapply(x, sort_keys)
+              nm <- names(x)
+              if (!is.null(nm) && all(nzchar(nm))) x <- x[order(nm)]
+            }
+            x
+          }
           schema_files <- list.files("schema", pattern = "\\.json$", full.names = TRUE)
           for (f in schema_files) {
             json <- jsonlite::fromJSON(f, simplifyVector = FALSE)
-            jsonlite::write_json(json, f, pretty = TRUE, auto_unbox = TRUE)
+            jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE)
           }
           cli::cli_alert_info("Pretty-printed {length(schema_files)} schema files")
         shell: Rscript {0}
@@ -164,7 +175,7 @@ jobs:
       - name: Check for schema changes
         id: schema_changes
         run: |
-          if git diff --quiet schema/ schema_hashes.csv; then
+          if git diff --quiet schema/; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "No schema changes detected"
           else
@@ -244,7 +255,9 @@ jobs:
 
       - name: Prepare PR body
         id: pr_body
-        if: steps.changes.outputs.has_changes == 'true'
+        if: >-
+          steps.changes.outputs.has_changes == 'true' &&
+          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
         run: |
           # Build PR body from template + diff report
           cat > pr_body.md << 'HEADER'
@@ -358,10 +371,12 @@ jobs:
           TAIL
 
       - name: Create Pull Request
-        if: steps.changes.outputs.has_changes == 'true'
-        uses: peter-evans/create-pull-request@v6
+        if: >-
+          steps.changes.outputs.has_changes == 'true' &&
+          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
+        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
           commit-message: "chore: update API schemas, generate function stubs and tests"
           title: "chore: API schema and test updates"
           body-path: pr_body.md
