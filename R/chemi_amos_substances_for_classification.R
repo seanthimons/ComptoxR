@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_substances_for_classification(kingdom = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
 #' }
 chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
   # Build options list for additional parameters

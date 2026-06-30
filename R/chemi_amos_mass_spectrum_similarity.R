@@ -5,7 +5,9 @@
 #'
 #' @param lower_mass_limit Lower limit of the mass range to search for.
 #' @param methodology Analytical methodology to search for.  Values aside from "GC/MS" and "LC/MS" are highly unlikely to produce results.
-#' @param spectrum Array of two-element numeric arrays.  The two-element arrays represent a single peak in the spectrum, in the format [m/z, intensity].  Peaks should be sorted in ascending order of m/z values.
+#' @param spectrum Array of two-element numeric arrays. The two-element arrays
+#'   represent a single peak in the spectrum, in the format `m/z, intensity`.
+#'   Peaks should be sorted in ascending order of m/z values.
 #' @param type Type of mass window to use for entropy similarity calculations.  Can be either "da" or "ppm".
 #' @param upper_mass_limit Upper limit of the mass range to search for.
 #' @param window Size of mass window.  Is in units of `type`.
@@ -14,7 +16,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_spectrum_similarity(lower_mass_limit = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID1024122")
 #' }
 chemi_amos_mass_spectrum_similarity <- function(
   lower_mass_limit = NULL,

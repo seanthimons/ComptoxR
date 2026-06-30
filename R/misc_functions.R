@@ -73,8 +73,15 @@ pretty_casewhen <- function(var, x) {
   message(paste0(var, " == ", x, " ~ '',\n"))
 }
 
-#' Not-in
+#' Not-in operator
 #'
-#' @return Opposite of %in%
+#' @param x Vector of values to match.
+#' @param table Vector or list to match against.
+#'
+#' @usage x \%ni\% table
+#'
+#' @return Logical vector indicating values in `x` that are not in `table`.
 #' @export
-`%ni%` <- Negate(`%in%`)
+`%ni%` <- function(x, table) {
+  !(x %in% table)
+}

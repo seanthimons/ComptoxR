@@ -124,7 +124,7 @@ chemi_safety_section <- function(query, section = NULL) {
           # Combine the extracted headers into a single vector.
           list_c()
         # Assign the extracted headers as names to the sublists in the current element.
-        setNames(.x, df)
+        stats::setNames(.x, df)
       }
     ) %>%
     map(

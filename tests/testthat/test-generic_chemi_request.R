@@ -1,4 +1,6 @@
 test_that("generic_chemi_request construction is correct", {
+  testthat::skip_if_not_installed("httpuv")
+
   Sys.setenv(run_debug = "TRUE")
   Sys.setenv(ctx_api_key = "logic_test_key")
   on.exit(Sys.setenv(run_debug = "FALSE"))
@@ -22,6 +24,8 @@ test_that("generic_chemi_request construction is correct", {
 })
 
 test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
+  testthat::skip_if_not_installed("httpuv")
+
   Sys.setenv(run_debug = "TRUE")
   on.exit(Sys.setenv(run_debug = "FALSE"))
 

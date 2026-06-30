@@ -283,7 +283,7 @@ build_function_stub <- function(
 
     # Build example_value_vec for example call generation
     if (isTRUE(method == "POST")) {
-      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      dtxsids <- sample_test_dtxsids(n = 1, custom_list = config$example_dtxsids %||% NULL)
       if (length(dtxsids) > 1) {
         example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
       } else {
@@ -369,7 +369,7 @@ build_function_stub <- function(
 
     # For POST requests, use sample from testing_chemicals
     if (isTRUE(method == "POST")) {
-      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      dtxsids <- sample_test_dtxsids(n = 1, custom_list = config$example_dtxsids %||% NULL)
       if (length(dtxsids) > 1) {
         example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
       } else {
@@ -802,7 +802,7 @@ build_function_stub <- function(
 
     # Build example value
     if (isTRUE(method == "POST")) {
-      dtxsids <- sample_test_dtxsids(n = 3, custom_list = config$example_dtxsids %||% NULL)
+      dtxsids <- sample_test_dtxsids(n = 1, custom_list = config$example_dtxsids %||% NULL)
       if (length(dtxsids) > 1) {
         example_value_vec <- paste0('c("', paste(dtxsids, collapse = '", "'), '")')
       } else {
@@ -981,15 +981,15 @@ build_function_stub <- function(
 
       body_code_lines <- c(
         "  # Build request body",
-        "  body <- list()"
+        "  request_body <- list()"
       )
 
       for (p in required_params) {
-        body_code_lines <- c(body_code_lines, paste0("  body$", p, " <- ", p))
+        body_code_lines <- c(body_code_lines, paste0("  request_body$", p, " <- ", p))
       }
 
       for (p in optional_params) {
-        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) body$", p, " <- ", p))
+        body_code_lines <- c(body_code_lines, paste0("  if (!is.null(", p, ")) request_body$", p, " <- ", p))
       }
 
       body_assembly <- paste(body_code_lines, collapse = "\n")
@@ -1004,7 +1004,7 @@ build_function_stub <- function(
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {batch_limit_code},
-    body = body{content_type_call}{pagination_call_params}
+    body = request_body{content_type_call}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here

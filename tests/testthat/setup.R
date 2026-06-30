@@ -7,7 +7,7 @@ library(testthat)
 # unqualified internal calls (see helper-generated-contracts.R for the same trap).
 if (!isNamespaceLoaded("ComptoxR")) {
   if (nzchar(Sys.getenv("GITHUB_ACTIONS"))) {
-    devtools::load_all()
+    pkgload::load_all()
   } else {
     library(ComptoxR)
   }

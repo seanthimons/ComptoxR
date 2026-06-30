@@ -2,13 +2,18 @@
 % Please edit documentation in R/misc_functions.R
 \name{\%ni\%}
 \alias{\%ni\%}
-\title{Not-in}
+\title{Not-in operator}
 \usage{
-... \%ni\% NA
+x \%ni\% table
+}
+\arguments{
+\item{x}{Vector of values to match.}
+
+\item{table}{Vector or list to match against.}
 }
 \value{
-Opposite of \%in\%
+Logical vector indicating values in \code{x} that are not in \code{table}.
 }
 \description{
-Not-in
+Not-in operator
 }

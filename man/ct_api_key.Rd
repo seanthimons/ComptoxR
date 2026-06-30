@@ -2,16 +2,18 @@
 % Please edit documentation in R/ct_api_key.R
 \name{ct_api_key}
 \alias{ct_api_key}
-\title{Retrieves CTX API key from the Sys Environment}
+\title{Retrieve the CTX API key from the environment}
 \usage{
-Use `Sys.setenv(ctx_api_key= 'TOKEN HERE')` to set it.
-
-Run the function to check to see if R has detected it. A restart of R may be needed.
+ct_api_key()
+}
+\value{
+A character string containing the configured CTX API key.
 }
 \description{
-An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
+An API key is needed to access CTX APIs. Each user needs a
+specific key for each application. To request a key, email
+\code{ccte_api@epa.gov} with the subject \verb{API Key Request}.
 
-to: \code{ccte_api@epa.gov}
-
-subject: \verb{API Key Request}
+Set the key with \code{Sys.setenv(ctx_api_key = "TOKEN HERE")}, then run
+\code{ct_api_key()} to confirm R can detect it. A restart of R may be needed.
 }

@@ -37,6 +37,15 @@
 #' A table of threatened species
 'threat_spec'
 
+#' ECHA REACH candidate list
+#'
+#' A tibble of substances from the European Chemicals Agency REACH candidate
+#' list, including substance identifiers, inclusion reasons, dates, and links to
+#' decision and support documents.
+#'
+#' @format A tibble with 474 rows and 11 columns.
+'reach'
+
 #' ToxValDB Source Dictionary
 #'
 #' Used to rank data sources. From ToxValDB 9.4

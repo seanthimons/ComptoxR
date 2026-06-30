@@ -18,7 +18,9 @@ chemi_amos_mass_spectrum_similarity(
 
 \item{methodology}{Analytical methodology to search for.  Values aside from "GC/MS" and "LC/MS" are highly unlikely to produce results.}
 
-\item{spectrum}{Array of two-element numeric arrays.  The two-element arrays represent a single peak in the spectrum, in the format \link{m/z, intensity}.  Peaks should be sorted in ascending order of m/z values.}
+\item{spectrum}{Array of two-element numeric arrays. The two-element arrays
+represent a single peak in the spectrum, in the format \verb{m/z, intensity}.
+Peaks should be sorted in ascending order of m/z values.}
 
 \item{type}{Type of mass window to use for entropy similarity calculations.  Can be either "da" or "ppm".}
 
@@ -34,6 +36,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectrum_similarity(lower_mass_limit = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID1024122")
 }
 }

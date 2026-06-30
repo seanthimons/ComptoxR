@@ -95,7 +95,7 @@ check_unhandled <- function(x) {
 
   if (length(unhandled) > 0) {
     cli::cli_warn("{length(unhandled)} unhandled Unicode symbol(s) detected:")
-    cli::cli_bullets(setNames(unhandled, rep("*", length(unhandled))))
+    cli::cli_bullets(stats::setNames(unhandled, rep("*", length(unhandled))))
     cli::cli_alert_info("Consider updating data-raw/unicode_map.R to include these.")
   }
 }

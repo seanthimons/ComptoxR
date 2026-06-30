@@ -1,17 +1,15 @@
-#' Retrieves CTX API key from the Sys Environment
+#' Retrieve the CTX API key from the environment
 #'
-#' @description An API Key is needed to access these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
+#' @description An API key is needed to access CTX APIs. Each user needs a
+#' specific key for each application. To request a key, email
+#' `ccte_api@epa.gov` with the subject `API Key Request`.
 #'
-#' to: `ccte_api@epa.gov`
+#' Set the key with `Sys.setenv(ctx_api_key = "TOKEN HERE")`, then run
+#' `ct_api_key()` to confirm R can detect it. A restart of R may be needed.
 #'
-#' subject: `API Key Request`
-#'
-#' @usage Use `Sys.setenv(ctx_api_key= 'TOKEN HERE')` to set it.
-#'
-#' Run the function to check to see if R has detected it. A restart of R may be needed.
+#' @return A character string containing the configured CTX API key.
 #'
 #' @export
-
 ct_api_key <- function() {
   ctx_api_key <- Sys.getenv("ctx_api_key")
 

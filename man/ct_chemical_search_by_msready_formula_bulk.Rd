@@ -17,6 +17,6 @@ Returns a tibble with results (array of objects)
 }
 \examples{
 \dontrun{
-ct_chemical_search_by_msready_formula_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+ct_chemical_search_by_msready_formula_bulk(query = "DTXSID1024122")
 }
 }

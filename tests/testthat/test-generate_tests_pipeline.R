@@ -133,6 +133,37 @@ test_that("generated-test check tolerates terminal newline differences", {
   expect_length(check$mismatches, 0)
 })
 
+test_that("generated-test check tolerates formatter-only wrapping", {
+  root <- make_generation_repo()
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+
+  metadata <- tg_collect_wrapper_metadata(root)
+  specs <- tg_render_all_tests(metadata)
+  alpha_idx <- which(vapply(specs, function(spec) identical(spec$function_name, "alpha"), logical(1)))
+  alpha <- specs[[alpha_idx]]
+  path <- file.path(root, alpha$file)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+
+  formatted_text <- gsub(
+    '  result <- try(suppressWarnings(suppressMessages(ComptoxR::alpha(query = "DTXSID7020182"))), silent = TRUE)',
+    paste(
+      "  result <- try(",
+      '    suppressWarnings(suppressMessages(ComptoxR::alpha(query = "DTXSID7020182"))),',
+      "    silent = TRUE",
+      "  )",
+      sep = "\n"
+    ),
+    alpha$text,
+    fixed = TRUE
+  )
+  writeLines(formatted_text, path, useBytes = TRUE)
+
+  check <- tg_check_generated_tests_current(list(alpha), root = root)
+
+  expect_true(check$current)
+  expect_length(check$mismatches, 0)
+})
+
 test_that("token preflight rejects empty placeholder and redacted-looking values", {
   expect_false(ctx_api_key_status("")$valid)
   expect_false(ctx_api_key_status("dummy_ctx_key")$valid)

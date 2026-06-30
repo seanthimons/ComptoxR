@@ -108,8 +108,8 @@ chemi_cluster <- function(
     {
       1 - .
     } %>%
-    as.dist(.) %>%
-    hclust(method = hclust_method)
+    stats::as.dist(.) %>%
+    stats::hclust(method = hclust_method)
 
   # Final output -----------------------------------------------------------
 

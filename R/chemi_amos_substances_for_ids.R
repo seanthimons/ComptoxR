@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_substances_for_ids(internal_id_list = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_substances_for_ids(internal_id_list = "DTXSID1024122")
 #' }
 chemi_amos_substances_for_ids <- function(internal_id_list = NULL) {
   result <- generic_chemi_request(
