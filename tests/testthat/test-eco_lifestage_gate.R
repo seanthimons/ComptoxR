@@ -1152,8 +1152,15 @@ test_that("section 16 remains identical in both ECOTOX build scripts", {
     )
   }
 
+  data_raw_ecotox <- project_path("data-raw", "ecotox.R")
+  inst_ecotox <- project_path("inst", "ecotox", "ecotox_build.R")
+  testthat::skip_if_not(
+    file.exists(data_raw_ecotox),
+    "Maintainer-only parity check requires data-raw/ecotox.R; data-raw/ is excluded from CRAN source tarballs"
+  )
+
   testthat::expect_identical(
-    extract_section(project_path("data-raw", "ecotox.R")),
-    extract_section(project_path("inst", "ecotox", "ecotox_build.R"))
+    extract_section(data_raw_ecotox),
+    extract_section(inst_ecotox)
   )
 })

@@ -1,5 +1,11 @@
-source(here::here("dev", "generate_tests.R"))
-source_test_generation_pipeline(here::here())
+generate_tests_script <- testthat::test_path("..", "..", "dev", "generate_tests.R")
+if (!file.exists(generate_tests_script)) {
+  testthat::skip(
+    "Maintainer-only test requires dev/generate_tests.R; dev/ is excluded from CRAN source tarballs"
+  )
+}
+source(generate_tests_script)
+source_test_generation_pipeline(normalizePath(testthat::test_path("..", ".."), winslash = "/", mustWork = TRUE))
 
 make_generation_repo <- function() {
   root <- tempfile("test-generation-")
