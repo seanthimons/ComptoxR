@@ -86,7 +86,7 @@
   ([87414cf](https://github.com/seanthimons/ComptoxR/tree/87414cf1d764c67c61b7f4d5ecb250a3f16148cc))
 - RQ codes now return tidy data or NULL, depreciated chemi_rq function.
   ([83c52fe](https://github.com/seanthimons/ComptoxR/tree/83c52fe1b48dcdcaef5b71d9b4bf36b72229bd14))
-- added stubbed out chemi\_ functions + docuementation
+- added stubbed out chemi\_ functions + documentation
   ([5298683](https://github.com/seanthimons/ComptoxR/tree/529868315f7dcc7f5592fb29467eb49fa403e1f9))
 - updated chemi_search
   ([f725a88](https://github.com/seanthimons/ComptoxR/tree/f725a88c882a418247f958dee74a821ab29525e8))
@@ -112,7 +112,7 @@
   final data as tibble.
   ([effcca2](https://github.com/seanthimons/ComptoxR/tree/effcca2ff7d47712b79d39fbe899ce9dbf03c16e))
 - update to schema and servers; will now try all servers and allows for
-  fallback to developement to generate endpoint lists.
+  fallback to development to generate endpoint lists.
   ([e1f50f8](https://github.com/seanthimons/ComptoxR/tree/e1f50f80a8c78f8f19401f2556943e89725a1dca))
 - schema now checks latest server for all endpoints, removed hardcoded
   endpoint list.
@@ -262,7 +262,7 @@
   ([ab8124c](https://github.com/seanthimons/ComptoxR/tree/ab8124c6a5aa2e5ce0949dd2a03d476b49372c58))
 - updated workflows to not infinite-trigger
   ([83a0856](https://github.com/seanthimons/ComptoxR/tree/83a08563689a5bad5ccdab1bf44ed335142e125e))
-- disabled workflows while debuggin building errors
+- disabled workflows while debugging building errors
   ([f56d6b3](https://github.com/seanthimons/ComptoxR/tree/f56d6b36bdb0315621ab4cf00acfa8031506ec6c))
 - workflow updates
   ([ce1ce0b](https://github.com/seanthimons/ComptoxR/tree/ce1ce0bcd574614199d1c284980c8e218763890a))
@@ -295,7 +295,7 @@
   ([60d42f6](https://github.com/seanthimons/ComptoxR/tree/60d42f6612355a5c56402958d1baab6e523519fe))
 - updated the loading logic for run\_\* flags
   ([21c8690](https://github.com/seanthimons/ComptoxR/tree/21c86909eb5c0be728b9be5fcd07870938aaa181))
-- added latency calculatiosn to ping test to diagnose routing issues.
+- added latency calculations to ping test to diagnose routing issues.
   ([08eb2a3](https://github.com/seanthimons/ComptoxR/tree/08eb2a3560e519a3d54e207bc615be95fff28d69))
 - updated generic request to strip out empty strings and NAs
   ([95b0a6b](https://github.com/seanthimons/ComptoxR/tree/95b0a6bb5f6c39136830575823b82ea1d1fe3530))
