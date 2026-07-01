@@ -16,7 +16,9 @@ ct_bioactivity_assay_search_by_endpoint <- function(endpoint) {
     endpoint = "bioactivity/assay/search/by-endpoint/",
     method = "GET",
     batch_limit = 0,
-    `endpoint` = endpoint
+    query_params = list(
+      `endpoint` = endpoint
+    )
   )
 
   # Additional post-processing can be added here

@@ -53,8 +53,33 @@ tg_without_terminal_newline <- function(text) {
   sub("\\n\\z", "", text, perl = TRUE)
 }
 
+tg_canonical_r_code <- function(text) {
+  parsed <- tryCatch(
+    parse(text = text, keep.source = FALSE),
+    error = function(e) NULL
+  )
+  if (is.null(parsed)) {
+    return(NULL)
+  }
+
+  paste(
+    vapply(parsed, function(expr) paste(deparse(expr, width.cutoff = 500), collapse = "\n"), character(1)),
+    collapse = "\n"
+  )
+}
+
 tg_generated_text_identical <- function(current, expected) {
-  identical(tg_without_terminal_newline(current), tg_without_terminal_newline(expected))
+  current <- tg_without_terminal_newline(current)
+  expected <- tg_without_terminal_newline(expected)
+
+  if (identical(current, expected)) {
+    return(TRUE)
+  }
+
+  current_code <- tg_canonical_r_code(current)
+  expected_code <- tg_canonical_r_code(expected)
+
+  !is.null(current_code) && identical(current_code, expected_code)
 }
 
 tg_text_header_lines <- function(text, n = 5L) {

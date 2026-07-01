@@ -127,8 +127,8 @@ epi_suite_pull_data <- function(epi_obj, endpoints = NULL) {
               map(., as_tibble) %>%
               list_rbind() %>%
               mutate(
-                across(everything(), as.character),
-                across(everything(), ~ na_if(.x, ""))
+                dplyr::across(everything(), as.character),
+                dplyr::across(everything(), ~ na_if(.x, ""))
               )
           }
         ) %>%

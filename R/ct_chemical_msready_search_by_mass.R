@@ -10,20 +10,20 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_msready_search_by_mass_bulk(masses = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' ct_chemical_msready_search_by_mass_bulk(masses = "DTXSID1024122")
 #' }
 ct_chemical_msready_search_by_mass_bulk <- function(masses, error) {
   # Build request body
-  body <- list()
-  body$masses <- masses
-  body$error <- error
+  request_body <- list()
+  request_body$masses <- masses
+  request_body$error <- error
 
   result <- generic_request(
     query = NULL,
     endpoint = "chemical/msready/search/by-mass/",
     method = "POST",
     batch_limit = as.numeric(Sys.getenv("batch_limit", "1000")),
-    body = body
+    body = request_body
   )
 
   # Additional post-processing can be added here

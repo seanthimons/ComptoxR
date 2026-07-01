@@ -8,9 +8,6 @@ chemi_functional_use(query)
 }
 \arguments{
 \item{query}{A character vector of one or more DTXSIDs to query.}
-
-\item{path}{The specific API endpoint path for the functional use query.
-Defaults to the standard endpoint for DTXSID-based lookups.}
 }
 \value{
 A \code{tibble} containing the aggregated functional use data

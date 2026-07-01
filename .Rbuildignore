@@ -5,6 +5,7 @@
 ^paper.qmd$
 [.]html$
 ^work$
+^docs$
 ^R.curation.R
 ^R.deprec.R
 ^dev/
@@ -16,3 +17,12 @@ build.R
 ^testing.R$
 air.toml
 data-raw/
+^AGENTS[.]md$
+^CLAUDE[.]md$
+^PRD-schema-check-false-positives[.]md$
+^codecov[.]yml$
+^LICENSE[.]md$
+^ComptoxR[.]Rcheck$
+^comptoxr_sitrep_.*[.]log$
+^pr_body[.]md$
+^schema_diff_report[.]md$

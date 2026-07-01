@@ -756,7 +756,6 @@ reset_servers <- function() {
 .onLoad <- function(libname, pkgname) {
   # Call the factory ONCE and assign the result to our placeholder.
 
-  .ComptoxREnv$extractor <- create_formula_extractor_final()
   .ComptoxREnv$classifier <- create_compound_classifier()
 
   # Load hook configuration from YAML
@@ -836,8 +835,43 @@ reset_servers <- function() {
   #message("Is .extractor a function? ", is.function(.extractor))
   #message("Is .classifier a function? ", is.function(.classifier))
 
-  # Silence R CMD check "no visible binding" notes
-  utils::globalVariables(c(".ComptoxREnv"))
+  # Silence R CMD check notes for package-private state and data-mask symbols.
+  utils::globalVariables(c(
+    ".",
+    ".ComptoxREnv",
+    "GHS Codes",
+    "H-Code",
+    "Hazard Class",
+    "NFPA",
+    "Number",
+    "Symbol",
+    "bin",
+    "chemical",
+    "child",
+    "class_stage1",
+    "dtxsid",
+    "dtxsidName",
+    "flags",
+    "h_code",
+    "hazard_class",
+    "health_bin",
+    "is_available",
+    "is_isotope_formula",
+    "molFormula",
+    "name",
+    "nfpa_fire",
+    "nfpa_health",
+    "nfpa_special",
+    "nfpa_stability",
+    "parent",
+    "relatedSubstanceDTXSID",
+    "rq",
+    "rq_kgs",
+    "rq_lbs",
+    "sid",
+    "special_bin",
+    "structuralSimilarity"
+  ))
 }
 
 .onUnload <- function(libpath) {

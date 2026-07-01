@@ -15,6 +15,8 @@ generic_request(
   path_params = NULL,
   content_type = "application/json",
   body_type = "json",
+  body = NULL,
+  query_params = NULL,
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
@@ -60,6 +62,12 @@ Supported types:
 \item "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
 with content type "text/plain". Used for endpoints like /chemical/search/equal/.
 }}
+
+\item{body}{Optional explicit POST body. When supplied, this value is
+JSON-encoded instead of the batched \code{query} payload.}
+
+\item{query_params}{Optional named list of URL query parameters. Use this for
+API parameters whose names collide with \code{generic_request()} formals.}
 
 \item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
 Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through

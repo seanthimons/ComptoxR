@@ -150,6 +150,10 @@ is_transient_error <- function(resp) {
 #'        - "json": Send as JSON array via `httr2::req_body_json()` (default)
 #'        - "raw_text": Send as newline-delimited plain text via `httr2::req_body_raw()`
 #'          with content type "text/plain". Used for endpoints like /chemical/search/equal/.
+#' @param body Optional explicit POST body. When supplied, this value is
+#'        JSON-encoded instead of the batched `query` payload.
+#' @param query_params Optional named list of URL query parameters. Use this for
+#'        API parameters whose names collide with `generic_request()` formals.
 #' @param paginate Boolean; whether to automatically fetch all pages for paginated endpoints.
 #'        Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
 #'        pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.
@@ -180,6 +184,8 @@ generic_request <- function(
   path_params = NULL,
   content_type = "application/json",
   body_type = "json",
+  body = NULL,
+  query_params = NULL,
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
@@ -200,7 +206,16 @@ generic_request <- function(
     batch_limit <- as.numeric(Sys.getenv("batch_limit", "1000"))
   }
 
-  if (batch_limit == 0) {
+  if (!is.null(body) && !identical(toupper(method), "POST")) {
+    cli::cli_abort("{.arg body} can only be supplied for POST requests.")
+  }
+
+  if (!is.null(body) && is.null(query)) {
+    original_query <- NULL
+    query <- character(0)
+    query_list <- list(NULL)
+    mult_count <- 1
+  } else if (batch_limit == 0) {
     # Static endpoint: no query validation needed
     # Save original query value before overwriting (for adding to query string)
     original_query <- query
@@ -273,6 +288,14 @@ generic_request <- function(
     ellipsis_args <- c(ellipsis_args, opts)
   }
 
+  if (!is.null(query_params)) {
+    if (!is.list(query_params) || is.null(names(query_params)) || any(!nzchar(names(query_params)))) {
+      cli::cli_abort("{.arg query_params} must be a named list.")
+    }
+    query_params <- query_params[!vapply(query_params, is.null, logical(1))]
+    ellipsis_args <- c(ellipsis_args, query_params)
+  }
+
   # Create a list of httr2 request objects, one for each batch.
   req_list <- purrr::map(
     query_list,
@@ -297,6 +320,8 @@ generic_request <- function(
           # Send as newline-delimited plain text (e.g., /chemical/search/equal/)
           body_text <- paste(query_part, collapse = "\n")
           req <- req %>% httr2::req_body_raw(body_text, type = "text/plain")
+        } else if (!is.null(body)) {
+          req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
         } else {
           # Default: Send as JSON array
           req <- req %>% httr2::req_body_json(query_part, auto_unbox = FALSE)
@@ -584,7 +609,8 @@ generic_request <- function(
 
         status <- httr2::resp_status(r)
         if (status < 200 || status >= 300) {
-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          qp_label <- if (length(qp) > 0) qp[1] else endpoint
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
           return(NULL)
         }
 
@@ -621,7 +647,8 @@ generic_request <- function(
 
         status <- httr2::resp_status(r)
         if (status < 200 || status >= 300) {
-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+          qp_label <- if (length(qp) > 0) qp[1] else endpoint
+          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
           return(NULL)
         }
 
@@ -648,7 +675,8 @@ generic_request <- function(
 
       status <- httr2::resp_status(r)
       if (status < 200 || status >= 300) {
-        cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp[1]}} with status {status}")
+        qp_label <- if (length(qp) > 0) qp[1] else endpoint
+        cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
         return(NULL)
       }
 
@@ -773,7 +801,7 @@ generic_chemi_request <- function(
   # 3. Payload Construction
   # Ensure options serializes as {} (object) not [] (array) when empty
   if (length(options) == 0) {
-    options <- setNames(list(), character(0))
+    options <- stats::setNames(list(), character(0))
   }
 
   if (!is.null(resolved_chemicals)) {

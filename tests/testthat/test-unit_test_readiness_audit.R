@@ -1,4 +1,10 @@
-source(file.path("..", "..", "dev", "unit_test_readiness_audit.R"))
+unit_test_readiness_audit_script <- testthat::test_path("..", "..", "dev", "unit_test_readiness_audit.R")
+if (!file.exists(unit_test_readiness_audit_script)) {
+  testthat::skip(
+    "Maintainer-only test requires dev/unit_test_readiness_audit.R; dev/ is excluded from CRAN source tarballs"
+  )
+}
+source(unit_test_readiness_audit_script)
 
 make_audit_repo <- function() {
   root <- tempfile("unit-test-audit-")

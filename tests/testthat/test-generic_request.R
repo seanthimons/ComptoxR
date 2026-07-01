@@ -1,4 +1,6 @@
 test_that("generic_request dry run works independently of network", {
+  testthat::skip_if_not_installed("httpuv")
+
   # Enable debug mode to avoid real requests
   Sys.setenv(run_debug = "TRUE")
   Sys.setenv(ctx_api_key = "logic_test_key")
@@ -24,6 +26,8 @@ test_that("generic_request dry run works independently of network", {
 })
 
 test_that("generic_request respects different server environments", {
+  testthat::skip_if_not_installed("httpuv")
+
   Sys.setenv(run_debug = "TRUE")
   on.exit(Sys.setenv(run_debug = "FALSE"))
 
@@ -33,6 +37,8 @@ test_that("generic_request respects different server environments", {
 })
 
 test_that("generic_request handles batching logic correctly", {
+  testthat::skip_if_not_installed("httpuv")
+
   Sys.setenv(run_debug = "TRUE")
   Sys.setenv(batch_limit = "2")
   on.exit({

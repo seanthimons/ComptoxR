@@ -28,12 +28,12 @@ get_mol_for_search <- function(query, search_type) {
     return(query)
   }
 
-  # Fetch MOL file via ct_chemical_file_mol
+  # Fetch MOL file via ct_chemical_file_mol_search
   if (as.logical(Sys.getenv("run_verbose", "FALSE"))) {
     cli::cli_alert_info("Fetching MOL file for {.val {query}}")
   }
 
-  ct_chemical_file_mol(dtxsid = query)
+  ct_chemical_file_mol_search(dtxsid = query)
 }
 
 #' Build params list for SearchRequest

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ct_chemical_property_experimental_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' ct_chemical_property_experimental_search_bulk(query = "DTXSID1024122")
 #' }
 ct_chemical_property_experimental_search_bulk <- function(query) {
   result <- generic_request(

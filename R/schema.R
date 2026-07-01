@@ -209,6 +209,13 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
   }
 
   any_schemas_downloaded <- FALSE
+  schema_log <- tibble::tibble(
+    server = character(),
+    endpoint = character(),
+    url = character(),
+    status = integer(),
+    success = logical()
+  )
 
   imap(
     serv,
@@ -273,21 +280,6 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
       }
 
       map(endpoints, function(endpoint) {
-        # initialize log tibble if requested
-        if (record && !exists('.__chemi_schema_log', envir = .GlobalEnv)) {
-          assign(
-            '.__chemi_schema_log',
-            tibble::tibble(
-              server = character(),
-              endpoint = character(),
-              url = character(),
-              status = integer(),
-              success = logical()
-            ),
-            envir = .GlobalEnv
-          )
-        }
-
         # Candidate URL permutations to try (ordered by likelihood)
         url_candidates <- c(
           paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/api-docs'),
@@ -309,9 +301,8 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
         for (u in url_candidates) {
           res_try <- attempt_download(u, endpoint, server)
           if (record) {
-            log_tbl <- get('.__chemi_schema_log', envir = .GlobalEnv)
-            log_tbl <- dplyr::bind_rows(
-              log_tbl,
+            schema_log <<- dplyr::bind_rows(
+              schema_log,
               tibble::tibble(
                 server = server,
                 endpoint = endpoint,
@@ -320,7 +311,6 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
                 success = isTRUE(res_try$success)
               )
             )
-            assign('.__chemi_schema_log', log_tbl, envir = .GlobalEnv)
           }
           if (isTRUE(res_try$success)) {
             cli::cli_alert_info("Downloaded schema for {endpoint} from {u}")
@@ -344,19 +334,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
   }
 
   if (isTRUE(record)) {
-    if (exists('.__chemi_schema_log', envir = .GlobalEnv)) {
-      res_log <- get('.__chemi_schema_log', envir = .GlobalEnv)
-      rm(list = '.__chemi_schema_log', envir = .GlobalEnv)
-      return(res_log)
-    } else {
-      return(tibble::tibble(
-        server = character(),
-        endpoint = character(),
-        url = character(),
-        status = integer(),
-        success = logical()
-      ))
-    }
+    return(schema_log)
   }
 
   invisible(NULL)

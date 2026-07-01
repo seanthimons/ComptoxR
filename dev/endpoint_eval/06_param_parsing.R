@@ -47,6 +47,24 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   return(paste0("= ", deparse(default_val)))
 }
 
+generic_request_reserved_args <- c(
+  "query",
+  "endpoint",
+  "method",
+  "server",
+  "batch_limit",
+  "auth",
+  "tidy",
+  "path_params",
+  "content_type",
+  "body_type",
+  "body",
+  "query_params",
+  "paginate",
+  "max_pages",
+  "pagination_strategy"
+)
+
 #' Parse function parameters from comma-separated string
 #'
 #' Extracts parameter information and generates code components for function signatures,
@@ -226,7 +244,11 @@ parse_function_params <- function(
   # Strategy-specific code generation
   if (strategy == "extra_params") {
     args_list <- paste(paste0("`", param_vec_orig, "` = ", param_vec_sanitized), collapse = ",\n    ")
-    params_call <- paste0(",\n    ", args_list)
+    if (any(param_vec_orig %in% generic_request_reserved_args)) {
+      params_call <- paste0(",\n    query_params = list(\n    ", args_list, "\n    )")
+    } else {
+      params_call <- paste0(",\n    ", args_list)
+    }
     params_code <- ""
   } else {
     lines <- c("  # Collect optional parameters", "  options <- list()")

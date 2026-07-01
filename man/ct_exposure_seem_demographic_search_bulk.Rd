@@ -17,6 +17,6 @@ Returns a scalar value
 }
 \examples{
 \dontrun{
-ct_exposure_seem_demographic_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+ct_exposure_seem_demographic_search_bulk(query = "DTXSID1024122")
 }
 }

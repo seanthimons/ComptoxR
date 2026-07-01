@@ -49,6 +49,13 @@ Keep handwritten tests for behavior the generator cannot model:
 
 Avoid handwritten API-wrapper tests that only assert ordinary request construction. Add those wrappers to the generator instead.
 
+### Maintainer-Only Source Checks
+
+Files under `dev/` and `data-raw/` are excluded from CRAN source tarballs by `.Rbuildignore`. Any `test-*.R`
+that sources, reads, or compares those files must compute the repo-local path, check `file.exists()`, and skip with
+a clear maintainer-only or CRAN-tarball reason before reading or sourcing it. The same test should remain active from
+a full checkout.
+
 ## Running Tests
 
 Run the local CRAN-readiness command:

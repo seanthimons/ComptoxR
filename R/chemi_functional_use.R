@@ -4,12 +4,9 @@
 #' data for a given set of chemical identifiers (DTXSIDs).
 #'
 #' @param query A character vector of one or more DTXSIDs to query.
-#' @param path The specific API endpoint path for the functional use query.
-#'   Defaults to the standard endpoint for DTXSID-based lookups.
 #'
 #' @return A `tibble` containing the aggregated functional use data
 #' @export
-
 chemi_functional_use <- function(query) {
   if (!is.character(query) || length(query) == 0) {
     cli_abort("{.arg query} must be a non-empty character vector of DTXSIDs.")
@@ -27,7 +24,7 @@ chemi_functional_use <- function(query) {
     })
 
   if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
-    cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
+    cli::cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
     return(req_list[[1]] %>% req_dry_run())
   }
 
