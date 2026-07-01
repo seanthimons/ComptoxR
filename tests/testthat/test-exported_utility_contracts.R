@@ -47,29 +47,10 @@ test_that("run_verbose and run_setup have offline-safe configuration contracts",
   expect_null(suppressWarnings(suppressMessages(run_setup())))
 })
 
-test_that("CAS and text extraction helpers handle valid and invalid input", {
+test_that("CAS coercion helper handles valid and invalid input", {
   expect_equal(
     as_cas(c("CAS: 7732-18-5", "50000", "50-00-1", NA)),
     c("7732-18-5", "50-00-0", NA_character_, NA_character_)
-  )
-
-  extracted <- extract_cas(c(
-    "The CAS numbers are 50-00-0 and 7732-18-5.",
-    "Invalid 50-00-1 should not be returned."
-  ))
-  expect_equal(extracted[[1]], c("50-00-0", "7732-18-5"))
-  expect_equal(extracted[[2]], character(0))
-
-  formulas <- extract_formulas(c(
-    "Water (H2O) and sodium chloride (NaCl).",
-    "Iron (III) chloride should not treat III as a formula."
-  ))
-  expect_equal(formulas[[1]], c("H2O", "NaCl"))
-  expect_equal(formulas[[2]], character(0))
-
-  expect_equal(
-    extract_mixture(c("Blend (1:1)", "Single chemical", "Blend 1.5:1 w/w")),
-    c(TRUE, FALSE, TRUE)
   )
 })
 

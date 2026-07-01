@@ -24,7 +24,7 @@ chemi_functional_use <- function(query) {
     })
 
   if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
-    cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
+    cli::cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
     return(req_list[[1]] %>% req_dry_run())
   }
 

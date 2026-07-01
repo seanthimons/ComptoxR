@@ -756,7 +756,6 @@ reset_servers <- function() {
 .onLoad <- function(libname, pkgname) {
   # Call the factory ONCE and assign the result to our placeholder.
 
-  .ComptoxREnv$extractor <- create_formula_extractor_final()
   .ComptoxREnv$classifier <- create_compound_classifier()
 
   # Load hook configuration from YAML
