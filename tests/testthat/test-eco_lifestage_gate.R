@@ -776,6 +776,60 @@ test_that("baseline patch aborts on release mismatch without live lookup", {
   )
 })
 
+test_that("baseline patch seed reuse requires explicit maintainer opt-in", {
+  release <- "ecotox_ascii_06_11_2026.zip"
+  seed_release <- "ecotox_ascii_03_12_2026.zip"
+  db_path <- make_patch_db("Adult", release = release)
+  baseline <- make_lifestage_cache_row(
+    org_lifestage = "Adult",
+    ecotox_release = seed_release,
+    source_provider = "NVS",
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    source_term_label = "adult",
+    source_term_definition = "An animal that has reached sexual maturity",
+    source_release = "current"
+  )
+  derivation <- tibble::tibble(
+    source_ontology = "S11",
+    source_term_id = "S1116",
+    harmonized_life_stage = "Adult",
+    reproductive_stage = FALSE,
+    derivation_source = "test_derivation"
+  )
+
+  withr::local_envvar(c(COMPTOXR_ECOTOX_ALLOW_PATCH_SEED_REUSE = "true"))
+  with_lifestage_files(
+    {
+      testthat::with_mocked_bindings(
+        .eco_lifestage_query_ols4 = function(...) stop("live lookup should not run"),
+        .eco_lifestage_query_nvs = function(...) stop("live lookup should not run"),
+        .package = "ComptoxR",
+        {
+          testthat::expect_warning(
+            .eco_patch_lifestage(db_path = db_path, refresh = "baseline"),
+            "Reusing lifestage patch seed across ECOTOX releases"
+          )
+        }
+      )
+    },
+    baseline = baseline,
+    derivation = derivation,
+    cache = NULL
+  )
+
+  con <- DBI::dbConnect(duckdb::duckdb(), dbdir = db_path, read_only = TRUE)
+  on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+  dictionary <- DBI::dbReadTable(con, "lifestage_dictionary")
+  patch_meta <- DBI::dbReadTable(con, "_metadata")
+
+  testthat::expect_equal(unique(dictionary$ecotox_release), release)
+  testthat::expect_equal(
+    patch_meta$value[patch_meta$key == "lifestage_patch_release"],
+    release
+  )
+})
+
 test_that("live-refresh patch path is maintainer-only", {
   release <- "ecotox_ascii_03_12_2026.zip"
   db_path <- make_patch_db("Adult", release = release)

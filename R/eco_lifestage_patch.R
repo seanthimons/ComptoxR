@@ -101,6 +101,12 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_allow_patch_seed_reuse <- function() {
+  value <- tolower(trimws(Sys.getenv("COMPTOXR_ECOTOX_ALLOW_PATCH_SEED_REUSE", unset = "")))
+  value %in% c("1", "true", "yes", "y")
+}
+
+#' @keywords internal
 .eco_lifestage_patch_seed_path <- function() {
   installed <- system.file(
     "extdata",
@@ -375,7 +381,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
       ontology_priority = as.integer(.data$ontology_priority)
     )
 
-  if (any(is.na(policy$ontology_priority))) {
+  if (anyNA(policy$ontology_priority)) {
     cli::cli_abort("Invalid lifestage route ontology priority policy: ontology_priority must be integer.")
   }
 
@@ -1067,10 +1073,20 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     ))
   }
   if (!is.null(expected_release) && !identical(releases, expected_release)) {
-    cli::cli_abort(c(
-      "Release mismatch in lifestage patch seed.",
-      "x" = "Expected {.val {expected_release}} but found {.val {releases}}."
+    if (!.eco_lifestage_allow_patch_seed_reuse()) {
+      cli::cli_abort(c(
+        "Release mismatch in lifestage patch seed.",
+        "x" = "Expected {.val {expected_release}} but found {.val {releases}}."
+      ))
+    }
+
+    cli::cli_warn(c(
+      "Reusing lifestage patch seed across ECOTOX releases.",
+      "i" = "Seed release: {.val {releases}}.",
+      "i" = "Target release: {.val {expected_release}}.",
+      "i" = "This maintainer workflow remains blocked if the target release contains uncovered lifestage terms."
     ))
+    x$ecotox_release <- expected_release
   }
 
   resolved_missing <- x |>
