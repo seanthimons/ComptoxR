@@ -4,7 +4,10 @@
 \alias{chemi_toxprints_bulk}
 \title{Toxprints}
 \usage{
-chemi_toxprints_bulk()
+chemi_toxprints_bulk(query)
+}
+\arguments{
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
 Returns a list with result object
@@ -14,6 +17,6 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_bulk()
+chemi_toxprints_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

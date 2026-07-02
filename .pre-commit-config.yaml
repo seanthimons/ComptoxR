@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: air-format
+        name: air format
+        description: Run air format for R formatting
+        entry: air format --check
+        language: system
+        types_or: [r]
+        require_serial: true
+
+      - id: jarl-check
+        name: jarl check
+        description: Run jarl check to lint R code
+        entry: jarl check
+        language: system
+        args:
+          - --output-format
+          - concise
+          - --ignore
+          - unused_function,implicit_assignment,internal_function,vector_logic,outer_negation,redundant_equals,any_duplicated,true_false_symbol
+        files: \.(R|r|Rmd|rmd|qmd)$
+        require_serial: true

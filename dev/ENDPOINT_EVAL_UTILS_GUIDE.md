@@ -28,17 +28,58 @@ The utility provides five main capabilities:
 4.  **Parameter Parsing** (`parse_path_parameters`, `parse_function_params`, `extract_query_params_with_refs`) - Extracts and organizes function parameters
 5.  **Code Generation** (`build_function_stub`, `render_endpoint_stubs`) - Generates R function source code
 
-### Processing Pipeline
+### Unified Processing Pipeline (v1.6+)
+
+**All generators use the same architecture:**
 
 ```
-schema_file → preprocess_schema → filtered openapi → openapi_to_spec → specification tibble
-                ↓                              ↓
-                extract_referenced_schemas    extract_body_properties
-                ↓                              ↓
-                filter_components_by_refs      resolve_schema_ref
-                                               ↓
-                                               extract_query_params_with_refs
+schema_file → select_schema_files → schema_list → openapi_to_spec (per file) → specification tibble
+                                                         ↓
+                                                   detect_schema_version (Swagger 2.0 / OpenAPI 3.0)
+                                                         ↓
+                                                   extract_body_properties (version-aware)
+                                                         ↓
+                                                   resolve_schema_ref (fallback chain)
+                                                         ↓
+                                                   extract_query_params_with_refs
 ```
+
+**Key Points:**
+- **Single entry point**: All schemas (ct, chemi, cc) use `openapi_to_spec()` directly
+- **Version detection**: Automatic Swagger 2.0 vs OpenAPI 3.0 handling
+- **Stage selection**: `select_schema_files()` handles multi-stage schemas (chemi)
+- **Reference resolution**: Unified `resolve_schema_ref()` with version-aware fallback
+
+------------------------------------------------------------------------
+
+## Schema Version Detection
+
+Before parsing, `openapi_to_spec()` detects the schema version to apply version-specific processing rules.
+
+### detect_schema_version()
+
+**Purpose:** Identifies whether the schema is Swagger 2.0 or OpenAPI 3.0
+
+**Detection logic:**
+1. Checks `swagger` field → If matches `^2\.` → Swagger 2.0
+2. Checks `openapi` field → If matches `^3\.` → OpenAPI 3.0
+3. Otherwise → Unknown version
+
+**Returns:** `list(version = "2.0" | "3.0.0", type = "swagger" | "openapi" | "unknown")`
+
+**Example:**
+```r
+openapi <- jsonlite::fromJSON("schema/chemi-amos-prod.json", simplifyVector = FALSE)
+version_info <- detect_schema_version(openapi)
+# Returns: list(version = "2.0", type = "swagger")
+```
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 251-262
+
+**Why it matters:**
+- Swagger 2.0 uses `definitions` for schemas, OpenAPI 3.0 uses `components/schemas`
+- Swagger 2.0 puts request body in `parameters` array, OpenAPI 3.0 uses `requestBody` object
+- Reference resolution needs version-aware fallback chains
 
 ------------------------------------------------------------------------
 
@@ -61,13 +102,44 @@ spec <- openapi_to_spec(openapi = "schema/chemi-hazard-prod.json", preprocess = 
 
 ### Step 1: Load OpenAPI Schemas
 
-The `parse_chemi_schemas()` function:
+**Unified Pipeline Approach (v1.6+):**
 
-1.  Lists all schema files matching pattern `^chemi-.*\.json$`
-2.  Filters out UI schemas (excluded by pattern)
-3.  Parses filenames to extract: `origin`, `domain`, `stage`
-4.  For each domain, selects the best available stage (priority: prod \> staging \> dev)
-5.  Parses each selected schema using `openapi_to_spec()`
+All stub generators (`generate_ct_stubs()`, `generate_chemi_stubs()`, `generate_cc_stubs()`) follow the same pattern:
+
+1.  **List schema files** - Use `select_schema_files()` helper to find matching schemas
+    -   For chemi: applies stage prioritization (prod > staging > dev)
+    -   For ct/cc: simple pattern matching
+2.  **Parse each schema** - Call `openapi_to_spec()` directly for each file
+3.  **Bind results** - Combine into single specification tibble
+4.  **Process endpoints** - Filter, classify, and generate stubs
+
+**Schema File Selection Helper (`select_schema_files()`):**
+
+Provides stage-based prioritization for schemas with multiple variants:
+
+```r
+# Chemi schemas with stage selection
+chemi_files <- select_schema_files(
+  pattern = "^chemi-.*\\.json$",
+  exclude_pattern = "ui",
+  stage_priority = c("prod", "staging", "dev")
+)
+
+# CT/CC schemas without stage selection
+ct_files <- select_schema_files(
+  pattern = "^ctx-.*-prod\\.json$",
+  exclude_pattern = NULL,
+  stage_priority = NULL
+)
+```
+
+**Parameters:**
+- `pattern`: Regex to match schema files
+- `exclude_pattern`: Optional pattern to exclude (e.g., "ui")
+- `stage_priority`: Character vector for stage ordering (NULL for non-staged schemas)
+- `schema_dir`: Path to schema directory (defaults to here::here("schema"))
+
+The helper automatically selects the highest priority stage per domain when multiple variants exist (e.g., chemi-mordred-prod.json, chemi-mordred-staging.json).
 
 ### Step 2: Extract Endpoint Specifications
 
@@ -158,6 +230,100 @@ The `get_response_schema_type()` function analyzes successful response schemas (
 ## Function Generation Pipeline
 
 6.  **Return stubs**: Return tibble with `text` column containing complete function definitions
+
+------------------------------------------------------------------------
+
+## Swagger 2.0 Support
+
+The stub generation pipeline fully supports Swagger 2.0 schemas, which are used by some cheminformatics microservices (AMOS, RDKit, Mordred).
+
+### Key Differences: OpenAPI 3.0 vs Swagger 2.0
+
+| Aspect | OpenAPI 3.0 | Swagger 2.0 |
+|--------|-------------|-------------|
+| **Root field** | `openapi: "3.0.0"` | `swagger: "2.0"` |
+| **Schema location** | `components.schemas` | `definitions` |
+| **Request body** | `requestBody` object | `parameters[]` with `in="body"` |
+| **Reference path** | `#/components/schemas/Name` | `#/definitions/Name` |
+| **Body constraints** | Multiple content types allowed | Single body parameter only |
+
+### Swagger 2.0 Processing Flow
+
+```mermaid
+flowchart TD
+    A[openapi_to_spec entry] --> B[detect_schema_version]
+    B --> C{Version type?}
+    C -->|swagger| D[Use definitions as components]
+    C -->|openapi| E[Use components.schemas]
+    D --> F[For each endpoint]
+    E --> F
+    F --> G{Method has body?}
+    G -->|Yes swagger| H[extract_swagger2_body_schema]
+    G -->|Yes openapi| I[extract_body_properties standard]
+    G -->|No| J[Skip body extraction]
+    H --> K[Find parameters with in=body]
+    K --> L[Extract schema property]
+    L --> M{Schema has $ref?}
+    M -->|Yes| N[resolve_swagger2_definition_ref]
+    M -->|No| O[Use inline schema]
+    N --> P[Extract properties from resolved schema]
+    O --> P
+    P --> Q[Build parameter metadata]
+    I --> Q
+    J --> Q
+```
+
+### Version-Aware Reference Resolution
+
+The `resolve_schema_ref()` function uses a version-aware fallback chain:
+
+**For Swagger 2.0:**
+1. Try `#/definitions/{Name}` first (primary)
+2. Fallback to `#/components/schemas/{Name}` (for normalized schemas)
+
+**For OpenAPI 3.0:**
+1. Try `#/components/schemas/{Name}` first (primary)
+2. Fallback to `#/definitions/{Name}` (for legacy refs)
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 168-182
+
+**Why fallback matters:**
+- Some schemas mix conventions during migration
+- Normalization step may create `components.schemas` from Swagger 2.0 `definitions`
+- Robust resolution prevents failures on edge cases
+
+**Logging:** Fallback usage is always logged with `cli::cli_alert_info()` for transparency
+
+### Implicit Object Type Detection
+
+Swagger 2.0 schemas often omit `type: "object"` when `properties` field is present. The pipeline detects this implicitly:
+
+```r
+# BODY-04: Implicit object detection
+has_properties <- !is.null(schema$properties) && length(schema$properties) > 0
+is_object <- (schema$type == "object") || (is.na(schema$type) && has_properties)
+```
+
+This handles schemas like:
+```json
+{
+  "properties": {
+    "dtxsids": {"type": "array"}
+  },
+  "required": ["dtxsids"]
+}
+```
+
+Even without explicit `"type": "object"`.
+
+### Which Schemas Use Swagger 2.0?
+
+**Cheminformatics microservices:**
+- AMOS (`chemi-amos-prod.json`)
+- RDKit (`chemi-rdkit-prod.json`)
+- Mordred (`chemi-mordred-prod.json`)
+
+**CompTox Dashboard and Common Chemistry:** Use OpenAPI 3.0
 
 ------------------------------------------------------------------------
 
@@ -284,11 +450,37 @@ chemi_resolver_universalharvest <- function(
 
 ### Body Parameters
 
-For POST/PUT/PATCH endpoints, body parameters come from request body schemas:
+For POST/PUT/PATCH endpoints, body parameters come from request body schemas.
 
-1.  Schema references (`$ref`) are resolved from `#/components/schemas/`
-2.  Properties are extracted with their types, defaults, and required status
-3.  Required parameters come first in the function signature, then optional with defaults
+**Version-aware body extraction:**
+
+#### OpenAPI 3.0
+Body parameters extracted from `requestBody` object:
+1. Navigate: `requestBody → content → application/json → schema`
+2. Resolve `$ref` from `#/components/schemas/`
+3. Extract properties with types, defaults, and required status
+
+#### Swagger 2.0
+Body parameters extracted from `parameters` array using `extract_swagger2_body_schema()`:
+1. Find parameters with `in="body"`
+2. Extract `schema` property from body parameter
+3. Resolve `$ref` from `#/definitions/`
+4. Handle object schemas, array schemas, and simple types
+
+**Location:** `dev/endpoint_eval/01_schema_resolution.R` lines 267-404
+
+**Key differences:**
+
+| Feature | OpenAPI 3.0 | Swagger 2.0 |
+|---------|-------------|-------------|
+| Location | `requestBody` object | `parameters[]` array with `in="body"` |
+| Reference path | `#/components/schemas/` | `#/definitions/` |
+| Multiple bodies | Allowed (rare) | Forbidden (max 1) |
+| Mutual exclusivity | N/A | Cannot mix body + formData |
+
+**Validation (Swagger 2.0 only):**
+- **BODY-05**: Warns if multiple body parameters detected (spec violation)
+- **BODY-06**: Warns if both body and formData parameters present (spec violation)
 
 ### Parameter Strategy
 
@@ -543,33 +735,39 @@ chemi_config <- list(
 ``` mermaid
 flowchart TB
     subgraph "Schema Loading"
-        A[Load OpenAPI JSON] --> B[parse_chemi_schemas]
-        B --> C{Multiple schemas?}
-        C -->|Yes| D[Select best stage per domain]
-        C -->|No| E[Use single schema]
-        D --> F[Merge into super schema]
+        A[Schema Directory] --> B[select_schema_files]
+        B --> C{Stage priority provided?}
+        C -->|Yes chemi| D[Select best stage per domain]
+        C -->|No ct/cc| E[Match pattern only]
+        D --> F[Schema file list]
         E --> F
     end
 
-    subgraph "Schema Preprocessing"
-        F --> F1[preprocess_schema]
-        F1 --> F2[Filter endpoints by ENDPOINT_PATTERNS_TO_EXCLUDE]
+    subgraph "Schema Preprocessing Optional"
+        F --> F1{Preprocess enabled?}
+        F1 -->|Yes| F2[Filter endpoints by ENDPOINT_PATTERNS_TO_EXCLUDE]
+        F1 -->|No| F5[Raw OpenAPI spec]
         F2 --> F3[extract_referenced_schemas]
         F3 --> F4[filter_components_by_refs]
-        F4 --> F5[Reduced OpenAPI spec]
+        F4 --> F5
     end
 
-    subgraph "Schema Parsing"
-        F5 --> G[openapi_to_spec]
-        G --> H[For each route/method]
+    subgraph "Schema Parsing Unified Pipeline"
+        F5 --> G[openapi_to_spec for each file]
+        G --> G1[detect_schema_version]
+        G1 --> G2{Swagger 2.0 or OpenAPI 3.0?}
+        G2 -->|Swagger 2.0| H1[Use definitions]
+        G2 -->|OpenAPI 3.0| H2[Use components/schemas]
+        H1 --> H[For each route/method]
+        H2 --> H
         H --> I[Extract path parameters]
         H --> J[Extract query parameters]
         H --> K[Extract body parameters]
         J --> J1[extract_query_params_with_refs]
         J1 --> J2[resolve_schema_ref for $ref params]
         J2 --> J3[Flatten nested objects with dot notation]
-        K --> K1[extract_body_properties]
-        K1 --> K2[resolve_schema_ref for body schema]
+        K --> K1[extract_body_properties version-aware]
+        K1 --> K2[resolve_schema_ref with fallback chain]
         I --> L[param_metadata]
         J3 --> L
         K2 --> L
@@ -805,11 +1003,14 @@ chemi_rq <- function(query) {
 | `preprocess_schema()` | Filter endpoints and reduce schema complexity | Schema file path | Filtered OpenAPI list |
 | `extract_referenced_schemas()` | Collect all $ref values from paths | OpenAPI paths | Character vector of schema names |
 | `filter_components_by_refs()` | Keep only referenced schemas | Components, refs | Filtered components |
-| `resolve_schema_ref()` | Resolve $ref with circular detection | Schema ref, components, max_depth | Resolved schema definition |
-| `extract_body_properties()` | Extract body schema metadata | Request body, components | Schema structure with properties |
-| `extract_query_params_with_refs()` | Resolve and flatten query params | Parameters, components | `list(names, metadata)` |
-| `parse_chemi_schemas()` | Load and merge OpenAPI schemas | Schema directory | Unified spec tibble |
-| `openapi_to_spec()` | Parse single OpenAPI to spec | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type`, `request_type` |
+| `detect_schema_version()` | Detect Swagger 2.0 vs OpenAPI 3.0 | OpenAPI spec | `list(version, type)` |
+| `resolve_schema_ref()` | Resolve $ref with version-aware fallback | Schema ref, components, schema_version | Resolved schema definition |
+| `extract_swagger2_body_schema()` | Extract body from Swagger 2.0 parameters | Parameters array, definitions | Schema structure with properties |
+| `resolve_swagger2_definition_ref()` | Resolve Swagger 2.0 definition refs | Ref string, definitions | Resolved schema definition |
+| `extract_body_properties()` | Extract body schema metadata (version-aware) | Request body/parameters, components, schema_version | Schema structure with properties |
+| `extract_query_params_with_refs()` | Resolve and flatten query params | Parameters, components, schema_version | `list(names, metadata)` |
+| `select_schema_files()` | Stage-based schema file selection | Pattern, stage priority | Character vector of filenames |
+| `openapi_to_spec()` | Parse OpenAPI to spec (Swagger 2.0 & 3.0) | OpenAPI list | Spec tibble with `needs_resolver`, `body_schema_type`, `request_type` |
 | `uses_chemical_schema()` | Check if body uses Chemical schema | Request body, OpenAPI spec | `TRUE` / `FALSE` |
 | `get_body_schema_type()` | Classify body schema type | Request body, OpenAPI spec | `"chemical_array"`, `"string_array"`, etc. |
 | `parse_path_parameters()` | Parse path params | Param string, metadata | Signature, calls, docs |
@@ -825,9 +1026,13 @@ chemi_rq <- function(query) {
 1.  **Inspect parsed schema with preprocessing:**
 
     ``` r
+    # Load utilities
+    source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
+
     spec <- openapi_to_spec("schema/chemi-hazard-prod.json", preprocess = TRUE)
     View(spec)
-    
+
     # Check new columns
     spec %>% select(route, method, request_type, body_schema_full, body_item_type)
     ```
@@ -842,15 +1047,18 @@ chemi_rq <- function(query) {
 3.  **Test query parameter $ref resolution:**
 
     ``` r
-    source("endpoint_eval_utils.R")
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
     openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
-    
+
+    # Detect version
+    schema_version <- detect_schema_version(openapi)
+
     # Find an endpoint with query params that have $ref
     params <- openapi$paths[["/api/resolver/universalharvest"]]$post$parameters
     components <- openapi$components
-    
+
     # Test the extraction
-    result <- extract_query_params_with_refs(params, components)
+    result <- extract_query_params_with_refs(params, components, schema_version)
     print(result$names)     # Flattened parameter names with dot notation
     print(result$metadata)  # Metadata for each parameter
     ```
@@ -858,8 +1066,13 @@ chemi_rq <- function(query) {
 4.  **Check which endpoints need resolver wrapping:**
 
     ``` r
-    source("endpoint_eval_utils.R")
-    eps <- parse_chemi_schemas()
+    # Load utilities
+    source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
+
+    # Parse a chemi schema
+    openapi <- jsonlite::fromJSON("schema/chemi-hazard-prod.json", simplifyVector = FALSE)
+    eps <- openapi_to_spec(openapi)
 
     # View all endpoints needing resolver
     eps[eps$needs_resolver == TRUE, c("route", "method", "body_schema_type")]
@@ -887,16 +1100,46 @@ chemi_rq <- function(query) {
 7.  **Debug schema resolution:**
 
     ``` r
-    source("endpoint_eval_utils.R")
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
     openapi <- jsonlite::fromJSON("schema/chemi-resolver-prod.json", simplifyVector = FALSE)
-    
+
+    # Detect version first
+    schema_version <- detect_schema_version(openapi)
+    print(schema_version)
+
     # Manually resolve a schema reference
     resolved <- resolve_schema_ref(
       "#/components/schemas/UniversalHarvestRequest",
       openapi$components,
-      max_depth = 5
+      schema_version = schema_version,
+      max_depth = 3
     )
     print(resolved)
+    ```
+
+8.  **Debug Swagger 2.0 body extraction:**
+
+    ``` r
+    source(file.path("dev", "endpoint_eval", "01_schema_resolution.R"))
+
+    # Load a Swagger 2.0 schema
+    openapi <- jsonlite::fromJSON("schema/chemi-amos-prod.json", simplifyVector = FALSE)
+    schema_version <- detect_schema_version(openapi)
+
+    # Check if it's Swagger 2.0
+    if (schema_version$type == "swagger") {
+      # Extract body from parameters array
+      endpoint_op <- openapi$paths[["/api/amos/calculate"]]$post
+      body_params <- purrr::keep(endpoint_op$parameters, ~ .x[["in"]] == "body")
+      print(body_params)
+
+      # Extract body schema
+      body_schema <- extract_swagger2_body_schema(
+        endpoint_op$parameters,
+        openapi$definitions
+      )
+      print(body_schema)
+    }
     ```
 
 8.  **Add new schema patterns for resolver wrapping:**
@@ -926,10 +1169,11 @@ This section provides systematic guidance for debugging when function stubs don'
 
 1. **Check if endpoint was parsed:**
    ```r
-   # Load the schema and check if route exists
-   source("endpoint_eval_utils.R")
-   eps <- parse_chemi_schemas()
-   
+   # Load utilities and parse schema
+   source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+   openapi <- jsonlite::fromJSON("schema/chemi-hazard-prod.json", simplifyVector = FALSE)
+   eps <- openapi_to_spec(openapi)
+
    # Search for your route
    eps %>% filter(grepl("your-route-pattern", route))
    ```
@@ -1234,16 +1478,18 @@ flowchart TD
 
 | Issue | File | Function |
 |-------|------|----------|
-| Schema not loading | `chemi_endpoint_eval.R` | Filtering logic |
-| Schema preprocessing | `endpoint_eval_utils.R` | `preprocess_schema()` |
-| $ref resolution failing | `endpoint_eval_utils.R` | `resolve_schema_ref()` |
-| Query params not flattened | `endpoint_eval_utils.R` | `extract_query_params_with_refs()` |
-| batch_limit wrong | `endpoint eval.R` | batch_limit assignment |
-| Parameter sanitization | `endpoint_eval_utils.R` | `sanitize_param()` |
-| Wrapper selection | `endpoint_eval_utils.R` | GET override logic |
-| wrap logic | `endpoint_eval_utils.R` | `has_no_additional_params` |
-| Resolver detection | `endpoint_eval_utils.R` | `uses_chemical_schema()` |
-| Function naming | `chemi_endpoint_eval.R` | fn generation |
+| Schema not loading | `generate_stubs.R` | Filtering logic in generators |
+| Schema version detection | `01_schema_resolution.R` | `detect_schema_version()` |
+| Schema preprocessing | `01_schema_resolution.R` | `preprocess_schema()` |
+| Swagger 2.0 body extraction | `01_schema_resolution.R` | `extract_swagger2_body_schema()` |
+| $ref resolution failing | `01_schema_resolution.R` | `resolve_schema_ref()` |
+| Query params not flattened | `01_schema_resolution.R` | `extract_query_params_with_refs()` |
+| batch_limit wrong | `generate_stubs.R` | batch_limit assignment |
+| Parameter sanitization | `06_param_parsing.R` | `sanitize_param()` |
+| Wrapper selection | `07_stub_generation.R` | GET override logic |
+| wrap logic | `07_stub_generation.R` | `has_no_additional_params` |
+| Resolver detection | `04_openapi_parser.R` | `uses_chemical_schema()` |
+| Function naming | `generate_stubs.R` | fn generation |
 
 ### Tips for Senior Developers
 
@@ -1253,7 +1499,19 @@ flowchart TD
    - `is_body_only`, `is_query_only`, `has_additional_params`
    - `primary_param`, `fn_signature`
 3. **Test schema changes in isolation:** Modify a copy of the OpenAPI JSON to test edge cases
-4. **Review glue templates:** The actual code is generated via glue() - check line 1609+ for templates
+4. **Review glue templates:** The actual code is generated via glue() - check `dev/endpoint_eval/07_stub_generation.R` for templates
+5. **Understand the v1.5-v1.6 architecture evolution:**
+   - **v1.5 (Swagger 2.0 support):** Added version detection, Swagger 2.0 body extraction, fallback reference resolution
+   - **v1.6 (Pipeline unification - UNIFY-CHEMI decision):** Eliminated `parse_chemi_schemas()`, made `generate_chemi_stubs()` call `openapi_to_spec()` directly
+   - **Why unify?** Reduces code duplication, ensures consistent Swagger 2.0 handling, simplifies maintenance
+6. **Schema file selection strategy:**
+   - Extracted `select_schema_files()` as reusable helper (EXTRACT-HELPER decision)
+   - Stage prioritization only for chemi schemas (prod > staging > dev)
+   - CT/CC schemas use simple pattern matching (always prod suffix)
+7. **When adding new schema support:**
+   - Check version with `detect_schema_version()` first
+   - Add Swagger 2.0 test cases if needed
+   - Update fallback chains if using non-standard reference paths
 
 ### Tips for Junior Developers
 
@@ -1262,8 +1520,16 @@ flowchart TD
 3. **Compare working examples:** Find a similar working function and compare its schema vs generated code
 4. **Check one endpoint at a time:**
    ```r
-   # Filter to single endpoint for testing
+   # Load utilities
+   source(file.path("dev", "endpoint_eval", "04_openapi_parser.R"))
+   source(file.path("dev", "endpoint_eval", "07_stub_generation.R"))
+
+   # Parse schema and filter to single endpoint
+   openapi <- jsonlite::fromJSON("schema/chemi-hazard-prod.json", simplifyVector = FALSE)
+   eps <- openapi_to_spec(openapi)
    test_ep <- eps %>% filter(route == "your-specific-route")
+
+   # Generate stub
    stub <- render_endpoint_stubs(test_ep, config = chemi_config)
    cat(stub$text)
    ```
@@ -1271,4 +1537,9 @@ flowchart TD
    - GET with path params? (batch_limit = 1)
    - GET with query params only? (batch_limit = 0)
    - POST with body? (batch_limit = NULL, might need wrap)
-6. **Read the flowcharts:** Start with the main processing flow, then dive into specific areas
+6. **Check schema version when debugging chemi endpoints:**
+   ```r
+   schema_version <- detect_schema_version(openapi)
+   # Swagger 2.0 uses definitions, OpenAPI 3.0 uses components
+   ```
+7. **Read the flowcharts:** Start with the main processing flow, then dive into specific areas

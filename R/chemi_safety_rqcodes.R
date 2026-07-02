@@ -32,11 +32,9 @@ chemi_safety_rqcodes <- function() {
         rq_lbs = as.numeric(stringr::str_remove_all(rq_lbs, '\\(|\\)|\\,')),
         rq_kgs = as.numeric(stringr::str_remove_all(rq_kgs, '\\(|\\)|\\,'))
       )
-  }else{
-
-		result <- NULL
-
-	}
+  } else {
+    result <- NULL
+  }
 
   return(result)
 }

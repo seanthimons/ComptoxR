@@ -4,7 +4,10 @@
 \alias{chemi_amos_record_counts}
 \title{Returns a dictionary containing the counts of record types that are present in the database for each supplied DTXSID.}
 \usage{
-chemi_amos_record_counts()
+chemi_amos_record_counts(dtxsids = NULL)
+}
+\arguments{
+\item{dtxsids}{List of DTXSIDs to search for.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_record_counts()
+chemi_amos_record_counts(dtxsids = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

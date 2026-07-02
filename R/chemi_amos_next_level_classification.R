@@ -3,17 +3,29 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param kingdom Kingdom-level (highest) classification of a substance.  Always required.
+#' @param klass Class-level (third-highest) classification of a substance.  Required if requesting a list of subclasses.
+#' @param superklass Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_next_level_classification()
+#' chemi_amos_next_level_classification(kingdom = "DTXSID1024122")
 #' }
-chemi_amos_next_level_classification <- function() {
+chemi_amos_next_level_classification <- function(kingdom = NULL, klass = NULL, superklass = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(klass)) {
+    options$klass <- klass
+  }
+  if (!is.null(superklass)) {
+    options$superklass <- superklass
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = kingdom,
     endpoint = "amos/next_level_classification/",
+    options = options,
     tidy = FALSE
   )
 
@@ -21,5 +33,3 @@ chemi_amos_next_level_classification <- function() {
 
   return(result)
 }
-
-

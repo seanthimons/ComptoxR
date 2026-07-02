@@ -5,7 +5,7 @@
 \title{Resolver Classyfire}
 \usage{
 chemi_resolver_classyfire(
-  query,
+  query = NULL,
   idType = "AnyId",
   fuzzy = "Not",
   kingdom = NULL,
@@ -17,11 +17,12 @@ chemi_resolver_classyfire(
   alternativeParent = NULL,
   substituent = NULL,
   page = 0,
-  size = 1000
+  size = 1000,
+  all_pages = TRUE
 )
 }
 \arguments{
-\item{query}{Required parameter}
+\item{query}{Optional parameter}
 
 \item{idType}{Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
 
@@ -46,6 +47,8 @@ chemi_resolver_classyfire(
 \item{page}{Optional parameter (default: 0)}
 
 \item{size}{Optional parameter (default: 1000)}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a list with result object

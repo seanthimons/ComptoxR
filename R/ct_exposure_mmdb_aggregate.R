@@ -3,8 +3,8 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param dtxsid DSSTox Substance Identifier
-#' @return Returns a tibble with results
+#' @param dtxsid DSSTox Substance Identifier. Type: string
+#' @return Returns a scalar value
 #' @export
 #'
 #' @examples
@@ -12,11 +12,14 @@
 #' ct_exposure_mmdb_aggregate(dtxsid = "DTXSID7020182")
 #' }
 ct_exposure_mmdb_aggregate <- function(dtxsid) {
-  generic_request(
+  result <- generic_request(
     query = dtxsid,
     endpoint = "exposure/mmdb/aggregate/by-dtxsid/",
     method = "GET",
     batch_limit = 1
   )
-}
 
+  # Additional post-processing can be added here
+
+  return(result)
+}

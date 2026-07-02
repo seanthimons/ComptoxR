@@ -12,7 +12,6 @@
 #' }
 chemi_stdizer_workflows <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "stdizer/workflows",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_stdizer_workflows <- function() {
 
   return(result)
 }
-
-

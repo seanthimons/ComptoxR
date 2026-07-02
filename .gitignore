@@ -54,6 +54,11 @@ temp.R
 
 *.xlsx
 *.csv
+!inst/extdata/ecotox/lifestage_patch_seed.csv
+!dev/lifestage/source/*.csv
+!dev/lifestage/provenance/*.csv
+!dev/lifestage/curation/*.csv
+*.duckdb
 
 /roadmap/
 
@@ -63,4 +68,13 @@ temp.R
 .*
 !.github
 !.gitignore
+!.pre-commit-config.yaml
 
+# Log files from package_sitrep
+*.log
+
+# Temporary schema diff artifacts (CI workflow)
+schema_old/
+
+# Planning docs
+!.planning

@@ -1,10 +1,10 @@
-#' Get Classyfire classificaton for DTXSID
+#' Get Classyfire classification for DTXSID
 #'
-#' This function retrieves Classyfire classificatons for a given DTXSID using the EPA's cheminformatics API.
+#' This function retrieves Classyfire classifications for a given DTXSID using the EPA's cheminformatics API.
 #'
 #' @param query A character vector of DTXSIDs to query.
 #'
-#' @return A list of Classyfire classificatons corresponding to the input DTXSIDs.
+#' @return A list of Classyfire classifications corresponding to the input DTXSIDs.
 #'  Returns NA if the request fails for a given DTXSID.
 #' @export
 #'

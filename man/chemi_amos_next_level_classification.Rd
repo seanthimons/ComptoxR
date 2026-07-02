@@ -4,7 +4,18 @@
 \alias{chemi_amos_next_level_classification}
 \title{Returns a list of categories for the specified level of ClassyFire classification, given the higher levels of classification.}
 \usage{
-chemi_amos_next_level_classification()
+chemi_amos_next_level_classification(
+  kingdom = NULL,
+  klass = NULL,
+  superklass = NULL
+)
+}
+\arguments{
+\item{kingdom}{Kingdom-level (highest) classification of a substance.  Always required.}
+
+\item{klass}{Class-level (third-highest) classification of a substance.  Required if requesting a list of subclasses.}
+
+\item{superklass}{Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +25,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_next_level_classification()
+chemi_amos_next_level_classification(kingdom = "DTXSID1024122")
 }
 }

@@ -12,7 +12,6 @@
 #' }
 chemi_amos_method_list <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "amos/method_list",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_amos_method_list <- function() {
 
   return(result)
 }
-
-

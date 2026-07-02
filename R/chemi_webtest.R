@@ -15,10 +15,13 @@
 chemi_webtest <- function(smiles, headers = FALSE) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(headers)) options[['headers']] <- headers
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  result <- generic_request(
     endpoint = "webtest",
     method = "GET",
     batch_limit = 0,
@@ -34,30 +37,26 @@ chemi_webtest <- function(smiles, headers = FALSE) {
 }
 
 
-
-
 #' Webtest
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param query Character vector of strings to send in request body
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_bulk()
+#' chemi_webtest_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_webtest_bulk <- function() {
-  result <- generic_chemi_request(
-    query = NULL,
+chemi_webtest_bulk <- function(query) {
+  result <- generic_request(
+    query = query,
     endpoint = "webtest",
-    tidy = FALSE
+    method = "POST",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
-
-  # Additional post-processing can be added here
 
   return(result)
 }
-
-

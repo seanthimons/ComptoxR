@@ -4,7 +4,10 @@
 \alias{chemi_amos_substances_for_ids}
 \title{Returns an Excel file containing a deduplicated list of substances that appear in a given set of database record IDs.}
 \usage{
-chemi_amos_substances_for_ids()
+chemi_amos_substances_for_ids(internal_id_list = NULL)
+}
+\arguments{
+\item{internal_id_list}{Array of record IDs.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_ids()
+chemi_amos_substances_for_ids(internal_id_list = "DTXSID1024122")
 }
 }

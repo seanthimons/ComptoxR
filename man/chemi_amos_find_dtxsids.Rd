@@ -4,7 +4,10 @@
 \alias{chemi_amos_find_dtxsids}
 \title{Returns a list of DTXSIDs associated with the specified internal ID, along with additional substance information.}
 \usage{
-chemi_amos_find_dtxsids()
+chemi_amos_find_dtxsids(internal_id)
+}
+\arguments{
+\item{internal_id}{Unique ID of the record of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_find_dtxsids()
+chemi_amos_find_dtxsids(internal_id = "DTXSID7020182")
 }
 }

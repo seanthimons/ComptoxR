@@ -14,7 +14,6 @@
 #' chemi_safety(query = "DTXSID7020182")
 #' }
 chemi_safety <- function(query) {
-  
   # Request standardized via generic_chemi_request
   df_raw <- generic_chemi_request(
     query = query,
@@ -22,8 +21,10 @@ chemi_safety <- function(query) {
     server = 'chemi_burl',
     wrap = FALSE
   )
-  
-  if (nrow(df_raw) == 0) return(invisible(NULL))
+
+  if (nrow(df_raw) == 0) {
+    return(invisible(NULL))
+  }
 
   # Tidy up headers early using vectorized logic
   headers <- df_raw %>%
@@ -42,7 +43,7 @@ chemi_safety <- function(query) {
   if ("NFPA" %in% colnames(flags_long)) {
     # Static mapping for NFPA codes to bins
     nfpa_bin_map <- c("1" = "L", "2" = "M", "3" = "H", "4" = "VH", "0" = "I")
-    
+
     nfpa <- flags_long %>%
       dplyr::select(dtxsid, NFPA) %>%
       tidyr::unnest(NFPA) %>%
@@ -78,7 +79,7 @@ chemi_safety <- function(query) {
   ghs_codes <- NULL
   if ("GHS Codes" %in% colnames(flags_long)) {
     ghs_tbl <- ghs_create_tbl() # Uses session cache internally
-    
+
     ghs_codes <- flags_long %>%
       dplyr::select(dtxsid, `GHS Codes`) %>%
       tidyr::unnest_longer(`GHS Codes`) %>%
@@ -94,19 +95,31 @@ chemi_safety <- function(query) {
       # Grouping endpoints into logical classes
       class = dplyr::case_when(
         hazard_class %in% c("stability_bin", "Desensitized explosives", "Explosives") ~ "Explosives",
-        hazard_class %in% c(
-          "fire_bin", "Flammable gases", "Flammable liquids", "Flammable solids", 
-          "Pyrophoric solids", "Pyrophoric liquids", "Substances and mixtures which in contact with water, emit flammable gases",
-          "Self-heating substances and mixtures"
-        ) ~ "Flammable",
-        hazard_class %in% c(
-          "Oxidizing gases", "Oxidizing liquids; Oxidizing solids", "Self-reactive substances and mixtures; Organic peroxides"
-        ) ~ "Oxidizers/ Self-Rxn",
+        hazard_class %in%
+          c(
+            "fire_bin",
+            "Flammable gases",
+            "Flammable liquids",
+            "Flammable solids",
+            "Pyrophoric solids",
+            "Pyrophoric liquids",
+            "Substances and mixtures which in contact with water, emit flammable gases",
+            "Self-heating substances and mixtures"
+          ) ~ "Flammable",
+        hazard_class %in%
+          c(
+            "Oxidizing gases",
+            "Oxidizing liquids; Oxidizing solids",
+            "Self-reactive substances and mixtures; Organic peroxides"
+          ) ~ "Oxidizers/ Self-Rxn",
         hazard_class %in% c("Gases under pressure", "Chemicals under pressure", "Aerosols") ~ "Pressurized chemicals",
-        hazard_class %in% c(
-          "Corrosive to Metals", "Skin corrosion/irritation and serious eye damage/eye irritation", 
-          "Skin corrosion/irritation", "Serious eye damage/eye irritation"
-        ) ~ "Corrosive",
+        hazard_class %in%
+          c(
+            "Corrosive to Metals",
+            "Skin corrosion/irritation and serious eye damage/eye irritation",
+            "Skin corrosion/irritation",
+            "Serious eye damage/eye irritation"
+          ) ~ "Corrosive",
         hazard_class == "Hazardous to the ozone layer" ~ "Ozone-depleting",
         .default = hazard_class
       ),
@@ -143,8 +156,10 @@ ghs_create_tbl <- function() {
 
   url <- "https://pubchem.ncbi.nlm.nih.gov/ghs/ghscode_10.txt"
   lines <- tryCatch(readLines(url, warn = FALSE), error = function(e) return(NULL))
-  
-  if (is.null(lines)) return(tibble::tibble())
+
+  if (is.null(lines)) {
+    return(tibble::tibble())
+  }
 
   split_lines <- purrr::map(strsplit(lines, "\t"), ~ .x[-8])
   # Header is actually H-Code, Statement, Class, Category, UN, Pictogram, Signal
@@ -157,9 +172,63 @@ ghs_create_tbl <- function() {
     dplyr::filter(stringr::str_detect(`H-Code`, pattern = "H")) %>%
     dplyr::mutate(
       bin = dplyr::case_when(
-        `H-Code` %in% c("H222", "H229", "H304", "H282", "H314", "H318", "H315+H320", "H220", "H221", "H230", "H231", "H232", "H224", "H225", "H228", "H270", "H271", "H272", "H250", "H251") ~ "VH",
-        `H-Code` %in% c("H240", "H241", "H242", "H260", "H261", "H200", "H201", "H202", "H203", "H205", "H209", "H210", "H211", "H206", "H207") ~ "VH",
-        `H-Code` %in% c("H223", "H305", "H283", "H284", "H290", "H204", "H208", "H226", "H227", "H280", "H281", "H420", "H252") ~ "H",
+        `H-Code` %in%
+          c(
+            "H222",
+            "H229",
+            "H304",
+            "H282",
+            "H314",
+            "H318",
+            "H315+H320",
+            "H220",
+            "H221",
+            "H230",
+            "H231",
+            "H232",
+            "H224",
+            "H225",
+            "H228",
+            "H270",
+            "H271",
+            "H272",
+            "H250",
+            "H251"
+          ) ~ "VH",
+        `H-Code` %in%
+          c(
+            "H240",
+            "H241",
+            "H242",
+            "H260",
+            "H261",
+            "H200",
+            "H201",
+            "H202",
+            "H203",
+            "H205",
+            "H209",
+            "H210",
+            "H211",
+            "H206",
+            "H207"
+          ) ~ "VH",
+        `H-Code` %in%
+          c(
+            "H223",
+            "H305",
+            "H283",
+            "H284",
+            "H290",
+            "H204",
+            "H208",
+            "H226",
+            "H227",
+            "H280",
+            "H281",
+            "H420",
+            "H252"
+          ) ~ "H",
         `H-Code` %in% c("H315", "H319") ~ "M",
         `H-Code` %in% c("H316", "H320") ~ "L",
         `H-Code` == "-" ~ "I",
@@ -172,6 +241,6 @@ ghs_create_tbl <- function() {
 
   # Cache the result for the remainder of the session
   .ComptoxREnv$ghs_table <- res
-  
+
   return(res)
 }

@@ -4,7 +4,29 @@
 \alias{chemi_amos_mass_spectrum_similarity}
 \title{Takes a mass range, methodology, and mass spectrum, and returns all spectra that match the mass and methodology, with entropy similarities between the database spectra and the user-supplied one.}
 \usage{
-chemi_amos_mass_spectrum_similarity()
+chemi_amos_mass_spectrum_similarity(
+  lower_mass_limit = NULL,
+  methodology = NULL,
+  spectrum = NULL,
+  type = NULL,
+  upper_mass_limit = NULL,
+  window = NULL
+)
+}
+\arguments{
+\item{lower_mass_limit}{Lower limit of the mass range to search for.}
+
+\item{methodology}{Analytical methodology to search for.  Values aside from "GC/MS" and "LC/MS" are highly unlikely to produce results.}
+
+\item{spectrum}{Array of two-element numeric arrays. The two-element arrays
+represent a single peak in the spectrum, in the format \verb{m/z, intensity}.
+Peaks should be sorted in ascending order of m/z values.}
+
+\item{type}{Type of mass window to use for entropy similarity calculations.  Can be either "da" or "ppm".}
+
+\item{upper_mass_limit}{Upper limit of the mass range to search for.}
+
+\item{window}{Size of mass window.  Is in units of \code{type}.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +36,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectrum_similarity()
+chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID1024122")
 }
 }

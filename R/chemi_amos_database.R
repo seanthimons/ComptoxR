@@ -12,7 +12,6 @@
 #' }
 chemi_amos_database <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "amos/database_summary/",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_amos_database <- function() {
 
   return(result)
 }
-
-

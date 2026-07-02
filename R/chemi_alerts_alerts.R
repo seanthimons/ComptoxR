@@ -12,7 +12,6 @@
 #' }
 chemi_alerts_alerts <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "alerts/alerts",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_alerts_alerts <- function() {
 
   return(result)
 }
-
-

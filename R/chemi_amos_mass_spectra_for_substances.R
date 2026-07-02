@@ -3,17 +3,19 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param dtxsids List of DTXSIDs to search for.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_mass_spectra_for_substances()
+#' chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID1024122")
 #' }
-chemi_amos_mass_spectra_for_substances <- function() {
+chemi_amos_mass_spectra_for_substances <- function(dtxsids = NULL) {
   result <- generic_chemi_request(
-    query = NULL,
+    query = dtxsids,
     endpoint = "amos/mass_spectra_for_substances/",
+    wrap = FALSE,
     tidy = FALSE
   )
 
@@ -21,5 +23,3 @@ chemi_amos_mass_spectra_for_substances <- function() {
 
   return(result)
 }
-
-

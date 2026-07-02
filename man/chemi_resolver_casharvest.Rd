@@ -4,10 +4,10 @@
 \alias{chemi_resolver_casharvest}
 \title{Resolver Casharvest}
 \usage{
-chemi_resolver_casharvest(request.filesInfo)
+chemi_resolver_casharvest(request.filesInfo = NULL)
 }
 \arguments{
-\item{request.filesInfo}{Required parameter}
+\item{request.filesInfo}{Optional parameter}
 }
 \value{
 Returns a list with result object

@@ -52,7 +52,6 @@ ct_classify <- function(df) {
 #' @return A function that takes a dataframe and classifies its compounds.
 #' @noRd
 create_compound_classifier <- function() {
-
   # --- ONE-TIME EXPENSIVE SETUP ---
   # All regex patterns and helper functions are defined here, once.
 
@@ -74,27 +73,79 @@ create_compound_classifier <- function() {
   num_pattern <- "(?:[1-9]\\d*)?"
   organic_element_group_pattern <- paste0("(?:", organic_element_pattern, num_pattern, ")+")
   organic_element_parentheses_group_pattern <- paste0("\\(", organic_element_group_pattern, "\\)", num_pattern)
-  organic_element_square_bracket_group_pattern <- paste0("\\[(?:", organic_element_group_pattern, "|", organic_element_parentheses_group_pattern, ")+\\]", num_pattern)
-  organic_final_regex <- paste0("^(", organic_element_square_bracket_group_pattern, "|", organic_element_parentheses_group_pattern, "|", organic_element_group_pattern, ")+$")
+  organic_element_square_bracket_group_pattern <- paste0(
+    "\\[(?:",
+    organic_element_group_pattern,
+    "|",
+    organic_element_parentheses_group_pattern,
+    ")+\\]",
+    num_pattern
+  )
+  organic_final_regex <- paste0(
+    "^(",
+    organic_element_square_bracket_group_pattern,
+    "|",
+    organic_element_parentheses_group_pattern,
+    "|",
+    organic_element_group_pattern,
+    ")+$"
+  )
   inorganic_element_group_pattern <- paste0("(?:", inorganic_element_pattern, num_pattern, ")+")
   inorganic_element_parentheses_group_pattern <- paste0("\\(", inorganic_element_group_pattern, "\\)", num_pattern)
-  inorganic_element_square_bracket_group_pattern <- paste0("\\[(?:", inorganic_element_group_pattern, "|", inorganic_element_parentheses_group_pattern, ")+\\]", num_pattern)
-  inorganic_final_regex <- paste0("^(", inorganic_element_square_bracket_group_pattern, "|", inorganic_element_parentheses_group_pattern, "|", inorganic_element_group_pattern, ")+$")
-  isotope_regex_pattern <- paste0("(^\\d+[A-Z][a-z]?)|", "(^\\[\\d+[A-Z][a-z]?\\](?:[1-9]\\d*)?$)|", "((?<![A-Za-z])D(?![a-z]))|", "((?<![A-Za-z])T(?![a-z]))")
+  inorganic_element_square_bracket_group_pattern <- paste0(
+    "\\[(?:",
+    inorganic_element_group_pattern,
+    "|",
+    inorganic_element_parentheses_group_pattern,
+    ")+\\]",
+    num_pattern
+  )
+  inorganic_final_regex <- paste0(
+    "^(",
+    inorganic_element_square_bracket_group_pattern,
+    "|",
+    inorganic_element_parentheses_group_pattern,
+    "|",
+    inorganic_element_group_pattern,
+    ")+$"
+  )
+  isotope_regex_pattern <- paste0(
+    "(^\\d+[A-Z][a-z]?)|",
+    "(^\\[\\d+[A-Z][a-z]?\\](?:[1-9]\\d*)?$)|",
+    "((?<![A-Za-z])D(?![a-z]))|",
+    "((?<![A-Za-z])T(?![a-z]))"
+  )
 
   # --- SMILES Classification Helper Functions ---
   # These are also static and can be pre-defined
   smiles_is_likely_organic_refined <- function(s) {
-    if (is.na(s) || s == "") return(FALSE)
+    if (is.na(s) || s == "") {
+      return(FALSE)
+    }
     s_parts <- stringr::str_split(s, "\\.")[[1]]
     is_complex_organic_found <- FALSE
     for (part in s_parts) {
-      if (stringr::str_detect(part, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]+[0-9]*\\]$") && !stringr::str_detect(part, "C")) next
-      if (part %in% c("O=C=O", "C", "[C]", "[CH4]", "C#N", "N#C", "[C-]#N", "N#[C+]", "[C-]#[C-]")) next
-      if (stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") || stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") || (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\["))) next
-      if (stringr::str_detect(part, "^\\[C[H0-4]?[0-9]*[+\\-]*[0-9]*\\]$")) next
+      if (stringr::str_detect(part, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]+[0-9]*\\]$") && !stringr::str_detect(part, "C")) {
+        next
+      }
+      if (part %in% c("O=C=O", "C", "[C]", "[CH4]", "C#N", "N#C", "[C-]#N", "N#[C+]", "[C-]#[C-]")) {
+        next
+      }
+      if (
+        stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") ||
+          stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") ||
+          (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\["))
+      ) {
+        next
+      }
+      if (stringr::str_detect(part, "^\\[C[H0-4]?[0-9]*[+\\-]*[0-9]*\\]$")) {
+        next
+      }
       organic_bond_pattern <- "CC|C=C|C#C|C\\(|C[1-9]|C@|C[NOSPSiBFClBrI]|[NOSPSiBFClBrI]C"
-      if (stringr::str_detect(part, "c") || (stringr::str_detect(part, "C") && stringr::str_detect(part, organic_bond_pattern))) {
+      if (
+        stringr::str_detect(part, "c") ||
+          (stringr::str_detect(part, "C") && stringr::str_detect(part, organic_bond_pattern))
+      ) {
         is_complex_organic_found <- TRUE
         break
       }
@@ -103,14 +154,27 @@ create_compound_classifier <- function() {
   }
 
   smiles_is_likely_inorganic <- function(s) {
-    if (is.na(s) || s == "") return(FALSE)
-    if (stringr::str_detect(s, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") || stringr::str_detect(s, "^[A-Z][a-z]?[=]?([A-Z][a-z]?)$")) return(TRUE)
-    if (stringr::str_detect(s, "c")) return(FALSE)
+    if (is.na(s) || s == "") {
+      return(FALSE)
+    }
+    if (
+      stringr::str_detect(s, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") ||
+        stringr::str_detect(s, "^[A-Z][a-z]?[=]?([A-Z][a-z]?)$")
+    ) {
+      return(TRUE)
+    }
+    if (stringr::str_detect(s, "c")) {
+      return(FALSE)
+    }
     s_parts <- stringr::str_split(s, "\\.")[[1]]
     all_parts_inorganic_or_simple_C <- TRUE
     for (part in s_parts) {
       if (stringr::str_detect(part, "C")) {
-        is_simple_inorg_C_part <- part %in% c("O=C=O", "C", "[C]", "[CH4]", "C#N", "N#C", "[C-]#N", "N#[C+]", "[C-]#[C-]") || stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") || stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") || (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\["))
+        is_simple_inorg_C_part <- part %in%
+          c("O=C=O", "C", "[C]", "[CH4]", "C#N", "N#C", "[C-]#N", "N#[C+]", "[C-]#[C-]") ||
+          stringr::str_detect(part, "^\\[O-\\]C\\(\\[O-\\]\\)=\\[O\\]$") ||
+          stringr::str_detect(part, "^C\\(\\[O-\\]\\)\\(\\[O-\\]\\)=\\[O\\]$") ||
+          (stringr::str_detect(part, "CO3") && stringr::str_detect(part, "\\["))
         if (!is_simple_inorg_C_part) {
           all_parts_inorganic_or_simple_C <- FALSE
           break
@@ -130,14 +194,18 @@ create_compound_classifier <- function() {
           isTRUE(isMarkush) ~ "MARKUSH",
           isTRUE(isotope == 1L) | (is.na(isotope) & isTRUE(is_isotope_formula)) ~ "ISOTOPE",
           molFormula %in% c("C", "CO", "CO2", "CH4") ~ 'INORG_FORMULA',
-          (stringr::str_detect(molFormula, "CO3") | stringr::str_detect(molFormula, "HCO3")) & stringr::str_detect(molFormula, metal_pattern_string) ~ 'INORG_FORMULA',
+          (stringr::str_detect(molFormula, "CO3") | stringr::str_detect(molFormula, "HCO3")) &
+            stringr::str_detect(molFormula, metal_pattern_string) ~ 'INORG_FORMULA',
           stringr::str_detect(molFormula, "C2(Ca|Mg|Na2|K2)") ~ 'INORG_FORMULA',
           stringr::str_detect(molFormula, "CN(Na|K|Ag|Pb|Hg)?") ~ 'INORG_FORMULA',
           stringr::str_detect(molFormula, "SCN(Na|K|Ag|Pb|Hg)?") ~ 'INORG_FORMULA',
           molFormula %in% c("CCl4", "CF4", "CBr4", "CI4", "CS2") ~ 'INORG_FORMULA',
-          (stringr::str_detect(molFormula, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") | stringr::str_detect(molFormula, "^[A-Z][a-z]?[0-9]*$")) & stringr::str_detect(molFormula, inorganic_element_pattern) ~ 'INORG_FORMULA',
+          (stringr::str_detect(molFormula, "^\\[[A-Za-z]{1,2}[0-9]*[+\\-]*[0-9]*\\]$") |
+            stringr::str_detect(molFormula, "^[A-Z][a-z]?[0-9]*$")) &
+            stringr::str_detect(molFormula, inorganic_element_pattern) ~ 'INORG_FORMULA',
           stringr::str_detect(molFormula, "C") & stringr::str_detect(molFormula, "H") ~ 'ORG_FORMULA',
-          !stringr::str_detect(molFormula, "C") & stringr::str_detect(molFormula, inorganic_final_regex) ~ 'INORG_FORMULA',
+          !stringr::str_detect(molFormula, "C") &
+            stringr::str_detect(molFormula, inorganic_final_regex) ~ 'INORG_FORMULA',
           stringr::str_detect(molFormula, "C") ~ 'UNKNOWN_FORMULA',
           .default = 'UNKNOWN_FORMULA'
         ),

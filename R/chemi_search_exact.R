@@ -16,11 +16,16 @@
 chemi_search_exact <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(exportSmiles)) options[['exportSmiles']] <- exportSmiles
-  if (!is.null(exportMol)) options[['exportMol']] <- exportMol
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(exportSmiles)) {
+    options[['exportSmiles']] <- exportSmiles
+  }
+  if (!is.null(exportMol)) {
+    options[['exportMol']] <- exportMol
+  }
+  result <- generic_request(
     endpoint = "search/exact",
     method = "GET",
     batch_limit = 0,
@@ -34,5 +39,3 @@ chemi_search_exact <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
 
   return(result)
 }
-
-

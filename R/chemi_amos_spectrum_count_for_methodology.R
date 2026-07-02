@@ -3,17 +3,25 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param dtxsid DTXSID for the substance of interest.
+#' @param spectrum_type Analytical methodology to search for.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_spectrum_count_for_methodology()
+#' chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID1024122")
 #' }
-chemi_amos_spectrum_count_for_methodology <- function() {
+chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_type = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(spectrum_type)) {
+    options$spectrum_type <- spectrum_type
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = dtxsid,
     endpoint = "amos/spectrum_count_for_methodology/",
+    options = options,
     tidy = FALSE
   )
 
@@ -21,5 +29,3 @@ chemi_amos_spectrum_count_for_methodology <- function() {
 
   return(result)
 }
-
-

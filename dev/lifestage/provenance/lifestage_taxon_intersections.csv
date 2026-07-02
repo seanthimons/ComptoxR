@@ -1,0 +1,1005 @@
+"org_lifestage","eco_group","kingdom","class_name","route_family","compound_count","species_count","citation_count","test_count","taxon_signal_score","total_taxon_signal","taxon_signal_share","dominant_route","source_match_status","source_ontology","source_term_id","source_term_label","candidate_score"
+"Adult","Insects/Spiders","Animalia","Insecta","invertebrate",967,870,1480,16953,6731,36685,0.183480986779338,TRUE,"resolved","S11","S1116","adult",100
+"Adult","Fish","Animalia","Actinopterygii","aquatic",813,239,1663,8950,6004,36685,0.163663622734087,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Mammals","Animalia","Mammalia","vertebrate",494,67,901,5478,3351,36685,0.0913452364726728,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Crustaceans","Animalia","Malacostraca","aquatic",528,215,594,4335,2987,36685,0.0814229249011858,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Bees","Animalia","Insecta","invertebrate",639,34,270,4245,2491,36685,0.0679024124301486,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Molluscs","Animalia","Gastropoda","aquatic",419,108,299,2604,1963,36685,0.0535096088319477,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Clitellata","invertebrate",397,37,361,2422,1950,36685,0.0531552405615374,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Insects/Spiders","Animalia","Arachnida","invertebrate",420,120,231,2074,1842,36685,0.05021125800736,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Crustaceans","Animalia","Branchiopoda","aquatic",336,45,240,1506,1533,36685,0.0417881968106856,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Birds","Animalia","Aves","vertebrate",269,77,284,1391,1452,36685,0.0395802098950525,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Molluscs","Animalia","Bivalvia","aquatic",251,84,226,1549,1289,36685,0.0351369769660624,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Crustaceans","Animalia","Maxillopoda","aquatic",263,97,193,1695,1272,36685,0.0346735723047567,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Amphibians","Animalia","Amphibia","amphibian",117,49,120,517,640,36685,0.0174458225432738,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Oligochaeta","invertebrate",120,33,107,679,607,36685,0.0165462723183863,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Secernentea","invertebrate",98,18,54,690,420,36685,0.0114488210440234,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Entognatha","invertebrate",58,20,57,299,308,36685,0.00839580209895052,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Reptiles","Animalia","Reptilia","vertebrate",47,18,28,84,215,36685,0.00586070601063105,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Errantia","invertebrate",38,10,30,182,184,36685,0.00501567398119122,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Hydrozoa","invertebrate",34,5,17,66,141,36685,0.00384353277906501,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Turbellaria","invertebrate",34,8,10,115,130,36685,0.00354368270410249,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Echinoidea","invertebrate",26,13,19,86,129,36685,0.00351642360637863,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Monogononta","invertebrate",32,7,13,90,129,36685,0.00351642360637863,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Crustaceans","Animalia","Ostracoda","aquatic",25,10,14,138,113,36685,0.00308027804279678,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Trematoda","invertebrate",21,12,11,49,97,36685,0.00264413247921494,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Unknown","invertebrate",16,9,12,42,81,36685,0.00220798691563309,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Asteroidea","invertebrate",14,5,5,32,57,36685,0.00155376857026032,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Algae","Chromista","Phaeophyceae","algae",14,4,4,41,54,36685,0.00147199127708873,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",8,9,9,21,51,36685,0.00139021398391713,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Adenophorea","invertebrate",10,9,6,39,51,36685,0.00139021398391713,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",7,3,5,23,34,36685,0.000926809322611422,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Diplopoda","invertebrate",6,7,4,15,33,36685,0.000899550224887556,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",6,5,4,24,31,36685,0.000845032029439826,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Anthozoa","invertebrate",7,3,3,7,30,36685,0.00081777293171596,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Sedentaria","invertebrate",8,1,2,46,29,36685,0.000790513833992095,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Fish","Animalia","Cephalaspidomorphi","aquatic",4,1,5,36,23,36685,0.000626959247648903,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Fish","Animalia","Chondrichthyes","aquatic",4,3,4,63,23,36685,0.000626959247648903,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Chilopoda","invertebrate",5,1,2,7,20,36685,0.000545181954477307,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Granuloreticulosea","invertebrate",4,3,2,18,19,36685,0.000517922856753441,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Crinoidea","invertebrate",5,1,1,5,18,36685,0.000490663759029576,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Unknown","invertebrate",4,1,2,5,17,36685,0.000463404661305711,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Gymnolaemata","invertebrate",2,6,2,40,16,36685,0.000436145563581845,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Bdelloidea","invertebrate",3,2,2,50,15,36685,0.00040888646585798,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Holothuroidea","invertebrate",3,2,2,4,15,36685,0.00040888646585798,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Fish","Animalia","Unknown","aquatic",3,1,2,13,14,36685,0.000381627368134115,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Algae","Plantae","Chlorophyceae","algae",2,2,2,4,12,36685,0.000327109172686384,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Ascidiacea","invertebrate",2,1,1,12,9,36685,0.000245331879514788,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Symphyla","invertebrate",2,1,1,6,9,36685,0.000245331879514788,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Sagittoidea","invertebrate",2,1,1,10,9,36685,0.000245331879514788,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Moss/Hornworts","Plantae","Bryopsida","plant",1,2,1,2,7,36685,0.000190813684067057,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Algae","Plantae","Rhodophyceae","algae",1,1,1,2,6,36685,0.000163554586343192,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Cephalochordata","invertebrate",1,1,1,1,6,36685,0.000163554586343192,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Invertebrates","Animalia","Pauropoda","invertebrate",1,1,1,1,6,36685,0.000163554586343192,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Miscellaneous","Community","Unknown","unknown",1,1,1,1,6,36685,0.000163554586343192,FALSE,"resolved","S11","S1116","adult",100
+"Adult","Worms","Animalia","Anopla","invertebrate",1,1,1,1,6,36685,0.000163554586343192,FALSE,"resolved","S11","S1116","adult",100
+"Alevin","Fish","Animalia","Actinopterygii","aquatic",87,21,83,530,448,448,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Blastula","Fish","Animalia","Actinopterygii","aquatic",83,7,45,283,346,728,0.475274725274725,TRUE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Blastula","Amphibians","Animalia","Amphibia","amphibian",64,6,24,135,246,728,0.337912087912088,FALSE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Blastula","Invertebrates","Animalia","Echinoidea","invertebrate",20,9,7,48,83,728,0.114010989010989,FALSE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Blastula","Worms","Animalia","Unknown","invertebrate",6,2,2,7,24,728,0.032967032967033,FALSE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Blastula","Mammals","Animalia","Mammalia","vertebrate",3,2,3,11,17,728,0.0233516483516484,FALSE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Blastula","Molluscs","Animalia","Bivalvia","aquatic",2,2,2,8,12,728,0.0164835164835165,FALSE,"resolved","UBERON","UBERON:0000307","blastula",100
+"Boot","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",6,5,6,25,35,35,1,TRUE,"resolved","PO","PO:0007013","BO.03 late boot stage",75
+"Bud blast stage","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",2,1,1,4,9,23,0.391304347826087,TRUE,"unresolved",,,,0
+"Bud blast stage","Invertebrates","Animalia","Phylactolaemata","invertebrate",1,3,1,3,8,23,0.347826086956522,FALSE,"unresolved",,,,0
+"Bud blast stage","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,4,6,23,0.260869565217391,FALSE,"unresolved",,,,0
+"Bud or Budding","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",23,19,15,75,118,144,0.819444444444444,TRUE,"resolved","PO","PO:0025528","bud development stage",100
+"Bud or Budding","Invertebrates","Animalia","Hydrozoa","invertebrate",2,1,2,5,11,144,0.0763888888888889,FALSE,"resolved","PO","PO:0025528","bud development stage",100
+"Bud or Budding","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",2,1,1,4,9,144,0.0625,FALSE,"resolved","PO","PO:0025528","bud development stage",100
+"Bud or Budding","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,1,6,144,0.0416666666666667,FALSE,"resolved","PO","PO:0025528","bud development stage",100
+"Cleavage stage","Amphibians","Animalia","Amphibia","amphibian",9,4,4,58,39,76,0.513157894736842,TRUE,"resolved","UBERON","UBERON:0000107","cleavage stage",100
+"Cleavage stage","Invertebrates","Animalia","Echinoidea","invertebrate",5,2,2,9,21,76,0.276315789473684,FALSE,"resolved","UBERON","UBERON:0000107","cleavage stage",100
+"Cleavage stage","Fish","Animalia","Actinopterygii","aquatic",2,2,4,22,16,76,0.210526315789474,FALSE,"resolved","UBERON","UBERON:0000107","cleavage stage",100
+"Cocoon","Insects/Spiders","Animalia","Insecta","invertebrate",29,9,8,161,112,178,0.629213483146067,TRUE,"resolved","UBERON","UBERON:0013198","cocoon",100
+"Cocoon","Worms","Animalia","Clitellata","invertebrate",7,5,6,9,38,178,0.213483146067416,FALSE,"resolved","UBERON","UBERON:0013198","cocoon",100
+"Cocoon","Worms","Animalia","Oligochaeta","invertebrate",2,3,2,8,13,178,0.0730337078651685,FALSE,"resolved","UBERON","UBERON:0013198","cocoon",100
+"Cocoon","Bees","Animalia","Insecta","invertebrate",2,1,1,6,9,178,0.050561797752809,FALSE,"resolved","UBERON","UBERON:0013198","cocoon",100
+"Cocoon","Insects/Spiders","Animalia","Arachnida","invertebrate",1,1,1,1,6,178,0.0337078651685393,FALSE,"resolved","UBERON","UBERON:0013198","cocoon",100
+"Copepodid","Crustaceans","Animalia","Maxillopoda","aquatic",38,16,16,65,162,162,1,TRUE,"resolved","UBERON","UBERON:0014858","crustacean post-larval stage",100
+"Copepodite","Crustaceans","Animalia","Maxillopoda","aquatic",26,17,18,101,131,131,1,TRUE,"resolved","S11","S115","copepodite",100
+"Corm","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",5,3,3,12,24,24,1,TRUE,"resolved","PO","PO:0025355","corm",100
+"Cyst","Crustaceans","Animalia","Branchiopoda","aquatic",64,12,26,210,256,667,0.383808095952024,TRUE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Monogononta","invertebrate",35,2,9,72,125,667,0.187406296851574,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Lobosa","invertebrate",28,4,4,78,96,667,0.143928035982009,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Ciliatea","invertebrate",11,3,3,18,42,667,0.0629685157421289,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Worms","Animalia","Secernentea","invertebrate",7,4,5,18,35,667,0.0524737631184408,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Worms","Animalia","Trematoda","invertebrate",6,2,2,15,24,667,0.0359820089955022,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Demospongiae","invertebrate",5,1,1,5,18,667,0.0269865067466267,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Phylactolaemata","invertebrate",5,1,1,5,18,667,0.0269865067466267,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Crustaceans","Animalia","Ostracoda","aquatic",3,1,1,3,12,667,0.0179910044977511,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Worms","Animalia","Cestoda","invertebrate",2,1,2,2,11,667,0.0164917541229385,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Algae","Plantae","Chlorodendrophyceae","algae",2,1,1,31,9,667,0.0134932533733133,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Prostomatea","invertebrate",2,1,1,8,9,667,0.0134932533733133,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,1,6,667,0.00899550224887556,FALSE,"resolved","S11","S1121","cyst",100
+"Cyst","Invertebrates","Animalia","Conoidasida","invertebrate",1,1,1,3,6,667,0.00899550224887556,FALSE,"resolved","S11","S1121","cyst",100
+"Egg","Fish","Animalia","Actinopterygii","aquatic",651,123,638,5556,3352,11432,0.293212036389083,TRUE,"resolved","S11","S1122","egg",100
+"Egg","Insects/Spiders","Animalia","Insecta","invertebrate",429,272,397,2894,2353,11432,0.205825752274318,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Birds","Animalia","Aves","vertebrate",181,44,171,1150,929,11432,0.0812631210636809,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Molluscs","Animalia","Gastropoda","aquatic",161,33,63,595,642,11432,0.0561581525542337,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Echinoidea","invertebrate",150,22,74,448,620,11432,0.0542337298810357,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Amphibians","Animalia","Amphibia","amphibian",124,45,79,716,575,11432,0.050297410776767,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Molluscs","Animalia","Bivalvia","aquatic",135,18,46,336,515,11432,0.0450489853044087,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Insects/Spiders","Animalia","Arachnida","invertebrate",118,35,56,434,501,11432,0.0438243526941917,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Secernentea","invertebrate",98,23,54,381,425,11432,0.0371763470958712,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Crustaceans","Animalia","Branchiopoda","aquatic",83,10,27,146,313,11432,0.0273792862141358,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Crustaceans","Animalia","Maxillopoda","aquatic",72,16,22,129,276,11432,0.0241427571728481,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Crustaceans","Animalia","Malacostraca","aquatic",42,21,30,158,207,11432,0.0181070678796361,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Reptiles","Animalia","Reptilia","vertebrate",31,14,30,255,167,11432,0.0146081175647306,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Trematoda","invertebrate",31,17,20,117,150,11432,0.0131210636808957,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Bees","Animalia","Insecta","invertebrate",18,4,10,36,78,11432,0.00682295311406578,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Unknown","invertebrate",20,4,5,40,74,11432,0.00647305808257523,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Entognatha","invertebrate",12,3,5,17,49,11432,0.00428621413575927,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Ascidiacea","invertebrate",9,2,2,9,33,11432,0.00288663400979706,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Adenophorea","invertebrate",8,3,3,34,33,11432,0.00288663400979706,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Cestoda","invertebrate",8,2,2,8,30,11432,0.00262421273617915,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Molluscs","Animalia","Cephalopoda","aquatic",5,1,3,14,22,11432,0.00192442267319804,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Fish","Animalia","Unknown","aquatic",4,1,2,4,17,11432,0.00148705388383485,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Algae","Chromista","Phaeophyceae","algae",2,2,2,4,12,11432,0.00104968509447166,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Errantia","invertebrate",3,1,1,3,12,11432,0.00104968509447166,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Monogononta","invertebrate",2,1,2,2,11,11432,0.00096221133659902,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Fish","Animalia","Cephalaspidomorphi","aquatic",2,1,1,2,9,11432,0.000787263820853744,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Cephalochordata","invertebrate",2,1,1,2,9,11432,0.000787263820853744,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Crustaceans","Animalia","Ostracoda","aquatic",1,1,1,1,6,11432,0.000524842547235829,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Invertebrates","Animalia","Ophiuroidea","invertebrate",1,1,1,1,6,11432,0.000524842547235829,FALSE,"resolved","S11","S1122","egg",100
+"Egg","Worms","Animalia","Sedentaria","invertebrate",1,1,1,1,6,11432,0.000524842547235829,FALSE,"resolved","S11","S1122","egg",100
+"Egg laying","Birds","Animalia","Aves","vertebrate",14,4,14,126,74,92,0.804347826086957,TRUE,"resolved","S11","S1122","egg",75
+"Egg laying","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",3,1,1,5,12,92,0.130434782608696,FALSE,"resolved","S11","S1122","egg",75
+"Egg laying","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,5,6,92,0.0652173913043478,FALSE,"resolved","S11","S1122","egg",75
+"Elver","Fish","Animalia","Actinopterygii","aquatic",32,5,7,52,115,127,0.905511811023622,TRUE,"resolved","S11","S1127","juvenile",100
+"Elver","Birds","Animalia","Aves","vertebrate",3,1,1,6,12,127,0.094488188976378,FALSE,"resolved","S11","S1127","juvenile",100
+"Embryo","Fish","Animalia","Actinopterygii","aquatic",1522,116,1229,10774,7140,12927,0.552332327686238,TRUE,"resolved","S11","S1106","embryo",100
+"Embryo","Amphibians","Animalia","Amphibia","amphibian",400,56,250,2722,1756,12927,0.135839715324515,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Molluscs","Animalia","Bivalvia","aquatic",227,30,112,1525,935,12927,0.0723292333874836,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Echinoidea","invertebrate",161,24,102,693,711,12927,0.055001160362033,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Birds","Animalia","Aves","vertebrate",124,10,89,584,560,12927,0.0433201825636265,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Mammals","Animalia","Mammalia","vertebrate",103,6,47,512,409,12927,0.0316392047652201,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Molluscs","Animalia","Gastropoda","aquatic",78,16,31,311,312,12927,0.0241355302854491,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Crustaceans","Animalia","Malacostraca","aquatic",57,17,39,327,266,12927,0.0205770867177226,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Crustaceans","Animalia","Branchiopoda","aquatic",37,8,21,83,161,12927,0.0124545524870426,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",27,15,15,155,126,12927,0.00974704107681597,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Ascidiacea","invertebrate",22,3,12,63,93,12927,0.00719424460431655,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Insects/Spiders","Animalia","Insecta","invertebrate",11,12,8,22,61,12927,0.00471880560068075,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Merostomata","invertebrate",15,4,4,56,57,12927,0.00440937572522627,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Unknown","invertebrate",11,2,5,14,45,12927,0.00348108609886285,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Errantia","invertebrate",8,2,4,17,34,12927,0.00263015394136304,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Molluscs","Animalia","Cephalopoda","aquatic",6,2,4,29,28,12927,0.00216600912818133,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Monogononta","invertebrate",7,2,2,12,27,12927,0.00208865165931771,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Reptiles","Animalia","Reptilia","vertebrate",7,2,2,13,27,12927,0.00208865165931771,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Algae","Chromista","Phaeophyceae","algae",6,2,3,20,26,12927,0.00201129419045409,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Secernentea","invertebrate",6,1,3,6,25,12927,0.00193393672159047,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",4,3,3,6,21,12927,0.00162450684613599,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Anthozoa","invertebrate",3,2,2,6,15,12927,0.00116036203295428,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Cestoda","invertebrate",4,1,1,4,15,12927,0.00116036203295428,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Trematoda","invertebrate",4,1,1,4,15,12927,0.00116036203295428,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Bdelloidea","invertebrate",3,1,1,3,12,12927,0.000928289626363425,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Molluscs","Animalia","Polyplacophora","aquatic",3,1,1,6,12,12927,0.000928289626363425,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Bees","Animalia","Insecta","invertebrate",2,1,1,2,9,12927,0.000696217219772569,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Holothuroidea","invertebrate",2,1,1,2,9,12927,0.000696217219772569,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Invertebrates","Animalia","Demospongiae","invertebrate",1,2,1,11,7,12927,0.000541502282045331,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Worms","Animalia","Clitellata","invertebrate",1,2,1,26,7,12927,0.000541502282045331,FALSE,"resolved","S11","S1106","embryo",100
+"Embryo","Algae","Plantae","Chlorophyceae","algae",1,1,1,18,6,12927,0.000464144813181713,FALSE,"resolved","S11","S1106","embryo",100
+"Exponential growth phase (log)","Algae","Plantae","Chlorophyceae","algae",1261,119,702,6285,5306,12629,0.420144112756354,TRUE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Monera","Cyanophyceae","algae",337,108,234,2123,1587,12629,0.12566315622773,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Ciliatea","invertebrate",313,37,83,1511,1142,12629,0.0904267954707419,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Bacillariophyceae","algae",201,68,135,1036,941,12629,0.0745110460052261,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Coscinodiscophyceae","algae",154,26,93,604,674,12629,0.0533692295510333,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Prymnesiophyceae","algae",105,13,44,316,416,12629,0.0329400585952965,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Dinophyceae","algae",58,20,36,146,266,12629,0.021062633621031,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",52,5,14,88,189,12629,0.0149655554675746,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Chlorodendrophyceae","algae",40,7,27,100,181,12629,0.0143320928022805,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Unknown","algae",41,2,21,62,167,12629,0.0132235331380157,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Euglenophyceae","algae",39,5,18,377,158,12629,0.0125108876395597,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",44,8,8,98,156,12629,0.0123525219732362,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Fragilariophyceae","algae",30,16,21,139,148,12629,0.011719059307942,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Eustigmatophyceae","algae",37,4,9,60,133,12629,0.0105313168105155,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Cryptophyceae","algae",25,12,15,84,117,12629,0.00926439147992715,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Prasinophyceae","algae",29,4,10,98,111,12629,0.00878929448095653,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Chrysophyceae","algae",26,6,8,71,100,12629,0.00791828331617705,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Trebouxiophyceae","algae",19,5,16,53,94,12629,0.00744318631720643,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Zoomastigophora","invertebrate",15,5,7,25,64,12629,0.00506770132235331,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Conjugatophyceae","algae",10,12,9,40,60,12629,0.00475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Monogononta","invertebrate",9,9,4,42,44,12629,0.0034840446591179,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Crustaceans","Animalia","Branchiopoda","aquatic",10,1,4,13,39,12629,0.00308813049330905,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Protista","Perkinsea","invertebrate",9,2,2,12,33,12629,0.00261303349433843,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Rhodophyceae","algae",6,2,6,8,32,12629,0.00253385066117666,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Dothideomycetes","fungi",4,4,3,7,22,12629,0.00174202232955895,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Leotiomycetes","fungi",5,2,2,5,21,12629,0.00166283949639718,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Unknown","fungi",3,2,5,10,21,12629,0.00166283949639718,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Dictyosteliomycetes","invertebrate",4,1,4,9,21,12629,0.00166283949639718,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Unknown","invertebrate",4,3,3,8,21,12629,0.00166283949639718,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Miscellaneous","Community","Unknown","unknown",5,2,2,8,21,12629,0.00166283949639718,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Raphidophyceae","algae",4,1,3,6,19,12629,0.00150447383007364,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fish","Animalia","Actinopterygii","aquatic",3,4,3,4,19,12629,0.00150447383007364,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",4,1,3,12,19,12629,0.00150447383007364,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Sordariomycetes","fungi",3,4,3,11,19,12629,0.00150447383007364,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Chloromonadophyceae","algae",3,1,4,8,18,12629,0.00142529099691187,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Unknown","algae",3,2,3,6,17,12629,0.0013461081637501,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Phaeophyceae","algae",3,2,2,9,15,12629,0.00118774249742656,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Mamiellophyceae","algae",3,2,2,5,15,12629,0.00118774249742656,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Chytridiomycetes","fungi",4,1,1,6,15,12629,0.00118774249742656,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Gastromycetes","fungi",4,1,1,4,15,12629,0.00118774249742656,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Hydrozoa","invertebrate",3,2,2,8,15,12629,0.00118774249742656,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Molluscs","Animalia","Bivalvia","aquatic",3,1,2,6,14,12629,0.00110855966426479,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Phytomastigophora","invertebrate",2,3,2,3,13,12629,0.00102937683110302,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Cyanidiophyceae","algae",3,1,1,3,12,12629,0.000950193997941246,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Ulvophyceae","algae",2,2,2,3,12,12629,0.000950193997941246,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Xanthophyceae","algae",2,2,2,4,12,12629,0.000950193997941246,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Fungi","Fungi","Eurotiomycetes","fungi",1,7,1,14,12,12629,0.000950193997941246,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Bdelloidea","invertebrate",2,1,2,4,11,12629,0.000871011164779476,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Plantae","Charophyceae","algae",2,1,1,14,9,12629,0.000712645498455935,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Worms","Animalia","Secernentea","invertebrate",2,1,1,2,9,12629,0.000712645498455935,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Algae","Chromista","Pelagophyceae","algae",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Crustaceans","Animalia","Unknown","aquatic",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Eumycetozoa","invertebrate",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Heliozoa","invertebrate",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Lobosa","invertebrate",1,1,1,2,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Invertebrates","Animalia","Oligohymenophorea","invertebrate",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Worms","Animalia","Errantia","invertebrate",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Exponential growth phase (log)","Worms","Animalia","Turbellaria","invertebrate",1,1,1,1,6,12629,0.000475096998970623,FALSE,"unresolved",,,,0
+"Eyed egg or stage, eyed embryo","Fish","Animalia","Actinopterygii","aquatic",117,22,99,738,571,620,0.920967741935484,TRUE,"resolved","S11","S1106","embryo",100
+"Eyed egg or stage, eyed embryo","Crustaceans","Animalia","Branchiopoda","aquatic",9,1,1,28,30,620,0.0483870967741935,FALSE,"resolved","S11","S1106","embryo",100
+"Eyed egg or stage, eyed embryo","Worms","Animalia","Trematoda","invertebrate",4,3,2,10,19,620,0.0306451612903226,FALSE,"resolved","S11","S1106","embryo",100
+"F0 generation","Fish","Animalia","Actinopterygii","aquatic",5,4,5,6,29,87,0.333333333333333,TRUE,"unresolved",,,,0
+"F0 generation","Crustaceans","Animalia","Branchiopoda","aquatic",3,2,2,3,15,87,0.172413793103448,FALSE,"unresolved",,,,0
+"F0 generation","Insects/Spiders","Animalia","Insecta","invertebrate",3,3,1,9,14,87,0.160919540229885,FALSE,"unresolved",,,,0
+"F0 generation","Mammals","Animalia","Mammalia","vertebrate",2,1,2,2,11,87,0.126436781609195,FALSE,"unresolved",,,,0
+"F0 generation","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,1,6,87,0.0689655172413793,FALSE,"unresolved",,,,0
+"F0 generation","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,1,6,87,0.0689655172413793,FALSE,"unresolved",,,,0
+"F0 generation","Worms","Animalia","Clitellata","invertebrate",1,1,1,1,6,87,0.0689655172413793,FALSE,"unresolved",,,,0
+"F1 generation","Insects/Spiders","Animalia","Insecta","invertebrate",11,2,2,23,39,133,0.293233082706767,TRUE,"unresolved",,,,0
+"F1 generation","Fish","Animalia","Actinopterygii","aquatic",8,4,5,69,38,133,0.285714285714286,FALSE,"unresolved",,,,0
+"F1 generation","Crustaceans","Animalia","Branchiopoda","aquatic",6,3,6,10,33,133,0.24812030075188,FALSE,"unresolved",,,,0
+"F1 generation","Mammals","Animalia","Mammalia","vertebrate",3,2,3,3,17,133,0.12781954887218,FALSE,"unresolved",,,,0
+"F1 generation","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,3,6,133,0.0451127819548872,FALSE,"unresolved",,,,0
+"F11 generation","Algae","Plantae","Chlorophyceae","algae",2,1,1,2,9,15,0.6,TRUE,"unresolved",,,,0
+"F11 generation","Algae","Chromista","Bacillariophyceae","algae",1,1,1,1,6,15,0.4,FALSE,"unresolved",,,,0
+"F2 generation","Crustaceans","Animalia","Maxillopoda","aquatic",5,4,4,15,27,60,0.45,TRUE,"unresolved",,,,0
+"F2 generation","Crustaceans","Animalia","Malacostraca","aquatic",2,1,1,2,9,60,0.15,FALSE,"unresolved",,,,0
+"F2 generation","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,5,6,60,0.1,FALSE,"unresolved",,,,0
+"F2 generation","Fish","Animalia","Actinopterygii","aquatic",1,1,1,2,6,60,0.1,FALSE,"unresolved",,,,0
+"F2 generation","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,1,6,60,0.1,FALSE,"unresolved",,,,0
+"F2 generation","Molluscs","Animalia","Cephalopoda","aquatic",1,1,1,2,6,60,0.1,FALSE,"unresolved",,,,0
+"F3 generation","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,1,6,12,0.5,FALSE,"unresolved",,,,0
+"F3 generation","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,1,6,12,0.5,TRUE,"unresolved",,,,0
+"F6 generation","Crustaceans","Animalia","Maxillopoda","aquatic",3,1,1,6,12,18,0.666666666666667,TRUE,"unresolved",,,,0
+"F6 generation","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,3,6,18,0.333333333333333,FALSE,"unresolved",,,,0
+"F7 generation","Crustaceans","Animalia","Maxillopoda","aquatic",1,1,1,1,6,12,0.5,TRUE,"unresolved",,,,0
+"F7 generation","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,3,6,12,0.5,FALSE,"unresolved",,,,0
+"Female gametophyte","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",6,3,3,13,27,45,0.6,TRUE,"resolved","PO","PO:0025279","megagametophyte",75
+"Female gametophyte","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",3,1,1,3,12,45,0.266666666666667,FALSE,"resolved","PO","PO:0025279","megagametophyte",75
+"Female gametophyte","Molluscs","Animalia","Bivalvia","aquatic",1,1,1,3,6,45,0.133333333333333,FALSE,"resolved","PO","PO:0025279","megagametophyte",75
+"Fingerling","Fish","Animalia","Actinopterygii","aquatic",1740,133,666,9833,6685,6715,0.995532390171258,TRUE,"resolved","S11","S1127","juvenile",100
+"Fingerling","Molluscs","Animalia","Bivalvia","aquatic",3,2,2,3,15,6715,0.00223380491437081,FALSE,"resolved","S11","S1127","juvenile",100
+"Fingerling","Molluscs","Animalia","Gastropoda","aquatic",2,1,1,4,9,6715,0.00134028294862249,FALSE,"resolved","S11","S1127","juvenile",100
+"Fingerling","Fish","Animalia","Unknown","aquatic",1,1,1,1,6,6715,0.000893521965748325,FALSE,"resolved","S11","S1127","juvenile",100
+"Flower opening","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",77,41,46,318,364,379,0.96042216358839,TRUE,"resolved","PO","PO:0007016","whole plant flowering stage",100
+"Flower opening","Crustaceans","Animalia","Branchiopoda","aquatic",2,1,1,2,9,379,0.0237467018469657,FALSE,"resolved","PO","PO:0007016","whole plant flowering stage",100
+"Flower opening","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,1,6,379,0.0158311345646438,FALSE,"resolved","PO","PO:0007016","whole plant flowering stage",100
+"Froglet","Amphibians","Animalia","Amphibia","amphibian",1,1,1,1,6,6,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Fry","Fish","Animalia","Actinopterygii","aquatic",505,142,548,5369,2753,2783,0.989220265900108,TRUE,"resolved","S11","S115","fry",100
+"Fry","Invertebrates","Animalia","Unknown","invertebrate",3,1,1,3,12,2783,0.00431189363995688,FALSE,"resolved","S11","S115","fry",100
+"Fry","Amphibians","Animalia","Amphibia","amphibian",1,1,1,1,6,2783,0.00215594681997844,FALSE,"resolved","S11","S115","fry",100
+"Fry","Crustaceans","Animalia","Malacostraca","aquatic",1,1,1,1,6,2783,0.00215594681997844,FALSE,"resolved","S11","S115","fry",100
+"Fry","Fish","Animalia","Unknown","aquatic",1,1,1,1,6,2783,0.00215594681997844,FALSE,"resolved","S11","S115","fry",100
+"Gamete","Invertebrates","Animalia","Echinoidea","invertebrate",31,8,11,128,123,536,0.229477611940299,TRUE,"unresolved",,,,0
+"Gamete","Invertebrates","Animalia","Anthozoa","invertebrate",16,10,7,48,72,536,0.134328358208955,FALSE,"unresolved",,,,0
+"Gamete","Fish","Animalia","Actinopterygii","aquatic",14,9,10,59,71,536,0.132462686567164,FALSE,"unresolved",,,,0
+"Gamete","Algae","Chromista","Phaeophyceae","algae",17,3,5,38,64,536,0.119402985074627,FALSE,"unresolved",,,,0
+"Gamete","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",16,2,2,50,54,536,0.100746268656716,FALSE,"unresolved",,,,0
+"Gamete","Algae","Plantae","Chlorophyceae","algae",11,3,3,28,42,536,0.0783582089552239,FALSE,"unresolved",,,,0
+"Gamete","Molluscs","Animalia","Bivalvia","aquatic",7,2,2,12,27,536,0.0503731343283582,FALSE,"unresolved",,,,0
+"Gamete","Invertebrates","Animalia","Ascidiacea","invertebrate",4,2,3,10,20,536,0.0373134328358209,FALSE,"unresolved",,,,0
+"Gamete","Invertebrates","Animalia","Sporozoea","invertebrate",4,1,1,4,15,536,0.0279850746268657,FALSE,"unresolved",,,,0
+"Gamete","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",2,2,2,8,12,536,0.0223880597014925,FALSE,"unresolved",,,,0
+"Gamete","Invertebrates","Animalia","Asteroidea","invertebrate",2,1,1,8,9,536,0.0167910447761194,FALSE,"unresolved",,,,0
+"Gamete","Worms","Animalia","Errantia","invertebrate",2,1,1,2,9,536,0.0167910447761194,FALSE,"unresolved",,,,0
+"Gamete","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",1,1,1,1,6,536,0.0111940298507463,FALSE,"unresolved",,,,0
+"Gamete","Invertebrates","Animalia","Unknown","invertebrate",1,1,1,2,6,536,0.0111940298507463,FALSE,"unresolved",,,,0
+"Gamete","Worms","Animalia","Unknown","invertebrate",1,1,1,17,6,536,0.0111940298507463,FALSE,"unresolved",,,,0
+"Gastrula","Fish","Animalia","Actinopterygii","aquatic",31,8,17,73,135,318,0.424528301886792,TRUE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Invertebrates","Animalia","Echinoidea","invertebrate",21,10,7,37,87,318,0.273584905660377,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Amphibians","Animalia","Amphibia","amphibian",13,5,8,17,60,318,0.188679245283019,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Reptiles","Animalia","Reptilia","vertebrate",4,1,1,4,15,318,0.0471698113207547,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Crustaceans","Animalia","Malacostraca","aquatic",2,1,1,6,9,318,0.0283018867924528,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Mammals","Animalia","Mammalia","vertebrate",1,1,1,1,6,318,0.0188679245283019,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Gastrula","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,1,6,318,0.0188679245283019,FALSE,"resolved","UBERON","UBERON:0004734","gastrula",100
+"Germinated seed","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",64,19,29,187,269,302,0.890728476821192,TRUE,"resolved","PO","PO:0007057","seed germination stage",100
+"Germinated seed","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",3,1,1,9,12,302,0.0397350993377483,FALSE,"resolved","PO","PO:0007057","seed germination stage",100
+"Germinated seed","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",2,1,1,2,9,302,0.0298013245033113,FALSE,"resolved","PO","PO:0007057","seed germination stage",100
+"Germinated seed","Algae","Plantae","Charophyceae","algae",1,1,1,3,6,302,0.0198675496688742,FALSE,"resolved","PO","PO:0007057","seed germination stage",100
+"Germinated seed","Fungi","Fungi","Glomeromycetes","fungi",1,1,1,1,6,302,0.0198675496688742,FALSE,"resolved","PO","PO:0007057","seed germination stage",100
+"Gestation","Mammals","Animalia","Mammalia","vertebrate",384,21,507,6953,2187,2428,0.900741350906096,TRUE,"unresolved",,,,0
+"Gestation","Crustaceans","Animalia","Branchiopoda","aquatic",24,3,8,164,91,2428,0.0374794069192751,FALSE,"unresolved",,,,0
+"Gestation","Fish","Animalia","Actinopterygii","aquatic",10,4,5,59,44,2428,0.0181219110378913,FALSE,"unresolved",,,,0
+"Gestation","Insects/Spiders","Animalia","Insecta","invertebrate",7,3,2,20,28,2428,0.0115321252059308,FALSE,"unresolved",,,,0
+"Gestation","Crustaceans","Animalia","Malacostraca","aquatic",4,3,3,51,21,2428,0.00864909390444811,FALSE,"unresolved",,,,0
+"Gestation","Molluscs","Animalia","Bivalvia","aquatic",5,1,1,13,18,2428,0.00741350906095552,FALSE,"unresolved",,,,0
+"Gestation","Invertebrates","Animalia","Monogononta","invertebrate",3,2,2,18,15,2428,0.00617792421746293,FALSE,"unresolved",,,,0
+"Gestation","Crustaceans","Animalia","Maxillopoda","aquatic",2,2,2,10,12,2428,0.00494233937397035,FALSE,"unresolved",,,,0
+"Gestation","Birds","Animalia","Aves","vertebrate",1,1,1,2,6,2428,0.00247116968698517,FALSE,"unresolved",,,,0
+"Gestation","Insects/Spiders","Animalia","Arachnida","invertebrate",1,1,1,3,6,2428,0.00247116968698517,FALSE,"unresolved",,,,0
+"Glochidia","Molluscs","Animalia","Bivalvia","aquatic",74,44,37,888,340,340,1,TRUE,"resolved","S11","S1128","larva",100
+"Grain or seed formation stage","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",7,4,4,19,33,33,1,TRUE,"resolved","PO","PO:0007042","whole plant fruit formation stage",100
+"Heading","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",13,8,6,31,59,68,0.867647058823529,TRUE,"resolved","PO","PO:0007041","inflorescence emergence stage",100
+"Heading","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",2,1,1,2,9,68,0.132352941176471,FALSE,"resolved","PO","PO:0007041","inflorescence emergence stage",100
+"Imago","Insects/Spiders","Animalia","Insecta","invertebrate",3,13,6,39,34,72,0.472222222222222,TRUE,"resolved","S11","S1116","adult",100
+"Imago","Insects/Spiders","Animalia","Arachnida","invertebrate",2,16,5,40,32,72,0.444444444444444,FALSE,"resolved","S11","S1116","adult",100
+"Imago","Mammals","Animalia","Mammalia","vertebrate",1,1,1,1,6,72,0.0833333333333333,FALSE,"resolved","S11","S1116","adult",100
+"Immature","Fish","Animalia","Actinopterygii","aquatic",132,42,130,964,698,2174,0.321067157313707,TRUE,"resolved","S11","S1171","immature",100
+"Immature","Insects/Spiders","Animalia","Insecta","invertebrate",69,62,71,508,411,2174,0.189052437902484,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Crustaceans","Animalia","Malacostraca","aquatic",81,23,21,316,308,2174,0.141674333026679,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Mammals","Animalia","Mammalia","vertebrate",36,8,40,369,196,2174,0.0901563937442502,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Birds","Animalia","Aves","vertebrate",33,8,18,258,143,2174,0.0657773689052438,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",15,10,7,39,69,2174,0.031738730450782,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Insects/Spiders","Animalia","Arachnida","invertebrate",13,4,4,20,51,2174,0.0234590616375345,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Molluscs","Animalia","Gastropoda","aquatic",11,6,6,33,51,2174,0.0234590616375345,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Worms","Animalia","Clitellata","invertebrate",8,8,9,21,50,2174,0.0229990800367985,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Molluscs","Animalia","Bivalvia","aquatic",6,5,6,35,35,2174,0.016099356025759,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Worms","Animalia","Errantia","invertebrate",9,1,3,11,34,2174,0.015639374425023,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Crustaceans","Animalia","Branchiopoda","aquatic",5,4,4,12,27,2174,0.0124195032198712,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Worms","Animalia","Oligochaeta","invertebrate",4,3,3,267,21,2174,0.00965961361545538,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Crustaceans","Animalia","Maxillopoda","aquatic",3,2,3,6,17,2174,0.0078196872125115,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Algae","Chromista","Phaeophyceae","algae",3,2,2,14,15,2174,0.00689972401103956,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Invertebrates","Animalia","Unknown","invertebrate",2,2,2,4,12,2174,0.00551977920883165,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Algae","Plantae","Chlorophyceae","algae",1,1,1,1,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Amphibians","Animalia","Amphibia","amphibian",1,1,1,8,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,2,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Invertebrates","Animalia","Ciliatea","invertebrate",1,1,1,22,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Invertebrates","Animalia","Entognatha","invertebrate",1,1,1,2,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Immature","Worms","Animalia","Palaeacanthocephala","invertebrate",1,1,1,5,6,2174,0.00275988960441582,FALSE,"resolved","S11","S1171","immature",100
+"Incipient bud","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",3,2,2,15,15,21,0.714285714285714,TRUE,"resolved","PO","PO:0025528","bud development stage",100
+"Incipient bud","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,1,6,21,0.285714285714286,FALSE,"resolved","PO","PO:0025528","bud development stage",100
+"Instar","Insects/Spiders","Animalia","Insecta","invertebrate",292,203,198,1792,1475,2234,0.660250671441361,TRUE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Crustaceans","Animalia","Branchiopoda","aquatic",99,5,50,286,402,2234,0.179946284691137,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Crustaceans","Animalia","Malacostraca","aquatic",69,13,17,251,254,2234,0.113697403760072,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Crustaceans","Animalia","Ostracoda","aquatic",13,1,3,19,46,2234,0.0205908683974933,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Insects/Spiders","Animalia","Arachnida","invertebrate",5,3,3,10,24,2234,0.0107430617726052,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Invertebrates","Animalia","Entognatha","invertebrate",6,2,2,13,24,2234,0.0107430617726052,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Instar","Molluscs","Animalia","Gastropoda","aquatic",2,1,1,5,9,2234,0.00402864816472695,FALSE,"resolved","S11","S1105","first juvenile instar",75
+"Intermolt","Crustaceans","Animalia","Malacostraca","aquatic",131,66,234,1273,927,927,1,TRUE,"unresolved",,,,0
+"Internode elongation","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",3,3,2,12,16,16,1,TRUE,"resolved","PO","PO:0007079","SE.00 stem elongation begins stage",100
+"Jointing","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",4,1,1,4,15,15,1,TRUE,"resolved","PO","PO:0007079","SE.00 stem elongation begins stage",100
+"Juvenile","Fish","Animalia","Actinopterygii","aquatic",1289,306,1920,17290,8013,21478,0.373079430114536,TRUE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Crustaceans","Animalia","Malacostraca","aquatic",469,150,550,4272,2657,21478,0.12370798025887,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Birds","Animalia","Aves","vertebrate",386,39,271,3090,1739,21478,0.0809665704441754,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Mammals","Animalia","Mammalia","vertebrate",263,28,411,3947,1639,21478,0.0763106434491107,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Crustaceans","Animalia","Branchiopoda","aquatic",255,45,202,2143,1214,21478,0.0565229537200857,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Secernentea","invertebrate",243,44,98,953,969,21478,0.0451159325821771,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Molluscs","Animalia","Bivalvia","aquatic",201,74,143,1526,963,21478,0.0448365769624732,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",235,50,3,2009,761,21478,0.0354316044324425,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Molluscs","Animalia","Gastropoda","aquatic",149,55,93,571,688,21478,0.0320327777260453,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",194,6,4,300,596,21478,0.0277493248905857,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Clitellata","invertebrate",108,12,46,275,428,21478,0.019927367538877,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Entognatha","invertebrate",64,10,51,265,304,21478,0.0141540180649967,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Amphibians","Animalia","Amphibia","amphibian",35,33,25,160,188,21478,0.00875314275072167,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Insects/Spiders","Animalia","Insecta","invertebrate",33,31,20,67,170,21478,0.00791507589161002,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Insects/Spiders","Animalia","Arachnida","invertebrate",45,9,9,84,162,21478,0.00754260173200484,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Reptiles","Animalia","Reptilia","vertebrate",21,12,18,81,111,21478,0.00516807896452184,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Errantia","invertebrate",20,5,18,165,101,21478,0.00470248626501536,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",29,1,1,33,90,21478,0.00419033429555825,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Crustaceans","Animalia","Maxillopoda","aquatic",18,9,13,135,89,21478,0.0041437750256076,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Turbellaria","invertebrate",27,1,1,44,84,21478,0.00391097867585436,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Monogononta","invertebrate",21,2,8,41,81,21478,0.00377130086600242,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Adenophorea","invertebrate",21,4,6,85,79,21478,0.00367818232610113,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Oligochaeta","invertebrate",16,10,7,36,72,21478,0.0033522674364466,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Algae","Chromista","Phaeophyceae","algae",9,4,6,21,43,21478,0.00200204860787783,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Unknown","invertebrate",8,2,4,14,34,21478,0.001583015178322,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Echinoidea","invertebrate",7,3,3,16,30,21478,0.00139677809851942,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Fish","Animalia","Unknown","aquatic",6,1,3,17,25,21478,0.00116398174876618,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Trematoda","invertebrate",4,3,3,8,21,21478,0.000977744668963591,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Anthozoa","invertebrate",4,2,3,7,20,21478,0.000931185399012944,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Bdelloidea","invertebrate",3,1,2,7,14,21478,0.00065182977930906,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Ciliatea","invertebrate",3,1,1,18,12,21478,0.000558711239407766,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Worms","Animalia","Sedentaria","invertebrate",2,1,2,18,11,21478,0.000512151969457119,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Ascidiacea","invertebrate",2,1,1,2,9,21478,0.000419033429555825,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Hydrozoa","invertebrate",2,1,1,2,9,21478,0.000419033429555825,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Scyphozoa","invertebrate",2,1,1,2,9,21478,0.000419033429555825,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Invertebrates","Animalia","Unknown","invertebrate",1,2,1,10,7,21478,0.00032591488965453,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Algae","Plantae","Chlorophyceae","algae",1,1,1,1,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Algae","Plantae","Rhodophyceae","algae",1,1,1,2,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Algae","Plantae","Unknown","algae",1,1,1,1,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Bees","Animalia","Insecta","invertebrate",1,1,1,1,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Crustaceans","Animalia","Ostracoda","aquatic",1,1,1,1,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Juvenile","Molluscs","Animalia","Cephalopoda","aquatic",1,1,1,1,6,21478,0.000279355619703883,FALSE,"resolved","S11","S1127","juvenile",100
+"Lactational","Mammals","Animalia","Mammalia","vertebrate",38,6,46,502,212,230,0.921739130434783,TRUE,"unresolved",,,,0
+"Lactational","Amphibians","Animalia","Amphibia","amphibian",1,1,1,3,6,230,0.0260869565217391,FALSE,"unresolved",,,,0
+"Lactational","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,2,6,230,0.0260869565217391,FALSE,"unresolved",,,,0
+"Lactational","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,1,6,230,0.0260869565217391,FALSE,"unresolved",,,,0
+"Lag growth phase","Algae","Chromista","Fragilariophyceae","algae",6,1,1,6,21,72,0.291666666666667,TRUE,"unresolved",,,,0
+"Lag growth phase","Algae","Plantae","Chlorophyceae","algae",5,2,2,14,21,72,0.291666666666667,FALSE,"unresolved",,,,0
+"Lag growth phase","Algae","Chromista","Bacillariophyceae","algae",2,1,1,10,9,72,0.125,FALSE,"unresolved",,,,0
+"Lag growth phase","Algae","Chromista","Dinophyceae","algae",2,1,1,10,9,72,0.125,FALSE,"unresolved",,,,0
+"Lag growth phase","Algae","Chromista","Prymnesiophyceae","algae",1,1,1,1,6,72,0.0833333333333333,FALSE,"unresolved",,,,0
+"Lag growth phase","Algae","Plantae","Chlorodendrophyceae","algae",1,1,1,3,6,72,0.0833333333333333,FALSE,"unresolved",,,,0
+"Larva","Insects/Spiders","Animalia","Insecta","invertebrate",1639,980,2867,32469,11631,28686,0.405459108973018,TRUE,"resolved","S11","S1128","larva",100
+"Larva","Fish","Animalia","Cephalaspidomorphi","aquatic",1543,7,20,2278,4676,28686,0.163006344558321,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Fish","Animalia","Actinopterygii","aquatic",682,164,722,6789,3654,28686,0.127379209370425,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Crustaceans","Animalia","Branchiopoda","aquatic",452,14,114,1415,1598,28686,0.0557066164679635,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Secernentea","invertebrate",323,33,141,1640,1284,28686,0.0447605103534825,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Amphibians","Animalia","Amphibia","amphibian",228,84,208,1677,1184,28686,0.0412744892979154,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Crustaceans","Animalia","Malacostraca","aquatic",180,84,209,1869,1042,28686,0.03632433939901,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Molluscs","Animalia","Bivalvia","aquatic",241,40,126,1098,1015,28686,0.0353831137140068,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Bees","Animalia","Insecta","invertebrate",203,13,71,1787,764,28686,0.0266332008645332,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Insects/Spiders","Animalia","Arachnida","invertebrate",86,33,41,261,373,28686,0.0130028585372656,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Crustaceans","Animalia","Maxillopoda","aquatic",57,17,27,180,242,28686,0.00843617095447257,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Molluscs","Animalia","Gastropoda","aquatic",40,15,25,92,185,28686,0.00644913895279928,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Trematoda","invertebrate",38,9,13,87,149,28686,0.00519417137279509,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Anthozoa","invertebrate",26,15,15,140,123,28686,0.00428780589834763,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Unknown","invertebrate",24,9,16,64,113,28686,0.00393920379279091,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Errantia","invertebrate",18,7,12,57,85,28686,0.0029631178972321,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Adenophorea","invertebrate",22,3,5,32,79,28686,0.00275395663389807,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Sedentaria","invertebrate",23,2,4,30,79,28686,0.00275395663389807,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Echinoidea","invertebrate",14,8,12,53,74,28686,0.00257965558111971,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Gymnolaemata","invertebrate",8,6,6,53,42,28686,0.00146412884333821,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Clitellata","invertebrate",7,4,5,16,35,28686,0.00122010736944851,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Merostomata","invertebrate",7,1,4,54,30,28686,0.00104580631667015,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Ascidiacea","invertebrate",5,3,4,17,26,28686,0.000906365474447466,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",4,4,4,5,24,28686,0.000836645053336122,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Unknown","invertebrate",4,3,3,6,21,28686,0.000732064421669107,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Molluscs","Animalia","Cephalopoda","aquatic",5,1,2,10,20,28686,0.000697204211113435,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Algae","Monera","Cyanophyceae","algae",5,1,1,5,18,28686,0.000627483790002092,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Oligochaeta","invertebrate",3,2,3,4,17,28686,0.00059262357944642,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Algae","Chromista","Bacillariophyceae","algae",3,3,2,5,16,28686,0.000557763368890748,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Algae","Plantae","Unknown","algae",4,1,1,6,15,28686,0.000522903158335076,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Demospongiae","invertebrate",3,2,2,78,15,28686,0.000522903158335076,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Prostomatea","invertebrate",2,1,1,2,9,28686,0.000313741895001046,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Crustaceans","Animalia","Ostracoda","aquatic",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Fish","Animalia","Unknown","aquatic",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",1,1,1,2,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Invertebrates","Animalia","Ciliatea","invertebrate",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Miscellaneous","Animalia","Unknown","unknown",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Cestoda","invertebrate",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva","Worms","Animalia","Turbellaria","invertebrate",1,1,1,1,6,28686,0.000209161263334031,FALSE,"resolved","S11","S1128","larva",100
+"Larva-pupa","Insects/Spiders","Animalia","Insecta","invertebrate",40,40,24,156,208,208,1,TRUE,"unresolved",,,,0
+"Male gametophyte","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",33,9,6,141,120,169,0.710059171597633,TRUE,"resolved","PO","PO:0025280","microgametophyte",75
+"Male gametophyte","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",6,4,3,7,28,169,0.165680473372781,FALSE,"resolved","PO","PO:0025280","microgametophyte",75
+"Male gametophyte","Crustaceans","Animalia","Malacostraca","aquatic",3,2,2,11,15,169,0.0887573964497041,FALSE,"resolved","PO","PO:0025280","microgametophyte",75
+"Male gametophyte","Molluscs","Animalia","Bivalvia","aquatic",1,1,1,3,6,169,0.0355029585798817,FALSE,"resolved","PO","PO:0025280","microgametophyte",75
+"Mature","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",261,290,252,1940,1577,5909,0.266881028938907,TRUE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Fish","Animalia","Actinopterygii","aquatic",165,70,150,702,865,5909,0.146386867490269,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Crustaceans","Animalia","Malacostraca","aquatic",186,33,48,858,687,5909,0.11626332712811,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Clitellata","invertebrate",172,8,66,381,656,5909,0.111017092570655,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Mammals","Animalia","Mammalia","vertebrate",73,11,60,287,350,5909,0.0592316804873921,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",45,23,32,104,222,5909,0.0375698087662887,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Crustaceans","Animalia","Branchiopoda","aquatic",36,8,21,83,158,5909,0.026738872905737,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Molluscs","Animalia","Gastropoda","aquatic",35,20,16,158,157,5909,0.0265696395329159,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Oligochaeta","invertebrate",34,10,17,99,146,5909,0.0247080724318836,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Insects/Spiders","Animalia","Insecta","invertebrate",35,14,12,87,143,5909,0.0242003723134202,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Molluscs","Animalia","Bivalvia","aquatic",26,21,18,119,135,5909,0.0228465053308512,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Birds","Animalia","Aves","vertebrate",25,7,20,76,122,5909,0.0206464714841767,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Entognatha","invertebrate",30,2,2,118,96,5909,0.0162464037908276,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",10,12,9,28,60,5909,0.0101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Secernentea","invertebrate",13,8,6,24,59,5909,0.0099847689964461,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Crustaceans","Animalia","Maxillopoda","aquatic",9,8,9,30,53,5909,0.00896936875951938,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Reptiles","Animalia","Reptilia","vertebrate",9,7,8,19,50,5909,0.00846166864105602,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",7,13,7,18,48,5909,0.00812320189541378,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Insects/Spiders","Animalia","Arachnida","invertebrate",10,6,6,28,48,5909,0.00812320189541378,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Crustaceans","Animalia","Ostracoda","aquatic",14,1,1,18,45,5909,0.00761550177695041,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Turbellaria","invertebrate",6,2,2,16,24,5909,0.00406160094770689,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Algae","Chromista","Phaeophyceae","algae",3,4,3,18,19,5909,0.00321543408360129,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",5,1,1,31,18,5909,0.00304620071078017,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Anthozoa","invertebrate",4,2,2,7,18,5909,0.00304620071078017,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Echinoidea","invertebrate",3,1,4,8,18,5909,0.00304620071078017,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Bdelloidea","invertebrate",4,1,1,4,15,5909,0.0025385005923168,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Amphibians","Animalia","Amphibia","amphibian",2,2,2,2,12,5909,0.00203080047385344,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Hydrozoa","invertebrate",2,2,2,15,12,5909,0.00203080047385344,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Errantia","invertebrate",2,2,2,9,12,5909,0.00203080047385344,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Sagittoidea","invertebrate",3,1,1,3,12,5909,0.00203080047385344,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Trematoda","invertebrate",2,2,2,2,12,5909,0.00203080047385344,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Algae","Monera","Cyanophyceae","algae",1,1,1,10,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Algae","Plantae","Chlorophyceae","algae",1,1,1,4,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Algae","Plantae","Rhodophyceae","algae",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Bees","Animalia","Insecta","invertebrate",1,1,1,2,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Fish","Animalia","Cephalaspidomorphi","aquatic",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Fungi","Fungi","Dothideomycetes","fungi",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Fungi","Fungi","Leotiomycetes","fungi",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Sporozoea","invertebrate",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Invertebrates","Animalia","Unknown","invertebrate",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature","Worms","Animalia","Cestoda","invertebrate",1,1,1,1,6,5909,0.00101540023692672,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Mature (full-bloom stage) organism","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",32,18,20,160,154,163,0.94478527607362,TRUE,"resolved","PO","PO:0007016","whole plant flowering stage",100
+"Mature (full-bloom stage) organism","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",2,1,1,2,9,163,0.0552147239263804,FALSE,"resolved","PO","PO:0007016","whole plant flowering stage",100
+"Mature dormant","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",98,37,43,237,417,530,0.786792452830189,TRUE,"resolved","PO","PO:0007132","sporophyte dormant stage",100
+"Mature dormant","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",18,9,15,112,93,530,0.175471698113208,FALSE,"resolved","PO","PO:0007132","sporophyte dormant stage",100
+"Mature dormant","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",3,1,2,5,14,530,0.0264150943396226,FALSE,"resolved","PO","PO:0007132","sporophyte dormant stage",100
+"Mature dormant","Birds","Animalia","Aves","vertebrate",1,1,1,9,6,530,0.0113207547169811,FALSE,"resolved","PO","PO:0007132","sporophyte dormant stage",100
+"Mature reproductive","Fish","Animalia","Actinopterygii","aquatic",12,4,9,26,58,174,0.333333333333333,TRUE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",9,3,3,61,36,174,0.206896551724138,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Insects/Spiders","Animalia","Insecta","invertebrate",7,3,4,24,32,174,0.183908045977011,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Crustaceans","Animalia","Branchiopoda","aquatic",3,2,2,3,15,174,0.0862068965517241,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Birds","Animalia","Aves","vertebrate",2,1,1,2,9,174,0.0517241379310345,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Mammals","Animalia","Mammalia","vertebrate",1,1,1,1,6,174,0.0344827586206897,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,1,6,174,0.0344827586206897,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Reptiles","Animalia","Reptilia","vertebrate",1,1,1,1,6,174,0.0344827586206897,FALSE,"resolved","S11","S1116","adult",100
+"Mature reproductive","Worms","Animalia","Secernentea","invertebrate",1,1,1,2,6,174,0.0344827586206897,FALSE,"resolved","S11","S1116","adult",100
+"Mature vegetative","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",203,200,227,1081,1263,1439,0.877692842251564,TRUE,"resolved","PO","PO:0007134","sporophyte vegetative stage",100
+"Mature vegetative","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",25,13,20,53,128,1439,0.088950660180681,FALSE,"resolved","PO","PO:0007134","sporophyte vegetative stage",100
+"Mature vegetative","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",5,5,5,6,30,1439,0.0208478109798471,FALSE,"resolved","PO","PO:0007134","sporophyte vegetative stage",100
+"Mature vegetative","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",4,2,2,8,18,1439,0.0125086865879083,FALSE,"resolved","PO","PO:0007134","sporophyte vegetative stage",100
+"Mature, pit-hardening stage (fruit trees)","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,3,6,6,1,TRUE,"resolved","PO","PO:0007042","whole plant fruit formation stage",100
+"Mature, post-bloom stage (fruit trees)","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",11,5,5,14,48,48,1,TRUE,"resolved","PO","PO:0007042","whole plant fruit formation stage",100
+"Mature, side-green stage (fruit trees)","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,3,6,6,1,TRUE,"resolved","PO","PO:0007042","whole plant fruit formation stage",100
+"Megalopa","Crustaceans","Animalia","Malacostraca","aquatic",12,7,10,66,63,63,1,TRUE,"resolved","S11","S1167","megalopa",100
+"Mid-neurula","Fish","Animalia","Actinopterygii","aquatic",2,1,1,11,9,9,1,TRUE,"unresolved",,,,0
+"Molt","Crustaceans","Animalia","Malacostraca","aquatic",14,5,7,23,61,115,0.530434782608696,TRUE,"unresolved",,,,0
+"Molt","Crustaceans","Animalia","Branchiopoda","aquatic",13,3,3,26,48,115,0.417391304347826,FALSE,"unresolved",,,,0
+"Molt","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,3,6,115,0.0521739130434783,FALSE,"unresolved",,,,0
+"Morula","Fish","Animalia","Actinopterygii","aquatic",6,3,5,22,31,61,0.508196721311475,TRUE,"resolved","UBERON","UBERON:0000085","morula",100
+"Morula","Crustaceans","Animalia","Malacostraca","aquatic",2,1,1,8,9,61,0.147540983606557,FALSE,"resolved","UBERON","UBERON:0000085","morula",100
+"Morula","Molluscs","Animalia","Bivalvia","aquatic",2,1,1,2,9,61,0.147540983606557,FALSE,"resolved","UBERON","UBERON:0000085","morula",100
+"Morula","Mammals","Animalia","Mammalia","vertebrate",1,1,1,1,6,61,0.0983606557377049,FALSE,"resolved","UBERON","UBERON:0000085","morula",100
+"Morula","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,1,6,61,0.0983606557377049,FALSE,"resolved","UBERON","UBERON:0000085","morula",100
+"Multiple","Insects/Spiders","Animalia","Insecta","invertebrate",189,209,209,1150,1194,5678,0.210285311729482,TRUE,"unresolved",,,,0
+"Multiple","Fish","Animalia","Actinopterygii","aquatic",222,80,194,1150,1134,5678,0.199718210637548,FALSE,"unresolved",,,,0
+"Multiple","Crustaceans","Animalia","Malacostraca","aquatic",78,56,77,350,444,5678,0.07819654808031,FALSE,"unresolved",,,,0
+"Multiple","Crustaceans","Animalia","Maxillopoda","aquatic",78,35,55,319,379,5678,0.066748855230715,FALSE,"unresolved",,,,0
+"Multiple","Crustaceans","Animalia","Branchiopoda","aquatic",57,21,38,236,268,5678,0.0471997182106376,FALSE,"unresolved",,,,0
+"Multiple","Insects/Spiders","Animalia","Arachnida","invertebrate",60,31,28,181,267,5678,0.0470235998591053,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Echinoidea","invertebrate",45,17,25,185,202,5678,0.0355759070095104,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Secernentea","invertebrate",34,17,19,89,157,5678,0.0276505811905601,FALSE,"unresolved",,,,0
+"Multiple","Bees","Animalia","Insecta","invertebrate",22,10,40,116,156,5678,0.0274744628390278,FALSE,"unresolved",,,,0
+"Multiple","Mammals","Animalia","Mammalia","vertebrate",25,16,30,102,151,5678,0.0265938710813667,FALSE,"unresolved",,,,0
+"Multiple","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",28,31,15,153,145,5678,0.0255371609721733,FALSE,"unresolved",,,,0
+"Multiple","Molluscs","Animalia","Bivalvia","aquatic",26,13,22,82,135,5678,0.023775977456851,FALSE,"unresolved",,,,0
+"Multiple","Molluscs","Animalia","Gastropoda","aquatic",26,18,18,60,132,5678,0.0232476224022543,FALSE,"unresolved",,,,0
+"Multiple","Amphibians","Animalia","Amphibia","amphibian",26,17,17,144,129,5678,0.0227192673476576,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Clitellata","invertebrate",23,14,19,55,121,5678,0.0213103205353998,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Unknown","invertebrate",13,5,10,27,64,5678,0.0112715744980627,FALSE,"unresolved",,,,0
+"Multiple","Birds","Animalia","Aves","vertebrate",9,8,8,28,51,5678,0.00898203592814371,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Anthozoa","invertebrate",9,5,4,14,40,5678,0.00704473406128919,FALSE,"unresolved",,,,0
+"Multiple","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",8,2,6,30,38,5678,0.00669249735822473,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Oligochaeta","invertebrate",7,3,4,11,32,5678,0.00563578724903135,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Unknown","invertebrate",7,3,3,21,30,5678,0.00528355054596689,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Merostomata","invertebrate",8,1,1,22,27,5678,0.0047551954913702,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Monogononta","invertebrate",5,3,4,11,26,5678,0.00457907713983797,FALSE,"unresolved",,,,0
+"Multiple","Algae","Plantae","Chlorophyceae","algae",5,4,3,19,25,5678,0.00440295878830574,FALSE,"unresolved",,,,0
+"Multiple","Reptiles","Animalia","Reptilia","vertebrate",5,4,3,9,25,5678,0.00440295878830574,FALSE,"unresolved",,,,0
+"Multiple","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",4,4,4,7,24,5678,0.00422684043677351,FALSE,"unresolved",,,,0
+"Multiple","Fungi","Fungi","Dothideomycetes","fungi",7,1,1,66,24,5678,0.00422684043677351,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Errantia","invertebrate",4,4,4,8,24,5678,0.00422684043677351,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Ciliatea","invertebrate",5,2,2,8,21,5678,0.00369848538217682,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Entognatha","invertebrate",4,3,3,5,21,5678,0.00369848538217682,FALSE,"unresolved",,,,0
+"Multiple","Algae","Plantae","Unknown","algae",4,1,2,4,17,5678,0.0029940119760479,FALSE,"unresolved",,,,0
+"Multiple","Miscellaneous","Community","Unknown","unknown",3,2,3,20,17,5678,0.0029940119760479,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Turbellaria","invertebrate",3,2,3,10,17,5678,0.0029940119760479,FALSE,"unresolved",,,,0
+"Multiple","Algae","Chromista","Bacillariophyceae","algae",4,1,1,4,15,5678,0.00264177527298344,FALSE,"unresolved",,,,0
+"Multiple","Algae","Plantae","Chlorodendrophyceae","algae",4,1,1,4,15,5678,0.00264177527298344,FALSE,"unresolved",,,,0
+"Multiple","Algae","Monera","Cyanophyceae","algae",2,3,2,3,13,5678,0.00228953856991899,FALSE,"unresolved",,,,0
+"Multiple","Molluscs","Animalia","Polyplacophora","aquatic",3,1,1,9,12,5678,0.00211342021838676,FALSE,"unresolved",,,,0
+"Multiple","Crustaceans","Animalia","Unknown","aquatic",2,1,2,3,11,5678,0.00193730186685453,FALSE,"unresolved",,,,0
+"Multiple","Algae","Chromista","Coscinodiscophyceae","algae",2,1,1,2,9,5678,0.00158506516379007,FALSE,"unresolved",,,,0
+"Multiple","Crustaceans","Animalia","Ostracoda","aquatic",2,1,1,4,9,5678,0.00158506516379007,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Adenophorea","invertebrate",2,1,1,2,9,5678,0.00158506516379007,FALSE,"unresolved",,,,0
+"Multiple","Algae","Plantae","Prasinophyceae","algae",1,1,1,3,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Fish","Animalia","Cephalaspidomorphi","aquatic",1,1,1,10,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Fish","Animalia","Unknown","aquatic",1,1,1,1,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Fungi","Fungi","Glomeromycetes","fungi",1,1,1,1,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Fungi","Fungi","Sordariomycetes","fungi",1,1,1,6,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Ascidiacea","invertebrate",1,1,1,1,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Invertebrates","Animalia","Diplopoda","invertebrate",1,1,1,2,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Multiple","Worms","Animalia","Trematoda","invertebrate",1,1,1,1,6,5678,0.00105671010919338,FALSE,"unresolved",,,,0
+"Mysis","Crustaceans","Animalia","Malacostraca","aquatic",43,14,32,187,207,207,1,TRUE,"resolved","S11","S1161","mysis",100
+"Naiad","Insects/Spiders","Animalia","Insecta","invertebrate",63,29,39,348,296,296,1,TRUE,"resolved","UBERON","UBERON:0000069","larval stage",75
+"Nauplii","Crustaceans","Animalia","Branchiopoda","aquatic",240,15,102,759,939,2171,0.432519576232151,TRUE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Crustaceans","Animalia","Maxillopoda","aquatic",191,54,141,905,909,2171,0.418701059419622,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Crustaceans","Animalia","Malacostraca","aquatic",46,12,29,158,208,2171,0.0958083832335329,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Crustaceans","Animalia","Unknown","aquatic",7,1,7,17,36,2171,0.0165822201750345,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Invertebrates","Animalia","Unknown","invertebrate",7,1,6,7,34,2171,0.015660985720866,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Miscellaneous","Animalia","Unknown","unknown",2,1,2,3,11,2171,0.00506678949792722,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Invertebrates","Animalia","Anthozoa","invertebrate",2,2,1,3,10,2171,0.00460617227084293,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Crustaceans","Animalia","Ostracoda","aquatic",2,1,1,2,9,2171,0.00414555504375864,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Worms","Animalia","Errantia","invertebrate",2,1,1,2,9,2171,0.00414555504375864,FALSE,"resolved","S11","S1115","N1-6",100
+"Nauplii","Fish","Animalia","Actinopterygii","aquatic",1,1,1,1,6,2171,0.00276370336250576,FALSE,"resolved","S11","S1115","N1-6",100
+"Neonate","Crustaceans","Animalia","Branchiopoda","aquatic",985,55,887,9619,4784,6548,0.730604764813684,TRUE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Invertebrates","Animalia","Monogononta","invertebrate",131,21,97,1169,608,6548,0.0928527794746487,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Insects/Spiders","Animalia","Insecta","invertebrate",91,29,47,685,396,6548,0.0604764813683568,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Mammals","Animalia","Mammalia","vertebrate",40,4,57,410,238,6548,0.0363469761759316,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Crustaceans","Animalia","Malacostraca","aquatic",49,10,23,211,203,6548,0.0310018326206475,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Fish","Animalia","Actinopterygii","aquatic",24,7,9,89,97,6548,0.0148136835675015,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Bees","Animalia","Insecta","invertebrate",18,3,6,39,69,6548,0.0105375687232743,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Molluscs","Animalia","Gastropoda","aquatic",8,4,5,52,38,6548,0.00580329871716555,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Algae","Plantae","Chlorophyceae","algae",9,1,3,13,34,6548,0.00519242516799023,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Reptiles","Animalia","Reptilia","vertebrate",4,5,4,7,25,6548,0.00381795968234575,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Crustaceans","Animalia","Maxillopoda","aquatic",4,3,3,15,21,6548,0.00320708613317043,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Crustaceans","Animalia","Ostracoda","aquatic",4,1,2,7,17,6548,0.00259621258399511,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Amphibians","Animalia","Amphibia","amphibian",1,1,1,1,6,6548,0.000916310323762981,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Birds","Animalia","Aves","vertebrate",1,1,1,9,6,6548,0.000916310323762981,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neonate","Invertebrates","Animalia","Entognatha","invertebrate",1,1,1,4,6,6548,0.000916310323762981,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",75
+"Neurala","Amphibians","Animalia","Amphibia","amphibian",3,2,2,3,15,26,0.576923076923077,TRUE,"unresolved",,,,0
+"Neurala","Fish","Animalia","Actinopterygii","aquatic",2,1,2,5,11,26,0.423076923076923,FALSE,"unresolved",,,,0
+"New, newly or recent hatch","Fish","Animalia","Actinopterygii","aquatic",52,16,31,427,234,1116,0.209677419354839,TRUE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Birds","Animalia","Aves","vertebrate",27,15,28,502,152,1116,0.136200716845878,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Insects/Spiders","Animalia","Insecta","invertebrate",31,15,16,88,140,1116,0.125448028673835,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Invertebrates","Animalia","Monogononta","invertebrate",30,2,10,83,112,1116,0.100358422939068,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Molluscs","Animalia","Gastropoda","aquatic",20,11,16,60,103,1116,0.0922939068100358,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Crustaceans","Animalia","Malacostraca","aquatic",18,9,13,36,89,1116,0.0797491039426523,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Crustaceans","Animalia","Branchiopoda","aquatic",16,7,11,52,77,1116,0.0689964157706093,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Bees","Animalia","Insecta","invertebrate",13,4,9,46,61,1116,0.0546594982078853,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Worms","Animalia","Trematoda","invertebrate",9,3,4,35,38,1116,0.0340501792114695,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Worms","Animalia","Secernentea","invertebrate",9,2,3,17,35,1116,0.0313620071684588,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Worms","Animalia","Clitellata","invertebrate",3,3,3,10,18,1116,0.0161290322580645,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Worms","Animalia","Adenophorea","invertebrate",3,2,2,6,15,1116,0.0134408602150538,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Fungi","Fungi","Leotiomycetes","fungi",2,1,1,34,9,1116,0.00806451612903226,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Insects/Spiders","Animalia","Arachnida","invertebrate",2,1,1,2,9,1116,0.00806451612903226,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Amphibians","Animalia","Amphibia","amphibian",1,1,1,2,6,1116,0.00537634408602151,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Molluscs","Animalia","Cephalopoda","aquatic",1,1,1,2,6,1116,0.00537634408602151,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Reptiles","Animalia","Reptilia","vertebrate",1,1,1,1,6,1116,0.00537634408602151,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"New, newly or recent hatch","Worms","Animalia","Turbellaria","invertebrate",1,1,1,18,6,1116,0.00537634408602151,FALSE,"resolved","UBERON","UBERON:0007221","neonate stage",100
+"Newborn","Crustaceans","Animalia","Branchiopoda","aquatic",47,14,32,179,219,487,0.449691991786448,TRUE,"resolved","S11","S1172","newborn",100
+"Newborn","Mammals","Animalia","Mammalia","vertebrate",33,6,44,277,193,487,0.396303901437372,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Fish","Animalia","Actinopterygii","aquatic",6,3,6,15,33,487,0.0677618069815195,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Bees","Animalia","Insecta","invertebrate",3,1,1,3,12,487,0.0246406570841889,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Birds","Animalia","Aves","vertebrate",2,2,2,27,12,487,0.0246406570841889,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Crustaceans","Animalia","Malacostraca","aquatic",1,1,1,4,6,487,0.0123203285420945,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,11,6,487,0.0123203285420945,FALSE,"resolved","S11","S1172","newborn",100
+"Newborn","Worms","Animalia","Turbellaria","invertebrate",1,1,1,3,6,487,0.0123203285420945,FALSE,"resolved","S11","S1172","newborn",100
+"Not coded","Unknown","Unknown","Unknown","unknown",0,0,0,0,0,0,0,TRUE,"unresolved",,,,0
+"Not intact","Fish","Animalia","Actinopterygii","aquatic",811,90,258,3261,3039,8300,0.366144578313253,TRUE,"unresolved",,,,0
+"Not intact","Mammals","Animalia","Mammalia","vertebrate",253,24,53,569,889,8300,0.10710843373494,FALSE,"unresolved",,,,0
+"Not intact","Insects/Spiders","Animalia","Insecta","invertebrate",233,34,41,440,815,8300,0.0981927710843374,FALSE,"unresolved",,,,0
+"Not intact","Birds","Animalia","Aves","vertebrate",227,17,58,572,814,8300,0.0980722891566265,FALSE,"unresolved",,,,0
+"Not intact","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",196,69,75,491,807,8300,0.0972289156626506,FALSE,"unresolved",,,,0
+"Not intact","Amphibians","Animalia","Amphibia","amphibian",161,14,47,379,591,8300,0.0712048192771084,FALSE,"unresolved",,,,0
+"Not intact","Molluscs","Animalia","Bivalvia","aquatic",96,14,18,229,338,8300,0.0407228915662651,FALSE,"unresolved",,,,0
+"Not intact","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",39,10,12,60,151,8300,0.0181927710843373,FALSE,"unresolved",,,,0
+"Not intact","Reptiles","Animalia","Reptilia","vertebrate",32,6,9,94,120,8300,0.0144578313253012,FALSE,"unresolved",,,,0
+"Not intact","Molluscs","Animalia","Gastropoda","aquatic",30,5,9,63,113,8300,0.0136144578313253,FALSE,"unresolved",,,,0
+"Not intact","Bees","Animalia","Insecta","invertebrate",25,8,13,67,109,8300,0.0131325301204819,FALSE,"unresolved",,,,0
+"Not intact","Crustaceans","Animalia","Branchiopoda","aquatic",34,1,1,38,105,8300,0.0126506024096386,FALSE,"unresolved",,,,0
+"Not intact","Worms","Animalia","Secernentea","invertebrate",29,2,5,41,99,8300,0.0119277108433735,FALSE,"unresolved",,,,0
+"Not intact","Crustaceans","Animalia","Malacostraca","aquatic",22,5,8,76,87,8300,0.0104819277108434,FALSE,"unresolved",,,,0
+"Not intact","Invertebrates","Animalia","Ciliatea","invertebrate",7,2,2,11,27,8300,0.00325301204819277,FALSE,"unresolved",,,,0
+"Not intact","Invertebrates","Animalia","Zoomastigophora","invertebrate",6,2,3,10,26,8300,0.00313253012048193,FALSE,"unresolved",,,,0
+"Not intact","Worms","Animalia","Clitellata","invertebrate",4,4,5,6,26,8300,0.00313253012048193,FALSE,"unresolved",,,,0
+"Not intact","Fish","Animalia","Chondrichthyes","aquatic",5,2,4,11,25,8300,0.00301204819277108,FALSE,"unresolved",,,,0
+"Not intact","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",5,3,3,12,24,8300,0.00289156626506024,FALSE,"unresolved",,,,0
+"Not intact","Worms","Animalia","Errantia","invertebrate",7,1,1,7,24,8300,0.00289156626506024,FALSE,"unresolved",,,,0
+"Not intact","Insects/Spiders","Animalia","Arachnida","invertebrate",6,1,2,14,23,8300,0.0027710843373494,FALSE,"unresolved",,,,0
+"Not intact","Invertebrates","Animalia","Ascidiacea","invertebrate",2,1,1,6,9,8300,0.00108433734939759,FALSE,"unresolved",,,,0
+"Not intact","Worms","Animalia","Unknown","invertebrate",2,1,1,6,9,8300,0.00108433734939759,FALSE,"unresolved",,,,0
+"Not intact","Fungi","Fungi","Agaricomycetes","fungi",1,1,1,1,6,8300,0.00072289156626506,FALSE,"unresolved",,,,0
+"Not intact","Fungi","Fungi","Basidiomycetes","fungi",1,1,1,2,6,8300,0.00072289156626506,FALSE,"unresolved",,,,0
+"Not intact","Fungi","Fungi","Gastromycetes","fungi",1,1,1,1,6,8300,0.00072289156626506,FALSE,"unresolved",,,,0
+"Not intact","Molluscs","Animalia","Unknown","aquatic",1,1,1,1,6,8300,0.00072289156626506,FALSE,"unresolved",,,,0
+"Not intact","Worms","Animalia","Turbellaria","invertebrate",1,1,1,1,6,8300,0.00072289156626506,FALSE,"unresolved",,,,0
+"Not reported","Unknown","Unknown","Unknown","unknown",0,0,0,0,0,0,0,TRUE,"unresolved",,,,0
+"Nymph","Insects/Spiders","Animalia","Insecta","invertebrate",455,228,278,2661,2149,2498,0.860288230584468,TRUE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Insects/Spiders","Animalia","Arachnida","invertebrate",66,25,31,178,285,2498,0.114091273018415,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Crustaceans","Animalia","Malacostraca","aquatic",7,3,2,8,28,2498,0.011208967173739,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Invertebrates","Animalia","Entognatha","invertebrate",3,7,1,16,18,2498,0.00720576461168935,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,1,6,2498,0.00240192153722978,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Fish","Animalia","Actinopterygii","aquatic",1,1,1,1,6,2498,0.00240192153722978,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Nymph","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,1,6,2498,0.00240192153722978,FALSE,"resolved","UBERON","UBERON:0014405","nymph stage",75
+"Oocyte, ova","Amphibians","Animalia","Amphibia","amphibian",81,4,29,163,305,800,0.38125,TRUE,"unresolved",,,,0
+"Oocyte, ova","Fish","Animalia","Actinopterygii","aquatic",52,13,24,171,217,800,0.27125,FALSE,"unresolved",,,,0
+"Oocyte, ova","Mammals","Animalia","Mammalia","vertebrate",27,10,15,97,121,800,0.15125,FALSE,"unresolved",,,,0
+"Oocyte, ova","Invertebrates","Animalia","Echinoidea","invertebrate",8,3,3,12,33,800,0.04125,FALSE,"unresolved",,,,0
+"Oocyte, ova","Invertebrates","Animalia","Ophiuroidea","invertebrate",7,1,1,24,24,800,0.03,FALSE,"unresolved",,,,0
+"Oocyte, ova","Worms","Animalia","Unknown","invertebrate",6,2,2,10,24,800,0.03,FALSE,"unresolved",,,,0
+"Oocyte, ova","Worms","Animalia","Trematoda","invertebrate",5,1,1,6,18,800,0.0225,FALSE,"unresolved",,,,0
+"Oocyte, ova","Crustaceans","Animalia","Malacostraca","aquatic",3,2,2,5,15,800,0.01875,FALSE,"unresolved",,,,0
+"Oocyte, ova","Molluscs","Animalia","Bivalvia","aquatic",3,1,1,6,12,800,0.015,FALSE,"unresolved",,,,0
+"Oocyte, ova","Molluscs","Animalia","Gastropoda","aquatic",2,2,2,4,12,800,0.015,FALSE,"unresolved",,,,0
+"Oocyte, ova","Invertebrates","Animalia","Conoidasida","invertebrate",1,2,1,2,7,800,0.00875,FALSE,"unresolved",,,,0
+"Oocyte, ova","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,1,6,800,0.0075,FALSE,"unresolved",,,,0
+"Oocyte, ova","Invertebrates","Animalia","Ascidiacea","invertebrate",1,1,1,16,6,800,0.0075,FALSE,"unresolved",,,,0
+"Parr","Fish","Animalia","Actinopterygii","aquatic",57,10,45,392,271,271,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Pollen, pollen grain","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",145,52,53,386,593,777,0.763191763191763,TRUE,"unresolved",,,,0
+"Pollen, pollen grain","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",26,10,6,50,100,777,0.128700128700129,FALSE,"unresolved",,,,0
+"Pollen, pollen grain","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",21,5,8,49,84,777,0.108108108108108,FALSE,"unresolved",,,,0
+"Post-embryo","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,1,6,6,1,TRUE,"resolved","S11","S1106","embryo",75
+"Post-emergence","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",33,19,11,74,140,283,0.49469964664311,TRUE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Bees","Animalia","Insecta","invertebrate",12,3,8,23,55,283,0.19434628975265,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Insects/Spiders","Animalia","Insecta","invertebrate",5,14,7,49,43,283,0.151943462897526,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Worms","Animalia","Trematoda","invertebrate",5,2,2,8,21,283,0.0742049469964664,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Worms","Animalia","Errantia","invertebrate",3,1,1,3,12,283,0.0424028268551237,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Algae","Plantae","Charophyceae","algae",1,1,1,2,6,283,0.0212014134275618,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-emergence","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,4,6,283,0.0212014134275618,FALSE,"resolved","UBERON","UBERON:0000113","post-juvenile adult stage",100
+"Post-hatch","Crustaceans","Animalia","Branchiopoda","aquatic",54,1,1,54,165,314,0.525477707006369,TRUE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Fish","Animalia","Actinopterygii","aquatic",9,3,5,22,40,314,0.127388535031847,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Invertebrates","Animalia","Monogononta","invertebrate",10,2,1,24,34,314,0.10828025477707,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Bees","Animalia","Insecta","invertebrate",3,2,2,5,15,314,0.0477707006369427,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Crustaceans","Animalia","Malacostraca","aquatic",3,1,1,5,12,314,0.0382165605095541,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",3,1,1,3,12,314,0.0382165605095541,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Amphibians","Animalia","Amphibia","amphibian",1,1,1,10,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Birds","Animalia","Aves","vertebrate",1,1,1,2,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Insects/Spiders","Animalia","Arachnida","invertebrate",1,1,1,1,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,3,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Reptiles","Animalia","Reptilia","vertebrate",1,1,1,2,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-hatch","Worms","Animalia","Secernentea","invertebrate",1,1,1,3,6,314,0.0191082802547771,FALSE,"resolved","UBERON","UBERON:0000092","post-embryonic stage",100
+"Post-larva","Crustaceans","Animalia","Malacostraca","aquatic",107,25,104,938,554,704,0.786931818181818,TRUE,"resolved","S11","S1128","larva",75
+"Post-larva","Fish","Animalia","Actinopterygii","aquatic",26,13,12,70,115,704,0.163352272727273,FALSE,"resolved","S11","S1128","larva",75
+"Post-larva","Amphibians","Animalia","Amphibia","amphibian",4,1,1,4,15,704,0.0213068181818182,FALSE,"resolved","S11","S1128","larva",75
+"Post-larva","Molluscs","Animalia","Bivalvia","aquatic",2,2,3,5,14,704,0.0198863636363636,FALSE,"resolved","S11","S1128","larva",75
+"Post-larva","Insects/Spiders","Animalia","Arachnida","invertebrate",1,1,1,2,6,704,0.00852272727272727,FALSE,"resolved","S11","S1128","larva",75
+"Post-molt","Crustaceans","Animalia","Malacostraca","aquatic",9,7,7,20,48,71,0.676056338028169,TRUE,"unresolved",,,,0
+"Post-molt","Crustaceans","Animalia","Maxillopoda","aquatic",4,1,1,4,15,71,0.211267605633803,FALSE,"unresolved",,,,0
+"Post-molt","Fish","Animalia","Actinopterygii","aquatic",1,1,2,11,8,71,0.112676056338028,FALSE,"unresolved",,,,0
+"Post-nauplius","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,1,6,6,1,TRUE,"resolved","S11","S1130","nauplius",75
+"Post-smolt","Fish","Animalia","Actinopterygii","aquatic",14,2,14,56,72,72,1,TRUE,"resolved","S11","S1173","smolt",75
+"Post-spawning","Fish","Animalia","Actinopterygii","aquatic",4,3,4,10,23,81,0.283950617283951,TRUE,"unresolved",,,,0
+"Post-spawning","Insects/Spiders","Animalia","Arachnida","invertebrate",3,3,2,4,16,81,0.197530864197531,FALSE,"unresolved",,,,0
+"Post-spawning","Molluscs","Animalia","Bivalvia","aquatic",4,1,1,4,15,81,0.185185185185185,FALSE,"unresolved",,,,0
+"Post-spawning","Crustaceans","Animalia","Malacostraca","aquatic",3,1,1,20,12,81,0.148148148148148,FALSE,"unresolved",,,,0
+"Post-spawning","Worms","Animalia","Unknown","invertebrate",2,1,1,6,9,81,0.111111111111111,FALSE,"unresolved",,,,0
+"Post-spawning","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,1,6,81,0.0740740740740741,FALSE,"unresolved",,,,0
+"Postpartum","Mammals","Animalia","Mammalia","vertebrate",5,2,4,104,25,25,1,TRUE,"unresolved",,,,0
+"Pre-, sub-, semi-, near adult, or peripubertal","Fish","Animalia","Actinopterygii","aquatic",24,15,16,111,119,321,0.370716510903427,TRUE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Crustaceans","Animalia","Malacostraca","aquatic",10,8,9,30,56,321,0.174454828660436,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Crustaceans","Animalia","Maxillopoda","aquatic",6,4,14,163,50,321,0.155763239875389,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Mammals","Animalia","Mammalia","vertebrate",5,2,2,67,21,321,0.0654205607476635,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Worms","Animalia","Secernentea","invertebrate",4,1,1,4,15,321,0.0467289719626168,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Crustaceans","Animalia","Branchiopoda","aquatic",2,2,3,5,14,321,0.043613707165109,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Insects/Spiders","Animalia","Insecta","invertebrate",2,2,2,3,12,321,0.0373831775700935,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Amphibians","Animalia","Amphibia","amphibian",2,1,1,7,9,321,0.0280373831775701,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Molluscs","Animalia","Gastropoda","aquatic",1,2,1,2,7,321,0.0218068535825545,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Invertebrates","Animalia","Entognatha","invertebrate",1,1,1,8,6,321,0.0186915887850467,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Molluscs","Animalia","Bivalvia","aquatic",1,1,1,2,6,321,0.0186915887850467,FALSE,"resolved","S11","S1116","adult",75
+"Pre-, sub-, semi-, near adult, or peripubertal","Worms","Animalia","Clitellata","invertebrate",1,1,1,1,6,321,0.0186915887850467,FALSE,"resolved","S11","S1116","adult",75
+"Pre-hatch","Insects/Spiders","Animalia","Insecta","invertebrate",2,2,2,4,12,18,0.666666666666667,TRUE,"resolved","S11","S1106","embryo",100
+"Pre-hatch","Fish","Animalia","Actinopterygii","aquatic",1,1,1,1,6,18,0.333333333333333,FALSE,"resolved","S11","S1106","embryo",100
+"Pre-larva","Fish","Animalia","Actinopterygii","aquatic",7,3,2,38,28,28,1,TRUE,"resolved","S11","S1128","larva",75
+"Pre-molt","Crustaceans","Animalia","Malacostraca","aquatic",24,5,7,38,91,91,1,TRUE,"unresolved",,,,0
+"Pre-smolt","Fish","Animalia","Actinopterygii","aquatic",6,2,10,36,40,40,1,TRUE,"resolved","S11","S1173","smolt",75
+"Pre-spawning","Fish","Animalia","Actinopterygii","aquatic",12,6,9,61,60,111,0.540540540540541,TRUE,"unresolved",,,,0
+"Pre-spawning","Molluscs","Animalia","Bivalvia","aquatic",8,4,4,12,36,111,0.324324324324324,FALSE,"unresolved",,,,0
+"Pre-spawning","Fish","Animalia","Cephalaspidomorphi","aquatic",2,1,1,14,9,111,0.0810810810810811,FALSE,"unresolved",,,,0
+"Pre-spawning","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,4,6,111,0.0540540540540541,FALSE,"unresolved",,,,0
+"Prebloom","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,2,2,8,8,1,TRUE,"resolved","PO","PO:0025528","bud development stage",100
+"Prepupal","Insects/Spiders","Animalia","Insecta","invertebrate",40,12,16,90,164,164,1,TRUE,"resolved","UBERON","UBERON:0003142","prepupa",100
+"Prolarva","Fish","Animalia","Actinopterygii","aquatic",9,7,9,50,52,64,0.8125,TRUE,"resolved","S11","S1128","larva",100
+"Prolarva","Fish","Animalia","Cephalaspidomorphi","aquatic",1,1,1,96,6,64,0.09375,FALSE,"resolved","S11","S1128","larva",100
+"Prolarva","Insects/Spiders","Animalia","Insecta","invertebrate",1,1,1,1,6,64,0.09375,FALSE,"resolved","S11","S1128","larva",100
+"Protolarvae","Fish","Animalia","Actinopterygii","aquatic",4,5,5,17,27,27,1,TRUE,"resolved","UBERON","UBERON:0000069","larval stage",100
+"Protozoea","Crustaceans","Animalia","Malacostraca","aquatic",19,6,7,66,77,77,1,TRUE,"resolved","S11","S1160","protozoea",100
+"Pullet","Birds","Animalia","Aves","vertebrate",9,2,5,13,39,39,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Pupa","Insects/Spiders","Animalia","Insecta","invertebrate",308,188,238,1747,1588,1630,0.974233128834356,TRUE,"resolved","S11","S1180","pupa",100
+"Pupa","Bees","Animalia","Insecta","invertebrate",4,3,3,7,21,1630,0.0128834355828221,FALSE,"resolved","S11","S1180","pupa",100
+"Pupa","Birds","Animalia","Aves","vertebrate",3,1,1,3,12,1630,0.00736196319018405,FALSE,"resolved","S11","S1180","pupa",100
+"Pupa","Insects/Spiders","Animalia","Arachnida","invertebrate",1,4,1,4,9,1630,0.00552147239263804,FALSE,"resolved","S11","S1180","pupa",100
+"Rhizome","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",12,6,5,23,52,94,0.553191489361702,TRUE,"resolved","PO","PO:0004542","rhizome",100
+"Rhizome","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",7,5,5,23,36,94,0.382978723404255,FALSE,"resolved","PO","PO:0004542","rhizome",100
+"Rhizome","Flowers/Trees/Shrubs/Ferns","Plantae","Equisetopsida","plant",1,1,1,2,6,94,0.0638297872340425,FALSE,"resolved","PO","PO:0004542","rhizome",100
+"Rooted cuttings","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",84,77,66,501,461,588,0.784013605442177,TRUE,"unresolved",,,,0
+"Rooted cuttings","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",20,10,12,62,94,588,0.159863945578231,FALSE,"unresolved",,,,0
+"Rooted cuttings","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",4,1,1,8,15,588,0.0255102040816327,FALSE,"unresolved",,,,0
+"Rooted cuttings","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",2,1,1,4,9,588,0.0153061224489796,FALSE,"unresolved",,,,0
+"Rooted cuttings","Fungi","Fungi","Sordariomycetes","fungi",2,1,1,2,9,588,0.0153061224489796,FALSE,"unresolved",,,,0
+"Rootstock","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",29,9,11,66,118,189,0.624338624338624,TRUE,"unresolved",,,,0
+"Rootstock","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",12,2,7,21,52,189,0.275132275132275,FALSE,"unresolved",,,,0
+"Rootstock","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",4,1,3,13,19,189,0.100529100529101,FALSE,"unresolved",,,,0
+"Sac fry, yolk sac fry","Fish","Animalia","Actinopterygii","aquatic",138,34,81,701,610,610,1,TRUE,"resolved","S11","S115","fry",100
+"Sapling","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",8,9,8,12,49,101,0.485148514851485,TRUE,"resolved","S11","S1127","juvenile",100
+"Sapling","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",8,4,9,112,46,101,0.455445544554455,FALSE,"resolved","S11","S1127","juvenile",100
+"Sapling","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",1,1,1,2,6,101,0.0594059405940594,FALSE,"resolved","S11","S1127","juvenile",100
+"Scape elongation","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",5,4,4,11,27,27,1,TRUE,"resolved","PO","PO:0007089","stem elongation stage",100
+"Seed","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1454,847,2582,26303,10373,11925,0.869853249475891,TRUE,"resolved","PO","PO:0009010","seed",100
+"Seed","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",199,52,121,710,891,11925,0.0747169811320755,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",79,37,65,558,404,11925,0.0338784067085954,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",36,2,22,124,154,11925,0.0129140461215933,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Insects/Spiders","Animalia","Insecta","invertebrate",5,6,5,10,31,11925,0.00259958071278826,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Flowers/Trees/Shrubs/Ferns","Plantae","Gnetopsida","plant",3,2,2,7,15,11925,0.00125786163522013,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Fungi","Chromista","Oomycetes","fungi",3,2,2,19,15,11925,0.00125786163522013,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Algae","Plantae","Chlorophyceae","algae",1,1,1,1,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Amphibians","Animalia","Amphibia","amphibian",1,1,1,1,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Fungi","Fungi","Basidiomycetes","fungi",1,1,1,8,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Fungi","Fungi","Eurotiomycetes","fungi",1,1,1,1,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Fungi","Fungi","Glomeromycetes","fungi",1,1,1,2,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Fungi","Fungi","Sordariomycetes","fungi",1,1,1,1,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seed","Worms","Animalia","Unknown","invertebrate",1,1,1,1,6,11925,0.00050314465408805,FALSE,"resolved","PO","PO:0009010","seed",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1465,863,2063,17596,9384,11762,0.797823499404863,TRUE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",312,88,110,796,1244,11762,0.105764325794933,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",152,68,170,1514,864,11762,0.0734568950858698,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",44,2,8,60,150,11762,0.0127529331746302,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",7,2,2,7,27,11762,0.00229552797143343,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Fungi","Fungi","Sordariomycetes","fungi",4,1,2,5,17,11762,0.00144533242645809,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Fungi","Fungi","Unknown","fungi",3,1,3,3,16,11762,0.00136031287196055,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Fungi","Chromista","Oomycetes","fungi",2,2,2,20,12,11762,0.00102023465397041,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Moss/Hornworts","Plantae","Hepatopsida","plant",2,1,1,6,9,11762,0.00076517599047781,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Moss/Hornworts","Plantae","Sphagnopsida","plant",2,1,1,2,9,11762,0.00076517599047781,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Algae","Plantae","Chlorophyceae","algae",1,1,1,1,6,11762,0.000510117326985207,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Flowers/Trees/Shrubs/Ferns","Plantae","Equisetopsida","plant",1,1,1,3,6,11762,0.000510117326985207,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Fungi","Fungi","Dothideomycetes","fungi",1,1,1,1,6,11762,0.000510117326985207,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Worms","Animalia","Adenophorea","invertebrate",1,1,1,1,6,11762,0.000510117326985207,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Seedling","Worms","Animalia","Secernentea","invertebrate",1,1,1,1,6,11762,0.000510117326985207,FALSE,"resolved","PO","PO:0008037","seedling",100
+"Senescence","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",2,1,1,2,9,9,1,TRUE,"resolved","PO","PO:0001036","H anther senescence stage",75
+"Sexually immature","Fish","Animalia","Actinopterygii","aquatic",75,24,64,537,377,534,0.705992509363296,TRUE,"resolved","S11","S1171","immature",75
+"Sexually immature","Mammals","Animalia","Mammalia","vertebrate",10,3,9,66,51,534,0.0955056179775281,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Worms","Animalia","Errantia","invertebrate",3,3,5,27,22,534,0.0411985018726592,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Birds","Animalia","Aves","vertebrate",5,2,2,24,21,534,0.0393258426966292,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Crustaceans","Animalia","Malacostraca","aquatic",4,3,3,20,21,534,0.0393258426966292,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Molluscs","Animalia","Bivalvia","aquatic",2,2,2,19,12,534,0.0224719101123595,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Crustaceans","Animalia","Branchiopoda","aquatic",2,1,1,16,9,534,0.0168539325842697,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Invertebrates","Animalia","Appendicularia","invertebrate",2,1,1,3,9,534,0.0168539325842697,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,1,6,534,0.0112359550561798,FALSE,"resolved","S11","S1171","immature",75
+"Sexually immature","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,2,6,534,0.0112359550561798,FALSE,"resolved","S11","S1171","immature",75
+"Sexually mature","Fish","Animalia","Actinopterygii","aquatic",181,52,199,1491,993,3460,0.286994219653179,TRUE,"resolved","S11","S1116","adult",100
+"Sexually mature","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",134,91,166,979,825,3460,0.238439306358382,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Mammals","Animalia","Mammalia","vertebrate",107,20,110,1102,561,3460,0.162138728323699,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Worms","Animalia","Clitellata","invertebrate",44,10,28,166,198,3460,0.0572254335260116,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Birds","Animalia","Aves","vertebrate",32,12,38,365,184,3460,0.0531791907514451,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Worms","Animalia","Oligochaeta","invertebrate",20,6,10,82,86,3460,0.0248554913294798,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Reptiles","Animalia","Reptilia","vertebrate",16,4,16,37,84,3460,0.0242774566473988,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Insects/Spiders","Animalia","Insecta","invertebrate",17,9,9,45,78,3460,0.0225433526011561,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Molluscs","Animalia","Gastropoda","aquatic",17,6,10,125,77,3460,0.0222543352601156,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Insects/Spiders","Animalia","Arachnida","invertebrate",20,5,4,39,73,3460,0.0210982658959538,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Crustaceans","Animalia","Malacostraca","aquatic",11,10,9,44,61,3460,0.0176300578034682,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Crustaceans","Animalia","Branchiopoda","aquatic",10,4,7,65,48,3460,0.0138728323699422,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",6,5,8,26,39,3460,0.011271676300578,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Amphibians","Animalia","Amphibia","amphibian",7,5,5,22,36,3460,0.0104046242774566,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Molluscs","Animalia","Bivalvia","aquatic",5,6,5,31,31,3460,0.00895953757225434,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Crustaceans","Animalia","Maxillopoda","aquatic",4,3,3,16,21,3460,0.00606936416184971,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Invertebrates","Animalia","Entognatha","invertebrate",2,3,2,10,13,3460,0.00375722543352601,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Invertebrates","Animalia","Echinoidea","invertebrate",2,2,1,28,10,3460,0.00289017341040462,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Algae","Chromista","Phaeophyceae","algae",2,1,1,3,9,3460,0.00260115606936416,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Algae","Plantae","Rhodophyceae","algae",2,1,1,12,9,3460,0.00260115606936416,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Algae","Plantae","Charophyceae","algae",1,1,1,1,6,3460,0.00173410404624277,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Fungi","Chromista","Oomycetes","fungi",1,1,1,1,6,3460,0.00173410404624277,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Worms","Animalia","Secernentea","invertebrate",1,1,1,6,6,3460,0.00173410404624277,FALSE,"resolved","S11","S1116","adult",100
+"Sexually mature","Worms","Animalia","Trematoda","invertebrate",1,1,1,1,6,3460,0.00173410404624277,FALSE,"resolved","S11","S1116","adult",100
+"Shoot","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",56,32,39,436,278,576,0.482638888888889,TRUE,"unresolved",,,,0
+"Shoot","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",47,20,31,333,223,576,0.387152777777778,FALSE,"unresolved",,,,0
+"Shoot","Moss/Hornworts","Plantae","Bryopsida","plant",9,5,5,20,42,576,0.0729166666666667,FALSE,"unresolved",,,,0
+"Shoot","Algae","Chromista","Phaeophyceae","algae",2,1,1,8,9,576,0.015625,FALSE,"unresolved",,,,0
+"Shoot","Algae","Plantae","Charophyceae","algae",1,1,1,1,6,576,0.0104166666666667,FALSE,"unresolved",,,,0
+"Shoot","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",1,1,1,1,6,576,0.0104166666666667,FALSE,"unresolved",,,,0
+"Shoot","Miscellaneous","Community","Unknown","unknown",1,1,1,1,6,576,0.0104166666666667,FALSE,"unresolved",,,,0
+"Shoot","Moss/Hornworts","Plantae","Sphagnopsida","plant",1,1,1,1,6,576,0.0104166666666667,FALSE,"unresolved",,,,0
+"Smolt","Fish","Animalia","Actinopterygii","aquatic",33,8,41,211,189,195,0.969230769230769,TRUE,"resolved","S11","S1173","smolt",100
+"Smolt","Mammals","Animalia","Mammalia","vertebrate",1,1,1,6,6,195,0.0307692307692308,FALSE,"resolved","S11","S1173","smolt",100
+"Spat","Molluscs","Animalia","Bivalvia","aquatic",282,7,15,385,883,901,0.980022197558269,TRUE,"resolved","S11","S1170","spat",100
+"Spat","Molluscs","Animalia","Gastropoda","aquatic",4,2,2,4,18,901,0.0199778024417314,FALSE,"resolved","S11","S1170","spat",100
+"Spawning","Fungi","Fungi","Agaricomycetes","fungi",8,1,1,13,27,45,0.6,TRUE,"unresolved",,,,0
+"Spawning","Fish","Animalia","Actinopterygii","aquatic",3,3,3,36,18,45,0.4,FALSE,"unresolved",,,,0
+"Sperm","Invertebrates","Animalia","Echinoidea","invertebrate",119,24,57,493,495,1534,0.322685788787484,TRUE,"unresolved",,,,0
+"Sperm","Fish","Animalia","Actinopterygii","aquatic",111,24,41,433,439,1534,0.286179921773142,FALSE,"unresolved",,,,0
+"Sperm","Molluscs","Animalia","Bivalvia","aquatic",31,9,14,75,130,1534,0.0847457627118644,FALSE,"unresolved",,,,0
+"Sperm","Mammals","Animalia","Mammalia","vertebrate",20,7,13,121,93,1534,0.060625814863103,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Fungi","Sordariomycetes","fungi",11,9,5,32,52,1534,0.0338983050847458,FALSE,"unresolved",,,,0
+"Sperm","Worms","Animalia","Unknown","invertebrate",13,4,4,29,51,1534,0.0332464146023468,FALSE,"unresolved",,,,0
+"Sperm","Amphibians","Animalia","Amphibia","amphibian",7,5,5,17,36,1534,0.0234680573663625,FALSE,"unresolved",,,,0
+"Sperm","Birds","Animalia","Aves","vertebrate",9,1,3,17,34,1534,0.0221642764015645,FALSE,"unresolved",,,,0
+"Sperm","Invertebrates","Animalia","Ascidiacea","invertebrate",8,2,4,8,34,1534,0.0221642764015645,FALSE,"unresolved",,,,0
+"Sperm","Fish","Animalia","Cephalaspidomorphi","aquatic",9,1,2,21,32,1534,0.0208604954367666,FALSE,"unresolved",,,,0
+"Sperm","Crustaceans","Animalia","Malacostraca","aquatic",7,2,2,7,27,1534,0.0176010430247718,FALSE,"unresolved",,,,0
+"Sperm","Algae","Plantae","Charophyceae","algae",4,2,2,19,18,1534,0.0117340286831812,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Fungi","Eurotiomycetes","fungi",4,2,2,14,18,1534,0.0117340286831812,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Fungi","Pucciniomycetes","fungi",2,2,2,8,12,1534,0.00782268578878748,FALSE,"unresolved",,,,0
+"Sperm","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",2,1,1,2,9,1534,0.00586701434159061,FALSE,"unresolved",,,,0
+"Sperm","Flowers/Trees/Shrubs/Ferns","Plantae","Pinopsida","plant",2,1,1,2,9,1534,0.00586701434159061,FALSE,"unresolved",,,,0
+"Sperm","Worms","Animalia","Errantia","invertebrate",2,1,1,4,9,1534,0.00586701434159061,FALSE,"unresolved",,,,0
+"Sperm","Bees","Animalia","Insecta","invertebrate",1,1,1,1,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Sperm","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",1,1,1,1,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Chromista","Oomycetes","fungi",1,1,1,2,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Fungi","Chytridiomycetes","fungi",1,1,1,2,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Sperm","Fungi","Fungi","Dothideomycetes","fungi",1,1,1,2,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Sperm","Molluscs","Animalia","Gastropoda","aquatic",1,1,1,2,6,1534,0.00391134289439374,FALSE,"unresolved",,,,0
+"Spore","Fungi","Fungi","Sordariomycetes","fungi",137,48,49,469,557,2290,0.243231441048035,TRUE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Dothideomycetes","fungi",89,31,33,426,364,2290,0.158951965065502,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Eurotiomycetes","fungi",74,27,31,384,311,2290,0.135807860262009,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Leotiomycetes","fungi",44,17,17,108,183,2290,0.0799126637554585,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Unknown","fungi",37,13,15,126,154,2290,0.0672489082969432,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Pucciniomycetes","fungi",32,14,10,205,130,2290,0.0567685589519651,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Glomeromycetes","fungi",31,9,8,43,118,2290,0.051528384279476,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Phycomycota","fungi",18,6,6,197,72,2290,0.0314410480349345,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Algae","Plantae","Chlorophyceae","algae",12,4,5,24,50,2290,0.0218340611353712,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",9,7,7,13,48,2290,0.0209606986899563,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Gastromycetes","fungi",10,6,6,138,48,2290,0.0209606986899563,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Algae","Plantae","Rhodophyceae","algae",11,1,2,46,38,2290,0.0165938864628821,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Agaricomycetes","fungi",8,2,3,16,32,2290,0.0139737991266376,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Invertebrates","Animalia","Microsporea","invertebrate",8,2,2,10,30,2290,0.0131004366812227,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Algae","Chromista","Phaeophyceae","algae",6,3,4,48,29,2290,0.0126637554585153,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Chromista","Oomycetes","fungi",6,3,3,22,27,2290,0.0117903930131004,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",4,4,4,20,24,2290,0.0104803493449782,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Chytridiomycetes","fungi",5,2,2,10,21,2290,0.00917030567685589,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Invertebrates","Animalia","Unknown","invertebrate",4,1,1,8,15,2290,0.00655021834061135,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Algae","Monera","Cyanophyceae","algae",2,1,1,4,9,2290,0.00393013100436681,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Algae","Plantae","Conjugatophyceae","algae",1,1,1,2,6,2290,0.00262008733624454,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Flowers/Trees/Shrubs/Ferns","Plantae","Unknown","plant",1,1,1,1,6,2290,0.00262008733624454,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Basidiomycetes","fungi",1,1,1,2,6,2290,0.00262008733624454,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Orbiliomycetes","fungi",1,1,1,1,6,2290,0.00262008733624454,FALSE,"resolved","S11","S1135","spore",100
+"Spore","Fungi","Fungi","Urediniomycetes","fungi",1,1,1,1,6,2290,0.00262008733624454,FALSE,"resolved","S11","S1135","spore",100
+"Sporeling","Fish","Animalia","Actinopterygii","aquatic",35,6,25,148,161,306,0.526143790849673,TRUE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",9,4,5,11,41,306,0.133986928104575,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Algae","Chromista","Phaeophyceae","algae",9,3,3,21,36,306,0.117647058823529,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Algae","Plantae","Rhodophyceae","algae",6,1,2,10,23,306,0.0751633986928105,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",3,4,4,12,21,306,0.0686274509803922,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",1,2,2,2,9,306,0.0294117647058824,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Invertebrates","Animalia","Dictyosteliomycetes","invertebrate",2,1,1,2,9,306,0.0294117647058824,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Sporeling","Algae","Plantae","Chlorophyceae","algae",1,1,1,1,6,306,0.0196078431372549,FALSE,"resolved","PO","PO:0008037","juvenile vascular leaf stage",100
+"Stationary growth phase","Invertebrates","Animalia","Ciliatea","invertebrate",59,7,12,200,208,625,0.3328,TRUE,"unresolved",,,,0
+"Stationary growth phase","Algae","Plantae","Chlorophyceae","algae",32,15,20,104,151,625,0.2416,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Monera","Cyanophyceae","algae",12,10,7,32,60,625,0.096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Chromista","Prymnesiophyceae","algae",6,4,5,12,32,625,0.0512,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Chromista","Coscinodiscophyceae","algae",7,2,3,22,29,625,0.0464,FALSE,"unresolved",,,,0
+"Stationary growth phase","Fungi","Fungi","Eurotiomycetes","fungi",8,1,1,8,27,625,0.0432,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Plantae","Trebouxiophyceae","algae",5,1,2,10,20,625,0.032,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Chromista","Dinophyceae","algae",3,3,3,7,18,625,0.0288,FALSE,"unresolved",,,,0
+"Stationary growth phase","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",2,2,2,6,12,625,0.0192,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Plantae","Prasinophyceae","algae",2,1,2,7,11,625,0.0176,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Chromista","Bacillariophyceae","algae",2,1,1,10,9,625,0.0144,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Plantae","Euglenophyceae","algae",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Algae","Plantae","Unknown","algae",1,1,1,2,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Crustaceans","Animalia","Branchiopoda","aquatic",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Fungi","Fungi","Unknown","fungi",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Invertebrates","Animalia","Bdelloidea","invertebrate",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Invertebrates","Animalia","Monogononta","invertebrate",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Invertebrates","Animalia","Zoomastigophora","invertebrate",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Stationary growth phase","Worms","Animalia","Unknown","invertebrate",1,1,1,1,6,625,0.0096,FALSE,"unresolved",,,,0
+"Subadult","Fish","Animalia","Actinopterygii","aquatic",26,13,15,63,121,459,0.263616557734205,TRUE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Crustaceans","Animalia","Malacostraca","aquatic",9,9,11,52,58,459,0.12636165577342,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Molluscs","Animalia","Gastropoda","aquatic",10,8,7,19,52,459,0.113289760348584,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Crustaceans","Animalia","Branchiopoda","aquatic",8,5,5,27,39,459,0.0849673202614379,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Birds","Animalia","Aves","vertebrate",5,8,4,13,31,459,0.0675381263616558,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Insects/Spiders","Animalia","Arachnida","invertebrate",5,5,5,5,30,459,0.065359477124183,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Mammals","Animalia","Mammalia","vertebrate",6,5,3,23,29,459,0.0631808278867102,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Insects/Spiders","Animalia","Insecta","invertebrate",5,4,4,15,27,459,0.0588235294117647,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Reptiles","Animalia","Reptilia","vertebrate",4,2,2,4,18,459,0.0392156862745098,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Worms","Animalia","Clitellata","invertebrate",2,2,2,8,12,459,0.0261437908496732,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Worms","Animalia","Turbellaria","invertebrate",2,2,2,3,12,459,0.0261437908496732,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Amphibians","Animalia","Amphibia","amphibian",1,1,1,1,6,459,0.0130718954248366,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,1,6,459,0.0130718954248366,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Invertebrates","Animalia","Asteroidea","invertebrate",1,1,1,3,6,459,0.0130718954248366,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Invertebrates","Animalia","Entognatha","invertebrate",1,1,1,8,6,459,0.0130718954248366,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Subadult","Molluscs","Animalia","Bivalvia","aquatic",1,1,1,1,6,459,0.0130718954248366,FALSE,"resolved","UBERON","UBERON:0000112","sexually immature stage",100
+"Swim-up","Fish","Animalia","Actinopterygii","aquatic",76,28,51,771,358,358,1,TRUE,"resolved","S11","S115","fry",100
+"Tadpole","Amphibians","Animalia","Amphibia","amphibian",542,150,659,5339,3094,3112,0.994215938303342,TRUE,"resolved","UBERON","UBERON:0002547","tadpole",100
+"Tadpole","Fish","Animalia","Actinopterygii","aquatic",3,3,3,7,18,3112,0.0057840616966581,FALSE,"resolved","UBERON","UBERON:0002547","tadpole",100
+"Tiller stage","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",48,41,32,204,249,255,0.976470588235294,TRUE,"resolved","PO","PO:0007073","2 formation of axillary shoot stage",100
+"Tiller stage","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",1,1,1,1,6,255,0.0235294117647059,FALSE,"resolved","PO","PO:0007073","2 formation of axillary shoot stage",100
+"Tissue culture callus","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",35,11,12,69,140,170,0.823529411764706,TRUE,"resolved","PO","PO:0000009","cultured plant callus",100
+"Tissue culture callus","Algae","Chromista","Phaeophyceae","algae",9,1,1,18,30,170,0.176470588235294,FALSE,"resolved","PO","PO:0000009","cultured plant callus",100
+"Trophozoite","Invertebrates","Animalia","Lobosa","invertebrate",27,4,3,56,91,118,0.771186440677966,TRUE,"unresolved",,,,0
+"Trophozoite","Invertebrates","Animalia","Zoomastigophora","invertebrate",5,1,1,5,18,118,0.152542372881356,FALSE,"unresolved",,,,0
+"Trophozoite","Invertebrates","Animalia","Ciliatea","invertebrate",2,1,1,2,9,118,0.076271186440678,FALSE,"unresolved",,,,0
+"Tuber","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",86,6,33,190,330,485,0.680412371134021,TRUE,"resolved","PO","PO:0025522","tuber",100
+"Tuber","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",32,11,24,157,155,485,0.319587628865979,FALSE,"resolved","PO","PO:0025522","tuber",100
+"Turion","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",1,1,1,1,6,6,1,TRUE,"unresolved",,,,0
+"Underyearling","Fish","Animalia","Actinopterygii","aquatic",51,14,32,196,231,231,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Unspecified","Unknown","Unknown","Unknown","unknown",0,0,0,0,0,0,0,TRUE,"unresolved",,,,0
+"Veliger","Molluscs","Animalia","Bivalvia","aquatic",30,10,14,53,128,158,0.810126582278481,TRUE,"resolved","S11","S1193","veliger",100
+"Veliger","Molluscs","Animalia","Gastropoda","aquatic",7,3,3,20,30,158,0.189873417721519,FALSE,"resolved","S11","S1193","veliger",100
+"Virgin","Mammals","Animalia","Mammalia","vertebrate",17,6,15,177,87,192,0.453125,TRUE,"resolved","S11","S1116","adult",100
+"Virgin","Insects/Spiders","Animalia","Insecta","invertebrate",17,6,12,51,81,192,0.421875,FALSE,"resolved","S11","S1116","adult",100
+"Virgin","Birds","Animalia","Aves","vertebrate",2,2,2,5,12,192,0.0625,FALSE,"resolved","S11","S1116","adult",100
+"Virgin","Fish","Animalia","Actinopterygii","aquatic",2,2,2,5,12,192,0.0625,FALSE,"resolved","S11","S1116","adult",100
+"Weanling","Mammals","Animalia","Mammalia","vertebrate",5,3,8,16,34,34,1,TRUE,"resolved","S11","S1127","juvenile",100
+"Yearling","Fish","Animalia","Actinopterygii","aquatic",144,42,161,1535,796,940,0.846808510638298,TRUE,"resolved","S11","S1127","juvenile",100
+"Yearling","Mammals","Animalia","Mammalia","vertebrate",16,7,16,119,87,940,0.0925531914893617,FALSE,"resolved","S11","S1127","juvenile",100
+"Yearling","Molluscs","Animalia","Bivalvia","aquatic",15,2,2,23,51,940,0.0542553191489362,FALSE,"resolved","S11","S1127","juvenile",100
+"Yearling","Birds","Animalia","Aves","vertebrate",1,1,1,4,6,940,0.00638297872340425,FALSE,"resolved","S11","S1127","juvenile",100
+"Yolk sac larvae, sac larvae","Fish","Animalia","Actinopterygii","aquatic",32,21,24,256,165,165,1,TRUE,"resolved","S11","S1187","yolk-sac larva",100
+"Young","Mammals","Animalia","Mammalia","vertebrate",146,15,115,908,683,3128,0.218350383631714,TRUE,"resolved","S11","S1127","juvenile",100
+"Young","Fish","Animalia","Actinopterygii","aquatic",110,44,77,830,528,3128,0.168797953964194,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Crustaceans","Animalia","Branchiopoda","aquatic",136,11,50,430,519,3128,0.165920716112532,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Crustaceans","Animalia","Malacostraca","aquatic",121,12,24,707,423,3128,0.135230179028133,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Birds","Animalia","Aves","vertebrate",46,15,46,196,245,3128,0.0783248081841432,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Flowers/Trees/Shrubs/Ferns","Plantae","Magnoliopsida","plant",30,20,18,84,146,3128,0.0466751918158568,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Worms","Animalia","Clitellata","invertebrate",32,2,3,38,104,3128,0.0332480818414322,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Molluscs","Animalia","Gastropoda","aquatic",19,7,8,22,80,3128,0.0255754475703325,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Algae","Chromista","Phaeophyceae","algae",17,3,4,29,62,3128,0.0198209718670077,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Flowers/Trees/Shrubs/Ferns","Plantae","Liliopsida","plant",10,9,9,28,57,3128,0.0182225063938619,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Insects/Spiders","Animalia","Insecta","invertebrate",12,6,7,40,56,3128,0.0179028132992327,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Molluscs","Animalia","Bivalvia","aquatic",9,4,11,37,53,3128,0.0169437340153453,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Bees","Animalia","Insecta","invertebrate",7,1,2,11,26,3128,0.00831202046035806,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Flowers/Trees/Shrubs/Ferns","Plantae","Filicopsida","plant",5,3,3,26,24,3128,0.00767263427109974,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Invertebrates","Animalia","Monogononta","invertebrate",5,4,2,115,23,3128,0.00735294117647059,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Amphibians","Animalia","Amphibia","amphibian",3,3,3,16,18,3128,0.00575447570332481,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Crustaceans","Animalia","Maxillopoda","aquatic",4,1,1,4,15,3128,0.00479539641943734,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Insects/Spiders","Animalia","Arachnida","invertebrate",2,2,2,8,12,3128,0.00383631713554987,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Worms","Animalia","Errantia","invertebrate",2,2,2,15,12,3128,0.00383631713554987,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Invertebrates","Animalia","Anthozoa","invertebrate",2,1,1,4,9,3128,0.0028772378516624,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Reptiles","Animalia","Reptilia","vertebrate",2,1,1,2,9,3128,0.0028772378516624,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Algae","Monera","Cyanophyceae","algae",1,1,1,1,6,3128,0.00191815856777494,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Algae","Plantae","Chlorophyceae","algae",1,1,1,2,6,3128,0.00191815856777494,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Algae","Plantae","Rhodophyceae","algae",1,1,1,2,6,3128,0.00191815856777494,FALSE,"resolved","S11","S1127","juvenile",100
+"Young","Worms","Animalia","Unknown","invertebrate",1,1,1,7,6,3128,0.00191815856777494,FALSE,"resolved","S11","S1127","juvenile",100
+"Young adult","Mammals","Animalia","Mammalia","vertebrate",73,8,60,446,347,1098,0.316029143897996,TRUE,"resolved","S11","S1116","adult",75
+"Young adult","Worms","Animalia","Secernentea","invertebrate",67,2,31,242,265,1098,0.241347905282332,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Bees","Animalia","Insecta","invertebrate",24,2,9,38,92,1098,0.0837887067395264,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Crustaceans","Animalia","Branchiopoda","aquatic",26,2,2,37,84,1098,0.0765027322404372,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Fish","Animalia","Actinopterygii","aquatic",13,12,12,67,75,1098,0.0683060109289618,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Crustaceans","Animalia","Malacostraca","aquatic",14,9,7,27,65,1098,0.0591985428051002,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Molluscs","Animalia","Gastropoda","aquatic",10,2,4,13,40,1098,0.0364298724954463,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Insects/Spiders","Animalia","Insecta","invertebrate",6,4,5,18,32,1098,0.029143897996357,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Insects/Spiders","Animalia","Arachnida","invertebrate",6,2,4,36,28,1098,0.0255009107468124,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Birds","Animalia","Aves","vertebrate",3,3,3,11,18,1098,0.0163934426229508,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Worms","Animalia","Errantia","invertebrate",3,1,2,71,14,1098,0.0127504553734062,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Molluscs","Animalia","Bivalvia","aquatic",2,2,2,5,12,1098,0.0109289617486339,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Fish","Animalia","Chondrichthyes","aquatic",2,3,1,4,11,1098,0.0100182149362477,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Amphibians","Animalia","Amphibia","amphibian",2,1,1,5,9,1098,0.00819672131147541,FALSE,"resolved","S11","S1116","adult",75
+"Young adult","Invertebrates","Animalia","Entognatha","invertebrate",1,1,1,10,6,1098,0.00546448087431694,FALSE,"resolved","S11","S1116","adult",75
+"Young of year","Fish","Animalia","Actinopterygii","aquatic",133,36,60,621,555,577,0.961871750433276,TRUE,"resolved","S11","S1127","juvenile",100
+"Young of year","Crustaceans","Animalia","Malacostraca","aquatic",3,2,2,36,15,577,0.0259965337954939,FALSE,"resolved","S11","S1127","juvenile",100
+"Young of year","Molluscs","Animalia","Bivalvia","aquatic",1,2,1,4,7,577,0.0121317157712305,FALSE,"resolved","S11","S1127","juvenile",100
+"Zoea","Crustaceans","Animalia","Malacostraca","aquatic",110,39,82,586,533,557,0.956912028725314,TRUE,"resolved","S11","S1137","zoea",100
+"Zoea","Algae","Plantae","Chlorophyceae","algae",5,1,1,27,18,557,0.0323159784560144,FALSE,"resolved","S11","S1137","zoea",100
+"Zoea","Invertebrates","Animalia","Unknown","invertebrate",1,1,1,1,6,557,0.0107719928186715,FALSE,"resolved","S11","S1137","zoea",100
+"Zygospore","Algae","Plantae","Chlorophyceae","algae",20,1,1,20,63,63,1,TRUE,"resolved","S11","S1134","resting spore",100
+"Zygote","Invertebrates","Animalia","Conoidasida","invertebrate",65,1,1,70,198,395,0.50126582278481,TRUE,"resolved","UBERON","CL:0010017","zygote",100
+"Zygote","Invertebrates","Animalia","Echinoidea","invertebrate",31,5,9,88,116,395,0.293670886075949,FALSE,"resolved","UBERON","CL:0010017","zygote",100
+"Zygote","Algae","Chromista","Phaeophyceae","algae",8,8,6,19,44,395,0.111392405063291,FALSE,"resolved","UBERON","CL:0010017","zygote",100
+"Zygote","Fish","Animalia","Actinopterygii","aquatic",4,3,5,11,25,395,0.0632911392405063,FALSE,"resolved","UBERON","CL:0010017","zygote",100
+"Zygote","Mammals","Animalia","Mammalia","vertebrate",2,2,2,7,12,395,0.030379746835443,FALSE,"resolved","UBERON","CL:0010017","zygote",100

@@ -3,27 +3,28 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param record_type A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.
+#' @param internal_id Unique ID of the document of interest.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_get_pdf()
+#' chemi_amos_get_pdf(record_type = "DTXSID7020182")
 #' }
-chemi_amos_get_pdf <- function() {
+chemi_amos_get_pdf <- function(record_type, internal_id = NULL) {
   result <- generic_request(
-    query = NULL,
+    query = record_type,
     endpoint = "amos/get_pdf/",
     method = "GET",
-    batch_limit = 0,
+    batch_limit = 1,
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE
+    tidy = FALSE,
+    path_params = c(internal_id = internal_id)
   )
 
   # Additional post-processing can be added here
 
   return(result)
 }
-
-

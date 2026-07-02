@@ -12,7 +12,6 @@
 #' }
 chemi_amos_get_data_source_info <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "amos/get_data_source_info/",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_amos_get_data_source_info <- function() {
 
   return(result)
 }
-
-

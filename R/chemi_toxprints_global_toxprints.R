@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param category Required parameter
+#' @param category Optional parameter
 #' @param label Optional parameter
 #' @return Returns a list with result object
 #' @export
@@ -12,13 +12,16 @@
 #' \dontrun{
 #' chemi_toxprints_global_toxprints(category = "DTXSID7020182")
 #' }
-chemi_toxprints_global_toxprints <- function(category, label = NULL) {
+chemi_toxprints_global_toxprints <- function(category = NULL, label = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(category)) options[['category']] <- category
-  if (!is.null(label)) options[['label']] <- label
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(category)) {
+    options[['category']] <- category
+  }
+  if (!is.null(label)) {
+    options[['label']] <- label
+  }
+  result <- generic_request(
     endpoint = "toxprints/global_toxprints",
     method = "GET",
     batch_limit = 0,
@@ -32,5 +35,3 @@ chemi_toxprints_global_toxprints <- function(category, label = NULL) {
 
   return(result)
 }
-
-

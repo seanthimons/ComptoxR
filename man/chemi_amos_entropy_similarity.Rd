@@ -4,7 +4,21 @@
 \alias{chemi_amos_entropy_similarity}
 \title{Calculates the entropy similarity for two spectra.}
 \usage{
-chemi_amos_entropy_similarity()
+chemi_amos_entropy_similarity(
+  spectrum_1 = NULL,
+  spectrum_2 = NULL,
+  type = NULL,
+  window = NULL
+)
+}
+\arguments{
+\item{spectrum_1}{Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.}
+
+\item{spectrum_2}{Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.}
+
+\item{type}{Type of mass window to use.  Should be either "da" or "ppm".}
+
+\item{window}{Size of the mass window to use.  Will be in units of the 'type' argument.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_entropy_similarity()
+chemi_amos_entropy_similarity(spectrum_1 = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

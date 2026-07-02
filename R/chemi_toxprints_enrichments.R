@@ -12,7 +12,6 @@
 #' }
 chemi_toxprints_enrichments <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "toxprints/enrichments",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_toxprints_enrichments <- function() {
 
   return(result)
 }
-
-

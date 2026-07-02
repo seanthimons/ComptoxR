@@ -1,0 +1,22 @@
+{
+  "artifact_schema": "vcr_test_classification/v1",
+  "description": "Machine-readable classification for tests that call vcr::use_cassette(). Every current VCR test file must have one entry.",
+  "issue": {
+    "github_issue": 202,
+    "bean": "ComptoxR-uvdd",
+    "title": "VCR Test Classification Gate"
+  },
+  "allowed_tiers": [
+    "replay_fixture_integration",
+    "live_only",
+    "recorder_only"
+  ],
+  "required_fields": [
+    "test_file",
+    "tier",
+    "reason",
+    "owner",
+    "issue"
+  ],
+  "classifications": []
+}

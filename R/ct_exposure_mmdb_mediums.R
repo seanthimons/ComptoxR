@@ -3,19 +3,21 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @return Returns a scalar value
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_mmdb_mediums(query = "DTXSID7020182")
+#' ct_exposure_mmdb_mediums()
 #' }
-ct_exposure_mmdb_mediums <- function(query) {
-  generic_request(
-    query = query,
+ct_exposure_mmdb_mediums <- function() {
+  result <- generic_request(
     endpoint = "exposure/mmdb/mediums",
     method = "GET",
-    batch_limit = 1
+    batch_limit = 0
   )
-}
 
+  # Additional post-processing can be added here
+
+  return(result)
+}

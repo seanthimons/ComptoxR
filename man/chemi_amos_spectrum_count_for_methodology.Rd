@@ -4,7 +4,12 @@
 \alias{chemi_amos_spectrum_count_for_methodology}
 \title{Returns the number of spectra that have a specified methodology.}
 \usage{
-chemi_amos_spectrum_count_for_methodology()
+chemi_amos_spectrum_count_for_methodology(dtxsid = NULL, spectrum_type = NULL)
+}
+\arguments{
+\item{dtxsid}{DTXSID for the substance of interest.}
+
+\item{spectrum_type}{Analytical methodology to search for.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectrum_count_for_methodology()
+chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID1024122")
 }
 }

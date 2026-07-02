@@ -4,7 +4,42 @@
 \alias{chemi_search}
 \title{Search}
 \usage{
-chemi_search()
+chemi_search(
+  searchType = NULL,
+  inputType = NULL,
+  query = NULL,
+  smiles = NULL,
+  querySmiles = NULL,
+  offset = 0,
+  limit = NULL,
+  sortBy = NULL,
+  sortDirection = NULL,
+  params = NULL,
+  all_pages = TRUE
+)
+}
+\arguments{
+\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+
+\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
+
+\item{query}{Optional parameter}
+
+\item{smiles}{Optional parameter}
+
+\item{querySmiles}{Optional parameter}
+
+\item{offset}{Optional parameter}
+
+\item{limit}{Optional parameter}
+
+\item{sortBy}{Optional parameter}
+
+\item{sortDirection}{Optional parameter}
+
+\item{params}{Optional parameter}
+
+\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +49,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search()
+chemi_search(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

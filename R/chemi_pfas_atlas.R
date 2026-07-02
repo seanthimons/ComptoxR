@@ -1,22 +1,23 @@
-#' Generate categories for one molecule
+#' Generate PFAS Atlas categories for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param smiles SMILES string of the molecule
-#' @return Returns a tibble with results
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_pfas_atlas(smiles = "Fc1c(F)c(F)c2c(c1F)C(F)(F)C(F)(Br)C2(Cl)Cl")
+#' chemi_pfas_atlas(smiles = "O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F")
 #' }
 chemi_pfas_atlas <- function(smiles) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  result <- generic_request(
     endpoint = "pfas_atlas",
     method = "GET",
     batch_limit = 0,
@@ -32,24 +33,30 @@ chemi_pfas_atlas <- function(smiles) {
 }
 
 
-
-
-#' Generate categories for multiple molecules
+#' Generate PFAS Atlas categories for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @param smiles Array of SMILES strings, kept for backward compatibility with the previous PFAS Atlas POST format.
+#' @param chemicals Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility.
+#' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_pfas_atlas_bulk()
+#' chemi_pfas_atlas_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_pfas_atlas_bulk <- function() {
+chemi_pfas_atlas_bulk <- function(smiles = NULL, chemicals = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(chemicals)) {
+    options$chemicals <- chemicals
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = smiles,
     endpoint = "pfas_atlas",
+    options = options,
     tidy = FALSE
   )
 
@@ -57,5 +64,3 @@ chemi_pfas_atlas_bulk <- function() {
 
   return(result)
 }
-
-

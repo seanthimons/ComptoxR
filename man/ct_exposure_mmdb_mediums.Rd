@@ -4,16 +4,16 @@
 \alias{ct_exposure_mmdb_mediums}
 \title{Get all Media options}
 \usage{
-ct_exposure_mmdb_mediums(query)
+ct_exposure_mmdb_mediums()
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_exposure_mmdb_mediums(query = "DTXSID7020182")
+ct_exposure_mmdb_mediums()
 }
 }

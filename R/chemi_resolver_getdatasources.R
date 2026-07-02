@@ -12,7 +12,6 @@
 #' }
 chemi_resolver_getdatasources <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "resolver/getdatasources",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_resolver_getdatasources <- function() {
 
   return(result)
 }
-
-

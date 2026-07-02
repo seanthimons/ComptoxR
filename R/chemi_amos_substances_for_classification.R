@@ -3,17 +3,33 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param kingdom Kingdom-level (highest) classification of a substance.
+#' @param klass Class-level (third-highest) classification of a substance.
+#' @param subklass Subclass-level (fourth-highest) classification of a substance.
+#' @param superklass Superclass-level (second-highest) classification of a substance.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_substances_for_classification()
+#' chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
 #' }
-chemi_amos_substances_for_classification <- function() {
+chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(klass)) {
+    options$klass <- klass
+  }
+  if (!is.null(subklass)) {
+    options$subklass <- subklass
+  }
+  if (!is.null(superklass)) {
+    options$superklass <- superklass
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = kingdom,
     endpoint = "amos/substances_for_classification/",
+    options = options,
     tidy = FALSE
   )
 
@@ -21,5 +37,3 @@ chemi_amos_substances_for_classification <- function() {
 
   return(result)
 }
-
-

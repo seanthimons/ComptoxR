@@ -4,7 +4,10 @@
 \alias{chemi_amos_count_substances_in_ids}
 \title{Counts the number of unique substances seen in a set of records.}
 \usage{
-chemi_amos_count_substances_in_ids()
+chemi_amos_count_substances_in_ids(internal_id_list = NULL)
+}
+\arguments{
+\item{internal_id_list}{Array of record IDs.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_count_substances_in_ids()
+chemi_amos_count_substances_in_ids(internal_id_list = "DTXSID1024122")
 }
 }

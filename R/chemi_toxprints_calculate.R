@@ -16,11 +16,16 @@
 chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(labels)) options[['labels']] <- labels
-  if (!is.null(profile)) options[['profile']] <- profile
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(labels)) {
+    options[['labels']] <- labels
+  }
+  if (!is.null(profile)) {
+    options[['profile']] <- profile
+  }
+  result <- generic_request(
     endpoint = "toxprints/calculate",
     method = "GET",
     batch_limit = 0,
@@ -36,18 +41,16 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 }
 
 
-
-
 #' Toxprints Calculate
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function first resolves chemical identifiers using `chemi_resolver`,
+#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #' then sends the resolved Chemical objects to the API endpoint.
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
-#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
+#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param labels Optional parameter
 #' @param options Optional parameter
 #' @return Returns a list with result object
@@ -57,63 +60,59 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 #' \dontrun{
 #' chemi_toxprints_calculate_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_toxprints_calculate_bulk <- function(query, id_type = "AnyId", labels = NULL, options = NULL) {
-  # Resolve identifiers to Chemical objects
-  resolved <- chemi_resolver(query = query, id_type = id_type)
+chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NULL, options = NULL) {
+  # Resolve identifiers to Chemical objects via bulk POST endpoint
+  resolved <- tryCatch(
+    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
+    error = function(e) {
+      tryCatch(
+        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
+        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
+      )
+    }
+  )
 
-  if (nrow(resolved) == 0) {
+  # Keep only successfully resolved entries
+  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
+
+  if (length(resolved) == 0) {
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }
 
-  # Transform resolved tibble to Chemical object format
-  # Map column names: dtxsid -> sid, etc.
-  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {
-    row <- resolved[i, ]
+  # Transform resolved list to ChemicalRecord format expected by endpoint
+  chemicals <- purrr::map(resolved, function(item) {
+    chem <- item$chemical
     list(
-      sid = row$dtxsid,
-      smiles = row$smiles,
-      casrn = row$casrn,
-      inchi = row$inchi,
-      inchiKey = row$inchiKey,
-      name = row$name,
-      mol = row$mol
+      chemical = list(
+        sid = chem$chemId %||% chem$sid,
+        smiles = chem$canonicalSmiles %||% chem$smiles,
+        casrn = chem$casrn,
+        inchi = chem$inchi,
+        inchiKey = chem$inchiKey,
+        name = chem$name
+      )
     )
   })
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(labels)) extra_options$labels <- labels
-  if (!is.null(options)) extra_options$options <- options
-
-  # Build and send request
-  base_url <- Sys.getenv("chemi_burl", unset = "chemi_burl")
-  if (base_url == "") base_url <- "chemi_burl"
-
-  payload <- list(chemicals = chemicals)
-  if (length(extra_options) > 0) payload$options <- extra_options
-
-  req <- httr2::request(base_url) |>
-    httr2::req_url_path_append("toxprints/calculate") |>
-    httr2::req_method("POST") |>
-    httr2::req_body_json(payload) |>
-    httr2::req_headers(Accept = "application/json")
-
-  if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
-    return(httr2::req_dry_run(req))
+  if (!is.null(labels)) {
+    extra_options$labels <- labels
+  }
+  if (!is.null(options)) {
+    extra_options$options <- options
   }
 
-  resp <- httr2::req_perform(req)
-
-  if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
-    cli::cli_abort("API request to {.val toxprints/calculate} failed with status {httr2::resp_status(resp)}")
-  }
-
-  result <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+  result <- generic_chemi_request(
+    query = NULL,
+    endpoint = "toxprints/calculate",
+    options = extra_options,
+    chemicals = chemicals,
+    tidy = FALSE
+  )
 
   # Additional post-processing can be added here
 
   return(result)
 }
-
-

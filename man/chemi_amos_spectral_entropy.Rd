@@ -4,7 +4,10 @@
 \alias{chemi_amos_spectral_entropy}
 \title{Calculates the spectral entropy for a single spectrum.}
 \usage{
-chemi_amos_spectral_entropy()
+chemi_amos_spectral_entropy(spectrum = NULL)
+}
+\arguments{
+\item{spectrum}{Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectral_entropy()
+chemi_amos_spectral_entropy(spectrum = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

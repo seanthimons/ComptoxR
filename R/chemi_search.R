@@ -3,23 +3,77 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param searchType Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED
+#' @param inputType Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP
+#' @param query Optional parameter
+#' @param smiles Optional parameter
+#' @param querySmiles Optional parameter
+#' @param offset Optional parameter
+#' @param limit Optional parameter
+#' @param sortBy Optional parameter
+#' @param sortDirection Optional parameter
+#' @param params Optional parameter
+#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_search()
+#' chemi_search(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_search <- function() {
+chemi_search <- function(
+  searchType = NULL,
+  inputType = NULL,
+  query = NULL,
+  smiles = NULL,
+  querySmiles = NULL,
+  offset = 0,
+  limit = NULL,
+  sortBy = NULL,
+  sortDirection = NULL,
+  params = NULL,
+  all_pages = TRUE
+) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(inputType)) {
+    options$inputType <- inputType
+  }
+  if (!is.null(query)) {
+    options$query <- query
+  }
+  if (!is.null(smiles)) {
+    options$smiles <- smiles
+  }
+  if (!is.null(querySmiles)) {
+    options$querySmiles <- querySmiles
+  }
+  if (!is.null(offset)) {
+    options$offset <- offset
+  }
+  if (!is.null(limit)) {
+    options$limit <- limit
+  }
+  if (!is.null(sortBy)) {
+    options$sortBy <- sortBy
+  }
+  if (!is.null(sortDirection)) {
+    options$sortDirection <- sortDirection
+  }
+  if (!is.null(params)) {
+    options$params <- params
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = searchType,
     endpoint = "search",
-    tidy = FALSE
+    options = options,
+    tidy = FALSE,
+    paginate = all_pages,
+    max_pages = 100,
+    pagination_strategy = "offset_limit"
   )
 
   # Additional post-processing can be added here
 
   return(result)
 }
-
-

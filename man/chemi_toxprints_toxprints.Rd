@@ -4,10 +4,10 @@
 \alias{chemi_toxprints_toxprints}
 \title{Toxprints Toxprints}
 \usage{
-chemi_toxprints_toxprints(category, label = NULL)
+chemi_toxprints_toxprints(category = NULL, label = NULL)
 }
 \arguments{
-\item{category}{Required parameter}
+\item{category}{Optional parameter}
 
 \item{label}{Optional parameter}
 }

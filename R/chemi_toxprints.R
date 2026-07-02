@@ -16,11 +16,16 @@
 chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(headers)) options[['headers']] <- headers
-  if (!is.null(profile)) options[['profile']] <- profile
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  if (!is.null(profile)) {
+    options[['profile']] <- profile
+  }
+  result <- generic_request(
     endpoint = "toxprints",
     method = "GET",
     batch_limit = 0,
@@ -36,30 +41,26 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 }
 
 
-
-
 #' Toxprints
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param query Character vector of strings to send in request body
 #' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_bulk()
+#' chemi_toxprints_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_toxprints_bulk <- function() {
-  result <- generic_chemi_request(
-    query = NULL,
+chemi_toxprints_bulk <- function(query) {
+  result <- generic_request(
+    query = query,
     endpoint = "toxprints",
-    tidy = FALSE
+    method = "POST",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
-
-  # Additional post-processing can be added here
 
   return(result)
 }
-
-

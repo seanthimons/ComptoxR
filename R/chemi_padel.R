@@ -19,14 +19,25 @@
 chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(x2d)) options[['2d']] <- x2d
-  if (!is.null(x3d)) options[['3d']] <- x3d
-  if (!is.null(fp)) options[['fp']] <- fp
-  if (!is.null(headers)) options[['headers']] <- headers
-  if (!is.null(timeout)) options[['timeout']] <- timeout
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(x2d)) {
+    options[['2d']] <- x2d
+  }
+  if (!is.null(x3d)) {
+    options[['3d']] <- x3d
+  }
+  if (!is.null(fp)) {
+    options[['fp']] <- fp
+  }
+  if (!is.null(headers)) {
+    options[['headers']] <- headers
+  }
+  if (!is.null(timeout)) {
+    options[['timeout']] <- timeout
+  }
+  result <- generic_request(
     endpoint = "padel",
     method = "GET",
     batch_limit = 0,
@@ -42,30 +53,26 @@ chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = F
 }
 
 
-
-
 #' Padel
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param query Character vector of strings to send in request body
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_padel_bulk()
+#' chemi_padel_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_padel_bulk <- function() {
-  result <- generic_chemi_request(
-    query = NULL,
+chemi_padel_bulk <- function(query) {
+  result <- generic_request(
+    query = query,
     endpoint = "padel",
-    tidy = FALSE
+    method = "POST",
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
   )
-
-  # Additional post-processing can be added here
 
   return(result)
 }
-
-

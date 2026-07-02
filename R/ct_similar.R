@@ -1,5 +1,8 @@
 #' @title Get Similar Compounds by DTXSID
-#' 
+#'
+#' @description
+#' `r lifecycle::badge("questioning")`
+#'
 #' @param query A character vector of DTXSIDs.
 #' @param similarity The similarity threshold, a numeric value between 0 and 1. Optional, defaults to 0.8.
 #'
@@ -11,16 +14,12 @@
 #' ct_similar(query = "DTXSID7020182", similarity = 0.8)
 #' }
 ct_similar <- function(query, similarity = 0.8) {
-  
-  if (similarity < 0 || similarity > 1) {
-    cli::cli_abort("Similarity threshold must be between 0 and 1.")
-  }
+  # Run pre-request hooks (validates similarity range)
+  hook_data <- run_hook("ct_similar", "pre_request", list(params = list(query = query, similarity = similarity)))
+  query <- hook_data$params$query
+  similarity <- hook_data$params$similarity
 
-  if(!is.numeric(similarity)) {
-    cli::cli_abort("Similarity threshold must be a numeric value.")
-  }
-
-  generic_request(
+  result <- generic_request(
     query = query,
     endpoint = "similar-compound/by-dtxsid/",
     method = "GET",
@@ -28,4 +27,6 @@ ct_similar <- function(query, similarity = 0.8) {
     server = "https://comptox.epa.gov/dashboard-api/",
     similarity
   )
+
+  return(result)
 }

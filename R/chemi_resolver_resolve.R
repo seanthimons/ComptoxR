@@ -3,17 +3,25 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param queries Optional parameter
+#' @param mol Optional parameter
 #' @return Returns a list with result object
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_resolve()
+#' chemi_resolver_resolve(queries = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_resolver_resolve <- function() {
+chemi_resolver_resolve <- function(queries = NULL, mol = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(mol)) {
+    options$mol <- mol
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = queries,
     endpoint = "resolver/resolve",
+    options = options,
     tidy = FALSE
   )
 
@@ -21,5 +29,3 @@ chemi_resolver_resolve <- function() {
 
   return(result)
 }
-
-

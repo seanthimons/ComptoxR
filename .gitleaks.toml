@@ -1,0 +1,15 @@
+title = "ComptoxR gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "EPA NEPIS Dockey query parameters are public document identifiers in recorded test fixtures"
+paths = [
+  '''tests/testthat/fixtures/chemi_amos_fact_sheet_list_basic\.yml'''
+]
+regexTarget = "line"
+regexes = [
+  '''Dockey=[A-Z0-9]{8}\.[A-Z]{3}'''
+]
+condition = "AND"

@@ -12,7 +12,6 @@
 #' }
 chemi_amos_analytical_qc_list <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "amos/analytical_qc_list/",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_amos_analytical_qc_list <- function() {
 
   return(result)
 }
-
-

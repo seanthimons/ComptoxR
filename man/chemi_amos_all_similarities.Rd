@@ -4,7 +4,27 @@
 \alias{chemi_amos_all_similarities}
 \title{Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.}
 \usage{
-chemi_amos_all_similarities()
+chemi_amos_all_similarities(
+  da_window = NULL,
+  dtxsids = NULL,
+  min_intensity = NULL,
+  ms_level = NULL,
+  ppm_window = NULL,
+  spectra = NULL
+)
+}
+\arguments{
+\item{da_window}{Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.}
+
+\item{dtxsids}{List of DTXSIDs to search for.}
+
+\item{min_intensity}{Minimum intensity level for peaks in both the user and database spectra to consider.  All database spectra are scaled to have a maximum intensity of 100, and all user spectra are assumed to be scaled the same.}
+
+\item{ms_level}{Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.}
+
+\item{ppm_window}{Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.}
+
+\item{spectra}{A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +34,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_all_similarities()
+chemi_amos_all_similarities(da_window = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

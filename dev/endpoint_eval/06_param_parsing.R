@@ -15,11 +15,13 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   }
 
   metadata_entry <- metadata[[param_name]]
-  if (!is.list(metadata_entry)) return("= NULL")
+  if (!is.list(metadata_entry)) {
+    return("= NULL")
+  }
 
   # Check if parameter is required
   if (isTRUE(metadata_entry$required)) {
-    return("")  # No default for required params
+    return("") # No default for required params
   }
 
   # Check for default value in schema
@@ -45,6 +47,24 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   return(paste0("= ", deparse(default_val)))
 }
 
+generic_request_reserved_args <- c(
+  "query",
+  "endpoint",
+  "method",
+  "server",
+  "batch_limit",
+  "auth",
+  "tidy",
+  "path_params",
+  "content_type",
+  "body_type",
+  "body",
+  "query_params",
+  "paginate",
+  "max_pages",
+  "pagination_strategy"
+)
+
 #' Parse function parameters from comma-separated string
 #'
 #' Extracts parameter information and generates code components for function signatures,
@@ -58,7 +78,12 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
 #' @return A list with: fn_signature, param_docs, params_code, params_call, has_params,
 #'   primary_param (when query params are used as primary).
 #' @export
-parse_function_params <- function(params_str, strategy = c("extra_params", "options"), metadata = list(), has_path_params = TRUE) {
+parse_function_params <- function(
+  params_str,
+  strategy = c("extra_params", "options"),
+  metadata = list(),
+  has_path_params = TRUE
+) {
   strategy <- match.arg(strategy)
 
   # Handle empty/NA params
@@ -93,7 +118,9 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 
   # Helper to sanitize parameter names
   sanitize_param <- function(x) {
-    if (is.na(x) || !nzchar(x)) return("param")
+    if (is.na(x) || !nzchar(x)) {
+      return("param")
+    }
     if (grepl("^[0-9]", x)) {
       paste0("x", x)
     } else {
@@ -103,12 +130,12 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 
   param_vec_sanitized <- vapply(param_vec_orig, sanitize_param, character(1))
   names(param_vec_sanitized) <- param_vec_orig
-  
+
   # Identify required vs optional parameters
   required_params <- character(0)
   optional_params <- character(0)
   primary_param <- NULL
-  
+
   if (!isTRUE(has_path_params)) {
     primary_param <- param_vec_sanitized[1]
   }
@@ -117,40 +144,54 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     p_orig <- param_vec_orig[i]
     p_san <- param_vec_sanitized[i]
     entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
-    
+
     is_required <- FALSE
     if (is.list(entry) && isTRUE(entry$required)) {
       is_required <- TRUE
     }
-    
+
+    # For primary parameters (first query param when no path params exist),
+    # only mark as required if the schema says so AND it has no default value.
+    # This ensures optional params with default values keep their defaults.
     if (!is.null(primary_param) && p_san == primary_param) {
-      is_required <- TRUE
+      # Only mark as required if the schema explicitly says required=true
+      # and there's no default value provided
+      has_default <- is.list(entry) && !is.null(entry$default) && !(length(entry$default) == 1 && is.na(entry$default))
+      schema_required <- is.list(entry) && isTRUE(entry$required)
+
+      if (schema_required && !has_default) {
+        is_required <- TRUE
+      }
     }
-    
+
     if (is_required) {
       required_params <- c(required_params, p_san)
     } else {
       optional_params <- c(optional_params, p_san)
     }
   }
-  
+
   # Build function signature
   sig_parts <- character(0)
   if (length(required_params) > 0) {
     sig_parts <- c(sig_parts, paste(required_params, collapse = ", "))
   }
-  
+
   if (length(optional_params) > 0) {
-    optional_defaults <- vapply(optional_params, function(p_san) {
-      p_orig <- param_vec_orig[which(param_vec_sanitized == p_san)[1]]
-      entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
-      build_param_default(p_orig, metadata, is_primary = FALSE)
-    }, character(1))
+    optional_defaults <- vapply(
+      optional_params,
+      function(p_san) {
+        p_orig <- param_vec_orig[which(param_vec_sanitized == p_san)[1]]
+        entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
+        build_param_default(p_orig, metadata, is_primary = FALSE)
+      },
+      character(1)
+    )
     sig_parts <- c(sig_parts, paste(optional_params, optional_defaults, collapse = ", "))
   }
-  
+
   fn_signature <- paste(sig_parts, collapse = ", ")
-  
+
   # Extract primary example safely
   primary_example <- NA
   if (!is.null(primary_param)) {
@@ -167,7 +208,7 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
     p_orig <- param_vec_orig[i]
     p_san <- param_vec_sanitized[i]
     entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
-    
+
     if (is.list(entry)) {
       desc <- entry$description %||% ""
       enum_vals <- entry$enum %||% NULL
@@ -192,7 +233,10 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 
       doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " ", param_desc))
     } else {
-       doc_lines <- c(doc_lines, paste0("#' @param ", p_san, if (p_san %in% required_params) " Required parameter" else " Optional parameter"))
+      doc_lines <- c(
+        doc_lines,
+        paste0("#' @param ", p_san, if (p_san %in% required_params) " Required parameter" else " Optional parameter")
+      )
     }
   }
   param_docs <- paste0(paste(doc_lines, collapse = "\n"), "\n")
@@ -200,7 +244,11 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
   # Strategy-specific code generation
   if (strategy == "extra_params") {
     args_list <- paste(paste0("`", param_vec_orig, "` = ", param_vec_sanitized), collapse = ",\n    ")
-    params_call <- paste0(",\n    ", args_list)
+    if (any(param_vec_orig %in% generic_request_reserved_args)) {
+      params_call <- paste0(",\n    query_params = list(\n    ", args_list, "\n    )")
+    } else {
+      params_call <- paste0(",\n    ", args_list)
+    }
     params_code <- ""
   } else {
     lines <- c("  # Collect optional parameters", "  options <- list()")
@@ -244,11 +292,21 @@ parse_function_params <- function(params_str, strategy = c("extra_params", "opti
 #'     \item primary_example: Example value for primary parameter (or NA)
 #'   }
 #' @export
-parse_path_parameters <- function(path_params_str, strategy = c("extra_params", "options"), metadata = list(), body_schema_full = NULL) {
+parse_path_parameters <- function(
+  path_params_str,
+  strategy = c("extra_params", "options"),
+  metadata = list(),
+  body_schema_full = NULL
+) {
   strategy <- match.arg(strategy)
 
   # Handle empty/NA path params
-  if (is.null(path_params_str) || length(path_params_str) == 0 || is.na(path_params_str[1]) || !nzchar(trimws(path_params_str[1]))) {
+  if (
+    is.null(path_params_str) ||
+      length(path_params_str) == 0 ||
+      is.na(path_params_str[1]) ||
+      !nzchar(trimws(path_params_str[1]))
+  ) {
     return(list(
       fn_signature = "",
       path_params_call = "",
@@ -284,7 +342,8 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   # Build function signature
   if (length(additional_params) > 0) {
     fn_signature <- paste0(
-      primary_param, ", ",
+      primary_param,
+      ", ",
       paste(additional_params, "= NULL", collapse = ", ")
     )
   } else {
@@ -306,7 +365,7 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
   doc_lines <- character(0)
   for (p in all_params) {
     entry <- if (!is.null(metadata) && !is.na(p)) metadata[[p]] else NULL
-    
+
     if (is.list(entry)) {
       desc <- entry$description %||% ""
       enum_vals <- entry$enum %||% NULL
@@ -380,45 +439,52 @@ parse_path_parameters <- function(path_params_str, strategy = c("extra_params", 
 
 
 #' Sample random DTXSIDs for examples
-#' 
+#'
 #' Samples random DTXSIDs from the testing_chemicals dataset for use in
 #' example code generation. Falls back to a default DTXSID if the dataset
 #' is unavailable.
-#' 
+#'
 #' @param n Number of DTXSIDs to sample (default 3)
 #' @param custom_list Optional custom vector of DTXSIDs to sample from
 #' @return Character vector of DTXSIDs
 sample_test_dtxsids <- function(n = 3, custom_list = NULL) {
-  # If custom list provided, use it
+  # Deterministic: take the first n of a stable source (not sample()) so
+  # regenerated @examples are reproducible across runs and environments.
   if (!is.null(custom_list) && length(custom_list) >= n) {
-    return(sample(custom_list, size = n))
+    return(utils::head(custom_list, n))
   }
-  
-  default_dtxsid <- "DTXSID7020182"
-  
-  tryCatch({
-    # Try to load testing_chemicals from package data
-    chems <- NULL
-    if (requireNamespace("ComptoxR", quietly = TRUE)) {
-      if (exists("testing_chemicals", envir = asNamespace("ComptoxR"))) {
-        chems <- get("testing_chemicals", envir = asNamespace("ComptoxR"))
+
+  # Fixed multi-DTXSID fallback so examples never degrade to a single id when
+  # testing_chemicals is unreachable (e.g. generate run without ComptoxR loaded).
+  default_dtxsids <- c(
+    "DTXSID7020182",
+    "DTXSID9020112",
+    "DTXSID3020035",
+    "DTXSID5020023",
+    "DTXSID0020232"
+  )
+
+  chems <- tryCatch(
+    {
+      if (
+        requireNamespace("ComptoxR", quietly = TRUE) &&
+          exists("testing_chemicals", envir = asNamespace("ComptoxR"))
+      ) {
+        get("testing_chemicals", envir = asNamespace("ComptoxR"))
+      } else if (file.exists("data/testing_chemicals.rda")) {
+        e <- new.env()
+        load("data/testing_chemicals.rda", envir = e)
+        e$testing_chemicals
+      } else {
+        NULL
       }
-    }
-    
-    # Fallback: try to load from data/ directory
-    if (is.null(chems)) {
-      data_path <- "data/testing_chemicals.rda"
-      if (file.exists(data_path)) {
-        load(data_path)
-      }
-    }
-    
-    if (!is.null(chems) && "dtxsid" %in% names(chems) && nrow(chems) >= n) {
-      sample(chems$dtxsid, size = n)
-    } else {
-      default_dtxsid
-    }
-  }, error = function(e) {
-    default_dtxsid  # fallback to default
-  })
+    },
+    error = function(e) NULL
+  )
+
+  if (!is.null(chems) && "dtxsid" %in% names(chems) && nrow(chems) >= n) {
+    utils::head(chems$dtxsid, n)
+  } else {
+    utils::head(default_dtxsids, n)
+  }
 }

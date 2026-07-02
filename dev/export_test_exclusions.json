@@ -1,0 +1,11 @@
+{
+  "artifact_schema": "export_test_exclusions/v1",
+  "description": "Intentional exported-function test exclusions for the unit-test readiness audit. Entries must include export, reason, owner, and issue.",
+  "required_fields": [
+    "export",
+    "reason",
+    "owner",
+    "issue"
+  ],
+  "exclusions": []
+}

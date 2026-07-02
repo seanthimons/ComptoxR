@@ -16,11 +16,16 @@
 chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(idType)) options[['idType']] <- idType
-  if (!is.null(fuzzy)) options[['fuzzy']] <- fuzzy
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(idType)) {
+    options[['idType']] <- idType
+  }
+  if (!is.null(fuzzy)) {
+    options[['fuzzy']] <- fuzzy
+  }
+  result <- generic_request(
     endpoint = "resolver/mesh",
     method = "GET",
     batch_limit = 0,
@@ -34,5 +39,3 @@ chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
 
   return(result)
 }
-
-

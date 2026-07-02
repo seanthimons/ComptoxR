@@ -4,7 +4,21 @@
 \alias{chemi_amos_substances_for_classification}
 \title{Returns a list of substances in the database which match the specified top four levels of a ClassyFire classification.}
 \usage{
-chemi_amos_substances_for_classification()
+chemi_amos_substances_for_classification(
+  kingdom = NULL,
+  klass = NULL,
+  subklass = NULL,
+  superklass = NULL
+)
+}
+\arguments{
+\item{kingdom}{Kingdom-level (highest) classification of a substance.}
+
+\item{klass}{Class-level (third-highest) classification of a substance.}
+
+\item{subklass}{Subclass-level (fourth-highest) classification of a substance.}
+
+\item{superklass}{Superclass-level (second-highest) classification of a substance.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +28,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_substances_for_classification()
+chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
 }
 }

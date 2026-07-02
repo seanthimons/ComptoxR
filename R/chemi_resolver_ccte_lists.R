@@ -12,7 +12,6 @@
 #' }
 chemi_resolver_ccte_lists <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "resolver/ccte-lists",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_resolver_ccte_lists <- function() {
 
   return(result)
 }
-
-

@@ -12,7 +12,6 @@
 #' }
 chemi_safety_pcodes <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "safety/pcodes",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_safety_pcodes <- function() {
 
   return(result)
 }
-
-

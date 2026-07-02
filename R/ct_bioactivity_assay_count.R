@@ -3,19 +3,21 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @return Returns a tibble with results
+#' @return Returns a scalar value
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_bioactivity_assay_count(query = "DTXSID7020182")
+#' ct_bioactivity_assay_count()
 #' }
-ct_bioactivity_assay_count <- function(query) {
-  generic_request(
-    query = query,
+ct_bioactivity_assay_count <- function() {
+  result <- generic_request(
     endpoint = "bioactivity/assay/count",
     method = "GET",
-    batch_limit = 1
+    batch_limit = 0
   )
-}
 
+  # Additional post-processing can be added here
+
+  return(result)
+}

@@ -7,10 +7,10 @@
 ct_exposure_mmdb_aggregate(dtxsid)
 }
 \arguments{
-\item{dtxsid}{DSSTox Substance Identifier}
+\item{dtxsid}{DSSTox Substance Identifier. Type: string}
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

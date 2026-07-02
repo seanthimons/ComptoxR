@@ -4,7 +4,10 @@
 \alias{chemi_amos_record_type_count}
 \title{Returns the number of records of the given type.}
 \usage{
-chemi_amos_record_type_count()
+chemi_amos_record_type_count(record_type)
+}
+\arguments{
+\item{record_type}{Record type.  Accepted values are "analytical_qc", "fact_sheets", and "methods".}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_record_type_count()
+chemi_amos_record_type_count(record_type = "DTXSID7020182")
 }
 }

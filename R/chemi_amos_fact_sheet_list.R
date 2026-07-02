@@ -12,7 +12,6 @@
 #' }
 chemi_amos_fact_sheet_list <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "amos/fact_sheet_list",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_amos_fact_sheet_list <- function() {
 
   return(result)
 }
-
-

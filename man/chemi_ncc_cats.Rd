@@ -2,25 +2,25 @@
 % Please edit documentation in R/chemi_ncc_cats.R
 \name{chemi_ncc_cats}
 \alias{chemi_ncc_cats}
-\title{Generate categories for one molecule}
+\title{Generate NCC categories for one molecule}
 \usage{
-chemi_ncc_cats(smiles, logp, ws)
+chemi_ncc_cats(smiles, logp = NULL, ws = NULL)
 }
 \arguments{
-\item{smiles}{SMILES string of the molecule}
+\item{smiles}{SMILES to generate NCC categories for}
 
 \item{logp}{Octanol-water partition coefficient}
 
 \item{ws}{Water solubility (mg/L)}
 }
 \value{
-Returns a tibble with results
+Returns a list with result object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_ncc_cats(smiles = "C1=CC=CC=C1C(C1C=CC=CC=1)C1C=CC=CC=1")
+chemi_ncc_cats(smiles = "DTXSID7020182")
 }
 }

@@ -4,7 +4,12 @@
 \alias{chemi_amos_get_pdf}
 \title{Retrieves a PDF from the database by the internal ID and type of record.}
 \usage{
-chemi_amos_get_pdf()
+chemi_amos_get_pdf(record_type, internal_id = NULL)
+}
+\arguments{
+\item{record_type}{A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.}
+
+\item{internal_id}{Unique ID of the document of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_get_pdf()
+chemi_amos_get_pdf(record_type = "DTXSID7020182")
 }
 }

@@ -4,16 +4,16 @@
 \alias{ct_chemical_list_type}
 \title{Get all list types}
 \usage{
-ct_chemical_list_type(query)
+ct_chemical_list_type()
 }
 \value{
-Returns a tibble with results
+Returns a tibble with results (array of objects)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_chemical_list_type(query = "DTXSID7020182")
+ct_chemical_list_type()
 }
 }

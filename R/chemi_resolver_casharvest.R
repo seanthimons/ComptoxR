@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param request.filesInfo Required parameter
+#' @param request.filesInfo Optional parameter
 #' @return Returns a list with result object
 #' @export
 #'
@@ -11,12 +11,13 @@
 #' \dontrun{
 #' chemi_resolver_casharvest(request.filesInfo = "DTXSID7020182")
 #' }
-chemi_resolver_casharvest <- function(request.filesInfo) {
+chemi_resolver_casharvest <- function(request.filesInfo = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(request.filesInfo)) options[['request.filesInfo']] <- request.filesInfo
-    result <- generic_chemi_request(
-    query = NULL,
+  if (!is.null(request.filesInfo)) {
+    options[['request.filesInfo']] <- request.filesInfo
+  }
+  result <- generic_chemi_request(
     endpoint = "resolver/casharvest",
     options = options,
     tidy = FALSE
@@ -26,5 +27,3 @@ chemi_resolver_casharvest <- function(request.filesInfo) {
 
   return(result)
 }
-
-

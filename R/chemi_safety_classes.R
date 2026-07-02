@@ -12,7 +12,6 @@
 #' }
 chemi_safety_classes <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "safety/classes",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_safety_classes <- function() {
 
   return(result)
 }
-
-

@@ -1,7 +1,7 @@
 #' Predict properties of chemical compounds using an external API.
 #'
 #' This function takes a vector of chemical identifiers as input, resolves them
-#' using `chemi_resolver`, and then uses an external API to predict their properties.
+#' using `chemi_resolver_lookup`, and then uses an external API to predict their properties.
 #' It sends a POST request to the API endpoint, passing the resolved chemical names
 #' in the request body.
 #'
@@ -30,10 +30,10 @@ chemi_predict <- function(query, report = "JSON") {
     cli::cli_abort('Request missing')
   }
 
-  # Resolve chemical identifiers using chemi_resolver
-  resolved_chemicals <- chemi_resolver(query)
+  # Resolve chemical identifiers using chemi_resolver_lookup
+  resolved_chemicals <- chemi_resolver_lookup(query)
 
-  # Check if chemi_resolver returned any results
+  # Check if chemi_resolver_lookup returned any results
   if (length(resolved_chemicals) == 0) {
     cli::cli_abort("No chemicals resolved for the given query.")
     return(NULL)

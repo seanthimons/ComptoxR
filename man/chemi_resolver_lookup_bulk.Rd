@@ -10,7 +10,8 @@ chemi_resolver_lookup_bulk(
   fuzzy = "Not",
   mol = FALSE,
   filters = NULL,
-  format = NULL
+  format = NULL,
+  tidy = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ chemi_resolver_lookup_bulk(
 \item{filters}{Optional filters object}
 
 \item{format}{Optional format specification. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
+
+\item{tidy}{Logical; if TRUE (default), return a tibble. If FALSE, return a cleaned list.}
 }
 \value{
 Returns a list with result object

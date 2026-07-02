@@ -16,6 +16,9 @@ generic_chemi_request(
   array_payload = FALSE,
   tidy = TRUE,
   chemicals = NULL,
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
   ...
 )
 }
@@ -35,12 +38,12 @@ provided, the chemicals parameter is used instead.}
 
 \item{pluck_res}{Optional character; the name of the field to extract from the JSON response.}
 
-\item{wrap}{Boolean; whether to wrap the query in a {"chemicals": \link{...}, "options": ...} structure.
-Defaults to TRUE. If FALSE, sends a JSON array of objects like \link{{"sid": "ID1"}, ...}.
+\item{wrap}{Boolean; whether to wrap the query in a \verb{\{"chemicals": [...], "options": ...\}} structure.
+Defaults to TRUE. If FALSE, sends a JSON array of objects like \verb{[\{"sid": "ID1"\}, ...]}.
 Ignored if array_payload is TRUE.}
 
 \item{array_payload}{Boolean; if TRUE, creates a flat structure with identifiers as an array:
-{"ids": \link{"ID1", "ID2"}, "option1": "value1", ...}. When TRUE, sid_label is used as the
+\verb{\{"ids": ["ID1", "ID2"], "option1": "value1", ...\}}. When TRUE, sid_label is used as the
 array key name and options are merged at the top level. Takes precedence over wrap parameter.
 Defaults to FALSE.}
 
@@ -50,6 +53,13 @@ Defaults to FALSE.}
 list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
 this takes precedence over the query parameter for building the chemicals payload.}
 
+\item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.
+When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
+
+\item{max_pages}{Maximum pages to fetch when paginate=TRUE. Defaults to 100.}
+
+\item{pagination_strategy}{Pagination strategy. For chemi search, usually "offset_limit" (body).}
+
 \item{...}{Additional arguments passed to httr2.}
 }
 \value{
@@ -57,5 +67,5 @@ A tidy tibble (if tidy=TRUE) or a raw list.
 }
 \description{
 This specialized template handles the nested payload structure common to the
-EPA cheminformatics microservices: {"chemicals": \link{{"sid": "ID1"}}, "options": {...}}
+EPA cheminformatics microservices: \verb{\{"chemicals": [\{"sid": "ID1"\}], "options": \{...\}\}}
 }

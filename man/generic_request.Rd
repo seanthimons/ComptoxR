@@ -14,6 +14,12 @@ generic_request(
   tidy = TRUE,
   path_params = NULL,
   content_type = "application/json",
+  body_type = "json",
+  body = NULL,
+  query_params = NULL,
+  paginate = FALSE,
+  max_pages = 100,
+  pagination_strategy = NULL,
   ...
 )
 }
@@ -43,14 +49,43 @@ Cannot be used with batching (batch_limit > 1).}
 
 \item{content_type}{Expected response content type. Defaults to "application/json".
 Supported types:
-- "application/json": Parses response as JSON (default behavior)
-- "text/plain": Returns response as character string
-- "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image}
+\itemize{
+\item "application/json": Parses response as JSON (default behavior)
+\item "text/plain": Returns response as character string
+\item "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
+}}
+
+\item{body_type}{How to encode the request body for POST requests. Defaults to "json".
+Supported types:
+\itemize{
+\item "json": Send as JSON array via \code{httr2::req_body_json()} (default)
+\item "raw_text": Send as newline-delimited plain text via \code{httr2::req_body_raw()}
+with content type "text/plain". Used for endpoints like /chemical/search/equal/.
+}}
+
+\item{body}{Optional explicit POST body. When supplied, this value is
+JSON-encoded instead of the batched \code{query} payload.}
+
+\item{query_params}{Optional named list of URL query parameters. Use this for
+API parameters whose names collide with \code{generic_request()} formals.}
+
+\item{paginate}{Boolean; whether to automatically fetch all pages for paginated endpoints.
+Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
+pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.}
+
+\item{max_pages}{Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
+Acts as a safety limit to prevent runaway pagination loops.}
+
+\item{pagination_strategy}{The pagination strategy to use. One of: "offset_limit", "page_number",
+"page_size", "cursor", or NULL. When NULL, paginate is ignored.
+Usually set by generated stubs from Phase 19 metadata.}
 
 \item{...}{Additional parameters:
-- If method is "POST": Added as query parameters to the URL.
-- If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
-- If method is "GET" and batch_limit > 1: Added as query parameters to the URL.}
+\itemize{
+\item If method is "POST": Added as query parameters to the URL.
+\item If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
+\item If method is "GET" and batch_limit > 1: Added as query parameters to the URL.
+}}
 }
 \value{
 Depends on content_type:

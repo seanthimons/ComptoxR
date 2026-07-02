@@ -3,17 +3,19 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param internal_id_list Array of record IDs.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_count_substances_in_ids()
+#' chemi_amos_count_substances_in_ids(internal_id_list = "DTXSID1024122")
 #' }
-chemi_amos_count_substances_in_ids <- function() {
+chemi_amos_count_substances_in_ids <- function(internal_id_list = NULL) {
   result <- generic_chemi_request(
-    query = NULL,
+    query = internal_id_list,
     endpoint = "amos/count_substances_in_ids/",
+    wrap = FALSE,
     tidy = FALSE
   )
 
@@ -21,5 +23,3 @@ chemi_amos_count_substances_in_ids <- function() {
 
   return(result)
 }
-
-

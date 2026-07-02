@@ -4,7 +4,12 @@
 \alias{chemi_amos_mass_range}
 \title{Returns a list of substances whose monoisotopic mass falls within the specified range.}
 \usage{
-chemi_amos_mass_range()
+chemi_amos_mass_range(lower_mass_limit = NULL, upper_mass_limit = NULL)
+}
+\arguments{
+\item{lower_mass_limit}{Lower limit of the mass range to search for.}
+
+\item{upper_mass_limit}{Upper limit of the mass range to search for.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +19,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_range()
+chemi_amos_mass_range(lower_mass_limit = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

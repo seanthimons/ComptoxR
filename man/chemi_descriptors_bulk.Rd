@@ -4,7 +4,10 @@
 \alias{chemi_descriptors_bulk}
 \title{Descriptors}
 \usage{
-chemi_descriptors_bulk()
+chemi_descriptors_bulk(query)
+}
+\arguments{
+\item{query}{Character vector of strings to send in request body}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk()
+chemi_descriptors_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 }
 }

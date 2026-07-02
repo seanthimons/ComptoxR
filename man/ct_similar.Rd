@@ -15,7 +15,7 @@ ct_similar(query, similarity = 0.8)
 A tibble of similar compounds, or an empty tibble if no similar compounds are found.
 }
 \description{
-Get Similar Compounds by DTXSID
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
 }
 \examples{
 \dontrun{

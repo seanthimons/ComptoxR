@@ -12,7 +12,6 @@
 #' }
 chemi_stdizer_operations <- function() {
   result <- generic_request(
-    query = NULL,
     endpoint = "stdizer/operations",
     method = "GET",
     batch_limit = 0,
@@ -25,5 +24,3 @@ chemi_stdizer_operations <- function() {
 
   return(result)
 }
-
-

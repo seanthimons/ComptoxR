@@ -4,16 +4,16 @@
 \alias{ct_bioactivity_assay_count}
 \title{Get total assay count}
 \usage{
-ct_bioactivity_assay_count(query)
+ct_bioactivity_assay_count()
 }
 \value{
-Returns a tibble with results
+Returns a scalar value
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-ct_bioactivity_assay_count(query = "DTXSID7020182")
+ct_bioactivity_assay_count()
 }
 }

@@ -3,11 +3,11 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function first resolves chemical identifiers using `chemi_resolver`,
+#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #' then sends the resolved Chemical objects to the API endpoint.
 #'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
-#' @param id_type Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
+#' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param section Optional parameter
 #' @return Returns a list with result object
 #' @export
@@ -16,33 +16,46 @@
 #' \dontrun{
 #' chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getsimilaritymap <- function(query, id_type = "AnyId", section = NULL) {
-  # Resolve identifiers to Chemical objects
-  resolved <- chemi_resolver(query = query, id_type = id_type)
+chemi_resolver_getsimilaritymap <- function(query, idType = "AnyId", section = NULL) {
+  # Resolve identifiers to Chemical objects via bulk POST endpoint
+  resolved <- tryCatch(
+    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
+    error = function(e) {
+      tryCatch(
+        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
+        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
+      )
+    }
+  )
 
-  if (nrow(resolved) == 0) {
+  # Keep only successfully resolved entries
+  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
+
+  if (length(resolved) == 0) {
     cli::cli_warn("No chemicals could be resolved from the provided identifiers")
     return(NULL)
   }
 
-  # Transform resolved tibble to Chemical object format
-  # Map column names: dtxsid -> sid, etc.
-  chemicals <- purrr::map(seq_len(nrow(resolved)), function(i) {
-    row <- resolved[i, ]
+  # Transform resolved list to ChemicalRecord format expected by endpoint
+  chemicals <- purrr::map(resolved, function(item) {
+    chem <- item$chemical
     list(
-      sid = row$dtxsid,
-      smiles = row$smiles,
-      casrn = row$casrn,
-      inchi = row$inchi,
-      inchiKey = row$inchiKey,
-      name = row$name,
-      mol = row$mol
+      chemical = list(
+        sid = chem$chemId %||% chem$sid,
+        smiles = chem$canonicalSmiles %||% chem$smiles,
+        casrn = chem$casrn,
+        inchi = chem$inchi,
+        inchiKey = chem$inchiKey,
+        name = chem$name
+      )
     )
   })
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) extra_options$section <- section
+  if (!is.null(section)) {
+    extra_options$section <- section
+  }
 
   result <- generic_chemi_request(
     query = NULL,
@@ -56,5 +69,3 @@ chemi_resolver_getsimilaritymap <- function(query, id_type = "AnyId", section = 
 
   return(result)
 }
-
-

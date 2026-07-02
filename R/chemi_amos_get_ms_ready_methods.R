@@ -3,19 +3,20 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param inchikey InChIKey to search by.
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_get_ms_ready_methods()
+#' chemi_amos_get_ms_ready_methods(inchikey = "DTXSID7020182")
 #' }
-chemi_amos_get_ms_ready_methods <- function() {
+chemi_amos_get_ms_ready_methods <- function(inchikey) {
   result <- generic_request(
-    query = NULL,
+    query = inchikey,
     endpoint = "amos/get_ms_ready_methods/",
     method = "GET",
-    batch_limit = 0,
+    batch_limit = 1,
     server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
@@ -25,5 +26,3 @@ chemi_amos_get_ms_ready_methods <- function() {
 
   return(result)
 }
-
-

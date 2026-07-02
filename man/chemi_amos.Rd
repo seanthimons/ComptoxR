@@ -4,7 +4,10 @@
 \alias{chemi_amos}
 \title{Retrieves a list of records from the database that contain a searched DTXSID.}
 \usage{
-chemi_amos()
+chemi_amos(dtxsid)
+}
+\arguments{
+\item{dtxsid}{The DTXSID for the substance of interest.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos()
+chemi_amos(dtxsid = "DTXSID7020182")
 }
 }

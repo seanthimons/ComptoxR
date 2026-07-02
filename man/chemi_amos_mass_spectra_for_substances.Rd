@@ -4,7 +4,10 @@
 \alias{chemi_amos_mass_spectra_for_substances}
 \title{Given a list of DTXSIDs, return all mass spectra for those substances.}
 \usage{
-chemi_amos_mass_spectra_for_substances()
+chemi_amos_mass_spectra_for_substances(dtxsids = NULL)
+}
+\arguments{
+\item{dtxsids}{List of DTXSIDs to search for.}
 }
 \value{
 Returns a tibble with results
@@ -14,6 +17,6 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_mass_spectra_for_substances()
+chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID1024122")
 }
 }

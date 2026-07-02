@@ -17,12 +17,19 @@
 chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus", format = NULL) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(endpoint)) options[['endpoint']] <- endpoint
-  if (!is.null(method)) options[['method']] <- method
-  if (!is.null(format)) options[['format']] <- format
-    result <- generic_request(
-    query = NULL,
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(endpoint)) {
+    options[['endpoint']] <- endpoint
+  }
+  if (!is.null(method)) {
+    options[['method']] <- method
+  }
+  if (!is.null(format)) {
+    options[['format']] <- format
+  }
+  result <- generic_request(
     endpoint = "webtest/predict",
     method = "GET",
     batch_limit = 0,
@@ -38,24 +45,36 @@ chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus",
 }
 
 
-
-
 #' Webtest Predict
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param structures Molecule expressed as SMILES or MOL
+#' @param endpoints Endpoint to predict
+#' @param methods Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)
+#' @param format Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF
 #' @return Returns a tibble with results
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict_bulk()
+#' chemi_webtest_predict_bulk(structures = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
 #' }
-chemi_webtest_predict_bulk <- function() {
+chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = NULL) {
+  # Build options list for additional parameters
+  options <- list()
+  options$endpoints <- endpoints
+  if (!is.null(methods)) {
+    options$methods <- methods
+  }
+  if (!is.null(format)) {
+    options$format <- format
+  }
   result <- generic_chemi_request(
-    query = NULL,
+    query = structures,
     endpoint = "webtest/predict",
+    options = options,
     tidy = FALSE
   )
 
@@ -63,5 +82,3 @@ chemi_webtest_predict_bulk <- function() {
 
   return(result)
 }
-
-
