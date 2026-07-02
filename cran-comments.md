@@ -1,9 +1,12 @@
 ## Test Environments
 
 * Local: Windows 11 x64, R 4.5.1 (2025-06-13 ucrt), x86_64-w64-mingw32
-* GitHub Actions: ubuntu-latest, R release, pending final R-CMD-check run URL
-* GitHub Actions: windows-latest, R release, pending final R-CMD-check run URL
-* GitHub Actions: macos-latest, R release, pending final R-CMD-check run URL
+* GitHub Actions: ubuntu-latest, R 4.6.1 release, R-CMD-check passed:
+  <https://github.com/seanthimons/ComptoxR/actions/runs/28600679813/job/84807773078>
+* GitHub Actions: windows-latest, R 4.6.1 release, R-CMD-check passed:
+  <https://github.com/seanthimons/ComptoxR/actions/runs/28600679813/job/84807773176>
+* GitHub Actions: macos-latest, R 4.6.1 release, R-CMD-check passed:
+  <https://github.com/seanthimons/ComptoxR/actions/runs/28600679813/job/84807773201>
 
 ## R CMD Check Results
 
@@ -40,6 +43,8 @@ secrets, HTTP error cassettes, or YAML parse errors.
 * `Rscript dev/check_cassette_health.R` reports 0 cassettes, 0 safety issues, 0 HTTP error responses, and 0 parse
   errors.
 * `Rscript dev/cran_readiness.R` passes in CRAN-safe mode without a real `ctx_api_key`.
+* GitHub Actions CRAN Readiness passed on commit `8d12412e0835f58255364e59c25ceddb5b6e5522`:
+  <https://github.com/seanthimons/ComptoxR/actions/runs/28600679829>
 * `R CMD build . --no-resave-data` builds `ComptoxR_1.5.0.tar.gz`.
 * `R CMD check --as-cran ComptoxR_1.5.0.tar.gz` passes locally with 0 errors, 0 warnings, and the two notes listed
   above.
