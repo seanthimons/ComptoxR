@@ -26,6 +26,7 @@ jobs:
       contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMPTOXR_ECOTOX_RELEASE_ZIP: ecotox_ascii_03_12_2026.zip
 
     steps:
       - uses: actions/checkout@v4

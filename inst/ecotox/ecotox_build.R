@@ -10,6 +10,61 @@
 #
 # Requires Suggests: arrow, janitor, lubridate, readr, readxl, rvest
 
+.ecotox_requested_release_zip <- function() {
+  requested <- trimws(Sys.getenv("COMPTOXR_ECOTOX_RELEASE_ZIP", unset = ""))
+  if (!nzchar(requested)) {
+    return(NULL)
+  }
+
+  if (!grepl("^ecotox_ascii_[0-9]{2}_[0-9]{2}_[0-9]{4}[.]zip$", requested)) {
+    cli::cli_abort(c(
+      "Invalid COMPTOXR_ECOTOX_RELEASE_ZIP value.",
+      "i" = "Expected a filename like ecotox_ascii_03_12_2026.zip."
+    ))
+  }
+
+  requested
+}
+
+.ecotox_select_ascii_zip <- function(ftp_links) {
+  zip_files <- ftp_links[
+    grepl("^ecotox_ascii_[0-9]{2}_[0-9]{2}_[0-9]{4}[.]zip$", ftp_links, ignore.case = TRUE)
+  ]
+  if (length(zip_files) == 0) {
+    cli::cli_abort("No zip files found on EPA ECOTOX FTP.")
+  }
+
+  zip_df <- data.frame(file = zip_files, stringsAsFactors = FALSE)
+  zip_df$date <- stringr::str_remove_all(zip_df$file, "ecotox_ascii_")
+  zip_df$date <- stringr::str_remove_all(zip_df$date, "\\.zip")
+  zip_df$date <- lubridate::as_date(zip_df$date, format = "%m_%d_%Y")
+  zip_df <- zip_df[order(zip_df$date, decreasing = TRUE), ]
+
+  requested <- .ecotox_requested_release_zip()
+  if (!is.null(requested)) {
+    match_idx <- match(requested, zip_df$file)
+    if (is.na(match_idx)) {
+      cli::cli_abort(c(
+        "Requested ECOTOX release was not found on EPA ECOTOX FTP.",
+        "x" = "Requested: {requested}.",
+        "i" = "Unset COMPTOXR_ECOTOX_RELEASE_ZIP to use the newest available release."
+      ))
+    }
+
+    return(list(
+      file = zip_df$file[match_idx],
+      date = zip_df$date[match_idx],
+      requested = TRUE
+    ))
+  }
+
+  list(
+    file = zip_df$file[1],
+    date = zip_df$date[1],
+    requested = FALSE
+  )
+}
+
 .build_ecotox_db <- function() {
   # 0. Dependency check --------------------------------------------------------
 
@@ -70,21 +125,14 @@
     rvest::html_elements("a") |>
     rvest::html_attr("href")
 
-  # Identify the latest ASCII zip
-  zip_files <- ftp_links[grepl("zip", ftp_links, ignore.case = TRUE)]
-  if (length(zip_files) == 0) {
-    cli::cli_abort("No zip files found on EPA ECOTOX FTP.")
+  selected_zip <- .ecotox_select_ascii_zip(ftp_links)
+  latest_zip <- selected_zip$file
+  latest_date <- selected_zip$date
+  if (isTRUE(selected_zip$requested)) {
+    cli::cli_alert_info("Selected requested release: {latest_zip} ({latest_date})")
+  } else {
+    cli::cli_alert_info("Latest release: {latest_zip} ({latest_date})")
   }
-
-  zip_df <- data.frame(file = zip_files, stringsAsFactors = FALSE)
-  zip_df$date <- stringr::str_remove_all(zip_df$file, "ecotox_ascii_")
-  zip_df$date <- stringr::str_remove_all(zip_df$date, "\\.zip")
-  zip_df$date <- lubridate::as_date(zip_df$date, format = "%m_%d_%Y")
-  zip_df <- zip_df[order(zip_df$date, decreasing = TRUE), ]
-
-  latest_zip <- zip_df$file[1]
-  latest_date <- zip_df$date[1]
-  cli::cli_alert_info("Latest release: {latest_zip} ({latest_date})")
 
   # Temp directory for raw data
   raw_dir <- tempfile("ecotox_raw_")
