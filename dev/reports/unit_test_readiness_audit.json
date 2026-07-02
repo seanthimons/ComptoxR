@@ -1,9 +1,9 @@
 {
   "artifact_schema": "unit_test_readiness_audit/v1",
   "metadata": {
-    "generated_at_utc": "2026-07-01T21:30:14Z",
-    "source_branch": "integration",
-    "source_commit": "91e85a7ef0e2fd325d84d8c947988f3324acd3ea",
+    "generated_at_utc": "2026-07-02T15:30:02Z",
+    "source_branch": "main",
+    "source_commit": "efc3e2136dc730310b6049fd41b904050dded9aa",
     "issue": {
       "github_issue": 180,
       "bean": "ComptoxR-wsxo",
