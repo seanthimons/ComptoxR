@@ -1,7 +1,17 @@
 normalize_news_text <- function(x) {
   x <- gsub("\u2018", "'", x, fixed = TRUE)
   x <- gsub("\u2019", "'", x, fixed = TRUE)
-  gsub("depreciated", "deprecated", x, fixed = TRUE)
+  replacements <- c(
+    "depreciated" = "deprecated",
+    "docuementation" = "documentation",
+    "developement" = "development",
+    "calculatiosn" = "calculations",
+    "debuggin" = "debugging"
+  )
+  for (from in names(replacements)) {
+    x <- gsub(from, replacements[[from]], x, fixed = TRUE)
+  }
+  x
 }
 
 normalize_autonewsmd_repo_list <- function(an) {
