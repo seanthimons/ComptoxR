@@ -60,4 +60,6 @@ jobs:
           '
 
       - name: Run CRAN readiness
-        run: Rscript dev/cran_readiness.R
+        run: |
+          Rscript dev/check_cassette_health.R
+          Rscript dev/cran_readiness.R

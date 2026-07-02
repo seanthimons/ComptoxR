@@ -19,6 +19,7 @@ air.toml
 data-raw/
 ^AGENTS[.]md$
 ^CLAUDE[.]md$
+^cran-comments[.]md$
 ^PRD-schema-check-false-positives[.]md$
 ^codecov[.]yml$
 ^LICENSE[.]md$

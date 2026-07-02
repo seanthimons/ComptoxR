@@ -1,7 +1,7 @@
-#' @title Retrieve ClassyFire classification by InChlKey from Wishart Lab
+#' @title Retrieve ClassyFire classification by InChIKey from Wishart Lab
 #' @description This function retrieves ClassyFire classification results for a
-#'   given InChlKey from the Wishart Lab ClassyFire website.
-#' @param query A character vector of InChlKeys to retrieve.
+#'   given InChIKey from the Wishart Lab ClassyFire website.
+#' @param query A character vector of InChIKeys to retrieve.
 #' @param path The API endpoint path, relative to the base URL.
 #' @returns A list containing the ClassyFire classification results.
 #' @examples
@@ -16,12 +16,12 @@ util_classyfire_wishart <- function(query, path = "entities") {
 
   # --- Check if query is missing
   if (missing(query)) {
-    cli::cli_abort("The `query` argument is missing. Please provide an InChlKey.")
+    cli::cli_abort("The `query` argument is missing. Please provide an InChIKey.")
   }
 
   # --- Check if query is a character vector
   if (!is.character(query)) {
-    cli::cli_abort("The `query` argument must be a character vector of InChlKeys.")
+    cli::cli_abort("The `query` argument must be a character vector of InChIKeys.")
   }
 
   # ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ util_classyfire_wishart <- function(query, path = "entities") {
   safe_get_wishart_result <- purrr::possibly(
     .f = function(current_query, current_index, total_queries) {
       if (run_verbose) {
-        cli::cli_alert_info("({current_index}/{total_queries}) Retrieving classification for InChlKey: {current_query}")
+        cli::cli_alert_info("({current_index}/{total_queries}) Retrieving classification for InChIKey: {current_query}")
       }
 
       # --- Build request ---
@@ -82,7 +82,7 @@ util_classyfire_wishart <- function(query, path = "entities") {
       if (httr2::resp_is_error(resp)) {
         status_code <- httr2::resp_status(resp)
         cli::cli_alert_danger(
-          "({current_index}/{total_queries}) HTTP error {status_code} for InChlKey: {current_query}"
+          "({current_index}/{total_queries}) HTTP error {status_code} for InChIKey: {current_query}"
         )
         cli::cli_alert_info("Response body: {.val {httr2::resp_body_string(resp)}}")
         return(NULL)
@@ -90,7 +90,7 @@ util_classyfire_wishart <- function(query, path = "entities") {
 
       if (run_verbose) {
         cli::cli_alert_success(
-          "({current_index}/{total_queries}) Successfully retrieved result for InChlKey: {current_query}"
+          "({current_index}/{total_queries}) Successfully retrieved result for InChIKey: {current_query}"
         )
       }
 

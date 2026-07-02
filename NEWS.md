@@ -54,7 +54,7 @@
   ([5cd22a8](https://github.com/seanthimons/ComptoxR/tree/5cd22a8394fd9f58e38039b20c3bcb43cb58aff5))
 - integrate function stub generation into schema update workflow
   ([3eb9c39](https://github.com/seanthimons/ComptoxR/tree/3eb9c39227bf7af9935d19e80e09645c353ec3d2))
-- add ‘none’ option to release workflow for creating releases without
+- add 'none' option to release workflow for creating releases without
   version bump
   ([614524e](https://github.com/seanthimons/ComptoxR/tree/614524e7fec993ab6b0ed5ab18d6df322dd1f75b))
 - update to 1.4.0 with new functions and features
@@ -84,7 +84,7 @@
   ([23ab8c8](https://github.com/seanthimons/ComptoxR/tree/23ab8c888bdd8d562fad361b984adbad0bdd8991))
 - Phase 4 - Code generation updates using request_type classification
   ([87414cf](https://github.com/seanthimons/ComptoxR/tree/87414cf1d764c67c61b7f4d5ecb250a3f16148cc))
-- RQ codes now return tidy data or NULL, depreciated chemi_rq function.
+- RQ codes now return tidy data or NULL, deprecated chemi_rq function.
   ([83c52fe](https://github.com/seanthimons/ComptoxR/tree/83c52fe1b48dcdcaef5b71d9b4bf36b72229bd14))
 - added stubbed out chemi\_ functions + documentation
   ([5298683](https://github.com/seanthimons/ComptoxR/tree/529868315f7dcc7f5592fb29467eb49fa403e1f9))
@@ -209,7 +209,7 @@
   ([3c8d033](https://github.com/seanthimons/ComptoxR/tree/3c8d0335e5ffe144e30a9fdc62e20d76701b1b93))
 - resolve GHA failures and bump action versions
   ([fb7388b](https://github.com/seanthimons/ComptoxR/tree/fb7388bd14dd42e58b48e2dde16efb71ee3b7740))
-- strip ‘ccd’ slug and hyphens from ct\_\* function name generation
+- strip 'ccd' slug and hyphens from ct\_\* function name generation
   ([3bcbefe](https://github.com/seanthimons/ComptoxR/tree/3bcbefeab6132d0fb8d42a9ed0f78aa5397b648d))
 - align coverage calculator with shared utilities and surface skip
   counts

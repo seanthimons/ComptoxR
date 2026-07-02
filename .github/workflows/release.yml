@@ -83,9 +83,12 @@ jobs:
         run: |
           # Now that the tag exists, regenerate NEWS.md so commits appear under the tag
           library(autonewsmd)
+          source("dev/normalize_news.R")
           an <- autonewsmd$new(repo_name = "ComptoxR", repo_path = getwd())
           an$generate()
+          normalize_autonewsmd_repo_list(an)
           an$write(force = TRUE)
+          normalize_news_file()
         shell: Rscript {0}
 
       - name: Commit and push NEWS.md

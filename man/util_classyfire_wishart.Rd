@@ -2,12 +2,12 @@
 % Please edit documentation in R/util_classyfire_wishart.R
 \name{util_classyfire_wishart}
 \alias{util_classyfire_wishart}
-\title{Retrieve ClassyFire classification by InChlKey from Wishart Lab}
+\title{Retrieve ClassyFire classification by InChIKey from Wishart Lab}
 \usage{
 util_classyfire_wishart(query, path = "entities")
 }
 \arguments{
-\item{query}{A character vector of InChlKeys to retrieve.}
+\item{query}{A character vector of InChIKeys to retrieve.}
 
 \item{path}{The API endpoint path, relative to the base URL.}
 }
@@ -16,7 +16,7 @@ A list containing the ClassyFire classification results.
 }
 \description{
 This function retrieves ClassyFire classification results for a
-given InChlKey from the Wishart Lab ClassyFire website.
+given InChIKey from the Wishart Lab ClassyFire website.
 }
 \examples{
 \dontrun{

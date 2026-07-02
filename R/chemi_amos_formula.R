@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param formula Molecular furmula to search by.  Formula should be in Hill form.
+#' @param formula Molecular formula to search by.  Formula should be in Hill form.
 #' @return Returns a tibble with results
 #' @export
 #'
