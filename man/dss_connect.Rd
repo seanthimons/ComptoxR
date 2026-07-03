@@ -21,6 +21,7 @@ If \code{path} is provided it is saved as the default for the session via
 \seealso{
 Other dsstox:
 \code{\link[=dss_cas]{dss_cas()}},
+\code{\link[=dss_diag_freshness]{dss_diag_freshness()}},
 \code{\link[=dss_disconnect]{dss_disconnect()}},
 \code{\link[=dss_fuzzy]{dss_fuzzy()}},
 \code{\link[=dss_install]{dss_install()}},

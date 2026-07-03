@@ -82,7 +82,7 @@ test_that("toxval_install() default path calls .db_download_release", {
     .db_download_release = function(db_name, dest_path, tag, ...) {
       download_called <<- TRUE
       expect_equal(db_name, "toxval")
-      expect_equal(tag, "latest")
+      expect_equal(tag, "db-latest")
       # Simulate successful download by writing a tiny file
       writeBin(raw(0), dest_path)
     },

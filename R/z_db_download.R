@@ -8,7 +8,8 @@
 #'
 #' @param db_name One of `"dsstox"`, `"ecotox"`, or `"toxval"`.
 #' @param dest_path Where to write the downloaded file.
-#' @param tag GitHub release tag (e.g. `"v2.1.0"`), or `"latest"` (default).
+#' @param tag GitHub release tag (e.g. `"v2.1.0"` or `"db-latest"`), or
+#'   `"latest"` for GitHub's latest non-prerelease.
 #' @param repo GitHub repository in `"owner/repo"` format.
 #' @return The downloaded file path (invisibly), or aborts on failure.
 #' @keywords internal

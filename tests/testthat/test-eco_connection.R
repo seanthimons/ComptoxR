@@ -145,7 +145,7 @@ test_that("eco_install() default path calls .db_download_release", {
     .db_download_release = function(db_name, dest_path, tag, ...) {
       download_called <<- TRUE
       expect_equal(db_name, "ecotox")
-      expect_equal(tag, "latest")
+      expect_equal(tag, "db-latest")
       writeBin(raw(0), dest_path)
     },
     .package = "ComptoxR"

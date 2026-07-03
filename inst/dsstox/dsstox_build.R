@@ -8,8 +8,35 @@
 #   — or —
 #   dss_install()  (from within ComptoxR)
 
+.dsstox_load_db_version_helpers <- function() {
+  env <- parent.frame()
+  helper_path <- file.path(getwd(), "R", "z_db_version.R")
+  if (file.exists(helper_path)) {
+    sys.source(helper_path, envir = env)
+    return(invisible(TRUE))
+  }
+
+  if ("ComptoxR" %in% loadedNamespaces()) {
+    ns <- asNamespace("ComptoxR")
+    for (fn in c(
+      ".dsstox_latest_upstream_entry",
+      ".dsstox_upstream_version_from_entry",
+      ".db_is_missing_string",
+      ".db_local_recorded_version",
+      ".db_write_version_sidecar"
+    )) {
+      assign(fn, get(fn, envir = ns), envir = env)
+    }
+    return(invisible(TRUE))
+  }
+
+  cli::cli_abort("Shared database version helper layer not available.")
+}
+
 .build_dsstox_db <- function() {
   # -- Configuration ----------------------------------------------------------
+
+  .dsstox_load_db_version_helpers()
 
   output_dir <- tools::R_user_dir("ComptoxR", "data")
   output_path <- file.path(output_dir, "dsstox.duckdb")
@@ -28,7 +55,13 @@
       cli::cli_alert_success(
         "DSSTox database is up-to-date ({round(file_age_days)} days old). Skipping rebuild."
       )
-      # Early exit — nothing to do
+      existing_version <- tryCatch(
+        .db_local_recorded_version("dsstox", path = output_path),
+        error = function(e) NA_character_
+      )
+      if (!.db_is_missing_string(existing_version)) {
+        .db_write_version_sidecar(output_path, existing_version)
+      }
       return(invisible(output_path))
     } else {
       cli::cli_alert_warning(
@@ -41,31 +74,8 @@
 
   cli::cli_alert_info("Fetching file list from Clowder...")
 
-  clowder_list <- httr2::request(
-    "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
-  ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
-
-  dss_entry <- clowder_list |>
-    purrr::map(\(x) x[c("id", "filename", "date-created", "contentType")]) |>
-    purrr::keep(\(x) {
-      grepl("multi/files-zipped", x$contentType) &&
-        grepl("DSSTox_", x$filename) &&
-        grepl("\\.zip$", x$filename) &&
-        !grepl("SDF", x$filename)
-    }) |>
-    purrr::map(tibble::as_tibble) |>
-    dplyr::bind_rows() |>
-    dplyr::mutate(
-      `date-created` = lubridate::parse_date_time(`date-created`, orders = "a b d HMS Y")
-    ) |>
-    dplyr::arrange(dplyr::desc(`date-created`)) |>
-    dplyr::slice_head(n = 1)
-
-  if (nrow(dss_entry) == 0) {
-    cli::cli_abort("No DSSTox ZIP files found on Clowder.")
-  }
+  dss_entry <- .dsstox_latest_upstream_entry()
+  dss_version <- .dsstox_upstream_version_from_entry(dss_entry)
 
   # -- Download & extract -----------------------------------------------------
 
@@ -112,7 +122,7 @@
   file_basenames <- tools::file_path_sans_ext(basename(all_data_files))
   is_split <- grepl("\\d+$", file_basenames)
 
-  if (any(is_split) && any(!is_split)) {
+  if (any(is_split) && !all(is_split)) {
     cli::cli_alert_info(
       "Found both aggregate and split files. Using {sum(is_split)} split files."
     )
@@ -258,6 +268,20 @@
   cli::cli_alert_success("Built dsstox table: {format(final_count, big.mark = ',')} rows.")
 
   DBI::dbExecute(dsstox_db, "DROP TABLE dsstox_raw")
+
+  metadata <- data.frame(
+    key = c("build_date", "dsstox_release_date", "dsstox_clowder_id", "builder", "builder_version"),
+    value = c(
+      as.character(Sys.Date()),
+      dss_entry$date_created[[1]],
+      dss_entry$id[[1]],
+      "ComptoxR",
+      as.character(utils::packageVersion("ComptoxR"))
+    ),
+    stringsAsFactors = FALSE
+  )
+  DBI::dbWriteTable(dsstox_db, "_metadata", metadata, overwrite = TRUE)
+  .db_write_version_sidecar(output_path, dss_version)
 
   # Clean up temp XLSX conversions
   if (length(xlsx_files) > 0) {

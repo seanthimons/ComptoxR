@@ -79,7 +79,7 @@ eco_path <- function() {
 #' Install the ECOTOX local database
 #'
 #' Installs the ECOTOX DuckDB database. By default, downloads a pre-built
-#' database from the latest GitHub Release. Falls back to building from source
+#' database from the rolling `db-latest` GitHub prerelease. Falls back to building from source
 #' if the release asset is not available.
 #'
 #' @param source Path to an existing `ecotox.duckdb` file. If provided, the
@@ -87,12 +87,12 @@ eco_path <- function() {
 #' @param build Logical; if `TRUE`, skip the download attempt and build from
 #'   source immediately. Default `FALSE`.
 #' @param tag GitHub release tag to download from (e.g. `"v2.1.0"`). Default
-#'   `"latest"`.
+#'   `"db-latest"`.
 #' @param overwrite Logical; overwrite an existing database? Default `FALSE`.
 #' @return Invisibly, the destination path.
 #' @export
 #' @family ecotox
-eco_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
+eco_install <- function(source = NULL, build = FALSE, tag = "db-latest", overwrite = FALSE) {
   dest <- eco_path()
   dest_dir <- dirname(dest)
 

@@ -105,6 +105,7 @@ eco_results(eco_group = "Fish", endpoint = c("LC50", "EC50"))
 }
 \seealso{
 Other ecotox:
+\code{\link[=eco_diag_freshness]{eco_diag_freshness()}},
 \code{\link[=eco_fields]{eco_fields()}},
 \code{\link[=eco_health]{eco_health()}},
 \code{\link[=eco_install]{eco_install()}},

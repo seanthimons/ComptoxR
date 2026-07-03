@@ -16,7 +16,8 @@
 
 \item{dest_path}{Where to write the downloaded file.}
 
-\item{tag}{GitHub release tag (e.g. \code{"v2.1.0"}), or \code{"latest"} (default).}
+\item{tag}{GitHub release tag (e.g. \code{"v2.1.0"} or \code{"db-latest"}), or
+\code{"latest"} for GitHub's latest non-prerelease.}
 
 \item{repo}{GitHub repository in \code{"owner/repo"} format.}
 }

@@ -79,7 +79,7 @@ toxval_path <- function() {
 #' Install the ToxValDB local database
 #'
 #' Installs the ToxValDB DuckDB database. By default, downloads a pre-built
-#' database from the latest GitHub Release. Falls back to building from source
+#' database from the rolling `db-latest` GitHub prerelease. Falls back to building from source
 #' if the release asset is not available.
 #'
 #' @param source Path to an existing `toxval.duckdb` file. If provided, the
@@ -87,12 +87,12 @@ toxval_path <- function() {
 #' @param build Logical; if `TRUE`, skip the download attempt and build from
 #'   source immediately. Default `FALSE`.
 #' @param tag GitHub release tag to download from (e.g. `"v2.1.0"`). Default
-#'   `"latest"`.
+#'   `"db-latest"`.
 #' @param overwrite Logical; overwrite an existing database? Default `FALSE`.
 #' @return Invisibly, the destination path.
 #' @export
 #' @family toxval
-toxval_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
+toxval_install <- function(source = NULL, build = FALSE, tag = "db-latest", overwrite = FALSE) {
   dest <- toxval_path()
   dest_dir <- dirname(dest)
 

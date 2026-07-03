@@ -65,8 +65,51 @@
   )
 }
 
+.ecotox_load_db_version_helpers <- function() {
+  env <- parent.frame()
+  helper_path <- file.path(getwd(), "R", "z_db_version.R")
+  if (file.exists(helper_path)) {
+    sys.source(helper_path, envir = env)
+    return(invisible(TRUE))
+  }
+
+  if ("ComptoxR" %in% loadedNamespaces()) {
+    ns <- asNamespace("ComptoxR")
+    for (fn in c(".db_is_missing_string", ".db_local_recorded_version", ".db_write_version_sidecar")) {
+      assign(fn, get(fn, envir = ns), envir = env)
+    }
+    return(invisible(TRUE))
+  }
+
+  cli::cli_abort("Shared database version helper layer not available.")
+}
+
+.ecotox_load_lifestage_helpers <- function(env = parent.frame()) {
+  helper_path <- file.path(getwd(), "R", "eco_lifestage_patch.R")
+  if (file.exists(helper_path)) {
+    sys.source(helper_path, envir = env)
+    return(invisible(TRUE))
+  }
+
+  if ("ComptoxR" %in% loadedNamespaces()) {
+    ns <- asNamespace("ComptoxR")
+    for (fn in c(
+      ".eco_lifestage_release_id",
+      ".eco_lifestage_materialize_tables",
+      ".eco_lifestage_write_drift_report"
+    )) {
+      assign(fn, get(fn, envir = ns), envir = env)
+    }
+    return(invisible(TRUE))
+  }
+
+  cli::cli_abort("Shared lifestage helper layer not available.")
+}
+
 .build_ecotox_db <- function() {
   # 0. Dependency check --------------------------------------------------------
+
+  .ecotox_load_db_version_helpers()
 
   rlang::check_installed(
     c("arrow", "janitor", "lubridate", "readr", "readxl", "rvest"),
@@ -101,6 +144,13 @@
       cli::cli_alert_success(
         "ECOTOX database is up-to-date ({round(age_days)} days old). Skipping."
       )
+      existing_version <- tryCatch(
+        .db_local_recorded_version("ecotox", path = output_path),
+        error = function(e) NA_character_
+      )
+      if (!.db_is_missing_string(existing_version)) {
+        .db_write_version_sidecar(output_path, existing_version)
+      }
       FALSE
     }
   }
@@ -1136,6 +1186,7 @@
     stringsAsFactors = FALSE
   )
   DBI::dbWriteTable(persist_con, "_metadata", metadata, overwrite = TRUE)
+  .db_write_version_sidecar(output_path, latest_zip)
 
   cli::cli_alert_success(
     "ECOTOX database built at {.path {output_path}}"
@@ -1146,4 +1197,18 @@
 
   invisible(output_path)
 }
-.build_ecotox_db()
+
+.ecotox_run_build <- function() {
+  .ecotox_load_lifestage_helpers(environment(.build_ecotox_db))
+  .ecotox_load_lifestage_helpers(environment())
+  tryCatch(
+    .build_ecotox_db(),
+    comptoxr_ecotox_lifestage_drift = function(cnd) {
+      report_path <- .eco_lifestage_write_drift_report(cnd)
+      cli::cli_alert_danger("Wrote ECOTOX vocabulary drift report to {.path {report_path}}")
+      stop(cnd)
+    }
+  )
+}
+
+.ecotox_run_build()

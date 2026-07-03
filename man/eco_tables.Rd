@@ -23,6 +23,7 @@ eco_tables()
 }
 \seealso{
 Other ecotox:
+\code{\link[=eco_diag_freshness]{eco_diag_freshness()}},
 \code{\link[=eco_fields]{eco_fields()}},
 \code{\link[=eco_health]{eco_health()}},
 \code{\link[=eco_install]{eco_install()}},

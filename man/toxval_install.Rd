@@ -4,7 +4,12 @@
 \alias{toxval_install}
 \title{Install the ToxValDB local database}
 \usage{
-toxval_install(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE)
+toxval_install(
+  source = NULL,
+  build = FALSE,
+  tag = "db-latest",
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{source}{Path to an existing \code{toxval.duckdb} file. If provided, the
@@ -14,7 +19,7 @@ file is copied directly (skipping download and build).}
 source immediately. Default \code{FALSE}.}
 
 \item{tag}{GitHub release tag to download from (e.g. \code{"v2.1.0"}). Default
-\code{"latest"}.}
+\code{"db-latest"}.}
 
 \item{overwrite}{Logical; overwrite an existing database? Default \code{FALSE}.}
 }
@@ -23,11 +28,12 @@ Invisibly, the destination path.
 }
 \description{
 Installs the ToxValDB DuckDB database. By default, downloads a pre-built
-database from the latest GitHub Release. Falls back to building from source
+database from the rolling \code{db-latest} GitHub prerelease. Falls back to building from source
 if the release asset is not available.
 }
 \seealso{
 Other toxval:
+\code{\link[=toxval_diag_freshness]{toxval_diag_freshness()}},
 \code{\link[=toxval_fields]{toxval_fields()}},
 \code{\link[=toxval_health]{toxval_health()}},
 \code{\link[=toxval_results]{toxval_results()}},

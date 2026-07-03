@@ -5,6 +5,30 @@
 #
 # Requires: a built ToxValDB (run toxval_install() first)
 
+if (!exists("%||%", mode = "function", inherits = TRUE)) {
+  `%||%` <- function(x, y) {
+    if (is.null(x) || length(x) == 0L || is.na(x[[1]])) y else x
+  }
+}
+
+.toxval_diag_load_version_probe <- function() {
+  if (exists(".toxval_latest_upstream_version", mode = "function", inherits = TRUE)) {
+    return(get(".toxval_latest_upstream_version", mode = "function", inherits = TRUE))
+  }
+
+  helper_path <- file.path(getwd(), "R", "z_db_version.R")
+  if (file.exists(helper_path)) {
+    sys.source(helper_path, envir = parent.frame())
+    return(get(".toxval_latest_upstream_version", mode = "function", inherits = TRUE))
+  }
+
+  if ("ComptoxR" %in% loadedNamespaces()) {
+    return(get(".toxval_latest_upstream_version", envir = asNamespace("ComptoxR")))
+  }
+
+  cli::cli_abort("Shared ToxValDB version probe not available.")
+}
+
 # --- Schema & Column Coverage ------------------------------------------------
 
 #' Check ToxValDB column coverage and sparsity
@@ -16,7 +40,7 @@ toxval_diag_columns <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::toxval_path()(),
+      dbdir = ComptoxR::toxval_path(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -81,7 +105,7 @@ toxval_diag_schema_drift <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::toxval_path()(),
+      dbdir = ComptoxR::toxval_path(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -126,7 +150,7 @@ toxval_diag_quality <- function(con = NULL) {
   if (is.null(con)) {
     con <- DBI::dbConnect(
       duckdb::duckdb(),
-      dbdir = ComptoxR::toxval_path()(),
+      dbdir = ComptoxR::toxval_path(),
       read_only = TRUE
     )
     on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
@@ -204,7 +228,7 @@ toxval_diag_quality <- function(con = NULL) {
 #' Tests API connectivity, reports available versions and file counts.
 #' Useful for debugging build failures or checking for new ToxVal releases.
 toxval_diag_clowder <- function() {
-  url <- "https://clowder.edap-cluster.com/api/datasets/6572f1d2e4b0bfe1afb58fec/files"
+  url <- "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
 
   cli::cli_h1("Clowder API Probe")
 
@@ -233,7 +257,7 @@ toxval_diag_clowder <- function() {
   fnames <- vapply(files, function(f) f$filename %||% "<unnamed>", character(1))
 
   # Identify ToxVal Excel files
-  tv_files <- fnames[grepl("^toxval_v9.*\\.xlsx$", fnames, ignore.case = TRUE)]
+  tv_files <- fnames[grepl("^toxval_all_res_toxval_v[0-9]{2,3}_[0-9]+.*\\.xlsx$", fnames, ignore.case = TRUE)]
 
   # Version breakdown
   versions <- unique(stringr::str_extract(tv_files, "v\\d{2,3}_\\d+"))
@@ -247,7 +271,7 @@ toxval_diag_clowder <- function() {
   }
 
   # Non-ToxVal items
-  other <- fnames[!grepl("^toxval_v9.*\\.xlsx$", fnames, ignore.case = TRUE)]
+  other <- fnames[!grepl("^toxval_all_res_toxval_v[0-9]{2,3}_[0-9]+.*\\.xlsx$", fnames, ignore.case = TRUE)]
   if (length(other) > 0) {
     cli::cli_h2("Other Files ({length(other)})")
     cli::cli_li(utils::head(other, 10))
@@ -272,7 +296,7 @@ toxval_diag_freshness <- function() {
   cli::cli_h1("ToxValDB Freshness Check")
 
   # Local version
-  path <- ComptoxR::toxval_path()()
+  path <- ComptoxR::toxval_path()
   if (!file.exists(path)) {
     cli::cli_alert_danger("ToxValDB not installed at {.path {path}}")
     return(invisible(NULL))
@@ -307,14 +331,7 @@ toxval_diag_freshness <- function() {
   cli::cli_alert_info("Checking Clowder for latest version...")
   remote <- tryCatch(
     {
-      resp <- httr2::request("https://clowder.edap-cluster.com/api/datasets/6572f1d2e4b0bfe1afb58fec/files") |>
-        httr2::req_timeout(10) |>
-        httr2::req_perform()
-      files <- httr2::resp_body_json(resp)
-      fnames <- vapply(files, function(f) f$filename %||% "", character(1))
-      tv <- fnames[grepl("^toxval_v9.*\\.xlsx$", fnames, ignore.case = TRUE)]
-      versions <- unique(stringr::str_extract(tv, "v\\d{2,3}_\\d+"))
-      versions[!is.na(versions)]
+      .toxval_diag_load_version_probe()()
     },
     error = function(e) {
       cli::cli_alert_warning("Could not reach Clowder: {conditionMessage(e)}")
@@ -323,11 +340,11 @@ toxval_diag_freshness <- function() {
   )
 
   if (length(remote) > 0) {
-    cli::cli_alert_info("Remote version(s): {paste(remote, collapse = ', ')}")
-    if (nrow(local_meta) > 0 && local_meta$version %in% remote) {
+    cli::cli_alert_info("Remote version: {remote}")
+    if (nrow(local_meta) > 0 && identical(local_meta$version[[1]], remote)) {
       cli::cli_alert_success("Local version matches remote.")
     } else if (nrow(local_meta) > 0) {
-      cli::cli_alert_warning("Version mismatch: local={local_meta$version}, remote={paste(remote, collapse=',')}")
+      cli::cli_alert_warning("Version mismatch: local={local_meta$version}, remote={remote}")
     }
   }
 

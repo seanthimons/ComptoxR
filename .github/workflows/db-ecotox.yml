@@ -3,20 +3,22 @@ name: Build & Upload ECOTOX Database
 on:
   release:
     types: [published]
+  schedule:
+    - cron: '0 9 * * 1'
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Release tag to attach asset to (e.g. v2.0.0). Leave blank for latest.'
-        required: false
-        default: ''
       force:
-        description: 'Force rebuild even if asset is already fresh'
+        description: 'Force rebuild even if the published sidecar is current'
         type: boolean
         default: false
-      max_age_days:
-        description: 'Rebuild if existing asset is older than this many days (default: 90)'
+      backstop_days:
+        description: 'Rebuild when the published sidecar is older than this many days'
         type: string
         default: '90'
+
+concurrency:
+  group: db-ecotox
+  cancel-in-progress: false
 
 jobs:
   build-ecotox:
@@ -24,6 +26,7 @@ jobs:
     timeout-minutes: 240
     permissions:
       contents: write
+      issues: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       COMPTOXR_ECOTOX_ALLOW_PATCH_SEED_REUSE: "true"
@@ -31,89 +34,137 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Resolve release tag
-        id: tag
+      - name: Ensure rolling prerelease exists
+        id: release
         run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            echo "value=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
-          elif [ -n "${{ inputs.tag }}" ]; then
-            echo "value=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
-          else
-            TAG=$(gh release list --repo "${{ github.repository }}" --limit 1 \
-              --json tagName --jq '.[0].tagName')
-            echo "value=$TAG" >> "$GITHUB_OUTPUT"
+          TAG="db-latest"
+          if ! gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release create "$TAG" \
+              --repo "${{ github.repository }}" \
+              --title "Latest database assets" \
+              --notes "Rolling prerelease for generated database assets." \
+              --prerelease
           fi
-
-      - name: Validate release tag
-        run: |
-          if [ -z "${{ steps.tag.outputs.value }}" ]; then
-            echo "No release tag found — cannot proceed"
-            exit 1
-          fi
-
-      - name: Check asset staleness
-        id: check
-        run: |
-          TAG="${{ steps.tag.outputs.value }}"
-          MAX_AGE="${{ inputs.max_age_days }}"
-          MAX_AGE="${MAX_AGE:-90}"
-          FORCE="${{ inputs.force }}"
-          FORCE="${FORCE:-false}"
-
-          ASSET_DATE=$(gh release view "$TAG" --repo "${{ github.repository }}" \
-            --json assets \
-            --jq '.assets[] | select(.name == "ecotox.duckdb") | .updatedAt' \
-            2>/dev/null || true)
-
-          if [ -z "$ASSET_DATE" ]; then
-            echo "ecotox.duckdb not found on release $TAG — will build."
-            echo "needed=true" >> "$GITHUB_OUTPUT"
-          elif [ "$FORCE" = "true" ]; then
-            echo "Force flag set — will rebuild."
-            echo "needed=true" >> "$GITHUB_OUTPUT"
-          else
-            ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s)
-            if [ -z "$ASSET_EPOCH" ]; then
-              echo "Could not parse asset date '$ASSET_DATE' — forcing rebuild"
-              echo "needed=true" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            NOW_EPOCH=$(date +%s)
-            AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
-            echo "Asset age: ${AGE_DAYS} days (threshold: ${MAX_AGE} days)"
-            if [ "$AGE_DAYS" -gt "$MAX_AGE" ]; then
-              echo "Asset is stale — will rebuild."
-              echo "needed=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "Asset is fresh — skipping build."
-              echo "needed=false" >> "$GITHUB_OUTPUT"
-            fi
-          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
       - uses: r-lib/actions/setup-r@v2
-        if: steps.check.outputs.needed == 'true'
         with:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        if: steps.check.outputs.needed == 'true'
         with:
           extra-packages: local::.
           needs: check
 
+      - name: Read published version sidecar
+        id: published
+        run: |
+          TAG="${{ steps.release.outputs.tag }}"
+          VERSION_DIR="$RUNNER_TEMP/db-version"
+          mkdir -p "$VERSION_DIR"
+
+          PUBLISHED_VERSION=""
+          if gh release download "$TAG" \
+            --repo "${{ github.repository }}" \
+            --pattern "ecotox.version" \
+            --dir "$VERSION_DIR" \
+            --clobber >/dev/null 2>&1; then
+            PUBLISHED_VERSION=$(tr -d '\r\n' < "$VERSION_DIR/ecotox.version")
+          fi
+
+          ASSET_DATE=$(gh release view "$TAG" --repo "${{ github.repository }}" \
+            --json assets \
+            --jq '.assets[] | select(.name == "ecotox.version") | .updatedAt' \
+            2>/dev/null || true)
+
+          AGE_DAYS=""
+          if [ -n "$ASSET_DATE" ]; then
+            ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s)
+            NOW_EPOCH=$(date +%s)
+            AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
+          fi
+
+          echo "published_version=$PUBLISHED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "asset_age_days=$AGE_DAYS" >> "$GITHUB_OUTPUT"
+
+      - name: Decide whether rebuild is needed
+        id: gate
+        env:
+          DB_NAME: ecotox
+          PUBLISHED_VERSION: ${{ steps.published.outputs.published_version }}
+          ASSET_AGE_DAYS: ${{ steps.published.outputs.asset_age_days }}
+          FORCE: ${{ inputs.force || false }}
+          BACKSTOP_DAYS: ${{ inputs.backstop_days || '90' }}
+        run: Rscript -e "source('R/z_db_version.R'); .db_gate_decision()"
+
       - name: Build ECOTOX database
-        if: steps.check.outputs.needed == 'true'
+        id: build
+        if: steps.gate.outputs.needed == 'true'
+        continue-on-error: true
         run: Rscript data-raw/ecotox.R
 
-      - name: Upload asset to release
-        if: steps.check.outputs.needed == 'true'
+      - name: Create ECOTOX vocabulary drift issue
+        if: steps.gate.outputs.needed == 'true' && steps.build.outcome == 'failure'
         run: |
+          REPORT="$RUNNER_TEMP/ecotox-vocabulary-drift.json"
+          if [ ! -f "$REPORT" ]; then
+            echo "No ECOTOX vocabulary drift report found."
+            exit 0
+          fi
+
+          TARGET_RELEASE=$(jq -r '.ecotox_release // "unknown"' "$REPORT")
+          SEED_RELEASE=$(jq -r '.seed_release // "unknown"' "$REPORT")
+          MISSING_TERMS=$(jq -r '.missing_terms[]?' "$REPORT" | sed 's/^/- /')
+          REFRESH=$(jq -r '.refresh_instructions // ""' "$REPORT")
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          BODY="$RUNNER_TEMP/ecotox-vocabulary-drift-issue.md"
+          {
+            echo "ECOTOX vocabulary drift blocked the rolling database build."
+            echo
+            echo "Run: $RUN_URL"
+            echo
+            echo "Target release: \`$TARGET_RELEASE\`"
+            echo
+            echo "Shipped seed release: \`$SEED_RELEASE\`"
+            echo
+            echo "Missing lifestage terms:"
+            if [ -n "$MISSING_TERMS" ]; then
+              echo "$MISSING_TERMS"
+            else
+              echo "- unknown"
+            fi
+            echo
+            echo "Maintainer refresh process:"
+            echo
+            echo "$REFRESH"
+          } > "$BODY"
+
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "ECOTOX vocabulary drift blocks database build: $TARGET_RELEASE" \
+            --body-file "$BODY"
+
+      - name: Fail after unsuccessful ECOTOX build
+        if: steps.gate.outputs.needed == 'true' && steps.build.outcome == 'failure'
+        run: exit 1
+
+      - name: Smoke-check ECOTOX database
+        if: steps.gate.outputs.needed == 'true' && steps.build.outcome == 'success'
+        env:
+          DB_NAME: ecotox
+        run: Rscript dev/db_smoke_check.R
+
+      - name: Upload assets to rolling release
+        if: steps.gate.outputs.needed == 'true' && steps.build.outcome == 'success'
+        run: |
+          TAG="${{ steps.release.outputs.tag }}"
           DB_PATH=$(Rscript -e "cat(file.path(tools::R_user_dir('ComptoxR', 'data'), 'ecotox.duckdb'))")
-          if [ -z "$DB_PATH" ] || [ ! -f "$DB_PATH" ]; then
-            echo "Database not found at '$DB_PATH' — build may have failed"
+          VERSION_PATH="${DB_PATH%.duckdb}.version"
+          if [ ! -f "$DB_PATH" ] || [ ! -f "$VERSION_PATH" ]; then
+            echo "Database or version sidecar is missing"
             exit 1
           fi
-          gh release upload "${{ steps.tag.outputs.value }}" "$DB_PATH" \
+          gh release upload "$TAG" "$DB_PATH" "$VERSION_PATH" \
             --clobber \
             --repo "${{ github.repository }}"
-          echo "Uploaded ecotox.duckdb to release ${{ steps.tag.outputs.value }}"

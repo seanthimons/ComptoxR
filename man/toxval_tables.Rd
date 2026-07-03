@@ -23,6 +23,7 @@ toxval_tables()
 }
 \seealso{
 Other toxval:
+\code{\link[=toxval_diag_freshness]{toxval_diag_freshness()}},
 \code{\link[=toxval_fields]{toxval_fields()}},
 \code{\link[=toxval_health]{toxval_health()}},
 \code{\link[=toxval_install]{toxval_install()}},

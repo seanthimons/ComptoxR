@@ -50,6 +50,7 @@ dss_fuzzy("CC(=O)O", method = "levenshtein", cols = "SMILES", threshold = 2)
 Other dsstox:
 \code{\link[=dss_cas]{dss_cas()}},
 \code{\link[=dss_connect]{dss_connect()}},
+\code{\link[=dss_diag_freshness]{dss_diag_freshness()}},
 \code{\link[=dss_disconnect]{dss_disconnect()}},
 \code{\link[=dss_install]{dss_install()}},
 \code{\link[=dss_query]{dss_query()}},

@@ -16,8 +16,40 @@
 # Staleness threshold in days (rebuild if older than this)
 .TOXVAL_STALENESS_DAYS <- 180
 
+if (!exists("%||%", mode = "function", inherits = TRUE)) {
+  `%||%` <- function(x, y) {
+    if (is.null(x) || length(x) == 0L || is.na(x[[1]])) y else x
+  }
+}
+
+.toxval_load_db_version_helpers <- function() {
+  env <- parent.frame()
+  helper_path <- file.path(getwd(), "R", "z_db_version.R")
+  if (file.exists(helper_path)) {
+    sys.source(helper_path, envir = env)
+    return(invisible(TRUE))
+  }
+
+  if ("ComptoxR" %in% loadedNamespaces()) {
+    ns <- asNamespace("ComptoxR")
+    for (fn in c(
+      ".toxval_latest_version",
+      ".db_is_missing_string",
+      ".db_local_recorded_version",
+      ".db_write_version_sidecar"
+    )) {
+      assign(fn, get(fn, envir = ns), envir = env)
+    }
+    return(invisible(TRUE))
+  }
+
+  cli::cli_abort("Shared database version helper layer not available.")
+}
+
 .build_toxval_db <- function(output_path = NULL, force = FALSE) {
   # 1. Dependency check
+  .toxval_load_db_version_helpers()
+
   rlang::check_installed(
     c("readxl", "janitor", "httr2"),
     reason = "to build the ToxValDB database from source"
@@ -41,6 +73,13 @@
       cli::cli_alert_success(
         "ToxValDB is up-to-date ({round(age_days)} days old). Skipping rebuild."
       )
+      existing_version <- tryCatch(
+        .db_local_recorded_version("toxval", path = output_path),
+        error = function(e) NA_character_
+      )
+      if (!.db_is_missing_string(existing_version)) {
+        .db_write_version_sidecar(output_path, existing_version)
+      }
       return(invisible(output_path))
     }
     cli::cli_alert_warning(
@@ -97,10 +136,10 @@
 
   # Filter for latest-version toxval per-source Excel files.
   # Dataset contains multiple versions (v92..v97) and QC-fail files —
-  # keep only toxval_all_res_toxval_v9*_*.xlsx (the per-source data files).
+  # keep only toxval_all_res_toxval_vNN_N*.xlsx (the per-source data files).
   toxval_files <- purrr::keep(file_list, function(f) {
     fname <- f$filename %||% ""
-    grepl("^toxval_all_res_toxval_v9.*\\.xlsx$", fname, ignore.case = TRUE)
+    grepl("^toxval_all_res_toxval_v[0-9]{2,3}_[0-9]+.*\\.xlsx$", fname, ignore.case = TRUE)
   })
 
   # Keep only the latest version present
@@ -111,7 +150,7 @@
         stringr::str_extract(.x$filename, "v\\d{2,3}_\\d+") %||% ""
       }
     )
-    latest_ver <- sort(unique(all_versions), decreasing = TRUE)[1]
+    latest_ver <- .toxval_latest_version(all_versions)
     toxval_files <- purrr::keep(toxval_files, function(f) {
       grepl(latest_ver, f$filename, fixed = TRUE)
     })
@@ -290,6 +329,7 @@
   )
   DBI::dbExecute(con, "COPY FROM DATABASE memory TO persist")
   DBI::dbExecute(con, "DETACH persist")
+  .db_write_version_sidecar(output_path, version_raw)
 
   cli::cli_alert_success(
     "ToxValDB {version_label} built: {nrow(stacked)} rows, {ncol(stacked)} columns."

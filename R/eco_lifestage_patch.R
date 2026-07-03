@@ -107,6 +107,66 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
 }
 
 #' @keywords internal
+.eco_lifestage_refresh_instructions <- function() {
+  paste(
+    "Update dev/lifestage/curation/lifestage_curation_queue.csv, run",
+    "Rscript dev/lifestage/rebuild_lifestage_patch_seed.R, review",
+    "inst/extdata/ecotox/lifestage_patch_seed.csv, then rerun the ECOTOX database build."
+  )
+}
+
+#' @keywords internal
+.eco_lifestage_drift_report_path <- function() {
+  dir <- Sys.getenv("RUNNER_TEMP", unset = tempdir())
+  file.path(dir, "ecotox-vocabulary-drift.json")
+}
+
+#' @keywords internal
+.eco_lifestage_write_drift_report <- function(cnd, path = .eco_lifestage_drift_report_path()) {
+  missing_terms <- cnd$missing_terms
+  if (is.null(missing_terms)) {
+    missing_terms <- character()
+  }
+  ecotox_release <- if (is.null(cnd$ecotox_release)) NA_character_ else cnd$ecotox_release
+  seed_release <- if (is.null(cnd$seed_release)) NA_character_ else cnd$seed_release
+  refresh_instructions <- if (is.null(cnd$refresh_instructions)) {
+    .eco_lifestage_refresh_instructions()
+  } else {
+    cnd$refresh_instructions
+  }
+
+  report <- list(
+    ecotox_release = ecotox_release,
+    seed_release = seed_release,
+    missing_terms = I(as.character(missing_terms)),
+    refresh_instructions = refresh_instructions,
+    message = conditionMessage(cnd)
+  )
+
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  jsonlite::write_json(report, path, auto_unbox = TRUE, pretty = TRUE)
+  invisible(path)
+}
+
+#' @keywords internal
+.eco_lifestage_abort_vocabulary_drift <- function(ecotox_release, seed_release, missing_terms, cache_source) {
+  cli::cli_abort(
+    c(
+      "ECOTOX lifestage vocabulary drift blocks database build.",
+      "x" = "Lifestage {.val {cache_source}} is incomplete for release {.val {ecotox_release}}.",
+      "x" = "Missing term(s): {.val {missing_terms}}.",
+      "i" = .eco_lifestage_refresh_instructions()
+    ),
+    class = c("comptoxr_ecotox_lifestage_drift", "comptoxr_error"),
+    ecotox_release = ecotox_release,
+    seed_release = seed_release,
+    missing_terms = missing_terms,
+    cache_source = cache_source,
+    refresh_instructions = .eco_lifestage_refresh_instructions()
+  )
+}
+
+#' @keywords internal
 .eco_lifestage_patch_seed_path <- function() {
   installed <- system.file(
     "extdata",
@@ -1072,6 +1132,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
       "x" = "Releases found: {.val {paste(releases, collapse = ', ')}}."
     ))
   }
+  seed_release <- releases[[1]]
   if (!is.null(expected_release) && !identical(releases, expected_release)) {
     if (!.eco_lifestage_allow_patch_seed_reuse()) {
       cli::cli_abort(c(
@@ -1115,6 +1176,7 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     ))
   }
 
+  attr(x, "seed_release") <- seed_release
   x
 }
 
@@ -1186,8 +1248,10 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
       cli::cli_abort("Release-matched lifestage cache is required for {.code refresh = 'cache'}.")
     }
 
+    cache_seed <- .eco_lifestage_cache_read(ecotox_release, required = TRUE)
+    attr(cache_seed, "seed_release") <- ecotox_release
     return(list(
-      seed_cache = .eco_lifestage_cache_read(ecotox_release, required = TRUE),
+      seed_cache = cache_seed,
       refresh_mode = "cache",
       cache_source = "cache"
     ))
@@ -2452,6 +2516,10 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
     force = force
   )
   effective_refresh <- seed$refresh_mode
+  seed_release <- attr(seed$seed_cache, "seed_release", exact = TRUE)
+  if (is.null(seed_release) || is.na(seed_release) || !nzchar(seed_release)) {
+    seed_release <- ecotox_release
+  }
 
   cache_rows <- seed$seed_cache |>
     dplyr::filter(.data$org_lifestage %in% org_lifestages)
@@ -2459,11 +2527,12 @@ if (!exists(".ComptoxREnv", mode = "environment", inherits = TRUE)) {
   missing_terms <- setdiff(org_lifestages, unique(cache_rows$org_lifestage))
 
   if (length(missing_terms) > 0) {
-    cli::cli_abort(c(
-      "Lifestage {.val {seed$cache_source}} is incomplete for release {.val {ecotox_release}}.",
-      "x" = "Missing term(s): {missing_terms}.",
-      "i" = "Maintainers should update {.path dev/lifestage/curation/lifestage_curation_queue.csv} and rebuild {.file lifestage_patch_seed.csv}."
-    ))
+    .eco_lifestage_abort_vocabulary_drift(
+      ecotox_release = ecotox_release,
+      seed_release = seed_release,
+      missing_terms = missing_terms,
+      cache_source = seed$cache_source
+    )
   }
 
   cache_rows <- cache_rows |>

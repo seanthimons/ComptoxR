@@ -31,6 +31,7 @@ dss_query(c("Formaldehyde", "Benzene"))
 Other dsstox:
 \code{\link[=dss_cas]{dss_cas()}},
 \code{\link[=dss_connect]{dss_connect()}},
+\code{\link[=dss_diag_freshness]{dss_diag_freshness()}},
 \code{\link[=dss_disconnect]{dss_disconnect()}},
 \code{\link[=dss_fuzzy]{dss_fuzzy()}},
 \code{\link[=dss_install]{dss_install()}},

@@ -10,6 +10,14 @@
 
 Provides access to the US EPA's CompTox Chemical Dashboard APIs and related products for chemical risk screening and prioritization. The package enables chemical identification and search through multiple identifier types (DTXSID, CAS, SMILES, InChI, names), hazard and safety assessment (including GHS codes, NFPA safety information, cancer, genotoxicity data), bioactivity and toxicity screening from multiple databases (GenRA, TEST, ECOTOX, ToxValDB), chemical properties and molecular descriptors, environmental fate and exposure data, and risk prioritization with regulatory list associations. It supports batch processing for large queries and integrates data from CompTox Chemistry Dashboard, GenRA Engine, Toxicity Estimation Software Tool (TEST), ECOTOX, ToxValDB, and EPI Suite.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/seanthimons/ComptoxR}
+  \item Report bugs at \url{https://github.com/seanthimons/ComptoxR/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Sean Thimons \email{thimons.sean@epa.gov}
 

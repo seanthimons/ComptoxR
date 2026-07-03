@@ -96,7 +96,7 @@ dss_disconnect <- function() {
 #' Install the DSSTox local database
 #'
 #' Installs the DSSTox DuckDB database. By default, downloads a pre-built
-#' database from the latest GitHub Release. Falls back to building from source
+#' database from the rolling `db-latest` GitHub prerelease. Falls back to building from source
 #' if the release asset is not available.
 #'
 #' @param source Path to an existing `dsstox.duckdb` file. If provided, the
@@ -104,12 +104,12 @@ dss_disconnect <- function() {
 #' @param build Logical; if `TRUE`, skip the download attempt and build from
 #'   source immediately. Default `FALSE`.
 #' @param tag GitHub release tag to download from (e.g. `"v2.1.0"`). Default
-#'   `"latest"`.
+#'   `"db-latest"`.
 #' @param overwrite Logical; overwrite an existing database? Default `FALSE`.
 #' @return Invisibly, the destination path.
 #' @export
 #' @family dsstox
-dss_install <- function(source = NULL, build = FALSE, tag = "latest", overwrite = FALSE) {
+dss_install <- function(source = NULL, build = FALSE, tag = "db-latest", overwrite = FALSE) {
   dest <- dss_path()
   dest_dir <- dirname(dest)
 
