@@ -73,6 +73,48 @@ test_that(".db_download_release() aborts on 404 / missing asset", {
   )
 })
 
+test_that(".db_download_release() shows progress only for asset downloads", {
+  calls <- list()
+
+  local_mocked_bindings(
+    req_perform = function(req, path = NULL, ...) {
+      calls[[length(calls) + 1L]] <<- list(req = req, path = path)
+      if (!is.null(path)) {
+        writeBin(raw(0), path)
+      }
+      list()
+    },
+    resp_body_json = function(resp, ...) {
+      list(
+        tag_name = "db-latest",
+        assets = list(list(
+          name = "toxval.duckdb",
+          browser_download_url = "https://example.com/toxval.duckdb",
+          size = 1024
+        ))
+      )
+    },
+    .package = "httr2"
+  )
+
+  dest <- tempfile(fileext = ".duckdb")
+  expect_equal(
+    .db_download_release("toxval", dest, tag = "db-latest", repo = "owner/repo"),
+    dest
+  )
+
+  expect_length(calls, 2)
+  expect_match(calls[[1]]$req$url, "/releases/tags/db-latest$")
+  expect_null(calls[[1]]$path)
+  expect_null(calls[[1]]$req$options$noprogress)
+  expect_null(calls[[1]]$req$options$xferinfofunction)
+
+  expect_equal(calls[[2]]$req$url, "https://example.com/toxval.duckdb")
+  expect_equal(calls[[2]]$path, dest)
+  expect_false(calls[[2]]$req$options$noprogress)
+  expect_true(is.function(calls[[2]]$req$options$xferinfofunction))
+})
+
 test_that("toxval_install() default path calls .db_download_release", {
   skip_if_cran_safe_external("ToxValDB install download path requires external release behavior.")
 

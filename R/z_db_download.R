@@ -76,7 +76,8 @@
 
   dl_req <- httr2::request(download_url) |>
     httr2::req_retry(max_tries = 3) |>
-    httr2::req_timeout(300)
+    httr2::req_timeout(300) |>
+    httr2::req_progress(type = "down")
 
   tryCatch(
     httr2::req_perform(dl_req, path = dest_path),
