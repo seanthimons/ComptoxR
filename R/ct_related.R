@@ -1,9 +1,12 @@
-# TODO Follow up to see if this will remain
-
 #' Get related substances from the EPA CompTox dashboard.
 #'
 #' @description
 #' `r lifecycle::badge("questioning")`
+#'
+#' This wrapper intentionally uses the legacy CompTox Dashboard
+#' `dashboard-api/ccdapp2` route. The production `ctx-api` route for
+#' `related-substances/search/by-dtxsid` is not currently available, while the
+#' legacy endpoint still serves this data.
 #'
 #' @param query A character vector of DTXSIDs to query.
 #' @param inclusive Boolean to only return results within all of the queried compounds. Valid for over one compound.
@@ -28,18 +31,21 @@ ct_related <- function(query, inclusive = FALSE) {
     cli::cli_abort("Inclusive option only valid for multiple compounds")
   }
 
-  # Display debugging information (preserve user experience)
-  cli::cli_rule(left = "Related substances payload options")
-  cli::cli_dl(
-    c(
-      "Number of compounds" = "{length(query)}",
-      "Inclusive" = "{inclusive}"
+  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  if (run_verbose) {
+    cli::cli_rule(left = "Related substances payload options")
+    cli::cli_dl(
+      c(
+        "Number of compounds" = "{length(query)}",
+        "Inclusive" = "{inclusive}"
+      )
     )
-  )
-  cli::cli_rule()
-  cli::cli_end()
+    cli::cli_rule()
+    cli::cli_end()
+  }
 
-  # Server switch with guaranteed cleanup
+  # Compatibility route: this endpoint is not exposed by production ctx-api yet,
+  # but the legacy Dashboard ccdapp2 route still responds.
   old_server <- Sys.getenv("ctx_burl")
   ctx_server(9)
   on.exit(Sys.setenv(ctx_burl = old_server), add = TRUE)
@@ -60,14 +66,29 @@ ct_related <- function(query, inclusive = FALSE) {
         id = dtxsid # Named parameter becomes query parameter
       )
     },
-    .progress = TRUE
+    .progress = run_verbose
   ) %>%
     purrr::set_names(query)
 
   # Post-process: extract nested data, filter parent compound
   # This matches original behavior exactly
   data <- results %>%
-    purrr::map(~ purrr::pluck(., "data")) %>%
+    purrr::map(function(result) {
+      if (is.list(result) && "data" %in% names(result)) {
+        return(result$data)
+      }
+
+      if (
+        is.list(result) &&
+          length(result) > 0 &&
+          is.list(result[[1]]) &&
+          "data" %in% names(result[[1]])
+      ) {
+        return(result[[1]]$data)
+      }
+
+      list()
+    }) %>%
     purrr::map(
       ~ purrr::map(
         .,

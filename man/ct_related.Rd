@@ -16,6 +16,11 @@ A list of data frames containing related substances.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#questioning}{\figure{lifecycle-questioning.svg}{options: alt='[Questioning]'}}}{\strong{[Questioning]}}
+
+This wrapper intentionally uses the legacy CompTox Dashboard
+\code{dashboard-api/ccdapp2} route. The production \code{ctx-api} route for
+\code{related-substances/search/by-dtxsid} is not currently available, while the
+legacy endpoint still serves this data.
 }
 \examples{
 \dontrun{
