@@ -1,7 +1,7 @@
 #' Get summary data by Study Type
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param studyType Study Type. Type: string
 #' @return Returns a scalar value

@@ -4,7 +4,13 @@
 \alias{chemi_hazard_bulk}
 \title{Hazard}
 \usage{
-chemi_hazard_bulk(query, idType = "AnyId", options = NULL, empty = NULL)
+chemi_hazard_bulk(
+  query,
+  idType = "AnyId",
+  options = NULL,
+  empty = NULL,
+  format = c("compact", "tidy", "raw")
+)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
@@ -14,6 +20,8 @@ chemi_hazard_bulk(query, idType = "AnyId", options = NULL, empty = NULL)
 \item{options}{Optional parameter}
 
 \item{empty}{Optional parameter}
+
+\item{format}{Output format. One of "compact", "tidy", or "raw".}
 }
 \value{
 Returns a tibble with results

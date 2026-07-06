@@ -1,7 +1,7 @@
 #' Get summary data by AEID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param aeid ToxCast assay component endpoint ID (AEID). Type: integer
 #' @return Returns a scalar value

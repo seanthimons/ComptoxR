@@ -1,7 +1,7 @@
 #' Get all list types
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @return Returns a tibble with results (array of objects)
 #' @export

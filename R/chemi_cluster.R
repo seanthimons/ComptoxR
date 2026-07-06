@@ -6,7 +6,8 @@
 #' @param hclust_method character string indicating which clustering method to use in `hclust`.
 #'   Defaults to "complete". See `?hclust` for available methods.
 #'
-#' @return List
+#' @return A list with `mol_names`, `similarity`, and `hc`. `mol_names` includes
+#'   a `dtxsid` column when the API response provides identifiers.
 #' @export
 
 chemi_cluster <- function(
@@ -14,11 +15,9 @@ chemi_cluster <- function(
   sort = TRUE,
   hclust_method = "complete"
 ) {
-  if (is.null(sort) | missing(sort)) {
+  if (is.null(sort)) {
     cli::cli_abort('Missing sort!')
   }
-
-  chemicals <- chemi_resolver_lookup(chemicals, idType = 'DTXSID', mol = FALSE)
 
   cli_rule(left = "Similarity payload options")
   cli_dl(
@@ -30,74 +29,28 @@ chemi_cluster <- function(
   cli_rule()
   cli_end()
 
-  req <- request(
-    Sys.getenv('chemi_burl')
-  ) %>%
-    req_method("POST") %>%
-    req_url_path_append("resolver/getsimilaritymap") %>%
-    req_url_query(sort = tolower(as.character(sort))) %>%
-    req_headers(
-      accept = "application/json, text/plain, */*"
-    ) %>%
-    req_body_json(
-      list(
-        'chemicals' = chemicals
-      )
-    )
+  parsed_resp <- chemi_resolver_getsimilaritymap(
+    query = chemicals,
+    idType = "DTXSID",
+    sort = sort
+  )
 
-  if (Sys.getenv("run_debug") == "TRUE") {
-    cli::cli_alert_info('DEBUGGING REQUEST')
-    print(req)
-  }
+  chemi_cluster_parse_similarity_map(parsed_resp, hclust_method = hclust_method)
+}
 
-  resp <- req %>%
-    req_retry(max_tries = 3, is_transient = \(resp) {
-      resp_status(resp) %in% c(429, 500, 502, 503, 504)
-    }) %>%
-    req_perform()
-
-  parsed_resp <- resp %>%
-    resp_body_json()
-
-  # Check if any data was found.
-  if (length(parsed_resp) > 0) {} else {
+chemi_cluster_parse_similarity_map <- function(parsed_resp, hclust_method = "complete") {
+  if (is.null(parsed_resp) || length(parsed_resp) == 0) {
     cli::cli_alert_danger('No data found!')
     return(NULL)
   }
 
-  mol_names <- parsed_resp %>%
-    pluck(., 'order') %>%
-    map(., ~ pluck(.x, 'chemical')) %>%
-    map(
-      .,
-      ~ keep(
-        .x,
-        names(.x) %in%
-          c(
-            # TODO removed the DTXSID field as some compounds don't have it? Very odd.
-            #	'sid',
-            'name'
-          )
-      )
-    ) %>%
-    map(., as_tibble) %>%
-    list_rbind() %>%
-    select(
-      # TODO removed the DTXSID field as some compounds don't have it? Very odd.
-      #dtxsid = sid,
-      name = name
-    )
+  mol_names <- chemi_cluster_mol_names(purrr::pluck(parsed_resp, 'order', .default = list()))
+  similarity <- chemi_cluster_similarity(purrr::pluck(parsed_resp, 'similarity', .default = list()))
 
-  # Is there a way to fix this locally by altering the lists when there is no color, which indicates perfect similarity?
-  similarity <- parsed_resp %>%
-    pluck(., 'similarity') %>%
-    map(
-      .,
-      ~ map(., ~ discard_at(.x, 'cl')) %>%
-        list_flatten() %>%
-        unname() %>%
-        list_c()
-    )
+  if (nrow(mol_names) == 0 || length(similarity) == 0) {
+    cli::cli_alert_danger('No data found!')
+    return(NULL)
+  }
 
   # ! NOTE removed the %>% replace(., . == 0, 1), as that was giving false positives.
 
@@ -118,6 +71,47 @@ chemi_cluster <- function(
     similarity = similarity,
     hc = hc
   )
+}
+
+chemi_cluster_mol_names <- function(order) {
+  chemicals <- purrr::map(order, ~ purrr::pluck(.x, 'chemical', .default = list()))
+  names <- purrr::map_chr(chemicals, ~ chemi_cluster_scalar(.x$name))
+  dtxsids <- purrr::map_chr(chemicals, ~ chemi_cluster_scalar(.x$sid %||% .x$dtxsid %||% .x$chemId))
+
+  if (any(!is.na(dtxsids))) {
+    return(tibble::tibble(dtxsid = dtxsids, name = names))
+  }
+
+  tibble::tibble(name = names)
+}
+
+chemi_cluster_scalar <- function(x) {
+  if (is.null(x) || length(x) == 0) {
+    return(NA_character_)
+  }
+
+  as.character(x[[1]])
+}
+
+chemi_cluster_similarity <- function(similarity) {
+  purrr::map(similarity, ~ purrr::map_dbl(.x, chemi_cluster_similarity_value))
+}
+
+chemi_cluster_similarity_value <- function(cell) {
+  if (!is.list(cell)) {
+    return(as.numeric(cell))
+  }
+
+  if ("value" %in% names(cell)) {
+    return(as.numeric(cell$value))
+  }
+
+  cell <- cell[setdiff(names(cell), "cl")]
+  if (length(cell) == 0) {
+    return(NA_real_)
+  }
+
+  as.numeric(unlist(cell, use.names = FALSE)[[1]])
 }
 
 #' Create a similarity list from chemical cluster data

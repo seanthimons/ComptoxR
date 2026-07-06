@@ -18,39 +18,30 @@
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
 chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE) {
-  # Resolve identifiers to Chemical objects via bulk POST endpoint
-  resolved <- tryCatch(
-    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
-    error = function(e) {
-      tryCatch(
-        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
-        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
-      )
-    }
+  chemicals <- NULL
+  req_data <- run_hook(
+    "chemi_resolver_getpubchemlist",
+    "pre_request",
+    list(params = list(query = query, idType = idType, section = section, all_pages = all_pages, chemicals = chemicals))
   )
-
-  # Keep only successfully resolved entries
-  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
-
-  if (length(resolved) == 0) {
-    cli::cli_warn("No chemicals could be resolved from the provided identifiers")
-    return(NULL)
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
   }
-
-  # Transform resolved list to ChemicalRecord format expected by endpoint
-  chemicals <- purrr::map(resolved, function(item) {
-    chem <- item$chemical
-    list(
-      chemical = list(
-        sid = chem$chemId %||% chem$sid,
-        smiles = chem$canonicalSmiles %||% chem$smiles,
-        casrn = chem$casrn,
-        inchi = chem$inchi,
-        inchiKey = chem$inchiKey,
-        name = chem$name
-      )
-    )
-  })
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("idType" %in% names(req_data$params)) {
+    idType <- req_data$params[["idType"]]
+  }
+  if ("section" %in% names(req_data$params)) {
+    section <- req_data$params[["section"]]
+  }
+  if ("all_pages" %in% names(req_data$params)) {
+    all_pages <- req_data$params[["all_pages"]]
+  }
+  if ("chemicals" %in% names(req_data$params)) {
+    chemicals <- req_data$params[["chemicals"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -59,7 +50,7 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
   }
 
   result <- generic_chemi_request(
-    query = NULL,
+    query = query,
     endpoint = "resolver/getpubchemlist",
     options = extra_options,
     chemicals = chemicals,

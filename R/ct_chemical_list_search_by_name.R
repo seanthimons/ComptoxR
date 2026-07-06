@@ -1,7 +1,7 @@
 #' Get lists by name
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param listName Chemical List Name. Type: string
 #' @param projection Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)
@@ -25,7 +25,10 @@ ct_chemical_list_search_by_name <- function(listName, projection = "chemicallist
   result <- run_hook(
     "ct_chemical_list_search_by_name",
     "post_response",
-    list(result = result, params = list(extract_dtxsids = extract_dtxsids))
+    list(
+      result = result,
+      params = list(listName = listName, projection = projection, extract_dtxsids = extract_dtxsids)
+    )
   )
   # Additional post-processing can be added here
 

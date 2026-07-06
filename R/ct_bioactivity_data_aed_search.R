@@ -1,7 +1,7 @@
 #' Get AED data for a batch of DTXSIDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a tibble with results (array of objects)
@@ -26,7 +26,7 @@ ct_bioactivity_data_aed_search_bulk <- function(query) {
 #' Get AED data by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid Primary query parameter. Type: string
 #' @return Returns a list with result object

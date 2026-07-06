@@ -4,12 +4,14 @@
 \alias{chemi_hazard}
 \title{Hazard}
 \usage{
-chemi_hazard(query, full = TRUE)
+chemi_hazard(query, full = TRUE, format = c("compact", "tidy", "raw"))
 }
 \arguments{
 \item{query}{Required parameter}
 
 \item{full}{Optional parameter (default: TRUE)}
+
+\item{format}{Output format. One of "compact", "tidy", or "raw".}
 }
 \value{
 Returns a tibble with results

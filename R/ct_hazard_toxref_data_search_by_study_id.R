@@ -1,7 +1,7 @@
 #' Get all data by Study ID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param studyId Study ID. Type: integer
 #' @return Returns a scalar value

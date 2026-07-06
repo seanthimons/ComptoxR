@@ -1,7 +1,7 @@
 #' Search by substring value
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param value Substring of search word. Type: string
 #' @param top Optional parameter (default: 0)

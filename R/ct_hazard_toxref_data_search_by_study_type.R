@@ -1,7 +1,7 @@
 #' Get all data by Study Type
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param studyType Study Type. Type: string
 #' @param pageNumber Optional parameter (default: 1)

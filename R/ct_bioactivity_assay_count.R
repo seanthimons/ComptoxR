@@ -1,7 +1,7 @@
 #' Get total assay count
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @return Returns a scalar value
 #' @export

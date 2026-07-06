@@ -1,7 +1,7 @@
 #' Get ADME data for IVIVE by DTXSID with CCD projection
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param projection Specifies if projection is used. Option: ccd-adme-data. If omitted, the default ADME-IVIVE projection is returned.

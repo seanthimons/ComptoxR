@@ -1,7 +1,7 @@
 #' Get data by SMILES
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param smiles SMILES String
 #' @return Returns a scalar value

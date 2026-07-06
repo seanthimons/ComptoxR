@@ -1,7 +1,7 @@
 #' Get AOP data by Key Event
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param eventNumber Key Event Number. Type: integer
 #' @return Returns a tibble with results (array of objects)

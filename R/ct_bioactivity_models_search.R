@@ -1,7 +1,7 @@
 #' Get predictions by DTXSID and model
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid dtxsid
 #' @param model model

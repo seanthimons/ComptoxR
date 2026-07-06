@@ -1,7 +1,7 @@
 #' Search by exact value
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param value Exact match of search value. Type: string
 #' @return Returns a scalar value

@@ -41,6 +41,31 @@ test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
   expect_match(output, "\\[\\s*\\{\\s*\"sid\"\\s*:\\s*\"DTXSID7020182\"\\s*\\}\\s*\\]")
 })
 
+test_that("generic_chemi_request appends named query parameters", {
+  captured_url <- NULL
+  testthat::with_mocked_bindings(
+    req_perform = function(req) {
+      captured_url <<- req$url
+      httr2::response(
+        status_code = 200,
+        headers = list(`Content-Type` = "application/json"),
+        body = charToRaw(jsonlite::toJSON(list(ok = TRUE), auto_unbox = TRUE))
+      )
+    },
+    .package = "httr2",
+    {
+      generic_chemi_request(
+        query = "DTXSID7020182",
+        endpoint = "resolver/getsimilaritymap",
+        sort = "true",
+        tidy = FALSE
+      )
+    }
+  )
+
+  expect_match(captured_url, "resolver/getsimilaritymap\\?sort=true")
+})
+
 test_that("generic_chemi_request tidies results with matching query IDs", {
   # Mock a typical chemi response which might be an unnamed list of same length as query
   test_data <- list(

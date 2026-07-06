@@ -60,7 +60,7 @@ When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
 
 \item{pagination_strategy}{Pagination strategy. For chemi search, usually "offset_limit" (body).}
 
-\item{...}{Additional arguments passed to httr2.}
+\item{...}{Named query parameters appended to the request URL.}
 }
 \value{
 A tidy tibble (if tidy=TRUE) or a raw list.

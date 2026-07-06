@@ -15,7 +15,8 @@ chemi_cluster(chemicals, sort = TRUE, hclust_method = "complete")
 Defaults to "complete". See \code{?hclust} for available methods.}
 }
 \value{
-List
+A list with \code{mol_names}, \code{similarity}, and \code{hc}. \code{mol_names} includes
+a \code{dtxsid} column when the API response provides identifiers.
 }
 \description{
 Get chemical similarity map

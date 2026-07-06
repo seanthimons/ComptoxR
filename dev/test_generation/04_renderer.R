@@ -35,7 +35,11 @@ tg_render_assertions <- function(metadata, call_values) {
   )
 
   for (arg_name in names(helper_args)) {
-    assertion <- tg_assertion_for_helper_arg(helper_args[[arg_name]], call_values)
+    assertion <- if (isTRUE(metadata$uses_resolve_query_hook) && identical(arg_name, "query")) {
+      sprintf("  expect_null(call[[%s]])", tg_quote_chr(arg_name))
+    } else {
+      tg_assertion_for_helper_arg(helper_args[[arg_name]], call_values)
+    }
     if (!is.null(assertion)) {
       assertions <- c(assertions, assertion)
     }

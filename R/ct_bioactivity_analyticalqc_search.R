@@ -1,7 +1,7 @@
 #' Get analytical QC data by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid Primary query parameter. Type: string
 #' @return Returns a scalar value

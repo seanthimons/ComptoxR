@@ -1,7 +1,7 @@
 #' Get data for a batch of AEIDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_bioactivity_data_search_by_aeid_bulk <- function(query) {
 #' Get data by AEID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param aeid ToxCast assay component endpoint ID (AEID). Type: integer
 #' @return Returns a tibble with results (array of objects)

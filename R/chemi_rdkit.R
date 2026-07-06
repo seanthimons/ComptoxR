@@ -15,6 +15,27 @@
 #' chemi_rdkit(smiles = "DTXSID7020182")
 #' }
 chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL) {
+  req_data <- run_hook(
+    "chemi_rdkit",
+    "pre_request",
+    list(params = list(smiles = smiles, type = type, radius = radius, bits = bits))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("smiles" %in% names(req_data$params)) {
+    smiles <- req_data$params[["smiles"]]
+  }
+  if ("type" %in% names(req_data$params)) {
+    type <- req_data$params[["type"]]
+  }
+  if ("radius" %in% names(req_data$params)) {
+    radius <- req_data$params[["radius"]]
+  }
+  if ("bits" %in% names(req_data$params)) {
+    bits <- req_data$params[["bits"]]
+  }
+
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {

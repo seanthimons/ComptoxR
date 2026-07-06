@@ -1,7 +1,7 @@
 #' Get assay summary by gene symbol
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param geneSymbol Gene Symbol. Type: string
 #' @return Returns a scalar value

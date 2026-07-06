@@ -6,14 +6,20 @@
 # single-call contract test cannot express (it only drives a valid id vector).
 # The collaborator generic_chemi_request is mocked; no network, no API key.
 #
-# The resolve-then-POST cluster (orderBySimilarity, getsimilaritylist,
-# getsimilaritymap, pubchem_section_bulk, getpubchemlist, universalharvest_cart,
-# stdizer_chemicals) is covered below against the real branch contract (#219):
+# The resolve-then-POST cluster (alerts, hazard_bulk, orderBySimilarity,
+# getsimilaritylist, getsimilaritymap, pubchem_section_bulk, getpubchemlist,
+# universalharvest_cart, stdizer_chemicals, toxprints_calculate_bulk) is covered
+# below against the real branch contract (#219):
 # each wrapper resolves via chemi_resolver_lookup_bulk, keeps result=="FOUND"
 # entries, maps them to a nested list(chemical = list(sid = chem$chemId %||%
 # chem$sid, ...)) payload, and POSTs via generic_chemi_request(tidy = FALSE).
 # An empty/all-non-FOUND resolution short-circuits to NULL + warning without
 # touching the request helper. Both collaborators are mocked; no network, no key.
+
+if (!exists("generated_contract_ensure_package", mode = "function")) {
+  source(file.path("tests", "testthat", "helper-generated-contracts.R"))
+}
+generated_contract_ensure_package()
 
 test_that("chemi_resolver_lookup_bulk aborts on empty/NULL ids before any request", {
   expect_error(chemi_resolver_lookup_bulk(NULL), "non-empty character vector")
@@ -44,13 +50,16 @@ test_that("chemi_resolver_lookup_bulk coerces ids to character and crosses the h
 
 # Endpoint each wrapper must POST to after resolution.
 resolver_cluster <- list(
+  chemi_alerts = "alerts",
+  chemi_hazard_bulk = "hazard",
   chemi_resolver_orderBySimilarity = "resolver/orderBySimilarity",
   chemi_resolver_getsimilaritylist = "resolver/getsimilaritylist",
   chemi_resolver_getsimilaritymap = "resolver/getsimilaritymap",
   chemi_resolver_pubchem_section_bulk = "resolver/pubchem-section",
   chemi_resolver_getpubchemlist = "resolver/getpubchemlist",
   chemi_resolver_universalharvest_cart = "resolver/universalharvest_cart",
-  chemi_stdizer_chemicals = "stdizer/chemicals"
+  chemi_stdizer_chemicals = "stdizer/chemicals",
+  chemi_toxprints_calculate_bulk = "toxprints/calculate"
 )
 
 # A FOUND-shaped lookup record whose chemical carries the canonical chemId key.

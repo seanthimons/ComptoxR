@@ -1,7 +1,7 @@
 #' Get AOP data by ToxCast AEID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param toxcastAeid ToxCast AEID. Type: integer
 #' @return Returns a tibble with results (array of objects)

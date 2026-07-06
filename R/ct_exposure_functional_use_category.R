@@ -1,7 +1,7 @@
 #' Get functional use categories
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @return Returns a scalar value
 #' @export
