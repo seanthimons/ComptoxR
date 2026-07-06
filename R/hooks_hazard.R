@@ -98,10 +98,45 @@ chemi_hazard_scalar <- function(...) {
   NA
 }
 
+chemi_hazard_chr <- function(...) {
+  value <- chemi_hazard_scalar(...)
+
+  if (is.null(value) || length(value) == 0 || is.na(value)) {
+    return(NA_character_)
+  }
+
+  as.character(value)
+}
+
+chemi_hazard_lgl <- function(...) {
+  value <- chemi_hazard_scalar(...)
+
+  if (is.null(value) || length(value) == 0 || is.na(value)) {
+    return(NA)
+  }
+
+  if (is.logical(value)) {
+    return(value)
+  }
+
+  if (is.numeric(value)) {
+    return(as.logical(value))
+  }
+
+  value <- tolower(trimws(as.character(value)))
+  if (value %in% c("true", "t", "yes", "y", "1")) {
+    return(TRUE)
+  }
+  if (value %in% c("false", "f", "no", "n", "0")) {
+    return(FALSE)
+  }
+
+  NA
+}
+
 chemi_hazard_empty_tidy <- function() {
   columns <- chemi_hazard_tidy_columns()
   typed <- stats::setNames(rep(list(character()), length(columns)), columns)
-  typed$value_mass <- numeric()
   typed$value_active <- logical()
   tibble::as_tibble(typed)
 }
@@ -214,42 +249,42 @@ chemi_hazard_record_row <- function(chemical, score, record) {
     record <- list()
   }
 
-  final_score <- chemi_hazard_scalar(score$finalScore)
-  final_authority <- chemi_hazard_scalar(score$finalAuthority)
+  final_score <- chemi_hazard_chr(score$finalScore)
+  final_authority <- chemi_hazard_chr(score$finalAuthority)
 
   list(
-    dtxsid = chemi_hazard_scalar(chemical$chemical$sid, chemical$chemical$chemId, chemical$chemicalId),
-    casrn = chemi_hazard_scalar(chemical$chemical$casrn, chemical$chemical$CAS, chemical$chemical$cas),
-    name = chemi_hazard_scalar(chemical$chemical$name),
-    hazard_id = chemi_hazard_scalar(score$hazardId),
-    hazard_name = chemi_hazard_scalar(score$hazardName),
+    dtxsid = chemi_hazard_chr(chemical$chemical$sid, chemical$chemical$chemId, chemical$chemicalId),
+    casrn = chemi_hazard_chr(chemical$chemical$casrn, chemical$chemical$CAS, chemical$chemical$cas),
+    name = chemi_hazard_chr(chemical$chemical$name),
+    hazard_id = chemi_hazard_chr(score$hazardId),
+    hazard_name = chemi_hazard_chr(score$hazardName),
     final_score = final_score,
     display_score = chemi_hazard_display_score(final_score, final_authority),
     final_authority = final_authority,
-    final_score_source = chemi_hazard_scalar(score$finalScoreSource),
-    record_name = chemi_hazard_scalar(record$name),
-    record_source = chemi_hazard_scalar(record$source),
-    record_source_original = chemi_hazard_scalar(record$sourceOriginal),
-    record_list_type = chemi_hazard_scalar(record$listType),
-    record_score = chemi_hazard_scalar(record$score),
-    record_category = chemi_hazard_scalar(record$category),
-    hazard_code = chemi_hazard_scalar(record$hazardCode),
-    hazard_statement = chemi_hazard_scalar(record$hazardStatement),
-    rationale = chemi_hazard_scalar(record$rationale),
-    route = chemi_hazard_scalar(record$route),
-    value_mass = chemi_hazard_scalar(record$valueMass),
-    value_mass_units = chemi_hazard_scalar(record$valueMassUnits),
-    value_mass_operator = chemi_hazard_scalar(record$valueMassOperator),
-    value_active = chemi_hazard_scalar(record$valueActive),
-    duration = chemi_hazard_scalar(record$duration),
-    duration_units = chemi_hazard_scalar(record$durationUnits),
-    effect = chemi_hazard_scalar(record$effect),
-    url = chemi_hazard_scalar(record$url),
-    long_ref = chemi_hazard_scalar(record$longRef),
-    test_organism = chemi_hazard_scalar(record$testOrganism),
-    test_type = chemi_hazard_scalar(record$testType),
-    toxval_id = chemi_hazard_scalar(record$toxvalID, record$toxvalId),
-    record_cas = chemi_hazard_scalar(record$CAS, record$cas)
+    final_score_source = chemi_hazard_chr(score$finalScoreSource),
+    record_name = chemi_hazard_chr(record$name),
+    record_source = chemi_hazard_chr(record$source),
+    record_source_original = chemi_hazard_chr(record$sourceOriginal),
+    record_list_type = chemi_hazard_chr(record$listType),
+    record_score = chemi_hazard_chr(record$score),
+    record_category = chemi_hazard_chr(record$category),
+    hazard_code = chemi_hazard_chr(record$hazardCode),
+    hazard_statement = chemi_hazard_chr(record$hazardStatement),
+    rationale = chemi_hazard_chr(record$rationale),
+    route = chemi_hazard_chr(record$route),
+    value_mass = chemi_hazard_chr(record$valueMass),
+    value_mass_units = chemi_hazard_chr(record$valueMassUnits),
+    value_mass_operator = chemi_hazard_chr(record$valueMassOperator),
+    value_active = chemi_hazard_lgl(record$valueActive),
+    duration = chemi_hazard_chr(record$duration),
+    duration_units = chemi_hazard_chr(record$durationUnits),
+    effect = chemi_hazard_chr(record$effect),
+    url = chemi_hazard_chr(record$url),
+    long_ref = chemi_hazard_chr(record$longRef),
+    test_organism = chemi_hazard_chr(record$testOrganism),
+    test_type = chemi_hazard_chr(record$testType),
+    toxval_id = chemi_hazard_chr(record$toxvalID, record$toxvalId),
+    record_cas = chemi_hazard_chr(record$CAS, record$cas)
   )
 }
 

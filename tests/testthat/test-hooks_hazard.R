@@ -51,6 +51,7 @@ mock_chemi_hazard_response <- function(wrapped = TRUE) {
                 source = "Source B",
                 listType = "QSAR Model",
                 score = "L",
+                valueMass = "mg/kg-day",
                 cas = "50-00-0"
               )
             )
@@ -156,6 +157,8 @@ test_that("format_chemi_hazard_result creates tidy long hazard rows", {
   expect_equal(nrow(oral_records), 3L)
   expect_equal(oral_records$casrn, rep("50-00-0", 3L))
   expect_true("50-00-0" %in% oral_records$record_cas)
+  expect_true("100" %in% oral_records$value_mass)
+  expect_true("mg/kg-day" %in% oral_records$value_mass)
 })
 
 test_that("format_chemi_hazard_result creates compact wide hazard rows", {
