@@ -12,9 +12,6 @@ library(ComptoxR)
 # Default: toxval_server(1) uses R_user_dir resolution.
 toxval_server(getOption("ComptoxR.toxval_path", default = 1))
 
-# Note: Uses internal ComptoxR function. Requires matching ComptoxR version.
-.get_con <- function() ComptoxR:::.tox_get_con()
-
 #* @apiTitle ToxValDB API
 #* @apiDescription Thin wrapper around ComptoxR toxval_*() functions
 

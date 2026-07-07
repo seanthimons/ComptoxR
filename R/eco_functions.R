@@ -654,8 +654,11 @@ eco_results <- function(
     if (ep_str == "all") {
       # No filtering
     } else if (ep_str == "default") {
+      # Tokens are start-anchored (^) so they match endpoint codes, not
+      # substrings (e.g. "^NOEC" won't match "XNOEC"). LR50/AC50/NR-*/(log)…
+      # variants left unanchored intentionally.
       endpoint_regex <- paste0(
-        "^EC50|^LC50|^LD50|LR50|^LOEC|^LOEL|NOEC|NOEL$|",
+        "^EC50|^LC50|^LD50|LR50|^LOEC|^LOEL|^NOEC|^NOEL|",
         "NR-ZERO|NR-LETH|AC50|\\(log\\)EC50|\\(log\\)LC50|\\(log\\)LOEC"
       )
       result_query <- result_query |>

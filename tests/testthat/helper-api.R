@@ -65,6 +65,20 @@ skip_if_cran_safe_external <- function(
   }
 }
 
+#' Skip a test when the local DuckDB for `db` is not installed
+#'
+#' DB-backed tests ship no database fixture; they skip when the file is absent.
+#' In the CRAN-safe / offline lane, setup.R points the `*_path()` options at a
+#' missing directory, so these skip automatically. Equivalent to the inline
+#' `skip_if_not(file.exists(eco_path()), ...)` idiom; prefer this in new tests.
+skip_if_no_local_db <- function(db = c("ecotox", "toxval")) {
+  db <- match.arg(db)
+  path <- switch(db, ecotox = eco_path(), toxval = toxval_path())
+  if (!file.exists(path)) {
+    testthat::skip(sprintf("%s database not installed", db))
+  }
+}
+
 #' Standard expectations for ComptoxR tibbles
 expect_valid_tibble <- function(object) {
   expect_s3_class(object, "tbl_df")

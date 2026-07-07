@@ -370,7 +370,7 @@ test_that("row count threshold constant is reasonable", {
 # Live tests (database required) ------------------------------------------
 
 test_that("connection returns valid DBIConnection", {
-  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
+  skip_if_no_local_db("toxval")
 
   con <- .tox_get_con()
   expect_true(inherits(con, "DBIConnection"))
@@ -378,7 +378,7 @@ test_that("connection returns valid DBIConnection", {
 })
 
 test_that(".tox_get_con() returns same cached connection", {
-  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
+  skip_if_no_local_db("toxval")
 
   con1 <- .tox_get_con()
   con2 <- .tox_get_con()
@@ -386,7 +386,7 @@ test_that(".tox_get_con() returns same cached connection", {
 })
 
 test_that("toxval_health() returns expected fields", {
-  skip_if_not(file.exists(toxval_path()), "ToxValDB not installed")
+  skip_if_no_local_db("toxval")
 
   health <- toxval_health()
   expect_type(health, "list")

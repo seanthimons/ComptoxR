@@ -44,12 +44,6 @@ ct_related <- function(query, inclusive = FALSE) {
     cli::cli_end()
   }
 
-  # Compatibility route: this endpoint is not exposed by production ctx-api yet,
-  # but the legacy Dashboard ccdapp2 route still responds.
-  old_server <- Sys.getenv("ctx_burl")
-  ctx_server(9)
-  on.exit(Sys.setenv(ctx_burl = old_server), add = TRUE)
-
   # Manual loop over query items - generic_request doesn't support per-item
   # query parameters with batch_limit=1 (that appends to path, not query string)
   # So we use batch_limit=0 (static endpoint) and pass id as query parameter
@@ -61,6 +55,9 @@ ct_related <- function(query, inclusive = FALSE) {
         endpoint = "related-substances/search/by-dtxsid",
         method = "GET",
         batch_limit = 0,
+        # Legacy Dashboard ccdapp2 route: production ctx-api does not expose this
+        # endpoint yet. Passed directly like ct_similar, not via ctx_server().
+        server = "https://comptox.epa.gov/dashboard-api/ccdapp2/",
         auth = FALSE,
         tidy = FALSE,
         id = dtxsid # Named parameter becomes query parameter

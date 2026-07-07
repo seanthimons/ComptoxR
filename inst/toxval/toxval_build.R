@@ -7,8 +7,8 @@
 #   source(system.file("toxval", "toxval_build.R", package = "ComptoxR"))
 #   .build_toxval_db()  # or call via toxval_install()
 
-# Clowder dataset URL for ToxValDB v9 per-source files
-.TOXVAL_CLOWDER_DATASET <- "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
+# Clowder dataset URL for ToxValDB v9 per-source files (shared package constant)
+.TOXVAL_CLOWDER_DATASET <- ComptoxR:::.DB_CLOWDER_DATASET
 
 # Minimum expected row count for ToxValDB v9.x (sanity check)
 .TOXVAL_MIN_ROWS <- 100000L

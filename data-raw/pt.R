@@ -163,11 +163,13 @@ nuclides <- tibble(
     ),
     isomer_hl = str_extract(title, "Nuclear isomer: (.+)$", group = 1) %>% str_trim()
   ) %>%
-  filter(
-    isotope_hl != "< 1 day" &
-      isotope_hl != "<1 day" |
-      (!is.na(isomer_hl) & isomer_hl != "< 1 day" & isomer_hl != "<1 day")
-  ) %>%
+  # NOTE
+  # Half-life filter: remove isotopes with half-life < 1 day (unless isomer has longer half-life)
+  # Probably disable this because of the need to capture short-lived isotopes for nuclear chemistry and radiochemistry applications
+  # filter(
+  #   isotope_hl != "< 1 day" &  isotope_hl != "<1 day" |
+  #     (!is.na(isomer_hl) & isomer_hl != "< 1 day" & isomer_hl != "<1 day")
+  # ) %>%
   mutate(
     Z = str_extract(iso, "\\d+"),
     element = str_extract(iso, "[A-Z][a-z]?")
@@ -355,7 +357,18 @@ if (nrow(nuc_missing) > 0) {
         distinct(cid, .keep_all = TRUE)
 
       if (nrow(still_ambiguous) > 0) {
-        cli::cli_warn("{nrow(still_ambiguous)} CID{?s} with multiple DTXSIDs could not be disambiguated; using first")
+        candidates <- multi_hits %>%
+          filter(cid %in% still_ambiguous$cid) %>%
+          group_by(cid) %>%
+          summarise(dtxsids = paste(DTXSID, collapse = ", "), .groups = "drop")
+        cli::cli_warn(c(
+          "{nrow(still_ambiguous)} CID{?s} with multiple DTXSIDs could not be disambiguated; using first.",
+          "i" = "Candidates per CID:",
+          stats::setNames(
+            paste0(candidates$cid, ": ", candidates$dtxsids),
+            rep("*", nrow(candidates))
+          )
+        ))
       }
 
       resolved_multi <- bind_rows(resolved_multi, still_ambiguous)

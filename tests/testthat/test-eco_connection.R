@@ -209,7 +209,7 @@ test_that("eco_install() falls back to build on download failure", {
 # -- Live tests (require database) ------------------------------------------
 
 test_that("eco_server(1) resolves to valid .duckdb path", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_burl <- Sys.getenv("eco_burl")
   on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
 
@@ -218,7 +218,7 @@ test_that("eco_server(1) resolves to valid .duckdb path", {
 })
 
 test_that("eco_server() with string path sets eco_burl", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_burl <- Sys.getenv("eco_burl")
   on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
 
@@ -228,7 +228,7 @@ test_that("eco_server() with string path sets eco_burl", {
 })
 
 test_that(".eco_get_con() returns valid connection", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
   on.exit(
@@ -248,7 +248,7 @@ test_that(".eco_get_con() returns valid connection", {
 })
 
 test_that(".eco_get_con() reuses cached connection", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
   on.exit(
@@ -268,7 +268,7 @@ test_that(".eco_get_con() reuses cached connection", {
 })
 
 test_that(".eco_close_con() disconnects and clears cache", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
   on.exit(
@@ -290,7 +290,7 @@ test_that(".eco_close_con() disconnects and clears cache", {
 })
 
 test_that("eco_server() mode switch closes existing connection", {
-  skip_if_not(file.exists(eco_path()), "ECOTOX database not installed")
+  skip_if_no_local_db("ecotox")
   old_con <- .ComptoxREnv$ecotox_db
   old_burl <- Sys.getenv("eco_burl")
   on.exit(

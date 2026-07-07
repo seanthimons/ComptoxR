@@ -109,10 +109,18 @@
     cli::cli_abort("No DSSTox ZIP files found on Clowder.")
   }
 
-  entries |>
+  parsed <- entries |>
     dplyr::mutate(
       date_created_parsed = lubridate::parse_date_time(.data$date_created, orders = "a b d HMS Y")
-    ) |>
+    )
+
+  if (all(is.na(parsed$date_created_parsed))) {
+    cli::cli_abort(
+      "Could not parse any DSSTox Clowder release dates (e.g. {.val {utils::head(entries$date_created, 3)}})."
+    )
+  }
+
+  parsed |>
     dplyr::arrange(dplyr::desc(.data$date_created_parsed)) |>
     dplyr::slice_head(n = 1)
 }

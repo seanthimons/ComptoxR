@@ -359,7 +359,6 @@ ctx_server <- function(server = NULL) {
       "2" = Sys.setenv('ctx_burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
       "3" = Sys.setenv('ctx_burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
       "5" = Sys.setenv('ctx_burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
-      "9" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/dashboard-api/ccdapp2/'),
       {
         cli::cli_alert_warning("\nInvalid server option selected!\n")
         #cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
@@ -456,6 +455,10 @@ eco_server <- function(server = NULL) {
   # Close stale connections on every mode switch
   .eco_close_con()
 
+  if (!is.null(server) && length(server) != 1) {
+    cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
+  }
+
   if (is.null(server)) {
     cli::cli_alert_danger("Server URL reset!")
     Sys.setenv("eco_burl" = "")
@@ -512,6 +515,10 @@ eco_server <- function(server = NULL) {
 toxval_server <- function(server = NULL) {
   # Close stale connections on every mode switch
   .tox_close_con()
+
+  if (!is.null(server) && length(server) != 1) {
+    cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
+  }
 
   if (is.null(server)) {
     cli::cli_alert_danger("Server URL reset!")
