@@ -950,12 +950,12 @@ reset_servers <- function() {
     eco_db_path <- eco_path()
     if (file.exists(eco_db_path)) {
       eco_db_mb <- round(file.info(eco_db_path)$size / 1024^2)
-      # Try to read version date from ECOTOX versions table
+      # Read release date from the _metadata table written by the build
       eco_version <- tryCatch(
         {
           con <- .eco_get_con()
-          v <- DBI::dbGetQuery(con, "SELECT date FROM versions WHERE latest = TRUE LIMIT 1")
-          if (nrow(v) > 0) paste0(", v", v$date[[1]]) else ""
+          d <- .db_metadata_value(.db_metadata_table(con), "ecotox_release_date")
+          if (!.db_is_missing_string(d)) paste0(", v", d) else ""
         },
         error = function(e) ""
       )

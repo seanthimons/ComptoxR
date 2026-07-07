@@ -144,12 +144,9 @@ eco_health <- function(con = NULL) {
     con <- .eco_get_con(con)
     db_path <- Sys.getenv("eco_burl")
 
-    # Try to get version date from versions table
+    # Read release date from the _metadata table written by the build
     version_date <- tryCatch(
-      {
-        v <- DBI::dbGetQuery(con, "SELECT date FROM versions WHERE latest = TRUE LIMIT 1")
-        if (nrow(v) > 0) v$date[[1]] else NA_character_
-      },
+      .db_metadata_value(.db_metadata_table(con), "ecotox_release_date"),
       error = function(e) NA_character_
     )
 
