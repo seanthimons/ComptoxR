@@ -34,6 +34,9 @@
 
 #### Tests
 
+- unblock CRAN readiness gate (exclude untestable toxval_diag_freshness,
+  correct stale ct_related/chemi_resolver tests)
+  ([d074521](https://github.com/seanthimons/ComptoxR/tree/d074521077fdc57ba0566618110aa2eec670cb79))
 - regenerate stale ct_related generated test for server param
   ([df991b7](https://github.com/seanthimons/ComptoxR/tree/df991b7e234724eab690d745fb194c2ef68fa42c))
 - add sitrep, local-db policy, and generic_request edge-case coverage
@@ -48,6 +51,8 @@
 #### Other changes
 
 - Update NEWS.md
+  ([d43ce71](https://github.com/seanthimons/ComptoxR/tree/d43ce71670932150bbfed6da65902e316d224061))
+- Update NEWS.md
   ([7c8e90c](https://github.com/seanthimons/ComptoxR/tree/7c8e90c397e4edce27bd41c0600e50210f7d7013))
 - Update NEWS.md
   ([636ac7a](https://github.com/seanthimons/ComptoxR/tree/636ac7a6640ce0766abe47a9f3bad732e7d37d9e))
@@ -55,7 +60,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...df991b7`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...df991b7)
+[`v1.5.0...d074521`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...d074521)
 
 ## v1.5.0 (2026-07-02)
 
