@@ -1,7 +1,7 @@
 #' Get AEID by assay component endpoint name
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param endpoint Required parameter
 #' @return Returns a scalar value

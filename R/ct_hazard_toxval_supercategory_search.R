@@ -1,7 +1,7 @@
 #' Get all toxval supercategories by dtxsid
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a scalar value

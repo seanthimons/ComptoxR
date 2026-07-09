@@ -12,8 +12,10 @@ ct_chemical_list_all:
       default: "FALSE"
       type: "logical"
       description: "Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)"
-  transform:
-    - lists_all_transform
+  pre_request:
+    - select_chemical_list_all_projection
+  post_response:
+    - format_chemical_list_all_result
 
 ct_similar:
   extra_params:
@@ -65,3 +67,75 @@ ct_chemical_property_predicted_bulk:
       description: "Split results by propertyId into named list of data frames"
   post_response:
     - coerce_by_property_id
+
+chemi_alerts:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_hazard:
+  extra_params:
+    format:
+      default: 'c("compact", "tidy", "raw")'
+      type: "character"
+      description: "Output format. One of 'compact', 'tidy', or 'raw'"
+  post_response:
+    - format_chemi_hazard_result
+
+chemi_hazard_bulk:
+  extra_params:
+    format:
+      default: 'c("compact", "tidy", "raw")'
+      type: "character"
+      description: "Output format. One of 'compact', 'tidy', or 'raw'"
+  pre_request:
+    - resolve_query_to_chemical_records
+  post_response:
+    - format_chemi_hazard_result
+
+chemi_resolver_getpubchemlist:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_resolver_getsimilaritylist:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_resolver_getsimilaritymap:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_resolver_orderBySimilarity:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_resolver_pubchem_section_bulk:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_resolver_universalharvest_cart:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_stdizer_chemicals:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_toxprints_calculate_bulk:
+  pre_request:
+    - resolve_query_to_chemical_records
+
+chemi_padel:
+  pre_request:
+    - resolve_smiles_identifier
+
+chemi_rdkit:
+  pre_request:
+    - resolve_smiles_identifier
+
+chemi_mordred:
+  pre_request:
+    - resolve_smiles_identifier
+
+chemi_webtest:
+  pre_request:
+    - resolve_smiles_identifier

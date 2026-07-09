@@ -30,6 +30,7 @@ test_that("ct_related passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "related-substances/search/by-dtxsid")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 0)
+  expect_equal(call[["server"]], "https://comptox.epa.gov/dashboard-api/ccdapp2/")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

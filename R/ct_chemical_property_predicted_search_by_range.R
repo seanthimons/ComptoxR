@@ -1,7 +1,7 @@
 #' Get predicted properties by property and range
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param propertyId Primary query parameter. Type: string
 #' @param start Optional parameter. Type: number

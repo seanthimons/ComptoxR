@@ -1,7 +1,7 @@
 #' Get data for a batch of DTXSID(s)
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_hazard_skin_eye_search_bulk <- function(query) {
 #' Get data by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a scalar value

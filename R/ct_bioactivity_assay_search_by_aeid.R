@@ -1,7 +1,7 @@
 #' Get assay annotations for a batch of AEIDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_bioactivity_assay_search_by_aeid_bulk <- function(query) {
 #' Get assay annotations by AEID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param aeid ToxCast assay component endpoint ID. Type: integer
 #' @param projection Specifies which projection to use. Options: ccd-assay-annotation, ccd-assay-gene, ccd-assay-citations, ccd-assay-tcpl, ccd-assay-reagents, assay-all. If omitted, the full assay data is returned.

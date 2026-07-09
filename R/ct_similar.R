@@ -15,9 +15,16 @@
 #' }
 ct_similar <- function(query, similarity = 0.8) {
   # Run pre-request hooks (validates similarity range)
-  hook_data <- run_hook("ct_similar", "pre_request", list(params = list(query = query, similarity = similarity)))
-  query <- hook_data$params$query
-  similarity <- hook_data$params$similarity
+  req_data <- run_hook("ct_similar", "pre_request", list(params = list(query = query, similarity = similarity)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("similarity" %in% names(req_data$params)) {
+    similarity <- req_data$params[["similarity"]]
+  }
 
   result <- generic_request(
     query = query,

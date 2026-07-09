@@ -228,7 +228,7 @@ toxval_diag_quality <- function(con = NULL) {
 #' Tests API connectivity, reports available versions and file counts.
 #' Useful for debugging build failures or checking for new ToxVal releases.
 toxval_diag_clowder <- function() {
-  url <- "https://clowder.edap-cluster.com/api/datasets/61147fefe4b0856fdc65639b/listAllFiles"
+  url <- ComptoxR:::.DB_CLOWDER_DATASET
 
   cli::cli_h1("Clowder API Probe")
 

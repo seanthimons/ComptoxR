@@ -66,29 +66,33 @@ extract_dtxsids_if_requested <- function(data) {
   return(tibble::tibble(dtxsid = dtxsids))
 }
 
-#' Transform hook for ct_lists_all
+#' Select projection for ct_chemical_list_all
 #'
-#' Transform hook that wraps ct_chemical_list_all with projection and coerce logic.
-#' This replaces the default generic_request call for ct_lists_all.
+#' Pre-request hook that maps `return_dtxsid = TRUE` to the projection that
+#' includes list DTXSID membership while leaving explicit projection choices
+#' alone otherwise.
 #'
-#' @param data Hook data structure with list(params = list(return_dtxsid = ..., coerce = ...))
-#' @return Tibble of lists or named list if coerced
+#' @param data Hook data structure with list(params = list(projection = ..., return_dtxsid = ...))
+#' @return Modified hook data with params$projection adjusted when requested
 #' @noRd
-lists_all_transform <- function(data) {
-  # Determine projection from params
-  projection <- if (!isTRUE(data$params$return_dtxsid)) {
-    "chemicallistall"
-  } else {
-    "chemicallistwithdtxsids"
+select_chemical_list_all_projection <- function(data) {
+  if (isTRUE(data$params$return_dtxsid)) {
+    data$params$projection <- "chemicallistwithdtxsids"
   }
 
-  # Call generic_request directly to avoid recursion
-  df <- generic_request(
-    endpoint = "chemical/list/all",
-    method = "GET",
-    batch_limit = 0,
-    projection = projection
-  )
+  data
+}
+
+#' Format ct_chemical_list_all result
+#'
+#' Post-response hook that reports the number of lists found and optionally
+#' coerces comma-separated DTXSIDs into per-list vectors.
+#'
+#' @param data Hook data structure with list(result = ..., params = list(return_dtxsid = ..., coerce = ...))
+#' @return Original result or coerced named list
+#' @noRd
+format_chemical_list_all_result <- function(data) {
+  df <- data$result
 
   # Show success message
   cli::cli_alert_success("{nrow(df)} lists found!")

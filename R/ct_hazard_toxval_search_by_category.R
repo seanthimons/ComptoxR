@@ -1,7 +1,7 @@
 #' Get all data by dtxsid and category
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param category Required parameter

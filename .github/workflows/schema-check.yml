@@ -50,16 +50,6 @@ jobs:
             any::purrr
           needs: check
 
-      - name: Ensure internal data
-        run: |
-          if (!file.exists("R/sysdata.rda")) {
-            cli::cli_alert_warning("sysdata.rda missing, regenerating from data-raw/")
-            source("data-raw/unicode_map.R")
-          } else {
-            cli::cli_alert_info("sysdata.rda found, skipping regeneration")
-          }
-        shell: Rscript {0}
-
       - name: Save old schemas for diff
         run: |
           # Always start clean to avoid nested cp -r into existing directory

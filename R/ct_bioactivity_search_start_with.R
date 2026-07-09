@@ -1,7 +1,7 @@
 #' Search by starting value
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param value Starting characters for search value. Type: string
 #' @param top Optional parameter (default: 500)

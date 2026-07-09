@@ -13,6 +13,17 @@
 #' chemi_webtest(smiles = "DTXSID7020182")
 #' }
 chemi_webtest <- function(smiles, headers = FALSE) {
+  req_data <- run_hook("chemi_webtest", "pre_request", list(params = list(smiles = smiles, headers = headers)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("smiles" %in% names(req_data$params)) {
+    smiles <- req_data$params[["smiles"]]
+  }
+  if ("headers" %in% names(req_data$params)) {
+    headers <- req_data$params[["headers"]]
+  }
+
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {

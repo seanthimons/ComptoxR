@@ -1,7 +1,7 @@
 #' Get observations by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid dtxsid. Type: string
 #' @return Returns a scalar value

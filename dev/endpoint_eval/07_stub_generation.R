@@ -8,6 +8,152 @@
   if (is.null(x) || (length(x) == 1 && is.na(x))) default else x
 }
 
+stubgen_formal_names <- function(fn_signature) {
+  fn_signature <- fn_signature %|NA|% ""
+  if (!nzchar(trimws(fn_signature))) {
+    return(character(0))
+  }
+
+  parsed <- tryCatch(
+    parse(text = paste0("function(", fn_signature, ") NULL"))[[1]],
+    error = function(e) NULL
+  )
+
+  if (!is.null(parsed)) {
+    return(names(formals(eval(parsed))))
+  }
+
+  sig_parts <- strsplit(fn_signature, ",")[[1]]
+  sig_parts <- trimws(sig_parts)
+  sig_parts <- gsub("\\s*=\\s*.*$", "", sig_parts)
+  sig_parts <- gsub("^`|`$", "", sig_parts)
+  sig_parts[nzchar(sig_parts)]
+}
+
+stubgen_symbol <- function(name) {
+  reserved <- c(
+    "if",
+    "else",
+    "repeat",
+    "while",
+    "function",
+    "for",
+    "in",
+    "next",
+    "break",
+    "TRUE",
+    "FALSE",
+    "NULL",
+    "Inf",
+    "NaN",
+    "NA",
+    "NA_integer_",
+    "NA_real_",
+    "NA_complex_",
+    "NA_character_"
+  )
+
+  if (identical(make.names(name), name) && !name %in% reserved) {
+    return(name)
+  }
+
+  paste0("`", gsub("`", "\\\\`", name, fixed = TRUE), "`")
+}
+
+stubgen_hook_params_expr <- function(param_names) {
+  param_names <- unique(param_names[nzchar(param_names)])
+  if (length(param_names) == 0) {
+    return("list()")
+  }
+
+  entries <- vapply(
+    param_names,
+    function(param_name) paste0("`", param_name, "` = ", stubgen_symbol(param_name)),
+    character(1)
+  )
+
+  paste0("list(", paste(entries, collapse = ", "), ")")
+}
+
+stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_params = character()) {
+  if (is.null(fn_config$pre_request) || length(fn_config$pre_request) == 0) {
+    return("")
+  }
+
+  formal_names <- stubgen_formal_names(fn_signature)
+  param_names <- unique(c(formal_names, additional_params))
+  params_expr <- stubgen_hook_params_expr(param_names)
+
+  init_names <- setdiff(additional_params, formal_names)
+  init_lines <- if (length(init_names) > 0) {
+    paste0("  ", vapply(init_names, stubgen_symbol, character(1)), " <- NULL\n", collapse = "")
+  } else {
+    ""
+  }
+
+  writeback <- paste0(
+    vapply(
+      param_names,
+      function(param_name) {
+        paste0(
+          "  if (\"",
+          param_name,
+          "\" %in% names(req_data$params)) {\n",
+          "    ",
+          stubgen_symbol(param_name),
+          " <- req_data$params[[\"",
+          param_name,
+          "\"]]\n",
+          "  }\n"
+        )
+      },
+      character(1)
+    ),
+    collapse = ""
+  )
+
+  paste0(
+    init_lines,
+    "  req_data <- run_hook(\"",
+    fn,
+    "\", \"pre_request\", list(params = ",
+    params_expr,
+    "))\n",
+    "  if (isTRUE(req_data$skip_request)) {\n",
+    "    return(req_data$result)\n",
+    "  }\n",
+    writeback
+  )
+}
+
+stubgen_build_post_hook <- function(fn, fn_config, fn_signature) {
+  if (is.null(fn_config$post_response) || length(fn_config$post_response) == 0) {
+    return("")
+  }
+
+  params_expr <- stubgen_hook_params_expr(stubgen_formal_names(fn_signature))
+
+  paste0(
+    "  result <- run_hook(\"",
+    fn,
+    "\", \"post_response\", list(result = result, params = ",
+    params_expr,
+    "))\n"
+  )
+}
+
+stubgen_build_transform_hook <- function(fn, fn_signature) {
+  params_expr <- stubgen_hook_params_expr(stubgen_formal_names(fn_signature))
+
+  paste0(
+    "  result <- run_hook(\"",
+    fn,
+    "\", \"transform\", list(params = ",
+    params_expr,
+    "))\n"
+  )
+}
+
 # Environment for tracking skipped/suspicious endpoints during generation
 .StubGenEnv <- new.env(parent = emptyenv())
 .StubGenEnv$skipped <- list()
@@ -444,7 +590,6 @@ build_function_stub <- function(
   # Hook Parameter Injection (Phase 28)
   # =========================================================================
   hook_config_path <- here::here("inst", "hook_config.yml")
-  hook_params_list <- list()
   has_hooks <- FALSE
 
   if (file.exists(hook_config_path)) {
@@ -475,9 +620,6 @@ build_function_stub <- function(
             param_spec$description,
             "\n"
           )
-
-          # Track for hook call generation
-          hook_params_list[[param_name]] <- param_spec$default
         }
       }
     }
@@ -493,56 +635,24 @@ build_function_stub <- function(
 
   hook_pre_request <- ""
   hook_post_response <- ""
+  hook_transform <- ""
   hook_is_transform <- FALSE
+  hook_chemi_chemicals_arg <- ""
 
   if (isTRUE(has_hooks)) {
     fn_config <- hook_config[[fn]]
 
-    # Build parameter list for hook calls (includes all extra_params + query if applicable)
-    hook_param_names <- names(hook_params_list)
-    hook_param_list_str <- if (length(hook_param_names) > 0) {
-      paste0(", ", paste(hook_param_names, "=", hook_param_names, collapse = ", "))
-    } else {
-      ""
-    }
-
     # Check for transform hooks (replace entire generic_request)
     if (!is.null(fn_config$transform) && length(fn_config$transform) > 0) {
       hook_is_transform <- TRUE
+      hook_transform <- stubgen_build_transform_hook(fn, fn_signature)
     }
 
-    # Build pre_request hook call
-    if (!is.null(fn_config$pre_request) && length(fn_config$pre_request) > 0) {
-      # Pre-request hooks modify params before the request
-      # They receive list(params = list(query = ..., extra_param1 = ..., ...))
-      # and return modified data
-      hook_pre_request <- paste0(
-        "  req_data <- run_hook(\"",
-        fn,
-        "\", \"pre_request\", list(params = list(query = query",
-        hook_param_list_str,
-        ")))\n",
-        "  query <- req_data$params$query\n"
-      )
-    }
-
-    # Build post_response hook call
-    if (!is.null(fn_config$post_response) && length(fn_config$post_response) > 0) {
-      # Post-response hooks modify the result after the request
-      # They receive list(result = ..., params = list(extra_param1 = ..., ...))
-      # and return modified result
-      hook_params_inner <- if (length(hook_param_names) > 0) {
-        paste(hook_param_names, "=", hook_param_names, collapse = ", ")
-      } else {
-        ""
-      }
-      hook_post_response <- paste0(
-        "  result <- run_hook(\"",
-        fn,
-        "\", \"post_response\", list(result = result, params = list(",
-        hook_params_inner,
-        ")))\n"
-      )
+    hook_extra_params <- if (identical(wrapper_fn, "generic_chemi_request")) "chemicals" else character(0)
+    hook_pre_request <- stubgen_build_pre_hook(fn, fn_config, fn_signature, additional_params = hook_extra_params)
+    hook_post_response <- stubgen_build_post_hook(fn, fn_config, fn_signature)
+    if (nzchar(hook_pre_request) && identical(wrapper_fn, "generic_chemi_request")) {
+      hook_chemi_chemicals_arg <- ",\n    chemicals = chemicals"
     }
   }
 
@@ -573,6 +683,20 @@ build_function_stub <- function(
 #\' }}'
   )
 
+  if (isTRUE(hook_is_transform)) {
+    fn_body <- glue::glue(
+      '
+{fn} <- function({fn_signature}) {{
+{hook_transform}
+  return(result)
+}}
+
+'
+    )
+
+    return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
+  }
+
   # Build function body based on endpoint type
   has_additional_params <- isTRUE(path_param_info$has_path_params) || isTRUE(query_param_info$has_params)
 
@@ -586,9 +710,17 @@ build_function_stub <- function(
     body_params_vec <- if (isTRUE(body_param_info$has_params)) {
       params <- strsplit(body_param_info$fn_signature, ",")[[1]]
       params <- trimws(params)
-      params <- gsub("\\s*=\\s*NULL$", "", params)
+      params <- gsub("\\s*=\\s*.*$", "", params)
       # Filter out 'chemicals' as we'll handle that via resolver
       params[!params %in% c("chemicals")]
+    } else {
+      character(0)
+    }
+
+    query_params_vec <- if (isTRUE(query_param_info$has_params)) {
+      params <- strsplit(query_param_info$fn_signature, ",")[[1]]
+      params <- trimws(params)
+      gsub("\\s*=\\s*.*$", "", params)
     } else {
       character(0)
     }
@@ -600,7 +732,13 @@ build_function_stub <- function(
       ""
     }
 
-    fn_signature_resolver <- paste0('query, idType = "AnyId"', additional_sig)
+    additional_query_sig <- if (length(query_params_vec) > 0) {
+      paste0(", ", query_param_info$fn_signature)
+    } else {
+      ""
+    }
+
+    fn_signature_resolver <- paste0('query, idType = "AnyId"', additional_sig, additional_query_sig)
 
     # Append all_pages param when pagination is active
     if (nzchar(pagination_call_params)) {
@@ -632,6 +770,39 @@ build_function_stub <- function(
       }
     }
     resolver_param_docs <- paste0(resolver_param_docs, resolver_pagination_param_doc)
+    if (length(query_params_vec) > 0) {
+      resolver_param_docs <- paste0(resolver_param_docs, query_param_info$param_docs)
+    }
+
+    resolver_query_params_call <- if (length(query_params_vec) > 0) {
+      query_args <- vapply(
+        query_params_vec,
+        function(p) {
+          value_expr <- if (identical(p, "sort")) {
+            paste0("if (!is.null(", p, ")) tolower(as.character(", p, ")) else NULL")
+          } else {
+            p
+          }
+          paste0(p, " = ", value_expr)
+        },
+        character(1)
+      )
+      paste0(",\n    ", paste(query_args, collapse = ",\n    "))
+    } else {
+      ""
+    }
+
+    resolver_hook_pre_request <- if (isTRUE(has_hooks)) {
+      stubgen_build_pre_hook(fn, hook_config[[fn]], fn_signature_resolver, additional_params = "chemicals")
+    } else {
+      ""
+    }
+    resolver_hook_post_response <- if (isTRUE(has_hooks)) {
+      stubgen_build_post_hook(fn, hook_config[[fn]], fn_signature_resolver)
+    } else {
+      ""
+    }
+    resolver_chemicals_arg <- if (nzchar(resolver_hook_pre_request)) ",\n    chemicals = chemicals" else ""
 
     # Update roxygen header with resolver-specific docs
     roxygen_header <- glue::glue(
@@ -657,49 +828,17 @@ build_function_stub <- function(
     fn_body <- glue::glue(
       '
 {fn} <- function({fn_signature_resolver}) {{
-  # Resolve identifiers to Chemical objects via bulk POST endpoint
-  resolved <- tryCatch(
-    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
-    error = function(e) {{
-      tryCatch(
-        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
-        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
-      )
-    }}
-  )
-
-  # Keep only successfully resolved entries
-  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
-
-  if (length(resolved) == 0) {{
-    cli::cli_warn("No chemicals could be resolved from the provided identifiers")
-    return(NULL)
-  }}
-
-  # Transform resolved list to ChemicalRecord format expected by endpoint
-  chemicals <- purrr::map(resolved, function(item) {{
-    chem <- item$chemical
-    list(chemical = list(
-      sid = chem$chemId %||% chem$sid,
-      smiles = chem$canonicalSmiles %||% chem$smiles,
-      casrn = chem$casrn,
-      inchi = chem$inchi,
-      inchiKey = chem$inchiKey,
-      name = chem$name
-    ))
-  }})
-
+{resolver_hook_pre_request}
 {options_assembly}
 
   result <- generic_chemi_request(
-    query = NULL,
+    query = query,
     endpoint = "{endpoint}",
     options = extra_options,
-    chemicals = chemicals,
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{resolver_chemicals_arg}{resolver_query_params_call}{pagination_call_params}
   )
 
-  {hook_post_response}# Additional post-processing can be added here
+  {resolver_hook_post_response}# Additional post-processing can be added here
 
   return(result)
 }}
@@ -835,7 +974,7 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_params_code}{hook_pre_request}  result <- generic_request(
+{hook_pre_request}{query_params_code}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
@@ -852,7 +991,7 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_params_code}{hook_pre_request}  result <- generic_request(
+{hook_pre_request}{query_params_code}  result <- generic_request(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
@@ -952,11 +1091,11 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{options_assembly}{hook_pre_request}
+{hook_pre_request}{options_assembly}
   result <- generic_chemi_request(
     query = {query_param},
     endpoint = "{endpoint}"{options_call}{wrap_param},
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -997,8 +1136,8 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{body_assembly}
 {hook_pre_request}
+{body_assembly}
   result <- generic_request(
     query = NULL,
     endpoint = "{endpoint}",
@@ -1043,8 +1182,8 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{body_assembly}
 {hook_pre_request}
+{body_assembly}
   result <- generic_cts_request(
     endpoint = "{endpoint}",
     body = body,
@@ -1071,7 +1210,7 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{cc_server_params}{content_type_call}{combined_calls}{pagination_call_params}
@@ -1088,9 +1227,9 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_chemi_request(
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1120,7 +1259,7 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_cts_request(
     endpoint = "{endpoint}",
     method = "{method}",
     body = list(),
@@ -1192,7 +1331,7 @@ build_function_stub <- function(
         fn_body <- glue::glue(
           '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_request(
     query = {effective_query},
     endpoint = "{endpoint}",
     method = "{method}",
@@ -1211,10 +1350,10 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_chemi_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1228,7 +1367,7 @@ build_function_stub <- function(
       fn_body <- glue::glue(
         '
 {fn} <- function({fn_signature}) {{
-{query_param_info$params_code}{hook_pre_request}  result <- generic_cts_request(
+{hook_pre_request}{query_param_info$params_code}  result <- generic_cts_request(
     endpoint = "{endpoint}",
     method = "{method}",
     body = list(),
@@ -1296,7 +1435,7 @@ build_function_stub <- function(
     endpoint = "{endpoint}",
     server = "chemi_burl",
     auth = FALSE,
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here

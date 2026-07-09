@@ -1,7 +1,7 @@
 #' Get summary data by DTXSID and assay tissue origin
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier
 #' @param tissue assay format's tissue of origin

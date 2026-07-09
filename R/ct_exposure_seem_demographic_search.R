@@ -1,7 +1,7 @@
 #' Get SEEM Demographic Exposure Prediction data for batch of DTXSIDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_exposure_seem_demographic_search_bulk <- function(query) {
 #' Get SEEM Demographic Exposure Prediction data by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param projection Specifies whether to use projection. Optional: ccd-demographic.

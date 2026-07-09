@@ -14,6 +14,8 @@ on:
       backstop_days:
         description: 'Rebuild when the published sidecar is older than this many days'
         type: string
+        # ECOTOX intentionally uses a shorter 90-day backstop than DSSTox/ToxVal
+        # (180). Rationale is maintainer-set; confirm before changing.
         default: '90'
 
 concurrency:
@@ -79,9 +81,12 @@ jobs:
 
           AGE_DAYS=""
           if [ -n "$ASSET_DATE" ]; then
-            ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s)
-            NOW_EPOCH=$(date +%s)
-            AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
+            if ASSET_EPOCH=$(date -d "$ASSET_DATE" +%s 2>/dev/null); then
+              NOW_EPOCH=$(date +%s)
+              AGE_DAYS=$(( (NOW_EPOCH - ASSET_EPOCH) / 86400 ))
+            else
+              echo "::warning::Could not parse asset date '$ASSET_DATE'; age unknown"
+            fi
           fi
 
           echo "published_version=$PUBLISHED_VERSION" >> "$GITHUB_OUTPUT"
@@ -165,6 +170,16 @@ jobs:
             echo "Database or version sidecar is missing"
             exit 1
           fi
+          EXISTING=$(gh release view "$TAG" --repo "${{ github.repository }}" \
+            --json assets --jq '.assets[].name' 2>/dev/null || true)
+          for f in "$DB_PATH" "$VERSION_PATH"; do
+            name=$(basename "$f")
+            if printf '%s\n' "$EXISTING" | grep -qx "$name"; then
+              echo "::notice::Replacing existing asset $name"
+            else
+              echo "::notice::Uploading new asset $name"
+            fi
+          done
           gh release upload "$TAG" "$DB_PATH" "$VERSION_PATH" \
             --clobber \
             --repo "${{ github.repository }}"

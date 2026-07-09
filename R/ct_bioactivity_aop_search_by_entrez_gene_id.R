@@ -1,7 +1,7 @@
 #' Get AOP data by Entrez Gene ID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param entrezGeneId Entrez Gene Id. Type: integer
 #' @return Returns a tibble with results (array of objects)

@@ -1,7 +1,7 @@
 #' Get DTXSIDs for list and containing exact string in chemical name
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param list List Name. Type: string
 #' @param word Chemical Name. Type: string

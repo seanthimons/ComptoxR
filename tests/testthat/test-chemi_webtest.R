@@ -18,6 +18,7 @@ test_that("chemi_webtest passes request metadata to helper", {
 
   testthat::local_mocked_bindings(
     generic_request = mock_helper,
+    chemi_resolver_lookup_bulk = generated_contract_resolver_lookup_bulk,
     .package = "ComptoxR"
   )
 

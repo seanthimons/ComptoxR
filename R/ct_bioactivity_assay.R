@@ -1,7 +1,7 @@
 #' Get all assay annotations
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param projection Optional parameter (default: assay-all)
 #' @return Returns a scalar value

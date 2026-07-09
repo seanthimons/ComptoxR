@@ -1,7 +1,7 @@
 #' Get summary by DTXSID and property
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid Required parameter
 #' @param propName Required parameter

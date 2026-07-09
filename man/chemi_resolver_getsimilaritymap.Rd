@@ -4,7 +4,12 @@
 \alias{chemi_resolver_getsimilaritymap}
 \title{Resolver Getsimilaritymap}
 \usage{
-chemi_resolver_getsimilaritymap(query, idType = "AnyId", section = NULL)
+chemi_resolver_getsimilaritymap(
+  query,
+  idType = "AnyId",
+  section = NULL,
+  sort = NULL
+)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
@@ -12,6 +17,8 @@ chemi_resolver_getsimilaritymap(query, idType = "AnyId", section = NULL)
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{section}{Optional parameter}
+
+\item{sort}{Optional logical value passed to the API query string.}
 }
 \value{
 Returns a list with result object

@@ -43,39 +43,78 @@ chemi_resolver_orderBySimilarity <- function(
   padelComputeFingerprints = NULL,
   toxprintsProfile = NULL
 ) {
-  # Resolve identifiers to Chemical objects via bulk POST endpoint
-  resolved <- tryCatch(
-    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
-    error = function(e) {
-      tryCatch(
-        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
-        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
-      )
-    }
-  )
-
-  # Keep only successfully resolved entries
-  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
-
-  if (length(resolved) == 0) {
-    cli::cli_warn("No chemicals could be resolved from the provided identifiers")
-    return(NULL)
-  }
-
-  # Transform resolved list to ChemicalRecord format expected by endpoint
-  chemicals <- purrr::map(resolved, function(item) {
-    chem <- item$chemical
+  chemicals <- NULL
+  req_data <- run_hook(
+    "chemi_resolver_orderBySimilarity",
+    "pre_request",
     list(
-      chemical = list(
-        sid = chem$chemId %||% chem$sid,
-        smiles = chem$canonicalSmiles %||% chem$smiles,
-        casrn = chem$casrn,
-        inchi = chem$inchi,
-        inchiKey = chem$inchiKey,
-        name = chem$name
+      params = list(
+        query = query,
+        idType = idType,
+        get_chemicals = get_chemicals,
+        main = main,
+        fingerprintName = fingerprintName,
+        scoreName = scoreName,
+        tverskyI = tverskyI,
+        rdkitType = rdkitType,
+        rdkitRadius = rdkitRadius,
+        rdkitBits = rdkitBits,
+        padelCompute2D = padelCompute2D,
+        padelCompute3D = padelCompute3D,
+        padelComputeFingerprints = padelComputeFingerprints,
+        toxprintsProfile = toxprintsProfile,
+        chemicals = chemicals
       )
     )
-  })
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("idType" %in% names(req_data$params)) {
+    idType <- req_data$params[["idType"]]
+  }
+  if ("get_chemicals" %in% names(req_data$params)) {
+    get_chemicals <- req_data$params[["get_chemicals"]]
+  }
+  if ("main" %in% names(req_data$params)) {
+    main <- req_data$params[["main"]]
+  }
+  if ("fingerprintName" %in% names(req_data$params)) {
+    fingerprintName <- req_data$params[["fingerprintName"]]
+  }
+  if ("scoreName" %in% names(req_data$params)) {
+    scoreName <- req_data$params[["scoreName"]]
+  }
+  if ("tverskyI" %in% names(req_data$params)) {
+    tverskyI <- req_data$params[["tverskyI"]]
+  }
+  if ("rdkitType" %in% names(req_data$params)) {
+    rdkitType <- req_data$params[["rdkitType"]]
+  }
+  if ("rdkitRadius" %in% names(req_data$params)) {
+    rdkitRadius <- req_data$params[["rdkitRadius"]]
+  }
+  if ("rdkitBits" %in% names(req_data$params)) {
+    rdkitBits <- req_data$params[["rdkitBits"]]
+  }
+  if ("padelCompute2D" %in% names(req_data$params)) {
+    padelCompute2D <- req_data$params[["padelCompute2D"]]
+  }
+  if ("padelCompute3D" %in% names(req_data$params)) {
+    padelCompute3D <- req_data$params[["padelCompute3D"]]
+  }
+  if ("padelComputeFingerprints" %in% names(req_data$params)) {
+    padelComputeFingerprints <- req_data$params[["padelComputeFingerprints"]]
+  }
+  if ("toxprintsProfile" %in% names(req_data$params)) {
+    toxprintsProfile <- req_data$params[["toxprintsProfile"]]
+  }
+  if ("chemicals" %in% names(req_data$params)) {
+    chemicals <- req_data$params[["chemicals"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -117,7 +156,7 @@ chemi_resolver_orderBySimilarity <- function(
   }
 
   result <- generic_chemi_request(
-    query = NULL,
+    query = query,
     endpoint = "resolver/orderBySimilarity",
     options = extra_options,
     chemicals = chemicals,

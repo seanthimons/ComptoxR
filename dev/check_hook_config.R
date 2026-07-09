@@ -33,10 +33,28 @@ for (hook_file in hook_files) {
 errors <- character()
 hook_count <- 0
 param_count <- 0
+all_r_files <- list.files(here::here("R"), pattern = "\\.R$", full.names = TRUE)
+
+find_generated_wrapper <- function(fn_name) {
+  for (r_file in all_r_files) {
+    stub_content <- readLines(r_file, warn = FALSE)
+    fn_def_pattern <- paste0("^", fn_name, "\\s*<-\\s*function\\(")
+    if (any(grepl(fn_def_pattern, stub_content))) {
+      return(list(
+        found = TRUE,
+        file = r_file,
+        text = paste(stub_content, collapse = "\n")
+      ))
+    }
+  }
+
+  list(found = FALSE, file = NULL, text = "")
+}
 
 # Validate each function entry
 for (fn_name in names(hook_config)) {
   fn_config <- hook_config[[fn_name]]
+  wrapper <- find_generated_wrapper(fn_name)
 
   # Validate hook function references
   for (hook_type in c("pre_request", "post_response", "transform")) {
@@ -62,53 +80,60 @@ for (fn_name in names(hook_config)) {
           )
         }
       }
+
+      if (isTRUE(wrapper$found)) {
+        stage_pattern <- paste0(
+          "run_hook\\(\\s*['\"]",
+          fn_name,
+          "['\"]\\s*,\\s*['\"]",
+          hook_type,
+          "['\"]"
+        )
+        if (!grepl(stage_pattern, wrapper$text, perl = TRUE)) {
+          errors <- c(
+            errors,
+            paste0(
+              "Function ",
+              fn_name,
+              " configures hook stage '",
+              hook_type,
+              "' but generated wrapper does not emit that stage (file: ",
+              basename(wrapper$file),
+              ")"
+            )
+          )
+        }
+      } else {
+        cli::cli_alert_info("Generated stub for {fn_name} not found (okay if not yet generated)")
+      }
     }
   }
 
   # Validate extra_params exist in generated stubs
   if (!is.null(fn_config$extra_params)) {
-    # Search for function definition in all R files (some stubs are multi-function)
-    all_r_files <- list.files(here::here("R"), pattern = "\\.R$", full.names = TRUE)
-    fn_found <- FALSE
-    fn_file <- NULL
+    if (isTRUE(wrapper$found)) {
+      for (param_name in names(fn_config$extra_params)) {
+        param_count <- param_count + 1
 
-    for (r_file in all_r_files) {
-      stub_content <- readLines(r_file, warn = FALSE)
-      stub_text <- paste(stub_content, collapse = "\n")
-
-      # Look for function definition: fn_name <- function(
-      fn_def_pattern <- paste0("^", fn_name, "\\s*<-\\s*function\\(")
-      if (any(grepl(fn_def_pattern, stub_content))) {
-        fn_found <- TRUE
-        fn_file <- r_file
-
-        # Check each extra param
-        for (param_name in names(fn_config$extra_params)) {
-          param_count <- param_count + 1
-
-          # Check if parameter appears in function signature
-          # Pattern: param_name = <default_value>
-          param_pattern <- paste0("\\b", param_name, "\\s*=")
-          if (!grepl(param_pattern, stub_text)) {
-            errors <- c(
-              errors,
-              paste0(
-                "Function ",
-                fn_name,
-                " declares extra_param '",
-                param_name,
-                "' but it's not in generated stub signature (file: ",
-                basename(fn_file),
-                ")"
-              )
+        # Check if parameter appears in function signature
+        # Pattern: param_name = <default_value>
+        param_pattern <- paste0("\\b", param_name, "\\s*=")
+        if (!grepl(param_pattern, wrapper$text)) {
+          errors <- c(
+            errors,
+            paste0(
+              "Function ",
+              fn_name,
+              " declares extra_param '",
+              param_name,
+              "' but it's not in generated stub signature (file: ",
+              basename(wrapper$file),
+              ")"
             )
-          }
+          )
         }
-        break
       }
-    }
-
-    if (!fn_found) {
+    } else {
       # Stub doesn't exist yet - not an error (might be generated later)
       cli::cli_alert_info("Generated stub for {fn_name} not found (okay if not yet generated)")
     }

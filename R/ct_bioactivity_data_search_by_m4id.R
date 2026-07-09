@@ -1,7 +1,7 @@
 #' Get data for a batch of M4IDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_bioactivity_data_search_by_m4id_bulk <- function(query) {
 #' Get data by M4ID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param m4id M4ID. Type: integer
 #' @return Returns a scalar value

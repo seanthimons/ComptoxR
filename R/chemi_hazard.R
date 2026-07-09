@@ -5,6 +5,7 @@
 #'
 #' @param query Required parameter
 #' @param full Optional parameter (default: TRUE)
+#' @param format Output format. One of "compact", "tidy", or "raw".
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -12,7 +13,9 @@
 #' \dontrun{
 #' chemi_hazard(query = "DTXSID7020182")
 #' }
-chemi_hazard <- function(query, full = TRUE) {
+chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw")) {
+  format <- match.arg(format)
+
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {
@@ -31,6 +34,11 @@ chemi_hazard <- function(query, full = TRUE) {
     options = options
   )
 
+  result <- run_hook(
+    "chemi_hazard",
+    "post_response",
+    list(result = result, params = list(query = query, full = full, format = format))
+  )
   # Additional post-processing can be added here
 
   return(result)
@@ -49,6 +57,7 @@ chemi_hazard <- function(query, full = TRUE) {
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param options Optional parameter
 #' @param empty Optional parameter
+#' @param format Output format. One of "compact", "tidy", or "raw".
 #' @return Returns a tibble with results
 #' @export
 #'
@@ -56,40 +65,51 @@ chemi_hazard <- function(query, full = TRUE) {
 #' \dontrun{
 #' chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_hazard_bulk <- function(query, idType = "AnyId", options = NULL, empty = NULL) {
-  # Resolve identifiers to Chemical objects via bulk POST endpoint
-  resolved <- tryCatch(
-    chemi_resolver_lookup_bulk(ids = query, idsType = idType, tidy = FALSE),
-    error = function(e) {
-      tryCatch(
-        chemi_resolver_lookup_bulk(ids = query, tidy = FALSE),
-        error = function(e2) stop("chemi_resolver_lookup_bulk failed: ", e2$message)
-      )
-    }
-  )
+chemi_hazard_bulk <- function(
+  query,
+  idType = "AnyId",
+  options = NULL,
+  empty = NULL,
+  format = c("compact", "tidy", "raw")
+) {
+  format <- match.arg(format)
 
-  # Keep only successfully resolved entries
-  resolved <- purrr::keep(resolved, function(item) identical(item$result, "FOUND"))
-
-  if (length(resolved) == 0) {
-    cli::cli_warn("No chemicals could be resolved from the provided identifiers")
-    return(NULL)
-  }
-
-  # Transform resolved list to ChemicalRecord format expected by endpoint
-  chemicals <- purrr::map(resolved, function(item) {
-    chem <- item$chemical
+  chemicals <- NULL
+  req_data <- run_hook(
+    "chemi_hazard_bulk",
+    "pre_request",
     list(
-      chemical = list(
-        sid = chem$chemId %||% chem$sid,
-        smiles = chem$canonicalSmiles %||% chem$smiles,
-        casrn = chem$casrn,
-        inchi = chem$inchi,
-        inchiKey = chem$inchiKey,
-        name = chem$name
+      params = list(
+        query = query,
+        idType = idType,
+        options = options,
+        empty = empty,
+        format = format,
+        chemicals = chemicals
       )
     )
-  })
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("idType" %in% names(req_data$params)) {
+    idType <- req_data$params[["idType"]]
+  }
+  if ("options" %in% names(req_data$params)) {
+    options <- req_data$params[["options"]]
+  }
+  if ("empty" %in% names(req_data$params)) {
+    empty <- req_data$params[["empty"]]
+  }
+  if ("format" %in% names(req_data$params)) {
+    format <- req_data$params[["format"]]
+  }
+  if ("chemicals" %in% names(req_data$params)) {
+    chemicals <- req_data$params[["chemicals"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -101,13 +121,21 @@ chemi_hazard_bulk <- function(query, idType = "AnyId", options = NULL, empty = N
   }
 
   result <- generic_chemi_request(
-    query = NULL,
+    query = query,
     endpoint = "hazard",
     options = extra_options,
     chemicals = chemicals,
     tidy = FALSE
   )
 
+  result <- run_hook(
+    "chemi_hazard_bulk",
+    "post_response",
+    list(
+      result = result,
+      params = list(query = query, idType = idType, options = options, empty = empty, format = format)
+    )
+  )
   # Additional post-processing can be added here
 
   return(result)

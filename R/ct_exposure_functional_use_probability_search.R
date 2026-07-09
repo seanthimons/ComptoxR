@@ -1,7 +1,7 @@
 #' Get functional use probability by DTXSID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a scalar value

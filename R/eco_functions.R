@@ -144,12 +144,9 @@ eco_health <- function(con = NULL) {
     con <- .eco_get_con(con)
     db_path <- Sys.getenv("eco_burl")
 
-    # Try to get version date from versions table
+    # Read release date from the _metadata table written by the build
     version_date <- tryCatch(
-      {
-        v <- DBI::dbGetQuery(con, "SELECT date FROM versions WHERE latest = TRUE LIMIT 1")
-        if (nrow(v) > 0) v$date[[1]] else NA_character_
-      },
+      .db_metadata_value(.db_metadata_table(con), "ecotox_release_date"),
       error = function(e) NA_character_
     )
 
@@ -654,8 +651,11 @@ eco_results <- function(
     if (ep_str == "all") {
       # No filtering
     } else if (ep_str == "default") {
+      # Tokens are start-anchored (^) so they match endpoint codes, not
+      # substrings (e.g. "^NOEC" won't match "XNOEC"). LR50/AC50/NR-*/(log)…
+      # variants left unanchored intentionally.
       endpoint_regex <- paste0(
-        "^EC50|^LC50|^LD50|LR50|^LOEC|^LOEL|NOEC|NOEL$|",
+        "^EC50|^LC50|^LD50|LR50|^LOEC|^LOEL|^NOEC|^NOEL|",
         "NR-ZERO|NR-LETH|AC50|\\(log\\)EC50|\\(log\\)LC50|\\(log\\)LOEC"
       )
       result_query <- result_query |>

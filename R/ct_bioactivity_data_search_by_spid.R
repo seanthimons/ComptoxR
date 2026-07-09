@@ -1,7 +1,7 @@
 #' Get data for a batch of SPIDs
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
@@ -26,7 +26,7 @@ ct_bioactivity_data_search_by_spid_bulk <- function(query) {
 #' Get data by SPID
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param spid sample ID (SPID). Type: string
 #' @return Returns a tibble with results (array of objects)

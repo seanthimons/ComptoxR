@@ -14,6 +14,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     name: CRAN-safe Test Readiness
+    timeout-minutes: 30
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -22,7 +23,9 @@ jobs:
       COMPTOXR_CRAN_READINESS_CPUS: "2"
       NOT_CRAN: "false"
       TESTTHAT_CPUS: "2"
-      TESTTHAT_PARALLEL: "TRUE"
+      # Sequential: parallel testthat trips a callr subprocess "zero-length variable
+      # name" hang on this suite. Restore once fixed — see #253.
+      TESTTHAT_PARALLEL: "FALSE"
 
     steps:
       - uses: actions/checkout@v5

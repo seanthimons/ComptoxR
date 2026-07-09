@@ -1,7 +1,7 @@
 #' Get DTXSIDs by list
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("stable")`
 #'
 #' @param list Primary query parameter. Type: string
 #' @return Returns a tibble with results (array of objects)

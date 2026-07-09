@@ -14,6 +14,24 @@
 #' chemi_mordred(smiles = "DTXSID7020182")
 #' }
 chemi_mordred <- function(smiles, headers = NULL, inchi = NULL) {
+  req_data <- run_hook(
+    "chemi_mordred",
+    "pre_request",
+    list(params = list(smiles = smiles, headers = headers, inchi = inchi))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("smiles" %in% names(req_data$params)) {
+    smiles <- req_data$params[["smiles"]]
+  }
+  if ("headers" %in% names(req_data$params)) {
+    headers <- req_data$params[["headers"]]
+  }
+  if ("inchi" %in% names(req_data$params)) {
+    inchi <- req_data$params[["inchi"]]
+  }
+
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {

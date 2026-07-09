@@ -756,7 +756,7 @@ generic_request <- function(
 #'        When TRUE, uses httr2::req_perform_iterative() to loop through pages.
 #' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
 #' @param pagination_strategy Pagination strategy. For chemi search, usually "offset_limit" (body).
-#' @param ... Additional arguments passed to httr2.
+#' @param ... Named query parameters appended to the request URL.
 #'
 #' @return A tidy tibble (if tidy=TRUE) or a raw list.
 #' @export
@@ -781,6 +781,14 @@ generic_chemi_request <- function(
   base_url <- Sys.getenv(server, unset = server)
   if (base_url == "") {
     base_url <- server
+  }
+
+  query_params <- list(...)
+  query_params <- query_params[!vapply(query_params, is.null, logical(1))]
+  if (length(query_params) > 0) {
+    if (is.null(names(query_params)) || any(!nzchar(names(query_params)))) {
+      cli::cli_abort("{.arg ...} values for generic_chemi_request() must be named query parameters.")
+    }
   }
 
   # 2. Input Normalization
@@ -852,6 +860,10 @@ generic_chemi_request <- function(
     httr2::req_method("POST") %>%
     httr2::req_body_json(payload) %>%
     httr2::req_headers(Accept = "application/json")
+
+  if (length(query_params) > 0) {
+    req <- do.call(httr2::req_url_query, c(list(req), query_params))
+  }
 
   if (auth) {
     req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
