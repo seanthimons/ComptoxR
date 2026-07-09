@@ -53,6 +53,8 @@
 #### Other changes
 
 - Update NEWS.md
+  ([3de0a3a](https://github.com/seanthimons/ComptoxR/tree/3de0a3a8654e5a71b267b9863a8f931479177e15))
+- Update NEWS.md
   ([da14226](https://github.com/seanthimons/ComptoxR/tree/da142267e424dfa36f96251a748698b626cc3ccd))
 - Update NEWS.md
   ([d43ce71](https://github.com/seanthimons/ComptoxR/tree/d43ce71670932150bbfed6da65902e316d224061))
@@ -64,7 +66,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...0d87e7f`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...0d87e7f)
+[`v1.5.0...f1c0e3c`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...f1c0e3c)
 
 ## v1.5.0 (2026-07-02)
 
