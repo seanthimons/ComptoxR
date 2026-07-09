@@ -111,3 +111,80 @@ test_that("package_sitrep returns ping results", {
     }
   })
 })
+
+test_that("package_sitrep marks unconfigured servers as SKIPPED", {
+  withr::with_tempdir({
+    local_sitrep_env()
+    result <- ComptoxR_package_sitrep()
+
+    # With all *_burl unset, no network is hit; pings report SKIPPED.
+    statuses <- vapply(result$ping_results, function(x) x$status, character(1))
+    expect_true(all(statuses == "SKIPPED"))
+    expect_true(all(is.na(vapply(
+      result$ping_results,
+      function(x) x$latency,
+      numeric(1)
+    ))))
+  })
+})
+
+# ---- run_debug -------------------------------------------------------------
+
+test_that("run_debug(TRUE) sets run_debug env var to TRUE", {
+  withr::local_envvar(run_debug = NA)
+  run_debug(TRUE)
+  expect_identical(Sys.getenv("run_debug"), "TRUE")
+})
+
+test_that("run_debug(FALSE) sets run_debug env var to FALSE", {
+  withr::local_envvar(run_debug = NA)
+  run_debug(FALSE)
+  expect_identical(Sys.getenv("run_debug"), "FALSE")
+})
+
+test_that("run_debug with non-logical input warns and defaults to FALSE", {
+  withr::local_envvar(run_debug = NA)
+  expect_message(run_debug("not-a-logical"), "Invalid debug option")
+  expect_identical(Sys.getenv("run_debug"), "FALSE")
+})
+
+# ---- run_verbose -----------------------------------------------------------
+
+test_that("run_verbose(TRUE) sets run_verbose env var to TRUE", {
+  withr::local_envvar(run_verbose = NA)
+  run_verbose(TRUE)
+  expect_identical(Sys.getenv("run_verbose"), "TRUE")
+})
+
+test_that("run_verbose(FALSE) sets run_verbose env var to FALSE", {
+  withr::local_envvar(run_verbose = NA)
+  run_verbose(FALSE)
+  expect_identical(Sys.getenv("run_verbose"), "FALSE")
+})
+
+test_that("run_verbose with non-logical input warns and defaults to FALSE", {
+  withr::local_envvar(run_verbose = NA)
+  expect_message(run_verbose(42), "Invalid verbose option")
+  expect_identical(Sys.getenv("run_verbose"), "FALSE")
+})
+
+# ---- batch_limit -----------------------------------------------------------
+
+test_that("batch_limit sets the batch_limit env var to the given numeric", {
+  withr::local_envvar(batch_limit = NA)
+  batch_limit(50)
+  expect_identical(Sys.getenv("batch_limit"), "50")
+})
+
+test_that("batch_limit defaults to 200", {
+  withr::local_envvar(batch_limit = NA)
+  batch_limit()
+  expect_identical(Sys.getenv("batch_limit"), "200")
+})
+
+test_that("batch_limit with non-numeric input warns and leaves default", {
+  withr::local_envvar(batch_limit = NA)
+  # Unset entry is seeded to "200" before the numeric check runs.
+  expect_message(batch_limit("lots"), "Invalid limit option")
+  expect_identical(Sys.getenv("batch_limit"), "200")
+})
