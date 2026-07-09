@@ -45,11 +45,15 @@
 
 #### CI
 
+- run CRAN readiness tests sequentially with a 30-min timeout (#253)
+  ([0d87e7f](https://github.com/seanthimons/ComptoxR/tree/0d87e7feb99330d2f35473a5fc1971ecd801bfd8))
 - remove dead sysdata regeneration step from schema check
   ([baabbf5](https://github.com/seanthimons/ComptoxR/tree/baabbf50f8a0047bba179d66f99efedcb935dcf2))
 
 #### Other changes
 
+- Update NEWS.md
+  ([da14226](https://github.com/seanthimons/ComptoxR/tree/da142267e424dfa36f96251a748698b626cc3ccd))
 - Update NEWS.md
   ([d43ce71](https://github.com/seanthimons/ComptoxR/tree/d43ce71670932150bbfed6da65902e316d224061))
 - Update NEWS.md
@@ -60,7 +64,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...d074521`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...d074521)
+[`v1.5.0...0d87e7f`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...0d87e7f)
 
 ## v1.5.0 (2026-07-02)
 
