@@ -32,6 +32,12 @@
 - repair v1.5.0 NEWS publishing
   ([caed38d](https://github.com/seanthimons/ComptoxR/tree/caed38db152a03cf6e079141fd51eb30580a16fd))
 
+#### Tests
+
+- add sitrep, local-db policy, and generic_request edge-case coverage
+  (#232, #227, #231)
+  ([85b19ac](https://github.com/seanthimons/ComptoxR/tree/85b19acb5409c248d1249c0e3a54cdfb4db3bf08))
+
 #### CI
 
 - remove dead sysdata regeneration step from schema check
@@ -39,11 +45,13 @@
 
 #### Other changes
 
+- Update NEWS.md
+  ([636ac7a](https://github.com/seanthimons/ComptoxR/tree/636ac7a6640ce0766abe47a9f3bad732e7d37d9e))
 - rebuild pt dataset
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...baabbf5`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...baabbf5)
+[`v1.5.0...85b19ac`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...85b19ac)
 
 ## v1.5.0 (2026-07-02)
 
