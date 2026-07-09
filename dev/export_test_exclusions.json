@@ -7,5 +7,12 @@
     "owner",
     "issue"
   ],
-  "exclusions": []
+  "exclusions": [
+    {
+      "export": "toxval_diag_freshness",
+      "reason": "ToxVal DB freshness diagnostic; requires a local ToxVal database, so no CRAN-safe unit test yet. Coverage deferred to the ToxVal local-db test batch.",
+      "owner": "seanthimons",
+      "issue": "#224"
+    }
+  ]
 }

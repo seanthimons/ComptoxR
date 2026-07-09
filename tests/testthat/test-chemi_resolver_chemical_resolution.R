@@ -100,7 +100,12 @@ for (wrapper_name in names(resolver_cluster)) {
 
       res <- get(nm, envir = asNamespace("ComptoxR"))(query = c("50-00-0", "x"))
 
-      expect_identical(res, "SENTINEL")
+      # Most cluster members return generic_chemi_request() verbatim. chemi_hazard_bulk
+      # is the exception: it carries a post_response formatter (format_chemi_hazard_result)
+      # that transforms the POST result, so it does not pass the raw request result through.
+      if (nm != "chemi_hazard_bulk") {
+        expect_identical(res, "SENTINEL")
+      }
       expect_identical(captured$endpoint, endpoint)
       expect_false(captured$tidy)
       expect_length(captured$chemicals, 2L)

@@ -32,18 +32,39 @@
 - repair v1.5.0 NEWS publishing
   ([caed38d](https://github.com/seanthimons/ComptoxR/tree/caed38db152a03cf6e079141fd51eb30580a16fd))
 
+#### Tests
+
+- unblock CRAN readiness gate (exclude untestable toxval_diag_freshness,
+  correct stale ct_related/chemi_resolver tests)
+  ([d074521](https://github.com/seanthimons/ComptoxR/tree/d074521077fdc57ba0566618110aa2eec670cb79))
+- regenerate stale ct_related generated test for server param
+  ([df991b7](https://github.com/seanthimons/ComptoxR/tree/df991b7e234724eab690d745fb194c2ef68fa42c))
+- add sitrep, local-db policy, and generic_request edge-case coverage
+  (#232, #227, #231)
+  ([85b19ac](https://github.com/seanthimons/ComptoxR/tree/85b19acb5409c248d1249c0e3a54cdfb4db3bf08))
+
 #### CI
 
+- run CRAN readiness tests sequentially with a 30-min timeout (#253)
+  ([0d87e7f](https://github.com/seanthimons/ComptoxR/tree/0d87e7feb99330d2f35473a5fc1971ecd801bfd8))
 - remove dead sysdata regeneration step from schema check
   ([baabbf5](https://github.com/seanthimons/ComptoxR/tree/baabbf50f8a0047bba179d66f99efedcb935dcf2))
 
 #### Other changes
 
+- Update NEWS.md
+  ([da14226](https://github.com/seanthimons/ComptoxR/tree/da142267e424dfa36f96251a748698b626cc3ccd))
+- Update NEWS.md
+  ([d43ce71](https://github.com/seanthimons/ComptoxR/tree/d43ce71670932150bbfed6da65902e316d224061))
+- Update NEWS.md
+  ([7c8e90c](https://github.com/seanthimons/ComptoxR/tree/7c8e90c397e4edce27bd41c0600e50210f7d7013))
+- Update NEWS.md
+  ([636ac7a](https://github.com/seanthimons/ComptoxR/tree/636ac7a6640ce0766abe47a9f3bad732e7d37d9e))
 - rebuild pt dataset
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...baabbf5`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...baabbf5)
+[`v1.5.0...0d87e7f`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...0d87e7f)
 
 ## v1.5.0 (2026-07-02)
 
