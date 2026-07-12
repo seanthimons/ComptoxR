@@ -2,7 +2,7 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-07-09)
+## Unreleased (2026-07-12)
 
 #### New features
 
@@ -15,6 +15,8 @@
 
 #### Bug fixes
 
+- add Quarto setup for autonewsmd NEWS rendering
+  ([a8402c1](https://github.com/seanthimons/ComptoxR/tree/a8402c16ef1761ad8093d3bc6c6c9063a4453f88))
 - remove dead sysdata regeneration step from schema check
   ([b44ec11](https://github.com/seanthimons/ComptoxR/tree/b44ec111c72ac9ef6baa53de21c73da945d4af5c))
 - read ECOTOX version date from \_metadata in health checks
@@ -45,6 +47,8 @@
 
 #### CI
 
+- align GitHub Actions across R package repos
+  ([e238ada](https://github.com/seanthimons/ComptoxR/tree/e238adad6d36d10fc1db528f720c5f9858fc5063))
 - run CRAN readiness tests sequentially with a 30-min timeout (#253)
   ([0d87e7f](https://github.com/seanthimons/ComptoxR/tree/0d87e7feb99330d2f35473a5fc1971ecd801bfd8))
 - remove dead sysdata regeneration step from schema check
@@ -52,6 +56,8 @@
 
 #### Other changes
 
+- Update NEWS.md
+  ([3de0a3a](https://github.com/seanthimons/ComptoxR/tree/3de0a3a8654e5a71b267b9863a8f931479177e15))
 - Update NEWS.md
   ([da14226](https://github.com/seanthimons/ComptoxR/tree/da142267e424dfa36f96251a748698b626cc3ccd))
 - Update NEWS.md
@@ -64,7 +70,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...0d87e7f`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...0d87e7f)
+[`v1.5.0...a8402c1`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...a8402c1)
 
 ## v1.5.0 (2026-07-02)
 
