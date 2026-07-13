@@ -180,14 +180,16 @@ run_generator <- function(spec) {
   # Generate stubs
   spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = spec$config)
 
-  # Optional per-API post-processing (e.g. chemi aggregates by file)
-  if (!is.null(spec$post)) {
-    spec_with_text <- spec$post(spec_with_text)
-  }
-
+  # Empty check must precede spec$post(): a zero-row render result has no
+  # columns, and post hooks (e.g. chemi's group_by(file)) error on it.
   if (nrow(spec_with_text) == 0) {
     cli_alert_warning("No {spec$prefix} stubs generated (all skipped)")
     return(list(scaffold = empty_scaffold(), drift = drift))
+  }
+
+  # Optional per-API post-processing (e.g. chemi aggregates by file)
+  if (!is.null(spec$post)) {
+    spec_with_text <- spec$post(spec_with_text)
   }
 
   list(

@@ -522,7 +522,11 @@ openapi_to_spec <- function(
 
   purrr::imap_dfr(paths, function(path_item, route) {
     path_level_params <- path_item$parameters %||% list()
-    meths <- intersect(names(path_item), c("get", "post", "put", "patch", "delete", "head", "options", "trace"))
+    # Hardban non-GET/POST methods: generic_request()/generic_chemi_request()
+    # only support GET and POST, so OPTIONS/PUT/PATCH/DELETE endpoints can never
+    # be wrapped. Dropping them here keeps stub generation, schema diffs, and
+    # coverage counts consistent.
+    meths <- intersect(names(path_item), c("get", "post"))
 
     purrr::map_dfr(meths, function(method) {
       op <- path_item[[method]]
