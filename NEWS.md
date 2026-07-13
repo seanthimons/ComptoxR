@@ -2,7 +2,7 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-07-09)
+## Unreleased (2026-07-13)
 
 #### New features
 
@@ -52,6 +52,10 @@
 
 #### Other changes
 
+- update API schemas, generate function stubs and tests
+  ([0ae9709](https://github.com/seanthimons/ComptoxR/tree/0ae970934d73b5111d2b4d40601273e49d8d4476))
+- Update NEWS.md
+  ([2587ed5](https://github.com/seanthimons/ComptoxR/tree/2587ed5455f2a751e07d739e8e54f5fe6a765c5a))
 - Update NEWS.md
   ([3de0a3a](https://github.com/seanthimons/ComptoxR/tree/3de0a3a8654e5a71b267b9863a8f931479177e15))
 - Update NEWS.md
@@ -66,7 +70,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...f1c0e3c`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...f1c0e3c)
+[`v1.5.0...0ae9709`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...0ae9709)
 
 ## v1.5.0 (2026-07-02)
 
