@@ -1,25 +1,98 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "RDKit descriptors generator API",
-    "version": "1.0",
-    "description": "API allows generating a set of RDKit descriptors via GET (one chemical) or POST (multiple chemicals)"
-  },
+  "basePath": "",
   "consumes": [
     "application/json"
   ],
-  "produces": [
-    "application/json"
-  ],
+  "definitions": {
+    "Request": {
+      "properties": {
+        "chemicals": {
+          "type": "array"
+        },
+        "options": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "chemicals"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "API allows generating a set of RDKit descriptors via GET (one chemical) or POST (multiple chemicals)",
+    "title": "RDKit descriptors generator API",
+    "version": "1.0"
+  },
+  "parameters": {},
   "paths": {
-    "/api/rdkit/version": {
+    "/api/rdkit": {
       "get": {
-        "operationId": "app.get_version",
+        "operationId": "app.get_descr",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "default": "ecfp",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": 3,
+            "in": "query",
+            "name": "radius",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": 1024,
+            "in": "query",
+            "name": "bits",
+            "required": false,
+            "type": "integer"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Returns calculated descriptors"
           }
-        }
+        },
+        "summary": "Generate descriptors for one molecule"
+      },
+      "post": {
+        "operationId": "app.post_descr",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "schema": {
+              "properties": {
+                "chemicals": {
+                  "type": "array"
+                },
+                "options": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "chemicals"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns calculated descriptors"
+          }
+        },
+        "summary": "Generate descriptors for multiple molecules"
       }
     },
     "/api/rdkit/metadata": {
@@ -32,93 +105,20 @@
         }
       }
     },
-    "/api/rdkit": {
+    "/api/rdkit/version": {
       "get": {
-        "operationId": "app.get_descr",
-        "summary": "Generate descriptors for one molecule",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "type": "string",
-            "required": true
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "type": "string",
-            "required": false,
-            "default": "ecfp"
-          },
-          {
-            "name": "radius",
-            "in": "query",
-            "type": "integer",
-            "required": false,
-            "default": 3
-          },
-          {
-            "name": "bits",
-            "in": "query",
-            "type": "integer",
-            "required": false,
-            "default": 1024
-          }
-        ],
+        "operationId": "app.get_version",
         "responses": {
           "200": {
-            "description": "Returns calculated descriptors"
-          }
-        }
-      },
-      "post": {
-        "operationId": "app.post_descr",
-        "summary": "Generate descriptors for multiple molecules",
-        "parameters": [
-          {
-            "name": "request",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "required": [
-                "chemicals"
-              ],
-              "properties": {
-                "chemicals": {
-                  "type": "array"
-                },
-                "options": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns calculated descriptors"
+            "description": "Success"
           }
         }
       }
     }
   },
-  "definitions": {
-    "Request": {
-      "type": "object",
-      "required": [
-        "chemicals"
-      ],
-      "properties": {
-        "chemicals": {
-          "type": "array"
-        },
-        "options": {
-          "type": "object"
-        }
-      }
-    }
-  },
-  "parameters": {},
+  "produces": [
+    "application/json"
+  ],
   "responses": {},
-  "basePath": ""
+  "swagger": "2.0"
 }

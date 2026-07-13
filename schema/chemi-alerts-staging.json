@@ -1,151 +1,501 @@
 {
-  "openapi": "3.1.0",
+  "components": {
+    "schemas": {
+      "Alert": {
+        "properties": {
+          "aux": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "frozen": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "logicType": {
+            "enum": [
+              "NONE",
+              "OR",
+              "AND",
+              "NOT"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/Operation"
+            },
+            "type": "array"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "METHOD",
+              "SMILES",
+              "SMARTS",
+              "TOXPRINT",
+              "HAZARD",
+              "PROPERTY",
+              "GROUP",
+              "REFERENCE"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AlertFilesRequest": {
+        "properties": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/AlertOptions"
+          }
+        },
+        "type": "object"
+      },
+      "AlertFlags": {
+        "properties": {
+          "flags": {
+            "items": {
+              "$ref": "#/components/schemas/Check"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AlertInfo": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AlertOptions": {
+        "properties": {
+          "alerts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "alertsInfo": {
+            "items": {
+              "$ref": "#/components/schemas/AlertInfo"
+            },
+            "type": "array"
+          },
+          "resolve": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "AlertRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/AlertOptions"
+          }
+        },
+        "type": "object"
+      },
+      "AlertResult": {
+        "properties": {
+          "alerts": {
+            "items": {
+              "$ref": "#/components/schemas/ChemicalAlerts"
+            },
+            "type": "array"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/AlertOptions"
+          }
+        },
+        "type": "object"
+      },
+      "AlertsMetadata": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/LibraryGroup"
+            },
+            "type": "array"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionInfo"
+          }
+        },
+        "type": "object"
+      },
+      "Check": {
+        "properties": {
+          "aux": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "logicType": {
+            "enum": [
+              "NONE",
+              "OR",
+              "AND",
+              "NOT"
+            ],
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "METHOD",
+              "SMILES",
+              "SMARTS",
+              "TOXPRINT",
+              "HAZARD",
+              "PROPERTY",
+              "GROUP",
+              "REFERENCE"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Chemical": {
+        "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "mol": {
+            "type": "string"
+          },
+          "molFormula": {
+            "type": "string"
+          },
+          "monoisotopicMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ChemicalAlerts": {
+        "properties": {
+          "alertFlags": {
+            "items": {
+              "$ref": "#/components/schemas/AlertFlags"
+            },
+            "type": "array"
+          },
+          "chemical": {
+            "$ref": "#/components/schemas/Chemical"
+          }
+        },
+        "type": "object"
+      },
+      "ExportRequest": {
+        "properties": {
+          "alertResult": {
+            "$ref": "#/components/schemas/AlertResult"
+          },
+          "collapse": {
+            "type": "boolean"
+          },
+          "format": {
+            "enum": [
+              "UNKNOWN",
+              "SDF",
+              "SMI",
+              "MOL",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "PDF",
+              "HTML",
+              "XML",
+              "DOCX"
+            ],
+            "type": "string"
+          },
+          "showAlertsOnly": {
+            "type": "boolean"
+          },
+          "showDetails": {
+            "type": "boolean"
+          },
+          "showImages": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "FileUploadInfo": {
+        "properties": {
+          "actField": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
+          },
+          "idField": {
+            "type": "string"
+          },
+          "strField": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "GroupAddRequest": {
+        "properties": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
+          },
+          "operationType": {
+            "enum": [
+              "METHOD",
+              "SMILES",
+              "SMARTS",
+              "TOXPRINT",
+              "HAZARD",
+              "PROPERTY",
+              "GROUP",
+              "REFERENCE"
+            ],
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "INFO",
+              "WARNING",
+              "ERROR",
+              "FATAL"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "LibraryGroup": {
+        "properties": {
+          "aux": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "frozen": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "logicType": {
+            "enum": [
+              "NONE",
+              "OR",
+              "AND",
+              "NOT"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/Operation"
+            },
+            "type": "array"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "METHOD",
+              "SMILES",
+              "SMARTS",
+              "TOXPRINT",
+              "HAZARD",
+              "PROPERTY",
+              "GROUP",
+              "REFERENCE"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Operation": {
+        "properties": {
+          "aux": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "METHOD",
+              "SMILES",
+              "SMARTS",
+              "TOXPRINT",
+              "HAZARD",
+              "PROPERTY",
+              "GROUP",
+              "REFERENCE"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VersionInfo": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
   "info": {
     "title": "Alerts Module",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "/",
-      "description": "Default Server URL"
-    }
-  ],
+  "openapi": "3.1.0",
   "paths": {
-    "/api/alerts/groups/{id}": {
-      "get": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "groupGet",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/LibraryGroup"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "groupUpdatePut",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LibraryGroup"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "groupDelete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "groupUpdatePatch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LibraryGroup"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/alerts": {
       "post": {
-        "tags": [
-          "alerts-controller"
-        ],
         "operationId": "alertRequestPost",
         "parameters": [
           {
-            "name": "files[]",
             "in": "query",
+            "name": "files[]",
             "required": true,
             "schema": {
-              "type": "array",
               "items": {
-                "type": "string",
-                "format": "binary"
-              }
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
             }
           },
           {
-            "name": "request",
             "in": "query",
+            "name": "request",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/AlertFilesRequest"
@@ -164,56 +514,150 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/AlertResult"
                 }
               }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "alerts-controller"
+        ]
+      }
+    },
+    "/api/alerts/alerts": {
+      "get": {
+        "operationId": "alertsGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Alert"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      }
+    },
+    "/api/alerts/export": {
+      "post": {
+        "operationId": "exportPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "alerts-controller"
+        ]
+      }
+    },
+    "/api/alerts/export-append": {
+      "post": {
+        "operationId": "exportAppendAlertsReportFromChemicals",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "alertRequest": {
+                    "$ref": "#/components/schemas/AlertRequest"
+                  },
+                  "file": {
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "alertRequest"
+                ],
+                "type": "object"
+              }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "alerts-controller"
+        ]
       }
     },
     "/api/alerts/groups": {
       "get": {
-        "tags": [
-          "library-controller"
-        ],
         "operationId": "groupsGet",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/LibraryGroup"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      },
-      "post": {
+        },
         "tags": [
           "library-controller"
-        ],
+        ]
+      },
+      "post": {
         "operationId": "groupCreatePost",
         "parameters": [
           {
-            "name": "files[]",
             "in": "query",
+            "name": "files[]",
             "required": true,
             "schema": {
-              "type": "array",
               "items": {
-                "type": "string",
-                "format": "binary"
-              }
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
             }
           }
         ],
@@ -229,90 +673,161 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/LibraryGroup"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      }
-    },
-    "/api/alerts/groups/{id}/replace": {
-      "post": {
+        },
         "tags": [
           "library-controller"
-        ],
-        "operationId": "groupReplacePostMultipart",
+        ]
+      }
+    },
+    "/api/alerts/groups/{id}": {
+      "delete": {
+        "operationId": "groupDelete",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "files[]",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
-              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      },
+      "get": {
+        "operationId": "groupGet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/LibraryGroup"
                 }
               }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "groupUpdatePatch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LibraryGroup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      },
+      "put": {
+        "operationId": "groupUpdatePut",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LibraryGroup"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
       }
     },
     "/api/alerts/groups/{id}/add": {
       "post": {
-        "tags": [
-          "library-controller"
-        ],
         "operationId": "groupAddPostMultipart",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "files[]",
             "in": "query",
+            "name": "files[]",
             "required": true,
             "schema": {
-              "type": "array",
               "items": {
-                "type": "string",
-                "format": "binary"
-              }
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
             }
           },
           {
-            "name": "request",
             "in": "query",
+            "name": "request",
             "required": false,
             "schema": {
               "$ref": "#/components/schemas/GroupAddRequest"
@@ -321,120 +836,49 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/LibraryGroup"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/api/alerts/export": {
-      "post": {
-        "tags": [
-          "alerts-controller"
-        ],
-        "operationId": "exportPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/alerts/export-append": {
-      "post": {
-        "tags": [
-          "alerts-controller"
-        ],
-        "operationId": "exportAppendAlertsReportFromChemicals",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "alertRequest": {
-                    "$ref": "#/components/schemas/AlertRequest"
-                  }
-                },
-                "required": [
-                  "alertRequest"
-                ]
-              }
-            }
+            },
+            "description": "OK"
           }
         },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
+        "tags": [
+          "library-controller"
+        ]
       }
     },
     "/api/alerts/groups/{id}/freeze": {
       "patch": {
-        "tags": [
-          "library-controller"
-        ],
         "operationId": "groupFreezePatch",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "freeze",
             "in": "query",
+            "name": "freeze",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": true
+              "default": true,
+              "type": "boolean"
             }
           },
           {
-            "name": "hierarchically",
             "in": "query",
+            "name": "hierarchically",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": false
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -442,634 +886,190 @@
           "200": {
             "description": "OK"
           }
-        }
-      }
-    },
-    "/api/alerts/version": {
-      "get": {
-        "tags": [
-          "alerts-controller"
-        ],
-        "operationId": "getVersion",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/alerts/render": {
-      "get": {
-        "tags": [
-          "render-controller"
-        ],
-        "operationId": "render",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "smirks",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "SVG",
-              "enum": [
-                "PNG",
-                "SVG"
-              ]
-            }
-          },
-          {
-            "name": "width",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "height",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/alerts/operations": {
-      "get": {
+        },
         "tags": [
           "library-controller"
+        ]
+      }
+    },
+    "/api/alerts/groups/{id}/replace": {
+      "post": {
+        "operationId": "groupReplacePostMultipart",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
         ],
-        "operationId": "operationsGet",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": {}
+                  "$ref": "#/components/schemas/LibraryGroup"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "library-controller"
+        ]
       }
     },
     "/api/alerts/metadata": {
       "get": {
-        "tags": [
-          "alerts-controller"
-        ],
         "operationId": "getMetadata",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/AlertsMetadata"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "alerts-controller"
+        ]
       }
     },
-    "/api/alerts/alerts": {
+    "/api/alerts/operations": {
       "get": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "alertsGet",
+        "operationId": "operationsGet",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Alert"
-                  }
+                  "additionalProperties": {},
+                  "type": "object"
                 }
               }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      }
+    },
+    "/api/alerts/render": {
+      "get": {
+        "operationId": "render",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "smirks",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "SVG",
+              "enum": [
+                "PNG",
+                "SVG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
             }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "render-controller"
+        ]
+      }
+    },
+    "/api/alerts/version": {
+      "get": {
+        "operationId": "getVersion",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "alerts-controller"
+        ]
       }
     }
   },
-  "components": {
-    "schemas": {
-      "LibraryGroup": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "METHOD",
-              "SMILES",
-              "SMARTS",
-              "TOXPRINT",
-              "HAZARD",
-              "PROPERTY",
-              "GROUP",
-              "REFERENCE"
-            ]
-          },
-          "text": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "aux": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "logicType": {
-            "type": "string",
-            "enum": [
-              "NONE",
-              "OR",
-              "AND",
-              "NOT"
-            ]
-          },
-          "operations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Operation"
-            }
-          },
-          "frozen": {
-            "type": "boolean"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "Operation": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "METHOD",
-              "SMILES",
-              "SMARTS",
-              "TOXPRINT",
-              "HAZARD",
-              "PROPERTY",
-              "GROUP",
-              "REFERENCE"
-            ]
-          },
-          "text": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "aux": {
-            "type": "string"
-          }
-        }
-      },
-      "AlertInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "AlertOptions": {
-        "type": "object",
-        "properties": {
-          "alerts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "alertsInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AlertInfo"
-            }
-          },
-          "resolve": {
-            "type": "boolean"
-          }
-        }
-      },
-      "AlertRequest": {
-        "type": "object",
-        "properties": {
-          "options": {
-            "$ref": "#/components/schemas/AlertOptions"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Chemical"
-            }
-          }
-        }
-      },
-      "Chemical": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "chemId": {
-            "type": "string"
-          },
-          "cid": {
-            "type": "string"
-          },
-          "sid": {
-            "type": "string"
-          },
-          "casrn": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "canonicalSmiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "mol": {
-            "type": "string"
-          },
-          "molFormula": {
-            "type": "string"
-          },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "image": {
-            "type": "string"
-          },
-          "additionalProps": {
-            "type": "object",
-            "additionalProperties": {}
-          }
-        }
-      },
-      "AlertFlags": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "flags": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Check"
-            }
-          }
-        }
-      },
-      "AlertResult": {
-        "type": "object",
-        "properties": {
-          "options": {
-            "$ref": "#/components/schemas/AlertOptions"
-          },
-          "alerts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChemicalAlerts"
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "Check": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "METHOD",
-              "SMILES",
-              "SMARTS",
-              "TOXPRINT",
-              "HAZARD",
-              "PROPERTY",
-              "GROUP",
-              "REFERENCE"
-            ]
-          },
-          "text": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "aux": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "logicType": {
-            "type": "string",
-            "enum": [
-              "NONE",
-              "OR",
-              "AND",
-              "NOT"
-            ]
-          }
-        }
-      },
-      "ChemicalAlerts": {
-        "type": "object",
-        "properties": {
-          "chemical": {
-            "$ref": "#/components/schemas/Chemical"
-          },
-          "alertFlags": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AlertFlags"
-            }
-          }
-        }
-      },
-      "AlertFilesRequest": {
-        "type": "object",
-        "properties": {
-          "filesInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            }
-          },
-          "options": {
-            "$ref": "#/components/schemas/AlertOptions"
-          }
-        }
-      },
-      "FileUploadInfo": {
-        "type": "object",
-        "properties": {
-          "fileName": {
-            "type": "string"
-          },
-          "idField": {
-            "type": "string"
-          },
-          "strField": {
-            "type": "string"
-          },
-          "actField": {
-            "type": "string"
-          },
-          "fillAdditionalProps": {
-            "type": "boolean"
-          }
-        }
-      },
-      "GroupAddRequest": {
-        "type": "object",
-        "properties": {
-          "filesInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            }
-          },
-          "operationType": {
-            "type": "string",
-            "enum": [
-              "METHOD",
-              "SMILES",
-              "SMARTS",
-              "TOXPRINT",
-              "HAZARD",
-              "PROPERTY",
-              "GROUP",
-              "REFERENCE"
-            ]
-          },
-          "severity": {
-            "type": "string",
-            "enum": [
-              "INFO",
-              "WARNING",
-              "ERROR",
-              "FATAL"
-            ]
-          }
-        }
-      },
-      "ExportRequest": {
-        "type": "object",
-        "properties": {
-          "format": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "SDF",
-              "SMI",
-              "MOL",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "PDF",
-              "HTML",
-              "XML",
-              "DOCX"
-            ]
-          },
-          "alertResult": {
-            "$ref": "#/components/schemas/AlertResult"
-          },
-          "collapse": {
-            "type": "boolean"
-          },
-          "showDetails": {
-            "type": "boolean"
-          },
-          "showAlertsOnly": {
-            "type": "boolean"
-          },
-          "showImages": {
-            "type": "boolean"
-          }
-        }
-      },
-      "VersionInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "compiled": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "AlertsMetadata": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "groups": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LibraryGroup"
-            }
-          }
-        }
-      },
-      "Alert": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "METHOD",
-              "SMILES",
-              "SMARTS",
-              "TOXPRINT",
-              "HAZARD",
-              "PROPERTY",
-              "GROUP",
-              "REFERENCE"
-            ]
-          },
-          "text": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "aux": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "logicType": {
-            "type": "string",
-            "enum": [
-              "NONE",
-              "OR",
-              "AND",
-              "NOT"
-            ]
-          },
-          "operations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Operation"
-            }
-          },
-          "frozen": {
-            "type": "boolean"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          }
-        }
-      }
+  "servers": [
+    {
+      "description": "Default Server URL",
+      "url": "/"
     }
-  }
+  ]
 }

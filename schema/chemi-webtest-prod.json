@@ -1,319 +1,13 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
-  },
-  "servers": [
-    {
-      "url": "/"
-    }
-  ],
-  "paths": {
-    "/api/webtest": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "descriptorsGet",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "headers",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/DescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "descriptorsPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DescriptorsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/DescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/predict": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "predict_1",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "endpoint",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "method",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "consensus"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "JSON",
-                "HTML",
-                "PDF"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PredictionResult"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "predict",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PredictionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PredictionResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/version": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "versionGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/report": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "summary": "Retrieve previously generated report by response ID",
-        "operationId": "report",
-        "parameters": [
-          {
-            "name": "structure",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "endpoint",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "method",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "consensus"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "HTML",
-              "enum": [
-                "JSON",
-                "HTML",
-                "PDF"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "format": "byte"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/metadata": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "metadataGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WebTESTMetadata"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
-      "DescriptorsRequest": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "JSON",
-              "CSV",
-              "TSV"
-            ]
-          },
-          "options": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
-          }
-        }
-      },
       "ChemicalDescriptors": {
-        "type": "object",
         "properties": {
-          "ordinal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "smiles": {
-            "type": "string"
+          "descriptors": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
           },
           "inchi": {
             "type": "string"
@@ -321,106 +15,89 @@
           "inchiKey": {
             "type": "string"
           },
-          "descriptors": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      },
-      "DescriptorsResponse": {
-        "type": "object",
-        "properties": {
-          "info": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
           },
-          "headers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "options": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChemicalDescriptors"
-            }
-          }
-        }
-      },
-      "PredictionRequest": {
-        "required": [
-          "endpoints",
-          "structures"
-        ],
-        "type": "object",
-        "properties": {
-          "structures": {
-            "type": "array",
-            "description": "Molecule expressed as SMILES or MOL",
-            "items": {
-              "type": "string",
-              "description": "Molecule expressed as SMILES or MOL"
-            }
-          },
-          "endpoints": {
-            "type": "array",
-            "description": "Endpoint to predict",
-            "items": {
-              "type": "string",
-              "description": "Endpoint to predict"
-            }
-          },
-          "methods": {
-            "type": "array",
-            "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)",
-            "items": {
-              "type": "string",
-              "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)"
-            }
-          },
-          "format": {
-            "type": "string",
-            "description": "Report type: JSON, HTML or PDF",
-            "enum": [
-              "JSON",
-              "HTML",
-              "PDF"
-            ]
+          "smiles": {
+            "type": "string"
           }
         },
-        "description": "WebTEST prediction request"
+        "type": "object"
+      },
+      "DescriptorsRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "format": {
+            "enum": [
+              "JSON",
+              "CSV",
+              "TSV"
+            ],
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DescriptorsResponse": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/ChemicalDescriptors"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "info": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "object"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
       },
       "DSSToxRecord": {
-        "type": "object",
         "properties": {
-          "gsid": {
-            "type": "integer",
-            "format": "int32"
+          "casrn": {
+            "type": "string"
           },
           "cid": {
             "type": "string"
           },
-          "sid": {
+          "error": {
             "type": "string"
           },
-          "casrn": {
-            "type": "string"
+          "gsid": {
+            "format": "int32",
+            "type": "integer"
           },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
+          "id": {
             "type": "string"
           },
           "inchi": {
@@ -435,85 +112,151 @@
           "mol": {
             "type": "string"
           },
-          "error": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        }
-      },
-      "EndpointInfo": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
           "name": {
             "type": "string"
           },
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EndpointInfo": {
+        "properties": {
           "binary": {
             "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "logMolar": {
+            "type": "boolean"
+          },
+          "logUnits": {
+            "type": "string"
+          },
+          "logValueDigits": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
           },
           "units": {
             "type": "string"
           },
           "valueDigits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "logValueDigits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "logUnits": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "MethodInfo": {
+        "properties": {
+          "id": {
             "type": "string"
           },
-          "logMolar": {
-            "type": "boolean"
+          "title": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "PredictionChemical": {
-        "type": "object",
         "properties": {
-          "chemicalId": {
-            "type": "string"
-          },
           "chemical": {
             "$ref": "#/components/schemas/DSSToxRecord"
           },
+          "chemicalId": {
+            "type": "string"
+          },
           "endpoints": {
-            "type": "array",
             "items": {
               "$ref": "#/components/schemas/PredictionEndpoint"
-            }
+            },
+            "type": "array"
           }
-        }
+        },
+        "type": "object"
       },
       "PredictionEndpoint": {
-        "type": "object",
         "properties": {
           "endpoint": {
             "$ref": "#/components/schemas/EndpointInfo"
           },
           "experimental": {
-            "type": "array",
             "items": {
               "$ref": "#/components/schemas/PredictionValue"
-            }
+            },
+            "type": "array"
           },
           "predicted": {
-            "type": "array",
             "items": {
               "$ref": "#/components/schemas/PredictionValue"
-            }
+            },
+            "type": "array"
           }
-        }
+        },
+        "type": "object"
+      },
+      "PredictionRequest": {
+        "description": "WebTEST prediction request",
+        "properties": {
+          "endpoints": {
+            "description": "Endpoint to predict",
+            "items": {
+              "description": "Endpoint to predict",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "format": {
+            "description": "Report type: JSON, HTML or PDF",
+            "enum": [
+              "JSON",
+              "HTML",
+              "PDF"
+            ],
+            "type": "string"
+          },
+          "methods": {
+            "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)",
+            "items": {
+              "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "structures": {
+            "description": "Molecule expressed as SMILES or MOL",
+            "items": {
+              "description": "Molecule expressed as SMILES or MOL",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "endpoints",
+          "structures"
+        ],
+        "type": "object"
       },
       "PredictionResult": {
-        "type": "object",
         "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/PredictionChemical"
+            },
+            "type": "array"
+          },
+          "condition": {
+            "type": "string"
+          },
           "id": {
             "type": "string"
           },
@@ -525,82 +268,54 @@
           },
           "softwareVersion": {
             "type": "string"
-          },
-          "condition": {
-            "type": "string"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionChemical"
-            }
           }
-        }
+        },
+        "type": "object"
       },
       "PredictionValue": {
-        "type": "object",
         "properties": {
-          "method": {
-            "type": "string"
-          },
           "active": {
             "type": "boolean"
           },
-          "logValue": {
-            "type": "number",
-            "format": "double"
-          },
-          "value": {
-            "type": "number",
-            "format": "double"
-          },
-          "message": {
+          "error": {
             "type": "string"
           },
           "errorCode": {
             "type": "string"
           },
-          "error": {
-            "type": "string"
-          }
-        }
-      },
-      "MethodInfo": {
-        "type": "object",
-        "properties": {
-          "id": {
+          "logValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "message": {
             "type": "string"
           },
-          "title": {
+          "method": {
             "type": "string"
+          },
+          "value": {
+            "format": "double",
+            "type": "number"
           }
-        }
+        },
+        "type": "object"
       },
       "WebTESTMetadata": {
-        "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
+          "endpoints": {
+            "items": {
+              "$ref": "#/components/schemas/EndpointInfo"
+            },
+            "type": "array"
           },
           "headers": {
-            "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "methods": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MethodInfo"
-            }
+            },
+            "type": "array"
           },
           "inputFormats": {
-            "type": "array",
             "items": {
-              "type": "string",
               "enum": [
                 "UNKNOWN",
                 "AUTO",
@@ -617,17 +332,302 @@
                 "XLSX",
                 "TXT",
                 "MSP"
-              ]
-            }
+              ],
+              "type": "string"
+            },
+            "type": "array"
           },
-          "endpoints": {
-            "type": "array",
+          "methods": {
             "items": {
-              "$ref": "#/components/schemas/EndpointInfo"
-            }
+              "$ref": "#/components/schemas/MethodInfo"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       }
     }
-  }
+  },
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/webtest": {
+      "get": {
+        "operationId": "descriptorsGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "headers",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      },
+      "post": {
+        "operationId": "descriptorsPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescriptorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/metadata": {
+      "get": {
+        "operationId": "metadataGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebTESTMetadata"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/predict": {
+      "get": {
+        "operationId": "predict_1",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endpoint",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "method",
+            "required": false,
+            "schema": {
+              "default": "consensus",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "enum": [
+                "JSON",
+                "HTML",
+                "PDF"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      },
+      "post": {
+        "operationId": "predict",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/report": {
+      "get": {
+        "operationId": "report",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "structure",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endpoint",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "method",
+            "required": false,
+            "schema": {
+              "default": "consensus",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "HTML",
+              "enum": [
+                "JSON",
+                "HTML",
+                "PDF"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "format": "byte",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Retrieve previously generated report by response ID",
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/version": {
+      "get": {
+        "operationId": "versionGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
 }

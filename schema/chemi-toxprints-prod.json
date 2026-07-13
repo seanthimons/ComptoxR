@@ -1,22 +1,1092 @@
 {
-  "openapi": "3.1.0",
-  "servers": [
-    {
-      "url": "/",
-      "description": "Default Server URL"
+  "components": {
+    "schemas": {
+      "ACL": {
+        "properties": {
+          "access": {
+            "enum": [
+              "PUBLIC",
+              "AUTHENTICATED",
+              "PRIVATE"
+            ],
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ActivityChemical": {
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "bits": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "mol": {
+            "type": "string"
+          },
+          "molFormula": {
+            "type": "string"
+          },
+          "monoisotopicMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Assay": {
+        "properties": {
+          "acl": {
+            "$ref": "#/components/schemas/ACL"
+          },
+          "actives": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "category": {
+            "type": "string"
+          },
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityChemical"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "labels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/ToxprintMetrics"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ToxprintsOptions"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AssayCategoryCount": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AssaysResponseAssay": {
+        "properties": {
+          "assays": {
+            "items": {
+              "$ref": "#/components/schemas/Assay"
+            },
+            "type": "array"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AssaysResponseReferenceAssay": {
+        "properties": {
+          "assays": {
+            "items": {
+              "$ref": "#/components/schemas/ReferenceAssay"
+            },
+            "type": "array"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AssaysResponseToxprintAssays": {
+        "properties": {
+          "assays": {
+            "items": {
+              "$ref": "#/components/schemas/ToxprintAssays"
+            },
+            "type": "array"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "CalculateRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array"
+          },
+          "labels": {
+            "type": "boolean"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ToxprintsOptions"
+          }
+        },
+        "type": "object"
+      },
+      "Chemical": {
+        "properties": {
+          "descriptors": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ChemicalsCategoriesRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/FingerprintedChemical"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ChemotypesProfile": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ExportGeneratedRequest": {
+        "properties": {
+          "assay": {
+            "$ref": "#/components/schemas/Assay"
+          },
+          "format": {
+            "enum": [
+              "UNKNOWN",
+              "SDF",
+              "SMI",
+              "MOL",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "PDF",
+              "HTML",
+              "XML",
+              "DOCX"
+            ],
+            "type": "string"
+          },
+          "nChemical": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "sheet": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "ExportGlobalAssaysRequest": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "format": {
+            "enum": [
+              "UNKNOWN",
+              "SDF",
+              "SMI",
+              "MOL",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "PDF",
+              "HTML",
+              "XML",
+              "DOCX"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "sheet": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "FileUploadInfo": {
+        "properties": {
+          "actField": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "idField": {
+            "type": "string"
+          },
+          "strField": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FingerprintedChemical": {
+        "properties": {
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "bits": {
+            "items": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "mol": {
+            "type": "string"
+          },
+          "molFormula": {
+            "type": "string"
+          },
+          "monoisotopicMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Metric": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Options": {
+        "properties": {
+          "headers": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "ReferenceAssay": {
+        "properties": {
+          "actives": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "category": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/ToxprintMetrics"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintAssay": {
+        "properties": {
+          "ACC": {
+            "format": "double",
+            "type": "number"
+          },
+          "actives": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "BA": {
+            "format": "double",
+            "type": "number"
+          },
+          "BM": {
+            "format": "double",
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "CTE": {
+            "type": "boolean"
+          },
+          "F1": {
+            "format": "double",
+            "type": "number"
+          },
+          "FDR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FM": {
+            "format": "double",
+            "type": "number"
+          },
+          "FN": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "FNR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FOR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FP": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "FPR": {
+            "format": "double",
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          },
+          "MCC": {
+            "format": "double",
+            "type": "number"
+          },
+          "MK": {
+            "format": "double",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "NPV": {
+            "format": "double",
+            "type": "number"
+          },
+          "OR": {
+            "format": "double",
+            "type": "number"
+          },
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "PPV": {
+            "format": "double",
+            "type": "number"
+          },
+          "PT": {
+            "format": "double",
+            "type": "number"
+          },
+          "PV1": {
+            "format": "double",
+            "type": "number"
+          },
+          "PV2": {
+            "format": "double",
+            "type": "number"
+          },
+          "TN": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TNR": {
+            "format": "double",
+            "type": "number"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TP": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TPR": {
+            "format": "double",
+            "type": "number"
+          },
+          "TS": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintAssays": {
+        "properties": {
+          "assays": {
+            "items": {
+              "$ref": "#/components/schemas/ToxprintAssay"
+            },
+            "type": "array"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintMetrics": {
+        "properties": {
+          "ACC": {
+            "format": "double",
+            "type": "number"
+          },
+          "BA": {
+            "format": "double",
+            "type": "number"
+          },
+          "BM": {
+            "format": "double",
+            "type": "number"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "CTE": {
+            "type": "boolean"
+          },
+          "F1": {
+            "format": "double",
+            "type": "number"
+          },
+          "FDR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FM": {
+            "format": "double",
+            "type": "number"
+          },
+          "FN": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "FNR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FOR": {
+            "format": "double",
+            "type": "number"
+          },
+          "FP": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "FPR": {
+            "format": "double",
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          },
+          "MCC": {
+            "format": "double",
+            "type": "number"
+          },
+          "MK": {
+            "format": "double",
+            "type": "number"
+          },
+          "NPV": {
+            "format": "double",
+            "type": "number"
+          },
+          "OR": {
+            "format": "double",
+            "type": "number"
+          },
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "PPV": {
+            "format": "double",
+            "type": "number"
+          },
+          "PT": {
+            "format": "double",
+            "type": "number"
+          },
+          "PV1": {
+            "format": "double",
+            "type": "number"
+          },
+          "PV2": {
+            "format": "double",
+            "type": "number"
+          },
+          "TN": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TNR": {
+            "format": "double",
+            "type": "number"
+          },
+          "TP": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TPR": {
+            "format": "double",
+            "type": "number"
+          },
+          "TS": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsCategoriesRequest": {
+        "properties": {
+          "chemical": {
+            "$ref": "#/components/schemas/FingerprintedChemical"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsCategoriesStats": {
+        "properties": {
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/AssayCategoryCount"
+            },
+            "type": "array"
+          },
+          "enrichments": {
+            "items": {
+              "additionalProperties": {
+                "type": "object"
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "sums": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsDescriptorsResponse": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "info": {
+            "$ref": "#/components/schemas/VersionInfo"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsFilesRequest": {
+        "properties": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
+          },
+          "labels": {
+            "type": "boolean"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ToxprintsOptions"
+          },
+          "resolve": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsMetadata": {
+        "properties": {
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "defaultProfile": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "labels": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/Metric"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ToxprintsOptions"
+          },
+          "profiles": {
+            "items": {
+              "$ref": "#/components/schemas/ChemotypesProfile"
+            },
+            "type": "array"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionInfo"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsOptions": {
+        "properties": {
+          "OR": {
+            "format": "double",
+            "type": "number"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "PV1": {
+            "format": "double",
+            "type": "number"
+          },
+          "TP": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "ToxprintsRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/Options"
+          },
+          "profile": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VersionInfo": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
     }
-  ],
+  },
+  "openapi": "3.1.0",
   "paths": {
-    "/api/toxprints/assays/{id}": {
-      "put": {
+    "/api/toxprints": {
+      "get": {
+        "operationId": "get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "headers",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "profile",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToxprintsDescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
         "tags": [
           "toxprints-controller"
+        ]
+      },
+      "post": {
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToxprintsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToxprintsDescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/assays": {
+      "get": {
+        "operationId": "assaysGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssaysResponseAssay"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      },
+      "post": {
+        "operationId": "assayCreatePost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Assay"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assay"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/assays/{id}": {
+      "delete": {
+        "operationId": "assayDelete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      },
+      "put": {
         "operationId": "assayUpdatePut",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string"
@@ -35,49 +1105,28 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Assay"
                 }
               }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "assayDelete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
+            },
             "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
       }
     },
     "/api/toxprints/assays/{id}/acl": {
       "put": {
-        "tags": [
-          "toxprints-controller"
-        ],
         "operationId": "assayAclUpdatePut",
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string"
@@ -96,280 +1145,148 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ACL"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      }
-    },
-    "/api/toxprints": {
-      "get": {
+        },
         "tags": [
           "toxprints-controller"
-        ],
-        "operationId": "get",
+        ]
+      }
+    },
+    "/api/toxprints/assays/{name}": {
+      "get": {
+        "operationId": "assayGet",
         "parameters": [
           {
-            "name": "smiles",
-            "in": "query",
+            "in": "path",
+            "name": "name",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "headers",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "profile",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToxprintsDescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ToxprintsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToxprintsDescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/toxprints_categories": {
-      "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "toxprintsCategoriesPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ToxprintsCategoriesRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToxprintsCategoriesStats"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/export_global": {
-      "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "exportGlobalAssaysPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportGlobalAssaysRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/export": {
-      "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "exportAssayPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportGeneratedRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/chemicals_categories": {
-      "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "chemicalsCategoriesPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChemicalsCategoriesRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToxprintsCategoriesStats"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/calculate": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "toxprintsCalculateGet",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "labels",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "profile",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Assay"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      },
-      "post": {
+        },
         "tags": [
           "toxprints-controller"
-        ],
-        "operationId": "toxprintsCalculatePost",
+        ]
+      }
+    },
+    "/api/toxprints/assays/check": {
+      "get": {
+        "operationId": "assayCheckGet",
         "parameters": [
           {
-            "name": "files[]",
             "in": "query",
+            "name": "name",
             "required": true,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
               }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/calculate": {
+      "get": {
+        "operationId": "toxprintsCalculateGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           },
           {
-            "name": "request",
             "in": "query",
+            "name": "labels",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "profile",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assay"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      },
+      "post": {
+        "operationId": "toxprintsCalculatePost",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "request",
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/ToxprintsFilesRequest"
@@ -388,65 +1305,29 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Assay"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
       }
     },
-    "/api/toxprints/assays": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "assaysGet",
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AssaysResponseAssay"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/toxprints/chemicals_categories": {
       "post": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "assayCreatePost",
+        "operationId": "chemicalsCategoriesPost",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Assay"
+                "$ref": "#/components/schemas/ChemicalsCategoriesRequest"
               }
             }
           },
@@ -454,302 +1335,28 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Assay"
+                  "$ref": "#/components/schemas/ToxprintsCategoriesStats"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      }
-    },
-    "/api/toxprints/version": {
-      "get": {
+        },
         "tags": [
           "toxprints-controller"
-        ],
-        "operationId": "versionGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/toxprints": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "toxprintsGet",
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AssaysResponseToxprintAssays"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/render": {
-      "get": {
-        "tags": [
-          "render-controller"
-        ],
-        "operationId": "render",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "profile",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "SVG",
-              "enum": [
-                "PNG",
-                "SVG"
-              ]
-            }
-          },
-          {
-            "name": "width",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "height",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "image/svg+xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              },
-              "image/png": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/metadata": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "metadataGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToxprintsMetadata"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/global_toxprints": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "globalToxprintsGet",
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AssaysResponseToxprintAssays"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/global_assays": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "globalAssaysGet",
-        "parameters": [
-          {
-            "name": "category",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "label",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AssaysResponseReferenceAssay"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/enrichments": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "enrichmentsGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "uniqueItems": true
-                  }
-                }
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/api/toxprints/download": {
       "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
         "operationId": "downloadGet",
         "parameters": [
           {
-            "name": "file",
             "in": "query",
+            "name": "file",
             "required": true,
             "schema": {
               "type": "string"
@@ -758,997 +1365,390 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      }
-    },
-    "/api/toxprints/assays/{name}": {
-      "get": {
+        },
         "tags": [
           "toxprints-controller"
-        ],
-        "operationId": "assayGet",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        ]
+      }
+    },
+    "/api/toxprints/enrichments": {
+      "get": {
+        "operationId": "enrichmentsGet",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Assay"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/toxprints/assays/check": {
-      "get": {
-        "tags": [
-          "toxprints-controller"
-        ],
-        "operationId": "assayCheckGet",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
                   "additionalProperties": {
-                    "type": "string"
-                  }
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "type": "object"
                 }
               }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/export": {
+      "post": {
+        "operationId": "exportAssayPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportGeneratedRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/export_global": {
+      "post": {
+        "operationId": "exportGlobalAssaysPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportGlobalAssaysRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/global_assays": {
+      "get": {
+        "operationId": "globalAssaysGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssaysResponseReferenceAssay"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/global_toxprints": {
+      "get": {
+        "operationId": "globalToxprintsGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssaysResponseToxprintAssays"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/metadata": {
+      "get": {
+        "operationId": "metadataGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToxprintsMetadata"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/render": {
+      "get": {
+        "operationId": "render",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "profile",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "SVG",
+              "enum": [
+                "PNG",
+                "SVG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "render-controller"
+        ]
+      }
+    },
+    "/api/toxprints/toxprints": {
+      "get": {
+        "operationId": "toxprintsGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssaysResponseToxprintAssays"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/toxprints_categories": {
+      "post": {
+        "operationId": "toxprintsCategoriesPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToxprintsCategoriesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToxprintsCategoriesStats"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
+    "/api/toxprints/version": {
+      "get": {
+        "operationId": "versionGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
       }
     }
   },
-  "components": {
-    "schemas": {
-      "ACL": {
-        "type": "object",
-        "properties": {
-          "access": {
-            "type": "string",
-            "enum": [
-              "PUBLIC",
-              "AUTHENTICATED",
-              "PRIVATE"
-            ]
-          },
-          "owner": {
-            "type": "string"
-          },
-          "read": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "write": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "ActivityChemical": {
-        "type": "object",
-        "properties": {
-          "chemId": {
-            "type": "string"
-          },
-          "cid": {
-            "type": "string"
-          },
-          "sid": {
-            "type": "string"
-          },
-          "casrn": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "canonicalSmiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "mol": {
-            "type": "string"
-          },
-          "molFormula": {
-            "type": "string"
-          },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "image": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          },
-          "bits": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "message": {
-            "type": "string"
-          },
-          "activity": {
-            "type": "string"
-          },
-          "active": {
-            "type": "boolean"
-          }
-        }
-      },
-      "Assay": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "actives": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "metrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ToxprintMetrics"
-            }
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ActivityChemical"
-            }
-          },
-          "labels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "options": {
-            "$ref": "#/components/schemas/ToxprintsOptions"
-          },
-          "acl": {
-            "$ref": "#/components/schemas/ACL"
-          }
-        }
-      },
-      "ToxprintMetrics": {
-        "type": "object",
-        "properties": {
-          "ordinal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "label": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CTE": {
-            "type": "boolean"
-          },
-          "TP": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TN": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FP": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FN": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "BA": {
-            "type": "number",
-            "format": "double"
-          },
-          "OR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PV1": {
-            "type": "number",
-            "format": "double"
-          },
-          "PV2": {
-            "type": "number",
-            "format": "double"
-          },
-          "TPR": {
-            "type": "number",
-            "format": "double"
-          },
-          "TNR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PPV": {
-            "type": "number",
-            "format": "double"
-          },
-          "NPV": {
-            "type": "number",
-            "format": "double"
-          },
-          "FNR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FPR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FDR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FOR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PT": {
-            "type": "number",
-            "format": "double"
-          },
-          "TS": {
-            "type": "number",
-            "format": "double"
-          },
-          "ACC": {
-            "type": "number",
-            "format": "double"
-          },
-          "F1": {
-            "type": "number",
-            "format": "double"
-          },
-          "MCC": {
-            "type": "number",
-            "format": "double"
-          },
-          "FM": {
-            "type": "number",
-            "format": "double"
-          },
-          "BM": {
-            "type": "number",
-            "format": "double"
-          },
-          "MK": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "ToxprintsOptions": {
-        "type": "object",
-        "properties": {
-          "profile": {
-            "type": "string"
-          },
-          "OR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PV1": {
-            "type": "number",
-            "format": "double"
-          },
-          "TP": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "Options": {
-        "type": "object",
-        "properties": {
-          "headers": {
-            "type": "boolean"
-          }
-        }
-      },
-      "ToxprintsRequest": {
-        "type": "object",
-        "properties": {
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "profile": {
-            "type": "string"
-          },
-          "options": {
-            "$ref": "#/components/schemas/Options"
-          }
-        }
-      },
-      "Chemical": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "descriptors": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      },
-      "ToxprintsDescriptorsResponse": {
-        "type": "object",
-        "properties": {
-          "info": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Chemical"
-            }
-          },
-          "headers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "VersionInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "compiled": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "FingerprintedChemical": {
-        "type": "object",
-        "properties": {
-          "chemId": {
-            "type": "string"
-          },
-          "cid": {
-            "type": "string"
-          },
-          "sid": {
-            "type": "string"
-          },
-          "casrn": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "canonicalSmiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "mol": {
-            "type": "string"
-          },
-          "molFormula": {
-            "type": "string"
-          },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
-          },
-          "image": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          },
-          "bits": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "ToxprintsCategoriesRequest": {
-        "type": "object",
-        "properties": {
-          "chemical": {
-            "$ref": "#/components/schemas/FingerprintedChemical"
-          }
-        }
-      },
-      "AssayCategoryCount": {
-        "type": "object",
-        "properties": {
-          "category": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ToxprintsCategoriesStats": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AssayCategoryCount"
-            }
-          },
-          "enrichments": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object"
-              }
-            }
-          },
-          "sums": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-      "ExportGlobalAssaysRequest": {
-        "type": "object",
-        "properties": {
-          "category": {
-            "type": "string"
-          },
-          "label": {
-            "type": "string"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "SDF",
-              "SMI",
-              "MOL",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "PDF",
-              "HTML",
-              "XML",
-              "DOCX"
-            ]
-          },
-          "sheet": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ExportGeneratedRequest": {
-        "type": "object",
-        "properties": {
-          "assay": {
-            "$ref": "#/components/schemas/Assay"
-          },
-          "format": {
-            "type": "string",
-            "enum": [
-              "UNKNOWN",
-              "SDF",
-              "SMI",
-              "MOL",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "PDF",
-              "HTML",
-              "XML",
-              "DOCX"
-            ]
-          },
-          "sheet": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nChemical": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ChemicalsCategoriesRequest": {
-        "type": "object",
-        "properties": {
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FingerprintedChemical"
-            }
-          }
-        }
-      },
-      "CalculateRequest": {
-        "type": "object",
-        "properties": {
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Chemical"
-            }
-          },
-          "labels": {
-            "type": "boolean"
-          },
-          "options": {
-            "$ref": "#/components/schemas/ToxprintsOptions"
-          }
-        }
-      },
-      "FileUploadInfo": {
-        "type": "object",
-        "properties": {
-          "fileName": {
-            "type": "string"
-          },
-          "idField": {
-            "type": "string"
-          },
-          "strField": {
-            "type": "string"
-          },
-          "actField": {
-            "type": "string"
-          }
-        }
-      },
-      "ToxprintsFilesRequest": {
-        "type": "object",
-        "properties": {
-          "filesInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            }
-          },
-          "resolve": {
-            "type": "boolean"
-          },
-          "labels": {
-            "type": "boolean"
-          },
-          "options": {
-            "$ref": "#/components/schemas/ToxprintsOptions"
-          }
-        }
-      },
-      "AssaysResponseToxprintAssays": {
-        "type": "object",
-        "properties": {
-          "assays": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ToxprintAssays"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ToxprintAssay": {
-        "type": "object",
-        "properties": {
-          "ordinal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "label": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "CTE": {
-            "type": "boolean"
-          },
-          "TP": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TN": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FP": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FN": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "BA": {
-            "type": "number",
-            "format": "double"
-          },
-          "OR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PV1": {
-            "type": "number",
-            "format": "double"
-          },
-          "PV2": {
-            "type": "number",
-            "format": "double"
-          },
-          "TPR": {
-            "type": "number",
-            "format": "double"
-          },
-          "TNR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PPV": {
-            "type": "number",
-            "format": "double"
-          },
-          "NPV": {
-            "type": "number",
-            "format": "double"
-          },
-          "FNR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FPR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FDR": {
-            "type": "number",
-            "format": "double"
-          },
-          "FOR": {
-            "type": "number",
-            "format": "double"
-          },
-          "PT": {
-            "type": "number",
-            "format": "double"
-          },
-          "TS": {
-            "type": "number",
-            "format": "double"
-          },
-          "ACC": {
-            "type": "number",
-            "format": "double"
-          },
-          "F1": {
-            "type": "number",
-            "format": "double"
-          },
-          "MCC": {
-            "type": "number",
-            "format": "double"
-          },
-          "FM": {
-            "type": "number",
-            "format": "double"
-          },
-          "BM": {
-            "type": "number",
-            "format": "double"
-          },
-          "MK": {
-            "type": "number",
-            "format": "double"
-          },
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "actives": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ToxprintAssays": {
-        "type": "object",
-        "properties": {
-          "ordinal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "label": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "assays": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ToxprintAssay"
-            }
-          }
-        }
-      },
-      "ChemotypesProfile": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string"
-          }
-        }
-      },
-      "Metric": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "ToxprintsMetadata": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "description": {
-            "type": "string"
-          },
-          "options": {
-            "$ref": "#/components/schemas/ToxprintsOptions"
-          },
-          "labels": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "metrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Metric"
-            }
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "profiles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChemotypesProfile"
-            }
-          },
-          "defaultProfile": {
-            "type": "string"
-          }
-        }
-      },
-      "AssaysResponseReferenceAssay": {
-        "type": "object",
-        "properties": {
-          "assays": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReferenceAssay"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ReferenceAssay": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "actives": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "metrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ToxprintMetrics"
-            }
-          }
-        }
-      },
-      "AssaysResponseAssay": {
-        "type": "object",
-        "properties": {
-          "assays": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Assay"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      }
+  "servers": [
+    {
+      "description": "Default Server URL",
+      "url": "/"
     }
-  }
+  ]
 }
