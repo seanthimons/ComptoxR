@@ -1,480 +1,58 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "WebTEST Module",
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "/",
-      "description": "Default Server URL"
-    }
-  ],
-  "paths": {
-    "/api/webtest": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "descriptorsGet",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "headers",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/DescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "descriptorsPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DescriptorsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/DescriptorsResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/predict": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "predict",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "endpoint",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "method",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "consensus"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "UNKNOWN",
-                "SDF",
-                "SMI",
-                "MOL",
-                "CSV",
-                "TSV",
-                "JSON",
-                "XLSX",
-                "PDF",
-                "HTML",
-                "XML",
-                "DOCX"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PredictionResult"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "predict_1",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PredictionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PredictionResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/predict/export": {
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "exportPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/export-append": {
-      "post": {
-        "tags": [
-          ""
-        ],
-        "operationId": "exportAppendPredict",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "predictionRequest": {
-                    "$ref": "#/components/schemas/PredictionRequest"
-                  }
-                },
-                "required": [
-                  "predictionRequest"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/version": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "versionGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/report": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "summary": "Retrieve previously generated report by response ID",
-        "operationId": "report",
-        "parameters": [
-          {
-            "name": "structure",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "endpoint",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "method",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "consensus"
-            }
-          },
-          {
-            "name": "format",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "HTML",
-              "enum": [
-                "UNKNOWN",
-                "SDF",
-                "SMI",
-                "MOL",
-                "CSV",
-                "TSV",
-                "JSON",
-                "XLSX",
-                "PDF",
-                "HTML",
-                "XML",
-                "DOCX"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/webtest/metadata": {
-      "get": {
-        "tags": [
-          ""
-        ],
-        "operationId": "metadataGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/WebTESTMetadata"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
-      "DescriptorsRequest": {
-        "type": "object",
+      "CancerStats": {
         "properties": {
-          "type": {
+          "concordance": {
             "type": "string"
           },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "correctCount": {
+            "format": "int32",
+            "type": "integer"
           },
-          "chemIdType": {
-            "type": "string",
-            "enum": [
-              "DTXSID",
-              "DTXCID",
-              "SMILES",
-              "MOL",
-              "CAS",
-              "Name",
-              "InChI",
-              "InChIKey",
-              "InChIKey_1",
-              "AnyId"
-            ]
+          "negConcordance": {
+            "type": "string"
           },
-          "format": {
-            "type": "string",
-            "enum": [
-              "JSON",
-              "CSV",
-              "TSV"
-            ]
+          "negCorrectCount": {
+            "format": "int32",
+            "type": "integer"
           },
-          "options": {
-            "type": "object",
-            "additionalProperties": {}
+          "negPredCount": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "posConcordance": {
+            "type": "string"
+          },
+          "posCorrectCount": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "posPredCount": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "predCount": {
+            "format": "int32",
+            "type": "integer"
           }
-        }
-      },
-      "ChemicalDescriptors": {
-        "type": "object",
-        "properties": {
-          "ordinal": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "descriptors": {
-            "type": "array",
-            "items": {}
-          }
-        }
-      },
-      "DescriptorsResponse": {
-        "type": "object",
-        "properties": {
-          "info": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "headers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "options": {
-            "type": "object",
-            "additionalProperties": {}
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChemicalDescriptors"
-            }
-          }
-        }
-      },
-      "VersionInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "compiled": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
+        },
+        "type": "object"
       },
       "Chemical": {
-        "type": "object",
         "properties": {
-          "id": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
             "type": "string"
           },
           "chemId": {
@@ -483,19 +61,10 @@
           "cid": {
             "type": "string"
           },
-          "sid": {
+          "id": {
             "type": "string"
           },
-          "casrn": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "canonicalSmiles": {
+          "image": {
             "type": "string"
           },
           "inchi": {
@@ -510,124 +79,60 @@
           "molFormula": {
             "type": "string"
           },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
           "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
+            "format": "double",
+            "type": "number"
           },
-          "image": {
+          "name": {
             "type": "string"
           },
-          "additionalProps": {
-            "type": "object",
-            "additionalProperties": {}
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "PredictionRequest": {
-        "type": "object",
-        "description": "WebTEST prediction request",
+      "ChemicalDescriptors": {
         "properties": {
-          "structures": {
-            "type": "array",
-            "description": "Molecule expressed as SMILES or MOL",
-            "items": {
-              "type": "string"
-            }
+          "descriptors": {
+            "items": {},
+            "type": "array"
           },
-          "chemicals": {
-            "type": "array",
-            "description": "Molecule expressed as ID & SMILES or MOL",
-            "items": {
-              "$ref": "#/components/schemas/Chemical"
-            }
+          "inchi": {
+            "type": "string"
           },
-          "endpoints": {
-            "type": "array",
-            "description": "Endpoint to predict",
-            "items": {
-              "type": "string"
-            }
+          "inchiKey": {
+            "type": "string"
           },
-          "methods": {
-            "type": "array",
-            "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)",
-            "items": {
-              "type": "string"
-            }
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
           },
-          "format": {
-            "type": "string",
-            "description": "Report type: JSON, HTML or PDF",
-            "enum": [
-              "UNKNOWN",
-              "SDF",
-              "SMI",
-              "MOL",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "PDF",
-              "HTML",
-              "XML",
-              "DOCX"
-            ]
+          "smiles": {
+            "type": "string"
           }
-        }
-      },
-      "CancerStats": {
-        "type": "object",
-        "properties": {
-          "concordance": {
-            "type": "string"
-          },
-          "correctCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "predCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "posConcordance": {
-            "type": "string"
-          },
-          "posCorrectCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "posPredCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "negConcordance": {
-            "type": "string"
-          },
-          "negCorrectCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "negPredCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
+        },
+        "type": "object"
       },
       "ClusterModel": {
-        "type": "object",
         "properties": {
-          "url": {
-            "type": "string"
-          },
-          "urlDescriptors": {
-            "type": "string"
+          "binary": {
+            "type": "boolean"
           },
           "clusterID": {
             "type": "string"
+          },
+          "concordance": {
+            "type": "string"
+          },
+          "descriptors": {
+            "items": {
+              "$ref": "#/components/schemas/Descriptor"
+            },
+            "type": "array"
           },
           "messageAD": {
             "type": "string"
@@ -635,39 +140,15 @@
           "minMaxValue": {
             "type": "string"
           },
-          "omitted": {
-            "type": "boolean"
-          },
-          "binary": {
-            "type": "boolean"
-          },
-          "r2": {
-            "type": "string"
-          },
-          "q2": {
-            "type": "string"
-          },
-          "concordance": {
-            "type": "string"
-          },
-          "sensitivity": {
-            "type": "string"
-          },
-          "specificity": {
+          "modelEquation": {
             "type": "string"
           },
           "numChemicals": {
-            "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "type": "integer"
           },
-          "descriptors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Descriptor"
-            }
-          },
-          "modelEquation": {
-            "type": "string"
+          "omitted": {
+            "type": "boolean"
           },
           "plotImage": {
             "type": "string"
@@ -677,45 +158,155 @@
           },
           "predictedValueLabel": {
             "type": "string"
+          },
+          "q2": {
+            "type": "string"
+          },
+          "r2": {
+            "type": "string"
+          },
+          "sensitivity": {
+            "type": "string"
+          },
+          "specificity": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "urlDescriptors": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "ClusterTable": {
-        "type": "object",
         "properties": {
           "caption": {
             "type": "string"
           },
-          "units": {
-            "type": "string"
+          "clusterModels": {
+            "items": {
+              "$ref": "#/components/schemas/ClusterModel"
+            },
+            "type": "array"
           },
           "message": {
             "type": "string"
           },
-          "clusterModels": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ClusterModel"
-            }
+          "units": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "DSSToxRecord": {
-        "type": "object",
+      "Descriptor": {
         "properties": {
-          "cid": {
+          "coefficient": {
             "type": "string"
           },
-          "sid": {
+          "coefficientUncertainty": {
             "type": "string"
           },
-          "casrn": {
+          "definition": {
             "type": "string"
           },
           "name": {
             "type": "string"
           },
-          "smiles": {
+          "value": {
+            "type": "string"
+          },
+          "value_x_coefficient": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DescriptorsRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "chemIdType": {
+            "enum": [
+              "DTXSID",
+              "DTXCID",
+              "SMILES",
+              "MOL",
+              "CAS",
+              "Name",
+              "InChI",
+              "InChIKey",
+              "InChIKey_1",
+              "AnyId"
+            ],
+            "type": "string"
+          },
+          "format": {
+            "enum": [
+              "JSON",
+              "CSV",
+              "TSV"
+            ],
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DescriptorsResponse": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/ChemicalDescriptors"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "info": {
+            "$ref": "#/components/schemas/VersionInfo"
+          },
+          "options": {
+            "additionalProperties": {},
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "DSSToxRecord": {
+        "properties": {
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "casrn": {
+            "type": "string"
+          },
+          "chemId": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "id": {
             "type": "string"
           },
           "inchi": {
@@ -730,68 +321,31 @@
           "mol": {
             "type": "string"
           },
-          "error": {
-            "type": "string"
-          },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
           "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
+            "format": "double",
+            "type": "number"
           },
-          "id": {
-            "type": "string"
-          },
-          "chemId": {
-            "type": "string"
-          }
-        }
-      },
-      "Descriptor": {
-        "type": "object",
-        "properties": {
           "name": {
             "type": "string"
           },
-          "definition": {
+          "sid": {
             "type": "string"
           },
-          "value": {
-            "type": "string"
-          },
-          "value_x_coefficient": {
-            "type": "string"
-          },
-          "coefficient": {
-            "type": "string"
-          },
-          "coefficientUncertainty": {
+          "smiles": {
             "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "EndpointInfo": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
+          "binary": {
+            "type": "boolean"
           },
           "description": {
             "type": "string"
           },
-          "valueDigits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "binary": {
-            "type": "boolean"
-          },
-          "units": {
+          "id": {
             "type": "string"
           },
           "logMolar": {
@@ -801,13 +355,23 @@
             "type": "string"
           },
           "logValueDigits": {
-            "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "units": {
+            "type": "string"
+          },
+          "valueDigits": {
+            "format": "int32",
+            "type": "integer"
           }
-        }
+        },
+        "type": "object"
       },
       "EndpointSource": {
-        "type": "object",
         "properties": {
           "sourceName": {
             "type": "string"
@@ -815,452 +379,12 @@
           "sourceURL": {
             "type": "string"
           }
-        }
-      },
-      "ExternalPredChart": {
-        "type": "object",
-        "properties": {
-          "externalPredChartImageSrc": {
-            "type": "string"
-          },
-          "maeentireTestSet": {
-            "type": "number",
-            "format": "double"
-          },
-          "mae": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "IndividualPredictionsForConsensus": {
-        "type": "object",
-        "properties": {
-          "consensusPredictions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionIndividualMethod"
-            }
-          },
-          "units": {
-            "type": "string"
-          }
-        }
-      },
-      "MOAPrediction": {
-        "type": "object",
-        "properties": {
-          "color": {
-            "type": "string"
-          },
-          "tag": {
-            "type": "string"
-          },
-          "clusterModelMOA": {
-            "$ref": "#/components/schemas/ClusterModel"
-          },
-          "clusterModelLC50": {
-            "$ref": "#/components/schemas/ClusterModel"
-          },
-          "moa": {
-            "type": "string"
-          },
-          "moascore": {
-            "type": "string"
-          },
-          "moascoreMsg": {
-            "type": "string"
-          },
-          "lc50Score": {
-            "type": "string"
-          },
-          "lc50ScoreMsg": {
-            "type": "string"
-          }
-        }
-      },
-      "MOATable": {
-        "type": "object",
-        "properties": {
-          "moapredictions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MOAPrediction"
-            }
-          }
-        }
-      },
-      "PredictionChemical": {
-        "type": "object",
-        "properties": {
-          "chemicalId": {
-            "type": "string"
-          },
-          "chemical": {
-            "$ref": "#/components/schemas/DSSToxRecord"
-          },
-          "endpoints": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionEndpoint"
-            }
-          },
-          "error": {
-            "$ref": "#/components/schemas/PredictionResultMessage"
-          }
-        }
-      },
-      "PredictionEndpoint": {
-        "type": "object",
-        "properties": {
-          "endpoint": {
-            "$ref": "#/components/schemas/EndpointInfo"
-          },
-          "experimental": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionValue"
-            }
-          },
-          "predicted": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionValue"
-            }
-          },
-          "displayedExperimentalString": {
-            "type": "string"
-          },
-          "displayedPredictedString": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          }
-        }
-      },
-      "PredictionIndividualMethod": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "prediction": {
-            "type": "string"
-          },
-          "fileName": {
-            "type": "string"
-          }
-        }
-      },
-      "PredictionResult": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "predictionTime": {
-            "type": "string"
-          },
-          "software": {
-            "type": "string"
-          },
-          "softwareVersion": {
-            "type": "string"
-          },
-          "condition": {
-            "type": "string"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PredictionChemical"
-            }
-          }
-        }
-      },
-      "PredictionResultMessage": {
-        "type": "object",
-        "properties": {
-          "severity": {
-            "type": "string",
-            "enum": [
-              "INFO",
-              "WARNING",
-              "ERROR"
-            ]
-          },
-          "message": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          }
-        }
-      },
-      "PredictionResults": {
-        "type": "object",
-        "properties": {
-          "cacheId": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "imageURL": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "endpoint": {
-            "type": "string"
-          },
-          "binaryEndpoint": {
-            "type": "boolean"
-          },
-          "logMolarEndpoint": {
-            "type": "boolean"
-          },
-          "clusterTable": {
-            "$ref": "#/components/schemas/ClusterTable"
-          },
-          "invalidClusterTable": {
-            "$ref": "#/components/schemas/ClusterTable"
-          },
-          "predictionResultsPrimaryTable": {
-            "$ref": "#/components/schemas/PredictionResultsPrimaryTable"
-          },
-          "individualPredictionsForConsensus": {
-            "$ref": "#/components/schemas/IndividualPredictionsForConsensus"
-          },
-          "moaTable": {
-            "$ref": "#/components/schemas/MOATable"
-          },
-          "similarChemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SimilarChemicals"
-            }
-          },
-          "reportBase": {
-            "type": "string"
-          },
-          "createDetailedReport": {
-            "type": "boolean"
-          },
-          "imgSize": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "webPath": {
-            "type": "string"
-          },
-          "webPath2": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "scmin": {
-            "type": "number",
-            "format": "double"
-          },
-          "cas": {
-            "type": "string"
-          },
-          "dtxsid": {
-            "type": "string"
-          },
-          "dtxcid": {
-            "type": "string"
-          }
-        }
-      },
-      "PredictionResultsPrimaryTable": {
-        "type": "object",
-        "properties": {
-          "source": {
-            "type": "string"
-          },
-          "endpointSubscripted": {
-            "type": "string"
-          },
-          "endpointSources": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EndpointSource"
-            }
-          },
-          "dtxcid": {
-            "type": "string"
-          },
-          "expCAS": {
-            "type": "string"
-          },
-          "expSet": {
-            "type": "string"
-          },
-          "writePredictionInterval": {
-            "type": "boolean"
-          },
-          "expToxValue": {
-            "type": "string"
-          },
-          "predToxValue": {
-            "type": "string"
-          },
-          "expToxValMass": {
-            "type": "string"
-          },
-          "predToxValMass": {
-            "type": "string"
-          },
-          "expToxValueEndpoint": {
-            "type": "string"
-          },
-          "predValueEndpoint": {
-            "type": "string"
-          },
-          "molarLogUnits": {
-            "type": "string"
-          },
-          "massUnits": {
-            "type": "string"
-          },
-          "predMinMaxVal": {
-            "type": "string"
-          },
-          "predMinMaxValMass": {
-            "type": "string"
-          },
-          "predictedValueSuperscript": {
-            "type": "string"
-          },
-          "predictedValueNote": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "expMOA": {
-            "type": "string"
-          },
-          "predMOA": {
-            "type": "string"
-          },
-          "maxScoreMOA": {
-            "type": "string"
-          }
-        }
-      },
-      "PredictionValue": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "active": {
-            "type": "boolean"
-          },
-          "logValue": {
-            "type": "number",
-            "format": "double"
-          },
-          "value": {
-            "type": "number",
-            "format": "double"
-          },
-          "message": {
-            "type": "string"
-          },
-          "errorCode": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "resultMessage": {
-            "$ref": "#/components/schemas/PredictionResultMessage"
-          },
-          "predictionResults": {
-            "$ref": "#/components/schemas/PredictionResults"
-          }
-        }
-      },
-      "SimilarChemical": {
-        "type": "object",
-        "properties": {
-          "gsid": {
-            "type": "string"
-          },
-          "backgroundColor": {
-            "type": "string"
-          },
-          "similarityCoefficient": {
-            "type": "string"
-          },
-          "expVal": {
-            "type": "string"
-          },
-          "predVal": {
-            "type": "string"
-          },
-          "imageUrl": {
-            "type": "string"
-          },
-          "dsstoxsid": {
-            "type": "string"
-          },
-          "dsstoxcid": {
-            "type": "string"
-          },
-          "cas": {
-            "type": "string"
-          }
-        }
-      },
-      "SimilarChemicals": {
-        "type": "object",
-        "properties": {
-          "similarChemicalsSet": {
-            "type": "string"
-          },
-          "similarChemicalsCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "units": {
-            "type": "string"
-          },
-          "expVal": {
-            "type": "string"
-          },
-          "predVal": {
-            "type": "string"
-          },
-          "similarChemicalsList": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SimilarChemical"
-            }
-          },
-          "externalPredChart": {
-            "$ref": "#/components/schemas/ExternalPredChart"
-          },
-          "cancerStats": {
-            "$ref": "#/components/schemas/CancerStats"
-          }
-        }
+        },
+        "type": "object"
       },
       "ExportRequest": {
-        "type": "object",
         "properties": {
           "format": {
-            "type": "string",
             "enum": [
               "UNKNOWN",
               "SDF",
@@ -1274,15 +398,46 @@
               "HTML",
               "XML",
               "DOCX"
-            ]
+            ],
+            "type": "string"
           },
           "predictionResult": {
             "$ref": "#/components/schemas/PredictionResult"
           }
-        }
+        },
+        "type": "object"
+      },
+      "ExternalPredChart": {
+        "properties": {
+          "externalPredChartImageSrc": {
+            "type": "string"
+          },
+          "mae": {
+            "format": "double",
+            "type": "number"
+          },
+          "maeentireTestSet": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "IndividualPredictionsForConsensus": {
+        "properties": {
+          "consensusPredictions": {
+            "items": {
+              "$ref": "#/components/schemas/PredictionIndividualMethod"
+            },
+            "type": "array"
+          },
+          "units": {
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "MethodInfo": {
-        "type": "object",
         "properties": {
           "id": {
             "type": "string"
@@ -1290,36 +445,510 @@
           "title": {
             "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "WebTESTMetadata": {
-        "type": "object",
+      "MOAPrediction": {
         "properties": {
-          "version": {
-            "$ref": "#/components/schemas/VersionInfo"
+          "clusterModelLC50": {
+            "$ref": "#/components/schemas/ClusterModel"
           },
-          "headers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "clusterModelMOA": {
+            "$ref": "#/components/schemas/ClusterModel"
           },
-          "methods": {
-            "type": "array",
+          "color": {
+            "type": "string"
+          },
+          "lc50Score": {
+            "type": "string"
+          },
+          "lc50ScoreMsg": {
+            "type": "string"
+          },
+          "moa": {
+            "type": "string"
+          },
+          "moascore": {
+            "type": "string"
+          },
+          "moascoreMsg": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "MOATable": {
+        "properties": {
+          "moapredictions": {
             "items": {
-              "$ref": "#/components/schemas/MethodInfo"
-            }
+              "$ref": "#/components/schemas/MOAPrediction"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionChemical": {
+        "properties": {
+          "chemical": {
+            "$ref": "#/components/schemas/DSSToxRecord"
+          },
+          "chemicalId": {
+            "type": "string"
           },
           "endpoints": {
-            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PredictionEndpoint"
+            },
+            "type": "array"
+          },
+          "error": {
+            "$ref": "#/components/schemas/PredictionResultMessage"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionEndpoint": {
+        "properties": {
+          "displayedExperimentalString": {
+            "type": "string"
+          },
+          "displayedPredictedString": {
+            "type": "string"
+          },
+          "endpoint": {
+            "$ref": "#/components/schemas/EndpointInfo"
+          },
+          "experimental": {
+            "items": {
+              "$ref": "#/components/schemas/PredictionValue"
+            },
+            "type": "array"
+          },
+          "path": {
+            "type": "string"
+          },
+          "predicted": {
+            "items": {
+              "$ref": "#/components/schemas/PredictionValue"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionIndividualMethod": {
+        "properties": {
+          "fileName": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "prediction": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionRequest": {
+        "description": "WebTEST prediction request",
+        "properties": {
+          "chemicals": {
+            "description": "Molecule expressed as ID & SMILES or MOL",
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array"
+          },
+          "endpoints": {
+            "description": "Endpoint to predict",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "format": {
+            "description": "Report type: JSON, HTML or PDF",
+            "enum": [
+              "UNKNOWN",
+              "SDF",
+              "SMI",
+              "MOL",
+              "CSV",
+              "TSV",
+              "JSON",
+              "XLSX",
+              "PDF",
+              "HTML",
+              "XML",
+              "DOCX"
+            ],
+            "type": "string"
+          },
+          "methods": {
+            "description": "Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "structures": {
+            "description": "Molecule expressed as SMILES or MOL",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionResult": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/PredictionChemical"
+            },
+            "type": "array"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "predictionTime": {
+            "type": "string"
+          },
+          "software": {
+            "type": "string"
+          },
+          "softwareVersion": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionResultMessage": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "INFO",
+              "WARNING",
+              "ERROR"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionResults": {
+        "properties": {
+          "binaryEndpoint": {
+            "type": "boolean"
+          },
+          "cacheId": {
+            "type": "string"
+          },
+          "cas": {
+            "type": "string"
+          },
+          "clusterTable": {
+            "$ref": "#/components/schemas/ClusterTable"
+          },
+          "createDetailedReport": {
+            "type": "boolean"
+          },
+          "dtxcid": {
+            "type": "string"
+          },
+          "dtxsid": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "imageURL": {
+            "type": "string"
+          },
+          "imgSize": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "individualPredictionsForConsensus": {
+            "$ref": "#/components/schemas/IndividualPredictionsForConsensus"
+          },
+          "invalidClusterTable": {
+            "$ref": "#/components/schemas/ClusterTable"
+          },
+          "logMolarEndpoint": {
+            "type": "boolean"
+          },
+          "method": {
+            "type": "string"
+          },
+          "moaTable": {
+            "$ref": "#/components/schemas/MOATable"
+          },
+          "predictionResultsPrimaryTable": {
+            "$ref": "#/components/schemas/PredictionResultsPrimaryTable"
+          },
+          "reportBase": {
+            "type": "string"
+          },
+          "scmin": {
+            "format": "double",
+            "type": "number"
+          },
+          "similarChemicals": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarChemicals"
+            },
+            "type": "array"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "webPath": {
+            "type": "string"
+          },
+          "webPath2": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionResultsPrimaryTable": {
+        "properties": {
+          "dtxcid": {
+            "type": "string"
+          },
+          "endpointSources": {
+            "items": {
+              "$ref": "#/components/schemas/EndpointSource"
+            },
+            "type": "array"
+          },
+          "endpointSubscripted": {
+            "type": "string"
+          },
+          "expCAS": {
+            "type": "string"
+          },
+          "expMOA": {
+            "type": "string"
+          },
+          "expSet": {
+            "type": "string"
+          },
+          "expToxValMass": {
+            "type": "string"
+          },
+          "expToxValue": {
+            "type": "string"
+          },
+          "expToxValueEndpoint": {
+            "type": "string"
+          },
+          "massUnits": {
+            "type": "string"
+          },
+          "maxScoreMOA": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "molarLogUnits": {
+            "type": "string"
+          },
+          "predictedValueNote": {
+            "type": "string"
+          },
+          "predictedValueSuperscript": {
+            "type": "string"
+          },
+          "predMinMaxVal": {
+            "type": "string"
+          },
+          "predMinMaxValMass": {
+            "type": "string"
+          },
+          "predMOA": {
+            "type": "string"
+          },
+          "predToxValMass": {
+            "type": "string"
+          },
+          "predToxValue": {
+            "type": "string"
+          },
+          "predValueEndpoint": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "writePredictionInterval": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionValue": {
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "logValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "predictionResults": {
+            "$ref": "#/components/schemas/PredictionResults"
+          },
+          "resultMessage": {
+            "$ref": "#/components/schemas/PredictionResultMessage"
+          },
+          "value": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "SimilarChemical": {
+        "properties": {
+          "backgroundColor": {
+            "type": "string"
+          },
+          "cas": {
+            "type": "string"
+          },
+          "dsstoxcid": {
+            "type": "string"
+          },
+          "dsstoxsid": {
+            "type": "string"
+          },
+          "expVal": {
+            "type": "string"
+          },
+          "gsid": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "predVal": {
+            "type": "string"
+          },
+          "similarityCoefficient": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SimilarChemicals": {
+        "properties": {
+          "cancerStats": {
+            "$ref": "#/components/schemas/CancerStats"
+          },
+          "expVal": {
+            "type": "string"
+          },
+          "externalPredChart": {
+            "$ref": "#/components/schemas/ExternalPredChart"
+          },
+          "predVal": {
+            "type": "string"
+          },
+          "similarChemicalsCount": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "similarChemicalsList": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarChemical"
+            },
+            "type": "array"
+          },
+          "similarChemicalsSet": {
+            "type": "string"
+          },
+          "units": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "VersionInfo": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "WebTESTMetadata": {
+        "properties": {
+          "endpoints": {
             "items": {
               "$ref": "#/components/schemas/EndpointInfo"
-            }
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "inputFormats": {
-            "type": "array",
             "items": {
-              "type": "string",
               "enum": [
                 "UNKNOWN",
                 "AUTO",
@@ -1336,11 +965,382 @@
                 "XLSX",
                 "TXT",
                 "MSP"
-              ]
-            }
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "methods": {
+            "items": {
+              "$ref": "#/components/schemas/MethodInfo"
+            },
+            "type": "array"
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionInfo"
           }
-        }
+        },
+        "type": "object"
       }
     }
-  }
+  },
+  "info": {
+    "title": "WebTEST Module",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/webtest": {
+      "get": {
+        "operationId": "descriptorsGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "headers",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      },
+      "post": {
+        "operationId": "descriptorsPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DescriptorsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DescriptorsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/export-append": {
+      "post": {
+        "operationId": "exportAppendPredict",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "predictionRequest": {
+                    "$ref": "#/components/schemas/PredictionRequest"
+                  }
+                },
+                "required": [
+                  "predictionRequest"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/metadata": {
+      "get": {
+        "operationId": "metadataGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebTESTMetadata"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/predict": {
+      "get": {
+        "operationId": "predict",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endpoint",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "method",
+            "required": false,
+            "schema": {
+              "default": "consensus",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "enum": [
+                "UNKNOWN",
+                "SDF",
+                "SMI",
+                "MOL",
+                "CSV",
+                "TSV",
+                "JSON",
+                "XLSX",
+                "PDF",
+                "HTML",
+                "XML",
+                "DOCX"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      },
+      "post": {
+        "operationId": "predict_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/predict/export": {
+      "post": {
+        "operationId": "exportPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/report": {
+      "get": {
+        "operationId": "report",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "structure",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endpoint",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "method",
+            "required": false,
+            "schema": {
+              "default": "consensus",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "HTML",
+              "enum": [
+                "UNKNOWN",
+                "SDF",
+                "SMI",
+                "MOL",
+                "CSV",
+                "TSV",
+                "JSON",
+                "XLSX",
+                "PDF",
+                "HTML",
+                "XML",
+                "DOCX"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Retrieve previously generated report by response ID",
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/webtest/version": {
+      "get": {
+        "operationId": "versionGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "description": "Default Server URL",
+      "url": "/"
+    }
+  ]
 }

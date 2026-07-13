@@ -1,683 +1,292 @@
 {
-  "openapi": "3.0.3",
+  "components": {},
   "info": {
     "title": "CHET API",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "/api/chet"
-    }
-  ],
+  "openapi": "3.0.3",
   "paths": {
-    "/curators/me": {
-      "get": {
-        "summary": "Return current curator session",
-        "operationId": "api.curators.me",
-        "responses": {
-          "200": {
-            "description": "Current curator session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/curators/login": {
-      "post": {
-        "summary": "Login curator user",
-        "operationId": "api.curators.login",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "username",
-                  "password"
-                ],
-                "properties": {
-                  "username": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Login result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid username or password",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/curators/logout": {
-      "post": {
-        "summary": "Logout curator user",
-        "operationId": "api.curators.logout",
-        "responses": {
-          "200": {
-            "description": "Logout result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/curators/change-password": {
-      "post": {
-        "summary": "Change the logged-in curator password",
-        "operationId": "api.curators.update_password",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "current_password",
-                  "new_password"
-                ],
-                "properties": {
-                  "current_password": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "new_password": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Password update result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Login required or current password incorrect",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/version": {
-      "get": {
-        "summary": "Service version information",
-        "operationId": "api.metadata.version",
-        "responses": {
-          "200": {
-            "description": "Version payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "version": {
-                      "type": "string"
-                    },
-                    "compiled": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "build_id": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/metadata": {
-      "get": {
-        "summary": "Service metadata",
-        "operationId": "api.metadata.metadata",
-        "responses": {
-          "200": {
-            "description": "Metadata payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/admin/database": {
       "get": {
-        "summary": "List admin error records",
         "operationId": "api.admin.database",
         "responses": {
           "200": {
-            "description": "Error list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/admin/resolve": {
-      "get": {
-        "summary": "Resolve a reported error (GET)",
-        "operationId": "api.admin.resolve_get",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Error list"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Resolved error id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Resolve a reported error (POST)",
-        "operationId": "api.admin.resolve_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Resolved error id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "summary": "List admin error records"
       }
     },
     "/admin/errorreport": {
       "get": {
-        "summary": "Create an error report (GET)",
         "operationId": "api.admin.errorreport_get",
         "requestBody": {
-          "required": false,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
-            "description": "Error report response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Error report response"
           }
-        }
+        },
+        "summary": "Create an error report (GET)"
       },
       "post": {
-        "summary": "Create an error report (POST)",
         "operationId": "api.admin.errorreport_post",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Error report response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/admin/register": {
-      "get": {
-        "summary": "Register a new admin user (GET)",
-        "operationId": "api.admin.register_get",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Error report response"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Registration response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Register a new admin user (POST)",
-        "operationId": "api.admin.register_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Registration response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Create an error report (POST)"
       }
     },
     "/admin/login": {
       "get": {
-        "summary": "Login admin user (GET)",
         "operationId": "api.admin.login_get",
         "requestBody": {
-          "required": false,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
-            "description": "Login response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Login response"
           }
-        }
+        },
+        "summary": "Login admin user (GET)"
       },
       "post": {
-        "summary": "Login admin user (POST)",
         "operationId": "api.admin.login_post",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Login response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Login response"
           }
-        }
+        },
+        "summary": "Login admin user (POST)"
       }
     },
-    "/auth/register": {
+    "/admin/register": {
       "get": {
-        "summary": "Register a user (GET)",
-        "operationId": "api.auth.register_get",
+        "operationId": "api.admin.register_get",
         "requestBody": {
-          "required": false,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
-            "description": "Registration response",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Registration response"
           }
-        }
+        },
+        "summary": "Register a new admin user (GET)"
       },
       "post": {
-        "summary": "Register a user (POST)",
-        "operationId": "api.auth.register_post",
+        "operationId": "api.admin.register_post",
         "requestBody": {
-          "required": true,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Registration response",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Registration response"
           }
-        }
+        },
+        "summary": "Register a new admin user (POST)"
       }
     },
-    "/auth/login": {
+    "/admin/resolve": {
       "get": {
-        "summary": "Login user (GET)",
-        "operationId": "api.auth.login_get",
+        "operationId": "api.admin.resolve_get",
         "requestBody": {
-          "required": false,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
-            "description": "Login response",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Resolved error id"
           }
-        }
+        },
+        "summary": "Resolve a reported error (GET)"
       },
       "post": {
-        "summary": "Login user (POST)",
-        "operationId": "api.auth.login_post",
+        "operationId": "api.admin.resolve_post",
         "requestBody": {
-          "required": true,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "additionalProperties": true,
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Login response",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/auth/logout": {
-      "get": {
-        "summary": "Logout user",
-        "operationId": "api.auth.logout",
-        "responses": {
-          "200": {
-            "description": "Logout response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/report": {
-      "get": {
-        "summary": "Report an error (GET)",
-        "operationId": "api.auth.report_get",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Resolved error id"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Report response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Report an error (POST)",
-        "operationId": "api.auth.report_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Report response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Resolve a reported error (POST)"
       }
     },
     "/auth/errorpage": {
       "get": {
-        "summary": "View error page (GET)",
         "operationId": "api.auth.errorpage_get",
         "responses": {
           "200": {
-            "description": "Error page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Error page response"
           }
-        }
+        },
+        "summary": "View error page (GET)"
       },
       "post": {
-        "summary": "View error page (POST)",
         "operationId": "api.auth.errorpage_post",
         "responses": {
           "200": {
-            "description": "Error page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Error page response"
           }
-        }
+        },
+        "summary": "View error page (POST)"
       }
     },
     "/auth/errorpage/{showhide}": {
       "get": {
-        "summary": "View error page with filter (GET)",
         "operationId": "api.auth.errorpage_showhide_get",
         "parameters": [
           {
@@ -691,19 +300,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Error page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Error page response"
           }
-        }
+        },
+        "summary": "View error page with filter (GET)"
       },
       "post": {
-        "summary": "View error page with filter (POST)",
         "operationId": "api.auth.errorpage_showhide_post",
         "parameters": [
           {
@@ -717,21 +326,21 @@
         ],
         "responses": {
           "200": {
-            "description": "Error page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Error page response"
           }
-        }
+        },
+        "summary": "View error page with filter (POST)"
       }
     },
     "/auth/errorpage/complete/{idnum}": {
       "get": {
-        "summary": "Complete error report (GET)",
         "operationId": "api.auth.errorpage_complete_get",
         "parameters": [
           {
@@ -745,19 +354,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Completion response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Completion response"
           }
-        }
+        },
+        "summary": "Complete error report (GET)"
       },
       "post": {
-        "summary": "Complete error report (POST)",
         "operationId": "api.auth.errorpage_complete_post",
         "parameters": [
           {
@@ -771,60 +380,546 @@
         ],
         "responses": {
           "200": {
-            "description": "Completion response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Completion response"
           }
-        }
+        },
+        "summary": "Complete error report (POST)"
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "operationId": "api.auth.login_get",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Login response"
+          }
+        },
+        "summary": "Login user (GET)"
+      },
+      "post": {
+        "operationId": "api.auth.login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Login response"
+          }
+        },
+        "summary": "Login user (POST)"
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "operationId": "api.auth.logout",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Logout response"
+          }
+        },
+        "summary": "Logout user"
+      }
+    },
+    "/auth/register": {
+      "get": {
+        "operationId": "api.auth.register_get",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Registration response"
+          }
+        },
+        "summary": "Register a user (GET)"
+      },
+      "post": {
+        "operationId": "api.auth.register_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Registration response"
+          }
+        },
+        "summary": "Register a user (POST)"
+      }
+    },
+    "/auth/report": {
+      "get": {
+        "operationId": "api.auth.report_get",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Report response"
+          }
+        },
+        "summary": "Report an error (GET)"
+      },
+      "post": {
+        "operationId": "api.auth.report_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Report response"
+          }
+        },
+        "summary": "Report an error (POST)"
       }
     },
     "/auth/testpage": {
       "get": {
-        "summary": "Run test page (GET)",
         "operationId": "api.auth.testpage_get",
         "responses": {
           "200": {
-            "description": "Test page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Test page response"
           }
-        }
+        },
+        "summary": "Run test page (GET)"
       },
       "post": {
-        "summary": "Run test page (POST)",
         "operationId": "api.auth.testpage_post",
         "responses": {
           "200": {
-            "description": "Test page response",
             "content": {
               "text/plain": {
                 "schema": {
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Test page response"
           }
-        }
+        },
+        "summary": "Run test page (POST)"
       }
     },
-    "/chemicals/verify/{dtxsid}": {
+    "/chemicals/{chemical_id}/image": {
       "get": {
-        "summary": "Verify a DTXSID against DSSTOX",
-        "operationId": "api.chemicals.verify",
+        "operationId": "api.chemicals.image",
         "parameters": [
           {
             "in": "path",
+            "name": "chemical_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "png",
+              "enum": [
+                "png",
+                "svg",
+                "pdf"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Rendered chemical image"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad render request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Chemical or renderable structure not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Renderer unavailable"
+          }
+        },
+        "summary": "Render a chemical structure image"
+      }
+    },
+    "/chemicals/alias": {
+      "get": {
+        "operationId": "api.chemicals.alias",
+        "parameters": [
+          {
+            "in": "query",
             "name": "dtxsid",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Alias response"
+          }
+        },
+        "summary": "Fetch aliases for a chemical"
+      }
+    },
+    "/chemicals/chemdelete": {
+      "get": {
+        "operationId": "api.chemicals.chemdelete_get",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Delete response"
+          }
+        },
+        "summary": "Delete a chemical (GET)"
+      },
+      "post": {
+        "operationId": "api.chemicals.chemdelete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Delete response"
+          }
+        },
+        "summary": "Delete a chemical (POST)"
+      }
+    },
+    "/chemicals/chemical_DL": {
+      "get": {
+        "operationId": "api.chemicals.chemical_dl_get",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV download"
+          }
+        },
+        "summary": "Download chemical list (GET)"
+      },
+      "post": {
+        "operationId": "api.chemicals.chemical_dl_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV download"
+          }
+        },
+        "summary": "Download chemical list (POST)"
+      }
+    },
+    "/chemicals/chemset": {
+      "get": {
+        "operationId": "api.chemicals.chemset",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "setid",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Chemical set response"
+          }
+        },
+        "summary": "List chemicals by library"
+      }
+    },
+    "/chemicals/chemtemp/{type}/{value}": {
+      "get": {
+        "operationId": "api.chemicals.chemtemp",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "value",
             "required": true,
             "schema": {
               "type": "string"
@@ -833,105 +928,60 @@
         ],
         "responses": {
           "200": {
-            "description": "Verification response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/newchemical": {
-      "post": {
-        "summary": "Add a new chemical",
-        "operationId": "api.chemicals.newchemical",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Temporary details"
           }
         },
-        "responses": {
-          "200": {
-            "description": "New chemical response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Fetch temporary chemical details"
       }
     },
-    "/chemicals/newchemfile": {
-      "post": {
-        "summary": "Add chemicals from a file",
-        "operationId": "api.chemicals.newchemfile",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "chemfile": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Bulk add response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/database-old": {
+    "/chemicals/counts": {
       "get": {
-        "summary": "List all chemicals (legacy)",
-        "operationId": "api.legacy.chemicals.database_old",
+        "operationId": "api.chemicals.counts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Chemical list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Counts response"
           }
-        }
+        },
+        "summary": "Chemical counts by library"
       }
     },
     "/chemicals/database": {
       "get": {
-        "summary": "Search chemicals",
         "operationId": "api.chemicals.database",
         "parameters": [
           {
@@ -985,130 +1035,42 @@
         ],
         "responses": {
           "200": {
-            "description": "Chemical search response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Chemical search response"
           }
-        }
+        },
+        "summary": "Search chemicals"
       }
     },
-    "/chemicals/suggest": {
+    "/chemicals/database-old": {
       "get": {
-        "summary": "Suggest CheT chemicals for look-ahead search",
-        "operationId": "api.chemicals.suggest",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "User-entered chemical name, DTXSID, CASRN, or resolver-supported identifier."
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 8,
-              "minimum": 1,
-              "maximum": 25
-            }
-          },
-          {
-            "in": "query",
-            "name": "only_in_reactions",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "true"
-            },
-            "description": "If true, only suggest chemicals that participate in at least one reaction."
-          }
-        ],
+        "operationId": "api.legacy.chemicals.database_old",
         "responses": {
           "200": {
-            "description": "Chemical suggestion response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "chemical_ID": {
-                            "type": "integer"
-                          },
-                          "dtxsid": {
-                            "type": "string"
-                          },
-                          "primary_name": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "casrn": {
-                            "type": "string"
-                          },
-                          "smiles": {
-                            "type": "string"
-                          },
-                          "inchi": {
-                            "type": "string"
-                          },
-                          "representative": {
-                            "type": "string"
-                          },
-                          "reaction_count": {
-                            "type": "integer"
-                          },
-                          "matched_by": {
-                            "type": "string",
-                            "enum": [
-                              "resolver",
-                              "dtxsid",
-                              "casrn",
-                              "name",
-                              "local"
-                            ]
-                          },
-                          "in_chet": {
-                            "type": "boolean"
-                          }
-                        }
-                      }
-                    },
-                    "length": {
-                      "type": "integer"
-                    },
-                    "query": {
-                      "type": "string"
-                    },
-                    "resolver_available": {
-                      "type": "boolean"
-                    }
-                  }
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Chemical list"
           }
-        }
+        },
+        "summary": "List all chemicals (legacy)"
       }
     },
     "/chemicals/database/stats": {
       "get": {
-        "summary": "Chemical stats and library names",
         "operationId": "api.chemicals.database_stats",
         "parameters": [
           {
@@ -1122,91 +1084,21 @@
         ],
         "responses": {
           "200": {
-            "description": "Stats response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Stats response"
           }
-        }
-      }
-    },
-    "/chemicals/chemset": {
-      "get": {
-        "summary": "List chemicals by library",
-        "operationId": "api.chemicals.chemset",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "setid",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Chemical set response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/counts": {
-      "get": {
-        "summary": "Chemical counts by library",
-        "operationId": "api.chemicals.counts",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "size",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Counts response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
+        },
+        "summary": "Chemical stats and library names"
       }
     },
     "/chemicals/maps": {
       "get": {
-        "summary": "Map list for a chemical",
         "operationId": "api.chemicals.maps",
         "parameters": [
           {
@@ -1220,24 +1112,87 @@
         ],
         "responses": {
           "200": {
-            "description": "Map response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Map response"
           }
-        }
+        },
+        "summary": "Map list for a chemical"
+      }
+    },
+    "/chemicals/newchemfile": {
+      "post": {
+        "operationId": "api.chemicals.newchemfile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "chemfile": {
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Bulk add response"
+          }
+        },
+        "summary": "Add chemicals from a file"
+      }
+    },
+    "/chemicals/newchemical": {
+      "post": {
+        "operationId": "api.chemicals.newchemical",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "New chemical response"
+          }
+        },
+        "summary": "Add a new chemical"
       }
     },
     "/chemicals/singlechemical": {
       "get": {
-        "summary": "Fetch a single chemical",
         "operationId": "api.chemicals.singlechemical",
         "parameters": [
           {
@@ -1251,317 +1206,157 @@
         ],
         "responses": {
           "200": {
-            "description": "Chemical response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Chemical response"
           }
-        }
+        },
+        "summary": "Fetch a single chemical"
       }
     },
-    "/chemicals/{chemical_id}/image": {
+    "/chemicals/suggest": {
       "get": {
-        "summary": "Render a chemical structure image",
-        "operationId": "api.chemicals.image",
+        "operationId": "api.chemicals.suggest",
         "parameters": [
           {
-            "in": "path",
-            "name": "chemical_id",
+            "description": "User-entered chemical name, DTXSID, CASRN, or resolver-supported identifier.",
+            "in": "query",
+            "name": "query",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 8,
+              "maximum": 25,
+              "minimum": 1,
               "type": "integer"
             }
           },
           {
+            "description": "If true, only suggest chemicals that participate in at least one reaction.",
             "in": "query",
-            "name": "width",
+            "name": "only_in_reactions",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "height",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "format",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "png",
-                "svg",
-                "pdf"
-              ],
-              "default": "png"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Rendered chemical image",
-            "content": {
-              "image/png": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "image/svg+xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad render request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Chemical or renderable structure not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Renderer unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/alias": {
-      "get": {
-        "summary": "Fetch aliases for a chemical",
-        "operationId": "api.chemicals.alias",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "dtxsid",
-            "required": false,
-            "schema": {
+              "default": "true",
               "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Alias response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "properties": {
+                    "data": {
+                      "items": {
+                        "properties": {
+                          "casrn": {
+                            "type": "string"
+                          },
+                          "chemical_ID": {
+                            "type": "integer"
+                          },
+                          "dtxsid": {
+                            "type": "string"
+                          },
+                          "in_chet": {
+                            "type": "boolean"
+                          },
+                          "inchi": {
+                            "type": "string"
+                          },
+                          "matched_by": {
+                            "enum": [
+                              "resolver",
+                              "dtxsid",
+                              "casrn",
+                              "name",
+                              "local"
+                            ],
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "primary_name": {
+                            "type": "string"
+                          },
+                          "reaction_count": {
+                            "type": "integer"
+                          },
+                          "representative": {
+                            "type": "string"
+                          },
+                          "smiles": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "length": {
+                      "type": "integer"
+                    },
+                    "query": {
+                      "type": "string"
+                    },
+                    "resolver_available": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
                 }
               }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/chemical_DL": {
-      "get": {
-        "summary": "Download chemical list (GET)",
-        "operationId": "api.chemicals.chemical_dl_get",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Chemical suggestion response"
           }
         },
-        "responses": {
-          "200": {
-            "description": "CSV download",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Download chemical list (POST)",
-        "operationId": "api.chemicals.chemical_dl_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "CSV download",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Suggest CheT chemicals for look-ahead search"
       }
     },
     "/chemicals/template_DL": {
       "post": {
-        "summary": "Download chemical template",
         "operationId": "api.chemicals.template_dl",
         "responses": {
           "200": {
-            "description": "Template CSV",
             "content": {
               "application/octet-stream": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/chemicals/chemdelete": {
-      "get": {
-        "summary": "Delete a chemical (GET)",
-        "operationId": "api.chemicals.chemdelete_get",
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Delete response",
-            "content": {
-              "text/plain": {
-                "schema": {
+                  "format": "binary",
                   "type": "string"
                 }
               }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Delete a chemical (POST)",
-        "operationId": "api.chemicals.chemdelete_post",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
+            },
+            "description": "Template CSV"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Delete response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+        "summary": "Download chemical template"
       }
     },
-    "/chemicals/chemtemp/{type}/{value}": {
+    "/chemicals/verify/{dtxsid}": {
       "get": {
-        "summary": "Fetch temporary chemical details",
-        "operationId": "api.chemicals.chemtemp",
+        "operationId": "api.chemicals.verify",
         "parameters": [
           {
             "in": "path",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "value",
+            "name": "dtxsid",
             "required": true,
             "schema": {
               "type": "string"
@@ -1570,161 +1365,226 @@
         ],
         "responses": {
           "200": {
-            "description": "Temporary details",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Verification response"
           }
-        }
+        },
+        "summary": "Verify a DTXSID against DSSTOX"
       }
     },
-    "/reaction/newlibrary": {
+    "/curators/change-password": {
       "post": {
-        "summary": "Add a new reaction library",
-        "operationId": "api.reaction.newlibrary",
+        "operationId": "api.curators.update_password",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "New library response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/newreaction": {
-      "post": {
-        "summary": "Add a new reaction",
-        "operationId": "api.reaction.newreaction",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "New reaction response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/newreactfile": {
-      "post": {
-        "summary": "Add reactions from a file",
-        "operationId": "api.reaction.newreactfile",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
                 "properties": {
-                  "reactionfile": {
-                    "type": "string",
-                    "format": "binary"
+                  "current_password": {
+                    "format": "password",
+                    "type": "string"
+                  },
+                  "new_password": {
+                    "format": "password",
+                    "type": "string"
                   }
-                }
+                },
+                "required": [
+                  "current_password",
+                  "new_password"
+                ],
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Bulk add response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
-            }
+            },
+            "description": "Password update result"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required or current password incorrect"
           }
-        }
+        },
+        "summary": "Change the logged-in curator password"
       }
     },
-    "/reaction/libraries": {
+    "/curators/detail-sets": {
       "get": {
-        "summary": "List reaction libraries",
-        "operationId": "api.reaction.libraries",
+        "operationId": "api.curators.detail_sets_payload",
         "responses": {
           "200": {
-            "description": "Library list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
-            }
+            },
+            "description": "Detail sets"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
           }
-        }
+        },
+        "summary": "List reusable detail sets with their detail definitions"
       }
     },
-    "/reaction/maps": {
-      "get": {
-        "summary": "List maps",
-        "operationId": "api.reaction.maps",
+    "/curators/details": {
+      "post": {
+        "operationId": "api.curators.create_detail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
-          "200": {
-            "description": "Map list",
+          "201": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
-            }
+            },
+            "description": "Detail created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid detail payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
           }
-        }
+        },
+        "summary": "Create a reusable detail definition and optionally attach it to library default detail sets"
       }
     },
-    "/reaction/react_maps": {
+    "/curators/libraries": {
+      "post": {
+        "operationId": "api.curators.create_library",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Library created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid library payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Duplicate library name"
+          }
+        },
+        "summary": "Create a reaction library from curator mode"
+      }
+    },
+    "/curators/libraries/{lib_id}": {
       "get": {
-        "summary": "List maps for a reaction",
-        "operationId": "api.reaction.react_maps",
+        "operationId": "api.curators.library_editor_payload",
         "parameters": [
           {
-            "in": "query",
-            "name": "react_id",
-            "required": false,
+            "in": "path",
+            "name": "lib_id",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -1732,25 +1592,127 @@
         ],
         "responses": {
           "200": {
-            "description": "Reaction map list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
+            },
+            "description": "Editable library payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Library not found"
+          }
+        },
+        "summary": "Return one library and its editable details"
+      },
+      "put": {
+        "operationId": "api.curators.update_library",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lib_id",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Library updated"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid library payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Library not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Duplicate library name"
+          }
+        },
+        "summary": "Update one library and its detail definitions"
       }
     },
-    "/reaction/details": {
+    "/curators/libraries/detail-options": {
       "get": {
-        "summary": "List details for a library",
-        "operationId": "api.reaction.details",
+        "operationId": "api.curators.library_detail_options",
         "parameters": [
           {
             "in": "query",
@@ -1763,111 +1725,268 @@
         ],
         "responses": {
           "200": {
-            "description": "Details list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
-            }
+            },
+            "description": "Detail option list"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
           }
-        }
+        },
+        "summary": "List deduplicated detail definitions available to curator library editor"
       }
     },
-    "/reaction/template_DL": {
+    "/curators/login": {
       "post": {
-        "summary": "Download reaction template",
-        "operationId": "api.reaction.template_dl",
+        "operationId": "api.curators.login",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "additionalProperties": true
+                "properties": {
+                  "password": {
+                    "format": "password",
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "type": "object"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
-            "description": "Template CSV",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/database_old": {
-      "get": {
-        "summary": "List all reactions (legacy)",
-        "operationId": "api.legacy.reaction.database_old",
-        "responses": {
-          "200": {
-            "description": "Reaction list",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "additionalProperties": true,
+                  "type": "object"
                 }
               }
-            }
+            },
+            "description": "Login result"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid username or password"
           }
-        }
+        },
+        "summary": "Login curator user"
       }
     },
-    "/reaction/database-old/{pagenum}/{searchterm}": {
-      "get": {
-        "summary": "Search reactions (legacy)",
-        "operationId": "api.legacy.reaction.database_old_search",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "pagenum",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "path",
-            "name": "searchterm",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+    "/curators/logout": {
+      "post": {
+        "operationId": "api.curators.logout",
         "responses": {
           "200": {
-            "description": "Reaction search response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Logout result"
+          }
+        },
+        "summary": "Logout curator user"
+      }
+    },
+    "/curators/me": {
+      "get": {
+        "operationId": "api.curators.me",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Current curator session"
+          }
+        },
+        "summary": "Return current curator session"
+      }
+    },
+    "/curators/units": {
+      "get": {
+        "operationId": "api.curators.units_payload",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unit definitions"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          }
+        },
+        "summary": "List reusable unit definitions for curator editors"
+      },
+      "post": {
+        "operationId": "api.curators.create_unit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unit created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          }
+        },
+        "summary": "Create or update a reusable unit definition"
+      }
+    },
+    "/metadata": {
+      "get": {
+        "operationId": "api.metadata.metadata",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Metadata payload"
+          }
+        },
+        "summary": "Service metadata"
+      }
+    },
+    "/reaction/batchsearch": {
+      "options": {
+        "operationId": "api.reaction.map_dl_options",
+        "responses": {
+          "200": {
+            "description": "Preflight response"
+          }
+        },
+        "summary": "CORS preflight for batch search"
+      },
+      "post": {
+        "operationId": "api.reaction.batchsearch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "dtxsids": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "search_level": {
+                    "enum": [
+                      "chemical",
+                      "reaction"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "dtxsids",
+                  "search_level"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
-            }
+            },
+            "description": "Batch search response"
           }
-        }
+        },
+        "summary": "Batch search reactions and chemicals"
       }
     },
     "/reaction/database": {
       "get": {
-        "summary": "Search reactions",
         "operationId": "api.reaction.database",
         "parameters": [
           {
@@ -1945,21 +2064,78 @@
         ],
         "responses": {
           "200": {
-            "description": "Reaction search response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
+            },
+            "description": "Reaction search response"
+          }
+        },
+        "summary": "Search reactions"
+      }
+    },
+    "/reaction/database_old": {
+      "get": {
+        "operationId": "api.legacy.reaction.database_old",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Reaction list"
+          }
+        },
+        "summary": "List all reactions (legacy)"
+      }
+    },
+    "/reaction/database-old/{pagenum}/{searchterm}": {
+      "get": {
+        "operationId": "api.legacy.reaction.database_old_search",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pagenum",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "searchterm",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Reaction search response"
+          }
+        },
+        "summary": "Search reactions (legacy)"
       }
     },
     "/reaction/database/stats": {
       "get": {
-        "summary": "Reaction stats and filters",
         "operationId": "api.reaction.database_stats",
         "parameters": [
           {
@@ -1973,21 +2149,858 @@
         ],
         "responses": {
           "200": {
-            "description": "Stats response",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object"
                 }
               }
+            },
+            "description": "Stats response"
+          }
+        },
+        "summary": "Reaction stats and filters"
+      }
+    },
+    "/reaction/dbcounts": {
+      "get": {
+        "operationId": "api.reaction.dbcounts",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Count response"
+          }
+        },
+        "summary": "Count chemicals and reactions"
+      }
+    },
+    "/reaction/details": {
+      "get": {
+        "operationId": "api.reaction.details",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lib_id",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Details list"
+          }
+        },
+        "summary": "List details for a library"
+      }
+    },
+    "/reaction/download_DB_backup": {
+      "get": {
+        "operationId": "api.reaction.download_db_backup",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Backup response"
+          }
+        },
+        "summary": "Download DB backup"
+      }
+    },
+    "/reaction/editor/{reaction_id}": {
+      "get": {
+        "operationId": "api.reaction.reaction_editor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reaction_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lib_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator reaction editor payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Fetch curator reaction editor payload"
+      },
+      "post": {
+        "operationId": "api.reaction.reaction_editor_save",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reaction_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Saved curator reaction editor payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Save curator reaction editor changes"
+      }
+    },
+    "/reaction/editor/check-existing": {
+      "post": {
+        "operationId": "api.reaction.reaction_editor_check_existing",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Existing reaction matches"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Check whether a ChemReg canvas connection already exists in CheT"
+      }
+    },
+    "/reaction/editor/check-existing-map": {
+      "post": {
+        "operationId": "api.reaction.reaction_editor_check_existing_map",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Existing reaction map matches"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Check whether a set of reactions already exists as a CheT reaction map"
+      }
+    },
+    "/reaction/editor/library-details": {
+      "get": {
+        "operationId": "api.reaction.reaction_editor_library_details",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lib_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Library detail definitions"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Return details attached to a library through detail sets for ChemReg reaction editor"
+      }
+    },
+    "/reaction/editor/load-map": {
+      "post": {
+        "operationId": "api.reaction.reaction_editor_load_map",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Loaded reaction map editor records"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Load an existing CheT reaction map into the ChemReg reaction editor"
+      }
+    },
+    "/reaction/editor/load-reactions": {
+      "post": {
+        "operationId": "api.reaction.reaction_editor_load_reactions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Loaded reaction editor records"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Load existing CheT reactions into the ChemReg reaction editor"
+      }
+    },
+    "/reaction/editor/save-scheme": {
+      "post": {
+        "operationId": "api.reaction.reaction_editor_save_scheme",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Saved reaction map and reactions"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Save a full ChemReg reaction scheme map to CheT"
+      }
+    },
+    "/reaction/libraries": {
+      "get": {
+        "operationId": "api.reaction.libraries",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Library list"
+          }
+        },
+        "summary": "List reaction libraries"
+      }
+    },
+    "/reaction/map_DL": {
+      "options": {
+        "operationId": "api.reaction.map_dl_options",
+        "responses": {
+          "200": {
+            "description": "Preflight response"
+          }
+        },
+        "summary": "CORS preflight for map download"
+      },
+      "post": {
+        "operationId": "api.reaction.map_dl",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV download"
+          }
+        },
+        "summary": "Download map reaction list"
+      }
+    },
+    "/reaction/mapfix/{map_id}": {
+      "post": {
+        "operationId": "api.reaction.mapfix",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "map_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Map fix response"
+          }
+        },
+        "summary": "Store map element positions"
+      }
+    },
+    "/reaction/mapid": {
+      "get": {
+        "operationId": "api.reaction.mapid",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "map_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Map response"
+          }
+        },
+        "summary": "List reactions for a map"
+      }
+    },
+    "/reaction/mappositions/{map_id}": {
+      "delete": {
+        "operationId": "api.reaction.delete_map_positions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "map_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Stored map positions deleted"
+          }
+        },
+        "summary": "Delete stored reaction-map node positions"
+      },
+      "get": {
+        "operationId": "api.reaction.map_positions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "map_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Stored map positions"
+          }
+        },
+        "summary": "Fetch stored reaction-map node positions"
+      }
+    },
+    "/reaction/maps": {
+      "get": {
+        "operationId": "api.reaction.maps",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Map list"
+          }
+        },
+        "summary": "List maps"
+      }
+    },
+    "/reaction/newlibrary": {
+      "post": {
+        "operationId": "api.reaction.newlibrary",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "New library response"
+          }
+        },
+        "summary": "Add a new reaction library"
+      }
+    },
+    "/reaction/newreactfile": {
+      "post": {
+        "operationId": "api.reaction.newreactfile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "reactionfile": {
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Bulk add response"
+          }
+        },
+        "summary": "Add reactions from a file"
+      }
+    },
+    "/reaction/newreaction": {
+      "post": {
+        "operationId": "api.reaction.newreaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "New reaction response"
+          }
+        },
+        "summary": "Add a new reaction"
+      }
+    },
+    "/reaction/react_maps": {
+      "get": {
+        "operationId": "api.reaction.react_maps",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "react_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Reaction map list"
+          }
+        },
+        "summary": "List maps for a reaction"
+      }
+    },
+    "/reaction/reaction_dl": {
+      "post": {
+        "operationId": "api.reaction.reaction_dl",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV download"
+          }
+        },
+        "summary": "Download reaction list"
+      }
+    },
+    "/reaction/reactiondelete": {
+      "post": {
+        "operationId": "api.reaction.reactiondelete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Delete response"
+          }
+        },
+        "summary": "Delete a reaction"
+      }
+    },
+    "/reaction/reactionmap": {
+      "get": {
+        "operationId": "api.reaction.reactionmap",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "searchtype",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Map response"
+          }
+        },
+        "summary": "Build reaction map"
       }
     },
     "/reaction/search": {
       "get": {
-        "summary": "Search reactions and chemicals",
         "operationId": "api.reaction.search",
         "parameters": [
           {
@@ -2017,581 +3030,24 @@
         ],
         "responses": {
           "200": {
-            "description": "Search response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/batchsearch": {
-      "options": {
-        "summary": "CORS preflight for batch search",
-        "operationId": "api.reaction.map_dl_options",
-        "responses": {
-          "200": {
-            "description": "Preflight response"
-          }
-        }
-      },
-      "post": {
-        "summary": "Batch search reactions and chemicals",
-        "operationId": "api.reaction.batchsearch",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "dtxsids",
-                  "search_level"
-                ],
-                "properties": {
-                  "dtxsids": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
                   },
-                  "search_level": {
-                    "type": "string",
-                    "enum": [
-                      "chemical",
-                      "reaction"
-                    ]
-                  }
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Search response"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Batch search response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/reaction_dl": {
-      "options": {
-        "summary": "CORS preflight for map download",
-        "operationId": "api.reaction.map_dl_options",
-        "responses": {
-          "200": {
-            "description": "Preflight response"
-          }
-        }
-      },
-      "post": {
-        "summary": "Download reaction list",
-        "operationId": "api.reaction.reaction_dl",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "CSV download",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/singlereaction": {
-      "get": {
-        "summary": "Fetch a single reaction",
-        "operationId": "api.reaction.singlereaction",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "reaction_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Reaction response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/table": {
-      "get": {
-        "summary": "Fetch reaction detail table",
-        "operationId": "api.reaction.table",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "reaction_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Detail table response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/reactionmap": {
-      "get": {
-        "summary": "Build reaction map",
-        "operationId": "api.reaction.reactionmap",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "searchtype",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Map response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/mapid": {
-      "get": {
-        "summary": "List reactions for a map",
-        "operationId": "api.reaction.mapid",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "map_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Map response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/mappositions/{map_id}": {
-      "get": {
-        "summary": "Fetch stored reaction-map node positions",
-        "operationId": "api.reaction.map_positions",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "map_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Stored map positions",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete stored reaction-map node positions",
-        "operationId": "api.reaction.delete_map_positions",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "map_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Stored map positions deleted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/mapfix/{map_id}": {
-      "post": {
-        "summary": "Store map element positions",
-        "operationId": "api.reaction.mapfix",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "map_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Map fix response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/map_DL": {
-      "options": {
-        "summary": "CORS preflight for map download",
-        "operationId": "api.reaction.map_dl_options",
-        "responses": {
-          "200": {
-            "description": "Preflight response"
-          }
-        }
-      },
-      "post": {
-        "summary": "Download map reaction list",
-        "operationId": "api.reaction.map_dl",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "CSV download",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/editor/{reaction_id}": {
-      "get": {
-        "summary": "Fetch curator reaction editor payload",
-        "operationId": "api.reaction.reaction_editor",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "reaction_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "lib_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Curator reaction editor payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Login required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Save curator reaction editor changes",
-        "operationId": "api.reaction.reaction_editor_save",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "reaction_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Saved curator reaction editor payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Login required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/visibility": {
-      "post": {
-        "summary": "Update curator-editable reaction visibility",
-        "operationId": "api.reaction.reaction_visibility",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "reaction_id",
-                  "internal_only"
-                ],
-                "properties": {
-                  "reaction_id": {
-                    "type": "integer"
-                  },
-                  "internal_only": {
-                    "type": "boolean"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Visibility update response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Login required",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/reactiondelete": {
-      "post": {
-        "summary": "Delete a reaction",
-        "operationId": "api.reaction.reactiondelete",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Delete response",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/reaction/dbcounts": {
-      "get": {
-        "summary": "Count chemicals and reactions",
-        "operationId": "api.reaction.dbcounts",
-        "responses": {
-          "200": {
-            "description": "Count response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        }
+        "summary": "Search reactions and chemicals"
       }
     },
     "/reaction/searchcounts/{search_input}/{search_type}": {
       "get": {
-        "summary": "Count search results",
         "operationId": "api.reaction.searchcounts",
         "parameters": [
           {
@@ -2613,39 +3069,206 @@
         ],
         "responses": {
           "200": {
-            "description": "Count response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
                   "items": {
                     "type": "object"
-                  }
+                  },
+                  "type": "array"
                 }
               }
-            }
+            },
+            "description": "Count response"
           }
-        }
+        },
+        "summary": "Count search results"
       }
     },
-    "/reaction/download_DB_backup": {
+    "/reaction/singlereaction": {
       "get": {
-        "summary": "Download DB backup",
-        "operationId": "api.reaction.download_db_backup",
+        "operationId": "api.reaction.singlereaction",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "reaction_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Backup response",
             "content": {
-              "text/plain": {
+              "application/json": {
                 "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Reaction response"
+          }
+        },
+        "summary": "Fetch a single reaction"
+      }
+    },
+    "/reaction/table": {
+      "get": {
+        "operationId": "api.reaction.table",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "reaction_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Detail table response"
+          }
+        },
+        "summary": "Fetch reaction detail table"
+      }
+    },
+    "/reaction/template_DL": {
+      "post": {
+        "operationId": "api.reaction.template_dl",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
                   "type": "string"
                 }
               }
-            }
+            },
+            "description": "Template CSV"
           }
-        }
+        },
+        "summary": "Download reaction template"
+      }
+    },
+    "/reaction/visibility": {
+      "post": {
+        "operationId": "api.reaction.reaction_visibility",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "internal_only": {
+                    "type": "boolean"
+                  },
+                  "reaction_id": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "reaction_id",
+                  "internal_only"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Visibility update response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Update curator-editable reaction visibility"
+      }
+    },
+    "/version": {
+      "get": {
+        "operationId": "api.metadata.version",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "build_id": {
+                      "type": "string"
+                    },
+                    "compiled": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Version payload"
+          }
+        },
+        "summary": "Service version information"
       }
     }
   },
-  "components": {}
+  "servers": [
+    {
+      "url": "/api/chet"
+    }
+  ]
 }
