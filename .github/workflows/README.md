@@ -10,6 +10,39 @@ This directory contains CI, coverage, data, release, and manual recording workfl
 
 Tests that need external services should use `skip_if_offline()`, `skip_if_no_key()`, or `skip_if_cran_safe_external()` so CRAN-safe runs do not depend on secrets, network access, local downloads, or production APIs.
 
+## Package Build And Release Workflows
+
+### `build-package.yaml`
+
+Manual artifact-only workflow named Build Package Artifact.
+
+- Builds the source package from the selected workflow branch.
+- Uploads the tarball as a workflow-run artifact retained for 14 days.
+- Does not create or modify a GitHub Release.
+
+### `publish-rolling-package.yaml`
+
+Manual rolling prerelease workflow named Publish Rolling Package.
+
+- Builds the source package from `main`.
+- Creates the `package-latest` prerelease when it does not exist.
+- Moves the rolling tag to the exact `main` commit used for each build.
+- Replaces the matching source tarball asset on later runs.
+- Does not affect GitHub's latest stable release selection.
+
+### `release.yaml`
+
+Manual stable-release workflow named Release.
+
+- Defaults to a semantic patch bump, such as v1.5.0 to v1.5.1.
+- Checks the package before pushing release commits and the version tag.
+- Creates an immutable versioned release with the source tarball attached.
+- Refuses to overwrite an existing version tag or release.
+
+Existing stable release assets should only be replaced by rebuilding the exact
+tagged source. Changed package code requires a new versioned release or the
+rolling `package-latest` prerelease.
+
 ## Main Testing Workflows
 
 ### `cran-readiness.yml`

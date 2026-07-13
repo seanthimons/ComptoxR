@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version_type:
-        description: 'Version component to bump'
+        description: 'Version component for a new immutable release'
         required: true
         default: patch
         type: choice
