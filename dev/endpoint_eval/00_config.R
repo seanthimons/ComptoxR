@@ -101,4 +101,8 @@ ensure_cols <- function(df, cols_with_defaults) {
 # /predictor_models/model/file/) return binary content with no documented
 # response structure. Until EPA publishes documentation for these endpoints,
 # we cannot generate meaningful wrappers. — 2026-02-27
-ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage"
+# NOTE: CHET curation-app surface is excluded (curators sessions, interactive
+# reaction editor, curation writes, binary downloads). These routes are internal
+# curation tooling, not chemical data. All patterns verified CHET-only across
+# schema/*.json. — 2026-07-13
+ENDPOINT_PATTERNS_TO_EXCLUDE <- "render|replace|add|freeze|metadata|version|reports|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp"
