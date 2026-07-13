@@ -2,7 +2,7 @@
 
 # ComptoxR NEWS
 
-## Unreleased (2026-07-12)
+## v1.5.1 (2026-07-13)
 
 #### New features
 
@@ -15,8 +15,8 @@
 
 #### Bug fixes
 
-- add Quarto setup for autonewsmd NEWS rendering
-  ([a8402c1](https://github.com/seanthimons/ComptoxR/tree/a8402c16ef1761ad8093d3bc6c6c9063a4453f88))
+- check for empty render result before running spec post hook
+  ([b15291f](https://github.com/seanthimons/ComptoxR/tree/b15291f39fd40930e8b439e5195cc2c930e17a74))
 - remove dead sysdata regeneration step from schema check
   ([b44ec11](https://github.com/seanthimons/ComptoxR/tree/b44ec111c72ac9ef6baa53de21c73da945d4af5c))
 - read ECOTOX version date from \_metadata in health checks
@@ -47,8 +47,14 @@
 
 #### CI
 
-- align GitHub Actions across R package repos
-  ([e238ada](https://github.com/seanthimons/ComptoxR/tree/e238adad6d36d10fc1db528f720c5f9858fc5063))
+- separate package build and publishing workflows
+  ([f018714](https://github.com/seanthimons/ComptoxR/tree/f0187147757edb9aadb0242bfd305543c80112da))
+- bump the actions group with 7 updates (#255)
+  ([2ed9bd2](https://github.com/seanthimons/ComptoxR/tree/2ed9bd2b4ab328ff541f5c48a663cc8d927daebb))
+- bump the actions group with 7 updates
+  ([32e9db8](https://github.com/seanthimons/ComptoxR/tree/32e9db82beba6750e61a98d4afba98125669404e))
+- align GitHub Actions across R package repos (#254)
+  ([e08f783](https://github.com/seanthimons/ComptoxR/tree/e08f783663fdf1c5d9689e0b90fd82dc7ff7d685))
 - run CRAN readiness tests sequentially with a 30-min timeout (#253)
   ([0d87e7f](https://github.com/seanthimons/ComptoxR/tree/0d87e7feb99330d2f35473a5fc1971ecd801bfd8))
 - remove dead sysdata regeneration step from schema check
@@ -56,6 +62,11 @@
 
 #### Other changes
 
+- bump version to 1.5.1 \[skip ci\]
+  ([c40d3b0](https://github.com/seanthimons/ComptoxR/tree/c40d3b0feb7b72de48ee36da1abf0d2f02af02d5))
+- exclude CHET curation endpoints and non-GET/POST methods from stub
+  generation
+  ([0f1dddc](https://github.com/seanthimons/ComptoxR/tree/0f1dddcf33089fb31e3f8809813fccb1bf3734f1))
 - Update NEWS.md
   ([3de0a3a](https://github.com/seanthimons/ComptoxR/tree/3de0a3a8654e5a71b267b9863a8f931479177e15))
 - Update NEWS.md
@@ -70,7 +81,7 @@
   ([00a28e9](https://github.com/seanthimons/ComptoxR/tree/00a28e91874dd0a9639aadf4170d9580be01d05e))
 
 Full set of changes:
-[`v1.5.0...a8402c1`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...a8402c1)
+[`v1.5.0...v1.5.1`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...v1.5.1)
 
 ## v1.5.0 (2026-07-02)
 
