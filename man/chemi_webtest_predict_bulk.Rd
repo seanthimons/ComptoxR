@@ -2,32 +2,39 @@
 % Please edit documentation in R/chemi_webtest_predict.R
 \name{chemi_webtest_predict_bulk}
 \alias{chemi_webtest_predict_bulk}
-\title{Webtest Predict}
+\title{Predict multiple chemicals with WebTEST}
 \usage{
 chemi_webtest_predict_bulk(
   structures,
   endpoints,
   methods = NULL,
-  format = NULL
+  format = "JSON",
+  output = c("wide", "raw")
 )
 }
 \arguments{
-\item{structures}{Molecule expressed as SMILES or MOL}
+\item{structures}{Chemical structures or resolvable identifiers.}
 
-\item{endpoints}{Endpoint to predict}
+\item{endpoints}{Required WebTEST endpoint identifiers.}
 
-\item{methods}{Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)}
+\item{methods}{Prediction methods: \code{consensus}, \code{hc}, \code{sm}, \code{gc}, or \code{nn}.}
 
-\item{format}{Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF}
+\item{format}{Report format: \code{JSON}, \code{HTML}, or \code{PDF}.}
+
+\item{output}{\code{wide} for normalized JSON predictions or \code{raw} for an
+unformatted response with provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A normalized prediction tibble or raw response.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_webtest_predict_bulk(structures = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_webtest_predict_bulk(
+  structures = c("DTXSID7020182", "CCO"),
+  endpoints = "LC50"
+)
 }
 }

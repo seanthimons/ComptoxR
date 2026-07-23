@@ -154,6 +154,44 @@ stubgen_build_transform_hook <- function(fn, fn_signature) {
   )
 }
 
+stubgen_apply_signature_overrides <- function(fn_signature, overrides) {
+  if (is.null(overrides) || length(overrides) == 0) {
+    return(fn_signature)
+  }
+
+  parsed <- parse(text = paste0("function(", fn_signature %|NA|% "", ") NULL"))[[1]]
+  fn <- eval(parsed)
+  fn_formals <- as.list(formals(fn))
+  missing_value <- as.list(alist(value = ))
+
+  for (param_name in names(overrides)) {
+    if (!param_name %in% names(fn_formals)) {
+      next
+    }
+    override <- overrides[[param_name]]
+    if (isTRUE(override$required)) {
+      fn_formals[param_name] <- missing_value
+    } else if (!is.null(override$default)) {
+      fn_formals[[param_name]] <- parse(text = as.character(override$default))[[1]]
+    }
+  }
+
+  entries <- vapply(
+    names(fn_formals),
+    function(param_name) {
+      value <- fn_formals[param_name]
+      symbol <- stubgen_symbol(param_name)
+      if (identical(unname(value), unname(missing_value))) {
+        symbol
+      } else {
+        paste0(symbol, " = ", paste(deparse(value[[1]], width.cutoff = 500L), collapse = " "))
+      }
+    },
+    character(1)
+  )
+  paste(entries, collapse = ", ")
+}
+
 # Environment for tracking skipped/suspicious endpoints during generation
 .StubGenEnv <- new.env(parent = emptyenv())
 .StubGenEnv$skipped <- list()
@@ -602,13 +640,21 @@ build_function_stub <- function(
       if (!is.null(fn_config$extra_params)) {
         for (param_name in names(fn_config$extra_params)) {
           param_spec <- fn_config$extra_params[[param_name]]
+          formal_names <- stubgen_formal_names(fn_signature)
 
           # 1. Append to fn_signature (same pattern as pagination all_pages)
-          fn_signature_check <- fn_signature %|NA|% ""
-          if (nzchar(fn_signature_check)) {
-            fn_signature <- paste0(fn_signature, ", ", param_name, " = ", param_spec$default)
-          } else {
-            fn_signature <- paste0(param_name, " = ", param_spec$default)
+          if (!param_name %in% formal_names) {
+            param_code <- if (isTRUE(param_spec$required)) {
+              param_name
+            } else {
+              paste0(param_name, " = ", param_spec$default)
+            }
+            fn_signature_check <- fn_signature %|NA|% ""
+            if (nzchar(fn_signature_check)) {
+              fn_signature <- paste0(fn_signature, ", ", param_code)
+            } else {
+              fn_signature <- param_code
+            }
           }
 
           # 2. Add @param doc
@@ -622,6 +668,11 @@ build_function_stub <- function(
           )
         }
       }
+
+      fn_signature <- stubgen_apply_signature_overrides(
+        fn_signature,
+        fn_config$signature_overrides
+      )
     }
   }
 
@@ -694,7 +745,18 @@ build_function_stub <- function(
 '
     )
 
-    return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
+    transformed_result <- paste0(roxygen_header, "\n", fn_body, "\n\n")
+    tryCatch(
+      parse(text = transformed_result),
+      error = function(e) {
+        cli::cli_abort(c(
+          "x" = "Generated invalid transform syntax for function {.fn {fn}}",
+          "i" = "Parse error: {e$message}",
+          "i" = "Endpoint: {endpoint}"
+        ))
+      }
+    )
+    return(transformed_result)
   }
 
   # Build function body based on endpoint type

@@ -124,18 +124,218 @@ chemi_toxprints_calculate_bulk:
   pre_request:
     - resolve_query_to_chemical_records
 
+chemi_descriptors:
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: &descriptor_pre
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - route_descriptor_request
+  post_response: &descriptor_post
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  transform: &descriptor_transform
+    - descriptor_request_transform
+
+chemi_descriptors_bulk:
+  extra_params:
+    type:
+      required: true
+      type: "character"
+      description: "Descriptor engine: padel, rdkit, mordred, or webtest"
+    chemIdType:
+      default: '"AnyId"'
+      type: "character"
+      description: "Input identifier type"
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+    format:
+      default: '"JSON"'
+      type: "character"
+      description: "Response format: JSON, CSV, or TSV"
+    timeout:
+      default: "NULL"
+      type: "numeric"
+      description: "Optional upstream calculation timeout"
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
 chemi_padel:
-  pre_request:
-    - resolve_smiles_identifier
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
+chemi_padel_bulk:
+  extra_params:
+    x2d:
+      default: "TRUE"
+      type: "logical"
+      description: "Calculate two-dimensional descriptors"
+    x3d:
+      default: "FALSE"
+      type: "logical"
+      description: "Calculate three-dimensional descriptors"
+    fp:
+      default: "FALSE"
+      type: "logical"
+      description: "Calculate fingerprints"
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+    timeout:
+      default: "NULL"
+      type: "numeric"
+      description: "Optional upstream calculation timeout"
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
 
 chemi_rdkit:
-  pre_request:
-    - resolve_smiles_identifier
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
+chemi_rdkit_bulk:
+  extra_params:
+    type:
+      default: "NULL"
+      type: "character"
+      description: "Fingerprint type"
+    radius:
+      default: "NULL"
+      type: "integer"
+      description: "ECFP radius"
+    bits:
+      default: "NULL"
+      type: "integer"
+      description: "Number of fingerprint bits"
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
 
 chemi_mordred:
-  pre_request:
-    - resolve_smiles_identifier
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
+chemi_mordred_bulk:
+  extra_params:
+    headers:
+      default: "NULL"
+      type: "logical"
+      description: "Request descriptor headers"
+    inchi:
+      default: "NULL"
+      type: "logical"
+      description: "Include InChI identifiers"
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
 
 chemi_webtest:
-  pre_request:
-    - resolve_smiles_identifier
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
+chemi_webtest_bulk:
+  extra_params:
+    chemIdType:
+      default: '"AnyId"'
+      type: "character"
+      description: "Input identifier type"
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+    format:
+      default: '"JSON"'
+      type: "character"
+      description: "Response format: JSON, CSV, or TSV"
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+  pre_request: *descriptor_pre
+  post_response: *descriptor_post
+  transform: *descriptor_transform
+
+chemi_webtest_predict:
+  signature_overrides:
+    endpoint:
+      required: true
+    format:
+      default: '"JSON"'
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw response"
+  pre_request: &prediction_pre
+    - validate_webtest_prediction_request
+    - resolve_webtest_prediction_inputs
+    - route_webtest_prediction_request
+  post_response: &prediction_post
+    - validate_webtest_prediction_response
+    - recover_webtest_prediction_rows
+    - add_webtest_prediction_provenance
+    - format_webtest_prediction_result
+  transform: &prediction_transform
+    - webtest_prediction_request_transform
+
+chemi_webtest_predict_bulk:
+  signature_overrides:
+    format:
+      default: '"JSON"'
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw response"
+  pre_request: *prediction_pre
+  post_response: *prediction_post
+  transform: *prediction_transform

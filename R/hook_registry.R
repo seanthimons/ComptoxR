@@ -34,6 +34,10 @@ load_hook_config <- function() {
 #' @return Transformed data after all hooks execute, or original data if no hooks registered
 #' @noRd
 run_hook <- function(fn_name, hook_type, data) {
+  if (is.list(data)) {
+    data$fn_name <- fn_name
+  }
+
   # Look up hook chain for this function and type
   hook_chain <- .HookRegistry$config[[fn_name]][[hook_type]]
 

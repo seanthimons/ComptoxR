@@ -3,7 +3,7 @@
 # Hook Configuration Drift Detection (Phase 28)
 # ==============================================================================
 # CI validation script that ensures hook_config.yml references are valid:
-#   1. All referenced hook functions exist in R/hooks/*.R
+#   1. All referenced hook functions exist in R/hooks_*.R
 #   2. Declared extra_params exist in generated stub signatures
 #   3. Hook function names resolve to actual R functions
 #
@@ -82,6 +82,8 @@ for (fn_name in names(hook_config)) {
       }
 
       if (isTRUE(wrapper$found)) {
+        transform_configured <- !is.null(fn_config$transform) &&
+          length(fn_config$transform) > 0
         stage_pattern <- paste0(
           "run_hook\\(\\s*['\"]",
           fn_name,
@@ -89,7 +91,8 @@ for (fn_name in names(hook_config)) {
           hook_type,
           "['\"]"
         )
-        if (!grepl(stage_pattern, wrapper$text, perl = TRUE)) {
+        stage_is_deep <- hook_type %in% c("pre_request", "post_response") && isTRUE(transform_configured)
+        if (!stage_is_deep && !grepl(stage_pattern, wrapper$text, perl = TRUE)) {
           errors <- c(
             errors,
             paste0(
@@ -116,8 +119,12 @@ for (fn_name in names(hook_config)) {
         param_count <- param_count + 1
 
         # Check if parameter appears in function signature
-        # Pattern: param_name = <default_value>
-        param_pattern <- paste0("\\b", param_name, "\\s*=")
+        param_spec <- fn_config$extra_params[[param_name]]
+        param_pattern <- if (isTRUE(param_spec$required)) {
+          paste0("\\b", param_name, "\\b")
+        } else {
+          paste0("\\b", param_name, "\\s*=")
+        }
         if (!grepl(param_pattern, wrapper$text)) {
           errors <- c(
             errors,

@@ -1,99 +1,90 @@
-#' Generate descriptors for one molecule
+#' Calculate RDKit fingerprints for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param type Optional parameter
-#' @param radius Optional parameter
-#' @param bits Optional parameter
-#' @return Returns a tibble with results
+#' This wrapper resolves identifier-like inputs to SMILES before calling the
+#' dedicated service. The raw `/api/rdkit` endpoint does not perform that
+#' wrapper-level resolution.
+#'
+#' @param smiles One SMILES string or resolvable chemical identifier.
+#' @param type Fingerprint type. Currently `ecfp`.
+#' @param radius ECFP radius.
+#' @param bits Number of fingerprint bits.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated one-row tibble or raw payload.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_rdkit(smiles = "DTXSID7020182")
+#' chemi_rdkit(smiles = "DTXSID7020182", bits = 1024)
 #' }
-chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL) {
-  req_data <- run_hook(
+chemi_rdkit <- function(
+  smiles,
+  type = NULL,
+  radius = NULL,
+  bits = NULL,
+  output = c("wide", "raw")
+) {
+  result <- run_hook(
     "chemi_rdkit",
-    "pre_request",
-    list(params = list(smiles = smiles, type = type, radius = radius, bits = bits))
+    "transform",
+    list(
+      params = list(
+        smiles = smiles,
+        type = type,
+        radius = radius,
+        bits = bits,
+        output = output
+      )
+    )
   )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("smiles" %in% names(req_data$params)) {
-    smiles <- req_data$params[["smiles"]]
-  }
-  if ("type" %in% names(req_data$params)) {
-    type <- req_data$params[["type"]]
-  }
-  if ("radius" %in% names(req_data$params)) {
-    radius <- req_data$params[["radius"]]
-  }
-  if ("bits" %in% names(req_data$params)) {
-    bits <- req_data$params[["bits"]]
-  }
-
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(type)) {
-    options[['type']] <- type
-  }
-  if (!is.null(radius)) {
-    options[['radius']] <- radius
-  }
-  if (!is.null(bits)) {
-    options[['bits']] <- bits
-  }
-  result <- generic_request(
-    endpoint = "rdkit",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
-
-#' Generate descriptors for multiple molecules
+#' Calculate RDKit fingerprints for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param chemicals Required parameter
-#' @param options Optional parameter
-#' @return Returns a tibble with results
+#' Explicit engine arguments override duplicate values in `options`.
+#'
+#' @param chemicals Chemical structures or resolvable identifiers.
+#' @param options Named list of additional dedicated RDKit options.
+#' @param type Fingerprint type. Currently `ecfp`.
+#' @param radius ECFP radius.
+#' @param bits Number of fingerprint bits.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated tibble with one row per input or raw payload.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_rdkit_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_rdkit_bulk(c("DTXSID7020182", "CCO"), bits = 1024)
 #' }
-chemi_rdkit_bulk <- function(chemicals, options = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  result <- generic_chemi_request(
-    query = chemicals,
-    endpoint = "rdkit",
-    options = options,
-    tidy = FALSE
+chemi_rdkit_bulk <- function(
+  chemicals,
+  options = NULL,
+  type = NULL,
+  radius = NULL,
+  bits = NULL,
+  output = c("wide", "raw")
+) {
+  result <- run_hook(
+    "chemi_rdkit_bulk",
+    "transform",
+    list(
+      params = list(
+        chemicals = chemicals,
+        options = options,
+        type = type,
+        radius = radius,
+        bits = bits,
+        output = output
+      )
+    )
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

@@ -2,23 +2,39 @@
 % Please edit documentation in R/chemi_mordred.R
 \name{chemi_mordred_bulk}
 \alias{chemi_mordred_bulk}
-\title{Generate descriptors for multiple molecules}
+\title{Calculate Mordred descriptors for multiple molecules}
 \usage{
-chemi_mordred_bulk(chemicals, options = NULL)
+chemi_mordred_bulk(
+  chemicals,
+  options = NULL,
+  headers = NULL,
+  inchi = NULL,
+  output = c("wide", "raw")
+)
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{chemicals}{Chemical structures or resolvable identifiers.}
 
-\item{options}{Optional parameter}
+\item{options}{Named list of additional dedicated Mordred options.}
+
+\item{headers}{Request upstream descriptor headers.}
+
+\item{inchi}{Include InChI identifiers.}
+
+\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
+provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated tibble with one row per input or raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Explicit \code{headers} and \code{inchi} arguments override duplicate values in
+\code{options}.
 }
 \examples{
 \dontrun{
-chemi_mordred_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_mordred_bulk(c("DTXSID7020182", "CCO"))
 }
 }

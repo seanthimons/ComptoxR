@@ -15,6 +15,7 @@ for (wrapper_name in descriptor_smiles_wrappers) {
     nm <- wrapper_name
 
     test_that(paste0(nm, " resolves identifier-like smiles before helper options"), {
+      withr::local_envvar(chemi_burl = "https://cim.sciencedataexperts.com/api")
       captured <- NULL
       local_mocked_bindings(
         chemi_resolver_lookup_bulk = function(...) {
@@ -23,17 +24,23 @@ for (wrapper_name in descriptor_smiles_wrappers) {
             chemical = list(canonicalSmiles = "c1ccccc1")
           ))
         },
-        generic_request = function(...) {
-          captured <<- list(...)
-          list()
+        descriptor_perform_request = function(spec) {
+          captured <<- spec
+          descriptor_contract_response(
+            records = list(descriptor_contract_record(
+              smiles = "c1ccccc1",
+              descriptors = if (identical(spec$engine, "rdkit")) 1:1024 else c(1, 2)
+            )),
+            headers = if (identical(spec$engine, "rdkit")) character() else c("a", "b")
+          )
         },
         .package = "ComptoxR"
       )
 
       get(nm, envir = asNamespace("ComptoxR"))(smiles = "DTXSID7020182")
 
-      expect_identical(captured$options$smiles, "c1ccccc1")
-      expect_false(identical(captured$options$smiles, "DTXSID7020182"))
+      expect_identical(captured$query$smiles, "c1ccccc1")
+      expect_false(identical(captured$query$smiles, "DTXSID7020182"))
     })
   })
 }

@@ -2,32 +2,40 @@
 % Please edit documentation in R/chemi_webtest_predict.R
 \name{chemi_webtest_predict}
 \alias{chemi_webtest_predict}
-\title{Webtest Predict}
+\title{Predict one chemical with WebTEST}
 \usage{
 chemi_webtest_predict(
   smiles,
-  endpoint = NULL,
+  endpoint,
   method = "consensus",
-  format = NULL
+  format = "JSON",
+  output = c("wide", "raw")
 )
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{One SMILES string or resolvable chemical identifier.}
 
-\item{endpoint}{Optional parameter}
+\item{endpoint}{Required WebTEST endpoint identifier, such as \code{LC50}.}
 
-\item{method}{Optional parameter (default: consensus)}
+\item{method}{Prediction method: \code{consensus}, \code{hc}, \code{sm}, \code{gc}, or \code{nn}.}
 
-\item{format}{Optional parameter. Options: JSON, HTML, PDF}
+\item{format}{Report format: \code{JSON}, \code{HTML}, or \code{PDF}.}
+
+\item{output}{\code{wide} for normalized JSON predictions or \code{raw} for an
+unformatted response with provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A normalized prediction tibble or raw response.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+WebTEST currently returns every endpoint and method even when a subset is
+requested. Wide output filters the response to the requested endpoint and
+method.
 }
 \examples{
 \dontrun{
-chemi_webtest_predict(smiles = "DTXSID7020182")
+chemi_webtest_predict("DTXSID7020182", endpoint = "LC50")
 }
 }
