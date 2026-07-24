@@ -159,3 +159,38 @@ tg_collect_wrapper_metadata <- function(root = ".") {
   metadata <- metadata[!vapply(metadata, is.null, logical(1))]
   metadata[sort(names(metadata))]
 }
+
+tg_bespoke_contracts <- function(root = ".") {
+  config <- tg_read_hook_config(root)
+  suites <- lapply(config, `[[`, "bespoke_test")
+  suites <- suites[!vapply(suites, is.null, logical(1))]
+  vapply(suites, as.character, character(1))
+}
+
+tg_validate_bespoke_contracts <- function(metadata, root = ".") {
+  suites <- tg_bespoke_contracts(root)
+  errors <- character()
+
+  for (wrapper in names(suites)) {
+    suite <- suites[[wrapper]]
+    path <- tg_file_path(root, suite)
+    if (!wrapper %in% names(metadata)) {
+      errors <- c(errors, paste0(wrapper, ": configured bespoke wrapper was not found"))
+      next
+    }
+    if (!file.exists(path)) {
+      errors <- c(errors, paste0(wrapper, ": bespoke suite is missing: ", suite))
+      next
+    }
+    text <- tg_read_text(path)
+    if (!grepl("\\btest_that\\s*\\(", text, perl = TRUE)) {
+      errors <- c(errors, paste0(wrapper, ": bespoke suite has no real test_that() contract: ", suite))
+    }
+    wrapper_pattern <- paste0("(?<![A-Za-z0-9_.])", wrapper, "(?![A-Za-z0-9_.])")
+    if (!grepl(wrapper_pattern, text, perl = TRUE)) {
+      errors <- c(errors, paste0(wrapper, ": bespoke suite does not reference the wrapper: ", suite))
+    }
+  }
+
+  list(valid = length(errors) == 0, errors = errors, suites = suites)
+}

@@ -125,6 +125,7 @@ chemi_toxprints_calculate_bulk:
     - resolve_query_to_chemical_records
 
 chemi_descriptors:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -177,6 +178,7 @@ chemi_descriptors:
       options: "req_data$request$options"
 
 chemi_descriptors_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     headers:
       default: "FALSE"
@@ -232,6 +234,7 @@ chemi_descriptors_bulk:
       content_type: "req_data$request$content_type"
 
 chemi_padel:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -268,6 +271,7 @@ chemi_padel:
   request_template: *descriptor_get_request
 
 chemi_padel_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     x2d:
       default: "TRUE"
@@ -315,6 +319,7 @@ chemi_padel_bulk:
   request_template: *descriptor_post_request
 
 chemi_rdkit:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -346,6 +351,7 @@ chemi_rdkit:
   request_template: *descriptor_get_request
 
 chemi_rdkit_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     type:
       default: "NULL"
@@ -384,6 +390,7 @@ chemi_rdkit_bulk:
   request_template: *descriptor_post_request
 
 chemi_mordred:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -412,6 +419,7 @@ chemi_mordred:
   request_template: *descriptor_get_request
 
 chemi_mordred_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     headers:
       default: "NULL"
@@ -446,6 +454,7 @@ chemi_mordred_bulk:
   request_template: *descriptor_post_request
 
 chemi_webtest:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -468,6 +477,7 @@ chemi_webtest:
   request_template: *descriptor_get_request
 
 chemi_webtest_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
   extra_params:
     chemIdType:
       default: '"AnyId"'
@@ -506,6 +516,7 @@ chemi_webtest_bulk:
   request_template: *descriptor_post_request
 
 chemi_webtest_predict:
+  bespoke_test: "tests/testthat/test-hooks-webtest.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
@@ -538,6 +549,7 @@ chemi_webtest_predict:
       options: "req_data$request$options"
 
 chemi_webtest_predict_bulk:
+  bespoke_test: "tests/testthat/test-hooks-webtest.R"
   extra_params:
     output:
       default: 'c("wide", "raw")'
