@@ -4,14 +4,18 @@
 \alias{pubchem_server}
 \title{Set API endpoint for PubChem PUG REST API}
 \usage{
-pubchem_server(server = NULL)
+pubchem_server(server = NULL, url_only = FALSE)
 }
 \arguments{
 \item{server}{Defines what server to target. If \code{NULL}, the server URL is
 reset. Only valid option is \code{1} (Production).}
+
+\item{url_only}{If \code{TRUE}, return the selected URL without changing
+\code{pubchem_burl}.}
 }
 \value{
-Should return the Sys Env variable \code{pubchem_burl}
+The selected URL when \code{url_only = TRUE}; otherwise the configured
+\code{pubchem_burl}.
 }
 \description{
 PubChem only has a production endpoint (no staging or development).

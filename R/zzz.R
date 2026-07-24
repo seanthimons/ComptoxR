@@ -342,41 +342,47 @@ run_setup <- function() {
 #'     \item Development: 3
 #'     \item Scraping: 9
 #'   }
+#' @param url_only If `TRUE`, return the selected URL without changing
+#'   `ctx_burl`.
 #'
-#' @return Should return the Sys Env variable `ctx_burl`.
+#' @return The selected URL when `url_only = TRUE`; otherwise the configured
+#'   `ctx_burl`.
 #' @export
 
-ctx_server <- function(server = NULL) {
+ctx_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("ctx_burl" = "")
     }
   } else {
-    switch(
+    url <- switch(
       as.character(server),
-      "1" = Sys.setenv('ctx_burl' = 'https://comptox.epa.gov/ctx-api/'),
-      "2" = Sys.setenv('ctx_burl' = 'https://ctx-api-stg.ccte.epa.gov/'),
-      "3" = Sys.setenv('ctx_burl' = 'https://ctx-api-dev.ccte.epa.gov/'),
-      "5" = Sys.setenv('ctx_burl' = 'https://comptoxstaging.rtpnc.epa.gov/ctx-api/'),
+      "1" = "https://comptox.epa.gov/ctx-api/",
+      "2" = "https://ctx-api-stg.ccte.epa.gov/",
+      "3" = "https://ctx-api-dev.ccte.epa.gov/",
+      "5" = "https://comptoxstaging.rtpnc.epa.gov/ctx-api/",
       {
         cli::cli_alert_warning("\nInvalid server option selected!\n")
         #cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("ctx_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("ctx_burl" = url)
     Sys.getenv('ctx_burl')
   }
-}
-
-chemi_server_urls <- function() {
-  c(
-    production = "https://hcd.rtpnc.epa.gov/api",
-    staging = "https://cim.sciencedataexperts.com/api",
-    development = "https://cim-dev.sciencedataexperts.com/api"
-  )
 }
 
 #' Set API endpoints for Cheminformatics API endpoints
@@ -392,83 +398,121 @@ chemi_server_urls <- function() {
 #'     \item Staging: 2
 #'     \item Development: 3
 #'   }
+#' @param url_only If `TRUE`, return the selected URL without changing
+#'   `chemi_burl`.
 #'
-#' @return Should return the Sys Env variable `chemi_burl`
+#' @return The selected URL when `url_only = TRUE`; otherwise the configured
+#'   `chemi_burl`.
 #' @export
-chemi_server <- function(server = NULL) {
+chemi_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("chemi_burl" = "")
     }
   } else {
-    server_urls <- chemi_server_urls()
-    switch(
+    url <- switch(
       as.character(server),
-      "1" = Sys.setenv("chemi_burl" = server_urls[["production"]]),
+      "1" = "https://hcd.rtpnc.epa.gov/api",
       # "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
       # "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
-      "2" = Sys.setenv("chemi_burl" = server_urls[["staging"]]),
-      "3" = Sys.setenv("chemi_burl" = server_urls[["development"]]),
+      "2" = "https://cim.sciencedataexperts.com/api",
+      "3" = "https://cim-dev.sciencedataexperts.com/api",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info(
           "Valid options are 1 (Production), 2 (Staging), 3 (Development)."
         )
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("chemi_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("chemi_burl" = url)
     Sys.getenv("chemi_burl")
   }
 }
 
 #' Set API endpoints for EPI Suite API endpoints
 #'
-#' @param server Defines what server to target
+#' @param server Defines what server to target.
+#' @param url_only If `TRUE`, return the selected URL without changing
+#'   `epi_burl`.
 #'
-#' @return Should return the Sys Env variable `epi_burl`
+#' @return The selected URL when `url_only = TRUE`; otherwise the configured
+#'   `epi_burl`.
 #' @export
 
-epi_server <- function(server = NULL) {
+epi_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("epi_burl" = "")
     }
   } else {
-    switch(
+    url <- switch(
       as.character(server),
-      "1" = Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api"),
+      "1" = "https://episuite.dev/EpiWebSuite/api",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info("Valid option is 1 (Production).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("epi_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("epi_burl" = url)
     Sys.getenv("epi_burl")
   }
 }
 
 #' Set API endpoints for ECOTOX API endpoints
 #'
-#' @param server Defines what server to target
+#' @param server Defines what server to target.
+#' @param url_only If `TRUE`, return the selected URL or database path without
+#'   changing `eco_burl` or closing a cached connection.
 #'
-#' @return Should return the Sys Env variable `eco_burl`
+#' @return The selected URL or path when `url_only = TRUE`; otherwise the
+#'   configured `eco_burl`.
 #' @export
 
-eco_server <- function(server = NULL) {
+eco_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   # Close stale connections on every mode switch
-  .eco_close_con()
+  if (!url_only) {
+    .eco_close_con()
+  }
 
   if (!is.null(server) && length(server) != 1) {
     cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
   }
 
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     cli::cli_alert_danger("Server URL reset!")
     Sys.setenv("eco_burl" = "")
   } else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
@@ -476,10 +520,14 @@ eco_server <- function(server = NULL) {
     if (!file.exists(server)) {
       cli::cli_abort("ECOTOX database file not found: {.path {server}}")
     }
-    Sys.setenv("eco_burl" = normalizePath(server, mustWork = TRUE))
+    url <- normalizePath(server, mustWork = TRUE)
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("eco_burl" = url)
     Sys.getenv("eco_burl")
   } else {
-    switch(
+    url <- switch(
       as.character(server),
       "1" = {
         db_path <- eco_path()
@@ -488,21 +536,26 @@ eco_server <- function(server = NULL) {
             "ECOTOX database not found at {.path {db_path}}. Run {.run eco_install()} to set up."
           )
         }
-        Sys.setenv("eco_burl" = db_path)
+        db_path
       },
-      "2" = Sys.setenv("eco_burl" = "http://127.0.0.1:5555"),
-      "3" = Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm"),
-      "4" = Sys.setenv("eco_burl" = "https://hcd.rtpnc.epa.gov/"),
+      "2" = "http://127.0.0.1:5555",
+      "3" = "https://cfpub.epa.gov/ecotox/index.cfm",
+      "4" = "https://hcd.rtpnc.epa.gov/",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info(
           "Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev site), or a file path."
         )
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("eco_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("eco_burl" = url)
     Sys.getenv("eco_burl")
   }
 }
@@ -518,18 +571,29 @@ eco_server <- function(server = NULL) {
 #'     \item Development: 4
 #'   }
 #'   A string argument is treated as a path to a custom `.duckdb` file.
+#' @param url_only If `TRUE`, return the selected URL or database path without
+#'   changing `toxval_burl` or closing a cached connection.
 #'
-#' @return Should return the Sys Env variable `toxval_burl`
+#' @return The selected URL or path when `url_only = TRUE`; otherwise the
+#'   configured `toxval_burl`.
 #' @export
-toxval_server <- function(server = NULL) {
+toxval_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   # Close stale connections on every mode switch
-  .tox_close_con()
+  if (!url_only) {
+    .tox_close_con()
+  }
 
   if (!is.null(server) && length(server) != 1) {
     cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
   }
 
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     cli::cli_alert_danger("Server URL reset!")
     Sys.setenv("toxval_burl" = "")
   } else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
@@ -537,10 +601,14 @@ toxval_server <- function(server = NULL) {
     if (!file.exists(server)) {
       cli::cli_abort("ToxValDB database file not found: {.path {server}}")
     }
-    Sys.setenv("toxval_burl" = normalizePath(server, mustWork = TRUE))
+    url <- normalizePath(server, mustWork = TRUE)
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("toxval_burl" = url)
     Sys.getenv("toxval_burl")
   } else {
-    switch(
+    url <- switch(
       as.character(server),
       "1" = {
         db_path <- toxval_path()
@@ -549,43 +617,59 @@ toxval_server <- function(server = NULL) {
             "ToxValDB database not found at {.path {db_path}}. Run {.run toxval_install()} to set up."
           )
         }
-        Sys.setenv("toxval_burl" = db_path)
+        db_path
       },
-      "2" = Sys.setenv("toxval_burl" = "http://127.0.0.1:5556"),
-      "3" = Sys.setenv("toxval_burl" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"),
-      "4" = Sys.setenv("toxval_burl" = ""),
+      "2" = "http://127.0.0.1:5556",
+      "3" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL",
+      "4" = "",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info(
           "Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev), or a file path."
         )
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("toxval_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("toxval_burl" = url)
     Sys.getenv("toxval_burl")
   }
 }
 
-np_server <- function(server = NULL) {
+np_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("np_burl" = "")
     }
   } else {
-    switch(
+    url <- switch(
       as.character(server),
-      "1" = Sys.setenv("np_burl" = "https://api.naturalproducts.net/latest/"),
+      "1" = "https://api.naturalproducts.net/latest/",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info("Valid options are 1 (Production).")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("np_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("np_burl" = url)
     Sys.getenv("np_burl")
   }
 }
@@ -596,27 +680,41 @@ np_server <- function(server = NULL) {
 #'
 #' @param server Defines what server to target. If `NULL`, the server URL is
 #'   reset. Only valid option is `1` (Production).
+#' @param url_only If `TRUE`, return the selected URL without changing
+#'   `pubchem_burl`.
 #'
-#' @return Should return the Sys Env variable `pubchem_burl`
+#' @return The selected URL when `url_only = TRUE`; otherwise the configured
+#'   `pubchem_burl`.
 #' @export
-pubchem_server <- function(server = NULL) {
+pubchem_server <- function(server = NULL, url_only = FALSE) {
+  if (!rlang::is_bool(url_only)) {
+    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
+  }
   if (is.null(server)) {
+    if (url_only) {
+      return("")
+    }
     {
       cli::cli_alert_danger("Server URL reset!")
       Sys.setenv("pubchem_burl" = "")
     }
   } else {
-    switch(
+    url <- switch(
       as.character(server),
-      "1" = Sys.setenv("pubchem_burl" = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/"),
+      "1" = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info("Valid option is 1 (Production). PubChem has no staging environment.")
-        cli::cli_alert_warning("Server URL reset!")
-        Sys.setenv("pubchem_burl" = "")
+        if (!url_only) {
+          cli::cli_alert_warning("Server URL reset!")
+        }
+        ""
       }
     )
-
+    if (url_only) {
+      return(url)
+    }
+    Sys.setenv("pubchem_burl" = url)
     Sys.getenv("pubchem_burl")
   }
 }

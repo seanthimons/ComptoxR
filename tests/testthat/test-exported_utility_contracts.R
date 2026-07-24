@@ -27,6 +27,60 @@ test_that("server helpers set and reset exported API base URLs", {
   expect_equal(Sys.getenv("pubchem_burl"), "")
 })
 
+test_that("server helpers return URLs without changing process state", {
+  withr::local_envvar(c(
+    ctx_burl = "ctx-sentinel",
+    chemi_burl = "chemi-sentinel",
+    epi_burl = "epi-sentinel",
+    eco_burl = "eco-sentinel",
+    toxval_burl = "toxval-sentinel",
+    np_burl = "np-sentinel",
+    pubchem_burl = "pubchem-sentinel"
+  ))
+
+  cases <- list(
+    list(ctx_server, 2, "ctx_burl", "https://ctx-api-stg.ccte.epa.gov/"),
+    list(chemi_server, 2, "chemi_burl", "https://cim.sciencedataexperts.com/api"),
+    list(epi_server, 1, "epi_burl", "https://episuite.dev/EpiWebSuite/api"),
+    list(eco_server, 2, "eco_burl", "http://127.0.0.1:5555"),
+    list(toxval_server, 2, "toxval_burl", "http://127.0.0.1:5556"),
+    list(np_server, 1, "np_burl", "https://api.naturalproducts.net/latest/"),
+    list(pubchem_server, 1, "pubchem_burl", "https://pubchem.ncbi.nlm.nih.gov/rest/pug/")
+  )
+
+  for (case in cases) {
+    expect_identical(case[[1]](case[[2]], url_only = TRUE), case[[4]])
+    expect_match(Sys.getenv(case[[3]]), "-sentinel$")
+  }
+
+  expect_identical(chemi_server(NULL, url_only = TRUE), "")
+  expect_identical(suppressMessages(chemi_server(99, url_only = TRUE)), "")
+  expect_identical(Sys.getenv("chemi_burl"), "chemi-sentinel")
+  expect_error(chemi_server(1, url_only = NA), "url_only")
+})
+
+test_that("database server URL lookup does not close cached connections", {
+  eco_closed <- FALSE
+  toxval_closed <- FALSE
+  local_mocked_bindings(
+    .eco_close_con = function() {
+      eco_closed <<- TRUE
+    },
+    .tox_close_con = function() {
+      toxval_closed <<- TRUE
+    },
+    .package = "ComptoxR"
+  )
+
+  expect_identical(eco_server(3, url_only = TRUE), "https://cfpub.epa.gov/ecotox/index.cfm")
+  expect_identical(
+    toxval_server(3, url_only = TRUE),
+    "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"
+  )
+  expect_false(eco_closed)
+  expect_false(toxval_closed)
+})
+
 test_that("run_verbose and run_setup have offline-safe configuration contracts", {
   withr::local_envvar(c(
     run_verbose = "",

@@ -7,15 +7,19 @@
 descriptor_selected_server <- function() {
   selected <- Sys.getenv("chemi_burl", unset = "")
   if (!nzchar(selected)) {
-    selected <- chemi_server_urls()[["production"]]
+    selected <- chemi_server(1, url_only = TRUE)
   }
   sub("/+$", "", selected)
 }
 
-descriptor_server_name <- function(url) {
-  urls <- chemi_server_urls()
-  match_index <- match(sub("/+$", "", url), urls)
-  if (is.na(match_index)) "custom" else names(urls)[[match_index]]
+descriptor_server_number <- function(url) {
+  urls <- vapply(
+    1:3,
+    chemi_server,
+    character(1),
+    url_only = TRUE
+  )
+  match(sub("/+$", "", url), sub("/+$", "", urls))
 }
 
 descriptor_scalar_chr <- function(x, default = NA_character_) {
@@ -542,12 +546,12 @@ apply_aggregate_mordred_fallback <- function(data) {
   needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
   if (
     identical(descriptor_engine(data$fn_name, params), "mordred") &&
-      identical(descriptor_server_name(params$.route$server), "production") &&
+      identical(descriptor_server_number(params$.route$server), 1L) &&
       needs_headers
   ) {
     return(descriptor_apply_fallback(
       data,
-      chemi_server_urls()[["staging"]],
+      chemi_server(2, url_only = TRUE),
       "mordred",
       paste(
         "Production aggregate Mordred cannot return validated headers;",
@@ -560,11 +564,11 @@ apply_aggregate_mordred_fallback <- function(data) {
 
 apply_aggregate_rdkit_fallback <- function(data) {
   params <- data$params
-  selected_name <- descriptor_server_name(params$.route$server)
+  selected_server <- descriptor_server_number(params$.route$server)
   needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
   if (
     identical(descriptor_engine(data$fn_name, params), "rdkit") &&
-      (selected_name %in% c("staging", "development") || (identical(selected_name, "production") && needs_headers))
+      (selected_server %in% c(2L, 3L) || (identical(selected_server, 1L) && needs_headers))
   ) {
     return(descriptor_apply_fallback(
       data,
@@ -581,10 +585,10 @@ apply_aggregate_rdkit_fallback <- function(data) {
 }
 
 apply_dedicated_mordred_fallback <- function(data) {
-  if (identical(descriptor_server_name(data$params$.route$server), "production")) {
+  if (identical(descriptor_server_number(data$params$.route$server), 1L)) {
     return(descriptor_apply_fallback(
       data,
-      chemi_server_urls()[["staging"]],
+      chemi_server(2, url_only = TRUE),
       "mordred",
       paste(
         "Production dedicated Mordred is unavailable;",

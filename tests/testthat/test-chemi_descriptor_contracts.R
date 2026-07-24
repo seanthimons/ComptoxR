@@ -292,6 +292,7 @@ test_that("known descriptor fallbacks are independent and carry provenance", {
   expect_identical(vapply(calls, `[[`, character(1), "server"), c(staging, staging, production))
   expect_identical(vapply(calls, `[[`, character(1), "endpoint"), c("mordred", "mordred", "rdkit"))
   expect_identical(calls[[3]]$options$bits, 1024L)
+  expect_identical(Sys.getenv("chemi_burl"), production)
   expect_true(all(aggregate_mordred$fallback_used))
   expect_true(all(dedicated_mordred$fallback_used))
   expect_true(all(aggregate_rdkit$fallback_used))
