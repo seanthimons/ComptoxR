@@ -131,31 +131,26 @@ validate_webtest_prediction_request <- function(data) {
     )
   }
 
+  output <- params$output %||% c("wide", "raw")
+  if (
+    !is.character(output) ||
+      length(output) == 0 ||
+      anyNA(output) ||
+      !output[[1]] %in% c("wide", "raw")
+  ) {
+    webtest_prediction_abort(
+      data,
+      hook_name,
+      "pre_request",
+      "output must be wide or raw."
+    )
+  }
+
   params$format <- "JSON"
+  params$output <- match.arg(output, c("wide", "raw"))
+  params$.inputs <- as.character(inputs)
   data$params <- params
   data
-}
-
-webtest_prediction_resolved_smiles <- function(item) {
-  if (
-    !is.list(item) ||
-      !identical(toupper(as.character(item$result %||% "")), "FOUND") ||
-      !is.list(item$chemical)
-  ) {
-    return(NULL)
-  }
-
-  canonical <- item$chemical$canonicalSmiles %||% item$chemical$smiles
-  if (
-    is.null(canonical) ||
-      length(canonical) == 0 ||
-      is.na(canonical[[1]]) ||
-      !nzchar(canonical[[1]])
-  ) {
-    return(NULL)
-  }
-
-  as.character(canonical[[1]])
 }
 
 webtest_prediction_resolver_item <- function(resolved, identifier, index) {
@@ -178,69 +173,113 @@ webtest_prediction_resolver_item <- function(resolved, identifier, index) {
 #' @return Hook data with identifiers replaced by canonical SMILES.
 #' @noRd
 resolve_webtest_prediction_inputs <- function(data) {
-  input_name <- webtest_prediction_input_name(data$fn_name)
-  inputs <- as.character(data$params[[input_name]])
-  identifier_index <- which(vapply(inputs, looks_like_smiles_identifier, logical(1)))
-
-  if (length(identifier_index) == 0) {
-    return(data)
-  }
-
-  identifiers <- unique(inputs[identifier_index])
-  resolved <- tryCatch(
-    chemi_resolver_lookup_bulk(
-      ids = identifiers,
-      idsType = "AnyId",
-      tidy = FALSE
-    ),
-    error = function(error) list()
-  )
-
-  resolved_smiles <- stats::setNames(
-    lapply(seq_along(identifiers), function(index) {
-      item <- webtest_prediction_resolver_item(
-        resolved,
-        identifiers[[index]],
-        index
-      )
-      webtest_prediction_resolved_smiles(item)
-    }),
-    identifiers
-  )
-  unresolved <- identifiers[vapply(resolved_smiles, is.null, logical(1))]
-
-  if (length(unresolved) > 0) {
-    cli::cli_warn(
-      c(
-        "Unresolved WebTEST identifiers omitted.",
-        "!" = "{paste(unresolved, collapse = ', ')}"
-      ),
-      class = "comptoxr_webtest_resolution_warning",
-      identifiers = unresolved
+  params <- data$params
+  inputs <- params$.inputs
+  input_map <- lapply(seq_along(inputs), function(index) {
+    value <- inputs[[index]]
+    missing <- is.na(value) || !nzchar(trimws(value))
+    list(
+      query = value,
+      input_index = as.integer(index),
+      request_value = if (missing) NA_character_ else value,
+      sid = NA_character_,
+      status = if (missing) "error" else "pending",
+      error = if (missing) "Input is missing or empty." else NA_character_,
+      resolved = FALSE
     )
-  }
+  })
+  resolve_index <- which(vapply(
+    input_map,
+    function(item) !is.na(item$query) && looks_like_smiles_identifier(item$query),
+    logical(1)
+  ))
 
-  keep <- rep(TRUE, length(inputs))
-  for (index in identifier_index) {
-    canonical <- resolved_smiles[[inputs[[index]]]]
-    if (is.null(canonical)) {
-      keep[[index]] <- FALSE
-    } else {
-      inputs[[index]] <- canonical
+  if (length(resolve_index) > 0) {
+    identifiers <- unique(vapply(input_map[resolve_index], `[[`, character(1), "query"))
+    resolved <- tryCatch(
+      chemi_resolver_lookup_bulk(ids = identifiers, idsType = "AnyId", tidy = FALSE),
+      error = function(error) error
+    )
+    unresolved <- character()
+
+    for (index in resolve_index) {
+      identifier <- input_map[[index]]$query
+      item <- if (inherits(resolved, "error")) {
+        NULL
+      } else {
+        webtest_prediction_resolver_item(resolved, identifier, match(identifier, identifiers))
+      }
+      smiles <- descriptor_resolved_smiles(item)
+      if (is.na(smiles) || !nzchar(smiles)) {
+        input_map[[index]]$request_value <- NA_character_
+        input_map[[index]]$status <- "error"
+        input_map[[index]]$error <- if (inherits(resolved, "error")) {
+          paste0("Identifier resolution failed: ", conditionMessage(resolved))
+        } else {
+          paste0("Unable to resolve chemical identifier ", identifier, " to canonical SMILES.")
+        }
+        unresolved <- c(unresolved, identifier)
+      } else {
+        input_map[[index]]$request_value <- smiles
+        input_map[[index]]$sid <- descriptor_resolved_sid(item)
+        input_map[[index]]$resolved <- TRUE
+      }
+    }
+
+    unresolved <- unique(unresolved)
+    if (length(unresolved) > 0) {
+      cli::cli_warn(
+        c(
+          "Unresolved WebTEST identifiers retained as error rows.",
+          "!" = "{paste(unresolved, collapse = ', ')}"
+        ),
+        class = "comptoxr_webtest_resolution_warning",
+        identifiers = unresolved
+      )
     }
   }
 
-  data$params[[input_name]] <- inputs[keep]
-  if (!any(keep)) {
+  params$.input_map <- input_map
+  params$.eligible_index <- which(vapply(
+    input_map,
+    function(item) identical(item$status, "pending"),
+    logical(1)
+  ))
+  data$params <- params
+  if (length(params$.eligible_index) == 0) {
     data$skip_request <- TRUE
     data$result <- list()
   }
   data
 }
 
-webtest_prediction_has_error <- function(value) {
-  is.list(value) &&
-    any(c("error", "errorCode", "message") %in% names(value))
+prepare_webtest_prediction_request <- function(data) {
+  params <- data$params
+  eligible <- params$.input_map[params$.eligible_index]
+  structures <- vapply(eligible, `[[`, character(1), "request_value")
+  endpoints <- params$endpoint %||% params$endpoints
+  methods <- if (identical(data$fn_name, "chemi_webtest_predict")) {
+    params$method
+  } else {
+    params$methods
+  }
+  data$request <- list(
+    endpoint = "webtest/predict",
+    server = descriptor_selected_server(),
+    options = list(
+      smiles = if (length(structures) > 0) structures[[1]] else NA_character_,
+      endpoint = endpoints,
+      method = methods,
+      format = "JSON"
+    ),
+    body = list(
+      structures = I(structures),
+      endpoints = I(endpoints),
+      methods = if (is.null(methods)) NULL else I(methods),
+      format = "JSON"
+    )
+  )
+  data
 }
 
 webtest_prediction_result_location <- function(result) {
@@ -265,134 +304,197 @@ webtest_prediction_result_location <- function(result) {
   stop("Response is not a WebTEST PredictionResult.", call. = FALSE)
 }
 
-webtest_filter_prediction_methods <- function(predictions, requested_methods) {
-  if (is.null(predictions) || is.null(requested_methods)) {
-    return(predictions)
-  }
-  if (!is.list(predictions)) {
-    stop("PredictionResult predicted values must be a list.", call. = FALSE)
-  }
-
-  keep <- vapply(
-    predictions,
-    function(prediction) {
-      if (!is.list(prediction)) {
-        stop("PredictionResult predicted values must contain lists.", call. = FALSE)
-      }
-      method <- prediction$method
-      if (is.null(method) || length(method) != 1 || is.na(method)) {
-        if (webtest_prediction_has_error(prediction)) {
-          return(TRUE)
-        }
-        stop("PredictionResult predicted value is missing its method.", call. = FALSE)
-      }
-      tolower(as.character(method)) %in% requested_methods
-    },
-    logical(1)
-  )
-
-  predictions[keep]
+webtest_prediction_raw <- function(data, prediction_result) {
+  attr(prediction_result, "source_server") <- data$request$server
+  attr(prediction_result, "source_endpoint") <- data$request$endpoint
+  attr(prediction_result, "input_map") <- data$params$.input_map
+  prediction_result
 }
 
-webtest_filter_prediction_endpoint <- function(
-  endpoint,
-  requested_methods
-) {
-  if (!is.list(endpoint)) {
-    stop("PredictionResult endpoints must contain lists.", call. = FALSE)
-  }
-  endpoint$predicted <- webtest_filter_prediction_methods(
-    endpoint$predicted,
-    requested_methods
-  )
-  endpoint
-}
-
-webtest_filter_prediction_chemical <- function(
-  chemical,
-  requested_endpoints,
-  requested_methods
-) {
+webtest_prediction_record_keys <- function(chemical) {
   if (!is.list(chemical)) {
-    stop("PredictionResult chemicals must contain lists.", call. = FALSE)
+    return(character())
   }
-  if (is.null(chemical$endpoints)) {
-    if (webtest_prediction_has_error(chemical)) {
-      return(chemical)
-    }
-    stop("PredictionResult chemical is missing endpoints.", call. = FALSE)
-  }
-  if (!is.list(chemical$endpoints)) {
-    stop("PredictionResult chemical endpoints must be a list.", call. = FALSE)
+  values <- c(
+    descriptor_scalar_chr(chemical$chemicalId),
+    if (is.list(chemical$chemical)) descriptor_scalar_chr(chemical$chemical$sid) else NA_character_,
+    if (is.list(chemical$chemical)) descriptor_scalar_chr(chemical$chemical$smiles) else NA_character_
+  )
+  unique(values[!is.na(values) & nzchar(values)])
+}
+
+webtest_prediction_map_chemicals <- function(chemicals, params) {
+  eligible <- params$.eligible_index
+  mapped <- stats::setNames(rep(list(NULL), length(params$.input_map)), as.character(seq_along(params$.input_map)))
+  if (length(eligible) == 0) {
+    return(mapped)
   }
 
-  keep <- vapply(
-    chemical$endpoints,
-    function(endpoint) {
-      if (
-        !is.list(endpoint) ||
-          !is.list(endpoint$endpoint) ||
-          is.null(endpoint$endpoint$id) ||
-          length(endpoint$endpoint$id) != 1 ||
-          is.na(endpoint$endpoint$id)
-      ) {
+  key_index <- list()
+  for (record_index in seq_along(chemicals)) {
+    for (key in webtest_prediction_record_keys(chemicals[[record_index]])) {
+      if (is.null(key_index[[key]])) {
+        key_index[[key]] <- record_index
+      }
+    }
+  }
+  equal_counts <- length(chemicals) == length(eligible)
+  for (position in seq_along(eligible)) {
+    input_index <- eligible[[position]]
+    input <- params$.input_map[[input_index]]
+    candidates <- unlist(
+      key_index[unique(c(input$query, input$request_value, input$sid))],
+      use.names = FALSE
+    )
+    record_index <- if (length(candidates) > 0) {
+      candidates[[1]]
+    } else if (equal_counts) {
+      position
+    } else {
+      NA_integer_
+    }
+    if (!is.na(record_index) && record_index <= length(chemicals)) {
+      mapped[[as.character(input_index)]] <- chemicals[[record_index]]
+    }
+  }
+  mapped
+}
+
+webtest_prediction_row <- function(
+  data,
+  input,
+  chemical = NULL,
+  endpoint = NULL,
+  prediction = NULL,
+  error = NA_character_
+) {
+  resolved <- if (is.list(chemical$chemical)) chemical$chemical else list()
+  metadata <- if (is.list(endpoint$endpoint)) endpoint$endpoint else list()
+  list(
+    query = input$query,
+    input_index = input$input_index,
+    status = if (is.na(error)) "ok" else "error",
+    error = error,
+    chemical_id = descriptor_scalar_chr(chemical$chemicalId, input$sid),
+    sid = descriptor_scalar_chr(resolved$sid, input$sid),
+    smiles = descriptor_scalar_chr(resolved$smiles, if (isTRUE(input$resolved)) input$request_value else NA_character_),
+    inchi = descriptor_scalar_chr(resolved$inchi),
+    inchi_key = descriptor_scalar_chr(resolved$inchiKey),
+    endpoint_id = descriptor_scalar_chr(metadata$id),
+    endpoint_name = descriptor_scalar_chr(metadata$name),
+    units = descriptor_scalar_chr(metadata$units),
+    log_units = descriptor_scalar_chr(metadata$logUnits),
+    method = descriptor_scalar_chr(prediction$method),
+    value = descriptor_scalar_num(prediction$value),
+    log_value = descriptor_scalar_num(prediction$logValue),
+    source_server = data$request$server,
+    source_endpoint = data$request$endpoint
+  )
+}
+
+webtest_prediction_wide <- function(data, prediction_result) {
+  chemicals <- prediction_result$chemicals
+  if (!is.list(chemicals)) {
+    stop("PredictionResult chemicals must be a list.", call. = FALSE)
+  }
+  mapped <- webtest_prediction_map_chemicals(chemicals, data$params)
+  requested_endpoints <- tolower(as.character(data$params$endpoint %||% data$params$endpoints))
+  methods <- if (identical(data$fn_name, "chemi_webtest_predict_bulk")) {
+    data$params$methods
+  } else {
+    data$params$method
+  }
+  requested_methods <- if (is.null(methods)) NULL else tolower(as.character(methods))
+  rows <- list()
+
+  for (index in seq_along(data$params$.input_map)) {
+    input <- data$params$.input_map[[index]]
+    chemical <- mapped[[as.character(index)]]
+    if (!identical(input$status, "pending")) {
+      rows[[length(rows) + 1L]] <- webtest_prediction_row(data, input, error = input$error)
+      next
+    }
+    if (is.null(chemical)) {
+      rows[[length(rows) + 1L]] <- webtest_prediction_row(
+        data,
+        input,
+        error = "No WebTEST prediction result was returned for this input."
+      )
+      next
+    }
+    embedded_error <- descriptor_error_text(chemical[c("error", "errorCode", "message")])
+    if (!is.na(embedded_error)) {
+      rows[[length(rows) + 1L]] <- webtest_prediction_row(data, input, chemical, error = embedded_error)
+      next
+    }
+    if (!is.list(chemical$endpoints)) {
+      stop("PredictionResult chemical endpoints must be a list.", call. = FALSE)
+    }
+
+    matched <- 0L
+    for (endpoint in chemical$endpoints) {
+      endpoint_id <- if (is.list(endpoint$endpoint)) descriptor_scalar_chr(endpoint$endpoint$id) else NA_character_
+      if (is.na(endpoint_id)) {
         stop("PredictionResult endpoint is missing its endpoint id.", call. = FALSE)
       }
-      tolower(as.character(endpoint$endpoint$id)) %in% requested_endpoints
-    },
-    logical(1)
-  )
+      if (!tolower(endpoint_id) %in% requested_endpoints) {
+        next
+      }
+      if (!is.list(endpoint$predicted)) {
+        stop("PredictionResult predicted values must be a list.", call. = FALSE)
+      }
+      for (prediction in endpoint$predicted) {
+        method <- descriptor_scalar_chr(prediction$method)
+        if (is.na(method)) {
+          stop("PredictionResult predicted value is missing its method.", call. = FALSE)
+        }
+        if (!is.null(requested_methods) && !tolower(method) %in% requested_methods) {
+          next
+        }
+        error <- descriptor_error_text(prediction[c("error", "errorCode", "message")])
+        rows[[length(rows) + 1L]] <- webtest_prediction_row(
+          data,
+          input,
+          chemical,
+          endpoint,
+          prediction,
+          error
+        )
+        matched <- matched + 1L
+      }
+    }
+    if (matched == 0L) {
+      rows[[length(rows) + 1L]] <- webtest_prediction_row(
+        data,
+        input,
+        chemical,
+        error = "No requested WebTEST prediction was returned for this input."
+      )
+    }
+  }
 
-  chemical$endpoints <- lapply(
-    chemical$endpoints[keep],
-    webtest_filter_prediction_endpoint,
-    requested_methods = requested_methods
-  )
-  chemical
+  tibble::as_tibble(do.call(rbind.data.frame, c(rows, list(stringsAsFactors = FALSE))))
 }
 
-#' Filter a WebTEST PredictionResult without reshaping it
+#' Format a WebTEST PredictionResult
 #'
-#' @param data Hook data with a generic-helper result and request parameters.
-#' @return The filtered upstream result.
+#' @param data Hook data with a generic-helper result and complete request state.
+#' @return A wide prediction tibble or the raw PredictionResult with provenance.
 #' @noRd
 filter_webtest_prediction_result <- function(data) {
   hook_name <- "filter_webtest_prediction_result"
 
   tryCatch(
     {
-      located <- webtest_prediction_result_location(data$result)
-      prediction_result <- located$result
-      if (!is.list(prediction_result$chemicals)) {
-        stop("PredictionResult chemicals must be a list.", call. = FALSE)
-      }
-
-      endpoints <- data$params$endpoint %||% data$params$endpoints
-      methods <- data$params$method
-      if (identical(data$fn_name, "chemi_webtest_predict_bulk")) {
-        methods <- data$params$methods
-      }
-      requested_endpoints <- tolower(as.character(endpoints))
-      requested_methods <- if (is.null(methods)) {
-        NULL
+      if (isTRUE(data$skip_request)) {
+        prediction_result <- list(chemicals = list())
       } else {
-        tolower(as.character(methods))
+        prediction_result <- webtest_prediction_result_location(data$result)$result
       }
-
-      prediction_result$chemicals <- lapply(
-        prediction_result$chemicals,
-        webtest_filter_prediction_chemical,
-        requested_endpoints = requested_endpoints,
-        requested_methods = requested_methods
-      )
-
-      if (isTRUE(located$wrapped)) {
-        result <- data$result
-        result[[1]] <- prediction_result
-        result
-      } else {
-        prediction_result
+      if (identical(data$params$output, "raw")) {
+        return(webtest_prediction_raw(data, prediction_result))
       }
+      webtest_prediction_wide(data, prediction_result)
     },
     error = function(parent) {
       webtest_prediction_abort(

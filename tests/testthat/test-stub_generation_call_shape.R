@@ -78,7 +78,7 @@ test_that("stub generation sends object POST bodies through explicit body payloa
   expect_false(grepl("body = body", text, fixed = TRUE))
 })
 
-test_that("stub generation emits the WebTEST flat array request override", {
+test_that("stub generation emits the WebTEST request template with complete hook state", {
   dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
   testthat::skip_if_not(
     file.exists(dev_stub_generation),
@@ -131,7 +131,7 @@ test_that("stub generation emits the WebTEST flat array request override", {
 
   expect_match(
     text,
-    "function(structures, endpoints, methods = NULL, format = \"JSON\")",
+    'function(structures, endpoints, methods = NULL, format = "JSON", output = c("wide", "raw"))',
     fixed = TRUE
   )
   expect_match(
@@ -139,12 +139,10 @@ test_that("stub generation emits the WebTEST flat array request override", {
     'run_hook("chemi_webtest_predict_bulk", "pre_request"',
     fixed = TRUE
   )
-  expect_match(text, "query = structures", fixed = TRUE)
-  expect_match(text, 'sid_label = "structures"', fixed = TRUE)
-  expect_match(text, "array_payload = TRUE", fixed = TRUE)
-  expect_match(text, "endpoints = endpoints", fixed = TRUE)
-  expect_match(text, "methods = methods", fixed = TRUE)
-  expect_match(text, "format = format", fixed = TRUE)
+  expect_match(text, "body = req_data$request$body", fixed = TRUE)
+  expect_match(text, "post_data <- req_data", fixed = TRUE)
+  expect_match(text, "post_data$result <- result", fixed = TRUE)
+  expect_match(text, "result <- req_data$result", fixed = TRUE)
   expect_match(
     text,
     'run_hook("chemi_webtest_predict_bulk", "post_response"',

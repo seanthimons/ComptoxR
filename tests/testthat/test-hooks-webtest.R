@@ -12,27 +12,50 @@ webtest_prediction_result <- function(
   )
 }
 
-test_that("WebTEST prediction interfaces retain their public signatures", {
+test_that("WebTEST prediction interfaces retain generated public contracts", {
   expect_identical(
     names(formals(chemi_webtest_predict)),
-    c("smiles", "endpoint", "method", "format")
+    c("smiles", "endpoint", "method", "format", "output")
   )
   expect_identical(
     names(formals(chemi_webtest_predict_bulk)),
-    c("structures", "endpoints", "methods", "format")
+    c("structures", "endpoints", "methods", "format", "output")
   )
   expect_identical(formals(chemi_webtest_predict)$method, "consensus")
   expect_identical(formals(chemi_webtest_predict)$format, "JSON")
+  expect_identical(formals(chemi_webtest_predict)$output, quote(c("wide", "raw")))
   expect_null(formals(chemi_webtest_predict_bulk)$methods)
   expect_identical(formals(chemi_webtest_predict_bulk)$format, "JSON")
+  expect_identical(formals(chemi_webtest_predict_bulk)$output, quote(c("wide", "raw")))
+
+  source <- paste(readLines(testthat::test_path("..", "..", "R", "chemi_webtest_predict.R")), collapse = "\n")
+  for (fn_name in c("chemi_webtest_predict", "chemi_webtest_predict_bulk")) {
+    definition <- parse(text = source)
+    definition <- Filter(
+      function(expression) {
+        is.call(expression) &&
+          identical(expression[[1]], as.name("<-")) &&
+          identical(as.character(expression[[2]]), fn_name)
+      },
+      as.list(definition)
+    )[[1]]
+    body_text <- paste(deparse(definition[[3]][[3]], width.cutoff = 500L), collapse = "\n")
+    expect_true(
+      regexpr('"pre_request"', body_text, fixed = TRUE)[[1]] < regexpr("generic_", body_text, fixed = TRUE)[[1]],
+      info = fn_name
+    )
+    expect_true(
+      regexpr("generic_", body_text, fixed = TRUE)[[1]] < regexpr('"post_response"', body_text, fixed = TRUE)[[1]],
+      info = fn_name
+    )
+    expect_match(body_text, "post_data <- req_data", fixed = TRUE, info = fn_name)
+  }
 })
 
-test_that("scalar WebTEST prediction resolves identifiers and sends exact GET parameters", {
-  withr::local_envvar(
-    chemi_burl = "https://selected.example/api"
-  )
+test_that("scalar prediction sends exact GET state and returns wide rows", {
+  withr::local_envvar(chemi_burl = "https://selected.example/api")
   captured <- NULL
-  selected_server <- NULL
+  upstream <- webtest_prediction_result()
   local_mocked_bindings(
     chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
       expect_identical(ids, "DTXSID7020182")
@@ -40,13 +63,15 @@ test_that("scalar WebTEST prediction resolves identifiers and sends exact GET pa
       expect_false(tidy)
       list(list(
         result = "FOUND",
-        chemical = list(canonicalSmiles = "resolved-smiles")
+        chemical = list(
+          sid = "DTXSID7020182",
+          canonicalSmiles = "resolved-smiles"
+        )
       ))
     },
     generic_request = function(...) {
       captured <<- list(...)
-      selected_server <<- Sys.getenv(captured$server)
-      list(webtest_prediction_result())
+      list(upstream)
     },
     .package = "ComptoxR"
   )
@@ -60,8 +85,7 @@ test_that("scalar WebTEST prediction resolves identifiers and sends exact GET pa
   expect_identical(captured$endpoint, "webtest/predict")
   expect_identical(captured$method, "GET")
   expect_identical(captured$batch_limit, 0)
-  expect_identical(captured$server, "chemi_burl")
-  expect_identical(selected_server, "https://selected.example/api")
+  expect_identical(captured$server, "https://selected.example/api")
   expect_false(captured$auth)
   expect_false(captured$tidy)
   expect_identical(
@@ -73,16 +97,28 @@ test_that("scalar WebTEST prediction resolves identifiers and sends exact GET pa
       format = "JSON"
     )
   )
-  expect_length(result, 1)
-  expect_identical(result[[1]]$id, "prediction-id")
+  expect_identical(result$query, "DTXSID7020182")
+  expect_identical(result$input_index, 1L)
+  expect_identical(result$status, "ok")
+  expect_identical(result$endpoint_id, "LC50")
+  expect_identical(result$method, "consensus")
+  expect_equal(result$value, 3.241)
+  expect_equal(result$log_value, 4.848)
+  expect_identical(result$source_server, "https://selected.example/api")
+  expect_identical(result$source_endpoint, "webtest/predict")
 })
 
-test_that("bulk WebTEST prediction emits the exact flat array payload inputs", {
+test_that("bulk prediction sends the exact flat JSON body", {
   captured <- NULL
   local_mocked_bindings(
     generic_chemi_request = function(...) {
       captured <<- list(...)
-      webtest_prediction_result()
+      webtest_prediction_result(
+        chemicals = list(
+          webtest_contract_prediction(smiles = "CCO"),
+          webtest_contract_prediction(smiles = "CCC")
+        )
+      )
     },
     .package = "ComptoxR"
   )
@@ -93,91 +129,58 @@ test_that("bulk WebTEST prediction emits the exact flat array payload inputs", {
     methods = c("consensus", "hc")
   )
 
-  payload <- c(
-    stats::setNames(list(as.character(captured$query)), captured$sid_label),
-    captured$options
+  expect_identical(captured$endpoint, "webtest/predict")
+  expect_identical(captured$server, chemi_server(1, url_only = TRUE))
+  expect_false(captured$auth)
+  expect_false(captured$tidy)
+  expect_identical(as.character(captured$body$structures), c("CCO", "CCC"))
+  expect_identical(as.character(captured$body$endpoints), c("LC50", "LD50"))
+  expect_identical(as.character(captured$body$methods), c("consensus", "hc"))
+  expect_identical(captured$body$format, "JSON")
+})
+
+test_that("wide prediction preserves duplicates and emits one row per failure", {
+  embedded_error <- list(
+    chemicalId = "bad[",
+    error = list(code = "INVALID", message = "invalid structure")
   )
-  expect_identical(
-    payload,
-    list(
-      structures = c("CCO", "CCC"),
-      endpoints = c("LC50", "LD50"),
-      methods = c("consensus", "hc"),
-      format = "JSON"
+  no_prediction <- webtest_contract_prediction(chemical_id = "CCC", smiles = "CCC")
+  no_prediction$endpoints <- no_prediction$endpoints[2]
+  upstream <- webtest_prediction_result(
+    chemicals = list(
+      webtest_contract_prediction(chemical_id = "CCO", smiles = "CCO"),
+      embedded_error,
+      no_prediction
     )
   )
-  expect_identical(captured$endpoint, "webtest/predict")
-  expect_identical(captured$sid_label, "structures")
-  expect_true(captured$array_payload)
-  expect_false(captured$tidy)
-})
-
-test_that("bulk methods NULL remains a top-level field and does not filter methods", {
-  captured <- NULL
-  local_mocked_bindings(
-    generic_chemi_request = function(...) {
-      captured <<- list(...)
-      webtest_prediction_result()
-    },
-    .package = "ComptoxR"
-  )
-
-  result <- chemi_webtest_predict_bulk(
-    structures = "CCO",
-    endpoints = "LC50"
-  )
-
-  expect_true("methods" %in% names(captured$options))
-  expect_null(captured$options$methods)
-  expect_identical(
-    vapply(
-      result$chemicals[[1]]$endpoints[[1]]$predicted,
-      `[[`,
-      character(1),
-      "method"
-    ),
-    c("consensus", "hc")
-  )
-})
-
-test_that("unresolved WebTEST identifiers are omitted with one warning", {
-  captured <- NULL
   local_mocked_bindings(
     chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
-      list(
-        list(
-          result = "FOUND",
-          chemical = list(canonicalSmiles = "resolved-smiles")
-        ),
-        list(result = "NOT_FOUND")
-      )
+      list(list(result = "NOT_FOUND"))
     },
-    generic_chemi_request = function(...) {
-      captured <<- list(...)
-      webtest_prediction_result()
-    },
+    generic_chemi_request = function(...) upstream,
     .package = "ComptoxR"
   )
 
-  warnings <- character()
-  result <- withCallingHandlers(
-    chemi_webtest_predict_bulk(
-      structures = c("DTXSID7020182", "CCO", "DTXSIDBAD"),
-      endpoints = "LC50"
+  expect_warning(
+    result <- chemi_webtest_predict_bulk(
+      structures = c("CCO", "CCO", "DTXSIDBAD", "bad[", "CCC"),
+      endpoints = "LC50",
+      methods = c("consensus", "hc")
     ),
-    warning = function(warning) {
-      warnings <<- c(warnings, conditionMessage(warning))
-      invokeRestart("muffleWarning")
-    }
+    "DTXSIDBAD",
+    fixed = TRUE
   )
 
-  expect_length(warnings, 1)
-  expect_match(warnings, "DTXSIDBAD", fixed = TRUE)
-  expect_identical(captured$query, c("resolved-smiles", "CCO"))
-  expect_identical(result$id, "prediction-id")
+  expect_identical(result$query, c("CCO", "CCO", "CCO", "CCO", "DTXSIDBAD", "bad[", "CCC"))
+  expect_identical(result$input_index, c(1L, 1L, 2L, 2L, 3L, 4L, 5L))
+  expect_identical(result$status, c("ok", "ok", "ok", "ok", "error", "error", "error"))
+  expect_identical(result$method[1:4], rep(c("consensus", "hc"), 2))
+  expect_match(result$error[[5]], "Unable to resolve")
+  expect_match(result$error[[6]], "INVALID: invalid structure")
+  expect_match(result$error[[7]], "No requested WebTEST prediction")
 })
 
-test_that("all-unresolved WebTEST inputs short-circuit the request", {
+test_that("all-invalid prediction skips HTTP and still formats error rows", {
   called <- FALSE
   local_mocked_bindings(
     chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
@@ -192,25 +195,22 @@ test_that("all-unresolved WebTEST inputs short-circuit the request", {
 
   expect_warning(
     result <- chemi_webtest_predict_bulk(
-      structures = c("DTXSIDBAD", "DTXCIDBAD"),
+      c("DTXSIDBAD", "DTXCIDBAD"),
       endpoints = "LC50"
     ),
     "DTXSIDBAD, DTXCIDBAD",
     fixed = TRUE
   )
 
-  expect_identical(result, list())
   expect_false(called)
+  expect_identical(result$query, c("DTXSIDBAD", "DTXCIDBAD"))
+  expect_identical(result$input_index, 1:2)
+  expect_true(all(result$status == "error"))
+  expect_true(all(result$source_endpoint == "webtest/predict"))
 })
 
-test_that("prediction filtering preserves metadata, nesting, and embedded errors", {
-  embedded_error <- list(
-    chemicalId = "unavailable",
-    error = list(code = "NO_MODEL", message = "No prediction available")
-  )
-  upstream <- webtest_prediction_result(
-    chemicals = list(webtest_contract_prediction(), embedded_error)
-  )
+test_that("raw prediction preserves the unfiltered PredictionResult", {
+  upstream <- webtest_prediction_result()
   local_mocked_bindings(
     generic_chemi_request = function(...) upstream,
     .package = "ComptoxR"
@@ -218,27 +218,31 @@ test_that("prediction filtering preserves metadata, nesting, and embedded errors
 
   result <- chemi_webtest_predict_bulk(
     structures = "CCO",
-    endpoints = "lc50",
-    methods = "CONSENSUS"
+    endpoints = "LC50",
+    methods = "consensus",
+    output = "raw"
   )
 
-  expect_identical(result$id, upstream$id)
-  expect_identical(result$predictionTime, upstream$predictionTime)
-  expect_identical(result$software, upstream$software)
-  expect_identical(result$softwareVersion, upstream$softwareVersion)
-  expect_identical(result$condition, upstream$condition)
-  expect_identical(result$requestMetadata, upstream$requestMetadata)
-  expect_identical(result$chemicals[[2]], embedded_error)
-  expect_length(result$chemicals[[1]]$endpoints, 1)
-  expect_identical(
-    result$chemicals[[1]]$endpoints[[1]]$endpoint$id,
-    "LC50"
+  payload <- result
+  attr(payload, "source_server") <- NULL
+  attr(payload, "source_endpoint") <- NULL
+  attr(payload, "input_map") <- NULL
+  expect_identical(payload, upstream)
+  expect_length(result$chemicals[[1]]$endpoints, 2)
+  expect_length(result$chemicals[[1]]$endpoints[[1]]$predicted, 2)
+  expect_identical(attr(result, "source_endpoint"), "webtest/predict")
+  expect_length(attr(result, "input_map"), 1)
+})
+
+test_that("bulk methods NULL retains every returned method in wide output", {
+  local_mocked_bindings(
+    generic_chemi_request = function(...) webtest_prediction_result(),
+    .package = "ComptoxR"
   )
-  expect_length(result$chemicals[[1]]$endpoints[[1]]$predicted, 1)
-  expect_identical(
-    result$chemicals[[1]]$endpoints[[1]]$predicted[[1]]$method,
-    "consensus"
-  )
+
+  result <- chemi_webtest_predict_bulk("CCO", endpoints = "LC50")
+
+  expect_identical(result$method, c("consensus", "hc"))
 })
 
 test_that("WebTEST request validation throws identifiable pre-request conditions", {
@@ -261,21 +265,18 @@ test_that("WebTEST request validation throws identifiable pre-request conditions
     },
     format = function() {
       chemi_webtest_predict("CCO", endpoint = "LC50", format = "HTML")
+    },
+    output = function() {
+      chemi_webtest_predict("CCO", endpoint = "LC50", output = "nested")
     }
   )
 
   for (case in cases) {
     condition <- rlang::catch_cnd(case())
-    expect_s3_class(
-      condition,
-      "comptoxr_webtest_pre_request_error"
-    )
+    expect_s3_class(condition, "comptoxr_webtest_pre_request_error")
     expect_s3_class(condition, "comptoxr_webtest_error")
     expect_identical(condition$function_name, "chemi_webtest_predict")
-    expect_identical(
-      condition$hook_name,
-      "validate_webtest_prediction_request"
-    )
+    expect_identical(condition$hook_name, "validate_webtest_prediction_request")
   }
   expect_false(called)
 })
@@ -305,29 +306,13 @@ test_that("malformed responses throw post-response conditions with parents", {
   )
 
   condition <- rlang::catch_cnd(
-    chemi_webtest_predict_bulk(
-      structures = "CCO",
-      endpoints = "LC50"
-    )
+    chemi_webtest_predict_bulk("CCO", endpoints = "LC50")
   )
 
-  expect_s3_class(
-    condition,
-    "comptoxr_webtest_post_response_error"
-  )
+  expect_s3_class(condition, "comptoxr_webtest_post_response_error")
   expect_s3_class(condition, "comptoxr_webtest_error")
-  expect_identical(
-    condition$function_name,
-    "chemi_webtest_predict_bulk"
-  )
-  expect_identical(
-    condition$hook_name,
-    "filter_webtest_prediction_result"
-  )
+  expect_identical(condition$function_name, "chemi_webtest_predict_bulk")
+  expect_identical(condition$hook_name, "filter_webtest_prediction_result")
   expect_s3_class(condition$parent, "error")
-  expect_match(
-    conditionMessage(condition$parent),
-    "chemicals must be a list",
-    fixed = TRUE
-  )
+  expect_match(conditionMessage(condition$parent), "chemicals must be a list", fixed = TRUE)
 })

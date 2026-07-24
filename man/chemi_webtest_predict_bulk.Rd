@@ -8,7 +8,8 @@ chemi_webtest_predict_bulk(
   structures,
   endpoints,
   methods = NULL,
-  format = "JSON"
+  format = "JSON",
+  output = c("wide", "raw")
 )
 }
 \arguments{
@@ -20,16 +21,19 @@ chemi_webtest_predict_bulk(
 or \code{nn}. \code{NULL} retains every method returned by WebTEST.}
 
 \item{format}{Response format. Only \code{JSON} is supported.}
+
+\item{output}{Output contract: \code{wide} for normalized rows or \code{raw} for the
+upstream \code{PredictionResult} with source and input-map attributes.}
 }
 \value{
-A filtered upstream WebTEST \code{PredictionResult}.
+A normalized tibble or raw WebTEST \code{PredictionResult}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-WebTEST may return endpoints and prediction methods beyond those requested.
-This function filters those nested records while preserving the upstream
-\code{PredictionResult} structure and metadata.
+Wide output preserves every input position and expands successful inputs to
+one row per requested prediction. Raw output preserves the upstream
+\code{PredictionResult}.
 }
 \examples{
 \dontrun{

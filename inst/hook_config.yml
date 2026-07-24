@@ -506,6 +506,12 @@ chemi_webtest_bulk:
   request_template: *descriptor_post_request
 
 chemi_webtest_predict:
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      order: 5
   signature_overrides:
     endpoint:
       required: true
@@ -516,10 +522,28 @@ chemi_webtest_predict:
   pre_request: &prediction_pre
     - validate_webtest_prediction_request
     - resolve_webtest_prediction_inputs
+    - prepare_webtest_prediction_request
   post_response: &prediction_post
     - filter_webtest_prediction_result
+  request_template:
+    helper: generic_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      method: '"GET"'
+      batch_limit: "0"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      options: "req_data$request$options"
 
 chemi_webtest_predict_bulk:
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      order: 5
   signature_overrides:
     endpoints:
       required: true
@@ -530,15 +554,17 @@ chemi_webtest_predict_bulk:
     - endpoints
     - methods
     - format
+    - output
   hook_missing_params:
     - endpoints
-  request_override:
-    query: structures
-    sid_label: structures
-    array_payload: true
-    top_level:
-      - endpoints
-      - methods
-      - format
   pre_request: *prediction_pre
   post_response: *prediction_post
+  request_template:
+    helper: generic_chemi_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      body: "req_data$request$body"
