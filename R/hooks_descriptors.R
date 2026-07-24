@@ -433,7 +433,6 @@ descriptor_refresh_request <- function(data) {
   }
   is_bulk <- descriptor_is_bulk(fn_name)
   request <- list(
-    helper = if (is_bulk) "generic_chemi_request" else "generic_request",
     endpoint = route$endpoint,
     server = route$server,
     method = if (is_bulk) "POST" else "GET",
@@ -492,7 +491,6 @@ descriptor_prepare_request <- function(data, mode, endpoint, format = NULL) {
     endpoint = endpoint,
     mode = mode,
     fallback_used = FALSE,
-    fallback_reason = NA_character_,
     format = format %||% params$format
   )
   data$params <- params
@@ -532,7 +530,6 @@ descriptor_apply_fallback <- function(
   params$.route$mode <- "dedicated"
   params$.route$format <- "JSON"
   params$.route$fallback_used <- TRUE
-  params$.route$fallback_reason <- reason
   if (!is.null(engine_options)) {
     params$.engine_options <- engine_options
   }
@@ -729,27 +726,57 @@ recover_descriptor_rows <- function(data) {
   mapped <- stats::setNames(rep(list(NULL), length(input_map)), as.character(seq_along(input_map)))
 
   if (is.na(data$response_error)) {
+    first_index <- function(keys) {
+      keys <- as.character(keys)
+      valid <- which(!is.na(keys) & nzchar(keys))
+      if (length(valid) == 0) {
+        return(integer())
+      }
+      unique_keys <- unique(keys[valid])
+      stats::setNames(
+        valid[match(unique_keys, keys[valid])],
+        unique_keys
+      )
+    }
+    ordinals <- vapply(
+      records,
+      function(record) {
+        suppressWarnings(as.integer(descriptor_scalar_num(record$ordinal)))
+      },
+      integer(1)
+    )
+    ids <- vapply(
+      records,
+      function(record) {
+        descriptor_scalar_chr(record$id)
+      },
+      character(1)
+    )
+    smiles <- vapply(
+      records,
+      function(record) {
+        descriptor_scalar_chr(record$smiles)
+      },
+      character(1)
+    )
+    ordinal_index <- first_index(ifelse(is.na(ordinals), NA_character_, as.character(ordinals + 1L)))
+    id_index <- first_index(ids)
+    smiles_index <- first_index(smiles)
+
     for (eligible_position in seq_along(eligible)) {
       input_index <- eligible[[eligible_position]]
       input_item <- input_map[[input_index]]
-
-      candidate_indices <- which(vapply(
-        records,
-        function(record) {
-          ordinal <- suppressWarnings(as.integer(descriptor_scalar_num(record$ordinal)))
-          if (!is.na(ordinal)) {
-            return(identical(ordinal + 1L, eligible_position))
-          }
-          identical(descriptor_scalar_chr(record$id), input_item$request_value) ||
-            identical(descriptor_scalar_chr(record$smiles), input_item$request_value)
-        },
-        logical(1)
-      ))
+      candidate_indices <- c(
+        unname(ordinal_index[as.character(eligible_position)]),
+        unname(id_index[input_item$request_value]),
+        unname(smiles_index[input_item$request_value])
+      )
+      candidate_indices <- candidate_indices[!is.na(candidate_indices)]
       if (length(candidate_indices) == 0 && equal_counts) {
         candidate_indices <- eligible_position
       }
       if (length(candidate_indices) > 0 && candidate_indices[[1]] <= length(records)) {
-        mapped[[as.character(input_index)]] <- records[[candidate_indices[[1]]]]
+        mapped[[as.character(input_index)]] <- records[[min(candidate_indices)]]
       }
     }
   }
@@ -814,19 +841,23 @@ format_descriptor_result <- function(data) {
   }
 
   headers <- data$descriptor_headers %||% character()
+  row_count <- length(data$params$.input_map)
   fixed <- list(
-    query = character(),
-    input_index = integer(),
-    status = character(),
-    error = character(),
-    smiles = character(),
-    inchi = character(),
-    inchi_key = character(),
-    source_server = character(),
-    source_endpoint = character(),
-    fallback_used = logical()
+    query = rep(NA_character_, row_count),
+    input_index = seq_len(row_count),
+    status = rep(NA_character_, row_count),
+    error = rep(NA_character_, row_count),
+    smiles = rep(NA_character_, row_count),
+    inchi = rep(NA_character_, row_count),
+    inchi_key = rep(NA_character_, row_count),
+    source_server = rep(data$provenance$source_server, row_count),
+    source_endpoint = rep(data$provenance$source_endpoint, row_count),
+    fallback_used = rep(data$provenance$fallback_used, row_count)
   )
-  descriptor_columns <- stats::setNames(rep(list(vector("list", 0)), length(headers)), headers)
+  descriptor_columns <- stats::setNames(
+    rep(list(rep(list(NA), row_count)), length(headers)),
+    headers
+  )
   columns <- c(fixed, descriptor_columns)
 
   for (i in seq_along(data$params$.input_map)) {
@@ -844,31 +875,22 @@ format_descriptor_result <- function(data) {
     }
 
     status <- if (is.na(row_error)) "ok" else "error"
-    columns$query <- c(columns$query, input$query)
-    columns$input_index <- c(columns$input_index, input$input_index)
-    columns$status <- c(columns$status, status)
-    columns$error <- c(columns$error, row_error)
-    columns$smiles <- c(
-      columns$smiles,
-      if (is.null(record)) {
-        if (isTRUE(input$resolved)) input$request_value else NA_character_
-      } else {
-        descriptor_scalar_chr(record$smiles, input$request_value)
-      }
-    )
-    columns$inchi <- c(columns$inchi, if (is.null(record)) NA_character_ else descriptor_scalar_chr(record$inchi))
-    columns$inchi_key <- c(
-      columns$inchi_key,
-      if (is.null(record)) NA_character_ else descriptor_scalar_chr(record$inchiKey)
-    )
-    columns$source_server <- c(columns$source_server, data$provenance$source_server)
-    columns$source_endpoint <- c(columns$source_endpoint, data$provenance$source_endpoint)
-    columns$fallback_used <- c(columns$fallback_used, data$provenance$fallback_used)
+    columns$query[[i]] <- input$query
+    columns$input_index[[i]] <- input$input_index
+    columns$status[[i]] <- status
+    columns$error[[i]] <- row_error
+    columns$smiles[[i]] <- if (is.null(record)) {
+      if (isTRUE(input$resolved)) input$request_value else NA_character_
+    } else {
+      descriptor_scalar_chr(record$smiles, input$request_value)
+    }
+    columns$inchi[[i]] <- if (is.null(record)) NA_character_ else descriptor_scalar_chr(record$inchi)
+    columns$inchi_key[[i]] <- if (is.null(record)) NA_character_ else descriptor_scalar_chr(record$inchiKey)
 
     descriptors <- if (!is.null(record) && is.na(row_error)) record$descriptors else NULL
     for (j in seq_along(headers)) {
       value <- if (is.null(descriptors)) NA else descriptors[[j]]
-      columns[[10L + j]] <- c(columns[[10L + j]], list(value))
+      columns[[10L + j]][[i]] <- value
     }
   }
 

@@ -164,6 +164,36 @@ test_that("bulk wide output preserves duplicates, invalid inputs, and ordinals",
   expect_match(result$error[[4]], "missing or empty")
 })
 
+test_that("large descriptor responses map once by ordinal and identifier", {
+  count <- 5000L
+  inputs <- sprintf("input-%05d", seq_len(count))
+  local_mocked_bindings(
+    generic_chemi_request = function(...) {
+      descriptor_contract_response(
+        records = rev(lapply(seq_len(count), function(index) {
+          descriptor_contract_record(
+            smiles = inputs[[index]],
+            descriptors = index,
+            ordinal = index - 1L
+          )
+        })),
+        headers = "value"
+      )
+    },
+    .package = "ComptoxR"
+  )
+
+  result <- chemi_descriptors_bulk(
+    inputs,
+    type = "padel",
+    chemIdType = "SMILES"
+  )
+
+  expect_identical(result$query, inputs)
+  expect_identical(result$input_index, seq_len(count))
+  expect_identical(result$value, seq_len(count))
+})
+
 test_that("all-invalid input skips HTTP but still runs descriptor post-hooks", {
   called <- FALSE
   local_mocked_bindings(
