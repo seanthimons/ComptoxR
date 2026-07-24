@@ -310,32 +310,34 @@ chemi_webtest_predict:
       required: true
     format:
       default: '"JSON"'
-  extra_params:
-    output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: normalized wide tibble or raw response"
+  hook_missing_params:
+    - endpoint
   pre_request: &prediction_pre
     - validate_webtest_prediction_request
     - resolve_webtest_prediction_inputs
-    - route_webtest_prediction_request
   post_response: &prediction_post
-    - validate_webtest_prediction_response
-    - recover_webtest_prediction_rows
-    - add_webtest_prediction_provenance
-    - format_webtest_prediction_result
-  transform: &prediction_transform
-    - webtest_prediction_request_transform
+    - filter_webtest_prediction_result
 
 chemi_webtest_predict_bulk:
   signature_overrides:
+    endpoints:
+      required: true
     format:
       default: '"JSON"'
-  extra_params:
-    output:
-      default: 'c("wide", "raw")'
-      type: "character"
-      description: "Output contract: normalized wide tibble or raw response"
+  signature_order:
+    - structures
+    - endpoints
+    - methods
+    - format
+  hook_missing_params:
+    - endpoints
+  request_override:
+    query: structures
+    sid_label: structures
+    array_payload: true
+    top_level:
+      - endpoints
+      - methods
+      - format
   pre_request: *prediction_pre
   post_response: *prediction_post
-  transform: *prediction_transform

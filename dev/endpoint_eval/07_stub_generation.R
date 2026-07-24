@@ -90,6 +90,21 @@ stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_param
   } else {
     ""
   }
+  hook_missing_params <- intersect(
+    fn_config$hook_missing_params %||% character(),
+    formal_names
+  )
+  missing_lines <- paste0(
+    vapply(
+      hook_missing_params,
+      function(param_name) {
+        symbol <- stubgen_symbol(param_name)
+        paste0("  if (missing(", symbol, ")) ", symbol, " <- NULL\n")
+      },
+      character(1)
+    ),
+    collapse = ""
+  )
 
   writeback <- paste0(
     vapply(
@@ -114,6 +129,7 @@ stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_param
 
   paste0(
     init_lines,
+    missing_lines,
     "  req_data <- run_hook(\"",
     fn,
     "\", \"pre_request\", list(params = ",
@@ -190,6 +206,112 @@ stubgen_apply_signature_overrides <- function(fn_signature, overrides) {
     character(1)
   )
   paste(entries, collapse = ", ")
+}
+
+stubgen_apply_signature_order <- function(fn_signature, signature_order) {
+  if (is.null(signature_order) || length(signature_order) == 0) {
+    return(fn_signature)
+  }
+
+  parsed <- parse(text = paste0("function(", fn_signature %|NA|% "", ") NULL"))[[1]]
+  fn_formals <- as.list(formals(eval(parsed)))
+  unknown <- setdiff(signature_order, names(fn_formals))
+  if (length(unknown) > 0) {
+    cli::cli_abort(
+      "Unknown signature_order parameter{?s}: {paste(unknown, collapse = ', ')}."
+    )
+  }
+
+  ordered_names <- c(signature_order, setdiff(names(fn_formals), signature_order))
+  missing_value <- as.list(alist(value = ))
+  entries <- vapply(
+    ordered_names,
+    function(param_name) {
+      value <- fn_formals[param_name]
+      symbol <- stubgen_symbol(param_name)
+      if (identical(unname(value), unname(missing_value))) {
+        symbol
+      } else {
+        paste0(
+          symbol,
+          " = ",
+          paste(deparse(value[[1]], width.cutoff = 500L), collapse = " ")
+        )
+      }
+    },
+    character(1)
+  )
+  paste(entries, collapse = ", ")
+}
+
+stubgen_build_request_override <- function(
+  fn,
+  fn_signature,
+  endpoint,
+  wrapper_fn,
+  request_override,
+  hook_pre_request,
+  hook_post_response,
+  pagination_call_params
+) {
+  if (is.null(request_override)) {
+    return(NULL)
+  }
+  if (
+    !identical(wrapper_fn, "generic_chemi_request") ||
+      !isTRUE(request_override$array_payload)
+  ) {
+    cli::cli_abort(
+      "Unsupported request override configured for {.fn {fn}}."
+    )
+  }
+
+  formal_names <- stubgen_formal_names(fn_signature)
+  query_param <- request_override$query
+  sid_label <- request_override$sid_label %||% query_param
+  top_level <- request_override$top_level %||% character()
+  referenced_params <- c(query_param, top_level)
+  unknown <- setdiff(referenced_params, formal_names)
+  if (length(unknown) > 0) {
+    cli::cli_abort(
+      "Request override for {.fn {fn}} references unknown parameter{?s}: {paste(unknown, collapse = ', ')}."
+    )
+  }
+
+  option_lines <- paste0(
+    "    ",
+    vapply(
+      top_level,
+      function(param_name) {
+        paste0(stubgen_symbol(param_name), " = ", stubgen_symbol(param_name))
+      },
+      character(1)
+    ),
+    collapse = ",\n"
+  )
+
+  glue::glue(
+    '
+{fn} <- function({fn_signature}) {{
+{hook_pre_request}  request_options <- list(
+{option_lines}
+  )
+  result <- generic_chemi_request(
+    query = {stubgen_symbol(query_param)},
+    endpoint = "{endpoint}",
+    options = request_options,
+    sid_label = "{sid_label}",
+    array_payload = TRUE,
+    tidy = FALSE{pagination_call_params}
+  )
+
+{hook_post_response}  # Additional post-processing can be added here
+
+  return(result)
+}}
+
+'
+  )
 }
 
 # Environment for tracking skipped/suspicious endpoints during generation
@@ -629,6 +751,7 @@ build_function_stub <- function(
   # =========================================================================
   hook_config_path <- here::here("inst", "hook_config.yml")
   has_hooks <- FALSE
+  fn_config <- NULL
 
   if (file.exists(hook_config_path)) {
     hook_config <- yaml::read_yaml(hook_config_path)
@@ -673,6 +796,10 @@ build_function_stub <- function(
         fn_signature,
         fn_config$signature_overrides
       )
+      fn_signature <- stubgen_apply_signature_order(
+        fn_signature,
+        fn_config$signature_order
+      )
     }
   }
 
@@ -699,7 +826,9 @@ build_function_stub <- function(
       hook_transform <- stubgen_build_transform_hook(fn, fn_signature)
     }
 
-    hook_extra_params <- if (identical(wrapper_fn, "generic_chemi_request")) "chemicals" else character(0)
+    uses_chemical_objects <- identical(wrapper_fn, "generic_chemi_request") &&
+      !isTRUE(fn_config$request_override$array_payload)
+    hook_extra_params <- if (uses_chemical_objects) "chemicals" else character(0)
     hook_pre_request <- stubgen_build_pre_hook(fn, fn_config, fn_signature, additional_params = hook_extra_params)
     hook_post_response <- stubgen_build_post_hook(fn, fn_config, fn_signature)
     if (nzchar(hook_pre_request) && identical(wrapper_fn, "generic_chemi_request")) {
@@ -757,6 +886,36 @@ build_function_stub <- function(
       }
     )
     return(transformed_result)
+  }
+
+  request_override_body <- stubgen_build_request_override(
+    fn = fn,
+    fn_signature = fn_signature,
+    endpoint = endpoint,
+    wrapper_fn = wrapper_fn,
+    request_override = fn_config$request_override,
+    hook_pre_request = hook_pre_request,
+    hook_post_response = hook_post_response,
+    pagination_call_params = pagination_call_params
+  )
+  if (!is.null(request_override_body)) {
+    override_result <- paste0(
+      roxygen_header,
+      "\n",
+      request_override_body,
+      "\n\n"
+    )
+    tryCatch(
+      parse(text = override_result),
+      error = function(e) {
+        cli::cli_abort(c(
+          "x" = "Generated invalid request override syntax for function {.fn {fn}}",
+          "i" = "Parse error: {e$message}",
+          "i" = "Endpoint: {endpoint}"
+        ))
+      }
+    )
+    return(override_result)
   }
 
   # Build function body based on endpoint type

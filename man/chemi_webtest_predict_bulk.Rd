@@ -8,8 +8,7 @@ chemi_webtest_predict_bulk(
   structures,
   endpoints,
   methods = NULL,
-  format = "JSON",
-  output = c("wide", "raw")
+  format = "JSON"
 )
 }
 \arguments{
@@ -17,18 +16,20 @@ chemi_webtest_predict_bulk(
 
 \item{endpoints}{Required WebTEST endpoint identifiers.}
 
-\item{methods}{Prediction methods: \code{consensus}, \code{hc}, \code{sm}, \code{gc}, or \code{nn}.}
+\item{methods}{Optional prediction methods: \code{consensus}, \code{hc}, \code{sm}, \code{gc},
+or \code{nn}. \code{NULL} retains every method returned by WebTEST.}
 
-\item{format}{Report format: \code{JSON}, \code{HTML}, or \code{PDF}.}
-
-\item{output}{\code{wide} for normalized JSON predictions or \code{raw} for an
-unformatted response with provenance attributes.}
+\item{format}{Response format. Only \code{JSON} is supported.}
 }
 \value{
-A normalized prediction tibble or raw response.
+A filtered upstream WebTEST \code{PredictionResult}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+WebTEST may return endpoints and prediction methods beyond those requested.
+This function filters those nested records while preserving the upstream
+\code{PredictionResult} structure and metadata.
 }
 \examples{
 \dontrun{

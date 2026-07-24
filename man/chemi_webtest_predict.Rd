@@ -4,35 +4,26 @@
 \alias{chemi_webtest_predict}
 \title{Predict one chemical with WebTEST}
 \usage{
-chemi_webtest_predict(
-  smiles,
-  endpoint,
-  method = "consensus",
-  format = "JSON",
-  output = c("wide", "raw")
-)
+chemi_webtest_predict(smiles, endpoint, method = "consensus", format = "JSON")
 }
 \arguments{
 \item{smiles}{One SMILES string or resolvable chemical identifier.}
 
-\item{endpoint}{Required WebTEST endpoint identifier, such as \code{LC50}.}
+\item{endpoint}{One required WebTEST endpoint identifier, such as \code{LC50}.}
 
 \item{method}{Prediction method: \code{consensus}, \code{hc}, \code{sm}, \code{gc}, or \code{nn}.}
 
-\item{format}{Report format: \code{JSON}, \code{HTML}, or \code{PDF}.}
-
-\item{output}{\code{wide} for normalized JSON predictions or \code{raw} for an
-unformatted response with provenance attributes.}
+\item{format}{Response format. Only \code{JSON} is supported.}
 }
 \value{
-A normalized prediction tibble or raw response.
+A filtered upstream WebTEST \code{PredictionResult}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-WebTEST currently returns every endpoint and method even when a subset is
-requested. Wide output filters the response to the requested endpoint and
-method.
+WebTEST may return endpoints and prediction methods beyond those requested.
+This function filters those nested records while preserving the upstream
+\code{PredictionResult} structure and metadata.
 }
 \examples{
 \dontrun{

@@ -1,4 +1,4 @@
-# Descriptor and WebTEST request hooks
+# Descriptor request hooks
 #
 # These wrappers have incompatible aggregate and dedicated service contracts.
 # The transform hook keeps those contracts out of generated wrappers while the
@@ -39,13 +39,6 @@ descriptor_scalar_num <- function(x, default = NA_real_) {
     return(default)
   }
   as.numeric(x[[1]])
-}
-
-descriptor_scalar_lgl <- function(x, default = NA) {
-  if (is.null(x) || length(x) == 0 || is.na(x[[1]])) {
-    return(default)
-  }
-  isTRUE(as.logical(x[[1]]))
 }
 
 descriptor_error_text <- function(x) {
@@ -95,8 +88,6 @@ descriptor_input_param <- function(fn_name) {
     chemi_mordred_bulk = "chemicals",
     chemi_webtest = "smiles",
     chemi_webtest_bulk = "query",
-    chemi_webtest_predict = "smiles",
-    chemi_webtest_predict_bulk = "structures",
     cli::cli_abort("Unknown descriptor wrapper {.fn {fn_name}}.")
   )
 }
@@ -242,53 +233,6 @@ validate_descriptor_request <- function(data) {
   descriptor_validate_common_request(data)
 }
 
-validate_webtest_prediction_request <- function(data) {
-  params <- data$params
-  fn_name <- data$fn_name
-  input_param <- descriptor_input_param(fn_name)
-  inputs <- params[[input_param]]
-
-  if (is.null(inputs) || length(inputs) == 0) {
-    cli::cli_abort("{.arg {input_param}} must contain at least one input.")
-  }
-  if (!descriptor_is_bulk(fn_name) && length(inputs) != 1) {
-    cli::cli_abort("{.arg {input_param}} must contain exactly one input.")
-  }
-
-  endpoints <- params$endpoint %||% params$endpoints
-  if (is.null(endpoints) || length(endpoints) == 0 || any(is.na(endpoints) | !nzchar(trimws(endpoints)))) {
-    cli::cli_abort("{.arg endpoint} must identify at least one WebTEST endpoint.")
-  }
-
-  methods <- params$method %||% params$methods %||% "consensus"
-  methods <- as.character(methods)
-  allowed_methods <- c("consensus", "hc", "sm", "gc", "nn")
-  invalid_methods <- setdiff(tolower(methods), allowed_methods)
-  if (length(invalid_methods) > 0) {
-    cli::cli_abort(
-      "{.arg method} must use consensus, hc, sm, gc, or nn; received {paste(invalid_methods, collapse = ', ')}."
-    )
-  }
-
-  params$output <- match.arg(params$output %||% c("wide", "raw"), c("wide", "raw"))
-  params$format <- descriptor_validate_choice(
-    params$format %||% "JSON",
-    c("JSON", "HTML", "PDF"),
-    "format"
-  )
-  if (!identical(params$format, "JSON") && identical(params$output, "wide")) {
-    cli::cli_abort("Non-JSON WebTEST reports require {.code output = \"raw\"}.")
-  }
-
-  params$.inputs <- as.character(inputs)
-  params$.input_param <- input_param
-  params$.requested_endpoints <- as.character(endpoints)
-  params$.requested_methods <- tolower(methods)
-  params$chemIdType <- "AnyId"
-  data$params <- params
-  data
-}
-
 descriptor_found_record <- function(item) {
   is.list(item) &&
     identical(toupper(descriptor_scalar_chr(item$result, "")), "FOUND") &&
@@ -405,10 +349,6 @@ resolve_descriptor_inputs <- function(data) {
   data
 }
 
-resolve_webtest_prediction_inputs <- function(data) {
-  resolve_descriptor_inputs(data)
-}
-
 route_descriptor_request <- function(data) {
   params <- data$params
   fn_name <- data$fn_name
@@ -470,18 +410,6 @@ route_descriptor_request <- function(data) {
 
   params$.route <- route
   data$params <- params
-  data
-}
-
-route_webtest_prediction_request <- function(data) {
-  data$params$.route <- list(
-    server = descriptor_selected_server(),
-    endpoint = "webtest/predict",
-    mode = "dedicated",
-    fallback_used = FALSE,
-    fallback_reason = NA_character_,
-    format = data$params$format
-  )
   data
 }
 
@@ -599,45 +527,6 @@ descriptor_request_spec <- function(fn_name, params) {
   spec
 }
 
-webtest_prediction_request_spec <- function(fn_name, params) {
-  route <- params$.route
-  eligible_values <- vapply(
-    params$.input_map[params$.eligible_index],
-    `[[`,
-    character(1),
-    "request_value"
-  )
-  is_bulk <- descriptor_is_bulk(fn_name)
-  spec <- c(
-    route,
-    list(
-      fn_name = fn_name,
-      engine = "webtest_predict",
-      method = if (is_bulk) "POST" else "GET",
-      query = list(),
-      body = NULL,
-      requested_format = params$format
-    )
-  )
-
-  if (is_bulk) {
-    spec$body <- list(
-      structures = I(eligible_values),
-      endpoints = I(params$.requested_endpoints),
-      methods = I(params$.requested_methods),
-      format = params$format
-    )
-  } else {
-    spec$query <- list(
-      smiles = eligible_values[[1]],
-      endpoint = params$.requested_endpoints[[1]],
-      method = params$.requested_methods[[1]],
-      format = params$format
-    )
-  }
-  spec
-}
-
 descriptor_accept_type <- function(format) {
   switch(
     toupper(format),
@@ -684,24 +573,16 @@ descriptor_perform_request <- function(spec) {
   list(status = status, content_type = content_type, body = body)
 }
 
-descriptor_transform_request <- function(data, prediction = FALSE) {
+descriptor_transform_request <- function(data) {
   fn_name <- data$fn_name
   pre <- run_hook(fn_name, "pre_request", list(params = data$params))
   eligible <- pre$params$.eligible_index
 
   if (length(eligible) == 0) {
-    spec <- if (prediction) {
-      webtest_prediction_request_spec(fn_name, pre$params)
-    } else {
-      descriptor_request_spec(fn_name, pre$params)
-    }
+    spec <- descriptor_request_spec(fn_name, pre$params)
     response <- list(status = 200L, content_type = "application/json", body = list())
   } else {
-    spec <- if (prediction) {
-      webtest_prediction_request_spec(fn_name, pre$params)
-    } else {
-      descriptor_request_spec(fn_name, pre$params)
-    }
+    spec <- descriptor_request_spec(fn_name, pre$params)
     response <- tryCatch(
       descriptor_perform_request(spec),
       error = function(e) {
@@ -724,11 +605,7 @@ descriptor_transform_request <- function(data, prediction = FALSE) {
 }
 
 descriptor_request_transform <- function(data) {
-  descriptor_transform_request(data, prediction = FALSE)
-}
-
-webtest_prediction_request_transform <- function(data) {
-  descriptor_transform_request(data, prediction = TRUE)
+  descriptor_transform_request(data)
 }
 
 validate_descriptor_response <- function(data) {
@@ -771,10 +648,6 @@ validate_descriptor_response <- function(data) {
 
   data$response_error <- error
   data
-}
-
-validate_webtest_prediction_response <- function(data) {
-  validate_descriptor_response(data)
 }
 
 descriptor_parse_delimited <- function(text, format) {
@@ -1038,232 +911,5 @@ format_descriptor_result <- function(data) {
   }
 
   data$result <- tibble::as_tibble(columns, .name_repair = "minimal")
-  data
-}
-
-recover_webtest_prediction_rows <- function(data) {
-  if (identical(data$params$output, "raw")) {
-    return(data)
-  }
-
-  body <- data$result$body
-  chemicals <- if (is.list(body)) body$chemicals %||% list() else list()
-  if (
-    is.list(chemicals) &&
-      length(chemicals) > 0 &&
-      !is.null(names(chemicals)) &&
-      any(c("chemicalId", "chemical", "endpoints", "error") %in% names(chemicals))
-  ) {
-    chemicals <- list(chemicals)
-  }
-
-  input_map <- data$params$.input_map
-  eligible <- data$params$.eligible_index
-  mapped <- stats::setNames(rep(list(NULL), length(input_map)), as.character(seq_along(input_map)))
-  equal_counts <- length(chemicals) == length(eligible)
-
-  if (is.na(data$response_error)) {
-    for (eligible_position in seq_along(eligible)) {
-      input_index <- eligible[[eligible_position]]
-      input <- input_map[[input_index]]
-      candidate <- which(vapply(
-        chemicals,
-        function(chemical) {
-          chemical_record <- chemical$chemical %||% list()
-          if (!is.list(chemical_record)) {
-            chemical_record <- list()
-          }
-          response_ids <- c(
-            descriptor_scalar_chr(chemical$chemicalId),
-            descriptor_scalar_chr(chemical_record$sid),
-            descriptor_scalar_chr(chemical_record$id)
-          )
-          response_smiles <- descriptor_scalar_chr(chemical_record$smiles)
-          (!is.na(input$sid) && input$sid %in% response_ids) ||
-            identical(input$request_value, response_smiles)
-        },
-        logical(1)
-      ))
-      if (length(candidate) == 0 && equal_counts) {
-        candidate <- eligible_position
-      }
-      if (length(candidate) > 0 && candidate[[1]] <= length(chemicals)) {
-        mapped[[as.character(input_index)]] <- chemicals[[candidate[[1]]]]
-      }
-    }
-  }
-
-  data$prediction_records <- mapped
-  data
-}
-
-add_webtest_prediction_provenance <- function(data) {
-  add_descriptor_provenance(data)
-}
-
-webtest_prediction_error <- function(value) {
-  descriptor_error_text(value[c("errorCode", "error", "message")])
-}
-
-webtest_prediction_row <- function(
-  input,
-  chemical = NULL,
-  endpoint = NULL,
-  prediction = NULL,
-  error = NA_character_,
-  provenance
-) {
-  chemical_record <- chemical$chemical %||% list()
-  if (!is.list(chemical_record)) {
-    chemical_record <- list()
-  }
-  endpoint_info <- endpoint$endpoint %||% list()
-  experimental <- endpoint$experimental %||% list()
-  if (
-    is.list(experimental) &&
-      !is.null(names(experimental)) &&
-      any(c("value", "logValue", "error") %in% names(experimental))
-  ) {
-    experimental <- list(experimental)
-  }
-  experimental <- if (length(experimental) > 0) experimental[[1]] else list()
-  prediction_error <- if (is.null(prediction)) NA_character_ else webtest_prediction_error(prediction)
-  combined_error <- c(error, prediction_error)
-  combined_error <- combined_error[!is.na(combined_error) & nzchar(combined_error)]
-  combined_error <- if (length(combined_error) == 0) NA_character_ else paste(unique(combined_error), collapse = ": ")
-
-  list(
-    query = input$query,
-    input_index = input$input_index,
-    status = if (is.na(combined_error)) "ok" else "error",
-    error = combined_error,
-    chemical_id = descriptor_scalar_chr(
-      chemical$chemicalId,
-      descriptor_scalar_chr(chemical_record$sid, input$sid)
-    ),
-    smiles = descriptor_scalar_chr(chemical_record$smiles, input$request_value),
-    inchi = descriptor_scalar_chr(chemical_record$inchi),
-    inchi_key = descriptor_scalar_chr(chemical_record$inchiKey),
-    endpoint = descriptor_scalar_chr(endpoint_info$id),
-    endpoint_name = descriptor_scalar_chr(endpoint_info$name),
-    method = if (is.null(prediction)) NA_character_ else descriptor_scalar_chr(prediction$method),
-    predicted_value = if (is.null(prediction)) NA_real_ else descriptor_scalar_num(prediction$value),
-    predicted_log_value = if (is.null(prediction)) NA_real_ else descriptor_scalar_num(prediction$logValue),
-    predicted_active = if (is.null(prediction)) NA else descriptor_scalar_lgl(prediction$active),
-    experimental_value = descriptor_scalar_num(experimental$value),
-    experimental_log_value = descriptor_scalar_num(experimental$logValue),
-    units = descriptor_scalar_chr(endpoint_info$units),
-    log_units = descriptor_scalar_chr(endpoint_info$logUnits),
-    source_server = provenance$source_server,
-    source_endpoint = provenance$source_endpoint,
-    fallback_used = provenance$fallback_used
-  )
-}
-
-format_webtest_prediction_result <- function(data) {
-  if (identical(data$params$output, "raw")) {
-    data$result <- descriptor_raw_result(data)
-    return(data)
-  }
-
-  requested_endpoints <- tolower(data$params$.requested_endpoints)
-  requested_methods <- tolower(data$params$.requested_methods)
-  rows <- list()
-
-  add_row <- function(row) {
-    rows[[length(rows) + 1L]] <<- row
-  }
-
-  for (i in seq_along(data$params$.input_map)) {
-    input <- data$params$.input_map[[i]]
-    chemical <- data$prediction_records[[as.character(i)]]
-    input_error <- input$error
-    if (identical(input$status, "pending") && !is.na(data$response_error)) {
-      input_error <- data$response_error
-    }
-    if (identical(input$status, "pending") && is.null(chemical) && is.na(input_error)) {
-      input_error <- "No WebTEST prediction result was returned for this input."
-    }
-    if (!is.na(input_error)) {
-      add_row(webtest_prediction_row(input, error = input_error, provenance = data$provenance))
-      next
-    }
-
-    chemical_error <- descriptor_error_text(chemical$error)
-    if (!is.na(chemical_error)) {
-      add_row(webtest_prediction_row(
-        input,
-        chemical = chemical,
-        error = chemical_error,
-        provenance = data$provenance
-      ))
-      next
-    }
-
-    endpoints <- chemical$endpoints %||% list()
-    if (
-      is.list(endpoints) &&
-        !is.null(names(endpoints)) &&
-        any(c("endpoint", "predicted", "experimental") %in% names(endpoints))
-    ) {
-      endpoints <- list(endpoints)
-    }
-
-    for (requested_endpoint in requested_endpoints) {
-      endpoint_matches <- Filter(
-        function(endpoint) {
-          identical(tolower(descriptor_scalar_chr(endpoint$endpoint$id, "")), requested_endpoint)
-        },
-        endpoints
-      )
-      if (length(endpoint_matches) == 0) {
-        add_row(webtest_prediction_row(
-          input,
-          chemical = chemical,
-          error = paste0("Requested endpoint ", requested_endpoint, " was not returned."),
-          provenance = data$provenance
-        ))
-        next
-      }
-
-      endpoint <- endpoint_matches[[1]]
-      predictions <- endpoint$predicted %||% list()
-      if (
-        is.list(predictions) &&
-          !is.null(names(predictions)) &&
-          any(c("method", "value", "error") %in% names(predictions))
-      ) {
-        predictions <- list(predictions)
-      }
-
-      for (requested_method in requested_methods) {
-        method_matches <- Filter(
-          function(prediction) {
-            identical(tolower(descriptor_scalar_chr(prediction$method, "")), requested_method)
-          },
-          predictions
-        )
-        if (length(method_matches) == 0) {
-          add_row(webtest_prediction_row(
-            input,
-            chemical = chemical,
-            endpoint = endpoint,
-            error = paste0("Requested prediction method ", requested_method, " was not returned."),
-            provenance = data$provenance
-          ))
-        } else {
-          add_row(webtest_prediction_row(
-            input,
-            chemical = chemical,
-            endpoint = endpoint,
-            prediction = method_matches[[1]],
-            provenance = data$provenance
-          ))
-        }
-      }
-    }
-  }
-
-  data$result <- tibble::as_tibble(dplyr::bind_rows(rows))
   data
 }
