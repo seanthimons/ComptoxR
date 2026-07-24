@@ -24,14 +24,14 @@ for (wrapper_name in descriptor_smiles_wrappers) {
             chemical = list(canonicalSmiles = "c1ccccc1")
           ))
         },
-        descriptor_perform_request = function(spec) {
-          captured <<- spec
+        generic_request = function(...) {
+          captured <<- list(...)
           descriptor_contract_response(
             records = list(descriptor_contract_record(
               smiles = "c1ccccc1",
-              descriptors = if (identical(spec$engine, "rdkit")) 1:1024 else c(1, 2)
+              descriptors = if (identical(captured$endpoint, "rdkit")) 1:1024 else c(1, 2)
             )),
-            headers = if (identical(spec$engine, "rdkit")) character() else c("a", "b")
+            headers = if (identical(captured$endpoint, "rdkit")) character() else c("a", "b")
           )
         },
         .package = "ComptoxR"
@@ -39,8 +39,8 @@ for (wrapper_name in descriptor_smiles_wrappers) {
 
       get(nm, envir = asNamespace("ComptoxR"))(smiles = "DTXSID7020182")
 
-      expect_identical(captured$query$smiles, "c1ccccc1")
-      expect_false(identical(captured$query$smiles, "DTXSID7020182"))
+      expect_identical(captured$options$smiles, "c1ccccc1")
+      expect_false(identical(captured$options$smiles, "DTXSID7020182"))
     })
   })
 }

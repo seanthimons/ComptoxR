@@ -16,6 +16,7 @@ webtest_prediction_abort <- function(
       "x" = message
     ),
     class = c(
+      paste0("comptoxr_", stage, "_hook_error"),
       paste0("comptoxr_webtest_", stage, "_error"),
       "comptoxr_webtest_error"
     ),

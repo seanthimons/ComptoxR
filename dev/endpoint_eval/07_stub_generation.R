@@ -75,7 +75,14 @@ stubgen_hook_params_expr <- function(param_names) {
   paste0("list(", paste(entries, collapse = ", "), ")")
 }
 
-stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_params = character()) {
+stubgen_build_pre_hook <- function(
+  fn,
+  fn_config,
+  fn_signature,
+  additional_params = character(),
+  return_on_skip = TRUE,
+  writeback_params = TRUE
+) {
   if (is.null(fn_config$pre_request) || length(fn_config$pre_request) == 0) {
     return("")
   }
@@ -106,26 +113,40 @@ stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_param
     collapse = ""
   )
 
-  writeback <- paste0(
-    vapply(
-      param_names,
-      function(param_name) {
-        paste0(
-          "  if (\"",
-          param_name,
-          "\" %in% names(req_data$params)) {\n",
-          "    ",
-          stubgen_symbol(param_name),
-          " <- req_data$params[[\"",
-          param_name,
-          "\"]]\n",
-          "  }\n"
-        )
-      },
-      character(1)
-    ),
-    collapse = ""
-  )
+  writeback <- if (isTRUE(writeback_params)) {
+    paste0(
+      vapply(
+        param_names,
+        function(param_name) {
+          paste0(
+            "  if (\"",
+            param_name,
+            "\" %in% names(req_data$params)) {\n",
+            "    ",
+            stubgen_symbol(param_name),
+            " <- req_data$params[[\"",
+            param_name,
+            "\"]]\n",
+            "  }\n"
+          )
+        },
+        character(1)
+      ),
+      collapse = ""
+    )
+  } else {
+    ""
+  }
+
+  skip_lines <- if (isTRUE(return_on_skip)) {
+    paste0(
+      "  if (isTRUE(req_data$skip_request)) {\n",
+      "    return(req_data$result)\n",
+      "  }\n"
+    )
+  } else {
+    ""
+  }
 
   paste0(
     init_lines,
@@ -135,9 +156,7 @@ stubgen_build_pre_hook <- function(fn, fn_config, fn_signature, additional_param
     "\", \"pre_request\", list(params = ",
     params_expr,
     "))\n",
-    "  if (isTRUE(req_data$skip_request)) {\n",
-    "    return(req_data$result)\n",
-    "  }\n",
+    skip_lines,
     writeback
   )
 }
@@ -153,18 +172,6 @@ stubgen_build_post_hook <- function(fn, fn_config, fn_signature) {
     "  result <- run_hook(\"",
     fn,
     "\", \"post_response\", list(result = result, params = ",
-    params_expr,
-    "))\n"
-  )
-}
-
-stubgen_build_transform_hook <- function(fn, fn_signature) {
-  params_expr <- stubgen_hook_params_expr(stubgen_formal_names(fn_signature))
-
-  paste0(
-    "  result <- run_hook(\"",
-    fn,
-    "\", \"transform\", list(params = ",
     params_expr,
     "))\n"
   )
@@ -242,6 +249,166 @@ stubgen_apply_signature_order <- function(fn_signature, signature_order) {
     character(1)
   )
   paste(entries, collapse = ", ")
+}
+
+stubgen_configured_parameter_order <- function(fn_config, fn_signature) {
+  configured <- c(
+    fn_config$parameter_overrides %||% list(),
+    fn_config$extra_params %||% list()
+  )
+  if (length(configured) == 0) {
+    return(character())
+  }
+
+  formal_names <- stubgen_formal_names(fn_signature)
+  ordered <- lapply(names(configured), function(config_name) {
+    spec <- configured[[config_name]]
+    public_name <- spec$name %||% config_name
+    if (is.null(spec$order) || !public_name %in% formal_names) {
+      return(NULL)
+    }
+    list(name = public_name, order = as.numeric(spec$order))
+  })
+  ordered <- Filter(Negate(is.null), ordered)
+  if (length(ordered) == 0) {
+    return(character())
+  }
+
+  names <- vapply(ordered, `[[`, character(1), "name")
+  positions <- vapply(ordered, `[[`, numeric(1), "order")
+  unique(names[order(positions, match(names, formal_names))])
+}
+
+stubgen_reorder_param_docs <- function(param_docs, formal_names) {
+  lines <- strsplit(param_docs %||% "", "\n", fixed = TRUE)[[1]]
+  doc_pattern <- "^#' @param ([^ ]+) "
+  is_param <- grepl(doc_pattern, lines)
+  param_lines <- lines[is_param]
+  if (length(param_lines) == 0) {
+    return(param_docs)
+  }
+
+  param_names <- sub(doc_pattern, "\\1", param_lines)
+  keep <- !duplicated(param_names)
+  param_lines <- param_lines[keep]
+  param_names <- param_names[keep]
+  ordered_names <- c(formal_names, setdiff(param_names, formal_names))
+  ordered_lines <- param_lines[match(ordered_names, param_names, nomatch = 0L)]
+  other_lines <- lines[!is_param & nzchar(lines)]
+  paste0(paste(c(ordered_lines, other_lines), collapse = "\n"), "\n")
+}
+
+stubgen_build_request_template <- function(
+  fn,
+  fn_signature,
+  fn_config,
+  hook_pre_request,
+  pagination_call_params
+) {
+  template <- fn_config$request_template
+  if (is.null(template)) {
+    return(NULL)
+  }
+  if (is.null(fn_config$pre_request) || length(fn_config$pre_request) == 0) {
+    cli::cli_abort(
+      "Request template for {.fn {fn}} requires at least one pre-request hook."
+    )
+  }
+
+  helper <- template$helper
+  allowed_helpers <- c("generic_request", "generic_chemi_request")
+  if (!is.character(helper) || length(helper) != 1 || !helper %in% allowed_helpers) {
+    cli::cli_abort(
+      "Request template for {.fn {fn}} must use one of: {paste(allowed_helpers, collapse = ', ')}."
+    )
+  }
+
+  args <- template$args
+  if (!is.list(args) || length(args) == 0 || is.null(names(args)) || any(!nzchar(names(args)))) {
+    cli::cli_abort(
+      "Request template for {.fn {fn}} must define named helper arguments."
+    )
+  }
+  duplicate_args <- unique(names(args)[duplicated(names(args))])
+  if (length(duplicate_args) > 0) {
+    cli::cli_abort(
+      "Request template for {.fn {fn}} repeats argument{?s}: {paste(duplicate_args, collapse = ', ')}."
+    )
+  }
+  expressions <- vapply(args, as.character, character(1))
+  for (expression in expressions) {
+    tryCatch(
+      parse(text = expression),
+      error = function(error) {
+        cli::cli_abort(
+          "Request template for {.fn {fn}} has invalid R expression {.code {expression}}.",
+          parent = error
+        )
+      }
+    )
+  }
+
+  argument_lines <- paste0(
+    "      ",
+    names(expressions),
+    " = ",
+    expressions,
+    collapse = ",\n"
+  )
+  helper_call <- paste0(
+    "    result <- ",
+    helper,
+    "(\n",
+    argument_lines,
+    pagination_call_params,
+    "\n    )"
+  )
+  request_lines <- if (isTRUE(template$post_on_skip)) {
+    paste0(
+      "  if (isTRUE(req_data$skip_request)) {\n",
+      "    result <- req_data$result\n",
+      "  } else {\n",
+      helper_call,
+      "\n  }\n"
+    )
+  } else {
+    paste0(helper_call, "\n")
+  }
+
+  post_lines <- if (!is.null(fn_config$post_response) && length(fn_config$post_response) > 0) {
+    paste0(
+      "  post_data <- req_data\n",
+      "  post_data$result <- result\n",
+      "  result <- run_hook(\"",
+      fn,
+      "\", \"post_response\", post_data)\n"
+    )
+  } else {
+    ""
+  }
+
+  body <- paste0(
+    fn,
+    " <- function(",
+    fn_signature,
+    ") {\n",
+    hook_pre_request,
+    request_lines,
+    "\n",
+    post_lines,
+    "\n  return(result)\n",
+    "}\n"
+  )
+  tryCatch(
+    parse(text = body),
+    error = function(error) {
+      cli::cli_abort(
+        "Generated invalid request-template syntax for function {.fn {fn}}.",
+        parent = error
+      )
+    }
+  )
+  body
 }
 
 stubgen_build_request_override <- function(
@@ -780,15 +947,17 @@ build_function_stub <- function(
             }
           }
 
-          # 2. Add @param doc
-          param_docs <- paste0(
-            param_docs,
-            "#' @param ",
-            param_name,
-            " ",
-            param_spec$description,
-            "\n"
-          )
+          # 2. Add @param doc only for newly injected parameters.
+          if (!param_name %in% formal_names) {
+            param_docs <- paste0(
+              param_docs,
+              "#' @param ",
+              param_name,
+              " ",
+              param_spec$description,
+              "\n"
+            )
+          }
         }
       }
 
@@ -796,9 +965,21 @@ build_function_stub <- function(
         fn_signature,
         fn_config$signature_overrides
       )
+      configured_order <- stubgen_configured_parameter_order(
+        fn_config,
+        fn_signature
+      )
+      fn_signature <- stubgen_apply_signature_order(
+        fn_signature,
+        c(configured_order, setdiff(stubgen_formal_names(fn_signature), configured_order))
+      )
       fn_signature <- stubgen_apply_signature_order(
         fn_signature,
         fn_config$signature_order
+      )
+      param_docs <- stubgen_reorder_param_docs(
+        param_docs,
+        stubgen_formal_names(fn_signature)
       )
     }
   }
@@ -809,27 +990,25 @@ build_function_stub <- function(
   # Build hook call snippets that will be inserted into stub bodies
   # Pre-request hooks: wrap query before generic_request
   # Post-response hooks: wrap result after generic_request
-  # Transform hooks: replace generic_request entirely
-
   hook_pre_request <- ""
   hook_post_response <- ""
-  hook_transform <- ""
-  hook_is_transform <- FALSE
   hook_chemi_chemicals_arg <- ""
 
   if (isTRUE(has_hooks)) {
     fn_config <- hook_config[[fn]]
 
-    # Check for transform hooks (replace entire generic_request)
-    if (!is.null(fn_config$transform) && length(fn_config$transform) > 0) {
-      hook_is_transform <- TRUE
-      hook_transform <- stubgen_build_transform_hook(fn, fn_signature)
-    }
-
     uses_chemical_objects <- identical(wrapper_fn, "generic_chemi_request") &&
+      is.null(fn_config$request_template) &&
       !isTRUE(fn_config$request_override$array_payload)
     hook_extra_params <- if (uses_chemical_objects) "chemicals" else character(0)
-    hook_pre_request <- stubgen_build_pre_hook(fn, fn_config, fn_signature, additional_params = hook_extra_params)
+    hook_pre_request <- stubgen_build_pre_hook(
+      fn,
+      fn_config,
+      fn_signature,
+      additional_params = hook_extra_params,
+      return_on_skip = is.null(fn_config$request_template),
+      writeback_params = is.null(fn_config$request_template)
+    )
     hook_post_response <- stubgen_build_post_hook(fn, fn_config, fn_signature)
     if (nzchar(hook_pre_request) && identical(wrapper_fn, "generic_chemi_request")) {
       hook_chemi_chemicals_arg <- ",\n    chemicals = chemicals"
@@ -863,29 +1042,15 @@ build_function_stub <- function(
 #\' }}'
   )
 
-  if (isTRUE(hook_is_transform)) {
-    fn_body <- glue::glue(
-      '
-{fn} <- function({fn_signature}) {{
-{hook_transform}
-  return(result)
-}}
-
-'
-    )
-
-    transformed_result <- paste0(roxygen_header, "\n", fn_body, "\n\n")
-    tryCatch(
-      parse(text = transformed_result),
-      error = function(e) {
-        cli::cli_abort(c(
-          "x" = "Generated invalid transform syntax for function {.fn {fn}}",
-          "i" = "Parse error: {e$message}",
-          "i" = "Endpoint: {endpoint}"
-        ))
-      }
-    )
-    return(transformed_result)
+  request_template_body <- stubgen_build_request_template(
+    fn = fn,
+    fn_signature = fn_signature,
+    fn_config = fn_config,
+    hook_pre_request = hook_pre_request,
+    pagination_call_params = pagination_call_params
+  )
+  if (!is.null(request_template_body)) {
+    return(paste0(roxygen_header, "\n", request_template_body, "\n"))
   }
 
   request_override_body <- stubgen_build_request_override(
@@ -1878,10 +2043,18 @@ render_endpoint_stubs <- function(
       )
     )
 
+  hook_config_path <- here::here("inst", "hook_config.yml")
+  hook_config <- if (file.exists(hook_config_path)) {
+    yaml::read_yaml(hook_config_path)
+  } else {
+    list()
+  }
+
   # Parse parameters row by row
   # We use pmap to avoid rowwise() issues
   parsed_params <- purrr::pmap(
     list(
+      spec$fn,
       spec$path_params,
       spec$query_params,
       spec$body_params,
@@ -1890,20 +2063,23 @@ render_endpoint_stubs <- function(
       spec$query_param_metadata,
       spec$body_param_metadata
     ),
-    function(pp, qp, bp, npp, ppm, qpm, bpm) {
+    function(fn, pp, qp, bp, npp, ppm, qpm, bpm) {
+      parameter_overrides <- hook_config[[fn]]$parameter_overrides %||% list()
       list(
         path_info = parse_path_parameters(pp, strategy = param_strategy, metadata = ppm %||% list()),
         query_info = parse_function_params(
           qp,
           strategy = param_strategy,
           metadata = qpm %||% list(),
-          has_path_params = (npp %||% 0 > 0)
+          has_path_params = (npp %||% 0 > 0),
+          overrides = parameter_overrides
         ),
         body_info = parse_function_params(
           bp,
           strategy = param_strategy,
           metadata = bpm %||% list(),
-          has_path_params = (npp %||% 0 > 0)
+          has_path_params = (npp %||% 0 > 0),
+          overrides = parameter_overrides
         )
       )
     }

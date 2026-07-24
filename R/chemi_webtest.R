@@ -23,9 +23,9 @@ chemi_webtest <- function(
   headers = FALSE,
   output = c("wide", "raw")
 ) {
-  result <- run_hook(
+  req_data <- run_hook(
     "chemi_webtest",
-    "transform",
+    "pre_request",
     list(
       params = list(
         smiles = smiles,
@@ -34,7 +34,26 @@ chemi_webtest <- function(
       )
     )
   )
-  result
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_request(
+      endpoint = req_data$request$endpoint,
+      method = req_data$request$method,
+      batch_limit = 0,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      content_type = req_data$request$content_type,
+      options = req_data$request$options
+    )
+  }
+
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_webtest", "post_response", post_data)
+
+  return(result)
 }
 
 #' Calculate WebTEST descriptors for multiple molecules
@@ -62,9 +81,9 @@ chemi_webtest_bulk <- function(
   format = "JSON",
   output = c("wide", "raw")
 ) {
-  result <- run_hook(
+  req_data <- run_hook(
     "chemi_webtest_bulk",
-    "transform",
+    "pre_request",
     list(
       params = list(
         query = query,
@@ -75,5 +94,22 @@ chemi_webtest_bulk <- function(
       )
     )
   )
-  result
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_chemi_request(
+      endpoint = req_data$request$endpoint,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      body = req_data$request$body,
+      content_type = req_data$request$content_type
+    )
+  }
+
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_webtest_bulk", "post_response", post_data)
+
+  return(result)
 }

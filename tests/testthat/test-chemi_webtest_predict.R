@@ -1,1 +1,1 @@
-# Prediction transform contracts are covered in test-chemi_descriptor_contracts.R.
+# Prediction hook contracts are covered in test-hooks-webtest.R.

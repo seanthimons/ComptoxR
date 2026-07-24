@@ -16,6 +16,8 @@ generic_chemi_request(
   array_payload = FALSE,
   tidy = TRUE,
   chemicals = NULL,
+  body = NULL,
+  content_type = "application/json",
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
@@ -53,6 +55,13 @@ Defaults to FALSE.}
 list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
 this takes precedence over the query parameter for building the chemicals payload.}
 
+\item{body}{Optional explicit JSON request body. When supplied, normal
+chemical payload synthesis is bypassed and the body is encoded exactly
+as provided, preserving array order and duplicates.}
+
+\item{content_type}{Expected response content type. JSON responses are parsed
+as lists; CSV and TSV responses are parsed as data frames.}
+
 \item{paginate}{Boolean; whether to automatically fetch all pages. Defaults to FALSE.
 When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
 
@@ -63,7 +72,8 @@ When TRUE, uses httr2::req_perform_iterative() to loop through pages.}
 \item{...}{Named query parameters appended to the request URL.}
 }
 \value{
-A tidy tibble (if tidy=TRUE) or a raw list.
+For JSON, a tidy tibble (if \code{tidy = TRUE}) or a raw list. For
+CSV and TSV content types, a data frame.
 }
 \description{
 This specialized template handles the nested payload structure common to the

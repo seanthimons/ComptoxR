@@ -1,28 +1,19 @@
 # Descriptor request hooks
 #
 # These wrappers have incompatible aggregate and dedicated service contracts.
-# The transform hook keeps those contracts out of generated wrappers while the
-# pre- and post-request chains keep validation, routing, recovery, and formatting
-# independently testable.
-
-descriptor_server_urls <- function() {
-  c(
-    production = "https://hcd.rtpnc.epa.gov/api",
-    staging = "https://cim.sciencedataexperts.com/api",
-    development = "https://cim-dev.sciencedataexperts.com/api"
-  )
-}
+# Pre-request hooks normalize those contracts into generic-helper request state;
+# post-response hooks validate and format the successful helper result.
 
 descriptor_selected_server <- function() {
   selected <- Sys.getenv("chemi_burl", unset = "")
   if (!nzchar(selected)) {
-    selected <- descriptor_server_urls()[["production"]]
+    selected <- chemi_server_urls()[["production"]]
   }
   sub("/+$", "", selected)
 }
 
 descriptor_server_name <- function(url) {
-  urls <- descriptor_server_urls()
+  urls <- chemi_server_urls()
   match_index <- match(sub("/+$", "", url), urls)
   if (is.na(match_index)) "custom" else names(urls)[[match_index]]
 }
@@ -346,70 +337,10 @@ resolve_descriptor_inputs <- function(data) {
     logical(1)
   ))
   data$params <- params
-  data
-}
-
-route_descriptor_request <- function(data) {
-  params <- data$params
-  fn_name <- data$fn_name
-  engine <- descriptor_engine(fn_name, params)
-  selected_server <- descriptor_selected_server()
-  selected_name <- descriptor_server_name(selected_server)
-  route <- list(
-    server = selected_server,
-    endpoint = engine,
-    mode = "dedicated",
-    fallback_used = FALSE,
-    fallback_reason = NA_character_,
-    format = params$format
-  )
-
-  if (fn_name %in% c("chemi_descriptors", "chemi_descriptors_bulk")) {
-    route$endpoint <- "descriptors"
-    route$mode <- "aggregate"
-
-    needs_wide_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
-    if (identical(engine, "mordred") && identical(selected_name, "production") && needs_wide_headers) {
-      route$server <- descriptor_server_urls()[["staging"]]
-      route$endpoint <- "mordred"
-      route$mode <- "dedicated"
-      route$format <- "JSON"
-      route$fallback_used <- TRUE
-      route$fallback_reason <- paste(
-        "Production aggregate Mordred cannot return validated headers;",
-        "using the staging dedicated Mordred service."
-      )
-    } else if (
-      identical(engine, "rdkit") &&
-        (selected_name %in%
-          c("staging", "development") ||
-          (identical(selected_name, "production") && needs_wide_headers))
-    ) {
-      route$endpoint <- "rdkit"
-      route$mode <- "dedicated"
-      route$format <- "JSON"
-      route$fallback_used <- TRUE
-      route$fallback_reason <- paste(
-        "The selected aggregate RDKit route cannot provide a validated 1,024-bit header-bearing response;",
-        "using its dedicated RDKit service."
-      )
-      params$.engine_options <- list(type = "ecfp", radius = 3L, bits = 1024L)
-    }
-  } else if (fn_name %in% c("chemi_mordred", "chemi_mordred_bulk") && identical(selected_name, "production")) {
-    route$server <- descriptor_server_urls()[["staging"]]
-    route$fallback_used <- TRUE
-    route$fallback_reason <- paste(
-      "Production dedicated Mordred is unavailable;",
-      "using the staging dedicated Mordred service."
-    )
+  if (length(params$.eligible_index) == 0) {
+    data$skip_request <- TRUE
+    data$result <- list()
   }
-
-  if (isTRUE(route$fallback_used)) {
-    cli::cli_warn(route$fallback_reason)
-  }
-
-  params$.route <- route
-  data$params <- params
   data
 }
 
@@ -465,68 +396,6 @@ descriptor_request_chem_id_type <- function(params) {
   }
 }
 
-descriptor_request_spec <- function(fn_name, params) {
-  route <- params$.route
-  engine <- descriptor_engine(fn_name, params)
-  eligible_values <- vapply(
-    params$.input_map[params$.eligible_index],
-    `[[`,
-    character(1),
-    "request_value"
-  )
-  is_bulk <- descriptor_is_bulk(fn_name)
-  spec <- c(
-    route,
-    list(
-      fn_name = fn_name,
-      engine = engine,
-      method = if (is_bulk) "POST" else "GET",
-      query = list(),
-      body = NULL,
-      requested_format = params$format
-    )
-  )
-
-  if (identical(route$mode, "aggregate")) {
-    if (is_bulk) {
-      spec$body <- list(
-        chemicals = I(eligible_values),
-        chemIdType = descriptor_request_chem_id_type(params),
-        format = route$format,
-        options = descriptor_engine_options(engine, params, post = TRUE),
-        type = engine
-      )
-    } else {
-      spec$query <- c(
-        list(
-          smiles = eligible_values[[1]],
-          type = engine,
-          headers = params$.request_headers,
-          format = route$format,
-          timeout = params$timeout
-        )
-      )
-      spec$query <- spec$query[!vapply(spec$query, is.null, logical(1))]
-    }
-  } else if (is_bulk) {
-    spec$body <- list(
-      chemicals = I(eligible_values),
-      options = descriptor_engine_options(engine, params, post = TRUE)
-    )
-    if (identical(engine, "webtest")) {
-      spec$body$chemIdType <- descriptor_request_chem_id_type(params)
-      spec$body$format <- route$format
-    }
-  } else {
-    spec$query <- c(
-      list(smiles = eligible_values[[1]]),
-      descriptor_engine_options(engine, params, post = FALSE)
-    )
-  }
-
-  spec
-}
-
 descriptor_accept_type <- function(format) {
   switch(
     toupper(format),
@@ -538,101 +407,212 @@ descriptor_accept_type <- function(format) {
   )
 }
 
-descriptor_perform_request <- function(spec) {
-  req <- httr2::request(spec$server) |>
-    httr2::req_url_path_append(spec$endpoint) |>
-    httr2::req_method(spec$method) |>
-    httr2::req_headers(Accept = descriptor_accept_type(spec$format)) |>
-    httr2::req_retry(max_tries = 3, is_transient = is_transient_error)
-
-  if (identical(spec$method, "POST")) {
-    req <- httr2::req_body_json(req, spec$body, auto_unbox = TRUE)
-  } else if (length(spec$query) > 0) {
-    req <- do.call(httr2::req_url_query, c(list(req), spec$query))
-  }
-
-  resp <- httr2::req_perform(
-    httr2::req_error(req, is_error = function(resp) FALSE)
+descriptor_eligible_values <- function(params) {
+  vapply(
+    params$.input_map[params$.eligible_index],
+    `[[`,
+    character(1),
+    "request_value"
   )
-  status <- httr2::resp_status(resp)
-  content_type <- httr2::resp_header(resp, "content-type") %||% ""
-  is_json <- grepl("json", content_type, ignore.case = TRUE) ||
-    identical(toupper(spec$format), "JSON")
-
-  body <- if (is_json) {
-    tryCatch(
-      httr2::resp_body_json(resp, simplifyVector = FALSE),
-      error = function(e) structure(list(), parse_error = conditionMessage(e))
-    )
-  } else if (identical(toupper(spec$format), "PDF")) {
-    httr2::resp_body_raw(resp)
-  } else {
-    httr2::resp_body_string(resp)
-  }
-
-  list(status = status, content_type = content_type, body = body)
 }
 
-descriptor_transform_request <- function(data) {
+descriptor_refresh_request <- function(data) {
+  params <- data$params
   fn_name <- data$fn_name
-  pre <- run_hook(fn_name, "pre_request", list(params = data$params))
-  eligible <- pre$params$.eligible_index
-
-  if (length(eligible) == 0) {
-    spec <- descriptor_request_spec(fn_name, pre$params)
-    response <- list(status = 200L, content_type = "application/json", body = list())
+  route <- params$.route
+  engine <- descriptor_engine(fn_name, params)
+  eligible_values <- descriptor_eligible_values(params)
+  scalar_value <- if (length(eligible_values) > 0) {
+    eligible_values[[1]]
   } else {
-    spec <- descriptor_request_spec(fn_name, pre$params)
-    response <- tryCatch(
-      descriptor_perform_request(spec),
-      error = function(e) {
+    NA_character_
+  }
+  is_bulk <- descriptor_is_bulk(fn_name)
+  request <- list(
+    helper = if (is_bulk) "generic_chemi_request" else "generic_request",
+    endpoint = route$endpoint,
+    server = route$server,
+    method = if (is_bulk) "POST" else "GET",
+    content_type = descriptor_accept_type(route$format),
+    format = route$format,
+    options = list(),
+    body = NULL
+  )
+
+  if (identical(route$mode, "aggregate")) {
+    if (is_bulk) {
+      request$body <- list(
+        chemicals = I(eligible_values),
+        chemIdType = descriptor_request_chem_id_type(params),
+        format = route$format,
+        options = descriptor_engine_options(engine, params, post = TRUE),
+        type = engine
+      )
+    } else {
+      request$options <- c(
         list(
-          status = NA_integer_,
-          content_type = "",
-          body = list(),
-          request_error = conditionMessage(e)
+          smiles = scalar_value,
+          type = engine,
+          headers = params$.request_headers,
+          format = route$format,
+          timeout = params$timeout
         )
-      }
+      )
+      request$options <- request$options[!vapply(request$options, is.null, logical(1))]
+    }
+  } else if (is_bulk) {
+    request$body <- list(
+      chemicals = I(eligible_values),
+      options = descriptor_engine_options(engine, params, post = TRUE)
+    )
+    if (identical(engine, "webtest")) {
+      request$body$chemIdType <- descriptor_request_chem_id_type(params)
+      request$body$format <- route$format
+    }
+  } else {
+    request$options <- c(
+      list(smiles = scalar_value),
+      descriptor_engine_options(engine, params, post = FALSE)
     )
   }
 
-  post <- run_hook(
-    fn_name,
-    "post_response",
-    list(result = response, params = pre$params, request = spec)
-  )
-  post$result
+  data$params <- params
+  data$request <- request
+  data
 }
 
-descriptor_request_transform <- function(data) {
-  descriptor_transform_request(data)
+descriptor_prepare_request <- function(data, mode, endpoint, format = NULL) {
+  params <- data$params
+  params$.route <- list(
+    server = descriptor_selected_server(),
+    endpoint = endpoint,
+    mode = mode,
+    fallback_used = FALSE,
+    fallback_reason = NA_character_,
+    format = format %||% params$format
+  )
+  data$params <- params
+  descriptor_refresh_request(data)
+}
+
+prepare_aggregate_descriptor_request <- function(data) {
+  descriptor_prepare_request(data, "aggregate", "descriptors")
+}
+
+prepare_padel_descriptor_request <- function(data) {
+  descriptor_prepare_request(data, "dedicated", "padel", "JSON")
+}
+
+prepare_rdkit_descriptor_request <- function(data) {
+  descriptor_prepare_request(data, "dedicated", "rdkit", "JSON")
+}
+
+prepare_mordred_descriptor_request <- function(data) {
+  descriptor_prepare_request(data, "dedicated", "mordred", "JSON")
+}
+
+prepare_webtest_descriptor_request <- function(data) {
+  descriptor_prepare_request(data, "dedicated", "webtest")
+}
+
+descriptor_apply_fallback <- function(
+  data,
+  server,
+  endpoint,
+  reason,
+  engine_options = NULL
+) {
+  params <- data$params
+  params$.route$server <- server
+  params$.route$endpoint <- endpoint
+  params$.route$mode <- "dedicated"
+  params$.route$format <- "JSON"
+  params$.route$fallback_used <- TRUE
+  params$.route$fallback_reason <- reason
+  if (!is.null(engine_options)) {
+    params$.engine_options <- engine_options
+  }
+  cli::cli_warn(reason)
+  data$params <- params
+  descriptor_refresh_request(data)
+}
+
+apply_aggregate_mordred_fallback <- function(data) {
+  params <- data$params
+  needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
+  if (
+    identical(descriptor_engine(data$fn_name, params), "mordred") &&
+      identical(descriptor_server_name(params$.route$server), "production") &&
+      needs_headers
+  ) {
+    return(descriptor_apply_fallback(
+      data,
+      chemi_server_urls()[["staging"]],
+      "mordred",
+      paste(
+        "Production aggregate Mordred cannot return validated headers;",
+        "using the staging dedicated Mordred service."
+      )
+    ))
+  }
+  data
+}
+
+apply_aggregate_rdkit_fallback <- function(data) {
+  params <- data$params
+  selected_name <- descriptor_server_name(params$.route$server)
+  needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
+  if (
+    identical(descriptor_engine(data$fn_name, params), "rdkit") &&
+      (selected_name %in% c("staging", "development") || (identical(selected_name, "production") && needs_headers))
+  ) {
+    return(descriptor_apply_fallback(
+      data,
+      params$.route$server,
+      "rdkit",
+      paste(
+        "The selected aggregate RDKit route cannot provide a validated 1,024-bit header-bearing response;",
+        "using its dedicated RDKit service."
+      ),
+      engine_options = list(type = "ecfp", radius = 3L, bits = 1024L)
+    ))
+  }
+  data
+}
+
+apply_dedicated_mordred_fallback <- function(data) {
+  if (identical(descriptor_server_name(data$params$.route$server), "production")) {
+    return(descriptor_apply_fallback(
+      data,
+      chemi_server_urls()[["staging"]],
+      "mordred",
+      paste(
+        "Production dedicated Mordred is unavailable;",
+        "using the staging dedicated Mordred service."
+      )
+    ))
+  }
+  data
+}
+
+descriptor_result_body <- function(result) {
+  if (
+    is.list(result) &&
+      length(result) == 1 &&
+      is.list(result[[1]]) &&
+      !is.null(names(result[[1]])) &&
+      any(c("chemicals", "headers", "error", "errors", "message") %in% names(result[[1]]))
+  ) {
+    return(result[[1]])
+  }
+  result
 }
 
 validate_descriptor_response <- function(data) {
-  response <- data$result
-  status <- response$status
-  body <- response$body
-  error <- response$request_error %||% NA_character_
-
-  if (is.na(error) && (is.na(status) || status < 200 || status >= 300)) {
-    embedded <- if (is.list(body)) {
-      descriptor_error_text(body[c("error", "message", "status")])
-    } else {
-      NA_character_
-    }
-    error <- paste0(
-      "Descriptor request failed",
-      if (!is.na(status)) paste0(" with HTTP ", status) else "",
-      if (!is.na(embedded)) paste0(": ", embedded) else "."
-    )
-  }
-
-  parse_error <- attr(body, "parse_error")
-  if (is.na(error) && !is.null(parse_error)) {
-    error <- paste0("Unable to parse descriptor response: ", parse_error)
-  }
+  body <- descriptor_result_body(data$result)
+  error <- NA_character_
   if (
-    is.na(error) &&
+    !isTRUE(data$skip_request) &&
       (is.null(body) ||
         length(body) == 0 ||
         (is.character(body) && length(body) == 1 && !nzchar(body)))
@@ -651,19 +631,13 @@ validate_descriptor_response <- function(data) {
 }
 
 descriptor_parse_delimited <- function(text, format) {
-  separator <- if (identical(toupper(format), "TSV")) "\t" else ","
-  tryCatch(
-    utils::read.table(
-      text = text,
-      header = TRUE,
-      sep = separator,
-      quote = "\"",
-      comment.char = "",
-      check.names = FALSE,
-      stringsAsFactors = FALSE,
-      fill = FALSE
-    ),
-    error = function(e) structure(data.frame(), parse_error = conditionMessage(e))
+  parse_delimited_response(
+    text,
+    if (identical(toupper(format), "TSV")) {
+      "text/tab-separated-values"
+    } else {
+      "text/csv"
+    }
   )
 }
 
@@ -684,10 +658,7 @@ descriptor_json_records <- function(body) {
 }
 
 descriptor_delimited_records <- function(body, format) {
-  table <- descriptor_parse_delimited(body, format)
-  if (!is.null(attr(table, "parse_error"))) {
-    return(list(records = list(), headers = character(), parse_error = attr(table, "parse_error")))
-  }
+  table <- if (is.data.frame(body)) body else descriptor_parse_delimited(body, format)
 
   metadata_names <- c("ordinal", "id", "smiles", "inchi", "inchikey")
   descriptor_columns <- names(table)[!tolower(names(table)) %in% metadata_names]
@@ -706,7 +677,7 @@ descriptor_delimited_records <- function(body, format) {
       descriptors = unname(as.list(row[descriptor_columns]))
     )
   })
-  list(records = records, headers = descriptor_columns, parse_error = NULL)
+  list(records = records, headers = descriptor_columns)
 }
 
 descriptor_rdkit_headers <- function(params, records) {
@@ -725,15 +696,14 @@ descriptor_rdkit_headers <- function(params, records) {
 
 descriptor_response_records <- function(data) {
   format <- toupper(data$request$format)
-  body <- data$result$body
-  if (format %in% c("CSV", "TSV") && is.character(body)) {
+  body <- descriptor_result_body(data$result)
+  if (format %in% c("CSV", "TSV") && (is.character(body) || is.data.frame(body))) {
     parsed <- descriptor_delimited_records(body, format)
     return(parsed)
   }
   list(
     records = descriptor_json_records(body),
-    headers = as.character(unlist(body$headers %||% character(), use.names = FALSE)),
-    parse_error = NULL
+    headers = as.character(unlist(body$headers %||% character(), use.names = FALSE))
   )
 }
 
@@ -743,9 +713,6 @@ recover_descriptor_rows <- function(data) {
   }
 
   parsed <- descriptor_response_records(data)
-  if (!is.null(parsed$parse_error) && is.na(data$response_error)) {
-    data$response_error <- paste0("Unable to parse descriptor response: ", parsed$parse_error)
-  }
   headers <- parsed$headers
   if (length(headers) == 0 && identical(descriptor_engine(data$fn_name, data$params), "rdkit")) {
     headers <- descriptor_rdkit_headers(data$params, parsed$records)
@@ -799,7 +766,7 @@ add_descriptor_provenance <- function(data) {
 }
 
 descriptor_raw_result <- function(data) {
-  result <- data$result$body
+  result <- descriptor_result_body(data$result)
   if (is.null(result)) {
     result <- list()
   }
@@ -839,8 +806,7 @@ descriptor_record_error <- function(record, headers) {
 
 format_descriptor_result <- function(data) {
   if (identical(data$params$output, "raw")) {
-    data$result <- descriptor_raw_result(data)
-    return(data)
+    return(descriptor_raw_result(data))
   }
 
   headers <- data$descriptor_headers %||% character()
@@ -910,6 +876,5 @@ format_descriptor_result <- function(data) {
     }
   }
 
-  data$result <- tibble::as_tibble(columns, .name_repair = "minimal")
-  data
+  tibble::as_tibble(columns, .name_repair = "minimal")
 }

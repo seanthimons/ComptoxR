@@ -371,6 +371,14 @@ ctx_server <- function(server = NULL) {
   }
 }
 
+chemi_server_urls <- function() {
+  c(
+    production = "https://hcd.rtpnc.epa.gov/api",
+    staging = "https://cim.sciencedataexperts.com/api",
+    development = "https://cim-dev.sciencedataexperts.com/api"
+  )
+}
+
 #' Set API endpoints for Cheminformatics API endpoints
 #'
 #' This function sets the API endpoint for the Cheminformatics API based on the
@@ -394,13 +402,14 @@ chemi_server <- function(server = NULL) {
       Sys.setenv("chemi_burl" = "")
     }
   } else {
+    server_urls <- chemi_server_urls()
     switch(
       as.character(server),
-      "1" = Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api"),
+      "1" = Sys.setenv("chemi_burl" = server_urls[["production"]]),
       # "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
       # "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
-      "2" = Sys.setenv("chemi_burl" = "https://cim.sciencedataexperts.com/api"),
-      "3" = Sys.setenv("chemi_burl" = "https://cim-dev.sciencedataexperts.com/api"),
+      "2" = Sys.setenv("chemi_burl" = server_urls[["staging"]]),
+      "3" = Sys.setenv("chemi_burl" = server_urls[["development"]]),
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info(

@@ -1,15 +1,13 @@
 descriptor_contract_response <- function(
   records = list(),
   headers = character(),
-  status = 200L,
-  content_type = "application/json",
   extra = list()
 ) {
   body <- c(extra, list(chemicals = records))
   if (length(headers) > 0) {
     body$headers <- headers
   }
-  list(status = status, content_type = content_type, body = body)
+  body
 }
 
 descriptor_contract_record <- function(
