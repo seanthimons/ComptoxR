@@ -1160,6 +1160,28 @@ build_function_stub <- function(
       resolver_param_docs <- paste0(resolver_param_docs, query_param_info$param_docs)
     }
 
+    if (isTRUE(has_hooks) && !is.null(fn_config$extra_params)) {
+      for (param_name in names(fn_config$extra_params)) {
+        param_spec <- fn_config$extra_params[[param_name]]
+        if (!param_name %in% stubgen_formal_names(fn_signature_resolver)) {
+          param_code <- if (isTRUE(param_spec$required)) {
+            param_name
+          } else {
+            paste0(param_name, " = ", param_spec$default)
+          }
+          fn_signature_resolver <- paste0(fn_signature_resolver, ", ", param_code)
+          resolver_param_docs <- paste0(
+            resolver_param_docs,
+            "#' @param ",
+            param_name,
+            " ",
+            param_spec$description,
+            "\n"
+          )
+        }
+      }
+    }
+
     resolver_query_params_call <- if (length(query_params_vec) > 0) {
       query_args <- vapply(
         query_params_vec,
@@ -1189,6 +1211,7 @@ build_function_stub <- function(
       ""
     }
     resolver_chemicals_arg <- if (nzchar(resolver_hook_pre_request)) ",\n    chemicals = chemicals" else ""
+    resolver_return_doc <- fn_config$return_description %||% return_doc
 
     # Update roxygen header with resolver-specific docs
     roxygen_header <- glue::glue(
@@ -1201,7 +1224,7 @@ build_function_stub <- function(
 #\' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
 #\' then sends the resolved Chemical objects to the API endpoint.
 #\'
-{resolver_param_docs}#\' @return {return_doc}
+{resolver_param_docs}#\' @return {resolver_return_doc}
 #\' @export
 #\'
 #\' @examples
@@ -1224,7 +1247,7 @@ build_function_stub <- function(
     tidy = FALSE{resolver_chemicals_arg}{resolver_query_params_call}{pagination_call_params}
   )
 
-  {resolver_hook_post_response}# Additional post-processing can be added here
+{resolver_hook_post_response}  # Additional post-processing can be added here
 
   return(result)
 }}
@@ -1233,7 +1256,7 @@ build_function_stub <- function(
     )
 
     # Combine header and body and return
-    return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
+    return(paste0(roxygen_header, "\n", fn_body))
   }
 
   # ===========================================================================

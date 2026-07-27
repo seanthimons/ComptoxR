@@ -182,6 +182,46 @@ test_that("schema preprocessing excludes WebTEST report and export routes", {
   )
 })
 
+test_that("resolver stubs include hook-configured output parameters", {
+  dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
+  testthat::skip_if_not(
+    file.exists(dev_stub_generation),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+  source_pipeline_files()
+
+  schema_path <- testthat::test_path("..", "..", "schema", "chemi-resolver-prod.json")
+  spec <- suppressWarnings(
+    openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
+  )
+  spec <- spec[spec$route == "/api/resolver/getsimilaritymap", , drop = FALSE]
+  spec$route <- "resolver/getsimilaritymap"
+  spec$fn <- "chemi_resolver_getsimilaritymap"
+  spec$file <- "chemi_resolver_getsimilaritymap.R"
+  spec$batch_limit <- 0L
+  config <- list(
+    wrapper_function = "generic_chemi_request",
+    param_strategy = "options",
+    example_query = "DTXSID7020182",
+    lifecycle_badge = "experimental"
+  )
+
+  text <- render_endpoint_stubs(spec, config = config)$text[[1]]
+  definition <- Filter(
+    function(expression) {
+      is.call(expression) &&
+        identical(expression[[1]], as.name("<-")) &&
+        identical(as.character(expression[[2]]), "chemi_resolver_getsimilaritymap")
+    },
+    as.list(parse(text = text))
+  )[[1]]
+  generated_fn <- eval(definition[[3]])
+
+  expect_true(all(c("hclust_method", "format") %in% names(formals(generated_fn))))
+  expect_identical(formals(generated_fn)$sort, FALSE)
+  expect_match(text, '"post_response"', fixed = TRUE)
+})
+
 test_that("real descriptor schemas render all ten generic hook wrappers", {
   dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
   testthat::skip_if_not(

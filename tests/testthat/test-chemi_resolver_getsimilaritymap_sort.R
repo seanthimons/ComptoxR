@@ -3,7 +3,20 @@ if (!exists("generated_contract_ensure_package", mode = "function")) {
 }
 generated_contract_ensure_package()
 
-test_that("chemi_resolver_getsimilaritymap forwards sort as a query parameter", {
+resolver_similarity_map_payload <- function() {
+  list(
+    order = list(
+      list(chemical = list(sid = "DTXSID-A", name = "A")),
+      list(chemical = list(sid = "DTXSID-B", name = "B"))
+    ),
+    similarity = list(
+      list(list(sim = 0), list(sim = 0.25)),
+      list(list(sim = 0.25), list(sim = 0))
+    )
+  )
+}
+
+test_that("chemi_resolver_getsimilaritymap sends flat Chemical records", {
   captured <- NULL
   testthat::local_mocked_bindings(
     chemi_resolver_lookup_bulk = function(...) {
@@ -21,14 +34,25 @@ test_that("chemi_resolver_getsimilaritymap forwards sort as a query parameter", 
     },
     generic_chemi_request = function(...) {
       captured <<- list(...)
-      list()
+      resolver_similarity_map_payload()
     },
     .package = "ComptoxR"
   )
 
-  ComptoxR::chemi_resolver_getsimilaritymap(query = "DTXSID1", sort = FALSE)
+  result <- ComptoxR::chemi_resolver_getsimilaritymap(
+    query = "DTXSID1",
+    section = "PubChem",
+    hclust_method = "single"
+  )
 
   expect_equal(captured$endpoint, "resolver/getsimilaritymap")
   expect_equal(captured$sort, "false")
   expect_false(captured$tidy)
+  expect_equal(captured$options$section, "PubChem")
+  expect_equal(captured$chemicals[[1]]$sid, "DTXSID1")
+  expect_null(captured$chemicals[[1]]$chemical)
+  expect_true(is.matrix(result$similarity))
+  expect_identical(rownames(result$similarity), c("DTXSID-A", "DTXSID-B"))
+  expect_identical(colnames(result$similarity), c("DTXSID-A", "DTXSID-B"))
+  expect_identical(result$hc$method, "single")
 })

@@ -101,8 +101,26 @@ chemi_resolver_getsimilaritylist:
     - resolve_query_to_chemical_records
 
 chemi_resolver_getsimilaritymap:
+  return_description: "A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`"
+  extra_params:
+    hclust_method:
+      default: '"complete"'
+      type: "character"
+      description: "Hierarchical clustering method passed to stats::hclust()"
+    format:
+      default: 'c("cluster", "long", "raw")'
+      type: "character"
+      description: "Output format: cluster result, long-form similarities, or raw API response"
+  parameter_overrides:
+    sort:
+      required: false
+      default: "FALSE"
+      description: "Logical value controlling API result ordering"
   pre_request:
     - resolve_query_to_chemical_records
+    - flatten_similarity_map_chemicals
+  post_response:
+    - format_similarity_map_result
 
 chemi_resolver_orderBySimilarity:
   pre_request:

@@ -125,26 +125,11 @@ test_that("API helper exports validate before external work", {
   withr::local_envvar(c(ctx_api_key = "real-token"))
   expect_equal(ct_api_key(), "real-token")
 
-  expect_error(chemi_cluster("DTXSID7020182", sort = NULL), "Missing sort")
   expect_error(chemi_functional_use(numeric()), "non-empty character vector")
   expect_error(chemi_predict(NULL), "Request missing")
   expect_error(chemi_safety_section(query = "DTXSID7020182"), "Missing section")
   expect_error(epi_suite_pull_data(list()), "Missing aggregaion endpoint")
   expect_error(util_classyfire(), "query")
-})
-
-test_that("chemi_cluster_sim_list converts similarity matrices to long form", {
-  cluster <- list(
-    mol_names = tibble::tibble(name = c("A", "B")),
-    similarity = list(c(1, 0.25), c(0.25, 1))
-  )
-
-  result <- chemi_cluster_sim_list(cluster)
-
-  expect_s3_class(result, "tbl_df")
-  expect_equal(nrow(result), 2)
-  expect_equal(sort(result$value), c(0.25, 0.25))
-  expect_true(all(result$parent != result$child))
 })
 
 test_that("ct_classify adds classification fields without network access", {

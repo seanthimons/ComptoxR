@@ -93,6 +93,18 @@ for (wrapper_name in names(resolver_cluster)) {
         chemi_resolver_lookup_bulk = function(...) list(found_record(), sid_only_record()),
         generic_chemi_request = function(...) {
           captured <<- list(...)
+          if (nm == "chemi_resolver_getsimilaritymap") {
+            return(list(
+              order = list(
+                list(chemical = list(sid = "DTXSID-A", name = "A")),
+                list(chemical = list(sid = "SID-ONLY", name = "B"))
+              ),
+              similarity = list(
+                list(list(sim = 0), list(sim = 0.25)),
+                list(list(sim = 0.25), list(sim = 0))
+              )
+            ))
+          }
           "SENTINEL"
         },
         .package = "ComptoxR"
@@ -100,17 +112,22 @@ for (wrapper_name in names(resolver_cluster)) {
 
       res <- get(nm, envir = asNamespace("ComptoxR"))(query = c("50-00-0", "x"))
 
-      # Most cluster members return generic_chemi_request() verbatim. chemi_hazard_bulk
-      # is the exception: it carries a post_response formatter (format_chemi_hazard_result)
-      # that transforms the POST result, so it does not pass the raw request result through.
-      if (nm != "chemi_hazard_bulk") {
+      # Post-response formatters transform the raw helper result.
+      if (nm == "chemi_resolver_getsimilaritymap") {
+        expect_s3_class(res$hc, "hclust")
+      } else if (nm != "chemi_hazard_bulk") {
         expect_identical(res, "SENTINEL")
       }
       expect_identical(captured$endpoint, endpoint)
       expect_false(captured$tidy)
       expect_length(captured$chemicals, 2L)
-      expect_identical(captured$chemicals[[1]]$chemical$sid, "DTXSID-A")
-      expect_identical(captured$chemicals[[2]]$chemical$sid, "SID-ONLY")
+      if (nm == "chemi_resolver_getsimilaritymap") {
+        expect_identical(captured$chemicals[[1]]$sid, "DTXSID-A")
+        expect_identical(captured$chemicals[[2]]$sid, "SID-ONLY")
+      } else {
+        expect_identical(captured$chemicals[[1]]$chemical$sid, "DTXSID-A")
+        expect_identical(captured$chemicals[[2]]$chemical$sid, "SID-ONLY")
+      }
     })
 
     test_that(paste0(nm, " short-circuits to NULL + warning when nothing resolves"), {
