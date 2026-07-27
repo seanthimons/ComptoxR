@@ -4,7 +4,7 @@
 \alias{ctx_server}
 \title{Set API endpoints for Comptox API endpoints}
 \usage{
-ctx_server(server = NULL)
+ctx_server(server = NULL, url_only = FALSE)
 }
 \arguments{
 \item{server}{Defines what server to target. If \code{NULL} the server URL is
@@ -15,9 +15,13 @@ reset. Valid options are:
 \item Development: 3
 \item Scraping: 9
 }}
+
+\item{url_only}{If \code{TRUE}, return the selected URL without changing
+\code{ctx_burl}.}
 }
 \value{
-Should return the Sys Env variable \code{ctx_burl}.
+The selected URL when \code{url_only = TRUE}; otherwise the configured
+\code{ctx_burl}.
 }
 \description{
 Set API endpoints for Comptox API endpoints

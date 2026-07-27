@@ -1,84 +1,133 @@
-#' Webtest Predict
+#' Predict one chemical with WebTEST
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param endpoint Optional parameter
-#' @param method Optional parameter (default: consensus)
-#' @param format Optional parameter. Options: JSON, HTML, PDF
-#' @return Returns a tibble with results
+#' Wide output preserves every input position and expands successful inputs to
+#' one row per requested prediction. Raw output preserves the upstream
+#' `PredictionResult`.
+#'
+#' @param smiles One SMILES string or resolvable chemical identifier.
+#' @param endpoint One required WebTEST endpoint identifier, such as `LC50`.
+#' @param method Prediction method: `consensus`, `hc`, `sm`, `gc`, or `nn`.
+#' @param format Response format. Only `JSON` is supported.
+#' @param output Output contract: `wide` for normalized rows or `raw` for the
+#'   upstream `PredictionResult` with source and input-map attributes.
+#' @return A normalized tibble or raw WebTEST `PredictionResult`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict(smiles = "DTXSID7020182")
+#' chemi_webtest_predict("DTXSID7020182", endpoint = "LC50")
 #' }
-chemi_webtest_predict <- function(smiles, endpoint = NULL, method = "consensus", format = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
+chemi_webtest_predict <- function(
+  smiles,
+  endpoint,
+  method = "consensus",
+  format = "JSON",
+  output = c("wide", "raw")
+) {
+  if (missing(endpoint)) {
+    endpoint <- NULL
   }
-  if (!is.null(endpoint)) {
-    options[['endpoint']] <- endpoint
-  }
-  if (!is.null(method)) {
-    options[['method']] <- method
-  }
-  if (!is.null(format)) {
-    options[['format']] <- format
-  }
-  result <- generic_request(
-    endpoint = "webtest/predict",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+  req_data <- run_hook(
+    "chemi_webtest_predict",
+    "pre_request",
+    list(
+      params = list(
+        smiles = smiles,
+        endpoint = endpoint,
+        method = method,
+        format = format,
+        output = output
+      )
+    )
   )
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_request(
+      endpoint = req_data$request$endpoint,
+      method = "GET",
+      batch_limit = 0,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      options = req_data$request$options
+    )
+  }
 
-  # Additional post-processing can be added here
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_webtest_predict", "post_response", post_data)
 
   return(result)
 }
 
-
-#' Webtest Predict
+#' Predict multiple chemicals with WebTEST
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param structures Molecule expressed as SMILES or MOL
-#' @param endpoints Endpoint to predict
-#' @param methods Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)
-#' @param format Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF
-#' @return Returns a tibble with results
+#' Wide output preserves every input position and expands successful inputs to
+#' one row per requested prediction. Raw output preserves the upstream
+#' `PredictionResult`.
+#'
+#' @param structures Chemical structures or resolvable identifiers.
+#' @param endpoints Required WebTEST endpoint identifiers.
+#' @param methods Optional prediction methods: `consensus`, `hc`, `sm`, `gc`,
+#'   or `nn`. `NULL` retains every method returned by WebTEST.
+#' @param format Response format. Only `JSON` is supported.
+#' @param output Output contract: `wide` for normalized rows or `raw` for the
+#'   upstream `PredictionResult` with source and input-map attributes.
+#' @return A normalized tibble or raw WebTEST `PredictionResult`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict_bulk(structures = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_webtest_predict_bulk(
+#'   structures = c("DTXSID7020182", "CCO"),
+#'   endpoints = "LC50"
+#' )
 #' }
-chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  options$endpoints <- endpoints
-  if (!is.null(methods)) {
-    options$methods <- methods
+chemi_webtest_predict_bulk <- function(
+  structures,
+  endpoints,
+  methods = NULL,
+  format = "JSON",
+  output = c("wide", "raw")
+) {
+  if (missing(endpoints)) {
+    endpoints <- NULL
   }
-  if (!is.null(format)) {
-    options$format <- format
-  }
-  result <- generic_chemi_request(
-    query = structures,
-    endpoint = "webtest/predict",
-    options = options,
-    tidy = FALSE
+  req_data <- run_hook(
+    "chemi_webtest_predict_bulk",
+    "pre_request",
+    list(
+      params = list(
+        structures = structures,
+        endpoints = endpoints,
+        methods = methods,
+        format = format,
+        output = output
+      )
+    )
   )
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_chemi_request(
+      endpoint = req_data$request$endpoint,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      body = req_data$request$body
+    )
+  }
 
-  # Additional post-processing can be added here
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_webtest_predict_bulk", "post_response", post_data)
 
   return(result)
 }

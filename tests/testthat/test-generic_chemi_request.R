@@ -41,6 +41,110 @@ test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
   expect_match(output, "\\[\\s*\\{\\s*\"sid\"\\s*:\\s*\"DTXSID7020182\"\\s*\\}\\s*\\]")
 })
 
+test_that("generic_chemi_request sends explicit bodies exactly and preserves duplicates", {
+  testthat::skip_if_not_installed("httpuv")
+  withr::local_envvar(run_debug = "TRUE")
+  body <- list(
+    chemicals = I(c("CCO", "CCO", "CCC")),
+    options = list(headers = TRUE)
+  )
+
+  output <- capture_output(
+    generic_chemi_request(
+      endpoint = "descriptors",
+      server = "https://selected.example/api",
+      body = body,
+      tidy = FALSE
+    )
+  )
+
+  expect_match(output, "POST /api/descriptors", fixed = TRUE)
+  expect_match(
+    output,
+    '"chemicals":\\s*\\[\\s*"CCO",\\s*"CCO",\\s*"CCC"\\s*\\]'
+  )
+  expect_match(output, '"options":\\s*\\{\\s*"headers":\\s*true\\s*\\}')
+})
+
+test_that("generic_chemi_request parses configured JSON, CSV, and TSV response types", {
+  responses <- list(
+    httr2::response(
+      status_code = 200,
+      headers = list(`Content-Type` = "application/json"),
+      body = charToRaw('{"chemicals":[{"smiles":"CCO"}]}')
+    ),
+    httr2::response(
+      status_code = 200,
+      headers = list(`Content-Type` = "text/csv"),
+      body = charToRaw("smiles,value\nCCO,1")
+    ),
+    httr2::response(
+      status_code = 200,
+      headers = list(`Content-Type` = "text/tab-separated-values"),
+      body = charToRaw("smiles\tvalue\nCCO\t1")
+    )
+  )
+  call_index <- 0L
+
+  testthat::with_mocked_bindings(
+    req_perform = function(req) {
+      call_index <<- call_index + 1L
+      responses[[call_index]]
+    },
+    .package = "httr2",
+    {
+      json <- generic_chemi_request(
+        endpoint = "descriptors",
+        body = list(chemicals = I("CCO")),
+        tidy = FALSE,
+        content_type = "application/json"
+      )
+      csv <- generic_chemi_request(
+        endpoint = "descriptors",
+        body = list(chemicals = I("CCO")),
+        tidy = FALSE,
+        content_type = "text/csv"
+      )
+      tsv <- generic_chemi_request(
+        endpoint = "descriptors",
+        body = list(chemicals = I("CCO")),
+        tidy = FALSE,
+        content_type = "text/tab-separated-values"
+      )
+    }
+  )
+
+  expect_identical(json$chemicals[[1]]$smiles, "CCO")
+  expect_s3_class(csv, "data.frame")
+  expect_identical(csv$smiles, "CCO")
+  expect_identical(csv$value, 1L)
+  expect_s3_class(tsv, "data.frame")
+  expect_identical(tsv$smiles, "CCO")
+  expect_identical(tsv$value, 1L)
+})
+
+test_that("generic_chemi_request propagates delimited response parsing failures", {
+  response <- httr2::response(
+    status_code = 200,
+    headers = list(`Content-Type` = "text/csv"),
+    body = charToRaw("smiles,value\nCCO")
+  )
+
+  testthat::with_mocked_bindings(
+    req_perform = function(req) response,
+    .package = "httr2",
+    expect_error(
+      generic_chemi_request(
+        endpoint = "descriptors",
+        body = list(chemicals = I("CCO")),
+        tidy = FALSE,
+        content_type = "text/csv"
+      ),
+      "did not have 2 elements"
+    )
+  )
+})
+
 test_that("generic_chemi_request appends named query parameters", {
   captured_url <- NULL
   testthat::with_mocked_bindings(

@@ -2,21 +2,49 @@
 % Please edit documentation in R/chemi_descriptors.R
 \name{chemi_descriptors_bulk}
 \alias{chemi_descriptors_bulk}
-\title{Descriptors}
+\title{Calculate descriptors for multiple chemicals}
 \usage{
-chemi_descriptors_bulk(query)
+chemi_descriptors_bulk(
+  query,
+  type,
+  chemIdType = "AnyId",
+  headers = FALSE,
+  format = "JSON",
+  timeout = NULL,
+  output = c("wide", "raw")
+)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{query}{Chemical identifiers or structures.}
+
+\item{type}{Descriptor engine: \code{padel}, \code{rdkit}, \code{mordred}, or \code{webtest}.}
+
+\item{chemIdType}{Input identifier type accepted by the aggregate service.}
+
+\item{headers}{Request upstream descriptor headers. Wide output always requests
+or deterministically generates headers.}
+
+\item{format}{Response format: \code{JSON}, \code{CSV}, or \code{TSV}.}
+
+\item{timeout}{Optional upstream calculation timeout.}
+
+\item{output}{Output contract: \code{wide} returns a validated tibble; \code{raw}
+returns the unformatted payload with provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated tibble with one row per input or a raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Every input position is represented in wide output, including duplicates,
+missing inputs, unresolved identifiers, and failed structures.
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_descriptors_bulk(
+  query = c("DTXSID7020182", "CCO"),
+  type = "padel"
+)
 }
 }

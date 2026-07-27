@@ -77,3 +77,230 @@ test_that("stub generation sends object POST bodies through explicit body payloa
   expect_match(text, "body = request_body", fixed = TRUE)
   expect_false(grepl("body = body", text, fixed = TRUE))
 })
+
+test_that("stub generation emits the WebTEST request template with complete hook state", {
+  dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
+  testthat::skip_if_not(
+    file.exists(dev_stub_generation),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+  source_pipeline_files()
+
+  spec <- tibble::tibble(
+    fn = "chemi_webtest_predict_bulk",
+    file = "chemi_webtest_predict.R",
+    route = "webtest/predict",
+    summary = "Webtest Predict",
+    method = "POST",
+    batch_limit = 0L,
+    path_params = "",
+    query_params = "",
+    body_params = "endpoints,structures,format,methods",
+    num_path_params = 0L,
+    num_body_params = 4L,
+    path_param_metadata = list(list()),
+    query_param_metadata = list(list()),
+    body_param_metadata = list(list(
+      endpoints = list(required = TRUE),
+      structures = list(required = TRUE),
+      format = list(required = FALSE, default = "JSON"),
+      methods = list(required = FALSE)
+    )),
+    body_schema_full = list(list(
+      type = "object",
+      properties = list(
+        endpoints = list(type = "array"),
+        structures = list(type = "array"),
+        format = list(type = "string"),
+        methods = list(type = "array")
+      )
+    )),
+    content_type = "application/json",
+    body_schema_type = "simple_object",
+    request_type = "json"
+  )
+  config <- list(
+    wrapper_function = "generic_chemi_request",
+    param_strategy = "options",
+    example_query = "DTXSID7020182",
+    lifecycle_badge = "experimental"
+  )
+
+  generated <- render_endpoint_stubs(spec, config = config)
+  text <- generated$text[[1]]
+
+  expect_match(
+    text,
+    'function(structures, endpoints, methods = NULL, format = "JSON", output = c("wide", "raw"))',
+    fixed = TRUE
+  )
+  expect_match(
+    text,
+    'run_hook("chemi_webtest_predict_bulk", "pre_request"',
+    fixed = TRUE
+  )
+  expect_match(text, "body = req_data$request$body", fixed = TRUE)
+  expect_match(text, "post_data <- req_data", fixed = TRUE)
+  expect_match(text, "post_data$result <- result", fixed = TRUE)
+  expect_match(text, "result <- req_data$result", fixed = TRUE)
+  expect_match(
+    text,
+    'run_hook("chemi_webtest_predict_bulk", "post_response"',
+    fixed = TRUE
+  )
+  expect_false(grepl('"transform"', text, fixed = TRUE))
+})
+
+test_that("schema preprocessing excludes WebTEST report and export routes", {
+  dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
+  testthat::skip_if_not(
+    file.exists(dev_stub_generation),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+  source_pipeline_files()
+
+  schema_file <- tempfile(fileext = ".json")
+  jsonlite::write_json(
+    list(
+      openapi = "3.0.1",
+      paths = list(
+        "/api/webtest/predict" = list(get = list()),
+        "/api/webtest/report" = list(get = list()),
+        "/api/webtest/export-append" = list(post = list()),
+        "/api/webtest/predict/export" = list(post = list())
+      )
+    ),
+    schema_file,
+    auto_unbox = TRUE
+  )
+
+  preprocessed <- preprocess_schema(schema_file)
+
+  expect_identical(
+    names(preprocessed$paths),
+    "/api/webtest/predict"
+  )
+})
+
+test_that("real descriptor schemas render all ten generic hook wrappers", {
+  dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
+  testthat::skip_if_not(
+    file.exists(dev_stub_generation),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+  source_pipeline_files()
+
+  schema_inputs <- list(
+    list(file = "chemi-descriptors-prod.json", service = "descriptors"),
+    list(file = "chemi-padel-prod.json", service = "padel"),
+    list(file = "chemi-rdkit-staging.json", service = "rdkit"),
+    list(file = "chemi-mordred-staging.json", service = "mordred"),
+    list(file = "chemi-webtest-prod.json", service = "webtest")
+  )
+  rows <- lapply(schema_inputs, function(input) {
+    schema_path <- testthat::test_path("..", "..", "schema", input$file)
+    parsed <- openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
+    parsed$route <- sub("^/api/", "", parsed$route)
+    parsed <- parsed[parsed$route == input$service, , drop = FALSE]
+    parsed$fn <- paste0(
+      "chemi_",
+      input$service,
+      ifelse(parsed$method == "POST", "_bulk", "")
+    )
+    parsed$file <- paste0("chemi_", input$service, ".R")
+    parsed$batch_limit <- 0L
+    parsed
+  })
+  spec <- dplyr::bind_rows(rows)
+  config <- list(
+    wrapper_function = "generic_chemi_request",
+    param_strategy = "options",
+    example_query = "DTXSID7020182",
+    lifecycle_badge = "experimental"
+  )
+
+  rendered <- render_endpoint_stubs(spec, config = config)
+  text_by_fn <- stats::setNames(rendered$text, rendered$fn)
+  expected_formals <- list(
+    chemi_descriptors = c("smiles", "type", "headers", "format", "timeout", "output"),
+    chemi_descriptors_bulk = c(
+      "query",
+      "type",
+      "chemIdType",
+      "headers",
+      "format",
+      "timeout",
+      "output"
+    ),
+    chemi_padel = c("smiles", "x2d", "x3d", "fp", "headers", "timeout", "output"),
+    chemi_padel_bulk = c("query", "x2d", "x3d", "fp", "headers", "timeout", "output"),
+    chemi_rdkit = c("smiles", "type", "radius", "bits", "output"),
+    chemi_rdkit_bulk = c("chemicals", "options", "type", "radius", "bits", "output"),
+    chemi_mordred = c("smiles", "headers", "inchi", "output"),
+    chemi_mordred_bulk = c("chemicals", "options", "headers", "inchi", "output"),
+    chemi_webtest = c("smiles", "headers", "output"),
+    chemi_webtest_bulk = c("query", "chemIdType", "headers", "format", "output")
+  )
+
+  expect_setequal(names(text_by_fn), names(expected_formals))
+  for (fn_name in names(expected_formals)) {
+    expressions <- parse(text = text_by_fn[[fn_name]])
+    definition <- Filter(
+      function(expression) {
+        is.call(expression) &&
+          identical(expression[[1]], as.name("<-")) &&
+          identical(as.character(expression[[2]]), fn_name)
+      },
+      as.list(expressions)
+    )[[1]]
+    generated_fn <- eval(definition[[3]])
+    expect_identical(
+      names(formals(generated_fn)),
+      expected_formals[[fn_name]],
+      info = fn_name
+    )
+
+    text <- text_by_fn[[fn_name]]
+    pre_position <- regexpr('"pre_request"', text, fixed = TRUE)[[1]]
+    helper_name <- if (grepl("_bulk$", fn_name)) {
+      "generic_chemi_request"
+    } else {
+      "generic_request"
+    }
+    helper_position <- regexpr(paste0(helper_name, "("), text, fixed = TRUE)[[1]]
+    post_position <- regexpr('"post_response"', text, fixed = TRUE)[[1]]
+    expect_true(
+      pre_position < helper_position && helper_position < post_position,
+      info = fn_name
+    )
+    expect_false(grepl('"transform"', text, fixed = TRUE), info = fn_name)
+    expect_match(text, "req_data$request$endpoint", fixed = TRUE)
+    if (grepl("_bulk$", fn_name)) {
+      expect_match(text, "body = req_data$request$body", fixed = TRUE)
+    } else {
+      expect_match(text, "options = req_data$request$options", fixed = TRUE)
+    }
+
+    for (param_name in expected_formals[[fn_name]]) {
+      doc_matches <- gregexpr(
+        paste0("#' @param ", param_name, " "),
+        text,
+        fixed = TRUE
+      )[[1]]
+      expect_equal(
+        length(doc_matches[doc_matches > 0]),
+        1L,
+        info = paste(fn_name, param_name)
+      )
+    }
+  }
+
+  expect_identical(
+    formals(eval(parse(text = text_by_fn[["chemi_descriptors_bulk"]])[[1]][[3]]))$chemIdType,
+    "AnyId"
+  )
+  expect_identical(
+    formals(eval(parse(text = text_by_fn[["chemi_webtest_bulk"]])[[1]][[3]]))$format,
+    "JSON"
+  )
+})
