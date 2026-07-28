@@ -81,7 +81,8 @@ stubgen_build_pre_hook <- function(
   fn_signature,
   additional_params = character(),
   return_on_skip = TRUE,
-  writeback_params = TRUE
+  writeback_params = TRUE,
+  param_inits = list()
 ) {
   if (is.null(fn_config$pre_request) || length(fn_config$pre_request) == 0) {
     return("")
@@ -91,9 +92,20 @@ stubgen_build_pre_hook <- function(
   param_names <- unique(c(formal_names, additional_params))
   params_expr <- stubgen_hook_params_expr(param_names)
 
+  # additional_params that are not function formals are initialised before the
+  # hook runs. Default init is NULL; `param_inits` supplies a code-string RHS for
+  # specific params (e.g. server <- "chemi_burl") so the hook has a value to
+  # override and the wrapper call has a valid fallback.
   init_names <- setdiff(additional_params, formal_names)
   init_lines <- if (length(init_names) > 0) {
-    paste0("  ", vapply(init_names, stubgen_symbol, character(1)), " <- NULL\n", collapse = "")
+    paste0(
+      "  ",
+      vapply(init_names, stubgen_symbol, character(1)),
+      " <- ",
+      vapply(init_names, function(nm) param_inits[[nm]] %||% "NULL", character(1)),
+      "\n",
+      collapse = ""
+    )
   } else {
     ""
   }
@@ -621,7 +633,39 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 #' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").
 #' @return Character string containing complete function definition.
 #' @export
-build_function_stub <- function(
+build_function_stub <- function(fn, ..., schema_stage = "public") {
+  result <- build_function_stub_impl(fn = fn, ..., schema_stage = schema_stage)
+
+  # Non-public functions thread a hook-supplied `server` (see the has_hooks
+  # block: enforce_stage_server sets req_data$params$server, which the generated
+  # writeback assigns to a local `server`). Route the request call through that
+  # local so the staging/development server URL is actually used. Prod-stage
+  # functions and any body that never wrote back `server` are returned verbatim.
+  if (is.na(result) || identical(schema_stage, "public")) {
+    return(result)
+  }
+  if (!grepl('req_data$params[["server"]]', result, fixed = TRUE)) {
+    return(result)
+  }
+  if (grepl('server = "chemi_burl"', result, fixed = TRUE)) {
+    result <- gsub('server = "chemi_burl"', "server = server", result, fixed = TRUE)
+  } else if (!grepl("server = server", result, fixed = TRUE)) {
+    result <- sub(
+      "(generic_(?:chemi_)?request\\(\\n)",
+      "\\1    server = server,\n",
+      result,
+      perl = TRUE
+    )
+  }
+  if (!grepl("server = server", result, fixed = TRUE)) {
+    cli::cli_abort(
+      "Non-public {.fn {fn}} threads a server override but no request call could be routed through it."
+    )
+  }
+  result
+}
+
+build_function_stub_impl <- function(
   fn,
   endpoint,
   method,
@@ -638,11 +682,18 @@ build_function_stub <- function(
   response_schema_type = "unknown",
   request_type = NULL,
   pagination_strategy = "none",
-  pagination_metadata = NULL
+  pagination_metadata = NULL,
+  schema_stage = "public"
 ) {
   if (!requireNamespace("glue", quietly = TRUE)) {
     stop("Package 'glue' is required.")
   }
+
+  # Deployment stage the endpoint was generated from (public/staging/development).
+  # Emitted as the @apiStage doc tag; non-public stages also drive the
+  # server-swap hook wiring below.
+  schema_stage <- schema_stage %|NA|% "public"
+  is_non_prod_stage <- !identical(schema_stage, "public")
 
   # Format batch_limit for code
   # For POST methods with bulk requests, use environment variable for runtime configuration
@@ -1001,13 +1052,31 @@ build_function_stub <- function(
       is.null(fn_config$request_template) &&
       !isTRUE(fn_config$request_override$array_payload)
     hook_extra_params <- if (uses_chemical_objects) "chemicals" else character(0)
+    # Non-public functions carry the enforce_stage_server hook, which sets
+    # req_data$params$server. Thread `server` through the writeback (initialised
+    # to the wrapper default) so the swapped URL reaches the request call. The
+    # thin build_function_stub() wrapper routes the wrapper call through it.
+    hook_param_inits <- list()
+    if (isTRUE(is_non_prod_stage)) {
+      hook_extra_params <- unique(c(hook_extra_params, "server"))
+      hook_param_inits <- list(
+        server = if (grepl("^cc_", fn)) {
+          '"cc_burl"'
+        } else if (grepl("^ct_", fn)) {
+          '"ctx_burl"'
+        } else {
+          '"chemi_burl"'
+        }
+      )
+    }
     hook_pre_request <- stubgen_build_pre_hook(
       fn,
       fn_config,
       fn_signature,
       additional_params = hook_extra_params,
       return_on_skip = is.null(fn_config$request_template),
-      writeback_params = is.null(fn_config$request_template)
+      writeback_params = is.null(fn_config$request_template),
+      param_inits = hook_param_inits
     )
     hook_post_response <- stubgen_build_post_hook(fn, fn_config, fn_signature)
     if (nzchar(hook_pre_request) && identical(wrapper_fn, "generic_chemi_request")) {
@@ -1034,6 +1103,7 @@ build_function_stub <- function(
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
 {param_docs}#\' @return {return_doc}
+#\' @apiStage {schema_stage}
 #\' @export
 #\'
 #\' @examples
@@ -1225,6 +1295,7 @@ build_function_stub <- function(
 #\' then sends the resolved Chemical objects to the API endpoint.
 #\'
 {resolver_param_docs}#\' @return {resolver_return_doc}
+#\' @apiStage {schema_stage}
 #\' @export
 #\'
 #\' @examples
@@ -1291,6 +1362,7 @@ build_function_stub <- function(
 #\'
 #\' @param query Character vector of values to search for
 #\' @return {return_doc}
+#\' @apiStage {schema_stage}
 #\' @export
 #\'
 #\' @examples
@@ -1369,6 +1441,7 @@ build_function_stub <- function(
 #\' `r lifecycle::badge("{lifecycle_badge}")`
 #\'
 {param_docs}#\' @return {return_doc}
+#\' @apiStage {schema_stage}
 #\' @export
 #\'
 #\' @examples
@@ -1999,6 +2072,7 @@ render_endpoint_stubs <- function(
       body_schema_full = list(list()),
       body_item_type = NA_character_,
       source_file = NA_character_,
+      schema_stage = "public",
       pagination_strategy = "none",
       pagination_metadata = list(NULL)
     )
@@ -2130,7 +2204,8 @@ render_endpoint_stubs <- function(
       response_schema_type = spec$response_schema_type,
       request_type = spec$request_type,
       pagination_strategy = spec$pagination_strategy,
-      pagination_metadata = spec$pagination_metadata
+      pagination_metadata = spec$pagination_metadata,
+      schema_stage = spec$schema_stage
     ),
     function(
       fn,
@@ -2148,7 +2223,8 @@ render_endpoint_stubs <- function(
       response_schema_type,
       request_type,
       pagination_strategy,
-      pagination_metadata
+      pagination_metadata,
+      schema_stage
     ) {
       build_function_stub(
         fn = fn,
@@ -2167,7 +2243,8 @@ render_endpoint_stubs <- function(
         response_schema_type = response_schema_type %|NA|% "unknown",
         request_type = request_type %|NA|% "",
         pagination_strategy = pagination_strategy %|NA|% "none",
-        pagination_metadata = pagination_metadata
+        pagination_metadata = pagination_metadata,
+        schema_stage = schema_stage %|NA|% "public"
       )
     }
   )

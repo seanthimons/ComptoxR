@@ -87,6 +87,27 @@ main <- function(pkg_dir = "R") {
   cat("\n== hook_config-owned (generated, excluded from candidates):", sum(res$hook_owned), "==\n")
   cat("\n== candidates:", nrow(cand), "non-generated fns that hit the API or wrap siblings ==\n")
   print(cand[, c("fn", "kind", "badge")], row.names = FALSE)
+
+  # Stable-badge audit: a clean stable wrapper is a single-function file whose
+  # only API access is one generic_request()/generic_chemi_request() call. Flag
+  # the ones "hiding" extra behaviour behind a stable badge.
+  stable <- res[res$badge == "stable", ]
+  stable$reason <- ifelse(
+    stable$raw_httr2,
+    "raw httr2",
+    ifelse(
+      stable$wraps_sibling & !stable$direct_api,
+      "wraps sibling, no generic_request",
+      ""
+    )
+  )
+  notable <- stable[nzchar(stable$reason), ]
+  notable <- notable[order(notable$reason, notable$fn), ]
+  cat("\n== stable-badge functions:", nrow(stable), "(", sum(nzchar(stable$reason)), "notable ) ==\n")
+  print(table(stable$kind))
+  cat("\n== notable stable functions (extra behaviour behind a stable badge) ==\n")
+  print(notable[, c("fn", "kind", "n_defs", "reason")], row.names = FALSE)
+
   cat("\nFull classification written to", normalizePath(out), "\n")
   invisible(res)
 }

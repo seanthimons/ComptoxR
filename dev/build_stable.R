@@ -16,20 +16,20 @@
 # ------------------------------------------------------------------------------
 # WHAT COUNTS AS "PUBLIC"
 # ------------------------------------------------------------------------------
-# Today public == lifecycle badge "stable". The keep-marker may later become a
-# custom roxygen tag/badge (name TBD — possibly `server`). When it lands, extend
-# the two config vectors below; nothing else changes.
-#   - a new BADGE stage  -> add to KEEP_STAGES  (e.g. "server")
-#   - a new custom TAG   -> add its regex to STAGE_REGEX (capture group 1 = stage)
-# A function with NO stage marker at all is always kept.
+# Public == lifecycle badge "stable" OR the custom `@apiStage public` tag written
+# by the stub generator (dev/endpoint_eval/07_stub_generation.R). Functions whose
+# only stage marker is a non-public `@apiStage` (staging/development) are dropped
+# from the public build; `@apiStage public` and unmarked functions are kept.
+# To extend: add a BADGE stage to KEEP_STAGES, or a custom TAG regex to
+# STAGE_REGEX (capture group 1 = stage). A function with NO stage marker is kept.
 # ==============================================================================
 
 # --- config -------------------------------------------------------------------
-KEEP_STAGES <- c("stable") # lifecycle stages kept exported in the stable build
+KEEP_STAGES <- c("stable", "public") # stages kept exported in the public build
 STAGE_REGEX <- c(
-  'lifecycle::badge\\("([a-z]+)"\\)' # standard inline lifecycle badge
-  # , "@lifecycle\\s+([a-z]+)"       # <- custom @lifecycle tag; enable when it exists
-  # , "@(server)\\b"                 # <- custom marker tag; enable when it exists
+  'lifecycle::badge\\("([a-z]+)"\\)', # standard inline lifecycle badge
+  "@apiStage\\s+([a-z]+)" # custom @apiStage provenance tag (public/staging/development)
+  # , "@lifecycle\\s+([a-z]+)"        # <- custom @lifecycle tag; enable when it exists
 )
 
 dry_run <- "--dry-run" %in% commandArgs(trailingOnly = TRUE)

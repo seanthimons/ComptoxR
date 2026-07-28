@@ -224,6 +224,8 @@ ct_spec <- list(
       mutate(
         route = strip_curly_params(route, leading_slash = 'remove'),
         domain = route %>% str_extract("^[^/]+"),
+        # ctx schemas are prod-only, so every ct_* function is public-stage.
+        schema_stage = "public",
         # "short" core: strips domain-ish noise AND the distinguishing tokens
         # (summary, by-dtxsid). This is today's logic, kept for idempotency.
         .core_short = route %>%
@@ -308,6 +310,13 @@ chemi_spec <- list(
             route = strip_curly_params(route, leading_slash = 'remove'),
             # Extract service slug from source filename (e.g., "chemi-chet-dev.json" -> "chet")
             service_slug = source_file %>% str_extract("^chemi-([^-]+)") %>% str_remove("^chemi-"),
+            # Deployment stage from filename suffix (e.g., "chemi-mordred-staging.json" -> "staging").
+            # Drives the @apiStage doc tag and the non-prod server-swap hook.
+            # prod -> public, staging -> staging, dev -> development; unstaged files default to public.
+            schema_stage = source_file %>%
+              str_match("-(prod|staging|dev)\\.json$") %>%
+              magrittr::extract(, 2) %>%
+              dplyr::recode(prod = "public", dev = "development", .missing = "public"),
             # Use route domain when route has api/ prefix, otherwise fall back to service slug
             domain = if_else(
               str_starts(route, "api/"),
