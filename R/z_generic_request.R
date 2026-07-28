@@ -540,6 +540,8 @@ generic_request <- function(
       progress = run_verbose
     )
 
+    observe_api_responses(resps)
+
     # Filter to successful responses only
     resps <- httr2::resps_successes(resps)
 
@@ -614,6 +616,8 @@ generic_request <- function(
   } else {
     resp_list <- list(httr2::req_perform(req_list[[1]]))
   }
+
+  observe_api_responses(resp_list)
 
   # --- 7. Response Processing ---
 
@@ -961,6 +965,8 @@ generic_chemi_request <- function(
       progress = run_verbose
     )
 
+    observe_api_responses(resps)
+
     resps <- httr2::resps_successes(resps)
 
     if (length(resps) == 0) {
@@ -995,6 +1001,7 @@ generic_chemi_request <- function(
 
   # 6. Execution
   resp <- httr2::req_perform(req)
+  observe_api_responses(list(resp))
 
   # 7. Response Processing
   if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
