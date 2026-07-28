@@ -10,11 +10,12 @@
 #' @param ppm_window Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.
 #' @param spectra A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_all_similarities(da_window = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_all_similarities(da_window = "DTXSID1024122")
 #' }
 chemi_amos_all_similarities <- function(
   da_window = NULL,

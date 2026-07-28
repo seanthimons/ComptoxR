@@ -24,3 +24,7 @@ Returns a list with result object
 chemi_ncc_cats(smiles = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

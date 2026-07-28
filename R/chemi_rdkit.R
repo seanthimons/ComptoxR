@@ -14,6 +14,7 @@
 #' @param output `wide` for a validated tibble or `raw` for the payload with
 #'   provenance attributes.
 #' @return A validated one-row tibble or raw payload.
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -77,6 +78,7 @@ chemi_rdkit <- function(
 #' @param output `wide` for a validated tibble or `raw` for the payload with
 #'   provenance attributes.
 #' @return A validated tibble with one row per input or raw payload.
+#' @apiStage staging
 #' @export
 #'
 #' @examples

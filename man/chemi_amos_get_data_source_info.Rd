@@ -17,3 +17,7 @@ Returns a tibble with results
 chemi_amos_get_data_source_info()
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

@@ -38,3 +38,7 @@ Explicit \code{headers} and \code{inchi} arguments override duplicate values in
 chemi_mordred_bulk(c("DTXSID7020182", "CCO"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

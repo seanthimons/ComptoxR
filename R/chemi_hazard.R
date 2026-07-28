@@ -7,6 +7,7 @@
 #' @param full Optional parameter (default: TRUE)
 #' @param format Output format. One of "compact", "tidy", or "raw".
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -59,6 +60,7 @@ chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw"
 #' @param empty Optional parameter
 #' @param format Output format. One of "compact", "tidy", or "raw".
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

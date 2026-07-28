@@ -5,36 +5,34 @@
 \title{Resolver Safety Flags}
 \usage{
 chemi_resolver_safety_flags_bulk(
+  averageMass = NULL,
+  canonicalSmiles = NULL,
+  casrn = NULL,
   chemId = NULL,
   cid = NULL,
-  sid = NULL,
-  casrn = NULL,
-  name = NULL,
-  smiles = NULL,
-  canonicalSmiles = NULL,
+  image = NULL,
   inchi = NULL,
   inchiKey = NULL,
   mol = NULL,
   molFormula = NULL,
-  averageMass = NULL,
   monoisotopicMass = NULL,
-  image = NULL
+  name = NULL,
+  sid = NULL,
+  smiles = NULL
 )
 }
 \arguments{
+\item{averageMass}{Optional parameter}
+
+\item{canonicalSmiles}{Optional parameter}
+
+\item{casrn}{Optional parameter}
+
 \item{chemId}{Optional parameter}
 
 \item{cid}{Optional parameter}
 
-\item{sid}{Optional parameter}
-
-\item{casrn}{Optional parameter}
-
-\item{name}{Optional parameter}
-
-\item{smiles}{Optional parameter}
-
-\item{canonicalSmiles}{Optional parameter}
+\item{image}{Optional parameter}
 
 \item{inchi}{Optional parameter}
 
@@ -44,11 +42,13 @@ chemi_resolver_safety_flags_bulk(
 
 \item{molFormula}{Optional parameter}
 
-\item{averageMass}{Optional parameter}
-
 \item{monoisotopicMass}{Optional parameter}
 
-\item{image}{Optional parameter}
+\item{name}{Optional parameter}
+
+\item{sid}{Optional parameter}
+
+\item{smiles}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -58,6 +58,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_safety_flags_bulk(chemId = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_resolver_safety_flags_bulk(averageMass = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

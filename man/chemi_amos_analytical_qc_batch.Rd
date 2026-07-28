@@ -34,6 +34,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_analytical_qc_batch(base_url = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_amos_analytical_qc_batch(base_url = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

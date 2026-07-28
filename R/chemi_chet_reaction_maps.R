@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -11,11 +12,19 @@
 #' chemi_chet_reaction_maps()
 #' }
 chemi_chet_reaction_maps <- function() {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_chet_reaction_maps", "pre_request", list(params = list(`server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     endpoint = "reaction/maps",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

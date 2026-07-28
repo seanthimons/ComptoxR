@@ -5,6 +5,7 @@
 #'
 #' @param search_term A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -43,3 +43,7 @@ resolution.
 chemi_descriptors(smiles = "DTXSID7020182", type = "padel")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

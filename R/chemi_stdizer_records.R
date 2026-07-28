@@ -3,27 +3,28 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param full Optional parameter
 #' @param options Optional parameter
 #' @param records Optional parameter
-#' @param full Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_stdizer_records(options = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_stdizer_records(full = "DTXSID1024122")
 #' }
-chemi_stdizer_records <- function(options = NULL, records = NULL, full = NULL) {
+chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
   # Build options list for additional parameters
   options <- list()
+  if (!is.null(options)) {
+    options$options <- options
+  }
   if (!is.null(records)) {
     options$records <- records
   }
-  if (!is.null(full)) {
-    options$full <- full
-  }
   result <- generic_chemi_request(
-    query = options,
+    query = full,
     endpoint = "stdizer/records",
     options = options,
     tidy = FALSE

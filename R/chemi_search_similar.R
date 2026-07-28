@@ -10,6 +10,7 @@
 #' @param max Optional parameter
 #' @param similarityType Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

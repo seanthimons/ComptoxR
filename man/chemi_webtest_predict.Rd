@@ -39,3 +39,7 @@ one row per requested prediction. Raw output preserves the upstream
 chemi_webtest_predict("DTXSID7020182", endpoint = "LC50")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

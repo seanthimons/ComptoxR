@@ -17,3 +17,7 @@ Returns a tibble with results
 chemi_amos_analytical_qc_list()
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

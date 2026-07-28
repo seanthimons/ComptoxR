@@ -22,3 +22,7 @@ Returns a scalar value
 ct_exposure_ccd_monitoring_data_search(dtxsid = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

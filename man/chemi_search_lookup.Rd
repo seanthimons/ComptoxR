@@ -5,23 +5,23 @@
 \title{Search Lookup}
 \usage{
 chemi_search_lookup(
-  searchType = NULL,
   inputType = NULL,
-  query = NULL,
   limit = NULL,
-  params = NULL
+  params = NULL,
+  query = NULL,
+  searchType = NULL
 )
 }
 \arguments{
-\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
-
 \item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
-
-\item{query}{Optional parameter}
 
 \item{limit}{Optional parameter}
 
 \item{params}{Optional parameter}
+
+\item{query}{Optional parameter}
+
+\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
 }
 \value{
 Returns a tibble with results
@@ -31,6 +31,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_search_lookup(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_search_lookup(inputType = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

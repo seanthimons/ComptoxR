@@ -5,6 +5,7 @@
 #'
 #' @param dtxsid The DTXSID for the substance of interest.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

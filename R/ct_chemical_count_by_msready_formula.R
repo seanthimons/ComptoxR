@@ -6,6 +6,7 @@
 #' @param formula Chemical formula. Type: string
 #' @param projection Optional parameter (default: count)
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

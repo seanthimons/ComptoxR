@@ -878,9 +878,9 @@ reset_servers <- function() {
   # Register the custom @apiStage roxygen2 tag. s3_register only wires these up
   # when roxygen2 is loaded (e.g. during devtools::document()), so there is no
   # hard dependency on roxygen2 at load or run time.
-  rlang::s3_register("roxygen2::roxy_tag_parse", "roxy_tag_apiStage")
-  rlang::s3_register("roxygen2::roxy_tag_rd", "roxy_tag_apiStage")
-  rlang::s3_register("base::format", "rd_section_apiStage")
+  s3_register("roxygen2::roxy_tag_parse", "roxy_tag_apiStage")
+  s3_register("roxygen2::roxy_tag_rd", "roxy_tag_apiStage")
+  s3_register("base::format", "rd_section_apiStage")
 
   # Set up server URLs and defaults - must be in .onLoad() so they're
   # available when using namespace access (e.g., ComptoxR::ct_hazard())

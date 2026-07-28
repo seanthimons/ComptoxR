@@ -5,11 +5,12 @@
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' ct_exposure_seem_general_search_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' ct_exposure_seem_general_search_bulk(query = "DTXSID1024122")
 #' }
 ct_exposure_seem_general_search_bulk <- function(query) {
   result <- generic_request(
@@ -31,6 +32,7 @@ ct_exposure_seem_general_search_bulk <- function(query) {
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param projection Specifies whether to use projection. Optional: ccd-general.
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

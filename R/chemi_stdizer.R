@@ -6,6 +6,7 @@
 #' @param workflow Required parameter
 #' @param smiles Required parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -43,10 +44,11 @@ chemi_stdizer <- function(workflow, smiles) {
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param request.filesInfo Optional parameter
-#' @param request.options.workflow Optional parameter
-#' @param request.options.run Optional parameter
 #' @param request.options.recordId Optional parameter
+#' @param request.options.run Optional parameter
+#' @param request.options.workflow Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -55,23 +57,23 @@ chemi_stdizer <- function(workflow, smiles) {
 #' }
 chemi_stdizer_bulk <- function(
   request.filesInfo = NULL,
-  request.options.workflow = NULL,
+  request.options.recordId = NULL,
   request.options.run = NULL,
-  request.options.recordId = NULL
+  request.options.workflow = NULL
 ) {
   # Collect optional parameters
   options <- list()
   if (!is.null(request.filesInfo)) {
     options[['request.filesInfo']] <- request.filesInfo
   }
-  if (!is.null(request.options.workflow)) {
-    options[['request.options.workflow']] <- request.options.workflow
+  if (!is.null(request.options.recordId)) {
+    options[['request.options.recordId']] <- request.options.recordId
   }
   if (!is.null(request.options.run)) {
     options[['request.options.run']] <- request.options.run
   }
-  if (!is.null(request.options.recordId)) {
-    options[['request.options.recordId']] <- request.options.recordId
+  if (!is.null(request.options.workflow)) {
+    options[['request.options.workflow']] <- request.options.workflow
   }
   result <- generic_chemi_request(
     endpoint = "stdizer",

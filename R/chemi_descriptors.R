@@ -16,6 +16,7 @@
 #' @param output Output contract: `wide` returns a validated tibble; `raw`
 #'   returns the unformatted payload with provenance attributes.
 #' @return A validated one-row tibble or a raw payload with provenance.
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -84,6 +85,7 @@ chemi_descriptors <- function(
 #' @param output Output contract: `wide` returns a validated tibble; `raw`
 #'   returns the unformatted payload with provenance attributes.
 #' @return A validated tibble with one row per input or a raw payload.
+#' @apiStage public
 #' @export
 #'
 #' @examples

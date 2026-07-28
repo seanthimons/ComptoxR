@@ -40,3 +40,7 @@ Explicit engine arguments override duplicate values in \code{options}.
 chemi_rdkit_bulk(c("DTXSID7020182", "CCO"), bits = 1024)
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

@@ -6,6 +6,7 @@
 #' @param word Starting string of word to search for. Values supplied as the 'word' parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN), or InChIKey.. Type: string
 #' @param top Optional parameter (default: 500)
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

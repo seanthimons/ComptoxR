@@ -5,6 +5,7 @@
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

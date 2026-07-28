@@ -10,6 +10,7 @@
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param info Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples

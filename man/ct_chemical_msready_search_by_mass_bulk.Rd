@@ -4,12 +4,12 @@
 \alias{ct_chemical_msready_search_by_mass_bulk}
 \title{Get MS-ready chemicals for a batch of mass ranges}
 \usage{
-ct_chemical_msready_search_by_mass_bulk(masses, error)
+ct_chemical_msready_search_by_mass_bulk(error, masses)
 }
 \arguments{
-\item{masses}{Required parameter}
-
 \item{error}{Required parameter}
+
+\item{masses}{Required parameter}
 }
 \value{
 Returns a list with result object
@@ -19,6 +19,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-ct_chemical_msready_search_by_mass_bulk(masses = "DTXSID1024122")
+ct_chemical_msready_search_by_mass_bulk(error = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

@@ -6,6 +6,7 @@
 #' @param search_type How to search the database.  Valid values are "spectrum" and "method".
 #' @param internal_id Unique ID of the spectrum or method of interest.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

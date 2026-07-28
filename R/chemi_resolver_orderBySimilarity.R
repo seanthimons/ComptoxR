@@ -21,6 +21,7 @@
 #' @param padelComputeFingerprints Optional parameter
 #' @param toxprintsProfile Optional parameter
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples

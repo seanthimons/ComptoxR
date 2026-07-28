@@ -20,3 +20,7 @@ Returns a tibble with results
 chemi_predictor_modelset_report(report_id = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

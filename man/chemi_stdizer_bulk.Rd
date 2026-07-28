@@ -6,19 +6,19 @@
 \usage{
 chemi_stdizer_bulk(
   request.filesInfo = NULL,
-  request.options.workflow = NULL,
+  request.options.recordId = NULL,
   request.options.run = NULL,
-  request.options.recordId = NULL
+  request.options.workflow = NULL
 )
 }
 \arguments{
 \item{request.filesInfo}{Optional parameter}
 
-\item{request.options.workflow}{Optional parameter}
+\item{request.options.recordId}{Optional parameter}
 
 \item{request.options.run}{Optional parameter}
 
-\item{request.options.recordId}{Optional parameter}
+\item{request.options.workflow}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -31,3 +31,7 @@ Returns a tibble with results
 chemi_stdizer_bulk(request.filesInfo = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

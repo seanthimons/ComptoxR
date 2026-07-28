@@ -39,3 +39,7 @@ wrapper-level resolution.
 chemi_rdkit(smiles = "DTXSID7020182", bits = 1024)
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

@@ -6,6 +6,7 @@
 #' @param query Required parameter
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -42,62 +43,60 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
+#' @param averageMass Optional parameter
+#' @param canonicalSmiles Optional parameter
+#' @param casrn Optional parameter
 #' @param chemId Optional parameter
 #' @param cid Optional parameter
-#' @param sid Optional parameter
-#' @param casrn Optional parameter
-#' @param name Optional parameter
-#' @param smiles Optional parameter
-#' @param canonicalSmiles Optional parameter
+#' @param image Optional parameter
 #' @param inchi Optional parameter
 #' @param inchiKey Optional parameter
 #' @param mol Optional parameter
 #' @param molFormula Optional parameter
-#' @param averageMass Optional parameter
 #' @param monoisotopicMass Optional parameter
-#' @param image Optional parameter
+#' @param name Optional parameter
+#' @param sid Optional parameter
+#' @param smiles Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_safety_flags_bulk(chemId = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_resolver_safety_flags_bulk(averageMass = "DTXSID1024122")
 #' }
 chemi_resolver_safety_flags_bulk <- function(
+  averageMass = NULL,
+  canonicalSmiles = NULL,
+  casrn = NULL,
   chemId = NULL,
   cid = NULL,
-  sid = NULL,
-  casrn = NULL,
-  name = NULL,
-  smiles = NULL,
-  canonicalSmiles = NULL,
+  image = NULL,
   inchi = NULL,
   inchiKey = NULL,
   mol = NULL,
   molFormula = NULL,
-  averageMass = NULL,
   monoisotopicMass = NULL,
-  image = NULL
+  name = NULL,
+  sid = NULL,
+  smiles = NULL
 ) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(cid)) {
-    options$cid <- cid
-  }
-  if (!is.null(sid)) {
-    options$sid <- sid
+  if (!is.null(canonicalSmiles)) {
+    options$canonicalSmiles <- canonicalSmiles
   }
   if (!is.null(casrn)) {
     options$casrn <- casrn
   }
-  if (!is.null(name)) {
-    options$name <- name
+  if (!is.null(chemId)) {
+    options$chemId <- chemId
   }
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
+  if (!is.null(cid)) {
+    options$cid <- cid
   }
-  if (!is.null(canonicalSmiles)) {
-    options$canonicalSmiles <- canonicalSmiles
+  if (!is.null(image)) {
+    options$image <- image
   }
   if (!is.null(inchi)) {
     options$inchi <- inchi
@@ -111,17 +110,20 @@ chemi_resolver_safety_flags_bulk <- function(
   if (!is.null(molFormula)) {
     options$molFormula <- molFormula
   }
-  if (!is.null(averageMass)) {
-    options$averageMass <- averageMass
-  }
   if (!is.null(monoisotopicMass)) {
     options$monoisotopicMass <- monoisotopicMass
   }
-  if (!is.null(image)) {
-    options$image <- image
+  if (!is.null(name)) {
+    options$name <- name
+  }
+  if (!is.null(sid)) {
+    options$sid <- sid
+  }
+  if (!is.null(smiles)) {
+    options$smiles <- smiles
   }
   result <- generic_chemi_request(
-    query = chemId,
+    query = averageMass,
     endpoint = "resolver/safety-flags",
     options = options,
     tidy = FALSE

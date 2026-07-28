@@ -5,6 +5,7 @@
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -30,6 +31,7 @@ ct_chemical_msready_search_by_dtxcid_bulk <- function(query) {
 #'
 #' @param dtxcid DSSTox Compound Identifier. Type: string
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples

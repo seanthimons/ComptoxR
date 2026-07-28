@@ -48,3 +48,7 @@ chemi_descriptors_bulk(
 )
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

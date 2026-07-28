@@ -17,3 +17,7 @@ Returns a tibble with results
 chemi_alerts_groups()
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

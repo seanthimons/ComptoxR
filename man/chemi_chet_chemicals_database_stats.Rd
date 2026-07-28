@@ -20,3 +20,7 @@ Returns a list with result object
 chemi_chet_chemicals_database_stats(total = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

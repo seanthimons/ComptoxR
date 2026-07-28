@@ -17,6 +17,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_amos_spectral_entropy(spectrum = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_amos_spectral_entropy(spectrum = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

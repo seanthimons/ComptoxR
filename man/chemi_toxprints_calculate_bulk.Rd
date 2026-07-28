@@ -8,7 +8,14 @@ chemi_toxprints_calculate_bulk(
   query,
   idType = "AnyId",
   labels = NULL,
-  options = NULL
+  options = NULL,
+  request.filesInfo = NULL,
+  request.labels = NULL,
+  request.options.OR = NULL,
+  request.options.profile = NULL,
+  request.options.PV1 = NULL,
+  request.options.TP = NULL,
+  request.resolve = NULL
 )
 }
 \arguments{
@@ -19,6 +26,20 @@ chemi_toxprints_calculate_bulk(
 \item{labels}{Optional parameter}
 
 \item{options}{Optional parameter}
+
+\item{request.filesInfo}{Optional parameter}
+
+\item{request.labels}{Optional parameter}
+
+\item{request.options.OR}{Optional parameter}
+
+\item{request.options.profile}{Optional parameter}
+
+\item{request.options.PV1}{Optional parameter}
+
+\item{request.options.TP}{Optional parameter}
+
+\item{request.resolve}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -34,3 +55,7 @@ then sends the resolved Chemical objects to the API endpoint.
 chemi_toxprints_calculate_bulk(query = c("50-00-0", "DTXSID7020182"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

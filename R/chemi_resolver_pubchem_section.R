@@ -7,6 +7,7 @@
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
 #' @param section Optional parameter
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -53,6 +54,7 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param section Optional parameter
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -64,7 +66,7 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
   req_data <- run_hook(
     "chemi_resolver_pubchem_section_bulk",
     "pre_request",
-    list(params = list(query = query, idType = idType, section = section, chemicals = chemicals))
+    list(params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals))
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
@@ -92,8 +94,8 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
     query = query,
     endpoint = "resolver/pubchem-section",
     options = extra_options,
-    chemicals = chemicals,
-    tidy = FALSE
+    tidy = FALSE,
+    chemicals = chemicals
   )
 
   # Additional post-processing can be added here

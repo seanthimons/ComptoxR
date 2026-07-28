@@ -13,6 +13,7 @@
 #' @param hclust_method Hierarchical clustering method passed to stats::hclust()
 #' @param format Output format: cluster result, long-form similarities, or raw API response
 #' @return A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`
+#' @apiStage public
 #' @export
 #'
 #' @examples

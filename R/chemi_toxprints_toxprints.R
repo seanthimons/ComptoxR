@@ -6,6 +6,7 @@
 #' @param category Optional parameter
 #' @param label Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples

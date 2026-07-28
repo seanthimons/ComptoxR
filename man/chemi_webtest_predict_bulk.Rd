@@ -43,3 +43,7 @@ chemi_webtest_predict_bulk(
 )
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

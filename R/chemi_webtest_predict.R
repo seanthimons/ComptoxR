@@ -14,6 +14,7 @@
 #' @param output Output contract: `wide` for normalized rows or `raw` for the
 #'   upstream `PredictionResult` with source and input-map attributes.
 #' @return A normalized tibble or raw WebTEST `PredictionResult`.
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -81,6 +82,7 @@ chemi_webtest_predict <- function(
 #' @param output Output contract: `wide` for normalized rows or `raw` for the
 #'   upstream `PredictionResult` with source and input-map attributes.
 #' @return A normalized tibble or raw WebTEST `PredictionResult`.
+#' @apiStage public
 #' @export
 #'
 #' @examples

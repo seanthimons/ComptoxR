@@ -20,3 +20,7 @@ Returns a tibble with results
 chemi_amos_substances_for_ids(internal_id_list = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

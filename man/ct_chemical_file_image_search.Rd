@@ -20,3 +20,7 @@ Returns image data (raw bytes or magick image object)
 ct_chemical_file_image_search(dtxsid = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

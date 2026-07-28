@@ -28,3 +28,7 @@ Returns a scalar value
 ct_chemical_list_search_by_name(listName = "40CFR1164")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

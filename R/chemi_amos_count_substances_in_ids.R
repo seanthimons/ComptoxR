@@ -5,6 +5,7 @@
 #'
 #' @param internal_id_list Array of record IDs.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

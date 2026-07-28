@@ -35,3 +35,7 @@ A validated tibble with one row per input or raw payload.
 chemi_webtest_bulk(c("DTXSID7020182", "CCO"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

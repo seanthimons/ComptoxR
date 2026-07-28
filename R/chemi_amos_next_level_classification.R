@@ -7,6 +7,7 @@
 #' @param klass Class-level (third-highest) classification of a substance.  Required if requesting a list of subclasses.
 #' @param superklass Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

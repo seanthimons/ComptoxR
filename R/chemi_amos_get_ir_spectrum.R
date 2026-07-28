@@ -5,6 +5,7 @@
 #'
 #' @param internal_id Unique ID of the IR spectrum of interest.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
