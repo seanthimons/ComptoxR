@@ -92,6 +92,13 @@ chemi_hazard_bulk:
   post_response:
     - format_chemi_hazard_result
 
+chemi_search:
+  bespoke_test: "tests/testthat/test-chemi_search.R"
+  pre_request:
+    - chemi_search_pre_request
+  post_response:
+    - chemi_search_post_response
+
 chemi_resolver_getpubchemlist:
   pre_request:
     - resolve_query_to_chemical_records
