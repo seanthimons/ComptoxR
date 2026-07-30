@@ -137,10 +137,6 @@ chemi_resolver_pubchem_section_bulk:
   pre_request:
     - resolve_query_to_chemical_records
 
-chemi_resolver_universalharvest_cart:
-  pre_request:
-    - resolve_query_to_chemical_records
-
 chemi_stdizer_chemicals:
   pre_request:
     - resolve_query_to_chemical_records

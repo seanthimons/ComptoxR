@@ -182,6 +182,48 @@ test_that("schema preprocessing excludes WebTEST report and export routes", {
   )
 })
 
+test_that("schema preprocessing excludes only harvest resolver routes", {
+  dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
+  testthat::skip_if_not(
+    file.exists(dev_stub_generation),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+  source_pipeline_files()
+
+  schema_file <- tempfile(fileext = ".json")
+  jsonlite::write_json(
+    list(
+      openapi = "3.0.1",
+      paths = stats::setNames(
+        rep(list(list(get = list())), 6),
+        paste0(
+          "/api/resolver/",
+          c(
+            "casharvest",
+            "universalharvest",
+            "universalharvest_cart",
+            "getpubchemlist",
+            "getsimilaritylist",
+            "orderBySimilarity"
+          )
+        )
+      )
+    ),
+    schema_file,
+    auto_unbox = TRUE
+  )
+
+  preprocessed <- preprocess_schema(schema_file)
+
+  expect_identical(
+    names(preprocessed$paths),
+    paste0(
+      "/api/resolver/",
+      c("getpubchemlist", "getsimilaritylist", "orderBySimilarity")
+    )
+  )
+})
+
 test_that("resolver stubs include hook-configured output parameters", {
   dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
   testthat::skip_if_not(

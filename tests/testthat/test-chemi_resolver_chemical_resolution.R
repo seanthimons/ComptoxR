@@ -8,7 +8,7 @@
 #
 # The resolve-then-POST cluster (alerts, hazard_bulk, orderBySimilarity,
 # getsimilaritylist, getsimilaritymap, pubchem_section_bulk, getpubchemlist,
-# universalharvest_cart, stdizer_chemicals, toxprints_calculate_bulk) is covered
+# stdizer_chemicals, toxprints_calculate_bulk) is covered
 # below against the real branch contract (#219):
 # each wrapper resolves via chemi_resolver_lookup_bulk, keeps result=="FOUND"
 # entries, maps them to a nested list(chemical = list(sid = chem$chemId %||%
@@ -57,7 +57,6 @@ resolver_cluster <- list(
   chemi_resolver_getsimilaritymap = "resolver/getsimilaritymap",
   chemi_resolver_pubchem_section_bulk = "resolver/pubchem-section",
   chemi_resolver_getpubchemlist = "resolver/getpubchemlist",
-  chemi_resolver_universalharvest_cart = "resolver/universalharvest_cart",
   chemi_stdizer_chemicals = "stdizer/chemicals",
   chemi_toxprints_calculate_bulk = "toxprints/calculate"
 )
