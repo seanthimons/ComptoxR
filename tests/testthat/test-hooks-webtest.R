@@ -28,18 +28,11 @@ test_that("WebTEST prediction interfaces retain generated public contracts", {
   expect_identical(formals(chemi_webtest_predict_bulk)$format, "JSON")
   expect_identical(formals(chemi_webtest_predict_bulk)$output, quote(c("wide", "raw")))
 
-  source <- paste(readLines(testthat::test_path("..", "..", "R", "chemi_webtest_predict.R")), collapse = "\n")
   for (fn_name in c("chemi_webtest_predict", "chemi_webtest_predict_bulk")) {
-    definition <- parse(text = source)
-    definition <- Filter(
-      function(expression) {
-        is.call(expression) &&
-          identical(expression[[1]], as.name("<-")) &&
-          identical(as.character(expression[[2]]), fn_name)
-      },
-      as.list(definition)
-    )[[1]]
-    body_text <- paste(deparse(definition[[3]][[3]], width.cutoff = 500L), collapse = "\n")
+    body_text <- paste(
+      deparse(body(get(fn_name)), width.cutoff = 500L),
+      collapse = "\n"
+    )
     expect_true(
       regexpr('"pre_request"', body_text, fixed = TRUE)[[1]] < regexpr("generic_", body_text, fixed = TRUE)[[1]],
       info = fn_name
