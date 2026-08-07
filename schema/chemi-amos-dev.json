@@ -122,7 +122,7 @@
             ]
           },
           "timepoint": {
-            "filterType": "set",
+            "filterType": "numeric",
             "values": [
               "T0"
             ]
@@ -759,9 +759,9 @@
           "description": "Stability call for the sample at the time of measurement.",
           "type": "string"
         },
-        "timepoint": {
-          "description": "Elapsed time (in months) that the sample has been at room temperature.  Should be formatted as \"T[# of months]\".",
-          "type": "string"
+        "timepoint_days": {
+          "description": "Elapsed time (in days) that the sample has been at room temperature.",
+          "type": "integer"
         }
       }
     },
