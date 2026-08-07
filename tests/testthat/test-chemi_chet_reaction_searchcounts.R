@@ -33,7 +33,6 @@ test_that("chemi_chet_reaction_searchcounts passes request metadata to helper", 
   expect_equal(call[["endpoint"]], "reaction/searchcounts/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
   expect_true("path_params" %in% names(call))

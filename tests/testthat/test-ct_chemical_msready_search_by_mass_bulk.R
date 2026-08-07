@@ -23,8 +23,8 @@ test_that("ct_chemical_msready_search_by_mass_bulk passes request metadata to he
 
   result <- try(
     suppressWarnings(suppressMessages(ComptoxR::ct_chemical_msready_search_by_mass_bulk(
-      masses = 1.2,
-      error = "DTXSID7020182"
+      error = "DTXSID7020182",
+      masses = 1.2
     ))),
     silent = TRUE
   )
