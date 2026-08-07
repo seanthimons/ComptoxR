@@ -4,12 +4,12 @@
 \alias{chemi_resolver_resolve}
 \title{Resolver Resolve}
 \usage{
-chemi_resolver_resolve(queries = NULL, mol = NULL)
+chemi_resolver_resolve(mol = NULL, queries = NULL)
 }
 \arguments{
-\item{queries}{Optional parameter}
-
 \item{mol}{Optional parameter}
+
+\item{queries}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -19,6 +19,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_resolve(queries = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_resolver_resolve(mol = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

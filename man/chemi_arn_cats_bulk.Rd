@@ -4,14 +4,14 @@
 \alias{chemi_arn_cats_bulk}
 \title{Generate groups for multiple molecules}
 \usage{
-chemi_arn_cats_bulk(smiles = NULL, chemicals = NULL, model = "RF")
+chemi_arn_cats_bulk(chemicals = NULL, model = "RF", smiles = NULL)
 }
 \arguments{
-\item{smiles}{Array of SMILES strings, same input style as amnb_nate.}
-
 \item{chemicals}{Array of objects with optional id and smiles, or an array of SMILES strings for backward compatibility.}
 
 \item{model}{Optional parameter. Options: RF, NN (default: RF)}
+
+\item{smiles}{Array of SMILES strings, same input style as amnb_nate.}
 }
 \value{
 Returns a list with result object
@@ -21,6 +21,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_arn_cats_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_arn_cats_bulk(chemicals = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

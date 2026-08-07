@@ -5,6 +5,7 @@
 #'
 #' @param id Primary query parameter. Type: string
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -11,6 +11,7 @@
 #' @param section Optional parameter
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples

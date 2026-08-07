@@ -2,23 +2,45 @@
 % Please edit documentation in R/chemi_rdkit.R
 \name{chemi_rdkit_bulk}
 \alias{chemi_rdkit_bulk}
-\title{Generate descriptors for multiple molecules}
+\title{Calculate RDKit fingerprints for multiple molecules}
 \usage{
-chemi_rdkit_bulk(chemicals, options = NULL)
+chemi_rdkit_bulk(
+  chemicals,
+  options = NULL,
+  type = NULL,
+  radius = NULL,
+  bits = NULL,
+  output = c("wide", "raw")
+)
 }
 \arguments{
-\item{chemicals}{Required parameter}
+\item{chemicals}{Chemical structures or resolvable identifiers.}
 
-\item{options}{Optional parameter}
+\item{options}{Named list of additional dedicated RDKit options.}
+
+\item{type}{Fingerprint type. Currently \code{ecfp}.}
+
+\item{radius}{ECFP radius.}
+
+\item{bits}{Number of fingerprint bits.}
+
+\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
+provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated tibble with one row per input or raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Explicit engine arguments override duplicate values in \code{options}.
 }
 \examples{
 \dontrun{
-chemi_rdkit_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_rdkit_bulk(c("DTXSID7020182", "CCO"), bits = 1024)
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

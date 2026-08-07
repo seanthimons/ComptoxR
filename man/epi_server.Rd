@@ -4,13 +4,17 @@
 \alias{epi_server}
 \title{Set API endpoints for EPI Suite API endpoints}
 \usage{
-epi_server(server = NULL)
+epi_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target}
+\item{server}{Defines what server to target.}
+
+\item{url_only}{If \code{TRUE}, return the selected URL without changing
+\code{epi_burl}.}
 }
 \value{
-Should return the Sys Env variable \code{epi_burl}
+The selected URL when \code{url_only = TRUE}; otherwise the configured
+\code{epi_burl}.
 }
 \description{
 Set API endpoints for EPI Suite API endpoints

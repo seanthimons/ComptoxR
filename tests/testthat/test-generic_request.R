@@ -78,6 +78,52 @@ test_that("generic_request tidies simple results into tibbles", {
     }
   )
 })
+
+test_that("generic_request parses CSV and TSV responses", {
+  responses <- list(
+    httr2::response(
+      status_code = 200,
+      headers = list(`Content-Type` = "text/csv"),
+      body = charToRaw("smiles,value\nCCO,1")
+    ),
+    httr2::response(
+      status_code = 200,
+      headers = list(`Content-Type` = "text/tab-separated-values"),
+      body = charToRaw("smiles\tvalue\nCCC\t2")
+    )
+  )
+  call_index <- 0L
+
+  testthat::with_mocked_bindings(
+    req_perform = function(req) {
+      call_index <<- call_index + 1L
+      responses[[call_index]]
+    },
+    .package = "httr2",
+    {
+      csv <- generic_request(
+        endpoint = "descriptors",
+        method = "GET",
+        batch_limit = 0,
+        content_type = "text/csv"
+      )
+      tsv <- generic_request(
+        endpoint = "descriptors",
+        method = "GET",
+        batch_limit = 0,
+        content_type = "text/tab-separated-values"
+      )
+    }
+  )
+
+  expect_s3_class(csv, "data.frame")
+  expect_identical(csv$smiles, "CCO")
+  expect_identical(csv$value, 1L)
+  expect_s3_class(tsv, "data.frame")
+  expect_identical(tsv$smiles, "CCC")
+  expect_identical(tsv$value, 2L)
+})
+
 test_that("generic_request handles empty results gracefully", {
   testthat::with_mocked_bindings(
     req_perform = function(req) {

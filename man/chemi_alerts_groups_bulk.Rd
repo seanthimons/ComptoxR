@@ -5,35 +5,35 @@
 \title{Alerts Groups}
 \usage{
 chemi_alerts_groups_bulk(
-  type = NULL,
-  text = NULL,
   description = NULL,
-  value = NULL,
-  logicType = NULL,
-  operations = NULL,
   frozen = NULL,
   id = NULL,
-  name = NULL
+  logicType = NULL,
+  name = NULL,
+  operations = NULL,
+  text = NULL,
+  type = NULL,
+  value = NULL
 )
 }
 \arguments{
-\item{type}{Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD, PROPERTY, GROUP, REFERENCE}
-
-\item{text}{Optional parameter}
-
 \item{description}{Optional parameter}
-
-\item{value}{Optional parameter}
-
-\item{logicType}{Optional parameter. Options: NONE, OR, AND, NOT}
-
-\item{operations}{Optional parameter}
 
 \item{frozen}{Optional parameter}
 
 \item{id}{Optional parameter}
 
+\item{logicType}{Optional parameter. Options: NONE, OR, AND, NOT}
+
 \item{name}{Optional parameter}
+
+\item{operations}{Optional parameter}
+
+\item{text}{Optional parameter}
+
+\item{type}{Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD, PROPERTY, GROUP, REFERENCE}
+
+\item{value}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -43,6 +43,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_alerts_groups_bulk(type = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_alerts_groups_bulk(description = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

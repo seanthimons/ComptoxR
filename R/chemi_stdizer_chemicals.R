@@ -11,6 +11,7 @@
 #' @param options Optional parameter
 #' @param full Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -8,7 +8,9 @@ chemi_resolver_getsimilaritymap(
   query,
   idType = "AnyId",
   section = NULL,
-  sort = NULL
+  sort = FALSE,
+  hclust_method = "complete",
+  format = c("cluster", "long", "raw")
 )
 }
 \arguments{
@@ -18,10 +20,14 @@ chemi_resolver_getsimilaritymap(
 
 \item{section}{Optional parameter}
 
-\item{sort}{Optional logical value passed to the API query string.}
+\item{sort}{Logical value controlling API result ordering}
+
+\item{hclust_method}{Hierarchical clustering method passed to stats::hclust()}
+
+\item{format}{Output format: cluster result, long-form similarities, or raw API response}
 }
 \value{
-Returns a list with result object
+A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by \code{format}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -34,3 +40,7 @@ then sends the resolved Chemical objects to the API endpoint.
 chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

@@ -1,105 +1,135 @@
-#' Padel
+#' Calculate PaDEL descriptors for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param x2d Optional parameter (default: TRUE)
-#' @param x3d Optional parameter (default: FALSE)
-#' @param fp Optional parameter (default: FALSE)
-#' @param headers Optional parameter (default: FALSE)
-#' @param timeout Optional parameter
-#' @return Returns a tibble with results
+#' This wrapper resolves identifier-like inputs to SMILES before calling the
+#' dedicated service. The raw `/api/padel` endpoint does not perform that
+#' wrapper-level resolution.
+#'
+#' @param smiles One SMILES string or resolvable chemical identifier.
+#' @param x2d Calculate two-dimensional descriptors.
+#' @param x3d Calculate three-dimensional descriptors.
+#' @param fp Calculate fingerprints.
+#' @param headers Request upstream descriptor headers.
+#' @param timeout Optional upstream calculation timeout.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated one-row tibble or raw payload.
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_padel(smiles = "DTXSID7020182")
 #' }
-chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL) {
+chemi_padel <- function(
+  smiles,
+  x2d = TRUE,
+  x3d = FALSE,
+  fp = FALSE,
+  headers = FALSE,
+  timeout = NULL,
+  output = c("wide", "raw")
+) {
   req_data <- run_hook(
     "chemi_padel",
     "pre_request",
-    list(params = list(smiles = smiles, x2d = x2d, x3d = x3d, fp = fp, headers = headers, timeout = timeout))
+    list(
+      params = list(
+        smiles = smiles,
+        x2d = x2d,
+        x3d = x3d,
+        fp = fp,
+        headers = headers,
+        timeout = timeout,
+        output = output
+      )
+    )
   )
   if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("smiles" %in% names(req_data$params)) {
-    smiles <- req_data$params[["smiles"]]
-  }
-  if ("x2d" %in% names(req_data$params)) {
-    x2d <- req_data$params[["x2d"]]
-  }
-  if ("x3d" %in% names(req_data$params)) {
-    x3d <- req_data$params[["x3d"]]
-  }
-  if ("fp" %in% names(req_data$params)) {
-    fp <- req_data$params[["fp"]]
-  }
-  if ("headers" %in% names(req_data$params)) {
-    headers <- req_data$params[["headers"]]
-  }
-  if ("timeout" %in% names(req_data$params)) {
-    timeout <- req_data$params[["timeout"]]
+    result <- req_data$result
+  } else {
+    result <- generic_request(
+      endpoint = req_data$request$endpoint,
+      method = req_data$request$method,
+      batch_limit = 0,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      content_type = req_data$request$content_type,
+      options = req_data$request$options
+    )
   }
 
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(x2d)) {
-    options[['2d']] <- x2d
-  }
-  if (!is.null(x3d)) {
-    options[['3d']] <- x3d
-  }
-  if (!is.null(fp)) {
-    options[['fp']] <- fp
-  }
-  if (!is.null(headers)) {
-    options[['headers']] <- headers
-  }
-  if (!is.null(timeout)) {
-    options[['timeout']] <- timeout
-  }
-  result <- generic_request(
-    endpoint = "padel",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_padel", "post_response", post_data)
 
   return(result)
 }
 
-
-#' Padel
+#' Calculate PaDEL descriptors for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query Character vector of strings to send in request body
-#' @return Returns a tibble with results
+#' @param query Chemical structures or resolvable identifiers.
+#' @param x2d Calculate two-dimensional descriptors.
+#' @param x3d Calculate three-dimensional descriptors.
+#' @param fp Calculate fingerprints.
+#' @param headers Request upstream descriptor headers.
+#' @param timeout Optional upstream calculation timeout.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated tibble with one row per input or raw payload.
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_padel_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_padel_bulk(query = c("DTXSID7020182", "CCO"))
 #' }
-chemi_padel_bulk <- function(query) {
-  result <- generic_request(
-    query = query,
-    endpoint = "padel",
-    method = "POST",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100"))
+chemi_padel_bulk <- function(
+  query,
+  x2d = TRUE,
+  x3d = FALSE,
+  fp = FALSE,
+  headers = FALSE,
+  timeout = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_padel_bulk",
+    "pre_request",
+    list(
+      params = list(
+        query = query,
+        x2d = x2d,
+        x3d = x3d,
+        fp = fp,
+        headers = headers,
+        timeout = timeout,
+        output = output
+      )
+    )
   )
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_chemi_request(
+      endpoint = req_data$request$endpoint,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      body = req_data$request$body,
+      content_type = req_data$request$content_type
+    )
+  }
+
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_padel_bulk", "post_response", post_data)
 
   return(result)
 }

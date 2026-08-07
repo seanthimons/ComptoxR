@@ -7,6 +7,7 @@
 #' @param pageNumber Optional parameter (default: 1)
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

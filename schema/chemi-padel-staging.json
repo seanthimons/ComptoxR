@@ -1,94 +1,214 @@
 {
-  "openapi": "3.1.0",
+  "components": {
+    "schemas": {
+      "ChemicalDescriptors": {
+        "properties": {
+          "descriptors": {
+            "items": {
+              "format": "double",
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "inchi": {
+            "type": "string"
+          },
+          "inchiKey": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Options": {
+        "properties": {
+          "compute2D": {
+            "type": "boolean"
+          },
+          "compute3D": {
+            "type": "boolean"
+          },
+          "computeFingerprints": {
+            "type": "boolean"
+          },
+          "descriptorTypes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "headers": {
+            "type": "boolean"
+          },
+          "removeSalt": {
+            "type": "boolean"
+          },
+          "standardizeNitro": {
+            "type": "boolean"
+          },
+          "standardizeTautomers": {
+            "type": "boolean"
+          },
+          "timeout": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "PaDELRequest": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "options": {
+            "$ref": "#/components/schemas/Options"
+          }
+        },
+        "type": "object"
+      },
+      "PaDELResponse": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/ChemicalDescriptors"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "info": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "options": {
+            "$ref": "#/components/schemas/Options"
+          }
+        },
+        "type": "object"
+      },
+      "VersionInfo": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
   "info": {
     "title": "PaDEL Descriptors Module",
     "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "/",
-      "description": "Default Server URL"
-    }
-  ],
+  "openapi": "3.1.0",
   "paths": {
     "/api/padel": {
       "get": {
-        "tags": [
-          "pa-del-controller"
-        ],
         "operationId": "get",
         "parameters": [
           {
-            "name": "smiles",
             "in": "query",
+            "name": "smiles",
             "required": true,
             "schema": {
               "type": "string"
             }
           },
           {
+            "in": "query",
             "name": "2d",
-            "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": true
+              "default": true,
+              "type": "boolean"
             }
           },
           {
+            "in": "query",
             "name": "3d",
-            "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": false
+              "default": false,
+              "type": "boolean"
             }
           },
           {
+            "in": "query",
             "name": "fp",
-            "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": false
+              "default": false,
+              "type": "boolean"
             }
           },
           {
+            "in": "query",
             "name": "headers",
-            "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean",
-              "default": false
+              "default": false,
+              "type": "boolean"
             }
           },
           {
-            "name": "timeout",
             "in": "query",
+            "name": "timeout",
             "required": false,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "type": "integer"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PaDELResponse"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      },
-      "post": {
+        },
         "tags": [
           "pa-del-controller"
-        ],
+        ]
+      },
+      "post": {
         "operationId": "post",
         "requestBody": {
           "content": {
@@ -102,187 +222,67 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PaDELResponse"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
+        },
+        "tags": [
+          "pa-del-controller"
+        ]
+      }
+    },
+    "/api/padel/metadata": {
+      "get": {
+        "operationId": "getMetadata",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "pa-del-controller"
+        ]
       }
     },
     "/api/padel/version": {
       "get": {
-        "tags": [
-          "pa-del-controller"
-        ],
         "operationId": "getVersion",
         "responses": {
           "200": {
-            "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/VersionInfo"
                 }
               }
-            }
+            },
+            "description": "OK"
           }
-        }
-      }
-    },
-    "/api/padel/metadata": {
-      "get": {
+        },
         "tags": [
           "pa-del-controller"
-        ],
-        "operationId": "getMetadata",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {}
-                }
-              }
-            }
-          }
-        }
+        ]
       }
     }
   },
-  "components": {
-    "schemas": {
-      "Options": {
-        "type": "object",
-        "properties": {
-          "headers": {
-            "type": "boolean"
-          },
-          "timeout": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "compute2D": {
-            "type": "boolean"
-          },
-          "compute3D": {
-            "type": "boolean"
-          },
-          "computeFingerprints": {
-            "type": "boolean"
-          },
-          "descriptorTypes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "uniqueItems": true
-          },
-          "removeSalt": {
-            "type": "boolean"
-          },
-          "standardizeNitro": {
-            "type": "boolean"
-          },
-          "standardizeTautomers": {
-            "type": "boolean"
-          }
-        }
-      },
-      "PaDELRequest": {
-        "type": "object",
-        "properties": {
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "options": {
-            "$ref": "#/components/schemas/Options"
-          }
-        }
-      },
-      "ChemicalDescriptors": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string"
-          },
-          "inchiKey": {
-            "type": "string"
-          },
-          "descriptors": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "format": "double"
-            }
-          }
-        }
-      },
-      "PaDELResponse": {
-        "type": "object",
-        "properties": {
-          "info": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "headers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "options": {
-            "$ref": "#/components/schemas/Options"
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ChemicalDescriptors"
-            }
-          }
-        }
-      },
-      "VersionInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "compiled": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      }
+  "servers": [
+    {
+      "description": "Default Server URL",
+      "url": "/"
     }
-  }
+  ]
 }

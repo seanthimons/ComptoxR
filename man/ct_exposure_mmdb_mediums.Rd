@@ -17,3 +17,7 @@ Returns a scalar value
 ct_exposure_mmdb_mediums()
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

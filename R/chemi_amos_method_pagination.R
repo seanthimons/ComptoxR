@@ -7,6 +7,7 @@
 #' @param offset Offset of method records to return.
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

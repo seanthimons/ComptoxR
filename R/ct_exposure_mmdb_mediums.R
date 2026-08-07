@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -59,6 +59,14 @@ print_generate_tests_help <- function() {
 
 build_generated_test_specs <- function(root = ".") {
   metadata <- tg_collect_wrapper_metadata(root)
+  bespoke <- tg_validate_bespoke_contracts(metadata, root)
+  if (!isTRUE(bespoke$valid)) {
+    stop(
+      paste(c("Invalid bespoke test exclusions:", bespoke$errors), collapse = "\n"),
+      call. = FALSE
+    )
+  }
+  metadata <- metadata[setdiff(names(metadata), names(bespoke$suites))]
   tg_render_all_tests(metadata)
 }
 

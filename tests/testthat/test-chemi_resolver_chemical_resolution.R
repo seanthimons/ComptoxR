@@ -8,7 +8,7 @@
 #
 # The resolve-then-POST cluster (alerts, hazard_bulk, orderBySimilarity,
 # getsimilaritylist, getsimilaritymap, pubchem_section_bulk, getpubchemlist,
-# universalharvest_cart, stdizer_chemicals, toxprints_calculate_bulk) is covered
+# stdizer_chemicals, toxprints_calculate_bulk) is covered
 # below against the real branch contract (#219):
 # each wrapper resolves via chemi_resolver_lookup_bulk, keeps result=="FOUND"
 # entries, maps them to a nested list(chemical = list(sid = chem$chemId %||%
@@ -57,7 +57,6 @@ resolver_cluster <- list(
   chemi_resolver_getsimilaritymap = "resolver/getsimilaritymap",
   chemi_resolver_pubchem_section_bulk = "resolver/pubchem-section",
   chemi_resolver_getpubchemlist = "resolver/getpubchemlist",
-  chemi_resolver_universalharvest_cart = "resolver/universalharvest_cart",
   chemi_stdizer_chemicals = "stdizer/chemicals",
   chemi_toxprints_calculate_bulk = "toxprints/calculate"
 )
@@ -93,6 +92,18 @@ for (wrapper_name in names(resolver_cluster)) {
         chemi_resolver_lookup_bulk = function(...) list(found_record(), sid_only_record()),
         generic_chemi_request = function(...) {
           captured <<- list(...)
+          if (nm == "chemi_resolver_getsimilaritymap") {
+            return(list(
+              order = list(
+                list(chemical = list(sid = "DTXSID-A", name = "A")),
+                list(chemical = list(sid = "SID-ONLY", name = "B"))
+              ),
+              similarity = list(
+                list(list(sim = 0), list(sim = 0.25)),
+                list(list(sim = 0.25), list(sim = 0))
+              )
+            ))
+          }
           "SENTINEL"
         },
         .package = "ComptoxR"
@@ -100,17 +111,22 @@ for (wrapper_name in names(resolver_cluster)) {
 
       res <- get(nm, envir = asNamespace("ComptoxR"))(query = c("50-00-0", "x"))
 
-      # Most cluster members return generic_chemi_request() verbatim. chemi_hazard_bulk
-      # is the exception: it carries a post_response formatter (format_chemi_hazard_result)
-      # that transforms the POST result, so it does not pass the raw request result through.
-      if (nm != "chemi_hazard_bulk") {
+      # Post-response formatters transform the raw helper result.
+      if (nm == "chemi_resolver_getsimilaritymap") {
+        expect_s3_class(res$hc, "hclust")
+      } else if (nm != "chemi_hazard_bulk") {
         expect_identical(res, "SENTINEL")
       }
       expect_identical(captured$endpoint, endpoint)
       expect_false(captured$tidy)
       expect_length(captured$chemicals, 2L)
-      expect_identical(captured$chemicals[[1]]$chemical$sid, "DTXSID-A")
-      expect_identical(captured$chemicals[[2]]$chemical$sid, "SID-ONLY")
+      if (nm == "chemi_resolver_getsimilaritymap") {
+        expect_identical(captured$chemicals[[1]]$sid, "DTXSID-A")
+        expect_identical(captured$chemicals[[2]]$sid, "SID-ONLY")
+      } else {
+        expect_identical(captured$chemicals[[1]]$chemical$sid, "DTXSID-A")
+        expect_identical(captured$chemicals[[2]]$chemical$sid, "SID-ONLY")
+      }
     })
 
     test_that(paste0(nm, " short-circuits to NULL + warning when nothing resolves"), {

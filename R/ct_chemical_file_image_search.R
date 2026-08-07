@@ -5,6 +5,7 @@
 #'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns image data (raw bytes or magick image object)
+#' @apiStage public
 #' @export
 #'
 #' @examples

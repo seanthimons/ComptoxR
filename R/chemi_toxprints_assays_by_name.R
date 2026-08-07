@@ -5,6 +5,7 @@
 #'
 #' @param name Primary query parameter. Type: string
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples

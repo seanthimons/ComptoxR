@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_padel.R
 \name{chemi_padel}
 \alias{chemi_padel}
-\title{Padel}
+\title{Calculate PaDEL descriptors for one molecule}
 \usage{
 chemi_padel(
   smiles,
@@ -10,30 +10,42 @@ chemi_padel(
   x3d = FALSE,
   fp = FALSE,
   headers = FALSE,
-  timeout = NULL
+  timeout = NULL,
+  output = c("wide", "raw")
 )
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{One SMILES string or resolvable chemical identifier.}
 
-\item{x2d}{Optional parameter (default: TRUE)}
+\item{x2d}{Calculate two-dimensional descriptors.}
 
-\item{x3d}{Optional parameter (default: FALSE)}
+\item{x3d}{Calculate three-dimensional descriptors.}
 
-\item{fp}{Optional parameter (default: FALSE)}
+\item{fp}{Calculate fingerprints.}
 
-\item{headers}{Optional parameter (default: FALSE)}
+\item{headers}{Request upstream descriptor headers.}
 
-\item{timeout}{Optional parameter}
+\item{timeout}{Optional upstream calculation timeout.}
+
+\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
+provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated one-row tibble or raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This wrapper resolves identifier-like inputs to SMILES before calling the
+dedicated service. The raw \verb{/api/padel} endpoint does not perform that
+wrapper-level resolution.
 }
 \examples{
 \dontrun{
 chemi_padel(smiles = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

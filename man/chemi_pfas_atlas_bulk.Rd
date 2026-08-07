@@ -4,12 +4,12 @@
 \alias{chemi_pfas_atlas_bulk}
 \title{Generate PFAS Atlas categories for multiple molecules}
 \usage{
-chemi_pfas_atlas_bulk(smiles = NULL, chemicals = NULL)
+chemi_pfas_atlas_bulk(chemicals = NULL, smiles = NULL)
 }
 \arguments{
-\item{smiles}{Array of SMILES strings, kept for backward compatibility with the previous PFAS Atlas POST format.}
-
 \item{chemicals}{Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility.}
+
+\item{smiles}{Array of SMILES strings, kept for backward compatibility with the previous PFAS Atlas POST format.}
 }
 \value{
 Returns a list with result object
@@ -19,6 +19,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_pfas_atlas_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_pfas_atlas_bulk(chemicals = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

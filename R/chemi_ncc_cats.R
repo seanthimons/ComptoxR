@@ -7,6 +7,7 @@
 #' @param logp Octanol-water partition coefficient
 #' @param ws Water solubility (mg/L)
 #' @return Returns a list with result object
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -14,6 +15,27 @@
 #' chemi_ncc_cats(smiles = "DTXSID7020182")
 #' }
 chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_ncc_cats",
+    "pre_request",
+    list(params = list(`smiles` = smiles, `logp` = logp, `ws` = ws, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("smiles" %in% names(req_data$params)) {
+    smiles <- req_data$params[["smiles"]]
+  }
+  if ("logp" %in% names(req_data$params)) {
+    logp <- req_data$params[["logp"]]
+  }
+  if ("ws" %in% names(req_data$params)) {
+    ws <- req_data$params[["ws"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {
@@ -29,7 +51,7 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
     endpoint = "ncc_cats",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -48,18 +70,37 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
 #'
 #' @param chemicals Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors.
 #' @return Returns a list with result object
+#' @apiStage staging
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_ncc_cats_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_ncc_cats_bulk(chemicals = "DTXSID1024122")
 #' }
 chemi_ncc_cats_bulk <- function(chemicals = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_ncc_cats_bulk",
+    "pre_request",
+    list(params = list(`chemicals` = chemicals, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("chemicals" %in% names(req_data$params)) {
+    chemicals <- req_data$params[["chemicals"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
+
   result <- generic_chemi_request(
+    server = server,
     query = chemicals,
     endpoint = "ncc_cats",
     wrap = FALSE,
-    tidy = FALSE
+    tidy = FALSE,
+    chemicals = chemicals
   )
 
   # Additional post-processing can be added here

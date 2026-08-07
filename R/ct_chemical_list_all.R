@@ -7,6 +7,7 @@
 #' @param return_dtxsid Return all DTXSIDs contained within each list
 #' @param coerce Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

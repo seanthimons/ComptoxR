@@ -5,6 +5,7 @@
 #'
 #' @param first_block First block of an InChIKey.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

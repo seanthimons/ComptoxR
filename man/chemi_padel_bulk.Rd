@@ -2,21 +2,46 @@
 % Please edit documentation in R/chemi_padel.R
 \name{chemi_padel_bulk}
 \alias{chemi_padel_bulk}
-\title{Padel}
+\title{Calculate PaDEL descriptors for multiple molecules}
 \usage{
-chemi_padel_bulk(query)
+chemi_padel_bulk(
+  query,
+  x2d = TRUE,
+  x3d = FALSE,
+  fp = FALSE,
+  headers = FALSE,
+  timeout = NULL,
+  output = c("wide", "raw")
+)
 }
 \arguments{
-\item{query}{Character vector of strings to send in request body}
+\item{query}{Chemical structures or resolvable identifiers.}
+
+\item{x2d}{Calculate two-dimensional descriptors.}
+
+\item{x3d}{Calculate three-dimensional descriptors.}
+
+\item{fp}{Calculate fingerprints.}
+
+\item{headers}{Request upstream descriptor headers.}
+
+\item{timeout}{Optional upstream calculation timeout.}
+
+\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
+provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated tibble with one row per input or raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_padel_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_padel_bulk(query = c("DTXSID7020182", "CCO"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

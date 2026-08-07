@@ -8,6 +8,7 @@
 #' @param subklass Subclass-level (fourth-highest) classification of a substance.
 #' @param superklass Superclass-level (second-highest) classification of a substance.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

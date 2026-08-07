@@ -17,6 +17,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_ncc_cats_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_ncc_cats_bulk(chemicals = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

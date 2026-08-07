@@ -142,13 +142,10 @@ jobs:
           md <- format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")
 
-          # Count changes for workflow outputs
-          breaking <- sum(sapply(results, function(r) {
-            nrow(r$removed) + sum(r$modified$breaking)
-          }))
-          nonbreaking <- sum(sapply(results, function(r) {
-            nrow(r$added) + sum(!r$modified$breaking)
-          }))
+          # Count changes for workflow outputs (robust to empty/error results)
+          counts <- count_diff_changes(results)
+          breaking <- counts$breaking
+          nonbreaking <- counts$nonbreaking
 
           # Write to GITHUB_OUTPUT
           gh_output <- Sys.getenv("GITHUB_OUTPUT")
@@ -245,9 +242,7 @@ jobs:
 
       - name: Prepare PR body
         id: pr_body
-        if: >-
-          steps.changes.outputs.has_changes == 'true' &&
-          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           # Build PR body from template + diff report
           cat > pr_body.md << 'HEADER'
@@ -361,9 +356,7 @@ jobs:
           TAIL
 
       - name: Create Pull Request
-        if: >-
-          steps.changes.outputs.has_changes == 'true' &&
-          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
+        if: steps.changes.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}

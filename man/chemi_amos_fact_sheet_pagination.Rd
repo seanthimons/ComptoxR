@@ -24,3 +24,7 @@ Returns a tibble with results
 chemi_amos_fact_sheet_pagination(limit = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

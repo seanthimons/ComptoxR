@@ -8,11 +8,12 @@
 #' @param type Type of mass window to use.  Should be either "da" or "ppm".
 #' @param window Size of the mass window to use.  Will be in units of the 'type' argument.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_entropy_similarity(spectrum_1 = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_entropy_similarity(spectrum_1 = "DTXSID1024122")
 #' }
 chemi_amos_entropy_similarity <- function(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL) {
   # Build options list for additional parameters

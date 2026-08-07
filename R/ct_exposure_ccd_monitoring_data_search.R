@@ -6,6 +6,7 @@
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param projection Specifies if projection is used. Option: ccd-biomonitoring, If omitted, the default CCDBiomonitoring data is returned.
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

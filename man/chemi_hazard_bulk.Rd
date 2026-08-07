@@ -37,3 +37,7 @@ then sends the resolved Chemical objects to the API endpoint.
 chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

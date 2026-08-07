@@ -4,14 +4,14 @@
 \alias{chemi_stdizer_records}
 \title{Stdizer Records}
 \usage{
-chemi_stdizer_records(options = NULL, records = NULL, full = NULL)
+chemi_stdizer_records(full = NULL, options = NULL, records = NULL)
 }
 \arguments{
+\item{full}{Optional parameter}
+
 \item{options}{Optional parameter}
 
 \item{records}{Optional parameter}
-
-\item{full}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -21,6 +21,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_records(options = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_stdizer_records(full = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

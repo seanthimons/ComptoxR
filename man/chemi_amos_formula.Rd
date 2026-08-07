@@ -7,7 +7,7 @@
 chemi_amos_formula(formula)
 }
 \arguments{
-\item{formula}{Molecular formula to search by.  Formula should be in Hill form.}
+\item{formula}{Molecular furmula to search by.  Formula should be in Hill form.}
 }
 \value{
 Returns a tibble with results
@@ -20,3 +20,7 @@ Returns a tibble with results
 chemi_amos_formula(formula = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

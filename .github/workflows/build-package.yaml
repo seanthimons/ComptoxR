@@ -10,6 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [full, stable]
+
     env:
       GITHUB_PAT: ${{ github.token }}
 
@@ -38,6 +43,11 @@ jobs:
           echo "package=$package" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+      - name: Strip non-public exports
+        if: matrix.profile == 'stable'
+        shell: bash
+        run: Rscript dev/build_stable.R
+
       - name: Build source package
         id: build
         env:
@@ -53,7 +63,7 @@ jobs:
       - name: Upload source package
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: ${{ steps.metadata.outputs.package }}-${{ steps.metadata.outputs.version }}-source
+          name: ${{ steps.metadata.outputs.package }}-${{ steps.metadata.outputs.version }}-${{ matrix.profile }}
           path: ${{ steps.build.outputs.tarball }}
           if-no-files-found: error
           retention-days: 14

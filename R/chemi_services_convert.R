@@ -6,11 +6,12 @@
 #' @param content Optional parameter
 #' @param type Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_services_convert(content = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_services_convert(content = "DTXSID1024122")
 #' }
 chemi_services_convert <- function(content = NULL, type = NULL) {
   # Build options list for additional parameters

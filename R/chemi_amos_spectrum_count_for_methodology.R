@@ -6,6 +6,7 @@
 #' @param dtxsid DTXSID for the substance of interest.
 #' @param spectrum_type Analytical methodology to search for.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

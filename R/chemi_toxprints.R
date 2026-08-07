@@ -7,6 +7,7 @@
 #' @param headers Optional parameter (default: FALSE)
 #' @param profile Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -48,11 +49,12 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_toxprints_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_toxprints_bulk(query = "DTXSID1024122")
 #' }
 chemi_toxprints_bulk <- function(query) {
   result <- generic_request(

@@ -4,6 +4,10 @@
 
 ## v1.5.1 (2026-07-13)
 
+#### Breaking changes
+
+- remove the cash and universal harvest resolver wrappers
+
 #### New features
 
 - add hook-based wrapper customizations

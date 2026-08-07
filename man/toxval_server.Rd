@@ -4,7 +4,7 @@
 \alias{toxval_server}
 \title{Set API endpoints for ToxValDB endpoints}
 \usage{
-toxval_server(server = NULL)
+toxval_server(server = NULL, url_only = FALSE)
 }
 \arguments{
 \item{server}{Defines what server to target. If \code{NULL}, the server URL is
@@ -16,9 +16,13 @@ reset. Valid options are:
 \item Development: 4
 }
 A string argument is treated as a path to a custom \code{.duckdb} file.}
+
+\item{url_only}{If \code{TRUE}, return the selected URL or database path without
+changing \code{toxval_burl} or closing a cached connection.}
 }
 \value{
-Should return the Sys Env variable \code{toxval_burl}
+The selected URL or path when \code{url_only = TRUE}; otherwise the
+configured \code{toxval_burl}.
 }
 \description{
 Set API endpoints for ToxValDB endpoints

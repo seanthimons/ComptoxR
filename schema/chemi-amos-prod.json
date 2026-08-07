@@ -1,170 +1,5 @@
 {
   "definitions": {
-    "BatchSearchAdditionalMassSpectrumInfo": {
-      "properties": {
-        "all": {
-          "description": "Include all additional info for mass spectra.  Overrides other flags.",
-          "type": "boolean"
-        },
-        "ionization_mode": {
-          "description": "Include whether the spectrum was collected in a positive or negative mode experiment.  Not always available.",
-          "type": "boolean"
-        },
-        "num_peaks": {
-          "description": "Include the number of peaks in the spectrum.",
-          "type": "boolean"
-        },
-        "rating": {
-          "description": "Include a clean/noisy rating for the spectrum, based on the spectral and normalized entropy scores.",
-          "type": "boolean"
-        },
-        "spectral_entropy": {
-          "description": "Include the spectral entropy score for a given spectrum.  Will be missing for spectra with only one peak.",
-          "type": "boolean"
-        }
-      }
-    },
-    "BatchSearchAdditionalRecordInfo": {
-      "properties": {
-        "ms": {
-          "$ref": "#/definitions/BatchSearchAdditionalMassSpectrumInfo"
-        }
-      }
-    },
-    "BatchSearchGeneralRequest": {
-      "properties": {
-        "additional_record_info": {
-          "$ref": "#/definitions/BatchSearchAdditionalRecordInfo"
-        },
-        "always_download_file": {
-          "description": "If false, a search that does not find any matching records in the database will just return a message instead of a file.",
-          "type": "boolean"
-        },
-        "base_url": {
-          "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
-          "type": "string"
-        },
-        "dtxsids": {
-          "description": "List of DTXSIDs to search for.",
-          "example": [
-            "DTXSID9020112",
-            "DTXSID3022401"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "include_classyfire": {
-          "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
-          "example": true,
-          "type": "boolean"
-        },
-        "include_external_links": {
-          "description": "Flag for whether to include database records that are purely external links (e.g., spectra that we can link to but cannot store directly in the database).",
-          "type": "boolean"
-        },
-        "include_functional_uses": {
-          "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
-          "type": "boolean"
-        },
-        "include_source_counts": {
-          "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
-          "type": "boolean"
-        },
-        "methodologies": {
-          "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
-          "example": {
-            "GC/MS": true,
-            "LC/MS": true,
-            "NMR": false,
-            "all": false
-          },
-          "type": "object"
-        },
-        "record_types": {
-          "description": "Filters returned results by record type.  This argument should be a dictionary with three keys with boolean values -- \"Fact Sheet\", \"Method\", and \"Spectrum\".  Note that the \"Spectrum\" flag will return spectra of all types -- mass, NMR, etc.",
-          "example": {
-            "Fact Sheet": false,
-            "Method": true,
-            "Spectrum": true
-          },
-          "type": "object"
-        }
-      }
-    },
-    "ClassyFireClassificationRequest": {
-      "properties": {
-        "kingdom": {
-          "description": "Kingdom-level (highest) classification of a substance.",
-          "example": "Organic compounds",
-          "type": "string"
-        },
-        "klass": {
-          "description": "Class-level (third-highest) classification of a substance.",
-          "example": "Organic metal salts",
-          "type": "string"
-        },
-        "subklass": {
-          "description": "Subclass-level (fourth-highest) classification of a substance.",
-          "example": "Organic calcium salts",
-          "type": "string"
-        },
-        "superklass": {
-          "description": "Superclass-level (second-highest) classification of a substance.",
-          "example": "Organic salts",
-          "type": "string"
-        }
-      }
-    },
-    "ClassyFireLevelRequest": {
-      "properties": {
-        "kingdom": {
-          "description": "Kingdom-level (highest) classification of a substance.  Always required.",
-          "example": "Organic compounds",
-          "type": "string"
-        },
-        "klass": {
-          "description": "Class-level (third-highest) classification of a substance.  Required if requesting a list of subclasses.",
-          "example": "Organic metal salts",
-          "type": "string"
-        },
-        "superklass": {
-          "description": "Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.",
-          "example": "Organic salts",
-          "type": "string"
-        }
-      }
-    },
-    "MassRangeSubstanceSearchRequest": {
-      "properties": {
-        "lower_mass_limit": {
-          "description": "Lower limit of the mass range to search for.",
-          "example": 194.1,
-          "type": "number"
-        },
-        "upper_mass_limit": {
-          "description": "Upper limit of the mass range to search for.",
-          "example": 194.2,
-          "type": "number"
-        }
-      }
-    },
-    "RecordCountsByDTXSIDRequest": {
-      "properties": {
-        "dtxsids": {
-          "description": "List of DTXSIDs to search for.",
-          "example": [
-            "DTXSID9020112",
-            "DTXSID3022401"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      }
-    },
     "all_similarity_by_dtxsid_request": {
       "properties": {
         "da_window": {
@@ -265,12 +100,148 @@
         "methodologies": {
           "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
           "example": {
+            "all": false,
             "GC/MS": true,
             "LC/MS": true,
-            "NMR": false,
-            "all": false
+            "NMR": false
           },
           "type": "object"
+        }
+      }
+    },
+    "BatchSearchAdditionalMassSpectrumInfo": {
+      "properties": {
+        "all": {
+          "description": "Include all additional info for mass spectra.  Overrides other flags.",
+          "type": "boolean"
+        },
+        "ionization_mode": {
+          "description": "Include whether the spectrum was collected in a positive or negative mode experiment.  Not always available.",
+          "type": "boolean"
+        },
+        "num_peaks": {
+          "description": "Include the number of peaks in the spectrum.",
+          "type": "boolean"
+        },
+        "rating": {
+          "description": "Include a clean/noisy rating for the spectrum, based on the spectral and normalized entropy scores.",
+          "type": "boolean"
+        },
+        "spectral_entropy": {
+          "description": "Include the spectral entropy score for a given spectrum.  Will be missing for spectra with only one peak.",
+          "type": "boolean"
+        }
+      }
+    },
+    "BatchSearchAdditionalRecordInfo": {
+      "properties": {
+        "ms": {
+          "$ref": "#/definitions/BatchSearchAdditionalMassSpectrumInfo"
+        }
+      }
+    },
+    "BatchSearchGeneralRequest": {
+      "properties": {
+        "additional_record_info": {
+          "$ref": "#/definitions/BatchSearchAdditionalRecordInfo"
+        },
+        "always_download_file": {
+          "description": "If false, a search that does not find any matching records in the database will just return a message instead of a file.",
+          "type": "boolean"
+        },
+        "base_url": {
+          "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
+          "type": "string"
+        },
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID3022401"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_classyfire": {
+          "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
+          "example": true,
+          "type": "boolean"
+        },
+        "include_external_links": {
+          "description": "Flag for whether to include database records that are purely external links (e.g., spectra that we can link to but cannot store directly in the database).",
+          "type": "boolean"
+        },
+        "include_functional_uses": {
+          "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
+          "type": "boolean"
+        },
+        "include_source_counts": {
+          "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
+          "type": "boolean"
+        },
+        "methodologies": {
+          "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
+          "example": {
+            "all": false,
+            "GC/MS": true,
+            "LC/MS": true,
+            "NMR": false
+          },
+          "type": "object"
+        },
+        "record_types": {
+          "description": "Filters returned results by record type.  This argument should be a dictionary with three keys with boolean values -- \"Fact Sheet\", \"Method\", and \"Spectrum\".  Note that the \"Spectrum\" flag will return spectra of all types -- mass, NMR, etc.",
+          "example": {
+            "Fact Sheet": false,
+            "Method": true,
+            "Spectrum": true
+          },
+          "type": "object"
+        }
+      }
+    },
+    "ClassyFireClassificationRequest": {
+      "properties": {
+        "kingdom": {
+          "description": "Kingdom-level (highest) classification of a substance.",
+          "example": "Organic compounds",
+          "type": "string"
+        },
+        "klass": {
+          "description": "Class-level (third-highest) classification of a substance.",
+          "example": "Organic metal salts",
+          "type": "string"
+        },
+        "subklass": {
+          "description": "Subclass-level (fourth-highest) classification of a substance.",
+          "example": "Organic calcium salts",
+          "type": "string"
+        },
+        "superklass": {
+          "description": "Superclass-level (second-highest) classification of a substance.",
+          "example": "Organic salts",
+          "type": "string"
+        }
+      }
+    },
+    "ClassyFireLevelRequest": {
+      "properties": {
+        "kingdom": {
+          "description": "Kingdom-level (highest) classification of a substance.  Always required.",
+          "example": "Organic compounds",
+          "type": "string"
+        },
+        "klass": {
+          "description": "Class-level (third-highest) classification of a substance.  Required if requesting a list of subclasses.",
+          "example": "Organic metal salts",
+          "type": "string"
+        },
+        "superklass": {
+          "description": "Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.",
+          "example": "Organic salts",
+          "type": "string"
         }
       }
     },
@@ -406,6 +377,20 @@
         }
       }
     },
+    "MassRangeSubstanceSearchRequest": {
+      "properties": {
+        "lower_mass_limit": {
+          "description": "Lower limit of the mass range to search for.",
+          "example": 194.1,
+          "type": "number"
+        },
+        "upper_mass_limit": {
+          "description": "Upper limit of the mass range to search for.",
+          "example": 194.2,
+          "type": "number"
+        }
+      }
+    },
     "max_similarity_by_dtxsid_request": {
       "properties": {
         "da_window": {
@@ -450,6 +435,21 @@
           ],
           "items": {
             "type": "array"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "RecordCountsByDTXSIDRequest": {
+      "properties": {
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID3022401"
+          ],
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }
@@ -977,33 +977,6 @@
         "summary": "Endpoint for retrieving a specified NMR spectrum from the database."
       }
     },
-    "/api/amos/get_pdf/{record_type}/{internal_id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.",
-            "in": "path",
-            "name": "record_type",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Unique ID of the document of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The PDF being searched, in the form of an <iframe>-compatible element."
-          }
-        },
-        "summary": "Retrieves a PDF from the database by the internal ID and type of record."
-      }
-    },
     "/api/amos/get_pdf_metadata/{record_type}/{internal_id}": {
       "get": {
         "description": "<br/>Fact sheets, methods, and spectrum PDFs all have associated metadata, so this uses the record_type argument to differentiate<br/>between them.",
@@ -1029,6 +1002,33 @@
           }
         },
         "summary": "Retrieves metadata associated with a PDF record."
+      }
+    },
+    "/api/amos/get_pdf/{record_type}/{internal_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.",
+            "in": "path",
+            "name": "record_type",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Unique ID of the document of interest.",
+            "in": "path",
+            "name": "internal_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The PDF being searched, in the form of an <iframe>-compatible element."
+          }
+        },
+        "summary": "Retrieves a PDF from the database by the internal ID and type of record."
       }
     },
     "/api/amos/get_similar_structures/{dtxsid}": {

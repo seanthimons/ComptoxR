@@ -5,6 +5,7 @@
 #'
 #' @param name Required parameter
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples

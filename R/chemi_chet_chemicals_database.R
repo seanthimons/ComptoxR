@@ -11,6 +11,7 @@
 #' @param only_in_reactions Optional parameter
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a list with result object
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -26,6 +27,50 @@ chemi_chet_chemicals_database <- function(
   only_in_reactions = NULL,
   all_pages = TRUE
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_chet_chemicals_database",
+    "pre_request",
+    list(
+      params = list(
+        `page` = page,
+        `size` = size,
+        `query` = query,
+        `exact_search` = exact_search,
+        `lib_name` = lib_name,
+        `only_in_reactions` = only_in_reactions,
+        `all_pages` = all_pages,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("page" %in% names(req_data$params)) {
+    page <- req_data$params[["page"]]
+  }
+  if ("size" %in% names(req_data$params)) {
+    size <- req_data$params[["size"]]
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("exact_search" %in% names(req_data$params)) {
+    exact_search <- req_data$params[["exact_search"]]
+  }
+  if ("lib_name" %in% names(req_data$params)) {
+    lib_name <- req_data$params[["lib_name"]]
+  }
+  if ("only_in_reactions" %in% names(req_data$params)) {
+    only_in_reactions <- req_data$params[["only_in_reactions"]]
+  }
+  if ("all_pages" %in% names(req_data$params)) {
+    all_pages <- req_data$params[["all_pages"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(page)) {
@@ -50,7 +95,7 @@ chemi_chet_chemicals_database <- function(
     endpoint = "chemicals/database",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options,

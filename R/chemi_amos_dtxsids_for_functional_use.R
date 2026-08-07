@@ -5,6 +5,7 @@
 #'
 #' @param functional_use Functional use class.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

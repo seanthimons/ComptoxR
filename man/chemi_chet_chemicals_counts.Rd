@@ -24,3 +24,7 @@ Returns a tibble with results (array of objects)
 chemi_chet_chemicals_counts(page = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

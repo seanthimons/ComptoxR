@@ -6,6 +6,7 @@
 #' @param pagenum Primary query parameter. Type: integer
 #' @param searchterm Optional parameter. Type: string
 #' @return Returns a list with result object
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -13,12 +14,30 @@
 #' chemi_chet_reaction_database_old_by_pagenum(pagenum = "DTXSID7020182")
 #' }
 chemi_chet_reaction_database_old_by_pagenum <- function(pagenum, searchterm = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_chet_reaction_database_old_by_pagenum",
+    "pre_request",
+    list(params = list(`pagenum` = pagenum, `searchterm` = searchterm, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("pagenum" %in% names(req_data$params)) {
+    pagenum <- req_data$params[["pagenum"]]
+  }
+  if ("searchterm" %in% names(req_data$params)) {
+    searchterm <- req_data$params[["searchterm"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     query = pagenum,
     endpoint = "reaction/database-old/",
     method = "GET",
     batch_limit = 1,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     path_params = c(searchterm = searchterm)

@@ -4,7 +4,7 @@
 \alias{chemi_server}
 \title{Set API endpoints for Cheminformatics API endpoints}
 \usage{
-chemi_server(server = NULL)
+chemi_server(server = NULL, url_only = FALSE)
 }
 \arguments{
 \item{server}{Defines what server to target. If \code{NULL}, the server URL is
@@ -14,9 +14,13 @@ reset. Valid options are:
 \item Staging: 2
 \item Development: 3
 }}
+
+\item{url_only}{If \code{TRUE}, return the selected URL without changing
+\code{chemi_burl}.}
 }
 \value{
-Should return the Sys Env variable \code{chemi_burl}
+The selected URL when \code{url_only = TRUE}; otherwise the configured
+\code{chemi_burl}.
 }
 \description{
 This function sets the API endpoint for the Cheminformatics API based on the

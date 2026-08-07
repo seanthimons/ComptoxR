@@ -164,6 +164,32 @@ test_that("generated-test check tolerates formatter-only wrapping", {
   expect_length(check$mismatches, 0)
 })
 
+test_that("bespoke exclusions require a real suite and wrapper reference", {
+  root <- make_generation_repo()
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  dir.create(file.path(root, "inst"))
+  writeLines(
+    c(
+      "alpha:",
+      '  bespoke_test: "tests/testthat/test-alpha-contract.R"'
+    ),
+    file.path(root, "inst", "hook_config.yml"),
+    useBytes = TRUE
+  )
+  suite <- file.path(root, "tests", "testthat", "test-alpha-contract.R")
+
+  expect_error(build_generated_test_specs(root), "bespoke suite is missing")
+  writeLines("# placeholder", suite, useBytes = TRUE)
+  expect_error(build_generated_test_specs(root), "no real test_that")
+  writeLines("test_that('contract', { expect_true(TRUE) })", suite, useBytes = TRUE)
+  expect_error(build_generated_test_specs(root), "does not reference the wrapper")
+  writeLines("test_that('alpha contract', { expect_true(is.function(alpha)) })", suite, useBytes = TRUE)
+
+  specs <- build_generated_test_specs(root)
+  expect_false("alpha" %in% vapply(specs, `[[`, character(1), "function_name"))
+  expect_true("beta" %in% vapply(specs, `[[`, character(1), "function_name"))
+})
+
 test_that("token preflight rejects empty placeholder and redacted-looking values", {
   expect_false(ctx_api_key_status("")$valid)
   expect_false(ctx_api_key_status("dummy_ctx_key")$valid)

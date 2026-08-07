@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -31,61 +32,62 @@ chemi_alerts_groups <- function() {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param type Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD, PROPERTY, GROUP, REFERENCE
-#' @param text Optional parameter
 #' @param description Optional parameter
-#' @param value Optional parameter
-#' @param logicType Optional parameter. Options: NONE, OR, AND, NOT
-#' @param operations Optional parameter
 #' @param frozen Optional parameter
 #' @param id Optional parameter
+#' @param logicType Optional parameter. Options: NONE, OR, AND, NOT
 #' @param name Optional parameter
+#' @param operations Optional parameter
+#' @param text Optional parameter
+#' @param type Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD, PROPERTY, GROUP, REFERENCE
+#' @param value Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_alerts_groups_bulk(type = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_alerts_groups_bulk(description = "DTXSID1024122")
 #' }
 chemi_alerts_groups_bulk <- function(
-  type = NULL,
-  text = NULL,
   description = NULL,
-  value = NULL,
-  logicType = NULL,
-  operations = NULL,
   frozen = NULL,
   id = NULL,
-  name = NULL
+  logicType = NULL,
+  name = NULL,
+  operations = NULL,
+  text = NULL,
+  type = NULL,
+  value = NULL
 ) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(text)) {
-    options$text <- text
-  }
-  if (!is.null(description)) {
-    options$description <- description
-  }
-  if (!is.null(value)) {
-    options$value <- value
-  }
-  if (!is.null(logicType)) {
-    options$logicType <- logicType
-  }
-  if (!is.null(operations)) {
-    options$operations <- operations
-  }
   if (!is.null(frozen)) {
     options$frozen <- frozen
   }
   if (!is.null(id)) {
     options$id <- id
   }
+  if (!is.null(logicType)) {
+    options$logicType <- logicType
+  }
   if (!is.null(name)) {
     options$name <- name
   }
+  if (!is.null(operations)) {
+    options$operations <- operations
+  }
+  if (!is.null(text)) {
+    options$text <- text
+  }
+  if (!is.null(type)) {
+    options$type <- type
+  }
+  if (!is.null(value)) {
+    options$value <- value
+  }
   result <- generic_chemi_request(
-    query = type,
+    query = description,
     endpoint = "alerts/groups",
     options = options,
     tidy = FALSE

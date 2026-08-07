@@ -7,6 +7,7 @@
 #' @param size Optional parameter
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage staging
 #' @export
 #'
 #' @examples
@@ -14,6 +15,27 @@
 #' chemi_chet_chemicals_counts(page = "DTXSID7020182")
 #' }
 chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_chet_chemicals_counts",
+    "pre_request",
+    list(params = list(`page` = page, `size` = size, `all_pages` = all_pages, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("page" %in% names(req_data$params)) {
+    page <- req_data$params[["page"]]
+  }
+  if ("size" %in% names(req_data$params)) {
+    size <- req_data$params[["size"]]
+  }
+  if ("all_pages" %in% names(req_data$params)) {
+    all_pages <- req_data$params[["all_pages"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(page)) {
@@ -26,7 +48,7 @@ chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE)
     endpoint = "chemicals/counts",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options,

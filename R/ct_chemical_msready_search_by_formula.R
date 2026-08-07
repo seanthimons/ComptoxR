@@ -5,6 +5,7 @@
 #'
 #' @param formula Chemical formula. Type: string
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples

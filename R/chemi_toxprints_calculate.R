@@ -7,6 +7,7 @@
 #' @param labels Optional parameter (default: FALSE)
 #' @param profile Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -53,19 +54,54 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param labels Optional parameter
 #' @param options Optional parameter
+#' @param request.filesInfo Optional parameter
+#' @param request.labels Optional parameter
+#' @param request.options.OR Optional parameter
+#' @param request.options.profile Optional parameter
+#' @param request.options.PV1 Optional parameter
+#' @param request.options.TP Optional parameter
+#' @param request.resolve Optional parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_calculate_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NULL, options = NULL) {
+chemi_toxprints_calculate_bulk <- function(
+  query,
+  idType = "AnyId",
+  labels = NULL,
+  options = NULL,
+  request.filesInfo = NULL,
+  request.labels = NULL,
+  request.options.OR = NULL,
+  request.options.profile = NULL,
+  request.options.PV1 = NULL,
+  request.options.TP = NULL,
+  request.resolve = NULL
+) {
   chemicals <- NULL
   req_data <- run_hook(
     "chemi_toxprints_calculate_bulk",
     "pre_request",
-    list(params = list(query = query, idType = idType, labels = labels, options = options, chemicals = chemicals))
+    list(
+      params = list(
+        `query` = query,
+        `idType` = idType,
+        `labels` = labels,
+        `options` = options,
+        `request.filesInfo` = request.filesInfo,
+        `request.labels` = request.labels,
+        `request.options.OR` = request.options.OR,
+        `request.options.profile` = request.options.profile,
+        `request.options.PV1` = request.options.PV1,
+        `request.options.TP` = request.options.TP,
+        `request.resolve` = request.resolve,
+        `chemicals` = chemicals
+      )
+    )
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
@@ -81,6 +117,27 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
   }
   if ("options" %in% names(req_data$params)) {
     options <- req_data$params[["options"]]
+  }
+  if ("request.filesInfo" %in% names(req_data$params)) {
+    request.filesInfo <- req_data$params[["request.filesInfo"]]
+  }
+  if ("request.labels" %in% names(req_data$params)) {
+    request.labels <- req_data$params[["request.labels"]]
+  }
+  if ("request.options.OR" %in% names(req_data$params)) {
+    request.options.OR <- req_data$params[["request.options.OR"]]
+  }
+  if ("request.options.profile" %in% names(req_data$params)) {
+    request.options.profile <- req_data$params[["request.options.profile"]]
+  }
+  if ("request.options.PV1" %in% names(req_data$params)) {
+    request.options.PV1 <- req_data$params[["request.options.PV1"]]
+  }
+  if ("request.options.TP" %in% names(req_data$params)) {
+    request.options.TP <- req_data$params[["request.options.TP"]]
+  }
+  if ("request.resolve" %in% names(req_data$params)) {
+    request.resolve <- req_data$params[["request.resolve"]]
   }
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
@@ -99,8 +156,15 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
     query = query,
     endpoint = "toxprints/calculate",
     options = extra_options,
+    tidy = FALSE,
     chemicals = chemicals,
-    tidy = FALSE
+    request.filesInfo = request.filesInfo,
+    request.labels = request.labels,
+    request.options.OR = request.options.OR,
+    request.options.profile = request.options.profile,
+    request.options.PV1 = request.options.PV1,
+    request.options.TP = request.options.TP,
+    request.resolve = request.resolve
   )
 
   # Additional post-processing can be added here

@@ -28,18 +28,27 @@ load_hook_config <- function() {
 #' Returns data unchanged if no hooks are registered.
 #'
 #' @param fn_name Character string naming the function
-#' @param hook_type Character string: "pre_request", "post_response", or "transform"
+#' @param hook_type Character string: "pre_request" or "post_response"
 #' @param data Data to pass through hook chain
 #'
 #' @return Transformed data after all hooks execute, or original data if no hooks registered
 #' @noRd
 run_hook <- function(fn_name, hook_type, data) {
+  if (!hook_type %in% c("pre_request", "post_response")) {
+    cli::cli_abort("Unsupported hook stage {.val {hook_type}}.")
+  }
+
   # Look up hook chain for this function and type
   hook_chain <- .HookRegistry$config[[fn_name]][[hook_type]]
 
   # If no hooks registered, return data unchanged
-  if (is.null(hook_chain)) {
+  if (is.null(hook_chain) || length(hook_chain) == 0) {
     return(data)
+  }
+
+  if (is.list(data)) {
+    data$fn_name <- fn_name
+    data$hook_type <- hook_type
   }
 
   # Execute each hook in chain order
@@ -49,12 +58,32 @@ run_hook <- function(fn_name, hook_type, data) {
   ns <- asNamespace("ComptoxR")
   result <- data
   for (hook_name in hook_chain) {
+    if (is.list(result)) {
+      result$fn_name <- fn_name
+      result$hook_type <- hook_type
+    }
     if (exists(hook_name, envir = ns, mode = "function")) {
       hook_fn <- get(hook_name, envir = ns, mode = "function")
     } else {
       hook_fn <- match.fun(hook_name)
     }
-    result <- hook_fn(result)
+    result <- tryCatch(
+      hook_fn(result),
+      error = function(parent) {
+        error_class <- paste0("comptoxr_", hook_type, "_hook_error")
+        if (inherits(parent, error_class)) {
+          stop(parent)
+        }
+        cli::cli_abort(
+          "{.fn {fn_name}} failed in {gsub('_', '-', hook_type, fixed = TRUE)} hook {.fn {hook_name}}.",
+          class = error_class,
+          parent = parent,
+          function_name = fn_name,
+          hook_name = hook_name,
+          stage = hook_type
+        )
+      }
+    )
   }
 
   result

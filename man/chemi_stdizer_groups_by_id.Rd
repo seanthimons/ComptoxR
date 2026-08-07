@@ -20,3 +20,7 @@ Returns a tibble with results
 chemi_stdizer_groups_by_id(id = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+
