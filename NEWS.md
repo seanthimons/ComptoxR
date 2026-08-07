@@ -2,11 +2,100 @@
 
 # ComptoxR NEWS
 
-## v1.5.1 (2026-07-13)
+## v1.6.0 (2026-08-07)
 
 #### Breaking changes
 
-- remove the cash and universal harvest resolver wrappers
+- replace cluster helpers with similarity map hooks
+  ([7401a9a](https://github.com/seanthimons/ComptoxR/tree/7401a9a8ea3005e2617bea892267701d421039e2))
+
+#### New features
+
+- remove harvest resolver wrappers
+  ([939a654](https://github.com/seanthimons/ComptoxR/tree/939a6546bcf99fb397acdce7575175b5a9793fc7))
+- expand cheminformatics search support
+  ([aae62ff](https://github.com/seanthimons/ComptoxR/tree/aae62ff61f3569e4bedbb93616c21ef3dced3a00))
+- add cross-server API function probe
+  ([3d892e5](https://github.com/seanthimons/ComptoxR/tree/3d892e516108abe5d3f08eef57d509533cb1f8ad))
+- stamp @apiStage stage on wrappers, wire non-prod server-swap, filter
+  public build
+  ([bbf7ce3](https://github.com/seanthimons/ComptoxR/tree/bbf7ce3cbba6ea876a90158cfeafac736971a219))
+- add @apiStage provenance tag and non-prod server-swap wiring
+  ([e616832](https://github.com/seanthimons/ComptoxR/tree/e616832e04e8724931abbbcf102fd0d5d23972d2))
+
+#### Bug fixes
+
+- integrate hooks-webtest release-blocker fix (#272)
+  ([525c339](https://github.com/seanthimons/ComptoxR/tree/525c3399a25a62dc4fe00308e0990f7e57b3de42))
+- read loaded function body instead of package source in hooks-webtest
+  (#272)
+  ([f5adb04](https://github.com/seanthimons/ComptoxR/tree/f5adb048bbe8c388ee8f474315cd2f8fe6f08fe1))
+- repair chemi_amos Rd cross-reference and refresh generated contract
+  tests
+  ([9768806](https://github.com/seanthimons/ComptoxR/tree/9768806befdb41bd428f73d97563afb60e200b08))
+- reseed patch for ecotox_ascii_06_11_2026
+  ([4fcc8f2](https://github.com/seanthimons/ComptoxR/tree/4fcc8f20bebda5e5a3200b9677ef12dcbe387387))
+- merge descriptor wrapper contracts
+  ([ef675a8](https://github.com/seanthimons/ComptoxR/tree/ef675a8a0011bd1ca054457f7b3bd17fe0490ff0))
+- normalize JSON prediction rows
+  ([82a6177](https://github.com/seanthimons/ComptoxR/tree/82a617758a7a8581692df20c8538640067f8b7bc))
+- make schema diff counting robust to empty/error results
+  ([da505e3](https://github.com/seanthimons/ComptoxR/tree/da505e342c55eda3344ac1b9e92908ce46950108))
+- support non-mutating URL lookup
+  ([906ff52](https://github.com/seanthimons/ComptoxR/tree/906ff52824f9c9b170c3053b76d2e3866d310c0e))
+- restore generic hook workflow
+  ([ac3f315](https://github.com/seanthimons/ComptoxR/tree/ac3f3150f34b424a15b701d229132eadff23e18c))
+- restore generic prediction workflow
+  ([c4ec7bd](https://github.com/seanthimons/ComptoxR/tree/c4ec7bdf9bdcd113fb4de8ee5c10bbc3150a31a3))
+- repair descriptor and WebTEST wrapper contracts
+  ([6881479](https://github.com/seanthimons/ComptoxR/tree/6881479d3bff64604d612b49eb0658624f4e87f6))
+
+#### Refactorings
+
+- operation-level API coverage via shared stub specs
+  ([d986165](https://github.com/seanthimons/ComptoxR/tree/d9861659354fcc6c233568488afd7f433522122d))
+
+#### Performance
+
+- index response row mapping
+  ([3624b5b](https://github.com/seanthimons/ComptoxR/tree/3624b5b09e1f5b07f26b4629fba1a6665fa2cf8f))
+
+#### Tests
+
+- require bespoke wrapper contract suites
+  ([8d917a5](https://github.com/seanthimons/ComptoxR/tree/8d917a5c251f5c76fcc7be116baeaad18db4bbea))
+
+#### CI
+
+- build full and stable package artifacts
+  ([73a28b5](https://github.com/seanthimons/ComptoxR/tree/73a28b59f38adc26ac6cbded0301010c84b04015))
+- add weekly API compatibility probe
+  ([576e8e5](https://github.com/seanthimons/ComptoxR/tree/576e8e59a9f798ef01fa1ad274ec024cf699d348))
+
+#### Docs
+
+- document development lifecycle and CI/release workflows
+  ([a55c702](https://github.com/seanthimons/ComptoxR/tree/a55c702bffdeb33ab115633fe3325197859080ad))
+
+#### Other changes
+
+- bump version to 1.6.0 \[skip ci\]
+  ([e6f93e6](https://github.com/seanthimons/ComptoxR/tree/e6f93e61a01dcc04e85d62bbc5cf317fd22ad997))
+- sync main v1.5.1 release into integration
+  ([64dc38a](https://github.com/seanthimons/ComptoxR/tree/64dc38abeb78c8a41f8add7ff5a98a9cd8708d0d))
+- remove stray regen artifact
+  ([e031ddf](https://github.com/seanthimons/ComptoxR/tree/e031ddf08f6ee184082c71849e3a163927019139))
+- add bespoke wrapper inventory tool
+  ([df30b40](https://github.com/seanthimons/ComptoxR/tree/df30b404749241330c87edea96d8bbfbc9cc1bd2))
+- merge remote integration updates
+  ([1d5b182](https://github.com/seanthimons/ComptoxR/tree/1d5b18244d1748f0391aeb57a3a9aa67940365c5))
+- update API schemas, generate function stubs and tests
+  ([107d36a](https://github.com/seanthimons/ComptoxR/tree/107d36a1af5a50021242acc27ab4cbe1de858c2e))
+
+Full set of changes:
+[`v1.5.1...v1.6.0`](https://github.com/seanthimons/ComptoxR/compare/v1.5.1...v1.6.0)
+
+## v1.5.1 (2026-07-13)
 
 #### New features
 
@@ -53,6 +142,8 @@
 
 - separate package build and publishing workflows
   ([f018714](https://github.com/seanthimons/ComptoxR/tree/f0187147757edb9aadb0242bfd305543c80112da))
+- separate package build and publishing workflows
+  ([25d02f1](https://github.com/seanthimons/ComptoxR/tree/25d02f11f56de541313d1bd586290cc807cae7c0))
 - bump the actions group with 7 updates (#255)
   ([2ed9bd2](https://github.com/seanthimons/ComptoxR/tree/2ed9bd2b4ab328ff541f5c48a663cc8d927daebb))
 - bump the actions group with 7 updates
@@ -64,10 +155,17 @@
 - remove dead sysdata regeneration step from schema check
   ([baabbf5](https://github.com/seanthimons/ComptoxR/tree/baabbf50f8a0047bba179d66f99efedcb935dcf2))
 
+#### Docs
+
+- update NEWS.md for v1.5.1 \[skip ci\]
+  ([fb1ea73](https://github.com/seanthimons/ComptoxR/tree/fb1ea73a2520fd57dda123475d030268113477e7))
+
 #### Other changes
 
 - bump version to 1.5.1 \[skip ci\]
   ([c40d3b0](https://github.com/seanthimons/ComptoxR/tree/c40d3b0feb7b72de48ee36da1abf0d2f02af02d5))
+- update API schemas, generate function stubs and tests
+  ([15cd572](https://github.com/seanthimons/ComptoxR/tree/15cd5723499763a1e6f1bd4d2a64189d289be588))
 - exclude CHET curation endpoints and non-GET/POST methods from stub
   generation
   ([0f1dddc](https://github.com/seanthimons/ComptoxR/tree/0f1dddcf33089fb31e3f8809813fccb1bf3734f1))
