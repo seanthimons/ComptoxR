@@ -752,11 +752,23 @@ build_function_stub_impl <- function(
     is_chemi_get <- TRUE # Track this to set correct server/auth
   }
 
-  # Build server and auth params for chemi GET endpoints
-  chemi_server_params <- if (isTRUE(is_chemi_get)) ',\n    server = "chemi_burl",\n    auth = FALSE' else ""
+  # epi_* wrappers hit the unauthenticated EPI Suite API on epi_burl. They reuse
+  # the chemi GET server/tidy slots (threaded into every GET template) rather than
+  # the generic_request ctx_burl default. Responses are deeply nested, so return
+  # the raw list (tidy = FALSE) and let post_response hooks shape each module.
+  is_epi_get <- isTRUE(grepl("^epi_", fn))
 
-  # Build tidy param for chemi GET endpoints (return raw list instead of tibble)
-  chemi_tidy_param <- if (isTRUE(is_chemi_get)) ',\n    tidy = FALSE' else ""
+  # Build server and auth params for chemi/epi GET endpoints
+  chemi_server_params <- if (isTRUE(is_chemi_get)) {
+    ',\n    server = "chemi_burl",\n    auth = FALSE'
+  } else if (is_epi_get) {
+    ',\n    server = "epi_burl",\n    auth = FALSE'
+  } else {
+    ""
+  }
+
+  # Build tidy param for chemi/epi GET endpoints (return raw list instead of tibble)
+  chemi_tidy_param <- if (isTRUE(is_chemi_get) || is_epi_get) ',\n    tidy = FALSE' else ""
 
   # Build server and auth params for common_chemistry (cc_) GET endpoints
   cc_server_params <- if (isTRUE(grepl("^cc_", fn))) ',\n    server = "cc_burl",\n    auth = TRUE' else ""
