@@ -41,6 +41,16 @@ chemi_config <- list(
   lifecycle_badge = "experimental"
 )
 
+# EPI Suite (epi_*) function generation configuration. Unauthenticated GET
+# endpoints on epi_burl; routes through generic_request like ct_* (see the
+# ^epi_ server/auth branch in 07_stub_generation.R that emits server="epi_burl").
+epi_config <- list(
+  wrapper_function = "generic_request",
+  param_strategy = "extra_params",
+  example_query = "50-00-0",
+  lifecycle_badge = "experimental"
+)
+
 # ==============================================================================
 # Load Utilities
 # ==============================================================================
@@ -384,7 +394,90 @@ chemi_spec <- list(
   }
 )
 
-api_specs <- list(ct = ct_spec, chemi = chemi_spec)
+epi_spec <- list(
+  prefix = "epi",
+  heading = "EPI Suite (epi_*)",
+  config = epi_config,
+  build_endpoints = function() {
+    epi_schema_files <- select_schema_files(
+      pattern = "^epi-.*\\.json$",
+      exclude_pattern = NULL,
+      stage_priority = c("prod", "staging", "dev")
+    )
+
+    if (length(epi_schema_files) == 0) {
+      cli_alert_warning("No epi schema files found, skipping epi_* generation")
+      return(NULL)
+    }
+
+    cli_alert_info("Found {length(epi_schema_files)} epi schema file(s)")
+
+    # Routes we deliberately drop: the self-referential /api spec doc, the CLI
+    # JAR download, the SVG structure renderer, and the ecosar health check.
+    # None return chemical data; everything else generates as an epi_* wrapper.
+    # Matched against the api-relative route (leading slash removed).
+    epi_exclude <- "^api$|^api/download|^api/draw-chemical|^api/ecosar/test"
+
+    epi_endpoints <- tryCatch(
+      {
+        ep <- map(
+          epi_schema_files,
+          ~ {
+            openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+            spec <- openapi_to_spec(openapi)
+            spec$source_file <- .x
+            spec
+          },
+          .progress = FALSE
+        ) %>%
+          list_rbind() %>%
+          mutate(route = strip_curly_params(route, leading_slash = 'remove')) %>%
+          filter(
+            str_detect(method, 'GET|POST'),
+            !str_detect(route, epi_exclude)
+          ) %>%
+          mutate(
+            # epi schema is prod-only, so every epi_* function is public-stage.
+            schema_stage = "public",
+            # Endpoint path is api-relative (epi_burl already ends in /api).
+            # Strip the trailing slash left by a removed {type} path param so the
+            # route stays clean and generic_request appends path params without a
+            # double slash (e.g. ecosar/surfactant + type -> .../surfactant/anionic).
+            route = route %>% str_remove("^api/") %>% str_remove("/+$"),
+            name = route %>%
+              str_replace_all("[/]+", "_") %>%
+              str_replace_all("-", "_"),
+            file_short = paste0("epi_", name, ".R"),
+            file_full = file_short,
+            batch_limit = case_when(
+              method == 'GET' & !is.na(num_path_params) & num_path_params > 0 ~ 1,
+              method == 'GET' & !is.na(num_path_params) & num_path_params == 0 ~ 0,
+              .default = NULL
+            )
+          ) %>%
+          distinct(route, method, .keep_all = TRUE)
+
+        ep$fn_short <- derive_fn_from_file(ep, "file_short")
+        ep$fn_full <- derive_fn_from_file(ep, "file_full")
+        resolve_collisions(ep)
+      },
+      error = function(e) {
+        cli_alert_warning("Error parsing epi schemas: {e$message}")
+        return(tibble())
+      }
+    )
+
+    if (nrow(epi_endpoints) == 0) {
+      cli_alert_warning("No epi endpoints parsed")
+      return(NULL)
+    }
+
+    cli_alert_info("Parsed {nrow(epi_endpoints)} endpoint(s) from schemas")
+    epi_endpoints
+  }
+)
+
+api_specs <- list(ct = ct_spec, chemi = chemi_spec, epi = epi_spec)
 
 # ==============================================================================
 # Operation-level Coverage
