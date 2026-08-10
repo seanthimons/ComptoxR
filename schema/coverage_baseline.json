@@ -5,5 +5,8 @@
   "chemi_coverage": 98.3,
   "chemi_endpoints": 172,
   "chemi_functions": 169,
-  "timestamp": "2026-08-07T18:59:19Z"
+  "epi_coverage": 100,
+  "epi_endpoints": 7,
+  "epi_functions": 7,
+  "timestamp": "2026-08-08T00:57:41Z"
 }

@@ -43,6 +43,16 @@ cat(sprintf("Cheminformatic Endpoints: %d\n", chemi_endpoints))
 cat(sprintf("Cheminformatic Covered: %d\n", chemi_functions))
 cat(sprintf("Cheminformatic Coverage: %.1f%%\n\n", chemi_coverage))
 
+cat("Calculating EPI Suite coverage...\n")
+epi_cov <- endpoint_coverage(epi_spec)
+epi_endpoints <- epi_cov$total
+epi_functions <- epi_cov$covered
+epi_coverage <- coverage_pct(epi_cov)
+
+cat(sprintf("EPI Suite Endpoints: %d\n", epi_endpoints))
+cat(sprintf("EPI Suite Covered: %d\n", epi_functions))
+cat(sprintf("EPI Suite Coverage: %.1f%%\n\n", epi_coverage))
+
 # ==============================================================================
 # Badge colors
 # ==============================================================================
@@ -63,6 +73,7 @@ get_badge_color <- function(coverage) {
 
 ccd_color <- get_badge_color(ccd_coverage)
 chemi_color <- get_badge_color(chemi_coverage)
+epi_color <- get_badge_color(epi_coverage)
 
 # ==============================================================================
 # Badge JSON (consumed by README shields.io endpoint badges)
@@ -84,7 +95,8 @@ write_badge <- function(path, label, coverage, color) {
 
 write_badge(here::here(".github/badges/ccd-coverage.json"), "CCD coverage", ccd_coverage, ccd_color)
 write_badge(here::here(".github/badges/chemi-coverage.json"), "Cheminformatic coverage", chemi_coverage, chemi_color)
-cat("Badge JSON updated: .github/badges/{ccd,chemi}-coverage.json\n")
+write_badge(here::here(".github/badges/epi-coverage.json"), "EPI Suite coverage", epi_coverage, epi_color)
+cat("Badge JSON updated: .github/badges/{ccd,chemi,epi}-coverage.json\n")
 
 # ==============================================================================
 # Coverage deltas (vs baseline)
@@ -122,6 +134,9 @@ ccd_functions_fmt <- paste0(ccd_functions, format_delta(ccd_functions, baseline$
 chemi_coverage_fmt <- paste0(sprintf("%.1f%%", chemi_coverage), format_delta(chemi_coverage, baseline$chemi_coverage))
 chemi_endpoints_fmt <- paste0(chemi_endpoints, format_delta(chemi_endpoints, baseline$chemi_endpoints))
 chemi_functions_fmt <- paste0(chemi_functions, format_delta(chemi_functions, baseline$chemi_functions))
+epi_coverage_fmt <- paste0(sprintf("%.1f%%", epi_coverage), format_delta(epi_coverage, baseline$epi_coverage))
+epi_endpoints_fmt <- paste0(epi_endpoints, format_delta(epi_endpoints, baseline$epi_endpoints))
+epi_functions_fmt <- paste0(epi_functions, format_delta(epi_functions, baseline$epi_functions))
 
 cat("\nCoverage deltas (vs baseline):\n")
 cat(sprintf("  CCD:   %s | %s endpoints | %s functions\n", ccd_coverage_fmt, ccd_endpoints_fmt, ccd_functions_fmt))
@@ -130,6 +145,12 @@ cat(sprintf(
   chemi_coverage_fmt,
   chemi_endpoints_fmt,
   chemi_functions_fmt
+))
+cat(sprintf(
+  "  EPI:   %s | %s endpoints | %s functions\n",
+  epi_coverage_fmt,
+  epi_endpoints_fmt,
+  epi_functions_fmt
 ))
 
 # Write updated baseline
@@ -140,6 +161,9 @@ new_baseline <- list(
   chemi_coverage = chemi_coverage,
   chemi_endpoints = chemi_endpoints,
   chemi_functions = chemi_functions,
+  epi_coverage = epi_coverage,
+  epi_endpoints = epi_endpoints,
+  epi_functions = epi_functions,
   timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 )
 jsonlite::write_json(new_baseline, baseline_path, auto_unbox = TRUE, pretty = TRUE)
@@ -155,10 +179,14 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   cat(sprintf("ccd_color=%s\n", ccd_color), file = output_file, append = TRUE)
   cat(sprintf("chemi_coverage=%.1f\n", chemi_coverage), file = output_file, append = TRUE)
   cat(sprintf("chemi_color=%s\n", chemi_color), file = output_file, append = TRUE)
+  cat(sprintf("epi_coverage=%.1f\n", epi_coverage), file = output_file, append = TRUE)
+  cat(sprintf("epi_color=%s\n", epi_color), file = output_file, append = TRUE)
   cat(sprintf("ccd_endpoints=%d\n", ccd_endpoints), file = output_file, append = TRUE)
   cat(sprintf("ccd_functions=%d\n", ccd_functions), file = output_file, append = TRUE)
   cat(sprintf("chemi_endpoints=%d\n", chemi_endpoints), file = output_file, append = TRUE)
   cat(sprintf("chemi_functions=%d\n", chemi_functions), file = output_file, append = TRUE)
+  cat(sprintf("epi_endpoints=%d\n", epi_endpoints), file = output_file, append = TRUE)
+  cat(sprintf("epi_functions=%d\n", epi_functions), file = output_file, append = TRUE)
 
   cat(sprintf("ccd_coverage_fmt=%s\n", ccd_coverage_fmt), file = output_file, append = TRUE)
   cat(sprintf("ccd_endpoints_fmt=%s\n", ccd_endpoints_fmt), file = output_file, append = TRUE)
@@ -166,6 +194,9 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   cat(sprintf("chemi_coverage_fmt=%s\n", chemi_coverage_fmt), file = output_file, append = TRUE)
   cat(sprintf("chemi_endpoints_fmt=%s\n", chemi_endpoints_fmt), file = output_file, append = TRUE)
   cat(sprintf("chemi_functions_fmt=%s\n", chemi_functions_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_coverage_fmt=%s\n", epi_coverage_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_endpoints_fmt=%s\n", epi_endpoints_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_functions_fmt=%s\n", epi_functions_fmt), file = output_file, append = TRUE)
 
   cat("Coverage data written to GITHUB_OUTPUT\n")
 }
@@ -178,4 +209,11 @@ cat(sprintf(
   chemi_functions,
   chemi_endpoints,
   chemi_color
+))
+cat(sprintf(
+  "EPI Suite Coverage: %.1f%% (%d/%d) - Color: %s\n",
+  epi_coverage,
+  epi_functions,
+  epi_endpoints,
+  epi_color
 ))

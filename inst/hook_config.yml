@@ -821,3 +821,34 @@ chemi_predictor_models_predict:
   endpoint_stage: staging
   pre_request:
     - enforce_stage_server
+
+# EPI Suite (epi_*) response shaping. epi_* wrappers return the raw list
+# (generic_request tidy = FALSE); these hooks unwrap the static-endpoint
+# envelope and give each endpoint its expected shape.
+epi_search:
+  post_response:
+    - format_epi_search_result
+
+epi_submit:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_surfactant:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_surfactant_nonionic:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_polymer:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_polymer_nonionic:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_dye:
+  post_response:
+    - unwrap_epi_result

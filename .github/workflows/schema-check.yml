@@ -335,6 +335,7 @@ jobs:
           COVERAGE
           echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions_fmt || 'N/A' }} |" >> pr_body.md
           echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions_fmt || 'N/A' }} |" >> pr_body.md
+          echo "| EPI Suite (epi_*) | ${{ steps.coverage.outputs.epi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_functions_fmt || 'N/A' }} |" >> pr_body.md
 
           # Add review checklist with breaking change awareness
           BREAKING="${{ steps.diff.outputs.breaking_count || '0' }}"
