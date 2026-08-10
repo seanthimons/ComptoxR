@@ -398,6 +398,7 @@ epi_schema <- function(
     dir.create(schema_dir, recursive = TRUE)
   }
   writeBin(body_raw, file.path(schema_dir, "epi-suite-prod.json"))
+  cli::cli_alert_success("Downloaded EPI Suite schema from production server")
 
   invisible(NULL)
 }
