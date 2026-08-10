@@ -144,6 +144,8 @@ if (run_rebuild) {
 
   chemi_schema()
 
+  epi_schema()
+
   invisible(ComptoxR::run_verbose(FALSE))
 
   cli::cli_alert_info("Rebuild logic executed, schema files rebuilt.")
