@@ -1967,7 +1967,7 @@
           },
           {
             "description": "User-provided Henry's Law constant override (atm-m3/mol)",
-            "example": 0.0056,
+            "example": 0.00555,
             "in": "query",
             "name": "userHenrysLawConstant",
             "required": false,
