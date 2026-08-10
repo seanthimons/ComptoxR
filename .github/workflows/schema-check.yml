@@ -108,7 +108,10 @@ jobs:
           schema_files <- list.files("schema", pattern = "\\.json$", full.names = TRUE)
           for (f in schema_files) {
             json <- jsonlite::fromJSON(f, simplifyVector = FALSE)
-            jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE)
+            # Keep the exact EPI example values. The default four digits can
+            # round a valid upstream change back to the committed value.
+            digits <- if (startsWith(basename(f), "epi-")) NA else 4
+            jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE, digits = digits)
           }
           cli::cli_alert_info("Pretty-printed {length(schema_files)} schema files")
         shell: Rscript {0}
