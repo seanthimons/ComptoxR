@@ -76,6 +76,20 @@ Informational coverage workflow.
 - Does not block merges on coverage percentage.
 - Must not auto-record cassettes from production APIs.
 
+### `schema-check.yml`
+
+Scheduled and manual schema update workflow.
+
+- Downloads the CompTox Dashboard, Cheminformatics, and EPI Suite schemas.
+- Reports `ok` and a comma-separated `failed_families` list from the download
+  step.
+- Handles each family separately. A failure does not stop the other downloads
+  or the later schema checks.
+- Validates the EPI Suite response before it writes the schema. If the request
+  or validation fails, the workflow warns and keeps the last valid committed
+  EPI Suite schema.
+- Creates an automated pull request when valid schema changes are present.
+
 ### `record-cassettes.yml`
 
 Manual live-recording workflow named Record VCR Cassettes.

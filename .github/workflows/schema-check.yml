@@ -67,17 +67,28 @@ jobs:
         continue-on-error: true
         run: |
           pkgload::load_all()
-          download_ok <- TRUE
-          tryCatch(ct_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("ct_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
-          tryCatch(chemi_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("chemi_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
+          failed_families <- character()
+          download_family <- function(family, download) {
+            tryCatch(
+              download(),
+              error = function(e) {
+                cli::cli_alert_warning("{family} schema download failed: {conditionMessage(e)}")
+                failed_families <<- c(failed_families, family)
+              }
+            )
+          }
+
+          download_family("ct", function() ct_schema(timeout = 60))
+          download_family("chemi", function() chemi_schema(timeout = 60))
+          download_family("epi", function() epi_schema(timeout = 60))
+
+          download_ok <- length(failed_families) == 0L
+          gh_output <- Sys.getenv("GITHUB_OUTPUT")
+          cat(sprintf("ok=%s\n", tolower(as.character(download_ok))), file = gh_output, append = TRUE)
+          cat(sprintf("failed_families=%s\n", paste(failed_families, collapse = ",")), file = gh_output, append = TRUE)
+
           if (!download_ok) {
-            cli::cli_alert_warning("One or more schema downloads failed - workflow will continue with available schemas")
+            cli::cli_alert_warning("Schema downloads failed for {paste(failed_families, collapse = ', ')}. The workflow will continue with available schemas.")
           }
         shell: Rscript {0}
 
@@ -233,8 +244,13 @@ jobs:
       - name: Workflow status summary
         if: always()
         run: |
-          if [ "${{ steps.download.outcome }}" = "failure" ]; then
-            echo "::warning::Schema download had failures - some schemas may be missing"
+          if [ "${{ steps.download.outputs.ok }}" != "true" ]; then
+            FAILED_FAMILIES="${{ steps.download.outputs.failed_families }}"
+            if [ -n "$FAILED_FAMILIES" ]; then
+              echo "::warning::Schema downloads failed for: $FAILED_FAMILIES"
+            else
+              echo "::warning::Schema download status was not available"
+            fi
           fi
           if [ "${{ steps.diff.outcome }}" = "failure" ]; then
             echo "::warning::Schema diff encountered errors"

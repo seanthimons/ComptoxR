@@ -339,3 +339,65 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
 
   invisible(NULL)
 }
+
+#' Download the EPI Suite API schema
+#'
+#' @description
+#' This function downloads and validates the production EPI Suite OpenAPI
+#' document. The schema is saved as `epi-suite-prod.json` in `schema_dir`.
+#'
+#' @param timeout Maximum time, in seconds, to wait for the download. Default: 30.
+#' @param schema_dir Directory in which to save the schema. Default:
+#'   `here::here("schema")`.
+#'
+#' @return Invisibly returns `NULL`.
+#'
+#' @keywords internal
+epi_schema <- function(
+  timeout = 30,
+  schema_dir = here::here("schema")
+) {
+  url <- epi_server(1, url_only = TRUE)
+  req <- httr2::request(url) %>%
+    httr2::req_timeout(timeout)
+
+  resp <- httr2::req_perform(req)
+  status <- httr2::resp_status(resp)
+  if (status < 200 || status >= 300) {
+    cli::cli_abort("EPI Suite schema request failed with HTTP {status}.")
+  }
+
+  body_raw <- httr2::resp_body_raw(resp)
+  schema <- tryCatch(
+    jsonlite::fromJSON(rawToChar(body_raw), simplifyVector = FALSE),
+    error = function(e) {
+      cli::cli_abort("EPI Suite schema is not valid JSON.", parent = e)
+    }
+  )
+
+  if (
+    !is.list(schema) ||
+      !is.character(schema$openapi) ||
+      length(schema$openapi) != 1L ||
+      is.na(schema$openapi) ||
+      !grepl("^3\\.", schema$openapi)
+  ) {
+    cli::cli_abort("EPI Suite schema must be an OpenAPI 3 document.")
+  }
+
+  if (
+    !is.list(schema$paths) ||
+      length(schema$paths) == 0L ||
+      is.null(names(schema$paths)) ||
+      !all(nzchar(names(schema$paths)))
+  ) {
+    cli::cli_abort("EPI Suite schema must have a non-empty paths object.")
+  }
+
+  if (!dir.exists(schema_dir)) {
+    dir.create(schema_dir, recursive = TRUE)
+  }
+  writeBin(body_raw, file.path(schema_dir, "epi-suite-prod.json"))
+
+  invisible(NULL)
+}
