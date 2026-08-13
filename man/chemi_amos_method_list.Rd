@@ -20,4 +20,3 @@ chemi_amos_method_list()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

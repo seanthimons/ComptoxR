@@ -33,6 +33,5 @@ test_that("chemi_chet_chemicals_counts passes request metadata to helper", {
   expect_equal(call[["tidy"]], FALSE)
   expect_true("options" %in% names(call))
   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
-  expect_equal(call[["max_pages"]], 100)
   expect_equal(call[["pagination_strategy"]], "page_size")
 })

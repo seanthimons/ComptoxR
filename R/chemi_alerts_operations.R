@@ -12,11 +12,19 @@
 #' chemi_alerts_operations()
 #' }
 chemi_alerts_operations <- function() {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_alerts_operations", "pre_request", list(params = list(`server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     endpoint = "alerts/operations",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

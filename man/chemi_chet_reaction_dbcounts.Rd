@@ -20,4 +20,3 @@ chemi_chet_reaction_dbcounts()
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

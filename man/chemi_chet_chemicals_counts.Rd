@@ -4,7 +4,12 @@
 \alias{chemi_chet_chemicals_counts}
 \title{Chemical counts by library}
 \usage{
-chemi_chet_chemicals_counts(page = 0, size = NULL, all_pages = TRUE)
+chemi_chet_chemicals_counts(
+  page = 0,
+  size = NULL,
+  all_pages = TRUE,
+  max_pages = 100
+)
 }
 \arguments{
 \item{page}{Optional parameter}
@@ -12,6 +17,8 @@ chemi_chet_chemicals_counts(page = 0, size = NULL, all_pages = TRUE)
 \item{size}{Optional parameter}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a tibble with results (array of objects)
@@ -27,4 +34,3 @@ chemi_chet_chemicals_counts(page = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

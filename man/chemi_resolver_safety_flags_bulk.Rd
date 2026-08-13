@@ -64,4 +64,3 @@ chemi_resolver_safety_flags_bulk(averageMass = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

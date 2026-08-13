@@ -49,4 +49,3 @@ chemi_alerts_groups_bulk(description = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

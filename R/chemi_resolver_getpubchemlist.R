@@ -10,6 +10,7 @@
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param section Optional parameter
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
+#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
@@ -18,12 +19,23 @@
 #' \dontrun{
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE) {
+chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
   chemicals <- NULL
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_resolver_getpubchemlist",
     "pre_request",
-    list(params = list(query = query, idType = idType, section = section, all_pages = all_pages, chemicals = chemicals))
+    list(
+      params = list(
+        `query` = query,
+        `idType` = idType,
+        `section` = section,
+        `all_pages` = all_pages,
+        `max_pages` = max_pages,
+        `chemicals` = chemicals,
+        `server` = server
+      )
+    )
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
@@ -40,8 +52,14 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
   if ("all_pages" %in% names(req_data$params)) {
     all_pages <- req_data$params[["all_pages"]]
   }
+  if ("max_pages" %in% names(req_data$params)) {
+    max_pages <- req_data$params[["max_pages"]]
+  }
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
   }
 
   # Build options from additional parameters
@@ -54,10 +72,11 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
     query = query,
     endpoint = "resolver/getpubchemlist",
     options = extra_options,
-    chemicals = chemicals,
     tidy = FALSE,
+    chemicals = chemicals,
+    server = server,
     paginate = all_pages,
-    max_pages = 100,
+    max_pages = max_pages,
     pagination_strategy = "page_size"
   )
 

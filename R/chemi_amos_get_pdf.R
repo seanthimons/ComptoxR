@@ -14,12 +14,30 @@
 #' chemi_amos_get_pdf(record_type = "DTXSID7020182")
 #' }
 chemi_amos_get_pdf <- function(record_type, internal_id = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_get_pdf",
+    "pre_request",
+    list(params = list(`record_type` = record_type, `internal_id` = internal_id, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("record_type" %in% names(req_data$params)) {
+    record_type <- req_data$params[["record_type"]]
+  }
+  if ("internal_id" %in% names(req_data$params)) {
+    internal_id <- req_data$params[["internal_id"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     query = record_type,
     endpoint = "amos/get_pdf/",
     method = "GET",
     batch_limit = 1,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     path_params = c(internal_id = internal_id)

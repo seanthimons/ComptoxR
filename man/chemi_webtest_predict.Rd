@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_webtest_predict.R
 \name{chemi_webtest_predict}
 \alias{chemi_webtest_predict}
-\title{Predict one chemical with WebTEST}
+\title{Webtest Predict}
 \usage{
 chemi_webtest_predict(
   smiles,
@@ -13,33 +13,27 @@ chemi_webtest_predict(
 )
 }
 \arguments{
-\item{smiles}{One SMILES string or resolvable chemical identifier.}
+\item{smiles}{Required parameter}
 
-\item{endpoint}{One required WebTEST endpoint identifier, such as \code{LC50}.}
+\item{endpoint}{Optional parameter}
 
-\item{method}{Prediction method: \code{consensus}, \code{hc}, \code{sm}, \code{gc}, or \code{nn}.}
+\item{method}{Optional parameter (default: consensus)}
 
-\item{format}{Response format. Only \code{JSON} is supported.}
+\item{format}{Optional parameter. Options: JSON, HTML, PDF}
 
-\item{output}{Output contract: \code{wide} for normalized rows or \code{raw} for the
-upstream \code{PredictionResult} with source and input-map attributes.}
+\item{output}{Output contract: normalized wide tibble or raw PredictionResult}
 }
 \value{
-A normalized tibble or raw WebTEST \code{PredictionResult}.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Wide output preserves every input position and expands successful inputs to
-one row per requested prediction. Raw output preserves the upstream
-\code{PredictionResult}.
 }
 \examples{
 \dontrun{
-chemi_webtest_predict("DTXSID7020182", endpoint = "LC50")
+chemi_webtest_predict(smiles = "DTXSID7020182")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

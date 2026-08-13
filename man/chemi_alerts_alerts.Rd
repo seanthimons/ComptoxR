@@ -20,4 +20,3 @@ chemi_alerts_alerts()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

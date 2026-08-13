@@ -23,6 +23,42 @@ chemi_amos_max_similarity <- function(
   ppm_window = NULL,
   spectra = NULL
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_max_similarity",
+    "pre_request",
+    list(
+      params = list(
+        `da_window` = da_window,
+        `dtxsids` = dtxsids,
+        `ms_level` = ms_level,
+        `ppm_window` = ppm_window,
+        `spectra` = spectra,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("da_window" %in% names(req_data$params)) {
+    da_window <- req_data$params[["da_window"]]
+  }
+  if ("dtxsids" %in% names(req_data$params)) {
+    dtxsids <- req_data$params[["dtxsids"]]
+  }
+  if ("ms_level" %in% names(req_data$params)) {
+    ms_level <- req_data$params[["ms_level"]]
+  }
+  if ("ppm_window" %in% names(req_data$params)) {
+    ppm_window <- req_data$params[["ppm_window"]]
+  }
+  if ("spectra" %in% names(req_data$params)) {
+    spectra <- req_data$params[["spectra"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(dtxsids)) {
@@ -41,7 +77,8 @@ chemi_amos_max_similarity <- function(
     query = da_window,
     endpoint = "amos/max_similarity_by_dtxsid/",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

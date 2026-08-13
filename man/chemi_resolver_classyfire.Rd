@@ -18,7 +18,8 @@ chemi_resolver_classyfire(
   substituent = NULL,
   page = 0,
   size = 1000,
-  all_pages = TRUE
+  all_pages = TRUE,
+  max_pages = 100
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ chemi_resolver_classyfire(
 \item{size}{Optional parameter (default: 1000)}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a list with result object
@@ -64,4 +67,3 @@ chemi_resolver_classyfire(query = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

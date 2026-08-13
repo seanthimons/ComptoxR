@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_webtest_predict.R
 \name{chemi_webtest_predict_bulk}
 \alias{chemi_webtest_predict_bulk}
-\title{Predict multiple chemicals with WebTEST}
+\title{Webtest Predict}
 \usage{
 chemi_webtest_predict_bulk(
   structures,
@@ -13,37 +13,27 @@ chemi_webtest_predict_bulk(
 )
 }
 \arguments{
-\item{structures}{Chemical structures or resolvable identifiers.}
+\item{structures}{Molecule expressed as SMILES or MOL}
 
-\item{endpoints}{Required WebTEST endpoint identifiers.}
+\item{endpoints}{Endpoint to predict}
 
-\item{methods}{Optional prediction methods: \code{consensus}, \code{hc}, \code{sm}, \code{gc},
-or \code{nn}. \code{NULL} retains every method returned by WebTEST.}
+\item{methods}{Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)}
 
-\item{format}{Response format. Only \code{JSON} is supported.}
+\item{format}{Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF}
 
-\item{output}{Output contract: \code{wide} for normalized rows or \code{raw} for the
-upstream \code{PredictionResult} with source and input-map attributes.}
+\item{output}{Output contract: normalized wide tibble or raw PredictionResult}
 }
 \value{
-A normalized tibble or raw WebTEST \code{PredictionResult}.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Wide output preserves every input position and expands successful inputs to
-one row per requested prediction. Raw output preserves the upstream
-\code{PredictionResult}.
 }
 \examples{
 \dontrun{
-chemi_webtest_predict_bulk(
-  structures = c("DTXSID7020182", "CCO"),
-  endpoints = "LC50"
-)
+chemi_webtest_predict_bulk(endpoints = "DTXSID1024122")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

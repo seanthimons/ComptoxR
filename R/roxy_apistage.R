@@ -27,7 +27,7 @@ format.rd_section_apiStage <- function(x, ...) {
     "  This wrapper was generated from the \\strong{",
     stage,
     "} API schema.\n",
-    "}\n"
+    "}"
   )
 }
 

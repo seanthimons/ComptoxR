@@ -34,4 +34,3 @@ chemi_amos_entropy_similarity(spectrum_1 = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

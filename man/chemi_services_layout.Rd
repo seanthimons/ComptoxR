@@ -23,4 +23,3 @@ chemi_services_layout(smiles = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

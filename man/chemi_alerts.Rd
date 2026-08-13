@@ -4,7 +4,14 @@
 \alias{chemi_alerts}
 \title{Alerts}
 \usage{
-chemi_alerts(query, idType = "AnyId", options = NULL)
+chemi_alerts(
+  query,
+  idType = "AnyId",
+  options = NULL,
+  request.filesInfo = NULL,
+  request.options.alerts = NULL,
+  request.options.resolve = NULL
+)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
@@ -12,6 +19,12 @@ chemi_alerts(query, idType = "AnyId", options = NULL)
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
 \item{options}{Optional parameter}
+
+\item{request.filesInfo}{Optional parameter}
+
+\item{request.options.alerts}{Optional parameter}
+
+\item{request.options.resolve}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -30,4 +43,3 @@ chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

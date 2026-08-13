@@ -13,12 +13,27 @@
 #' chemi_amos_get_image_for_dtxsid(dtxsid = "DTXSID7020182")
 #' }
 chemi_amos_get_image_for_dtxsid <- function(dtxsid) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_get_image_for_dtxsid",
+    "pre_request",
+    list(params = list(`dtxsid` = dtxsid, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("dtxsid" %in% names(req_data$params)) {
+    dtxsid <- req_data$params[["dtxsid"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     query = dtxsid,
     endpoint = "amos/get_image_for_dtxsid/",
     method = "GET",
     batch_limit = 1,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

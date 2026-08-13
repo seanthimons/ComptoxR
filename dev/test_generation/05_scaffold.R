@@ -43,6 +43,24 @@ tg_remove_obsolete_generated_tests <- function(desired, root = ".", dry_run = FA
   obsolete
 }
 
+tg_format_generated_text <- function(text) {
+  if (!nzchar(Sys.which("air"))) {
+    return(text)
+  }
+
+  formatted <- system2(
+    "air",
+    c("format", "--stdin-file-path", shQuote("generated-test.R")),
+    input = text,
+    stdout = TRUE
+  )
+  status <- attr(formatted, "status")
+  if (!is.null(status) && status != 0L) {
+    stop("Air could not format generated wrapper-test text.", call. = FALSE)
+  }
+  paste(formatted, collapse = "\n")
+}
+
 tg_write_generated_tests <- function(desired, root = ".", dry_run = FALSE, force = FALSE) {
   results <- list()
 
@@ -90,6 +108,10 @@ tg_write_generated_tests <- function(desired, root = ".", dry_run = FALSE, force
 }
 
 tg_scaffold_generated_tests <- function(desired, root = ".", dry_run = FALSE, force = FALSE) {
+  desired <- lapply(desired, function(spec) {
+    spec$text <- tg_format_generated_text(spec$text)
+    spec
+  })
   removed_legacy <- tg_remove_legacy_generated_tests(root, dry_run = dry_run)
   removed_obsolete <- tg_remove_obsolete_generated_tests(desired, root, dry_run = dry_run)
   write_results <- tg_write_generated_tests(desired, root, dry_run = dry_run, force = force)

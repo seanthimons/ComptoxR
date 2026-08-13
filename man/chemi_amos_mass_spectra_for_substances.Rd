@@ -23,4 +23,3 @@ chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

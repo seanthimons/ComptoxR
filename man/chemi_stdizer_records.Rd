@@ -27,4 +27,3 @@ chemi_stdizer_records(full = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

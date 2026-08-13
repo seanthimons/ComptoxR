@@ -20,6 +20,7 @@ generic_request(
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
+  pagination_cursor_location = NULL,
   ...
 )
 }
@@ -81,6 +82,9 @@ Acts as a safety limit to prevent runaway pagination loops.}
 \item{pagination_strategy}{The pagination strategy to use. One of: "offset_limit", "page_number",
 "page_size", "cursor", or NULL. When NULL, paginate is ignored.
 Usually set by generated stubs from Phase 19 metadata.}
+
+\item{pagination_cursor_location}{For cursor pagination, the schema-derived
+cursor location: "query" or "body". Defaults to "query".}
 
 \item{...}{Additional parameters:
 \itemize{

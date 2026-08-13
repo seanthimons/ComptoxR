@@ -342,8 +342,7 @@ order_path_by_route <- function(path_names, route) {
   }
   m <- stringr::str_match_all(route, "\\{([^}]+)\\}")
   if (length(m) >= 1 && length(m[[1]]) && nrow(m[[1]]) > 0) {
-    in_route <- m[[1]][, 2]
-    unique(c(in_route[in_route %in% path_names], setdiff(path_names, in_route)))
+    unique(m[[1]][, 2])
   } else {
     unique(path_names)
   }
@@ -383,14 +382,22 @@ detect_pagination <- function(route, path_params, query_params, body_params, reg
       }
     }
 
-    # Cursor strategy: special case -- "limit" in path AND "cursor" in query
+    # AMOS keyset cursors are query parameters for GET and body fields for POST.
     if (identical(entry$strategy, "cursor")) {
-      if ("limit" %in% path_vec && "cursor" %in% query_vec) {
+      cursor_location <- if ("cursor" %in% query_vec) {
+        "query"
+      } else if ("cursor" %in% body_vec) {
+        "body"
+      } else {
+        NA_character_
+      }
+      if ("limit" %in% path_vec && !is.na(cursor_location)) {
         return(list(
           strategy = entry$strategy,
           registry_key = entry_name,
           params = entry$param_names,
           param_location = entry$param_location,
+          cursor_location = cursor_location,
           description = entry$description
         ))
       }
@@ -415,6 +422,7 @@ detect_pagination <- function(route, path_params, query_params, body_params, reg
         registry_key = entry_name,
         params = entry$param_names,
         param_location = entry$param_location,
+        cursor_location = NA_character_,
         description = entry$description
       ))
     }
@@ -455,6 +463,7 @@ detect_pagination <- function(route, path_params, query_params, body_params, reg
     registry_key = NA_character_,
     params = character(0),
     param_location = NA_character_,
+    cursor_location = NA_character_,
     description = "No pagination detected"
   )
 }

@@ -13,11 +13,28 @@
 #' chemi_amos_spectral_entropy(spectrum = "DTXSID1024122")
 #' }
 chemi_amos_spectral_entropy <- function(spectrum = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_spectral_entropy",
+    "pre_request",
+    list(params = list(`spectrum` = spectrum, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("spectrum" %in% names(req_data$params)) {
+    spectrum <- req_data$params[["spectrum"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
+
   result <- generic_chemi_request(
     query = spectrum,
     endpoint = "amos/spectral_entropy/",
     wrap = FALSE,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

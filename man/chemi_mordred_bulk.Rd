@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_mordred.R
 \name{chemi_mordred_bulk}
 \alias{chemi_mordred_bulk}
-\title{Calculate Mordred descriptors for multiple molecules}
+\title{Generate descriptors for multiple molecules}
 \usage{
 chemi_mordred_bulk(
   chemicals,
@@ -13,32 +13,27 @@ chemi_mordred_bulk(
 )
 }
 \arguments{
-\item{chemicals}{Chemical structures or resolvable identifiers.}
+\item{chemicals}{Chemical structures or resolvable identifiers}
 
-\item{options}{Named list of additional dedicated Mordred options.}
+\item{options}{Named list of additional dedicated Mordred options}
 
-\item{headers}{Request upstream descriptor headers.}
+\item{headers}{Request descriptor headers}
 
-\item{inchi}{Include InChI identifiers.}
+\item{inchi}{Include InChI identifiers}
 
-\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
-provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated tibble with one row per input or raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Explicit \code{headers} and \code{inchi} arguments override duplicate values in
-\code{options}.
 }
 \examples{
 \dontrun{
-chemi_mordred_bulk(c("DTXSID7020182", "CCO"))
+chemi_mordred_bulk(chemicals = "DTXSID1024122")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

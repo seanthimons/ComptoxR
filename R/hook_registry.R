@@ -3,6 +3,32 @@
 
 .HookRegistry <- new.env(parent = emptyenv())
 
+merge_hook_configs <- function(manual, generated) {
+  result <- if (is.null(manual)) list() else manual
+  generated <- if (is.null(generated)) list() else generated
+
+  for (fn_name in names(generated)) {
+    manual_entry <- if (is.null(result[[fn_name]])) list() else result[[fn_name]]
+    generated_entry <- if (is.null(generated[[fn_name]])) list() else generated[[fn_name]]
+    merged_entry <- utils::modifyList(manual_entry, generated_entry)
+    merged_entry$pre_request <- unique(c(
+      if (is.null(manual_entry$pre_request)) character() else manual_entry$pre_request,
+      if (is.null(generated_entry$pre_request)) character() else generated_entry$pre_request
+    ))
+    result[[fn_name]] <- merged_entry
+  }
+
+  result
+}
+
+read_hook_configs <- function(manual_path, generated_path) {
+  read_one <- function(path) {
+    value <- if (file.exists(path)) yaml::read_yaml(path) else list()
+    if (is.null(value)) list() else value
+  }
+  merge_hook_configs(read_one(manual_path), read_one(generated_path))
+}
+
 #' Load Hook Configuration from YAML
 #'
 #' Loads hook configuration from inst/hook_config.yml and populates the
@@ -11,13 +37,10 @@
 #' @return Invisible NULL
 #' @noRd
 load_hook_config <- function() {
-  config_path <- system.file("hook_config.yml", package = "ComptoxR")
-
-  if (file.exists(config_path)) {
-    .HookRegistry$config <- yaml::read_yaml(config_path)
-  } else {
-    .HookRegistry$config <- list()
-  }
+  .HookRegistry$config <- read_hook_configs(
+    system.file("hook_config.yml", package = "ComptoxR"),
+    system.file("hook_config_generated.yml", package = "ComptoxR")
+  )
 
   invisible(NULL)
 }

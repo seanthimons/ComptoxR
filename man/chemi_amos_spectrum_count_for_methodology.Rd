@@ -25,4 +25,3 @@ chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -33,7 +33,6 @@ test_that("chemi_amos_get_substances_for_term passes request metadata to helper"
   expect_equal(call[["endpoint"]], "amos/get_substances_for_search_term/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

@@ -20,4 +20,3 @@ chemi_resolver_getallannotations()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

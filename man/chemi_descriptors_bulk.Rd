@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_descriptors.R
 \name{chemi_descriptors_bulk}
 \alias{chemi_descriptors_bulk}
-\title{Calculate descriptors for multiple chemicals}
+\title{Descriptors}
 \usage{
 chemi_descriptors_bulk(
   query,
@@ -15,40 +15,31 @@ chemi_descriptors_bulk(
 )
 }
 \arguments{
-\item{query}{Chemical identifiers or structures.}
+\item{query}{Chemical identifiers or structures}
 
-\item{type}{Descriptor engine: \code{padel}, \code{rdkit}, \code{mordred}, or \code{webtest}.}
+\item{type}{Descriptor engine: padel, rdkit, mordred, or webtest}
 
-\item{chemIdType}{Input identifier type accepted by the aggregate service.}
+\item{chemIdType}{Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
 
-\item{headers}{Request upstream descriptor headers. Wide output always requests
-or deterministically generates headers.}
+\item{headers}{Request descriptor headers}
 
-\item{format}{Response format: \code{JSON}, \code{CSV}, or \code{TSV}.}
+\item{format}{Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)}
 
-\item{timeout}{Optional upstream calculation timeout.}
+\item{timeout}{Optional upstream calculation timeout}
 
-\item{output}{Output contract: \code{wide} returns a validated tibble; \code{raw}
-returns the unformatted payload with provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated tibble with one row per input or a raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-Every input position is represented in wide output, including duplicates,
-missing inputs, unresolved identifiers, and failed structures.
 }
 \examples{
 \dontrun{
-chemi_descriptors_bulk(
-  query = c("DTXSID7020182", "CCO"),
-  type = "padel"
-)
+chemi_descriptors_bulk(query = "DTXSID1024122")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

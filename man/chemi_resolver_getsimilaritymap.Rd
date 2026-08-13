@@ -20,7 +20,7 @@ chemi_resolver_getsimilaritymap(
 
 \item{section}{Optional parameter}
 
-\item{sort}{Logical value controlling API result ordering}
+\item{sort}{Logical value controlling API result ordering (default: FALSE)}
 
 \item{hclust_method}{Hierarchical clustering method passed to stats::hclust()}
 
@@ -43,4 +43,3 @@ chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

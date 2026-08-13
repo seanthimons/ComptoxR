@@ -14,7 +14,8 @@ chemi_chet_reaction_database(
   reaction_scheme = NULL,
   reaction_phase = NULL,
   craccm_id = NULL,
-  all_pages = TRUE
+  all_pages = TRUE,
+  max_pages = 100
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ chemi_chet_reaction_database(
 \item{craccm_id}{Optional parameter}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a list with result object
@@ -52,4 +55,3 @@ chemi_chet_reaction_database(page = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

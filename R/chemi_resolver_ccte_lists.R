@@ -12,11 +12,19 @@
 #' chemi_resolver_ccte_lists()
 #' }
 chemi_resolver_ccte_lists <- function() {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_resolver_ccte_lists", "pre_request", list(params = list(`server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     endpoint = "resolver/ccte-lists",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

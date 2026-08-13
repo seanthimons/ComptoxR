@@ -31,4 +31,3 @@ chemi_amos_next_level_classification(kingdom = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

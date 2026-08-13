@@ -1,150 +1,169 @@
-# ==============================================================================
-# Remove Experimental Functions
-# ==============================================================================
-#
-# This script finds and removes R files containing the experimental lifecycle badge.
-# Useful for testing the endpoint evaluation workflow by clearing generated stubs.
-#
-# Usage:
-#   source("remove_experimental.R")
-#
-# Safety:
-#   - Lists files before deletion
-#   - Requires confirmation before proceeding
-#   - Set dry_run = TRUE to preview without deleting
-#
-# ==============================================================================
+#!/usr/bin/env Rscript
 
-library(tidyverse)
+recognized_api_stages <- c("public", "staging", "development")
+protected_lifecycles <- c("stable", "maturing", "superseded", "deprecated", "defunct")
 
-# Configuration
-dry_run <- FALSE # Set to TRUE to preview without deleting
-target_dir <- "R" # Directory to search
+parse_exported_roxygen <- function(path) {
+  lines <- readLines(path, warn = FALSE)
+  definitions <- grep(
+    "^\\s*`?([A-Za-z.][A-Za-z0-9._]*)`?\\s*<-\\s*function\\s*\\(",
+    lines,
+    perl = TRUE
+  )
 
-# Pattern to match experimental badge in roxygen comments
-experimental_pattern <- '`r lifecycle::badge\\("experimental"\\)`'
+  records <- lapply(definitions, function(line_number) {
+    block_end <- line_number - 1L
+    while (block_end > 0L && !nzchar(trimws(lines[[block_end]]))) {
+      block_end <- block_end - 1L
+    }
+    block_start <- block_end
+    while (block_start > 0L && grepl("^\\s*#'", lines[[block_start]])) {
+      block_start <- block_start - 1L
+    }
+    block <- if (block_end > block_start) {
+      lines[seq.int(block_start + 1L, block_end)]
+    } else {
+      character()
+    }
+    if (!any(grepl("^\\s*#'\\s*@export(?:\\s|$)", block, perl = TRUE))) {
+      return(NULL)
+    }
 
-# ==============================================================================
-# Find files with experimental badge
-# ==============================================================================
+    name <- sub(
+      "^\\s*`?([A-Za-z.][A-Za-z0-9._]*)`?\\s*<-.*$",
+      "\\1",
+      lines[[line_number]],
+      perl = TRUE
+    )
+    lifecycle_matches <- regmatches(
+      block,
+      gregexpr("lifecycle::badge\\([\\\"']([^\\\"']+)[\\\"']\\)", block, perl = TRUE)
+    )
+    lifecycles <- unique(sub(
+      ".*lifecycle::badge\\([\\\"']([^\\\"']+)[\\\"']\\).*$",
+      "\\1",
+      unlist(lifecycle_matches, use.names = FALSE),
+      perl = TRUE
+    ))
+    lifecycles <- lifecycles[nzchar(lifecycles)]
+    stage_lines <- grep("^\\s*#'\\s*@apiStage\\s+", block, value = TRUE, perl = TRUE)
+    stages <- unique(sub("^.*@apiStage\\s+(\\S+).*$", "\\1", stage_lines, perl = TRUE))
 
-cat("Searching for files with experimental lifecycle badge...\n\n")
+    list(name = name, lifecycles = lifecycles, stages = stages)
+  })
 
-# Get all R files
-r_files <- list.files(target_dir, pattern = "\\.R$", full.names = TRUE) %>%
-  .[grep('^ct_|^chemi_|^cc_|^cts_', basename(.), invert = FALSE)]
-# Check each file for experimental badge
-experimental_files <- character()
-
-for (file in r_files) {
-  content <- readLines(file, warn = FALSE)
-  if (any(stringr::str_detect(content, stringr::fixed('lifecycle::badge("experimental")')))) {
-    experimental_files <- c(experimental_files, file)
-  }
+  Filter(Negate(is.null), records)
 }
 
-# ==============================================================================
-# Report findings
-# ==============================================================================
+classify_chemi_file <- function(path) {
+  exports <- parse_exported_roxygen(path)
+  if (length(exports) == 0L) {
+    return(list(status = "invalid", reason = "no exported roxygen function"))
+  }
 
-if (length(experimental_files) == 0) {
-  cat("No files with experimental badge found.\n")
-} else {
-  cat("Found", length(experimental_files), "file(s) with experimental badge:\n\n")
+  invalid <- vapply(
+    exports,
+    function(record) {
+      length(record$lifecycles) != 1L ||
+        length(record$stages) != 1L ||
+        !record$stages %in% recognized_api_stages
+    },
+    logical(1)
+  )
+  if (any(invalid)) {
+    names <- vapply(exports[invalid], `[[`, character(1), "name")
+    return(list(
+      status = "invalid",
+      reason = paste0("missing, mixed, or unrecognized tags: ", paste(names, collapse = ", "))
+    ))
+  }
 
-  # Create a summary table
-  experimental_summary <- tibble(
-    file = experimental_files,
-    filename = basename(file),
-    size_kb = file.size(file) / 1024
-  ) %>%
-    arrange(filename)
+  lifecycles <- vapply(exports, function(record) record$lifecycles[[1]], character(1))
+  if (all(lifecycles == "experimental")) {
+    return(list(status = "selected", reason = "all exports are experimental"))
+  }
 
-  print(experimental_summary, n = Inf)
-
-  cat("\nTotal files:", nrow(experimental_summary), "\n")
-  cat("Total size:", round(sum(experimental_summary$size_kb), 2), "KB\n\n")
-
-  # ==============================================================================
-  # Delete files (with confirmation)
-  # ==============================================================================
-
-  if (dry_run) {
-    cat("DRY RUN MODE: No files will be deleted.\n")
-    cat("Set dry_run = FALSE to actually delete files.\n")
+  reason <- if (all(lifecycles %in% protected_lifecycles)) {
+    paste0("protected lifecycle: ", paste(unique(lifecycles), collapse = ", "))
   } else {
-    cat("WARNING: This will permanently delete", length(experimental_files), "files.\n")
+    paste0("mixed or protected lifecycles: ", paste(unique(lifecycles), collapse = ", "))
+  }
+  list(status = "protected", reason = reason)
+}
 
-    # Non-interactive: proceed without prompting (CI / regen workflow).
-    response <- "yes"
+scan_experimental_chemi_files <- function(r_dir = "R") {
+  files <- sort(list.files(r_dir, pattern = "^chemi_.*\\.R$", full.names = TRUE))
+  if (length(files) == 0L) {
+    return(data.frame(file = character(), status = character(), reason = character()))
+  }
 
-    if (tolower(trimws(response)) == "yes") {
-      cat("\nDeleting files...\n")
+  classifications <- lapply(files, classify_chemi_file)
+  data.frame(
+    file = files,
+    status = vapply(classifications, `[[`, character(1), "status"),
+    reason = vapply(classifications, `[[`, character(1), "reason"),
+    stringsAsFactors = FALSE
+  )
+}
 
-      deleted_count <- 0
-      failed_count <- 0
-
-      for (file in experimental_files) {
-        result <- tryCatch(
-          {
-            file.remove(file)
-            TRUE
-          },
-          error = function(e) {
-            cat("  ERROR:", file, "-", e$message, "\n")
-            FALSE
-          }
-        )
-
-        if (result) {
-          cat("  Deleted:", file, "\n")
-          deleted_count <- deleted_count + 1
-        } else {
-          failed_count <- failed_count + 1
-        }
-      }
-
-      cat("\nDeletion complete:\n")
-      cat("  Successfully deleted:", deleted_count, "files\n")
-      if (failed_count > 0) {
-        cat("  Failed to delete:", failed_count, "files\n")
-      }
+print_removal_report <- function(report) {
+  for (status in c("selected", "protected", "invalid")) {
+    rows <- report[report$status == status, , drop = FALSE]
+    cat("\n", tools::toTitleCase(status), " (", nrow(rows), "):\n", sep = "")
+    if (nrow(rows) == 0L) {
+      cat("  none\n")
     } else {
-      cat("\nDeletion cancelled.\n")
+      for (i in seq_len(nrow(rows))) {
+        cat("  ", rows$file[[i]], " - ", rows$reason[[i]], "\n", sep = "")
+      }
     }
   }
-} # End of else block (files found)
+}
 
-# ==============================================================================
-# Cleanup
-# ==============================================================================
+parse_remove_args <- function(args = commandArgs(trailingOnly = TRUE)) {
+  unknown <- setdiff(args, c("--dry-run", "--apply", "--help", "-h"))
+  if (length(unknown) > 0L) {
+    stop("Unknown argument: ", unknown[[1]], call. = FALSE)
+  }
+  if (all(c("--dry-run", "--apply") %in% args)) {
+    stop("Choose only one mode: --dry-run or --apply", call. = FALSE)
+  }
+  list(apply = "--apply" %in% args, help = any(args %in% c("--help", "-h")))
+}
 
-# Remove all variables created by this script
-rm(
-  dry_run,
-  target_dir,
-  experimental_pattern,
-  r_files,
-  experimental_files,
-  file
-)
+remove_experimental_main <- function(args = commandArgs(trailingOnly = TRUE)) {
+  parsed <- parse_remove_args(args)
+  if (parsed$help) {
+    cat("Usage:\n  Rscript dev/remove_experimental.R --dry-run\n  Rscript dev/remove_experimental.R --apply\n")
+    return(invisible(NULL))
+  }
 
-# Remove conditional variables if they exist
-if (exists("content")) {
-  rm(content)
+  report <- scan_experimental_chemi_files("R")
+  print_removal_report(report)
+  selected <- report$file[report$status == "selected"]
+
+  if (!parsed$apply) {
+    cat("\nDry run: no files were removed. Use --apply to remove selected files.\n")
+    return(invisible(report))
+  }
+
+  removed <- file.remove(selected)
+  if (any(!removed)) {
+    stop("Failed to remove: ", paste(selected[!removed], collapse = ", "), call. = FALSE)
+  }
+  cat("\nRemoved ", length(selected), " generated Cheminformatics file(s).\n", sep = "")
+  invisible(report)
 }
-if (exists("experimental_summary")) {
-  rm(experimental_summary)
+
+remove_experimental_is_entrypoint <- function() {
+  file_args <- grep("^--file=", commandArgs(FALSE), value = TRUE)
+  length(file_args) > 0L &&
+    identical(
+      basename(sub("^--file=", "", file_args[[length(file_args)]])),
+      "remove_experimental.R"
+    )
 }
-if (exists("response")) {
-  rm(response)
-}
-if (exists("deleted_count")) {
-  rm(deleted_count)
-}
-if (exists("failed_count")) {
-  rm(failed_count)
-}
-if (exists("result")) {
-  rm(result)
+
+if (remove_experimental_is_entrypoint()) {
+  remove_experimental_main()
 }

@@ -7,7 +7,15 @@
 
 # Framework parameters that are added by the stub generator/wrappers
 # These should be excluded from drift detection since they're not from the schema
-FRAMEWORK_PARAMS <- c("tidy", "verbose", "...", ".verbose", ".tidy", "all_pages")
+FRAMEWORK_PARAMS <- c(
+  "tidy",
+  "verbose",
+  "...",
+  ".verbose",
+  ".tidy",
+  "all_pages",
+  "max_pages"
+)
 
 #' Extract function parameters from R source file
 #'

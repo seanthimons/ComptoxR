@@ -25,4 +25,3 @@ chemi_services_convert(content = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

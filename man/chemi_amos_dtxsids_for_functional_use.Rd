@@ -23,4 +23,3 @@ chemi_amos_dtxsids_for_functional_use(functional_use = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

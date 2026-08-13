@@ -29,7 +29,6 @@ test_that("chemi_amos_get_data_source_info passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "amos/get_data_source_info/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 0)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

@@ -25,4 +25,3 @@ chemi_resolver_resolve(mol = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

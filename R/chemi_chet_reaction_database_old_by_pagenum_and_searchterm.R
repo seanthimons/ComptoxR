@@ -11,12 +11,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' chemi_chet_reaction_database_old_by_pagenum(pagenum = "DTXSID7020182")
+#' chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020182")
 #' }
-chemi_chet_reaction_database_old_by_pagenum <- function(pagenum, searchterm = NULL) {
+chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(pagenum, searchterm = NULL) {
   server <- "chemi_burl"
   req_data <- run_hook(
-    "chemi_chet_reaction_database_old_by_pagenum",
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
     "pre_request",
     list(params = list(`pagenum` = pagenum, `searchterm` = searchterm, `server` = server))
   )

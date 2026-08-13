@@ -15,6 +15,27 @@
 #' chemi_stdizer_records(full = "DTXSID1024122")
 #' }
 chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_stdizer_records",
+    "pre_request",
+    list(params = list(`full` = full, `options` = options, `records` = records, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("full" %in% names(req_data$params)) {
+    full <- req_data$params[["full"]]
+  }
+  if ("options" %in% names(req_data$params)) {
+    options <- req_data$params[["options"]]
+  }
+  if ("records" %in% names(req_data$params)) {
+    records <- req_data$params[["records"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(options)) {
@@ -27,7 +48,8 @@ chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
     query = full,
     endpoint = "stdizer/records",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

@@ -33,6 +33,62 @@ chemi_amos_batch <- function(
   methodologies = NULL,
   record_types = NULL
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_batch",
+    "pre_request",
+    list(
+      params = list(
+        `additional_record_info` = additional_record_info,
+        `always_download_file` = always_download_file,
+        `base_url` = base_url,
+        `dtxsids` = dtxsids,
+        `include_classyfire` = include_classyfire,
+        `include_external_links` = include_external_links,
+        `include_functional_uses` = include_functional_uses,
+        `include_source_counts` = include_source_counts,
+        `methodologies` = methodologies,
+        `record_types` = record_types,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("additional_record_info" %in% names(req_data$params)) {
+    additional_record_info <- req_data$params[["additional_record_info"]]
+  }
+  if ("always_download_file" %in% names(req_data$params)) {
+    always_download_file <- req_data$params[["always_download_file"]]
+  }
+  if ("base_url" %in% names(req_data$params)) {
+    base_url <- req_data$params[["base_url"]]
+  }
+  if ("dtxsids" %in% names(req_data$params)) {
+    dtxsids <- req_data$params[["dtxsids"]]
+  }
+  if ("include_classyfire" %in% names(req_data$params)) {
+    include_classyfire <- req_data$params[["include_classyfire"]]
+  }
+  if ("include_external_links" %in% names(req_data$params)) {
+    include_external_links <- req_data$params[["include_external_links"]]
+  }
+  if ("include_functional_uses" %in% names(req_data$params)) {
+    include_functional_uses <- req_data$params[["include_functional_uses"]]
+  }
+  if ("include_source_counts" %in% names(req_data$params)) {
+    include_source_counts <- req_data$params[["include_source_counts"]]
+  }
+  if ("methodologies" %in% names(req_data$params)) {
+    methodologies <- req_data$params[["methodologies"]]
+  }
+  if ("record_types" %in% names(req_data$params)) {
+    record_types <- req_data$params[["record_types"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(always_download_file)) {
@@ -66,7 +122,8 @@ chemi_amos_batch <- function(
     query = additional_record_info,
     endpoint = "amos/batch_search",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

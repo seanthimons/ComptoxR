@@ -13,12 +13,27 @@
 #' chemi_amos_get_substances_for_term(search_term = "DTXSID7020182")
 #' }
 chemi_amos_get_substances_for_term <- function(search_term) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_get_substances_for_term",
+    "pre_request",
+    list(params = list(`search_term` = search_term, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("search_term" %in% names(req_data$params)) {
+    search_term <- req_data$params[["search_term"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     query = search_term,
     endpoint = "amos/get_substances_for_search_term/",
     method = "GET",
     batch_limit = 1,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

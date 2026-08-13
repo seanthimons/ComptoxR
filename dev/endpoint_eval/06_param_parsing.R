@@ -2,6 +2,22 @@
 # Parameter Parsing
 # ==============================================================================
 
+schema_value_missing <- function(value) {
+  is.null(value) ||
+    (is.atomic(value) && length(value) == 1L && is.na(value))
+}
+
+schema_value_code <- function(value) {
+  paste(deparse(value, width.cutoff = 500L), collapse = " ")
+}
+
+schema_value_label <- function(value) {
+  if (is.list(value)) {
+    return(as.character(jsonlite::toJSON(value, auto_unbox = TRUE, null = "null")))
+  }
+  paste(value, collapse = ", ")
+}
+
 #' Helper function to build parameter default value based on schema metadata
 build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   # If parameter is primary (required), no default
@@ -26,7 +42,7 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
 
   # Check for default value in schema
   default_val <- metadata_entry$default
-  if (is.null(default_val) || (length(default_val) == 1 && is.na(default_val))) {
+  if (schema_value_missing(default_val)) {
     return("= NULL")
   }
 
@@ -44,7 +60,7 @@ build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   }
 
   # Safe fallback using deparse
-  return(paste0("= ", deparse(default_val)))
+  return(paste0("= ", schema_value_code(default_val)))
 }
 
 generic_request_reserved_args <- c(
@@ -62,7 +78,8 @@ generic_request_reserved_args <- c(
   "query_params",
   "paginate",
   "max_pages",
-  "pagination_strategy"
+  "pagination_strategy",
+  "pagination_cursor_location"
 )
 
 #' Parse function parameters from comma-separated string
@@ -200,7 +217,7 @@ parse_function_params <- function(
     if (!is.null(primary_param) && p_san == primary_param) {
       # Only mark as required if the schema explicitly says required=true
       # and there's no default value provided
-      has_default <- is.list(entry) && !is.null(entry$default) && !(length(entry$default) == 1 && is.na(entry$default))
+      has_default <- is.list(entry) && !schema_value_missing(entry$default)
       schema_required <- is.list(entry) && isTRUE(entry$required)
 
       if (schema_required && !has_default) {
@@ -271,8 +288,8 @@ parse_function_params <- function(
         param_desc <- paste0(param_desc, ". Options: ", paste(enum_vals, collapse = ", "))
       }
 
-      if (!is.na(default_val)) {
-        param_desc <- paste0(param_desc, " (default: ", default_val, ")")
+      if (!schema_value_missing(default_val)) {
+        param_desc <- paste0(param_desc, " (default: ", schema_value_label(default_val), ")")
       }
 
       doc_lines <- c(doc_lines, paste0("#' @param ", p_san, " ", param_desc))
@@ -441,8 +458,8 @@ parse_path_parameters <- function(
       }
 
       # Append default value if available
-      if (!is.na(default_val)) {
-        param_desc <- paste0(param_desc, " (default: ", default_val, ")")
+      if (!schema_value_missing(default_val)) {
+        param_desc <- paste0(param_desc, " (default: ", schema_value_label(default_val), ")")
       }
 
       doc_lines <- c(doc_lines, paste0("#' @param ", p, " ", param_desc))

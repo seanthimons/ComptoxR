@@ -15,6 +15,27 @@
 #' chemi_toxprints_calculate(smiles = "DTXSID7020182")
 #' }
 chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_toxprints_calculate",
+    "pre_request",
+    list(params = list(`smiles` = smiles, `labels` = labels, `profile` = profile, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("smiles" %in% names(req_data$params)) {
+    smiles <- req_data$params[["smiles"]]
+  }
+  if ("labels" %in% names(req_data$params)) {
+    labels <- req_data$params[["labels"]]
+  }
+  if ("profile" %in% names(req_data$params)) {
+    profile <- req_data$params[["profile"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {
@@ -30,7 +51,7 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
     endpoint = "toxprints/calculate",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -40,7 +61,6 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 
   return(result)
 }
-
 
 #' Toxprints Calculate
 #'
@@ -83,6 +103,7 @@ chemi_toxprints_calculate_bulk <- function(
   request.resolve = NULL
 ) {
   chemicals <- NULL
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_toxprints_calculate_bulk",
     "pre_request",
@@ -99,7 +120,8 @@ chemi_toxprints_calculate_bulk <- function(
         `request.options.PV1` = request.options.PV1,
         `request.options.TP` = request.options.TP,
         `request.resolve` = request.resolve,
-        `chemicals` = chemicals
+        `chemicals` = chemicals,
+        `server` = server
       )
     )
   )
@@ -142,6 +164,9 @@ chemi_toxprints_calculate_bulk <- function(
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -164,7 +189,8 @@ chemi_toxprints_calculate_bulk <- function(
     request.options.profile = request.options.profile,
     request.options.PV1 = request.options.PV1,
     request.options.TP = request.options.TP,
-    request.resolve = request.resolve
+    request.resolve = request.resolve,
+    server = server
   )
 
   # Additional post-processing can be added here
