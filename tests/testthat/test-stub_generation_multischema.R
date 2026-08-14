@@ -144,8 +144,9 @@ test_that("the rebuilt Cheminformatics tree has no obsolete experimental functio
   source(remover, local = remover_env)
 
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())
-  report <- remover_env$scan_experimental_chemi_files(
-    testthat::test_path("..", "..", "R")
+  report <- remover_env$scan_experimental_files(
+    testthat::test_path("..", "..", "R"),
+    prefix = "chemi"
   )
   selected <- report$file[report$status == "selected"]
   exported <- unlist(lapply(selected, function(path) {
