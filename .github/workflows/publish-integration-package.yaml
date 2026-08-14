@@ -1,0 +1,232 @@
+name: Publish Integration Package
+
+on:
+  push:
+    branches: [integration]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-integration-package
+  cancel-in-progress: false
+
+env:
+  ROLLING_TAG: integration-latest
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+
+    outputs:
+      package: ${{ steps.metadata.outputs.package }}
+      version: ${{ steps.metadata.outputs.version }}
+      commit: ${{ steps.metadata.outputs.commit }}
+      short_sha: ${{ steps.metadata.outputs.short_sha }}
+
+    steps:
+      - name: Checkout integration source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Read package metadata
+        id: metadata
+        shell: bash
+        run: |
+          package="$(Rscript -e "cat(read.dcf('DESCRIPTION', fields = 'Package')[1, 'Package'])")"
+          version="$(Rscript -e "cat(read.dcf('DESCRIPTION', fields = 'Version')[1, 'Version'])")"
+          commit="$(git rev-parse HEAD)"
+          short_sha="$(git rev-parse --short=7 HEAD)"
+
+          if [[ "$version" != *.9000 ]]; then
+            echo "::error::integration rolling builds must use a dev-suffixed DESCRIPTION version, e.g. 1.6.0.9000. Found: $version"
+            exit 1
+          fi
+
+          echo "package=$package" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$short_sha" >> "$GITHUB_OUTPUT"
+
+  prepare-release:
+    needs: metadata
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      COMMIT: ${{ needs.metadata.outputs.commit }}
+      PACKAGE: ${{ needs.metadata.outputs.package }}
+      VERSION: ${{ needs.metadata.outputs.version }}
+
+    steps:
+      - name: Ensure integration prerelease exists
+        shell: bash
+        run: |
+          if gh release view "$ROLLING_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            is_prerelease="$(gh release view "$ROLLING_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json isPrerelease \
+              --jq '.isPrerelease')"
+            if [ "$is_prerelease" != "true" ]; then
+              echo "::error::Release $ROLLING_TAG exists but is not a prerelease."
+              exit 1
+            fi
+          else
+            gh release create "$ROLLING_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$COMMIT" \
+              --title "$PACKAGE integration rolling build" \
+              --notes "Preparing integration rolling prerelease for $PACKAGE $VERSION at commit $COMMIT." \
+              --prerelease
+          fi
+
+  build-upload:
+    needs: [metadata, prepare-release]
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_label: source
+            extension: tar.gz
+            build_binary: false
+          - os: windows-latest
+            asset_label: windows
+            extension: zip
+            build_binary: true
+          - os: macos-latest
+            asset_label: macos
+            extension: tgz
+            build_binary: true
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PACKAGE: ${{ needs.metadata.outputs.package }}
+      VERSION: ${{ needs.metadata.outputs.version }}
+      COMMIT: ${{ needs.metadata.outputs.commit }}
+      SHORT_SHA: ${{ needs.metadata.outputs.short_sha }}
+      ASSET_LABEL: ${{ matrix.asset_label }}
+      EXTENSION: ${{ matrix.extension }}
+      BUILD_BINARY: ${{ matrix.build_binary }}
+
+    steps:
+      - name: Checkout integration source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.metadata.outputs.commit }}
+          fetch-depth: 0
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - name: Set up pandoc
+        uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+
+      - name: Install package dependencies
+        uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+
+      - name: Build package asset
+        id: build
+        shell: bash
+        run: |
+          R CMD build .
+          tarball="${PACKAGE}_${VERSION}.tar.gz"
+          test -f "$tarball"
+
+          if [ "$BUILD_BINARY" = "true" ]; then
+            R CMD INSTALL --build "$tarball"
+            built_asset="${PACKAGE}_${VERSION}.${EXTENSION}"
+            if [ ! -f "$built_asset" ]; then
+              echo "::error::Expected binary package was not produced: $built_asset"
+              ls -la
+              exit 1
+            fi
+            asset="${PACKAGE}_${VERSION}_${SHORT_SHA}_${ASSET_LABEL}.${EXTENSION}"
+            mv "$built_asset" "$asset"
+          else
+            asset="${PACKAGE}_${VERSION}_${SHORT_SHA}_${ASSET_LABEL}.tar.gz"
+            mv "$tarball" "$asset"
+          fi
+
+          test -f "$asset"
+          echo "asset=$asset" >> "$GITHUB_OUTPUT"
+
+      - name: Upload package asset to integration prerelease
+        env:
+          ASSET: ${{ steps.build.outputs.asset }}
+        shell: bash
+        run: |
+          gh release upload "$ROLLING_TAG" "$ASSET" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
+
+  finalize-release:
+    needs: [metadata, build-upload]
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PACKAGE: ${{ needs.metadata.outputs.package }}
+      VERSION: ${{ needs.metadata.outputs.version }}
+      COMMIT: ${{ needs.metadata.outputs.commit }}
+      SHORT_SHA: ${{ needs.metadata.outputs.short_sha }}
+
+    steps:
+      - name: Point rolling tag at integration commit and remove stale assets
+        shell: bash
+        run: |
+          gh api \
+            --method PATCH \
+            "repos/$GITHUB_REPOSITORY/git/refs/tags/$ROLLING_TAG" \
+            -f "sha=$COMMIT" \
+            -F force=true >/dev/null
+
+          while IFS= read -r asset; do
+            if [[ "$asset" == "${PACKAGE}_"* && "$asset" != "${PACKAGE}_${VERSION}_${SHORT_SHA}_"* ]]; then
+              gh release delete-asset "$ROLLING_TAG" "$asset" \
+                --repo "$GITHUB_REPOSITORY" \
+                --yes
+            fi
+          done < <(gh release view "$ROLLING_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json assets \
+            --jq '.assets[].name')
+
+      - name: Update integration prerelease notes
+        shell: bash
+        run: |
+          assets="$(gh release view "$ROLLING_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json assets \
+            --jq '.assets[].name' \
+            | sort \
+            | sed 's/^/- /')"
+
+          {
+            echo "Bleeding-edge rolling prerelease for collaborator binaries built from integration."
+            echo
+            echo "Built from integration at commit $COMMIT"
+            echo "DESCRIPTION Version: $VERSION"
+            echo
+            echo "Assets:"
+            printf '%s\n' "$assets"
+          } > release-notes.md
+
+          gh release edit "$ROLLING_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$PACKAGE integration rolling build" \
+            --notes-file release-notes.md \
+            --prerelease
