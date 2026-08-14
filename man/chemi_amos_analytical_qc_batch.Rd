@@ -40,4 +40,3 @@ chemi_amos_analytical_qc_batch(base_url = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

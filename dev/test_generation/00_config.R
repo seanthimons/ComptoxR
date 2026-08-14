@@ -69,6 +69,10 @@ tg_canonical_r_code <- function(text) {
 }
 
 tg_generated_text_identical <- function(current, expected) {
+  if (xor(endsWith(current, "\n"), endsWith(expected, "\n"))) {
+    return(FALSE)
+  }
+
   current <- tg_without_terminal_newline(current)
   expected <- tg_without_terminal_newline(expected)
 

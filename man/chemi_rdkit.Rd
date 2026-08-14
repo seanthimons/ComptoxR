@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_rdkit.R
 \name{chemi_rdkit}
 \alias{chemi_rdkit}
-\title{Calculate RDKit fingerprints for one molecule}
+\title{Generate descriptors for one molecule}
 \usage{
 chemi_rdkit(
   smiles,
@@ -13,33 +13,27 @@ chemi_rdkit(
 )
 }
 \arguments{
-\item{smiles}{One SMILES string or resolvable chemical identifier.}
+\item{smiles}{One SMILES string or resolvable chemical identifier}
 
-\item{type}{Fingerprint type. Currently \code{ecfp}.}
+\item{type}{Fingerprint type}
 
-\item{radius}{ECFP radius.}
+\item{radius}{ECFP radius}
 
-\item{bits}{Number of fingerprint bits.}
+\item{bits}{Number of fingerprint bits}
 
-\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
-provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated one-row tibble or raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This wrapper resolves identifier-like inputs to SMILES before calling the
-dedicated service. The raw \verb{/api/rdkit} endpoint does not perform that
-wrapper-level resolution.
 }
 \examples{
 \dontrun{
-chemi_rdkit(smiles = "DTXSID7020182", bits = 1024)
+chemi_rdkit(smiles = "DTXSID7020182")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

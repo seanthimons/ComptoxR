@@ -13,12 +13,27 @@
 #' chemi_amos_get_ms_ready_methods(inchikey = "DTXSID7020182")
 #' }
 chemi_amos_get_ms_ready_methods <- function(inchikey) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_get_ms_ready_methods",
+    "pre_request",
+    list(params = list(`inchikey` = inchikey, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("inchikey" %in% names(req_data$params)) {
+    inchikey <- req_data$params[["inchikey"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     query = inchikey,
     endpoint = "amos/get_ms_ready_methods/",
     method = "GET",
     batch_limit = 1,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )

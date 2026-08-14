@@ -13,6 +13,21 @@
 #' chemi_resolver_getsubstance(name = "DTXSID7020182")
 #' }
 chemi_resolver_getsubstance <- function(name) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_resolver_getsubstance",
+    "pre_request",
+    list(params = list(`name` = name, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("name" %in% names(req_data$params)) {
+    name <- req_data$params[["name"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(name)) {
@@ -22,7 +37,7 @@ chemi_resolver_getsubstance <- function(name) {
     endpoint = "resolver/getsubstance",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options

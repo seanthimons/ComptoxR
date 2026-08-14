@@ -1,33 +1,23 @@
-#' Predict one chemical with WebTEST
+#' Webtest Predict
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Wide output preserves every input position and expands successful inputs to
-#' one row per requested prediction. Raw output preserves the upstream
-#' `PredictionResult`.
-#'
-#' @param smiles One SMILES string or resolvable chemical identifier.
-#' @param endpoint One required WebTEST endpoint identifier, such as `LC50`.
-#' @param method Prediction method: `consensus`, `hc`, `sm`, `gc`, or `nn`.
-#' @param format Response format. Only `JSON` is supported.
-#' @param output Output contract: `wide` for normalized rows or `raw` for the
-#'   upstream `PredictionResult` with source and input-map attributes.
-#' @return A normalized tibble or raw WebTEST `PredictionResult`.
+#' @param smiles Required parameter
+#' @param endpoint Optional parameter
+#' @param method Optional parameter (default: consensus)
+#' @param format Optional parameter. Options: JSON, HTML, PDF
+#' @param output Output contract: normalized wide tibble or raw PredictionResult
+#' @return Returns a tibble with results
 #' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict("DTXSID7020182", endpoint = "LC50")
+#' chemi_webtest_predict(smiles = "DTXSID7020182")
 #' }
-chemi_webtest_predict <- function(
-  smiles,
-  endpoint,
-  method = "consensus",
-  format = "JSON",
-  output = c("wide", "raw")
-) {
+chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")) {
+  server <- "chemi_burl"
   if (missing(endpoint)) {
     endpoint <- NULL
   }
@@ -36,11 +26,12 @@ chemi_webtest_predict <- function(
     "pre_request",
     list(
       params = list(
-        smiles = smiles,
-        endpoint = endpoint,
-        method = method,
-        format = format,
-        output = output
+        `smiles` = smiles,
+        `endpoint` = endpoint,
+        `method` = method,
+        `format` = format,
+        `output` = output,
+        `server` = server
       )
     )
   )
@@ -65,32 +56,23 @@ chemi_webtest_predict <- function(
   return(result)
 }
 
-#' Predict multiple chemicals with WebTEST
+#' Webtest Predict
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Wide output preserves every input position and expands successful inputs to
-#' one row per requested prediction. Raw output preserves the upstream
-#' `PredictionResult`.
-#'
-#' @param structures Chemical structures or resolvable identifiers.
-#' @param endpoints Required WebTEST endpoint identifiers.
-#' @param methods Optional prediction methods: `consensus`, `hc`, `sm`, `gc`,
-#'   or `nn`. `NULL` retains every method returned by WebTEST.
-#' @param format Response format. Only `JSON` is supported.
-#' @param output Output contract: `wide` for normalized rows or `raw` for the
-#'   upstream `PredictionResult` with source and input-map attributes.
-#' @return A normalized tibble or raw WebTEST `PredictionResult`.
+#' @param endpoints Endpoint to predict
+#' @param structures Molecule expressed as SMILES or MOL
+#' @param format Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF
+#' @param methods Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)
+#' @param output Output contract: normalized wide tibble or raw PredictionResult
+#' @return Returns a tibble with results
 #' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_webtest_predict_bulk(
-#'   structures = c("DTXSID7020182", "CCO"),
-#'   endpoints = "LC50"
-#' )
+#' chemi_webtest_predict_bulk(endpoints = "DTXSID1024122")
 #' }
 chemi_webtest_predict_bulk <- function(
   structures,
@@ -99,6 +81,7 @@ chemi_webtest_predict_bulk <- function(
   format = "JSON",
   output = c("wide", "raw")
 ) {
+  server <- "chemi_burl"
   if (missing(endpoints)) {
     endpoints <- NULL
   }
@@ -107,11 +90,12 @@ chemi_webtest_predict_bulk <- function(
     "pre_request",
     list(
       params = list(
-        structures = structures,
-        endpoints = endpoints,
-        methods = methods,
-        format = format,
-        output = output
+        `structures` = structures,
+        `endpoints` = endpoints,
+        `methods` = methods,
+        `format` = format,
+        `output` = output,
+        `server` = server
       )
     )
   )

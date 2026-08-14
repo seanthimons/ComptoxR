@@ -15,14 +15,16 @@
 library(yaml)
 library(cli)
 
-# Read hook config
+# Read and merge manual and generated hook configs.
 hook_config_path <- here::here("inst", "hook_config.yml")
+generated_hook_config_path <- here::here("inst", "hook_config_generated.yml")
 
 if (!file.exists(hook_config_path)) {
   cli::cli_abort("Hook config not found: {hook_config_path}")
 }
 
-hook_config <- yaml::read_yaml(hook_config_path)
+source(here::here("R", "hook_registry.R"), local = FALSE)
+hook_config <- read_hook_configs(hook_config_path, generated_hook_config_path)
 
 # Source all hook files to make functions available
 hook_files <- list.files(here::here("R"), pattern = "^hooks_.*\\.R$", full.names = TRUE)

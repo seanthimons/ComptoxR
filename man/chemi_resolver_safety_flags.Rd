@@ -25,4 +25,3 @@ chemi_resolver_safety_flags(query = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

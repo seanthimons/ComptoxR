@@ -20,4 +20,3 @@ chemi_resolver_ccte_lists()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

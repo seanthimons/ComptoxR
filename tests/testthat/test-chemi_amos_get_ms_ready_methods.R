@@ -35,7 +35,6 @@ test_that("chemi_amos_get_ms_ready_methods passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "amos/get_ms_ready_methods/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

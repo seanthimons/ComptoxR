@@ -146,6 +146,20 @@ parse_delimited_response <- function(text, content_type) {
   )
 }
 
+unwrap_collection_envelope <- function(body) {
+  collection_fields <- c("results", "records", "data", "content")
+  if (
+    is.list(body) &&
+      length(body) == 1L &&
+      !is.null(names(body)) &&
+      names(body)[[1]] %in% collection_fields &&
+      is.list(body[[1]])
+  ) {
+    return(body[[1]])
+  }
+  body
+}
+
 #' Generic API Request Function
 #'
 #' This is a centralized template function used by nearly all `ct_*` functions
@@ -191,6 +205,8 @@ parse_delimited_response <- function(text, content_type) {
 #' @param pagination_strategy The pagination strategy to use. One of: "offset_limit", "page_number",
 #'        "page_size", "cursor", or NULL. When NULL, paginate is ignored.
 #'        Usually set by generated stubs from Phase 19 metadata.
+#' @param pagination_cursor_location For cursor pagination, the schema-derived
+#'        cursor location: "query" or "body". Defaults to "query".
 #' @param ... Additional parameters:
 #'        - If method is "POST": Added as query parameters to the URL.
 #'        - If method is "GET" and batch_limit is 1: Named arguments are added as query parameters.
@@ -218,6 +234,7 @@ generic_request <- function(
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
+  pagination_cursor_location = NULL,
   ...
 ) {
   # --- 1. Base URL Resolution ---
@@ -519,14 +536,30 @@ generic_request <- function(
         }
       )
     } else if (pagination_strategy == "cursor") {
-      # Cursor/keyset: cursor value in query param
-      next_req <- httr2::iterate_with_cursor(
-        "cursor",
-        resp_param_value = function(resp) {
-          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
-          body[["cursor"]] %||% body[["nextCursor"]] %||% body[["next"]]
+      cursor_location <- pagination_cursor_location %||% "query"
+      if (!cursor_location %in% c("query", "body")) {
+        cli::cli_abort(
+          "{.arg pagination_cursor_location} must be {.val query} or {.val body}."
+        )
+      }
+      next_req <- function(resp, req) {
+        response_body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        pagination <- response_body[["pagination"]] %||% list()
+        if (identical(pagination[["hasNext"]], FALSE)) {
+          return(NULL)
         }
-      )
+        next_cursor <- pagination[["nextCursor"]] %||%
+          response_body[["cursor"]] %||%
+          response_body[["nextCursor"]] %||%
+          response_body[["next"]]
+        if (is.null(next_cursor) || length(next_cursor) == 0L || identical(next_cursor, "")) {
+          return(NULL)
+        }
+        if (identical(cursor_location, "body")) {
+          return(httr2::req_body_json_modify(req, cursor = next_cursor))
+        }
+        httr2::req_url_query(req, cursor = next_cursor)
+      }
     } else {
       cli::cli_abort("Unknown pagination_strategy: {.val {pagination_strategy}}")
     }
@@ -722,7 +755,7 @@ generic_request <- function(
         return(NULL)
       }
 
-      body <- httr2::resp_body_json(r)
+      body <- unwrap_collection_envelope(httr2::resp_body_json(r))
 
       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
       if (length(qp) == 1 && is.list(body)) {

@@ -4,16 +4,16 @@
 \alias{chemi_stdizer_chemicals}
 \title{Stdizer Chemicals}
 \usage{
-chemi_stdizer_chemicals(query, idType = "AnyId", options = NULL, full = NULL)
+chemi_stdizer_chemicals(query, idType = "AnyId", full = NULL, options = NULL)
 }
 \arguments{
 \item{query}{Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)}
 
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
-\item{options}{Optional parameter}
-
 \item{full}{Optional parameter}
+
+\item{options}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -32,4 +32,3 @@ chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

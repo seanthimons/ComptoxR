@@ -44,7 +44,6 @@ chemi_amnb_nate <- function(smiles) {
   return(result)
 }
 
-
 #' Generate predictions for multiple molecules
 #'
 #' @description
@@ -85,12 +84,11 @@ chemi_amnb_nate_bulk <- function(chemicals = NULL, smiles = NULL) {
     options$smiles <- smiles
   }
   result <- generic_chemi_request(
-    server = server,
     query = chemicals,
     endpoint = "amnb_nate",
     options = options,
     tidy = FALSE,
-    chemicals = chemicals
+    server = server
   )
 
   # Additional post-processing can be added here

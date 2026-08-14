@@ -14,6 +14,24 @@
 #' chemi_toxprints_assays(category = "DTXSID7020182")
 #' }
 chemi_toxprints_assays <- function(category = NULL, label = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_toxprints_assays",
+    "pre_request",
+    list(params = list(`category` = category, `label` = label, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("category" %in% names(req_data$params)) {
+    category <- req_data$params[["category"]]
+  }
+  if ("label" %in% names(req_data$params)) {
+    label <- req_data$params[["label"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(category)) {
@@ -26,7 +44,7 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
     endpoint = "toxprints/assays",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -36,7 +54,6 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
 
   return(result)
 }
-
 
 #' Toxprints Assays
 #'
@@ -73,6 +90,62 @@ chemi_toxprints_assays_bulk <- function(
   options = NULL,
   total = NULL
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_toxprints_assays_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `acl` = acl,
+        `actives` = actives,
+        `category` = category,
+        `chemicals` = chemicals,
+        `id` = id,
+        `labels` = labels,
+        `metrics` = metrics,
+        `name` = name,
+        `options` = options,
+        `total` = total,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("acl" %in% names(req_data$params)) {
+    acl <- req_data$params[["acl"]]
+  }
+  if ("actives" %in% names(req_data$params)) {
+    actives <- req_data$params[["actives"]]
+  }
+  if ("category" %in% names(req_data$params)) {
+    category <- req_data$params[["category"]]
+  }
+  if ("chemicals" %in% names(req_data$params)) {
+    chemicals <- req_data$params[["chemicals"]]
+  }
+  if ("id" %in% names(req_data$params)) {
+    id <- req_data$params[["id"]]
+  }
+  if ("labels" %in% names(req_data$params)) {
+    labels <- req_data$params[["labels"]]
+  }
+  if ("metrics" %in% names(req_data$params)) {
+    metrics <- req_data$params[["metrics"]]
+  }
+  if ("name" %in% names(req_data$params)) {
+    name <- req_data$params[["name"]]
+  }
+  if ("options" %in% names(req_data$params)) {
+    options <- req_data$params[["options"]]
+  }
+  if ("total" %in% names(req_data$params)) {
+    total <- req_data$params[["total"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(actives)) {
@@ -106,7 +179,8 @@ chemi_toxprints_assays_bulk <- function(
     query = acl,
     endpoint = "toxprints/assays",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

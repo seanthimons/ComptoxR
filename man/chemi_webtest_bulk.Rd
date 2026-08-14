@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_webtest.R
 \name{chemi_webtest_bulk}
 \alias{chemi_webtest_bulk}
-\title{Calculate WebTEST descriptors for multiple molecules}
+\title{Webtest}
 \usage{
 chemi_webtest_bulk(
   query,
@@ -13,29 +13,27 @@ chemi_webtest_bulk(
 )
 }
 \arguments{
-\item{query}{Chemical structures or resolvable identifiers.}
+\item{query}{Chemical structures or resolvable identifiers}
 
-\item{chemIdType}{Identifier type used for wrapper-level input resolution.}
+\item{chemIdType}{Input identifier type}
 
-\item{headers}{Request upstream descriptor headers.}
+\item{headers}{Request descriptor headers}
 
-\item{format}{Response format: \code{JSON}, \code{CSV}, or \code{TSV}.}
+\item{format}{Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)}
 
-\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
-provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated tibble with one row per input or raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_webtest_bulk(c("DTXSID7020182", "CCO"))
+chemi_webtest_bulk(query = "DTXSID1024122")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

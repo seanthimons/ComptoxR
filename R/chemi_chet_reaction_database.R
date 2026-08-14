@@ -13,6 +13,7 @@
 #' @param reaction_phase Optional parameter
 #' @param craccm_id Optional parameter
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
+#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a list with result object
 #' @apiStage staging
 #' @export
@@ -31,7 +32,8 @@ chemi_chet_reaction_database <- function(
   reaction_scheme = NULL,
   reaction_phase = NULL,
   craccm_id = NULL,
-  all_pages = TRUE
+  all_pages = TRUE,
+  max_pages = 100
 ) {
   server <- "chemi_burl"
   req_data <- run_hook(
@@ -49,6 +51,7 @@ chemi_chet_reaction_database <- function(
         `reaction_phase` = reaction_phase,
         `craccm_id` = craccm_id,
         `all_pages` = all_pages,
+        `max_pages` = max_pages,
         `server` = server
       )
     )
@@ -85,6 +88,9 @@ chemi_chet_reaction_database <- function(
   }
   if ("all_pages" %in% names(req_data$params)) {
     all_pages <- req_data$params[["all_pages"]]
+  }
+  if ("max_pages" %in% names(req_data$params)) {
+    max_pages <- req_data$params[["max_pages"]]
   }
   if ("server" %in% names(req_data$params)) {
     server <- req_data$params[["server"]]
@@ -127,7 +133,7 @@ chemi_chet_reaction_database <- function(
     tidy = FALSE,
     options = options,
     paginate = all_pages,
-    max_pages = 100,
+    max_pages = max_pages,
     pagination_strategy = "page_size"
   )
 

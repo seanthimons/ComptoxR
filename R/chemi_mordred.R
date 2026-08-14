@@ -1,21 +1,13 @@
-#' Calculate Mordred descriptors for one molecule
+#' Generate descriptors for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Production calls use the staging dedicated Mordred deployment because the
-#' production dedicated deployment is unavailable.
-#'
-#' This wrapper resolves identifier-like inputs to SMILES before calling the
-#' dedicated service. The raw `/api/mordred` endpoint does not perform that
-#' wrapper-level resolution.
-#'
-#' @param smiles One SMILES string or resolvable chemical identifier.
-#' @param headers Request upstream descriptor headers.
-#' @param inchi Include InChI identifiers.
-#' @param output `wide` for a validated tibble or `raw` for the payload with
-#'   provenance attributes.
-#' @return A validated one-row tibble or raw payload.
+#' @param smiles One SMILES string or resolvable chemical identifier
+#' @param headers Request upstream descriptor headers
+#' @param inchi Include InChI identifiers
+#' @param output Output contract: validated wide tibble or raw payload
+#' @return Returns a tibble with results
 #' @apiStage staging
 #' @export
 #'
@@ -23,23 +15,12 @@
 #' \dontrun{
 #' chemi_mordred(smiles = "DTXSID7020182")
 #' }
-chemi_mordred <- function(
-  smiles,
-  headers = NULL,
-  inchi = NULL,
-  output = c("wide", "raw")
-) {
+chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_mordred",
     "pre_request",
-    list(
-      params = list(
-        smiles = smiles,
-        headers = headers,
-        inchi = inchi,
-        output = output
-      )
-    )
+    list(params = list(`smiles` = smiles, `headers` = headers, `inchi` = inchi, `output` = output, `server` = server))
   )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
@@ -63,45 +44,37 @@ chemi_mordred <- function(
   return(result)
 }
 
-#' Calculate Mordred descriptors for multiple molecules
+#' Generate descriptors for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Explicit `headers` and `inchi` arguments override duplicate values in
-#' `options`.
-#'
-#' @param chemicals Chemical structures or resolvable identifiers.
-#' @param options Named list of additional dedicated Mordred options.
-#' @param headers Request upstream descriptor headers.
-#' @param inchi Include InChI identifiers.
-#' @param output `wide` for a validated tibble or `raw` for the payload with
-#'   provenance attributes.
-#' @return A validated tibble with one row per input or raw payload.
+#' @param chemicals Chemical structures or resolvable identifiers
+#' @param options Named list of additional dedicated Mordred options
+#' @param headers Request descriptor headers
+#' @param inchi Include InChI identifiers
+#' @param output Output contract: validated wide tibble or raw payload
+#' @return Returns a tibble with results
 #' @apiStage staging
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_mordred_bulk(c("DTXSID7020182", "CCO"))
+#' chemi_mordred_bulk(chemicals = "DTXSID1024122")
 #' }
-chemi_mordred_bulk <- function(
-  chemicals,
-  options = NULL,
-  headers = NULL,
-  inchi = NULL,
-  output = c("wide", "raw")
-) {
+chemi_mordred_bulk <- function(chemicals, options = NULL, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_mordred_bulk",
     "pre_request",
     list(
       params = list(
-        chemicals = chemicals,
-        options = options,
-        headers = headers,
-        inchi = inchi,
-        output = output
+        `chemicals` = chemicals,
+        `options` = options,
+        `headers` = headers,
+        `inchi` = inchi,
+        `output` = output,
+        `server` = server
       )
     )
   )

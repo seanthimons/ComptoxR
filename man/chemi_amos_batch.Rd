@@ -52,4 +52,3 @@ chemi_amos_batch(additional_record_info = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

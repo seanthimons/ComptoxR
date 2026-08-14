@@ -399,3 +399,133 @@ test_that("generic_request with paginate=TRUE and cursor follows cursor tokens",
     }
   )
 })
+
+test_that("generic_request advances nested query cursors and honors hasNext", {
+  requests <- list()
+  call_count <- 0L
+  testthat::with_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      requests[[call_count]] <<- req
+      data <- if (call_count == 1L) {
+        list(
+          results = list(list(id = 1)),
+          pagination = list(hasNext = TRUE, nextCursor = "next-query")
+        )
+      } else {
+        list(
+          results = list(list(id = 2)),
+          pagination = list(hasNext = FALSE, nextCursor = "unused")
+        )
+      }
+      httr2::response(
+        status_code = 200,
+        headers = list(`Content-Type` = "application/json"),
+        body = charToRaw(jsonlite::toJSON(data, auto_unbox = TRUE))
+      )
+    },
+    .package = "httr2",
+    {
+      result <- generic_request(
+        query = "1",
+        endpoint = "amos/method_keyset_pagination/",
+        method = "GET",
+        server = "https://example.test/api",
+        auth = FALSE,
+        tidy = FALSE,
+        batch_limit = 1,
+        cursor = "start",
+        filter = "keep",
+        paginate = TRUE,
+        max_pages = 10,
+        pagination_strategy = "cursor",
+        pagination_cursor_location = "query"
+      )
+    }
+  )
+
+  expect_equal(call_count, 2L)
+  expect_length(result, 2L)
+  expect_match(requests[[2]]$url, "cursor=next-query", fixed = TRUE)
+  expect_match(requests[[2]]$url, "filter=keep", fixed = TRUE)
+})
+
+test_that("generic_request advances body cursors without changing filters or sort", {
+  requests <- list()
+  call_count <- 0L
+  initial_body <- list(
+    cursor = "start",
+    filters = list(source = list(type = "equals", filter = "EPA")),
+    sortModel = list(list(colId = "method_name", sort = "asc"))
+  )
+  testthat::with_mocked_bindings(
+    req_perform = function(req, ...) {
+      call_count <<- call_count + 1L
+      requests[[call_count]] <<- req
+      data <- if (call_count == 1L) {
+        list(
+          results = list(list(id = 1)),
+          pagination = list(hasNext = TRUE, nextCursor = "next-body")
+        )
+      } else {
+        list(results = list(list(id = 2)), pagination = list(hasNext = FALSE))
+      }
+      httr2::response(
+        status_code = 200,
+        headers = list(`Content-Type` = "application/json"),
+        body = charToRaw(jsonlite::toJSON(data, auto_unbox = TRUE))
+      )
+    },
+    .package = "httr2",
+    {
+      result <- generic_request(
+        query = NULL,
+        endpoint = "amos/method_keyset_pagination/",
+        method = "POST",
+        server = "https://example.test/api",
+        auth = FALSE,
+        tidy = FALSE,
+        batch_limit = 0,
+        path_params = c(limit = 1),
+        body = initial_body,
+        paginate = TRUE,
+        max_pages = 10,
+        pagination_strategy = "cursor",
+        pagination_cursor_location = "body"
+      )
+    }
+  )
+
+  expect_equal(call_count, 2L)
+  expect_length(result, 2L)
+  expect_identical(requests[[2]]$body$data$cursor, "next-body")
+  expect_identical(requests[[2]]$body$data$filters, initial_body$filters)
+  expect_identical(requests[[2]]$body$data$sortModel, initial_body$sortModel)
+})
+
+test_that("generic_request unwraps a single results collection", {
+  response_body <- list(results = list(list(id = 1), list(id = 2)))
+  testthat::with_mocked_bindings(
+    req_perform = function(req, ...) {
+      httr2::response(
+        status_code = 200,
+        headers = list(`Content-Type` = "application/json"),
+        body = charToRaw(jsonlite::toJSON(response_body, auto_unbox = TRUE))
+      )
+    },
+    .package = "httr2",
+    {
+      result <- generic_request(
+        endpoint = "amos/method_list",
+        method = "GET",
+        server = "https://example.test/api",
+        auth = FALSE,
+        tidy = FALSE,
+        batch_limit = 0
+      )
+    }
+  )
+
+  expect_length(result, 2L)
+  expect_identical(result[[1]]$id, 1L)
+})

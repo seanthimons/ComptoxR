@@ -31,7 +31,7 @@ test_that("chemi_hazard_bulk passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "hazard")
   expect_true("options" %in% names(call))
   expect_true(is.null(call[["options"]]) || length(call[["options"]]) >= 0)
+  expect_equal(call[["tidy"]], FALSE)
   expect_true("chemicals" %in% names(call))
   expect_true(is.null(call[["chemicals"]]) || length(call[["chemicals"]]) >= 0)
-  expect_equal(call[["tidy"]], FALSE)
 })

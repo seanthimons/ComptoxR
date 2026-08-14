@@ -9,7 +9,7 @@
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param section Optional parameter
-#' @param sort Logical value controlling API result ordering
+#' @param sort Logical value controlling API result ordering (default: FALSE)
 #' @param hclust_method Hierarchical clustering method passed to stats::hclust()
 #' @param format Output format: cluster result, long-form similarities, or raw API response
 #' @return A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`
@@ -29,6 +29,7 @@ chemi_resolver_getsimilaritymap <- function(
   format = c("cluster", "long", "raw")
 ) {
   chemicals <- NULL
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_resolver_getsimilaritymap",
     "pre_request",
@@ -40,7 +41,8 @@ chemi_resolver_getsimilaritymap <- function(
         `sort` = sort,
         `hclust_method` = hclust_method,
         `format` = format,
-        `chemicals` = chemicals
+        `chemicals` = chemicals,
+        `server` = server
       )
     )
   )
@@ -68,6 +70,9 @@ chemi_resolver_getsimilaritymap <- function(
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -81,7 +86,8 @@ chemi_resolver_getsimilaritymap <- function(
     options = extra_options,
     tidy = FALSE,
     chemicals = chemicals,
-    sort = if (!is.null(sort)) tolower(as.character(sort)) else NULL
+    sort = if (!is.null(sort)) tolower(as.character(sort)) else NULL,
+    server = server
   )
 
   result <- run_hook(

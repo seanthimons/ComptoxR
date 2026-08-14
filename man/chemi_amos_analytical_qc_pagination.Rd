@@ -4,7 +4,12 @@
 \alias{chemi_amos_analytical_qc_pagination}
 \title{Returns information on a batch of Analytical QC documents.  Intended to be used for pagination of the data instead of trying to transfer all the information in one transaction.}
 \usage{
-chemi_amos_analytical_qc_pagination(limit, offset = 0, all_pages = TRUE)
+chemi_amos_analytical_qc_pagination(
+  limit,
+  offset = 0,
+  all_pages = TRUE,
+  max_pages = 100
+)
 }
 \arguments{
 \item{limit}{Limit of records to return.}
@@ -12,6 +17,8 @@ chemi_amos_analytical_qc_pagination(limit, offset = 0, all_pages = TRUE)
 \item{offset}{Offset of the records to return.}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a tibble with results
@@ -27,4 +34,3 @@ chemi_amos_analytical_qc_pagination(limit = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

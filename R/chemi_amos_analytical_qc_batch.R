@@ -25,6 +25,46 @@ chemi_amos_analytical_qc_batch <- function(
   include_source_counts = NULL,
   methodologies = NULL
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_amos_analytical_qc_batch",
+    "pre_request",
+    list(
+      params = list(
+        `base_url` = base_url,
+        `dtxsids` = dtxsids,
+        `include_classyfire` = include_classyfire,
+        `include_functional_uses` = include_functional_uses,
+        `include_source_counts` = include_source_counts,
+        `methodologies` = methodologies,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("base_url" %in% names(req_data$params)) {
+    base_url <- req_data$params[["base_url"]]
+  }
+  if ("dtxsids" %in% names(req_data$params)) {
+    dtxsids <- req_data$params[["dtxsids"]]
+  }
+  if ("include_classyfire" %in% names(req_data$params)) {
+    include_classyfire <- req_data$params[["include_classyfire"]]
+  }
+  if ("include_functional_uses" %in% names(req_data$params)) {
+    include_functional_uses <- req_data$params[["include_functional_uses"]]
+  }
+  if ("include_source_counts" %in% names(req_data$params)) {
+    include_source_counts <- req_data$params[["include_source_counts"]]
+  }
+  if ("methodologies" %in% names(req_data$params)) {
+    methodologies <- req_data$params[["methodologies"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(dtxsids)) {
@@ -46,7 +86,8 @@ chemi_amos_analytical_qc_batch <- function(
     query = base_url,
     endpoint = "amos/analytical_qc_batch_search",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

@@ -23,4 +23,3 @@ chemi_toxprints_toxprints_categories(chemical = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

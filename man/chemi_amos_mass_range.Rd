@@ -25,4 +25,3 @@ chemi_amos_mass_range(lower_mass_limit = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -2,27 +2,22 @@
 % Please edit documentation in R/chemi_webtest.R
 \name{chemi_webtest}
 \alias{chemi_webtest}
-\title{Calculate WebTEST descriptors for one molecule}
+\title{Webtest}
 \usage{
 chemi_webtest(smiles, headers = FALSE, output = c("wide", "raw"))
 }
 \arguments{
-\item{smiles}{One SMILES string or resolvable chemical identifier.}
+\item{smiles}{One SMILES string or resolvable chemical identifier}
 
-\item{headers}{Request upstream descriptor headers.}
+\item{headers}{Request upstream descriptor headers (default: FALSE)}
 
-\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
-provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated one-row tibble or raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-This wrapper resolves identifier-like inputs to SMILES before calling the
-dedicated service. The raw \verb{/api/webtest} endpoint does not perform that
-wrapper-level resolution.
 }
 \examples{
 \dontrun{
@@ -32,4 +27,3 @@ chemi_webtest(smiles = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

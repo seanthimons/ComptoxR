@@ -25,4 +25,3 @@ chemi_amos_get_pdf(record_type = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

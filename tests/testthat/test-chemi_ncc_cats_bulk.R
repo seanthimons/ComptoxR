@@ -31,6 +31,4 @@ test_that("chemi_ncc_cats_bulk passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "ncc_cats")
   expect_equal(call[["wrap"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
-  expect_true("chemicals" %in% names(call))
-  expect_true(is.null(call[["chemicals"]]) || length(call[["chemicals"]]) >= 0)
 })

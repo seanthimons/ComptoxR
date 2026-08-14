@@ -7,18 +7,18 @@
 chemi_resolver_getsimilaritylist(
   query,
   idType = "AnyId",
+  fingerprintName = NULL,
   get_chemicals = NULL,
   main = NULL,
-  fingerprintName = NULL,
-  scoreName = NULL,
-  tverskyI = NULL,
-  rdkitType = NULL,
-  rdkitRadius = NULL,
-  rdkitBits = NULL,
   padelCompute2D = NULL,
   padelCompute3D = NULL,
   padelComputeFingerprints = NULL,
-  toxprintsProfile = NULL
+  rdkitBits = NULL,
+  rdkitRadius = NULL,
+  rdkitType = NULL,
+  scoreName = NULL,
+  toxprintsProfile = NULL,
+  tverskyI = NULL
 )
 }
 \arguments{
@@ -26,21 +26,11 @@ chemi_resolver_getsimilaritylist(
 
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
+\item{fingerprintName}{Optional parameter}
+
 \item{get_chemicals}{Optional parameter}
 
 \item{main}{Optional parameter}
-
-\item{fingerprintName}{Optional parameter}
-
-\item{scoreName}{Optional parameter}
-
-\item{tverskyI}{Optional parameter}
-
-\item{rdkitType}{Optional parameter}
-
-\item{rdkitRadius}{Optional parameter}
-
-\item{rdkitBits}{Optional parameter}
 
 \item{padelCompute2D}{Optional parameter}
 
@@ -48,7 +38,17 @@ chemi_resolver_getsimilaritylist(
 
 \item{padelComputeFingerprints}{Optional parameter}
 
+\item{rdkitBits}{Optional parameter}
+
+\item{rdkitRadius}{Optional parameter}
+
+\item{rdkitType}{Optional parameter}
+
+\item{scoreName}{Optional parameter}
+
 \item{toxprintsProfile}{Optional parameter}
+
+\item{tverskyI}{Optional parameter}
 }
 \value{
 Returns a tibble with results (array of objects)
@@ -67,4 +67,3 @@ chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

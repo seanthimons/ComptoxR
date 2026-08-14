@@ -1,27 +1,21 @@
-#' Calculate descriptors with the aggregate descriptor service
+#' Descriptors
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Identifier-like inputs (DTXSID, DTXCID, and CASRN) are resolved to SMILES
-#' before the request. Raw aggregate endpoints do not perform this wrapper-level
-#' resolution.
-#'
-#' @param smiles One SMILES string or resolvable chemical identifier.
-#' @param type Descriptor engine: `padel`, `rdkit`, `mordred`, or `webtest`.
-#' @param headers Request upstream descriptor headers. Wide output always requests
-#'   or deterministically generates headers.
-#' @param format Response format: `JSON`, `CSV`, or `TSV`.
-#' @param timeout Optional upstream calculation timeout.
-#' @param output Output contract: `wide` returns a validated tibble; `raw`
-#'   returns the unformatted payload with provenance attributes.
-#' @return A validated one-row tibble or a raw payload with provenance.
+#' @param smiles One SMILES string or resolvable chemical identifier
+#' @param type Descriptor engine: padel, rdkit, mordred, or webtest
+#' @param headers Request upstream descriptor headers (default: FALSE)
+#' @param format Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)
+#' @param timeout Optional upstream calculation timeout
+#' @param output Output contract: validated wide tibble or raw payload
+#' @return Returns a tibble with results
 #' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_descriptors(smiles = "DTXSID7020182", type = "padel")
+#' chemi_descriptors(smiles = "DTXSID7020182")
 #' }
 chemi_descriptors <- function(
   smiles,
@@ -31,17 +25,19 @@ chemi_descriptors <- function(
   timeout = NULL,
   output = c("wide", "raw")
 ) {
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_descriptors",
     "pre_request",
     list(
       params = list(
-        smiles = smiles,
-        type = type,
-        headers = headers,
-        format = format,
-        timeout = timeout,
-        output = output
+        `smiles` = smiles,
+        `type` = type,
+        `headers` = headers,
+        `format` = format,
+        `timeout` = timeout,
+        `output` = output,
+        `server` = server
       )
     )
   )
@@ -67,33 +63,25 @@ chemi_descriptors <- function(
   return(result)
 }
 
-#' Calculate descriptors for multiple chemicals
+#' Descriptors
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' Every input position is represented in wide output, including duplicates,
-#' missing inputs, unresolved identifiers, and failed structures.
-#'
-#' @param query Chemical identifiers or structures.
-#' @param type Descriptor engine: `padel`, `rdkit`, `mordred`, or `webtest`.
-#' @param chemIdType Input identifier type accepted by the aggregate service.
-#' @param headers Request upstream descriptor headers. Wide output always requests
-#'   or deterministically generates headers.
-#' @param format Response format: `JSON`, `CSV`, or `TSV`.
-#' @param timeout Optional upstream calculation timeout.
-#' @param output Output contract: `wide` returns a validated tibble; `raw`
-#'   returns the unformatted payload with provenance attributes.
-#' @return A validated tibble with one row per input or a raw payload.
+#' @param query Chemical identifiers or structures
+#' @param type Descriptor engine: padel, rdkit, mordred, or webtest
+#' @param chemIdType Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
+#' @param format Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)
+#' @param headers Request descriptor headers
+#' @param timeout Optional upstream calculation timeout
+#' @param output Output contract: validated wide tibble or raw payload
+#' @return Returns a tibble with results
 #' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_descriptors_bulk(
-#'   query = c("DTXSID7020182", "CCO"),
-#'   type = "padel"
-#' )
+#' chemi_descriptors_bulk(query = "DTXSID1024122")
 #' }
 chemi_descriptors_bulk <- function(
   query,
@@ -104,18 +92,20 @@ chemi_descriptors_bulk <- function(
   timeout = NULL,
   output = c("wide", "raw")
 ) {
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_descriptors_bulk",
     "pre_request",
     list(
       params = list(
-        query = query,
-        type = type,
-        chemIdType = chemIdType,
-        headers = headers,
-        format = format,
-        timeout = timeout,
-        output = output
+        `query` = query,
+        `type` = type,
+        `chemIdType` = chemIdType,
+        `headers` = headers,
+        `format` = format,
+        `timeout` = timeout,
+        `output` = output,
+        `server` = server
       )
     )
   )

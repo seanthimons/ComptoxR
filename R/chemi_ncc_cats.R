@@ -62,7 +62,6 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
   return(result)
 }
 
-
 #' Generate NCC categories for multiple molecules
 #'
 #' @description
@@ -95,12 +94,11 @@ chemi_ncc_cats_bulk <- function(chemicals = NULL) {
   }
 
   result <- generic_chemi_request(
-    server = server,
     query = chemicals,
     endpoint = "ncc_cats",
     wrap = FALSE,
     tidy = FALSE,
-    chemicals = chemicals
+    server = server
   )
 
   # Additional post-processing can be added here

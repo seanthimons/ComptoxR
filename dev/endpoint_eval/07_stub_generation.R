@@ -8,6 +8,28 @@
   if (is.null(x) || (length(x) == 1 && is.na(x))) default else x
 }
 
+stubgen_value_missing <- function(value) {
+  is.null(value) ||
+    (is.atomic(value) && length(value) == 1L && is.na(value))
+}
+
+stubgen_example_value <- function(value) {
+  if (is.list(value)) {
+    return(paste(deparse(value, width.cutoff = 500L), collapse = " "))
+  }
+  as.character(value)[1]
+}
+
+stubgen_read_hook_config <- function() {
+  if (!exists("read_hook_configs", mode = "function")) {
+    source(here::here("R", "hook_registry.R"), local = FALSE)
+  }
+  read_hook_configs(
+    here::here("inst", "hook_config.yml"),
+    here::here("inst", "hook_config_generated.yml")
+  )
+}
+
 stubgen_formal_names <- function(fn_signature) {
   fn_signature <- fn_signature %|NA|% ""
   if (!nzchar(trimws(fn_signature))) {
@@ -288,7 +310,21 @@ stubgen_configured_parameter_order <- function(fn_config, fn_signature) {
 
   names <- vapply(ordered, `[[`, character(1), "name")
   positions <- vapply(ordered, `[[`, numeric(1), "order")
-  unique(names[order(positions, match(names, formal_names))])
+  configured_order <- order(positions, match(names, formal_names))
+  names <- names[configured_order]
+  positions <- positions[configured_order]
+
+  result <- setdiff(formal_names, names)
+  used_positions <- list()
+  for (i in seq_along(names)) {
+    position <- max(1L, as.integer(positions[[i]]))
+    position_key <- as.character(position)
+    same_position <- used_positions[[position_key]] %||% 0L
+    after <- min(position - 1L + same_position, length(result))
+    result <- append(result, names[[i]], after = after)
+    used_positions[[position_key]] <- same_position + 1L
+  }
+  unique(result)
 }
 
 stubgen_reorder_param_docs <- function(param_docs, formal_names) {
@@ -431,7 +467,8 @@ stubgen_build_request_override <- function(
   request_override,
   hook_pre_request,
   hook_post_response,
-  pagination_call_params
+  pagination_call_params,
+  stage_server_call
 ) {
   if (is.null(request_override)) {
     return(NULL)
@@ -481,7 +518,7 @@ stubgen_build_request_override <- function(
     options = request_options,
     sid_label = "{sid_label}",
     array_payload = TRUE,
-    tidy = FALSE{pagination_call_params}
+    tidy = FALSE{stage_server_call}{pagination_call_params}
   )
 
 {hook_post_response}  # Additional post-processing can be added here
@@ -634,35 +671,7 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 #' @return Character string containing complete function definition.
 #' @export
 build_function_stub <- function(fn, ..., schema_stage = "public") {
-  result <- build_function_stub_impl(fn = fn, ..., schema_stage = schema_stage)
-
-  # Non-public functions thread a hook-supplied `server` (see the has_hooks
-  # block: enforce_stage_server sets req_data$params$server, which the generated
-  # writeback assigns to a local `server`). Route the request call through that
-  # local so the staging/development server URL is actually used. Prod-stage
-  # functions and any body that never wrote back `server` are returned verbatim.
-  if (is.na(result) || identical(schema_stage, "public")) {
-    return(result)
-  }
-  if (!grepl('req_data$params[["server"]]', result, fixed = TRUE)) {
-    return(result)
-  }
-  if (grepl('server = "chemi_burl"', result, fixed = TRUE)) {
-    result <- gsub('server = "chemi_burl"', "server = server", result, fixed = TRUE)
-  } else if (!grepl("server = server", result, fixed = TRUE)) {
-    result <- sub(
-      "(generic_(?:chemi_)?request\\(\\n)",
-      "\\1    server = server,\n",
-      result,
-      perl = TRUE
-    )
-  }
-  if (!grepl("server = server", result, fixed = TRUE)) {
-    cli::cli_abort(
-      "Non-public {.fn {fn}} threads a server override but no request call could be routed through it."
-    )
-  }
-  result
+  build_function_stub_impl(fn = fn, ..., schema_stage = schema_stage)
 }
 
 build_function_stub_impl <- function(
@@ -693,7 +702,13 @@ build_function_stub_impl <- function(
   # Emitted as the @apiStage doc tag; non-public stages also drive the
   # server-swap hook wiring below.
   schema_stage <- schema_stage %|NA|% "public"
-  is_non_prod_stage <- !identical(schema_stage, "public")
+  hook_config <- stubgen_read_hook_config()
+  fn_config <- hook_config[[fn]]
+  has_hooks <- !is.null(fn_config)
+  has_stage_server_hook <- isTRUE(has_hooks) &&
+    "enforce_stage_server" %in% (fn_config$pre_request %||% character())
+  stage_server_call <- if (has_stage_server_hook) ',\n    server = server' else ""
+  chemi_server_value <- if (has_stage_server_hook) "server" else '"chemi_burl"'
 
   # Format batch_limit for code
   # For POST methods with bulk requests, use environment variable for runtime configuration
@@ -760,7 +775,10 @@ build_function_stub_impl <- function(
 
   # Build server and auth params for chemi/epi GET endpoints
   chemi_server_params <- if (isTRUE(is_chemi_get)) {
-    ',\n    server = "chemi_burl",\n    auth = FALSE'
+    paste0(
+      if (has_stage_server_hook) ',\n    server = server' else ',\n    server = "chemi_burl"',
+      ",\n    auth = FALSE"
+    )
   } else if (is_epi_get) {
     ',\n    server = "epi_burl",\n    auth = FALSE'
   } else {
@@ -780,11 +798,13 @@ build_function_stub_impl <- function(
   #   - "path": GET with path parameters (standard path-based endpoint)
   #   - "query_only": GET without path parameters (static endpoint, query params only)
   if (!is.null(request_type) && !is.na(request_type) && nzchar(request_type)) {
-    is_body_only <- request_type == "json"
+    is_path_body <- request_type == "json" && isTRUE(path_param_info$has_any_path_params)
+    is_body_only <- request_type == "json" && !is_path_body
     # NEW: Simple body types are also body-only
     is_simple_body <- body_schema_type %in% c("string", "string_array")
     is_query_only <- request_type == "query_only" # "path" falls through to standard case
   } else {
+    is_path_body <- FALSE
     # Legacy detection for backward compatibility
     is_query_only <- (!is.null(batch_limit) &&
       !is.na(batch_limit) &&
@@ -800,7 +820,22 @@ build_function_stub_impl <- function(
     is_simple_body <- body_schema_type %in% c("string", "string_array")
   }
 
-  if (isTRUE(is_body_only)) {
+  if (isTRUE(is_path_body)) {
+    primary_param <- path_param_info$primary_param
+    fn_signature <- paste(
+      c(path_param_info$fn_signature, body_param_info$fn_signature)[
+        nzchar(c(path_param_info$fn_signature, body_param_info$fn_signature))
+      ],
+      collapse = ", "
+    )
+    combined_calls <- ""
+    param_docs <- paste0(path_param_info$param_docs, body_param_info$param_docs)
+    example_value <- example_query
+    if (!stubgen_value_missing(path_param_info$primary_example)) {
+      example_value <- stubgen_example_value(path_param_info$primary_example)
+    }
+    example_value_vec <- paste0('"', example_value, '"')
+  } else if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
     primary_param <- body_param_info$primary_param %||% "data"
     fn_signature <- body_param_info$fn_signature
@@ -811,10 +846,9 @@ build_function_stub_impl <- function(
     example_value <- example_query
     if (
       !is.null(body_param_info$primary_example) &&
-        length(body_param_info$primary_example) > 0 &&
-        !is.na(body_param_info$primary_example[1])
+        !stubgen_value_missing(body_param_info$primary_example)
     ) {
-      example_value <- as.character(body_param_info$primary_example[1])
+      example_value <- stubgen_example_value(body_param_info$primary_example)
     }
 
     # Build example_value_vec for example call generation
@@ -840,10 +874,9 @@ build_function_stub_impl <- function(
     example_value <- example_query
     if (
       !is.null(query_param_info$primary_example) &&
-        length(query_param_info$primary_example) > 0 &&
-        !is.na(query_param_info$primary_example[1])
+        !stubgen_value_missing(query_param_info$primary_example)
     ) {
-      example_value <- as.character(query_param_info$primary_example[1])
+      example_value <- stubgen_example_value(query_param_info$primary_example)
     }
 
     # Build example_value_vec for example call generation
@@ -897,10 +930,9 @@ build_function_stub_impl <- function(
     example_value <- example_query
     if (
       !is.null(path_param_info$primary_example) &&
-        length(path_param_info$primary_example) > 0 &&
-        !is.na(path_param_info$primary_example[1])
+        !stubgen_value_missing(path_param_info$primary_example)
     ) {
-      example_value <- as.character(path_param_info$primary_example[1])
+      example_value <- stubgen_example_value(path_param_info$primary_example)
     }
 
     # For POST requests, use sample from testing_chemicals
@@ -952,99 +984,97 @@ build_function_stub_impl <- function(
       fn_signature <- gsub("\\bpageNumber(?!\\s*=)", "pageNumber = 1", fn_signature, perl = TRUE)
     }
 
-    # 2. Append all_pages = TRUE to end of signature
+    # 2. Append the automatic pagination controls to the signature.
     fn_signature_check <- fn_signature %|NA|% ""
     if (nzchar(fn_signature_check)) {
-      fn_signature <- paste0(fn_signature, ", all_pages = TRUE")
+      fn_signature <- paste0(fn_signature, ", all_pages = TRUE, max_pages = 100")
     } else {
-      fn_signature <- "all_pages = TRUE"
+      fn_signature <- "all_pages = TRUE, max_pages = 100"
     }
 
     # 3. Add @param all_pages documentation
     param_docs <- paste0(
       param_docs,
-      "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n"
+      "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n",
+      "#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.\n"
     )
 
     # 4. Build pagination call params string (inserted into glue templates)
     pagination_call_params <- paste0(
       ",\n    paginate = all_pages",
-      ",\n    max_pages = 100",
+      ",\n    max_pages = max_pages",
       ',\n    pagination_strategy = "',
       pagination_strategy,
-      '"'
+      '"',
+      if (
+        identical(pagination_strategy, "cursor") &&
+          !stubgen_value_missing(pagination_metadata$cursor_location)
+      ) {
+        paste0(',\n    pagination_cursor_location = "', pagination_metadata$cursor_location, '"')
+      } else {
+        ""
+      }
     )
   }
 
   # =========================================================================
   # Hook Parameter Injection (Phase 28)
   # =========================================================================
-  hook_config_path <- here::here("inst", "hook_config.yml")
-  has_hooks <- FALSE
-  fn_config <- NULL
+  if (isTRUE(has_hooks)) {
+    if (!is.null(fn_config$extra_params)) {
+      for (param_name in names(fn_config$extra_params)) {
+        param_spec <- fn_config$extra_params[[param_name]]
+        formal_names <- stubgen_formal_names(fn_signature)
 
-  if (file.exists(hook_config_path)) {
-    hook_config <- yaml::read_yaml(hook_config_path)
-    fn_config <- hook_config[[fn]]
-
-    if (!is.null(fn_config)) {
-      has_hooks <- TRUE
-
-      if (!is.null(fn_config$extra_params)) {
-        for (param_name in names(fn_config$extra_params)) {
-          param_spec <- fn_config$extra_params[[param_name]]
-          formal_names <- stubgen_formal_names(fn_signature)
-
-          # 1. Append to fn_signature (same pattern as pagination all_pages)
-          if (!param_name %in% formal_names) {
-            param_code <- if (isTRUE(param_spec$required)) {
-              param_name
-            } else {
-              paste0(param_name, " = ", param_spec$default)
-            }
-            fn_signature_check <- fn_signature %|NA|% ""
-            if (nzchar(fn_signature_check)) {
-              fn_signature <- paste0(fn_signature, ", ", param_code)
-            } else {
-              fn_signature <- param_code
-            }
+        # 1. Append to fn_signature (same pattern as pagination all_pages)
+        if (!param_name %in% formal_names) {
+          param_code <- if (isTRUE(param_spec$required)) {
+            param_name
+          } else {
+            paste0(param_name, " = ", param_spec$default)
           }
-
-          # 2. Add @param doc only for newly injected parameters.
-          if (!param_name %in% formal_names) {
-            param_docs <- paste0(
-              param_docs,
-              "#' @param ",
-              param_name,
-              " ",
-              param_spec$description,
-              "\n"
-            )
+          fn_signature_check <- fn_signature %|NA|% ""
+          if (nzchar(fn_signature_check)) {
+            fn_signature <- paste0(fn_signature, ", ", param_code)
+          } else {
+            fn_signature <- param_code
           }
         }
-      }
 
-      fn_signature <- stubgen_apply_signature_overrides(
-        fn_signature,
-        fn_config$signature_overrides
-      )
-      configured_order <- stubgen_configured_parameter_order(
-        fn_config,
-        fn_signature
-      )
-      fn_signature <- stubgen_apply_signature_order(
-        fn_signature,
-        c(configured_order, setdiff(stubgen_formal_names(fn_signature), configured_order))
-      )
-      fn_signature <- stubgen_apply_signature_order(
-        fn_signature,
-        fn_config$signature_order
-      )
-      param_docs <- stubgen_reorder_param_docs(
-        param_docs,
-        stubgen_formal_names(fn_signature)
-      )
+        # 2. Add @param doc only for newly injected parameters.
+        if (!param_name %in% formal_names) {
+          param_docs <- paste0(
+            param_docs,
+            "#' @param ",
+            param_name,
+            " ",
+            param_spec$description,
+            "\n"
+          )
+        }
+      }
     }
+
+    fn_signature <- stubgen_apply_signature_overrides(
+      fn_signature,
+      fn_config$signature_overrides
+    )
+    configured_order <- stubgen_configured_parameter_order(
+      fn_config,
+      fn_signature
+    )
+    fn_signature <- stubgen_apply_signature_order(
+      fn_signature,
+      c(configured_order, setdiff(stubgen_formal_names(fn_signature), configured_order))
+    )
+    fn_signature <- stubgen_apply_signature_order(
+      fn_signature,
+      fn_config$signature_order
+    )
+    param_docs <- stubgen_reorder_param_docs(
+      param_docs,
+      stubgen_formal_names(fn_signature)
+    )
   }
 
   # =========================================================================
@@ -1061,15 +1091,13 @@ build_function_stub_impl <- function(
     fn_config <- hook_config[[fn]]
 
     uses_chemical_objects <- identical(wrapper_fn, "generic_chemi_request") &&
+      !isTRUE(is_path_body) &&
       is.null(fn_config$request_template) &&
-      !isTRUE(fn_config$request_override$array_payload)
+      !isTRUE(fn_config$request_override$array_payload) &&
+      "resolve_query_to_chemical_records" %in% (fn_config$pre_request %||% character())
     hook_extra_params <- if (uses_chemical_objects) "chemicals" else character(0)
-    # Non-public functions carry the enforce_stage_server hook, which sets
-    # req_data$params$server. Thread `server` through the writeback (initialised
-    # to the wrapper default) so the swapped URL reaches the request call. The
-    # thin build_function_stub() wrapper routes the wrapper call through it.
     hook_param_inits <- list()
-    if (isTRUE(is_non_prod_stage)) {
+    if (isTRUE(has_stage_server_hook)) {
       hook_extra_params <- unique(c(hook_extra_params, "server"))
       hook_param_inits <- list(
         server = if (grepl("^cc_", fn)) {
@@ -1091,7 +1119,11 @@ build_function_stub_impl <- function(
       param_inits = hook_param_inits
     )
     hook_post_response <- stubgen_build_post_hook(fn, fn_config, fn_signature)
-    if (nzchar(hook_pre_request) && identical(wrapper_fn, "generic_chemi_request")) {
+    if (
+      nzchar(hook_pre_request) &&
+        identical(wrapper_fn, "generic_chemi_request") &&
+        isTRUE(uses_chemical_objects)
+    ) {
       hook_chemi_chemicals_arg <- ",\n    chemicals = chemicals"
     }
   }
@@ -1143,7 +1175,8 @@ build_function_stub_impl <- function(
     request_override = fn_config$request_override,
     hook_pre_request = hook_pre_request,
     hook_post_response = hook_post_response,
-    pagination_call_params = pagination_call_params
+    pagination_call_params = pagination_call_params,
+    stage_server_call = stage_server_call
   )
   if (!is.null(request_override_body)) {
     override_result <- paste0(
@@ -1210,8 +1243,11 @@ build_function_stub_impl <- function(
 
     # Append all_pages param when pagination is active
     if (nzchar(pagination_call_params)) {
-      fn_signature_resolver <- paste0(fn_signature_resolver, ", all_pages = TRUE")
-      resolver_pagination_param_doc <- "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n"
+      fn_signature_resolver <- paste0(fn_signature_resolver, ", all_pages = TRUE, max_pages = 100")
+      resolver_pagination_param_doc <- paste0(
+        "#' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.\n",
+        "#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.\n"
+      )
     } else {
       resolver_pagination_param_doc <- ""
     }
@@ -1283,7 +1319,18 @@ build_function_stub_impl <- function(
     }
 
     resolver_hook_pre_request <- if (isTRUE(has_hooks)) {
-      stubgen_build_pre_hook(fn, hook_config[[fn]], fn_signature_resolver, additional_params = "chemicals")
+      resolver_extra_params <- c(
+        "chemicals",
+        if (has_stage_server_hook) "server" else character()
+      )
+      resolver_param_inits <- if (has_stage_server_hook) list(server = '"chemi_burl"') else list()
+      stubgen_build_pre_hook(
+        fn,
+        hook_config[[fn]],
+        fn_signature_resolver,
+        additional_params = resolver_extra_params,
+        param_inits = resolver_param_inits
+      )
     } else {
       ""
     }
@@ -1327,7 +1374,7 @@ build_function_stub_impl <- function(
     query = query,
     endpoint = "{endpoint}",
     options = extra_options,
-    tidy = FALSE{resolver_chemicals_arg}{resolver_query_params_call}{pagination_call_params}
+    tidy = FALSE{resolver_chemicals_arg}{resolver_query_params_call}{stage_server_call}{pagination_call_params}
   )
 
 {resolver_hook_post_response}  # Additional post-processing can be added here
@@ -1432,6 +1479,28 @@ build_function_stub_impl <- function(
       query_params_code <- query_param_info$params_code %||% ""
     }
 
+    # Simple-body endpoints replace the schema-derived signature with `query`.
+    # Rebuild the stage hook after that replacement so it does not reference
+    # discarded body-property parameters.
+    if (isTRUE(has_hooks)) {
+      simple_additional_params <- if (isTRUE(has_stage_server_hook)) {
+        "server"
+      } else {
+        character()
+      }
+      hook_pre_request <- stubgen_build_pre_hook(
+        fn,
+        fn_config,
+        fn_signature,
+        additional_params = simple_additional_params,
+        param_inits = if (isTRUE(has_stage_server_hook)) {
+          list(server = '"chemi_burl"')
+        } else {
+          list()
+        }
+      )
+    }
+
     # Build example value
     if (isTRUE(method == "POST")) {
       dtxsids <- sample_test_dtxsids(n = 1, custom_list = config$example_dtxsids %||% NULL)
@@ -1472,7 +1541,7 @@ build_function_stub_impl <- function(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){query_params_call}{pagination_call_params}
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){stage_server_call}{query_params_call}{pagination_call_params}
   )
 
   return(result)
@@ -1489,7 +1558,7 @@ build_function_stub_impl <- function(
     query = query,
     endpoint = "{endpoint}",
     method = "{method}",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){query_params_call}{pagination_call_params}
+    batch_limit = as.numeric(Sys.getenv("batch_limit", "100")){stage_server_call}{query_params_call}{pagination_call_params}
   )
 
   return(result)
@@ -1503,7 +1572,61 @@ build_function_stub_impl <- function(
     return(paste0(roxygen_header, "\n", fn_body, "\n\n"))
   }
 
-  if (isTRUE(is_body_only)) {
+  if (isTRUE(is_path_body)) {
+    body_params <- stubgen_formal_names(body_param_info$fn_signature)
+    required_body_params <- body_params[
+      !grepl(
+        "=",
+        trimws(strsplit(body_param_info$fn_signature, ",")[[1]]),
+        fixed = TRUE
+      )
+    ]
+    optional_body_params <- setdiff(body_params, required_body_params)
+    body_lines <- c("  # Build request body", "  request_body <- list()")
+    for (param_name in required_body_params) {
+      body_lines <- c(body_lines, paste0("  request_body$", param_name, " <- ", param_name))
+    }
+    for (param_name in optional_body_params) {
+      body_lines <- c(
+        body_lines,
+        paste0("  if (!is.null(", param_name, ")) request_body$", param_name, " <- ", param_name)
+      )
+    }
+    path_names <- stubgen_formal_names(path_param_info$fn_signature)
+    path_call <- paste0(
+      ",\n    path_params = c(",
+      paste(path_names, "=", path_names, collapse = ", "),
+      ")"
+    )
+    path_body_server_call <- if (identical(wrapper_fn, "generic_chemi_request")) {
+      paste0(
+        if (has_stage_server_hook) ',\n    server = server' else ',\n    server = "chemi_burl"',
+        ",\n    auth = FALSE,\n    tidy = FALSE"
+      )
+    } else {
+      ""
+    }
+
+    fn_body <- glue::glue(
+      '
+{fn} <- function({fn_signature}) {{
+{hook_pre_request}{paste(body_lines, collapse = "\n")}
+  result <- generic_request(
+    query = NULL,
+    endpoint = "{endpoint}",
+    method = "{method}",
+    batch_limit = 0{path_body_server_call}{path_call},
+    body = request_body{content_type_call}{pagination_call_params}
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+'
+    )
+  } else if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
       # Extract parameter info from body_param_info
@@ -1589,7 +1712,7 @@ build_function_stub_impl <- function(
   result <- generic_chemi_request(
     query = {query_param},
     endpoint = "{endpoint}"{options_call}{wrap_param},
-    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{stage_server_call}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1723,7 +1846,7 @@ build_function_stub_impl <- function(
 {fn} <- function({fn_signature}) {{
 {hook_pre_request}{query_param_info$params_code}  result <- generic_chemi_request(
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{stage_server_call}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1807,7 +1930,7 @@ build_function_stub_impl <- function(
         fn_body <- glue::glue(
           '
 {fn} <- function({fn_signature}) {{
-  result <- generic_request(
+{hook_pre_request}  result <- generic_request(
     endpoint = "{endpoint}",
     method = "{method}",
     batch_limit = {effective_batch_limit}{chemi_server_params}{chemi_tidy_param}{content_type_call}{direct_params}{pagination_call_params}
@@ -1847,7 +1970,7 @@ build_function_stub_impl <- function(
 {hook_pre_request}{query_param_info$params_code}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}"{combined_calls},
-    tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
+    tidy = FALSE{hook_chemi_chemicals_arg}{stage_server_call}{pagination_call_params}
   )
 
   {hook_post_response}# Additional post-processing can be added here
@@ -1927,7 +2050,7 @@ build_function_stub_impl <- function(
 {hook_pre_request}  result <- generic_chemi_request(
     query = {primary_param},
     endpoint = "{endpoint}",
-    server = "chemi_burl",
+    server = {chemi_server_value},
     auth = FALSE,
     tidy = FALSE{hook_chemi_chemicals_arg}{pagination_call_params}
   )
@@ -2145,19 +2268,14 @@ render_endpoint_stubs <- function(
     dplyr::mutate(
       fn = dplyr::coalesce(fn, vapply(file, fn_transform, character(1))),
       endpoint = route,
-      title = dplyr::if_else(
+      title = trimws(dplyr::if_else(
         nzchar(summary %||% ""),
         summary,
         tools::toTitleCase(gsub("[/_-]", " ", route))
-      )
+      ))
     )
 
-  hook_config_path <- here::here("inst", "hook_config.yml")
-  hook_config <- if (file.exists(hook_config_path)) {
-    yaml::read_yaml(hook_config_path)
-  } else {
-    list()
-  }
+  hook_config <- stubgen_read_hook_config()
 
   # Parse parameters row by row
   # We use pmap to avoid rowwise() issues

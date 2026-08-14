@@ -20,4 +20,3 @@ chemi_safety_hcodes()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

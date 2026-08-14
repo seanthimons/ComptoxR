@@ -11,7 +11,7 @@ chemi_hazard(query, full = TRUE, format = c("compact", "tidy", "raw"))
 
 \item{full}{Optional parameter (default: TRUE)}
 
-\item{format}{Output format. One of "compact", "tidy", or "raw".}
+\item{format}{Output format. One of 'compact', 'tidy', or 'raw'}
 }
 \value{
 Returns a tibble with results
@@ -27,4 +27,3 @@ chemi_hazard(query = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

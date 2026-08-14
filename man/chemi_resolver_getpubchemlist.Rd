@@ -8,7 +8,8 @@ chemi_resolver_getpubchemlist(
   query,
   idType = "AnyId",
   section = NULL,
-  all_pages = TRUE
+  all_pages = TRUE,
+  max_pages = 100
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ chemi_resolver_getpubchemlist(
 \item{section}{Optional parameter}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a list with result object
@@ -37,4 +40,3 @@ chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

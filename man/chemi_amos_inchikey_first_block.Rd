@@ -23,4 +23,3 @@ chemi_amos_inchikey_first_block(first_block = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

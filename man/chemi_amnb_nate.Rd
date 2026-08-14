@@ -23,4 +23,3 @@ chemi_amnb_nate(smiles = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

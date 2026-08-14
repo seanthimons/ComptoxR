@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_padel.R
 \name{chemi_padel_bulk}
 \alias{chemi_padel_bulk}
-\title{Calculate PaDEL descriptors for multiple molecules}
+\title{Padel}
 \usage{
 chemi_padel_bulk(
   query,
@@ -15,33 +15,31 @@ chemi_padel_bulk(
 )
 }
 \arguments{
-\item{query}{Chemical structures or resolvable identifiers.}
+\item{query}{Chemical structures or resolvable identifiers}
 
-\item{x2d}{Calculate two-dimensional descriptors.}
+\item{x2d}{Calculate two-dimensional descriptors}
 
-\item{x3d}{Calculate three-dimensional descriptors.}
+\item{x3d}{Calculate three-dimensional descriptors}
 
-\item{fp}{Calculate fingerprints.}
+\item{fp}{Calculate fingerprints}
 
-\item{headers}{Request upstream descriptor headers.}
+\item{headers}{Request descriptor headers}
 
-\item{timeout}{Optional upstream calculation timeout.}
+\item{timeout}{Optional upstream calculation timeout}
 
-\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
-provenance attributes.}
+\item{output}{Output contract: validated wide tibble or raw payload}
 }
 \value{
-A validated tibble with one row per input or raw payload.
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_padel_bulk(query = c("DTXSID7020182", "CCO"))
+chemi_padel_bulk(query = "DTXSID1024122")
 }
 }
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

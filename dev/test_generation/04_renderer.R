@@ -100,8 +100,7 @@ tg_render_contract_test <- function(metadata) {
     "  call <- calls[[1L]]",
     "  expect_true(is.list(call))",
     assertions,
-    "})",
-    ""
+    "})"
   )
 
   paste(lines, collapse = "\n")

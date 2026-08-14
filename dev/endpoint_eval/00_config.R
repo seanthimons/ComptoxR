@@ -28,7 +28,7 @@ PAGINATION_REGISTRY <- list(
     strategy = "cursor",
     route_pattern = "_keyset_pagination/\\{[^}]+\\}$",
     param_names = c("limit", "cursor"),
-    param_location = c("path", "query"),
+    param_location = c("path", "query", "body"),
     description = "AMOS-style keyset/cursor pagination"
   ),
   page_number_query = list(

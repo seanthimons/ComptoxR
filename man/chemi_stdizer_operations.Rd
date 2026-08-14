@@ -20,4 +20,3 @@ chemi_stdizer_operations()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

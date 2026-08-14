@@ -25,4 +25,3 @@ chemi_pfas_cats_bulk(chemicals = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

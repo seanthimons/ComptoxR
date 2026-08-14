@@ -44,7 +44,6 @@ chemi_pfas_atlas <- function(smiles) {
   return(result)
 }
 
-
 #' Generate PFAS Atlas categories for multiple molecules
 #'
 #' @description
@@ -85,12 +84,11 @@ chemi_pfas_atlas_bulk <- function(chemicals = NULL, smiles = NULL) {
     options$smiles <- smiles
   }
   result <- generic_chemi_request(
-    server = server,
     query = chemicals,
     endpoint = "pfas_atlas",
     options = options,
     tidy = FALSE,
-    chemicals = chemicals
+    server = server
   )
 
   # Additional post-processing can be added here

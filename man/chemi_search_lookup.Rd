@@ -37,4 +37,3 @@ chemi_search_lookup(inputType = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -12,11 +12,19 @@
 #' chemi_stdizer_groups()
 #' }
 chemi_stdizer_groups <- function() {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_stdizer_groups", "pre_request", list(params = list(`server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   result <- generic_request(
     endpoint = "stdizer/groups",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE
   )
@@ -25,7 +33,6 @@ chemi_stdizer_groups <- function() {
 
   return(result)
 }
-
 
 #' Stdizer Groups
 #'
@@ -64,6 +71,66 @@ chemi_stdizer_groups_bulk <- function(
   type = NULL,
   value = NULL
 ) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_stdizer_groups_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `acl` = acl,
+        `description` = description,
+        `flag` = flag,
+        `frozen` = frozen,
+        `id` = id,
+        `invalid` = invalid,
+        `invalidMessage` = invalidMessage,
+        `operations` = operations,
+        `text` = text,
+        `type` = type,
+        `value` = value,
+        `server` = server
+      )
+    )
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("acl" %in% names(req_data$params)) {
+    acl <- req_data$params[["acl"]]
+  }
+  if ("description" %in% names(req_data$params)) {
+    description <- req_data$params[["description"]]
+  }
+  if ("flag" %in% names(req_data$params)) {
+    flag <- req_data$params[["flag"]]
+  }
+  if ("frozen" %in% names(req_data$params)) {
+    frozen <- req_data$params[["frozen"]]
+  }
+  if ("id" %in% names(req_data$params)) {
+    id <- req_data$params[["id"]]
+  }
+  if ("invalid" %in% names(req_data$params)) {
+    invalid <- req_data$params[["invalid"]]
+  }
+  if ("invalidMessage" %in% names(req_data$params)) {
+    invalidMessage <- req_data$params[["invalidMessage"]]
+  }
+  if ("operations" %in% names(req_data$params)) {
+    operations <- req_data$params[["operations"]]
+  }
+  if ("text" %in% names(req_data$params)) {
+    text <- req_data$params[["text"]]
+  }
+  if ("type" %in% names(req_data$params)) {
+    type <- req_data$params[["type"]]
+  }
+  if ("value" %in% names(req_data$params)) {
+    value <- req_data$params[["value"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Build options list for additional parameters
   options <- list()
   if (!is.null(description)) {
@@ -100,7 +167,8 @@ chemi_stdizer_groups_bulk <- function(
     query = acl,
     endpoint = "stdizer/groups",
     options = options,
-    tidy = FALSE
+    tidy = FALSE,
+    server = server
   )
 
   # Additional post-processing can be added here

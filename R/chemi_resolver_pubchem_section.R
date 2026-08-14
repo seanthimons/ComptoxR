@@ -15,6 +15,27 @@
 #' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
 chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_resolver_pubchem_section",
+    "pre_request",
+    list(params = list(`query` = query, `idType` = idType, `section` = section, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("idType" %in% names(req_data$params)) {
+    idType <- req_data$params[["idType"]]
+  }
+  if ("section" %in% names(req_data$params)) {
+    section <- req_data$params[["section"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {
@@ -30,7 +51,7 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
     endpoint = "resolver/pubchem-section",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -40,7 +61,6 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 
   return(result)
 }
-
 
 #' Resolver Pubchem Section
 #'
@@ -63,10 +83,13 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 #' }
 chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section = NULL) {
   chemicals <- NULL
+  server <- "chemi_burl"
   req_data <- run_hook(
     "chemi_resolver_pubchem_section_bulk",
     "pre_request",
-    list(params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals))
+    list(
+      params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals, `server` = server)
+    )
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
@@ -83,6 +106,9 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
 
   # Build options from additional parameters
   extra_options <- list()
@@ -95,7 +121,8 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
     endpoint = "resolver/pubchem-section",
     options = extra_options,
     tidy = FALSE,
-    chemicals = chemicals
+    chemicals = chemicals,
+    server = server
   )
 
   # Additional post-processing can be added here

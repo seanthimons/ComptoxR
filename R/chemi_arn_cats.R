@@ -55,7 +55,6 @@ chemi_arn_cats <- function(smiles, model = "RF") {
   return(result)
 }
 
-
 #' Generate groups for multiple molecules
 #'
 #' @description
@@ -103,12 +102,11 @@ chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
     options$smiles <- smiles
   }
   result <- generic_chemi_request(
-    server = server,
     query = chemicals,
     endpoint = "arn_cats",
     options = options,
     tidy = FALSE,
-    chemicals = chemicals
+    server = server
   )
 
   # Additional post-processing can be added here

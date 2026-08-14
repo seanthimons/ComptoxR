@@ -27,4 +27,3 @@ chemi_chet_reaction(query = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{staging} API schema.
 }
-

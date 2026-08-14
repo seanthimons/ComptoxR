@@ -15,6 +15,27 @@
 #' chemi_resolver_mesh(query = "DTXSID7020182")
 #' }
 chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
+  server <- "chemi_burl"
+  req_data <- run_hook(
+    "chemi_resolver_mesh",
+    "pre_request",
+    list(params = list(`query` = query, `idType` = idType, `fuzzy` = fuzzy, `server` = server))
+  )
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("query" %in% names(req_data$params)) {
+    query <- req_data$params[["query"]]
+  }
+  if ("idType" %in% names(req_data$params)) {
+    idType <- req_data$params[["idType"]]
+  }
+  if ("fuzzy" %in% names(req_data$params)) {
+    fuzzy <- req_data$params[["fuzzy"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {
@@ -30,7 +51,7 @@ chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
     endpoint = "resolver/mesh",
     method = "GET",
     batch_limit = 0,
-    server = "chemi_burl",
+    server = server,
     auth = FALSE,
     tidy = FALSE,
     options = options

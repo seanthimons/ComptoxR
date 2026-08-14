@@ -69,6 +69,7 @@ source(file.path(utils_dir, "05_file_scaffold.R"))
 source(file.path(utils_dir, "06_param_parsing.R"))
 source(file.path(utils_dir, "07_stub_generation.R"))
 source(file.path(utils_dir, "08_drift_detection.R"))
+source(here::here("R", "hook_registry.R"))
 
 # ==============================================================================
 # Generic Runner
@@ -147,6 +148,10 @@ run_generator <- function(spec) {
     return(list(scaffold = empty_scaffold(), drift = tibble()))
   }
 
+  if (!is.null(spec$prepare)) {
+    spec$prepare(endpoints)
+  }
+
   # Find missing endpoints
   res <- find_endpoint_usages_base(
     endpoints$route,
@@ -171,6 +176,9 @@ run_generator <- function(spec) {
     )
 
   if (nrow(endpoints_to_build) == 0) {
+    if (!is.null(spec$finalize)) {
+      spec$finalize(endpoints)
+    }
     cli_alert_success("All {spec$prefix}_* endpoints already implemented")
     return(list(scaffold = empty_scaffold(), drift = drift))
   }
@@ -183,6 +191,9 @@ run_generator <- function(spec) {
   # Empty check must precede spec$post(): a zero-row render result has no
   # columns, and post hooks (e.g. chemi's group_by(file)) error on it.
   if (nrow(spec_with_text) == 0) {
+    if (!is.null(spec$finalize)) {
+      spec$finalize(endpoints)
+    }
     cli_alert_warning("No {spec$prefix} stubs generated (all skipped)")
     return(list(scaffold = empty_scaffold(), drift = drift))
   }
@@ -192,10 +203,18 @@ run_generator <- function(spec) {
     spec_with_text <- spec$post(spec_with_text)
   }
 
-  list(
-    scaffold = scaffold_files(spec_with_text, base_dir = "R", overwrite = FALSE, append = TRUE, quiet = TRUE),
-    drift = drift
+  scaffold <- scaffold_files(
+    spec_with_text,
+    base_dir = "R",
+    overwrite = FALSE,
+    append = TRUE,
+    quiet = TRUE
   )
+  if (!is.null(spec$finalize)) {
+    spec$finalize(endpoints)
+  }
+
+  list(scaffold = scaffold, drift = drift)
 }
 
 # ==============================================================================
@@ -278,17 +297,224 @@ ct_spec <- list(
   }
 )
 
+chemi_stage_priority <- c("public", "staging", "development")
+
+chemi_schema_stage <- function(source_file) {
+  stage <- stringr::str_match(source_file, "-(prod|staging|dev)\\.json$")[, 2]
+  dplyr::recode(stage, prod = "public", dev = "development", .missing = "public")
+}
+
+normalize_chemi_operation_route <- function(route) {
+  route %>%
+    stringr::str_replace_all("/{2,}", "/") %>%
+    stringr::str_remove("^/+") %>%
+    stringr::str_remove("/+$") %>%
+    stringr::str_replace_all("\\{[^}]+\\}", "{}")
+}
+
+chemi_contract_value <- function(row, name, default = NULL) {
+  value <- row[[name]]
+  if (is.null(value)) {
+    return(default)
+  }
+  if (is.list(value) && length(value) == 1L) {
+    return(value[[1]])
+  }
+  value
+}
+
+canonical_chemi_request_contract <- function(row) {
+  contract <- list(
+    route = chemi_contract_value(row, "route", ""),
+    method = chemi_contract_value(row, "method", ""),
+    parameters = list(
+      path = chemi_contract_value(row, "path_params", ""),
+      query = chemi_contract_value(row, "query_params", ""),
+      body = chemi_contract_value(row, "body_params", ""),
+      path_metadata = chemi_contract_value(row, "path_param_metadata", list()),
+      query_metadata = chemi_contract_value(row, "query_param_metadata", list()),
+      body_metadata = chemi_contract_value(row, "body_param_metadata", list())
+    ),
+    request_body = list(
+      type = chemi_contract_value(row, "body_schema_type", "unknown"),
+      schema = chemi_contract_value(row, "body_schema_full", list()),
+      item_type = chemi_contract_value(row, "body_item_type", NA_character_)
+    ),
+    content_type = chemi_contract_value(row, "content_type", ""),
+    request_type = chemi_contract_value(row, "request_type", ""),
+    pagination = chemi_contract_value(row, "pagination_metadata", list())
+  )
+  jsonlite::toJSON(contract, auto_unbox = TRUE, null = "null", na = "null")
+}
+
+collapse_chemi_stage_contracts <- function(endpoints) {
+  if (nrow(endpoints) == 0L) {
+    return(endpoints)
+  }
+
+  endpoints$schema_stage <- vapply(
+    endpoints$source_file,
+    chemi_schema_stage,
+    character(1)
+  )
+  endpoints$operation_route <- normalize_chemi_operation_route(endpoints$route)
+  endpoints$operation_key <- paste(
+    endpoints$service_slug,
+    endpoints$operation_route,
+    endpoints$method,
+    sep = "\034"
+  )
+  endpoints$contract_key <- vapply(
+    seq_len(nrow(endpoints)),
+    function(i) canonical_chemi_request_contract(endpoints[i, , drop = FALSE]),
+    character(1)
+  )
+
+  collapsed <- lapply(split(seq_len(nrow(endpoints)), endpoints$operation_key), function(indices) {
+    operation <- endpoints[indices, , drop = FALSE]
+    contracts <- split(seq_len(nrow(operation)), operation$contract_key)
+    variants <- lapply(contracts, function(contract_indices) {
+      rows <- operation[contract_indices, , drop = FALSE]
+      ranks <- match(rows$schema_stage, chemi_stage_priority)
+      representative <- rows[order(ranks, rows$source_file)[1], , drop = FALSE]
+      supported <- chemi_stage_priority[chemi_stage_priority %in% rows$schema_stage]
+      representative$supported_schema_stages <- list(supported)
+      representative$preferred_fallback_stage <- supported[[1]]
+      representative
+    }) %>%
+      dplyr::bind_rows()
+
+    ranks <- match(variants$schema_stage, chemi_stage_priority)
+    variants <- variants[order(ranks, variants$contract_key), , drop = FALSE]
+    variants$variant_suffix <- c(
+      "",
+      if (nrow(variants) > 1L) paste0("_", variants$schema_stage[-1L]) else character()
+    )
+    variants
+  }) %>%
+    dplyr::bind_rows()
+
+  collapsed %>%
+    arrange(
+      service_slug,
+      operation_route,
+      factor(method, levels = c("GET", "POST")),
+      match(schema_stage, chemi_stage_priority)
+    )
+}
+
+append_chemi_variant_suffix <- function(path, suffix) {
+  if (!nzchar(suffix)) {
+    return(path)
+  }
+  paste0(tools::file_path_sans_ext(path), suffix, ".R")
+}
+
+name_chemi_endpoints <- function(endpoints) {
+  naming <- endpoints[!duplicated(endpoints$operation_key), , drop = FALSE] %>%
+    mutate(
+      route_clean = strip_curly_params(route, leading_slash = "remove"),
+      domain = if_else(
+        str_starts(route_clean, "api/"),
+        route_clean %>% str_remove("^api/") %>% str_extract("^[^/]+"),
+        service_slug
+      ),
+      name = route_clean %>%
+        str_remove_all("^api/") %>%
+        str_remove_all(regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
+        str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
+        str_replace_all("[/]+", " ") %>%
+        str_squish() %>%
+        str_replace_all("\\s", "_") %>%
+        str_replace_all("-", "_"),
+      path_marker = purrr::map_chr(
+        str_extract_all(route, "(?<=\\{)[^}]+"),
+        ~ paste(.x, collapse = "_and_")
+      ) %>%
+        str_replace_all("[^A-Za-z0-9]+", "_") %>%
+        str_to_lower(),
+      name_full = if_else(
+        num_path_params > 0 & nzchar(path_marker),
+        paste0(name, "_by_", path_marker),
+        name
+      ),
+      file_short = case_when(
+        nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
+        str_detect(name, fixed(domain)) ~ paste0("chemi_", name, ".R"),
+        .default = paste0("chemi_", domain, "_", name, ".R")
+      ),
+      file_full = case_when(
+        nchar(name_full) == 0 ~ paste0("chemi_", domain, ".R"),
+        str_detect(name_full, fixed(domain)) ~ paste0("chemi_", name_full, ".R"),
+        .default = paste0("chemi_", domain, "_", name_full, ".R")
+      ),
+      batch_limit = 0
+    )
+
+  naming$fn_short <- derive_fn_from_file(naming, "file_short")
+  naming$fn_full <- derive_fn_from_file(naming, "file_full")
+  naming <- resolve_collisions(naming) %>% select(operation_key, file, fn)
+
+  endpoints %>%
+    left_join(naming, by = "operation_key") %>%
+    mutate(
+      file = purrr::map2_chr(file, variant_suffix, append_chemi_variant_suffix),
+      fn = paste0(fn, variant_suffix),
+      route = strip_curly_params(route, leading_slash = "remove") %>% str_remove_all("^api/")
+    ) %>%
+    select(-contract_key, -operation_route, -variant_suffix)
+}
+
+write_generated_hook_config <- function(
+  endpoints,
+  path = here::here("inst", "hook_config_generated.yml"),
+  implemented_only = FALSE
+) {
+  generated <- endpoints %>%
+    filter(purrr::map_lgl(file, function(file) {
+      source_path <- here::here("R", file)
+      !file.exists(source_path) || !has_protected_lifecycle(source_path)
+    }))
+
+  if (implemented_only) {
+    generated <- generated %>%
+      filter(purrr::map2_lgl(
+        file,
+        fn,
+        ~ is_operation_implemented(.x, .y, here::here("R"))
+      ))
+  }
+
+  generated <- generated %>%
+    arrange(fn)
+
+  config <- stats::setNames(
+    lapply(seq_len(nrow(generated)), function(i) {
+      supported <- generated$supported_schema_stages[[i]]
+      list(
+        supported_schema_stages = as.list(supported),
+        preferred_fallback_stage = generated$preferred_fallback_stage[[i]],
+        pre_request = list("enforce_stage_server")
+      )
+    }),
+    generated$fn
+  )
+
+  yaml::write_yaml(config, path)
+  invisible(config)
+}
+
 chemi_spec <- list(
   prefix = "chemi",
   heading = "Cheminformatics (chemi_*)",
   config = chemi_config,
   build_endpoints = function() {
-    # Select schema files with stage prioritization
-    chemi_schema_files <- select_schema_files(
-      pattern = "^chemi-.*\\.json$",
-      exclude_pattern = "ui",
-      stage_priority = c("prod", "staging", "dev")
-    )
+    chemi_schema_files <- sort(list.files(
+      path = here::here("schema"),
+      pattern = "^chemi-.*-(prod|staging|dev)\\.json$",
+      full.names = FALSE
+    ))
+    chemi_schema_files <- chemi_schema_files[!grepl("ui", chemi_schema_files, ignore.case = TRUE)]
 
     if (length(chemi_schema_files) == 0) {
       cli_alert_warning("No chemi schema files found, skipping chemi_* generation")
@@ -307,6 +533,11 @@ chemi_spec <- list(
             openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
             spec <- openapi_to_spec(openapi)
             spec$source_file <- .x
+            spec$service_slug <- sub(
+              "^chemi-(.*)-(prod|staging|dev)\\.json$",
+              "\\1",
+              .x
+            )
             spec
           },
           .progress = FALSE
@@ -316,61 +547,9 @@ chemi_spec <- list(
             str_detect(method, 'GET|POST'),
             !str_detect(route, ENDPOINT_PATTERNS_TO_EXCLUDE) # Exclude admin/UI routes
           ) %>%
-          mutate(
-            route = strip_curly_params(route, leading_slash = 'remove'),
-            # Extract service slug from source filename (e.g., "chemi-chet-dev.json" -> "chet")
-            service_slug = source_file %>% str_extract("^chemi-([^-]+)") %>% str_remove("^chemi-"),
-            # Deployment stage from filename suffix (e.g., "chemi-mordred-staging.json" -> "staging").
-            # Drives the @apiStage doc tag and the non-prod server-swap hook.
-            # prod -> public, staging -> staging, dev -> development; unstaged files default to public.
-            schema_stage = source_file %>%
-              str_match("-(prod|staging|dev)\\.json$") %>%
-              magrittr::extract(, 2) %>%
-              dplyr::recode(prod = "public", dev = "development", .missing = "public"),
-            # Use route domain when route has api/ prefix, otherwise fall back to service slug
-            domain = if_else(
-              str_starts(route, "api/"),
-              route %>% str_remove("^api/") %>% str_extract("^[^/]+"),
-              service_slug
-            ),
-            name = route %>%
-              str_remove_all("^api/") %>%
-              str_remove_all(regex("(?i)(?:^|[/_-])(?:chemi|search(?:es)?|summary|by[/_-]dtxsid)(?=$|[/_-])")) %>%
-              str_remove_all(regex("(?i)-summary(?=$|[/_-]|$)")) %>%
-              str_replace_all("[/]+", " ") %>%
-              str_squish() %>%
-              str_replace_all("\\s", "_") %>%
-              str_replace_all("-", "_"),
-            # First path-param name, used as a disambiguating marker for
-            # trailing-slash / path-param GET variants that share a short name.
-            .first_pp = path_params %>%
-              str_extract("^[^,]+") %>%
-              str_replace_all("[^A-Za-z0-9]+", "_") %>%
-              str_to_lower() %>%
-              coalesce(""),
-            .name_full = if_else(
-              num_path_params > 0 & nzchar(.first_pp) & !str_detect(name, fixed(.first_pp)),
-              paste0(name, "_by_", .first_pp),
-              name
-            ),
-            file_short = case_when(
-              nchar(name) == 0 ~ paste0("chemi_", domain, ".R"),
-              str_detect(name, pattern = domain) ~ paste0("chemi_", name, ".R"),
-              .default = paste0("chemi_", domain, "_", name, ".R")
-            ),
-            file_full = case_when(
-              nchar(.name_full) == 0 ~ paste0("chemi_", domain, ".R"),
-              str_detect(.name_full, pattern = domain) ~ paste0("chemi_", .name_full, ".R"),
-              .default = paste0("chemi_", domain, "_", .name_full, ".R")
-            ),
-            batch_limit = 0,
-            route = str_remove_all(route, "^api/")
-          ) %>%
-          distinct(route, method, .keep_all = TRUE)
+          mutate(batch_limit = 0)
 
-        ep$fn_short <- derive_fn_from_file(ep, "file_short")
-        ep$fn_full <- derive_fn_from_file(ep, "file_full")
-        resolve_collisions(ep)
+        ep %>% collapse_chemi_stage_contracts() %>% name_chemi_endpoints()
       },
       error = function(e) {
         cli_alert_warning("Error parsing chemi schemas: {e$message}")
@@ -386,11 +565,23 @@ chemi_spec <- list(
     cli_alert_info("Parsed {nrow(chemi_endpoints)} endpoint(s) from schemas")
     chemi_endpoints
   },
+  prepare = function(endpoints) {
+    write_generated_hook_config(endpoints)
+  },
+  finalize = function(endpoints) {
+    write_generated_hook_config(endpoints, implemented_only = TRUE)
+  },
   # Aggregate by file (multiple functions per file) before scaffolding.
   post = function(spec_with_text) {
     spec_with_text %>%
       group_by(file) %>%
-      summarise(text = paste(text, collapse = "\n\n"), .groups = "drop")
+      summarise(
+        text = paste0(
+          paste(sub("[\r\n]+\\z", "", text, perl = TRUE), collapse = "\n\n"),
+          "\n"
+        ),
+        .groups = "drop"
+      )
   }
 )
 

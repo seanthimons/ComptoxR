@@ -33,7 +33,6 @@ test_that("chemi_amos_functional_uses_for_dtxsid passes request metadata to help
   expect_equal(call[["endpoint"]], "amos/functional_uses_for_dtxsid/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

@@ -27,4 +27,3 @@ chemi_search_exact(smiles = "DTXSID7020182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -7,8 +7,14 @@
 chemi_hazard_bulk(
   query,
   idType = "AnyId",
-  options = NULL,
   empty = NULL,
+  options = NULL,
+  request.filesInfo = NULL,
+  request.options.analogsSearchType = NULL,
+  request.options.cts = NULL,
+  request.options.minSimilarity = NULL,
+  request.options.noRecords = NULL,
+  request.options.usePredictions = NULL,
   format = c("compact", "tidy", "raw")
 )
 }
@@ -17,11 +23,23 @@ chemi_hazard_bulk(
 
 \item{idType}{Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)}
 
-\item{options}{Optional parameter}
-
 \item{empty}{Optional parameter}
 
-\item{format}{Output format. One of "compact", "tidy", or "raw".}
+\item{options}{Optional parameter}
+
+\item{request.filesInfo}{Optional parameter}
+
+\item{request.options.analogsSearchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, TOXPRINTS, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+
+\item{request.options.cts}{Optional parameter}
+
+\item{request.options.minSimilarity}{Optional parameter}
+
+\item{request.options.noRecords}{Optional parameter}
+
+\item{request.options.usePredictions}{Optional parameter}
+
+\item{format}{Output format. One of 'compact', 'tidy', or 'raw'}
 }
 \value{
 Returns a tibble with results
@@ -40,4 +58,3 @@ chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

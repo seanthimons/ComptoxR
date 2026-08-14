@@ -39,6 +39,24 @@ cli_alert_info("Working directory: {getwd()}")
 # Each result is list(scaffold = <tibble>, drift = <tibble>) — uniform shape.
 results <- map(api_specs, run_generator)
 
+generated_r_files <- results %>%
+  purrr::map("scaffold") %>%
+  purrr::map(
+    ~ {
+      if (!all(c("written", "path") %in% names(.x))) {
+        return(character())
+      }
+      .x$path[.x$written & stringr::str_detect(.x$path, "[/\\\\]chemi_")]
+    }
+  ) %>%
+  unlist(use.names = FALSE)
+if (length(generated_r_files) > 0L && nzchar(Sys.which("air"))) {
+  format_status <- system2("air", c("format", shQuote(generated_r_files)))
+  if (!identical(format_status, 0L)) {
+    cli::cli_abort("Air could not format generated Cheminformatics wrappers.")
+  }
+}
+
 # Combine scaffold and drift results, tagging each row with its API.
 all_results <- imap(results, ~ .x$scaffold %>% mutate(api = .y)) %>% list_rbind()
 all_drift <- imap(results, ~ .x$drift %>% mutate(api = .y)) %>% list_rbind()
