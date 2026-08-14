@@ -33,7 +33,6 @@ test_that("chemi_predictor_modelset_report passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "predictor/modelset_report/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

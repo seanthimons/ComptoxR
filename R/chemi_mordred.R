@@ -1,92 +1,126 @@
-#' Generate descriptors for one molecule
+#' Calculate Mordred descriptors for one molecule
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
-#' @param headers Optional parameter
-#' @param inchi Optional parameter
-#' @return Returns a tibble with results
+#' Production calls use the staging dedicated Mordred deployment because the
+#' production dedicated deployment is unavailable.
+#'
+#' This wrapper resolves identifier-like inputs to SMILES before calling the
+#' dedicated service. The raw `/api/mordred` endpoint does not perform that
+#' wrapper-level resolution.
+#'
+#' @param smiles One SMILES string or resolvable chemical identifier.
+#' @param headers Request upstream descriptor headers.
+#' @param inchi Include InChI identifiers.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated one-row tibble or raw payload.
+#' @apiStage staging
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_mordred(smiles = "DTXSID7020182")
 #' }
-chemi_mordred <- function(smiles, headers = NULL, inchi = NULL) {
+chemi_mordred <- function(
+  smiles,
+  headers = NULL,
+  inchi = NULL,
+  output = c("wide", "raw")
+) {
   req_data <- run_hook(
     "chemi_mordred",
     "pre_request",
-    list(params = list(smiles = smiles, headers = headers, inchi = inchi))
+    list(
+      params = list(
+        smiles = smiles,
+        headers = headers,
+        inchi = inchi,
+        output = output
+      )
+    )
   )
   if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("smiles" %in% names(req_data$params)) {
-    smiles <- req_data$params[["smiles"]]
-  }
-  if ("headers" %in% names(req_data$params)) {
-    headers <- req_data$params[["headers"]]
-  }
-  if ("inchi" %in% names(req_data$params)) {
-    inchi <- req_data$params[["inchi"]]
+    result <- req_data$result
+  } else {
+    result <- generic_request(
+      endpoint = req_data$request$endpoint,
+      method = req_data$request$method,
+      batch_limit = 0,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      content_type = req_data$request$content_type,
+      options = req_data$request$options
+    )
   }
 
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(headers)) {
-    options[['headers']] <- headers
-  }
-  if (!is.null(inchi)) {
-    options[['inchi']] <- inchi
-  }
-  result <- generic_request(
-    endpoint = "mordred",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_mordred", "post_response", post_data)
 
   return(result)
 }
 
-
-#' Generate descriptors for multiple molecules
+#' Calculate Mordred descriptors for multiple molecules
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param chemicals Required parameter
-#' @param options Optional parameter
-#' @return Returns a tibble with results
+#' Explicit `headers` and `inchi` arguments override duplicate values in
+#' `options`.
+#'
+#' @param chemicals Chemical structures or resolvable identifiers.
+#' @param options Named list of additional dedicated Mordred options.
+#' @param headers Request upstream descriptor headers.
+#' @param inchi Include InChI identifiers.
+#' @param output `wide` for a validated tibble or `raw` for the payload with
+#'   provenance attributes.
+#' @return A validated tibble with one row per input or raw payload.
+#' @apiStage staging
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_mordred_bulk(chemicals = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_mordred_bulk(c("DTXSID7020182", "CCO"))
 #' }
-chemi_mordred_bulk <- function(chemicals, options = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  result <- generic_chemi_request(
-    query = chemicals,
-    endpoint = "mordred",
-    options = options,
-    tidy = FALSE
+chemi_mordred_bulk <- function(
+  chemicals,
+  options = NULL,
+  headers = NULL,
+  inchi = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_mordred_bulk",
+    "pre_request",
+    list(
+      params = list(
+        chemicals = chemicals,
+        options = options,
+        headers = headers,
+        inchi = inchi,
+        output = output
+      )
+    )
   )
+  if (isTRUE(req_data$skip_request)) {
+    result <- req_data$result
+  } else {
+    result <- generic_chemi_request(
+      endpoint = req_data$request$endpoint,
+      server = req_data$request$server,
+      auth = FALSE,
+      tidy = FALSE,
+      body = req_data$request$body,
+      content_type = req_data$request$content_type
+    )
+  }
 
-  # Additional post-processing can be added here
+  post_data <- req_data
+  post_data$result <- result
+  result <- run_hook("chemi_mordred_bulk", "post_response", post_data)
 
   return(result)
 }

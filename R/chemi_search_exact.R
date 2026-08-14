@@ -7,6 +7,7 @@
 #' @param exportSmiles Optional parameter
 #' @param exportMol Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -1,124 +1,57 @@
 #!/usr/bin/env Rscript
-# Calculate API schema coverage for CCD and Cheminformatic services
+# Calculate operation-level API coverage for CCD (ct_*) and Cheminformatic
+# (chemi_*) services.
 #
-# Uses the same shared utilities (select_schema_files, openapi_to_spec,
-# ENDPOINT_PATTERNS_TO_EXCLUDE) as the diff engine and stub generator
-# to ensure consistent endpoint counting across all three systems.
+# Coverage = implemented operations / total operations, where the operation set
+# for each API is exactly what its stub generator builds (one row per
+# (route, method); GET and POST on a route are distinct operations). Because
+# "implemented" is a subset of "total", coverage is always <= 100% (no artificial
+# cap). ct_spec / chemi_spec / endpoint_coverage() come from the shared module so
+# coverage matches the stub generator's own notion of an endpoint 1:1.
 
-suppressPackageStartupMessages({
-  library(jsonlite)
-  library(here)
-  library(dplyr)
-  library(purrr)
-  library(stringr)
-  library(cli)
-})
-
-# Load shared utilities
-source(here::here("dev/endpoint_eval/00_config.R"))
-source(here::here("dev/endpoint_eval/01_schema_resolution.R"))
-source(here::here("dev/endpoint_eval/06_param_parsing.R"))
-source(here::here("dev/endpoint_eval/04_openapi_parser.R"))
+suppressPackageStartupMessages(library(here))
+source(here::here("dev", "stub_specs.R"))
 
 # ==============================================================================
-# Endpoint counting (from schemas, using shared parser)
+# Coverage (operation-level, from the shared stub-generator specs)
 # ==============================================================================
+# endpoint_coverage() returns list(total, covered) for one API by counting how
+# many of the generator's (route, method) operations have an implemented wrapper.
+# `*_functions` therefore holds "covered operations", not raw function defs.
 
-#' Count endpoints across schema files using openapi_to_spec
-#'
-#' @param schema_files Character vector of schema filenames (not full paths)
-#' @param exclude_pattern Regex to exclude from endpoint routes
-#' @return Integer count of unique endpoints
-count_endpoints_from_schemas <- function(schema_files, exclude_pattern = ENDPOINT_PATTERNS_TO_EXCLUDE) {
-  if (length(schema_files) == 0) {
-    return(0L)
-  }
-
-  endpoints <- tryCatch(
-    {
-      map(
-        schema_files,
-        ~ {
-          openapi <- jsonlite::fromJSON(here::here("schema", .x), simplifyVector = FALSE)
-          suppressMessages(openapi_to_spec(openapi))
-        }
-      ) %>%
-        list_rbind() %>%
-        filter(
-          str_detect(method, "GET|POST"),
-          !str_detect(route, exclude_pattern)
-        ) %>%
-        distinct(route, method)
-    },
-    error = function(e) {
-      cli_alert_warning("Error parsing schemas: {e$message}")
-      tibble()
-    }
-  )
-
-  nrow(endpoints)
+coverage_pct <- function(cov) {
+  if (cov$total > 0) round(100 * cov$covered / cov$total, 1) else 0
 }
-
-# ==============================================================================
-# Function counting (from R files)
-# ==============================================================================
-
-count_r_functions <- function(function_prefix) {
-  r_files <- list.files(here::here("R"), pattern = "\\.R$", full.names = TRUE)
-  function_count <- 0L
-
-  for (r_file in r_files) {
-    lines <- readLines(r_file, warn = FALSE)
-    pattern <- sprintf("^%s[a-zA-Z0-9_]* ?(<-|=) ?function\\(", function_prefix)
-    matches <- grep(pattern, lines, value = FALSE)
-    function_count <- function_count + length(matches)
-  }
-
-  function_count
-}
-
-# ==============================================================================
-# CCD Coverage
-# ==============================================================================
 
 cat("Calculating CCD (CompTox Chemical Dashboard) coverage...\n")
-
-ccd_schema_files <- list.files(
-  here::here("schema"),
-  pattern = "^ctx-.*-prod\\.json$",
-  full.names = FALSE
-)
-
-ccd_endpoints <- count_endpoints_from_schemas(ccd_schema_files)
-ccd_functions <- count_r_functions("ct_")
-ccd_coverage_raw <- if (ccd_endpoints > 0) (ccd_functions / ccd_endpoints) * 100 else 0
-ccd_coverage <- min(round(ccd_coverage_raw, 1), 100.0)
+ccd_cov <- endpoint_coverage(ct_spec)
+ccd_endpoints <- ccd_cov$total
+ccd_functions <- ccd_cov$covered
+ccd_coverage <- coverage_pct(ccd_cov)
 
 cat(sprintf("CCD Endpoints: %d\n", ccd_endpoints))
-cat(sprintf("CCD Functions: %d\n", ccd_functions))
+cat(sprintf("CCD Covered: %d\n", ccd_functions))
 cat(sprintf("CCD Coverage: %.1f%%\n\n", ccd_coverage))
 
-# ==============================================================================
-# Cheminformatic Coverage
-# ==============================================================================
-
 cat("Calculating Cheminformatic coverage...\n")
-
-# Use select_schema_files with stage priority — same as stub generator
-chemi_schema_files <- select_schema_files(
-  pattern = "^chemi-.*\\.json$",
-  exclude_pattern = "ui|coverage_baseline|schema_hashes",
-  stage_priority = c("prod", "staging", "dev")
-)
-
-chemi_endpoints <- count_endpoints_from_schemas(chemi_schema_files)
-chemi_functions <- count_r_functions("chemi_")
-chemi_coverage_raw <- if (chemi_endpoints > 0) (chemi_functions / chemi_endpoints) * 100 else 0
-chemi_coverage <- min(round(chemi_coverage_raw, 1), 100.0)
+chemi_cov <- endpoint_coverage(chemi_spec)
+chemi_endpoints <- chemi_cov$total
+chemi_functions <- chemi_cov$covered
+chemi_coverage <- coverage_pct(chemi_cov)
 
 cat(sprintf("Cheminformatic Endpoints: %d\n", chemi_endpoints))
-cat(sprintf("Cheminformatic Functions: %d\n", chemi_functions))
+cat(sprintf("Cheminformatic Covered: %d\n", chemi_functions))
 cat(sprintf("Cheminformatic Coverage: %.1f%%\n\n", chemi_coverage))
+
+cat("Calculating EPI Suite coverage...\n")
+epi_cov <- endpoint_coverage(epi_spec)
+epi_endpoints <- epi_cov$total
+epi_functions <- epi_cov$covered
+epi_coverage <- coverage_pct(epi_cov)
+
+cat(sprintf("EPI Suite Endpoints: %d\n", epi_endpoints))
+cat(sprintf("EPI Suite Covered: %d\n", epi_functions))
+cat(sprintf("EPI Suite Coverage: %.1f%%\n\n", epi_coverage))
 
 # ==============================================================================
 # Badge colors
@@ -140,6 +73,7 @@ get_badge_color <- function(coverage) {
 
 ccd_color <- get_badge_color(ccd_coverage)
 chemi_color <- get_badge_color(chemi_coverage)
+epi_color <- get_badge_color(epi_coverage)
 
 # ==============================================================================
 # Badge JSON (consumed by README shields.io endpoint badges)
@@ -161,7 +95,8 @@ write_badge <- function(path, label, coverage, color) {
 
 write_badge(here::here(".github/badges/ccd-coverage.json"), "CCD coverage", ccd_coverage, ccd_color)
 write_badge(here::here(".github/badges/chemi-coverage.json"), "Cheminformatic coverage", chemi_coverage, chemi_color)
-cat("Badge JSON updated: .github/badges/{ccd,chemi}-coverage.json\n")
+write_badge(here::here(".github/badges/epi-coverage.json"), "EPI Suite coverage", epi_coverage, epi_color)
+cat("Badge JSON updated: .github/badges/{ccd,chemi,epi}-coverage.json\n")
 
 # ==============================================================================
 # Coverage deltas (vs baseline)
@@ -199,6 +134,9 @@ ccd_functions_fmt <- paste0(ccd_functions, format_delta(ccd_functions, baseline$
 chemi_coverage_fmt <- paste0(sprintf("%.1f%%", chemi_coverage), format_delta(chemi_coverage, baseline$chemi_coverage))
 chemi_endpoints_fmt <- paste0(chemi_endpoints, format_delta(chemi_endpoints, baseline$chemi_endpoints))
 chemi_functions_fmt <- paste0(chemi_functions, format_delta(chemi_functions, baseline$chemi_functions))
+epi_coverage_fmt <- paste0(sprintf("%.1f%%", epi_coverage), format_delta(epi_coverage, baseline$epi_coverage))
+epi_endpoints_fmt <- paste0(epi_endpoints, format_delta(epi_endpoints, baseline$epi_endpoints))
+epi_functions_fmt <- paste0(epi_functions, format_delta(epi_functions, baseline$epi_functions))
 
 cat("\nCoverage deltas (vs baseline):\n")
 cat(sprintf("  CCD:   %s | %s endpoints | %s functions\n", ccd_coverage_fmt, ccd_endpoints_fmt, ccd_functions_fmt))
@@ -207,6 +145,12 @@ cat(sprintf(
   chemi_coverage_fmt,
   chemi_endpoints_fmt,
   chemi_functions_fmt
+))
+cat(sprintf(
+  "  EPI:   %s | %s endpoints | %s functions\n",
+  epi_coverage_fmt,
+  epi_endpoints_fmt,
+  epi_functions_fmt
 ))
 
 # Write updated baseline
@@ -217,6 +161,9 @@ new_baseline <- list(
   chemi_coverage = chemi_coverage,
   chemi_endpoints = chemi_endpoints,
   chemi_functions = chemi_functions,
+  epi_coverage = epi_coverage,
+  epi_endpoints = epi_endpoints,
+  epi_functions = epi_functions,
   timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 )
 jsonlite::write_json(new_baseline, baseline_path, auto_unbox = TRUE, pretty = TRUE)
@@ -232,10 +179,14 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   cat(sprintf("ccd_color=%s\n", ccd_color), file = output_file, append = TRUE)
   cat(sprintf("chemi_coverage=%.1f\n", chemi_coverage), file = output_file, append = TRUE)
   cat(sprintf("chemi_color=%s\n", chemi_color), file = output_file, append = TRUE)
+  cat(sprintf("epi_coverage=%.1f\n", epi_coverage), file = output_file, append = TRUE)
+  cat(sprintf("epi_color=%s\n", epi_color), file = output_file, append = TRUE)
   cat(sprintf("ccd_endpoints=%d\n", ccd_endpoints), file = output_file, append = TRUE)
   cat(sprintf("ccd_functions=%d\n", ccd_functions), file = output_file, append = TRUE)
   cat(sprintf("chemi_endpoints=%d\n", chemi_endpoints), file = output_file, append = TRUE)
   cat(sprintf("chemi_functions=%d\n", chemi_functions), file = output_file, append = TRUE)
+  cat(sprintf("epi_endpoints=%d\n", epi_endpoints), file = output_file, append = TRUE)
+  cat(sprintf("epi_functions=%d\n", epi_functions), file = output_file, append = TRUE)
 
   cat(sprintf("ccd_coverage_fmt=%s\n", ccd_coverage_fmt), file = output_file, append = TRUE)
   cat(sprintf("ccd_endpoints_fmt=%s\n", ccd_endpoints_fmt), file = output_file, append = TRUE)
@@ -243,6 +194,9 @@ if (Sys.getenv("GITHUB_OUTPUT") != "") {
   cat(sprintf("chemi_coverage_fmt=%s\n", chemi_coverage_fmt), file = output_file, append = TRUE)
   cat(sprintf("chemi_endpoints_fmt=%s\n", chemi_endpoints_fmt), file = output_file, append = TRUE)
   cat(sprintf("chemi_functions_fmt=%s\n", chemi_functions_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_coverage_fmt=%s\n", epi_coverage_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_endpoints_fmt=%s\n", epi_endpoints_fmt), file = output_file, append = TRUE)
+  cat(sprintf("epi_functions_fmt=%s\n", epi_functions_fmt), file = output_file, append = TRUE)
 
   cat("Coverage data written to GITHUB_OUTPUT\n")
 }
@@ -255,4 +209,11 @@ cat(sprintf(
   chemi_functions,
   chemi_endpoints,
   chemi_color
+))
+cat(sprintf(
+  "EPI Suite Coverage: %.1f%% (%d/%d) - Color: %s\n",
+  epi_coverage,
+  epi_functions,
+  epi_endpoints,
+  epi_color
 ))

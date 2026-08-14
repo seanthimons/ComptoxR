@@ -1,512 +1,57 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Services Module",
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "/",
-      "description": "Default Server URL"
-    }
-  ],
-  "paths": {
-    "/api/services/universalpreflight": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "postMultipartUniversalPreflight",
-        "parameters": [
-          {
-            "name": "files[]",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PreflightResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/preflight": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "postMultipartPreflight",
-        "parameters": [
-          {
-            "name": "files[]",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PreflightResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/files": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "postMultipartFiles",
-        "parameters": [
-          {
-            "name": "files[]",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          },
-          {
-            "name": "request",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FilesUploadRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ResolvedChemical"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/export_json_report": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "exportJsonReport",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/export": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "exportAssayPost",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/convert": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "convert",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ConvertRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/collated_report": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "exportCollatedReport",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportCollatedReportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/caspreflight": {
-      "post": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "postMultipartCASPreflight",
-        "parameters": [
-          {
-            "name": "files[]",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/CASPreflightResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/version": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "versionGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/VersionInfo"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/smirks2rxn": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "smirks2rxn",
-        "parameters": [
-          {
-            "name": "smirks",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/release_notes": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "releaseNotesGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ReleaseNoteTableItem"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/metadata": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "metadataGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {}
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/layout": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "layout",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/services/cim_component_info": {
-      "get": {
-        "tags": [
-          "services-controller"
-        ],
-        "operationId": "cimComponentInfoGet",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CimComponentInfo"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
-      "PreflightInfo": {
-        "type": "object",
+      "CASPreflightInfo": {
         "properties": {
+          "casField": {
+            "type": "string"
+          },
           "fileName": {
             "type": "string"
           },
-          "idField": {
-            "type": "string"
-          },
-          "strField": {
-            "type": "string"
-          },
-          "actField": {
-            "type": "string"
-          },
           "headers": {
-            "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "type": "array"
+          },
+          "inchikeyField": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "PreflightResponse": {
-        "type": "array",
+      "CASPreflightResponse": {
         "items": {
-          "$ref": "#/components/schemas/PreflightInfo"
+          "$ref": "#/components/schemas/CASPreflightInfo"
         },
         "properties": {
           "empty": {
             "type": "boolean"
           },
           "first": {
-            "$ref": "#/components/schemas/PreflightInfo"
+            "$ref": "#/components/schemas/CASPreflightInfo"
           },
           "last": {
-            "$ref": "#/components/schemas/PreflightInfo"
+            "$ref": "#/components/schemas/CASPreflightInfo"
           }
-        }
-      },
-      "FileUploadInfo": {
-        "type": "object",
-        "properties": {
-          "fileName": {
-            "type": "string"
-          },
-          "idField": {
-            "type": "string"
-          },
-          "strField": {
-            "type": "string"
-          },
-          "actField": {
-            "type": "string"
-          },
-          "fillAdditionalProps": {
-            "type": "boolean"
-          }
-        }
-      },
-      "FilesUploadRequest": {
-        "type": "object",
-        "properties": {
-          "filesInfo": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            }
-          }
-        }
+        },
+        "type": "array"
       },
       "Chemical": {
-        "type": "object",
         "properties": {
-          "id": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
             "type": "string"
           },
           "chemId": {
@@ -515,19 +60,10 @@
           "cid": {
             "type": "string"
           },
-          "sid": {
+          "id": {
             "type": "string"
           },
-          "casrn": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "smiles": {
-            "type": "string"
-          },
-          "canonicalSmiles": {
+          "image": {
             "type": "string"
           },
           "inchi": {
@@ -542,112 +78,146 @@
           "molFormula": {
             "type": "string"
           },
-          "averageMass": {
-            "type": "number",
-            "format": "double"
-          },
           "monoisotopicMass": {
-            "type": "number",
-            "format": "double"
+            "format": "double",
+            "type": "number"
           },
-          "image": {
+          "name": {
             "type": "string"
           },
-          "additionalProps": {
-            "type": "object",
-            "additionalProperties": {}
+          "sid": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "ResolvedChemical": {
-        "type": "object",
+      "CimComponentInfo": {
         "properties": {
-          "chemical": {
-            "$ref": "#/components/schemas/Chemical"
-          },
-          "resolvedBy": {
-            "type": "string",
-            "enum": [
-              "DTXSID",
-              "DTXCID",
-              "SMILES",
-              "MOL",
-              "CAS",
-              "Name",
-              "InChI",
-              "InChIKey",
-              "InChIKey_1",
-              "AnyId"
-            ]
-          },
-          "confidence": {
-            "type": "number",
-            "format": "float"
-          },
-          "result": {
-            "type": "string",
-            "enum": [
-              "NOT_RESOLVED",
-              "FOUND",
-              "CONVERTED",
-              "MALFORMED",
-              "DUPLICATE"
-            ]
-          },
-          "query": {
+          "api": {
             "type": "string"
           },
-          "message": {
+          "api_only": {
+            "type": "boolean"
+          },
+          "availableIsConstant": {
+            "type": "boolean"
+          },
+          "build_date": {
             "type": "string"
           },
-          "source": {
-            "type": "string",
-            "enum": [
-              "DTX",
-              "COMMONCHEMISTRY",
-              "PUBCHEM"
-            ]
+          "build_id": {
+            "type": "string"
           },
-          "similarity": {
-            "type": "number",
-            "format": "float"
+          "category": {
+            "enum": [
+              "Module",
+              "Tools",
+              "Model",
+              "Data",
+              "Ui"
+            ],
+            "type": "string"
+          },
+          "coreUI": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "is_available": {
+            "type": "boolean"
+          },
+          "isAvailableResetRest": {
+            "type": "boolean",
+            "writeOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "ColDef": {
-        "type": "object",
         "properties": {
+          "cellClasses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "field": {
             "type": "string"
           },
           "headerName": {
             "type": "string"
           },
-          "cellClasses": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "unit": {
             "type": "string"
           }
-        }
+        },
+        "type": "object"
+      },
+      "ConvertRequest": {
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ExportCollatedReportRequest": {
+        "properties": {
+          "alertRequest": {
+            "type": "string"
+          },
+          "chemicals": {
+            "type": "string"
+          },
+          "exportAlerts": {
+            "type": "boolean"
+          },
+          "exportHazard": {
+            "type": "boolean"
+          },
+          "exportHazard2": {
+            "type": "boolean"
+          },
+          "exportPrediction": {
+            "type": "boolean"
+          },
+          "exportSafety": {
+            "type": "boolean"
+          },
+          "hazardRequest": {
+            "type": "string"
+          },
+          "predictionRequest": {
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "ExportRequest": {
-        "type": "object",
         "properties": {
           "chemicals": {
-            "type": "array",
             "items": {
               "$ref": "#/components/schemas/Chemical"
-            }
-          },
-          "readyReport": {
-            "$ref": "#/components/schemas/ReadyReport"
+            },
+            "type": "array"
           },
           "format": {
-            "type": "string",
             "enum": [
               "UNKNOWN",
               "SDF",
@@ -661,39 +231,71 @@
               "HTML",
               "XML",
               "DOCX"
-            ]
+            ],
+            "type": "string"
+          },
+          "readyReport": {
+            "$ref": "#/components/schemas/ReadyReport"
           },
           "showImages": {
             "type": "boolean"
           }
-        }
+        },
+        "type": "object"
       },
-      "Parent": {
-        "type": "object",
+      "FilesUploadRequest": {
         "properties": {
-          "headerName": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "FileUploadInfo": {
+        "properties": {
+          "actField": {
             "type": "string"
           },
-          "parent": {},
-          "unit": {
+          "fileName": {
+            "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
+          },
+          "idField": {
+            "type": "string"
+          },
+          "strField": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Parent": {
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "headerName": {
             "type": "string"
           },
           "headerNameWithUnits": {
             "type": "string"
           },
-          "fullName": {
+          "parent": {},
+          "unit": {
             "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
       "PassedColumn": {
-        "type": "object",
         "properties": {
           "colDef": {
             "$ref": "#/components/schemas/ColDef"
-          },
-          "parent": {
-            "$ref": "#/components/schemas/Parent"
           },
           "field": {
             "type": "string"
@@ -704,130 +306,187 @@
           "headerName": {
             "type": "string"
           },
+          "parent": {
+            "$ref": "#/components/schemas/Parent"
+          },
           "strippedBackground": {
             "type": "boolean"
           }
-        }
+        },
+        "type": "object"
       },
-      "ReadyReport": {
-        "type": "object",
+      "PreflightInfo": {
         "properties": {
-          "result": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "columns": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PassedColumn"
-            }
-          },
-          "resultType": {
+          "actField": {
             "type": "string"
           },
-          "modelDetails": {
-            "type": "object",
-            "additionalProperties": {}
-          },
-          "message": {
-            "type": "string"
-          },
-          "modelName": {
-            "type": "string"
-          },
-          "dataColumns": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PassedColumn"
-            }
-          }
-        }
-      },
-      "ConvertRequest": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
-        }
-      },
-      "ExportCollatedReportRequest": {
-        "type": "object",
-        "properties": {
-          "hazardRequest": {
-            "type": "string"
-          },
-          "chemicals": {
-            "type": "string"
-          },
-          "alertRequest": {
-            "type": "string"
-          },
-          "predictionRequest": {
-            "type": "string"
-          },
-          "exportHazard": {
-            "type": "boolean"
-          },
-          "exportHazard2": {
-            "type": "boolean"
-          },
-          "exportSafety": {
-            "type": "boolean"
-          },
-          "exportAlerts": {
-            "type": "boolean"
-          },
-          "exportPrediction": {
-            "type": "boolean"
-          }
-        }
-      },
-      "CASPreflightInfo": {
-        "type": "object",
-        "properties": {
           "fileName": {
             "type": "string"
           },
-          "casField": {
-            "type": "string"
-          },
-          "inchikeyField": {
-            "type": "string"
-          },
           "headers": {
-            "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "type": "array"
+          },
+          "idField": {
+            "type": "string"
+          },
+          "strField": {
+            "type": "string"
           }
-        }
+        },
+        "type": "object"
       },
-      "CASPreflightResponse": {
-        "type": "array",
+      "PreflightResponse": {
         "items": {
-          "$ref": "#/components/schemas/CASPreflightInfo"
+          "$ref": "#/components/schemas/PreflightInfo"
         },
         "properties": {
           "empty": {
             "type": "boolean"
           },
           "first": {
-            "$ref": "#/components/schemas/CASPreflightInfo"
+            "$ref": "#/components/schemas/PreflightInfo"
           },
           "last": {
-            "$ref": "#/components/schemas/CASPreflightInfo"
+            "$ref": "#/components/schemas/PreflightInfo"
           }
-        }
+        },
+        "type": "array"
+      },
+      "ReadyReport": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
+            },
+            "type": "array"
+          },
+          "dataColumns": {
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
+            },
+            "type": "array"
+          },
+          "message": {
+            "type": "string"
+          },
+          "modelDetails": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "modelName": {
+            "type": "string"
+          },
+          "result": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "resultType": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReleaseNote": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReleaseNoteTableItem": {
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "releaseNotes": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNote"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ResolvedChemical": {
+        "properties": {
+          "chemical": {
+            "$ref": "#/components/schemas/Chemical"
+          },
+          "confidence": {
+            "format": "float",
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "resolvedBy": {
+            "enum": [
+              "DTXSID",
+              "DTXCID",
+              "SMILES",
+              "MOL",
+              "CAS",
+              "Name",
+              "InChI",
+              "InChIKey",
+              "InChIKey_1",
+              "AnyId"
+            ],
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "NOT_RESOLVED",
+              "FOUND",
+              "CONVERTED",
+              "MALFORMED",
+              "DUPLICATE"
+            ],
+            "type": "string"
+          },
+          "similarity": {
+            "format": "float",
+            "type": "number"
+          },
+          "source": {
+            "enum": [
+              "DTX",
+              "COMMONCHEMISTRY",
+              "PUBCHEM"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "VersionInfo": {
-        "type": "object",
         "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
@@ -836,100 +495,441 @@
           },
           "version": {
             "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "compiled": {
-            "type": "string",
-            "format": "date-time"
           }
-        }
-      },
-      "ReleaseNote": {
-        "type": "object",
-        "properties": {
-          "module": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
-        }
-      },
-      "ReleaseNoteTableItem": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "releaseNotes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ReleaseNote"
-            }
-          }
-        }
-      },
-      "CimComponentInfo": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string",
-            "enum": [
-              "Module",
-              "Tools",
-              "Model",
-              "Data",
-              "Ui"
-            ]
-          },
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "api": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "coreUI": {
-            "type": "boolean"
-          },
-          "isAvailableResetRest": {
-            "type": "boolean",
-            "writeOnly": true
-          },
-          "availableIsConstant": {
-            "type": "boolean"
-          },
-          "api_only": {
-            "type": "boolean"
-          },
-          "build_date": {
-            "type": "string"
-          },
-          "build_id": {
-            "type": "string"
-          },
-          "is_available": {
-            "type": "boolean"
-          }
-        }
+        },
+        "type": "object"
       }
     }
-  }
+  },
+  "info": {
+    "title": "Services Module",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/services/caspreflight": {
+      "post": {
+        "operationId": "postMultipartCASPreflight",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CASPreflightResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/cim_component_info": {
+      "get": {
+        "operationId": "cimComponentInfoGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CimComponentInfo"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/collated_report": {
+      "post": {
+        "operationId": "exportCollatedReport",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportCollatedReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/convert": {
+      "post": {
+        "operationId": "convert",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConvertRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/export": {
+      "post": {
+        "operationId": "exportAssayPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/export_json_report": {
+      "post": {
+        "operationId": "exportJsonReport",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/files": {
+      "post": {
+        "operationId": "postMultipartFiles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FilesUploadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResolvedChemical"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/layout": {
+      "get": {
+        "operationId": "layout",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/metadata": {
+      "get": {
+        "operationId": "metadataGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/preflight": {
+      "post": {
+        "operationId": "postMultipartPreflight",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreflightResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/release_notes": {
+      "get": {
+        "operationId": "releaseNotesGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {
+                    "items": {
+                      "$ref": "#/components/schemas/ReleaseNoteTableItem"
+                    },
+                    "type": "array"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/smirks2rxn": {
+      "get": {
+        "operationId": "smirks2rxn",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smirks",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/universalpreflight": {
+      "post": {
+        "operationId": "postMultipartUniversalPreflight",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreflightResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/version": {
+      "get": {
+        "operationId": "versionGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionInfo"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "description": "Default Server URL",
+      "url": "/"
+    }
+  ]
 }

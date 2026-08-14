@@ -2,53 +2,139 @@
 % Please edit documentation in R/chemi_search.R
 \name{chemi_search}
 \alias{chemi_search}
-\title{Search}
+\title{Cheminformatics Search}
 \usage{
 chemi_search(
-  searchType = NULL,
-  inputType = NULL,
   query = NULL,
-  smiles = NULL,
-  querySmiles = NULL,
-  offset = 0,
-  limit = NULL,
-  sortBy = NULL,
-  sortDirection = NULL,
-  params = NULL,
-  all_pages = TRUE
+  search_type = c("exact", "substructure", "similar", "mass", "hazard", "features"),
+  similarity_type = c("tanimoto", "euclid", "tversky"),
+  min_similarity = 0.85,
+  hazard_name = NULL,
+  min_toxicity = c("VH", "H", "M", "L", "A"),
+  min_authority = c("auth", "screen", "qsar"),
+  mass_type = c("mono", "mw", "abu"),
+  min_mass = NULL,
+  max_mass = NULL,
+  filter_features = FALSE,
+  feature_filters = NULL,
+  element_include = NULL,
+  element_exclude = NULL,
+  exclude_all_others = FALSE,
+  limit = 50,
+  all_pages = FALSE
 )
 }
 \arguments{
-\item{searchType}{Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, FORMULA, MASS, FEATURES, HAZARD, ADVANCED}
+\item{query}{Chemical identifier (DTXSID), SMILES string, or MOL file string.
+Required for exact, substructure, and similar searches. Can be NULL for
+mass, hazard, and features searches.}
 
-\item{inputType}{Optional parameter. Options: UNKNOWN, AUTO, MOL, RXN, SDF, RDF, SMI, SMILES, SMIRKS, CSV, TSV, JSON, XLSX, TXT, MSP}
+\item{search_type}{Type of search to perform. One of:
+\itemize{
+\item \code{"exact"} - Exact structure match
+\item \code{"substructure"} - Substructure search
+\item \code{"similar"} - Similarity search
+\item \code{"mass"} - Mass-based search
+\item \code{"hazard"} - Hazard-based search
+\item \code{"features"} - Feature-based search
+}}
 
-\item{query}{Optional parameter}
+\item{similarity_type}{Similarity metric for similar searches. One of
+\code{"tanimoto"} (default), \code{"euclid"}, or \code{"tversky"}.}
 
-\item{smiles}{Optional parameter}
+\item{min_similarity}{Minimum similarity threshold (0-1). Defaults to 0.85.}
 
-\item{querySmiles}{Optional parameter}
+\item{hazard_name}{Hazard endpoint name for hazard searches. Use short names:
+\code{"acute_oral"}, \code{"acute_inhal"}, \code{"acute_dermal"},
+\code{"cancer"}, \code{"geno"}, \code{"endo"}, \code{"reprod"},
+\code{"develop"}, \code{"neuro_single"}, \code{"neuro_repeat"},
+\code{"sys_single"}, \code{"sys_repeat"}, \code{"skin_sens"},
+\code{"skin_irr"}, \code{"eye"}, \code{"aq_acute"}, \code{"aq_chron"},
+\code{"persis"}, \code{"bioacc"}, \code{"expo"}.}
 
-\item{offset}{Optional parameter}
+\item{min_toxicity}{Minimum toxicity level for hazard searches.
+One of \code{"VH"} (Very High), \code{"H"} (High), \code{"M"} (Medium),
+\code{"L"} (Low), or \code{"A"} (Any).}
 
-\item{limit}{Optional parameter}
+\item{min_authority}{Minimum data authority level for hazard searches.
+One of \code{"auth"} (Authoritative), \code{"screen"} (Screening),
+or \code{"qsar"} (QSAR).}
 
-\item{sortBy}{Optional parameter}
+\item{mass_type}{Type of mass for mass searches. One of \code{"mono"}
+(monoisotopic mass), \code{"mw"} (molecular weight), or \code{"abu"}
+(most abundant mass).}
 
-\item{sortDirection}{Optional parameter}
+\item{min_mass}{Minimum mass value for mass searches.}
 
-\item{params}{Optional parameter}
+\item{max_mass}{Maximum mass value for mass searches.}
 
-\item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+\item{filter_features}{Logical; whether to apply feature filters. Defaults to FALSE.}
+
+\item{feature_filters}{Named logical vector of feature filters to apply when
+\code{filter_features = TRUE}. Valid filter names: \code{"stereo"},
+\code{"chiral"}, \code{"isotopes"}, \code{"charged"}, \code{"multicomponent"},
+\code{"radicals"}, \code{"salts"}, \code{"polymers"}, \code{"sgroups"}.}
+
+\item{element_include}{Character vector of element symbols to include in results.}
+
+\item{element_exclude}{Character vector of element symbols to exclude from results.}
+
+\item{exclude_all_others}{Logical; if TRUE, excludes all elements except those
+in \code{element_include}. Defaults to FALSE.}
+
+\item{limit}{Maximum number of results to return per page. Defaults to 50.}
+
+\item{all_pages}{Logical; if TRUE, automatically fetches all pages via
+offset/limit pagination. If FALSE (default), returns a single page.}
 }
 \value{
-Returns a tibble with results
+A tibble containing search results with columns depending on search type.
+For similarity searches, includes a \code{relationship} column indicating
+\code{"parent"} (query compound) or \code{"child"} (similar compound).
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+
+Search the cheminformatics database using various search types including
+exact structure, substructure, similarity, mass, hazard, and feature searches.
 }
 \examples{
 \dontrun{
-chemi_search(searchType = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+# Exact search by DTXSID
+chemi_search("DTXSID7020182", "exact")
+
+# Similarity search with custom threshold
+chemi_search("DTXSID7020182", "similar", min_similarity = 0.9)
+
+# Mass range search
+chemi_search(
+  query = NULL,
+  search_type = "mass",
+  mass_type = "mono",
+  min_mass = 100,
+  max_mass = 200
+)
+
+# Hazard search for carcinogenicity
+chemi_search(
+  query = NULL,
+  search_type = "hazard",
+  hazard_name = "cancer",
+  min_toxicity = "H",
+  min_authority = "auth"
+)
+
+# Feature search with element filtering
+chemi_search(
+  query = NULL,
+  search_type = "features",
+  element_include = c("C", "N", "O"),
+  exclude_all_others = TRUE,
+  limit = 100
+)
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

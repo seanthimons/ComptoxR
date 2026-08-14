@@ -5,6 +5,7 @@
 #'
 #' @param smiles Required parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

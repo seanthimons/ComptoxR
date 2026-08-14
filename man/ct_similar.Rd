@@ -22,3 +22,7 @@ A tibble of similar compounds, or an empty tibble if no similar compounds are fo
 ct_similar(query = "DTXSID7020182", similarity = 0.8)
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

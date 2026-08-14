@@ -5,6 +5,7 @@
 #'
 #' @param record_type Record type.  Accepted values are "analytical_qc", "fact_sheets", and "methods".
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

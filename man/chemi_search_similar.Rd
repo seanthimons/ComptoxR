@@ -37,3 +37,7 @@ Returns a tibble with results
 chemi_search_similar(smiles = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

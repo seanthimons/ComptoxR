@@ -2,35 +2,48 @@
 % Please edit documentation in R/chemi_descriptors.R
 \name{chemi_descriptors}
 \alias{chemi_descriptors}
-\title{Descriptors}
+\title{Calculate descriptors with the aggregate descriptor service}
 \usage{
 chemi_descriptors(
   smiles,
   type,
   headers = FALSE,
   format = "JSON",
-  timeout = NULL
+  timeout = NULL,
+  output = c("wide", "raw")
 )
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{One SMILES string or resolvable chemical identifier.}
 
-\item{type}{Required parameter}
+\item{type}{Descriptor engine: \code{padel}, \code{rdkit}, \code{mordred}, or \code{webtest}.}
 
-\item{headers}{Optional parameter (default: FALSE)}
+\item{headers}{Request upstream descriptor headers. Wide output always requests
+or deterministically generates headers.}
 
-\item{format}{Optional parameter. Options: JSON, CSV, TSV (default: JSON)}
+\item{format}{Response format: \code{JSON}, \code{CSV}, or \code{TSV}.}
 
-\item{timeout}{Optional parameter}
+\item{timeout}{Optional upstream calculation timeout.}
+
+\item{output}{Output contract: \code{wide} returns a validated tibble; \code{raw}
+returns the unformatted payload with provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated one-row tibble or a raw payload with provenance.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Identifier-like inputs (DTXSID, DTXCID, and CASRN) are resolved to SMILES
+before the request. Raw aggregate endpoints do not perform this wrapper-level
+resolution.
 }
 \examples{
 \dontrun{
-chemi_descriptors(smiles = "DTXSID7020182")
+chemi_descriptors(smiles = "DTXSID7020182", type = "padel")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

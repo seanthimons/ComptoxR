@@ -1,5 +1,115 @@
 {
   "definitions": {
+    "all_similarity_by_dtxsid_request": {
+      "properties": {
+        "da_window": {
+          "description": "Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.",
+          "example": 0.1,
+          "type": "number"
+        },
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID3022401"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "min_intensity": {
+          "description": "Minimum intensity level for peaks in both the user and database spectra to consider.  All database spectra are scaled to have a maximum intensity of 100, and all user spectra are assumed to be scaled the same.",
+          "example": 0,
+          "type": "number"
+        },
+        "ms_level": {
+          "description": "Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.",
+          "example": 2,
+          "type": "integer"
+        },
+        "ppm_window": {
+          "description": "Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.",
+          "example": 5,
+          "type": "number"
+        },
+        "spectra": {
+          "description": "A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.",
+          "example": [
+            [
+              [
+                10,
+                20
+              ],
+              [
+                23,
+                100
+              ]
+            ],
+            [
+              [
+                15,
+                30
+              ],
+              [
+                24.5,
+                100
+              ],
+              [
+                33,
+                9
+              ]
+            ]
+          ],
+          "items": {
+            "type": "array"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "analytical_qc_batch_search_request": {
+      "properties": {
+        "base_url": {
+          "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
+          "type": "string"
+        },
+        "ids": {
+          "description": "List of DTXSIDs or other identifiers to search for.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID3022401",
+            "benzene"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include_classyfire": {
+          "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
+          "type": "boolean"
+        },
+        "include_functional_uses": {
+          "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
+          "type": "boolean"
+        },
+        "include_source_counts": {
+          "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
+          "type": "boolean"
+        },
+        "methodologies": {
+          "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
+          "example": {
+            "all": false,
+            "GC/MS": true,
+            "LC/MS": true,
+            "NMR": false
+          },
+          "type": "object"
+        }
+      }
+    },
     "AnalyticalQCFilteredListRequest": {
       "example": {
         "cursor": "",
@@ -12,7 +122,7 @@
             ]
           },
           "timepoint": {
-            "filterType": "set",
+            "filterType": "numeric",
             "values": [
               "T0"
             ]
@@ -163,10 +273,10 @@
         "methodologies": {
           "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
           "example": {
+            "all": false,
             "GC/MS": true,
             "LC/MS": true,
-            "NMR": false,
-            "all": false
+            "NMR": false
           },
           "type": "object"
         },
@@ -221,6 +331,78 @@
           "description": "Superclass-level (second-highest) classification of a substance.  Required if requesting a list of classes or subclasses.",
           "example": "Organic salts",
           "type": "string"
+        }
+      }
+    },
+    "count_substances_in_ids_request": {
+      "properties": {
+        "internal_id_list": {
+          "description": "Array of record IDs.",
+          "example": [
+            "GJ-004",
+            "FS-26369",
+            "1CGr7ZTsFv4"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "entropy_similarity_request": {
+      "properties": {
+        "spectrum_1": {
+          "description": "Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.",
+          "example": [
+            [
+              10.5,
+              20
+            ],
+            [
+              20,
+              100
+            ],
+            [
+              50,
+              1
+            ]
+          ],
+          "items": {
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "spectrum_2": {
+          "description": "Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.",
+          "example": [
+            [
+              10.5,
+              20
+            ],
+            [
+              22,
+              100
+            ],
+            [
+              50,
+              1.5
+            ]
+          ],
+          "items": {
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Type of mass window to use.  Should be either \"da\" or \"ppm\".",
+          "example": "da",
+          "type": "string"
+        },
+        "window": {
+          "description": "Size of the mass window to use.  Will be in units of the 'type' argument.",
+          "example": 0.1,
+          "type": "number"
         }
       }
     },
@@ -310,6 +492,66 @@
         }
       }
     },
+    "mass_spectra_for_substances_request": {
+      "properties": {
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
+          "example": [
+            "DTXSID9020112"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      }
+    },
+    "mass_spectrum_similarity_search_request": {
+      "properties": {
+        "lower_mass_limit": {
+          "description": "Lower limit of the mass range to search for.",
+          "example": 194.1,
+          "type": "number"
+        },
+        "methodology": {
+          "description": "Analytical methodology to search for.  Values aside from \"GC/MS\" and \"LC/MS\" are highly unlikely to produce results.",
+          "example": "LC/MS",
+          "type": "string"
+        },
+        "spectrum": {
+          "description": "Array of two-element numeric arrays.  The two-element arrays represent a single peak in the spectrum, in the format [m/z, intensity].  Peaks should be sorted in ascending order of m/z values.",
+          "example": [
+            [
+              217.0696,
+              100
+            ],
+            [
+              218.0721,
+              10.2292
+            ]
+          ],
+          "items": {
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Type of mass window to use for entropy similarity calculations.  Can be either \"da\" or \"ppm\".",
+          "example": "da",
+          "type": "string"
+        },
+        "upper_mass_limit": {
+          "description": "Upper limit of the mass range to search for.",
+          "example": 194.2,
+          "type": "number"
+        },
+        "window": {
+          "description": "Size of mass window.  Is in units of `type`.",
+          "example": 0.05,
+          "type": "number"
+        }
+      }
+    },
     "MassRangeSubstanceSearchRequest": {
       "properties": {
         "lower_mass_limit": {
@@ -321,6 +563,55 @@
           "description": "Upper limit of the mass range to search for.",
           "example": 194.2,
           "type": "number"
+        }
+      }
+    },
+    "max_similarity_by_dtxsid_request": {
+      "properties": {
+        "da_window": {
+          "description": "Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.",
+          "example": 0.1,
+          "type": "number"
+        },
+        "dtxsids": {
+          "description": "List of DTXSIDs to search for.",
+          "example": [
+            "DTXSID0020232",
+            "DTXSID70199859"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ms_level": {
+          "description": "Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.",
+          "example": 2,
+          "type": "integer"
+        },
+        "ppm_window": {
+          "description": "Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.",
+          "example": 5,
+          "type": "number"
+        },
+        "spectra": {
+          "description": "A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.",
+          "example": [
+            [
+              [
+                217.0696,
+                100
+              ],
+              [
+                218.0721,
+                10.2292
+              ]
+            ]
+          ],
+          "items": {
+            "type": "array"
+          },
+          "type": "array"
         }
       }
     },
@@ -407,110 +698,6 @@
             "type": "object"
           },
           "type": "array"
-        }
-      }
-    },
-    "NewAnalyticalQCSpectrum": {
-      "properties": {
-        "annotation": {
-          "description": "Annotation for the spectrum.  Can be empty.",
-          "type": "string"
-        },
-        "dtxsid": {
-          "description": "DTXSID for the spectrum.  Required.",
-          "type": "string"
-        },
-        "file": {
-          "description": "Spectrum to add.  Should be a file with an extension of .jdx, .json, or .pdf.",
-          "type": "file"
-        },
-        "first_timepoint": {
-          "description": "Quality descriptor for the sample at the initial timepoint.",
-          "type": "string"
-        },
-        "flags": {
-          "description": "List of substance flags pertaining to the spectrum's substance.  Can be empty but should not be null.",
-          "type": "array"
-        },
-        "last_timepoint": {
-          "description": "Quality descriptor for the sample at the measured timepoint.",
-          "type": "string"
-        },
-        "lcms_amen_neg_true": {
-          "description": "Substance level (?) amenability flag for ESI- work.",
-          "type": "string"
-        },
-        "lcms_amen_pos_true": {
-          "description": "Substance level (?) amenability flag for ESI+ work.",
-          "type": "string"
-        },
-        "methodology": {
-          "description": "Analytical methodology for the spectrum.  Should be either GC/MS, LC/MS, or NMR.  Required.",
-          "type": "string"
-        },
-        "sample_id": {
-          "description": "ID of the tested sample.",
-          "type": "string"
-        },
-        "stability_call": {
-          "description": "Stability call for the sample at the time of measurement.",
-          "type": "string"
-        },
-        "timepoint": {
-          "description": "Elapsed time (in months) that the sample has been at room temperature.  Should be formatted as \"T[# of months]\".",
-          "type": "string"
-        }
-      }
-    },
-    "NewDocument": {
-      "properties": {
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "source": {
-          "description": "Name of the source.  Optional.",
-          "type": "string"
-        }
-      }
-    },
-    "NewFactSheet": {
-      "properties": {
-        "document_type": {
-          "description": "Type of fact sheet. Optional.",
-          "type": "string"
-        },
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "skip_clean": {
-          "description": "Skip PDF cleaning. Default false.",
-          "type": "boolean"
-        },
-        "skip_ocr": {
-          "description": "Skip OCR. Default false.",
-          "type": "boolean"
-        },
-        "source": {
-          "description": "Name of the source. Optional.",
-          "type": "string"
-        }
-      }
-    },
-    "NewMethod": {
-      "properties": {
-        "document_type": {
-          "description": "Type of method. Optional.",
-          "type": "string"
-        },
-        "file": {
-          "description": "PDF to add.",
-          "type": "file"
-        },
-        "source": {
-          "description": "Name of the source.  Optional.",
-          "type": "string"
         }
       }
     },
@@ -701,309 +888,6 @@
         }
       }
     },
-    "all_similarity_by_dtxsid_request": {
-      "properties": {
-        "da_window": {
-          "description": "Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.",
-          "example": 0.1,
-          "type": "number"
-        },
-        "dtxsids": {
-          "description": "List of DTXSIDs to search for.",
-          "example": [
-            "DTXSID9020112",
-            "DTXSID3022401"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "min_intensity": {
-          "description": "Minimum intensity level for peaks in both the user and database spectra to consider.  All database spectra are scaled to have a maximum intensity of 100, and all user spectra are assumed to be scaled the same.",
-          "example": 0,
-          "type": "number"
-        },
-        "ms_level": {
-          "description": "Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.",
-          "example": 2,
-          "type": "integer"
-        },
-        "ppm_window": {
-          "description": "Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.",
-          "example": 5,
-          "type": "number"
-        },
-        "spectra": {
-          "description": "A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.",
-          "example": [
-            [
-              [
-                10,
-                20
-              ],
-              [
-                23,
-                100
-              ]
-            ],
-            [
-              [
-                15,
-                30
-              ],
-              [
-                24.5,
-                100
-              ],
-              [
-                33,
-                9
-              ]
-            ]
-          ],
-          "items": {
-            "type": "array"
-          },
-          "type": "array"
-        }
-      }
-    },
-    "analytical_qc_batch_search_request": {
-      "properties": {
-        "base_url": {
-          "description": "URL for the AMOS frontend.  Used to construct the internal links in the output file.",
-          "type": "string"
-        },
-        "ids": {
-          "description": "List of DTXSIDs or other identifiers to search for.",
-          "example": [
-            "DTXSID9020112",
-            "DTXSID3022401",
-            "benzene"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "include_classyfire": {
-          "description": "Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.",
-          "type": "boolean"
-        },
-        "include_functional_uses": {
-          "description": "Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.",
-          "type": "boolean"
-        },
-        "include_source_counts": {
-          "description": "Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.",
-          "type": "boolean"
-        },
-        "methodologies": {
-          "description": "Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- \"all\", \"GC/MS\", \"LC/MS\", and \"NMR\".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if \"all\" is set to true.",
-          "example": {
-            "GC/MS": true,
-            "LC/MS": true,
-            "NMR": false,
-            "all": false
-          },
-          "type": "object"
-        }
-      }
-    },
-    "count_substances_in_ids_request": {
-      "properties": {
-        "internal_id_list": {
-          "description": "Array of record IDs.",
-          "example": [
-            "GJ-004",
-            "FS-26369",
-            "1CGr7ZTsFv4"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      }
-    },
-    "dtxsids_search_schema": {
-      "properties": {
-        "dtxsids": {
-          "description": "Array of DTXSIDs as strings.",
-          "example": [
-            "DTXSID9020112",
-            "DTXSID2023985"
-          ],
-          "type": "array"
-        }
-      }
-    },
-    "entropy_similarity_request": {
-      "properties": {
-        "spectrum_1": {
-          "description": "Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.",
-          "example": [
-            [
-              10.5,
-              20
-            ],
-            [
-              20,
-              100
-            ],
-            [
-              50,
-              1
-            ]
-          ],
-          "items": {
-            "type": "array"
-          },
-          "type": "array"
-        },
-        "spectrum_2": {
-          "description": "Array of m/z intensity pairs.  Should be formatted as an array of two-element arrays, each of which has the m/z value and the intensity value (in that order).  Peaks should be sorted in increasing order of m/z values.",
-          "example": [
-            [
-              10.5,
-              20
-            ],
-            [
-              22,
-              100
-            ],
-            [
-              50,
-              1.5
-            ]
-          ],
-          "items": {
-            "type": "array"
-          },
-          "type": "array"
-        },
-        "type": {
-          "description": "Type of mass window to use.  Should be either \"da\" or \"ppm\".",
-          "example": "da",
-          "type": "string"
-        },
-        "window": {
-          "description": "Size of the mass window to use.  Will be in units of the 'type' argument.",
-          "example": 0.1,
-          "type": "number"
-        }
-      }
-    },
-    "mass_spectra_for_substances_request": {
-      "properties": {
-        "dtxsids": {
-          "description": "List of DTXSIDs to search for.",
-          "example": [
-            "DTXSID9020112"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      }
-    },
-    "mass_spectrum_similarity_search_request": {
-      "properties": {
-        "lower_mass_limit": {
-          "description": "Lower limit of the mass range to search for.",
-          "example": 194.1,
-          "type": "number"
-        },
-        "methodology": {
-          "description": "Analytical methodology to search for.  Values aside from \"GC/MS\" and \"LC/MS\" are highly unlikely to produce results.",
-          "example": "LC/MS",
-          "type": "string"
-        },
-        "spectrum": {
-          "description": "Array of two-element numeric arrays.  The two-element arrays represent a single peak in the spectrum, in the format [m/z, intensity].  Peaks should be sorted in ascending order of m/z values.",
-          "example": [
-            [
-              217.0696,
-              100
-            ],
-            [
-              218.0721,
-              10.2292
-            ]
-          ],
-          "items": {
-            "type": "array"
-          },
-          "type": "array"
-        },
-        "type": {
-          "description": "Type of mass window to use for entropy similarity calculations.  Can be either \"da\" or \"ppm\".",
-          "example": "da",
-          "type": "string"
-        },
-        "upper_mass_limit": {
-          "description": "Upper limit of the mass range to search for.",
-          "example": 194.2,
-          "type": "number"
-        },
-        "window": {
-          "description": "Size of mass window.  Is in units of `type`.",
-          "example": 0.05,
-          "type": "number"
-        }
-      }
-    },
-    "max_similarity_by_dtxsid_request": {
-      "properties": {
-        "da_window": {
-          "description": "Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.",
-          "example": 0.1,
-          "type": "number"
-        },
-        "dtxsids": {
-          "description": "List of DTXSIDs to search for.",
-          "example": [
-            "DTXSID0020232",
-            "DTXSID70199859"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "ms_level": {
-          "description": "Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.",
-          "example": 2,
-          "type": "integer"
-        },
-        "ppm_window": {
-          "description": "Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.",
-          "example": 5,
-          "type": "number"
-        },
-        "spectra": {
-          "description": "A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.",
-          "example": [
-            [
-              [
-                217.0696,
-                100
-              ],
-              [
-                218.0721,
-                10.2292
-              ]
-            ]
-          ],
-          "items": {
-            "type": "array"
-          },
-          "type": "array"
-        }
-      }
-    },
     "spectral_entropy_request": {
       "properties": {
         "spectrum": {
@@ -1067,7 +951,7 @@
   "paths": {
     "/api/amos/add_aqc_spectrum/": {
       "post": {
-        "description": "(.jdx), and a specific form of JSON.",
+        "description": "(.jdx), and a specific form of JSON.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1077,13 +961,12 @@
             }
           }
         ],
-        "responses": {},
         "summary": "Loads a new spectrum into the database for Analytical QC.  This is intended to accept only PDFs, JCAMP-DX files"
       }
     },
     "/api/amos/add_new_fact_sheet/": {
       "post": {
-        "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf",
+        "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1093,13 +976,12 @@
             }
           }
         ],
-        "responses": {},
         "summary": "Adds a new fact sheet to the database. The new ID is automatically determined and assigned."
       }
     },
     "/api/amos/add_new_method/": {
       "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
+        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1109,13 +991,12 @@
             }
           }
         ],
-        "responses": {},
         "summary": "Adds a new method to the database.  The new ID is automatically determined and assigned by this function."
       }
     },
     "/api/amos/add_new_product_declaration/": {
       "post": {
-        "description": "function.  Additionally, since little metadata is currently being added during this step, all documents are set to<br/>be drafts in the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
+        "description": "function.  Additionally, since little metadata is currently being added during this step, all documents are set to<br/>be drafts in the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1125,13 +1006,12 @@
             }
           }
         ],
-        "responses": {},
         "summary": "Adds a new product declaration to the database.  The new ID is automatically determined and assigned by this"
       }
     },
     "/api/amos/add_new_safety_data_sheet/": {
       "post": {
-        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.",
+        "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1141,13 +1021,11 @@
             }
           }
         ],
-        "responses": {},
         "summary": "Adds a new safety data sheet to the database.  The new ID is automatically determined and assigned by this function."
       }
     },
     "/api/amos/additional_sources_for_substance/{dtxsid}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1167,7 +1045,7 @@
     },
     "/api/amos/all_similarities_by_dtxsid/": {
       "post": {
-        "description": "<br/>This endpoint is intended for use with INTERPRET NTA.",
+        "description": "<br/>This endpoint is intended for use with INTERPRET NTA.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1187,7 +1065,7 @@
     },
     "/api/amos/analytical_qc_batch_search": {
       "post": {
-        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.<br/>Analytical QC data can be found in the general batch search, but will lack some domain-specific information that<br/>this search supplies.",
+        "description": "or other identifiers.<br/><br/>Due to the amount of special handling that the Analytical QC data requires, this separate endpoint was set up.<br/>Analytical QC data can be found in the general batch search, but will lack some domain-specific information that<br/>this search supplies.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1207,7 +1085,6 @@
     },
     "/api/amos/analytical_qc_keyset_pagination/{limit}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -1232,7 +1109,6 @@
         "summary": "Returns information on a batch of Analytical QC documents using keyset pagination."
       },
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -1263,7 +1139,7 @@
     },
     "/api/amos/batch_search": {
       "post": {
-        "description": "<br/>There are a number of options for either filtering records from the database or incorporating additional information<br/><br/>If a record contains more than one of the searched DTXSIDs, then that record will appear once for each searched substance it contains.",
+        "description": "<br/>There are a number of options for either filtering records from the database or incorporating additional information<br/><br/>If a record contains more than one of the searched DTXSIDs, then that record will appear once for each searched substance it contains.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1283,7 +1159,6 @@
     },
     "/api/amos/count_substances_in_ids/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -1303,7 +1178,6 @@
     },
     "/api/amos/database_summary/": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "A summary of the data in the database."
@@ -1312,25 +1186,8 @@
         "summary": "Returns a summary of the records in the database, organized by record types, methodologies, and sources."
       }
     },
-    "/api/amos/dtxsids/": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/dtxsids_search_schema"
-            }
-          }
-        ],
-        "responses": {},
-        "summary": "Returns substance information and record counts for a list of DTXSIDs."
-      }
-    },
     "/api/amos/dtxsids_from_functional_use/{functional_use}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Functional use classification to search for.",
@@ -1351,9 +1208,22 @@
         "summary": "Returns all substances associated with the specified functional use classification."
       }
     },
+    "/api/amos/dtxsids/": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/dtxsids_search_schema"
+            }
+          }
+        ],
+        "summary": "Returns substance information and record counts for a list of DTXSIDs."
+      }
+    },
     "/api/amos/entropy_similarity/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -1373,7 +1243,6 @@
     },
     "/api/amos/fact_sheet_keyset_pagination/{limit}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -1398,7 +1267,6 @@
         "summary": "Returns information on a batch of fact sheets using keyset pagination."
       },
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -1429,7 +1297,6 @@
     },
     "/api/amos/find_dtxsids/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the record of interest.",
@@ -1449,7 +1316,7 @@
     },
     "/api/amos/formula_search/{formula}": {
       "get": {
-        "description": "<br/>The molecular formula is assumed to be in Hill form, which simply counts the number of atoms of each element that are present, and orders them alphabetically.  The exception is substances with carbon, where the atoms will be listed in the order of carbon, hydrogen, and then alphabetical order of everything else (e.g., C8H14ClN5 for atrazine).",
+        "description": "<br/>The molecular formula is assumed to be in Hill form, which simply counts the number of atoms of each element that are present, and orders them alphabetically.  The exception is substances with carbon, where the atoms will be listed in the order of carbon, hydrogen, and then alphabetical order of everything else (e.g., C8H14ClN5 for atrazine).<br/>",
         "parameters": [
           {
             "description": "Molecular formula to search by.  Formula should be in Hill form.",
@@ -1469,7 +1336,6 @@
     },
     "/api/amos/functional_class_search/{functional_class}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Functional use class.",
@@ -1489,7 +1355,6 @@
     },
     "/api/amos/functional_uses_for_dtxsid/{dtxsid}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1509,7 +1374,6 @@
     },
     "/api/amos/get_classification_for_dtxsid/{dtxsid}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1529,7 +1393,6 @@
     },
     "/api/amos/get_data_source_info/": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "List of JSON objects with information on major data sources."
@@ -1540,7 +1403,7 @@
     },
     "/api/amos/get_fact_sheet_editor_info/{internal_id}": {
       "get": {
-        "description": "appears in the pdf_metadata field in the FactSheets database table.",
+        "description": "appears in the pdf_metadata field in the FactSheets database table.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the fact sheet of interest.",
@@ -1563,7 +1426,6 @@
     },
     "/api/amos/get_info_by_id/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the record of interest.",
@@ -1583,7 +1445,6 @@
     },
     "/api/amos/get_ir_spectrum/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the IR spectrum of interest.",
@@ -1606,7 +1467,7 @@
     },
     "/api/amos/get_mass_spectrum/{internal_id}": {
       "get": {
-        "description": "<br/>This will only search for mass spectra stored directly in the database, and not spectra stored as PDFs.",
+        "description": "<br/>This will only search for mass spectra stored directly in the database, and not spectra stored as PDFs.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the mass spectrum of interest.",
@@ -1629,7 +1490,7 @@
     },
     "/api/amos/get_method_editor_info/{internal_id}": {
       "get": {
-        "description": "in the pdf_metadata field in the Method database table.",
+        "description": "in the pdf_metadata field in the Method database table.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the method of interest.",
@@ -1652,7 +1513,7 @@
     },
     "/api/amos/get_ms_ready_methods/{inchikey}": {
       "get": {
-        "description": "<br/>These methods are found by looking for substances which match the first block of the given InChIKey.  This only checks against JChem InChIKeys, not Indigo ones.",
+        "description": "<br/>These methods are found by looking for substances which match the first block of the given InChIKey.  This only checks against JChem InChIKeys, not Indigo ones.<br/>",
         "parameters": [
           {
             "description": "InChIKey to search by.",
@@ -1670,32 +1531,9 @@
         "summary": "Retrieves a list of methods that contain the MS-Ready forms of a given substance but not the substance itself."
       }
     },
-    "/api/amos/get_nmr_spectrum/{internal_id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "Unique ID of the NMR spectrum of interest.",
-            "in": "path",
-            "name": "internal_id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON object containing the spectrum and metadata about it."
-          },
-          "204": {
-            "description": "No NMR spectrum was found for the given internal ID."
-          }
-        },
-        "summary": "Endpoint for retrieving a specified NMR spectrum from the database."
-      }
-    },
     "/api/amos/get_nmr_spectrum_editor_info/{internal_id}": {
       "get": {
-        "description": "information relating to NMR spectra for Analytical QC.",
+        "description": "information relating to NMR spectra for Analytical QC.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the NMR spectrum.",
@@ -1716,19 +1554,11 @@
         "summary": "Retrieves metadata from the database about a single NMR spectrum.  It is currently intended only to retrieve"
       }
     },
-    "/api/amos/get_pdf/{record_type}/{internal_id}": {
+    "/api/amos/get_nmr_spectrum/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
-            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.",
-            "in": "path",
-            "name": "record_type",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "description": "Unique ID of the document of interest.",
+            "description": "Unique ID of the NMR spectrum of interest.",
             "in": "path",
             "name": "internal_id",
             "required": true,
@@ -1737,21 +1567,18 @@
         ],
         "responses": {
           "200": {
-            "description": "The PDF being searched, in the form of an <iframe>-compatible element."
+            "description": "A JSON object containing the spectrum and metadata about it."
           },
           "204": {
-            "description": "No record of the specified type was found for the specified ID."
-          },
-          "404": {
-            "description": "An invalid record type was supplied."
+            "description": "No NMR spectrum was found for the given internal ID."
           }
         },
-        "summary": "Retrieves a PDF from the database by the internal ID and type of record."
+        "summary": "Endpoint for retrieving a specified NMR spectrum from the database."
       }
     },
     "/api/amos/get_pdf_metadata/{record_type}/{internal_id}": {
       "get": {
-        "description": "<br/>Fact sheets, methods, and spectrum PDFs all have associated metadata, so this uses the record_type argument to differentiate<br/>between them.",
+        "description": "<br/>Fact sheets, methods, and spectrum PDFs all have associated metadata, so this uses the record_type argument to differentiate<br/>between them.<br/>",
         "parameters": [
           {
             "description": "A string indicating which kind of record is being retrieved. Valid values are 'spectrum', 'fact sheet', and 'method'.",
@@ -1782,9 +1609,41 @@
         "summary": "Retrieves metadata associated with a PDF record."
       }
     },
+    "/api/amos/get_pdf/{record_type}/{internal_id}": {
+      "get": {
+        "parameters": [
+          {
+            "description": "A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.",
+            "in": "path",
+            "name": "record_type",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Unique ID of the document of interest.",
+            "in": "path",
+            "name": "internal_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The PDF being searched, in the form of an <iframe>-compatible element."
+          },
+          "204": {
+            "description": "No record of the specified type was found for the specified ID."
+          },
+          "404": {
+            "description": "An invalid record type was supplied."
+          }
+        },
+        "summary": "Retrieves a PDF from the database by the internal ID and type of record."
+      }
+    },
     "/api/amos/get_product_declaration_editor_info/{internal_id}": {
       "get": {
-        "description": "that appears in the pdf_metadata field in the ProductDeclarations database table.",
+        "description": "that appears in the pdf_metadata field in the ProductDeclarations database table.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the product declaration.",
@@ -1807,7 +1666,7 @@
     },
     "/api/amos/get_safety_data_sheet_editor_info/{internal_id}": {
       "get": {
-        "description": "that appears in the pdf_metadata field in the SafetyDataSheets database table.",
+        "description": "that appears in the pdf_metadata field in the SafetyDataSheets database table.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the safety data sheet.",
@@ -1830,7 +1689,7 @@
     },
     "/api/amos/get_similar_structures/{identifier_type}/{identifier}": {
       "get": {
-        "description": "substance.<br/><br/>Search similarity is currently hardcoded to 0.5.",
+        "description": "substance.<br/><br/>Search similarity is currently hardcoded to 0.5.<br/>",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -1850,7 +1709,6 @@
     },
     "/api/amos/get_substance_file_for_record/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the record of interest.",
@@ -1870,7 +1728,7 @@
     },
     "/api/amos/get_substances_for_search_term/{search_term}": {
       "get": {
-        "description": "in the route.<br/><br/>Takes a string that is interpreted as either an InChIKey, CASRN, DTXSID, or substance name and returns a list of any<br/>substances that match the search term.  If no DTXSID is found, the function returns None.  If multiple synonyms or<br/>the first block InChIKey matches are found, the response will have an 'ambiguity' variable will be passed indicating<br/>the issue.<br/><br/>If an InChIKey is searched for, the results will consist of all InChIKeys that match the first block of the InChIKey.",
+        "description": "in the route.<br/><br/>Takes a string that is interpreted as either an InChIKey, CASRN, DTXSID, or substance name and returns a list of any<br/>substances that match the search term.  If no DTXSID is found, the function returns None.  If multiple synonyms or<br/>the first block InChIKey matches are found, the response will have an 'ambiguity' variable will be passed indicating<br/>the issue.<br/><br/>If an InChIKey is searched for, the results will consist of all InChIKeys that match the first block of the InChIKey.<br/>",
         "parameters": [
           {
             "description": "A substance identifier.  If it cannot be parsed as an InChIKey, CASRN, or DTXSID, it is assumed to be a name.",
@@ -1890,7 +1748,6 @@
     },
     "/api/amos/inchikey_first_block_search/{first_block}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "First block of an InChIKey.",
@@ -1910,7 +1767,6 @@
     },
     "/api/amos/list_fact_sheet_types/": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "List of fact sheet types."
@@ -1921,7 +1777,6 @@
     },
     "/api/amos/list_functional_classes": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "List of functional use classes."
@@ -1932,7 +1787,6 @@
     },
     "/api/amos/list_sources_by_record_type/{record_type}": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "List of source names."
@@ -1943,7 +1797,6 @@
     },
     "/api/amos/mass_range_search/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -1963,7 +1816,7 @@
     },
     "/api/amos/mass_spectra_for_substances/": {
       "post": {
-        "description": "<br/>This endpoint will not return mass spectra stored as PDFs or ones that are only externally linked.<br/><br/>IMPORTANT -- Some substances can potentially have a multiple hundreds of spectra associated with them.  Submitting<br/>large numbers of substances in an individual transaction is not advised due to potential lag.",
+        "description": "<br/>This endpoint will not return mass spectra stored as PDFs or ones that are only externally linked.<br/><br/>IMPORTANT -- Some substances can potentially have a multiple hundreds of spectra associated with them.  Submitting<br/>large numbers of substances in an individual transaction is not advised due to potential lag.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -1983,7 +1836,6 @@
     },
     "/api/amos/mass_spectrum_similarity_search/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -2003,7 +1855,7 @@
     },
     "/api/amos/max_similarity_by_dtxsid/": {
       "post": {
-        "description": "DTXSID and spectrum.<br/><br/>This endpoint is intended for use with INTERPRET NTA.",
+        "description": "DTXSID and spectrum.<br/><br/>This endpoint is intended for use with INTERPRET NTA.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -2023,7 +1875,6 @@
     },
     "/api/amos/method_keyset_pagination/{limit}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2048,7 +1899,6 @@
         "summary": "Returns information on a batch of methods using keyset pagination."
       },
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2079,7 +1929,6 @@
     },
     "/api/amos/method_with_spectra/{search_type}/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "How to search the database.  Valid values are \"spectrum\" and \"method\".",
@@ -2106,7 +1955,7 @@
     },
     "/api/amos/next_level_classification/": {
       "post": {
-        "description": "<br/>Can search for<br/>- All superclasses for a given kingdom<br/>- All classes for a given kingdom and superclass<br/>- All subclasses for a given kingdom, superclass, and class<br/><br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming keyword.",
+        "description": "<br/>Can search for<br/>- All superclasses for a given kingdom<br/>- All classes for a given kingdom and superclass<br/>- All subclasses for a given kingdom, superclass, and class<br/><br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming keyword.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -2126,7 +1975,6 @@
     },
     "/api/amos/product_declaration_keyset_pagination/{limit}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2151,7 +1999,6 @@
         "summary": "Returns information on a batch of product declarations using keyset pagination."
       },
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2182,7 +2029,6 @@
     },
     "/api/amos/record_counts_by_dtxsid/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -2202,7 +2048,6 @@
     },
     "/api/amos/record_id_search/{internal_id}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the record of interest.",
@@ -2222,7 +2067,7 @@
     },
     "/api/amos/record_ids_for_substance/{dtxsid}/{record_type}": {
       "get": {
-        "description": "table displays of records.",
+        "description": "table displays of records.<br/>",
         "parameters": [
           {
             "description": "The DTXSID for the substance of interest.",
@@ -2249,7 +2094,6 @@
     },
     "/api/amos/record_type_count/{record_type}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Record type.  Accepted values are \"analytical_qc\", \"fact_sheets\", and \"methods\".",
@@ -2272,7 +2116,6 @@
     },
     "/api/amos/release_notes": {
       "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "List of release notes in the form of JSON objects, sorted in reverse chronological order."
@@ -2283,7 +2126,6 @@
     },
     "/api/amos/retrieve_fact_sheets/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "List of fact sheet IDs to return information on.",
@@ -2303,7 +2145,6 @@
     },
     "/api/amos/retrieve_product_declarations/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "List of product declaration IDs to return information on.",
@@ -2323,7 +2164,6 @@
     },
     "/api/amos/retrieve_safety_data_sheets/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "List of safety data sheet IDs to return information on.",
@@ -2343,7 +2183,6 @@
     },
     "/api/amos/safety_data_sheet_keyset_pagination/{limit}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2368,7 +2207,6 @@
         "summary": "Returns information on a batch of safety data sheets using keyset pagination."
       },
       "post": {
-        "description": "",
         "parameters": [
           {
             "description": "Limit of records to return.",
@@ -2397,29 +2235,8 @@
         "summary": "Returns filtered safety data sheets using keyset pagination."
       }
     },
-    "/api/amos/search/{dtxsid}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "description": "The DTXSID for the substance of interest.",
-            "in": "path",
-            "name": "dtxsid",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A JSON object containing a list of records from the database and counts of records by record type."
-          }
-        },
-        "summary": "Retrieves a list of records from the database that contain a searched DTXSID."
-      }
-    },
     "/api/amos/search_by_text/{substr}": {
       "get": {
-        "description": "",
         "parameters": [
           {
             "description": "The substring to search for.",
@@ -2439,7 +2256,7 @@
     },
     "/api/amos/search_for_document_ids/{record_type}": {
       "post": {
-        "description": "matches, and document text.",
+        "description": "matches, and document text.<br/>",
         "parameters": [
           {
             "description": "Record type to filter by.  Should be either 'Fact Sheet', 'Method', 'Product Declaration', or 'Safety Data Sheet' (capitalization included).",
@@ -2468,13 +2285,30 @@
             "type": "array of strings"
           }
         ],
-        "responses": {},
         "summary": "Runs a search for document IDs that pass a list of submitted filters, including document metadata, substance"
+      }
+    },
+    "/api/amos/search/{dtxsid}": {
+      "get": {
+        "parameters": [
+          {
+            "description": "The DTXSID for the substance of interest.",
+            "in": "path",
+            "name": "dtxsid",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON object containing a list of records from the database and counts of records by record type."
+          }
+        },
+        "summary": "Retrieves a list of records from the database that contain a searched DTXSID."
       }
     },
     "/api/amos/spectral_entropy/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -2494,7 +2328,7 @@
     },
     "/api/amos/spectrum_count_for_methodology/": {
       "post": {
-        "description": "<br/>Spectra from a variety of methodologies are present in the database; however, all but a few edge cases will be one of GC/MS, LC/MS, NMR, or IR.  The returned counts will also include spectra stored as PDFs, not just those stored directly in the database.<br/><br/>This endpoint is currently handled by a POST rather than a GET operation due to the fact that a lot of methodologies have forward slashes in them (e.g., 'LC/MS'), which disrupts routing.<br/><br/>Currently intended for use with applications outside the Vue app.",
+        "description": "<br/>Spectra from a variety of methodologies are present in the database; however, all but a few edge cases will be one of GC/MS, LC/MS, NMR, or IR.  The returned counts will also include spectra stored as PDFs, not just those stored directly in the database.<br/><br/>This endpoint is currently handled by a POST rather than a GET operation due to the fact that a lot of methodologies have forward slashes in them (e.g., 'LC/MS'), which disrupts routing.<br/><br/>Currently intended for use with applications outside the Vue app.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -2514,7 +2348,7 @@
     },
     "/api/amos/substances_for_classification/": {
       "post": {
-        "description": "<br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming<br/>keyword.  Additionally, not all substances in the database have a ClassyFire classification.",
+        "description": "<br/>Note that \"class\" is spelled with a \"k\" in the arguments to avoid possible issues with using a common programming<br/>keyword.  Additionally, not all substances in the database have a ClassyFire classification.<br/>",
         "parameters": [
           {
             "in": "body",
@@ -2534,7 +2368,6 @@
     },
     "/api/amos/substances_for_ids/": {
       "post": {
-        "description": "",
         "parameters": [
           {
             "in": "body",
@@ -2554,7 +2387,7 @@
     },
     "/api/amos/substring_search/{substring}": {
       "get": {
-        "description": "<br/>Substances where either the EPA-preferred name or an EPA-recorgnized synonyms are returned. This returns a list of<br/>substances, synonyms that matched the search (if any), and the record counts for each substance.",
+        "description": "<br/>Substances where either the EPA-preferred name or an EPA-recorgnized synonyms are returned. This returns a list of<br/>substances, synonyms that matched the search (if any), and the record counts for each substance.<br/>",
         "parameters": [
           {
             "description": "A name substring to search by.",
@@ -2574,7 +2407,6 @@
     },
     "/api/amos/update_analytical_qc_pdf_info/{internal_id}": {
       "put": {
-        "description": "",
         "parameters": [
           {
             "description": "Unique ID of the fact sheet of interest.",
@@ -2597,7 +2429,7 @@
     },
     "/api/amos/update_fact_sheet_info/{internal_id}": {
       "put": {
-        "description": "is also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be<br/>returned.",
+        "description": "is also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be<br/>returned.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the fact sheet of interest.",
@@ -2620,7 +2452,7 @@
     },
     "/api/amos/update_method_info/{internal_id}": {
       "put": {
-        "description": "also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be returned.",
+        "description": "also performed; if the result is determined to be invalid, a list of issues and an HTTP 409 error will be returned.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the method of interest.",
@@ -2643,7 +2475,7 @@
     },
     "/api/amos/update_nmr_spectrum_info/{internal_id}": {
       "put": {
-        "description": "the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
+        "description": "the submission is invalid, a list of issues and an HTTP 409 error will be returned.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the NMR spectrum to update.",
@@ -2666,7 +2498,7 @@
     },
     "/api/amos/update_product_declaration_info/{internal_id}": {
       "put": {
-        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
+        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the product declaration of interest.",
@@ -2689,7 +2521,7 @@
     },
     "/api/amos/update_safety_data_sheet_info/{internal_id}": {
       "put": {
-        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.",
+        "description": "validation is performed; if the submission is invalid, a list of issues and an HTTP 409 error will be returned.<br/>",
         "parameters": [
           {
             "description": "Unique ID of the product declaration of interest.",

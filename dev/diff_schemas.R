@@ -519,6 +519,38 @@ format_diff_markdown <- function(diff_results) {
 }
 
 # ------------------------------------------------------------------------------
+# Change Counting
+# ------------------------------------------------------------------------------
+
+#' Count breaking / non-breaking endpoint changes from diff_schemas() output
+#'
+#' Robust to an empty result list (no changes) and to parse-error entries
+#' (which carry only `schema_file` + `error`). A plain accumulator loop avoids
+#' the `sum(sapply(...))` hazard where sapply over an empty or mixed-length list
+#' returns a list and `sum()` aborts with "invalid 'type' (list) of argument".
+#'
+#' @param diff_results Output from diff_schemas()
+#' @return List with breaking (integer) and nonbreaking (integer)
+count_diff_changes <- function(diff_results) {
+  breaking <- 0L
+  nonbreaking <- 0L
+  for (result in diff_results) {
+    if (!is.null(result$error)) {
+      # Parse error - treat as a breaking change so it surfaces for review
+      breaking <- breaking + 1L
+      next
+    }
+    breaking <- breaking + nrow(result$removed)
+    nonbreaking <- nonbreaking + nrow(result$added)
+    if (nrow(result$modified) > 0) {
+      breaking <- breaking + sum(result$modified$breaking)
+      nonbreaking <- nonbreaking + sum(!result$modified$breaking)
+    }
+  }
+  list(breaking = as.integer(breaking), nonbreaking = as.integer(nonbreaking))
+}
+
+# ------------------------------------------------------------------------------
 # CLI Entrypoint (when sourced from CI)
 # ------------------------------------------------------------------------------
 
@@ -543,29 +575,9 @@ if (sys.nframe() == 0) {
   cat("Report written to: schema_diff_report.md\n")
 
   # Calculate counts for CI
-  breaking_count <- 0
-  nonbreaking_count <- 0
-
-  for (result in results) {
-    if (!is.null(result$error)) {
-      breaking_count <- breaking_count + 1
-      next
-    }
-
-    # Removed endpoints are breaking
-    breaking_count <- breaking_count + nrow(result$removed)
-
-    # Added endpoints are non-breaking
-    nonbreaking_count <- nonbreaking_count + nrow(result$added)
-
-    # Modified endpoints - count by breaking flag
-    if (nrow(result$modified) > 0) {
-      breaking_count <- breaking_count + sum(result$modified$breaking)
-      nonbreaking_count <- nonbreaking_count + sum(!result$modified$breaking)
-    }
-  }
+  counts <- count_diff_changes(results)
 
   # Output counts for CI parsing
-  cat(sprintf("BREAKING_COUNT=%d\n", breaking_count))
-  cat(sprintf("NONBREAKING_COUNT=%d\n", nonbreaking_count))
+  cat(sprintf("BREAKING_COUNT=%d\n", counts$breaking))
+  cat(sprintf("NONBREAKING_COUNT=%d\n", counts$nonbreaking))
 }

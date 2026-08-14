@@ -7,7 +7,7 @@
 ct_chemical_search_contain(word, top = 0, projection = "chemicalsearchall")
 }
 \arguments{
-\item{word}{Substring of word to search for. Values supplied as the 'word' parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN), or InChIKey.. Type: string}
+\item{word}{Substring of word to seach for. Values supplied as the 'word' parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN), or InChIKey.. Type: string}
 
 \item{top}{Optional parameter (default: 0)}
 
@@ -24,3 +24,7 @@ Returns a scalar value
 ct_chemical_search_contain(word = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

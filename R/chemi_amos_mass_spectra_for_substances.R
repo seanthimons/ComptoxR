@@ -5,6 +5,7 @@
 #'
 #' @param dtxsids List of DTXSIDs to search for.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples

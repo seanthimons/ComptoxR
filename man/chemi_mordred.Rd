@@ -2,25 +2,39 @@
 % Please edit documentation in R/chemi_mordred.R
 \name{chemi_mordred}
 \alias{chemi_mordred}
-\title{Generate descriptors for one molecule}
+\title{Calculate Mordred descriptors for one molecule}
 \usage{
-chemi_mordred(smiles, headers = NULL, inchi = NULL)
+chemi_mordred(smiles, headers = NULL, inchi = NULL, output = c("wide", "raw"))
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{One SMILES string or resolvable chemical identifier.}
 
-\item{headers}{Optional parameter}
+\item{headers}{Request upstream descriptor headers.}
 
-\item{inchi}{Optional parameter}
+\item{inchi}{Include InChI identifiers.}
+
+\item{output}{\code{wide} for a validated tibble or \code{raw} for the payload with
+provenance attributes.}
 }
 \value{
-Returns a tibble with results
+A validated one-row tibble or raw payload.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Production calls use the staging dedicated Mordred deployment because the
+production dedicated deployment is unavailable.
+
+This wrapper resolves identifier-like inputs to SMILES before calling the
+dedicated service. The raw \verb{/api/mordred} endpoint does not perform that
+wrapper-level resolution.
 }
 \examples{
 \dontrun{
 chemi_mordred(smiles = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

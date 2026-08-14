@@ -21,7 +21,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: integration
           fetch-depth: 0
@@ -67,17 +67,28 @@ jobs:
         continue-on-error: true
         run: |
           pkgload::load_all()
-          download_ok <- TRUE
-          tryCatch(ct_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("ct_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
-          tryCatch(chemi_schema(timeout = 60), error = function(e) {
-            cli::cli_alert_warning("chemi_schema failed: {conditionMessage(e)}")
-            download_ok <<- FALSE
-          })
+          failed_families <- character()
+          download_family <- function(family, download) {
+            tryCatch(
+              download(),
+              error = function(e) {
+                cli::cli_alert_warning("{family} schema download failed: {conditionMessage(e)}")
+                failed_families <<- c(failed_families, family)
+              }
+            )
+          }
+
+          download_family("ct", function() ct_schema(timeout = 60))
+          download_family("chemi", function() chemi_schema(timeout = 60))
+          download_family("epi", function() epi_schema(timeout = 60))
+
+          download_ok <- length(failed_families) == 0L
+          gh_output <- Sys.getenv("GITHUB_OUTPUT")
+          cat(sprintf("ok=%s\n", tolower(as.character(download_ok))), file = gh_output, append = TRUE)
+          cat(sprintf("failed_families=%s\n", paste(failed_families, collapse = ",")), file = gh_output, append = TRUE)
+
           if (!download_ok) {
-            cli::cli_alert_warning("One or more schema downloads failed - workflow will continue with available schemas")
+            cli::cli_alert_warning("Schema downloads failed for {paste(failed_families, collapse = ', ')}. The workflow will continue with available schemas.")
           }
         shell: Rscript {0}
 
@@ -97,7 +108,10 @@ jobs:
           schema_files <- list.files("schema", pattern = "\\.json$", full.names = TRUE)
           for (f in schema_files) {
             json <- jsonlite::fromJSON(f, simplifyVector = FALSE)
-            jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE)
+            # Keep the exact EPI example values. The default four digits can
+            # round a valid upstream change back to the committed value.
+            digits <- if (startsWith(basename(f), "epi-")) NA else 4
+            jsonlite::write_json(sort_keys(json), f, pretty = TRUE, auto_unbox = TRUE, digits = digits)
           }
           cli::cli_alert_info("Pretty-printed {length(schema_files)} schema files")
         shell: Rscript {0}
@@ -142,13 +156,10 @@ jobs:
           md <- format_diff_markdown(results)
           writeLines(md, "schema_diff_report.md")
 
-          # Count changes for workflow outputs
-          breaking <- sum(sapply(results, function(r) {
-            nrow(r$removed) + sum(r$modified$breaking)
-          }))
-          nonbreaking <- sum(sapply(results, function(r) {
-            nrow(r$added) + sum(!r$modified$breaking)
-          }))
+          # Count changes for workflow outputs (robust to empty/error results)
+          counts <- count_diff_changes(results)
+          breaking <- counts$breaking
+          nonbreaking <- counts$nonbreaking
 
           # Write to GITHUB_OUTPUT
           gh_output <- Sys.getenv("GITHUB_OUTPUT")
@@ -236,8 +247,13 @@ jobs:
       - name: Workflow status summary
         if: always()
         run: |
-          if [ "${{ steps.download.outcome }}" = "failure" ]; then
-            echo "::warning::Schema download had failures - some schemas may be missing"
+          if [ "${{ steps.download.outputs.ok }}" != "true" ]; then
+            FAILED_FAMILIES="${{ steps.download.outputs.failed_families }}"
+            if [ -n "$FAILED_FAMILIES" ]; then
+              echo "::warning::Schema downloads failed for: $FAILED_FAMILIES"
+            else
+              echo "::warning::Schema download status was not available"
+            fi
           fi
           if [ "${{ steps.diff.outcome }}" = "failure" ]; then
             echo "::warning::Schema diff encountered errors"
@@ -245,9 +261,7 @@ jobs:
 
       - name: Prepare PR body
         id: pr_body
-        if: >-
-          steps.changes.outputs.has_changes == 'true' &&
-          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           # Build PR body from template + diff report
           cat > pr_body.md << 'HEADER'
@@ -340,6 +354,7 @@ jobs:
           COVERAGE
           echo "| CompTox Dashboard (ct_*) | ${{ steps.coverage.outputs.ccd_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.ccd_functions_fmt || 'N/A' }} |" >> pr_body.md
           echo "| Cheminformatics (chemi_*) | ${{ steps.coverage.outputs.chemi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.chemi_functions_fmt || 'N/A' }} |" >> pr_body.md
+          echo "| EPI Suite (epi_*) | ${{ steps.coverage.outputs.epi_coverage_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_endpoints_fmt || 'N/A' }} | ${{ steps.coverage.outputs.epi_functions_fmt || 'N/A' }} |" >> pr_body.md
 
           # Add review checklist with breaking change awareness
           BREAKING="${{ steps.diff.outputs.breaking_count || '0' }}"
@@ -361,10 +376,8 @@ jobs:
           TAIL
 
       - name: Create Pull Request
-        if: >-
-          steps.changes.outputs.has_changes == 'true' &&
-          (steps.diff.outputs.has_endpoint_changes == 'true' || steps.diff.outcome == 'failure')
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
           commit-message: "chore: update API schemas, generate function stubs and tests"

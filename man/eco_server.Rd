@@ -4,13 +4,17 @@
 \alias{eco_server}
 \title{Set API endpoints for ECOTOX API endpoints}
 \usage{
-eco_server(server = NULL)
+eco_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target}
+\item{server}{Defines what server to target.}
+
+\item{url_only}{If \code{TRUE}, return the selected URL or database path without
+changing \code{eco_burl} or closing a cached connection.}
 }
 \value{
-Should return the Sys Env variable \code{eco_burl}
+The selected URL or path when \code{url_only = TRUE}; otherwise the
+configured \code{eco_burl}.
 }
 \description{
 Set API endpoints for ECOTOX API endpoints

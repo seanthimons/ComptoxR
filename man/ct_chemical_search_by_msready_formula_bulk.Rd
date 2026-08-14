@@ -20,3 +20,7 @@ Returns a tibble with results (array of objects)
 ct_chemical_search_by_msready_formula_bulk(query = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

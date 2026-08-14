@@ -24,3 +24,7 @@ Returns a scalar value
 ct_exposure_mmdb_aggregate_by_medium(medium = "surface water")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

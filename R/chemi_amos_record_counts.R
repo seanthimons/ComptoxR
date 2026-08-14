@@ -5,11 +5,12 @@
 #'
 #' @param dtxsids List of DTXSIDs to search for.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_record_counts(dtxsids = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_record_counts(dtxsids = "DTXSID1024122")
 #' }
 chemi_amos_record_counts <- function(dtxsids = NULL) {
   result <- generic_chemi_request(

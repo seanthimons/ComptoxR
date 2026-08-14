@@ -5,27 +5,29 @@
 \title{Stdizer Groups}
 \usage{
 chemi_stdizer_groups_bulk(
-  type = NULL,
-  text = NULL,
+  acl = NULL,
   description = NULL,
   flag = NULL,
+  frozen = NULL,
+  id = NULL,
   invalid = NULL,
   invalidMessage = NULL,
   operations = NULL,
-  frozen = NULL,
-  id = NULL,
-  value = NULL,
-  acl = NULL
+  text = NULL,
+  type = NULL,
+  value = NULL
 )
 }
 \arguments{
-\item{type}{Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE}
-
-\item{text}{Optional parameter}
+\item{acl}{Optional parameter}
 
 \item{description}{Optional parameter}
 
 \item{flag}{Optional parameter}
+
+\item{frozen}{Optional parameter}
+
+\item{id}{Optional parameter}
 
 \item{invalid}{Optional parameter}
 
@@ -33,13 +35,11 @@ chemi_stdizer_groups_bulk(
 
 \item{operations}{Optional parameter}
 
-\item{frozen}{Optional parameter}
+\item{text}{Optional parameter}
 
-\item{id}{Optional parameter}
+\item{type}{Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE}
 
 \item{value}{Optional parameter}
-
-\item{acl}{Optional parameter}
 }
 \value{
 Returns a tibble with results
@@ -49,6 +49,10 @@ Returns a tibble with results
 }
 \examples{
 \dontrun{
-chemi_stdizer_groups_bulk(type = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_stdizer_groups_bulk(acl = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

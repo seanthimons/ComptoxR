@@ -14,11 +14,12 @@
 #' @param methodologies Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- "all", "GC/MS", "LC/MS", and "NMR".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if "all" is set to true.
 #' @param record_types Filters returned results by record type.  This argument should be a dictionary with three keys with boolean values -- "Fact Sheet", "Method", and "Spectrum".  Note that the "Spectrum" flag will return spectra of all types -- mass, NMR, etc.
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_amos_batch(additional_record_info = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_amos_batch(additional_record_info = "DTXSID1024122")
 #' }
 chemi_amos_batch <- function(
   additional_record_info = NULL,

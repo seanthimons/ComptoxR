@@ -75,6 +75,8 @@ generic_request_reserved_args <- c(
 #' @param metadata Named list mapping parameter names to list(example, description).
 #' @param has_path_params Logical; whether the endpoint has path parameters. If FALSE and
 #'   query params exist, the first query param becomes the primary parameter.
+#' @param overrides Named per-schema-parameter overrides supporting `name`,
+#'   `exclude`, `required`, `default`, `description`, and `order`.
 #' @return A list with: fn_signature, param_docs, params_code, params_call, has_params,
 #'   primary_param (when query params are used as primary).
 #' @export
@@ -82,7 +84,8 @@ parse_function_params <- function(
   params_str,
   strategy = c("extra_params", "options"),
   metadata = list(),
-  has_path_params = TRUE
+  has_path_params = TRUE,
+  overrides = list()
 ) {
   strategy <- match.arg(strategy)
 
@@ -103,6 +106,12 @@ parse_function_params <- function(
   param_vec_orig <- strsplit(params_str, ",")[[1]]
   param_vec_orig <- trimws(param_vec_orig)
   param_vec_orig <- param_vec_orig[nzchar(param_vec_orig) & !is.na(param_vec_orig)]
+  excluded <- vapply(
+    param_vec_orig,
+    function(param_name) isTRUE(overrides[[param_name]]$exclude),
+    logical(1)
+  )
+  param_vec_orig <- param_vec_orig[!excluded]
 
   if (length(param_vec_orig) == 0) {
     return(list(
@@ -128,7 +137,42 @@ parse_function_params <- function(
     }
   }
 
-  param_vec_sanitized <- vapply(param_vec_orig, sanitize_param, character(1))
+  override_order <- vapply(
+    param_vec_orig,
+    function(param_name) {
+      order <- overrides[[param_name]]$order
+      if (is.null(order)) Inf else as.numeric(order)
+    },
+    numeric(1)
+  )
+  param_vec_orig <- param_vec_orig[order(override_order, seq_along(param_vec_orig))]
+
+  metadata <- metadata %||% list()
+  for (param_name in param_vec_orig) {
+    override <- overrides[[param_name]]
+    if (is.null(override)) {
+      next
+    }
+    entry <- metadata[[param_name]] %||% list()
+    if ("required" %in% names(override)) {
+      entry$required <- isTRUE(override$required)
+    }
+    if ("default" %in% names(override)) {
+      entry$default <- override$default
+    }
+    if (!is.null(override$description)) {
+      entry$description <- override$description
+    }
+    metadata[[param_name]] <- entry
+  }
+
+  param_vec_sanitized <- vapply(
+    param_vec_orig,
+    function(param_name) {
+      overrides[[param_name]]$name %||% sanitize_param(param_name)
+    },
+    character(1)
+  )
   names(param_vec_sanitized) <- param_vec_orig
 
   # Identify required vs optional parameters

@@ -52,6 +52,8 @@ Supported types:
 \itemize{
 \item "application/json": Parses response as JSON (default behavior)
 \item "text/plain": Returns response as character string
+\item "text/csv" or "text/tab-separated-values": Parses the delimited
+response as a data frame
 \item "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
 }}
 

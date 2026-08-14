@@ -1,656 +1,8 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-    "title": "EPA Predictor",
-    "version": "0.0.1",
-    "description": "API gateway to EPA predictions"
-  },
-  "paths": {
-    "/api/amnb_nate/version": {
-      "get": {
-        "operationId": "app.get_version",
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/amnb_nate/metadata": {
-      "get": {
-        "operationId": "app.get_metadata",
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/amnb_nate": {
-      "get": {
-        "operationId": "app.get_predict",
-        "parameters": [
-          {
-            "name": "smiles",
-            "in": "query",
-            "description": "SMILES to generate predictions for",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "examples": {
-              "example1": {
-                "summary": "SMILES that generates one of the 56 ARN groups",
-                "value": "CC(C)c1ccc2sc3ccccc3c(=O)c2c1"
-              },
-              "example2": {
-                "summary": "Miscellaneous chemistry",
-                "value": "c1ccc(OP(Oc2ccccc2)Oc2ccccc2)cc1"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "type": "object",
-                      "properties": {
-                        "chemical": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "oneOf": [
-                                {
-                                  "type": "integer"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "chemId": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "cid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "sid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "casrn": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "name": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "smiles": {
-                              "type": "string"
-                            },
-                            "canonicalSmiles": {
-                              "type": "string"
-                            },
-                            "inchi": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "inchiKey": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "additionalProps": {
-                              "type": "object"
-                            }
-                          },
-                          "required": [
-                            "smiles",
-                            "canonicalSmiles",
-                            "additionalProps"
-                          ],
-                          "additionalProperties": false
-                        },
-                        "standardizedChemical": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "oneOf": [
-                                {
-                                  "type": "integer"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "chemId": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "cid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "sid": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "casrn": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "name": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "smiles": {
-                              "type": "string"
-                            },
-                            "canonicalSmiles": {
-                              "type": "string"
-                            },
-                            "inchi": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "inchiKey": {
-                              "type": "string",
-                              "nullable": true
-                            },
-                            "additionalProps": {
-                              "type": "object"
-                            }
-                          },
-                          "required": [
-                            "smiles",
-                            "canonicalSmiles",
-                            "additionalProps"
-                          ],
-                          "additionalProperties": false
-                        },
-                        "result": {
-                          "type": "object",
-                          "properties": {
-                            "positive": {
-                              "type": "integer"
-                            },
-                            "positive_proba": {
-                              "type": "number"
-                            },
-                            "negative": {
-                              "type": "integer"
-                            },
-                            "negative_proba": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "positive",
-                            "positive_proba",
-                            "negative",
-                            "negative_proba"
-                          ],
-                          "additionalProperties": false
-                        },
-                        "error": {
-                          "type": "object",
-                          "properties": {
-                            "message": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "message"
-                          ],
-                          "additionalProperties": false
-                        }
-                      },
-                      "required": [
-                        "chemical"
-                      ],
-                      "additionalProperties": false
-                    },
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "message"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "result"
-                  ],
-                  "additionalProperties": false
-                },
-                "example": {
-                  "result": {
-                    "chemical": {
-                      "chemId": "DTXSID5026386",
-                      "cid": "DTXCID006386",
-                      "sid": "DTXSID5026386",
-                      "casrn": "74-98-6",
-                      "name": "Propane",
-                      "smiles": "CCC",
-                      "canonicalSmiles": "CCC",
-                      "inchi": "InChI=1S/C3H8/c1-3-2/h3H2,1-2H3",
-                      "inchiKey": "ATUOYWHBWRKTHZ-UHFFFAOYSA-N",
-                      "additionalProps": {}
-                    },
-                    "result": {
-                      "positive": 1,
-                      "positive_proba": 0.9104,
-                      "negative": 0,
-                      "negative_proba": 0.7651
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "app.post_predict",
-        "summary": "Generate predictions for multiple molecules",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "smiles": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "chemicals": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "oneOf": [
-                            {
-                              "type": "integer"
-                            },
-                            {
-                              "type": "string"
-                            }
-                          ]
-                        },
-                        "smiles": {
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": false
-                    }
-                  }
-                },
-                "additionalProperties": false
-              },
-              "examples": {
-                "smilesRequest": {
-                  "value": {
-                    "smiles": [
-                      "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-                      "CCCCN"
-                    ]
-                  }
-                },
-                "chemicalsRequest": {
-                  "value": {
-                    "chemicals": [
-                      {
-                        "id": 1,
-                        "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
-                      },
-                      {
-                        "id": 2,
-                        "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "chemical": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "oneOf": [
-                                  {
-                                    "type": "integer"
-                                  },
-                                  {
-                                    "type": "string"
-                                  }
-                                ]
-                              },
-                              "chemId": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "cid": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "sid": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "casrn": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "name": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "smiles": {
-                                "type": "string"
-                              },
-                              "canonicalSmiles": {
-                                "type": "string"
-                              },
-                              "inchi": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "inchiKey": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "additionalProps": {
-                                "type": "object"
-                              }
-                            },
-                            "required": [
-                              "smiles",
-                              "canonicalSmiles",
-                              "additionalProps"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "standardizedChemical": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "oneOf": [
-                                  {
-                                    "type": "integer"
-                                  },
-                                  {
-                                    "type": "string"
-                                  }
-                                ]
-                              },
-                              "chemId": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "cid": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "sid": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "casrn": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "name": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "smiles": {
-                                "type": "string"
-                              },
-                              "canonicalSmiles": {
-                                "type": "string"
-                              },
-                              "inchi": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "inchiKey": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "additionalProps": {
-                                "type": "object"
-                              }
-                            },
-                            "required": [
-                              "smiles",
-                              "canonicalSmiles",
-                              "additionalProps"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "result": {
-                            "type": "object",
-                            "properties": {
-                              "positive": {
-                                "type": "integer"
-                              },
-                              "positive_proba": {
-                                "type": "number"
-                              },
-                              "negative": {
-                                "type": "integer"
-                              },
-                              "negative_proba": {
-                                "type": "number"
-                              }
-                            },
-                            "required": [
-                              "positive",
-                              "positive_proba",
-                              "negative",
-                              "negative_proba"
-                            ],
-                            "additionalProperties": false
-                          },
-                          "error": {
-                            "type": "object",
-                            "properties": {
-                              "message": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "message"
-                            ],
-                            "additionalProperties": false
-                          }
-                        },
-                        "required": [
-                          "chemical"
-                        ],
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "required": [
-                    "results"
-                  ],
-                  "additionalProperties": false
-                },
-                "example": {
-                  "results": [
-                    {
-                      "chemical": {
-                        "chemId": "DTXSID001348045",
-                        "cid": "DTXCID401776795",
-                        "sid": "DTXSID001348045",
-                        "casrn": "NOCAS_1348045",
-                        "name": "2-(Heptafluoropropyl)-4H-3,1-benzoxazin-4-one",
-                        "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
-                        "canonicalSmiles": "O=C1OC(=NC2=CC=CC=C21)C(F)(F)C(F)(F)C(F)(F)F",
-                        "inchi": "InChI=1S/C11H4F7NO2/c12-9(13,10(14,15)11(16,17)18)8-19-6-4-2-1-3-5(6)7(20)21-8/h1-4H",
-                        "inchiKey": "LEJAJVFLTGIPPE-UHFFFAOYSA-N",
-                        "additionalProps": {}
-                      },
-                      "standardizedChemical": {
-                        "chemId": "DTXSID001348045",
-                        "cid": "DTXCID401776795",
-                        "sid": "DTXSID001348045",
-                        "casrn": "NOCAS_1348045",
-                        "name": "2-(Heptafluoropropyl)-4H-3,1-benzoxazin-4-one",
-                        "smiles": "FC(F)(F)C(F)(F)C(F)(F)C1=NC2C=CC=CC=2C(=O)O1",
-                        "canonicalSmiles": "O=C1OC(=NC2C=CC=CC=21)C(F)(F)C(F)(F)C(F)(F)F",
-                        "inchi": "InChI=1/C11H4F7NO2/c12-9(13,10(14,15)11(16,17)18)8-19-6-4-2-1-3-5(6)7(20)21-8/h1-4H",
-                        "inchiKey": "LEJAJVFLTGIPPE-UHFFFAOYNA-N",
-                        "additionalProps": {}
-                      },
-                      "result": {
-                        "positive": 1,
-                        "positive_proba": 0.5193,
-                        "negative": 0,
-                        "negative_proba": 0.6401
-                      }
-                    },
-                    {
-                      "chemical": {
-                        "smiles": "invalid",
-                        "canonicalSmiles": "invalid",
-                        "additionalProps": {}
-                      },
-                      "error": {
-                        "message": "Cannot standardize a given chemical"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
-      "Request": {
-        "type": "object",
-        "properties": {
-          "smiles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "oneOf": [
-                    {
-                      "type": "integer"
-                    },
-                    {
-                      "type": "string"
-                    }
-                  ]
-                },
-                "smiles": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          }
-        },
-        "additionalProperties": false
-      },
-      "SmilesRequest": {
-        "type": "object",
-        "properties": {
-          "smiles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "smiles"
-        ],
-        "additionalProperties": false
-      },
-      "ChemicalsRequest": {
-        "type": "object",
-        "properties": {
-          "chemicals": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "oneOf": [
-                    {
-                      "type": "integer"
-                    },
-                    {
-                      "type": "string"
-                    }
-                  ]
-                },
-                "smiles": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "smiles"
-              ],
-              "additionalProperties": false
-            }
-          }
-        },
-        "required": [
-          "chemicals"
-        ],
-        "additionalProperties": false
-      },
       "Chemical": {
-        "type": "object",
+        "additionalProperties": false,
         "properties": {
           "id": {
             "oneOf": [
@@ -670,14 +22,79 @@
           "id",
           "smiles"
         ],
-        "additionalProperties": false
+        "type": "object"
+      },
+      "ChemicalsRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "chemicals": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "smiles"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "chemicals"
+        ],
+        "type": "object"
+      },
+      "PredictionError": {
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "type": "object"
       },
       "PredictionItem": {
-        "type": "object",
+        "additionalProperties": false,
         "properties": {
           "chemical": {
-            "type": "object",
+            "additionalProperties": false,
             "properties": {
+              "additionalProps": {
+                "type": "object"
+              },
+              "canonicalSmiles": {
+                "type": "string"
+              },
+              "casrn": {
+                "nullable": true,
+                "type": "string"
+              },
+              "chemId": {
+                "nullable": true,
+                "type": "string"
+              },
+              "cid": {
+                "nullable": true,
+                "type": "string"
+              },
               "id": {
                 "oneOf": [
                   {
@@ -688,42 +105,24 @@
                   }
                 ]
               },
-              "chemId": {
-                "type": "string",
-                "nullable": true
+              "inchi": {
+                "nullable": true,
+                "type": "string"
               },
-              "cid": {
-                "type": "string",
-                "nullable": true
-              },
-              "sid": {
-                "type": "string",
-                "nullable": true
-              },
-              "casrn": {
-                "type": "string",
-                "nullable": true
+              "inchiKey": {
+                "nullable": true,
+                "type": "string"
               },
               "name": {
-                "type": "string",
-                "nullable": true
+                "nullable": true,
+                "type": "string"
+              },
+              "sid": {
+                "nullable": true,
+                "type": "string"
               },
               "smiles": {
                 "type": "string"
-              },
-              "canonicalSmiles": {
-                "type": "string"
-              },
-              "inchi": {
-                "type": "string",
-                "nullable": true
-              },
-              "inchiKey": {
-                "type": "string",
-                "nullable": true
-              },
-              "additionalProps": {
-                "type": "object"
               }
             },
             "required": [
@@ -731,79 +130,33 @@
               "canonicalSmiles",
               "additionalProps"
             ],
-            "additionalProperties": false
+            "type": "object"
           },
-          "standardizedChemical": {
-            "type": "object",
+          "error": {
+            "additionalProperties": false,
             "properties": {
-              "id": {
-                "oneOf": [
-                  {
-                    "type": "integer"
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              },
-              "chemId": {
-                "type": "string",
-                "nullable": true
-              },
-              "cid": {
-                "type": "string",
-                "nullable": true
-              },
-              "sid": {
-                "type": "string",
-                "nullable": true
-              },
-              "casrn": {
-                "type": "string",
-                "nullable": true
-              },
-              "name": {
-                "type": "string",
-                "nullable": true
-              },
-              "smiles": {
+              "message": {
                 "type": "string"
-              },
-              "canonicalSmiles": {
-                "type": "string"
-              },
-              "inchi": {
-                "type": "string",
-                "nullable": true
-              },
-              "inchiKey": {
-                "type": "string",
-                "nullable": true
-              },
-              "additionalProps": {
-                "type": "object"
               }
             },
             "required": [
-              "smiles",
-              "canonicalSmiles",
-              "additionalProps"
+              "message"
             ],
-            "additionalProperties": false
+            "type": "object"
           },
           "result": {
-            "type": "object",
+            "additionalProperties": false,
             "properties": {
-              "positive": {
-                "type": "integer"
-              },
-              "positive_proba": {
-                "type": "number"
-              },
               "negative": {
                 "type": "integer"
               },
               "negative_proba": {
+                "type": "number"
+              },
+              "positive": {
+                "type": "integer"
+              },
+              "positive_proba": {
                 "type": "number"
               }
             },
@@ -813,37 +166,100 @@
               "negative",
               "negative_proba"
             ],
-            "additionalProperties": false
+            "type": "object"
           },
-          "error": {
-            "type": "object",
+          "standardizedChemical": {
+            "additionalProperties": false,
             "properties": {
-              "message": {
+              "additionalProps": {
+                "type": "object"
+              },
+              "canonicalSmiles": {
+                "type": "string"
+              },
+              "casrn": {
+                "nullable": true,
+                "type": "string"
+              },
+              "chemId": {
+                "nullable": true,
+                "type": "string"
+              },
+              "cid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "id": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "inchi": {
+                "nullable": true,
+                "type": "string"
+              },
+              "inchiKey": {
+                "nullable": true,
+                "type": "string"
+              },
+              "name": {
+                "nullable": true,
+                "type": "string"
+              },
+              "sid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "smiles": {
                 "type": "string"
               }
             },
             "required": [
-              "message"
+              "smiles",
+              "canonicalSmiles",
+              "additionalProps"
             ],
-            "additionalProperties": false
+            "type": "object"
           }
         },
         "required": [
           "chemical"
         ],
-        "additionalProperties": false
+        "type": "object"
       },
       "PredictionResponse": {
-        "type": "object",
+        "additionalProperties": false,
         "properties": {
           "results": {
-            "type": "array",
             "items": {
-              "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "chemical": {
-                  "type": "object",
+                  "additionalProperties": false,
                   "properties": {
+                    "additionalProps": {
+                      "type": "object"
+                    },
+                    "canonicalSmiles": {
+                      "type": "string"
+                    },
+                    "casrn": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "chemId": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "cid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
                     "id": {
                       "oneOf": [
                         {
@@ -854,42 +270,24 @@
                         }
                       ]
                     },
-                    "chemId": {
-                      "type": "string",
-                      "nullable": true
+                    "inchi": {
+                      "nullable": true,
+                      "type": "string"
                     },
-                    "cid": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "sid": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "casrn": {
-                      "type": "string",
-                      "nullable": true
+                    "inchiKey": {
+                      "nullable": true,
+                      "type": "string"
                     },
                     "name": {
-                      "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "sid": {
+                      "nullable": true,
+                      "type": "string"
                     },
                     "smiles": {
                       "type": "string"
-                    },
-                    "canonicalSmiles": {
-                      "type": "string"
-                    },
-                    "inchi": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "inchiKey": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "additionalProps": {
-                      "type": "object"
                     }
                   },
                   "required": [
@@ -897,79 +295,33 @@
                     "canonicalSmiles",
                     "additionalProps"
                   ],
-                  "additionalProperties": false
+                  "type": "object"
                 },
-                "standardizedChemical": {
-                  "type": "object",
+                "error": {
+                  "additionalProperties": false,
                   "properties": {
-                    "id": {
-                      "oneOf": [
-                        {
-                          "type": "integer"
-                        },
-                        {
-                          "type": "string"
-                        }
-                      ]
-                    },
-                    "chemId": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "cid": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "sid": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "casrn": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "name": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "smiles": {
+                    "message": {
                       "type": "string"
-                    },
-                    "canonicalSmiles": {
-                      "type": "string"
-                    },
-                    "inchi": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "inchiKey": {
-                      "type": "string",
-                      "nullable": true
-                    },
-                    "additionalProps": {
-                      "type": "object"
                     }
                   },
                   "required": [
-                    "smiles",
-                    "canonicalSmiles",
-                    "additionalProps"
+                    "message"
                   ],
-                  "additionalProperties": false
+                  "type": "object"
                 },
                 "result": {
-                  "type": "object",
+                  "additionalProperties": false,
                   "properties": {
-                    "positive": {
-                      "type": "integer"
-                    },
-                    "positive_proba": {
-                      "type": "number"
-                    },
                     "negative": {
                       "type": "integer"
                     },
                     "negative_proba": {
+                      "type": "number"
+                    },
+                    "positive": {
+                      "type": "integer"
+                    },
+                    "positive_proba": {
                       "type": "number"
                     }
                   },
@@ -979,218 +331,159 @@
                     "negative",
                     "negative_proba"
                   ],
-                  "additionalProperties": false
+                  "type": "object"
                 },
-                "error": {
-                  "type": "object",
+                "standardizedChemical": {
+                  "additionalProperties": false,
                   "properties": {
-                    "message": {
+                    "additionalProps": {
+                      "type": "object"
+                    },
+                    "canonicalSmiles": {
+                      "type": "string"
+                    },
+                    "casrn": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "chemId": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "cid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "id": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "inchi": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "inchiKey": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "name": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "sid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "smiles": {
                       "type": "string"
                     }
                   },
                   "required": [
-                    "message"
+                    "smiles",
+                    "canonicalSmiles",
+                    "additionalProps"
                   ],
-                  "additionalProperties": false
+                  "type": "object"
                 }
               },
               "required": [
                 "chemical"
               ],
-              "additionalProperties": false
-            }
+              "type": "object"
+            },
+            "type": "array"
           }
         },
         "required": [
           "results"
         ],
-        "additionalProperties": false
+        "type": "object"
       },
-      "SinglePredictionResponse": {
-        "type": "object",
+      "PredictionResult": {
+        "additionalProperties": false,
         "properties": {
-          "result": {
-            "type": "object",
-            "properties": {
-              "chemical": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "oneOf": [
-                      {
-                        "type": "integer"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "chemId": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "cid": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "sid": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "casrn": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "name": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "smiles": {
-                    "type": "string"
-                  },
-                  "canonicalSmiles": {
-                    "type": "string"
-                  },
-                  "inchi": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "inchiKey": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "additionalProps": {
-                    "type": "object"
-                  }
-                },
-                "required": [
-                  "smiles",
-                  "canonicalSmiles",
-                  "additionalProps"
-                ],
-                "additionalProperties": false
-              },
-              "standardizedChemical": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "oneOf": [
-                      {
-                        "type": "integer"
-                      },
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  },
-                  "chemId": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "cid": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "sid": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "casrn": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "name": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "smiles": {
-                    "type": "string"
-                  },
-                  "canonicalSmiles": {
-                    "type": "string"
-                  },
-                  "inchi": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "inchiKey": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "additionalProps": {
-                    "type": "object"
-                  }
-                },
-                "required": [
-                  "smiles",
-                  "canonicalSmiles",
-                  "additionalProps"
-                ],
-                "additionalProperties": false
-              },
-              "result": {
-                "type": "object",
-                "properties": {
-                  "positive": {
-                    "type": "integer"
-                  },
-                  "positive_proba": {
-                    "type": "number"
-                  },
-                  "negative": {
-                    "type": "integer"
-                  },
-                  "negative_proba": {
-                    "type": "number"
-                  }
-                },
-                "required": [
-                  "positive",
-                  "positive_proba",
-                  "negative",
-                  "negative_proba"
-                ],
-                "additionalProperties": false
-              },
-              "error": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "message"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "required": [
-              "chemical"
-            ],
-            "additionalProperties": false
+          "negative": {
+            "type": "integer"
           },
-          "error": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "message"
-            ],
-            "additionalProperties": false
+          "negative_proba": {
+            "type": "number"
+          },
+          "positive": {
+            "type": "integer"
+          },
+          "positive_proba": {
+            "type": "number"
           }
         },
         "required": [
-          "result"
+          "positive",
+          "positive_proba",
+          "negative",
+          "negative_proba"
         ],
-        "additionalProperties": false
+        "type": "object"
+      },
+      "Request": {
+        "additionalProperties": false,
+        "properties": {
+          "chemicals": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "smiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
       },
       "ResolvedChemical": {
-        "type": "object",
+        "additionalProperties": false,
         "properties": {
+          "additionalProps": {
+            "type": "object"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "chemId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cid": {
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "oneOf": [
               {
@@ -1201,42 +494,24 @@
               }
             ]
           },
-          "chemId": {
-            "type": "string",
-            "nullable": true
+          "inchi": {
+            "nullable": true,
+            "type": "string"
           },
-          "cid": {
-            "type": "string",
-            "nullable": true
-          },
-          "sid": {
-            "type": "string",
-            "nullable": true
-          },
-          "casrn": {
-            "type": "string",
-            "nullable": true
+          "inchiKey": {
+            "nullable": true,
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
+          },
+          "sid": {
+            "nullable": true,
+            "type": "string"
           },
           "smiles": {
             "type": "string"
-          },
-          "canonicalSmiles": {
-            "type": "string"
-          },
-          "inchi": {
-            "type": "string",
-            "nullable": true
-          },
-          "inchiKey": {
-            "type": "string",
-            "nullable": true
-          },
-          "additionalProps": {
-            "type": "object"
           }
         },
         "required": [
@@ -1244,43 +519,768 @@
           "canonicalSmiles",
           "additionalProps"
         ],
-        "additionalProperties": false
+        "type": "object"
       },
-      "PredictionResult": {
-        "type": "object",
+      "SinglePredictionResponse": {
+        "additionalProperties": false,
         "properties": {
-          "positive": {
-            "type": "integer"
+          "error": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
           },
-          "positive_proba": {
-            "type": "number"
-          },
-          "negative": {
-            "type": "integer"
-          },
-          "negative_proba": {
-            "type": "number"
+          "result": {
+            "additionalProperties": false,
+            "properties": {
+              "chemical": {
+                "additionalProperties": false,
+                "properties": {
+                  "additionalProps": {
+                    "type": "object"
+                  },
+                  "canonicalSmiles": {
+                    "type": "string"
+                  },
+                  "casrn": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "chemId": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "cid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "id": {
+                    "oneOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "inchi": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "inchiKey": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "sid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "smiles": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "smiles",
+                  "canonicalSmiles",
+                  "additionalProps"
+                ],
+                "type": "object"
+              },
+              "error": {
+                "additionalProperties": false,
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "type": "object"
+              },
+              "result": {
+                "additionalProperties": false,
+                "properties": {
+                  "negative": {
+                    "type": "integer"
+                  },
+                  "negative_proba": {
+                    "type": "number"
+                  },
+                  "positive": {
+                    "type": "integer"
+                  },
+                  "positive_proba": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "positive",
+                  "positive_proba",
+                  "negative",
+                  "negative_proba"
+                ],
+                "type": "object"
+              },
+              "standardizedChemical": {
+                "additionalProperties": false,
+                "properties": {
+                  "additionalProps": {
+                    "type": "object"
+                  },
+                  "canonicalSmiles": {
+                    "type": "string"
+                  },
+                  "casrn": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "chemId": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "cid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "id": {
+                    "oneOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "inchi": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "inchiKey": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "sid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "smiles": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "smiles",
+                  "canonicalSmiles",
+                  "additionalProps"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "chemical"
+            ],
+            "type": "object"
           }
         },
         "required": [
-          "positive",
-          "positive_proba",
-          "negative",
-          "negative_proba"
+          "result"
         ],
-        "additionalProperties": false
+        "type": "object"
       },
-      "PredictionError": {
-        "type": "object",
+      "SmilesRequest": {
+        "additionalProperties": false,
         "properties": {
-          "message": {
-            "type": "string"
+          "smiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
-          "message"
+          "smiles"
         ],
-        "additionalProperties": false
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "API gateway to EPA predictions",
+    "title": "EPA Predictor",
+    "version": "0.0.1"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/api/amnb_nate": {
+      "get": {
+        "operationId": "app.get_predict",
+        "parameters": [
+          {
+            "description": "SMILES to generate predictions for",
+            "examples": {
+              "example1": {
+                "summary": "SMILES that generates one of the 56 ARN groups",
+                "value": "CC(C)c1ccc2sc3ccccc3c(=O)c2c1"
+              },
+              "example2": {
+                "summary": "Miscellaneous chemistry",
+                "value": "c1ccc(OP(Oc2ccccc2)Oc2ccccc2)cc1"
+              }
+            },
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "result": {
+                    "chemical": {
+                      "additionalProps": {},
+                      "canonicalSmiles": "CCC",
+                      "casrn": "74-98-6",
+                      "chemId": "DTXSID5026386",
+                      "cid": "DTXCID006386",
+                      "inchi": "InChI=1S/C3H8/c1-3-2/h3H2,1-2H3",
+                      "inchiKey": "ATUOYWHBWRKTHZ-UHFFFAOYSA-N",
+                      "name": "Propane",
+                      "sid": "DTXSID5026386",
+                      "smiles": "CCC"
+                    },
+                    "result": {
+                      "negative": 0,
+                      "negative_proba": 0.7651,
+                      "positive": 1,
+                      "positive_proba": 0.9104
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "error": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "type": "object"
+                    },
+                    "result": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "chemical": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "additionalProps": {
+                              "type": "object"
+                            },
+                            "canonicalSmiles": {
+                              "type": "string"
+                            },
+                            "casrn": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "chemId": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "cid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "inchi": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "inchiKey": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "name": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "sid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "smiles": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "smiles",
+                            "canonicalSmiles",
+                            "additionalProps"
+                          ],
+                          "type": "object"
+                        },
+                        "error": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message"
+                          ],
+                          "type": "object"
+                        },
+                        "result": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "negative": {
+                              "type": "integer"
+                            },
+                            "negative_proba": {
+                              "type": "number"
+                            },
+                            "positive": {
+                              "type": "integer"
+                            },
+                            "positive_proba": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "positive",
+                            "positive_proba",
+                            "negative",
+                            "negative_proba"
+                          ],
+                          "type": "object"
+                        },
+                        "standardizedChemical": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "additionalProps": {
+                              "type": "object"
+                            },
+                            "canonicalSmiles": {
+                              "type": "string"
+                            },
+                            "casrn": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "chemId": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "cid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "inchi": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "inchiKey": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "name": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "sid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "smiles": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "smiles",
+                            "canonicalSmiles",
+                            "additionalProps"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "chemical"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "operationId": "app.post_predict",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "chemicalsRequest": {
+                  "value": {
+                    "chemicals": [
+                      {
+                        "id": 1,
+                        "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
+                      },
+                      {
+                        "id": 2,
+                        "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
+                      }
+                    ]
+                  }
+                },
+                "smilesRequest": {
+                  "value": {
+                    "smiles": [
+                      "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                      "CCCCN"
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "chemicals": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "oneOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "smiles": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "smiles": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "results": [
+                    {
+                      "chemical": {
+                        "additionalProps": {},
+                        "canonicalSmiles": "O=C1OC(=NC2=CC=CC=C21)C(F)(F)C(F)(F)C(F)(F)F",
+                        "casrn": "NOCAS_1348045",
+                        "chemId": "DTXSID001348045",
+                        "cid": "DTXCID401776795",
+                        "inchi": "InChI=1S/C11H4F7NO2/c12-9(13,10(14,15)11(16,17)18)8-19-6-4-2-1-3-5(6)7(20)21-8/h1-4H",
+                        "inchiKey": "LEJAJVFLTGIPPE-UHFFFAOYSA-N",
+                        "name": "2-(Heptafluoropropyl)-4H-3,1-benzoxazin-4-one",
+                        "sid": "DTXSID001348045",
+                        "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
+                      },
+                      "result": {
+                        "negative": 0,
+                        "negative_proba": 0.6401,
+                        "positive": 1,
+                        "positive_proba": 0.5193
+                      },
+                      "standardizedChemical": {
+                        "additionalProps": {},
+                        "canonicalSmiles": "O=C1OC(=NC2C=CC=CC=21)C(F)(F)C(F)(F)C(F)(F)F",
+                        "casrn": "NOCAS_1348045",
+                        "chemId": "DTXSID001348045",
+                        "cid": "DTXCID401776795",
+                        "inchi": "InChI=1/C11H4F7NO2/c12-9(13,10(14,15)11(16,17)18)8-19-6-4-2-1-3-5(6)7(20)21-8/h1-4H",
+                        "inchiKey": "LEJAJVFLTGIPPE-UHFFFAOYNA-N",
+                        "name": "2-(Heptafluoropropyl)-4H-3,1-benzoxazin-4-one",
+                        "sid": "DTXSID001348045",
+                        "smiles": "FC(F)(F)C(F)(F)C(F)(F)C1=NC2C=CC=CC=2C(=O)O1"
+                      }
+                    },
+                    {
+                      "chemical": {
+                        "additionalProps": {},
+                        "canonicalSmiles": "invalid",
+                        "smiles": "invalid"
+                      },
+                      "error": {
+                        "message": "Cannot standardize a given chemical"
+                      }
+                    }
+                  ]
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "results": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "chemical": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "additionalProps": {
+                                "type": "object"
+                              },
+                              "canonicalSmiles": {
+                                "type": "string"
+                              },
+                              "casrn": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "chemId": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "cid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "inchi": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "inchiKey": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "name": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "sid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "smiles": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "smiles",
+                              "canonicalSmiles",
+                              "additionalProps"
+                            ],
+                            "type": "object"
+                          },
+                          "error": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "message"
+                            ],
+                            "type": "object"
+                          },
+                          "result": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "negative": {
+                                "type": "integer"
+                              },
+                              "negative_proba": {
+                                "type": "number"
+                              },
+                              "positive": {
+                                "type": "integer"
+                              },
+                              "positive_proba": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "positive",
+                              "positive_proba",
+                              "negative",
+                              "negative_proba"
+                            ],
+                            "type": "object"
+                          },
+                          "standardizedChemical": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "additionalProps": {
+                                "type": "object"
+                              },
+                              "canonicalSmiles": {
+                                "type": "string"
+                              },
+                              "casrn": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "chemId": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "cid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "inchi": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "inchiKey": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "name": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "sid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "smiles": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "smiles",
+                              "canonicalSmiles",
+                              "additionalProps"
+                            ],
+                            "type": "object"
+                          }
+                        },
+                        "required": [
+                          "chemical"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "results"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          }
+        },
+        "summary": "Generate predictions for multiple molecules"
+      }
+    },
+    "/api/amnb_nate/metadata": {
+      "get": {
+        "operationId": "app.get_metadata",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/amnb_nate/version": {
+      "get": {
+        "operationId": "app.get_version",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     }
   },

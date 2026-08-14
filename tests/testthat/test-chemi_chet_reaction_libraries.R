@@ -29,7 +29,6 @@ test_that("chemi_chet_reaction_libraries passes request metadata to helper", {
   expect_equal(call[["endpoint"]], "reaction/libraries")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 0)
-  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

@@ -5,6 +5,7 @@
 #'
 #' @param gsid Generic Substance Id. Type: string
 #' @return Returns image data (raw bytes or magick image object)
+#' @apiStage public
 #' @export
 #'
 #' @examples

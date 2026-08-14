@@ -22,3 +22,7 @@ Returns a tibble with results
 chemi_stdizer(workflow = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

@@ -1,0 +1,136 @@
+---
+title: "Development Lifecycle"
+description: >
+  How a change travels from a feature branch to a released version of
+  ComptoxR, and how the GitHub Actions workflows build, test, version, and
+  publish the package along the way.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+This article is for **contributors and maintainers**. It explains the branch
+model, which GitHub Actions run at each step, and how a release bumps the
+version and publishes the package. For per-workflow detail, read
+[`.github/workflows/README.md`](https://github.com/seanthimons/ComptoxR/blob/main/.github/workflows/README.md);
+this article ties those workflows together into one flow.
+
+## The branch model
+
+Work flows through three long-lived branches:
+
+```
+feature branch  ->  integration  ->  main  ->  Release (tag + GitHub release)
+(feat/ fix/         (light            (trunk;      (manual, version-bumped)
+ chore/ docs/)       staging)          full gate)
+```
+
+- **Feature branches** (`feat/`, `fix/`, `chore/`, `docs/`, ...) are cut from
+  `integration`. All day-to-day work happens here.
+- **`integration`** is light staging. Merges land here first so several
+  features can settle together. Pushing to `integration` runs only the
+  always-on checks (secret scanning), not the heavy R gate.
+- **`main`** is the trunk. The full check suite runs on every pull request that
+  **targets `main`**, so `main` stays release-ready at all times.
+- **Release** is a manual step run from `main`. It bumps the version, tags,
+  regenerates `NEWS.md`, and cuts a GitHub release.
+
+Branch and commit names follow Conventional Branch / Conventional Commits
+(`type/description` and `type: description`). See `CONTRIBUTING.md`.
+
+## Which checks run, and when
+
+The workflows are wired by branch and event, so the cost of CI scales with how
+close a change is to release.
+
+| Event | Workflows that run |
+| --- | --- |
+| Push to any branch (incl. `integration`) | Gitleaks Secret Scan |
+| Push to `dev-*` | Quick Tests |
+| Push to `main` / `dev` | Coverage Check (+ R-CMD-check on `main`) |
+| **PR targeting `main`** | R-CMD-check, CRAN Readiness, Pipeline Integration Tests, Quick Tests, Coverage Check, Commit Lint |
+| PR review **approved** | Rebase branches on PR approval (rebases open WIP branches) |
+
+The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` is the
+blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
+`NOT_CRAN=false`) with no API key, no live network, and no local database, so a
+green PR means the package is CRAN-clean.
+
+Tests run in three lanes — CRAN-safe unit/contract, replay/fixture, and
+explicit live-recording. See `dev/TESTING_GUIDE.md` and
+`.github/workflows/README.md` for the full lane rules.
+
+## Scheduled automation
+
+Several workflows run on a cron and open PRs or refresh data on their own:
+
+| Workflow | Schedule (UTC) | What it does |
+| --- | --- | --- |
+| Schema Update Check | Mon/Wed/Fri 09:00 | Detects EPA API schema drift; opens a PR on `automated/schema-update` with regenerated stubs/tests |
+| Build & Upload DSSTox Database | Mon 08:00 | Rebuilds and uploads the DSSTox database |
+| Build & Upload ECOTOX Database | Mon 09:00 | Rebuilds and uploads the ECOTOX database |
+| Build & Upload ToxValDB Database | Mon 10:00 | Rebuilds and uploads the ToxValDB database |
+| API compatibility probe | Mon 12:00 | Probes EPA endpoints for cross-server API changes |
+
+Treat an `automated/schema-update` PR like any other change: review the diff,
+let the `main` gate run, then merge.
+
+## Releasing
+
+Releases are **manual and never hand-bumped**. Do not edit the `Version:` field
+in `DESCRIPTION` yourself — the Release workflow owns it.
+
+1. Land all intended changes on `main`.
+2. GitHub -> Actions -> **Release** -> *Run workflow*, and choose
+   `version_type`:
+   - `patch` -> `1.5.0` to `1.5.1`
+   - `minor` -> `1.5.0` to `1.6.0`
+   - `major` -> `1.5.0` to `2.0.0`
+   - `none`  -> release the current version as-is (no bump)
+
+The workflow then, on `main`:
+
+1. Runs `desc::desc_bump_version(<type>)` to bump `DESCRIPTION` (skipped for
+   `none`).
+2. **Guards** against re-releasing: if `v<version>` already exists as a tag, it
+   aborts rather than overwrite.
+3. Commits `chore: bump version to <version> [skip ci]` and tags `v<version>`.
+4. Regenerates `NEWS.md` with `autonewsmd` (rendered via Quarto), commits
+   `docs: update NEWS.md for v<version> [skip ci]`, and re-points the tag.
+5. Pushes the commits and tag, then runs `gh release create v<version>` with the
+   source tarball attached.
+
+Because `NEWS.md` is generated from commit history, the first line of each
+commit message is the release-note text — write it as the note you want to
+appear.
+
+### Other build/publish workflows
+
+These are all manual (`workflow_dispatch`) and do **not** create a stable
+release:
+
+- **Publish Rolling Package** — builds from `main` and moves the
+  `package-latest` prerelease tag to that commit. A moving "latest dev build",
+  separate from stable releases.
+- **Build Package Artifact** — builds a source tarball and uploads it as a
+  workflow artifact (retained 14 days). No release, no tag.
+- **Record VCR Cassettes** — the only sanctioned path for live cassette
+  recording; requires the `CTX_API_KEY` secret. Ordinary CI never records from
+  production.
+
+## Putting it together
+
+A typical change:
+
+1. `git switch integration && git switch -c feat/my-change`
+2. Commit with Conventional Commits; push. Gitleaks runs.
+3. Open a PR into `main` (directly, or via `integration` first for staged
+   work). The full gate runs; `CRAN Readiness` must be green.
+4. Merge once checks pass.
+5. When ready to ship, run the **Release** workflow from `main` with the right
+   `version_type`.

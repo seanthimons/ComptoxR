@@ -7,6 +7,7 @@
 #' @param projection Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)
 #' @param extract_dtxsids Extract DTXSIDs from results into character vector (requires projection = 'chemicallistwithdtxsids')
 #' @return Returns a scalar value
+#' @apiStage public
 #' @export
 #'
 #' @examples

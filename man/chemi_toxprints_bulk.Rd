@@ -17,6 +17,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_toxprints_bulk(query = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_toxprints_bulk(query = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

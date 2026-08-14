@@ -5,6 +5,7 @@
 #'
 #' @param name Required parameter
 #' @return Returns a list with result object
+#' @apiStage public
 #' @export
 #'
 #' @examples

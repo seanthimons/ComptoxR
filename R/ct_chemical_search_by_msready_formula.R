@@ -5,6 +5,7 @@
 #'
 #' @param query Character vector of strings to send in request body
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -30,6 +31,7 @@ ct_chemical_search_by_msready_formula_bulk <- function(query) {
 #'
 #' @param formula Chemical formula. Type: string
 #' @return Returns a tibble with results (array of objects)
+#' @apiStage public
 #' @export
 #'
 #' @examples

@@ -1,7 +1,7 @@
 Package: ComptoxR
 Title: Wrappers and Functions for Accessing USEPA CompTox Chemical
     Dashboard and Other Products
-Version: 1.5.0
+Version: 1.6.0
 Authors@R: 
     person("Sean", "Thimons",
     email = "thimons.sean@epa.gov",
@@ -62,6 +62,7 @@ Suggests:
     pkgload,
     readr,
     readxl,
+    roxygen2,
     rvest,
     testthat (>= 3.0.0),
     vcr,
@@ -70,4 +71,4 @@ Suggests:
     withr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

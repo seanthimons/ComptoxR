@@ -92,6 +92,13 @@ chemi_hazard_bulk:
   post_response:
     - format_chemi_hazard_result
 
+chemi_search:
+  bespoke_test: "tests/testthat/test-chemi_search.R"
+  pre_request:
+    - chemi_search_pre_request
+  post_response:
+    - chemi_search_post_response
+
 chemi_resolver_getpubchemlist:
   pre_request:
     - resolve_query_to_chemical_records
@@ -101,18 +108,32 @@ chemi_resolver_getsimilaritylist:
     - resolve_query_to_chemical_records
 
 chemi_resolver_getsimilaritymap:
+  return_description: "A cluster list containing a named similarity matrix and hclust object, long-form similarity tibble, or raw API response, selected by `format`"
+  extra_params:
+    hclust_method:
+      default: '"complete"'
+      type: "character"
+      description: "Hierarchical clustering method passed to stats::hclust()"
+    format:
+      default: 'c("cluster", "long", "raw")'
+      type: "character"
+      description: "Output format: cluster result, long-form similarities, or raw API response"
+  parameter_overrides:
+    sort:
+      required: false
+      default: "FALSE"
+      description: "Logical value controlling API result ordering"
   pre_request:
     - resolve_query_to_chemical_records
+    - flatten_similarity_map_chemicals
+  post_response:
+    - format_similarity_map_result
 
 chemi_resolver_orderBySimilarity:
   pre_request:
     - resolve_query_to_chemical_records
 
 chemi_resolver_pubchem_section_bulk:
-  pre_request:
-    - resolve_query_to_chemical_records
-
-chemi_resolver_universalharvest_cart:
   pre_request:
     - resolve_query_to_chemical_records
 
@@ -124,18 +145,710 @@ chemi_toxprints_calculate_bulk:
   pre_request:
     - resolve_query_to_chemical_records
 
-chemi_padel:
+chemi_descriptors:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 6
+  parameter_overrides:
+    smiles:
+      required: true
+      description: "One SMILES string or resolvable chemical identifier"
+      order: 1
+    type:
+      required: true
+      description: "Descriptor engine: padel, rdkit, mordred, or webtest"
+      order: 2
+    headers:
+      default: false
+      description: "Request upstream descriptor headers"
+      order: 3
+    format:
+      default: "JSON"
+      description: "Response format: JSON, CSV, or TSV"
+      order: 4
+    timeout:
+      default: null
+      description: "Optional upstream calculation timeout"
+      order: 5
   pre_request:
-    - resolve_smiles_identifier
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_aggregate_descriptor_request
+    - apply_aggregate_mordred_fallback
+    - apply_aggregate_rdkit_fallback
+  post_response: &descriptor_post
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  request_template: &descriptor_get_request
+    helper: generic_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      method: "req_data$request$method"
+      batch_limit: "0"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      content_type: "req_data$request$content_type"
+      options: "req_data$request$options"
+
+chemi_descriptors_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+      order: 4
+    timeout:
+      default: "NULL"
+      type: "numeric"
+      description: "Optional upstream calculation timeout"
+      order: 6
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 7
+  parameter_overrides:
+    chemicals:
+      name: "query"
+      required: true
+      description: "Chemical identifiers or structures"
+      order: 1
+    type:
+      required: true
+      description: "Descriptor engine: padel, rdkit, mordred, or webtest"
+      order: 2
+    chemIdType:
+      default: "AnyId"
+      description: "Input identifier type"
+      order: 3
+    format:
+      default: "JSON"
+      description: "Response format: JSON, CSV, or TSV"
+      order: 5
+    options:
+      exclude: true
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_aggregate_descriptor_request
+    - apply_aggregate_mordred_fallback
+    - apply_aggregate_rdkit_fallback
+  post_response: *descriptor_post
+  request_template: &descriptor_post_request
+    helper: generic_chemi_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      body: "req_data$request$body"
+      content_type: "req_data$request$content_type"
+
+chemi_padel:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 7
+  parameter_overrides:
+    smiles:
+      required: true
+      description: "One SMILES string or resolvable chemical identifier"
+      order: 1
+    "2d":
+      name: "x2d"
+      description: "Calculate two-dimensional descriptors"
+      order: 2
+    "3d":
+      name: "x3d"
+      description: "Calculate three-dimensional descriptors"
+      order: 3
+    fp:
+      description: "Calculate fingerprints"
+      order: 4
+    headers:
+      description: "Request upstream descriptor headers"
+      order: 5
+    timeout:
+      description: "Optional upstream calculation timeout"
+      order: 6
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_padel_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_get_request
+
+chemi_padel_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    x2d:
+      default: "TRUE"
+      type: "logical"
+      description: "Calculate two-dimensional descriptors"
+      order: 2
+    x3d:
+      default: "FALSE"
+      type: "logical"
+      description: "Calculate three-dimensional descriptors"
+      order: 3
+    fp:
+      default: "FALSE"
+      type: "logical"
+      description: "Calculate fingerprints"
+      order: 4
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+      order: 5
+    timeout:
+      default: "NULL"
+      type: "numeric"
+      description: "Optional upstream calculation timeout"
+      order: 6
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 7
+  parameter_overrides:
+    chemicals:
+      name: "query"
+      required: true
+      description: "Chemical structures or resolvable identifiers"
+      order: 1
+    options:
+      exclude: true
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_padel_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_post_request
 
 chemi_rdkit:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 5
+  parameter_overrides:
+    smiles:
+      required: true
+      description: "One SMILES string or resolvable chemical identifier"
+      order: 1
+    type:
+      default: null
+      description: "Fingerprint type"
+      order: 2
+    radius:
+      default: null
+      description: "ECFP radius"
+      order: 3
+    bits:
+      default: null
+      description: "Number of fingerprint bits"
+      order: 4
   pre_request:
-    - resolve_smiles_identifier
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_rdkit_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_get_request
+
+chemi_rdkit_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    type:
+      default: "NULL"
+      type: "character"
+      description: "Fingerprint type"
+      order: 3
+    radius:
+      default: "NULL"
+      type: "integer"
+      description: "ECFP radius"
+      order: 4
+    bits:
+      default: "NULL"
+      type: "integer"
+      description: "Number of fingerprint bits"
+      order: 5
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 6
+  parameter_overrides:
+    chemicals:
+      required: true
+      description: "Chemical structures or resolvable identifiers"
+      order: 1
+    options:
+      default: null
+      description: "Named list of additional dedicated RDKit options"
+      order: 2
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_rdkit_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_post_request
 
 chemi_mordred:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 4
+  parameter_overrides:
+    smiles:
+      required: true
+      description: "One SMILES string or resolvable chemical identifier"
+      order: 1
+    headers:
+      default: null
+      description: "Request upstream descriptor headers"
+      order: 2
+    inchi:
+      default: null
+      description: "Include InChI identifiers"
+      order: 3
   pre_request:
-    - resolve_smiles_identifier
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_mordred_descriptor_request
+    - apply_dedicated_mordred_fallback
+  post_response: *descriptor_post
+  request_template: *descriptor_get_request
+
+chemi_mordred_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    headers:
+      default: "NULL"
+      type: "logical"
+      description: "Request descriptor headers"
+      order: 3
+    inchi:
+      default: "NULL"
+      type: "logical"
+      description: "Include InChI identifiers"
+      order: 4
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 5
+  parameter_overrides:
+    chemicals:
+      required: true
+      description: "Chemical structures or resolvable identifiers"
+      order: 1
+    options:
+      default: null
+      description: "Named list of additional dedicated Mordred options"
+      order: 2
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_mordred_descriptor_request
+    - apply_dedicated_mordred_fallback
+  post_response: *descriptor_post
+  request_template: *descriptor_post_request
 
 chemi_webtest:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 3
+  parameter_overrides:
+    smiles:
+      required: true
+      description: "One SMILES string or resolvable chemical identifier"
+      order: 1
+    headers:
+      description: "Request upstream descriptor headers"
+      order: 2
   pre_request:
-    - resolve_smiles_identifier
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_webtest_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_get_request
+
+chemi_webtest_bulk:
+  bespoke_test: "tests/testthat/test-chemi_descriptor_contracts.R"
+  extra_params:
+    chemIdType:
+      default: '"AnyId"'
+      type: "character"
+      description: "Input identifier type"
+      order: 2
+    headers:
+      default: "FALSE"
+      type: "logical"
+      description: "Request descriptor headers"
+      order: 3
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: validated wide tibble or raw payload"
+      order: 5
+  parameter_overrides:
+    chemicals:
+      name: "query"
+      required: true
+      description: "Chemical structures or resolvable identifiers"
+      order: 1
+    format:
+      default: "JSON"
+      description: "Response format: JSON, CSV, or TSV"
+      order: 4
+    options:
+      exclude: true
+    type:
+      exclude: true
+  pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_webtest_descriptor_request
+  post_response: *descriptor_post
+  request_template: *descriptor_post_request
+
+chemi_webtest_predict:
+  bespoke_test: "tests/testthat/test-hooks-webtest.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      order: 5
+  signature_overrides:
+    endpoint:
+      required: true
+    format:
+      default: '"JSON"'
+  hook_missing_params:
+    - endpoint
+  pre_request: &prediction_pre
+    - validate_webtest_prediction_request
+    - resolve_webtest_prediction_inputs
+    - prepare_webtest_prediction_request
+  post_response: &prediction_post
+    - filter_webtest_prediction_result
+  request_template:
+    helper: generic_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      method: '"GET"'
+      batch_limit: "0"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      options: "req_data$request$options"
+
+chemi_webtest_predict_bulk:
+  bespoke_test: "tests/testthat/test-hooks-webtest.R"
+  extra_params:
+    output:
+      default: 'c("wide", "raw")'
+      type: "character"
+      description: "Output contract: normalized wide tibble or raw PredictionResult"
+      order: 5
+  signature_overrides:
+    endpoints:
+      required: true
+    format:
+      default: '"JSON"'
+  signature_order:
+    - structures
+    - endpoints
+    - methods
+    - format
+    - output
+  hook_missing_params:
+    - endpoints
+  pre_request: *prediction_pre
+  post_response: *prediction_post
+  request_template:
+    helper: generic_chemi_request
+    post_on_skip: true
+    args:
+      endpoint: "req_data$request$endpoint"
+      server: "req_data$request$server"
+      auth: "FALSE"
+      tidy: "FALSE"
+      body: "req_data$request$body"
+
+chemi_amnb_nate:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_amnb_nate_bulk:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_arn_cats:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_arn_cats_bulk:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_image:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_alias:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_chemset:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_counts:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_database:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_database_old:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_database_stats:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_maps:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_singlechemical:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_suggest:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_chemicals_verify:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_batchsearch:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_database:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_database_old:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_database_old_by_pagenum:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_database_stats:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_dbcounts:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_details:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_libraries:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_mapid:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_mappositions:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_maps:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_react_maps:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_reactionmap:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_searchcounts:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_singlereaction:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_chet_reaction_table:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_ncc_cats:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_ncc_cats_bulk:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_opera:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_opera_report:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_pfas_atlas:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_pfas_atlas_bulk:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_pfas_cats:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_pfas_cats_bulk:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_predictor_modelset_report:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_predictor_qmrf:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_predictor_report:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+chemi_predictor_models_predict:
+  endpoint_stage: staging
+  pre_request:
+    - enforce_stage_server
+
+# EPI Suite (epi_*) response shaping. epi_* wrappers return the raw list
+# (generic_request tidy = FALSE); these hooks unwrap the static-endpoint
+# envelope and give each endpoint its expected shape.
+epi_search:
+  post_response:
+    - format_epi_search_result
+
+epi_submit:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_surfactant:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_surfactant_nonionic:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_polymer:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_polymer_nonionic:
+  post_response:
+    - unwrap_epi_result
+
+epi_ecosar_dye:
+  post_response:
+    - unwrap_epi_result

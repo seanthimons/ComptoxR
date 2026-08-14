@@ -4,12 +4,12 @@
 \alias{chemi_amnb_nate_bulk}
 \title{Generate predictions for multiple molecules}
 \usage{
-chemi_amnb_nate_bulk(smiles = NULL, chemicals = NULL)
+chemi_amnb_nate_bulk(chemicals = NULL, smiles = NULL)
 }
 \arguments{
-\item{smiles}{Optional parameter}
-
 \item{chemicals}{Optional parameter}
+
+\item{smiles}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -19,6 +19,10 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_amnb_nate_bulk(smiles = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+chemi_amnb_nate_bulk(chemicals = "DTXSID1024122")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

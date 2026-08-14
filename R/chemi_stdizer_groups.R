@@ -4,6 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -31,47 +32,51 @@ chemi_stdizer_groups <- function() {
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param type Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE
-#' @param text Optional parameter
+#' @param acl Optional parameter
 #' @param description Optional parameter
 #' @param flag Optional parameter
+#' @param frozen Optional parameter
+#' @param id Optional parameter
 #' @param invalid Optional parameter
 #' @param invalidMessage Optional parameter
 #' @param operations Optional parameter
-#' @param frozen Optional parameter
-#' @param id Optional parameter
+#' @param text Optional parameter
+#' @param type Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE
 #' @param value Optional parameter
-#' @param acl Optional parameter
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_stdizer_groups_bulk(type = c("DTXSID1024122", "DTXSID4020533", "DTXSID00205033"))
+#' chemi_stdizer_groups_bulk(acl = "DTXSID1024122")
 #' }
 chemi_stdizer_groups_bulk <- function(
-  type = NULL,
-  text = NULL,
+  acl = NULL,
   description = NULL,
   flag = NULL,
+  frozen = NULL,
+  id = NULL,
   invalid = NULL,
   invalidMessage = NULL,
   operations = NULL,
-  frozen = NULL,
-  id = NULL,
-  value = NULL,
-  acl = NULL
+  text = NULL,
+  type = NULL,
+  value = NULL
 ) {
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(text)) {
-    options$text <- text
-  }
   if (!is.null(description)) {
     options$description <- description
   }
   if (!is.null(flag)) {
     options$flag <- flag
+  }
+  if (!is.null(frozen)) {
+    options$frozen <- frozen
+  }
+  if (!is.null(id)) {
+    options$id <- id
   }
   if (!is.null(invalid)) {
     options$invalid <- invalid
@@ -82,20 +87,17 @@ chemi_stdizer_groups_bulk <- function(
   if (!is.null(operations)) {
     options$operations <- operations
   }
-  if (!is.null(frozen)) {
-    options$frozen <- frozen
+  if (!is.null(text)) {
+    options$text <- text
   }
-  if (!is.null(id)) {
-    options$id <- id
+  if (!is.null(type)) {
+    options$type <- type
   }
   if (!is.null(value)) {
     options$value <- value
   }
-  if (!is.null(acl)) {
-    options$acl <- acl
-  }
   result <- generic_chemi_request(
-    query = type,
+    query = acl,
     endpoint = "stdizer/groups",
     options = options,
     tidy = FALSE

@@ -119,6 +119,33 @@ is_transient_error <- function(resp) {
   status == 429 || status >= 500
 }
 
+parse_delimited_response <- function(text, content_type) {
+  if (!nzchar(text)) {
+    return(data.frame())
+  }
+  separator <- if (
+    grepl(
+      "^(text/tab-separated-values|text/tsv)",
+      content_type,
+      ignore.case = TRUE
+    )
+  ) {
+    "\t"
+  } else {
+    ","
+  }
+  utils::read.table(
+    text = text,
+    header = TRUE,
+    sep = separator,
+    quote = "\"",
+    comment.char = "",
+    check.names = FALSE,
+    stringsAsFactors = FALSE,
+    fill = FALSE
+  )
+}
+
 #' Generic API Request Function
 #'
 #' This is a centralized template function used by nearly all `ct_*` functions
@@ -144,6 +171,8 @@ is_transient_error <- function(resp) {
 #'        Supported types:
 #'        - "application/json": Parses response as JSON (default behavior)
 #'        - "text/plain": Returns response as character string
+#'        - "text/csv" or "text/tab-separated-values": Parses the delimited
+#'          response as a data frame
 #'        - "image/*" (e.g., "image/png", "image/svg+xml"): Returns raw bytes or magick image
 #' @param body_type How to encode the request body for POST requests. Defaults to "json".
 #'        Supported types:
@@ -511,6 +540,8 @@ generic_request <- function(
       progress = run_verbose
     )
 
+    observe_api_responses(resps)
+
     # Filter to successful responses only
     resps <- httr2::resps_successes(resps)
 
@@ -586,13 +617,19 @@ generic_request <- function(
     resp_list <- list(httr2::req_perform(req_list[[1]]))
   }
 
+  observe_api_responses(resp_list)
+
   # --- 7. Response Processing ---
 
   # Determine response type from content_type parameter
 
   is_image <- grepl("^image/", content_type)
-  is_text <- grepl("^text/plain", content_type)
-  is_json <- !is_image && !is_text
+  is_delimited <- grepl(
+    "^text/(csv|tab-separated-values|tsv)",
+    content_type,
+    ignore.case = TRUE
+  )
+  is_text <- grepl("^text/plain", content_type, ignore.case = TRUE) || is_delimited
 
   # For non-JSON content types, we handle responses differently
 
@@ -652,7 +689,12 @@ generic_request <- function(
           return(NULL)
         }
 
-        httr2::resp_body_string(r)
+        text <- httr2::resp_body_string(r)
+        if (is_delimited) {
+          parse_delimited_response(text, content_type)
+        } else {
+          text
+        }
       })
 
     # For single query, return the string directly
@@ -752,13 +794,19 @@ generic_request <- function(
 #' @param chemicals Optional list of pre-resolved Chemical objects. Each element should be a
 #'        list with fields like sid, smiles, casrn, inchi, inchiKey, name, mol. When provided,
 #'        this takes precedence over the query parameter for building the chemicals payload.
+#' @param body Optional explicit JSON request body. When supplied, normal
+#'        chemical payload synthesis is bypassed and the body is encoded exactly
+#'        as provided, preserving array order and duplicates.
+#' @param content_type Expected response content type. JSON responses are parsed
+#'        as lists; CSV and TSV responses are parsed as data frames.
 #' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
 #'        When TRUE, uses httr2::req_perform_iterative() to loop through pages.
 #' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
 #' @param pagination_strategy Pagination strategy. For chemi search, usually "offset_limit" (body).
 #' @param ... Named query parameters appended to the request URL.
 #'
-#' @return A tidy tibble (if tidy=TRUE) or a raw list.
+#' @return For JSON, a tidy tibble (if `tidy = TRUE`) or a raw list. For
+#'   CSV and TSV content types, a data frame.
 #' @export
 generic_chemi_request <- function(
   query = NULL,
@@ -772,6 +820,8 @@ generic_chemi_request <- function(
   array_payload = FALSE,
   tidy = TRUE,
   chemicals = NULL,
+  body = NULL,
+  content_type = "application/json",
   paginate = FALSE,
   max_pages = 100,
   pagination_strategy = NULL,
@@ -792,8 +842,10 @@ generic_chemi_request <- function(
   }
 
   # 2. Input Normalization
-  # If pre-resolved chemicals are provided, use them directly
-  if (!is.null(chemicals) && is.list(chemicals) && length(chemicals) > 0) {
+  # Explicit bodies bypass normal chemical payload synthesis.
+  if (!is.null(body)) {
+    resolved_chemicals <- NULL
+  } else if (!is.null(chemicals) && is.list(chemicals) && length(chemicals) > 0) {
     # Use pre-resolved chemicals directly
     resolved_chemicals <- chemicals
   } else {
@@ -812,7 +864,9 @@ generic_chemi_request <- function(
     options <- stats::setNames(list(), character(0))
   }
 
-  if (!is.null(resolved_chemicals)) {
+  if (!is.null(body)) {
+    payload <- body
+  } else if (!is.null(resolved_chemicals)) {
     # Pre-resolved chemicals provided - use them directly
     if (wrap) {
       payload <- list(
@@ -859,7 +913,7 @@ generic_chemi_request <- function(
     httr2::req_url_path_append(endpoint) %>%
     httr2::req_method("POST") %>%
     httr2::req_body_json(payload) %>%
-    httr2::req_headers(Accept = "application/json")
+    httr2::req_headers(Accept = content_type)
 
   if (length(query_params) > 0) {
     req <- do.call(httr2::req_url_query, c(list(req), query_params))
@@ -911,6 +965,8 @@ generic_chemi_request <- function(
       progress = run_verbose
     )
 
+    observe_api_responses(resps)
+
     resps <- httr2::resps_successes(resps)
 
     if (length(resps) == 0) {
@@ -945,13 +1001,24 @@ generic_chemi_request <- function(
 
   # 6. Execution
   resp <- httr2::req_perform(req)
+  observe_api_responses(list(resp))
 
   # 7. Response Processing
   if (httr2::resp_status(resp) < 200 || httr2::resp_status(resp) >= 300) {
     cli::cli_abort("Chemi API request to {.val {endpoint}} failed with status {httr2::resp_status(resp)}")
   }
 
-  body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+  is_csv <- grepl("^text/csv", content_type, ignore.case = TRUE)
+  is_tsv <- grepl(
+    "^(text/tab-separated-values|text/tsv)",
+    content_type,
+    ignore.case = TRUE
+  )
+  body <- if (is_csv || is_tsv) {
+    parse_delimited_response(httr2::resp_body_string(resp), content_type)
+  } else {
+    httr2::resp_body_json(resp, simplifyVector = FALSE)
+  }
 
   if (!is.null(pluck_res)) {
     body <- purrr::pluck(body, pluck_res)
@@ -961,7 +1028,7 @@ generic_chemi_request <- function(
     if (tidy) return(tibble::tibble()) else return(list())
   }
 
-  if (!tidy) {
+  if (!tidy || is_csv || is_tsv) {
     return(body)
   }
 

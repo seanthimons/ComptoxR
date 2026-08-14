@@ -7,6 +7,7 @@
 #' @param similarity The similarity threshold, a numeric value between 0 and 1. Optional, defaults to 0.8.
 #'
 #' @returns A tibble of similar compounds, or an empty tibble if no similar compounds are found.
+#' @apiStage public
 #' @export
 #'
 #' @examples

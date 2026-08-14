@@ -20,3 +20,7 @@ Returns a scalar value
 ct_exposure_product_data_search(dtxsid = "DTXSID0020232")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

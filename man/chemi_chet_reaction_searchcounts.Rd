@@ -22,3 +22,7 @@ Returns a tibble with results (array of objects)
 chemi_chet_reaction_searchcounts(search_input = "DTXSID7020182")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{staging} API schema.
+}
+

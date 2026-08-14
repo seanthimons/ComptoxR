@@ -22,3 +22,7 @@ Returns a tibble with results (array of objects)
 ct_chemical_msready_search_by_mass(start = "200.9")
 }
 }
+\section{API stage}{
+  This wrapper was generated from the \strong{public} API schema.
+}
+

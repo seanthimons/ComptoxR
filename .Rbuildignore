@@ -27,3 +27,5 @@ data-raw/
 ^comptoxr_sitrep_.*[.]log$
 ^pr_body[.]md$
 ^schema_diff_report[.]md$
+^CONTRIBUTING[.]md$
+^vignettes/articles$

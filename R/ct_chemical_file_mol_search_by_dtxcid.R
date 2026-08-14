@@ -5,6 +5,7 @@
 #'
 #' @param dtxcid DSSTox Compound Identifier. Type: string
 #' @return Returns a tibble with results
+#' @apiStage public
 #' @export
 #'
 #' @examples
