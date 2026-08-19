@@ -350,6 +350,18 @@
         }
       }
     },
+    "dtxsids_search_schema": {
+      "properties": {
+        "dtxsids": {
+          "description": "Array of DTXSIDs as strings.",
+          "example": [
+            "DTXSID9020112",
+            "DTXSID2023985"
+          ],
+          "type": "array"
+        }
+      }
+    },
     "entropy_similarity_request": {
       "properties": {
         "spectrum_1": {
@@ -951,76 +963,241 @@
   "paths": {
     "/api/amos/add_aqc_spectrum/": {
       "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
         "description": "(.jdx), and a specific form of JSON.<br/>",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewAnalyticalQCSpectrum"
-            }
+            "description": "Spectrum to add. Should be a file with an extension of .jdx, .json, or .pdf.",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Annotation for the spectrum. Can be empty.",
+            "in": "formData",
+            "name": "annotation",
+            "type": "string"
+          },
+          {
+            "description": "DTXSID for the spectrum.",
+            "in": "formData",
+            "name": "dtxsid",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Quality descriptor for the sample at the initial timepoint.",
+            "in": "formData",
+            "name": "first_timepoint",
+            "type": "string"
+          },
+          {
+            "collectionFormat": "multi",
+            "description": "List of substance flags pertaining to the spectrum's substance.",
+            "in": "formData",
+            "items": {
+              "type": "string"
+            },
+            "name": "flags[]",
+            "type": "array"
+          },
+          {
+            "description": "Quality descriptor for the sample at the measured timepoint.",
+            "in": "formData",
+            "name": "last_timepoint",
+            "type": "string"
+          },
+          {
+            "description": "Substance-level amenability flag for ESI- work.",
+            "in": "formData",
+            "name": "lcms_amen_neg_true",
+            "type": "string"
+          },
+          {
+            "description": "Substance-level amenability flag for ESI+ work.",
+            "in": "formData",
+            "name": "lcms_amen_pos_true",
+            "type": "string"
+          },
+          {
+            "description": "Analytical methodology for the spectrum. Should be either GC/MS, LC/MS, or NMR.",
+            "in": "formData",
+            "name": "methodology",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "ID of the tested sample.",
+            "in": "formData",
+            "name": "sample_id",
+            "type": "string"
+          },
+          {
+            "description": "Stability call for the sample at the time of measurement.",
+            "in": "formData",
+            "name": "stability_call",
+            "type": "string"
+          },
+          {
+            "description": "Elapsed time in days that the sample has been at room temperature.",
+            "in": "formData",
+            "name": "timepoint_days",
+            "type": "integer"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ID of the newly added spectrum and a stub of the URL for the spectrum's viewing page."
+          },
+          "409": {
+            "description": "A list of issues with the submission."
+          }
+        },
         "summary": "Loads a new spectrum into the database for Analytical QC.  This is intended to accept only PDFs, JCAMP-DX files"
       }
     },
     "/api/amos/add_new_fact_sheet/": {
       "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
         "description": "<br/>Optional flags:<br/>- skip_clean: if true, do not clean the PDF<br/>- skip_ocr: if true, skip OCR step inside prepare_pdf<br/>",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewFactSheet"
-            }
+            "description": "PDF to add.",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Name of the source. Optional.",
+            "in": "formData",
+            "name": "source",
+            "type": "string"
+          },
+          {
+            "description": "Type of fact sheet. Optional.",
+            "in": "formData",
+            "name": "document_type",
+            "type": "string"
+          },
+          {
+            "default": false,
+            "description": "Skip PDF cleaning.",
+            "in": "formData",
+            "name": "skip_clean",
+            "type": "boolean"
+          },
+          {
+            "default": false,
+            "description": "Skip OCR.",
+            "in": "formData",
+            "name": "skip_ocr",
+            "type": "boolean"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ID of the newly added fact sheet."
+          }
+        },
         "summary": "Adds a new fact sheet to the database. The new ID is automatically determined and assigned."
       }
     },
     "/api/amos/add_new_method/": {
       "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
         "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewMethod"
-            }
+            "description": "PDF to add.",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Name of the source. Optional.",
+            "in": "formData",
+            "name": "source",
+            "type": "string"
+          },
+          {
+            "description": "Type of method. Optional.",
+            "in": "formData",
+            "name": "document_type",
+            "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ID of the newly added method."
+          }
+        },
         "summary": "Adds a new method to the database.  The new ID is automatically determined and assigned by this function."
       }
     },
     "/api/amos/add_new_product_declaration/": {
       "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
         "description": "function.  Additionally, since little metadata is currently being added during this step, all documents are set to<br/>be drafts in the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewDocument"
-            }
+            "description": "PDF to add.",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Name of the source. Optional.",
+            "in": "formData",
+            "name": "source",
+            "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ID of the newly added product declaration."
+          }
+        },
         "summary": "Adds a new product declaration to the database.  The new ID is automatically determined and assigned by this"
       }
     },
     "/api/amos/add_new_safety_data_sheet/": {
       "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
         "description": "Additionally, since little metadata is currently being added during this step, all documents are set to be drafts in<br/>the database.<br/><br/>Returns the newly generated ID so that the user can quickly navigate to and check out the new method on the<br/>frontend.<br/>",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/NewDocument"
-            }
+            "description": "PDF to add.",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "description": "Name of the source. Optional.",
+            "in": "formData",
+            "name": "source",
+            "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "The ID of the newly added safety data sheet."
+          }
+        },
         "summary": "Adds a new safety data sheet to the database.  The new ID is automatically determined and assigned by this function."
       }
     },
@@ -1219,6 +1396,11 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Substance information and record counts for the supplied DTXSIDs."
+          }
+        },
         "summary": "Returns substance information and record counts for a list of DTXSIDs."
       }
     },

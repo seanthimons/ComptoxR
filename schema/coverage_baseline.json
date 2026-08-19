@@ -2,11 +2,11 @@
   "ccd_coverage": 100,
   "ccd_endpoints": 140,
   "ccd_functions": 140,
-  "chemi_coverage": 98.3,
-  "chemi_endpoints": 172,
-  "chemi_functions": 169,
+  "chemi_coverage": 96.9,
+  "chemi_endpoints": 227,
+  "chemi_functions": 220,
   "epi_coverage": 100,
   "epi_endpoints": 7,
   "epi_functions": 7,
-  "timestamp": "2026-08-10T18:35:31Z"
+  "timestamp": "2026-08-19T09:19:06Z"
 }
