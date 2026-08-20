@@ -50,6 +50,8 @@ chemi_stdizer_groups <- function() {
 #' @param text Optional parameter
 #' @param type Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE
 #' @param value Optional parameter
+#' @param request.filesInfo Optional parameter
+#' @param request.replace Optional parameter
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
@@ -69,7 +71,9 @@ chemi_stdizer_groups_bulk <- function(
   operations = NULL,
   text = NULL,
   type = NULL,
-  value = NULL
+  value = NULL,
+  request.filesInfo = NULL,
+  request.replace = NULL
 ) {
   server <- "chemi_burl"
   req_data <- run_hook(
@@ -88,6 +92,8 @@ chemi_stdizer_groups_bulk <- function(
         `text` = text,
         `type` = type,
         `value` = value,
+        `request.filesInfo` = request.filesInfo,
+        `request.replace` = request.replace,
         `server` = server
       )
     )
@@ -127,6 +133,12 @@ chemi_stdizer_groups_bulk <- function(
   }
   if ("value" %in% names(req_data$params)) {
     value <- req_data$params[["value"]]
+  }
+  if ("request.filesInfo" %in% names(req_data$params)) {
+    request.filesInfo <- req_data$params[["request.filesInfo"]]
+  }
+  if ("request.replace" %in% names(req_data$params)) {
+    request.replace <- req_data$params[["request.replace"]]
   }
   if ("server" %in% names(req_data$params)) {
     server <- req_data$params[["server"]]

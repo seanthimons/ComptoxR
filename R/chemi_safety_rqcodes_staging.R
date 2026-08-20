@@ -1,70 +1,15 @@
-#' Resolver Safety Flags
+#' Safety Rqcodes
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query Required parameter
-#' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
-#' @return Returns a list with result object
-#' @apiStage public
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' chemi_resolver_safety_flags(query = "DTXSID7020182")
-#' }
-chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
-  server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_safety_flags",
-    "pre_request",
-    list(params = list(`query` = query, `idType` = idType, `server` = server))
-  )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  result <- generic_request(
-    endpoint = "resolver/safety-flags",
-    method = "GET",
-    batch_limit = 0,
-    server = server,
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
-  )
-
-  # Additional post-processing can be added here
-
-  return(result)
-}
-
-#' Resolver Safety Flags
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
+#' @param additionalProps Optional parameter
 #' @param averageMass Optional parameter
 #' @param canonicalSmiles Optional parameter
 #' @param casrn Optional parameter
 #' @param chemId Optional parameter
 #' @param cid Optional parameter
+#' @param id Optional parameter
 #' @param image Optional parameter
 #' @param inchi Optional parameter
 #' @param inchiKey Optional parameter
@@ -74,21 +19,22 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' @param name Optional parameter
 #' @param sid Optional parameter
 #' @param smiles Optional parameter
-#' @param request.filesInfo Optional parameter
-#' @return Returns a list with result object
-#' @apiStage public
+#' @return Returns a tibble with results (array of objects)
+#' @apiStage staging
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' chemi_resolver_safety_flags_bulk(averageMass = "DTXSID1024122")
+#' chemi_safety_rqcodes_staging(additionalProps = "DTXSID1024122")
 #' }
-chemi_resolver_safety_flags_bulk <- function(
+chemi_safety_rqcodes_staging <- function(
+  additionalProps = NULL,
   averageMass = NULL,
   canonicalSmiles = NULL,
   casrn = NULL,
   chemId = NULL,
   cid = NULL,
+  id = NULL,
   image = NULL,
   inchi = NULL,
   inchiKey = NULL,
@@ -97,20 +43,21 @@ chemi_resolver_safety_flags_bulk <- function(
   monoisotopicMass = NULL,
   name = NULL,
   sid = NULL,
-  smiles = NULL,
-  request.filesInfo = NULL
+  smiles = NULL
 ) {
   server <- "chemi_burl"
   req_data <- run_hook(
-    "chemi_resolver_safety_flags_bulk",
+    "chemi_safety_rqcodes_staging",
     "pre_request",
     list(
       params = list(
+        `additionalProps` = additionalProps,
         `averageMass` = averageMass,
         `canonicalSmiles` = canonicalSmiles,
         `casrn` = casrn,
         `chemId` = chemId,
         `cid` = cid,
+        `id` = id,
         `image` = image,
         `inchi` = inchi,
         `inchiKey` = inchiKey,
@@ -120,13 +67,15 @@ chemi_resolver_safety_flags_bulk <- function(
         `name` = name,
         `sid` = sid,
         `smiles` = smiles,
-        `request.filesInfo` = request.filesInfo,
         `server` = server
       )
     )
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
+  }
+  if ("additionalProps" %in% names(req_data$params)) {
+    additionalProps <- req_data$params[["additionalProps"]]
   }
   if ("averageMass" %in% names(req_data$params)) {
     averageMass <- req_data$params[["averageMass"]]
@@ -142,6 +91,9 @@ chemi_resolver_safety_flags_bulk <- function(
   }
   if ("cid" %in% names(req_data$params)) {
     cid <- req_data$params[["cid"]]
+  }
+  if ("id" %in% names(req_data$params)) {
+    id <- req_data$params[["id"]]
   }
   if ("image" %in% names(req_data$params)) {
     image <- req_data$params[["image"]]
@@ -170,14 +122,14 @@ chemi_resolver_safety_flags_bulk <- function(
   if ("smiles" %in% names(req_data$params)) {
     smiles <- req_data$params[["smiles"]]
   }
-  if ("request.filesInfo" %in% names(req_data$params)) {
-    request.filesInfo <- req_data$params[["request.filesInfo"]]
-  }
   if ("server" %in% names(req_data$params)) {
     server <- req_data$params[["server"]]
   }
   # Build options list for additional parameters
   options <- list()
+  if (!is.null(averageMass)) {
+    options$averageMass <- averageMass
+  }
   if (!is.null(canonicalSmiles)) {
     options$canonicalSmiles <- canonicalSmiles
   }
@@ -189,6 +141,9 @@ chemi_resolver_safety_flags_bulk <- function(
   }
   if (!is.null(cid)) {
     options$cid <- cid
+  }
+  if (!is.null(id)) {
+    options$id <- id
   }
   if (!is.null(image)) {
     options$image <- image
@@ -218,8 +173,8 @@ chemi_resolver_safety_flags_bulk <- function(
     options$smiles <- smiles
   }
   result <- generic_chemi_request(
-    query = averageMass,
-    endpoint = "resolver/safety-flags",
+    query = additionalProps,
+    endpoint = "safety/rqcodes",
     options = options,
     tidy = FALSE,
     server = server
