@@ -25,11 +25,11 @@ util_classyfire_wishart <- function(query, path = "entities") {
   }
 
   # ---------------------------------------------------------------------------
-  # --- Get environment variables
+  # --- Get configuration
   # ---------------------------------------------------------------------------
 
-  run_debug <- as.logical(Sys.getenv("run_debug", unset = "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", unset = "FALSE"))
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   # ---------------------------------------------------------------------------
   # --- Debugging information

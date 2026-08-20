@@ -7,11 +7,17 @@
 run_debug(debug = FALSE)
 }
 \arguments{
-\item{debug}{A logical value to enable or disable debug mode.}
+\item{debug}{One nonmissing logical value to enable or disable debug mode.}
 }
 \value{
-Should return the Sys Env variable \code{run_debug}
+Invisibly returns \code{NULL}.
 }
 \description{
 Set debug mode
+}
+\details{
+Debug mode applies only to the current R session. It resets to \code{FALSE} each
+time the package loads, so enable it again in each session with
+\code{run_debug(TRUE)}. The old \code{run_debug} environment variable is no longer
+supported.
 }

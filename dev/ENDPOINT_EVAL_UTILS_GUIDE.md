@@ -1093,9 +1093,12 @@ chemi_rq <- function(query) {
 6.  **Enable verbose output:**
 
     ``` r
-    Sys.setenv(run_verbose = "TRUE")
-    Sys.setenv(run_debug = "TRUE")
+    run_verbose(TRUE)
+    run_debug(TRUE)
     ```
+
+    Verbose mode uses the `ComptoxR.run_verbose` option. Debug mode is
+    session-only and must be enabled again in each session.
 
 7.  **Debug schema resolution:**
 

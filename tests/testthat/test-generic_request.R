@@ -2,12 +2,15 @@ test_that("generic_request dry run works independently of network", {
   testthat::skip_if_not_installed("httpuv")
 
   # Enable debug mode to avoid real requests
-  Sys.setenv(run_debug = "TRUE")
+  suppressMessages(run_debug(TRUE))
   Sys.setenv(ctx_api_key = "logic_test_key")
-  on.exit({
-    Sys.setenv(run_debug = "FALSE")
-    # Restore dummy key if needed, though setup.R handles it usually
-  })
+  on.exit(
+    {
+      suppressMessages(run_debug(FALSE))
+      # Restore dummy key if needed, though setup.R handles it usually
+    },
+    add = TRUE
+  )
 
   # Test POST request construction
   output <- capture_output(
@@ -28,8 +31,8 @@ test_that("generic_request dry run works independently of network", {
 test_that("generic_request respects different server environments", {
   testthat::skip_if_not_installed("httpuv")
 
-  Sys.setenv(run_debug = "TRUE")
-  on.exit(Sys.setenv(run_debug = "FALSE"))
+  suppressMessages(run_debug(TRUE))
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
 
   # Custom server via literal URL
   output_custom <- capture_output(generic_request("A", "endpoint", server = "http://test.com/api"))
@@ -39,12 +42,15 @@ test_that("generic_request respects different server environments", {
 test_that("generic_request handles batching logic correctly", {
   testthat::skip_if_not_installed("httpuv")
 
-  Sys.setenv(run_debug = "TRUE")
+  suppressMessages(run_debug(TRUE))
   Sys.setenv(batch_limit = "2")
-  on.exit({
-    Sys.setenv(run_debug = "FALSE")
-    Sys.setenv(batch_limit = "100")
-  })
+  on.exit(
+    {
+      suppressMessages(run_debug(FALSE))
+      Sys.setenv(batch_limit = "100")
+    },
+    add = TRUE
+  )
 
   output <- capture_output(
     dry_run <- generic_request(
@@ -55,6 +61,48 @@ test_that("generic_request handles batching logic correctly", {
   )
 
   expect_match(output, "\\[\\s*\"A\",\\s*\"B\"\\s*\\]")
+})
+
+test_that("generic_request progress follows the verbose option", {
+  withr::local_envvar(run_debug = "TRUE")
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
+  suppressMessages(run_debug(FALSE))
+  progress_values <- logical()
+  response <- httr2::response(
+    status_code = 200,
+    headers = list(`Content-Type` = "application/json"),
+    body = charToRaw('[{"id":1}]')
+  )
+
+  testthat::with_mocked_bindings(
+    req_perform_iterative = function(req, next_req, max_reqs, on_error, progress) {
+      progress_values <<- c(progress_values, progress)
+      list(response)
+    },
+    .package = "httr2",
+    {
+      for (verbose in c(FALSE, TRUE)) {
+        suppressMessages(withr::with_options(
+          list(ComptoxR.run_verbose = verbose),
+          generic_request(
+            "A",
+            "endpoint",
+            method = "GET",
+            server = "https://example.test/api",
+            batch_limit = 1,
+            auth = FALSE,
+            paginate = TRUE,
+            max_pages = 2,
+            pagination_strategy = "page_number",
+            pageNumber = 1
+          )
+        ))
+      }
+    }
+  )
+
+  expect_identical(progress_values, c(FALSE, TRUE))
+  expect_identical(Sys.getenv("run_debug"), "TRUE")
 })
 
 test_that("generic_request tidies simple results into tibbles", {

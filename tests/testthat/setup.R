@@ -17,8 +17,8 @@ if (!isNamespaceLoaded("ComptoxR")) {
 # This ensures tests can run even if the user hasn't set up their keys locally
 Sys.setenv("ctx_api_key" = Sys.getenv("ctx_api_key", "dummy_ctx_key"))
 Sys.setenv("batch_limit" = "100")
-Sys.setenv("run_debug" = "FALSE")
-Sys.setenv("run_verbose" = "FALSE")
+options(ComptoxR.run_verbose = FALSE)
+suppressMessages(run_debug(FALSE))
 
 # Explicitly set servers to Production for tests
 # This ensures consistency across different developer environments

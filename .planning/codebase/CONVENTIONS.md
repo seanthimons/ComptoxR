@@ -72,8 +72,9 @@
   - `epi_burl`: EPI Suite URL
   - `eco_burl`: ECOTOX URL
   - `batch_limit`: Default batch size (100-1000)
-  - `run_debug`: Debug mode flag
-  - `run_verbose`: Verbose output flag
+- Runtime modes use package-specific state:
+  - `.ComptoxREnv$run_debug`: Session-only debug mode
+  - `ComptoxR.run_verbose`: R option for verbose output
 
 **Roxygen Documentation:**
 - All exported functions have roxygen comments
@@ -106,8 +107,8 @@
 **Framework:** cli package (not base R `message()`)
 
 **Patterns:**
-- Verbose mode enabled via `Sys.getenv("run_verbose")`
-- Debug mode enabled via `Sys.getenv("run_debug")`
+- Verbose mode enabled via `run_verbose(TRUE)` or the `ComptoxR.run_verbose` option
+- Debug mode enabled for the current session via `run_debug(TRUE)`
 - When verbose=TRUE:
   - `cli::cli_rule()`: Section headers with endpoint name
   - `cli::cli_dl()`: Named list of debug information (item count, batch count, method)
@@ -122,7 +123,7 @@
       ))
     }
     ```
-- Debug mode (run_debug=TRUE): Prints request construction without executing HTTP calls
+- Debug mode (`run_debug(TRUE)`): Prints request construction without executing HTTP calls
 
 **Startup logging:**
 - `run_setup()` function provides endpoint connectivity check and latency reporting

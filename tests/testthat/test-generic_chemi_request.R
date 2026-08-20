@@ -1,9 +1,9 @@
 test_that("generic_chemi_request construction is correct", {
   testthat::skip_if_not_installed("httpuv")
 
-  Sys.setenv(run_debug = "TRUE")
+  suppressMessages(run_debug(TRUE))
   Sys.setenv(ctx_api_key = "logic_test_key")
-  on.exit(Sys.setenv(run_debug = "FALSE"))
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
 
   # Test the nested chemicals/options structure
   output <- capture_output(
@@ -26,8 +26,8 @@ test_that("generic_chemi_request construction is correct", {
 test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
   testthat::skip_if_not_installed("httpuv")
 
-  Sys.setenv(run_debug = "TRUE")
-  on.exit(Sys.setenv(run_debug = "FALSE"))
+  suppressMessages(run_debug(TRUE))
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
 
   output <- capture_output(
     dry_run <- generic_chemi_request(
@@ -43,7 +43,8 @@ test_that("generic_chemi_request handles unnested payload when wrap=FALSE", {
 
 test_that("generic_chemi_request sends explicit bodies exactly and preserves duplicates", {
   testthat::skip_if_not_installed("httpuv")
-  withr::local_envvar(run_debug = "TRUE")
+  suppressMessages(run_debug(TRUE))
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
   body <- list(
     chemicals = I(c("CCO", "CCO", "CCC")),
     options = list(headers = TRUE)

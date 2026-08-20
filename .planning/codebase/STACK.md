@@ -101,10 +101,10 @@
 - `ctx_api_key` - CompTox Dashboard API key (required for authenticated endpoints)
 - `cc_api_key` - CAS Common Chemistry API key (required)
 
-**Runtime Flags:**
-- `run_debug` - Boolean flag for debug mode (dry-run without executing requests)
-- `run_verbose` - Boolean flag for verbose logging
-- `batch_limit` - Numeric batch size for POST requests (default: 200)
+**Runtime Settings:**
+- `.ComptoxREnv$run_debug` - Session-only debug mode state (dry-run without executing requests)
+- `ComptoxR.run_verbose` - R option for verbose logging
+- `batch_limit` - Environment variable for the POST batch size (default: 200)
 
 ## Platform Requirements
 

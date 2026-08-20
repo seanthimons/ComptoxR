@@ -59,7 +59,7 @@ test_that("ct_related gates payload header behind run_verbose", {
     .package = "ComptoxR"
   )
 
-  withr::local_envvar(c(run_verbose = "FALSE"))
+  withr::local_options(list(ComptoxR.run_verbose = FALSE))
   quiet_output <- capture.output(
     result <- ComptoxR::ct_related(query = "DTXSID1"),
     type = "message"
@@ -67,7 +67,7 @@ test_that("ct_related gates payload header behind run_verbose", {
   expect_equal(result$child, "DTXSID2")
   expect_false(any(grepl("Related substances payload options", quiet_output, fixed = TRUE)))
 
-  withr::local_envvar(c(run_verbose = "TRUE"))
+  withr::local_options(list(ComptoxR.run_verbose = TRUE))
   verbose_output <- capture.output(
     verbose_result <- ComptoxR::ct_related(query = "DTXSID1"),
     type = "message"

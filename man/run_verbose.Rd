@@ -7,19 +7,29 @@
 run_verbose(verbose = FALSE)
 }
 \arguments{
-\item{verbose}{A logical value indicating whether verbose mode should be enabled.
-Defaults to \code{FALSE}. If a non-logical value is provided, a warning is issued,
-and verbose mode is set to \code{FALSE}.}
+\item{verbose}{One nonmissing logical value that enables or disables verbose
+mode. The default is \code{FALSE}. An invalid value gives a warning and sets
+verbose mode to \code{FALSE}.}
+}
+\value{
+Invisibly returns \code{NULL}.
 }
 \description{
 Sets the verbosity of the execution.
 }
 \details{
-This function sets the \code{"run_verbose"} environment variable based on the
-\code{verbose} argument. If \code{verbose} is \code{TRUE}, the environment variable is set
-to \code{"TRUE"}. Otherwise, it is set to \code{"FALSE"}. If an invalid value is
-provided for \code{verbose}, a warning message is displayed, and the environment
-variable is set to \code{"FALSE"}.
+This function sets the \code{ComptoxR.run_verbose} option for the current R
+session. To enable verbose mode in future sessions, open the user profile
+with \code{file.edit("~/.Rprofile")} and add:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(ComptoxR.run_verbose = TRUE)
+}\if{html}{\out{</div>}}
+
+Start a new R session before this setting affects the package startup
+header. \code{run_verbose(FALSE)} overrides it only for the current session. The
+package never creates or edits \code{.Rprofile}.
+
+The old \code{Sys.setenv(run_verbose = "TRUE")} setting is no longer supported.
 }
 \examples{
 \dontrun{

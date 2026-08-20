@@ -31,7 +31,7 @@ ct_related <- function(query, inclusive = FALSE) {
     cli::cli_abort("Inclusive option only valid for multiple compounds")
   }
 
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  run_verbose <- .run_verbose_enabled()
   if (run_verbose) {
     cli::cli_rule(left = "Related substances payload options")
     cli::cli_dl(

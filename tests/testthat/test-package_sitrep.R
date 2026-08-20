@@ -130,42 +130,104 @@ test_that("package_sitrep marks unconfigured servers as SKIPPED", {
 
 # ---- run_debug -------------------------------------------------------------
 
-test_that("run_debug(TRUE) sets run_debug env var to TRUE", {
-  withr::local_envvar(run_debug = NA)
-  run_debug(TRUE)
-  expect_identical(Sys.getenv("run_debug"), "TRUE")
+run_debug_enabled <- getFromNamespace(".run_debug_enabled", "ComptoxR")
+run_verbose_enabled <- getFromNamespace(".run_verbose_enabled", "ComptoxR")
+on_attach <- getFromNamespace(".onAttach", "ComptoxR")
+
+test_that("run_debug changes private session state", {
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
+
+  expect_invisible(suppressMessages(run_debug(TRUE)))
+  expect_true(run_debug_enabled())
+
+  expect_invisible(suppressMessages(run_debug(FALSE)))
+  expect_false(run_debug_enabled())
 })
 
-test_that("run_debug(FALSE) sets run_debug env var to FALSE", {
-  withr::local_envvar(run_debug = NA)
-  run_debug(FALSE)
-  expect_identical(Sys.getenv("run_debug"), "FALSE")
+test_that("missing settings default to FALSE", {
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
+  state <- getFromNamespace(".ComptoxREnv", "ComptoxR")
+  old_debug <- state$run_debug
+  on.exit(assign("run_debug", old_debug, envir = state), add = TRUE)
+  rm("run_debug", envir = state)
+
+  expect_false(run_debug_enabled())
+  expect_false(run_verbose_enabled())
 })
 
-test_that("run_debug with non-logical input warns and defaults to FALSE", {
-  withr::local_envvar(run_debug = NA)
-  expect_message(run_debug("not-a-logical"), "Invalid debug option")
-  expect_identical(Sys.getenv("run_debug"), "FALSE")
+test_that("invalid debug values warn and reset private state", {
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
+
+  for (value in list(42, NA, c(TRUE, FALSE))) {
+    suppressMessages(run_debug(TRUE))
+    expect_message(run_debug(value), "Invalid debug option")
+    expect_false(run_debug_enabled())
+  }
 })
 
 # ---- run_verbose -----------------------------------------------------------
 
-test_that("run_verbose(TRUE) sets run_verbose env var to TRUE", {
-  withr::local_envvar(run_verbose = NA)
-  run_verbose(TRUE)
-  expect_identical(Sys.getenv("run_verbose"), "TRUE")
+test_that("run_verbose changes the namespaced option", {
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
+
+  expect_invisible(suppressMessages(run_verbose(TRUE)))
+  expect_identical(getOption("ComptoxR.run_verbose"), TRUE)
+
+  expect_invisible(suppressMessages(run_verbose(FALSE)))
+  expect_identical(getOption("ComptoxR.run_verbose"), FALSE)
 })
 
-test_that("run_verbose(FALSE) sets run_verbose env var to FALSE", {
-  withr::local_envvar(run_verbose = NA)
-  run_verbose(FALSE)
-  expect_identical(Sys.getenv("run_verbose"), "FALSE")
+test_that("invalid verbose values warn and reset the option", {
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
+
+  for (value in list(42, NA, c(TRUE, FALSE))) {
+    suppressMessages(run_verbose(TRUE))
+    expect_message(run_verbose(value), "Invalid verbose option")
+    expect_identical(getOption("ComptoxR.run_verbose"), FALSE)
+  }
 })
 
-test_that("run_verbose with non-logical input warns and defaults to FALSE", {
-  withr::local_envvar(run_verbose = NA)
-  expect_message(run_verbose(42), "Invalid verbose option")
-  expect_identical(Sys.getenv("run_verbose"), "FALSE")
+test_that("legacy environment variables do not control runtime settings", {
+  withr::local_envvar(c(run_debug = "TRUE", run_verbose = "TRUE"))
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
+  state <- getFromNamespace(".ComptoxREnv", "ComptoxR")
+  old_debug <- state$run_debug
+  on.exit(assign("run_debug", old_debug, envir = state), add = TRUE)
+  state$run_debug <- FALSE
+
+  expect_false(run_debug_enabled())
+  expect_false(run_verbose_enabled())
+})
+
+test_that("setters leave legacy environment variables unchanged", {
+  withr::local_envvar(c(
+    run_debug = "legacy-debug",
+    run_verbose = "legacy-verbose"
+  ))
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
+  on.exit(suppressMessages(run_debug(FALSE)), add = TRUE)
+
+  suppressMessages(run_debug(TRUE))
+  suppressMessages(run_verbose(TRUE))
+
+  expect_identical(Sys.getenv("run_debug"), "legacy-debug")
+  expect_identical(Sys.getenv("run_verbose"), "legacy-verbose")
+})
+
+test_that("package attachment uses a verbose option set before attachment", {
+  withr::local_options(list(ComptoxR.run_verbose = TRUE))
+  withr::local_envvar(R_DEVTOOLS_LOAD = "")
+  header_called <- FALSE
+  testthat::local_mocked_bindings(
+    .header = function() {
+      header_called <<- TRUE
+    },
+    .package = "ComptoxR"
+  )
+
+  suppressPackageStartupMessages(on_attach("", "ComptoxR"))
+
+  expect_true(header_called)
 })
 
 # ---- batch_limit -----------------------------------------------------------

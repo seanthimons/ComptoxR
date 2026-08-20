@@ -24,11 +24,11 @@ util_classyfire <- function(query) {
   }
 
   # ---------------------------------------------------------------------------
-  # --- Get environment variables
+  # --- Get configuration
   # ---------------------------------------------------------------------------
   ctx_burl <- Sys.getenv("np_burl", unset = NA)
-  run_debug <- as.logical(Sys.getenv("run_debug", unset = "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", unset = "FALSE"))
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   if (is.na(ctx_burl)) {
     cli::cli_abort("The `np_burl` environment variable is not set. Please set it to the base API URL.")

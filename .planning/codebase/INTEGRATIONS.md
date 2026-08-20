@@ -131,8 +131,8 @@
 **Logging:**
 - `cli` package for formatted console output
 - No external logging service integrated
-- Debug mode: `run_debug(TRUE)` for dry-run without actual requests
-- Verbose mode: `run_verbose(TRUE)` for detailed logging
+- Debug mode: `run_debug(TRUE)` enables dry runs for the current session
+- Verbose mode: `run_verbose(TRUE)` sets the `ComptoxR.run_verbose` option
 
 **Error Handling:**
 - HTTP errors (4xx/5xx) trigger warnings, return NULL/empty for batch
@@ -153,9 +153,11 @@
 - `eco_burl` - ECOTOX URL (auto-set by `eco_server()`)
 - `cc_burl` - Common Chemistry URL (auto-set by `cc_server()`)
 - `np_burl` - Natural Products URL (auto-set by `np_server()`)
-- `run_debug` - Debug flag (auto-set by `run_debug()`)
-- `run_verbose` - Verbose flag (auto-set by `run_verbose()`)
 - `batch_limit` - Batch size (auto-set by `batch_limit()`, default 200)
+
+**Runtime settings:**
+- `.ComptoxREnv$run_debug` - Session-only debug state set by `run_debug()`
+- `ComptoxR.run_verbose` - R option set by `run_verbose()`
 
 **Development vs Production:**
 - DEV version (no package date) defaults to Staging/Dev environments

@@ -83,7 +83,6 @@ test_that("database server URL lookup does not close cached connections", {
 
 test_that("run_verbose and run_setup have offline-safe configuration contracts", {
   withr::local_envvar(c(
-    run_verbose = "",
     ctx_burl = "",
     chemi_burl = "",
     epi_burl = "",
@@ -92,11 +91,12 @@ test_that("run_verbose and run_setup have offline-safe configuration contracts",
     toxval_burl = "",
     ctx_api_key = ""
   ))
+  withr::local_options(list(ComptoxR.run_verbose = NULL))
 
   suppressMessages(run_verbose(TRUE))
-  expect_equal(Sys.getenv("run_verbose"), "TRUE")
+  expect_identical(getOption("ComptoxR.run_verbose"), TRUE)
   suppressMessages(run_verbose("invalid"))
-  expect_equal(Sys.getenv("run_verbose"), "FALSE")
+  expect_identical(getOption("ComptoxR.run_verbose"), FALSE)
 
   expect_null(suppressWarnings(suppressMessages(run_setup())))
 })

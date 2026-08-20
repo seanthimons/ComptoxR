@@ -1,6 +1,14 @@
 # Internal package environment for session-level caching
 .ComptoxREnv <- new.env(parent = emptyenv())
 
+.run_debug_enabled <- function() {
+  isTRUE(.ComptoxREnv$run_debug)
+}
+
+.run_verbose_enabled <- function() {
+  isTRUE(getOption("ComptoxR.run_verbose", FALSE))
+}
+
 #' First time setup for functions
 
 #'
@@ -774,13 +782,19 @@ pubchem_server <- function(server = NULL, url_only = FALSE) {
 
 #' Set debug mode
 #'
-#' @param debug A logical value to enable or disable debug mode.
+#' @param debug One nonmissing logical value to enable or disable debug mode.
 #'
-#' @return Should return the Sys Env variable `run_debug`
+#' @details
+#' Debug mode applies only to the current R session. It resets to `FALSE` each
+#' time the package loads, so enable it again in each session with
+#' `run_debug(TRUE)`. The old `run_debug` environment variable is no longer
+#' supported.
+#'
+#' @return Invisibly returns `NULL`.
 #' @export
 run_debug <- function(debug = FALSE) {
-  if (is.logical(debug)) {
-    Sys.setenv("run_debug" = as.character(debug))
+  if (rlang::is_bool(debug)) {
+    .ComptoxREnv$run_debug <- debug
     if (isTRUE(debug)) {
       cli::cli_alert_info(
         paste0("Debug mode is now ", cli::style_bold(cli::col_red("ON")))
@@ -796,24 +810,36 @@ run_debug <- function(debug = FALSE) {
     )
     cli::cli_alert_info("Valid options are TRUE or FALSE.")
     cli::cli_alert_warning("Debug mode set to FALSE.")
-    Sys.setenv("run_debug" = "FALSE")
+    .ComptoxREnv$run_debug <- FALSE
   }
+
+  invisible(NULL)
 }
 
 #' Set verbose mode
 #'
 #' Sets the verbosity of the execution.
 #'
-#' @param verbose A logical value indicating whether verbose mode should be enabled.
-#'   Defaults to `FALSE`. If a non-logical value is provided, a warning is issued,
-#'   and verbose mode is set to `FALSE`.
+#' @param verbose One nonmissing logical value that enables or disables verbose
+#'   mode. The default is `FALSE`. An invalid value gives a warning and sets
+#'   verbose mode to `FALSE`.
 #'
 #' @details
-#' This function sets the `"run_verbose"` environment variable based on the
-#' `verbose` argument. If `verbose` is `TRUE`, the environment variable is set
-#' to `"TRUE"`. Otherwise, it is set to `"FALSE"`. If an invalid value is
-#' provided for `verbose`, a warning message is displayed, and the environment
-#' variable is set to `"FALSE"`.
+#' This function sets the `ComptoxR.run_verbose` option for the current R
+#' session. To enable verbose mode in future sessions, open the user profile
+#' with `file.edit("~/.Rprofile")` and add:
+#'
+#' ```r
+#' options(ComptoxR.run_verbose = TRUE)
+#' ```
+#'
+#' Start a new R session before this setting affects the package startup
+#' header. `run_verbose(FALSE)` overrides it only for the current session. The
+#' package never creates or edits `.Rprofile`.
+#'
+#' The old `Sys.setenv(run_verbose = "TRUE")` setting is no longer supported.
+#'
+#' @return Invisibly returns `NULL`.
 #'
 #' @examples
 #' \dontrun{
@@ -828,8 +854,8 @@ run_debug <- function(debug = FALSE) {
 #' }
 #' @export
 run_verbose <- function(verbose = FALSE) {
-  if (is.logical(verbose)) {
-    Sys.setenv("run_verbose" = as.character(verbose))
+  if (rlang::is_bool(verbose)) {
+    options(ComptoxR.run_verbose = verbose)
     if (isTRUE(verbose)) {
       cli::cli_alert_info(
         paste0("Verbose mode is now ", cli::style_bold(cli::col_green("ON")))
@@ -845,8 +871,10 @@ run_verbose <- function(verbose = FALSE) {
     )
     cli::cli_alert_info("Valid options are TRUE or FALSE.")
     cli::cli_alert_warning("Verbose mode set to FALSE.")
-    Sys.setenv("run_verbose" = "FALSE")
+    options(ComptoxR.run_verbose = FALSE)
   }
+
+  invisible(NULL)
 }
 
 #' Set batch limit for POST requests
@@ -898,7 +926,7 @@ reset_servers <- function() {
   # .onAttach() only handles startup messages.
 
   # Conditionally display startup message based on verbosity
-  if (Sys.getenv("run_verbose") == "TRUE" && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
+  if (.run_verbose_enabled() && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
     # Use cli's message handler to preserve ANSI formatting while remaining CRAN compliant
     # cli outputs through message() by default, which packageStartupMessage wraps
     withCallingHandlers(
@@ -923,6 +951,7 @@ reset_servers <- function() {
 .onLoad <- function(libname, pkgname) {
   # Call the factory ONCE and assign the result to our placeholder.
 
+  .ComptoxREnv$run_debug <- FALSE
   .ComptoxREnv$classifier <- create_compound_classifier()
 
   # Hook configuration is loaded lazily on first use via get_hook_config().
@@ -962,13 +991,6 @@ reset_servers <- function() {
       if (Sys.getenv("pubchem_burl") == "") {
         pubchem_server(server = 1)
       }
-      # Only set verbose if not already configured
-      if (Sys.getenv("run_verbose") == "") {
-        run_verbose(verbose = FALSE)
-      }
-      if (Sys.getenv("run_debug") == "") {
-        run_debug(debug = FALSE)
-      }
       batch_limit(limit = 200)
     } else {
       # Production version defaults (only if not already set)
@@ -993,14 +1015,6 @@ reset_servers <- function() {
       if (Sys.getenv("pubchem_burl") == "") {
         pubchem_server(server = 1)
       }
-      # Only set verbose if not already configured
-      if (Sys.getenv("run_verbose") == "") {
-        run_verbose(verbose = FALSE)
-      }
-      if (Sys.getenv("run_debug") == "") {
-        run_debug(debug = FALSE)
-      }
-
       batch_limit(limit = 200)
     }
   })
@@ -1079,14 +1093,12 @@ reset_servers <- function() {
     cli::cli_alert_success("Built on: {build_date}")
 
     cli::cli_rule(left = 'Run settings')
-    debug_flag <- Sys.getenv("run_debug")
-    verbose_flag <- Sys.getenv("run_verbose")
-    debug_value <- if (debug_flag == "TRUE") {
+    debug_value <- if (.run_debug_enabled()) {
       cli::col_red("TRUE")
     } else {
       cli::col_green("FALSE")
     }
-    verbose_value <- if (verbose_flag == "TRUE") {
+    verbose_value <- if (.run_verbose_enabled()) {
       cli::col_green("TRUE")
     } else {
       cli::col_red("FALSE")

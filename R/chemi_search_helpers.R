@@ -29,7 +29,7 @@ get_mol_for_search <- function(query, search_type) {
   }
 
   # Fetch MOL file via ct_chemical_file_mol_search
-  if (as.logical(Sys.getenv("run_verbose", "FALSE"))) {
+  if (.run_verbose_enabled()) {
     cli::cli_alert_info("Fetching MOL file for {.val {query}}")
   }
 

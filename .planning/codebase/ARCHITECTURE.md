@@ -81,10 +81,12 @@
 - `.ComptoxREnv` internal environment stores:
   - `.ComptoxREnv$extractor` - Pre-compiled formula extractor function (created in `.onLoad()`)
   - `.ComptoxREnv$classifier` - Pre-compiled compound classifier (created in `.onLoad()`)
+  - `.ComptoxREnv$run_debug` - Session-only debug mode state (reset in `.onLoad()`)
+- The `ComptoxR.run_verbose` R option stores verbose mode state
 - System environment variables store:
   - API endpoints (ctx_burl, chemi_burl, epi_burl, eco_burl, cc_burl)
   - API keys (ctx_api_key, cc_api_key)
-  - Behavior flags (run_debug, run_verbose, batch_limit)
+  - Batch size (`batch_limit`)
 
 ## Key Abstractions
 

@@ -306,9 +306,9 @@ generic_request <- function(
     }
   }
 
-  # Check environment flags for logging/debugging
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  # Check runtime settings for logging/debugging
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   if (run_verbose) {
     cli::cli_rule(left = paste('Generic Request:', endpoint))
@@ -928,9 +928,9 @@ generic_chemi_request <- function(
     }
   }
 
-  # Check environment flags
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  # Check runtime settings
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   if (run_verbose) {
     # Determine count based on whether chemicals or query was provided
@@ -1127,9 +1127,9 @@ generic_search_request <- function(
   # Remove NULL params
   payload$params <- purrr::compact(payload$params)
 
-  # Check environment flags
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  # Check runtime settings
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   if (run_verbose) {
     cli::cli_rule(left = paste("Generic Search Request:", search_type))
@@ -1204,9 +1204,9 @@ generic_pubchem_request <- function(
     cli::cli_abort("PubChem server URL not configured. Run {.run pubchem_server(1)} first.")
   }
 
-  # Check environment flags
-  run_debug <- as.logical(Sys.getenv("run_debug", "FALSE"))
-  run_verbose <- as.logical(Sys.getenv("run_verbose", "FALSE"))
+  # Check runtime settings
+  run_debug <- .run_debug_enabled()
+  run_verbose <- .run_verbose_enabled()
 
   if (run_verbose) {
     cli::cli_rule(left = paste("PubChem Request:", namespace, "/", operation))

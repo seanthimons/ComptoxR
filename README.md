@@ -92,7 +92,32 @@ Restart R to ensure that the token is detected properly.
 
 On attaching the package, the API server paths will automatically be set to public endpoints, but can be adjusted or reset via the `*_server()` functions. The attaching function will also assess API endpoint status, debugging / verbosity flags, and token status.
 
-To control certain verbosity outputs, use the `run_verbose(verbose = *BOOLEAN*)` function. This also hides the initial header output if `verbose = FALSE`.
+Use `run_verbose(TRUE)` or `run_verbose(FALSE)` to control verbose output in the current R session. This setting also controls the package startup header.
+
+To enable verbose mode in future sessions, open your user profile and add the option:
+
+``` r
+file.edit("~/.Rprofile")
+
+# Add to ~/.Rprofile
+options(ComptoxR.run_verbose = TRUE)
+```
+
+Start a new R session before the option affects the package startup header. `run_verbose(FALSE)` overrides the profile value only for the current session. ComptoxR never creates or edits `.Rprofile`.
+
+Debug mode is session-only. Enable it again in each session with `run_debug(TRUE)`.
+
+#### Minor-release migration
+
+The old environment variable is no longer supported:
+
+``` r
+# Old, no longer supported
+Sys.setenv(run_verbose = "TRUE")
+
+# New persistent setting
+options(ComptoxR.run_verbose = TRUE)
+```
 
 ## Disclaimers
 

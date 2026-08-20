@@ -23,7 +23,7 @@ chemi_functional_use <- function(query) {
         req_url_path_append("amos/functional_uses_for_dtxsid", dtxsid)
     })
 
-  if (as.logical(Sys.getenv("run_debug", "FALSE"))) {
+  if (.run_debug_enabled()) {
     cli::cli_alert_info("Debug mode is ON. Performing a dry run for the first query item.")
     return(req_list[[1]] %>% req_dry_run())
   }
