@@ -87,4 +87,41 @@ test_generated_wrapper <- function() {
   )
 }
 
+test_live_wrapper <- function() {
+  request <- function(endpoint, method, body) {
+    response <- httr2::request(paste0("https://cim.sciencedataexperts.com", endpoint)) |>
+      httr2::req_method(method) |>
+      httr2::req_body_json(body, auto_unbox = TRUE) |>
+      httr2::req_timeout(120) |>
+      httr2::req_perform()
+    list(status = httr2::resp_status(response), body = httr2::resp_body_json(response))
+  }
+
+  predictor <- eval(parse(text = generate_wrapper(cases[[1]])))
+  opera <- eval(parse(text = generate_wrapper(cases[[2]])))
+  responses <- list(
+    predictor_smiles = predictor(request, model_id = 1065, smiles = list("CCCCN")),
+    predictor_chemicals = predictor(
+      request,
+      model_id = 1065,
+      chemicals = list(list(id = 1, smiles = "CCCCN"))
+    ),
+    opera_smiles = opera(request, smiles = list("CCCCN")),
+    opera_chemicals = opera(
+      request,
+      chemicals = list(list(id = 1, smiles = "CCCCN"))
+    )
+  )
+
+  stopifnot(vapply(
+    responses,
+    function(response) {
+      response$status == 200L && "modelDetails" %in% names(response$body)
+    },
+    logical(1)
+  ))
+  print(vapply(responses, `[[`, integer(1), "status"))
+}
+
 test_generated_wrapper()
+test_live_wrapper()
