@@ -97,10 +97,6 @@ ComptoxR_package_sitrep <- function() {
 
   # Define ping endpoints
   ping_endpoints <- list(
-    "CompTox Dashboard API" = list(
-      url = Sys.getenv("ctx_burl"),
-      ping_path = "chemical/health"
-    ),
     "EPI Suite API" = list(
       url = Sys.getenv("epi_burl"),
       ping_path = ""
@@ -193,6 +189,74 @@ ComptoxR_package_sitrep <- function() {
 
     add_log(sprintf("%-30s: %-10s %-30s %s", name, result$status, result$message, latency_str))
   }
+
+  # Check CTX four-domain health (chemical/hazard/exposure/bioactivity)
+  ctx_result <- tryCatch(
+    {
+      ctx_url <- Sys.getenv("ctx_burl")
+      if (nzchar(ctx_url)) {
+        ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
+        reqs <- purrr::map(ctx_domains, function(domain) {
+          httr2::request(paste0(ctx_url, domain, "/health")) %>%
+            httr2::req_method("HEAD") %>%
+            httr2::req_timeout(5) %>%
+            httr2::req_error(is_error = function(resp) FALSE)
+        })
+        start_time <- Sys.time()
+        resps <- httr2::req_perform_parallel(reqs, on_error = "continue")
+        end_time <- Sys.time()
+
+        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+
+        up <- sum(purrr::map_lgl(resps, function(r) {
+          inherits(r, "httr2_response") &&
+            httr2::resp_status(r) >= 200 &&
+            httr2::resp_status(r) < 400
+        }))
+        total <- length(ctx_domains)
+
+        status <- if (up == total) {
+          "OK"
+        } else if (up > 0) {
+          "WARNING"
+        } else {
+          "ERROR"
+        }
+
+        list(
+          name = "CompTox Dashboard API",
+          status = status,
+          message = sprintf("%d/%d endpoints active", up, total),
+          latency = latency
+        )
+      } else {
+        list(
+          name = "CompTox Dashboard API",
+          status = "SKIPPED",
+          message = "Not configured",
+          latency = NA_real_
+        )
+      }
+    },
+    error = function(e) {
+      list(
+        name = "CompTox Dashboard API",
+        status = "ERROR",
+        message = "Failed to reach endpoints",
+        latency = NA_real_
+      )
+    }
+  )
+
+  ping_results[["CompTox Dashboard API"]] <- ctx_result
+
+  latency_str <- if (is.finite(ctx_result$latency)) {
+    sprintf("%.0fms", ctx_result$latency * 1000)
+  } else {
+    ""
+  }
+
+  add_log(sprintf("%-30s: %-10s %-30s %s", ctx_result$name, ctx_result$status, ctx_result$message, latency_str))
 
   # Check Cheminformatics endpoints separately
   chemi_result <- tryCatch(
