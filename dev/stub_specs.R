@@ -138,8 +138,9 @@ resolve_collisions <- function(df) {
 #' Run the shared stub-generation pipeline for one API spec.
 #' @param spec list with prefix, heading, build_endpoints(), config, and
 #'   optional post() hook.
+#' @param pkg_dir Directory containing the R source files (default R/).
 #' @return list(scaffold = <scaffold tibble>, drift = <drift tibble>)
-run_generator <- function(spec) {
+run_generator <- function(spec, pkg_dir = here::here("R")) {
   cli_h2(spec$heading)
 
   endpoints <- spec$build_endpoints()
@@ -155,7 +156,7 @@ run_generator <- function(spec) {
   # Find missing endpoints
   res <- find_endpoint_usages_base(
     endpoints$route,
-    pkg_dir = here::here("R"),
+    pkg_dir = pkg_dir,
     files_regex = sprintf("^%s_.*\\.R$", spec$prefix),
     expected_files = endpoints$file
   )
@@ -164,16 +165,11 @@ run_generator <- function(spec) {
   drift <- detect_parameter_drift(
     endpoints = endpoints,
     usage_summary = res$summary %>% filter(n_hits > 0),
-    pkg_dir = here::here("R")
+    pkg_dir = pkg_dir
   )
 
   endpoints_to_build <- endpoints %>%
-    filter(
-      route %in%
-        {
-          res$summary %>% filter(n_hits == 0) %>% pull(endpoint)
-        }
-    )
+    filter(!purrr::map2_lgl(file, fn, is_operation_implemented, pkg_dir = pkg_dir))
 
   if (nrow(endpoints_to_build) == 0) {
     if (!is.null(spec$finalize)) {
@@ -205,7 +201,7 @@ run_generator <- function(spec) {
 
   scaffold <- scaffold_files(
     spec_with_text,
-    base_dir = "R",
+    base_dir = pkg_dir,
     overwrite = FALSE,
     append = TRUE,
     quiet = TRUE
