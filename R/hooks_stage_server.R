@@ -1,5 +1,5 @@
 enforce_stage_server <- function(data) {
-  cfg <- .HookRegistry$config[[data$fn_name]]
+  cfg <- get_hook_config()[[data$fn_name]]
   supported <- unlist(cfg$supported_schema_stages, use.names = FALSE)
   if (length(supported) == 0L) {
     return(data)

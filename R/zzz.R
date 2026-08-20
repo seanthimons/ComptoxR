@@ -16,10 +16,6 @@ run_setup <- function() {
   )
 
   server_urls <- list(
-    "CompTox Dashboard API" = list(
-      display_url = Sys.getenv("ctx_burl"),
-      ping_url = paste0(Sys.getenv("ctx_burl"), 'chemical/health')
-    ),
     "EPI Suite API" = list(
       display_url = Sys.getenv("epi_burl"),
       ping_url = Sys.getenv("epi_burl")
@@ -104,11 +100,68 @@ run_setup <- function() {
 
     results <- purrr::imap(ping_list, check_url)
 
+    # Check CTX four-domain health (chemical/hazard/exposure/bioactivity) ----
+    # CTX exposes four domains under the same ctx-api base. Ping in parallel so
+    # verbose startup does not pay 4x5s serially. Ordered first in `results`.
+    ctx_result <- tryCatch(
+      {
+        ctx_burl <- Sys.getenv("ctx_burl")
+        ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
+        reqs <- purrr::map(ctx_domains, function(domain) {
+          httr2::request(paste0(ctx_burl, domain, "/health")) %>%
+            httr2::req_method("HEAD") %>%
+            httr2::req_timeout(5) %>%
+            httr2::req_error(is_error = \(resp) FALSE)
+        })
+        start_time <- Sys.time()
+        resps <- httr2::req_perform_parallel(reqs, on_error = "continue")
+        end_time <- Sys.time()
+
+        latency <- as.numeric(difftime(end_time, start_time, units = "secs"))
+        latency_fmt <- paste0(round(latency * 1000), "ms")
+
+        up <- sum(purrr::map_lgl(resps, \(r) {
+          inherits(r, "httr2_response") &&
+            httr2::resp_status(r) >= 200 &&
+            httr2::resp_status(r) < 400
+        }))
+        total <- length(ctx_domains)
+
+        ctx_status <- if (up == total) {
+          cli::col_green(cli::format_inline("OK ({up}/{total} endpoints active)"))
+        } else if (up > 0) {
+          cli::col_yellow(cli::format_inline("WARN ({up}/{total} endpoints active)"))
+        } else {
+          cli::col_red("ERROR (0 endpoints active)")
+        }
+
+        list(
+          name = "CompTox Dashboard API",
+          url = ctx_burl,
+          status_text = ctx_status,
+          latency = latency,
+          latency_fmt = latency_fmt
+        )
+      },
+      error = function(e) {
+        list(
+          name = "CompTox Dashboard API",
+          url = Sys.getenv("ctx_burl"),
+          status_text = cli::col_red("ERROR (Failed to reach endpoints)"),
+          latency = NA_real_,
+          latency_fmt = ""
+        )
+      }
+    )
+    results <- c(list(ctx_result), results)
+
     # Check for active Cheminformatics endpoints ----
     tryCatch(
       {
         start_time <- Sys.time()
         resp <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+          httr2::req_timeout(5) %>%
+          httr2::req_error(is_error = \(resp) FALSE) %>%
           httr2::req_perform()
         end_time <- Sys.time()
 
@@ -872,8 +925,7 @@ reset_servers <- function() {
 
   .ComptoxREnv$classifier <- create_compound_classifier()
 
-  # Load hook configuration from YAML
-  load_hook_config()
+  # Hook configuration is loaded lazily on first use via get_hook_config().
 
   # Register the custom @apiStage roxygen2 tag. s3_register only wires these up
   # when roxygen2 is loaded (e.g. during devtools::document()), so there is no

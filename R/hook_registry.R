@@ -45,6 +45,20 @@ load_hook_config <- function() {
   invisible(NULL)
 }
 
+#' Get Hook Configuration (lazy)
+#'
+#' Returns the hook configuration, loading it on first use. Tests that set
+#' `.HookRegistry$config` directly bypass the load.
+#'
+#' @return Hook configuration list
+#' @noRd
+get_hook_config <- function() {
+  if (is.null(.HookRegistry$config)) {
+    load_hook_config()
+  }
+  .HookRegistry$config
+}
+
 #' Run Hook Chain for Function
 #'
 #' Executes registered hooks for a given function and hook type.
@@ -62,7 +76,7 @@ run_hook <- function(fn_name, hook_type, data) {
   }
 
   # Look up hook chain for this function and type
-  hook_chain <- .HookRegistry$config[[fn_name]][[hook_type]]
+  hook_chain <- get_hook_config()[[fn_name]][[hook_type]]
 
   # If no hooks registered, return data unchanged
   if (is.null(hook_chain) || length(hook_chain) == 0) {
