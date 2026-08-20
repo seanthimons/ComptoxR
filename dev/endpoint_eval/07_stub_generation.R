@@ -563,6 +563,15 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
     ))
   }
 
+  if (identical(body_schema_type, "unsupported_map")) {
+    return(list(
+      skip = TRUE,
+      reason = "Unsupported free-form object body (additionalProperties)",
+      suspicious = FALSE,
+      suspicious_reason = ""
+    ))
+  }
+
   # Check for no query params
   has_query_params <- !is.null(query_params) && nzchar(query_params %||% "")
 

@@ -559,6 +559,22 @@ extract_body_properties <- function(request_body, components, schema_version = N
   # Check schema type
   type <- json_schema[["type"]] %||% NA
 
+  has_named_properties <- !is.null(json_schema[["properties"]]) &&
+    length(json_schema[["properties"]]) > 0
+  additional_properties <- json_schema[["additionalProperties"]]
+  if (
+    identical(type, "object") &&
+      !has_named_properties &&
+      !is.null(additional_properties) &&
+      !identical(additional_properties, FALSE)
+  ) {
+    return(list(
+      type = "unsupported_map",
+      properties = list(),
+      additional_properties = additional_properties
+    ))
+  }
+
   # Handle simple string type
   if (!is.na(type) && type == "string") {
     # Create synthetic parameter metadata for the string body

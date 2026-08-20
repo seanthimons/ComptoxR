@@ -124,6 +124,51 @@ test_that("object oneOf bodies are normalized and unsupported variants stay unkn
   expect_length(empty$properties, 0L)
 })
 
+test_that("free-form object bodies are explicitly blocked", {
+  source_pipeline_files()
+  request_body <- function(schema) {
+    list(content = list("application/json" = list(schema = schema)))
+  }
+  map_schema <- list(
+    type = "object",
+    additionalProperties = list(type = "array", items = list(type = "string"))
+  )
+
+  parsed <- extract_body_properties(request_body(map_schema), list())
+  expect_identical(parsed$type, "unsupported_map")
+  expect_identical(parsed$additional_properties, map_schema$additionalProperties)
+
+  named <- extract_body_properties(
+    request_body(list(
+      type = "object",
+      properties = list(id = list(type = "string")),
+      additionalProperties = TRUE
+    )),
+    list()
+  )
+  expect_identical(named$type, "object")
+  expect_identical(
+    extract_body_properties(
+      request_body(list(type = "object", additionalProperties = FALSE)),
+      list()
+    )$type,
+    "unknown"
+  )
+
+  blocked <- is_empty_post_endpoint(
+    "POST",
+    "format",
+    "id",
+    parsed,
+    "unsupported_map"
+  )
+  expect_true(blocked$skip)
+  expect_identical(
+    blocked$reason,
+    "Unsupported free-form object body (additionalProperties)"
+  )
+})
+
 test_that("oneOf wrapper sends exactly one body shape through explicit body", {
   source_pipeline_files()
   schema_path <- testthat::test_path("..", "..", "schema", "chemi-predictor_models-staging.json")

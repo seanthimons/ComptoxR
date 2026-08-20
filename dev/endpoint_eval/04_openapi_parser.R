@@ -646,8 +646,8 @@ openapi_to_spec <- function(
           # Use the type from body_props which was already extracted
           body_props$type %||% "unknown"
         } else {
-          if (identical(body_props$type, "one_of")) {
-            "one_of"
+          if (isTRUE(body_props$type %in% c("one_of", "unsupported_map"))) {
+            body_props$type
           } else {
             get_body_schema_type(op$requestBody, openapi)
           }
