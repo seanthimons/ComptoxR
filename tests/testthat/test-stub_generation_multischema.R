@@ -21,6 +21,52 @@ test_that("Cheminformatics generation loads and collapses all schema stages", {
       endpoints$fn
   ))
   expect_identical(anyDuplicated(endpoints$fn), 0L)
+  expect_true(all(
+    c(
+      "chemi_predictor_models_predict_bulk",
+      "chemi_opera_bulk"
+    ) %in%
+      endpoints$fn
+  ))
+
+  predictor_get <- endpoints[
+    endpoints$route == "predictor_models/predict" & endpoints$method == "GET",
+  ]
+  expect_equal(nrow(predictor_get), 1L)
+})
+
+test_that("OPERA oneOf wrapper keeps body and query parameters separate", {
+  load_multischema_pipeline()
+  endpoints <- suppressWarnings(chemi_spec$build_endpoints())
+  opera <- endpoints[endpoints$fn == "chemi_opera_bulk", , drop = FALSE]
+  generated_config <- write_generated_hook_config(endpoints, tempfile(fileext = ".yml"))
+  generated_config$chemi_opera_bulk$post_response <- list("test_post_hook")
+  rlang::local_bindings(
+    stubgen_read_hook_config = function() generated_config,
+    .env = environment(render_endpoint_stubs)
+  )
+  text <- render_endpoint_stubs(opera, chemi_config)$text[[1]]
+  definition <- Filter(
+    function(expression) is.call(expression) && identical(expression[[1]], as.name("<-")),
+    as.list(parse(text = text))
+  )[[1]]
+  generated_fn <- eval(definition[[3]])
+
+  expect_identical(
+    names(formals(generated_fn)),
+    c("cache_only", "smiles", "chemicals", "format", "standardize")
+  )
+  expect_identical(formals(generated_fn)$cache_only, FALSE)
+  expect_identical(formals(generated_fn)$format, "json")
+  expect_identical(formals(generated_fn)$standardize, FALSE)
+  expect_match(text, "request_body <- Filter", fixed = TRUE)
+  expect_match(text, "cache_only = cache_only", fixed = TRUE)
+  expect_match(text, "format = format", fixed = TRUE)
+  expect_match(text, "standardize = standardize", fixed = TRUE)
+  expect_match(text, "server = server", fixed = TRUE)
+  expect_match(text, '"pre_request"', fixed = TRUE)
+  expect_match(text, '"post_response"', fixed = TRUE)
+  expect_true(regexpr('"pre_request"', text, fixed = TRUE) < regexpr("request_body <- Filter", text, fixed = TRUE))
 })
 
 test_that("identical stage contracts collapse and conflicts get deterministic suffixes", {

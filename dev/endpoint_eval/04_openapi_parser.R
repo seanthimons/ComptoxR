@@ -567,7 +567,7 @@ openapi_to_spec <- function(
       }
 
       # Extract body parameter names (ordered by required first, then alphabetically)
-      body_names <- if (body_props$type == "object" && length(body_props$properties) > 0) {
+      body_names <- if (body_props$type %in% c("object", "one_of") && length(body_props$properties) > 0) {
         required_names <- names(purrr::keep(body_props$properties, ~ .x$required))
         optional_names <- names(purrr::keep(body_props$properties, ~ !.x$required))
         c(required_names, optional_names)
@@ -591,7 +591,7 @@ openapi_to_spec <- function(
       # Create simplified body_meta for backward compatibility
       body_meta <- if (length(body_names) > 0) {
         purrr::map(body_names, function(name) {
-          if (body_props$type == "object") {
+          if (body_props$type %in% c("object", "one_of")) {
             body_props$properties[[name]]
           } else if (body_props$type %in% c("array", "object_array") && !is.null(body_props$item_schema)) {
             body_props$item_schema$properties[[name]]
@@ -646,7 +646,11 @@ openapi_to_spec <- function(
           # Use the type from body_props which was already extracted
           body_props$type %||% "unknown"
         } else {
-          get_body_schema_type(op$requestBody, openapi)
+          if (identical(body_props$type, "one_of")) {
+            "one_of"
+          } else {
+            get_body_schema_type(op$requestBody, openapi)
+          }
         }
       } else {
         "unknown"

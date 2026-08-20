@@ -372,7 +372,7 @@ stubgen_build_request_template <- function(
   }
 
   args <- template$args
-  if (!is.list(args) || length(args) == 0 || is.null(names(args)) || any(!nzchar(names(args)))) {
+  if (!is.list(args) || length(args) == 0 || is.null(names(args)) || !all(nzchar(names(args)))) {
     cli::cli_abort(
       "Request template for {.fn {fn}} must define named helper arguments."
     )
@@ -665,6 +665,7 @@ is_empty_post_endpoint <- function(method, query_params, path_params, body_schem
 #' @param config Configuration list specifying template behavior.
 #' @param needs_resolver Boolean; whether this endpoint needs resolver pre-processing.
 #' @param body_schema_type Character; type of body schema ("chemical_array", "string_array", "object_array", "simple_object", "unknown").
+#' @param body_schema_full Full normalized request-body schema metadata.
 #' @param deprecated Boolean; whether endpoint is deprecated in OpenAPI spec.
 #' @param response_schema_type Character; type of response schema ("array", "object", "scalar", "binary", "unknown").
 #' @param request_type Character; type classification of request ("json", "query_only", "query_with_schema").
@@ -687,6 +688,7 @@ build_function_stub_impl <- function(
   config,
   needs_resolver = FALSE,
   body_schema_type = "unknown",
+  body_schema_full = list(),
   deprecated = FALSE,
   response_schema_type = "unknown",
   request_type = NULL,
@@ -838,9 +840,14 @@ build_function_stub_impl <- function(
   } else if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with no path params): primary param from body
     primary_param <- body_param_info$primary_param %||% "data"
-    fn_signature <- body_param_info$fn_signature
+    fn_signature <- paste(
+      c(body_param_info$fn_signature, query_param_info$fn_signature)[
+        nzchar(c(body_param_info$fn_signature, query_param_info$fn_signature))
+      ],
+      collapse = ", "
+    )
     combined_calls <- "" # Body params handled differently
-    param_docs <- body_param_info$param_docs
+    param_docs <- paste0(body_param_info$param_docs, query_param_info$param_docs)
 
     # Example value from body param metadata
     example_value <- example_query
@@ -1626,6 +1633,47 @@ build_function_stub_impl <- function(
 
 '
     )
+  } else if (isTRUE(is_body_only) && identical(body_schema_type, "one_of")) {
+    body_params <- stubgen_formal_names(body_param_info$fn_signature)
+    query_params <- stubgen_formal_names(query_param_info$fn_signature)
+    query_params_call <- if (length(query_params) > 0) {
+      paste0(",\n    ", paste(query_params, "=", query_params, collapse = ",\n    "))
+    } else {
+      ""
+    }
+    variant_checks <- vapply(
+      body_schema_full$required_by_variant,
+      function(fields) {
+        paste0("all(!vapply(list(", paste(fields, collapse = ", "), "), is.null, logical(1)))")
+      },
+      character(1)
+    )
+    body_lines <- c(
+      paste0("  if (sum(c(", paste(variant_checks, collapse = ", "), ")) != 1L) {"),
+      '    cli::cli_abort("Supply exactly one supported request-body shape.")',
+      "  }",
+      "  request_body <- Filter(",
+      "    Negate(is.null),",
+      paste0("    list(", paste(body_params, "=", body_params, collapse = ", "), ")"),
+      "  )"
+    )
+    fn_body <- glue::glue(
+      '
+{fn} <- function({fn_signature}) {{
+{hook_pre_request}{paste(body_lines, collapse = "\n")}
+  result <- generic_chemi_request(
+    endpoint = "{endpoint}",
+    body = request_body,
+    tidy = FALSE{stage_server_call}{query_params_call}
+  )
+
+  {hook_post_response}# Additional post-processing can be added here
+
+  return(result)
+}}
+
+'
+    )
   } else if (isTRUE(is_body_only)) {
     # Body-only endpoint (POST/PUT/PATCH with body params): build request body
     if (wrapper_fn == "generic_chemi_request") {
@@ -2330,6 +2378,7 @@ render_endpoint_stubs <- function(
       content_type = spec$content_type,
       needs_resolver = spec$needs_resolver,
       body_schema_type = spec$body_schema_type,
+      body_schema_full = spec$body_schema_full,
       deprecated = spec$deprecated,
       response_schema_type = spec$response_schema_type,
       request_type = spec$request_type,
@@ -2349,6 +2398,7 @@ render_endpoint_stubs <- function(
       content_type,
       needs_resolver,
       body_schema_type,
+      body_schema_full,
       deprecated,
       response_schema_type,
       request_type,
@@ -2369,6 +2419,7 @@ render_endpoint_stubs <- function(
         config = config,
         needs_resolver = isTRUE(as.logical(needs_resolver %|NA|% FALSE)),
         body_schema_type = body_schema_type %|NA|% "unknown",
+        body_schema_full = body_schema_full,
         deprecated = isTRUE(as.logical(deprecated %|NA|% FALSE)),
         response_schema_type = response_schema_type %|NA|% "unknown",
         request_type = request_type %|NA|% "",
