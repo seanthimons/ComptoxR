@@ -78,6 +78,135 @@ test_that("stub generation sends object POST bodies through explicit body payloa
   expect_false(grepl("body = body", text, fixed = TRUE))
 })
 
+test_that("object oneOf bodies are normalized and unsupported variants stay unknown", {
+  source_pipeline_files()
+  request_body <- function(one_of) {
+    list(content = list("application/json" = list(schema = list(oneOf = one_of))))
+  }
+  shared <- list(type = "integer", description = "first definition")
+  variants <- list(
+    list(
+      type = "object",
+      required = c("model_id", "smiles"),
+      properties = list(model_id = shared, smiles = list(type = "array"))
+    ),
+    list(
+      type = "object",
+      required = c("model_id", "chemicals"),
+      properties = list(model_id = list(type = "string"), chemicals = list(type = "array"))
+    )
+  )
+
+  parsed <- extract_body_properties(request_body(variants), list())
+  expect_identical(parsed$type, "one_of")
+  expect_identical(names(parsed$properties), c("model_id", "smiles", "chemicals"))
+  expect_true(parsed$properties$model_id$required)
+  expect_false(parsed$properties$smiles$required)
+  expect_identical(parsed$properties$model_id$description, "first definition")
+  expect_identical(parsed$required_by_variant, list(c("model_id", "smiles"), c("model_id", "chemicals")))
+
+  components <- list(schemas = list(first = variants[[1]]))
+  with_ref <- extract_body_properties(
+    request_body(list(list("$ref" = "#/components/schemas/first"), variants[[2]])),
+    components
+  )
+  expect_identical(with_ref$type, "one_of")
+  expect_identical(
+    extract_body_properties(request_body(list(variants[[1]], list(type = "string"))), list())$type,
+    "unknown"
+  )
+
+  empty <- extract_body_properties(
+    list(content = list("application/json" = list(schema = list(type = "object", properties = list())))),
+    list()
+  )
+  expect_identical(empty$type, "object")
+  expect_length(empty$properties, 0L)
+})
+
+test_that("free-form object bodies are explicitly blocked", {
+  source_pipeline_files()
+  request_body <- function(schema) {
+    list(content = list("application/json" = list(schema = schema)))
+  }
+  map_schema <- list(
+    type = "object",
+    additionalProperties = list(type = "array", items = list(type = "string"))
+  )
+
+  parsed <- extract_body_properties(request_body(map_schema), list())
+  expect_identical(parsed$type, "unsupported_map")
+  expect_identical(parsed$additional_properties, map_schema$additionalProperties)
+
+  named <- extract_body_properties(
+    request_body(list(
+      type = "object",
+      properties = list(id = list(type = "string")),
+      additionalProperties = TRUE
+    )),
+    list()
+  )
+  expect_identical(named$type, "object")
+  expect_identical(
+    extract_body_properties(
+      request_body(list(type = "object", additionalProperties = FALSE)),
+      list()
+    )$type,
+    "unknown"
+  )
+
+  blocked <- is_empty_post_endpoint(
+    "POST",
+    "format",
+    "id",
+    parsed,
+    "unsupported_map"
+  )
+  expect_true(blocked$skip)
+  expect_identical(
+    blocked$reason,
+    "Unsupported free-form object body (additionalProperties)"
+  )
+})
+
+test_that("oneOf wrapper sends exactly one body shape through explicit body", {
+  source_pipeline_files()
+  schema_path <- testthat::test_path("..", "..", "schema", "chemi-predictor_models-staging.json")
+  spec <- openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
+  spec <- spec[spec$method == "POST", , drop = FALSE]
+  spec$route <- "predictor_models/predict"
+  spec$fn <- "chemi_predictor_models_predict_bulk"
+  spec$file <- "chemi_predictor_models_predict.R"
+  spec$batch_limit <- 0L
+  text <- render_endpoint_stubs(spec, config = get_stubgen_config())$text[[1]]
+  definition <- Filter(
+    function(expression) is.call(expression) && identical(expression[[1]], as.name("<-")),
+    as.list(parse(text = text))
+  )[[1]]
+  generated_fn <- eval(definition[[3]])
+  calls <- list()
+  generic_chemi_request <- function(...) {
+    calls[[length(calls) + 1L]] <<- list(...)
+    list(ok = TRUE)
+  }
+
+  expect_identical(names(formals(generated_fn)), c("model_id", "smiles", "chemicals"))
+  expect_identical(formals(generated_fn)$smiles, quote(NULL))
+  expect_identical(formals(generated_fn)$chemicals, quote(NULL))
+  generated_fn(1065, smiles = c("CC", "CCC"))
+  expect_identical(calls[[1]]$body, list(model_id = 1065, smiles = c("CC", "CCC")))
+  generated_fn(1065, chemicals = list(list(id = 1, smiles = "CC")))
+  expect_identical(
+    calls[[2]]$body,
+    list(model_id = 1065, chemicals = list(list(id = 1, smiles = "CC")))
+  )
+  expect_error(generated_fn(1065), "Supply exactly one supported request-body shape")
+  expect_error(
+    generated_fn(1065, smiles = "CC", chemicals = list()),
+    "Supply exactly one supported request-body shape"
+  )
+})
+
 test_that("stub generation emits the WebTEST request template with complete hook state", {
   dev_stub_generation <- testthat::test_path("..", "..", "dev", "endpoint_eval", "07_stub_generation.R")
   testthat::skip_if_not(

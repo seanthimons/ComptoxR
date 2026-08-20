@@ -50,6 +50,44 @@ test_that("endpoint_coverage counts operations per (route, method) row", {
   expect_identical(cov, list(total = 2L, covered = 1L))
 })
 
+test_that("generation and coverage identify the same missing shared-route operation", {
+  skip_specs()
+  tmp <- withr::local_tempdir()
+  writeLines("ct_foo <- function(query) query", file.path(tmp, "ct_foo.R"))
+
+  endpoints <- tibble::tibble(
+    route = c("foo", "foo"),
+    method = c("GET", "POST"),
+    file = c("ct_foo.R", "ct_foo.R"),
+    fn = c("ct_foo", "ct_foo_bulk")
+  )
+  fake_spec <- list(
+    prefix = "ct",
+    heading = "Test",
+    config = list(),
+    build_endpoints = function() endpoints
+  )
+  selected <- NULL
+  rlang::local_bindings(
+    find_endpoint_usages_base = function(...) {
+      list(summary = tibble::tibble(endpoint = "foo", n_hits = 1L))
+    },
+    detect_parameter_drift = function(...) tibble::tibble(),
+    render_endpoint_stubs = function(endpoints, config) {
+      selected <<- endpoints
+      tibble::tibble(file = endpoints$file, fn = endpoints$fn, text = "stub")
+    },
+    scaffold_files = function(...) empty_scaffold(),
+    .env = environment(run_generator)
+  )
+
+  run_generator(fake_spec, pkg_dir = tmp)
+  cov <- endpoint_coverage(fake_spec, pkg_dir = tmp)
+
+  expect_identical(selected$fn, "ct_foo_bulk")
+  expect_identical(cov, list(total = 2L, covered = 1L))
+})
+
 test_that("endpoint_coverage returns 0/0 for an empty spec", {
   skip_specs()
   empty_spec <- list(build_endpoints = function() tibble::tibble())

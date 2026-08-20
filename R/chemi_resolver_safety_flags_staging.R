@@ -19,6 +19,7 @@
 #' @param name Optional parameter
 #' @param sid Optional parameter
 #' @param smiles Optional parameter
+#' @param request.filesInfo Optional parameter
 #' @return Returns a list with result object
 #' @apiStage staging
 #' @export
@@ -43,7 +44,8 @@ chemi_resolver_safety_flags_bulk_staging <- function(
   monoisotopicMass = NULL,
   name = NULL,
   sid = NULL,
-  smiles = NULL
+  smiles = NULL,
+  request.filesInfo = NULL
 ) {
   server <- "chemi_burl"
   req_data <- run_hook(
@@ -67,6 +69,7 @@ chemi_resolver_safety_flags_bulk_staging <- function(
         `name` = name,
         `sid` = sid,
         `smiles` = smiles,
+        `request.filesInfo` = request.filesInfo,
         `server` = server
       )
     )
@@ -121,6 +124,9 @@ chemi_resolver_safety_flags_bulk_staging <- function(
   }
   if ("smiles" %in% names(req_data$params)) {
     smiles <- req_data$params[["smiles"]]
+  }
+  if ("request.filesInfo" %in% names(req_data$params)) {
+    request.filesInfo <- req_data$params[["request.filesInfo"]]
   }
   if ("server" %in% names(req_data$params)) {
     server <- req_data$params[["server"]]

@@ -505,8 +505,75 @@ extract_body_properties <- function(request_body, components, schema_version = N
     json_schema <- resolve_schema_ref(json_schema[["$ref"]], components, schema_version, max_depth = 3)
   }
 
+  if (!is.null(json_schema[["oneOf"]])) {
+    variants <- lapply(json_schema[["oneOf"]], function(variant) {
+      if (!is.null(variant[["$ref"]])) {
+        variant <- tryCatch(
+          resolve_schema_ref(variant[["$ref"]], components, schema_version, max_depth = 3),
+          error = function(...) NULL
+        )
+      }
+      if (
+        is.null(variant) ||
+          !identical(variant[["type"]], "object") ||
+          is.null(variant[["properties"]]) ||
+          length(variant[["properties"]]) == 0
+      ) {
+        return(NULL)
+      }
+      variant
+    })
+    if (length(variants) == 0 || any(vapply(variants, is.null, logical(1)))) {
+      return(list(type = "unknown", properties = list()))
+    }
+
+    required_by_variant <- lapply(variants, function(variant) {
+      unlist(variant[["required"]] %||% character(0), use.names = FALSE)
+    })
+    required_fields <- Reduce(intersect, required_by_variant)
+    properties <- list()
+    for (variant in variants) {
+      for (prop_name in names(variant[["properties"]])) {
+        if (is.null(properties[[prop_name]])) {
+          prop <- variant[["properties"]][[prop_name]]
+          properties[[prop_name]] <- list(
+            name = prop_name,
+            type = prop[["type"]] %||% NA,
+            format = prop[["format"]] %||% NA,
+            description = prop[["description"]] %||% "",
+            enum = prop[["enum"]] %||% NULL,
+            default = prop[["default"]] %||% NA,
+            required = prop_name %in% required_fields,
+            example = prop[["example"]] %||% prop[["default"]] %||% NA
+          )
+        }
+      }
+    }
+    return(list(
+      type = "one_of",
+      properties = properties,
+      required_by_variant = required_by_variant
+    ))
+  }
+
   # Check schema type
   type <- json_schema[["type"]] %||% NA
+
+  has_named_properties <- !is.null(json_schema[["properties"]]) &&
+    length(json_schema[["properties"]]) > 0
+  additional_properties <- json_schema[["additionalProperties"]]
+  if (
+    identical(type, "object") &&
+      !has_named_properties &&
+      !is.null(additional_properties) &&
+      !identical(additional_properties, FALSE)
+  ) {
+    return(list(
+      type = "unsupported_map",
+      properties = list(),
+      additional_properties = additional_properties
+    ))
+  }
 
   # Handle simple string type
   if (!is.na(type) && type == "string") {

@@ -912,6 +912,13 @@ chemi_opera:
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
+chemi_opera_bulk:
+  supported_schema_stages:
+  - staging
+  - development
+  preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
 chemi_opera_report:
   supported_schema_stages:
   - staging
@@ -964,6 +971,13 @@ chemi_pfas_cats_bulk:
   pre_request:
   - enforce_stage_server
 chemi_predictor_models_predict:
+  supported_schema_stages:
+  - staging
+  - development
+  preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_predictor_models_predict_bulk:
   supported_schema_stages:
   - staging
   - development
@@ -1230,6 +1244,13 @@ chemi_safety_pcodes:
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_safety_rqcodes_staging:
+  supported_schema_stages:
+  - staging
+  - development
+  preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
 chemi_safety_statements:
   supported_schema_stages:
   - public
@@ -1265,6 +1286,13 @@ chemi_search_similar:
   pre_request:
   - enforce_stage_server
 chemi_search_similar_staging:
+  supported_schema_stages:
+  - staging
+  - development
+  preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_search_staging:
   supported_schema_stages:
   - staging
   - development
