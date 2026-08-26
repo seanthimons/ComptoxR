@@ -74,7 +74,6 @@ chemi_amos:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
@@ -82,8 +81,13 @@ chemi_amos_all_similarities:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_all_similarities_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_analytical_qc_batch:
@@ -92,25 +96,40 @@ chemi_amos_analytical_qc_batch:
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_amos_analytical_qc_batch_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
 chemi_amos_analytical_qc_batch_staging:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_analytical_qc_keyset_pagination:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_analytical_qc_keyset_pagination_bulk:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_analytical_qc_keyset_pagination_bulk_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_analytical_qc_keyset_pagination_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_analytical_qc_list:
@@ -125,46 +144,96 @@ chemi_amos_analytical_qc_pagination:
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_amos_bar_resolver:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
 chemi_amos_batch:
   supported_schema_stages:
   - public
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_amos_batch_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
 chemi_amos_batch_staging:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_by_text:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_by_text_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_check_if_similar_smiles:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_count_substances_in_ids:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_count_substances_in_ids_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_coversheet_by_internal_id:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_database:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_database_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_dtxsids:
   supported_schema_stages:
   - staging
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_dtxsids_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_dtxsids_for_functional_use:
@@ -176,30 +245,50 @@ chemi_amos_dtxsids_for_functional_use:
 chemi_amos_dtxsids_from_functional_use:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_dtxsids_from_functional_use_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_entropy_similarity:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_entropy_similarity_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_fact_sheet_keyset_pagination:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_fact_sheet_keyset_pagination_bulk:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_fact_sheet_keyset_pagination_bulk_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_fact_sheet_keyset_pagination_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_fact_sheet_list:
@@ -224,15 +313,31 @@ chemi_amos_find_dtxsids:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_find_dtxsids_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_find_matches:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_for_document_ids:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_for_document_ids_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_formula:
@@ -241,49 +346,85 @@ chemi_amos_formula:
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_amos_formula_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
 chemi_amos_formula_staging:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_functional_class:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_functional_class_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_functional_uses_for_dtxsid:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_functional_uses_for_dtxsid_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_analytical_qc_pdf_editor_info:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_classification_for_dtxsid:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_classification_for_dtxsid_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_data_source_info:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_data_source_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_fact_sheet_editor_info:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_fact_sheet_editor_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_image_for_dtxsid:
@@ -296,54 +437,89 @@ chemi_amos_get_info_by_id:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_info_by_id_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_ir_spectrum:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_ir_spectrum_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_mass_spectrum:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_mass_spectrum_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_method_editor_info:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_method_editor_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_ms_ready_methods:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_ms_ready_methods_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_nmr_spectrum:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_nmr_spectrum_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_nmr_spectrum_editor_info:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_nmr_spectrum_editor_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_pdf:
@@ -352,25 +528,40 @@ chemi_amos_get_pdf:
   preferred_fallback_stage: public
   pre_request:
   - enforce_stage_server
+chemi_amos_get_pdf_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
 chemi_amos_get_pdf_staging:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_get_product_declaration_editor_info:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_product_declaration_editor_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_safety_data_sheet_editor_info:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_safety_data_sheet_editor_info_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_similar_structures_by_dtxsid:
@@ -382,91 +573,151 @@ chemi_amos_get_similar_structures_by_dtxsid:
 chemi_amos_get_similar_structures_by_identifier_type_and_identifier:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_similar_structures_by_identifier_type_and_identifier_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_get_substances_for_term:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_get_substances_for_term_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_inchikey_first_block:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_inchikey_first_block_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_list_fact_sheet_types:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_list_fact_sheet_types_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_list_functional_classes:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_list_functional_classes_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_list_sources_by_record_type:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_list_sources_by_record_type_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_mass_range:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_mass_range_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_mass_spectra_for_substances:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_mass_spectra_for_substances_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_mass_spectrum_similarity:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_mass_spectrum_similarity_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_max_similarity:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_max_similarity_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_method_keyset_pagination:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_method_keyset_pagination_bulk:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_method_keyset_pagination_bulk_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_method_keyset_pagination_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_method_list:
@@ -485,119 +736,199 @@ chemi_amos_method_with_spectra:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_method_with_spectra_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_next_level_classification:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_next_level_classification_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_product_declaration_keyset_pagination:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_product_declaration_keyset_pagination_bulk:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_product_declaration_keyset_pagination_bulk_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_product_declaration_keyset_pagination_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_record_counts:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_record_counts_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_record_id:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_record_id_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_record_ids_for_substance:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_record_ids_for_substance_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_record_type_count:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_record_type_count_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_release_notes:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_release_notes_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_retrieve_fact_sheets:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_retrieve_fact_sheets_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_retrieve_product_declarations:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_retrieve_product_declarations_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_retrieve_safety_data_sheets:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_retrieve_safety_data_sheets_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_safety_data_sheet_keyset_pagination:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
   pre_request:
   - enforce_stage_server
 chemi_amos_safety_data_sheet_keyset_pagination_bulk:
   supported_schema_stages:
   - staging
-  - development
   preferred_fallback_stage: staging
+  pre_request:
+  - enforce_stage_server
+chemi_amos_safety_data_sheet_keyset_pagination_bulk_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
+  pre_request:
+  - enforce_stage_server
+chemi_amos_safety_data_sheet_keyset_pagination_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_spectral_entropy:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_spectral_entropy_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_spectrum_count_for_methodology:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_spectrum_count_for_methodology_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_substance_similarity:
@@ -610,24 +941,39 @@ chemi_amos_substances_for_classification:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_substances_for_classification_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_substances_for_ids:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_substances_for_ids_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_amos_substring:
   supported_schema_stages:
   - public
   - staging
-  - development
   preferred_fallback_stage: public
+  pre_request:
+  - enforce_stage_server
+chemi_amos_substring_development:
+  supported_schema_stages:
+  - development
+  preferred_fallback_stage: development
   pre_request:
   - enforce_stage_server
 chemi_arn_cats:

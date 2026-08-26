@@ -15,7 +15,9 @@ chemi_stdizer_groups_bulk(
   operations = NULL,
   text = NULL,
   type = NULL,
-  value = NULL
+  value = NULL,
+  request.filesInfo = NULL,
+  request.replace = NULL
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ chemi_stdizer_groups_bulk(
 \item{type}{Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP, REFERENCE}
 
 \item{value}{Optional parameter}
+
+\item{request.filesInfo}{Optional parameter}
+
+\item{request.replace}{Optional parameter}
 }
 \value{
 Returns a tibble with results

@@ -1,0 +1,65 @@
+#' Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param da_window Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.
+#' @param dtxsids List of DTXSIDs to search for.
+#' @param min_intensity Minimum intensity level for peaks in both the user and database spectra to consider.  All database spectra are scaled to have a maximum intensity of 100, and all user spectra are assumed to be scaled the same.
+#' @param ms_level Level of mass spectrometry; if supplied, then only spectra at the specified level will be returned.  Valid values are from 1 to 5.
+#' @param ppm_window Mass window in units of parts per million.  Will only be used if da_window is null or not passed and ppm_window is not null.
+#' @param spectra A list of spectra, where each spectrum is an array of m/z-intensity pairs formatted as two-element arrays.  Maximum intensity should be scaled to 100.
+#' @return Returns a tibble with results
+#' @apiStage development
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_amos_all_similarities_development(da_window = "DTXSID1024122")
+#' }
+chemi_amos_all_similarities_development <- function(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_amos_all_similarities_development", "pre_request", list(params = list(`da_window` = da_window, `dtxsids` = dtxsids, `min_intensity` = min_intensity, `ms_level` = ms_level, `ppm_window` = ppm_window, `spectra` = spectra, `server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("da_window" %in% names(req_data$params)) {
+    da_window <- req_data$params[["da_window"]]
+  }
+  if ("dtxsids" %in% names(req_data$params)) {
+    dtxsids <- req_data$params[["dtxsids"]]
+  }
+  if ("min_intensity" %in% names(req_data$params)) {
+    min_intensity <- req_data$params[["min_intensity"]]
+  }
+  if ("ms_level" %in% names(req_data$params)) {
+    ms_level <- req_data$params[["ms_level"]]
+  }
+  if ("ppm_window" %in% names(req_data$params)) {
+    ppm_window <- req_data$params[["ppm_window"]]
+  }
+  if ("spectra" %in% names(req_data$params)) {
+    spectra <- req_data$params[["spectra"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
+  if (!is.null(min_intensity)) options$min_intensity <- min_intensity
+  if (!is.null(ms_level)) options$ms_level <- ms_level
+  if (!is.null(ppm_window)) options$ppm_window <- ppm_window
+  if (!is.null(spectra)) options$spectra <- spectra
+  result <- generic_chemi_request(
+    query = da_window,
+    endpoint = "amos/all_similarities_by_dtxsid/",
+    options = options,
+    tidy = FALSE,
+    server = server
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}

@@ -37,4 +37,3 @@ epi_ecosar_dye(ethoxylate = "0")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-
