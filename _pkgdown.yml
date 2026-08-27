@@ -12,6 +12,17 @@ navbar:
       text: Get started
       href: articles/getting-started.html
 
+articles:
+  - title: Learn ComptoxR
+    navbar: Articles
+    contents:
+      - starts_with("articles/getting")
+      - starts_with("articles/chemical")
+      - starts_with("articles/batch")
+      - starts_with("articles/hazard")
+      - starts_with("articles/local")
+      - starts_with("articles/development")
+
 reference:
   - title: CompTox Chemical Dashboard
     contents:

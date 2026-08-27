@@ -67,17 +67,24 @@ result <- ct_chemical_detail_search("DTXSID7020182")
 result
 ```
 
-Several identifiers can be queried together:
+For several identifiers, use the bulk function:
 
 ```{r}
-result <- ct_chemical_detail_search(
-  c("DTXSID7020182", "DTXSID7020183")
+result <- ct_chemical_detail_search_bulk(
+  query = c("DTXSID7020182", "DTXSID7020192")
 )
-result
+dplyr::glimpse(result)
 ```
 
-The returned object is normally a tibble, which can be inspected, filtered,
-and saved with familiar R tools.
+The returned object is normally a tibble. Use standard R tools to inspect the
+columns and rows:
+
+```{r}
+head(result)
+```
+
+Use `ct_chemical_detail_search()` when you need one chemical record. Use
+`ct_chemical_detail_search_bulk()` for a vector of identifiers.
 
 ## Find the right function
 
