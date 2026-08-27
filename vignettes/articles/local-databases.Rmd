@@ -1,0 +1,62 @@
+---
+title: "Use the local EPA databases"
+description: >
+  Install and query local DSSTox, ECOTOX, and ToxValDB copies.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Some ComptoxR services use local database files. Local copies are useful when
+you need repeated queries, offline work, or more control over data extraction.
+They can require substantial disk space and may take time to download.
+
+## Install a database
+
+Install the database you need. These commands may download a large file:
+
+```{r}
+library(ComptoxR)
+
+dss_install()
+eco_install()
+toxval_install()
+```
+
+Use the `source`, `tag`, or `overwrite` arguments when you need a specific
+release or want to replace an existing local copy. Check the function reference
+for the current database options.
+
+## Query DSSTox
+
+Search the local DSSTox database by text:
+
+```{r}
+dss_search("benzene", limit = 20)
+```
+
+Resolve a CAS number:
+
+```{r}
+dss_resolve("71-43-2")
+```
+
+## Query ToxValDB
+
+Use a DTXSID to retrieve local toxicity values:
+
+```{r}
+toxval_search("DTXSID7020182")
+```
+
+## Query ECOTOX
+
+ECOTOX queries can filter by chemical, species, endpoint, and other fields:
+
+```{r}
+eco_results(casrn = "71-43-2", endpoint = "mortality")
+```
+
+Use `eco_fields()` and `eco_tables()` to inspect the available local schema
+before writing a larger query.

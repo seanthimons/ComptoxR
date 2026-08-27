@@ -2,123 +2,112 @@
 
 <!-- badges: start -->
 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml) [![CodeFactor](https://www.codefactor.io/repository/github/seanthimons/comptoxr/badge)](https://www.codefactor.io/repository/github/seanthimons/comptoxr) [![CCD Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/ccd-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml) [![Cheminformatic Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/chemi-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) [![Test Coverage](https://img.shields.io/badge/coverage-3%25-red.svg)](https://github.com/seanthimons/ComptoxR/actions/workflows/test-coverage.yml) [![CodeFactor](https://www.codefactor.io/repository/github/seanthimons/comptoxr/badge)](https://www.codefactor.io/repository/github/seanthimons/comptoxr) [![CCD Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/ccd-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml) [![Cheminformatics Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/seanthimons/ComptoxR/main/.github/badges/chemi-coverage.json)](https://github.com/seanthimons/ComptoxR/actions/workflows/schema-check.yml)
 
 <!-- badges: end -->
 
-# Wrappers and Functions for Accessing USEPA CompTox Chemical Dashboard APIs and Other Products
+## Access EPA chemical data from R
 
-ComptoxR provides access to the US EPA's CompTox Chemical Dashboard APIs and related products for chemical risk screening and prioritization. The package integrates data from multiple EPA databases including CompTox Chemistry Dashboard, GenRA Engine, Toxicity Estimation Software Tool (TEST), ECOTOX, and EPI Suite to enable comprehensive chemical hazard assessment and toxicity screening.
+ComptoxR helps researchers query and analyze chemical data from the U.S. EPA
+CompTox Chemical Dashboard and related products. It is intended for students,
+scientists, and other users who want to work with EPA chemical data without
+writing HTTP requests themselves.
 
-## Main Purpose
+Start with the [ComptoxR package site](https://seanthimons.github.io/ComptoxR/),
+which includes a getting-started guide, tutorials, and function reference.
 
-ComptoxR enables researchers to query and analyze chemical hazard, toxicity, and environmental data from EPA databases for: - Rapid chemical risk screening and prioritization - Regulatory compliance assessment - Chemical hazard prioritization studies - Environmental fate and exposure modeling - Toxicity prediction and bioactivity screening - Chemical structure and property analysis
+## What can ComptoxR do?
 
-## Key Capabilities
-
-### Chemical Identification & Search
-
--   Resolve chemical identifiers (DTXSID, DTXCID, CAS, SMILES, InChI, InChIKey, chemical names) with fuzzy or exact matching
--   Search chemicals by string matching (exact, starts-with, or contains)
--   Retrieve detailed compound information with various projection options
--   Classify compounds as organic, inorganic, isotope, or Markush structures
-
-### Hazard & Safety Assessment
-
--   Generate hazard comparison data with multiple coercion methods
--   Retrieve GHS codes and NFPA 704 safety diamond information
--   Access Toxprint molecular fingerprint analysis
--   Query cancer endpoints, genotoxicity data, skin/eye irritation information
--   Get GHS classifications and regulatory hazard data
-
-### Bioactivity & Toxicity Data
-
--   Query bioactivity and toxicity screening models
--   Access environmental degradation and fate data
--   Retrieve exposure information from multiple sources
--   Get QSAR model predictions
-
-### Chemical Properties & Descriptors
-
--   Access molecular descriptors and chemical properties
--   Retrieve EPI Suite environmental partition predictions
--   Get molecular classifications using ClassyFire chemical taxonomy
--   Find similar or related compounds
--   Perform chemical clustering and similarity analysis
-
-### Risk Screening & Prioritization
-
--   Chemical risk prioritization queries
--   Regulatory list associations
--   Functional use information
--   Analog searches for hazard comparison
-
-### Batch Processing
-
--   Automatic batch processing for large queries (default 200 compounds per batch)
--   Support for multiple server environments (Production, Staging, Development)
-
-An API Key is needed to access some of these APIs. Each user will need a specific key for each application. Please send an email to request an API key.
-
-------------------------------------------------------------------------
-
-to: `ccte_api@epa.gov`
-
-subject: API Key Request
-
-------------------------------------------------------------------------
+- Find chemicals by names, CAS numbers, DTXSIDs, SMILES, InChI, and other identifiers.
+- Retrieve chemical properties, descriptors, structures, and synonyms.
+- Explore hazard, cancer, genotoxicity, safety, and toxicity information.
+- Query bioactivity, exposure, environmental fate, and QSAR data.
+- Work with GenRA, ECOTOX, ToxValDB, EPI Suite, and cheminformatics services.
+- Send batches of chemicals and receive results as data frames or tibbles.
 
 ## Installation
 
-``` r
-library(devtools) 
+ComptoxR is currently installed from GitHub. Install `pak` once, then install
+ComptoxR:
+
+```r
+install.packages("pak")
+pak::pkg_install("seanthimons/ComptoxR")
 ```
 
-``` r
-install_github("seanthimons/ComptoxR")
+Load the package in each R session in which you use it:
+
+```r
+library(ComptoxR)
 ```
 
-### Setting API keys
+## API key setup
 
-Set API key in System Environment to the variable `ctx_api_key`.
+Many CompTox services require an API key. Request a key by emailing
+`ccte_api@epa.gov` with the subject `API Key Request`.
 
-``` r
-Sys.setenv('ctx_api_key' = [TOKEN HERE])
+After you receive a key, store it in your user `.Renviron` file. This keeps the
+key out of scripts and projects:
+
+```r
+file.edit("~/.Renviron")
 ```
 
-Restart R to ensure that the token is detected properly.
+Add this line to the file, replacing the placeholder with your key:
 
-### Initial Setup
-
-On attaching the package, the API server paths will automatically be set to public endpoints, but can be adjusted or reset via the `*_server()` functions. The attaching function will also assess API endpoint status, debugging / verbosity flags, and token status.
-
-Use `run_verbose(TRUE)` or `run_verbose(FALSE)` to control verbose output in the current R session. This setting also controls the package startup header.
-
-To enable verbose mode in future sessions, open your user profile and add the option:
-
-``` r
-file.edit("~/.Rprofile")
-
-# Add to ~/.Rprofile
-options(ComptoxR.run_verbose = TRUE)
+```text
+ctx_api_key=YOUR_KEY_HERE
 ```
 
-Start a new R session before the option affects the package startup header. `run_verbose(FALSE)` overrides the profile value only for the current session. ComptoxR never creates or edits `.Rprofile`.
+Save the file and restart R. Confirm that R can find the key without printing
+the key in a script or report:
 
-Debug mode is session-only. Enable it again in each session with `run_debug(TRUE)`.
-
-#### Minor-release migration
-
-The old environment variable is no longer supported:
-
-``` r
-# Old, no longer supported
-Sys.setenv(run_verbose = "TRUE")
-
-# New persistent setting
-options(ComptoxR.run_verbose = TRUE)
+```r
+ct_api_key()
 ```
 
-## Disclaimers
+If you only need the key for the current session, use:
 
-This resource is a proof-of-concept and is a compilation of information sourced from many databases and literature sources, including U.S. Federal and state sources and international bodies, which can save the user time by providing information in one location. The data are not fully reviewed by USEPA -- the user must apply judgment in use of the information. You should consult the original scientific paper or data source if possible. Reference herein to any specific commercial products, process, or service by trade name, trademark, manufacturer, or otherwise, does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government. The views and opinions of the developers of the site expressed herein do not necessarily state or reflect those of the United States Government, and shall not be used for advertising or product endorsement purposes With respect to documents available from this server, neither the United States Government nor any of their employees, makes any warranty, express or implied, including the warranties of merchantability and fitness for a particular purpose, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights.
+```r
+Sys.setenv(ctx_api_key = "YOUR_KEY_HERE")
+```
+
+## First steps
+
+Use a chemical identifier to retrieve a compound record:
+
+```r
+library(ComptoxR)
+
+ct_chemical_detail_search("DTXSID7020182")
+```
+
+Most API functions accept one identifier or a vector of identifiers. For
+example, a small batch search is:
+
+```r
+ct_chemical_detail_search(
+  c("DTXSID7020182", "DTXSID7020183")
+)
+```
+
+The package site has examples for searching, hazard data, properties, batch
+requests, and local database tools. API-dependent examples are marked so that
+installing the package does not make unexpected network requests.
+
+## Configuration and troubleshooting
+
+- `run_setup()` checks the configured endpoints and available credentials.
+- `run_verbose(TRUE)` prints request progress for the current session.
+- `run_debug(TRUE)` creates dry-run requests without sending them.
+- `ctx_server()`, `chemi_server()`, and the other `*_server()` functions show or change service endpoints.
+
+For help, see the [package site](https://seanthimons.github.io/ComptoxR/),
+[report an issue](https://github.com/seanthimons/ComptoxR/issues), or read the
+documentation for the function you are using.
+
+## Development status
+
+ComptoxR is experimental. It combines information from several EPA services;
+check the original source and its limitations before using results for
+decisions or publications.

@@ -1,0 +1,60 @@
+---
+title: "Search for chemicals and retrieve profiles"
+description: >
+  Find chemicals with common identifiers and retrieve CompTox records.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Chemical work usually starts with an identifier. ComptoxR accepts common
+identifiers such as DTXSIDs, CAS numbers, names, SMILES, and InChI strings.
+
+## Retrieve a chemical record
+
+Use `ct_chemical_detail_search()` when you already have a DTXSID:
+
+```{r}
+library(ComptoxR)
+
+benzene <- ct_chemical_detail_search("DTXSID7020182")
+benzene
+```
+
+For several DTXSIDs, use the bulk function:
+
+```{r}
+benzene_and_toluene <- ct_chemical_detail_search_bulk(
+  c("DTXSID7020182", "DTXSID7020192")
+)
+```
+
+## Search by name or text
+
+Use the chemical search functions when you do not know the DTXSID:
+
+```{r}
+ct_chemical_search_equal("benzene")
+ct_chemical_search_contain("benzene", top = 20)
+```
+
+Use `chemi_resolver_lookup()` when you want identifier resolution across
+several identifier types:
+
+```{r}
+chemi_resolver_lookup("benzene", idType = "name", fuzzy = TRUE)
+```
+
+## Inspect the result
+
+The functions return tibbles by default. Use standard R tools to select or
+save columns:
+
+```{r}
+benzene[c("dtxsid", "preferred_name")]
+write.csv(benzene, "benzene.csv", row.names = FALSE)
+```
+
+Start with one chemical while learning the result shape. Move to bulk
+functions after the single-chemical call gives the fields you need.

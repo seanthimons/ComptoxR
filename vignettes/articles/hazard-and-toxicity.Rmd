@@ -1,0 +1,58 @@
+---
+title: "Explore hazard and toxicity data"
+description: >
+  Retrieve hazard, safety, toxicity, and bioactivity information for chemicals.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+ComptoxR connects a chemical identifier to several EPA hazard and toxicity
+services. The results come from different sources, so keep the source fields
+when saving or combining results.
+
+## Hazard and safety information
+
+For cheminformatics hazard and safety summaries:
+
+```{r}
+library(ComptoxR)
+
+chemi_hazard("DTXSID7020182")
+chemi_safety("DTXSID7020182")
+```
+
+For cancer and genotoxicity information from the CompTox Dashboard:
+
+```{r}
+ct_hazard_cancer_search("DTXSID7020182")
+ct_hazard_genetox_search("DTXSID7020182")
+```
+
+## Toxicity and bioactivity
+
+Query ToxValDB data for a DTXSID:
+
+```{r}
+toxval_search("DTXSID7020182")
+```
+
+Retrieve CompTox bioactivity data by DTXSID:
+
+```{r}
+ct_bioactivity_data_search_by_dtxsid("DTXSID7020182")
+```
+
+## Compare several chemicals
+
+Many services provide bulk variants. Use them when you have a vector of
+identifiers:
+
+```{r}
+chemi_hazard_bulk(c("DTXSID7020182", "DTXSID7020192"))
+ct_hazard_cancer_search_bulk(c("DTXSID7020182", "DTXSID7020192"))
+```
+
+These results should be interpreted with the source database documentation;
+the presence of a record does not by itself establish a risk conclusion.

@@ -18,7 +18,7 @@ Description: Provides access to the US EPA's CompTox Chemical Dashboard APIs
     with regulatory list associations. It supports batch processing for large
     queries and integrates data from CompTox Chemistry Dashboard, GenRA Engine,
     Toxicity Estimation Software Tool (TEST), ECOTOX, ToxValDB, and EPI Suite.
-URL: https://github.com/seanthimons/ComptoxR
+URL: https://seanthimons.github.io/ComptoxR/, https://github.com/seanthimons/ComptoxR
 BugReports: https://github.com/seanthimons/ComptoxR/issues
 License: MIT + file LICENSE
 Language: en-US
@@ -56,6 +56,7 @@ Suggests:
     httptest2,
     httpuv,
     janitor,
+    knitr,
     lubridate,
     magick,
     mockery,
@@ -63,6 +64,7 @@ Suggests:
     readr,
     readxl,
     roxygen2,
+    rmarkdown,
     rvest,
     testthat (>= 3.0.0),
     vcr,
@@ -72,3 +74,4 @@ Suggests:
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/roxygen2/version: 8.1.0
+VignetteBuilder: knitr
