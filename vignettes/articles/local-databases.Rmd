@@ -1,20 +1,18 @@
 ---
-title: "Use the local EPA databases"
+title: "Local data and development"
 description: >
-  Install and query local DSSTox, ECOTOX, and ToxValDB copies.
+  Install local EPA data, inspect schemas, and find contributor guidance.
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
-Some ComptoxR services use local database files. Local copies are useful when
-you need repeated queries, offline work, or more control over data extraction.
-They can require substantial disk space and may take time to download.
+Local database copies support repeated queries, offline work, and controlled
+data extraction. Downloads can be large. Install only the database that your
+work needs.
 
-## Install a database
-
-Install the database you need. These commands may download a large file:
+## Install local databases
 
 ```{r}
 library(ComptoxR)
@@ -24,39 +22,42 @@ eco_install()
 toxval_install()
 ```
 
-Use the `source`, `tag`, or `overwrite` arguments when you need a specific
-release or want to replace an existing local copy. Check the function reference
-for the current database options.
+Use `source`, `tag`, or `overwrite` only when you need a specific release or
+must replace an existing copy. See each function reference for its current
+options.
 
-## Query DSSTox
+## Check health and schema before querying
 
-Search the local DSSTox database by text:
+```{r}
+eco_health()
+eco_tables()
+eco_fields("results")
+eco_inventory()
+
+toxval_health()
+toxval_tables()
+toxval_fields("toxval")
+toxval_sources()
+```
+
+The health result identifies the configured local data source. Table and field
+functions help you confirm the schema before a large query.
+
+## Use the focused articles
+
+See [Hazard Data and ToxValDB](hazard-and-toxicity.html) for local toxicity
+values and [ECOTOX](ecotox.html) for ecological effects. DSSTox provides local
+chemical search and resolution:
 
 ```{r}
 dss_search("benzene", limit = 20)
-```
-
-Resolve a CAS number:
-
-```{r}
 dss_resolve("71-43-2")
 ```
 
-## Query ToxValDB
+## Develop ComptoxR
 
-Use a DTXSID to retrieve local toxicity values:
-
-```{r}
-toxval_search("DTXSID7020182")
-```
-
-## Query ECOTOX
-
-ECOTOX queries can filter by chemical, species, endpoint, and other fields:
-
-```{r}
-eco_results(casrn = "71-43-2", endpoint = "mortality")
-```
-
-Use `eco_fields()` and `eco_tables()` to inspect the available local schema
-before writing a larger query.
+Read the standalone [development lifecycle](development-lifecycle.html) before
+changing the package. It describes branches, checks, continuous integration,
+and releases. Also read `CONTRIBUTING.md` in the repository root. Do not record
+API cassettes unless the task requires production traffic and you can run the
+cassette safety checks.

@@ -1,58 +1,85 @@
 ---
-title: "Explore hazard and toxicity data"
+title: "Hazard data and ToxValDB"
 description: >
-  Retrieve hazard, safety, toxicity, and bioactivity information for chemicals.
+  Use fast CCD hazard endpoints, then deepen the search with local ToxValDB data.
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
-ComptoxR connects a chemical identifier to several EPA hazard and toxicity
-services. The results come from different sources, so keep the source fields
-when saving or combining results.
+The CCD hazard endpoints are the fast API path. ToxValDB is a separate local
+DuckDB database or a service that you host. It is not another public CCD
+endpoint.
 
-## Hazard and safety information
-
-For cheminformatics hazard and safety summaries:
+## Start with CCD hazard endpoints
 
 ```{r}
 library(ComptoxR)
+library(dplyr)
 
-chemi_hazard("DTXSID7020182")
-chemi_safety("DTXSID7020182")
+dtxsid <- "DTXSID7020182"
+
+ccd_toxval <- ct_hazard_toxval_search(dtxsid)
+ccd_toxval |>
+  select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
+         toxvalNumeric, toxvalUnits, speciesCommon, studyType,
+         quality, qcCategory)
+
+ct_hazard_genetox_search(dtxsid)
+ct_hazard_cancer_search(dtxsid)
+ct_hazard_toxref_data_search(dtxsid)
 ```
 
-For cancer and genotoxicity information from the CompTox Dashboard:
+Use the CCD path for quick profile work and bulk screening. Keep source, value
+type, units, species, and quality fields.
+
+## Install and inspect ToxValDB
 
 ```{r}
-ct_hazard_cancer_search("DTXSID7020182")
-ct_hazard_genetox_search("DTXSID7020182")
+toxval_install()
+toxval_health()
+toxval_tables()
+toxval_fields("toxval")
+head(toxval_sources())
 ```
 
-## Toxicity and bioactivity
+`toxval_install()` downloads and configures the local database. These commands
+can use a substantial download and are disabled during the site build. A
+self-hosted Plumber service provides the same high-level query workflow.
 
-Query ToxValDB data for a DTXSID:
+## Search and filter local records
+
+`toxval_search()` is the short DTXSID path.
 
 ```{r}
-toxval_search("DTXSID7020182")
+local_values <- toxval_search(dtxsid)
+local_values |>
+  select(dtxsid, source, toxval_type, toxval_numeric, toxval_units,
+         species_common, qc_status, qc_category)
 ```
 
-Retrieve CompTox bioactivity data by DTXSID:
+Use `toxval_results()` for focused filters.
 
 ```{r}
-ct_bioactivity_data_search_by_dtxsid("DTXSID7020182")
+iris_oral <- toxval_results(
+  dtxsid = dtxsid,
+  source = "IRIS",
+  toxval_type = "RfD",
+  species = "Human",
+  qc_status = "pass"
+)
+
+iris_oral |>
+  select(dtxsid, source, toxval_type, toxval_numeric, toxval_units,
+         species_common, study_type, qc_status, qc_category)
 ```
 
-## Compare several chemicals
+The filters accept vectors. `qc_status = "pass_or_not_determined"` is the
+default. Use `"pass"` for accepted rows only or `"all"` when you must review
+failed QC rows. Keep failed rows labeled; do not silently mix them with passed
+records.
 
-Many services provide bulk variants. Use them when you have a vector of
-identifiers:
-
-```{r}
-chemi_hazard_bulk(c("DTXSID7020182", "DTXSID7020192"))
-ct_hazard_cancer_search_bulk(c("DTXSID7020182", "DTXSID7020192"))
-```
-
-These results should be interpreted with the source database documentation;
-the presence of a record does not by itself establish a risk conclusion.
+ToxValDB deepens the hazard review with local, filterable records. It does not
+replace the identity, property, fate, exposure, or bioactivity parts of the
+[CCD chemical profile](chemical-search.html).

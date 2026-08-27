@@ -1,0 +1,212 @@
+---
+title: "Risk evidence compilation"
+description: >
+  Compile screening-level identity, fate, hazard, exposure, and bioactivity evidence.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+This workflow compiles evidence that can support risk characterization or
+screening. It is not a completed regulatory risk assessment. It does not
+define an exposure scenario, select critical studies, derive points of
+departure, or make a regulatory conclusion.
+
+## Discover relevant CCD lists
+
+```{r}
+library(ComptoxR)
+library(dplyr)
+
+lists <- ct_chemical_list_all()
+fungicide_lists <- lists |>
+  filter(grepl(
+    "fungic",
+    paste(listName, label, shortDescription, longDescription),
+    ignore.case = TRUE
+  )) |>
+  select(listName, label, type, chemicalCount, shortDescription)
+
+fungicide_lists
+ct_chemical_list_search_by_name("S11_SWISSPEST")
+```
+
+Dashboard lists can change. Use list discovery to find current candidates, but
+use a small explicit input vector for a reproducible example.
+
+## Resolve a fixed fungicide input
+
+```{r}
+input <- tibble(
+  input_id = seq_len(4),
+  identifier = c("captan", "chlorothalonil", "azoxystrobin",
+                 "not-a-real-chemical")
+)
+
+resolved <- ct_chemical_search_equal_bulk(input$identifier)
+resolution <- input |>
+  left_join(
+    resolved,
+    by = c("identifier" = "searchValue"),
+    relationship = "many-to-many"
+  ) |>
+  mutate(
+    match_status = case_when(
+      is.na(dtxsid) ~ "unmatched",
+      duplicated(input_id) | duplicated(input_id, fromLast = TRUE) ~ "ambiguous",
+      TRUE ~ "matched"
+    )
+  )
+
+resolution |>
+  select(input_id, identifier, dtxsid, preferredName, casrn, match_status)
+
+ids <- resolution |>
+  filter(match_status == "matched") |>
+  distinct(dtxsid) |>
+  pull()
+
+if (!length(ids)) stop("No unambiguous DTXSIDs were resolved.")
+```
+
+Keep the failed input in `resolution`. Excluding it without a record would
+make the evidence table look more complete than the input process was.
+
+## Compile CCD evidence
+
+Use bulk wrappers when they exist.
+
+```{r}
+identity <- ct_chemical_detail_search_bulk(ids)
+property_experimental <- ct_chemical_property_experimental_search_bulk(ids)
+property_predicted <- ct_chemical_property_predicted_search_bulk(ids)
+fate <- ct_chemical_fate_search_bulk(ids)
+hazard <- ct_hazard_toxval_search_bulk(ids) |>
+  filter(toxvalTypeSuperCategory %in% c(
+    "Point of Departure",
+    "Reference Value"
+  )) |>
+  select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
+         toxvalNumeric, toxvalUnits, speciesCommon, studyType,
+         quality, qcCategory)
+exposure <- ct_exposure_seem_general_search_bulk(ids)
+bioactivity_detail <- ct_bioactivity_data_search_bulk(ids)
+```
+
+Use small iteration for endpoints without bulk wrappers.
+
+```{r}
+ivive <- lapply(ids, ct_hazard_adme_ivive_search) |>
+  bind_rows()
+
+bioactivity_summary <- lapply(
+  ids,
+  ct_bioactivity_data_summary_search_by_dtxsid
+) |>
+  bind_rows()
+```
+
+The result now contains chemical identity, physical-chemical evidence, fate
+and transport, selected hazard evidence, IVIVE, SEEM exposure estimates, and
+bioactivity summaries. DTXSID is the join key for every CCD table.
+
+## Add optional local evidence
+
+Run these calls only after you install the local databases.
+
+```{r}
+toxval_local <- toxval_results(
+  dtxsid = ids,
+  qc_status = "pass_or_not_determined"
+)
+
+cas_map <- identity |>
+  distinct(dtxsid, casrn)
+
+ecotox_local <- eco_results(
+  casrn = cas_map$casrn,
+  eco_group = "Fish",
+  endpoint = c("LC50", "EC50"),
+  lifestage_details = TRUE
+) |>
+  left_join(cas_map, by = c("test_cas" = "casrn"))
+```
+
+ToxValDB joins directly by DTXSID. ECOTOX starts with CASRN, so use the
+identity table to add the DTXSID immediately. Keep unmatched CAS numbers
+visible.
+
+## Build an evidence-availability table
+
+```{r}
+evidence <- list(
+  identity = identity,
+  property_experimental = property_experimental,
+  property_predicted = property_predicted,
+  fate = fate,
+  hazard = hazard,
+  ivive = ivive,
+  exposure = exposure,
+  bioactivity_summary = bioactivity_summary
+)
+
+available <- bind_rows(lapply(names(evidence), function(evidence_type) {
+  endpoint_result <- evidence[[evidence_type]]
+  if (!"dtxsid" %in% names(endpoint_result)) {
+    return(tibble(
+      dtxsid = character(),
+      evidence_type = character(),
+      available = logical()
+    ))
+  }
+
+  endpoint_result |>
+    filter(!is.na(dtxsid)) |>
+    distinct(dtxsid) |>
+    mutate(evidence_type = evidence_type, available = TRUE)
+}))
+
+availability_by_dtxsid <- tidyr::crossing(
+  dtxsid = ids,
+  evidence_type = names(evidence)
+) |>
+  left_join(available, by = c("dtxsid", "evidence_type")) |>
+  mutate(available = coalesce(available, FALSE)) |>
+  tidyr::pivot_wider(
+    names_from = evidence_type,
+    values_from = available,
+    values_fill = FALSE
+  )
+
+availability <- resolution |>
+  distinct(input_id, identifier, dtxsid, match_status) |>
+  left_join(availability_by_dtxsid, by = "dtxsid") |>
+  mutate(across(all_of(names(evidence)), ~ coalesce(.x, FALSE)))
+
+availability
+```
+
+An empty endpoint result means “not retrieved from this endpoint,” not “no
+evidence exists.” Preserve that distinction in the screening summary.
+
+```{r}
+screening_summary <- identity |>
+  select(dtxsid, preferredName, casrn, molFormula, averageMass) |>
+  left_join(
+    exposure |>
+      select(dtxsid, productionVolume, units, starts_with("probability")),
+    by = "dtxsid"
+  ) |>
+  left_join(
+    bioactivity_summary |>
+      select(dtxsid, ntested, nhit, cytotoxMedianUm),
+    by = "dtxsid"
+  )
+
+screening_summary
+```
+
+Review the full source tables before interpretation. The compact table is a
+screening index into the evidence, not a replacement for study review or a
+regulatory risk assessment.

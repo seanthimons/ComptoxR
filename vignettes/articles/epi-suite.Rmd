@@ -1,0 +1,54 @@
+---
+title: "EPI Suite"
+description: >
+  Find a chemical, submit selected EPI Suite modules, and inspect nested estimates.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+EPI Suite estimates physical-chemical, fate, and ecotoxicity properties. Search
+first, then submit a selected chemical.
+
+## Search and submit one compound
+
+```{r}
+library(ComptoxR)
+
+hits <- epi_search("benzene")
+str(hits, max.level = 1)
+
+epi <- epi_submit(
+  cas = "71-43-2",
+  modules = paste(
+    c("logKow", "biodegradationRate", "bioconcentration",
+      "atmosphericHalfLife", "ecosar"),
+    collapse = ","
+  )
+)
+```
+
+The result is nested by EPI module. Inspect names before selecting fields.
+
+```{r}
+names(epi$result)
+selected <- epi$result[c(
+  "logKow",
+  "biodegradationRate",
+  "bioconcentration",
+  "atmosphericHalfLife",
+  "ecosar"
+)]
+str(selected, max.level = 2)
+```
+
+Keep the module name, estimate, units, and any model warnings together. EPI
+results are screening estimates, not measured values.
+
+## Bulk limits
+
+ComptoxR has no package-level bulk wrapper for EPI Suite. For two or three
+chemicals, use the small, delayed loop in
+[Chemical Lists and Bulk Workflows](batch-processing.html). Do not submit a
+large vector as if `epi_submit()` were a bulk endpoint.

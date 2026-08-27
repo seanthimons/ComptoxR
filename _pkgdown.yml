@@ -16,12 +16,19 @@ articles:
   - title: Learn ComptoxR
     navbar: Articles
     contents:
-      - starts_with("articles/getting")
-      - starts_with("articles/chemical")
-      - starts_with("articles/batch")
-      - starts_with("articles/hazard")
-      - starts_with("articles/local")
-      - starts_with("articles/development")
+      - articles/getting-started
+      - articles/chemical-search
+      - articles/batch-processing
+      - articles/hazard-and-toxicity
+      - articles/cheminformatics-and-amos
+      - articles/epi-suite
+      - articles/ecotox
+      - articles/risk-evidence-compilation
+      - articles/local-databases
+  - title: Contributor guides
+    navbar: Articles
+    contents:
+      - articles/development-lifecycle
 
 reference:
   - title: CompTox Chemical Dashboard
