@@ -2,6 +2,101 @@
 
 # ComptoxR NEWS
 
+## v1.7.0 (2026-08-27)
+
+#### New features
+
+- persist verbose mode with package option
+  ([6990027](https://github.com/seanthimons/ComptoxR/tree/6990027846b09046c81ca287a4131ee3c13b2d50))
+- ping four CTX domains for health and defer hook config load
+  (#feat/ctx-health-endpoints)
+  ([f148ae5](https://github.com/seanthimons/ComptoxR/tree/f148ae5273711bf8e81be12f4cb4b230da2316c2))
+- ping four CTX domains for health and defer hook config load
+  ([02f6c5e](https://github.com/seanthimons/ComptoxR/tree/02f6c5eab1a20c87a99826b464e6256c91c6c731))
+- ingest EPI Suite schema into stub-generation pipeline
+  ([4480d85](https://github.com/seanthimons/ComptoxR/tree/4480d8563a5d83fe6a3e9f959e9cce3995cde4f2))
+
+#### Bug fixes
+
+- remove duplicate articles navigation
+  ([ac88ae7](https://github.com/seanthimons/ComptoxR/tree/ac88ae76d03c878362d01a6f2cfbe89dd9c77460))
+- keep untested staging wrappers internal
+  ([ba391f1](https://github.com/seanthimons/ComptoxR/tree/ba391f1c87fee4717e8f872c849f6097e364a019))
+- synchronize generated function documentation
+  ([80c7fb2](https://github.com/seanthimons/ComptoxR/tree/80c7fb2623a4c3dd1077ccec42569418ad7bc14a))
+- skip maintainer tests in source packages
+  ([131869b](https://github.com/seanthimons/ComptoxR/tree/131869bc2093f96c36e79ef8c7b1489cbb7a306b))
+- normalize equivalent schema contracts
+  ([2fe4c06](https://github.com/seanthimons/ComptoxR/tree/2fe4c06c6cbff7c4a281cb6181aa66ec6f6caa33))
+- extend DuckDB release download timeout
+  ([bbaa805](https://github.com/seanthimons/ComptoxR/tree/bbaa8059267bfc9f71bd80df4ea79efbe595bac9))
+- skip free-form request bodies
+  ([f44c99b](https://github.com/seanthimons/ComptoxR/tree/f44c99b2aae7813921647fb152d01de8da6bbb75))
+- generate oneof request wrappers
+  ([4a519b5](https://github.com/seanthimons/ComptoxR/tree/4a519b5ec91308731ecee6898c933869b29e857e))
+- detect missing wrappers by operation
+  ([2f6f6cf](https://github.com/seanthimons/ComptoxR/tree/2f6f6cf3ea26f87c3ba52b1ebc6a4a750c184cf9))
+- merge AMOS pagination rebuild
+  ([84556ac](https://github.com/seanthimons/ComptoxR/tree/84556ac421427aba66b69f16092c8b0adfac02cb))
+- restore endpoint filtering in experimental remover
+  ([534d8ab](https://github.com/seanthimons/ComptoxR/tree/534d8abacd237efb60440b112874d08543996178))
+- rebuild cheminformatics wrappers across schema stages
+  ([22f5159](https://github.com/seanthimons/ComptoxR/tree/22f51597efab72add3c4ae13637ae82101cb50d8))
+- report successful EPI Suite downloads
+  ([048ab95](https://github.com/seanthimons/ComptoxR/tree/048ab9560b71b74a7d7be50378c7da5ecde65d5e))
+- preserve EPI Suite numeric precision
+  ([ea03480](https://github.com/seanthimons/ComptoxR/tree/ea03480ca3a653a2aafee41fa5475e0fa97b5e89))
+- refresh EPI Suite schema in scheduled checks
+  ([fef5d9f](https://github.com/seanthimons/ComptoxR/tree/fef5d9f7ba5a6a4e4afb5d6bf84b99a59fb62ab9))
+
+#### CI
+
+- link macOS coverage libraries
+  ([dc7be08](https://github.com/seanthimons/ComptoxR/tree/dc7be084228b8e6c96db2222601356c474d8d00c))
+- install macOS coverage libraries
+  ([18c4502](https://github.com/seanthimons/ComptoxR/tree/18c45020970f99a06e4209ae4f5217909ec3c402))
+- install coverage test dependencies
+  ([29bb0f2](https://github.com/seanthimons/ComptoxR/tree/29bb0f2232350a5d57a2943903be30a3ba1318fd))
+- skip package tests for documentation changes
+  ([650c05d](https://github.com/seanthimons/ComptoxR/tree/650c05d5dd14a8bc5efe28aef61f6193ae1f7f8d))
+- publish integration rolling binaries
+  ([647fd6f](https://github.com/seanthimons/ComptoxR/tree/647fd6f5a559e5aff5c2283c4ced29975720271c))
+- surface EPI Suite coverage in schema-check PR body
+  ([c7e5132](https://github.com/seanthimons/ComptoxR/tree/c7e5132c52a58b86962c26c83ffcbfa14d61f5ce))
+
+#### Docs
+
+- add task-oriented evidence workflow articles
+  ([2d3fb08](https://github.com/seanthimons/ComptoxR/tree/2d3fb08052b9ac27ee9f0343e89200dbce0f5926))
+- order articles and clarify bulk search
+  ([dc1a209](https://github.com/seanthimons/ComptoxR/tree/dc1a209894d8371ff1f16e983b5b7eb5aa470af5))
+- add package site documentation
+  ([fee4449](https://github.com/seanthimons/ComptoxR/tree/fee4449269de000eaef499f9419874e98cabac7c))
+- add README and package site documentation
+  ([35977d0](https://github.com/seanthimons/ComptoxR/tree/35977d0af386dcda62ac92cc5d0cca92f16ce758))
+- document Cheminformatics API research
+  ([5d824a2](https://github.com/seanthimons/ComptoxR/tree/5d824a20d8ba3f5a1b6e1d324f4544606d44f3cf))
+- add ECOTOX lifestage reseed plan
+  ([80ae932](https://github.com/seanthimons/ComptoxR/tree/80ae932508a196387287e8eb3c1f51fca67a4fc9))
+
+#### Other changes
+
+- bump version to 1.7.0 \[skip ci\]
+  ([efc6b02](https://github.com/seanthimons/ComptoxR/tree/efc6b02727fc43b64483afa537fc3ad50d648f39))
+- regenerate experimental wrappers
+  ([2145568](https://github.com/seanthimons/ComptoxR/tree/2145568d173a5c210fde878fc072018b767ee5a4))
+- update API schemas, generate function stubs and tests
+  ([aebc28d](https://github.com/seanthimons/ComptoxR/tree/aebc28d7648588aaac311b758b026c0555c9641f))
+- sync main into integration
+  ([bbf94b8](https://github.com/seanthimons/ComptoxR/tree/bbf94b8c07b071286877fd41153d22257e7e961d))
+- updated documenation generation
+  ([580c274](https://github.com/seanthimons/ComptoxR/tree/580c2746111a3f4bc7cf34861df9f7c54fb66f51))
+- update API schemas, generate function stubs and tests
+  ([f9112f8](https://github.com/seanthimons/ComptoxR/tree/f9112f8e47f96824fea9f45ad4c751729abd70e5))
+
+Full set of changes:
+[`v1.6.0...v1.7.0`](https://github.com/seanthimons/ComptoxR/compare/v1.6.0...v1.7.0)
+
 ## v1.6.0 (2026-08-07)
 
 #### Breaking changes
@@ -74,6 +169,8 @@
 
 #### Docs
 
+- update NEWS.md for v1.6.0 \[skip ci\]
+  ([075a231](https://github.com/seanthimons/ComptoxR/tree/075a231e19617319791b5de0e5575bee8b6d8bad))
 - document development lifecycle and CI/release workflows
   ([a55c702](https://github.com/seanthimons/ComptoxR/tree/a55c702bffdeb33ab115633fe3325197859080ad))
 
@@ -169,6 +266,8 @@ Full set of changes:
 - exclude CHET curation endpoints and non-GET/POST methods from stub
   generation
   ([0f1dddc](https://github.com/seanthimons/ComptoxR/tree/0f1dddcf33089fb31e3f8809813fccb1bf3734f1))
+- Update NEWS.md
+  ([2587ed5](https://github.com/seanthimons/ComptoxR/tree/2587ed5455f2a751e07d739e8e54f5fe6a765c5a))
 - Update NEWS.md
   ([3de0a3a](https://github.com/seanthimons/ComptoxR/tree/3de0a3a8654e5a71b267b9863a8f931479177e15))
 - Update NEWS.md
