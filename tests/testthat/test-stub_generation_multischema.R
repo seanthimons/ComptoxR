@@ -104,6 +104,41 @@ test_that("identical stage contracts collapse and conflicts get deterministic su
   expect_identical(conflicts$supported_schema_stages[[2]], c("staging", "development"))
 })
 
+test_that("Swagger omissions do not split equivalent stage contracts", {
+  load_multischema_pipeline()
+  endpoints <- tibble::tibble(
+    source_file = c("chemi-demo-staging.json", "chemi-demo-dev.json"),
+    service_slug = "demo",
+    route = "/api/demo/items/{id}",
+    method = "GET",
+    path_params = "id",
+    query_params = "cursor",
+    body_params = "",
+    path_param_metadata = list(
+      list(list(name = "id", type = "integer")),
+      list(list(name = "id", type = NA_character_))
+    ),
+    query_param_metadata = list(
+      list(list(name = "cursor", type = NA_character_)),
+      list(list(name = "cursor", type = "string"))
+    ),
+    body_param_metadata = list(list(), list()),
+    body_schema_type = "unknown",
+    body_schema_full = list(list(), list()),
+    body_item_type = c(NA_character_, NA_character_),
+    content_type = c("", "application/json"),
+    request_type = "path",
+    pagination_metadata = list(list(), list())
+  )
+
+  collapsed <- collapse_chemi_stage_contracts(endpoints)
+  expect_equal(nrow(collapsed), 1L)
+  expect_identical(
+    collapsed$supported_schema_stages[[1]],
+    c("staging", "development")
+  )
+})
+
 test_that("generated stage configuration and AMOS call shapes are deterministic", {
   load_multischema_pipeline()
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())

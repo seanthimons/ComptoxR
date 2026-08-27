@@ -319,6 +319,18 @@ chemi_contract_value <- function(row, name, default = NULL) {
   value
 }
 
+normalize_chemi_parameter_metadata <- function(metadata) {
+  purrr::map(metadata, function(parameter) {
+    parameter$type <- NULL
+    parameter
+  })
+}
+
+normalize_chemi_content_type <- function(content_type) {
+  content_type <- content_type %||% ""
+  if (!nzchar(trimws(content_type))) "application/json" else content_type
+}
+
 canonical_chemi_request_contract <- function(row) {
   contract <- list(
     route = chemi_contract_value(row, "route", ""),
@@ -327,16 +339,24 @@ canonical_chemi_request_contract <- function(row) {
       path = chemi_contract_value(row, "path_params", ""),
       query = chemi_contract_value(row, "query_params", ""),
       body = chemi_contract_value(row, "body_params", ""),
-      path_metadata = chemi_contract_value(row, "path_param_metadata", list()),
-      query_metadata = chemi_contract_value(row, "query_param_metadata", list()),
-      body_metadata = chemi_contract_value(row, "body_param_metadata", list())
+      path_metadata = normalize_chemi_parameter_metadata(
+        chemi_contract_value(row, "path_param_metadata", list())
+      ),
+      query_metadata = normalize_chemi_parameter_metadata(
+        chemi_contract_value(row, "query_param_metadata", list())
+      ),
+      body_metadata = normalize_chemi_parameter_metadata(
+        chemi_contract_value(row, "body_param_metadata", list())
+      )
     ),
     request_body = list(
       type = chemi_contract_value(row, "body_schema_type", "unknown"),
       schema = chemi_contract_value(row, "body_schema_full", list()),
       item_type = chemi_contract_value(row, "body_item_type", NA_character_)
     ),
-    content_type = chemi_contract_value(row, "content_type", ""),
+    content_type = normalize_chemi_content_type(
+      chemi_contract_value(row, "content_type", "")
+    ),
     request_type = chemi_contract_value(row, "request_type", ""),
     pagination = chemi_contract_value(row, "pagination_metadata", list())
   )
