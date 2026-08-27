@@ -20,7 +20,6 @@
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a tibble with results
 #' @apiStage staging
-#' @export
 #'
 #' @examples
 #' \dontrun{

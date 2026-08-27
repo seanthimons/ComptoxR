@@ -13,6 +13,7 @@ Provides access to the US EPA's CompTox Chemical Dashboard APIs and related prod
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://seanthimons.github.io/ComptoxR/}
   \item \url{https://github.com/seanthimons/ComptoxR}
   \item Report bugs at \url{https://github.com/seanthimons/ComptoxR/issues}
 }

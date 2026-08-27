@@ -23,4 +23,3 @@ ct_chemical_msready_search_by_dtxcid_bulk(query = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

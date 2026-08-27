@@ -25,4 +25,3 @@ ct_exposure_seem_general_search(dtxsid = "DTXSID0020232")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

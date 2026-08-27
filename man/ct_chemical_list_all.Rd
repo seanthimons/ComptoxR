@@ -31,4 +31,3 @@ ct_chemical_list_all(projection = "chemicallistall")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

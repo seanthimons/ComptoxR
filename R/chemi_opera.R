@@ -74,7 +74,6 @@ chemi_opera <- function(smiles, format = "json", standardize = FALSE) {
 #' @param standardize Standardize chemical before calculating predictions (default: FALSE)
 #' @return Returns a list with result object
 #' @apiStage staging
-#' @export
 #'
 #' @examples
 #' \dontrun{

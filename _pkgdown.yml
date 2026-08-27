@@ -14,7 +14,7 @@ navbar:
 
 articles:
   - title: Learn ComptoxR
-    navbar: Articles
+    navbar: ~
     contents:
       - articles/getting-started
       - articles/chemical-search
@@ -26,7 +26,6 @@ articles:
       - articles/risk-evidence-compilation
       - articles/local-databases
   - title: Contributor guides
-    navbar: Articles
     contents:
       - articles/development-lifecycle
 

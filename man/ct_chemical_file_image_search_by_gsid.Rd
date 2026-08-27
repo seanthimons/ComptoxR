@@ -23,4 +23,3 @@ ct_chemical_file_image_search_by_gsid(gsid = "20182")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-
