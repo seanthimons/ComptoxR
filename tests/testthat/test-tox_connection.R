@@ -111,8 +111,35 @@ test_that(".db_download_release() shows progress only for asset downloads", {
 
   expect_equal(calls[[2]]$req$url, "https://example.com/toxval.duckdb")
   expect_equal(calls[[2]]$path, dest)
+  expect_equal(calls[[2]]$req$options$timeout_ms, 4500000)
   expect_false(calls[[2]]$req$options$noprogress)
   expect_true(is.function(calls[[2]]$req$options$xferinfofunction))
+})
+
+test_that(".db_download_release() restores the previous timeout", {
+  local_mocked_bindings(
+    req_perform = function(req, path = NULL, ...) {
+      if (!is.null(path)) {
+        writeBin(raw(0), path)
+      }
+      list()
+    },
+    resp_body_json = function(resp, ...) {
+      list(
+        tag_name = "db-latest",
+        assets = list(list(
+          name = "toxval.duckdb",
+          browser_download_url = "https://example.com/toxval.duckdb",
+          size = 1024
+        ))
+      )
+    },
+    .package = "httr2"
+  )
+
+  withr::local_options(timeout = 123)
+  .db_download_release("toxval", tempfile(), tag = "db-latest", repo = "owner/repo")
+  expect_equal(getOption("timeout"), 123)
 })
 
 test_that("toxval_install() default path calls .db_download_release", {
