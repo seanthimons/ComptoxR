@@ -18,7 +18,8 @@ chemi_amos_mass_spectrum_similarity(
 
 \item{methodology}{Analytical methodology to search for.  Values aside from "GC/MS" and "LC/MS" are highly unlikely to produce results.}
 
-\item{spectrum}{Array of two-element numeric arrays.  The two-element arrays represent a single peak in the spectrum, in the format \link{m/z, intensity}.  Peaks should be sorted in ascending order of m/z values.}
+\item{spectrum}{Array of two-element numeric arrays. The two values represent
+m/z and intensity. Peaks must be sorted by increasing m/z values.}
 
 \item{type}{Type of mass window to use for entropy similarity calculations.  Can be either "da" or "ppm".}
 

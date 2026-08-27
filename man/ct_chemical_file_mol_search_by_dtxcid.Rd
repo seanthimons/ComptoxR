@@ -23,4 +23,3 @@ ct_chemical_file_mol_search_by_dtxcid(dtxcid = "DTXCID505")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

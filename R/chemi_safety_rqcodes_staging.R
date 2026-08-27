@@ -21,7 +21,6 @@
 #' @param smiles Optional parameter
 #' @return Returns a tibble with results (array of objects)
 #' @apiStage staging
-#' @export
 #'
 #' @examples
 #' \dontrun{

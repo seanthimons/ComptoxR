@@ -121,4 +121,3 @@ epi_submit(smiles = "c1ccccc1")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-
