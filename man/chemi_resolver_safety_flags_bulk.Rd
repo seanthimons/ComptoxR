@@ -18,7 +18,8 @@ chemi_resolver_safety_flags_bulk(
   monoisotopicMass = NULL,
   name = NULL,
   sid = NULL,
-  smiles = NULL
+  smiles = NULL,
+  request.filesInfo = NULL
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ chemi_resolver_safety_flags_bulk(
 \item{sid}{Optional parameter}
 
 \item{smiles}{Optional parameter}
+
+\item{request.filesInfo}{Optional parameter}
 }
 \value{
 Returns a list with result object

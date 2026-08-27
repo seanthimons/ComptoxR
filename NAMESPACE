@@ -137,6 +137,7 @@ export(chemi_mordred_bulk)
 export(chemi_ncc_cats)
 export(chemi_ncc_cats_bulk)
 export(chemi_opera)
+export(chemi_opera_bulk)
 export(chemi_opera_report)
 export(chemi_padel)
 export(chemi_padel_bulk)
@@ -146,6 +147,7 @@ export(chemi_pfas_cats)
 export(chemi_pfas_cats_bulk)
 export(chemi_predict)
 export(chemi_predictor_models_predict)
+export(chemi_predictor_models_predict_bulk)
 export(chemi_predictor_modelset_report)
 export(chemi_predictor_qmrf)
 export(chemi_predictor_report)
@@ -185,6 +187,7 @@ export(chemi_safety_classes)
 export(chemi_safety_hcodes)
 export(chemi_safety_pcodes)
 export(chemi_safety_rqcodes)
+export(chemi_safety_rqcodes_staging)
 export(chemi_safety_section)
 export(chemi_safety_statements)
 export(chemi_search)
@@ -193,6 +196,7 @@ export(chemi_search_gethazard)
 export(chemi_search_lookup)
 export(chemi_search_similar)
 export(chemi_search_similar_staging)
+export(chemi_search_staging)
 export(chemi_search_substructure)
 export(chemi_server)
 export(chemi_services_cim_component_info)
@@ -443,33 +447,43 @@ import(httr2)
 import(stringr)
 import(tidyr)
 importFrom(dbplyr,sql_render)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,case_when)
-importFrom(dplyr,mutate)
-importFrom(dplyr,select)
-importFrom(jsonlite,flatten)
-importFrom(jsonlite,fromJSON)
-importFrom(jsonlite,write_json)
+importFrom(dplyr,
+  "%>%",
+  case_when,
+  mutate,
+  select
+)
+importFrom(jsonlite,
+  flatten,
+  fromJSON,
+  write_json
+)
 importFrom(lifecycle,deprecated)
 importFrom(magrittr,"%>%")
-importFrom(purrr,compact)
-importFrom(purrr,imap)
-importFrom(purrr,keep)
-importFrom(purrr,list_flatten)
-importFrom(purrr,list_rbind)
-importFrom(purrr,map)
-importFrom(purrr,map2)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_lgl)
-importFrom(purrr,pluck)
-importFrom(purrr,set_names)
-importFrom(rlang,arg_match)
-importFrom(rlang,is_missing)
-importFrom(rlang,maybe_missing)
+importFrom(purrr,
+  compact,
+  imap,
+  keep,
+  list_flatten,
+  list_rbind,
+  map,
+  map2,
+  map_chr,
+  map_lgl,
+  pluck,
+  set_names
+)
+importFrom(rlang,
+  arg_match,
+  is_missing,
+  maybe_missing
+)
 importFrom(scales,rescale)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_remove_all)
-importFrom(stringr,str_split)
-importFrom(stringr,str_split_i)
-importFrom(stringr,str_sub)
+importFrom(stringr,
+  str_detect,
+  str_remove_all,
+  str_split,
+  str_split_i,
+  str_sub
+)
 importFrom(tibble,enframe)

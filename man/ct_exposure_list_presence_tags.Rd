@@ -20,4 +20,3 @@ ct_exposure_list_presence_tags()
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -40,4 +40,3 @@ epi_ecosar_surfactant(type = "50-00-0")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

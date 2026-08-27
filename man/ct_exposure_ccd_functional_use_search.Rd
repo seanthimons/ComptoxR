@@ -23,4 +23,3 @@ ct_exposure_ccd_functional_use_search(dtxsid = "DTXSID0020232")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

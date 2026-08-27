@@ -23,4 +23,3 @@ ct_chemical_extra_data_search(dtxsid = "DTXSID101296374")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

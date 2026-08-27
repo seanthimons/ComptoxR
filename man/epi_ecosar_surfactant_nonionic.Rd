@@ -55,4 +55,3 @@ epi_ecosar_surfactant_nonionic(mainCarbons = "0")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

@@ -23,4 +23,3 @@ ct_chemical_msready_search_by_formula(formula = "C16H24N2O5S")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-

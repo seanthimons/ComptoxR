@@ -23,4 +23,3 @@ ct_chemical_extra_data_search_bulk(query = "DTXSID1024122")
 \section{API stage}{
   This wrapper was generated from the \strong{public} API schema.
 }
-
