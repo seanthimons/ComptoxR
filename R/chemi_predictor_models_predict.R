@@ -87,7 +87,6 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
 #' @param chemicals Optional parameter
 #' @return Returns a tibble with results
 #' @apiStage staging
-#' @export
 #'
 #' @examples
 #' \dontrun{
