@@ -10,6 +10,11 @@ on:
       - '**/*.md'
       - '.github/**'
       - '.planning/**'
+      - 'DESCRIPTION'
+      - '_pkgdown.yml'
+      - 'NAMESPACE'
+      - 'man/**'
+      - 'vignettes/**'
   pull_request:
     branches: [main, dev]
     paths-ignore:
@@ -17,6 +22,11 @@ on:
       - '**/*.md'
       - '.github/**'
       - '.planning/**'
+      - 'DESCRIPTION'
+      - '_pkgdown.yml'
+      - 'NAMESPACE'
+      - 'man/**'
+      - 'vignettes/**'
 
 jobs:
   test-coverage:
