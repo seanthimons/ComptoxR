@@ -54,10 +54,18 @@ jobs:
           r-version: ${{ matrix.r-version }}
           use-public-rspm: true
 
+      - name: Install macOS build dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          echo "CPATH=$(brew --prefix gettext)/include" >> "$GITHUB_ENV"
+          echo "LIBRARY_PATH=$(brew --prefix gettext)/lib" >> "$GITHUB_ENV"
+
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
+            any::devtools
             any::rcmdcheck
             any::covr
             any::testthat
