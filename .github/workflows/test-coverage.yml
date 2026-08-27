@@ -57,7 +57,7 @@ jobs:
       - name: Install macOS build dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install gettext
+          brew install gettext libgit2
           echo "CPATH=$(brew --prefix gettext)/include" >> "$GITHUB_ENV"
           echo "LIBRARY_PATH=$(brew --prefix gettext)/lib" >> "$GITHUB_ENV"
 
