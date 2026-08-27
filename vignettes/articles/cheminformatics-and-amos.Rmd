@@ -1,0 +1,143 @@
+---
+title: "Cheminformatics search and AMOS"
+description: >
+  Search structures, run available models, cluster chemicals, and use AMOS classifications.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Cheminformatics searches have different input contracts and result shapes.
+Start with one search type and inspect its result before you combine searches.
+
+## Search chemical space
+
+```{r}
+library(ComptoxR)
+library(dplyr)
+
+exact <- chemi_search("DTXSID7020182", search_type = "exact")
+similar <- chemi_search(
+  "DTXSID7020182",
+  search_type = "similar",
+  min_similarity = 0.9
+)
+substructure <- chemi_search("c1ccccc1", search_type = "substructure")
+mass <- chemi_search(
+  search_type = "mass",
+  mass_type = "mono",
+  min_mass = 77,
+  max_mass = 79
+)
+features <- chemi_search(
+  search_type = "features",
+  element_include = c("C", "H"),
+  exclude_all_others = TRUE
+)
+```
+
+Exact, similarity, and substructure searches require a structure or chemical
+query. Mass search requires a mass type and range. Feature search uses element
+and structure flags.
+
+Hazard search uses service categories instead of a structure query.
+
+```{r}
+hazard <- chemi_search(
+  search_type = "hazard",
+  hazard_name = "cancer",
+  min_toxicity = "H",
+  min_authority = "auth"
+)
+```
+
+## Predict and cluster
+
+```{r}
+prediction <- chemi_predictor_models_predict(
+  model_id = 1065,
+  identifier = "DTXSID7020182"
+)
+
+clusters <- chemi_resolver_getsimilaritymap(
+  c("DTXSID7020182", "DTXSID0020319", "DTXSID9020243"),
+  idType = "DTXSID",
+  format = "cluster"
+)
+plot(clusters$hc)
+```
+
+Model IDs belong to models deployed by the service. A known ID can be removed,
+replaced, or unavailable on the selected server. Record the model ID and
+service environment with each prediction. Treat availability as
+service-controlled, not as a package guarantee.
+
+## Inspect AMOS analytical methods
+
+AMOS method discovery returns analytical method records. It is not a chemical
+lookup.
+
+```{r}
+methods <- chemi_amos_method_list()
+glimpse(methods)
+head(methods)
+```
+
+Do not use `chemi_amos_method_with_spectra()` for a compound lookup. It requires
+an AMOS method or spectrum record ID.
+
+## Move through ClassyFire categories
+
+First get the four ClassyFire levels for benzene.
+
+```{r}
+classification <-
+  chemi_amos_get_classification_for_dtxsid("DTXSID7020182") |>
+  bind_rows()
+
+classification |>
+  select(any_of(c("kingdom", "superklass", "klass", "subklass")))
+```
+
+Then enumerate valid child categories. Use `klass`; `class` is not a supported
+request parameter.
+
+```{r}
+classes <- chemi_amos_next_level_classification(
+  kingdom = classification$kingdom[[1]],
+  superklass = classification$superklass[[1]]
+)
+
+subclasses <- chemi_amos_next_level_classification(
+  kingdom = classification$kingdom[[1]],
+  superklass = classification$superklass[[1]],
+  klass = classification$klass[[1]]
+)
+```
+
+Move from one ClassyFire category back to matching substances.
+
+```{r}
+class_members <- chemi_amos_substances_for_classification(
+  kingdom = classification$kingdom[[1]],
+  superklass = classification$superklass[[1]],
+  klass = classification$klass[[1]],
+  subklass = classification$subklass[[1]]
+)
+```
+
+Request ClassyFire fields for several DTXSIDs with the AMOS batch workflow.
+
+```{r}
+amos_batch <- chemi_amos_batch(
+  dtxsids = c("DTXSID7020182", "DTXSID0020319", "DTXSID9020243"),
+  include_classyfire = TRUE
+)
+glimpse(amos_batch)
+```
+
+ClassyFire describes chemical structure classes. ChemFuncT describes
+functional uses. Keep the two classification systems separate. Advanced users
+can query ChemFuncT with
+`chemi_amos_functional_uses_for_dtxsid("DTXSID7020182")`.

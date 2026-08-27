@@ -1,0 +1,57 @@
+url: https://seanthimons.github.io/ComptoxR/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [github]
+  components:
+    intro:
+      text: Get started
+      href: articles/getting-started.html
+
+articles:
+  - title: Learn ComptoxR
+    navbar: Articles
+    contents:
+      - articles/getting-started
+      - articles/chemical-search
+      - articles/batch-processing
+      - articles/hazard-and-toxicity
+      - articles/cheminformatics-and-amos
+      - articles/epi-suite
+      - articles/ecotox
+      - articles/risk-evidence-compilation
+      - articles/local-databases
+  - title: Contributor guides
+    navbar: Articles
+    contents:
+      - articles/development-lifecycle
+
+reference:
+  - title: CompTox Chemical Dashboard
+    contents:
+      - starts_with("ct_")
+  - title: Cheminformatics and chemical services
+    contents:
+      - starts_with("chemi_")
+  - title: EPA databases
+    contents:
+      - starts_with("dss_")
+      - starts_with("eco_")
+      - starts_with("toxval_")
+      - starts_with("epi_")
+      - starts_with("genra_")
+  - title: PubChem and utilities
+    contents:
+      - starts_with("pubchem_")
+      - starts_with("util_")
+      - run_setup
+      - run_debug
+      - run_verbose
+      - batch_limit
+  - title: Other exported functions
+    contents:
+      - matches(".")

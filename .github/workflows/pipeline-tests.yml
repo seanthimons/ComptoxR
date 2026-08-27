@@ -9,6 +9,11 @@ on:
       - '**/*.md'
       - '.github/**'
       - '.planning/**'
+      - 'DESCRIPTION'
+      - '_pkgdown.yml'
+      - 'NAMESPACE'
+      - 'man/**'
+      - 'vignettes/**'
   workflow_dispatch:
     inputs:
       rerecord_cassettes:

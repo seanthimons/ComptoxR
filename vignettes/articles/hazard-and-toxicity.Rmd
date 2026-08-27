@@ -1,0 +1,85 @@
+---
+title: "Hazard data and ToxValDB"
+description: >
+  Use fast CCD hazard endpoints, then deepen the search with local ToxValDB data.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+The CCD hazard endpoints are the fast API path. ToxValDB is a separate local
+DuckDB database or a service that you host. It is not another public CCD
+endpoint.
+
+## Start with CCD hazard endpoints
+
+```{r}
+library(ComptoxR)
+library(dplyr)
+
+dtxsid <- "DTXSID7020182"
+
+ccd_toxval <- ct_hazard_toxval_search(dtxsid)
+ccd_toxval |>
+  select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
+         toxvalNumeric, toxvalUnits, speciesCommon, studyType,
+         quality, qcCategory)
+
+ct_hazard_genetox_search(dtxsid)
+ct_hazard_cancer_search(dtxsid)
+ct_hazard_toxref_data_search(dtxsid)
+```
+
+Use the CCD path for quick profile work and bulk screening. Keep source, value
+type, units, species, and quality fields.
+
+## Install and inspect ToxValDB
+
+```{r}
+toxval_install()
+toxval_health()
+toxval_tables()
+toxval_fields("toxval")
+head(toxval_sources())
+```
+
+`toxval_install()` downloads and configures the local database. These commands
+can use a substantial download and are disabled during the site build. A
+self-hosted Plumber service provides the same high-level query workflow.
+
+## Search and filter local records
+
+`toxval_search()` is the short DTXSID path.
+
+```{r}
+local_values <- toxval_search(dtxsid)
+local_values |>
+  select(dtxsid, source, toxval_type, toxval_numeric, toxval_units,
+         species_common, qc_status, qc_category)
+```
+
+Use `toxval_results()` for focused filters.
+
+```{r}
+iris_oral <- toxval_results(
+  dtxsid = dtxsid,
+  source = "IRIS",
+  toxval_type = "RfD",
+  species = "Human",
+  qc_status = "pass"
+)
+
+iris_oral |>
+  select(dtxsid, source, toxval_type, toxval_numeric, toxval_units,
+         species_common, study_type, qc_status, qc_category)
+```
+
+The filters accept vectors. `qc_status = "pass_or_not_determined"` is the
+default. Use `"pass"` for accepted rows only or `"all"` when you must review
+failed QC rows. Keep failed rows labeled; do not silently mix them with passed
+records.
+
+ToxValDB deepens the hazard review with local, filterable records. It does not
+replace the identity, property, fate, exposure, or bioactivity parts of the
+[CCD chemical profile](chemical-search.html).

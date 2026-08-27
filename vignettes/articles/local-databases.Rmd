@@ -1,0 +1,63 @@
+---
+title: "Local data and development"
+description: >
+  Install local EPA data, inspect schemas, and find contributor guidance.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+Local database copies support repeated queries, offline work, and controlled
+data extraction. Downloads can be large. Install only the database that your
+work needs.
+
+## Install local databases
+
+```{r}
+library(ComptoxR)
+
+dss_install()
+eco_install()
+toxval_install()
+```
+
+Use `source`, `tag`, or `overwrite` only when you need a specific release or
+must replace an existing copy. See each function reference for its current
+options.
+
+## Check health and schema before querying
+
+```{r}
+eco_health()
+eco_tables()
+eco_fields("results")
+eco_inventory()
+
+toxval_health()
+toxval_tables()
+toxval_fields("toxval")
+toxval_sources()
+```
+
+The health result identifies the configured local data source. Table and field
+functions help you confirm the schema before a large query.
+
+## Use the focused articles
+
+See [Hazard Data and ToxValDB](hazard-and-toxicity.html) for local toxicity
+values and [ECOTOX](ecotox.html) for ecological effects. DSSTox provides local
+chemical search and resolution:
+
+```{r}
+dss_search("benzene", limit = 20)
+dss_resolve("71-43-2")
+```
+
+## Develop ComptoxR
+
+Read the standalone [development lifecycle](development-lifecycle.html) before
+changing the package. It describes branches, checks, continuous integration,
+and releases. Also read `CONTRIBUTING.md` in the repository root. Do not record
+API cassettes unless the task requires production traffic and you can run the
+cassette safety checks.

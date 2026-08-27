@@ -1,0 +1,172 @@
+---
+title: "Building a CCD chemical profile"
+description: >
+  Build a task-oriented CompTox profile for one chemical.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+This article builds one Chemical Dashboard profile for benzene. It uses
+`DTXSID7020182` as the join key. Keep units, sources, and evidence categories
+when you combine results.
+
+## Start with chemical identity
+
+```{r}
+library(ComptoxR)
+library(dplyr)
+
+dtxsid <- "DTXSID7020182"
+detail <- ct_chemical_detail_search(dtxsid)
+
+glimpse(detail)
+detail |>
+  select(dtxsid, preferredName, casrn, molFormula, averageMass, smiles)
+```
+
+A verified production response has one row and includes `dtxsid`,
+`preferredName`, `casrn`, `molFormula`, `averageMass`, and `smiles`, with
+additional identifiers and Dashboard summary fields.
+
+## Add physical-chemical properties
+
+Property names are service values. Inspect them before you build a large
+query.
+
+```{r}
+ct_chemical_property_experimental_name()
+ct_chemical_property_predicted_name()
+
+water_summary <- ct_chemical_property_summary_search(
+  dtxsid,
+  propName = "Water Solubility"
+)
+water_experimental <- ct_chemical_property_summary_experimental_search(
+  dtxsid,
+  propName = "Water Solubility"
+)
+water_predicted <- ct_chemical_property_summary_predicted_search(
+  dtxsid,
+  propName = "Water Solubility"
+)
+
+water_summary |>
+  select(propName, unit, experimentalMedian, experimentalCount,
+         predictedMedian, predictedCount)
+water_experimental |> select(propValue, sourceName, publicSourceUrl)
+water_predicted |> select(propValue, sourceName, qmrfUrl)
+```
+
+The summary combines counts and simple statistics. Experimental rows give
+reported values and sources. Predicted rows give model values and, when
+available, model-report links. Do not compare values until you confirm their
+units and basis.
+
+## Add environmental fate
+
+The fate wrappers use the same `propName` pattern. Some chemicals have only
+experimental or only predicted evidence.
+
+```{r}
+bcf_summary <- ct_chemical_fate_summary_search(
+  dtxsid,
+  propName = "Bioconcentration Factor"
+)
+bcf_experimental <- ct_chemical_fate_experimental_search(
+  dtxsid,
+  propName = "Bioconcentration Factor"
+)
+bcf_predicted <- ct_chemical_fate_predicted_search(
+  dtxsid,
+  propName = "Bioconcentration Factor"
+)
+
+bcf_summary |>
+  select(propName, unit, experimentalMedian, experimentalCount,
+         predictedMedian, predictedCount)
+bcf_experimental |> select(propValue, sourceName, publicSourceUrl)
+bcf_predicted |> select(propValue, sourceName, qmrfUrl)
+```
+
+Other current fate property names include `"Biodeg. Half-Life"`,
+`"Atmos. Hydroxylation Rate"`, and `"Soil Adsorp. Coeff. (Koc)"`.
+
+## Add hazard evidence
+
+The CCD ToxVal endpoint is a fast public API path. Select a small set of fields
+and keep the evidence metadata.
+
+```{r}
+toxval <- ct_hazard_toxval_search(dtxsid)
+
+toxval |>
+  filter(toxvalTypeSuperCategory %in% c("Point of Departure", "Reference Value")) |>
+  select(dtxsid, source, toxvalType, toxvalTypeSuperCategory,
+         toxvalNumeric, toxvalUnits, speciesCommon, studyType,
+         quality, qcCategory)
+
+genetox <- ct_hazard_genetox_search(dtxsid)
+cancer <- ct_hazard_cancer_search(dtxsid)
+toxref <- ct_hazard_toxref_data_search(dtxsid)
+```
+
+`toxvalNumeric` has meaning only with `toxvalUnits`. `toxvalType` states the
+value type, while `toxvalTypeSuperCategory` groups evidence such as points of
+departure and reference values. Source, species, study type, quality, and QC
+fields help a reviewer judge the evidence.
+
+## Retrieve IVIVE parameters
+
+```{r}
+ivive <- ct_hazard_adme_ivive_search(dtxsid)
+ivive |>
+  select(dtxsid, description, measured, predicted, unit, model,
+         species, reference)
+```
+
+The current response separates measured and predicted values. Keep `unit`,
+`model`, `species`, and `reference` with each parameter.
+
+## Add exposure estimates
+
+SEEM general exposure is the primary compact exposure result.
+
+```{r}
+seem <- ct_exposure_seem_general_search(dtxsid)
+seem |>
+  select(dtxsid, productionVolume, units, starts_with("probability"))
+
+production <- ct_exposure_ccd_production_volume_search(dtxsid)
+production |> select(dtxsid, name, amount)
+```
+
+The SEEM probabilities describe exposure-use categories. They are screening
+estimates, not measured individual exposure. Production-volume records are a
+short supporting line of evidence.
+
+## Start compact, then inspect assay records
+
+```{r}
+bioactivity_summary <-
+  ct_bioactivity_data_summary_search_by_dtxsid(dtxsid)
+bioactivity_summary |>
+  select(dtxsid, activeMc, totalMc, activeSc, totalSc, ntested, nhit,
+         cytotoxMedianUm)
+
+bioactivity_detail <- ct_bioactivity_data_search_by_dtxsid(dtxsid)
+glimpse(bioactivity_detail)
+```
+
+The summary gives assay counts and cytotoxicity context before you work with
+detailed assay records.
+
+## Know which calls are bulk
+
+Use bulk wrappers for chemical detail, experimental and predicted properties,
+fate records, CCD ToxVal, cancer, genetox, SEEM general exposure, and detailed
+bioactivity data. The property and fate summary wrappers, IVIVE, production
+volume, and bioactivity summary wrappers require one DTXSID at a time. Use a
+small, rate-conscious iteration only when no bulk wrapper exists. The next
+article shows both patterns.
