@@ -10,11 +10,14 @@
 #' @return Invisible TRUE on success
 #' @export
 source_pipeline_files <- function() {
+  pkg_root <- normalizePath(testthat::test_path("..", ".."), mustWork = TRUE)
+  testthat::skip_if_not(
+    dir.exists(file.path(pkg_root, "dev", "endpoint_eval")),
+    "Maintainer-only test requires dev/endpoint_eval/; dev/ is excluded from CRAN source tarballs"
+  )
+
   tryCatch(
     {
-      # Get package root directory
-      pkg_root <- here::here()
-
       # Define pipeline files in dependency order
       pipeline_files <- c(
         "dev/endpoint_eval/00_config.R", # No dependencies
