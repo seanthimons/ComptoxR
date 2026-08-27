@@ -6,13 +6,25 @@ on:
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
+      - '.github/**'
       - '.planning/**'
+      - 'DESCRIPTION'
+      - '_pkgdown.yml'
+      - 'NAMESPACE'
+      - 'man/**'
+      - 'vignettes/**'
   pull_request:
     branches: [main]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
+      - '.github/**'
       - '.planning/**'
+      - 'DESCRIPTION'
+      - '_pkgdown.yml'
+      - 'NAMESPACE'
+      - 'man/**'
+      - 'vignettes/**'
   workflow_dispatch:
 
 permissions:

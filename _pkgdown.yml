@@ -12,6 +12,24 @@ navbar:
       text: Get started
       href: articles/getting-started.html
 
+articles:
+  - title: Learn ComptoxR
+    navbar: Articles
+    contents:
+      - articles/getting-started
+      - articles/chemical-search
+      - articles/batch-processing
+      - articles/hazard-and-toxicity
+      - articles/cheminformatics-and-amos
+      - articles/epi-suite
+      - articles/ecotox
+      - articles/risk-evidence-compilation
+      - articles/local-databases
+  - title: Contributor guides
+    navbar: Articles
+    contents:
+      - articles/development-lifecycle
+
 reference:
   - title: CompTox Chemical Dashboard
     contents:

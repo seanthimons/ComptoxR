@@ -1,0 +1,58 @@
+---
+title: "ECOTOX"
+description: >
+  Install local ECOTOX data and run one focused ecological-effects query.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+The ECOTOX workflow uses a local DuckDB database or a service that you host.
+Install the data once, then inspect its health and schema.
+
+## Install and inspect ECOTOX
+
+```{r}
+library(ComptoxR)
+library(dplyr)
+
+eco_install()
+eco_health()
+eco_tables()
+eco_fields("results")
+eco_inventory()
+eco_species("rainbow trout", field = "common_name")
+```
+
+These calls can use a large local download, so site builds do not run them.
+
+## Run a focused query
+
+Filter by chemical, species, and endpoint in `eco_results()`. Request detailed
+life-stage fields, then filter life stage in R.
+
+```{r}
+trout <- eco_results(
+  casrn = "71-43-2",
+  common_name = "Rainbow trout",
+  endpoint = "LC50",
+  lifestage_details = TRUE
+) |>
+  filter(harmonized_life_stage == "Juvenile") |>
+  select(test_cas, common_name, latin_name, endpoint,
+         harmonized_life_stage, final_conc, obs_duration,
+         final_obs_duration)
+```
+
+`eco_results()` does not have a direct life-stage filter argument. The
+`lifestage_details = TRUE` result supplies harmonized fields for a clear
+post-query filter. Keep concentration and duration units from the full result
+when you report values.
+
+## Advanced query design
+
+Before a complex query, inspect `eco_fields()` for the current table names and
+columns. Full ECOTOX query design can include effect groups, exposure types,
+taxonomic joins, unit conversions, and study-level joins. Those larger joins
+are outside this focused first workflow.

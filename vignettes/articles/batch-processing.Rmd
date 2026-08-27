@@ -1,59 +1,130 @@
 ---
-title: "Process batches and inspect requests"
+title: "Chemical lists and bulk workflows"
 description: >
-  Query multiple chemicals and troubleshoot requests safely.
+  Discover lists, resolve identifiers, preserve failures, and use bulk endpoints.
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
-ComptoxR accepts vectors of identifiers. Bulk functions and the package batch
-settings help process larger lists without writing a request loop yourself.
+Bulk work is most reliable when you keep the original identifier and use the
+DTXSID as the join key after resolution.
 
-## Start with a small vector
+## Discover and retrieve CCD lists
 
 ```{r}
 library(ComptoxR)
+library(dplyr)
 
-ids <- c("DTXSID7020182", "DTXSID7020192")
-results <- ct_chemical_detail_search_bulk(ids)
-results
+lists <- ct_chemical_list_all()
+lists |>
+  filter(grepl("fungic", paste(listName, label, shortDescription),
+               ignore.case = TRUE)) |>
+  select(listName, label, type, chemicalCount)
+
+named_list <- ct_chemical_list_search_by_name("S11_SWISSPEST")
+members <- ct_chemical_list_chemicals_search_by_listname("S11_SWISSPEST")
+members |> select(any_of(c("dtxsid", "preferredName", "casrn")))
 ```
 
-Use the bulk function for the service you need:
+`ct_chemical_list_search_by_name()` uses a Dashboard list name. Use the full
+list table for text discovery, then pass a selected `listName` to the two
+specific functions.
+
+## Resolve names and CAS numbers without losing failures
 
 ```{r}
-hazards <- chemi_hazard_bulk(ids)
-toxicity <- ct_hazard_cancer_search_bulk(ids)
+input <- tibble(
+  input_id = seq_len(4),
+  identifier = c("benzene", "108-88-3", "not-a-real-chemical", "benzene")
+)
+
+resolved <- ct_chemical_search_equal_bulk(input$identifier)
+
+resolution <- input |>
+  left_join(
+    resolved,
+    by = c("identifier" = "searchValue"),
+    relationship = "many-to-many"
+  ) |>
+  mutate(
+    match_status = case_when(
+      is.na(dtxsid) ~ "unmatched",
+      duplicated(input_id) | duplicated(input_id, fromLast = TRUE) ~ "ambiguous",
+      TRUE ~ "matched"
+    )
+  )
+
+resolution |>
+  select(input_id, identifier, dtxsid, preferredName, casrn, match_status)
 ```
 
-## Check the batch limit
+The input row number preserves duplicates. The left join preserves unmatched
+identifiers. More than one result for one `input_id` is explicit ambiguity.
+Do not join endpoint data by name or CAS number after this step.
 
-The package has a default batch limit for APIs that accept batched requests.
-Inspect or change it for the current session:
+## Use the available bulk wrappers
 
 ```{r}
-batch_limit()
-batch_limit(100)
+ids <- resolution |>
+  filter(match_status == "matched") |>
+  distinct(dtxsid) |>
+  pull()
+
+if (!length(ids)) stop("No unambiguous DTXSIDs were resolved.")
+
+details <- ct_chemical_detail_search_bulk(ids)
+property_exp <- ct_chemical_property_experimental_search_bulk(ids)
+property_pred <- ct_chemical_property_predicted_search_bulk(ids)
+fate <- ct_chemical_fate_search_bulk(ids)
+exposure <- ct_exposure_seem_general_search_bulk(ids)
+hazard <- ct_hazard_toxval_search_bulk(ids)
+cancer <- ct_hazard_cancer_search_bulk(ids)
+genetox <- ct_hazard_genetox_search_bulk(ids)
+bioactivity <- ct_bioactivity_data_search_bulk(ids)
 ```
 
-Use a limit supported by the service and consider the size of the returned
-data when processing large lists.
+Each result can be joined to `resolution` by `dtxsid`. Empty endpoint results
+must remain valid empty tables; do not treat them as proof that the chemical
+has no hazard or exposure.
 
-## Inspect a request without sending it
+## Reverse the workflow
 
-Debug mode builds dry-run requests. This is useful for checking an endpoint or
-payload before using a real API key:
+Endpoint results can define a new chemical set.
 
 ```{r}
-run_debug(TRUE)
-ct_chemical_detail_search("DTXSID7020182")
-run_debug(FALSE)
+selected_ids <- hazard |>
+  filter(toxvalTypeSuperCategory == "Reference Value", !is.na(toxvalNumeric)) |>
+  distinct(dtxsid) |>
+  pull()
+
+selected_details <- ct_chemical_detail_search_bulk(selected_ids)
+selected_exposure <- ct_exposure_seem_general_search_bulk(selected_ids)
 ```
 
-Verbose mode reports progress while a request is running:
+## Iterate only when no bulk wrapper exists
+
+IVIVE has no bulk wrapper. Property summaries, fate summaries, production
+volume, and bioactivity summaries also require iteration.
 
 ```{r}
-run_verbose(TRUE)
+ivive <- lapply(ids, ct_hazard_adme_ivive_search) |>
+  bind_rows()
 ```
+
+EPI Suite also has no package-level bulk wrapper. Keep any loop small and
+rate-conscious.
+
+```{r}
+epi_results <- lapply(
+  c("71-43-2", "108-88-3"),
+  function(cas) {
+    Sys.sleep(1)
+    epi_submit(cas = cas, modules = "logKow,biodegradationRate")
+  }
+)
+```
+
+Use `batch_limit()` only for endpoints that accept package-managed batches.
+It does not turn a single-chemical endpoint into a bulk endpoint.

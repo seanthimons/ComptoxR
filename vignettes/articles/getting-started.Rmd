@@ -57,27 +57,38 @@ run_setup()
 
 Do not put an API key directly in a script that you share or commit.
 
-## Retrieve a chemical record
+## Retrieve your first chemical record
 
 Many functions accept a DTXSID, CAS number, chemical name, or another chemical
 identifier. For example:
 
 ```{r}
-result <- ct_chemical_detail_search("DTXSID7020182")
-result
+benzene <- ct_chemical_detail_search("DTXSID7020182")
+dplyr::glimpse(benzene)
 ```
 
-Several identifiers can be queried together:
+The DTXSID is the stable join key for the workflows in this series. For several
+identifiers, use the bulk function:
 
 ```{r}
-result <- ct_chemical_detail_search(
-  c("DTXSID7020182", "DTXSID7020183")
+chemicals <- ct_chemical_detail_search_bulk(
+  query = c("DTXSID7020182", "DTXSID9020243")
 )
-result
+dplyr::glimpse(chemicals)
 ```
 
-The returned object is normally a tibble, which can be inspected, filtered,
-and saved with familiar R tools.
+The returned object is normally a tibble. Use standard R tools to inspect the
+columns and rows:
+
+```{r}
+head(chemicals)
+```
+
+Use `ct_chemical_detail_search()` when you need one chemical record. Use
+`ct_chemical_detail_search_bulk()` for a vector of identifiers.
+
+Continue with [Building a CCD Chemical Profile](chemical-search.html) to add
+properties, fate, hazard, exposure, and bioactivity evidence.
 
 ## Find the right function
 
