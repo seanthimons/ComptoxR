@@ -1,0 +1,109 @@
+---
+title: "Getting started with ComptoxR"
+description: >
+  Install ComptoxR, configure an API key, and retrieve chemical data.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+ComptoxR provides R functions for querying the U.S. EPA CompTox Chemical
+Dashboard and related services. This guide assumes that you are new to R
+packages or API-based data access.
+
+## Install ComptoxR
+
+Run this once in the R console:
+
+```{r}
+install.packages("pak")
+pak::pkg_install("seanthimons/ComptoxR")
+```
+
+Load the package whenever you start a new R session:
+
+```{r}
+library(ComptoxR)
+```
+
+## Configure access
+
+Some services require an API key. Request one by emailing
+`ccte_api@epa.gov` with the subject `API Key Request`.
+
+For a persistent setup, open your user `.Renviron` file:
+
+```{r}
+file.edit("~/.Renviron")
+```
+
+Add the following line, replacing the placeholder with your key:
+
+```text
+ctx_api_key=YOUR_KEY_HERE
+```
+
+Save the file and restart R. Then check the setup:
+
+```{r}
+ct_api_key()
+run_setup()
+```
+
+Do not put an API key directly in a script that you share or commit.
+
+## Retrieve a chemical record
+
+Many functions accept a DTXSID, CAS number, chemical name, or another chemical
+identifier. For example:
+
+```{r}
+result <- ct_chemical_detail_search("DTXSID7020182")
+result
+```
+
+Several identifiers can be queried together:
+
+```{r}
+result <- ct_chemical_detail_search(
+  c("DTXSID7020182", "DTXSID7020183")
+)
+result
+```
+
+The returned object is normally a tibble, which can be inspected, filtered,
+and saved with familiar R tools.
+
+## Find the right function
+
+The [reference](../reference/index.html) lists all exported functions. The
+function names use prefixes to show the service family:
+
+- `ct_` functions query CompTox Chemical Dashboard services.
+- `chemi_` functions query cheminformatics and chemical-service APIs.
+- `dss_`, `eco_`, and `toxval_` functions work with local EPA databases.
+- `epi_` and `genra_` functions access prediction services.
+
+Start with a single chemical and a small result. Then move to batch functions
+when the single-query version works for your data.
+
+## Troubleshooting
+
+Use verbose mode to see progress:
+
+```{r}
+run_verbose(TRUE)
+```
+
+Use debug mode to inspect a request without sending it:
+
+```{r}
+run_debug(TRUE)
+```
+
+Both settings apply only to the current R session.

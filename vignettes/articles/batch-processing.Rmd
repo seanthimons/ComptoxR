@@ -1,0 +1,59 @@
+---
+title: "Process batches and inspect requests"
+description: >
+  Query multiple chemicals and troubleshoot requests safely.
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+ComptoxR accepts vectors of identifiers. Bulk functions and the package batch
+settings help process larger lists without writing a request loop yourself.
+
+## Start with a small vector
+
+```{r}
+library(ComptoxR)
+
+ids <- c("DTXSID7020182", "DTXSID7020192")
+results <- ct_chemical_detail_search_bulk(ids)
+results
+```
+
+Use the bulk function for the service you need:
+
+```{r}
+hazards <- chemi_hazard_bulk(ids)
+toxicity <- ct_hazard_cancer_search_bulk(ids)
+```
+
+## Check the batch limit
+
+The package has a default batch limit for APIs that accept batched requests.
+Inspect or change it for the current session:
+
+```{r}
+batch_limit()
+batch_limit(100)
+```
+
+Use a limit supported by the service and consider the size of the returned
+data when processing large lists.
+
+## Inspect a request without sending it
+
+Debug mode builds dry-run requests. This is useful for checking an endpoint or
+payload before using a real API key:
+
+```{r}
+run_debug(TRUE)
+ct_chemical_detail_search("DTXSID7020182")
+run_debug(FALSE)
+```
+
+Verbose mode reports progress while a request is running:
+
+```{r}
+run_verbose(TRUE)
+```
