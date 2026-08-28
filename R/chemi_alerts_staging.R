@@ -21,34 +21,10 @@
 #' \dontrun{
 #' chemi_alerts_staging(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_alerts_staging <- function(
-  query,
-  idType = "AnyId",
-  options = NULL,
-  request.filesInfo = NULL,
-  request.options.alerts = NULL,
-  request.options.alertsInfo = NULL,
-  request.options.resolve = NULL
-) {
+chemi_alerts_staging <- function(query, idType = "AnyId", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.alertsInfo = NULL, request.options.resolve = NULL) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_alerts_staging",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `options` = options,
-        `request.filesInfo` = request.filesInfo,
-        `request.options.alerts` = request.options.alerts,
-        `request.options.alertsInfo` = request.options.alertsInfo,
-        `request.options.resolve` = request.options.resolve,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_alerts_staging", "pre_request", list(params = list(`query` = query, `idType` = idType, `options` = options, `request.filesInfo` = request.filesInfo, `request.options.alerts` = request.options.alerts, `request.options.alertsInfo` = request.options.alertsInfo, `request.options.resolve` = request.options.resolve, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -82,9 +58,7 @@ chemi_alerts_staging <- function(
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(options)) {
-    extra_options$options <- options
-  }
+  if (!is.null(options)) extra_options$options <- options
 
   result <- generic_chemi_request(
     query = query,

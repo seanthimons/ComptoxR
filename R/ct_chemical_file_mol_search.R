@@ -24,3 +24,5 @@ ct_chemical_file_mol_search <- function(dtxsid) {
 
   return(result)
 }
+
+

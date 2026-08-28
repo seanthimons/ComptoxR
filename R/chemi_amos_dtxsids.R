@@ -5,7 +5,7 @@
 #'
 #' @param dtxsids Array of DTXSIDs as strings.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples

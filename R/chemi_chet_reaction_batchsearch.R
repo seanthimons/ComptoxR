@@ -6,7 +6,7 @@
 #' @param dtxsids Required parameter
 #' @param search_level Required parameter. Options: chemical, reaction
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_batchsearch",
-    "pre_request",
-    list(params = list(`dtxsids` = dtxsids, `search_level` = search_level, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction_batchsearch", "pre_request", list(params = list(`dtxsids` = dtxsids, `search_level` = search_level, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

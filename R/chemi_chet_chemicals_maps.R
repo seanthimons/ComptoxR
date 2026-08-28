@@ -5,7 +5,7 @@
 #'
 #' @param chemid Optional parameter
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_chet_chemicals_maps <- function(chemid = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_maps",
-    "pre_request",
-    list(params = list(`chemid` = chemid, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_chemicals_maps", "pre_request", list(params = list(`chemid` = chemid, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_chet_chemicals_maps <- function(chemid = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(chemid)) {
-    options[['chemid']] <- chemid
-  }
-  result <- generic_request(
+  if (!is.null(chemid)) options[['chemid']] <- chemid
+    result <- generic_request(
     endpoint = "chemicals/maps",
     method = "GET",
     batch_limit = 0,

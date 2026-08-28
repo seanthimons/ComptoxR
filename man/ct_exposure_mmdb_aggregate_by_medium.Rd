@@ -4,7 +4,12 @@
 \alias{ct_exposure_mmdb_aggregate_by_medium}
 \title{Get Aggregate data by Medium}
 \usage{
-ct_exposure_mmdb_aggregate_by_medium(medium, pageNumber = 1, all_pages = TRUE)
+ct_exposure_mmdb_aggregate_by_medium(
+  medium,
+  pageNumber = 1,
+  all_pages = TRUE,
+  max_pages = 100
+)
 }
 \arguments{
 \item{medium}{harmonized medium}
@@ -12,6 +17,8 @@ ct_exposure_mmdb_aggregate_by_medium(medium, pageNumber = 1, all_pages = TRUE)
 \item{pageNumber}{Optional parameter (default: 1)}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a scalar value

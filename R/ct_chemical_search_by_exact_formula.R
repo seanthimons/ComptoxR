@@ -24,3 +24,5 @@ ct_chemical_search_by_exact_formula <- function(formula) {
 
   return(result)
 }
+
+

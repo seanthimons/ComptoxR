@@ -32,5 +32,5 @@ chemi_amos_for_document_ids(record_type = "DTXSID1024122")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

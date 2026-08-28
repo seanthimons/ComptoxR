@@ -7,9 +7,7 @@
             "type": "string"
           },
           "options": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "url": {
@@ -67,9 +65,7 @@
             "type": "string"
           },
           "options": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "type": {

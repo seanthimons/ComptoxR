@@ -6,7 +6,7 @@
 #' @param id Optional parameter
 #' @param searchtype Optional parameter
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_chet_reaction_reactionmap <- function(id = NULL, searchtype = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_reactionmap",
-    "pre_request",
-    list(params = list(`id` = id, `searchtype` = searchtype, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction_reactionmap", "pre_request", list(params = list(`id` = id, `searchtype` = searchtype, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_chet_reaction_reactionmap <- function(id = NULL, searchtype = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(id)) {
-    options[['id']] <- id
-  }
-  if (!is.null(searchtype)) {
-    options[['searchtype']] <- searchtype
-  }
-  result <- generic_request(
+  if (!is.null(id)) options[['id']] <- id
+  if (!is.null(searchtype)) options[['searchtype']] <- searchtype
+    result <- generic_request(
     endpoint = "reaction/reactionmap",
     method = "GET",
     batch_limit = 0,

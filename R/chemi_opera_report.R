@@ -6,7 +6,7 @@
 #' @param dtxsid DSSTox substance identifier
 #' @param modelId Dashboard model ID for the OPERA endpoint
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_opera_report <- function(dtxsid, modelId) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_opera_report",
-    "pre_request",
-    list(params = list(`dtxsid` = dtxsid, `modelId` = modelId, `server` = server))
-  )
+  req_data <- run_hook("chemi_opera_report", "pre_request", list(params = list(`dtxsid` = dtxsid, `modelId` = modelId, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_opera_report <- function(dtxsid, modelId) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(dtxsid)) {
-    options[['dtxsid']] <- dtxsid
-  }
-  if (!is.null(modelId)) {
-    options[['modelId']] <- modelId
-  }
-  result <- generic_request(
+  if (!is.null(dtxsid)) options[['dtxsid']] <- dtxsid
+  if (!is.null(modelId)) options[['modelId']] <- modelId
+    result <- generic_request(
     endpoint = "opera/report",
     method = "GET",
     batch_limit = 0,

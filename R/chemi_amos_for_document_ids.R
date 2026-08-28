@@ -8,33 +8,16 @@
 #' @param record_info_fields List of field names in search_info that are fields in the record_info table in PostgreSQL.
 #' @param table_fields List of field names in search_info that are fields in the fact_sheets table in PostgreSQL.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_amos_for_document_ids(record_type = "DTXSID1024122")
 #' }
-chemi_amos_for_document_ids <- function(
-  record_type,
-  search_info = NULL,
-  record_info_fields = NULL,
-  table_fields = NULL
-) {
+chemi_amos_for_document_ids <- function(record_type, search_info = NULL, record_info_fields = NULL, table_fields = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_for_document_ids",
-    "pre_request",
-    list(
-      params = list(
-        `record_type` = record_type,
-        `search_info` = search_info,
-        `record_info_fields` = record_info_fields,
-        `table_fields` = table_fields,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_for_document_ids", "pre_request", list(params = list(`record_type` = record_type, `search_info` = search_info, `record_info_fields` = record_info_fields, `table_fields` = table_fields, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -55,16 +38,10 @@ chemi_amos_for_document_ids <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(search_info)) {
-    options[['search_info']] <- search_info
-  }
-  if (!is.null(record_info_fields)) {
-    options[['record_info_fields']] <- record_info_fields
-  }
-  if (!is.null(table_fields)) {
-    options[['table_fields']] <- table_fields
-  }
-  result <- generic_chemi_request(
+  if (!is.null(search_info)) options[['search_info']] <- search_info
+  if (!is.null(record_info_fields)) options[['record_info_fields']] <- record_info_fields
+  if (!is.null(table_fields)) options[['table_fields']] <- table_fields
+    result <- generic_chemi_request(
     query = record_type,
     endpoint = "amos/search_for_document_ids/",
     options = options,

@@ -1,4 +1,4 @@
-#' Returns substance(s) that match a search term.
+#' Returns substance(s) that match a search term.  Since some substance names can have slashes in them, <path> is used
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -14,11 +14,7 @@
 #' }
 chemi_amos_get_substances_for_term <- function(search_term) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_get_substances_for_term",
-    "pre_request",
-    list(params = list(`search_term` = search_term, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_get_substances_for_term", "pre_request", list(params = list(`search_term` = search_term, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

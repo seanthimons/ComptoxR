@@ -14,11 +14,7 @@
 #' }
 chemi_amos_count_substances_in_ids <- function(internal_id_list = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_count_substances_in_ids",
-    "pre_request",
-    list(params = list(`internal_id_list` = internal_id_list, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_count_substances_in_ids", "pre_request", list(params = list(`internal_id_list` = internal_id_list, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

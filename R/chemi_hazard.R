@@ -16,11 +16,7 @@
 #' }
 chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_hazard",
-    "pre_request",
-    list(params = list(`query` = query, `full` = full, `format` = format, `server` = server))
-  )
+  req_data <- run_hook("chemi_hazard", "pre_request", list(params = list(`query` = query, `full` = full, `format` = format, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,13 +34,9 @@ chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw"
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(full)) {
-    options[['full']] <- full
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(full)) options[['full']] <- full
+    result <- generic_request(
     endpoint = "hazard",
     method = "GET",
     batch_limit = 0,
@@ -54,12 +46,8 @@ chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw"
     options = options
   )
 
-  result <- run_hook(
-    "chemi_hazard",
-    "post_response",
-    list(result = result, params = list(`query` = query, `full` = full, `format` = format))
-  )
-  # Additional post-processing can be added here
+    result <- run_hook("chemi_hazard", "post_response", list(result = result, params = list(`query` = query, `full` = full, `format` = format)))
+# Additional post-processing can be added here
 
   return(result)
 }
@@ -91,42 +79,10 @@ chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw"
 #' \dontrun{
 #' chemi_hazard_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_hazard_bulk <- function(
-  query,
-  idType = "AnyId",
-  empty = NULL,
-  options = NULL,
-  request.filesInfo = NULL,
-  request.options.analogsSearchType = NULL,
-  request.options.cts = NULL,
-  request.options.minSimilarity = NULL,
-  request.options.noRecords = NULL,
-  request.options.usePredictions = NULL,
-  format = c("compact", "tidy", "raw")
-) {
+chemi_hazard_bulk <- function(query, idType = "AnyId", empty = NULL, options = NULL, request.filesInfo = NULL, request.options.analogsSearchType = NULL, request.options.cts = NULL, request.options.minSimilarity = NULL, request.options.noRecords = NULL, request.options.usePredictions = NULL, format = c("compact", "tidy", "raw")) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_hazard_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `empty` = empty,
-        `options` = options,
-        `request.filesInfo` = request.filesInfo,
-        `request.options.analogsSearchType` = request.options.analogsSearchType,
-        `request.options.cts` = request.options.cts,
-        `request.options.minSimilarity` = request.options.minSimilarity,
-        `request.options.noRecords` = request.options.noRecords,
-        `request.options.usePredictions` = request.options.usePredictions,
-        `format` = format,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_hazard_bulk", "pre_request", list(params = list(`query` = query, `idType` = idType, `empty` = empty, `options` = options, `request.filesInfo` = request.filesInfo, `request.options.analogsSearchType` = request.options.analogsSearchType, `request.options.cts` = request.options.cts, `request.options.minSimilarity` = request.options.minSimilarity, `request.options.noRecords` = request.options.noRecords, `request.options.usePredictions` = request.options.usePredictions, `format` = format, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -172,12 +128,8 @@ chemi_hazard_bulk <- function(
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(empty)) {
-    extra_options$empty <- empty
-  }
-  if (!is.null(options)) {
-    extra_options$options <- options
-  }
+  if (!is.null(empty)) extra_options$empty <- empty
+  if (!is.null(options)) extra_options$options <- options
 
   result <- generic_chemi_request(
     query = query,
@@ -194,26 +146,7 @@ chemi_hazard_bulk <- function(
     server = server
   )
 
-  result <- run_hook(
-    "chemi_hazard_bulk",
-    "post_response",
-    list(
-      result = result,
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `empty` = empty,
-        `options` = options,
-        `request.filesInfo` = request.filesInfo,
-        `request.options.analogsSearchType` = request.options.analogsSearchType,
-        `request.options.cts` = request.options.cts,
-        `request.options.minSimilarity` = request.options.minSimilarity,
-        `request.options.noRecords` = request.options.noRecords,
-        `request.options.usePredictions` = request.options.usePredictions,
-        `format` = format
-      )
-    )
-  )
+  result <- run_hook("chemi_hazard_bulk", "post_response", list(result = result, params = list(`query` = query, `idType` = idType, `empty` = empty, `options` = options, `request.filesInfo` = request.filesInfo, `request.options.analogsSearchType` = request.options.analogsSearchType, `request.options.cts` = request.options.cts, `request.options.minSimilarity` = request.options.minSimilarity, `request.options.noRecords` = request.options.noRecords, `request.options.usePredictions` = request.options.usePredictions, `format` = format)))
   # Additional post-processing can be added here
 
   return(result)

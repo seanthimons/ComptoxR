@@ -2,12 +2,14 @@
 % Please edit documentation in R/epi_search.R
 \name{epi_search}
 \alias{epi_search}
-\title{Search chemicals}
+\title{Search embedded experimental data}
 \usage{
-epi_search(query)
+epi_search(query, limit = 20)
 }
 \arguments{
-\item{query}{Chemical name or CAS number to search for}
+\item{query}{Required parameter}
+
+\item{limit}{Optional parameter (default: 20)}
 }
 \value{
 Returns a tibble with results (array of objects)

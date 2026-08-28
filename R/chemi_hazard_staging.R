@@ -30,52 +30,10 @@
 #' \dontrun{
 #' chemi_hazard_bulk_staging(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_hazard_bulk_staging <- function(
-  query,
-  idType = "AnyId",
-  empty = NULL,
-  options = NULL,
-  request.filesInfo = NULL,
-  request.options.analogsSearchType = NULL,
-  request.options.authority = NULL,
-  request.options.cts = NULL,
-  request.options.fingerprintType = NULL,
-  request.options.hazardName = NULL,
-  request.options.maxNumber = NULL,
-  request.options.minNumber = NULL,
-  request.options.minSimilarity = NULL,
-  request.options.noRecords = NULL,
-  request.options.similarityType = NULL,
-  request.options.usePredictions = NULL
-) {
+chemi_hazard_bulk_staging <- function(query, idType = "AnyId", empty = NULL, options = NULL, request.filesInfo = NULL, request.options.analogsSearchType = NULL, request.options.authority = NULL, request.options.cts = NULL, request.options.fingerprintType = NULL, request.options.hazardName = NULL, request.options.maxNumber = NULL, request.options.minNumber = NULL, request.options.minSimilarity = NULL, request.options.noRecords = NULL, request.options.similarityType = NULL, request.options.usePredictions = NULL) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_hazard_bulk_staging",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `empty` = empty,
-        `options` = options,
-        `request.filesInfo` = request.filesInfo,
-        `request.options.analogsSearchType` = request.options.analogsSearchType,
-        `request.options.authority` = request.options.authority,
-        `request.options.cts` = request.options.cts,
-        `request.options.fingerprintType` = request.options.fingerprintType,
-        `request.options.hazardName` = request.options.hazardName,
-        `request.options.maxNumber` = request.options.maxNumber,
-        `request.options.minNumber` = request.options.minNumber,
-        `request.options.minSimilarity` = request.options.minSimilarity,
-        `request.options.noRecords` = request.options.noRecords,
-        `request.options.similarityType` = request.options.similarityType,
-        `request.options.usePredictions` = request.options.usePredictions,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_hazard_bulk_staging", "pre_request", list(params = list(`query` = query, `idType` = idType, `empty` = empty, `options` = options, `request.filesInfo` = request.filesInfo, `request.options.analogsSearchType` = request.options.analogsSearchType, `request.options.authority` = request.options.authority, `request.options.cts` = request.options.cts, `request.options.fingerprintType` = request.options.fingerprintType, `request.options.hazardName` = request.options.hazardName, `request.options.maxNumber` = request.options.maxNumber, `request.options.minNumber` = request.options.minNumber, `request.options.minSimilarity` = request.options.minSimilarity, `request.options.noRecords` = request.options.noRecords, `request.options.similarityType` = request.options.similarityType, `request.options.usePredictions` = request.options.usePredictions, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -136,12 +94,8 @@ chemi_hazard_bulk_staging <- function(
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(empty)) {
-    extra_options$empty <- empty
-  }
-  if (!is.null(options)) {
-    extra_options$options <- options
-  }
+  if (!is.null(empty)) extra_options$empty <- empty
+  if (!is.null(options)) extra_options$options <- options
 
   result <- generic_chemi_request(
     query = query,

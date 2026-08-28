@@ -111,3 +111,24 @@ test_that("apply removes only selected files within the endpoint prefix", {
   expect_true(file.exists(protected))
   expect_true(file.exists(adjacent))
 })
+
+test_that("schema updates rebuild experimental API wrappers", {
+  workflow <- testthat::test_path("..", "..", ".github", "workflows", "schema-check.yml")
+  testthat::skip_if_not(file.exists(workflow), "Maintainer-only test requires workflow files")
+
+  expect_true(any(grepl(
+    'remove_experimental_main(c("--apply", "--prefix=ct"))',
+    readLines(workflow, warn = FALSE),
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    'remove_experimental_main(c("--apply", "--prefix=chemi"))',
+    readLines(workflow, warn = FALSE),
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    'remove_experimental_main(c("--apply", "--prefix=epi"))',
+    readLines(workflow, warn = FALSE),
+    fixed = TRUE
+  )))
+})

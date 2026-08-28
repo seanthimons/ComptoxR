@@ -52,3 +52,5 @@ ct_chemical_synonym_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
+
+

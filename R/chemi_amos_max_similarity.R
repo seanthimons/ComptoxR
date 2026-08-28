@@ -1,4 +1,4 @@
-#' Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.
+#' Given a list of DTXSIDs and a list of mass spectra, return the highest similarity score for each combination of
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -16,28 +16,9 @@
 #' \dontrun{
 #' chemi_amos_max_similarity(da_window = "DTXSID1024122")
 #' }
-chemi_amos_max_similarity <- function(
-  da_window = NULL,
-  dtxsids = NULL,
-  ms_level = NULL,
-  ppm_window = NULL,
-  spectra = NULL
-) {
+chemi_amos_max_similarity <- function(da_window = NULL, dtxsids = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_max_similarity",
-    "pre_request",
-    list(
-      params = list(
-        `da_window` = da_window,
-        `dtxsids` = dtxsids,
-        `ms_level` = ms_level,
-        `ppm_window` = ppm_window,
-        `spectra` = spectra,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_max_similarity", "pre_request", list(params = list(`da_window` = da_window, `dtxsids` = dtxsids, `ms_level` = ms_level, `ppm_window` = ppm_window, `spectra` = spectra, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -61,18 +42,10 @@ chemi_amos_max_similarity <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(dtxsids)) {
-    options$dtxsids <- dtxsids
-  }
-  if (!is.null(ms_level)) {
-    options$ms_level <- ms_level
-  }
-  if (!is.null(ppm_window)) {
-    options$ppm_window <- ppm_window
-  }
-  if (!is.null(spectra)) {
-    options$spectra <- spectra
-  }
+  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
+  if (!is.null(ms_level)) options$ms_level <- ms_level
+  if (!is.null(ppm_window)) options$ppm_window <- ppm_window
+  if (!is.null(spectra)) options$spectra <- spectra
   result <- generic_chemi_request(
     query = da_window,
     endpoint = "amos/max_similarity_by_dtxsid/",

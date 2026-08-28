@@ -26,3 +26,5 @@ ct_chemical_search_start_with <- function(word, top = 500) {
 
   return(result)
 }
+
+

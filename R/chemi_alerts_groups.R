@@ -56,36 +56,9 @@ chemi_alerts_groups <- function() {
 #' \dontrun{
 #' chemi_alerts_groups_bulk(description = "DTXSID1024122")
 #' }
-chemi_alerts_groups_bulk <- function(
-  description = NULL,
-  frozen = NULL,
-  id = NULL,
-  logicType = NULL,
-  name = NULL,
-  operations = NULL,
-  text = NULL,
-  type = NULL,
-  value = NULL
-) {
+chemi_alerts_groups_bulk <- function(description = NULL, frozen = NULL, id = NULL, logicType = NULL, name = NULL, operations = NULL, text = NULL, type = NULL, value = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_alerts_groups_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `description` = description,
-        `frozen` = frozen,
-        `id` = id,
-        `logicType` = logicType,
-        `name` = name,
-        `operations` = operations,
-        `text` = text,
-        `type` = type,
-        `value` = value,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_alerts_groups_bulk", "pre_request", list(params = list(`description` = description, `frozen` = frozen, `id` = id, `logicType` = logicType, `name` = name, `operations` = operations, `text` = text, `type` = type, `value` = value, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -121,30 +94,14 @@ chemi_alerts_groups_bulk <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(frozen)) {
-    options$frozen <- frozen
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(logicType)) {
-    options$logicType <- logicType
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(operations)) {
-    options$operations <- operations
-  }
-  if (!is.null(text)) {
-    options$text <- text
-  }
-  if (!is.null(type)) {
-    options$type <- type
-  }
-  if (!is.null(value)) {
-    options$value <- value
-  }
+  if (!is.null(frozen)) options$frozen <- frozen
+  if (!is.null(id)) options$id <- id
+  if (!is.null(logicType)) options$logicType <- logicType
+  if (!is.null(name)) options$name <- name
+  if (!is.null(operations)) options$operations <- operations
+  if (!is.null(text)) options$text <- text
+  if (!is.null(type)) options$type <- type
+  if (!is.null(value)) options$value <- value
   result <- generic_chemi_request(
     query = description,
     endpoint = "alerts/groups",

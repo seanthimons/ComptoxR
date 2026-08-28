@@ -14,11 +14,7 @@
 #' }
 chemi_amos_substring <- function(substring) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_substring",
-    "pre_request",
-    list(params = list(`substring` = substring, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_substring", "pre_request", list(params = list(`substring` = substring, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

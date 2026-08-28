@@ -1,84 +1,90 @@
-#' Run EpiSuite calculations
+#' Estimate one chemical
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles SMILES notation of the chemical. Either smiles or cas is required.
-#' @param cas CAS registry number. Either smiles or cas is required.
-#' @param caseNumber Case identifier for tracking purposes
-#' @param modules Comma-separated list of modules to run. If not specified, all modules are run. Valid values: logKow, mpbpvp, waterSolubilityFromLogKow, waterSolubilityFromWaterNt, henrysLawConstant, logKoa, logKoc, biodegradationRate, hydrocarbonBiodegradationRate, bioconcentration, aerosolAdsorptionFraction, atmosphericHalfLife, hydrolysis, waterVolatilization, sewageTreatmentModel, fugacityModel, dermalPermeability, ecosar, aimanalogs
-#' @param userLogKow User-provided octanol-water partition coefficient (log Kow) override
-#' @param userMeltingPoint User-provided melting point override (Celsius)
-#' @param userBoilingPoint User-provided boiling point override (Celsius)
-#' @param userVaporPressure User-provided vapor pressure override (mmHg)
-#' @param userWaterSolubility User-provided water solubility override (mg/L)
-#' @param userHenrysLawConstant User-provided Henry's Law constant override (atm-m3/mol)
-#' @param userLogKoa User-provided octanol-air partition coefficient (log Koa) override
-#' @param userLogKoc User-provided soil adsorption coefficient (log Koc) override (L/kg)
-#' @param userHydroxylReactionRateConstant User-provided hydroxyl reaction rate constant (cm3/molecule-sec)
-#' @param userAtmosphericHydroxylRadicalConcentration User-provided atmospheric hydroxyl radical concentration (radicals/cm3). Default: 1.5e6 (default: 1500000)
-#' @param userAtmosphericOzoneConcentration User-provided atmospheric ozone concentration (molecules/cm3). Default: 7e11 (default: 7e+11)
-#' @param userAtmosphericDaylightHours User-provided average daylight hours for atmospheric calculations. Default: 12 (default: 12)
-#' @param userDermalPermeabilityCoefficient User-provided dermal permeability coefficient override (cm/hr)
-#' @param userBiodegradationRateRemoveMetals Whether to remove metals from biodegradation rate calculation. Default: true (default: TRUE)
-#' @param userStpHalfLifePrimaryClarifier User-provided STP primary clarifier half-life (hours). Default: 10000 (default: 10000)
-#' @param userStpHalfLifeAerationVessel User-provided STP aeration vessel half-life (hours). Default: 10000 (default: 10000)
-#' @param userStpHalfLifeSettlingTank User-provided STP settling tank half-life (hours). Default: 10000 (default: 10000)
-#' @param userFugacityHalfLifeAir User-provided fugacity model air half-life (hours). Default: 0 (calculated from atmospheric half-life) (default: 0)
-#' @param userFugacityHalfLifeWater User-provided fugacity model water half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)
-#' @param userFugacityHalfLifeSoil User-provided fugacity model soil half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)
-#' @param userFugacityHalfLifeSediment User-provided fugacity model sediment half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)
-#' @param userFugacityEmissionRateAir User-provided fugacity model air emission rate (kg/hour). Default: 1000 (default: 1000)
-#' @param userFugacityEmissionRateWater User-provided fugacity model water emission rate (kg/hour). Default: 1000 (default: 1000)
-#' @param userFugacityEmissionRateSoil User-provided fugacity model soil emission rate (kg/hour). Default: 1000 (default: 1000)
-#' @param userFugacityEmissionRateSediment User-provided fugacity model sediment emission rate (kg/hour). Default: 0 (default: 0)
-#' @param userFugacityAdvectionTimeAir User-provided fugacity model air advection residence time (hours). Default: 100 (default: 100)
-#' @param userFugacityAdvectionTimeWater User-provided fugacity model water advection residence time (hours). Default: 1000 (default: 1000)
-#' @param userFugacityAdvectionTimeSoil User-provided fugacity model soil advection residence time (hours). Default: 0 (default: 0)
-#' @param userFugacityAdvectionTimeSediment User-provided fugacity model sediment advection residence time (hours). Default: 50000 (default: 50000)
+#' @param smiles SMILES; required when cas is absent.
+#' @param cas CAS Registry Number; required when smiles is absent.
+#' @param modules Comma-separated canonical public module names; defaults to all. Array order does not control scientific precedence: selected modules run in canonical dependency order, with waterSolubilityProvider controlling the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for CLI parity but public names are the durable HTTP contract.
+#' @param chemicalName Optional parameter
+#' @param logKow Optional parameter
+#' @param molecularWeight Optional resolved molecular weight in g/mol. Together with positive vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL candidate; Bond and Group require only SMILES.
+#' @param waterSolubilityMgPerL Optional resolved water solubility in mg/L. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.
+#' @param waterSolubility Optional parameter
+#' @param waterSolubilityProvider Selects the source used for downstream resolved water solubility. Both WSKOW and WaterNT independent results remain visible when all modules run.. Options: wskow, waternt (default: wskow)
+#' @param vaporPressureMmHg Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.
+#' @param subcooledVaporPressureMmHg Optional parameter
+#' @param henryAtmM3PerMol Optional parameter
+#' @param logKoa Optional parameter
+#' @param koc Optional parameter
+#' @param meltingPointC Optional parameter
+#' @param boilingPointC Optional parameter
+#' @param vaporPressureTemperatureC Compatibility field for the maintained fixed-temperature MPBPVP calculation. Only 25 °C is accepted.. Options: 25 (default: 25)
+#' @param aopRateConstant Optional parameter
+#' @param biowinScore Optional parameter
+#' @param biowin3 Optional parameter
+#' @param biowin5 Optional parameter
+#' @param removeMetals Whether BIOWIN removes selected metal and salt counterions; model default is true. (default: TRUE)
+#' @param tspUgPerM3 Total suspended particulate matter in ug/m3; AEROWIN default is 80. (default: 80)
+#' @param theta Combined Junge-Pankow cTheta in Pa (not particle surface-area Theta); AEROWIN default is 0.00010836 Pa. (default: 0.00010836)
+#' @param waterConcentrationMgPerCm3 Optional parameter
+#' @param waterConcentrationMgPerLiter Optional parameter
+#' @param eventFrequencyPerDay Optional parameter
+#' @param exposureDurationYears Optional parameter
+#' @param exposureFrequencyDaysPerYear Optional parameter
+#' @param skinSurfaceAreaCm2 Optional parameter
+#' @param bodyWeightKg Optional parameter
+#' @param averagingTimeDays Optional parameter
+#' @param fractionAbsorbed Optional parameter
+#' @param eventDurationHours Optional parameter
+#' @param userKpCmPerHour Optional parameter
+#' @param halfLifeHoursPrimaryClarifier Optional parameter
+#' @param halfLifeHoursAerationVessel Optional parameter
+#' @param halfLifeHoursSettlingTank Optional parameter
+#' @param halfLifeAir Optional parameter
+#' @param halfLifeWater Optional parameter
+#' @param halfLifeSoil Optional parameter
+#' @param halfLifeSediment Optional parameter
+#' @param emissionRateAir Optional parameter
+#' @param emissionRateWater Optional parameter
+#' @param emissionRateSoil Optional parameter
+#' @param emissionRateSediment Optional parameter
+#' @param advectionTimeAir Optional parameter
+#' @param advectionTimeWater Optional parameter
+#' @param advectionTimeSoil Optional parameter
+#' @param advectionTimeSediment Optional parameter
+#' @param ohConcentrationE6OhPerCm3 Optional parameter
+#' @param ozoneConcentrationE11MolPerCm3 Optional parameter
+#' @param daylightHours Atmospheric daylight period in hours; AOPWIN default is 12.. Options: 12, 24 (default: 12)
+#' @param riverWindMPerSec Optional parameter
+#' @param riverCurrentMPerSec Optional parameter
+#' @param riverDepthMeters Optional parameter
+#' @param lakeWindMPerSec Optional parameter
+#' @param lakeCurrentMPerSec Optional parameter
+#' @param lakeDepthMeters Optional parameter
+#' @param carbonChainLength Optional parameter
+#' @param mainCarbons Optional parameter
+#' @param branchedCarbons Optional parameter
+#' @param branches Optional parameter
+#' @param propoxyGroups Optional parameter
+#' @param ethoxylate Optional parameter
+#' @param amineNitrogens Optional parameter
+#' @param cationAnionRatio Optional parameter
+#' @param mw500Percentage Optional parameter
+#' @param mw1000Percentage Optional parameter
+#' @param averageMolecularWeight Optional parameter
+#' @param useSmiles Optional parameter
+#' @param solubilityType Optional parameter
+#' @param polymerType Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' epi_submit(smiles = "c1ccccc1")
+#' epi_submit(smiles = "CCO")
 #' }
-epi_submit <- function(
-  smiles = NULL,
-  cas = NULL,
-  caseNumber = NULL,
-  modules = NULL,
-  userLogKow = NULL,
-  userMeltingPoint = NULL,
-  userBoilingPoint = NULL,
-  userVaporPressure = NULL,
-  userWaterSolubility = NULL,
-  userHenrysLawConstant = NULL,
-  userLogKoa = NULL,
-  userLogKoc = NULL,
-  userHydroxylReactionRateConstant = NULL,
-  userAtmosphericHydroxylRadicalConcentration = 1500000,
-  userAtmosphericOzoneConcentration = 7e+11,
-  userAtmosphericDaylightHours = 12,
-  userDermalPermeabilityCoefficient = NULL,
-  userBiodegradationRateRemoveMetals = TRUE,
-  userStpHalfLifePrimaryClarifier = 10000,
-  userStpHalfLifeAerationVessel = 10000,
-  userStpHalfLifeSettlingTank = 10000,
-  userFugacityHalfLifeAir = 0,
-  userFugacityHalfLifeWater = 0,
-  userFugacityHalfLifeSoil = 0,
-  userFugacityHalfLifeSediment = 0,
-  userFugacityEmissionRateAir = 1000,
-  userFugacityEmissionRateWater = 1000,
-  userFugacityEmissionRateSoil = 1000,
-  userFugacityEmissionRateSediment = 0,
-  userFugacityAdvectionTimeAir = 100,
-  userFugacityAdvectionTimeWater = 1000,
-  userFugacityAdvectionTimeSoil = 0,
-  userFugacityAdvectionTimeSediment = 50000
-) {
+epi_submit <- function(smiles = NULL, cas = NULL, modules = NULL, chemicalName = NULL, logKow = NULL, molecularWeight = NULL, waterSolubilityMgPerL = NULL, waterSolubility = NULL, waterSolubilityProvider = "wskow", vaporPressureMmHg = NULL, subcooledVaporPressureMmHg = NULL, henryAtmM3PerMol = NULL, logKoa = NULL, koc = NULL, meltingPointC = NULL, boilingPointC = NULL, vaporPressureTemperatureC = 25, aopRateConstant = NULL, biowinScore = NULL, biowin3 = NULL, biowin5 = NULL, removeMetals = TRUE, tspUgPerM3 = 80, theta = 0.00010836, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, skinSurfaceAreaCm2 = NULL, bodyWeightKg = NULL, averagingTimeDays = NULL, fractionAbsorbed = NULL, eventDurationHours = NULL, userKpCmPerHour = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursSettlingTank = NULL, halfLifeAir = NULL, halfLifeWater = NULL, halfLifeSoil = NULL, halfLifeSediment = NULL, emissionRateAir = NULL, emissionRateWater = NULL, emissionRateSoil = NULL, emissionRateSediment = NULL, advectionTimeAir = NULL, advectionTimeWater = NULL, advectionTimeSoil = NULL, advectionTimeSediment = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, daylightHours = 12, riverWindMPerSec = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, lakeWindMPerSec = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, carbonChainLength = NULL, mainCarbons = NULL, branchedCarbons = NULL, branches = NULL, propoxyGroups = NULL, ethoxylate = NULL, amineNitrogens = NULL, cationAnionRatio = NULL, mw500Percentage = NULL, mw1000Percentage = NULL, averageMolecularWeight = NULL, useSmiles = NULL, solubilityType = NULL, polymerType = NULL) {
   result <- generic_request(
     endpoint = "submit",
     method = "GET",
@@ -88,82 +94,83 @@ epi_submit <- function(
     tidy = FALSE,
     `smiles` = smiles,
     `cas` = cas,
-    `caseNumber` = caseNumber,
     `modules` = modules,
-    `userLogKow` = userLogKow,
-    `userMeltingPoint` = userMeltingPoint,
-    `userBoilingPoint` = userBoilingPoint,
-    `userVaporPressure` = userVaporPressure,
-    `userWaterSolubility` = userWaterSolubility,
-    `userHenrysLawConstant` = userHenrysLawConstant,
-    `userLogKoa` = userLogKoa,
-    `userLogKoc` = userLogKoc,
-    `userHydroxylReactionRateConstant` = userHydroxylReactionRateConstant,
-    `userAtmosphericHydroxylRadicalConcentration` = userAtmosphericHydroxylRadicalConcentration,
-    `userAtmosphericOzoneConcentration` = userAtmosphericOzoneConcentration,
-    `userAtmosphericDaylightHours` = userAtmosphericDaylightHours,
-    `userDermalPermeabilityCoefficient` = userDermalPermeabilityCoefficient,
-    `userBiodegradationRateRemoveMetals` = userBiodegradationRateRemoveMetals,
-    `userStpHalfLifePrimaryClarifier` = userStpHalfLifePrimaryClarifier,
-    `userStpHalfLifeAerationVessel` = userStpHalfLifeAerationVessel,
-    `userStpHalfLifeSettlingTank` = userStpHalfLifeSettlingTank,
-    `userFugacityHalfLifeAir` = userFugacityHalfLifeAir,
-    `userFugacityHalfLifeWater` = userFugacityHalfLifeWater,
-    `userFugacityHalfLifeSoil` = userFugacityHalfLifeSoil,
-    `userFugacityHalfLifeSediment` = userFugacityHalfLifeSediment,
-    `userFugacityEmissionRateAir` = userFugacityEmissionRateAir,
-    `userFugacityEmissionRateWater` = userFugacityEmissionRateWater,
-    `userFugacityEmissionRateSoil` = userFugacityEmissionRateSoil,
-    `userFugacityEmissionRateSediment` = userFugacityEmissionRateSediment,
-    `userFugacityAdvectionTimeAir` = userFugacityAdvectionTimeAir,
-    `userFugacityAdvectionTimeWater` = userFugacityAdvectionTimeWater,
-    `userFugacityAdvectionTimeSoil` = userFugacityAdvectionTimeSoil,
-    `userFugacityAdvectionTimeSediment` = userFugacityAdvectionTimeSediment
+    `chemicalName` = chemicalName,
+    `logKow` = logKow,
+    `molecularWeight` = molecularWeight,
+    `waterSolubilityMgPerL` = waterSolubilityMgPerL,
+    `waterSolubility` = waterSolubility,
+    `waterSolubilityProvider` = waterSolubilityProvider,
+    `vaporPressureMmHg` = vaporPressureMmHg,
+    `subcooledVaporPressureMmHg` = subcooledVaporPressureMmHg,
+    `henryAtmM3PerMol` = henryAtmM3PerMol,
+    `logKoa` = logKoa,
+    `koc` = koc,
+    `meltingPointC` = meltingPointC,
+    `boilingPointC` = boilingPointC,
+    `vaporPressureTemperatureC` = vaporPressureTemperatureC,
+    `aopRateConstant` = aopRateConstant,
+    `biowinScore` = biowinScore,
+    `biowin3` = biowin3,
+    `biowin5` = biowin5,
+    `removeMetals` = removeMetals,
+    `tspUgPerM3` = tspUgPerM3,
+    `theta` = theta,
+    `waterConcentrationMgPerCm3` = waterConcentrationMgPerCm3,
+    `waterConcentrationMgPerLiter` = waterConcentrationMgPerLiter,
+    `eventFrequencyPerDay` = eventFrequencyPerDay,
+    `exposureDurationYears` = exposureDurationYears,
+    `exposureFrequencyDaysPerYear` = exposureFrequencyDaysPerYear,
+    `skinSurfaceAreaCm2` = skinSurfaceAreaCm2,
+    `bodyWeightKg` = bodyWeightKg,
+    `averagingTimeDays` = averagingTimeDays,
+    `fractionAbsorbed` = fractionAbsorbed,
+    `eventDurationHours` = eventDurationHours,
+    `userKpCmPerHour` = userKpCmPerHour,
+    `halfLifeHoursPrimaryClarifier` = halfLifeHoursPrimaryClarifier,
+    `halfLifeHoursAerationVessel` = halfLifeHoursAerationVessel,
+    `halfLifeHoursSettlingTank` = halfLifeHoursSettlingTank,
+    `halfLifeAir` = halfLifeAir,
+    `halfLifeWater` = halfLifeWater,
+    `halfLifeSoil` = halfLifeSoil,
+    `halfLifeSediment` = halfLifeSediment,
+    `emissionRateAir` = emissionRateAir,
+    `emissionRateWater` = emissionRateWater,
+    `emissionRateSoil` = emissionRateSoil,
+    `emissionRateSediment` = emissionRateSediment,
+    `advectionTimeAir` = advectionTimeAir,
+    `advectionTimeWater` = advectionTimeWater,
+    `advectionTimeSoil` = advectionTimeSoil,
+    `advectionTimeSediment` = advectionTimeSediment,
+    `ohConcentrationE6OhPerCm3` = ohConcentrationE6OhPerCm3,
+    `ozoneConcentrationE11MolPerCm3` = ozoneConcentrationE11MolPerCm3,
+    `daylightHours` = daylightHours,
+    `riverWindMPerSec` = riverWindMPerSec,
+    `riverCurrentMPerSec` = riverCurrentMPerSec,
+    `riverDepthMeters` = riverDepthMeters,
+    `lakeWindMPerSec` = lakeWindMPerSec,
+    `lakeCurrentMPerSec` = lakeCurrentMPerSec,
+    `lakeDepthMeters` = lakeDepthMeters,
+    `carbonChainLength` = carbonChainLength,
+    `mainCarbons` = mainCarbons,
+    `branchedCarbons` = branchedCarbons,
+    `branches` = branches,
+    `propoxyGroups` = propoxyGroups,
+    `ethoxylate` = ethoxylate,
+    `amineNitrogens` = amineNitrogens,
+    `cationAnionRatio` = cationAnionRatio,
+    `mw500Percentage` = mw500Percentage,
+    `mw1000Percentage` = mw1000Percentage,
+    `averageMolecularWeight` = averageMolecularWeight,
+    `useSmiles` = useSmiles,
+    `solubilityType` = solubilityType,
+    `polymerType` = polymerType
   )
 
-  result <- run_hook(
-    "epi_submit",
-    "post_response",
-    list(
-      result = result,
-      params = list(
-        `smiles` = smiles,
-        `cas` = cas,
-        `caseNumber` = caseNumber,
-        `modules` = modules,
-        `userLogKow` = userLogKow,
-        `userMeltingPoint` = userMeltingPoint,
-        `userBoilingPoint` = userBoilingPoint,
-        `userVaporPressure` = userVaporPressure,
-        `userWaterSolubility` = userWaterSolubility,
-        `userHenrysLawConstant` = userHenrysLawConstant,
-        `userLogKoa` = userLogKoa,
-        `userLogKoc` = userLogKoc,
-        `userHydroxylReactionRateConstant` = userHydroxylReactionRateConstant,
-        `userAtmosphericHydroxylRadicalConcentration` = userAtmosphericHydroxylRadicalConcentration,
-        `userAtmosphericOzoneConcentration` = userAtmosphericOzoneConcentration,
-        `userAtmosphericDaylightHours` = userAtmosphericDaylightHours,
-        `userDermalPermeabilityCoefficient` = userDermalPermeabilityCoefficient,
-        `userBiodegradationRateRemoveMetals` = userBiodegradationRateRemoveMetals,
-        `userStpHalfLifePrimaryClarifier` = userStpHalfLifePrimaryClarifier,
-        `userStpHalfLifeAerationVessel` = userStpHalfLifeAerationVessel,
-        `userStpHalfLifeSettlingTank` = userStpHalfLifeSettlingTank,
-        `userFugacityHalfLifeAir` = userFugacityHalfLifeAir,
-        `userFugacityHalfLifeWater` = userFugacityHalfLifeWater,
-        `userFugacityHalfLifeSoil` = userFugacityHalfLifeSoil,
-        `userFugacityHalfLifeSediment` = userFugacityHalfLifeSediment,
-        `userFugacityEmissionRateAir` = userFugacityEmissionRateAir,
-        `userFugacityEmissionRateWater` = userFugacityEmissionRateWater,
-        `userFugacityEmissionRateSoil` = userFugacityEmissionRateSoil,
-        `userFugacityEmissionRateSediment` = userFugacityEmissionRateSediment,
-        `userFugacityAdvectionTimeAir` = userFugacityAdvectionTimeAir,
-        `userFugacityAdvectionTimeWater` = userFugacityAdvectionTimeWater,
-        `userFugacityAdvectionTimeSoil` = userFugacityAdvectionTimeSoil,
-        `userFugacityAdvectionTimeSediment` = userFugacityAdvectionTimeSediment
-      )
-    )
-  )
-  # Additional post-processing can be added here
+    result <- run_hook("epi_submit", "post_response", list(result = result, params = list(`smiles` = smiles, `cas` = cas, `modules` = modules, `chemicalName` = chemicalName, `logKow` = logKow, `molecularWeight` = molecularWeight, `waterSolubilityMgPerL` = waterSolubilityMgPerL, `waterSolubility` = waterSolubility, `waterSolubilityProvider` = waterSolubilityProvider, `vaporPressureMmHg` = vaporPressureMmHg, `subcooledVaporPressureMmHg` = subcooledVaporPressureMmHg, `henryAtmM3PerMol` = henryAtmM3PerMol, `logKoa` = logKoa, `koc` = koc, `meltingPointC` = meltingPointC, `boilingPointC` = boilingPointC, `vaporPressureTemperatureC` = vaporPressureTemperatureC, `aopRateConstant` = aopRateConstant, `biowinScore` = biowinScore, `biowin3` = biowin3, `biowin5` = biowin5, `removeMetals` = removeMetals, `tspUgPerM3` = tspUgPerM3, `theta` = theta, `waterConcentrationMgPerCm3` = waterConcentrationMgPerCm3, `waterConcentrationMgPerLiter` = waterConcentrationMgPerLiter, `eventFrequencyPerDay` = eventFrequencyPerDay, `exposureDurationYears` = exposureDurationYears, `exposureFrequencyDaysPerYear` = exposureFrequencyDaysPerYear, `skinSurfaceAreaCm2` = skinSurfaceAreaCm2, `bodyWeightKg` = bodyWeightKg, `averagingTimeDays` = averagingTimeDays, `fractionAbsorbed` = fractionAbsorbed, `eventDurationHours` = eventDurationHours, `userKpCmPerHour` = userKpCmPerHour, `halfLifeHoursPrimaryClarifier` = halfLifeHoursPrimaryClarifier, `halfLifeHoursAerationVessel` = halfLifeHoursAerationVessel, `halfLifeHoursSettlingTank` = halfLifeHoursSettlingTank, `halfLifeAir` = halfLifeAir, `halfLifeWater` = halfLifeWater, `halfLifeSoil` = halfLifeSoil, `halfLifeSediment` = halfLifeSediment, `emissionRateAir` = emissionRateAir, `emissionRateWater` = emissionRateWater, `emissionRateSoil` = emissionRateSoil, `emissionRateSediment` = emissionRateSediment, `advectionTimeAir` = advectionTimeAir, `advectionTimeWater` = advectionTimeWater, `advectionTimeSoil` = advectionTimeSoil, `advectionTimeSediment` = advectionTimeSediment, `ohConcentrationE6OhPerCm3` = ohConcentrationE6OhPerCm3, `ozoneConcentrationE11MolPerCm3` = ozoneConcentrationE11MolPerCm3, `daylightHours` = daylightHours, `riverWindMPerSec` = riverWindMPerSec, `riverCurrentMPerSec` = riverCurrentMPerSec, `riverDepthMeters` = riverDepthMeters, `lakeWindMPerSec` = lakeWindMPerSec, `lakeCurrentMPerSec` = lakeCurrentMPerSec, `lakeDepthMeters` = lakeDepthMeters, `carbonChainLength` = carbonChainLength, `mainCarbons` = mainCarbons, `branchedCarbons` = branchedCarbons, `branches` = branches, `propoxyGroups` = propoxyGroups, `ethoxylate` = ethoxylate, `amineNitrogens` = amineNitrogens, `cationAnionRatio` = cationAnionRatio, `mw500Percentage` = mw500Percentage, `mw1000Percentage` = mw1000Percentage, `averageMolecularWeight` = averageMolecularWeight, `useSmiles` = useSmiles, `solubilityType` = solubilityType, `polymerType` = polymerType)))
+# Additional post-processing can be added here
 
   return(result)
 }
+
+

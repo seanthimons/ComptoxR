@@ -9,7 +9,7 @@
 #' @param bits Number of fingerprint bits
 #' @param output Output contract: validated wide tibble or raw payload
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -18,20 +18,7 @@
 #' }
 chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_rdkit",
-    "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `type` = type,
-        `radius` = radius,
-        `bits` = bits,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_rdkit", "pre_request", list(params = list(`smiles` = smiles, `type` = type, `radius` = radius, `bits` = bits, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -66,37 +53,16 @@ chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output 
 #' @param bits Number of fingerprint bits
 #' @param output Output contract: validated wide tibble or raw payload
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_rdkit_bulk(chemicals = "DTXSID1024122")
 #' }
-chemi_rdkit_bulk <- function(
-  chemicals,
-  options = NULL,
-  type = NULL,
-  radius = NULL,
-  bits = NULL,
-  output = c("wide", "raw")
-) {
+chemi_rdkit_bulk <- function(chemicals, options = NULL, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_rdkit_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `chemicals` = chemicals,
-        `options` = options,
-        `type` = type,
-        `radius` = radius,
-        `bits` = bits,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_rdkit_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `options` = options, `type` = type, `radius` = radius, `bits` = bits, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

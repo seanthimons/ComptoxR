@@ -75,6 +75,23 @@ test_that("generator selects required arguments and handles no-parameter wrapper
   expect_equal(tg_render_wrapper_call("beta", beta_args), "beta()")
 })
 
+test_that("generator selects a valid one-of body for prediction bulk wrappers", {
+  metadata <- list(
+    function_name = NULL,
+    formals = list(
+      smiles = list(name = "smiles", required = FALSE),
+      chemicals = list(name = "chemicals", required = FALSE)
+    )
+  )
+
+  for (function_name in c("chemi_opera_bulk", "chemi_predictor_models_predict_bulk")) {
+    metadata$function_name <- function_name
+    args <- tg_build_wrapper_call_args(metadata)
+
+    expect_identical(args$args, list(smiles = '"CCCC"'), info = function_name)
+  }
+})
+
 test_that("renderer emits offline mocked contract tests", {
   root <- make_generation_repo()
   on.exit(unlink(root, recursive = TRUE), add = TRUE)

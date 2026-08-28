@@ -17,19 +17,7 @@
 #' }
 chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_substances_for_classification",
-    "pre_request",
-    list(
-      params = list(
-        `kingdom` = kingdom,
-        `klass` = klass,
-        `subklass` = subklass,
-        `superklass` = superklass,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_substances_for_classification", "pre_request", list(params = list(`kingdom` = kingdom, `klass` = klass, `subklass` = subklass, `superklass` = superklass, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -50,15 +38,9 @@ chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NUL
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(klass)) {
-    options$klass <- klass
-  }
-  if (!is.null(subklass)) {
-    options$subklass <- subklass
-  }
-  if (!is.null(superklass)) {
-    options$superklass <- superklass
-  }
+  if (!is.null(klass)) options$klass <- klass
+  if (!is.null(subklass)) options$subklass <- subklass
+  if (!is.null(superklass)) options$superklass <- superklass
   result <- generic_chemi_request(
     query = kingdom,
     endpoint = "amos/substances_for_classification/",

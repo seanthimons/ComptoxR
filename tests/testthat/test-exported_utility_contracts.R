@@ -17,7 +17,7 @@ test_that("server helpers set and reset exported API base URLs", {
   expect_equal(Sys.getenv("chemi_burl"), "")
 
   suppressMessages(epi_server(1))
-  expect_equal(Sys.getenv("epi_burl"), "https://episuite.dev/EpiWebSuite/api")
+  expect_equal(Sys.getenv("epi_burl"), "https://episuite.dev/api")
   suppressMessages(epi_server(NULL))
   expect_equal(Sys.getenv("epi_burl"), "")
 
@@ -41,7 +41,7 @@ test_that("server helpers return URLs without changing process state", {
   cases <- list(
     list(ctx_server, 2, "ctx_burl", "https://ctx-api-stg.ccte.epa.gov/"),
     list(chemi_server, 2, "chemi_burl", "https://cim.sciencedataexperts.com/api"),
-    list(epi_server, 1, "epi_burl", "https://episuite.dev/EpiWebSuite/api"),
+    list(epi_server, 1, "epi_burl", "https://episuite.dev/api"),
     list(eco_server, 2, "eco_burl", "http://127.0.0.1:5555"),
     list(toxval_server, 2, "toxval_burl", "http://127.0.0.1:5556"),
     list(np_server, 1, "np_burl", "https://api.naturalproducts.net/latest/"),

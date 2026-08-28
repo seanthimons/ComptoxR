@@ -14,6 +14,7 @@
 #' ct_chemical_msready_search_by_mass_bulk(error = "DTXSID1024122")
 #' }
 ct_chemical_msready_search_by_mass_bulk <- function(error, masses) {
+
   # Build request body
   request_body <- list()
   request_body$error <- error
@@ -60,3 +61,5 @@ ct_chemical_msready_search_by_mass <- function(start, end = NULL) {
 
   return(result)
 }
+
+

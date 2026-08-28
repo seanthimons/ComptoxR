@@ -5,7 +5,7 @@
 #'
 #' @param functional_use Functional use classification to search for.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_amos_dtxsids_from_functional_use <- function(functional_use) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_dtxsids_from_functional_use",
-    "pre_request",
-    list(params = list(`functional_use` = functional_use, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_dtxsids_from_functional_use", "pre_request", list(params = list(`functional_use` = functional_use, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

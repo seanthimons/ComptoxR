@@ -16,11 +16,7 @@
 #' }
 chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_webtest",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `headers` = headers, `output` = output, `server` = server))
-  )
+  req_data <- run_hook("chemi_webtest", "pre_request", list(params = list(`smiles` = smiles, `headers` = headers, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -49,8 +45,8 @@ chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param query Chemical structures or resolvable identifiers
+#' @param chemIdType Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
 #' @param format Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default: JSON)
-#' @param chemIdType Input identifier type
 #' @param headers Request descriptor headers
 #' @param output Output contract: validated wide tibble or raw payload
 #' @return Returns a tibble with results
@@ -61,28 +57,9 @@ chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
 #' \dontrun{
 #' chemi_webtest_bulk(query = "DTXSID1024122")
 #' }
-chemi_webtest_bulk <- function(
-  query,
-  chemIdType = "AnyId",
-  headers = FALSE,
-  format = "JSON",
-  output = c("wide", "raw")
-) {
+chemi_webtest_bulk <- function(query, chemIdType = "AnyId", headers = FALSE, format = "JSON", output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_webtest_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `chemIdType` = chemIdType,
-        `headers` = headers,
-        `format` = format,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_webtest_bulk", "pre_request", list(params = list(`query` = query, `chemIdType` = chemIdType, `headers` = headers, `format` = format, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

@@ -3,6 +3,10 @@
     "schemas": {
       "Chemical": {
         "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
           "averageMass": {
             "format": "double",
             "type": "number"
@@ -17,6 +21,9 @@
             "type": "string"
           },
           "cid": {
+            "type": "string"
+          },
+          "id": {
             "type": "string"
           },
           "image": {
@@ -46,106 +53,6 @@
           },
           "smiles": {
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "Hcode": {
-        "properties": {
-          "category": {
-            "type": "string"
-          },
-          "classes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "code": {
-            "type": "string"
-          },
-          "disposal": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "id": {
-            "type": "string"
-          },
-          "obsolete": {
-            "type": "boolean"
-          },
-          "pictograms": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "prevention": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "response": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "signal": {
-            "type": "string"
-          },
-          "statements": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "storage": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "un_class": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "Pair": {
-        "properties": {
-          "codes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "uniqueItems": true
-          },
-          "statement": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "Pcode": {
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "codes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "description": {
-            "type": "string"
-          },
-          "obsolete": {
-            "type": "boolean"
           }
         },
         "type": "object"
@@ -322,13 +229,7 @@
         "responses": {
           "200": {
             "content": {
-              "image/png": {
-                "schema": {
-                  "format": "byte",
-                  "type": "string"
-                }
-              },
-              "image/svg+xml": {
+              "*/*": {
                 "schema": {
                   "format": "byte",
                   "type": "string"
@@ -343,52 +244,6 @@
         ]
       }
     },
-    "/api/safety/classes": {
-      "get": {
-        "operationId": "classesGet",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Hcode"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "safety-controller"
-        ]
-      }
-    },
-    "/api/safety/hcodes": {
-      "get": {
-        "operationId": "hCodesGet",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Hcode"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "safety-controller"
-        ]
-      }
-    },
     "/api/safety/metadata": {
       "get": {
         "operationId": "getMetadata",
@@ -398,29 +253,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SafetyMetadata"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "safety-controller"
-        ]
-      }
-    },
-    "/api/safety/pcodes": {
-      "get": {
-        "operationId": "pCodesGet",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Pcode"
-                  },
-                  "type": "array"
                 }
               }
             },
@@ -455,29 +287,6 @@
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/RQChemical"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "safety-controller"
-        ]
-      }
-    },
-    "/api/safety/statements": {
-      "get": {
-        "operationId": "stmntsGet",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/Pair"
                   },
                   "type": "array"
                 }

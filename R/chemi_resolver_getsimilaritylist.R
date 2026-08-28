@@ -28,48 +28,10 @@
 #' \dontrun{
 #' chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getsimilaritylist <- function(
-  query,
-  idType = "AnyId",
-  fingerprintName = NULL,
-  get_chemicals = NULL,
-  main = NULL,
-  padelCompute2D = NULL,
-  padelCompute3D = NULL,
-  padelComputeFingerprints = NULL,
-  rdkitBits = NULL,
-  rdkitRadius = NULL,
-  rdkitType = NULL,
-  scoreName = NULL,
-  toxprintsProfile = NULL,
-  tverskyI = NULL
-) {
+chemi_resolver_getsimilaritylist <- function(query, idType = "AnyId", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_getsimilaritylist",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `fingerprintName` = fingerprintName,
-        `get_chemicals` = get_chemicals,
-        `main` = main,
-        `padelCompute2D` = padelCompute2D,
-        `padelCompute3D` = padelCompute3D,
-        `padelComputeFingerprints` = padelComputeFingerprints,
-        `rdkitBits` = rdkitBits,
-        `rdkitRadius` = rdkitRadius,
-        `rdkitType` = rdkitType,
-        `scoreName` = scoreName,
-        `toxprintsProfile` = toxprintsProfile,
-        `tverskyI` = tverskyI,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_resolver_getsimilaritylist", "pre_request", list(params = list(`query` = query, `idType` = idType, `fingerprintName` = fingerprintName, `get_chemicals` = get_chemicals, `main` = main, `padelCompute2D` = padelCompute2D, `padelCompute3D` = padelCompute3D, `padelComputeFingerprints` = padelComputeFingerprints, `rdkitBits` = rdkitBits, `rdkitRadius` = rdkitRadius, `rdkitType` = rdkitType, `scoreName` = scoreName, `toxprintsProfile` = toxprintsProfile, `tverskyI` = tverskyI, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -124,42 +86,18 @@ chemi_resolver_getsimilaritylist <- function(
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(fingerprintName)) {
-    extra_options$fingerprintName <- fingerprintName
-  }
-  if (!is.null(get_chemicals)) {
-    extra_options$get_chemicals <- get_chemicals
-  }
-  if (!is.null(main)) {
-    extra_options$main <- main
-  }
-  if (!is.null(padelCompute2D)) {
-    extra_options$padelCompute2D <- padelCompute2D
-  }
-  if (!is.null(padelCompute3D)) {
-    extra_options$padelCompute3D <- padelCompute3D
-  }
-  if (!is.null(padelComputeFingerprints)) {
-    extra_options$padelComputeFingerprints <- padelComputeFingerprints
-  }
-  if (!is.null(rdkitBits)) {
-    extra_options$rdkitBits <- rdkitBits
-  }
-  if (!is.null(rdkitRadius)) {
-    extra_options$rdkitRadius <- rdkitRadius
-  }
-  if (!is.null(rdkitType)) {
-    extra_options$rdkitType <- rdkitType
-  }
-  if (!is.null(scoreName)) {
-    extra_options$scoreName <- scoreName
-  }
-  if (!is.null(toxprintsProfile)) {
-    extra_options$toxprintsProfile <- toxprintsProfile
-  }
-  if (!is.null(tverskyI)) {
-    extra_options$tverskyI <- tverskyI
-  }
+  if (!is.null(fingerprintName)) extra_options$fingerprintName <- fingerprintName
+  if (!is.null(get_chemicals)) extra_options$get_chemicals <- get_chemicals
+  if (!is.null(main)) extra_options$main <- main
+  if (!is.null(padelCompute2D)) extra_options$padelCompute2D <- padelCompute2D
+  if (!is.null(padelCompute3D)) extra_options$padelCompute3D <- padelCompute3D
+  if (!is.null(padelComputeFingerprints)) extra_options$padelComputeFingerprints <- padelComputeFingerprints
+  if (!is.null(rdkitBits)) extra_options$rdkitBits <- rdkitBits
+  if (!is.null(rdkitRadius)) extra_options$rdkitRadius <- rdkitRadius
+  if (!is.null(rdkitType)) extra_options$rdkitType <- rdkitType
+  if (!is.null(scoreName)) extra_options$scoreName <- scoreName
+  if (!is.null(toxprintsProfile)) extra_options$toxprintsProfile <- toxprintsProfile
+  if (!is.null(tverskyI)) extra_options$tverskyI <- tverskyI
 
   result <- generic_chemi_request(
     query = query,

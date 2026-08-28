@@ -1,966 +1,2482 @@
 {
   "components": {
+    "parameters": {
+      "AmineNitrogens": {
+        "description": "Required for soluble or dispersible amphoteric/polycationic polymers.",
+        "in": "query",
+        "name": "amineNitrogens",
+        "schema": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "AmphotericCarbonChainLength": {
+        "in": "query",
+        "name": "carbonChainLength",
+        "required": true,
+        "schema": {
+          "maximum": 18,
+          "minimum": 8,
+          "type": "integer"
+        }
+      },
+      "AverageMolecularWeight": {
+        "description": "Required with both percentage fields for polymer screening when applicable.",
+        "in": "query",
+        "name": "averageMolecularWeight",
+        "schema": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "BranchedCarbons": {
+        "in": "query",
+        "name": "branchedCarbons",
+        "schema": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "Branches": {
+        "in": "query",
+        "name": "branches",
+        "schema": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "CarbonChainLength": {
+        "in": "query",
+        "name": "carbonChainLength",
+        "required": true,
+        "schema": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "Cas": {
+        "in": "query",
+        "name": "cas",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "CationAnionRatio": {
+        "description": "Required for soluble or dispersible amphoteric polymers.",
+        "in": "query",
+        "name": "cationAnionRatio",
+        "schema": {
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "ChemicalName": {
+        "in": "query",
+        "name": "chemicalName",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Ethoxylate": {
+        "in": "query",
+        "name": "ethoxylate",
+        "schema": {
+          "default": 0,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "LogKow": {
+        "description": "Required when neither an explicit value nor CAS/SMILES identity is available for dependency resolution.",
+        "in": "query",
+        "name": "logKow",
+        "schema": {
+          "type": "number"
+        }
+      },
+      "MainCarbons": {
+        "in": "query",
+        "name": "mainCarbons",
+        "required": true,
+        "schema": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "MolecularWeight": {
+        "description": "Required when neither an explicit value nor CAS/SMILES identity is available for dependency resolution.",
+        "in": "query",
+        "name": "molecularWeight",
+        "schema": {
+          "exclusiveMinimum": true,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "Mw1000Percentage": {
+        "in": "query",
+        "name": "mw1000Percentage",
+        "schema": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "Mw500Percentage": {
+        "in": "query",
+        "name": "mw500Percentage",
+        "schema": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "OptionalSolubilityType": {
+        "in": "query",
+        "name": "solubilityType",
+        "schema": {
+          "enum": [
+            "DISPERSIBLE",
+            "SOLUBLE"
+          ],
+          "type": "string"
+        }
+      },
+      "PolymerType": {
+        "in": "query",
+        "name": "polymerType",
+        "schema": {
+          "default": "carbon",
+          "enum": [
+            "carbon",
+            "silicon",
+            "natural"
+          ],
+          "type": "string"
+        }
+      },
+      "PropoxyGroups": {
+        "in": "query",
+        "name": "propoxyGroups",
+        "schema": {
+          "default": 0,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "Smiles": {
+        "description": "Optional structure identity used to resolve otherwise missing physical properties. It is not required when all model inputs are supplied explicitly.",
+        "in": "query",
+        "name": "smiles",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "SolubilityType": {
+        "in": "query",
+        "name": "solubilityType",
+        "required": true,
+        "schema": {
+          "enum": [
+            "INSOLUBLE",
+            "DISPERSIBLE",
+            "SOLUBLE"
+          ],
+          "type": "string"
+        }
+      },
+      "UseSmiles": {
+        "in": "query",
+        "name": "useSmiles",
+        "schema": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "WaterSolubility": {
+        "description": "Required when neither an explicit value nor CAS/SMILES identity is available for dependency resolution.",
+        "in": "query",
+        "name": "waterSolubility",
+        "schema": {
+          "exclusiveMinimum": true,
+          "minimum": 0,
+          "type": "number"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "Invalid or unknown canonical query parameter"
+      },
+      "BatchTooLarge": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "The batch exceeds 100 items or 1,048,576 UTF-8 request bytes"
+      },
+      "EstimateTimeout": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "The whole batch exceeded the 30-second estimation timeout"
+      },
+      "MethodNotAllowed": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "The HTTP method is not supported for this path"
+      },
+      "NotFound": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "Chemical or endpoint not found"
+      },
+      "ServerError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "An unexpected server failure prevented a complete batch envelope"
+      },
+      "TypedEcosar": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TypedEcosarResult"
+            }
+          }
+        },
+        "description": "Canonical typed ECOSAR result"
+      },
+      "Unavailable": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "Embedded experimental data is unavailable"
+      },
+      "UnsupportedMediaType": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        },
+        "description": "The batch is not uncompressed application/json"
+      }
+    },
     "schemas": {
-      "AerosolAdsorptionFractionResults": {
-        "additionalProperties": true,
-        "description": "Aerosol adsorption fraction estimation results",
-        "properties": {
-          "aerosolAdsorptionFraction": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "AtmosphericHalfLifeResults": {
-        "additionalProperties": true,
-        "description": "Atmospheric oxidation half-life estimation results",
-        "properties": {
-          "hydroxylRadicalHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "overallAtmosphericHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "ozoneReactionHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "BioconcentrationModelResults": {
-        "additionalProperties": true,
-        "description": "Bioconcentration factor (BCF/BAF) estimation results",
-        "properties": {
-          "bafArnot-GobbasMidTrophicEstimate": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "bcfArnot-GobbasMidTrophicEstimate": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "bcfRegressionEstimate": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "experimentalValues": {
-            "items": {
-              "$ref": "#/components/schemas/ExperimentalValue"
-            },
-            "type": "array"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "BiodegradationRateResults": {
-        "description": "Biodegradation rate estimation results from BIOWIN models",
-        "properties": {
-          "biowin1": {
-            "description": "Linear biodegradation probability",
-            "type": "object"
-          },
-          "biowin2": {
-            "description": "Non-linear biodegradation probability",
-            "type": "object"
-          },
-          "biowin3": {
-            "description": "Expert survey biodegradation (ultimate)",
-            "type": "object"
-          },
-          "biowin4": {
-            "description": "Expert survey biodegradation (primary)",
-            "type": "object"
-          },
-          "biowin5": {
-            "description": "MITI linear probability",
-            "type": "object"
-          },
-          "biowin6": {
-            "description": "MITI non-linear probability",
-            "type": "object"
-          },
-          "biowin7": {
-            "description": "Anaerobic biodegradation probability",
-            "type": "object"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "readyBiodegradability": {
-            "description": "Overall ready biodegradability assessment",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "BpResults": {
-        "allOf": [
+      "AnalogIdentificationModuleResult": {
+        "oneOf": [
           {
-            "$ref": "#/components/schemas/PropertyResults"
+            "$ref": "#/components/schemas/AnalogIdentificationResult"
           },
           {
-            "description": "Boiling point estimation results (Celsius)",
-            "type": "object"
+            "$ref": "#/components/schemas/ModuleError"
           }
         ]
       },
-      "ChemicalProperties": {
-        "description": "Chemical identification and basic properties",
-        "properties": {
-          "aminoAcid": {
-            "description": "Whether the compound is an amino acid",
-            "type": "boolean"
-          },
-          "cas": {
-            "description": "CAS registry number",
-            "type": "string"
-          },
-          "flags": {
-            "description": "Special flags or warnings for this chemical",
-            "type": "string"
-          },
-          "molecularFormula": {
-            "description": "Molecular formula",
-            "type": "string"
-          },
-          "molecularFormulaHtml": {
-            "description": "Molecular formula with HTML subscripts",
-            "type": "string"
-          },
-          "molecularWeight": {
-            "description": "Molecular weight in g/mol",
-            "type": "number"
-          },
-          "name": {
-            "description": "Common chemical name",
-            "type": "string"
-          },
-          "nonStandardMetal": {
-            "description": "Whether the compound contains non-standard metals (not K, Na, Li, Ca)",
-            "type": "boolean"
-          },
-          "organic": {
-            "description": "Whether the compound contains carbon",
-            "type": "boolean"
-          },
-          "organicAcid": {
-            "description": "Whether the compound is an organic acid",
-            "type": "boolean"
-          },
-          "smiles": {
-            "description": "Canonical SMILES notation",
-            "type": "string"
-          },
-          "systematicName": {
-            "description": "IUPAC systematic name",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "DermalPermeabilityResults": {
-        "additionalProperties": true,
-        "description": "Dermal permeability coefficient estimation results",
-        "properties": {
-          "estimatedValue": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "selectedValue": {
-            "$ref": "#/components/schemas/Value"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarDyeParameters": {
-        "description": "Input parameters for cationic dye calculations",
-        "properties": {
-          "cas": {
-            "description": "CAS registry number",
-            "type": "string"
-          },
-          "chemicalName": {
-            "description": "Chemical name",
-            "type": "string"
-          },
-          "ethoxylate": {
-            "description": "Number of ethoxylate groups",
-            "type": "integer"
-          },
-          "molecularWeight": {
-            "description": "Molecular weight in g/mol",
-            "type": "number"
-          },
-          "waterSolubility": {
-            "description": "Water solubility in mg/L",
-            "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarDyeResults": {
-        "description": "Results from cationic dye toxicity calculations",
+      "AnalogIdentificationResult": {
+        "additionalProperties": false,
         "properties": {
           "alerts": {
-            "description": "Warning messages or alerts",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
-          "parameters": {
-            "$ref": "#/components/schemas/EcosarDyeParameters"
+          "analogDataAvailable": {
+            "type": "boolean"
           },
-          "predictions": {
-            "description": "List of toxicity predictions",
+          "analogs": {
             "items": {
-              "$ref": "#/components/schemas/EcosarPrediction"
+              "type": "string"
             },
             "type": "array"
+          },
+          "cas": {
+            "type": "string"
+          },
+          "fragmentCounts": {
+            "type": "string"
+          },
+          "fragmentIds": {
+            "type": "string"
+          },
+          "fragments": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                },
+                "index": {
+                  "type": "integer"
+                },
+                "kind": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "kind",
+                "index",
+                "count"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "generic2Fragments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "generic3Fragments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "genericFragments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "halogenGenericFragments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "logKowAnalogs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "metalFragmentIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "metalGenericFragments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "molecularWeight": {
+            "type": "number"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "rearrangedSmiles": {
+            "type": "string"
+          },
+          "recordFieldCount": {
+            "type": "integer"
+          },
+          "ringIndex": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "totalHalogens": {
+            "type": "integer"
+          },
+          "zwitterion": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "smiles",
+          "analogDataAvailable",
+          "fragments",
+          "analogs",
+          "logKowAnalogs",
+          "alerts"
+        ],
+        "type": "object"
+      },
+      "AtmosphericHalfLifeModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/AtmosphericHalfLifeResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "AtmosphericHalfLifeResult": {
+        "properties": {
+          "estimatedHydroxylRadicalReactionRateConstant": {
+            "$ref": "#/components/schemas/Value"
+          },
+          "estimatedOzoneReactionRateConstant": {
+            "$ref": "#/components/schemas/Value"
+          },
+          "estimatedValue": {
+            "$ref": "#/components/schemas/Value"
+          },
+          "experimentalHydroxylRadicalReactionRateConstantValues": {
+            "items": {
+              "$ref": "#/components/schemas/Value"
+            },
+            "type": "array"
+          },
+          "experimentalOzoneReactionRateConstantValues": {
+            "items": {
+              "$ref": "#/components/schemas/Value"
+            },
+            "type": "array"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "selectedHydroxylRadicalReactionRateConstant": {
+            "$ref": "#/components/schemas/Value"
+          },
+          "selectedOzoneReactionRateConstantValues": {
+            "$ref": "#/components/schemas/Value"
+          }
+        },
+        "type": "object"
+      },
+      "BatchEstimateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "advectionTimeAir": {
+            "type": "number"
+          },
+          "advectionTimeSediment": {
+            "type": "number"
+          },
+          "advectionTimeSoil": {
+            "type": "number"
+          },
+          "advectionTimeWater": {
+            "type": "number"
+          },
+          "amineNitrogens": {
+            "type": "number"
+          },
+          "aopRateConstant": {
+            "type": "number"
+          },
+          "averageMolecularWeight": {
+            "type": "number"
+          },
+          "averagingTimeDays": {
+            "type": "number"
+          },
+          "biowin3": {
+            "type": "number"
+          },
+          "biowin5": {
+            "type": "number"
+          },
+          "biowinScore": {
+            "type": "number"
+          },
+          "bodyWeightKg": {
+            "type": "number"
+          },
+          "boilingPointC": {
+            "type": "number"
+          },
+          "branchedCarbons": {
+            "type": "integer"
+          },
+          "branches": {
+            "type": "integer"
+          },
+          "carbonChainLength": {
+            "type": "integer"
+          },
+          "cas": {
+            "description": "CAS Registry Number. Only a CAS-identified batch item can resolve experimental results; CAS takes precedence when SMILES is also supplied.",
+            "type": "string"
+          },
+          "cationAnionRatio": {
+            "type": "number"
+          },
+          "chemicalName": {
+            "type": "string"
+          },
+          "daylightHours": {
+            "type": "number"
+          },
+          "emissionRateAir": {
+            "type": "number"
+          },
+          "emissionRateSediment": {
+            "type": "number"
+          },
+          "emissionRateSoil": {
+            "type": "number"
+          },
+          "emissionRateWater": {
+            "type": "number"
+          },
+          "ethoxylate": {
+            "type": "integer"
+          },
+          "eventDurationHours": {
+            "type": "number"
+          },
+          "eventFrequencyPerDay": {
+            "type": "number"
+          },
+          "exposureDurationYears": {
+            "type": "number"
+          },
+          "exposureFrequencyDaysPerYear": {
+            "type": "number"
+          },
+          "fractionAbsorbed": {
+            "type": "number"
+          },
+          "halfLifeAir": {
+            "type": "number"
+          },
+          "halfLifeHoursAerationVessel": {
+            "type": "number"
+          },
+          "halfLifeHoursPrimaryClarifier": {
+            "type": "number"
+          },
+          "halfLifeHoursSettlingTank": {
+            "type": "number"
+          },
+          "halfLifeSediment": {
+            "type": "number"
+          },
+          "halfLifeSoil": {
+            "type": "number"
+          },
+          "halfLifeWater": {
+            "type": "number"
+          },
+          "henryAtmM3PerMol": {
+            "type": "number"
+          },
+          "koc": {
+            "type": "number"
+          },
+          "lakeCurrentMPerSec": {
+            "type": "number"
+          },
+          "lakeDepthMeters": {
+            "type": "number"
+          },
+          "lakeWindMPerSec": {
+            "type": "number"
+          },
+          "logKoa": {
+            "type": "number"
+          },
+          "logKow": {
+            "type": "number"
+          },
+          "mainCarbons": {
+            "type": "integer"
+          },
+          "meltingPointC": {
+            "type": "number"
+          },
+          "modules": {
+            "description": "Selected calculations. Items run in canonical dependency order rather than submitted array order; use waterSolubilityProvider for the shared water-solubility choice.",
+            "items": {
+              "enum": [
+                "logKow",
+                "physicalProperties",
+                "waterSolubilityFromLogKow",
+                "waterSolubilityFromWaterNt",
+                "henrysLawConstant",
+                "logKoc",
+                "atmosphericHalfLife",
+                "biodegradationRate",
+                "logKoa",
+                "aerosolAdsorptionFraction",
+                "dermalPermeability",
+                "sewageTreatmentModel",
+                "waterVolatilization",
+                "fugacityModel",
+                "hydrocarbonBiodegradationRate",
+                "bioconcentration",
+                "ecosar.organics",
+                "ecosar.nonionic-surfactant",
+                "ecosar.anionic-surfactant",
+                "ecosar.cationic-surfactant",
+                "ecosar.amphoteric-surfactant",
+                "ecosar.dye",
+                "ecosar.nonionic-polymer",
+                "ecosar.anionic-polymer",
+                "ecosar.amphoteric-polymer",
+                "ecosar.polycationic-polymer",
+                "fishBiotransformationRate",
+                "hydrolysis",
+                "analogIdentification"
+              ],
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "molecularWeight": {
+            "description": "Optional resolved molecular weight. Part of the complete positive VP/WSOL/MW triplet that enables the HENRYWIN VP/WSOL candidate.",
+            "type": "number"
+          },
+          "mw1000Percentage": {
+            "type": "number"
+          },
+          "mw500Percentage": {
+            "type": "number"
+          },
+          "ohConcentrationE6OhPerCm3": {
+            "type": "number"
+          },
+          "ozoneConcentrationE11MolPerCm3": {
+            "type": "number"
+          },
+          "polymerType": {
+            "type": "string"
+          },
+          "propoxyGroups": {
+            "type": "number"
+          },
+          "removeMetals": {
+            "type": "boolean"
+          },
+          "riverCurrentMPerSec": {
+            "type": "number"
+          },
+          "riverDepthMeters": {
+            "type": "number"
+          },
+          "riverWindMPerSec": {
+            "type": "number"
+          },
+          "skinSurfaceAreaCm2": {
+            "type": "number"
+          },
+          "smiles": {
+            "description": "Raw structure input. A SMILES-only batch item is estimated without experimental results.",
+            "type": "string"
+          },
+          "solubilityType": {
+            "type": "string"
+          },
+          "subcooledVaporPressureMmHg": {
+            "type": "number"
+          },
+          "theta": {
+            "type": "number"
+          },
+          "tspUgPerM3": {
+            "type": "number"
+          },
+          "userKpCmPerHour": {
+            "type": "number"
+          },
+          "useSmiles": {
+            "type": "boolean"
+          },
+          "vaporPressureMmHg": {
+            "description": "Optional resolved vapor pressure in mmHg. Its omission leaves structural HENRYWIN candidates available.",
+            "type": "number"
+          },
+          "vaporPressureTemperatureC": {
+            "default": 25,
+            "description": "Fixed MPBPVP calculation temperature in °C; values other than 25 are rejected.",
+            "enum": [
+              25
+            ],
+            "type": "number"
+          },
+          "waterConcentrationMgPerCm3": {
+            "type": "number"
+          },
+          "waterConcentrationMgPerLiter": {
+            "type": "number"
+          },
+          "waterSolubility": {
+            "type": "number"
+          },
+          "waterSolubilityMgPerL": {
+            "description": "Optional resolved water solubility in mg/L. Its omission leaves structural HENRYWIN candidates available.",
+            "type": "number"
+          },
+          "waterSolubilityProvider": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "modules"
+        ],
+        "type": "object"
+      },
+      "BatchEstimateResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/BatchItemError"
+            },
+            "type": "array"
+          },
+          "results": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/EpiResults"
+                }
+              ],
+              "nullable": true
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success",
+          "count",
+          "results",
+          "errors"
+        ],
+        "type": "object"
+      },
+      "BatchItemError": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "invalid_item",
+              "unknown_field",
+              "invalid_type",
+              "missing_required",
+              "invalid_value",
+              "invalid_cas",
+              "compound_not_found",
+              "experimental_data_unavailable",
+              "estimation_failed"
+            ],
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "index": {
+            "maximum": 99,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "code",
+          "module",
+          "message"
+        ],
+        "type": "object"
+      },
+      "BioconcentrationModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BioconcentrationResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "BioconcentrationResult": {
+        "properties": {
+          "alerts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "arnotGobasBcfBafEstimates": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "bioaccumulationFactor": {
+            "type": "number"
+          },
+          "bioconcentrationFactor": {
+            "type": "number"
+          },
+          "bioconcentrationFactors": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "biotransformationFactors": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "biotransformationHalfLife": {
+            "type": "number"
+          },
+          "biotransformationRateConstants": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "experimentalBioconcentrationFactor": {
+            "description": "Packaged CAS-backed experimental BCF in L/kg wet-wt, derived as 10^experimentalLogBioconcentrationFactor. This comparison value does not replace the calculated BCF.",
+            "nullable": true,
+            "type": "number"
+          },
+          "experimentalBiotransformationHalfLife": {
+            "description": "Packaged experimental biotransformation half-life in days, derived as 10^experimentalLogBiotransformationHalfLife.",
+            "nullable": true,
+            "type": "number"
+          },
+          "experimentalBioTransformationRate": {
+            "description": "Compatibility projection in day^-1, derived as ln(2) divided by the packaged experimental half-life. It is not an estimator input or selected calculated rate.",
+            "nullable": true,
+            "type": "number"
+          },
+          "experimentalEvidence": {
+            "additionalProperties": false,
+            "description": "Source and value-type metadata for the raw packaged log values. Keys are present only for available evidence.",
+            "properties": {
+              "logBioconcentrationFactor": {
+                "$ref": "#/components/schemas/Value"
+              },
+              "logBiotransformationHalfLifeDays": {
+                "$ref": "#/components/schemas/Value"
+              }
+            },
+            "type": "object"
+          },
+          "experimentalLogBioconcentrationFactor": {
+            "description": "Curated dimensionless log10 BCF evidence, when available for the CAS-backed structure.",
+            "nullable": true,
+            "type": "number"
+          },
+          "experimentalLogBiotransformationHalfLife": {
+            "description": "Curated log10 biotransformation half-life in days, when available for the CAS-backed structure.",
+            "nullable": true,
+            "type": "number"
+          },
+          "flags": {
+            "additionalProperties": false,
+            "properties": {
+              "hasAlerts": {
+                "type": "boolean"
+              },
+              "inorganic": {
+                "type": "boolean"
+              },
+              "ionic": {
+                "type": "boolean"
+              },
+              "metalRemoved": {
+                "type": "boolean"
+              },
+              "zwitterion": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "logBioaccumulationFactor": {
+            "type": "number"
+          },
+          "logBioconcentrationFactor": {
+            "type": "number"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "BiowinModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BiowinResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "BiowinResult": {
+        "properties": {
+          "models": {
+            "items": {
+              "properties": {
+                "calculatedValue": {
+                  "type": "number"
+                },
+                "factors": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "index": {
+                  "type": "integer"
+                },
+                "interpretation": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "nativeValue": {
+                  "type": "number"
+                },
+                "shortName": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "ChemicalProperties": {
+        "properties": {
+          "aminoAcid": {
+            "type": "boolean"
+          },
+          "cas": {
+            "nullable": true,
+            "type": "string"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "molecularFormula": {
+            "type": "string"
+          },
+          "molecularFormulaHtml": {
+            "type": "string"
+          },
+          "molecularWeight": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nonStandardMetal": {
+            "type": "boolean"
+          },
+          "organic": {
+            "type": "boolean"
+          },
+          "organicAcid": {
+            "type": "boolean"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "systematicName": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DermalPermeabilityModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/DermalPermeabilityResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "DermalPermeabilityResult": {
+        "properties": {
+          "dermalAbsorbedDose": {
+            "type": "number"
+          },
+          "dermalAbsorbedDosePerEvent": {
+            "type": "number"
+          },
+          "dermalPermeabilityCoefficient": {
+            "type": "number"
+          },
+          "lagTimePerEventHours": {
+            "type": "number"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "timeToReachSteadyStateHours": {
+            "type": "number"
           }
         },
         "type": "object"
       },
       "EcosarModelResult": {
-        "description": "A neutral-organics ECOSAR model result",
         "properties": {
           "concentration": {
-            "description": "Predicted concentration in mg/L",
             "type": "number"
           },
           "duration": {
-            "description": "Exposure duration",
             "type": "string"
           },
           "endpoint": {
-            "description": "Toxicity endpoint",
             "type": "string"
           },
           "flags": {
-            "description": "Warning flags for this row",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "maxLogKow": {
-            "description": "Maximum LogKow applicability cutoff",
             "type": "number"
           },
           "organism": {
-            "description": "Target organism",
             "type": "string"
           },
           "qsarClass": {
-            "description": "ECOSAR QSAR class",
             "type": "string"
           }
         },
         "type": "object"
       },
-      "EcosarNonionicPolymerParameters": {
-        "description": "Input parameters for nonionic polymer qualitative assessments",
+      "EpiResults": {
+        "additionalProperties": false,
         "properties": {
-          "averageMolecularWeight": {
-            "description": "Average molecular weight in daltons",
-            "type": "number"
+          "aerosolAdsorptionFraction": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "cas": {
-            "description": "CAS registry number",
-            "type": "string"
+          "analogIdentification": {
+            "$ref": "#/components/schemas/AnalogIdentificationModuleResult"
           },
-          "chemicalName": {
-            "description": "Chemical name",
-            "type": "string"
+          "atmosphericHalfLife": {
+            "$ref": "#/components/schemas/AtmosphericHalfLifeModuleResult"
           },
-          "mw1000Percentage": {
-            "description": "Percentage of polymer with MW < 1000 daltons",
-            "type": "number"
+          "bioconcentration": {
+            "$ref": "#/components/schemas/BioconcentrationModuleResult"
           },
-          "mw500Percentage": {
-            "description": "Percentage of polymer with MW < 500 daltons",
-            "type": "number"
+          "biodegradationRate": {
+            "$ref": "#/components/schemas/BiowinModuleResult"
           },
-          "solubilityType": {
-            "description": "Solubility classification (INSOLUBLE, DISPERSIBLE, SOLUBLE)",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarNonionicPolymerResults": {
-        "description": "Results from nonionic polymer qualitative assessments",
-        "properties": {
-          "alerts": {
-            "description": "Warning messages or alerts",
+          "boilingPoint": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
+          },
+          "chemicalProperties": {
+            "$ref": "#/components/schemas/ChemicalProperties"
+          },
+          "dermalPermeability": {
+            "$ref": "#/components/schemas/DermalPermeabilityModuleResult"
+          },
+          "ecosar": {
+            "$ref": "#/components/schemas/OrganicEcosarModuleResult"
+          },
+          "ecosar.amphoteric-polymer": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.amphoteric-surfactant": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.anionic-polymer": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.anionic-surfactant": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.cationic-surfactant": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.dye": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.nonionic-polymer": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.nonionic-surfactant": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "ecosar.polycationic-polymer": {
+            "$ref": "#/components/schemas/TypedEcosarModuleResult"
+          },
+          "errors": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ModuleError"
             },
             "type": "array"
           },
-          "parameters": {
-            "$ref": "#/components/schemas/EcosarNonionicPolymerParameters"
+          "fishBiotransformationRate": {
+            "$ref": "#/components/schemas/FishBiotransformationModuleResult"
           },
-          "polymerCheck": {
-            "description": "Polymer screening result (SUCCESS, WARNING_ECOSAR, WARNING_ECOSAR_LOW, ERROR)",
-            "type": "string"
+          "fugacityModel": {
+            "$ref": "#/components/schemas/FugacityModuleResult"
           },
-          "predictions": {
-            "description": "Always empty for the qualitative nonionic polymer assessment",
-            "items": {
-              "$ref": "#/components/schemas/EcosarPrediction"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarNonionicSurfactantParameters": {
-        "description": "Input parameters for nonionic surfactant calculations",
-        "properties": {
-          "branchedCarbons": {
-            "description": "Number of branched carbons",
-            "type": "integer"
+          "henrysLawConstant": {
+            "$ref": "#/components/schemas/HenryModuleResult"
           },
-          "branches": {
-            "description": "Number of branches",
-            "type": "integer"
+          "hydrocarbonBiodegradationRate": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "cas": {
-            "description": "CAS registry number",
-            "type": "string"
+          "hydrolysis": {
+            "$ref": "#/components/schemas/HydrolysisResult"
           },
-          "chemicalName": {
-            "description": "Chemical name",
-            "type": "string"
+          "logKoa": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "ethoxylate": {
-            "description": "Number of ethoxylate groups",
-            "type": "integer"
+          "logKoc": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
           "logKow": {
-            "description": "Log octanol-water partition coefficient",
-            "type": "number"
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "mainCarbons": {
-            "description": "Number of main chain carbons",
-            "type": "integer"
+          "meltingPoint": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "molecularWeight": {
-            "description": "Molecular weight in g/mol",
-            "type": "number"
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
           },
-          "propoxyGroups": {
-            "description": "Number of propoxy groups",
-            "type": "integer"
+          "sewageTreatmentModel": {
+            "$ref": "#/components/schemas/SewageTreatmentModuleResult"
           },
-          "smiles": {
-            "description": "SMILES notation",
-            "type": "string"
+          "vaporPressure": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
           },
-          "waterSolubility": {
-            "description": "Water solubility in mg/L",
-            "type": "number"
+          "waterSolubilityFromLogKow": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
+          },
+          "waterSolubilityFromWaterNt": {
+            "$ref": "#/components/schemas/PropertyModuleResult"
+          },
+          "waterVolatilization": {
+            "$ref": "#/components/schemas/WaterVolatilizationModuleResult"
           }
         },
+        "required": [
+          "parameters",
+          "chemicalProperties"
+        ],
         "type": "object"
       },
-      "EcosarNonionicSurfactantResults": {
-        "description": "Results from nonionic surfactant toxicity calculations",
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "type": "object"
+      },
+      "FishBiotransformationModuleResult": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FishBiotransformationResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "FishBiotransformationResult": {
+        "additionalProperties": false,
         "properties": {
           "alerts": {
-            "description": "Warning messages or alerts",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
-          "parameters": {
-            "$ref": "#/components/schemas/EcosarNonionicSurfactantParameters"
-          },
-          "predictions": {
-            "description": "List of toxicity predictions",
+          "calculationTerms": {
             "items": {
-              "$ref": "#/components/schemas/EcosarPrediction"
+              "additionalProperties": false,
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "type",
+                "description",
+                "value"
+              ],
+              "type": "object"
             },
             "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarPolymerParameters": {
-        "description": "Input parameters for polymer calculations and qualitative assessments",
-        "properties": {
-          "amineNitrogens": {
-            "description": "Percent amine nitrogen",
-            "type": "number"
-          },
-          "averageMolecularWeight": {
-            "description": "Average molecular weight in daltons",
-            "type": "number"
           },
           "cas": {
-            "description": "CAS registry number",
             "type": "string"
           },
-          "cationAnionRatio": {
-            "description": "Cation to anion ratio (CAR)",
+          "fragmentContribution": {
             "type": "number"
           },
-          "chemicalName": {
-            "description": "Chemical name",
-            "type": "string"
+          "fragments": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "coefficient": {
+                  "type": "number"
+                },
+                "count": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "family": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "integer"
+                },
+                "totalCoefficient": {
+                  "type": "number"
+                },
+                "trainingCount": {
+                  "type": "integer"
+                },
+                "trainingMaxCount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "family",
+                "index",
+                "description",
+                "count",
+                "coefficient",
+                "totalCoefficient"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
-          "mw1000Percentage": {
-            "description": "Percentage of polymer with MW < 1000 daltons",
+          "generalFragmentCount": {
+            "type": "integer"
+          },
+          "halfLifeDays": {
+            "nullable": true,
             "type": "number"
           },
-          "mw500Percentage": {
-            "description": "Percentage of polymer with MW < 500 daltons",
+          "hasLogKow": {
+            "type": "boolean"
+          },
+          "hydrocarbonFragmentCount": {
+            "type": "integer"
+          },
+          "inorganic": {
+            "type": "boolean"
+          },
+          "ionic": {
+            "type": "boolean"
+          },
+          "lithiumCount": {
+            "type": "integer"
+          },
+          "logHalfLifeDays": {
+            "nullable": true,
             "type": "number"
           },
-          "polymerType": {
-            "description": "Polymer backbone type (Carbon, Silicon, Natural)",
-            "type": "string"
+          "logKow": {
+            "nullable": true,
+            "type": "number"
           },
-          "solubilityType": {
-            "description": "Solubility classification (INSOLUBLE, DISPERSIBLE, SOLUBLE)",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarPolymerResults": {
-        "description": "Results from polymer toxicity calculations or qualitative assessments",
-        "properties": {
-          "alerts": {
-            "description": "Warning messages or alerts",
+          "logKowContribution": {
+            "nullable": true,
+            "type": "number"
+          },
+          "metalRemoved": {
+            "type": "boolean"
+          },
+          "molecularWeight": {
+            "type": "number"
+          },
+          "molecularWeightContribution": {
+            "type": "number"
+          },
+          "notes": {
             "items": {
               "type": "string"
             },
             "type": "array"
           },
+          "output": {
+            "type": "string"
+          },
           "parameters": {
-            "$ref": "#/components/schemas/EcosarPolymerParameters"
+            "additionalProperties": true,
+            "type": "object"
           },
-          "polymerCheck": {
-            "description": "Polymer screening result (SUCCESS, WARNING_ECOSAR, WARNING_ECOSAR_LOW, ERROR)",
-            "type": "string"
+          "potassiumCount": {
+            "type": "integer"
           },
-          "polymerType": {
-            "description": "Type of polymer",
-            "type": "string"
+          "rateCapApplied": {
+            "type": "boolean"
           },
-          "predictions": {
-            "description": "List of toxicity predictions",
+          "rateCapMaximum": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rateConstant100g": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rateConstant10g": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rateConstant10kg": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rateConstant1kg": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rateConstants": {
             "items": {
-              "$ref": "#/components/schemas/EcosarPrediction"
+              "additionalProperties": false,
+              "properties": {
+                "fishSize": {
+                  "type": "string"
+                },
+                "rateConstant": {
+                  "type": "number"
+                },
+                "units": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "fishSize",
+                "rateConstant",
+                "units"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "reportMolecularWeight": {
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          },
+          "sodiumCount": {
+            "type": "integer"
+          },
+          "uncappedRateConstant10g": {
+            "nullable": true,
+            "type": "number"
+          },
+          "zwitterion": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "halfLifeDays",
+          "rateConstants",
+          "fragments",
+          "alerts"
+        ],
+        "type": "object"
+      },
+      "FugacityModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/FugacityResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "FugacityResult": {
+        "properties": {
+          "model": {
+            "properties": {
+              "compartments": {
+                "items": {
+                  "properties": {
+                    "emissionsKgPerHour": {
+                      "type": "number"
+                    },
+                    "halfLifeHours": {
+                      "type": "number"
+                    },
+                    "massPercent": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "estimates": {
+                "properties": {
+                  "airPercent": {
+                    "type": "number"
+                  },
+                  "originalEqcKocComparison": {
+                    "description": "The historical original-EQC Koc comparison (0.41 × 10^logKow), in L/kg. It is reported for context and is not substituted into the Level III calculation.",
+                    "type": "number"
+                  },
+                  "persistenceHours": {
+                    "type": "number"
+                  },
+                  "sedimentPercent": {
+                    "type": "number"
+                  },
+                  "selectedKoc": {
+                    "description": "The resolved soil Koc used by the Level III calculation, in L/kg.",
+                    "type": "number"
+                  },
+                  "soilPercent": {
+                    "type": "number"
+                  },
+                  "waterPercent": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "output": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "HenryEstimatedValue": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Value"
+          },
+          {
+            "properties": {
+              "model": {
+                "items": {
+                  "$ref": "#/components/schemas/HenryModel"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "model"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "HenryFactor": {
+        "additionalProperties": false,
+        "properties": {
+          "coefficient": {
+            "description": "Per-fragment coefficient. Null for nonlinear correction formulas and rows without a scientific contribution.",
+            "nullable": true,
+            "type": "number"
+          },
+          "comment": {
+            "nullable": true,
+            "type": "string"
+          },
+          "correction": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "fragmentCount": {
+            "type": "integer"
+          },
+          "maxFragmentCount": {
+            "description": "Bond maximum training-set fragment count. Null for Group rows, whose source supplies no maximum-count metadata.",
+            "nullable": true,
+            "type": "integer"
+          },
+          "totalCoefficient": {
+            "description": "Total row contribution. Null for missing-fragment and note-only rows; explicit correction totals remain authoritative even when coefficient is null.",
+            "nullable": true,
+            "type": "number"
+          },
+          "trainingCount": {
+            "description": "Bond training-set occurrence count. Null for Group rows, whose source supplies no training-count metadata.",
+            "nullable": true,
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "description",
+          "fragmentCount",
+          "coefficient",
+          "totalCoefficient",
+          "trainingCount",
+          "maxFragmentCount",
+          "correction"
+        ],
+        "type": "object"
+      },
+      "HenryModel": {
+        "additionalProperties": false,
+        "properties": {
+          "complete": {
+            "type": "boolean"
+          },
+          "factors": {
+            "items": {
+              "$ref": "#/components/schemas/HenryFactor"
+            },
+            "type": "array"
+          },
+          "hasCorrectionFactor": {
+            "type": "boolean"
+          },
+          "hlcAtmM3PerMol": {
+            "nullable": true,
+            "type": "number"
+          },
+          "hlcPaM3PerMol": {
+            "nullable": true,
+            "type": "number"
+          },
+          "hlcUnitless": {
+            "nullable": true,
+            "type": "number"
+          },
+          "missingValues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "name": {
+            "enum": [
+              "Bond",
+              "Group",
+              "VP/WSOL"
+            ],
+            "type": "string"
+          },
+          "nativeUnits": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nativeValue": {
+            "description": "Method-native result: LWAPC/log-gamma for Bond or Group and atm-m3/mol for VP/WSOL.",
+            "nullable": true,
+            "type": "number"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "unavailableReason": {
+            "nullable": true,
+            "type": "string"
+          },
+          "value": {
+            "description": "Compatibility alias for the method-native result. Prefer nativeValue with nativeUnits or the explicit HLC projections.",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "complete",
+          "hlcAtmM3PerMol",
+          "hlcUnitless",
+          "hlcPaM3PerMol",
+          "hasCorrectionFactor",
+          "factors",
+          "missingValues"
+        ],
+        "type": "object"
+      },
+      "HenryModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/HenryResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "HenryResult": {
+        "additionalProperties": false,
+        "properties": {
+          "estimatedValue": {
+            "$ref": "#/components/schemas/HenryEstimatedValue"
+          },
+          "experimentalValues": {
+            "items": {
+              "$ref": "#/components/schemas/Value"
+            },
+            "type": "array"
+          },
+          "output": {
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "selectedMethod": {
+            "description": "Preferred calculated candidate. This can differ from the provenance of selectedValue when a user-provided or packaged-evidence value is selected.",
+            "enum": [
+              "Bond",
+              "Group",
+              "VP/WSOL"
+            ],
+            "type": "string"
+          },
+          "selectedValue": {
+            "$ref": "#/components/schemas/Value"
+          },
+          "selectionReason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameters",
+          "estimatedValue",
+          "experimentalValues",
+          "selectedValue",
+          "selectedMethod"
+        ],
+        "type": "object"
+      },
+      "HydrolysisHalfLife": {
+        "additionalProperties": false,
+        "description": "Flat compatibility half-life projection normalized to days. Pathway-scoped half-lives retain their original context in pathways.",
+        "properties": {
+          "isomer": {
+            "enum": [
+              "trans"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "Combined denotes a native summary that cannot be assigned to one catalytic mechanism.",
+            "enum": [
+              "base-catalyzed",
+              "acid-catalyzed",
+              "phosphorus-ester",
+              "combined"
+            ],
+            "type": "string"
+          },
+          "originalUnit": {
+            "description": "Native HYDROWIN unit for originalValue.",
+            "type": "string"
+          },
+          "originalValue": {
+            "description": "Unnormalized native half-life value, retained with originalUnit.",
+            "nullable": true,
+            "type": "number"
+          },
+          "pH": {
+            "description": "pH associated with the native summary, or null when no single pH applies.",
+            "nullable": true,
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "estimated",
+              "not-estimated"
+            ],
+            "type": "string"
+          },
+          "unit": {
+            "enum": [
+              "days"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "mechanism",
+          "pH",
+          "isomer",
+          "value",
+          "unit",
+          "originalValue",
+          "originalUnit"
+        ],
+        "type": "object"
+      },
+      "HydrolysisMessage": {
+        "additionalProperties": false,
+        "description": "A message scoped by its containing response, pathway, or site.",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "info",
+              "caution",
+              "warning"
+            ],
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "text"
+        ],
+        "type": "object"
+      },
+      "HydrolysisPathway": {
+        "additionalProperties": false,
+        "description": "One independently classified hydrolysis pathway. Nested sites, rates, half-lives, evidence, and messages retain their scope.",
+        "properties": {
+          "chemicalClass": {
+            "nullable": true,
+            "type": "string"
+          },
+          "evidenceText": {
+            "description": "Native evidence text scoped to this pathway, or null when the report provides none.",
+            "nullable": true,
+            "type": "string"
+          },
+          "family": {
+            "enum": [
+              "general",
+              "phosphorus"
+            ],
+            "type": "string"
+          },
+          "halfLives": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisPathwayHalfLife"
+            },
+            "type": "array"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisMessage"
+            },
+            "type": "array"
+          },
+          "rates": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisRate"
+            },
+            "type": "array"
+          },
+          "sites": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisSite"
+            },
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "estimated",
+              "detected-only",
+              "insufficient-data",
+              "unsupported",
+              "indeterminate"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "family",
+          "chemicalClass",
+          "status",
+          "sites",
+          "rates",
+          "halfLives",
+          "evidenceText",
+          "messages"
+        ],
+        "type": "object"
+      },
+      "HydrolysisPathwayHalfLife": {
+        "additionalProperties": false,
+        "description": "Half-life scoped to one pathway and preserved in its native unit.",
+        "properties": {
+          "isomer": {
+            "nullable": true,
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "Null means the report did not assign a base-, acid-, or neutral-catalyzed mechanism.",
+            "enum": [
+              "acid-catalyzed",
+              "base-catalyzed",
+              "neutral"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "pH": {
+            "type": "integer"
+          },
+          "unit": {
+            "description": "Native HYDROWIN unit for value.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Native pathway half-life value.",
+            "type": "number"
+          }
+        },
+        "required": [
+          "mechanism",
+          "pH",
+          "isomer",
+          "value",
+          "unit"
+        ],
+        "type": "object"
+      },
+      "HydrolysisRate": {
+        "additionalProperties": false,
+        "description": "Rate estimate scoped by its containing pathway or site. It is not a flat response-wide compatibility projection.",
+        "properties": {
+          "isomer": {
+            "nullable": true,
+            "type": "string"
+          },
+          "logUnit": {
+            "description": "Unit or label associated with logValue.",
+            "nullable": true,
+            "type": "string"
+          },
+          "logValue": {
+            "description": "Reported log-rate value when supplied.",
+            "nullable": true,
+            "type": "number"
+          },
+          "mechanism": {
+            "enum": [
+              "acid-catalyzed",
+              "base-catalyzed",
+              "neutral"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "estimated",
+              "unavailable"
+            ],
+            "type": "string"
+          },
+          "unit": {
+            "description": "Unit associated with value.",
+            "nullable": true,
+            "type": "string"
+          },
+          "value": {
+            "description": "Reported rate value, or null when unavailable.",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "mechanism",
+          "status",
+          "value",
+          "unit",
+          "logValue",
+          "logUnit",
+          "isomer"
+        ],
+        "type": "object"
+      },
+      "HydrolysisRateEstimate": {
+        "additionalProperties": false,
+        "description": "Flat compatibility rate projection. For site- and pathway-scoped estimates, use pathways.",
+        "properties": {
+          "basis": {
+            "enum": [
+              "general",
+              "phosphorus-ester"
+            ],
+            "type": "string"
+          },
+          "isomer": {
+            "enum": [
+              "trans"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "estimated",
+              "not-estimated"
+            ],
+            "type": "string"
+          },
+          "unit": {
+            "description": "Canonical unit for this flat compatibility projection.",
+            "enum": [
+              "L mol-1 s-1",
+              "s-1"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Estimated native rate constant, or null when the status is not-estimated.",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "unit",
+          "basis",
+          "isomer"
+        ],
+        "type": "object"
+      },
+      "HydrolysisReportParts": {
+        "additionalProperties": false,
+        "description": "Preserved native report sections. These strings are available only in full responses.",
+        "properties": {
+          "details": {
+            "description": "Native detailed functional-group and calculation section.",
+            "type": "string"
+          },
+          "molecularWeight": {
+            "description": "Native report molecular-weight section.",
+            "type": "string"
+          },
+          "smiles": {
+            "description": "Native report SMILES section.",
+            "type": "string"
+          },
+          "summary": {
+            "description": "Native report summary section.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "smiles",
+          "molecularWeight",
+          "summary",
+          "details"
+        ],
+        "type": "object"
+      },
+      "HydrolysisResult": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/HydrolysisSuccess"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "HydrolysisSite": {
+        "additionalProperties": false,
+        "description": "A reactive site within its containing pathway. Native functional-group text can contain line breaks.",
+        "properties": {
+          "atomNumber": {
+            "nullable": true,
+            "type": "integer"
+          },
+          "chemicalClass": {
+            "nullable": true,
+            "type": "string"
+          },
+          "functionalGroup": {
+            "description": "Native functional-group representation for this site.",
+            "nullable": true,
+            "type": "string"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisMessage"
+            },
+            "type": "array"
+          },
+          "rates": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisRate"
+            },
+            "type": "array"
+          },
+          "substituents": {
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisSubstituent"
             },
             "type": "array"
           }
         },
+        "required": [
+          "atomNumber",
+          "chemicalClass",
+          "functionalGroup",
+          "substituents",
+          "rates",
+          "messages"
+        ],
         "type": "object"
       },
-      "EcosarPrediction": {
-        "description": "A single ECOSAR toxicity prediction",
+      "HydrolysisSubstituent": {
+        "additionalProperties": false,
+        "description": "Native substituent text associated with one reactive site.",
         "properties": {
-          "concentration": {
-            "description": "Predicted concentration in mg/L",
-            "type": "number"
-          },
-          "duration": {
-            "description": "Exposure duration (e.g., 96 hr, 48 hr)",
+          "attachment": {
             "type": "string"
           },
-          "endpoint": {
-            "description": "Toxicity endpoint (e.g., LC50, EC50)",
-            "type": "string"
-          },
-          "flag": {
-            "description": "Warning flag if applicable",
-            "type": "string"
-          },
-          "organism": {
-            "description": "Target organism (e.g., Fish, Daphnid, Green Algae)",
+          "fragment": {
             "type": "string"
           }
         },
+        "required": [
+          "attachment",
+          "fragment"
+        ],
         "type": "object"
       },
-      "EcosarResults": {
-        "additionalProperties": true,
-        "description": "ECOSAR aquatic toxicity estimation results",
+      "HydrolysisSuccess": {
+        "additionalProperties": false,
+        "description": "Full HYDROWIN response. pathways is the primary structured result; the top-level rates, halfLives, fragments, notes, and alerts are flat compatibility projections and can lose pathway or site scope.",
         "properties": {
           "alerts": {
-            "description": "Warning messages or alerts",
+            "description": "Legacy flat report alerts retained for compatibility.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "disposition": {
+            "description": "Overall outcome after all HYDROWIN pathways are considered.",
+            "enum": [
+              "estimated",
+              "detected-only",
+              "insufficient-data",
+              "unsupported",
+              "indeterminate"
+            ],
+            "type": "string"
+          },
+          "flags": {
+            "additionalProperties": false,
+            "properties": {
+              "hasAlerts": {
+                "type": "boolean"
+              },
+              "hasHydrolyzableFunctions": {
+                "type": "boolean"
+              },
+              "hasPhosphorusEster": {
+                "type": "boolean"
+              },
+              "zwitterion": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "zwitterion",
+              "hasHydrolyzableFunctions",
+              "hasPhosphorusEster",
+              "hasAlerts"
+            ],
+            "type": "object"
+          },
+          "fragments": {
+            "description": "Legacy flat functional-group projection. It does not replace pathway site records.",
+            "items": {
+              "properties": {
+                "chemicalClass": {
+                  "type": "string"
+                },
+                "functionalGroup": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "halfLives": {
+            "description": "Lossy flat compatibility projection normalized to days. Use pathways for scoped native half-lives.",
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisHalfLife"
+            },
+            "type": "array"
+          },
+          "messages": {
+            "description": "Response-scoped messages. Pathway- and site-scoped messages remain nested in pathways.",
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisMessage"
+            },
+            "type": "array"
+          },
+          "notes": {
+            "description": "Legacy flat report notes retained for compatibility.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "output": {
+            "description": "Preserved native primary output. Omitted by compact responses; reportParts.summary remains separately available in full responses.",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "pathways": {
+            "description": "Ordered authoritative pathways. The Malathion example is representative and abbreviated; actual site, message, evidence, rate, and half-life rows vary by chemical.",
+            "example": [
+              {
+                "chemicalClass": "Thiophosphate",
+                "evidenceText": {},
+                "family": "phosphorus",
+                "halfLives": [],
+                "messages": [],
+                "rates": [
+                  {
+                    "isomer": {},
+                    "logUnit": "L mol-1 s-1",
+                    "logValue": -2.4364,
+                    "mechanism": "base-catalyzed",
+                    "status": "estimated",
+                    "unit": "L mol-1 s-1",
+                    "value": 0.003661
+                  }
+                ],
+                "sites": [],
+                "status": "estimated"
+              },
+              {
+                "chemicalClass": {},
+                "evidenceText": {},
+                "family": "general",
+                "halfLives": [],
+                "messages": [],
+                "rates": [
+                  {
+                    "isomer": {},
+                    "logUnit": {},
+                    "logValue": {},
+                    "mechanism": "base-catalyzed",
+                    "status": "estimated",
+                    "unit": "L/mol-sec",
+                    "value": 0.0605619251728058
+                  }
+                ],
+                "sites": [],
+                "status": "estimated"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/HydrolysisPathway"
+            },
+            "type": "array"
+          },
+          "phosphorusEster": {
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "required": [
+              "mode"
+            ],
+            "type": "object"
+          },
+          "rates": {
+            "additionalProperties": false,
+            "description": "Lossy flat compatibility projection of selected rates. Use pathways for scoped rates.",
+            "properties": {
+              "acidCatalyzedPrimary": {
+                "$ref": "#/components/schemas/HydrolysisRateEstimate"
+              },
+              "acidCatalyzedTrans": {
+                "$ref": "#/components/schemas/HydrolysisRateEstimate"
+              },
+              "baseCatalyzed": {
+                "$ref": "#/components/schemas/HydrolysisRateEstimate"
+              },
+              "neutral": {
+                "$ref": "#/components/schemas/HydrolysisRateEstimate"
+              }
+            },
+            "required": [
+              "baseCatalyzed",
+              "acidCatalyzedPrimary",
+              "acidCatalyzedTrans",
+              "neutral"
+            ],
+            "type": "object"
+          },
+          "reportParts": {
+            "$ref": "#/components/schemas/HydrolysisReportParts"
+          }
+        },
+        "required": [
+          "parameters",
+          "disposition",
+          "pathways",
+          "messages",
+          "rates",
+          "halfLives",
+          "phosphorusEster",
+          "flags",
+          "alerts",
+          "fragments",
+          "notes",
+          "reportParts",
+          "output"
+        ],
+        "type": "object"
+      },
+      "ModuleError": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "enum": [
+              "estimation_failed"
+            ],
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "module",
+          "code",
+          "message"
+        ],
+        "type": "object"
+      },
+      "OrganicEcosarModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/OrganicEcosarResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "OrganicEcosarResult": {
+        "properties": {
+          "alerts": {
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "modelResults": {
-            "description": "List of neutral-organics toxicity predictions by QSAR class",
             "items": {
               "$ref": "#/components/schemas/EcosarModelResult"
             },
             "type": "array"
           },
           "output": {
-            "description": "Raw ECOSAR report output",
             "type": "string"
           },
           "parameters": {
-            "additionalProperties": true,
             "type": "object"
           }
         },
         "type": "object"
       },
-      "EcosarSurfactantParameters": {
-        "description": "Input parameters for surfactant calculations",
-        "properties": {
-          "carbonChainLength": {
-            "description": "Carbon chain length",
-            "type": "integer"
-          },
-          "cas": {
-            "description": "CAS registry number",
-            "type": "string"
-          },
-          "chemicalName": {
-            "description": "Chemical name",
-            "type": "string"
-          },
-          "ethoxylate": {
-            "description": "Ethoxylate groups for amphoteric surfactants",
-            "type": "integer"
-          },
-          "waterSolubility": {
-            "description": "Water solubility in mg/L",
-            "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "EcosarSurfactantResults": {
-        "description": "Results from surfactant toxicity calculations",
-        "properties": {
-          "alerts": {
-            "description": "Warning messages or alerts",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/EcosarSurfactantParameters"
-          },
-          "predictions": {
-            "description": "List of toxicity predictions for quantitative polymer SAR routes; empty for qualitative-only assessments",
-            "items": {
-              "$ref": "#/components/schemas/EcosarPrediction"
-            },
-            "type": "array"
-          },
-          "surfactantType": {
-            "description": "Type of surfactant (anionic, cationic, amphoteric)",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "EpiSuiteParameters": {
-        "description": "Input parameters for the calculation",
-        "properties": {
-          "cas": {
-            "description": "Input CAS number",
-            "type": "string"
-          },
-          "caseNumber": {
-            "description": "Case identifier",
-            "type": "string"
-          },
-          "modules": {
-            "description": "List of modules that were run",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "smiles": {
-            "description": "Input SMILES notation",
-            "type": "string"
-          },
-          "userAtmosphericDaylightHours": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userAtmosphericHydroxylRadicalConcentration": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userAtmosphericOzoneConcentration": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userBiodegradationRateRemoveMetals": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userBoilingPoint": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userDermalPermeabilityCoefficient": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityAdvectionTimeAir": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityAdvectionTimeSediment": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityAdvectionTimeSoil": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityAdvectionTimeWater": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityEmissionRateAir": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityEmissionRateSediment": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityEmissionRateSoil": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityEmissionRateWater": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityHalfLifeAir": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityHalfLifeSediment": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityHalfLifeSoil": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userFugacityHalfLifeWater": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userHenrysLawConstant": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userHydroxylReactionRateConstant": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userLogKoa": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userLogKoc": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userLogKow": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userMeltingPoint": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userStpHalfLifeAerationVessel": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userStpHalfLifePrimaryClarifier": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userStpHalfLifeSettlingTank": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userVaporPressure": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          },
-          "userWaterSolubility": {
-            "$ref": "#/components/schemas/UserProvidedValue"
-          }
-        },
-        "type": "object"
-      },
-      "EpiSuiteResults": {
-        "description": "Complete EpiSuite calculation results",
-        "properties": {
-          "aerosolAdsorptionFraction": {
-            "$ref": "#/components/schemas/AerosolAdsorptionFractionResults"
-          },
-          "analogs": {
-            "description": "List of structural analogs",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "atmosphericHalfLife": {
-            "$ref": "#/components/schemas/AtmosphericHalfLifeResults"
-          },
-          "bioconcentration": {
-            "$ref": "#/components/schemas/BioconcentrationModelResults"
-          },
-          "biodegradationRate": {
-            "$ref": "#/components/schemas/BiodegradationRateResults"
-          },
-          "boilingPoint": {
-            "$ref": "#/components/schemas/BpResults"
-          },
-          "chemicalProperties": {
-            "$ref": "#/components/schemas/ChemicalProperties"
-          },
-          "dermalPermeability": {
-            "$ref": "#/components/schemas/DermalPermeabilityResults"
-          },
-          "ecosar": {
-            "$ref": "#/components/schemas/EcosarResults"
-          },
-          "fugacityModel": {
-            "$ref": "#/components/schemas/FugacityModelResults"
-          },
-          "henrysLawConstant": {
-            "$ref": "#/components/schemas/HenrysLawConstantResults"
-          },
-          "hydrocarbonBiodegradationRate": {
-            "$ref": "#/components/schemas/HydrocarbonBiodegradationRateResults"
-          },
-          "hydrolysis": {
-            "$ref": "#/components/schemas/HydrolysisResults"
-          },
-          "logKoa": {
-            "$ref": "#/components/schemas/LogKoaResults"
-          },
-          "logKoc": {
-            "$ref": "#/components/schemas/LogKocResults"
-          },
-          "logKow": {
-            "$ref": "#/components/schemas/LogKowResults"
-          },
-          "logKowAnalogs": {
-            "description": "List of structural analogs found for LogKow estimation",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "meltingPoint": {
-            "$ref": "#/components/schemas/MpResults"
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/EpiSuiteParameters"
-          },
-          "sewageTreatmentModel": {
-            "$ref": "#/components/schemas/SewageTreatmentModelResults"
-          },
-          "vaporPressure": {
-            "$ref": "#/components/schemas/VpResults"
-          },
-          "waterSolubilityFromLogKow": {
-            "$ref": "#/components/schemas/WaterSolubilityResults"
-          },
-          "waterSolubilityFromWaterNt": {
-            "$ref": "#/components/schemas/WaterSolubilityResults"
-          },
-          "waterVolatilization": {
-            "$ref": "#/components/schemas/WaterVolatilizationResults"
-          }
-        },
-        "type": "object"
-      },
-      "EstimatedValue": {
-        "allOf": [
+      "PropertyModuleResult": {
+        "anyOf": [
           {
-            "$ref": "#/components/schemas/Value"
+            "$ref": "#/components/schemas/PropertyResult"
           },
           {
-            "description": "A model-estimated value with calculation details",
-            "properties": {
-              "model": {
-                "additionalProperties": true,
-                "description": "Model calculation details including factors and contributions",
-                "type": "object"
-              }
-            },
-            "type": "object"
+            "$ref": "#/components/schemas/ModuleError"
           }
         ]
       },
-      "ExperimentalValue": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Value"
-          },
-          {
-            "description": "An experimental/measured value from literature",
-            "properties": {
-              "author": {
-                "description": "Author or source of the experimental data",
-                "type": "string"
-              },
-              "order": {
-                "description": "Order/priority of this value among multiple experimental values",
-                "type": "integer"
-              },
-              "year": {
-                "description": "Year of publication",
-                "type": "integer"
-              }
-            },
-            "type": "object"
-          }
-        ]
-      },
-      "FugacityModelResults": {
+      "PropertyResult": {
         "additionalProperties": true,
-        "description": "Level III fugacity environmental fate model results",
-        "properties": {
-          "airMassPercent": {
-            "description": "Percentage of chemical mass in air compartment",
-            "type": "number"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "persistenceTime": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "sedimentMassPercent": {
-            "description": "Percentage of chemical mass in sediment compartment",
-            "type": "number"
-          },
-          "soilMassPercent": {
-            "description": "Percentage of chemical mass in soil compartment",
-            "type": "number"
-          },
-          "waterMassPercent": {
-            "description": "Percentage of chemical mass in water compartment",
-            "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "HenrysLawConstantResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "Henry's Law constant estimation results (atm-m3/mol)",
-            "type": "object"
-          }
-        ]
-      },
-      "HydrocarbonBiodegradationRateResults": {
-        "additionalProperties": true,
-        "description": "Hydrocarbon biodegradation rate estimation results",
-        "properties": {
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "HydrolysisResults": {
-        "additionalProperties": true,
-        "description": "Hydrolysis half-life estimation results",
-        "properties": {
-          "acidHydrolysis": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "baseHydrolysis": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "neutralHydrolysis": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "overallHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
-          },
-          "parameters": {
-            "additionalProperties": true,
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
-      "LogKoaResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "LogKoa (octanol-air partition coefficient) estimation results",
-            "type": "object"
-          }
-        ]
-      },
-      "LogKocResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "LogKoc (soil adsorption coefficient) estimation results (L/kg)",
-            "type": "object"
-          }
-        ]
-      },
-      "LogKowResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "LogKow (octanol-water partition coefficient) estimation results",
-            "type": "object"
-          }
-        ]
-      },
-      "MpResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "Melting point estimation results (Celsius)",
-            "type": "object"
-          }
-        ]
-      },
-      "PropertyResults": {
-        "description": "Generic module results containing estimated, experimental, and selected values",
         "properties": {
           "estimatedValue": {
-            "$ref": "#/components/schemas/EstimatedValue"
+            "additionalProperties": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Value"
+              }
+            ]
           },
           "experimentalValues": {
-            "description": "List of experimental values from literature",
             "items": {
-              "$ref": "#/components/schemas/ExperimentalValue"
+              "$ref": "#/components/schemas/Value"
             },
             "type": "array"
           },
+          "output": {
+            "type": "string"
+          },
           "parameters": {
             "additionalProperties": true,
-            "description": "Module-specific input parameters",
             "type": "object"
           },
           "selectedValue": {
@@ -970,129 +2486,285 @@
         "type": "object"
       },
       "SearchResult": {
-        "description": "A chemical search result",
         "properties": {
           "cas": {
-            "description": "CAS registry number",
+            "nullable": true,
             "type": "string"
           },
           "name": {
-            "description": "Chemical name",
+            "nullable": true,
             "type": "string"
           },
           "smiles": {
-            "description": "SMILES notation",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "smiles",
+          "cas"
+        ],
+        "type": "object"
+      },
+      "SewageTreatmentModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/SewageTreatmentResult"
+          },
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "SewageTreatmentResult": {
+        "properties": {
+          "model": {
+            "properties": {
+              "estimates": {
+                "properties": {
+                  "finalEffluentPercent": {
+                    "type": "number"
+                  },
+                  "totalAirPercent": {
+                    "type": "number"
+                  },
+                  "totalBiodegradationPercent": {
+                    "type": "number"
+                  },
+                  "totalRemovalPercent": {
+                    "type": "number"
+                  },
+                  "totalSludgeAdsorptionPercent": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "processBreakdown": {
+                "items": {
+                  "properties": {
+                    "category": {
+                      "type": "string"
+                    },
+                    "massPerHour": {
+                      "type": "number"
+                    },
+                    "molPerHour": {
+                      "type": "number"
+                    },
+                    "percent": {
+                      "type": "number"
+                    },
+                    "process": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "output": {
             "type": "string"
           }
         },
         "type": "object"
       },
-      "SewageTreatmentModelResults": {
-        "additionalProperties": true,
-        "description": "Sewage treatment plant removal estimation results",
-        "properties": {
-          "airStrippingRemoval": {
-            "$ref": "#/components/schemas/EstimatedValue"
+      "TypedEcosarModuleResult": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/TypedEcosarResult"
           },
-          "biodegradationRemoval": {
-            "$ref": "#/components/schemas/EstimatedValue"
+          {
+            "$ref": "#/components/schemas/ModuleError"
+          }
+        ]
+      },
+      "TypedEcosarPrediction": {
+        "properties": {
+          "concentration": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "flag": {
+            "type": "string"
+          },
+          "organism": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TypedEcosarResult": {
+        "additionalProperties": true,
+        "properties": {
+          "alerts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "estimates": {
+            "additionalProperties": true,
+            "properties": {
+              "concentrationUnit": {
+                "type": "string"
+              },
+              "polymerCheck": {
+                "type": "string"
+              },
+              "predictionCount": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "flags": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object"
+          },
+          "model": {
+            "enum": [
+              "ecosar"
+            ],
+            "type": "string"
+          },
+          "modelDetails": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "module": {
+            "type": "string"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "parameters": {
             "additionalProperties": true,
             "type": "object"
           },
-          "sludgeAdsorptionRemoval": {
-            "$ref": "#/components/schemas/EstimatedValue"
+          "predictionCount": {
+            "type": "integer"
           },
-          "totalRemoval": {
-            "$ref": "#/components/schemas/EstimatedValue"
+          "predictions": {
+            "items": {
+              "$ref": "#/components/schemas/TypedEcosarPrediction"
+            },
+            "type": "array"
+          },
+          "resolvedInputs": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "submodule": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
           }
         },
+        "required": [
+          "module",
+          "success",
+          "parameters",
+          "predictions",
+          "alerts"
+        ],
         "type": "object"
       },
-      "UserProvidedValue": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Value"
-          },
-          {
-            "description": "A user-provided override value",
-            "type": "object"
-          }
-        ]
-      },
       "Value": {
-        "description": "A value with units and type information",
         "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "evidenceType": {
+            "enum": [
+              "EXPERIMENTAL",
+              "ESTIMATED",
+              "EXTRAPOLATED",
+              "OTHER",
+              "UNSPECIFIED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "method": {
+            "description": "Packaged evidence method code when this value was selected from attached evidence.",
+            "nullable": true,
+            "type": "string"
+          },
+          "order": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "source": {
+            "nullable": true,
+            "type": "string"
+          },
           "units": {
-            "description": "Units of measurement (empty string if unitless)",
+            "nullable": true,
             "type": "string"
           },
           "value": {
-            "description": "The actual value",
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "string"
-              }
-            ]
+            "nullable": true,
+            "type": "number"
           },
           "valueType": {
-            "$ref": "#/components/schemas/ValueType"
+            "enum": [
+              "ESTIMATED",
+              "EXPERIMENTAL",
+              "EXTRAPOLATED",
+              "EVIDENCE",
+              "USER_PROVIDED",
+              "DEFAULT",
+              "NONE"
+            ],
+            "type": "string"
+          },
+          "year": {
+            "type": "integer"
           }
         },
         "type": "object"
       },
-      "ValueType": {
-        "description": "The source/type of a value",
-        "enum": [
-          "NONE",
-          "ESTIMATED",
-          "EXPERIMENTAL",
-          "USER_PROVIDED"
-        ],
-        "type": "string"
-      },
-      "VpResults": {
-        "allOf": [
+      "WaterVolatilizationModuleResult": {
+        "anyOf": [
           {
-            "$ref": "#/components/schemas/PropertyResults"
+            "$ref": "#/components/schemas/WaterVolatilizationResult"
           },
           {
-            "description": "Vapor pressure estimation results (mmHg)",
-            "type": "object"
+            "$ref": "#/components/schemas/ModuleError"
           }
         ]
       },
-      "WaterSolubilityResults": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PropertyResults"
-          },
-          {
-            "description": "Water solubility estimation results (mg/L)",
-            "type": "object"
-          }
-        ]
-      },
-      "WaterVolatilizationResults": {
-        "additionalProperties": true,
-        "description": "Water volatilization half-life estimation results",
+      "WaterVolatilizationResult": {
         "properties": {
-          "lakeHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
+          "lakeHalfLifeHours": {
+            "type": "number"
           },
           "parameters": {
             "additionalProperties": true,
             "type": "object"
           },
-          "riverHalfLife": {
-            "$ref": "#/components/schemas/EstimatedValue"
+          "riverHalfLifeHours": {
+            "type": "number"
           }
         },
         "type": "object"
@@ -1101,70 +2773,30 @@
   },
   "info": {
     "contact": {
-      "name": "SRC Inc."
+      "name": "SRC, Inc."
     },
-    "description": "Chemical property prediction and environmental assessment API. Calculates properties like LogKow, Henry's Law constant, biodegradation rates, bioconcentration factors, and more from SMILES or CAS numbers.",
-    "title": "EpiSuite API",
-    "version": "1.0.3-beta",
-    "x-databases": [
-      {
-        "name": "EpiUnified.sqlite",
-        "sha256": "98AEDDB7CF608F8C2388AAA70E059CFB93668D9E57DED4E2B74A71EC451416AB",
-        "size": 86686720
-      },
-      {
-        "name": "EpiSearch.sqlite",
-        "sha256": "32285AEB8CD2A8B7D766CCB3A3EAFC8964EDBFB0E2CD557024F1764703EC57C3",
-        "size": 47716352
-      },
-      {
-        "name": "AimExpKowwin.sqlite",
-        "sha256": "2FBAD37E4C3FBD24707E42FE369CD0C6AB32380186A38FEDC99AB67D9159A14E",
-        "size": 6094848
-      },
-      {
-        "name": "EcosarData.sqlite",
-        "sha256": "D6EC8E4A902D64C558D5162CB6B06357FA1CC0B7B3CB19F73B1ECA794BE15112",
-        "size": 720896
-      },
-      {
-        "name": "KowwinData.sqlite",
-        "sha256": "37B10D904832E22B33BCDF8781305E125B5EBF6E01EC8AE69ABF8B496B374999",
-        "size": 2752512
-      },
-      {
-        "name": "MpBpVpData.sqlite",
-        "sha256": "CFC5AC4E24CC1B21EC5996E0C50FB7C5E1AE6404B05D14ED8883B931238DD429",
-        "size": 2523136
-      },
-      {
-        "name": "WSolData.sqlite",
-        "sha256": "31850088D44BE5D56E7E27ED0B90186D88BDEDC3399C545BD784753083ED83F5",
-        "size": 1146880
-      }
-    ],
-    "x-db-version": "2026-05-15"
+    "description": "HTTP API for chemical search, EPI Suite estimation, typed ECOSAR calculations, and synchronous batch estimation. The built-in server has no authentication. Query names and response paths are canonical; legacy client aliases are not accepted. Single-submit values are carried in URLs and batch values in JSON request bodies, so deployments must keep request logs private and users must not submit confidential business information.",
+    "title": "EPI Suite CLI API",
+    "version": "1.1.0"
   },
   "openapi": "3.0.3",
   "paths": {
     "/api": {
       "get": {
-        "description": "Returns the OpenAPI specification JSON document for this API",
         "operationId": "getOpenApiSpec",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "description": "OpenAPI 3.0 specification document",
                   "type": "object"
                 }
               }
             },
-            "description": "OpenAPI specification document"
+            "description": "This OpenAPI document. Runtime state is exposed through x-epi-status and x-epi-health."
           }
         },
-        "summary": "Get OpenAPI specification",
+        "summary": "Get the OpenAPI specification and runtime health",
         "tags": [
           "Documentation"
         ]
@@ -1172,8 +2804,8 @@
     },
     "/api/download": {
       "get": {
-        "description": "Download the EpiSuite CLI JAR file for local use",
-        "operationId": "downloadJar",
+        "description": "Streams the packaged application JAR byte-for-byte for redistribution. Exploded-class development runs return 503 rather than constructing a different archive.",
+        "operationId": "downloadDistributionJar",
         "responses": {
           "200": {
             "content": {
@@ -1184,285 +2816,160 @@
                 }
               }
             },
-            "description": "JAR file download"
-          },
-          "500": {
-            "content": {
-              "text/plain": {
+            "description": "An exact copy of the running packaged JAR.",
+            "headers": {
+              "Content-Disposition": {
                 "schema": {
+                  "example": "attachment; filename=\"epi-estimators-cli.jar\"",
                   "type": "string"
                 }
               }
-            },
-            "description": "Server error"
-          }
-        },
-        "summary": "Download CLI JAR",
-        "tags": [
-          "Downloads"
-        ]
-      }
-    },
-    "/api/draw-chemical": {
-      "get": {
-        "description": "Get an SVG rendering of a chemical structure from its SMILES notation",
-        "operationId": "drawChemical",
-        "parameters": [
-          {
-            "description": "SMILES notation of the chemical",
-            "example": "c1ccccc1",
-            "in": "query",
-            "name": "smiles",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "image/svg+xml": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "SVG image of the chemical structure"
           },
-          "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "Draw chemical structure",
+        "summary": "Download the running EPI Suite CLI JAR",
         "tags": [
-          "Visualization"
+          "Documentation"
         ]
       }
     },
     "/api/ecosar/dye": {
       "get": {
-        "description": "Calculate aquatic toxicity predictions for cationic dyes",
-        "operationId": "ecosarDye",
+        "description": "Molecular weight and water solubility are required only when neither CAS nor SMILES identity is supplied for dependency resolution. Ethoxylate remains an explicit optional count with a zero default.",
+        "operationId": "estimateDye",
         "parameters": [
           {
-            "description": "Number of ethoxylate groups",
-            "in": "query",
-            "name": "ethoxylate",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/Ethoxylate"
           },
           {
-            "description": "Molecular weight in g/mol",
-            "in": "query",
-            "name": "molecularWeight",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/MolecularWeight"
           },
           {
-            "description": "Water solubility in mg/L",
-            "in": "query",
-            "name": "waterSolubility",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/WaterSolubility"
           },
           {
-            "description": "CAS registry number",
-            "in": "query",
-            "name": "cas",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Cas"
           },
           {
-            "description": "Chemical name",
-            "in": "query",
-            "name": "chemicalName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/ChemicalName"
+          },
+          {
+            "$ref": "#/components/parameters/Smiles"
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EcosarDyeResults"
-                }
-              }
-            },
-            "description": "Cationic dye toxicity predictions"
+            "$ref": "#/components/responses/TypedEcosar"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "ECOSAR cationic dye predictions",
+        "summary": "Estimate a cationic dye",
         "tags": [
           "ECOSAR"
         ]
       }
     },
-    "/api/ecosar/polymer/{type}": {
+    "/api/ecosar/polymer/amphoteric": {
       "get": {
-        "description": "Calculate aquatic toxicity predictions for amphoteric and polycationic polymers, and qualitative screening assessments for anionic polymers",
-        "operationId": "ecosarPolymer",
+        "operationId": "estimateAmphotericPolymer",
         "parameters": [
           {
-            "description": "Polymer type",
-            "in": "path",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "enum": [
-                "anionic",
-                "amphoteric",
-                "polycationic"
-              ],
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/SolubilityType"
           },
           {
-            "description": "Percent amine nitrogen for amphoteric and polycationic polymers",
-            "in": "query",
-            "name": "amineNitrogens",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/PolymerType"
           },
           {
-            "description": "Solubility classification for anionic and amphoteric polymers",
-            "in": "query",
-            "name": "solubilityType",
-            "required": false,
-            "schema": {
-              "enum": [
-                "INSOLUBLE",
-                "DISPERSIBLE",
-                "SOLUBLE"
-              ],
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/AmineNitrogens"
           },
           {
-            "description": "Polymer backbone type",
-            "in": "query",
-            "name": "polymerType",
-            "required": false,
-            "schema": {
-              "enum": [
-                "Carbon",
-                "Silicon",
-                "Natural"
-              ],
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/CationAnionRatio"
           },
           {
-            "description": "Cation to anion ratio (CAR) for amphoteric polymers",
-            "in": "query",
-            "name": "cationAnionRatio",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/AverageMolecularWeight"
           },
           {
-            "description": "Average molecular weight in daltons",
-            "in": "query",
-            "name": "averageMolecularWeight",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/Mw500Percentage"
           },
           {
-            "description": "Percentage of polymer with MW < 500 daltons",
-            "in": "query",
-            "name": "mw500Percentage",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/Mw1000Percentage"
           },
           {
-            "description": "Percentage of polymer with MW < 1000 daltons",
-            "in": "query",
-            "name": "mw1000Percentage",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/Cas"
           },
           {
-            "description": "CAS registry number",
-            "in": "query",
-            "name": "cas",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Chemical name",
-            "in": "query",
-            "name": "chemicalName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/ChemicalName"
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EcosarPolymerResults"
-                }
-              }
-            },
-            "description": "Polymer toxicity predictions or qualitative assessment"
+            "$ref": "#/components/responses/TypedEcosar"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "ECOSAR polymer assessment",
+        "summary": "Estimate an amphoteric polymer",
+        "tags": [
+          "ECOSAR"
+        ]
+      }
+    },
+    "/api/ecosar/polymer/anionic": {
+      "get": {
+        "operationId": "estimateAnionicPolymer",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SolubilityType"
+          },
+          {
+            "$ref": "#/components/parameters/AverageMolecularWeight"
+          },
+          {
+            "$ref": "#/components/parameters/Mw500Percentage"
+          },
+          {
+            "$ref": "#/components/parameters/Mw1000Percentage"
+          },
+          {
+            "$ref": "#/components/parameters/Cas"
+          },
+          {
+            "$ref": "#/components/parameters/ChemicalName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TypedEcosar"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "summary": "Estimate an anionic polymer",
         "tags": [
           "ECOSAR"
         ]
@@ -1470,191 +2977,218 @@
     },
     "/api/ecosar/polymer/nonionic": {
       "get": {
-        "description": "Calculate qualitative screening assessments for nonionic polymers",
-        "operationId": "ecosarNonionicPolymer",
+        "operationId": "estimateNonionicPolymer",
         "parameters": [
           {
-            "description": "Solubility classification of the polymer",
-            "in": "query",
-            "name": "solubilityType",
-            "required": false,
-            "schema": {
-              "enum": [
-                "INSOLUBLE",
-                "DISPERSIBLE",
-                "SOLUBLE"
-              ],
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/SolubilityType"
           },
           {
-            "description": "Average molecular weight in daltons",
-            "in": "query",
-            "name": "averageMolecularWeight",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/AverageMolecularWeight"
           },
           {
-            "description": "Percentage of polymer with MW < 500 daltons",
-            "in": "query",
-            "name": "mw500Percentage",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/Mw500Percentage"
           },
           {
-            "description": "Percentage of polymer with MW < 1000 daltons",
-            "in": "query",
-            "name": "mw1000Percentage",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/Mw1000Percentage"
           },
           {
-            "description": "CAS registry number",
-            "in": "query",
-            "name": "cas",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Cas"
           },
           {
-            "description": "Chemical name",
-            "in": "query",
-            "name": "chemicalName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/ChemicalName"
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EcosarNonionicPolymerResults"
-                }
-              }
-            },
-            "description": "Nonionic polymer qualitative assessment"
+            "$ref": "#/components/responses/TypedEcosar"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "ECOSAR nonionic polymer assessment",
+        "summary": "Estimate a nonionic polymer",
         "tags": [
           "ECOSAR"
         ]
       }
     },
-    "/api/ecosar/surfactant/{type}": {
+    "/api/ecosar/polymer/polycationic": {
       "get": {
-        "description": "Calculate aquatic toxicity predictions for anionic, cationic, or amphoteric surfactants",
-        "operationId": "ecosarSurfactant",
+        "description": "Polycationic polymers are assessed only as soluble or dispersible. INSOLUBLE is not an accepted calculation mode.",
+        "operationId": "estimatePolycationicPolymer",
         "parameters": [
           {
-            "description": "Surfactant type",
-            "in": "path",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "enum": [
-                "anionic",
-                "cationic",
-                "amphoteric"
-              ],
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/OptionalSolubilityType"
           },
           {
-            "description": "Carbon chain length of the surfactant",
-            "example": 12,
-            "in": "query",
-            "name": "carbonChainLength",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/PolymerType"
           },
           {
-            "description": "Ethoxylate groups for amphoteric surfactants",
-            "example": 0,
-            "in": "query",
-            "name": "ethoxylate",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/AmineNitrogens"
           },
           {
-            "description": "Water solubility in mg/L",
-            "example": 100,
-            "in": "query",
-            "name": "waterSolubility",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/AverageMolecularWeight"
           },
           {
-            "description": "CAS registry number",
-            "in": "query",
-            "name": "cas",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Mw500Percentage"
           },
           {
-            "description": "Chemical name",
-            "in": "query",
-            "name": "chemicalName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Mw1000Percentage"
+          },
+          {
+            "$ref": "#/components/parameters/Cas"
+          },
+          {
+            "$ref": "#/components/parameters/ChemicalName"
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EcosarSurfactantResults"
-                }
-              }
-            },
-            "description": "Surfactant toxicity predictions"
+            "$ref": "#/components/responses/TypedEcosar"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "ECOSAR surfactant predictions",
+        "summary": "Estimate a polycationic polymer",
+        "tags": [
+          "ECOSAR"
+        ]
+      }
+    },
+    "/api/ecosar/surfactant/amphoteric": {
+      "get": {
+        "description": "Carbon chain length is always required. Water solubility is required only when neither CAS nor SMILES identity is supplied for dependency resolution. Ethoxylate remains optional.",
+        "operationId": "estimateAmphotericSurfactant",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AmphotericCarbonChainLength"
+          },
+          {
+            "$ref": "#/components/parameters/Ethoxylate"
+          },
+          {
+            "$ref": "#/components/parameters/WaterSolubility"
+          },
+          {
+            "$ref": "#/components/parameters/Cas"
+          },
+          {
+            "$ref": "#/components/parameters/ChemicalName"
+          },
+          {
+            "$ref": "#/components/parameters/Smiles"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TypedEcosar"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "summary": "Estimate an amphoteric surfactant",
+        "tags": [
+          "ECOSAR"
+        ]
+      }
+    },
+    "/api/ecosar/surfactant/anionic": {
+      "get": {
+        "description": "Carbon chain length is always required. Water solubility is required only when neither CAS nor SMILES identity is supplied for dependency resolution.",
+        "operationId": "estimateAnionicSurfactant",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CarbonChainLength"
+          },
+          {
+            "$ref": "#/components/parameters/WaterSolubility"
+          },
+          {
+            "$ref": "#/components/parameters/Cas"
+          },
+          {
+            "$ref": "#/components/parameters/ChemicalName"
+          },
+          {
+            "$ref": "#/components/parameters/Smiles"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TypedEcosar"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "summary": "Estimate an anionic surfactant",
+        "tags": [
+          "ECOSAR"
+        ]
+      }
+    },
+    "/api/ecosar/surfactant/cationic": {
+      "get": {
+        "description": "Carbon chain length is always required. Water solubility is required only when neither CAS nor SMILES identity is supplied for dependency resolution.",
+        "operationId": "estimateCationicSurfactant",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CarbonChainLength"
+          },
+          {
+            "$ref": "#/components/parameters/WaterSolubility"
+          },
+          {
+            "$ref": "#/components/parameters/Cas"
+          },
+          {
+            "$ref": "#/components/parameters/ChemicalName"
+          },
+          {
+            "$ref": "#/components/parameters/Smiles"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TypedEcosar"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "summary": "Estimate a cationic surfactant",
         "tags": [
           "ECOSAR"
         ]
@@ -1662,163 +3196,61 @@
     },
     "/api/ecosar/surfactant/nonionic": {
       "get": {
-        "description": "Calculate aquatic toxicity predictions for nonionic surfactants",
-        "operationId": "ecosarNonionicSurfactant",
+        "description": "Main carbons are always required. Water solubility, log Kow, and molecular weight are required only when neither CAS nor SMILES identity is supplied for dependency resolution. A complete scalar request does not require identity.",
+        "operationId": "estimateNonionicSurfactant",
         "parameters": [
           {
-            "description": "Number of main chain carbons",
-            "in": "query",
-            "name": "mainCarbons",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/MainCarbons"
           },
           {
-            "description": "Number of branched carbons",
-            "in": "query",
-            "name": "branchedCarbons",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/BranchedCarbons"
           },
           {
-            "description": "Number of branches",
-            "in": "query",
-            "name": "branches",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/Branches"
           },
           {
-            "description": "Number of propoxy groups",
-            "in": "query",
-            "name": "propoxyGroups",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/PropoxyGroups"
           },
           {
-            "description": "Number of ethoxylate groups",
-            "in": "query",
-            "name": "ethoxylate",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "integer"
-            }
+            "$ref": "#/components/parameters/Ethoxylate"
           },
           {
-            "description": "Water solubility in mg/L",
-            "in": "query",
-            "name": "waterSolubility",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/WaterSolubility"
           },
           {
-            "description": "Log octanol-water partition coefficient",
-            "in": "query",
-            "name": "logKow",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/LogKow"
           },
           {
-            "description": "Molecular weight in g/mol",
-            "in": "query",
-            "name": "molecularWeight",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/MolecularWeight"
           },
           {
-            "description": "CAS registry number",
-            "in": "query",
-            "name": "cas",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Cas"
           },
           {
-            "description": "Chemical name",
-            "in": "query",
-            "name": "chemicalName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/ChemicalName"
           },
           {
-            "description": "SMILES notation",
-            "in": "query",
-            "name": "smiles",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "$ref": "#/components/parameters/Smiles"
+          },
+          {
+            "$ref": "#/components/parameters/UseSmiles"
           }
         ],
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EcosarNonionicSurfactantResults"
-                }
-              }
-            },
-            "description": "Nonionic surfactant toxicity predictions"
+            "$ref": "#/components/responses/TypedEcosar"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "ECOSAR nonionic surfactant predictions",
-        "tags": [
-          "ECOSAR"
-        ]
-      }
-    },
-    "/api/ecosar/test": {
-      "get": {
-        "description": "Test endpoint to verify ECOSAR routes are working",
-        "operationId": "ecosarTest",
-        "responses": {
-          "200": {
-            "content": {
-              "text/plain": {
-                "example": "ECOSAR test route works!",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Test message"
-          }
-        },
-        "summary": "ECOSAR test endpoint",
+        "summary": "Estimate a nonionic surfactant",
         "tags": [
           "ECOSAR"
         ]
@@ -1826,17 +3258,27 @@
     },
     "/api/search": {
       "get": {
-        "description": "Search for chemicals by name or CAS number",
+        "description": "Searches normalized CAS, exact canonical SMILES, and normalized chemical names.",
         "operationId": "searchChemicals",
         "parameters": [
           {
-            "description": "Chemical name or CAS number to search for",
             "example": "benzene",
             "in": "query",
             "name": "query",
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
             }
           }
         ],
@@ -1852,20 +3294,16 @@
                 }
               }
             },
-            "description": "List of matching chemicals"
+            "description": "Ordered matching chemicals"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request"
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
           }
         },
-        "summary": "Search chemicals",
+        "summary": "Search embedded experimental data",
         "tags": [
           "Search"
         ]
@@ -1873,355 +3311,583 @@
     },
     "/api/submit": {
       "get": {
-        "description": "Submit a chemical for property prediction calculations. Provide either SMILES or CAS number. Results include LogKow, melting/boiling points, vapor pressure, water solubility, Henry's Law constant, biodegradation rates, bioconcentration factors, atmospheric half-life, hydrolysis, fugacity model, sewage treatment model, dermal permeability, and ECOSAR aquatic toxicity predictions.",
-        "operationId": "submitCalculation",
+        "description": "Provide smiles or cas and optionally select modules or override canonical scalar inputs.",
+        "operationId": "submitEstimate",
         "parameters": [
           {
-            "description": "SMILES notation of the chemical. Either smiles or cas is required.",
-            "example": "c1ccccc1",
+            "description": "SMILES; required when cas is absent.",
+            "example": "CCO",
             "in": "query",
             "name": "smiles",
-            "required": false,
             "schema": {
               "type": "string"
             }
           },
           {
-            "description": "CAS registry number. Either smiles or cas is required.",
-            "example": "71-43-2",
+            "description": "CAS Registry Number; required when smiles is absent.",
+            "example": "64-17-5",
             "in": "query",
             "name": "cas",
-            "required": false,
             "schema": {
               "type": "string"
             }
           },
           {
-            "description": "Case identifier for tracking purposes",
-            "in": "query",
-            "name": "caseNumber",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Comma-separated list of modules to run. If not specified, all modules are run. Valid values: logKow, mpbpvp, waterSolubilityFromLogKow, waterSolubilityFromWaterNt, henrysLawConstant, logKoa, logKoc, biodegradationRate, hydrocarbonBiodegradationRate, bioconcentration, aerosolAdsorptionFraction, atmosphericHalfLife, hydrolysis, waterVolatilization, sewageTreatmentModel, fugacityModel, dermalPermeability, ecosar, aimanalogs",
-            "example": "logKow,mpbpvp,ecosar",
+            "description": "Comma-separated canonical public module names; defaults to all. Array order does not control scientific precedence: selected modules run in canonical dependency order, with waterSolubilityProvider controlling the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for CLI parity but public names are the durable HTTP contract.",
+            "example": "all",
             "in": "query",
             "name": "modules",
-            "required": false,
+            "schema": {
+              "pattern": "^[A-Za-z0-9.,-]+$",
+              "type": "string"
+            },
+            "x-allowed-values": [
+              "all",
+              "logKow",
+              "physicalProperties",
+              "waterSolubilityFromLogKow",
+              "waterSolubilityFromWaterNt",
+              "henrysLawConstant",
+              "logKoc",
+              "atmosphericHalfLife",
+              "biodegradationRate",
+              "logKoa",
+              "aerosolAdsorptionFraction",
+              "dermalPermeability",
+              "sewageTreatmentModel",
+              "waterVolatilization",
+              "fugacityModel",
+              "hydrocarbonBiodegradationRate",
+              "bioconcentration",
+              "ecosar.organics",
+              "ecosar.nonionic-surfactant",
+              "ecosar.anionic-surfactant",
+              "ecosar.cationic-surfactant",
+              "ecosar.amphoteric-surfactant",
+              "ecosar.dye",
+              "ecosar.nonionic-polymer",
+              "ecosar.anionic-polymer",
+              "ecosar.amphoteric-polymer",
+              "ecosar.polycationic-polymer",
+              "fishBiotransformationRate",
+              "hydrolysis",
+              "analogIdentification"
+            ]
+          },
+          {
+            "in": "query",
+            "name": "chemicalName",
             "schema": {
               "type": "string"
             }
           },
           {
-            "description": "User-provided octanol-water partition coefficient (log Kow) override",
-            "example": 2.13,
             "in": "query",
-            "name": "userLogKow",
-            "required": false,
+            "name": "logKow",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided melting point override (Celsius)",
-            "example": 5.5,
+            "description": "Optional resolved molecular weight in g/mol. Together with positive vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL candidate; Bond and Group require only SMILES.",
             "in": "query",
-            "name": "userMeltingPoint",
-            "required": false,
+            "name": "molecularWeight",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided boiling point override (Celsius)",
-            "example": 80.1,
+            "description": "Optional resolved water solubility in mg/L. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.",
             "in": "query",
-            "name": "userBoilingPoint",
-            "required": false,
+            "name": "waterSolubilityMgPerL",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided vapor pressure override (mmHg)",
-            "example": 95.2,
             "in": "query",
-            "name": "userVaporPressure",
-            "required": false,
+            "name": "waterSolubility",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided water solubility override (mg/L)",
-            "example": 1790,
+            "description": "Selects the source used for downstream resolved water solubility. Both WSKOW and WaterNT independent results remain visible when all modules run.",
             "in": "query",
-            "name": "userWaterSolubility",
-            "required": false,
+            "name": "waterSolubilityProvider",
+            "schema": {
+              "default": "wskow",
+              "enum": [
+                "wskow",
+                "waternt"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.",
+            "in": "query",
+            "name": "vaporPressureMmHg",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided Henry's Law constant override (atm-m3/mol)",
-            "example": 0.00555,
             "in": "query",
-            "name": "userHenrysLawConstant",
-            "required": false,
+            "name": "subcooledVaporPressureMmHg",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided octanol-air partition coefficient (log Koa) override",
-            "example": 5.2,
             "in": "query",
-            "name": "userLogKoa",
-            "required": false,
+            "name": "henryAtmM3PerMol",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided soil adsorption coefficient (log Koc) override (L/kg)",
-            "example": 1.85,
             "in": "query",
-            "name": "userLogKoc",
-            "required": false,
+            "name": "logKoa",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided hydroxyl reaction rate constant (cm3/molecule-sec)",
-            "example": 1.23e-12,
             "in": "query",
-            "name": "userHydroxylReactionRateConstant",
-            "required": false,
+            "name": "koc",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "User-provided atmospheric hydroxyl radical concentration (radicals/cm3). Default: 1.5e6",
-            "example": 1500000,
             "in": "query",
-            "name": "userAtmosphericHydroxylRadicalConcentration",
-            "required": false,
-            "schema": {
-              "default": 1500000,
-              "type": "number"
-            }
-          },
-          {
-            "description": "User-provided atmospheric ozone concentration (molecules/cm3). Default: 7e11",
-            "example": 700000000000,
-            "in": "query",
-            "name": "userAtmosphericOzoneConcentration",
-            "required": false,
-            "schema": {
-              "default": 700000000000,
-              "type": "number"
-            }
-          },
-          {
-            "description": "User-provided average daylight hours for atmospheric calculations. Default: 12",
-            "example": 12,
-            "in": "query",
-            "name": "userAtmosphericDaylightHours",
-            "required": false,
-            "schema": {
-              "default": 12,
-              "type": "number"
-            }
-          },
-          {
-            "description": "User-provided dermal permeability coefficient override (cm/hr)",
-            "example": 0.001,
-            "in": "query",
-            "name": "userDermalPermeabilityCoefficient",
-            "required": false,
+            "name": "meltingPointC",
             "schema": {
               "type": "number"
             }
           },
           {
-            "description": "Whether to remove metals from biodegradation rate calculation. Default: true",
-            "example": true,
             "in": "query",
-            "name": "userBiodegradationRateRemoveMetals",
-            "required": false,
+            "name": "boilingPointC",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Compatibility field for the maintained fixed-temperature MPBPVP calculation. Only 25 °C is accepted.",
+            "in": "query",
+            "name": "vaporPressureTemperatureC",
+            "schema": {
+              "default": 25,
+              "enum": [
+                25
+              ],
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "aopRateConstant",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "biowinScore",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "biowin3",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "biowin5",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Whether BIOWIN removes selected metal and salt counterions; model default is true.",
+            "in": "query",
+            "name": "removeMetals",
             "schema": {
               "default": true,
               "type": "boolean"
             }
           },
           {
-            "description": "User-provided STP primary clarifier half-life (hours). Default: 10000",
-            "example": 10000,
+            "description": "Total suspended particulate matter in ug/m3; AEROWIN default is 80.",
             "in": "query",
-            "name": "userStpHalfLifePrimaryClarifier",
-            "required": false,
+            "name": "tspUgPerM3",
             "schema": {
-              "default": 10000,
+              "default": 80,
               "type": "number"
             }
           },
           {
-            "description": "User-provided STP aeration vessel half-life (hours). Default: 10000",
-            "example": 10000,
+            "description": "Combined Junge-Pankow cTheta in Pa (not particle surface-area Theta); AEROWIN default is 0.00010836 Pa.",
             "in": "query",
-            "name": "userStpHalfLifeAerationVessel",
-            "required": false,
+            "name": "theta",
             "schema": {
-              "default": 10000,
+              "default": 0.00010836,
               "type": "number"
             }
           },
           {
-            "description": "User-provided STP settling tank half-life (hours). Default: 10000",
-            "example": 10000,
             "in": "query",
-            "name": "userStpHalfLifeSettlingTank",
-            "required": false,
+            "name": "waterConcentrationMgPerCm3",
             "schema": {
-              "default": 10000,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model air half-life (hours). Default: 0 (calculated from atmospheric half-life)",
-            "example": 100,
             "in": "query",
-            "name": "userFugacityHalfLifeAir",
-            "required": false,
+            "name": "waterConcentrationMgPerLiter",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model water half-life (hours). Default: 0 (calculated from biodegradation)",
-            "example": 360,
             "in": "query",
-            "name": "userFugacityHalfLifeWater",
-            "required": false,
+            "name": "eventFrequencyPerDay",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model soil half-life (hours). Default: 0 (calculated from biodegradation)",
-            "example": 720,
             "in": "query",
-            "name": "userFugacityHalfLifeSoil",
-            "required": false,
+            "name": "exposureDurationYears",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model sediment half-life (hours). Default: 0 (calculated from biodegradation)",
-            "example": 1440,
             "in": "query",
-            "name": "userFugacityHalfLifeSediment",
-            "required": false,
+            "name": "exposureFrequencyDaysPerYear",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model air emission rate (kg/hour). Default: 1000",
-            "example": 1000,
             "in": "query",
-            "name": "userFugacityEmissionRateAir",
-            "required": false,
+            "name": "skinSurfaceAreaCm2",
             "schema": {
-              "default": 1000,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model water emission rate (kg/hour). Default: 1000",
-            "example": 1000,
             "in": "query",
-            "name": "userFugacityEmissionRateWater",
-            "required": false,
+            "name": "bodyWeightKg",
             "schema": {
-              "default": 1000,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model soil emission rate (kg/hour). Default: 1000",
-            "example": 1000,
             "in": "query",
-            "name": "userFugacityEmissionRateSoil",
-            "required": false,
+            "name": "averagingTimeDays",
             "schema": {
-              "default": 1000,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model sediment emission rate (kg/hour). Default: 0",
-            "example": 0,
             "in": "query",
-            "name": "userFugacityEmissionRateSediment",
-            "required": false,
+            "name": "fractionAbsorbed",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model air advection residence time (hours). Default: 100",
-            "example": 100,
             "in": "query",
-            "name": "userFugacityAdvectionTimeAir",
-            "required": false,
+            "name": "eventDurationHours",
             "schema": {
-              "default": 100,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model water advection residence time (hours). Default: 1000",
-            "example": 1000,
             "in": "query",
-            "name": "userFugacityAdvectionTimeWater",
-            "required": false,
+            "name": "userKpCmPerHour",
             "schema": {
-              "default": 1000,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model soil advection residence time (hours). Default: 0",
-            "example": 0,
             "in": "query",
-            "name": "userFugacityAdvectionTimeSoil",
-            "required": false,
+            "name": "halfLifeHoursPrimaryClarifier",
             "schema": {
-              "default": 0,
               "type": "number"
             }
           },
           {
-            "description": "User-provided fugacity model sediment advection residence time (hours). Default: 50000",
-            "example": 50000,
             "in": "query",
-            "name": "userFugacityAdvectionTimeSediment",
-            "required": false,
+            "name": "halfLifeHoursAerationVessel",
             "schema": {
-              "default": 50000,
               "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "halfLifeHoursSettlingTank",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "halfLifeAir",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "halfLifeWater",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "halfLifeSoil",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "halfLifeSediment",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "emissionRateAir",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "emissionRateWater",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "emissionRateSoil",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "emissionRateSediment",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "advectionTimeAir",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "advectionTimeWater",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "advectionTimeSoil",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "advectionTimeSediment",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ohConcentrationE6OhPerCm3",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ozoneConcentrationE11MolPerCm3",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Atmospheric daylight period in hours; AOPWIN default is 12.",
+            "in": "query",
+            "name": "daylightHours",
+            "schema": {
+              "default": 12,
+              "enum": [
+                12,
+                24
+              ],
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "riverWindMPerSec",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "riverCurrentMPerSec",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "riverDepthMeters",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lakeWindMPerSec",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lakeCurrentMPerSec",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lakeDepthMeters",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "carbonChainLength",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mainCarbons",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchedCarbons",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "branches",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "propoxyGroups",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ethoxylate",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "amineNitrogens",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cationAnionRatio",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mw500Percentage",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "mw1000Percentage",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "averageMolecularWeight",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "useSmiles",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "solubilityType",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "polymerType",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -2229,61 +3895,218 @@
           "200": {
             "content": {
               "application/json": {
-                "example": {
-                  "chemicalProperties": {
-                    "cas": "71-43-2",
-                    "molecularFormula": "C6H6",
-                    "molecularWeight": 78.11,
-                    "name": "Benzene",
-                    "smiles": "c1ccccc1"
-                  },
-                  "logKow": {
-                    "estimatedValue": {
-                      "units": "",
-                      "value": 2.13,
-                      "valueType": "ESTIMATED"
+                "schema": {
+                  "$ref": "#/components/schemas/EpiResults"
+                }
+              }
+            },
+            "description": "Canonical aggregate estimate"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        },
+        "summary": "Estimate one chemical",
+        "tags": [
+          "Calculations"
+        ]
+      }
+    },
+    "/api/submit/batch": {
+      "post": {
+        "description": "Validates and estimates 1 to 100 independent requests in source order. A syntactically accepted batch always returns HTTP 200; item failures occupy null result slots and are reported by source index.",
+        "operationId": "submitEstimateBatch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "allEcosarProfiles": {
+                  "summary": "One valid item for each ECOSAR interface mode",
+                  "value": [
+                    {
+                      "modules": [
+                        "ecosar.organics",
+                        "logKow",
+                        "physicalProperties",
+                        "waterSolubilityFromLogKow"
+                      ],
+                      "smiles": "CCO"
                     },
-                    "selectedValue": {
-                      "value": 2.13,
-                      "valueType": "ESTIMATED"
+                    {
+                      "ethoxylate": 0,
+                      "modules": [
+                        "ecosar.dye"
+                      ],
+                      "molecularWeight": 350,
+                      "waterSolubility": 10
+                    },
+                    {
+                      "branchedCarbons": 0,
+                      "branches": 0,
+                      "ethoxylate": 5,
+                      "logKow": 3.1,
+                      "mainCarbons": 12,
+                      "modules": [
+                        "ecosar.nonionic-surfactant"
+                      ],
+                      "molecularWeight": 320,
+                      "propoxyGroups": 0,
+                      "waterSolubility": 100
+                    },
+                    {
+                      "carbonChainLength": 12,
+                      "modules": [
+                        "ecosar.anionic-surfactant"
+                      ],
+                      "waterSolubility": 100
+                    },
+                    {
+                      "carbonChainLength": 12,
+                      "ethoxylate": 0,
+                      "modules": [
+                        "ecosar.amphoteric-surfactant"
+                      ],
+                      "waterSolubility": 100
+                    },
+                    {
+                      "carbonChainLength": 12,
+                      "modules": [
+                        "ecosar.cationic-surfactant"
+                      ],
+                      "waterSolubility": 100
+                    },
+                    {
+                      "modules": [
+                        "ecosar.anionic-polymer"
+                      ],
+                      "solubilityType": "INSOLUBLE"
+                    },
+                    {
+                      "amineNitrogens": 1.5,
+                      "cationAnionRatio": 1,
+                      "modules": [
+                        "ecosar.amphoteric-polymer"
+                      ],
+                      "polymerType": "carbon",
+                      "solubilityType": "SOLUBLE"
+                    },
+                    {
+                      "amineNitrogens": 1.5,
+                      "modules": [
+                        "ecosar.polycationic-polymer"
+                      ],
+                      "polymerType": "carbon"
+                    },
+                    {
+                      "averageMolecularWeight": 10000,
+                      "modules": [
+                        "ecosar.nonionic-polymer"
+                      ],
+                      "mw1000Percentage": 10,
+                      "mw500Percentage": 5,
+                      "solubilityType": "SOLUBLE"
                     }
-                  },
-                  "parameters": {
-                    "cas": "71-43-2",
-                    "smiles": "c1ccccc1"
+                  ]
+                },
+                "mixedGeneralModules": {
+                  "summary": "The endpoint is generic and accepts non-ECOSAR modules",
+                  "value": [
+                    {
+                      "modules": [
+                        "logKow"
+                      ],
+                      "smiles": "CCO"
+                    },
+                    {
+                      "modules": [
+                        "physicalProperties",
+                        "henrysLawConstant"
+                      ],
+                      "smiles": "c1ccccc1"
+                    }
+                  ]
+                }
+              },
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/BatchEstimateRequest"
+                },
+                "maxItems": 100,
+                "minItems": 1,
+                "type": "array"
+              }
+            }
+          },
+          "required": true,
+          "x-epi-max-body-bytes": 1048576
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "partialFailure": {
+                    "summary": "The failed source row retains a null positional slot",
+                    "value": {
+                      "count": 2,
+                      "errors": [
+                        {
+                          "code": "missing_required",
+                          "field": "modules",
+                          "index": 1,
+                          "message": "modules is required and must be a non-empty JSON array.",
+                          "module": "request"
+                        }
+                      ],
+                      "results": [
+                        {
+                          "chemicalProperties": {
+                            "smiles": "CCO"
+                          },
+                          "parameters": {}
+                        },
+                        {}
+                      ],
+                      "success": false
+                    }
                   }
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/EpiSuiteResults"
+                  "$ref": "#/components/schemas/BatchEstimateResponse"
                 }
               }
             },
-            "description": "Calculation results containing property predictions from all requested modules"
+            "description": "Complete positional batch envelope, including any item-level failures"
           },
           "400": {
-            "content": {
-              "text/plain": {
-                "example": "Invalid CAS ID",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Bad request - missing required parameter, invalid CAS ID, or invalid input"
+            "$ref": "#/components/responses/BadRequest"
           },
-          "404": {
-            "content": {
-              "text/plain": {
-                "example": "Could not locate CAS ID, try again with SMILES if available",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "CAS ID was not found in the database"
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          },
+          "413": {
+            "$ref": "#/components/responses/BatchTooLarge"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          },
+          "504": {
+            "$ref": "#/components/responses/EstimateTimeout"
           }
         },
-        "summary": "Run EpiSuite calculations",
+        "summary": "Estimate an ordered batch of chemicals",
         "tags": [
           "Calculations"
         ]
@@ -2298,28 +4121,124 @@
   ],
   "tags": [
     {
-      "description": "API documentation",
       "name": "Documentation"
     },
     {
-      "description": "Chemical search operations",
       "name": "Search"
     },
     {
-      "description": "Chemical structure visualization",
-      "name": "Visualization"
-    },
-    {
-      "description": "EpiSuite property calculations",
       "name": "Calculations"
     },
     {
-      "description": "File downloads",
-      "name": "Downloads"
-    },
-    {
-      "description": "Ecological Structure Activity Relationships - aquatic toxicity predictions and qualitative assessments for surfactants, polymers, and dyes",
       "name": "ECOSAR"
     }
-  ]
+  ],
+  "x-epi-health": {
+    "experimentalData": {
+      "available": true,
+      "bytes": 1651336,
+      "rowGroups": 39,
+      "rows": 58115,
+      "searchBytes": 5737515,
+      "searchCatalogAvailable": true,
+      "searchIndexBuildMillis": 4068,
+      "searchIndexCandidates": 115594,
+      "searchSha256": "c248acdfd382e4ad799e95b2476c88b663e71bf83a8c8fc1cf53e622b6f61c94",
+      "sha256": "c3a06b0892cbfcce4afef6d983366a1d84632142ffb02166c8202cbfeffef55c",
+      "source": "embedded:/webroot/data.parquet"
+    },
+    "requestHandling": {
+      "estimateActive": false,
+      "estimationAvailable": true,
+      "healthy": false,
+      "lastFailurePath": "/assets/datasets/mpbpvp.zip",
+      "unexpectedFailureCount": 13
+    }
+  },
+  "x-epi-reference-client-inputs": {
+    "apiOnly": [
+      "vaporPressureTemperatureC"
+    ],
+    "ecosar": [
+      "waterSolubility",
+      "carbonChainLength",
+      "mainCarbons",
+      "branchedCarbons",
+      "branches",
+      "propoxyGroups",
+      "ethoxylate",
+      "amineNitrogens",
+      "cationAnionRatio",
+      "mw500Percentage",
+      "mw1000Percentage",
+      "averageMolecularWeight",
+      "useSmiles",
+      "solubilityType",
+      "polymerType"
+    ],
+    "fixedPolicy": [
+      "modules"
+    ],
+    "main": [
+      "vaporPressureMmHg",
+      "henryAtmM3PerMol",
+      "logKoa",
+      "koc",
+      "boilingPointC",
+      "subcooledVaporPressureMmHg",
+      "waterSolubilityProvider",
+      "aopRateConstant",
+      "biowinScore",
+      "biowin3",
+      "biowin5",
+      "tspUgPerM3",
+      "theta",
+      "userKpCmPerHour",
+      "waterConcentrationMgPerCm3",
+      "waterConcentrationMgPerLiter",
+      "eventFrequencyPerDay",
+      "exposureDurationYears",
+      "exposureFrequencyDaysPerYear",
+      "skinSurfaceAreaCm2",
+      "bodyWeightKg",
+      "averagingTimeDays",
+      "fractionAbsorbed",
+      "eventDurationHours",
+      "halfLifeHoursPrimaryClarifier",
+      "halfLifeHoursAerationVessel",
+      "halfLifeHoursSettlingTank",
+      "halfLifeAir",
+      "halfLifeWater",
+      "halfLifeSoil",
+      "halfLifeSediment",
+      "emissionRateAir",
+      "emissionRateWater",
+      "emissionRateSoil",
+      "emissionRateSediment",
+      "advectionTimeAir",
+      "advectionTimeWater",
+      "advectionTimeSoil",
+      "advectionTimeSediment",
+      "ohConcentrationE6OhPerCm3",
+      "ozoneConcentrationE11MolPerCm3",
+      "daylightHours",
+      "riverWindMPerSec",
+      "riverCurrentMPerSec",
+      "riverDepthMeters",
+      "lakeWindMPerSec",
+      "lakeCurrentMPerSec",
+      "lakeDepthMeters",
+      "removeMetals"
+    ],
+    "shared": [
+      "smiles",
+      "cas",
+      "chemicalName",
+      "logKow",
+      "molecularWeight",
+      "waterSolubilityMgPerL",
+      "meltingPointC"
+    ]
+  },
+  "x-epi-status": "degraded"
 }

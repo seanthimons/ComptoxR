@@ -111,6 +111,10 @@
           "stereo": {
             "format": "int32",
             "type": "integer"
+          },
+          "toxicity": {
+            "format": "int32",
+            "type": "integer"
           }
         },
         "type": "object"
@@ -201,57 +205,6 @@
         },
         "type": "object"
       },
-      "LookupRequest": {
-        "properties": {
-          "inputType": {
-            "enum": [
-              "UNKNOWN",
-              "AUTO",
-              "MOL",
-              "RXN",
-              "SDF",
-              "RDF",
-              "SMI",
-              "SMILES",
-              "SMIRKS",
-              "CSV",
-              "TSV",
-              "JSON",
-              "XLSX",
-              "TXT",
-              "MSP"
-            ],
-            "type": "string"
-          },
-          "limit": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "params": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "query": {
-            "type": "string"
-          },
-          "searchType": {
-            "enum": [
-              "EXACT",
-              "SUBSTRUCTURE",
-              "SIMILAR",
-              "FORMULA",
-              "MASS",
-              "FEATURES",
-              "HAZARD",
-              "ADVANCED"
-            ],
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "SearchMetadata": {
         "properties": {
           "dateCreated": {
@@ -286,11 +239,19 @@
           "authority": {
             "type": "string"
           },
+          "averageMass": {
+            "format": "double",
+            "type": "number"
+          },
           "casrn": {
             "type": "string"
           },
           "chemId": {
             "type": "string"
+          },
+          "diffRequestMass": {
+            "format": "double",
+            "type": "number"
           },
           "formula": {
             "type": "string"
@@ -309,8 +270,16 @@
           "mol": {
             "type": "string"
           },
+          "monoisotopicMass": {
+            "format": "double",
+            "type": "number"
+          },
           "name": {
             "type": "string"
+          },
+          "requestMass": {
+            "format": "double",
+            "type": "number"
           },
           "result": {
             "enum": [
@@ -336,6 +305,12 @@
       },
       "SearchRequest": {
         "properties": {
+          "hazardNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "inputType": {
             "enum": [
               "UNKNOWN",
@@ -357,6 +332,14 @@
             "type": "string"
           },
           "limit": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "maxNumber": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "minNumber": {
             "format": "int32",
             "type": "integer"
           },
@@ -403,6 +386,10 @@
       },
       "SearchResult": {
         "properties": {
+          "appliedMin": {
+            "format": "float",
+            "type": "number"
+          },
           "error": {
             "type": "string"
           },
@@ -541,6 +528,44 @@
             "schema": {
               "format": "int32",
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "search-controller"
+        ]
+      }
+    },
+    "/api/search/download/mol-by-smiles": {
+      "get": {
+        "operationId": "getMol_1",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -709,39 +734,6 @@
         ]
       }
     },
-    "/api/search/lookup": {
-      "post": {
-        "operationId": "lookup",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LookupRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/SearchRecord"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "search-controller"
-        ]
-      }
-    },
     "/api/search/metadata": {
       "get": {
         "operationId": "metadataGet",
@@ -885,7 +877,15 @@
           {
             "in": "query",
             "name": "smiles",
-            "required": true,
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "dtxsid",
+            "required": false,
             "schema": {
               "type": "string"
             }

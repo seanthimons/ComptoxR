@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_get_substances_for_term.R
 \name{chemi_amos_get_substances_for_term}
 \alias{chemi_amos_get_substances_for_term}
-\title{Returns substance(s) that match a search term.}
+\title{Returns substance(s) that match a search term.  Since some substance names can have slashes in them, \if{html}{\out{<path>}} is used}
 \usage{
 chemi_amos_get_substances_for_term(search_term)
 }

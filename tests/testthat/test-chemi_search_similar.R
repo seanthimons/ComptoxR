@@ -21,7 +21,7 @@ test_that("chemi_search_similar passes request metadata to helper", {
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_search_similar(smiles = "CCCC"))), silent = TRUE)
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_search_similar())), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))

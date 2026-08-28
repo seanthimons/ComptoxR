@@ -14,11 +14,7 @@
 #' }
 chemi_amos_inchikey_first_block <- function(first_block) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_inchikey_first_block",
-    "pre_request",
-    list(params = list(`first_block` = first_block, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_inchikey_first_block", "pre_request", list(params = list(`first_block` = first_block, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

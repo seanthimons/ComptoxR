@@ -6,7 +6,7 @@
 #' @param search_input Primary query parameter. Type: string
 #' @param search_type Optional parameter. Type: string
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_chet_reaction_searchcounts <- function(search_input, search_type = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_searchcounts",
-    "pre_request",
-    list(params = list(`search_input` = search_input, `search_type` = search_type, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction_searchcounts", "pre_request", list(params = list(`search_input` = search_input, `search_type` = search_type, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

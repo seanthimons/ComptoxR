@@ -14,11 +14,7 @@
 #' }
 chemi_amos_get_classification_for_dtxsid <- function(dtxsid) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_get_classification_for_dtxsid",
-    "pre_request",
-    list(params = list(`dtxsid` = dtxsid, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_get_classification_for_dtxsid", "pre_request", list(params = list(`dtxsid` = dtxsid, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

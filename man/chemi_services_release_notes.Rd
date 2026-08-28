@@ -18,5 +18,5 @@ chemi_services_release_notes()
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

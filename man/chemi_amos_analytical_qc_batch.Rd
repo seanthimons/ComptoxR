@@ -2,11 +2,11 @@
 % Please edit documentation in R/chemi_amos_analytical_qc_batch.R
 \name{chemi_amos_analytical_qc_batch}
 \alias{chemi_amos_analytical_qc_batch}
-\title{Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs.}
+\title{Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs}
 \usage{
 chemi_amos_analytical_qc_batch(
   base_url = NULL,
-  dtxsids = NULL,
+  ids = NULL,
   include_classyfire = NULL,
   include_functional_uses = NULL,
   include_source_counts = NULL,
@@ -16,7 +16,7 @@ chemi_amos_analytical_qc_batch(
 \arguments{
 \item{base_url}{URL for the AMOS frontend.  Used to construct the internal links in the output file.}
 
-\item{dtxsids}{List of DTXSIDs to search for.}
+\item{ids}{List of DTXSIDs or other identifiers to search for.}
 
 \item{include_classyfire}{Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.}
 

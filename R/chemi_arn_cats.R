@@ -6,7 +6,7 @@
 #' @param smiles SMILES to generate groups for
 #' @param model Model to use for group prediction. Options: RF, NN (default: RF)
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_arn_cats <- function(smiles, model = "RF") {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_arn_cats",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `model` = model, `server` = server))
-  )
+  req_data <- run_hook("chemi_arn_cats", "pre_request", list(params = list(`smiles` = smiles, `model` = model, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_arn_cats <- function(smiles, model = "RF") {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(model)) {
-    options[['model']] <- model
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(model)) options[['model']] <- model
+    result <- generic_request(
     endpoint = "arn_cats",
     method = "GET",
     batch_limit = 0,
@@ -64,7 +56,7 @@ chemi_arn_cats <- function(smiles, model = "RF") {
 #' @param model Optional parameter. Options: RF, NN (default: RF)
 #' @param smiles Array of SMILES strings, same input style as amnb_nate.
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -73,11 +65,7 @@ chemi_arn_cats <- function(smiles, model = "RF") {
 #' }
 chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_arn_cats_bulk",
-    "pre_request",
-    list(params = list(`chemicals` = chemicals, `model` = model, `smiles` = smiles, `server` = server))
-  )
+  req_data <- run_hook("chemi_arn_cats_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `model` = model, `smiles` = smiles, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -95,12 +83,8 @@ chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(model)) {
-    options$model <- model
-  }
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
+  if (!is.null(model)) options$model <- model
+  if (!is.null(smiles)) options$smiles <- smiles
   result <- generic_chemi_request(
     query = chemicals,
     endpoint = "arn_cats",

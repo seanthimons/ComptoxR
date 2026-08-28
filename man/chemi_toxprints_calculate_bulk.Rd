@@ -11,9 +11,12 @@ chemi_toxprints_calculate_bulk(
   options = NULL,
   request.filesInfo = NULL,
   request.labels = NULL,
+  request.options.or = NULL,
   request.options.OR = NULL,
   request.options.profile = NULL,
+  request.options.pv1 = NULL,
   request.options.PV1 = NULL,
+  request.options.tp = NULL,
   request.options.TP = NULL,
   request.resolve = NULL
 )
@@ -31,11 +34,17 @@ chemi_toxprints_calculate_bulk(
 
 \item{request.labels}{Optional parameter}
 
+\item{request.options.or}{Optional parameter}
+
 \item{request.options.OR}{Optional parameter}
 
 \item{request.options.profile}{Optional parameter}
 
+\item{request.options.pv1}{Optional parameter}
+
 \item{request.options.PV1}{Optional parameter}
+
+\item{request.options.tp}{Optional parameter}
 
 \item{request.options.TP}{Optional parameter}
 

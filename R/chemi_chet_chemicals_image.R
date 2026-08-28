@@ -8,7 +8,7 @@
 #' @param height Optional parameter
 #' @param format Optional parameter. Options: png, svg, pdf (default: png)
 #' @return Returns image data (raw bytes or magick image object)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -17,19 +17,7 @@
 #' }
 chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_image",
-    "pre_request",
-    list(
-      params = list(
-        `chemical_id` = chemical_id,
-        `width` = width,
-        `height` = height,
-        `format` = format,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_chet_chemicals_image", "pre_request", list(params = list(`chemical_id` = chemical_id, `width` = width, `height` = height, `format` = format, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -50,16 +38,10 @@ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL,
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(width)) {
-    options[['width']] <- width
-  }
-  if (!is.null(height)) {
-    options[['height']] <- height
-  }
-  if (!is.null(format)) {
-    options[['format']] <- format
-  }
-  result <- generic_request(
+  if (!is.null(width)) options[['width']] <- width
+  if (!is.null(height)) options[['height']] <- height
+  if (!is.null(format)) options[['format']] <- format
+    result <- generic_request(
     query = chemical_id,
     endpoint = "chemicals/image",
     method = "GET",

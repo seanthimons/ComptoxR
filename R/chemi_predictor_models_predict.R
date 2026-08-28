@@ -8,7 +8,7 @@
 #' @param model_id Model ID to use
 #' @param report_format which format to return (default: json)
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -17,19 +17,7 @@
 #' }
 chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier = NULL, report_format = "json") {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_predictor_models_predict",
-    "pre_request",
-    list(
-      params = list(
-        `model_id` = model_id,
-        `smiles` = smiles,
-        `identifier` = identifier,
-        `report_format` = report_format,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_predictor_models_predict", "pre_request", list(params = list(`model_id` = model_id, `smiles` = smiles, `identifier` = identifier, `report_format` = report_format, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -50,19 +38,11 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(identifier)) {
-    options[['identifier']] <- identifier
-  }
-  if (!is.null(model_id)) {
-    options[['model_id']] <- model_id
-  }
-  if (!is.null(report_format)) {
-    options[['report_format']] <- report_format
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(identifier)) options[['identifier']] <- identifier
+  if (!is.null(model_id)) options[['model_id']] <- model_id
+  if (!is.null(report_format)) options[['report_format']] <- report_format
+    result <- generic_request(
     endpoint = "predictor_models/predict",
     method = "GET",
     batch_limit = 0,
@@ -86,7 +66,8 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
 #' @param smiles Optional parameter
 #' @param chemicals Optional parameter
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -94,11 +75,7 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
 #' }
 chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemicals = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_predictor_models_predict_bulk",
-    "pre_request",
-    list(params = list(`model_id` = model_id, `smiles` = smiles, `chemicals` = chemicals, `server` = server))
-  )
+  req_data <- run_hook("chemi_predictor_models_predict_bulk", "pre_request", list(params = list(`model_id` = model_id, `smiles` = smiles, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -114,13 +91,7 @@ chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemica
   if ("server" %in% names(req_data$params)) {
     server <- req_data$params[["server"]]
   }
-  if (
-    sum(c(
-      all(!vapply(list(smiles, model_id), is.null, logical(1))),
-      all(!vapply(list(chemicals, model_id), is.null, logical(1)))
-    )) !=
-      1L
-  ) {
+  if (sum(c(all(!vapply(list(smiles, model_id), is.null, logical(1))), all(!vapply(list(chemicals, model_id), is.null, logical(1))))) != 1L) {
     cli::cli_abort("Supply exactly one supported request-body shape.")
   }
   request_body <- Filter(
