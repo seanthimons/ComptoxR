@@ -18,32 +18,9 @@
 #' \dontrun{
 #' chemi_padel(smiles = "DTXSID7020182")
 #' }
-chemi_padel <- function(
-  smiles,
-  x2d = TRUE,
-  x3d = FALSE,
-  fp = FALSE,
-  headers = FALSE,
-  timeout = NULL,
-  output = c("wide", "raw")
-) {
+chemi_padel <- function(smiles, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_padel",
-    "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `x2d` = x2d,
-        `x3d` = x3d,
-        `fp` = fp,
-        `headers` = headers,
-        `timeout` = timeout,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_padel", "pre_request", list(params = list(`smiles` = smiles, `x2d` = x2d, `x3d` = x3d, `fp` = fp, `headers` = headers, `timeout` = timeout, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -86,32 +63,9 @@ chemi_padel <- function(
 #' \dontrun{
 #' chemi_padel_bulk(query = "DTXSID1024122")
 #' }
-chemi_padel_bulk <- function(
-  query,
-  x2d = TRUE,
-  x3d = FALSE,
-  fp = FALSE,
-  headers = FALSE,
-  timeout = NULL,
-  output = c("wide", "raw")
-) {
+chemi_padel_bulk <- function(query, x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_padel_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `x2d` = x2d,
-        `x3d` = x3d,
-        `fp` = fp,
-        `headers` = headers,
-        `timeout` = timeout,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_padel_bulk", "pre_request", list(params = list(`query` = query, `x2d` = x2d, `x3d` = x3d, `fp` = fp, `headers` = headers, `timeout` = timeout, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

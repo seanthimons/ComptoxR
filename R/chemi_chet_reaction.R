@@ -7,7 +7,7 @@
 #' @param searchType Optional parameter
 #' @param substringTF Optional parameter
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -16,11 +16,7 @@
 #' }
 chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction",
-    "pre_request",
-    list(params = list(`query` = query, `searchType` = searchType, `substringTF` = substringTF, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction", "pre_request", list(params = list(`query` = query, `searchType` = searchType, `substringTF` = substringTF, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = N
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(searchType)) {
-    options[['searchType']] <- searchType
-  }
-  if (!is.null(substringTF)) {
-    options[['substringTF']] <- substringTF
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(searchType)) options[['searchType']] <- searchType
+  if (!is.null(substringTF)) options[['substringTF']] <- substringTF
+    result <- generic_request(
     endpoint = "reaction/search",
     method = "GET",
     batch_limit = 0,

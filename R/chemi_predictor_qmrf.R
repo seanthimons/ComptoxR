@@ -14,11 +14,7 @@
 #' }
 chemi_predictor_qmrf <- function(qmrf_id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_predictor_qmrf",
-    "pre_request",
-    list(params = list(`qmrf_id` = qmrf_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_predictor_qmrf", "pre_request", list(params = list(`qmrf_id` = qmrf_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

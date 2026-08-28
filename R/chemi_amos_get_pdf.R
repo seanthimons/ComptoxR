@@ -3,7 +3,7 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param record_type A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.
+#' @param record_type A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.
 #' @param internal_id Unique ID of the document of interest.
 #' @return Returns a tibble with results
 #' @apiStage public
@@ -15,11 +15,7 @@
 #' }
 chemi_amos_get_pdf <- function(record_type, internal_id = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_get_pdf",
-    "pre_request",
-    list(params = list(`record_type` = record_type, `internal_id` = internal_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_get_pdf", "pre_request", list(params = list(`record_type` = record_type, `internal_id` = internal_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

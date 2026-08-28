@@ -44,5 +44,5 @@ chemi_chet_chemicals_database(page = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

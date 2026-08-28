@@ -2,39 +2,19 @@
 % Please edit documentation in R/epi_ecosar_polymer_nonionic.R
 \name{epi_ecosar_polymer_nonionic}
 \alias{epi_ecosar_polymer_nonionic}
-\title{ECOSAR nonionic polymer assessment}
+\title{Estimate a nonionic polymer}
 \usage{
-epi_ecosar_polymer_nonionic(
-  solubilityType = NULL,
-  averageMolecularWeight = NULL,
-  mw500Percentage = NULL,
-  mw1000Percentage = NULL,
-  cas = NULL,
-  chemicalName = NULL
-)
-}
-\arguments{
-\item{solubilityType}{Solubility classification of the polymer. Options: INSOLUBLE, DISPERSIBLE, SOLUBLE}
-
-\item{averageMolecularWeight}{Average molecular weight in daltons}
-
-\item{mw500Percentage}{Percentage of polymer with MW < 500 daltons}
-
-\item{mw1000Percentage}{Percentage of polymer with MW < 1000 daltons}
-
-\item{cas}{CAS registry number}
-
-\item{chemicalName}{Chemical name}
+epi_ecosar_polymer_nonionic()
 }
 \value{
-Returns a list with result object
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_polymer_nonionic(solubilityType = "50-00-0")
+epi_ecosar_polymer_nonionic()
 }
 }
 \section{API stage}{

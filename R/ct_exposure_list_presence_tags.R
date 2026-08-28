@@ -22,3 +22,5 @@ ct_exposure_list_presence_tags <- function() {
 
   return(result)
 }
+
+

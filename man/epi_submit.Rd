@@ -2,110 +2,230 @@
 % Please edit documentation in R/epi_submit.R
 \name{epi_submit}
 \alias{epi_submit}
-\title{Run EpiSuite calculations}
+\title{Estimate one chemical}
 \usage{
 epi_submit(
   smiles = NULL,
   cas = NULL,
-  caseNumber = NULL,
   modules = NULL,
-  userLogKow = NULL,
-  userMeltingPoint = NULL,
-  userBoilingPoint = NULL,
-  userVaporPressure = NULL,
-  userWaterSolubility = NULL,
-  userHenrysLawConstant = NULL,
-  userLogKoa = NULL,
-  userLogKoc = NULL,
-  userHydroxylReactionRateConstant = NULL,
-  userAtmosphericHydroxylRadicalConcentration = 1500000,
-  userAtmosphericOzoneConcentration = 7e+11,
-  userAtmosphericDaylightHours = 12,
-  userDermalPermeabilityCoefficient = NULL,
-  userBiodegradationRateRemoveMetals = TRUE,
-  userStpHalfLifePrimaryClarifier = 10000,
-  userStpHalfLifeAerationVessel = 10000,
-  userStpHalfLifeSettlingTank = 10000,
-  userFugacityHalfLifeAir = 0,
-  userFugacityHalfLifeWater = 0,
-  userFugacityHalfLifeSoil = 0,
-  userFugacityHalfLifeSediment = 0,
-  userFugacityEmissionRateAir = 1000,
-  userFugacityEmissionRateWater = 1000,
-  userFugacityEmissionRateSoil = 1000,
-  userFugacityEmissionRateSediment = 0,
-  userFugacityAdvectionTimeAir = 100,
-  userFugacityAdvectionTimeWater = 1000,
-  userFugacityAdvectionTimeSoil = 0,
-  userFugacityAdvectionTimeSediment = 50000
+  chemicalName = NULL,
+  logKow = NULL,
+  molecularWeight = NULL,
+  waterSolubilityMgPerL = NULL,
+  waterSolubility = NULL,
+  waterSolubilityProvider = "wskow",
+  vaporPressureMmHg = NULL,
+  subcooledVaporPressureMmHg = NULL,
+  henryAtmM3PerMol = NULL,
+  logKoa = NULL,
+  koc = NULL,
+  meltingPointC = NULL,
+  boilingPointC = NULL,
+  vaporPressureTemperatureC = 25,
+  aopRateConstant = NULL,
+  biowinScore = NULL,
+  biowin3 = NULL,
+  biowin5 = NULL,
+  removeMetals = TRUE,
+  tspUgPerM3 = 80,
+  theta = 0.00010836,
+  waterConcentrationMgPerCm3 = NULL,
+  waterConcentrationMgPerLiter = NULL,
+  eventFrequencyPerDay = NULL,
+  exposureDurationYears = NULL,
+  exposureFrequencyDaysPerYear = NULL,
+  skinSurfaceAreaCm2 = NULL,
+  bodyWeightKg = NULL,
+  averagingTimeDays = NULL,
+  fractionAbsorbed = NULL,
+  eventDurationHours = NULL,
+  userKpCmPerHour = NULL,
+  halfLifeHoursPrimaryClarifier = NULL,
+  halfLifeHoursAerationVessel = NULL,
+  halfLifeHoursSettlingTank = NULL,
+  halfLifeAir = NULL,
+  halfLifeWater = NULL,
+  halfLifeSoil = NULL,
+  halfLifeSediment = NULL,
+  emissionRateAir = NULL,
+  emissionRateWater = NULL,
+  emissionRateSoil = NULL,
+  emissionRateSediment = NULL,
+  advectionTimeAir = NULL,
+  advectionTimeWater = NULL,
+  advectionTimeSoil = NULL,
+  advectionTimeSediment = NULL,
+  ohConcentrationE6OhPerCm3 = NULL,
+  ozoneConcentrationE11MolPerCm3 = NULL,
+  daylightHours = 12,
+  riverWindMPerSec = NULL,
+  riverCurrentMPerSec = NULL,
+  riverDepthMeters = NULL,
+  lakeWindMPerSec = NULL,
+  lakeCurrentMPerSec = NULL,
+  lakeDepthMeters = NULL,
+  carbonChainLength = NULL,
+  mainCarbons = NULL,
+  branchedCarbons = NULL,
+  branches = NULL,
+  propoxyGroups = NULL,
+  ethoxylate = NULL,
+  amineNitrogens = NULL,
+  cationAnionRatio = NULL,
+  mw500Percentage = NULL,
+  mw1000Percentage = NULL,
+  averageMolecularWeight = NULL,
+  useSmiles = NULL,
+  solubilityType = NULL,
+  polymerType = NULL
 )
 }
 \arguments{
-\item{smiles}{SMILES notation of the chemical. Either smiles or cas is required.}
+\item{smiles}{SMILES; required when cas is absent.}
 
-\item{cas}{CAS registry number. Either smiles or cas is required.}
+\item{cas}{CAS Registry Number; required when smiles is absent.}
 
-\item{caseNumber}{Case identifier for tracking purposes}
+\item{modules}{Comma-separated canonical public module names; defaults to all. Array order does not control scientific precedence: selected modules run in canonical dependency order, with waterSolubilityProvider controlling the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for CLI parity but public names are the durable HTTP contract.}
 
-\item{modules}{Comma-separated list of modules to run. If not specified, all modules are run. Valid values: logKow, mpbpvp, waterSolubilityFromLogKow, waterSolubilityFromWaterNt, henrysLawConstant, logKoa, logKoc, biodegradationRate, hydrocarbonBiodegradationRate, bioconcentration, aerosolAdsorptionFraction, atmosphericHalfLife, hydrolysis, waterVolatilization, sewageTreatmentModel, fugacityModel, dermalPermeability, ecosar, aimanalogs}
+\item{chemicalName}{Optional parameter}
 
-\item{userLogKow}{User-provided octanol-water partition coefficient (log Kow) override}
+\item{logKow}{Optional parameter}
 
-\item{userMeltingPoint}{User-provided melting point override (Celsius)}
+\item{molecularWeight}{Optional resolved molecular weight in g/mol. Together with positive vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL candidate; Bond and Group require only SMILES.}
 
-\item{userBoilingPoint}{User-provided boiling point override (Celsius)}
+\item{waterSolubilityMgPerL}{Optional resolved water solubility in mg/L. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.}
 
-\item{userVaporPressure}{User-provided vapor pressure override (mmHg)}
+\item{waterSolubility}{Optional parameter}
 
-\item{userWaterSolubility}{User-provided water solubility override (mg/L)}
+\item{waterSolubilityProvider}{Selects the source used for downstream resolved water solubility. Both WSKOW and WaterNT independent results remain visible when all modules run.. Options: wskow, waternt (default: wskow)}
 
-\item{userHenrysLawConstant}{User-provided Henry's Law constant override (atm-m3/mol)}
+\item{vaporPressureMmHg}{Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent Bond or Group estimation.}
 
-\item{userLogKoa}{User-provided octanol-air partition coefficient (log Koa) override}
+\item{subcooledVaporPressureMmHg}{Optional parameter}
 
-\item{userLogKoc}{User-provided soil adsorption coefficient (log Koc) override (L/kg)}
+\item{henryAtmM3PerMol}{Optional parameter}
 
-\item{userHydroxylReactionRateConstant}{User-provided hydroxyl reaction rate constant (cm3/molecule-sec)}
+\item{logKoa}{Optional parameter}
 
-\item{userAtmosphericHydroxylRadicalConcentration}{User-provided atmospheric hydroxyl radical concentration (radicals/cm3). Default: 1.5e6 (default: 1500000)}
+\item{koc}{Optional parameter}
 
-\item{userAtmosphericOzoneConcentration}{User-provided atmospheric ozone concentration (molecules/cm3). Default: 7e11 (default: 7e+11)}
+\item{meltingPointC}{Optional parameter}
 
-\item{userAtmosphericDaylightHours}{User-provided average daylight hours for atmospheric calculations. Default: 12 (default: 12)}
+\item{boilingPointC}{Optional parameter}
 
-\item{userDermalPermeabilityCoefficient}{User-provided dermal permeability coefficient override (cm/hr)}
+\item{vaporPressureTemperatureC}{Compatibility field for the maintained fixed-temperature MPBPVP calculation. Only 25 °C is accepted.. Options: 25 (default: 25)}
 
-\item{userBiodegradationRateRemoveMetals}{Whether to remove metals from biodegradation rate calculation. Default: true (default: TRUE)}
+\item{aopRateConstant}{Optional parameter}
 
-\item{userStpHalfLifePrimaryClarifier}{User-provided STP primary clarifier half-life (hours). Default: 10000 (default: 10000)}
+\item{biowinScore}{Optional parameter}
 
-\item{userStpHalfLifeAerationVessel}{User-provided STP aeration vessel half-life (hours). Default: 10000 (default: 10000)}
+\item{biowin3}{Optional parameter}
 
-\item{userStpHalfLifeSettlingTank}{User-provided STP settling tank half-life (hours). Default: 10000 (default: 10000)}
+\item{biowin5}{Optional parameter}
 
-\item{userFugacityHalfLifeAir}{User-provided fugacity model air half-life (hours). Default: 0 (calculated from atmospheric half-life) (default: 0)}
+\item{removeMetals}{Whether BIOWIN removes selected metal and salt counterions; model default is true. (default: TRUE)}
 
-\item{userFugacityHalfLifeWater}{User-provided fugacity model water half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)}
+\item{tspUgPerM3}{Total suspended particulate matter in ug/m3; AEROWIN default is 80. (default: 80)}
 
-\item{userFugacityHalfLifeSoil}{User-provided fugacity model soil half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)}
+\item{theta}{Combined Junge-Pankow cTheta in Pa (not particle surface-area Theta); AEROWIN default is 0.00010836 Pa. (default: 0.00010836)}
 
-\item{userFugacityHalfLifeSediment}{User-provided fugacity model sediment half-life (hours). Default: 0 (calculated from biodegradation) (default: 0)}
+\item{waterConcentrationMgPerCm3}{Optional parameter}
 
-\item{userFugacityEmissionRateAir}{User-provided fugacity model air emission rate (kg/hour). Default: 1000 (default: 1000)}
+\item{waterConcentrationMgPerLiter}{Optional parameter}
 
-\item{userFugacityEmissionRateWater}{User-provided fugacity model water emission rate (kg/hour). Default: 1000 (default: 1000)}
+\item{eventFrequencyPerDay}{Optional parameter}
 
-\item{userFugacityEmissionRateSoil}{User-provided fugacity model soil emission rate (kg/hour). Default: 1000 (default: 1000)}
+\item{exposureDurationYears}{Optional parameter}
 
-\item{userFugacityEmissionRateSediment}{User-provided fugacity model sediment emission rate (kg/hour). Default: 0 (default: 0)}
+\item{exposureFrequencyDaysPerYear}{Optional parameter}
 
-\item{userFugacityAdvectionTimeAir}{User-provided fugacity model air advection residence time (hours). Default: 100 (default: 100)}
+\item{skinSurfaceAreaCm2}{Optional parameter}
 
-\item{userFugacityAdvectionTimeWater}{User-provided fugacity model water advection residence time (hours). Default: 1000 (default: 1000)}
+\item{bodyWeightKg}{Optional parameter}
 
-\item{userFugacityAdvectionTimeSoil}{User-provided fugacity model soil advection residence time (hours). Default: 0 (default: 0)}
+\item{averagingTimeDays}{Optional parameter}
 
-\item{userFugacityAdvectionTimeSediment}{User-provided fugacity model sediment advection residence time (hours). Default: 50000 (default: 50000)}
+\item{fractionAbsorbed}{Optional parameter}
+
+\item{eventDurationHours}{Optional parameter}
+
+\item{userKpCmPerHour}{Optional parameter}
+
+\item{halfLifeHoursPrimaryClarifier}{Optional parameter}
+
+\item{halfLifeHoursAerationVessel}{Optional parameter}
+
+\item{halfLifeHoursSettlingTank}{Optional parameter}
+
+\item{halfLifeAir}{Optional parameter}
+
+\item{halfLifeWater}{Optional parameter}
+
+\item{halfLifeSoil}{Optional parameter}
+
+\item{halfLifeSediment}{Optional parameter}
+
+\item{emissionRateAir}{Optional parameter}
+
+\item{emissionRateWater}{Optional parameter}
+
+\item{emissionRateSoil}{Optional parameter}
+
+\item{emissionRateSediment}{Optional parameter}
+
+\item{advectionTimeAir}{Optional parameter}
+
+\item{advectionTimeWater}{Optional parameter}
+
+\item{advectionTimeSoil}{Optional parameter}
+
+\item{advectionTimeSediment}{Optional parameter}
+
+\item{ohConcentrationE6OhPerCm3}{Optional parameter}
+
+\item{ozoneConcentrationE11MolPerCm3}{Optional parameter}
+
+\item{daylightHours}{Atmospheric daylight period in hours; AOPWIN default is 12.. Options: 12, 24 (default: 12)}
+
+\item{riverWindMPerSec}{Optional parameter}
+
+\item{riverCurrentMPerSec}{Optional parameter}
+
+\item{riverDepthMeters}{Optional parameter}
+
+\item{lakeWindMPerSec}{Optional parameter}
+
+\item{lakeCurrentMPerSec}{Optional parameter}
+
+\item{lakeDepthMeters}{Optional parameter}
+
+\item{carbonChainLength}{Optional parameter}
+
+\item{mainCarbons}{Optional parameter}
+
+\item{branchedCarbons}{Optional parameter}
+
+\item{branches}{Optional parameter}
+
+\item{propoxyGroups}{Optional parameter}
+
+\item{ethoxylate}{Optional parameter}
+
+\item{amineNitrogens}{Optional parameter}
+
+\item{cationAnionRatio}{Optional parameter}
+
+\item{mw500Percentage}{Optional parameter}
+
+\item{mw1000Percentage}{Optional parameter}
+
+\item{averageMolecularWeight}{Optional parameter}
+
+\item{useSmiles}{Optional parameter}
+
+\item{solubilityType}{Optional parameter}
+
+\item{polymerType}{Optional parameter}
 }
 \value{
 Returns a list with result object
@@ -115,7 +235,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-epi_submit(smiles = "c1ccccc1")
+epi_submit(smiles = "CCO")
 }
 }
 \section{API stage}{

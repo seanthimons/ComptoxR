@@ -2,54 +2,19 @@
 % Please edit documentation in R/epi_ecosar_surfactant_nonionic.R
 \name{epi_ecosar_surfactant_nonionic}
 \alias{epi_ecosar_surfactant_nonionic}
-\title{ECOSAR nonionic surfactant predictions}
+\title{Estimate a nonionic surfactant}
 \usage{
-epi_ecosar_surfactant_nonionic(
-  mainCarbons = 0,
-  branchedCarbons = 0,
-  branches = 0,
-  propoxyGroups = 0,
-  ethoxylate = 0,
-  waterSolubility = 0,
-  logKow = 0,
-  molecularWeight = 0,
-  cas = NULL,
-  chemicalName = NULL,
-  smiles = NULL
-)
-}
-\arguments{
-\item{mainCarbons}{Number of main chain carbons (default: 0)}
-
-\item{branchedCarbons}{Number of branched carbons (default: 0)}
-
-\item{branches}{Number of branches (default: 0)}
-
-\item{propoxyGroups}{Number of propoxy groups (default: 0)}
-
-\item{ethoxylate}{Number of ethoxylate groups (default: 0)}
-
-\item{waterSolubility}{Water solubility in mg/L (default: 0)}
-
-\item{logKow}{Log octanol-water partition coefficient (default: 0)}
-
-\item{molecularWeight}{Molecular weight in g/mol (default: 0)}
-
-\item{cas}{CAS registry number}
-
-\item{chemicalName}{Chemical name}
-
-\item{smiles}{SMILES notation}
+epi_ecosar_surfactant_nonionic()
 }
 \value{
-Returns a list with result object
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_surfactant_nonionic(mainCarbons = "0")
+epi_ecosar_surfactant_nonionic()
 }
 }
 \section{API stage}{

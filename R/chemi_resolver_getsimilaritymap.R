@@ -20,32 +20,10 @@
 #' \dontrun{
 #' chemi_resolver_getsimilaritymap(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getsimilaritymap <- function(
-  query,
-  idType = "AnyId",
-  section = NULL,
-  sort = FALSE,
-  hclust_method = "complete",
-  format = c("cluster", "long", "raw")
-) {
+chemi_resolver_getsimilaritymap <- function(query, idType = "AnyId", section = NULL, sort = FALSE, hclust_method = "complete", format = c("cluster", "long", "raw")) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_getsimilaritymap",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `sort` = sort,
-        `hclust_method` = hclust_method,
-        `format` = format,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_resolver_getsimilaritymap", "pre_request", list(params = list(`query` = query, `idType` = idType, `section` = section, `sort` = sort, `hclust_method` = hclust_method, `format` = format, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -76,9 +54,7 @@ chemi_resolver_getsimilaritymap <- function(
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) {
-    extra_options$section <- section
-  }
+  if (!is.null(section)) extra_options$section <- section
 
   result <- generic_chemi_request(
     query = query,
@@ -90,21 +66,7 @@ chemi_resolver_getsimilaritymap <- function(
     server = server
   )
 
-  result <- run_hook(
-    "chemi_resolver_getsimilaritymap",
-    "post_response",
-    list(
-      result = result,
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `sort` = sort,
-        `hclust_method` = hclust_method,
-        `format` = format
-      )
-    )
-  )
+  result <- run_hook("chemi_resolver_getsimilaritymap", "post_response", list(result = result, params = list(`query` = query, `idType` = idType, `section` = section, `sort` = sort, `hclust_method` = hclust_method, `format` = format)))
   # Additional post-processing can be added here
 
   return(result)

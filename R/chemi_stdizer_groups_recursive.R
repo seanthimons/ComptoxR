@@ -14,11 +14,7 @@
 #' }
 chemi_stdizer_groups_recursive <- function(id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_stdizer_groups_recursive",
-    "pre_request",
-    list(params = list(`id` = id, `server` = server))
-  )
+  req_data <- run_hook("chemi_stdizer_groups_recursive", "pre_request", list(params = list(`id` = id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

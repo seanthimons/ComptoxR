@@ -14,11 +14,7 @@
 #' }
 chemi_amos_mass_spectra_for_substances <- function(dtxsids = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_mass_spectra_for_substances",
-    "pre_request",
-    list(params = list(`dtxsids` = dtxsids, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_mass_spectra_for_substances", "pre_request", list(params = list(`dtxsids` = dtxsids, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

@@ -15,7 +15,7 @@ chemi_webtest_bulk(
 \arguments{
 \item{query}{Chemical structures or resolvable identifiers}
 
-\item{chemIdType}{Input identifier type}
+\item{chemIdType}{Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)}
 
 \item{headers}{Request descriptor headers}
 

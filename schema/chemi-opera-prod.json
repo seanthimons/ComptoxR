@@ -1,0 +1,2148 @@
+{
+  "components": {
+    "schemas": {
+      "Chemical": {
+        "properties": {
+          "additionalProps": {
+            "properties": {
+              "moleculeId": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "canonicalSmiles": {
+            "type": "string"
+          },
+          "casrn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "chemId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cid": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "inchi": {
+            "nullable": true,
+            "type": "string"
+          },
+          "inchiKey": {
+            "nullable": true,
+            "type": "string"
+          },
+          "ionization": {
+            "nullable": true,
+            "type": "integer"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sid": {
+            "nullable": true,
+            "type": "string"
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "smiles",
+          "canonicalSmiles",
+          "additionalProps"
+        ],
+        "type": "object"
+      },
+      "LegacyPredictionItem": {
+        "properties": {
+          "chemical": {
+            "properties": {
+              "additionalProps": {
+                "properties": {
+                  "moleculeId": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "type": "object"
+              },
+              "canonicalSmiles": {
+                "type": "string"
+              },
+              "casrn": {
+                "nullable": true,
+                "type": "string"
+              },
+              "chemId": {
+                "nullable": true,
+                "type": "string"
+              },
+              "cid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "id": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "inchi": {
+                "nullable": true,
+                "type": "string"
+              },
+              "inchiKey": {
+                "nullable": true,
+                "type": "string"
+              },
+              "ionization": {
+                "nullable": true,
+                "type": "integer"
+              },
+              "name": {
+                "nullable": true,
+                "type": "string"
+              },
+              "sid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "smiles": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "smiles",
+              "canonicalSmiles",
+              "additionalProps"
+            ],
+            "type": "object"
+          },
+          "result": {
+            "additionalProperties": true,
+            "description": "OPERA prediction values keyed by OPERA output column name.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "chemical",
+          "result"
+        ],
+        "type": "object"
+      },
+      "LegacyPredictionResponse": {
+        "properties": {
+          "modelDetails": {
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "chemical": {
+                  "properties": {
+                    "additionalProps": {
+                      "properties": {
+                        "moleculeId": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "canonicalSmiles": {
+                      "type": "string"
+                    },
+                    "casrn": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "chemId": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "cid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "id": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "inchi": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "inchiKey": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "ionization": {
+                      "nullable": true,
+                      "type": "integer"
+                    },
+                    "name": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "sid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "smiles": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "smiles",
+                    "canonicalSmiles",
+                    "additionalProps"
+                  ],
+                  "type": "object"
+                },
+                "result": {
+                  "additionalProperties": true,
+                  "description": "OPERA prediction values keyed by OPERA output column name.",
+                  "type": "object"
+                }
+              },
+              "required": [
+                "chemical",
+                "result"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "modelDetails",
+          "results"
+        ],
+        "type": "object"
+      },
+      "MissingChemical": {
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "smiles": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "smiles"
+        ],
+        "type": "object"
+      },
+      "ModelDetails": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PredictionEndpoint": {
+        "properties": {
+          "endpoint_id": {
+            "type": "string"
+          },
+          "experimental": {
+            "allOf": [
+              {
+                "properties": {
+                  "value": {
+                    "nullable": true,
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "model_id": {
+            "nullable": true,
+            "type": "integer"
+          },
+          "predicted": {
+            "properties": {
+              "ad": {
+                "nullable": true,
+                "type": "number"
+              },
+              "ad_index": {
+                "nullable": true,
+                "type": "number"
+              },
+              "conf_index": {
+                "nullable": true,
+                "type": "number"
+              },
+              "range": {
+                "nullable": true,
+                "type": "string"
+              },
+              "value": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "range",
+              "ad",
+              "ad_index",
+              "conf_index"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "endpoint_id",
+          "predicted",
+          "experimental"
+        ],
+        "type": "object"
+      },
+      "PredictionEndpointExperimental": {
+        "properties": {
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
+      },
+      "PredictionEndpointPredicted": {
+        "properties": {
+          "ad": {
+            "nullable": true,
+            "type": "number"
+          },
+          "ad_index": {
+            "nullable": true,
+            "type": "number"
+          },
+          "conf_index": {
+            "nullable": true,
+            "type": "number"
+          },
+          "range": {
+            "nullable": true,
+            "type": "string"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "range",
+          "ad",
+          "ad_index",
+          "conf_index"
+        ],
+        "type": "object"
+      },
+      "PredictionError": {
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "type": "object"
+      },
+      "RequestLegacy": {
+        "example": {
+          "cache_only": false,
+          "smiles": [
+            "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+            "CCCCN"
+          ]
+        },
+        "properties": {
+          "cache_only": {
+            "default": false,
+            "description": "Return only predictions found in the response cache and list uncached inputs without running OPERA. If the persistent cache is unavailable, OPERA falls back to in-memory cache and reports misses.",
+            "type": "boolean"
+          },
+          "smiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "smiles"
+        ],
+        "type": "object"
+      },
+      "RequestWithChemicals": {
+        "example": {
+          "cache_only": false,
+          "chemicals": [
+            {
+              "id": 1,
+              "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
+            },
+            {
+              "id": "ext-2",
+              "smiles": "CCCCN"
+            }
+          ]
+        },
+        "properties": {
+          "cache_only": {
+            "default": false,
+            "description": "Return only predictions found in the response cache and list uncached inputs without running OPERA. If the persistent cache is unavailable, OPERA falls back to in-memory cache and reports misses.",
+            "type": "boolean"
+          },
+          "chemicals": {
+            "items": {
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "smiles"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "chemicals"
+        ],
+        "type": "object"
+      },
+      "SingleStructuredPredictionResponse": {
+        "properties": {
+          "error": {
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "modelDetails": {
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "result": {
+            "properties": {
+              "chemical": {
+                "properties": {
+                  "additionalProps": {
+                    "properties": {
+                      "moleculeId": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "canonicalSmiles": {
+                    "type": "string"
+                  },
+                  "casrn": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "chemId": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "cid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "id": {
+                    "oneOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "inchi": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "inchiKey": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "ionization": {
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "sid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "smiles": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "smiles",
+                  "canonicalSmiles",
+                  "additionalProps"
+                ],
+                "type": "object"
+              },
+              "error": {
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "type": "object"
+              },
+              "result": {
+                "items": {
+                  "properties": {
+                    "endpoint_id": {
+                      "type": "string"
+                    },
+                    "experimental": {
+                      "allOf": [
+                        {
+                          "properties": {
+                            "value": {
+                              "nullable": true,
+                              "oneOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "type": "object"
+                        }
+                      ],
+                      "nullable": true,
+                      "type": "object"
+                    },
+                    "model_id": {
+                      "nullable": true,
+                      "type": "integer"
+                    },
+                    "predicted": {
+                      "properties": {
+                        "ad": {
+                          "nullable": true,
+                          "type": "number"
+                        },
+                        "ad_index": {
+                          "nullable": true,
+                          "type": "number"
+                        },
+                        "conf_index": {
+                          "nullable": true,
+                          "type": "number"
+                        },
+                        "range": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "value": {
+                          "nullable": true,
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "range",
+                        "ad",
+                        "ad_index",
+                        "conf_index"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "endpoint_id",
+                    "predicted",
+                    "experimental"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "chemical"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "modelDetails",
+          "result"
+        ],
+        "type": "object"
+      },
+      "StructuredPredictionItem": {
+        "properties": {
+          "chemical": {
+            "properties": {
+              "additionalProps": {
+                "properties": {
+                  "moleculeId": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                },
+                "type": "object"
+              },
+              "canonicalSmiles": {
+                "type": "string"
+              },
+              "casrn": {
+                "nullable": true,
+                "type": "string"
+              },
+              "chemId": {
+                "nullable": true,
+                "type": "string"
+              },
+              "cid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "id": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "inchi": {
+                "nullable": true,
+                "type": "string"
+              },
+              "inchiKey": {
+                "nullable": true,
+                "type": "string"
+              },
+              "ionization": {
+                "nullable": true,
+                "type": "integer"
+              },
+              "name": {
+                "nullable": true,
+                "type": "string"
+              },
+              "sid": {
+                "nullable": true,
+                "type": "string"
+              },
+              "smiles": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "smiles",
+              "canonicalSmiles",
+              "additionalProps"
+            ],
+            "type": "object"
+          },
+          "error": {
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "result": {
+            "items": {
+              "properties": {
+                "endpoint_id": {
+                  "type": "string"
+                },
+                "experimental": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "value": {
+                          "nullable": true,
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "nullable": true,
+                  "type": "object"
+                },
+                "model_id": {
+                  "nullable": true,
+                  "type": "integer"
+                },
+                "predicted": {
+                  "properties": {
+                    "ad": {
+                      "nullable": true,
+                      "type": "number"
+                    },
+                    "ad_index": {
+                      "nullable": true,
+                      "type": "number"
+                    },
+                    "conf_index": {
+                      "nullable": true,
+                      "type": "number"
+                    },
+                    "range": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "value": {
+                      "nullable": true,
+                      "oneOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "range",
+                    "ad",
+                    "ad_index",
+                    "conf_index"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "endpoint_id",
+                "predicted",
+                "experimental"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "chemical"
+        ],
+        "type": "object"
+      },
+      "StructuredPredictionResponse": {
+        "properties": {
+          "missing_chemicals": {
+            "description": "Present when `cache_only=true`; contains request items that were not found in cache.",
+            "items": {
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "smiles"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "modelDetails": {
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "results": {
+            "items": {
+              "properties": {
+                "chemical": {
+                  "properties": {
+                    "additionalProps": {
+                      "properties": {
+                        "moleculeId": {
+                          "oneOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "canonicalSmiles": {
+                      "type": "string"
+                    },
+                    "casrn": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "chemId": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "cid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "id": {
+                      "oneOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "inchi": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "inchiKey": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "ionization": {
+                      "nullable": true,
+                      "type": "integer"
+                    },
+                    "name": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "sid": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "smiles": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "smiles",
+                    "canonicalSmiles",
+                    "additionalProps"
+                  ],
+                  "type": "object"
+                },
+                "error": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "result": {
+                  "items": {
+                    "properties": {
+                      "endpoint_id": {
+                        "type": "string"
+                      },
+                      "experimental": {
+                        "allOf": [
+                          {
+                            "properties": {
+                              "value": {
+                                "nullable": true,
+                                "oneOf": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "type": "object"
+                          }
+                        ],
+                        "nullable": true,
+                        "type": "object"
+                      },
+                      "model_id": {
+                        "nullable": true,
+                        "type": "integer"
+                      },
+                      "predicted": {
+                        "properties": {
+                          "ad": {
+                            "nullable": true,
+                            "type": "number"
+                          },
+                          "ad_index": {
+                            "nullable": true,
+                            "type": "number"
+                          },
+                          "conf_index": {
+                            "nullable": true,
+                            "type": "number"
+                          },
+                          "range": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "value": {
+                            "nullable": true,
+                            "oneOf": [
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "value",
+                          "range",
+                          "ad",
+                          "ad_index",
+                          "conf_index"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "endpoint_id",
+                      "predicted",
+                      "experimental"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "chemical"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "modelDetails",
+          "results"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "API gateway to OPERA predictions",
+    "title": "OPERA Predictor",
+    "version": "0.0.1"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/api/opera": {
+      "get": {
+        "operationId": "app.get_predict",
+        "parameters": [
+          {
+            "description": "SMILES to generate predictions for",
+            "examples": {
+              "example1": {
+                "summary": "50-01-1",
+                "value": "NC(N)=N"
+              },
+              "example2": {
+                "summary": "50-02-2",
+                "value": "CC1CC2C3CCC4=CC(=O)C=CC4(C)C3(F)C(O)CC2(C)C1(O)C(=O)CO"
+              },
+              "example3": {
+                "summary": "50-12-4",
+                "value": "CCC1(NC(=O)N(C)C1=O)c1ccccc1"
+              }
+            },
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            },
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "default": "json",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Standardize chemical before calculating predictions",
+            "in": "query",
+            "name": "standardize",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "type": "object"
+                    },
+                    "modelDetails": {
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "result": {
+                      "properties": {
+                        "chemical": {
+                          "properties": {
+                            "additionalProps": {
+                              "properties": {
+                                "moleculeId": {
+                                  "oneOf": [
+                                    {
+                                      "type": "number"
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ]
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "canonicalSmiles": {
+                              "type": "string"
+                            },
+                            "casrn": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "chemId": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "cid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "inchi": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "inchiKey": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "ionization": {
+                              "nullable": true,
+                              "type": "integer"
+                            },
+                            "name": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "sid": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "smiles": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "smiles",
+                            "canonicalSmiles",
+                            "additionalProps"
+                          ],
+                          "type": "object"
+                        },
+                        "error": {
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message"
+                          ],
+                          "type": "object"
+                        },
+                        "result": {
+                          "items": {
+                            "properties": {
+                              "endpoint_id": {
+                                "type": "string"
+                              },
+                              "experimental": {
+                                "allOf": [
+                                  {
+                                    "properties": {
+                                      "value": {
+                                        "nullable": true,
+                                        "oneOf": [
+                                          {
+                                            "type": "number"
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "type": "object"
+                                  }
+                                ],
+                                "nullable": true,
+                                "type": "object"
+                              },
+                              "model_id": {
+                                "nullable": true,
+                                "type": "integer"
+                              },
+                              "predicted": {
+                                "properties": {
+                                  "ad": {
+                                    "nullable": true,
+                                    "type": "number"
+                                  },
+                                  "ad_index": {
+                                    "nullable": true,
+                                    "type": "number"
+                                  },
+                                  "conf_index": {
+                                    "nullable": true,
+                                    "type": "number"
+                                  },
+                                  "range": {
+                                    "nullable": true,
+                                    "type": "string"
+                                  },
+                                  "value": {
+                                    "nullable": true,
+                                    "oneOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "value",
+                                  "range",
+                                  "ad",
+                                  "ad_index",
+                                  "conf_index"
+                                ],
+                                "type": "object"
+                              }
+                            },
+                            "required": [
+                              "endpoint_id",
+                              "predicted",
+                              "experimental"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "chemical"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "modelDetails",
+                    "result"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "post": {
+        "operationId": "app.post_predict",
+        "parameters": [
+          {
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            },
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "default": "json",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Standardize chemical before calculating predictions",
+            "in": "query",
+            "name": "standardize",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "example": {
+                      "cache_only": false,
+                      "smiles": [
+                        "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                        "CCCCN"
+                      ]
+                    },
+                    "properties": {
+                      "cache_only": {
+                        "default": false,
+                        "description": "Return only predictions found in the response cache and list uncached inputs without running OPERA. If the persistent cache is unavailable, OPERA falls back to in-memory cache and reports misses.",
+                        "type": "boolean"
+                      },
+                      "smiles": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "smiles"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "example": {
+                      "cache_only": false,
+                      "chemicals": [
+                        {
+                          "id": 1,
+                          "smiles": "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F"
+                        },
+                        {
+                          "id": "ext-2",
+                          "smiles": "CCCCN"
+                        }
+                      ]
+                    },
+                    "properties": {
+                      "cache_only": {
+                        "default": false,
+                        "description": "Return only predictions found in the response cache and list uncached inputs without running OPERA. If the persistent cache is unavailable, OPERA falls back to in-memory cache and reports misses.",
+                        "type": "boolean"
+                      },
+                      "chemicals": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "smiles": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "smiles"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "chemicals"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "missing_chemicals": {
+                      "description": "Present when `cache_only=true`; contains request items that were not found in cache.",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "smiles": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "smiles"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "modelDetails": {
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "results": {
+                      "items": {
+                        "properties": {
+                          "chemical": {
+                            "properties": {
+                              "additionalProps": {
+                                "properties": {
+                                  "moleculeId": {
+                                    "oneOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "canonicalSmiles": {
+                                "type": "string"
+                              },
+                              "casrn": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "chemId": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "cid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "inchi": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "inchiKey": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "ionization": {
+                                "nullable": true,
+                                "type": "integer"
+                              },
+                              "name": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "sid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "smiles": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "smiles",
+                              "canonicalSmiles",
+                              "additionalProps"
+                            ],
+                            "type": "object"
+                          },
+                          "error": {
+                            "properties": {
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "message"
+                            ],
+                            "type": "object"
+                          },
+                          "result": {
+                            "items": {
+                              "properties": {
+                                "endpoint_id": {
+                                  "type": "string"
+                                },
+                                "experimental": {
+                                  "allOf": [
+                                    {
+                                      "properties": {
+                                        "value": {
+                                          "nullable": true,
+                                          "oneOf": [
+                                            {
+                                              "type": "number"
+                                            },
+                                            {
+                                              "type": "boolean"
+                                            },
+                                            {
+                                              "type": "string"
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ],
+                                  "nullable": true,
+                                  "type": "object"
+                                },
+                                "model_id": {
+                                  "nullable": true,
+                                  "type": "integer"
+                                },
+                                "predicted": {
+                                  "properties": {
+                                    "ad": {
+                                      "nullable": true,
+                                      "type": "number"
+                                    },
+                                    "ad_index": {
+                                      "nullable": true,
+                                      "type": "number"
+                                    },
+                                    "conf_index": {
+                                      "nullable": true,
+                                      "type": "number"
+                                    },
+                                    "range": {
+                                      "nullable": true,
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "nullable": true,
+                                      "oneOf": [
+                                        {
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "boolean"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "value",
+                                    "range",
+                                    "ad",
+                                    "ad_index",
+                                    "conf_index"
+                                  ],
+                                  "type": "object"
+                                }
+                              },
+                              "required": [
+                                "endpoint_id",
+                                "predicted",
+                                "experimental"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "chemical"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "modelDetails",
+                    "results"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "summary": "Generate predictions for multiple molecules"
+      }
+    },
+    "/api/opera/file": {
+      "post": {
+        "description": "Calculates OPERA predictions for a file (CSV, SMI, SDF)",
+        "operationId": "app.post_predict_file",
+        "parameters": [
+          {
+            "description": "Format to return predictions in (json, csv, xlsx)",
+            "examples": {
+              "example1": {
+                "summary": "CSV",
+                "value": "csv"
+              },
+              "example2": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example3": {
+                "summary": "Excel",
+                "value": "xlsx"
+              }
+            },
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "default": "json",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Standardize chemical before calculating predictions",
+            "in": "query",
+            "name": "standardize",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "File to predict",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "modelDetails": {
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "results": {
+                      "items": {
+                        "properties": {
+                          "chemical": {
+                            "properties": {
+                              "additionalProps": {
+                                "properties": {
+                                  "moleculeId": {
+                                    "oneOf": [
+                                      {
+                                        "type": "number"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              "canonicalSmiles": {
+                                "type": "string"
+                              },
+                              "casrn": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "chemId": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "cid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "id": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "inchi": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "inchiKey": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "ionization": {
+                                "nullable": true,
+                                "type": "integer"
+                              },
+                              "name": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "sid": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "smiles": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "smiles",
+                              "canonicalSmiles",
+                              "additionalProps"
+                            ],
+                            "type": "object"
+                          },
+                          "result": {
+                            "additionalProperties": true,
+                            "description": "OPERA prediction values keyed by OPERA output column name.",
+                            "type": "object"
+                          }
+                        },
+                        "required": [
+                          "chemical",
+                          "result"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "modelDetails",
+                    "results"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/opera/metadata": {
+      "get": {
+        "operationId": "app.get_metadata",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/opera/report": {
+      "get": {
+        "description": "Generates an OPERA report from the Mongo report cache",
+        "operationId": "app.get_report_html",
+        "parameters": [
+          {
+            "description": "DSSTox substance identifier",
+            "example": "DTXSID7020182",
+            "in": "query",
+            "name": "dtxsid",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Dashboard model ID for the OPERA endpoint",
+            "example": 1169,
+            "in": "query",
+            "name": "modelId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OPERA report HTML"
+          },
+          "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Report data not found"
+          },
+          "503": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Mongo report cache unavailable"
+          }
+        },
+        "summary": "Generate a standalone OPERA calculation report"
+      }
+    },
+    "/api/opera/version": {
+      "get": {
+        "operationId": "app.get_version",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": ""
+    }
+  ]
+}

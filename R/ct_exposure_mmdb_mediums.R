@@ -22,3 +22,5 @@ ct_exposure_mmdb_mediums <- function() {
 
   return(result)
 }
+
+

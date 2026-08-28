@@ -15,11 +15,7 @@
 #' }
 chemi_services_convert <- function(content = NULL, type = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_services_convert",
-    "pre_request",
-    list(params = list(`content` = content, `type` = type, `server` = server))
-  )
+  req_data <- run_hook("chemi_services_convert", "pre_request", list(params = list(`content` = content, `type` = type, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,9 +30,7 @@ chemi_services_convert <- function(content = NULL, type = NULL) {
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(type)) {
-    options$type <- type
-  }
+  if (!is.null(type)) options$type <- type
   result <- generic_chemi_request(
     query = content,
     endpoint = "services/convert",

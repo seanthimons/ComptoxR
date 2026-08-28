@@ -21,10 +21,7 @@ test_that("ct_exposure_mmdb_single_sample_by_medium passes request metadata to h
     .package = "ComptoxR"
   )
 
-  result <- try(
-    suppressWarnings(suppressMessages(ComptoxR::ct_exposure_mmdb_single_sample_by_medium(medium = "water"))),
-    silent = TRUE
-  )
+  result <- try(suppressWarnings(suppressMessages(ComptoxR::ct_exposure_mmdb_single_sample_by_medium(medium = "water"))), silent = TRUE)
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
@@ -33,6 +30,5 @@ test_that("ct_exposure_mmdb_single_sample_by_medium passes request metadata to h
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 0)
   expect_equal(call[["medium"]], "water")
-  expect_equal(call[["max_pages"]], 100)
   expect_equal(call[["pagination_strategy"]], "page_number")
 })

@@ -15,11 +15,7 @@
 #' }
 chemi_resolver_resolve <- function(mol = NULL, queries = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_resolve",
-    "pre_request",
-    list(params = list(`mol` = mol, `queries` = queries, `server` = server))
-  )
+  req_data <- run_hook("chemi_resolver_resolve", "pre_request", list(params = list(`mol` = mol, `queries` = queries, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,9 +30,7 @@ chemi_resolver_resolve <- function(mol = NULL, queries = NULL) {
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(queries)) {
-    options$queries <- queries
-  }
+  if (!is.null(queries)) options$queries <- queries
   result <- generic_chemi_request(
     query = mol,
     endpoint = "resolver/resolve",

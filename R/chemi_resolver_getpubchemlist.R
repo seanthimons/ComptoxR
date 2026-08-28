@@ -22,21 +22,7 @@
 chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
   chemicals <- NULL
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_getpubchemlist",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `chemicals` = chemicals,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_resolver_getpubchemlist", "pre_request", list(params = list(`query` = query, `idType` = idType, `section` = section, `all_pages` = all_pages, `max_pages` = max_pages, `chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -64,9 +50,7 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) {
-    extra_options$section <- section
-  }
+  if (!is.null(section)) extra_options$section <- section
 
   result <- generic_chemi_request(
     query = query,

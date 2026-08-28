@@ -16,11 +16,7 @@
 #' }
 chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_toxprints",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `headers` = headers, `profile` = profile, `server` = server))
-  )
+  req_data <- run_hook("chemi_toxprints", "pre_request", list(params = list(`smiles` = smiles, `headers` = headers, `profile` = profile, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(headers)) {
-    options[['headers']] <- headers
-  }
-  if (!is.null(profile)) {
-    options[['profile']] <- profile
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(headers)) options[['headers']] <- headers
+  if (!is.null(profile)) options[['profile']] <- profile
+    result <- generic_request(
     endpoint = "toxprints",
     method = "GET",
     batch_limit = 0,

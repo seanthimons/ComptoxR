@@ -14,11 +14,7 @@
 #' }
 chemi_resolver_lookupCASRN <- function(query) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_lookupCASRN",
-    "pre_request",
-    list(params = list(`query` = query, `server` = server))
-  )
+  req_data <- run_hook("chemi_resolver_lookupCASRN", "pre_request", list(params = list(`query` = query, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_resolver_lookupCASRN <- function(query) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+    result <- generic_request(
     endpoint = "resolver/lookupCASRN",
     method = "GET",
     batch_limit = 0,

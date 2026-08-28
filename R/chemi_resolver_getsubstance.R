@@ -14,11 +14,7 @@
 #' }
 chemi_resolver_getsubstance <- function(name) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_getsubstance",
-    "pre_request",
-    list(params = list(`name` = name, `server` = server))
-  )
+  req_data <- run_hook("chemi_resolver_getsubstance", "pre_request", list(params = list(`name` = name, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_resolver_getsubstance <- function(name) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(name)) {
-    options[['name']] <- name
-  }
-  result <- generic_request(
+  if (!is.null(name)) options[['name']] <- name
+    result <- generic_request(
     endpoint = "resolver/getsubstance",
     method = "GET",
     batch_limit = 0,

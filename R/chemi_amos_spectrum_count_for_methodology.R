@@ -15,11 +15,7 @@
 #' }
 chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_type = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_spectrum_count_for_methodology",
-    "pre_request",
-    list(params = list(`dtxsid` = dtxsid, `spectrum_type` = spectrum_type, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_spectrum_count_for_methodology", "pre_request", list(params = list(`dtxsid` = dtxsid, `spectrum_type` = spectrum_type, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,9 +30,7 @@ chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_ty
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(spectrum_type)) {
-    options$spectrum_type <- spectrum_type
-  }
+  if (!is.null(spectrum_type)) options$spectrum_type <- spectrum_type
   result <- generic_chemi_request(
     query = dtxsid,
     endpoint = "amos/spectrum_count_for_methodology/",

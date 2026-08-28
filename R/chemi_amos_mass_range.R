@@ -15,11 +15,7 @@
 #' }
 chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_mass_range",
-    "pre_request",
-    list(params = list(`lower_mass_limit` = lower_mass_limit, `upper_mass_limit` = upper_mass_limit, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_mass_range", "pre_request", list(params = list(`lower_mass_limit` = lower_mass_limit, `upper_mass_limit` = upper_mass_limit, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,9 +30,7 @@ chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NU
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(upper_mass_limit)) {
-    options$upper_mass_limit <- upper_mass_limit
-  }
+  if (!is.null(upper_mass_limit)) options$upper_mass_limit <- upper_mass_limit
   result <- generic_chemi_request(
     query = lower_mass_limit,
     endpoint = "amos/mass_range_search/",

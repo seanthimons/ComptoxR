@@ -6,7 +6,7 @@
 #' @param smiles Required parameter
 #' @param endpoint Optional parameter
 #' @param method Optional parameter (default: consensus)
-#' @param format Optional parameter. Options: JSON, HTML, PDF
+#' @param format Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX
 #' @param output Output contract: normalized wide tibble or raw PredictionResult
 #' @return Returns a tibble with results
 #' @apiStage public
@@ -18,23 +18,8 @@
 #' }
 chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")) {
   server <- "chemi_burl"
-  if (missing(endpoint)) {
-    endpoint <- NULL
-  }
-  req_data <- run_hook(
-    "chemi_webtest_predict",
-    "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `endpoint` = endpoint,
-        `method` = method,
-        `format` = format,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  if (missing(endpoint)) endpoint <- NULL
+  req_data <- run_hook("chemi_webtest_predict", "pre_request", list(params = list(`smiles` = smiles, `endpoint` = endpoint, `method` = method, `format` = format, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -62,9 +47,9 @@ chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format
 #' `r lifecycle::badge("experimental")`
 #'
 #' @param endpoints Endpoint to predict
-#' @param structures Molecule expressed as SMILES or MOL
-#' @param format Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF
+#' @param format Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX
 #' @param methods Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)
+#' @param structures Molecule expressed as SMILES or MOL
 #' @param output Output contract: normalized wide tibble or raw PredictionResult
 #' @return Returns a tibble with results
 #' @apiStage public
@@ -74,31 +59,10 @@ chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format
 #' \dontrun{
 #' chemi_webtest_predict_bulk(endpoints = "DTXSID1024122")
 #' }
-chemi_webtest_predict_bulk <- function(
-  structures,
-  endpoints,
-  methods = NULL,
-  format = "JSON",
-  output = c("wide", "raw")
-) {
+chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = "JSON", output = c("wide", "raw")) {
   server <- "chemi_burl"
-  if (missing(endpoints)) {
-    endpoints <- NULL
-  }
-  req_data <- run_hook(
-    "chemi_webtest_predict_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `structures` = structures,
-        `endpoints` = endpoints,
-        `methods` = methods,
-        `format` = format,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  if (missing(endpoints)) endpoints <- NULL
+  req_data <- run_hook("chemi_webtest_predict_bulk", "pre_request", list(params = list(`structures` = structures, `endpoints` = endpoints, `methods` = methods, `format` = format, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

@@ -5,11 +5,13 @@
 \title{Resolver Safety Flags}
 \usage{
 chemi_resolver_safety_flags_bulk(
+  additionalProps = NULL,
   averageMass = NULL,
   canonicalSmiles = NULL,
   casrn = NULL,
   chemId = NULL,
   cid = NULL,
+  id = NULL,
   image = NULL,
   inchi = NULL,
   inchiKey = NULL,
@@ -23,6 +25,8 @@ chemi_resolver_safety_flags_bulk(
 )
 }
 \arguments{
+\item{additionalProps}{Optional parameter}
+
 \item{averageMass}{Optional parameter}
 
 \item{canonicalSmiles}{Optional parameter}
@@ -32,6 +36,8 @@ chemi_resolver_safety_flags_bulk(
 \item{chemId}{Optional parameter}
 
 \item{cid}{Optional parameter}
+
+\item{id}{Optional parameter}
 
 \item{image}{Optional parameter}
 
@@ -61,7 +67,7 @@ Returns a list with result object
 }
 \examples{
 \dontrun{
-chemi_resolver_safety_flags_bulk(averageMass = "DTXSID1024122")
+chemi_resolver_safety_flags_bulk(additionalProps = "DTXSID1024122")
 }
 }
 \section{API stage}{

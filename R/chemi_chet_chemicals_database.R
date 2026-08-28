@@ -12,41 +12,16 @@
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_chet_chemicals_database(page = "DTXSID7020182")
 #' }
-chemi_chet_chemicals_database <- function(
-  page = 0,
-  size = NULL,
-  query = NULL,
-  exact_search = NULL,
-  lib_name = NULL,
-  only_in_reactions = NULL,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_chet_chemicals_database <- function(page = 0, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_database",
-    "pre_request",
-    list(
-      params = list(
-        `page` = page,
-        `size` = size,
-        `query` = query,
-        `exact_search` = exact_search,
-        `lib_name` = lib_name,
-        `only_in_reactions` = only_in_reactions,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_chet_chemicals_database", "pre_request", list(params = list(`page` = page, `size` = size, `query` = query, `exact_search` = exact_search, `lib_name` = lib_name, `only_in_reactions` = only_in_reactions, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -79,25 +54,13 @@ chemi_chet_chemicals_database <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(exact_search)) {
-    options[['exact_search']] <- exact_search
-  }
-  if (!is.null(lib_name)) {
-    options[['lib_name']] <- lib_name
-  }
-  if (!is.null(only_in_reactions)) {
-    options[['only_in_reactions']] <- only_in_reactions
-  }
-  result <- generic_request(
+  if (!is.null(page)) options[['page']] <- page
+  if (!is.null(size)) options[['size']] <- size
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(exact_search)) options[['exact_search']] <- exact_search
+  if (!is.null(lib_name)) options[['lib_name']] <- lib_name
+  if (!is.null(only_in_reactions)) options[['only_in_reactions']] <- only_in_reactions
+    result <- generic_request(
     endpoint = "chemicals/database",
     method = "GET",
     batch_limit = 0,

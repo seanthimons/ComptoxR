@@ -1,0 +1,124 @@
+{
+  "basePath": "",
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "Request": {
+      "properties": {
+        "chemicals": {
+          "type": "array"
+        },
+        "options": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "chemicals"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "API allows generating a set of RDKit descriptors via GET (one chemical) or POST (multiple chemicals)",
+    "title": "RDKit descriptors generator API",
+    "version": "1.0"
+  },
+  "parameters": {},
+  "paths": {
+    "/api/rdkit": {
+      "get": {
+        "operationId": "app.get_descr",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "smiles",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "default": "ecfp",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": 3,
+            "in": "query",
+            "name": "radius",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": 1024,
+            "in": "query",
+            "name": "bits",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns calculated descriptors"
+          }
+        },
+        "summary": "Generate descriptors for one molecule"
+      },
+      "post": {
+        "operationId": "app.post_descr",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "schema": {
+              "properties": {
+                "chemicals": {
+                  "type": "array"
+                },
+                "options": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "chemicals"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns calculated descriptors"
+          }
+        },
+        "summary": "Generate descriptors for multiple molecules"
+      }
+    },
+    "/api/rdkit/metadata": {
+      "get": {
+        "operationId": "app.get_metadata",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/rdkit/version": {
+      "get": {
+        "operationId": "app.get_version",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "responses": {},
+  "swagger": "2.0"
+}

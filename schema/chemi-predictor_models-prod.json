@@ -1,0 +1,367 @@
+{
+  "components": {
+    "schemas": {
+      "RequestLegacy": {
+        "example": {
+          "model_id": 1065,
+          "smiles": [
+            "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+            "CCCCN"
+          ]
+        },
+        "properties": {
+          "model_id": {
+            "type": "integer"
+          },
+          "smiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "smiles",
+          "model_id"
+        ],
+        "type": "object"
+      },
+      "RequestWithChemicals": {
+        "example": {
+          "chemicals": [
+            {
+              "id": 1,
+              "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
+            },
+            {
+              "id": 2,
+              "smiles": "CCCCN"
+            }
+          ],
+          "model_id": 1065
+        },
+        "properties": {
+          "chemicals": {
+            "items": {
+              "properties": {
+                "id": {
+                  "oneOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "smiles": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "smiles"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "model_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "chemicals",
+          "model_id"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "API gateway to EPA predictions",
+    "title": "EPA Predictor",
+    "version": "0.0.1"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/api/predictor_models/metadata": {
+      "get": {
+        "operationId": "app.get_metadata",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/predictor_models/model/file/": {
+      "get": {
+        "operationId": "app.get_file",
+        "parameters": [
+          {
+            "example": 3,
+            "in": "query",
+            "name": "type_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "example": 1065,
+            "in": "query",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "File"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/predictor_models/predict": {
+      "get": {
+        "operationId": "app.predictDB",
+        "parameters": [
+          {
+            "description": "SMILES to generate predictions for",
+            "examples": {
+              "example0": {
+                "summary": "Empty",
+                "value": {}
+              },
+              "example1": {
+                "summary": "2-Isopropylthioxanthone",
+                "value": "CC(C)c1ccc2sc3ccccc3c(=O)c2c1"
+              },
+              "example2": {
+                "summary": "Triphenyl phosphite",
+                "value": "c1ccc(OP(Oc2ccccc2)Oc2ccccc2)cc1"
+              }
+            },
+            "in": "query",
+            "name": "smiles",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "identifier to generate predictions for",
+            "examples": {
+              "example0": {
+                "summary": "Empty",
+                "value": {}
+              },
+              "example1": {
+                "summary": "CASRN",
+                "value": "71-43-2"
+              },
+              "example2": {
+                "summary": "CHEMICAL NAME",
+                "value": "benzene"
+              },
+              "example3": {
+                "summary": "DTXSID",
+                "value": "DTXSID3039242"
+              }
+            },
+            "in": "query",
+            "name": "identifier",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Model ID to use",
+            "examples": {
+              "example1": {
+                "summary": "HLC-XGB Martin 2024",
+                "value": 1065
+              },
+              "example2": {
+                "summary": "WS-XGB Martin 2024",
+                "value": 1066
+              },
+              "example3": {
+                "summary": "VP-XGB Martin 2024",
+                "value": 1067
+              },
+              "example4": {
+                "summary": "BP-XGB Martin 2024",
+                "value": 1068
+              },
+              "example5": {
+                "summary": "LogP-XGB Martin 2024",
+                "value": 1069
+              },
+              "example6": {
+                "summary": "MP-XGB Martin 2024",
+                "value": 1070
+              }
+            },
+            "in": "query",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "which format to return",
+            "examples": {
+              "example1": {
+                "summary": "JSON",
+                "value": "json"
+              },
+              "example2": {
+                "summary": "HTML",
+                "value": "html"
+              }
+            },
+            "in": "query",
+            "name": "report_format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "operationId": "app.predictDB_POST",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "example": {
+                      "model_id": 1065,
+                      "smiles": [
+                        "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F",
+                        "CCCCN"
+                      ]
+                    },
+                    "properties": {
+                      "model_id": {
+                        "type": "integer"
+                      },
+                      "smiles": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "smiles",
+                      "model_id"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "example": {
+                      "chemicals": [
+                        {
+                          "id": 1,
+                          "smiles": "CC(C)CCC(C)NC1=CC(=O)C(=CC1=O)NC1C=CC=CC=1"
+                        },
+                        {
+                          "id": 2,
+                          "smiles": "CCCCN"
+                        }
+                      ],
+                      "model_id": 1065
+                    },
+                    "properties": {
+                      "chemicals": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "smiles": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "smiles"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "model_id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "chemicals",
+                      "model_id"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "Success"
+          }
+        },
+        "summary": "Generate predictions for multiple molecules"
+      }
+    },
+    "/api/predictor_models/version": {
+      "get": {
+        "operationId": "app.get_version",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": ""
+    }
+  ]
+}

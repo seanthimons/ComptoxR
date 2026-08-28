@@ -5,7 +5,7 @@
 #'
 #' @param name Required parameter
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -26,10 +26,8 @@ chemi_resolver_ghs_list <- function(name) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(name)) {
-    options[['name']] <- name
-  }
-  result <- generic_request(
+  if (!is.null(name)) options[['name']] <- name
+    result <- generic_request(
     endpoint = "resolver/ghs-list",
     method = "GET",
     batch_limit = 0,

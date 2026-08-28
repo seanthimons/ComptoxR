@@ -7,7 +7,7 @@
 #' @param logp Octanol-water partition coefficient
 #' @param ws Water solubility (mg/L)
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -16,11 +16,7 @@
 #' }
 chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_ncc_cats",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `logp` = logp, `ws` = ws, `server` = server))
-  )
+  req_data <- run_hook("chemi_ncc_cats", "pre_request", list(params = list(`smiles` = smiles, `logp` = logp, `ws` = ws, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(logp)) {
-    options[['logp']] <- logp
-  }
-  if (!is.null(ws)) {
-    options[['ws']] <- ws
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(logp)) options[['logp']] <- logp
+  if (!is.null(ws)) options[['ws']] <- ws
+    result <- generic_request(
     endpoint = "ncc_cats",
     method = "GET",
     batch_limit = 0,
@@ -69,7 +59,7 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
 #'
 #' @param chemicals Array of input chemicals with optional id, smiles, logp, and ws. Missing smiles are returned as item-level errors.
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -78,11 +68,7 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
 #' }
 chemi_ncc_cats_bulk <- function(chemicals = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_ncc_cats_bulk",
-    "pre_request",
-    list(params = list(`chemicals` = chemicals, `server` = server))
-  )
+  req_data <- run_hook("chemi_ncc_cats_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

@@ -5,7 +5,8 @@
 \title{Search Similar}
 \usage{
 chemi_search_similar(
-  smiles,
+  smiles = NULL,
+  dtxsid = NULL,
   exportSmiles = NULL,
   exportMol = NULL,
   min = NULL,
@@ -14,7 +15,9 @@ chemi_search_similar(
 )
 }
 \arguments{
-\item{smiles}{Required parameter}
+\item{smiles}{Optional parameter}
+
+\item{dtxsid}{Optional parameter}
 
 \item{exportSmiles}{Optional parameter}
 

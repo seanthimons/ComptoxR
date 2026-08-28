@@ -8,7 +8,7 @@ chemi_amos_batch(
   additional_record_info = NULL,
   always_download_file = NULL,
   base_url = NULL,
-  dtxsids = NULL,
+  ids = NULL,
   include_classyfire = NULL,
   include_external_links = NULL,
   include_functional_uses = NULL,
@@ -24,7 +24,7 @@ chemi_amos_batch(
 
 \item{base_url}{URL for the AMOS frontend.  Used to construct the internal links in the output file.}
 
-\item{dtxsids}{List of DTXSIDs to search for.}
+\item{ids}{List of DTXSIDs or other identifiers to search for.}
 
 \item{include_classyfire}{Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.}
 

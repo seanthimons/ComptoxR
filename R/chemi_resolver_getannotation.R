@@ -15,11 +15,7 @@
 #' }
 chemi_resolver_getannotation <- function(name, heading) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_getannotation",
-    "pre_request",
-    list(params = list(`name` = name, `heading` = heading, `server` = server))
-  )
+  req_data <- run_hook("chemi_resolver_getannotation", "pre_request", list(params = list(`name` = name, `heading` = heading, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_resolver_getannotation <- function(name, heading) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(name)) {
-    options[['name']] <- name
-  }
-  if (!is.null(heading)) {
-    options[['heading']] <- heading
-  }
-  result <- generic_request(
+  if (!is.null(name)) options[['name']] <- name
+  if (!is.null(heading)) options[['heading']] <- heading
+    result <- generic_request(
     endpoint = "resolver/getannotation",
     method = "GET",
     batch_limit = 0,

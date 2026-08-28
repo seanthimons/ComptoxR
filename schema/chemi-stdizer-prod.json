@@ -65,6 +65,10 @@
       },
       "Chemical": {
         "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
           "averageMass": {
             "format": "double",
             "type": "number"
@@ -79,6 +83,9 @@
             "type": "string"
           },
           "cid": {
+            "type": "string"
+          },
+          "id": {
             "type": "string"
           },
           "image": {
@@ -122,9 +129,7 @@
             "type": "integer"
           },
           "properties": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "rid": {
@@ -239,6 +244,9 @@
           },
           "fileName": {
             "type": "string"
+          },
+          "fillAdditionalProps": {
+            "type": "boolean"
           },
           "idField": {
             "type": "string"
@@ -676,9 +684,7 @@
             "type": "integer"
           },
           "properties": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "rid": {
@@ -1874,13 +1880,7 @@
         "responses": {
           "200": {
             "content": {
-              "image/png": {
-                "schema": {
-                  "format": "byte",
-                  "type": "string"
-                }
-              },
-              "image/svg+xml": {
+              "*/*": {
                 "schema": {
                   "format": "byte",
                   "type": "string"

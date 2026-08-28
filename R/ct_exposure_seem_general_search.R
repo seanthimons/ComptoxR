@@ -52,3 +52,5 @@ ct_exposure_seem_general_search <- function(dtxsid, projection = NULL) {
 
   return(result)
 }
+
+

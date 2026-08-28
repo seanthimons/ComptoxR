@@ -3,7 +3,8 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param smiles Required parameter
+#' @param smiles Optional parameter
+#' @param dtxsid Optional parameter
 #' @param exportSmiles Optional parameter
 #' @param exportMol Optional parameter
 #' @param min Optional parameter
@@ -17,35 +18,17 @@
 #' \dontrun{
 #' chemi_search_similar(smiles = "DTXSID7020182")
 #' }
-chemi_search_similar <- function(
-  smiles,
-  exportSmiles = NULL,
-  exportMol = NULL,
-  min = NULL,
-  max = NULL,
-  similarityType = NULL
-) {
+chemi_search_similar <- function(smiles = NULL, dtxsid = NULL, exportSmiles = NULL, exportMol = NULL, min = NULL, max = NULL, similarityType = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_search_similar",
-    "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `exportSmiles` = exportSmiles,
-        `exportMol` = exportMol,
-        `min` = min,
-        `max` = max,
-        `similarityType` = similarityType,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_search_similar", "pre_request", list(params = list(`smiles` = smiles, `dtxsid` = dtxsid, `exportSmiles` = exportSmiles, `exportMol` = exportMol, `min` = min, `max` = max, `similarityType` = similarityType, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
   if ("smiles" %in% names(req_data$params)) {
     smiles <- req_data$params[["smiles"]]
+  }
+  if ("dtxsid" %in% names(req_data$params)) {
+    dtxsid <- req_data$params[["dtxsid"]]
   }
   if ("exportSmiles" %in% names(req_data$params)) {
     exportSmiles <- req_data$params[["exportSmiles"]]
@@ -67,25 +50,14 @@ chemi_search_similar <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(exportSmiles)) {
-    options[['exportSmiles']] <- exportSmiles
-  }
-  if (!is.null(exportMol)) {
-    options[['exportMol']] <- exportMol
-  }
-  if (!is.null(min)) {
-    options[['min']] <- min
-  }
-  if (!is.null(max)) {
-    options[['max']] <- max
-  }
-  if (!is.null(similarityType)) {
-    options[['similarityType']] <- similarityType
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(dtxsid)) options[['dtxsid']] <- dtxsid
+  if (!is.null(exportSmiles)) options[['exportSmiles']] <- exportSmiles
+  if (!is.null(exportMol)) options[['exportMol']] <- exportMol
+  if (!is.null(min)) options[['min']] <- min
+  if (!is.null(max)) options[['max']] <- max
+  if (!is.null(similarityType)) options[['similarityType']] <- similarityType
+    result <- generic_request(
     endpoint = "search/similar",
     method = "GET",
     batch_limit = 0,

@@ -7,7 +7,7 @@
 chemi_amos_formula(formula)
 }
 \arguments{
-\item{formula}{Molecular furmula to search by.  Formula should be in Hill form.}
+\item{formula}{Molecular formula to search by.  Formula should be in Hill form.}
 }
 \value{
 Returns a tibble with results

@@ -5,7 +5,7 @@
 #'
 #' @param lib_id Optional parameter
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_chet_reaction_details <- function(lib_id = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_details",
-    "pre_request",
-    list(params = list(`lib_id` = lib_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction_details", "pre_request", list(params = list(`lib_id` = lib_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_chet_reaction_details <- function(lib_id = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(lib_id)) {
-    options[['lib_id']] <- lib_id
-  }
-  result <- generic_request(
+  if (!is.null(lib_id)) options[['lib_id']] <- lib_id
+    result <- generic_request(
     endpoint = "reaction/details",
     method = "GET",
     batch_limit = 0,

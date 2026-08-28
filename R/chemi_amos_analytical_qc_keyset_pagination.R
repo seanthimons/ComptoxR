@@ -8,7 +8,7 @@
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -17,19 +17,7 @@
 #' }
 chemi_amos_analytical_qc_keyset_pagination <- function(limit, cursor = NULL, all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_analytical_qc_keyset_pagination",
-    "pre_request",
-    list(
-      params = list(
-        `limit` = limit,
-        `cursor` = cursor,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_analytical_qc_keyset_pagination", "pre_request", list(params = list(`limit` = limit, `cursor` = cursor, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -50,10 +38,8 @@ chemi_amos_analytical_qc_keyset_pagination <- function(limit, cursor = NULL, all
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(cursor)) {
-    options[['cursor']] <- cursor
-  }
-  result <- generic_request(
+  if (!is.null(cursor)) options[['cursor']] <- cursor
+    result <- generic_request(
     query = limit,
     endpoint = "amos/analytical_qc_keyset_pagination/",
     method = "GET",
@@ -90,47 +76,16 @@ chemi_amos_analytical_qc_keyset_pagination <- function(limit, cursor = NULL, all
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_amos_analytical_qc_keyset_pagination_bulk(limit = "DTXSID7020182")
 #' }
-chemi_amos_analytical_qc_keyset_pagination_bulk <- function(
-  limit,
-  cursor = "",
-  dtxsid = "",
-  filterModel = structure(list(), names = character(0)),
-  filters = structure(list(), names = character(0)),
-  full_table = "",
-  include_total = FALSE,
-  quickFilter = "",
-  sortModel = list(),
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_amos_analytical_qc_keyset_pagination_bulk <- function(limit, cursor = "", dtxsid = "", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = "", include_total = FALSE, quickFilter = "", sortModel = list(), all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_analytical_qc_keyset_pagination_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `limit` = limit,
-        `cursor` = cursor,
-        `dtxsid` = dtxsid,
-        `filterModel` = filterModel,
-        `filters` = filters,
-        `full_table` = full_table,
-        `include_total` = include_total,
-        `quickFilter` = quickFilter,
-        `sortModel` = sortModel,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_analytical_qc_keyset_pagination_bulk", "pre_request", list(params = list(`limit` = limit, `cursor` = cursor, `dtxsid` = dtxsid, `filterModel` = filterModel, `filters` = filters, `full_table` = full_table, `include_total` = include_total, `quickFilter` = quickFilter, `sortModel` = sortModel, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -172,30 +127,14 @@ chemi_amos_analytical_qc_keyset_pagination_bulk <- function(
   }
   # Build request body
   request_body <- list()
-  if (!is.null(cursor)) {
-    request_body$cursor <- cursor
-  }
-  if (!is.null(dtxsid)) {
-    request_body$dtxsid <- dtxsid
-  }
-  if (!is.null(filterModel)) {
-    request_body$filterModel <- filterModel
-  }
-  if (!is.null(filters)) {
-    request_body$filters <- filters
-  }
-  if (!is.null(full_table)) {
-    request_body$full_table <- full_table
-  }
-  if (!is.null(include_total)) {
-    request_body$include_total <- include_total
-  }
-  if (!is.null(quickFilter)) {
-    request_body$quickFilter <- quickFilter
-  }
-  if (!is.null(sortModel)) {
-    request_body$sortModel <- sortModel
-  }
+  if (!is.null(cursor)) request_body$cursor <- cursor
+  if (!is.null(dtxsid)) request_body$dtxsid <- dtxsid
+  if (!is.null(filterModel)) request_body$filterModel <- filterModel
+  if (!is.null(filters)) request_body$filters <- filters
+  if (!is.null(full_table)) request_body$full_table <- full_table
+  if (!is.null(include_total)) request_body$include_total <- include_total
+  if (!is.null(quickFilter)) request_body$quickFilter <- quickFilter
+  if (!is.null(sortModel)) request_body$sortModel <- sortModel
   result <- generic_request(
     query = NULL,
     endpoint = "amos/analytical_qc_keyset_pagination/",

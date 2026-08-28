@@ -15,47 +15,16 @@
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_chet_reaction_database(page = "DTXSID7020182")
 #' }
-chemi_chet_reaction_database <- function(
-  page = 0,
-  size = NULL,
-  query = NULL,
-  lib_name = NULL,
-  reaction_process = NULL,
-  reaction_type = NULL,
-  reaction_scheme = NULL,
-  reaction_phase = NULL,
-  craccm_id = NULL,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_chet_reaction_database <- function(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_database",
-    "pre_request",
-    list(
-      params = list(
-        `page` = page,
-        `size` = size,
-        `query` = query,
-        `lib_name` = lib_name,
-        `reaction_process` = reaction_process,
-        `reaction_type` = reaction_type,
-        `reaction_scheme` = reaction_scheme,
-        `reaction_phase` = reaction_phase,
-        `craccm_id` = craccm_id,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_chet_reaction_database", "pre_request", list(params = list(`page` = page, `size` = size, `query` = query, `lib_name` = lib_name, `reaction_process` = reaction_process, `reaction_type` = reaction_type, `reaction_scheme` = reaction_scheme, `reaction_phase` = reaction_phase, `craccm_id` = craccm_id, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -97,34 +66,16 @@ chemi_chet_reaction_database <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(lib_name)) {
-    options[['lib_name']] <- lib_name
-  }
-  if (!is.null(reaction_process)) {
-    options[['reaction_process']] <- reaction_process
-  }
-  if (!is.null(reaction_type)) {
-    options[['reaction_type']] <- reaction_type
-  }
-  if (!is.null(reaction_scheme)) {
-    options[['reaction_scheme']] <- reaction_scheme
-  }
-  if (!is.null(reaction_phase)) {
-    options[['reaction_phase']] <- reaction_phase
-  }
-  if (!is.null(craccm_id)) {
-    options[['craccm_id']] <- craccm_id
-  }
-  result <- generic_request(
+  if (!is.null(page)) options[['page']] <- page
+  if (!is.null(size)) options[['size']] <- size
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(lib_name)) options[['lib_name']] <- lib_name
+  if (!is.null(reaction_process)) options[['reaction_process']] <- reaction_process
+  if (!is.null(reaction_type)) options[['reaction_type']] <- reaction_type
+  if (!is.null(reaction_scheme)) options[['reaction_scheme']] <- reaction_scheme
+  if (!is.null(reaction_phase)) options[['reaction_phase']] <- reaction_phase
+  if (!is.null(craccm_id)) options[['craccm_id']] <- craccm_id
+    result <- generic_request(
     endpoint = "reaction/database",
     method = "GET",
     batch_limit = 0,

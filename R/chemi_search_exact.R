@@ -16,11 +16,7 @@
 #' }
 chemi_search_exact <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_search_exact",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `exportSmiles` = exportSmiles, `exportMol` = exportMol, `server` = server))
-  )
+  req_data <- run_hook("chemi_search_exact", "pre_request", list(params = list(`smiles` = smiles, `exportSmiles` = exportSmiles, `exportMol` = exportMol, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_search_exact <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(exportSmiles)) {
-    options[['exportSmiles']] <- exportSmiles
-  }
-  if (!is.null(exportMol)) {
-    options[['exportMol']] <- exportMol
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(exportSmiles)) options[['exportSmiles']] <- exportSmiles
+  if (!is.null(exportMol)) options[['exportMol']] <- exportMol
+    result <- generic_request(
     endpoint = "search/exact",
     method = "GET",
     batch_limit = 0,

@@ -26,48 +26,9 @@
 #' \dontrun{
 #' chemi_resolver_classyfire(query = "DTXSID7020182")
 #' }
-chemi_resolver_classyfire <- function(
-  query = NULL,
-  idType = "AnyId",
-  fuzzy = "Not",
-  kingdom = NULL,
-  superklass = NULL,
-  klass = NULL,
-  subklass = NULL,
-  directParent = NULL,
-  geometricDescriptor = NULL,
-  alternativeParent = NULL,
-  substituent = NULL,
-  page = 0,
-  size = 1000,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_resolver_classyfire <- function(query = NULL, idType = "AnyId", fuzzy = "Not", kingdom = NULL, superklass = NULL, klass = NULL, subklass = NULL, directParent = NULL, geometricDescriptor = NULL, alternativeParent = NULL, substituent = NULL, page = 0, size = 1000, all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_classyfire",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `fuzzy` = fuzzy,
-        `kingdom` = kingdom,
-        `superklass` = superklass,
-        `klass` = klass,
-        `subklass` = subklass,
-        `directParent` = directParent,
-        `geometricDescriptor` = geometricDescriptor,
-        `alternativeParent` = alternativeParent,
-        `substituent` = substituent,
-        `page` = page,
-        `size` = size,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_resolver_classyfire", "pre_request", list(params = list(`query` = query, `idType` = idType, `fuzzy` = fuzzy, `kingdom` = kingdom, `superklass` = superklass, `klass` = klass, `subklass` = subklass, `directParent` = directParent, `geometricDescriptor` = geometricDescriptor, `alternativeParent` = alternativeParent, `substituent` = substituent, `page` = page, `size` = size, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -121,46 +82,20 @@ chemi_resolver_classyfire <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  if (!is.null(fuzzy)) {
-    options[['fuzzy']] <- fuzzy
-  }
-  if (!is.null(kingdom)) {
-    options[['kingdom']] <- kingdom
-  }
-  if (!is.null(superklass)) {
-    options[['superklass']] <- superklass
-  }
-  if (!is.null(klass)) {
-    options[['klass']] <- klass
-  }
-  if (!is.null(subklass)) {
-    options[['subklass']] <- subklass
-  }
-  if (!is.null(directParent)) {
-    options[['directParent']] <- directParent
-  }
-  if (!is.null(geometricDescriptor)) {
-    options[['geometricDescriptor']] <- geometricDescriptor
-  }
-  if (!is.null(alternativeParent)) {
-    options[['alternativeParent']] <- alternativeParent
-  }
-  if (!is.null(substituent)) {
-    options[['substituent']] <- substituent
-  }
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(idType)) options[['idType']] <- idType
+  if (!is.null(fuzzy)) options[['fuzzy']] <- fuzzy
+  if (!is.null(kingdom)) options[['kingdom']] <- kingdom
+  if (!is.null(superklass)) options[['superklass']] <- superklass
+  if (!is.null(klass)) options[['klass']] <- klass
+  if (!is.null(subklass)) options[['subklass']] <- subklass
+  if (!is.null(directParent)) options[['directParent']] <- directParent
+  if (!is.null(geometricDescriptor)) options[['geometricDescriptor']] <- geometricDescriptor
+  if (!is.null(alternativeParent)) options[['alternativeParent']] <- alternativeParent
+  if (!is.null(substituent)) options[['substituent']] <- substituent
+  if (!is.null(page)) options[['page']] <- page
+  if (!is.null(size)) options[['size']] <- size
+    result <- generic_request(
     endpoint = "resolver/classyfire",
     method = "GET",
     batch_limit = 0,

@@ -6,6 +6,7 @@
 #' @param medium harmonized medium
 #' @param pageNumber Optional parameter (default: 1)
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
+#' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a scalar value
 #' @apiStage public
 #' @export
@@ -14,7 +15,7 @@
 #' \dontrun{
 #' ct_exposure_mmdb_aggregate_by_medium(medium = "surface water")
 #' }
-ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1, all_pages = TRUE) {
+ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1, all_pages = TRUE, max_pages = 100) {
   result <- generic_request(
     endpoint = "exposure/mmdb/aggregate/by-medium",
     method = "GET",
@@ -22,7 +23,7 @@ ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1, all_pag
     `medium` = medium,
     `pageNumber` = pageNumber,
     paginate = all_pages,
-    max_pages = 100,
+    max_pages = max_pages,
     pagination_strategy = "page_number"
   )
 
@@ -30,3 +31,5 @@ ct_exposure_mmdb_aggregate_by_medium <- function(medium, pageNumber = 1, all_pag
 
   return(result)
 }
+
+

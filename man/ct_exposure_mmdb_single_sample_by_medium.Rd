@@ -7,7 +7,8 @@
 ct_exposure_mmdb_single_sample_by_medium(
   medium,
   pageNumber = 1,
-  all_pages = TRUE
+  all_pages = TRUE,
+  max_pages = 100
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ ct_exposure_mmdb_single_sample_by_medium(
 \item{pageNumber}{Optional parameter (default: 1)}
 
 \item{all_pages}{Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.}
+
+\item{max_pages}{Maximum number of pages to fetch when all_pages is TRUE.}
 }
 \value{
 Returns a scalar value

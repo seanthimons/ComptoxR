@@ -5,7 +5,7 @@
 #'
 #' @param substr The substring to search for.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples

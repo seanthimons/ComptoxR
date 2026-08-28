@@ -5,7 +5,7 @@
 #'
 #' @param map_id Primary query parameter. Type: string
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_chet_reaction_mappositions <- function(map_id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_reaction_mappositions",
-    "pre_request",
-    list(params = list(`map_id` = map_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_reaction_mappositions", "pre_request", list(params = list(`map_id` = map_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

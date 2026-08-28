@@ -5,7 +5,7 @@
 #'
 #' @param functional_class Functional use class.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_amos_functional_class <- function(functional_class) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_functional_class",
-    "pre_request",
-    list(params = list(`functional_class` = functional_class, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_functional_class", "pre_request", list(params = list(`functional_class` = functional_class, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

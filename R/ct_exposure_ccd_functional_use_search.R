@@ -24,3 +24,5 @@ ct_exposure_ccd_functional_use_search <- function(dtxsid) {
 
   return(result)
 }
+
+
