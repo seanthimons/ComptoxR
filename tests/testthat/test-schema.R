@@ -88,6 +88,30 @@ test_that("epi_schema preserves an existing file after invalid JSON", {
   )
 })
 
+test_that("epi_schema removes invalid control bytes", {
+  schema_dir <- withr::local_tempdir()
+  body <- paste0(
+    '{"openapi":"3.0.3","paths":{"/api":{}},"description":"before\u00d7',
+    intToUtf8(23L),
+    'after"}'
+  )
+
+  testthat::local_mocked_bindings(
+    req_perform = function(req) epi_schema_response(req, body),
+    .package = "httr2"
+  )
+
+  epi_schema(schema_dir = schema_dir)
+  schema_file <- file.path(schema_dir, "epi-suite-prod.json")
+  expected <- gsub(intToUtf8(23L), "", body, fixed = TRUE)
+
+  expect_identical(
+    readBin(schema_file, what = "raw", n = file.info(schema_file)$size),
+    charToRaw(expected)
+  )
+  expect_silent(jsonlite::fromJSON(schema_file))
+})
+
 test_that("epi_schema requires OpenAPI 3 and a non-empty paths object", {
   schema_dir <- withr::local_tempdir()
   schema_file <- file.path(schema_dir, "epi-suite-prod.json")

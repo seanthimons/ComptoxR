@@ -529,7 +529,7 @@ epi_server <- function(server = NULL, url_only = FALSE) {
   } else {
     url <- switch(
       as.character(server),
-      "1" = "https://episuite.dev/EpiWebSuite/api",
+      "1" = "https://episuite.dev/api",
       {
         cli::cli_alert_warning("Invalid server option selected!")
         cli::cli_alert_info("Valid option is 1 (Production).")

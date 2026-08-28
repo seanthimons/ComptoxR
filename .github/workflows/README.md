@@ -93,6 +93,7 @@ Informational coverage workflow.
 Scheduled and manual schema update workflow.
 
 - Downloads the CompTox Dashboard, Cheminformatics, and EPI Suite schemas.
+- Safely rebuilds experimental `ct_*`, `chemi_*`, and `epi_*` wrappers.
 - Reports `ok` and a comma-separated `failed_families` list from the download
   step.
 - Handles each family separately. A failure does not stop the other downloads

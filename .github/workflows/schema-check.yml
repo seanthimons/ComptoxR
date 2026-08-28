@@ -189,6 +189,10 @@ jobs:
         id: stubs
         if: steps.schema_changes.outputs.changed == 'true'
         run: |
+          source("dev/remove_experimental.R")
+          remove_experimental_main(c("--apply", "--prefix=ct"))
+          remove_experimental_main(c("--apply", "--prefix=chemi"))
+          remove_experimental_main(c("--apply", "--prefix=epi"))
           source("dev/generate_stubs.R")
         shell: Rscript {0}
 

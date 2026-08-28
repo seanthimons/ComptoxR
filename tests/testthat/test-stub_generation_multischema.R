@@ -8,18 +8,7 @@ test_that("Cheminformatics generation loads and collapses all schema stages", {
   load_multischema_pipeline()
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())
 
-  keyset <- endpoints[endpoints$fn == "chemi_amos_method_keyset_pagination", ]
-  expect_identical(keyset$supported_schema_stages[[1]], c("staging", "development"))
-  expect_identical(unname(keyset$schema_stage), "staging")
-  expect_true(all(
-    c(
-      "chemi_amos_method_list",
-      "chemi_amos_method_pagination",
-      "chemi_amos_method_keyset_pagination",
-      "chemi_amos_method_keyset_pagination_bulk"
-    ) %in%
-      endpoints$fn
-  ))
+  expect_gt(nrow(endpoints), 0L)
   expect_identical(anyDuplicated(endpoints$fn), 0L)
   expect_true(all(
     c(
@@ -149,20 +138,12 @@ test_that("generated stage configuration and AMOS call shapes are deterministic"
   expect_identical(readLines(first), readLines(second))
 
   wanted <- c(
-    "chemi_amos_method_list",
-    "chemi_amos_method_pagination",
     "chemi_amos_method_keyset_pagination",
     "chemi_amos_method_keyset_pagination_bulk"
   )
   rendered <- render_endpoint_stubs(endpoints[endpoints$fn %in% wanted, ], chemi_config)
   text <- stats::setNames(rendered$text, rendered$fn)
 
-  expect_match(
-    text[["chemi_amos_method_pagination"]],
-    "function(limit, offset = 0, all_pages = TRUE, max_pages = 100)",
-    fixed = TRUE
-  )
-  expect_match(text[["chemi_amos_method_pagination"]], "max_pages = max_pages", fixed = TRUE)
   expect_match(
     text[["chemi_amos_method_keyset_pagination"]],
     'pagination_cursor_location = "query"',

@@ -86,7 +86,7 @@
   - Development: `https://cim-dev.sciencedataexperts.com/api`
 
 - `epi_burl` - EPI Suite API base URL
-  - Production: `https://episuite.dev/EpiWebSuite/api`
+  - Production: `https://episuite.dev/api`
 
 - `eco_burl` - ECOTOX API base URL
   - Options: Dashboard, Production, or Local
