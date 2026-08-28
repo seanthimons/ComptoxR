@@ -2,6 +2,36 @@
 
 # ComptoxR NEWS
 
+## v1.7.1 (2026-08-28)
+
+#### Bug fixes
+
+- escape bare brackets in generated docs
+  ([ffc7c5a](https://github.com/seanthimons/ComptoxR/tree/ffc7c5a1cfcaf6bfb6d9e0952b748a239726693f))
+- preserve generated wrapper contracts
+  ([8ec018a](https://github.com/seanthimons/ComptoxR/tree/8ec018a09cb3b6e57d66aeb815f4cb08b947cfae))
+- rebuild wrappers from current API schemas
+  ([ca27c1b](https://github.com/seanthimons/ComptoxR/tree/ca27c1b2f96877c74fd4ee2e0ef8f2a0d59d1213))
+
+#### Tests
+
+- support native WebTEST identifier type
+  ([caae01d](https://github.com/seanthimons/ComptoxR/tree/caae01d00ad512befd34d1d172da293df3ab8e80))
+
+#### Other changes
+
+- bump version to 1.7.1 \[skip ci\]
+  ([7faf85f](https://github.com/seanthimons/ComptoxR/tree/7faf85f38652cdf145f0007e9724783e131191af))
+- update API schemas, generate function stubs and tests
+  ([1fd69f6](https://github.com/seanthimons/ComptoxR/tree/1fd69f67bf6d7d786d6ca9e9fb4c314170d4bedf))
+- start 1.7.0 development
+  ([f3a2d97](https://github.com/seanthimons/ComptoxR/tree/f3a2d975440977dac62ed6778ce29591f16b5e7c))
+- synchronize v1.7.0 release
+  ([62b5121](https://github.com/seanthimons/ComptoxR/tree/62b5121374ba982588029fb059ed31a01f861828))
+
+Full set of changes:
+[`v1.7.0...v1.7.1`](https://github.com/seanthimons/ComptoxR/compare/v1.7.0...v1.7.1)
+
 ## v1.7.0 (2026-08-27)
 
 #### New features
@@ -66,6 +96,8 @@
 
 #### Docs
 
+- update NEWS.md for v1.7.0 \[skip ci\]
+  ([9a79d48](https://github.com/seanthimons/ComptoxR/tree/9a79d48ce88af1e2ea9da6dda571a1e7db6709fa))
 - add task-oriented evidence workflow articles
   ([2d3fb08](https://github.com/seanthimons/ComptoxR/tree/2d3fb08052b9ac27ee9f0343e89200dbce0f5926))
 - order articles and clarify bulk search
