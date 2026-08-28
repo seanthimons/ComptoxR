@@ -18,6 +18,10 @@ schema_value_label <- function(value) {
   paste(value, collapse = ", ")
 }
 
+escape_roxygen_bare_brackets <- function(text) {
+  gsub("(?<!\\\\)\\[([^]]+)\\](?!\\()", "\\\\[\\1\\\\]", text, perl = TRUE)
+}
+
 #' Helper function to build parameter default value based on schema metadata
 build_param_default <- function(param_name, metadata, is_primary = FALSE) {
   # If parameter is primary (required), no default
@@ -271,7 +275,7 @@ parse_function_params <- function(
     entry <- if (!is.null(metadata) && !is.na(p_orig)) metadata[[p_orig]] else NULL
 
     if (is.list(entry)) {
-      desc <- entry$description %||% ""
+      desc <- escape_roxygen_bare_brackets(entry$description %||% "")
       enum_vals <- entry$enum %||% NULL
       default_val <- entry$default %||% NA
       is_req <- p_san %in% required_params
@@ -428,7 +432,7 @@ parse_path_parameters <- function(
     entry <- if (!is.null(metadata) && !is.na(p)) metadata[[p]] else NULL
 
     if (is.list(entry)) {
-      desc <- entry$description %||% ""
+      desc <- escape_roxygen_bare_brackets(entry$description %||% "")
       enum_vals <- entry$enum %||% NULL
       default_val <- entry$default %||% NA
       param_type <- entry$type %||% NA
