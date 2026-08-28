@@ -28,6 +28,10 @@ on:
       - 'man/**'
       - 'vignettes/**'
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test-coverage:
     if: github.actor != 'github-actions[bot]'
@@ -85,12 +89,13 @@ jobs:
       - name: Calculate coverage
         if: matrix.os == 'ubuntu-latest' && matrix.r-version == 'release'
         run: |
-          Rscript -e 'cov <- covr::package_coverage(); print(cov); covr::codecov(coverage = cov)'
+          Rscript -e 'cov <- covr::package_coverage(); print(cov); covr::to_cobertura(cov, filename = "coverage.xml")'
         shell: bash
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-latest' && matrix.r-version == 'release'
         uses: codecov/codecov-action@v7
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+          use_oidc: true
+          files: coverage.xml
+          fail_ci_if_error: true
