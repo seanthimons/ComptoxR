@@ -185,6 +185,22 @@ test_that("object and array defaults render as valid R values", {
   expect_match(parsed$param_docs, "default: []", fixed = TRUE)
 })
 
+test_that("bare schema brackets do not become Rd links", {
+  load_multischema_pipeline()
+  parsed <- parse_function_params(
+    "spectrum",
+    metadata = list(
+      spectrum = list(
+        required = FALSE,
+        description = "Use [m/z, intensity]; see [docs](https://example.com)."
+      )
+    )
+  )
+
+  expect_match(parsed$param_docs, "\\[m/z, intensity\\]", fixed = TRUE)
+  expect_match(parsed$param_docs, "[docs](https://example.com)", fixed = TRUE)
+})
+
 test_that("a configured parameter order keeps unconfigured parameters in place", {
   load_multischema_pipeline()
   order <- stubgen_configured_parameter_order(
