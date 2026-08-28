@@ -532,6 +532,10 @@ chemi_webtest_bulk:
       required: true
       description: "Chemical structures or resolvable identifiers"
       order: 1
+    chemIdType:
+      default: "AnyId"
+      description: "Input identifier type"
+      order: 2
     format:
       default: "JSON"
       description: "Response format: JSON, CSV, or TSV"
@@ -588,7 +592,12 @@ chemi_webtest_predict_bulk:
       type: "character"
       description: "Output contract: normalized wide tibble or raw PredictionResult"
       order: 5
+  parameter_overrides:
+    chemicals:
+      exclude: true
   signature_overrides:
+    structures:
+      required: true
     endpoints:
       required: true
     format:

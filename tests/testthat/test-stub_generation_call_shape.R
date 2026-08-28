@@ -224,16 +224,17 @@ test_that("stub generation emits the WebTEST request template with complete hook
     batch_limit = 0L,
     path_params = "",
     query_params = "",
-    body_params = "endpoints,structures,format,methods",
+    body_params = "endpoints,structures,format,methods,chemicals",
     num_path_params = 0L,
-    num_body_params = 4L,
+    num_body_params = 5L,
     path_param_metadata = list(list()),
     query_param_metadata = list(list()),
     body_param_metadata = list(list(
       endpoints = list(required = TRUE),
-      structures = list(required = TRUE),
+      structures = list(required = FALSE),
       format = list(required = FALSE, default = "JSON"),
-      methods = list(required = FALSE)
+      methods = list(required = FALSE),
+      chemicals = list(required = FALSE)
     )),
     body_schema_full = list(list(
       type = "object",
@@ -241,7 +242,8 @@ test_that("stub generation emits the WebTEST request template with complete hook
         endpoints = list(type = "array"),
         structures = list(type = "array"),
         format = list(type = "string"),
-        methods = list(type = "array")
+        methods = list(type = "array"),
+        chemicals = list(type = "array")
       )
     )),
     content_type = "application/json",
@@ -514,4 +516,19 @@ test_that("real descriptor schemas render all ten generic hook wrappers", {
     formals(eval(parse(text = text_by_fn[["chemi_webtest_bulk"]])[[1]][[3]]))$format,
     "JSON"
   )
+  expect_identical(
+    formals(eval(parse(text = text_by_fn[["chemi_webtest_bulk"]])[[1]][[3]]))$chemIdType,
+    "AnyId"
+  )
+
+  native_webtest <- spec[spec$fn == "chemi_webtest_bulk", , drop = FALSE]
+  native_webtest$body_params <- paste0(native_webtest$body_params, ",chemIdType")
+  native_webtest$num_body_params <- native_webtest$num_body_params + 1L
+  native_metadata <- native_webtest$body_param_metadata[[1]]
+  native_metadata$chemIdType <- list(required = FALSE)
+  native_webtest$body_param_metadata <- list(native_metadata)
+  native_text <- render_endpoint_stubs(native_webtest, config = config)$text[[1]]
+  native_fn <- eval(parse(text = native_text)[[1]][[3]])
+
+  expect_identical(formals(native_fn)$chemIdType, "AnyId")
 })
