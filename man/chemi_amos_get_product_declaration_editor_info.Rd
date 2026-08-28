@@ -22,5 +22,5 @@ chemi_amos_get_product_declaration_editor_info(internal_id = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

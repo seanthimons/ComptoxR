@@ -27,5 +27,5 @@ chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

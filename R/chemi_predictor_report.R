@@ -16,11 +16,7 @@
 #' }
 chemi_predictor_report <- function(model_id, smiles, format = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_predictor_report",
-    "pre_request",
-    list(params = list(`model_id` = model_id, `smiles` = smiles, `format` = format, `server` = server))
-  )
+  req_data <- run_hook("chemi_predictor_report", "pre_request", list(params = list(`model_id` = model_id, `smiles` = smiles, `format` = format, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_predictor_report <- function(model_id, smiles, format = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(model_id)) {
-    options[['model_id']] <- model_id
-  }
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(format)) {
-    options[['format']] <- format
-  }
-  result <- generic_request(
+  if (!is.null(model_id)) options[['model_id']] <- model_id
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+  if (!is.null(format)) options[['format']] <- format
+    result <- generic_request(
     endpoint = "predictor/report",
     method = "GET",
     batch_limit = 0,

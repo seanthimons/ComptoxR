@@ -26,10 +26,8 @@ chemi_search_gethazard <- function(sid) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(sid)) {
-    options[['sid']] <- sid
-  }
-  result <- generic_request(
+  if (!is.null(sid)) options[['sid']] <- sid
+    result <- generic_request(
     endpoint = "search/gethazard",
     method = "GET",
     batch_limit = 0,

@@ -5,7 +5,7 @@
 #'
 #' @param setid Optional parameter
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_chet_chemicals_chemset <- function(setid = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_chemset",
-    "pre_request",
-    list(params = list(`setid` = setid, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_chemicals_chemset", "pre_request", list(params = list(`setid` = setid, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_chet_chemicals_chemset <- function(setid = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(setid)) {
-    options[['setid']] <- setid
-  }
-  result <- generic_request(
+  if (!is.null(setid)) options[['setid']] <- setid
+    result <- generic_request(
     endpoint = "chemicals/chemset",
     method = "GET",
     batch_limit = 0,

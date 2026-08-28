@@ -13,43 +13,16 @@
 #' @param hazardRequest Optional parameter
 #' @param predictionRequest Optional parameter
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' chemi_services_collated_report(alertRequest = "DTXSID1024122")
 #' }
-chemi_services_collated_report <- function(
-  alertRequest = NULL,
-  chemicals = NULL,
-  exportAlerts = NULL,
-  exportHazard = NULL,
-  exportHazard2 = NULL,
-  exportPrediction = NULL,
-  exportSafety = NULL,
-  hazardRequest = NULL,
-  predictionRequest = NULL
-) {
+chemi_services_collated_report <- function(alertRequest = NULL, chemicals = NULL, exportAlerts = NULL, exportHazard = NULL, exportHazard2 = NULL, exportPrediction = NULL, exportSafety = NULL, hazardRequest = NULL, predictionRequest = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_services_collated_report",
-    "pre_request",
-    list(
-      params = list(
-        `alertRequest` = alertRequest,
-        `chemicals` = chemicals,
-        `exportAlerts` = exportAlerts,
-        `exportHazard` = exportHazard,
-        `exportHazard2` = exportHazard2,
-        `exportPrediction` = exportPrediction,
-        `exportSafety` = exportSafety,
-        `hazardRequest` = hazardRequest,
-        `predictionRequest` = predictionRequest,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_services_collated_report", "pre_request", list(params = list(`alertRequest` = alertRequest, `chemicals` = chemicals, `exportAlerts` = exportAlerts, `exportHazard` = exportHazard, `exportHazard2` = exportHazard2, `exportPrediction` = exportPrediction, `exportSafety` = exportSafety, `hazardRequest` = hazardRequest, `predictionRequest` = predictionRequest, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -85,30 +58,14 @@ chemi_services_collated_report <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(chemicals)) {
-    options$chemicals <- chemicals
-  }
-  if (!is.null(exportAlerts)) {
-    options$exportAlerts <- exportAlerts
-  }
-  if (!is.null(exportHazard)) {
-    options$exportHazard <- exportHazard
-  }
-  if (!is.null(exportHazard2)) {
-    options$exportHazard2 <- exportHazard2
-  }
-  if (!is.null(exportPrediction)) {
-    options$exportPrediction <- exportPrediction
-  }
-  if (!is.null(exportSafety)) {
-    options$exportSafety <- exportSafety
-  }
-  if (!is.null(hazardRequest)) {
-    options$hazardRequest <- hazardRequest
-  }
-  if (!is.null(predictionRequest)) {
-    options$predictionRequest <- predictionRequest
-  }
+  if (!is.null(chemicals)) options$chemicals <- chemicals
+  if (!is.null(exportAlerts)) options$exportAlerts <- exportAlerts
+  if (!is.null(exportHazard)) options$exportHazard <- exportHazard
+  if (!is.null(exportHazard2)) options$exportHazard2 <- exportHazard2
+  if (!is.null(exportPrediction)) options$exportPrediction <- exportPrediction
+  if (!is.null(exportSafety)) options$exportSafety <- exportSafety
+  if (!is.null(hazardRequest)) options$hazardRequest <- hazardRequest
+  if (!is.null(predictionRequest)) options$predictionRequest <- predictionRequest
   result <- generic_chemi_request(
     query = alertRequest,
     endpoint = "services/collated_report",

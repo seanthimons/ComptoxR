@@ -16,11 +16,7 @@
 #' }
 chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_stdizer_records",
-    "pre_request",
-    list(params = list(`full` = full, `options` = options, `records` = records, `server` = server))
-  )
+  req_data <- run_hook("chemi_stdizer_records", "pre_request", list(params = list(`full` = full, `options` = options, `records` = records, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,12 +34,8 @@ chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  if (!is.null(records)) {
-    options$records <- records
-  }
+  if (!is.null(options)) options$options <- options
+  if (!is.null(records)) options$records <- records
   result <- generic_chemi_request(
     query = full,
     endpoint = "stdizer/records",

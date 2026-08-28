@@ -14,11 +14,7 @@
 #' }
 chemi_amos_record_type_count <- function(record_type) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_record_type_count",
-    "pre_request",
-    list(params = list(`record_type` = record_type, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_record_type_count", "pre_request", list(params = list(`record_type` = record_type, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

@@ -5,7 +5,7 @@
 #'
 #' @param internal_id Unique ID of the product declaration.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_amos_get_product_declaration_editor_info <- function(internal_id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_get_product_declaration_editor_info",
-    "pre_request",
-    list(params = list(`internal_id` = internal_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_get_product_declaration_editor_info", "pre_request", list(params = list(`internal_id` = internal_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

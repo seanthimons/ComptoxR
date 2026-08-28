@@ -42,6 +42,10 @@
       },
       "Chemical": {
         "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
           "averageMass": {
             "format": "double",
             "type": "number"
@@ -56,6 +60,9 @@
             "type": "string"
           },
           "cid": {
+            "type": "string"
+          },
+          "id": {
             "type": "string"
           },
           "image": {
@@ -217,6 +224,12 @@
       },
       "ExportRequest": {
         "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/Chemical"
+            },
+            "type": "array"
+          },
           "format": {
             "enum": [
               "UNKNOWN",
@@ -242,6 +255,9 @@
           },
           "selectedForSimilarity": {
             "$ref": "#/components/schemas/Chemical"
+          },
+          "showImages": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -299,10 +315,109 @@
           "fileName": {
             "type": "string"
           },
+          "fillAdditionalProps": {
+            "type": "boolean"
+          },
           "idField": {
             "type": "string"
           },
           "strField": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Hcode": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "classes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "code": {
+            "type": "string"
+          },
+          "disposal": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "obsolete": {
+            "type": "boolean"
+          },
+          "pictograms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "prevention": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "response": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "signal": {
+            "type": "string"
+          },
+          "statements": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "storage": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "un_class": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "HcodeCount": {
+        "properties": {
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "hcode": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "HcodeListElement": {
+        "properties": {
+          "codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "statement": {
             "type": "string"
           }
         },
@@ -569,6 +684,26 @@
         },
         "type": "object"
       },
+      "Pcode": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": {
+            "type": "string"
+          },
+          "obsolete": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "PubchemRequest": {
         "properties": {
           "chemicals": {
@@ -819,15 +954,11 @@
             "type": "boolean"
           },
           "flags": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "rqCode": {
-            "additionalProperties": {
-              "type": "object"
-            },
+            "additionalProperties": {},
             "type": "object"
           },
           "sah": {
@@ -919,6 +1050,12 @@
       },
       "SectionInfo": {
         "properties": {
+          "children": {
+            "items": {
+              "$ref": "#/components/schemas/SectionInfo"
+            },
+            "type": "array"
+          },
           "id": {
             "type": "string"
           },
@@ -1547,6 +1684,36 @@
         ]
       }
     },
+    "/api/resolver/export_classyfire": {
+      "post": {
+        "operationId": "exportClassyFire",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
     "/api/resolver/export-append": {
       "post": {
         "operationId": "exportAppendSafetyReportFromChemicals",
@@ -2117,9 +2284,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "object"
-                  },
+                  "additionalProperties": {},
                   "type": "object"
                 }
               }
@@ -2224,6 +2389,211 @@
               "application/json": {
                 "schema": {
                   "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/resolver/ghs-list": {
+      "get": {
+        "operationId": "ghsListGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResolvedChemical"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/resolver/ghs-list-count": {
+      "get": {
+        "operationId": "ghsListCountGet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "items": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "type": "array"
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HcodeCount"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      },
+      "post": {
+        "operationId": "ghsListCountGet_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": {
+                  "items": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "type": "array"
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HcodeCount"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/resolver/ghs/classes": {
+      "get": {
+        "operationId": "classesGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Hcode"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "ghs-controller"
+        ]
+      }
+    },
+    "/api/resolver/ghs/hcodes": {
+      "get": {
+        "operationId": "hCodesGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Hcode"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "ghs-controller"
+        ]
+      }
+    },
+    "/api/resolver/ghs/pcodes": {
+      "get": {
+        "operationId": "pCodesGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Pcode"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "ghs-controller"
+        ]
+      }
+    },
+    "/api/resolver/hcodes": {
+      "get": {
+        "operationId": "hcodeListGet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HcodeListElement"
+                  },
+                  "type": "array"
                 }
               }
             },
@@ -2523,9 +2893,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "object"
-                  },
+                  "additionalProperties": {},
                   "type": "object"
                 }
               }
@@ -2727,13 +3095,7 @@
         "responses": {
           "200": {
             "content": {
-              "image/png": {
-                "schema": {
-                  "format": "byte",
-                  "type": "string"
-                }
-              },
-              "image/svg+xml": {
+              "*/*": {
                 "schema": {
                   "format": "byte",
                   "type": "string"

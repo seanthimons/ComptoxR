@@ -15,11 +15,7 @@
 #' }
 chemi_toxprints_global_assays <- function(category = NULL, label = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_toxprints_global_assays",
-    "pre_request",
-    list(params = list(`category` = category, `label` = label, `server` = server))
-  )
+  req_data <- run_hook("chemi_toxprints_global_assays", "pre_request", list(params = list(`category` = category, `label` = label, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_toxprints_global_assays <- function(category = NULL, label = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(category)) {
-    options[['category']] <- category
-  }
-  if (!is.null(label)) {
-    options[['label']] <- label
-  }
-  result <- generic_request(
+  if (!is.null(category)) options[['category']] <- category
+  if (!is.null(label)) options[['label']] <- label
+    result <- generic_request(
     endpoint = "toxprints/global_assays",
     method = "GET",
     batch_limit = 0,

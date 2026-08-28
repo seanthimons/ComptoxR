@@ -16,11 +16,7 @@
 #' }
 chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_resolver_mesh",
-    "pre_request",
-    list(params = list(`query` = query, `idType` = idType, `fuzzy` = fuzzy, `server` = server))
-  )
+  req_data <- run_hook("chemi_resolver_mesh", "pre_request", list(params = list(`query` = query, `idType` = idType, `fuzzy` = fuzzy, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_resolver_mesh <- function(query, idType = "AnyId", fuzzy = "Not") {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  if (!is.null(fuzzy)) {
-    options[['fuzzy']] <- fuzzy
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(idType)) options[['idType']] <- idType
+  if (!is.null(fuzzy)) options[['fuzzy']] <- fuzzy
+    result <- generic_request(
     endpoint = "resolver/mesh",
     method = "GET",
     batch_limit = 0,

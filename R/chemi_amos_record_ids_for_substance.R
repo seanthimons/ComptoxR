@@ -6,7 +6,7 @@
 #' @param dtxsid The DTXSID for the substance of interest.
 #' @param record_type The record type of interest.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -15,11 +15,7 @@
 #' }
 chemi_amos_record_ids_for_substance <- function(dtxsid, record_type = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_record_ids_for_substance",
-    "pre_request",
-    list(params = list(`dtxsid` = dtxsid, `record_type` = record_type, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_record_ids_for_substance", "pre_request", list(params = list(`dtxsid` = dtxsid, `record_type` = record_type, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

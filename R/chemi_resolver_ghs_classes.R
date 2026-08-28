@@ -4,7 +4,7 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples

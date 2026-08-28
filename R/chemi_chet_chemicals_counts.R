@@ -8,7 +8,7 @@
 #' @param all_pages Logical; if TRUE (default), automatically fetches all pages. If FALSE, returns a single page using manual pagination parameters.
 #' @param max_pages Maximum number of pages to fetch when all_pages is TRUE.
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -17,13 +17,7 @@
 #' }
 chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE, max_pages = 100) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_counts",
-    "pre_request",
-    list(
-      params = list(`page` = page, `size` = size, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)
-    )
-  )
+  req_data <- run_hook("chemi_chet_chemicals_counts", "pre_request", list(params = list(`page` = page, `size` = size, `all_pages` = all_pages, `max_pages` = max_pages, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -44,13 +38,9 @@ chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE,
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  result <- generic_request(
+  if (!is.null(page)) options[['page']] <- page
+  if (!is.null(size)) options[['size']] <- size
+    result <- generic_request(
     endpoint = "chemicals/counts",
     method = "GET",
     batch_limit = 0,

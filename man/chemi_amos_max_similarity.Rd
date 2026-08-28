@@ -2,7 +2,7 @@
 % Please edit documentation in R/chemi_amos_max_similarity.R
 \name{chemi_amos_max_similarity}
 \alias{chemi_amos_max_similarity}
-\title{Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.}
+\title{Given a list of DTXSIDs and a list of mass spectra, return the highest similarity score for each combination of}
 \usage{
 chemi_amos_max_similarity(
   da_window = NULL,

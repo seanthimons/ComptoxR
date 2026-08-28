@@ -57,5 +57,5 @@ chemi_amos_safety_data_sheet_keyset_pagination_bulk(limit = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

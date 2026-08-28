@@ -14,11 +14,7 @@
 #' }
 chemi_predictor_modelset_report <- function(report_id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_predictor_modelset_report",
-    "pre_request",
-    list(params = list(`report_id` = report_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_predictor_modelset_report", "pre_request", list(params = list(`report_id` = report_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

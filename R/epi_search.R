@@ -1,9 +1,10 @@
-#' Search chemicals
+#' Search embedded experimental data
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' @param query Chemical name or CAS number to search for
+#' @param query Required parameter
+#' @param limit Optional parameter (default: 20)
 #' @return Returns a tibble with results (array of objects)
 #' @apiStage public
 #' @export
@@ -12,7 +13,7 @@
 #' \dontrun{
 #' epi_search(query = "benzene")
 #' }
-epi_search <- function(query) {
+epi_search <- function(query, limit = 20) {
   result <- generic_request(
     endpoint = "search",
     method = "GET",
@@ -21,12 +22,15 @@ epi_search <- function(query) {
     auth = FALSE,
     tidy = FALSE,
     query_params = list(
-      `query` = query
+    `query` = query,
+    `limit` = limit
     )
   )
 
-  result <- run_hook("epi_search", "post_response", list(result = result, params = list(`query` = query)))
-  # Additional post-processing can be added here
+    result <- run_hook("epi_search", "post_response", list(result = result, params = list(`query` = query, `limit` = limit)))
+# Additional post-processing can be added here
 
   return(result)
 }
+
+

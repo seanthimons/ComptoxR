@@ -7,7 +7,7 @@
 #' @param limit Optional parameter (default: 8)
 #' @param only_in_reactions If true, only suggest chemicals that participate in at least one reaction. (default: true)
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -16,11 +16,7 @@
 #' }
 chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_suggest",
-    "pre_request",
-    list(params = list(`query` = query, `limit` = limit, `only_in_reactions` = only_in_reactions, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_chemicals_suggest", "pre_request", list(params = list(`query` = query, `limit` = limit, `only_in_reactions` = only_in_reactions, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -38,16 +34,10 @@ chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(limit)) {
-    options[['limit']] <- limit
-  }
-  if (!is.null(only_in_reactions)) {
-    options[['only_in_reactions']] <- only_in_reactions
-  }
-  result <- generic_request(
+  if (!is.null(query)) options[['query']] <- query
+  if (!is.null(limit)) options[['limit']] <- limit
+  if (!is.null(only_in_reactions)) options[['only_in_reactions']] <- only_in_reactions
+    result <- generic_request(
     endpoint = "chemicals/suggest",
     method = "GET",
     batch_limit = 0,

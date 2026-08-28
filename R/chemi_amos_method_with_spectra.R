@@ -15,11 +15,7 @@
 #' }
 chemi_amos_method_with_spectra <- function(search_type, internal_id = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_method_with_spectra",
-    "pre_request",
-    list(params = list(`search_type` = search_type, `internal_id` = internal_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_method_with_spectra", "pre_request", list(params = list(`search_type` = search_type, `internal_id` = internal_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

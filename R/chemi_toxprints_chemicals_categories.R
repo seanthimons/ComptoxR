@@ -14,11 +14,7 @@
 #' }
 chemi_toxprints_chemicals_categories <- function(chemicals = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_toxprints_chemicals_categories",
-    "pre_request",
-    list(params = list(`chemicals` = chemicals, `server` = server))
-  )
+  req_data <- run_hook("chemi_toxprints_chemicals_categories", "pre_request", list(params = list(`chemicals` = chemicals, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

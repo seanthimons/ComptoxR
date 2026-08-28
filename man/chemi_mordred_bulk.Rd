@@ -35,5 +35,5 @@ chemi_mordred_bulk(chemicals = "DTXSID1024122")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

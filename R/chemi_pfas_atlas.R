@@ -5,7 +5,7 @@
 #'
 #' @param smiles SMILES string of the molecule
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -26,10 +26,8 @@ chemi_pfas_atlas <- function(smiles) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+    result <- generic_request(
     endpoint = "pfas_atlas",
     method = "GET",
     batch_limit = 0,
@@ -52,7 +50,7 @@ chemi_pfas_atlas <- function(smiles) {
 #' @param chemicals Either an array of input chemicals with optional id and required smiles, or an array of SMILES strings for backward compatibility.
 #' @param smiles Array of SMILES strings, kept for backward compatibility with the previous PFAS Atlas POST format.
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -61,11 +59,7 @@ chemi_pfas_atlas <- function(smiles) {
 #' }
 chemi_pfas_atlas_bulk <- function(chemicals = NULL, smiles = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_pfas_atlas_bulk",
-    "pre_request",
-    list(params = list(`chemicals` = chemicals, `smiles` = smiles, `server` = server))
-  )
+  req_data <- run_hook("chemi_pfas_atlas_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `smiles` = smiles, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -80,9 +74,7 @@ chemi_pfas_atlas_bulk <- function(chemicals = NULL, smiles = NULL) {
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
+  if (!is.null(smiles)) options$smiles <- smiles
   result <- generic_chemi_request(
     query = chemicals,
     endpoint = "pfas_atlas",

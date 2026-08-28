@@ -14,11 +14,7 @@
 #' }
 chemi_services_layout <- function(smiles) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_services_layout",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `server` = server))
-  )
+  req_data <- run_hook("chemi_services_layout", "pre_request", list(params = list(`smiles` = smiles, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_services_layout <- function(smiles) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  result <- generic_request(
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+    result <- generic_request(
     endpoint = "services/layout",
     method = "GET",
     batch_limit = 0,

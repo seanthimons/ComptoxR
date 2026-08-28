@@ -21,5 +21,5 @@ chemi_ncc_cats_bulk(chemicals = "DTXSID1024122")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

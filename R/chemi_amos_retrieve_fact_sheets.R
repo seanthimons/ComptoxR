@@ -5,7 +5,7 @@
 #'
 #' @param internal_ids List of fact sheet IDs to return information on.
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_amos_retrieve_fact_sheets <- function(internal_ids = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_retrieve_fact_sheets",
-    "pre_request",
-    list(params = list(`internal_ids` = internal_ids, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_retrieve_fact_sheets", "pre_request", list(params = list(`internal_ids` = internal_ids, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_amos_retrieve_fact_sheets <- function(internal_ids = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(internal_ids)) {
-    options[['internal_ids']] <- internal_ids
-  }
-  result <- generic_chemi_request(
+  if (!is.null(internal_ids)) options[['internal_ids']] <- internal_ids
+    result <- generic_chemi_request(
     endpoint = "amos/retrieve_fact_sheets/",
     options = options,
     tidy = FALSE,

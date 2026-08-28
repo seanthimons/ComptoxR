@@ -17,30 +17,9 @@
 #' \dontrun{
 #' chemi_amos_all_similarities(da_window = "DTXSID1024122")
 #' }
-chemi_amos_all_similarities <- function(
-  da_window = NULL,
-  dtxsids = NULL,
-  min_intensity = NULL,
-  ms_level = NULL,
-  ppm_window = NULL,
-  spectra = NULL
-) {
+chemi_amos_all_similarities <- function(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_all_similarities",
-    "pre_request",
-    list(
-      params = list(
-        `da_window` = da_window,
-        `dtxsids` = dtxsids,
-        `min_intensity` = min_intensity,
-        `ms_level` = ms_level,
-        `ppm_window` = ppm_window,
-        `spectra` = spectra,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_all_similarities", "pre_request", list(params = list(`da_window` = da_window, `dtxsids` = dtxsids, `min_intensity` = min_intensity, `ms_level` = ms_level, `ppm_window` = ppm_window, `spectra` = spectra, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -67,21 +46,11 @@ chemi_amos_all_similarities <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(dtxsids)) {
-    options$dtxsids <- dtxsids
-  }
-  if (!is.null(min_intensity)) {
-    options$min_intensity <- min_intensity
-  }
-  if (!is.null(ms_level)) {
-    options$ms_level <- ms_level
-  }
-  if (!is.null(ppm_window)) {
-    options$ppm_window <- ppm_window
-  }
-  if (!is.null(spectra)) {
-    options$spectra <- spectra
-  }
+  if (!is.null(dtxsids)) options$dtxsids <- dtxsids
+  if (!is.null(min_intensity)) options$min_intensity <- min_intensity
+  if (!is.null(ms_level)) options$ms_level <- ms_level
+  if (!is.null(ppm_window)) options$ppm_window <- ppm_window
+  if (!is.null(spectra)) options$spectra <- spectra
   result <- generic_chemi_request(
     query = da_window,
     endpoint = "amos/all_similarities_by_dtxsid/",

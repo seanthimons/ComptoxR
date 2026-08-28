@@ -14,11 +14,7 @@
 #' }
 chemi_amos_spectral_entropy <- function(spectrum = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_spectral_entropy",
-    "pre_request",
-    list(params = list(`spectrum` = spectrum, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_spectral_entropy", "pre_request", list(params = list(`spectrum` = spectrum, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

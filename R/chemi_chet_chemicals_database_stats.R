@@ -5,7 +5,7 @@
 #'
 #' @param total Optional parameter
 #' @return Returns a list with result object
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -14,11 +14,7 @@
 #' }
 chemi_chet_chemicals_database_stats <- function(total = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_chet_chemicals_database_stats",
-    "pre_request",
-    list(params = list(`total` = total, `server` = server))
-  )
+  req_data <- run_hook("chemi_chet_chemicals_database_stats", "pre_request", list(params = list(`total` = total, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -30,10 +26,8 @@ chemi_chet_chemicals_database_stats <- function(total = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(total)) {
-    options[['total']] <- total
-  }
-  result <- generic_request(
+  if (!is.null(total)) options[['total']] <- total
+    result <- generic_request(
     endpoint = "chemicals/database/stats",
     method = "GET",
     batch_limit = 0,

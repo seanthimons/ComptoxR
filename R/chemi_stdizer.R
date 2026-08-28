@@ -15,11 +15,7 @@
 #' }
 chemi_stdizer <- function(workflow, smiles) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_stdizer",
-    "pre_request",
-    list(params = list(`workflow` = workflow, `smiles` = smiles, `server` = server))
-  )
+  req_data <- run_hook("chemi_stdizer", "pre_request", list(params = list(`workflow` = workflow, `smiles` = smiles, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_stdizer <- function(workflow, smiles) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(workflow)) {
-    options[['workflow']] <- workflow
-  }
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  result <- generic_request(
+  if (!is.null(workflow)) options[['workflow']] <- workflow
+  if (!is.null(smiles)) options[['smiles']] <- smiles
+    result <- generic_request(
     endpoint = "stdizer",
     method = "GET",
     batch_limit = 0,
@@ -72,26 +64,9 @@ chemi_stdizer <- function(workflow, smiles) {
 #' \dontrun{
 #' chemi_stdizer_bulk(request.filesInfo = "DTXSID7020182")
 #' }
-chemi_stdizer_bulk <- function(
-  request.filesInfo = NULL,
-  request.options.recordId = NULL,
-  request.options.run = NULL,
-  request.options.workflow = NULL
-) {
+chemi_stdizer_bulk <- function(request.filesInfo = NULL, request.options.recordId = NULL, request.options.run = NULL, request.options.workflow = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_stdizer_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `request.filesInfo` = request.filesInfo,
-        `request.options.recordId` = request.options.recordId,
-        `request.options.run` = request.options.run,
-        `request.options.workflow` = request.options.workflow,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_stdizer_bulk", "pre_request", list(params = list(`request.filesInfo` = request.filesInfo, `request.options.recordId` = request.options.recordId, `request.options.run` = request.options.run, `request.options.workflow` = request.options.workflow, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -112,19 +87,11 @@ chemi_stdizer_bulk <- function(
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(request.filesInfo)) {
-    options[['request.filesInfo']] <- request.filesInfo
-  }
-  if (!is.null(request.options.recordId)) {
-    options[['request.options.recordId']] <- request.options.recordId
-  }
-  if (!is.null(request.options.run)) {
-    options[['request.options.run']] <- request.options.run
-  }
-  if (!is.null(request.options.workflow)) {
-    options[['request.options.workflow']] <- request.options.workflow
-  }
-  result <- generic_chemi_request(
+  if (!is.null(request.filesInfo)) options[['request.filesInfo']] <- request.filesInfo
+  if (!is.null(request.options.recordId)) options[['request.options.recordId']] <- request.options.recordId
+  if (!is.null(request.options.run)) options[['request.options.run']] <- request.options.run
+  if (!is.null(request.options.workflow)) options[['request.options.workflow']] <- request.options.workflow
+    result <- generic_chemi_request(
     endpoint = "stdizer",
     options = options,
     tidy = FALSE,

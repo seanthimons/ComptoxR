@@ -101,6 +101,30 @@
           }
         },
         "type": "object"
+      },
+      "VersionInfo": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "compiled": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
       }
     }
   },
@@ -221,9 +245,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "object"
-                  },
+                  "additionalProperties": {},
                   "type": "object"
                 }
               }
@@ -244,10 +266,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
+                  "$ref": "#/components/schemas/VersionInfo"
                 }
               }
             },

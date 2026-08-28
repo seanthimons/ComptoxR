@@ -19,7 +19,7 @@ chemi_webtest_predict(
 
 \item{method}{Optional parameter (default: consensus)}
 
-\item{format}{Optional parameter. Options: JSON, HTML, PDF}
+\item{format}{Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
 
 \item{output}{Output contract: normalized wide tibble or raw PredictionResult}
 }

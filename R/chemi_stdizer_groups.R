@@ -60,44 +60,9 @@ chemi_stdizer_groups <- function() {
 #' \dontrun{
 #' chemi_stdizer_groups_bulk(acl = "DTXSID1024122")
 #' }
-chemi_stdizer_groups_bulk <- function(
-  acl = NULL,
-  description = NULL,
-  flag = NULL,
-  frozen = NULL,
-  id = NULL,
-  invalid = NULL,
-  invalidMessage = NULL,
-  operations = NULL,
-  text = NULL,
-  type = NULL,
-  value = NULL,
-  request.filesInfo = NULL,
-  request.replace = NULL
-) {
+chemi_stdizer_groups_bulk <- function(acl = NULL, description = NULL, flag = NULL, frozen = NULL, id = NULL, invalid = NULL, invalidMessage = NULL, operations = NULL, text = NULL, type = NULL, value = NULL, request.filesInfo = NULL, request.replace = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_stdizer_groups_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `acl` = acl,
-        `description` = description,
-        `flag` = flag,
-        `frozen` = frozen,
-        `id` = id,
-        `invalid` = invalid,
-        `invalidMessage` = invalidMessage,
-        `operations` = operations,
-        `text` = text,
-        `type` = type,
-        `value` = value,
-        `request.filesInfo` = request.filesInfo,
-        `request.replace` = request.replace,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_stdizer_groups_bulk", "pre_request", list(params = list(`acl` = acl, `description` = description, `flag` = flag, `frozen` = frozen, `id` = id, `invalid` = invalid, `invalidMessage` = invalidMessage, `operations` = operations, `text` = text, `type` = type, `value` = value, `request.filesInfo` = request.filesInfo, `request.replace` = request.replace, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -145,36 +110,16 @@ chemi_stdizer_groups_bulk <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(description)) {
-    options$description <- description
-  }
-  if (!is.null(flag)) {
-    options$flag <- flag
-  }
-  if (!is.null(frozen)) {
-    options$frozen <- frozen
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(invalid)) {
-    options$invalid <- invalid
-  }
-  if (!is.null(invalidMessage)) {
-    options$invalidMessage <- invalidMessage
-  }
-  if (!is.null(operations)) {
-    options$operations <- operations
-  }
-  if (!is.null(text)) {
-    options$text <- text
-  }
-  if (!is.null(type)) {
-    options$type <- type
-  }
-  if (!is.null(value)) {
-    options$value <- value
-  }
+  if (!is.null(description)) options$description <- description
+  if (!is.null(flag)) options$flag <- flag
+  if (!is.null(frozen)) options$frozen <- frozen
+  if (!is.null(id)) options$id <- id
+  if (!is.null(invalid)) options$invalid <- invalid
+  if (!is.null(invalidMessage)) options$invalidMessage <- invalidMessage
+  if (!is.null(operations)) options$operations <- operations
+  if (!is.null(text)) options$text <- text
+  if (!is.null(type)) options$type <- type
+  if (!is.null(value)) options$value <- value
   result <- generic_chemi_request(
     query = acl,
     endpoint = "stdizer/groups",

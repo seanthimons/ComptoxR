@@ -7,7 +7,7 @@
 chemi_amos_get_pdf(record_type, internal_id = NULL)
 }
 \arguments{
-\item{record_type}{A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum pdf'.}
+\item{record_type}{A string indicating which kind of record is being retrieved.  Valid values are 'fact sheet', 'method', and 'spectrum'.}
 
 \item{internal_id}{Unique ID of the document of interest.}
 }

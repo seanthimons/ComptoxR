@@ -14,11 +14,7 @@
 #' }
 chemi_amos_record_counts <- function(dtxsids = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_record_counts",
-    "pre_request",
-    list(params = list(`dtxsids` = dtxsids, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_record_counts", "pre_request", list(params = list(`dtxsids` = dtxsids, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

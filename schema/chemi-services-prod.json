@@ -28,12 +28,22 @@
         "properties": {
           "empty": {
             "type": "boolean"
+          },
+          "first": {
+            "$ref": "#/components/schemas/CASPreflightInfo"
+          },
+          "last": {
+            "$ref": "#/components/schemas/CASPreflightInfo"
           }
         },
         "type": "array"
       },
       "Chemical": {
         "properties": {
+          "additionalProps": {
+            "additionalProperties": {},
+            "type": "object"
+          },
           "averageMass": {
             "format": "double",
             "type": "number"
@@ -48,6 +58,9 @@
             "type": "string"
           },
           "cid": {
+            "type": "string"
+          },
+          "id": {
             "type": "string"
           },
           "image": {
@@ -81,12 +94,116 @@
         },
         "type": "object"
       },
+      "CimComponentInfo": {
+        "properties": {
+          "api": {
+            "type": "string"
+          },
+          "api_only": {
+            "type": "boolean"
+          },
+          "availableIsConstant": {
+            "type": "boolean"
+          },
+          "build_date": {
+            "type": "string"
+          },
+          "build_id": {
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "Module",
+              "Tools",
+              "Model",
+              "Data",
+              "Ui"
+            ],
+            "type": "string"
+          },
+          "coreUI": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "is_available": {
+            "type": "boolean"
+          },
+          "isAvailableResetRest": {
+            "type": "boolean",
+            "writeOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ColDef": {
+        "properties": {
+          "cellClasses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "field": {
+            "type": "string"
+          },
+          "headerName": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "ConvertRequest": {
         "properties": {
           "content": {
             "type": "string"
           },
           "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ExportCollatedReportRequest": {
+        "properties": {
+          "alertRequest": {
+            "type": "string"
+          },
+          "chemicals": {
+            "type": "string"
+          },
+          "exportAlerts": {
+            "type": "boolean"
+          },
+          "exportHazard": {
+            "type": "boolean"
+          },
+          "exportHazard2": {
+            "type": "boolean"
+          },
+          "exportPrediction": {
+            "type": "boolean"
+          },
+          "exportSafety": {
+            "type": "boolean"
+          },
+          "hazardRequest": {
+            "type": "string"
+          },
+          "predictionRequest": {
             "type": "string"
           }
         },
@@ -117,6 +234,9 @@
             ],
             "type": "string"
           },
+          "readyReport": {
+            "$ref": "#/components/schemas/ReadyReport"
+          },
           "showImages": {
             "type": "boolean"
           }
@@ -142,11 +262,55 @@
           "fileName": {
             "type": "string"
           },
+          "fillAdditionalProps": {
+            "type": "boolean"
+          },
           "idField": {
             "type": "string"
           },
           "strField": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Parent": {
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "headerName": {
+            "type": "string"
+          },
+          "headerNameWithUnits": {
+            "type": "string"
+          },
+          "parent": {},
+          "unit": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PassedColumn": {
+        "properties": {
+          "colDef": {
+            "$ref": "#/components/schemas/ColDef"
+          },
+          "field": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "headerName": {
+            "type": "string"
+          },
+          "parent": {
+            "$ref": "#/components/schemas/Parent"
+          },
+          "strippedBackground": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -181,9 +345,80 @@
         "properties": {
           "empty": {
             "type": "boolean"
+          },
+          "first": {
+            "$ref": "#/components/schemas/PreflightInfo"
+          },
+          "last": {
+            "$ref": "#/components/schemas/PreflightInfo"
           }
         },
         "type": "array"
+      },
+      "ReadyReport": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
+            },
+            "type": "array"
+          },
+          "dataColumns": {
+            "items": {
+              "$ref": "#/components/schemas/PassedColumn"
+            },
+            "type": "array"
+          },
+          "message": {
+            "type": "string"
+          },
+          "modelDetails": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "modelName": {
+            "type": "string"
+          },
+          "result": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "resultType": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReleaseNote": {
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReleaseNoteTableItem": {
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "releaseNotes": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNote"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
       },
       "ResolvedChemical": {
         "properties": {
@@ -306,6 +541,60 @@
         ]
       }
     },
+    "/api/services/cim_component_info": {
+      "get": {
+        "operationId": "cimComponentInfoGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CimComponentInfo"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/collated_report": {
+      "post": {
+        "operationId": "exportCollatedReport",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportCollatedReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "format": "byte",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
     "/api/services/convert": {
       "post": {
         "operationId": "convert",
@@ -339,6 +628,36 @@
     "/api/services/export": {
       "post": {
         "operationId": "exportAssayPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/export_json_report": {
+      "post": {
+        "operationId": "exportJsonReport",
         "requestBody": {
           "content": {
             "application/json": {
@@ -449,9 +768,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "object"
-                  },
+                  "additionalProperties": {},
                   "type": "object"
                 }
               }
@@ -487,6 +804,32 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PreflightResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "services-controller"
+        ]
+      }
+    },
+    "/api/services/release_notes": {
+      "get": {
+        "operationId": "releaseNotesGet",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {
+                    "items": {
+                      "$ref": "#/components/schemas/ReleaseNoteTableItem"
+                    },
+                    "type": "array"
+                  },
+                  "type": "object"
                 }
               }
             },

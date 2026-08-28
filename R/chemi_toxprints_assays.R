@@ -15,11 +15,7 @@
 #' }
 chemi_toxprints_assays <- function(category = NULL, label = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_toxprints_assays",
-    "pre_request",
-    list(params = list(`category` = category, `label` = label, `server` = server))
-  )
+  req_data <- run_hook("chemi_toxprints_assays", "pre_request", list(params = list(`category` = category, `label` = label, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -34,13 +30,9 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
   }
   # Collect optional parameters
   options <- list()
-  if (!is.null(category)) {
-    options[['category']] <- category
-  }
-  if (!is.null(label)) {
-    options[['label']] <- label
-  }
-  result <- generic_request(
+  if (!is.null(category)) options[['category']] <- category
+  if (!is.null(label)) options[['label']] <- label
+    result <- generic_request(
     endpoint = "toxprints/assays",
     method = "GET",
     batch_limit = 0,
@@ -78,38 +70,9 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
 #' \dontrun{
 #' chemi_toxprints_assays_bulk(acl = "DTXSID1024122")
 #' }
-chemi_toxprints_assays_bulk <- function(
-  acl = NULL,
-  actives = NULL,
-  category = NULL,
-  chemicals = NULL,
-  id = NULL,
-  labels = NULL,
-  metrics = NULL,
-  name = NULL,
-  options = NULL,
-  total = NULL
-) {
+chemi_toxprints_assays_bulk <- function(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_toxprints_assays_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `acl` = acl,
-        `actives` = actives,
-        `category` = category,
-        `chemicals` = chemicals,
-        `id` = id,
-        `labels` = labels,
-        `metrics` = metrics,
-        `name` = name,
-        `options` = options,
-        `total` = total,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_toxprints_assays_bulk", "pre_request", list(params = list(`acl` = acl, `actives` = actives, `category` = category, `chemicals` = chemicals, `id` = id, `labels` = labels, `metrics` = metrics, `name` = name, `options` = options, `total` = total, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -148,33 +111,15 @@ chemi_toxprints_assays_bulk <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(actives)) {
-    options$actives <- actives
-  }
-  if (!is.null(category)) {
-    options$category <- category
-  }
-  if (!is.null(chemicals)) {
-    options$chemicals <- chemicals
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(labels)) {
-    options$labels <- labels
-  }
-  if (!is.null(metrics)) {
-    options$metrics <- metrics
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  if (!is.null(total)) {
-    options$total <- total
-  }
+  if (!is.null(actives)) options$actives <- actives
+  if (!is.null(category)) options$category <- category
+  if (!is.null(chemicals)) options$chemicals <- chemicals
+  if (!is.null(id)) options$id <- id
+  if (!is.null(labels)) options$labels <- labels
+  if (!is.null(metrics)) options$metrics <- metrics
+  if (!is.null(name)) options$name <- name
+  if (!is.null(options)) options$options <- options
+  if (!is.null(total)) options$total <- total
   result <- generic_chemi_request(
     query = acl,
     endpoint = "toxprints/assays",

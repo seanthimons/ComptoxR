@@ -8,7 +8,7 @@
 #' @param inchi Include InChI identifiers
 #' @param output Output contract: validated wide tibble or raw payload
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -17,11 +17,7 @@
 #' }
 chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_mordred",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `headers` = headers, `inchi` = inchi, `output` = output, `server` = server))
-  )
+  req_data <- run_hook("chemi_mordred", "pre_request", list(params = list(`smiles` = smiles, `headers` = headers, `inchi` = inchi, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -55,7 +51,7 @@ chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide
 #' @param inchi Include InChI identifiers
 #' @param output Output contract: validated wide tibble or raw payload
 #' @return Returns a tibble with results
-#' @apiStage staging
+#' @apiStage public
 #' @export
 #'
 #' @examples
@@ -64,20 +60,7 @@ chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide
 #' }
 chemi_mordred_bulk <- function(chemicals, options = NULL, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_mordred_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `chemicals` = chemicals,
-        `options` = options,
-        `headers` = headers,
-        `inchi` = inchi,
-        `output` = output,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_mordred_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `options` = options, `headers` = headers, `inchi` = inchi, `output` = output, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

@@ -50,3 +50,5 @@ ct_chemical_extra_data_search <- function(dtxsid) {
 
   return(result)
 }
+
+

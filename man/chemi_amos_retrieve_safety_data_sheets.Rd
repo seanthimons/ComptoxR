@@ -21,5 +21,5 @@ chemi_amos_retrieve_safety_data_sheets(internal_ids = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

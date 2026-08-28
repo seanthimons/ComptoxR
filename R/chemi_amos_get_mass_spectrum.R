@@ -14,11 +14,7 @@
 #' }
 chemi_amos_get_mass_spectrum <- function(internal_id) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_get_mass_spectrum",
-    "pre_request",
-    list(params = list(`internal_id` = internal_id, `server` = server))
-  )
+  req_data <- run_hook("chemi_amos_get_mass_spectrum", "pre_request", list(params = list(`internal_id` = internal_id, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }

@@ -1,0 +1,339 @@
+{
+  "timestamp": "2026-08-28T17:36:13Z",
+  "manifest_authoritative": false,
+  "manifest_replacement": "dev/reports/unit_test_readiness_audit.json",
+  "gaps_count": 55,
+  "gaps": {
+    "chemi_amos_all_similarities_development": {
+      "function_name": "chemi_amos_all_similarities_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_all_similarities_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_all_similarities_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_analytical_qc_batch_development": {
+      "function_name": "chemi_amos_analytical_qc_batch_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_analytical_qc_batch_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_analytical_qc_batch_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_analytical_qc_keyset_pagination_bulk_development": {
+      "function_name": "chemi_amos_analytical_qc_keyset_pagination_bulk_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_analytical_qc_keyset_pagination_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_analytical_qc_keyset_pagination_bulk_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_bar_resolver": {
+      "function_name": "chemi_amos_bar_resolver",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_bar_resolver.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_bar_resolver.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_batch_development": {
+      "function_name": "chemi_amos_batch_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_batch_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_batch_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_check_if_similar_smiles": {
+      "function_name": "chemi_amos_check_if_similar_smiles",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_check_if_similar_smiles.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_check_if_similar_smiles.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_count_substances_in_ids_development": {
+      "function_name": "chemi_amos_count_substances_in_ids_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_count_substances_in_ids_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_count_substances_in_ids_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_coversheet_by_internal_id": {
+      "function_name": "chemi_amos_coversheet_by_internal_id",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_coversheet_by_internal_id.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_coversheet_by_internal_id.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_dtxsids_development": {
+      "function_name": "chemi_amos_dtxsids_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_dtxsids_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_dtxsids_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_entropy_similarity_development": {
+      "function_name": "chemi_amos_entropy_similarity_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_entropy_similarity_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_entropy_similarity_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_fact_sheet_keyset_pagination_bulk_development": {
+      "function_name": "chemi_amos_fact_sheet_keyset_pagination_bulk_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_fact_sheet_keyset_pagination_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_fact_sheet_keyset_pagination_bulk_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_find_matches": {
+      "function_name": "chemi_amos_find_matches",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_find_matches.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_find_matches.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_for_document_ids_development": {
+      "function_name": "chemi_amos_for_document_ids_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_for_document_ids_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_for_document_ids_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_get_analytical_qc_pdf_editor_info": {
+      "function_name": "chemi_amos_get_analytical_qc_pdf_editor_info",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_get_analytical_qc_pdf_editor_info.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_get_analytical_qc_pdf_editor_info.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_get_pdf_development": {
+      "function_name": "chemi_amos_get_pdf_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_get_pdf_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_get_pdf_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_get_similar_structures": {
+      "function_name": "chemi_amos_get_similar_structures",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_get_similar_structures.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_get_similar_structures.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_get_similar_structures_development": {
+      "function_name": "chemi_amos_get_similar_structures_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_get_similar_structures_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_get_similar_structures_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_list_sources_by_record_type_development": {
+      "function_name": "chemi_amos_list_sources_by_record_type_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_list_sources_by_record_type_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_list_sources_by_record_type_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_mass_range_development": {
+      "function_name": "chemi_amos_mass_range_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_mass_range_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_mass_range_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_mass_spectra_for_substances_development": {
+      "function_name": "chemi_amos_mass_spectra_for_substances_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_mass_spectra_for_substances_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_mass_spectra_for_substances_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_mass_spectrum_similarity_development": {
+      "function_name": "chemi_amos_mass_spectrum_similarity_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_mass_spectrum_similarity_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_mass_spectrum_similarity_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_max_similarity_development": {
+      "function_name": "chemi_amos_max_similarity_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_max_similarity_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_max_similarity_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_method_keyset_pagination_bulk_development": {
+      "function_name": "chemi_amos_method_keyset_pagination_bulk_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_method_keyset_pagination_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_method_keyset_pagination_bulk_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_next_level_classification_development": {
+      "function_name": "chemi_amos_next_level_classification_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_next_level_classification_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_next_level_classification_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_product_declaration_keyset_pagination_bulk_development": {
+      "function_name": "chemi_amos_product_declaration_keyset_pagination_bulk_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_product_declaration_keyset_pagination_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_product_declaration_keyset_pagination_bulk_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_record_counts_development": {
+      "function_name": "chemi_amos_record_counts_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_record_counts_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_record_counts_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_retrieve_fact_sheets_development": {
+      "function_name": "chemi_amos_retrieve_fact_sheets_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_retrieve_fact_sheets_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_retrieve_fact_sheets_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_retrieve_product_declarations_development": {
+      "function_name": "chemi_amos_retrieve_product_declarations_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_retrieve_product_declarations_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_retrieve_product_declarations_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_retrieve_safety_data_sheets_development": {
+      "function_name": "chemi_amos_retrieve_safety_data_sheets_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_retrieve_safety_data_sheets_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_retrieve_safety_data_sheets_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination_bulk_development": {
+      "function_name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_safety_data_sheet_keyset_pagination_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_safety_data_sheet_keyset_pagination_bulk_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_spectral_entropy_development": {
+      "function_name": "chemi_amos_spectral_entropy_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_spectral_entropy_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_spectral_entropy_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_spectrum_count_for_methodology_development": {
+      "function_name": "chemi_amos_spectrum_count_for_methodology_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_spectrum_count_for_methodology_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_spectrum_count_for_methodology_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_substances_for_classification_development": {
+      "function_name": "chemi_amos_substances_for_classification_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_substances_for_classification_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_substances_for_classification_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_amos_substances_for_ids_development": {
+      "function_name": "chemi_amos_substances_for_ids_development",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_amos_substances_for_ids_development.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_amos_substances_for_ids_development.R",
+      "reason": "no_test_file"
+    },
+    "chemi_descriptors": {
+      "function_name": "chemi_descriptors",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_descriptors.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_descriptors.R",
+      "reason": "no_test_file"
+    },
+    "chemi_descriptors_bulk": {
+      "function_name": "chemi_descriptors_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_descriptors.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_descriptors_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_mordred": {
+      "function_name": "chemi_mordred",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_mordred.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_mordred.R",
+      "reason": "no_test_file"
+    },
+    "chemi_mordred_bulk": {
+      "function_name": "chemi_mordred_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_mordred.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_mordred_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_opera_bulk": {
+      "function_name": "chemi_opera_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_opera.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_opera_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_padel": {
+      "function_name": "chemi_padel",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_padel.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_padel.R",
+      "reason": "no_test_file"
+    },
+    "chemi_padel_bulk": {
+      "function_name": "chemi_padel_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_padel.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_padel_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_predictor_models_predict_bulk": {
+      "function_name": "chemi_predictor_models_predict_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_predictor_models_predict.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_predictor_models_predict_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_rdkit": {
+      "function_name": "chemi_rdkit",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_rdkit.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_rdkit.R",
+      "reason": "no_test_file"
+    },
+    "chemi_rdkit_bulk": {
+      "function_name": "chemi_rdkit_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_rdkit.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_rdkit_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_webtest": {
+      "function_name": "chemi_webtest",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_webtest.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_webtest.R",
+      "reason": "no_test_file"
+    },
+    "chemi_webtest_bulk": {
+      "function_name": "chemi_webtest_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_webtest.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_webtest_bulk.R",
+      "reason": "no_test_file"
+    },
+    "chemi_webtest_predict": {
+      "function_name": "chemi_webtest_predict",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_webtest_predict.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_webtest_predict.R",
+      "reason": "no_test_file"
+    },
+    "chemi_webtest_predict_bulk": {
+      "function_name": "chemi_webtest_predict_bulk",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/chemi_webtest_predict.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-chemi_webtest_predict_bulk.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_polymer_amphoteric": {
+      "function_name": "epi_ecosar_polymer_amphoteric",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_polymer_amphoteric.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_polymer_amphoteric.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_polymer_anionic": {
+      "function_name": "epi_ecosar_polymer_anionic",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_polymer_anionic.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_polymer_anionic.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_polymer_polycationic": {
+      "function_name": "epi_ecosar_polymer_polycationic",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_polymer_polycationic.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_polymer_polycationic.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_surfactant_amphoteric": {
+      "function_name": "epi_ecosar_surfactant_amphoteric",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_surfactant_amphoteric.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_surfactant_amphoteric.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_surfactant_anionic": {
+      "function_name": "epi_ecosar_surfactant_anionic",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_surfactant_anionic.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_surfactant_anionic.R",
+      "reason": "no_test_file"
+    },
+    "epi_ecosar_surfactant_cationic": {
+      "function_name": "epi_ecosar_surfactant_cationic",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_ecosar_surfactant_cationic.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_ecosar_surfactant_cationic.R",
+      "reason": "no_test_file"
+    },
+    "epi_submit_batch": {
+      "function_name": "epi_submit_batch",
+      "file_path": "/home/runner/work/ComptoxR/ComptoxR/R/epi_submit_batch.R",
+      "test_file": "/home/runner/work/ComptoxR/ComptoxR/tests/testthat/test-epi_submit_batch.R",
+      "reason": "no_test_file"
+    }
+  },
+  "stale_protected": []
+}

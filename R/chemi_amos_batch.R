@@ -6,7 +6,7 @@
 #' @param additional_record_info Optional parameter
 #' @param always_download_file If false, a search that does not find any matching records in the database will just return a message instead of a file.
 #' @param base_url URL for the AMOS frontend.  Used to construct the internal links in the output file.
-#' @param dtxsids List of DTXSIDs to search for.
+#' @param ids List of DTXSIDs or other identifiers to search for.
 #' @param include_classyfire Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.
 #' @param include_external_links Flag for whether to include database records that are purely external links (e.g., spectra that we can link to but cannot store directly in the database).
 #' @param include_functional_uses Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.
@@ -21,38 +21,9 @@
 #' \dontrun{
 #' chemi_amos_batch(additional_record_info = "DTXSID1024122")
 #' }
-chemi_amos_batch <- function(
-  additional_record_info = NULL,
-  always_download_file = NULL,
-  base_url = NULL,
-  dtxsids = NULL,
-  include_classyfire = NULL,
-  include_external_links = NULL,
-  include_functional_uses = NULL,
-  include_source_counts = NULL,
-  methodologies = NULL,
-  record_types = NULL
-) {
+chemi_amos_batch <- function(additional_record_info = NULL, always_download_file = NULL, base_url = NULL, ids = NULL, include_classyfire = NULL, include_external_links = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL, record_types = NULL) {
   server <- "chemi_burl"
-  req_data <- run_hook(
-    "chemi_amos_batch",
-    "pre_request",
-    list(
-      params = list(
-        `additional_record_info` = additional_record_info,
-        `always_download_file` = always_download_file,
-        `base_url` = base_url,
-        `dtxsids` = dtxsids,
-        `include_classyfire` = include_classyfire,
-        `include_external_links` = include_external_links,
-        `include_functional_uses` = include_functional_uses,
-        `include_source_counts` = include_source_counts,
-        `methodologies` = methodologies,
-        `record_types` = record_types,
-        `server` = server
-      )
-    )
-  )
+  req_data <- run_hook("chemi_amos_batch", "pre_request", list(params = list(`additional_record_info` = additional_record_info, `always_download_file` = always_download_file, `base_url` = base_url, `ids` = ids, `include_classyfire` = include_classyfire, `include_external_links` = include_external_links, `include_functional_uses` = include_functional_uses, `include_source_counts` = include_source_counts, `methodologies` = methodologies, `record_types` = record_types, `server` = server)))
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -65,8 +36,8 @@ chemi_amos_batch <- function(
   if ("base_url" %in% names(req_data$params)) {
     base_url <- req_data$params[["base_url"]]
   }
-  if ("dtxsids" %in% names(req_data$params)) {
-    dtxsids <- req_data$params[["dtxsids"]]
+  if ("ids" %in% names(req_data$params)) {
+    ids <- req_data$params[["ids"]]
   }
   if ("include_classyfire" %in% names(req_data$params)) {
     include_classyfire <- req_data$params[["include_classyfire"]]
@@ -91,33 +62,15 @@ chemi_amos_batch <- function(
   }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(always_download_file)) {
-    options$always_download_file <- always_download_file
-  }
-  if (!is.null(base_url)) {
-    options$base_url <- base_url
-  }
-  if (!is.null(dtxsids)) {
-    options$dtxsids <- dtxsids
-  }
-  if (!is.null(include_classyfire)) {
-    options$include_classyfire <- include_classyfire
-  }
-  if (!is.null(include_external_links)) {
-    options$include_external_links <- include_external_links
-  }
-  if (!is.null(include_functional_uses)) {
-    options$include_functional_uses <- include_functional_uses
-  }
-  if (!is.null(include_source_counts)) {
-    options$include_source_counts <- include_source_counts
-  }
-  if (!is.null(methodologies)) {
-    options$methodologies <- methodologies
-  }
-  if (!is.null(record_types)) {
-    options$record_types <- record_types
-  }
+  if (!is.null(always_download_file)) options$always_download_file <- always_download_file
+  if (!is.null(base_url)) options$base_url <- base_url
+  if (!is.null(ids)) options$ids <- ids
+  if (!is.null(include_classyfire)) options$include_classyfire <- include_classyfire
+  if (!is.null(include_external_links)) options$include_external_links <- include_external_links
+  if (!is.null(include_functional_uses)) options$include_functional_uses <- include_functional_uses
+  if (!is.null(include_source_counts)) options$include_source_counts <- include_source_counts
+  if (!is.null(methodologies)) options$methodologies <- methodologies
+  if (!is.null(record_types)) options$record_types <- record_types
   result <- generic_chemi_request(
     query = additional_record_info,
     endpoint = "amos/batch_search",

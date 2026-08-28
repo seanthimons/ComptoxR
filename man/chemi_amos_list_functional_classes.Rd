@@ -18,5 +18,5 @@ chemi_amos_list_functional_classes()
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{staging} API schema.
+  This wrapper was generated from the \strong{public} API schema.
 }

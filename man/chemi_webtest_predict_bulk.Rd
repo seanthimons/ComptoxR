@@ -19,7 +19,7 @@ chemi_webtest_predict_bulk(
 
 \item{methods}{Prediction method: hc (Hierarchical Clustering), sm (Single Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)}
 
-\item{format}{Report type: JSON, HTML or PDF. Options: JSON, HTML, PDF}
+\item{format}{Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX}
 
 \item{output}{Output contract: normalized wide tibble or raw PredictionResult}
 }

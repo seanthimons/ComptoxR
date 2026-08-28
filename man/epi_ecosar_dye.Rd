@@ -2,36 +2,19 @@
 % Please edit documentation in R/epi_ecosar_dye.R
 \name{epi_ecosar_dye}
 \alias{epi_ecosar_dye}
-\title{ECOSAR cationic dye predictions}
+\title{Estimate a cationic dye}
 \usage{
-epi_ecosar_dye(
-  ethoxylate = 0,
-  molecularWeight = 0,
-  waterSolubility = 0,
-  cas = NULL,
-  chemicalName = NULL
-)
-}
-\arguments{
-\item{ethoxylate}{Number of ethoxylate groups (default: 0)}
-
-\item{molecularWeight}{Molecular weight in g/mol (default: 0)}
-
-\item{waterSolubility}{Water solubility in mg/L (default: 0)}
-
-\item{cas}{CAS registry number}
-
-\item{chemicalName}{Chemical name}
+epi_ecosar_dye()
 }
 \value{
-Returns a list with result object
+Returns a tibble with results
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-epi_ecosar_dye(ethoxylate = "0")
+epi_ecosar_dye()
 }
 }
 \section{API stage}{
