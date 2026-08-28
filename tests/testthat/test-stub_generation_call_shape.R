@@ -522,11 +522,14 @@ test_that("real descriptor schemas render all ten generic hook wrappers", {
   )
 
   native_webtest <- spec[spec$fn == "chemi_webtest_bulk", , drop = FALSE]
-  native_webtest$body_params <- paste0(native_webtest$body_params, ",chemIdType")
-  native_webtest$num_body_params <- native_webtest$num_body_params + 1L
-  native_metadata <- native_webtest$body_param_metadata[[1]]
-  native_metadata$chemIdType <- list(required = FALSE)
-  native_webtest$body_param_metadata <- list(native_metadata)
+  native_params <- strsplit(native_webtest$body_params, ",", fixed = TRUE)[[1]]
+  if (!"chemIdType" %in% native_params) {
+    native_webtest$body_params <- paste0(native_webtest$body_params, ",chemIdType")
+    native_webtest$num_body_params <- native_webtest$num_body_params + 1L
+    native_metadata <- native_webtest$body_param_metadata[[1]]
+    native_metadata$chemIdType <- list(required = FALSE)
+    native_webtest$body_param_metadata <- list(native_metadata)
+  }
   native_text <- render_endpoint_stubs(native_webtest, config = config)$text[[1]]
   native_fn <- eval(parse(text = native_text)[[1]][[3]])
 
