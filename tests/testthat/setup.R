@@ -25,7 +25,7 @@ suppressMessages(run_debug(FALSE))
 # Set server URLs directly as environment variables
 Sys.setenv("ctx_burl" = "https://comptox.epa.gov/ctx-api/")
 Sys.setenv("chemi_burl" = "https://hcd.rtpnc.epa.gov/api")
-Sys.setenv("epi_burl" = "https://episuite.dev/EpiWebSuite/api")
+Sys.setenv("epi_burl" = "https://episuite.dev/api")
 Sys.setenv("eco_burl" = "https://cfpub.epa.gov/ecotox/index.cfm")
 
 cran_safe_tests <- tolower(trimws(Sys.getenv("COMPTOXR_CRAN_SAFE_TESTS", unset = ""))) %in% c("1", "true", "yes", "y")

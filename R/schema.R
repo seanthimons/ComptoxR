@@ -368,8 +368,12 @@ epi_schema <- function(
   }
 
   body_raw <- httr2::resp_body_raw(resp)
+  body_bytes <- as.integer(body_raw)
+  body_raw <- body_raw[body_bytes >= 32L | body_bytes %in% c(9L, 10L, 13L)]
+  body_text <- rawToChar(body_raw)
+  Encoding(body_text) <- "UTF-8"
   schema <- tryCatch(
-    jsonlite::fromJSON(rawToChar(body_raw), simplifyVector = FALSE),
+    jsonlite::fromJSON(body_text, simplifyVector = FALSE),
     error = function(e) {
       cli::cli_abort("EPI Suite schema is not valid JSON.", parent = e)
     }
