@@ -21,5 +21,5 @@ chemi_amos_bar_resolver(identifier = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{development} API schema.
+  This wrapper was generated from the \strong{staging} API schema.
 }

@@ -7,7 +7,7 @@
 #' @param internal_id Optional parameter. Type: string
 #' @param substr Optional parameter. Type: string
 #' @return Returns a tibble with results
-#' @apiStage development
+#' @apiStage staging
 #' @export
 #'
 #' @examples

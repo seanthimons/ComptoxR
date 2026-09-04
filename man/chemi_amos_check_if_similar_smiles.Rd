@@ -21,5 +21,5 @@ chemi_amos_check_if_similar_smiles(identifier = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{development} API schema.
+  This wrapper was generated from the \strong{staging} API schema.
 }

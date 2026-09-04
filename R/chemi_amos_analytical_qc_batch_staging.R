@@ -1,0 +1,65 @@
+#' Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param base_url URL for the AMOS frontend.  Used to construct the internal links in the output file.
+#' @param identifiers List of DTXSIDs or other identifiers to search for.
+#' @param include_classyfire Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.
+#' @param include_functional_uses Flag for whether to include functional use classifications based on the ChemFuncT ontology.  Only exists for around 21,000 substances in the database.
+#' @param include_source_counts Flag for whether to include counts of a substance's appearances in patents, PubMed articles, and other external sources.
+#' @param methodologies Filters the returned results by analytical methodologies.  This argument should be a dictionary with four keys with boolean values -- "all", "GC/MS", "LC/MS", and "NMR".  There are some methodologies with small numbers of records (e.g., IR spectra) which will only appear in the data if "all" is set to true.
+#' @return Returns a tibble with results
+#' @apiStage staging
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' chemi_amos_analytical_qc_batch_staging(base_url = "DTXSID1024122")
+#' }
+chemi_amos_analytical_qc_batch_staging <- function(base_url = NULL, identifiers = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL) {
+  server <- "chemi_burl"
+  req_data <- run_hook("chemi_amos_analytical_qc_batch_staging", "pre_request", list(params = list(`base_url` = base_url, `identifiers` = identifiers, `include_classyfire` = include_classyfire, `include_functional_uses` = include_functional_uses, `include_source_counts` = include_source_counts, `methodologies` = methodologies, `server` = server)))
+  if (isTRUE(req_data$skip_request)) {
+    return(req_data$result)
+  }
+  if ("base_url" %in% names(req_data$params)) {
+    base_url <- req_data$params[["base_url"]]
+  }
+  if ("identifiers" %in% names(req_data$params)) {
+    identifiers <- req_data$params[["identifiers"]]
+  }
+  if ("include_classyfire" %in% names(req_data$params)) {
+    include_classyfire <- req_data$params[["include_classyfire"]]
+  }
+  if ("include_functional_uses" %in% names(req_data$params)) {
+    include_functional_uses <- req_data$params[["include_functional_uses"]]
+  }
+  if ("include_source_counts" %in% names(req_data$params)) {
+    include_source_counts <- req_data$params[["include_source_counts"]]
+  }
+  if ("methodologies" %in% names(req_data$params)) {
+    methodologies <- req_data$params[["methodologies"]]
+  }
+  if ("server" %in% names(req_data$params)) {
+    server <- req_data$params[["server"]]
+  }
+  # Build options list for additional parameters
+  options <- list()
+  if (!is.null(identifiers)) options$identifiers <- identifiers
+  if (!is.null(include_classyfire)) options$include_classyfire <- include_classyfire
+  if (!is.null(include_functional_uses)) options$include_functional_uses <- include_functional_uses
+  if (!is.null(include_source_counts)) options$include_source_counts <- include_source_counts
+  if (!is.null(methodologies)) options$methodologies <- methodologies
+  result <- generic_chemi_request(
+    query = base_url,
+    endpoint = "amos/analytical_qc_batch_search",
+    options = options,
+    tidy = FALSE,
+    server = server
+  )
+
+  # Additional post-processing can be added here
+
+  return(result)
+}

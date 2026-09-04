@@ -25,5 +25,5 @@ chemi_amos_find_matches(record_type = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{development} API schema.
+  This wrapper was generated from the \strong{staging} API schema.
 }

@@ -5,7 +5,7 @@
 #'
 #' @param internal_id Primary query parameter. Type: string
 #' @return Returns a tibble with results
-#' @apiStage development
+#' @apiStage staging
 #' @export
 #'
 #' @examples

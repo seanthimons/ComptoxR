@@ -5,7 +5,7 @@
 #'
 #' @param identifier Primary query parameter. Type: string
 #' @return Returns a tibble with results (array of objects)
-#' @apiStage development
+#' @apiStage staging
 #' @export
 #'
 #' @examples
