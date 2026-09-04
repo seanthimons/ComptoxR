@@ -4141,7 +4141,7 @@
       "rows": 58115,
       "searchBytes": 5737515,
       "searchCatalogAvailable": true,
-      "searchIndexBuildMillis": 4068,
+      "searchIndexBuildMillis": 3591,
       "searchIndexCandidates": 115594,
       "searchSha256": "c248acdfd382e4ad799e95b2476c88b663e71bf83a8c8fc1cf53e622b6f61c94",
       "sha256": "c3a06b0892cbfcce4afef6d983366a1d84632142ffb02166c8202cbfeffef55c",
@@ -4151,8 +4151,8 @@
       "estimateActive": false,
       "estimationAvailable": true,
       "healthy": false,
-      "lastFailurePath": "/assets/datasets/mpbpvp.zip",
-      "unexpectedFailureCount": 13
+      "lastFailurePath": "/help.zip",
+      "unexpectedFailureCount": 10
     }
   },
   "x-epi-reference-client-inputs": {

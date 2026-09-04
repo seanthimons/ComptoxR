@@ -21,5 +21,5 @@ chemi_amos_coversheet_by_internal_id(internal_id = "DTXSID7020182")
 }
 }
 \section{API stage}{
-  This wrapper was generated from the \strong{development} API schema.
+  This wrapper was generated from the \strong{staging} API schema.
 }
