@@ -61,7 +61,7 @@ verify_published_database <- function(db, package_library, harmonizer_library, e
   }
   stopifnot(identical(before, digest::digest(file = db, algo = 'sha256')))
   cat(sprintf(
-    'Published package %s: %d native rows match restarted localhost HTTP and explicit mapping.\n',
+    'Installed package %s: %d native rows match restarted localhost HTTP and explicit mapping.\n',
     expected_version,
     nrow(local)
   ))

@@ -51,6 +51,10 @@ Final local gates after removal:
 - Separate local package: deterministic generation, containment checks, and
   installed mocked HTTP passed without ComptoxR or wrapmaint in its library.
   Frozen alerts supports nine operations and reports eight unsupported ones.
+- Installed public client: all 336 generated contract files passed with the
+  toolkit unavailable. The full frozen database also passed 664-row native
+  localhost HTTP parity and explicit envharmonizer mapping; its hash stayed
+  `c6f2e9cbb42e8e9fe45a0749fdeaaaf22208fe856cca0fe43e4293ffc26fa803`.
 - Fifty-four development/staging schema files were removed only after SHA-256
   matched their copies outside the repository. See `local-input-hashes.csv`.
 - `removed-exports.csv` records removed names and production replacements;
