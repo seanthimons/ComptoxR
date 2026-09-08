@@ -84,28 +84,6 @@
   cli::cli_abort("Shared database version helper layer not available.")
 }
 
-.ecotox_load_lifestage_helpers <- function(env = parent.frame()) {
-  helper_path <- file.path(getwd(), "R", "eco_lifestage_patch.R")
-  if (file.exists(helper_path)) {
-    sys.source(helper_path, envir = env)
-    return(invisible(TRUE))
-  }
-
-  if ("ComptoxR" %in% loadedNamespaces()) {
-    ns <- asNamespace("ComptoxR")
-    for (fn in c(
-      ".eco_lifestage_release_id",
-      ".eco_lifestage_materialize_tables",
-      ".eco_lifestage_write_drift_report"
-    )) {
-      assign(fn, get(fn, envir = ns), envir = env)
-    }
-    return(invisible(TRUE))
-  }
-
-  cli::cli_abort("Shared lifestage helper layer not available.")
-}
-
 .build_ecotox_db <- function() {
   # 0. Dependency check --------------------------------------------------------
 
@@ -1070,58 +1048,7 @@
   DBI::dbWriteTable(eco_con, "z_unit_intermediate", units_intermediate, overwrite = TRUE)
   DBI::dbWriteTable(eco_con, "unit_conversion", unit_conversion, overwrite = TRUE)
 
-  # 16. Lifestage dictionary ---------------------------------------------------
-
-  cli::cli_alert_info("Writing lifestage dictionary...")
-
-  if (!exists(".eco_lifestage_materialize_tables", mode = "function")) {
-    helper_path <- file.path(getwd(), "R", "eco_lifestage_patch.R")
-
-    if (file.exists(helper_path)) {
-      source(helper_path, local = environment())
-    } else if ("ComptoxR" %in% loadedNamespaces()) {
-      ns <- asNamespace("ComptoxR")
-      for (fn in c(".eco_lifestage_release_id", ".eco_lifestage_materialize_tables")) {
-        assign(fn, get(fn, envir = ns), envir = environment())
-      }
-    } else {
-      cli::cli_abort("Shared lifestage helper layer not available.")
-    }
-  }
-
-  db_lifestages <- DBI::dbGetQuery(
-    eco_con,
-    "SELECT DISTINCT description FROM lifestage_codes ORDER BY description"
-  )$description
-
-  lifestage_tables <- .eco_lifestage_materialize_tables(
-    org_lifestages = db_lifestages,
-    ecotox_release = .eco_lifestage_release_id(latest_zip),
-    refresh = "auto",
-    force = FALSE,
-    write_cache = TRUE
-  )
-
-  DBI::dbWriteTable(
-    eco_con,
-    "lifestage_dictionary",
-    lifestage_tables$dictionary,
-    overwrite = TRUE
-  )
-  DBI::dbWriteTable(
-    eco_con,
-    "lifestage_review",
-    lifestage_tables$review,
-    overwrite = TRUE
-  )
-
-  if (nrow(lifestage_tables$review) > 0) {
-    cli::cli_alert_warning(
-      "{nrow(lifestage_tables$review)} lifestage row(s) quarantined in lifestage_review."
-    )
-  }
-
-  # 17. Effects super-group ----------------------------------------------------
+  # 16. Effects super-group ----------------------------------------------------
 
   cli::cli_alert_info("Building effects group dictionary...")
 
@@ -1157,7 +1084,7 @@
 
   DBI::dbWriteTable(eco_con, "effect_groups_dictionary", effect_conversion, overwrite = TRUE)
 
-  # 18. Persist + metadata -----------------------------------------------------
+  # 17. Persist + metadata -----------------------------------------------------
 
   cli::cli_alert_info("Persisting database to disk...")
 
@@ -1199,17 +1126,4 @@
   invisible(output_path)
 }
 
-.ecotox_run_build <- function() {
-  .ecotox_load_lifestage_helpers(environment(.build_ecotox_db))
-  .ecotox_load_lifestage_helpers(environment())
-  tryCatch(
-    .build_ecotox_db(),
-    comptoxr_ecotox_lifestage_drift = function(cnd) {
-      report_path <- .eco_lifestage_write_drift_report(cnd)
-      cli::cli_alert_danger("Wrote ECOTOX vocabulary drift report to {.path {report_path}}")
-      stop(cnd)
-    }
-  )
-}
-
-.ecotox_run_build()
+.build_ecotox_db()
