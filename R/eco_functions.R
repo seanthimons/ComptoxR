@@ -374,7 +374,8 @@ eco_results <- function(
   )
 
   httr2::resp_body_json(resp, simplifyVector = TRUE) |>
-    tibble::as_tibble()
+    tibble::as_tibble() |>
+    dplyr::mutate(dplyr::across(c("organism_lifestage", "org_lifestage"), as.character))
 }
 
 
