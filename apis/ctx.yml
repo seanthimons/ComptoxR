@@ -154,4 +154,2814 @@ names:
   POST /hazard/toxval/search/by-dtxsid/: ct_hazard_toxval_search_bulk
   GET /hazard/toxval/search/by-dtxsid/{dtxsid}: ct_hazard_toxval_search
   GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}: ct_hazard_toxval_supercategory_search
-
+operations:
+  GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/analyticalqc/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}:
+    inputs:
+      entrezGeneId:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - entrezGeneId
+        endpoint:
+          value: bioactivity/aop/search/by-entrez-gene-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/aop/search/by-event-number/{eventNumber}:
+    inputs:
+      eventNumber:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - eventNumber
+        endpoint:
+          value: bioactivity/aop/search/by-event-number/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}:
+    inputs:
+      toxcastAeid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - toxcastAeid
+        endpoint:
+          value: bioactivity/aop/search/by-toxcast-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/assay/:
+    inputs:
+      projection:
+        required: no
+        default: assay-all
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/assay/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}:
+    inputs:
+      aeid:
+        required: yes
+      projection:
+        required: no
+        default: dtxsidsonly
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - aeid
+        endpoint:
+          value: bioactivity/assay/chemicals/search/by-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /bioactivity/assay/count:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/assay/count
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  POST /bioactivity/assay/search/by-aeid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/assay/search/by-aeid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/assay/search/by-aeid/{aeid}:
+    inputs:
+      aeid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - aeid
+        endpoint:
+          value: bioactivity/assay/search/by-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /bioactivity/assay/search/by-endpoint/:
+    inputs:
+      endpoint:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/assay/search/by-endpoint/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        query_params:
+          object:
+            endpoint:
+              from:
+              - params
+              - endpoint
+  GET /bioactivity/assay/search/by-gene/{geneSymbol}:
+    inputs:
+      geneSymbol:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - geneSymbol
+        endpoint:
+          value: bioactivity/assay/search/by-gene/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}:
+    inputs:
+      aeid:
+        required: yes
+      projection:
+        required: no
+        default: single-conc
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - aeid
+        endpoint:
+          value: bioactivity/assay/single-conc/search/by-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /bioactivity/data/aed/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/aed/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/data/aed/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /bioactivity/data/search/by-aeid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/search/by-aeid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/data/search/by-aeid/{aeid}:
+    inputs:
+      aeid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - aeid
+        endpoint:
+          value: bioactivity/data/search/by-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /bioactivity/data/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/data/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /bioactivity/data/search/by-m4id/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/search/by-m4id/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/data/search/by-m4id/{m4id}:
+    inputs:
+      m4id:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - m4id
+        endpoint:
+          value: bioactivity/data/search/by-m4id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /bioactivity/data/search/by-spid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/search/by-spid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /bioactivity/data/search/by-spid/{spid}:
+    inputs:
+      spid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - spid
+        endpoint:
+          value: bioactivity/data/search/by-spid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/data/summary/search/by-aeid/{aeid}:
+    inputs:
+      aeid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - aeid
+        endpoint:
+          value: bioactivity/data/summary/search/by-aeid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/data/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/data/summary/search/by-tissue/:
+    inputs:
+      dtxsid:
+        required: yes
+      tissue:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/data/summary/search/by-tissue/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        tissue:
+          from:
+          - params
+          - tissue
+  GET /bioactivity/models/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      model:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/models/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        model:
+          from:
+          - params
+          - model
+  GET /bioactivity/models/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/models/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/search/contain/{value}:
+    inputs:
+      value:
+        required: yes
+      top:
+        required: no
+        default: 0.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - value
+        endpoint:
+          value: bioactivity/search/contain/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        top:
+          from:
+          - params
+          - top
+  GET /bioactivity/search/equal/{value}:
+    inputs:
+      value:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - value
+        endpoint:
+          value: bioactivity/search/equal/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /bioactivity/search/start-with/{value}:
+    inputs:
+      value:
+        required: yes
+      top:
+        required: no
+        default: 500.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - value
+        endpoint:
+          value: bioactivity/search/start-with/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        top:
+          from:
+          - params
+          - top
+  GET /chemical/count/by-exact-formula/{formula}:
+    inputs:
+      formula:
+        required: yes
+      projection:
+        required: no
+        default: count
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: chemical/count/by-exact-formula/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/count/by-msready-formula/{formula}:
+    inputs:
+      formula:
+        required: yes
+      projection:
+        required: no
+        default: count
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: chemical/count/by-msready-formula/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /chemical/detail/search/by-dtxcid/:
+    inputs:
+      query:
+        required: yes
+      projection:
+        required: no
+        default: chemicaldetailall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/detail/search/by-dtxcid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/detail/search/by-dtxcid/{dtxcid}:
+    inputs:
+      dtxcid:
+        required: yes
+      projection:
+        required: no
+        default: chemicaldetailall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxcid
+        endpoint:
+          value: chemical/detail/search/by-dtxcid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /chemical/detail/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+      projection:
+        required: no
+        default: chemicaldetailall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/detail/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/detail/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: chemicaldetailall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/detail/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/detail/search/by-smiles/:
+    inputs:
+      smiles:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/detail/search/by-smiles/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        smiles:
+          from:
+          - params
+          - smiles
+  POST /chemical/extra-data/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/extra-data/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/extra-data/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/extra-data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /chemical/fate/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/fate/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/fate/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/fate/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/fate/summary/experimental/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/experimental/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/fate/summary/predicted/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/predicted/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/fate/summary/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/fate/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/file/image/search/by-dtxcid/{dtxcid}:
+    inputs:
+      dtxcid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxcid
+        endpoint:
+          value: chemical/file/image/search/by-dtxcid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        content_type:
+          value: image/png
+  GET /chemical/file/image/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/file/image/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        content_type:
+          value: image/png
+  GET /chemical/file/image/search/by-gsid/{gsid}:
+    inputs:
+      gsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - gsid
+        endpoint:
+          value: chemical/file/image/search/by-gsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        content_type:
+          value: image/png
+  GET /chemical/file/mol/search/by-dtxcid/{dtxcid}:
+    inputs:
+      dtxcid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxcid
+        endpoint:
+          value: chemical/file/mol/search/by-dtxcid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/file/mol/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/file/mol/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/list/all:
+    inputs:
+      projection:
+        required: no
+        default: chemicallistall
+        type: character
+      return_dtxsid:
+        required: no
+        default: no
+        type: logical
+      coerce:
+        required: no
+        default: no
+        type: logical
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/list/all
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/list/chemicals/search/by-listname/{list}:
+    inputs:
+      list:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - list
+        endpoint:
+          value: chemical/list/chemicals/search/by-listname/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/list/chemicals/search/contain/{list}/{word}:
+    inputs:
+      list:
+        required: yes
+      word:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - list
+        endpoint:
+          value: chemical/list/chemicals/search/contain/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            word:
+              from:
+              - params
+              - word
+  GET /chemical/list/chemicals/search/equal/{list}/{word}:
+    inputs:
+      list:
+        required: yes
+      word:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - list
+        endpoint:
+          value: chemical/list/chemicals/search/equal/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            word:
+              from:
+              - params
+              - word
+  GET /chemical/list/chemicals/search/start-with/{list}/{word}:
+    inputs:
+      list:
+        required: yes
+      word:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - list
+        endpoint:
+          value: chemical/list/chemicals/search/start-with/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            word:
+              from:
+              - params
+              - word
+  GET /chemical/list/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: chemicallistall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/list/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/list/search/by-name/{listName}:
+    inputs:
+      listName:
+        required: yes
+      projection:
+        required: no
+        default: chemicallistall
+        type: character
+      extract_dtxsids:
+        required: no
+        default: no
+        type: logical
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - listName
+        endpoint:
+          value: chemical/list/search/by-name/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/list/search/by-type/{type}:
+    inputs:
+      type:
+        required: yes
+      projection:
+        required: no
+        default: chemicallistall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - type
+        endpoint:
+          value: chemical/list/search/by-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/list/type:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/list/type
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  POST /chemical/msready/search/by-dtxcid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/msready/search/by-dtxcid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/msready/search/by-dtxcid/{dtxcid}:
+    inputs:
+      dtxcid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxcid
+        endpoint:
+          value: chemical/msready/search/by-dtxcid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/msready/search/by-formula/{formula}:
+    inputs:
+      formula:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: chemical/msready/search/by-formula/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /chemical/msready/search/by-mass/:
+    inputs:
+      error:
+        required: yes
+      masses:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: chemical/msready/search/by-mass/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_1000
+        body:
+          compact_object:
+            error:
+              from:
+              - params
+              - error
+            masses:
+              from:
+              - params
+              - masses
+  GET /chemical/msready/search/by-mass/{start}/{end}:
+    inputs:
+      start:
+        required: yes
+      end:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - start
+        endpoint:
+          value: chemical/msready/search/by-mass/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            end:
+              from:
+              - params
+              - end
+  GET /chemical/property/experimental/name:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/experimental/name
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  POST /chemical/property/experimental/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/property/experimental/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/experimental/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}:
+    inputs:
+      propertyName:
+        required: yes
+      start:
+        required: no
+        default: ~
+        type: object
+      end:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - propertyName
+        endpoint:
+          value: chemical/property/experimental/search/by-range/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            start:
+              from:
+              - params
+              - start
+            end:
+              from:
+              - params
+              - end
+  GET /chemical/property/predicted/name:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/predicted/name
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  POST /chemical/property/predicted/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/property/predicted/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/predicted/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}:
+    inputs:
+      propertyId:
+        required: yes
+      start:
+        required: no
+        default: ~
+        type: object
+      end:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - propertyId
+        endpoint:
+          value: chemical/property/predicted/search/by-range/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          vector:
+            start:
+              from:
+              - params
+              - start
+            end:
+              from:
+              - params
+              - end
+  GET /chemical/property/summary/experimental/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/experimental/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/property/summary/predicted/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/predicted/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/property/summary/search/:
+    inputs:
+      dtxsid:
+        required: yes
+      propName:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+  GET /chemical/property/summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/search/by-exact-formula/{formula}:
+    inputs:
+      formula:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: chemical/search/by-exact-formula/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /chemical/search/by-msready-formula/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/search/by-msready-formula/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/search/by-msready-formula/{formula}:
+    inputs:
+      formula:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: chemical/search/by-msready-formula/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /chemical/search/contain/{word}:
+    inputs:
+      word:
+        required: yes
+      top:
+        required: no
+        default: 0.0
+        type: numeric
+      projection:
+        required: no
+        default: chemicalsearchall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - word
+        endpoint:
+          value: chemical/search/contain/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        top:
+          from:
+          - params
+          - top
+        projection:
+          from:
+          - params
+          - projection
+  POST /chemical/search/equal/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/search/equal/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_1000
+        body_type:
+          value: raw_text
+  GET /chemical/search/equal/{word}:
+    inputs:
+      word:
+        required: yes
+      projection:
+        required: no
+        default: chemicalsearchall
+        type: character
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - word
+        endpoint:
+          value: chemical/search/equal/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /chemical/search/start-with/{word}:
+    inputs:
+      word:
+        required: yes
+      top:
+        required: no
+        default: 500.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - word
+        endpoint:
+          value: chemical/search/start-with/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        top:
+          from:
+          - params
+          - top
+  POST /chemical/synonym/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/synonym/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /chemical/synonym/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/synonym/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/chem-weight-fractions/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/functional-use/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/keywords/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/monitoring-data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/production-volume/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/ccd/puc/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/functional-use/category:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/functional-use/category
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/functional-use/probability/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /exposure/functional-use/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/functional-use/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/functional-use/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/functional-use/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /exposure/httk/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/httk/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/httk/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/httk/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /exposure/list-presence/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/list-presence/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/list-presence/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/list-presence/tags:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/list-presence/tags
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/mmdb/aggregate/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/mmdb/aggregate/by-medium:
+    inputs:
+      medium:
+        required: yes
+      pageNumber:
+        required: no
+        default: 1.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/aggregate/by-medium
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        medium:
+          from:
+          - params
+          - medium
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_number
+  GET /exposure/mmdb/mediums:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/mediums
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/mmdb/single-sample/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /exposure/mmdb/single-sample/by-medium:
+    inputs:
+      medium:
+        required: yes
+      pageNumber:
+        required: no
+        default: 1.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/mmdb/single-sample/by-medium
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        medium:
+          from:
+          - params
+          - medium
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_number
+  GET /exposure/product-data/puc:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: exposure/product-data/puc
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+  POST /exposure/product-data/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/product-data/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/product-data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /exposure/seem/demographic/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/seem/demographic/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/seem/demographic/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /exposure/seem/general/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: exposure/seem/general/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: exposure/seem/general/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/adme-ivive/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /hazard/cancer-summary/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/cancer-summary/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/cancer-summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /hazard/genetox/details/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/genetox/details/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      projection:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/genetox/details/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+  POST /hazard/genetox/summary/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/genetox/summary/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/genetox/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/hawc/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/hawc/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/iris/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/iris/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/pprtv/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/pprtv/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  POST /hazard/skin-eye/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/skin-eye/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/skin-eye/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/data/search/by-study-id/{studyId}:
+    inputs:
+      studyId:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/data/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/data/search/by-study-type/{studyType}:
+    inputs:
+      studyType:
+        required: yes
+      pageNumber:
+        required: no
+        default: 1.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/data/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+  GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/effects/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/effects/search/by-study-id/{studyId}:
+    inputs:
+      studyId:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/effects/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/effects/search/by-study-type/{studyType}:
+    inputs:
+      studyType:
+        required: yes
+      pageNumber:
+        required: no
+        default: 1.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/effects/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+  GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/observations/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/observations/search/by-study-id/{studyId}:
+    inputs:
+      studyId:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/observations/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/observations/search/by-study-type/{studyType}:
+    inputs:
+      studyType:
+        required: yes
+      pageNumber:
+        required: no
+        default: 1.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/observations/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+  GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/summary/search/by-study-id/{studyId}:
+    inputs:
+      studyId:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/summary/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxref/summary/search/by-study-type/{studyType}:
+    inputs:
+      studyType:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/summary/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxval/search/by-category/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+      category:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/search/by-category/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        category:
+          from:
+          - params
+          - category
+  POST /hazard/toxval/search/by-dtxsid/:
+    inputs:
+      query:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/toxval/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_100
+  GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+  GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/supercategory/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0

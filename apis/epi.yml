@@ -27,4 +27,1393 @@ names:
   GET /api/search: epi_search
   GET /api/submit: epi_submit
   POST /api/submit/batch: epi_submit_batch
-
+operations:
+  GET /api/ecosar/dye:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/dye
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/polymer/amphoteric:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/polymer/amphoteric
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/polymer/anionic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/polymer/anionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/polymer/nonionic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/polymer/nonionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/polymer/polycationic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/polymer/polycationic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/surfactant/amphoteric:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/surfactant/amphoteric
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/surfactant/anionic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/surfactant/anionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/surfactant/cationic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/surfactant/cationic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/ecosar/surfactant/nonionic:
+    inputs: {}
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/surfactant/nonionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+  GET /api/search:
+    inputs:
+      query:
+        required: yes
+      limit:
+        required: no
+        default: 20.0
+        type: numeric
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: search
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        query_params:
+          object:
+            query:
+              from:
+              - params
+              - query
+            limit:
+              from:
+              - params
+              - limit
+  GET /api/submit:
+    inputs:
+      smiles:
+        required: no
+        default: ~
+        type: object
+      cas:
+        required: no
+        default: ~
+        type: object
+      modules:
+        required: no
+        default: ~
+        type: object
+      chemicalName:
+        required: no
+        default: ~
+        type: object
+      logKow:
+        required: no
+        default: ~
+        type: object
+      molecularWeight:
+        required: no
+        default: ~
+        type: object
+      waterSolubilityMgPerL:
+        required: no
+        default: ~
+        type: object
+      waterSolubility:
+        required: no
+        default: ~
+        type: object
+      waterSolubilityProvider:
+        required: no
+        default: wskow
+        type: character
+      vaporPressureMmHg:
+        required: no
+        default: ~
+        type: object
+      subcooledVaporPressureMmHg:
+        required: no
+        default: ~
+        type: object
+      henryAtmM3PerMol:
+        required: no
+        default: ~
+        type: object
+      logKoa:
+        required: no
+        default: ~
+        type: object
+      koc:
+        required: no
+        default: ~
+        type: object
+      meltingPointC:
+        required: no
+        default: ~
+        type: object
+      boilingPointC:
+        required: no
+        default: ~
+        type: object
+      vaporPressureTemperatureC:
+        required: no
+        default: 25.0
+        type: numeric
+      aopRateConstant:
+        required: no
+        default: ~
+        type: object
+      biowinScore:
+        required: no
+        default: ~
+        type: object
+      biowin3:
+        required: no
+        default: ~
+        type: object
+      biowin5:
+        required: no
+        default: ~
+        type: object
+      removeMetals:
+        required: no
+        default: yes
+        type: logical
+      tspUgPerM3:
+        required: no
+        default: 80.0
+        type: numeric
+      theta:
+        required: no
+        default: 0.00010836
+        type: numeric
+      waterConcentrationMgPerCm3:
+        required: no
+        default: ~
+        type: object
+      waterConcentrationMgPerLiter:
+        required: no
+        default: ~
+        type: object
+      eventFrequencyPerDay:
+        required: no
+        default: ~
+        type: object
+      exposureDurationYears:
+        required: no
+        default: ~
+        type: object
+      exposureFrequencyDaysPerYear:
+        required: no
+        default: ~
+        type: object
+      skinSurfaceAreaCm2:
+        required: no
+        default: ~
+        type: object
+      bodyWeightKg:
+        required: no
+        default: ~
+        type: object
+      averagingTimeDays:
+        required: no
+        default: ~
+        type: object
+      fractionAbsorbed:
+        required: no
+        default: ~
+        type: object
+      eventDurationHours:
+        required: no
+        default: ~
+        type: object
+      userKpCmPerHour:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursPrimaryClarifier:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursAerationVessel:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursSettlingTank:
+        required: no
+        default: ~
+        type: object
+      halfLifeAir:
+        required: no
+        default: ~
+        type: object
+      halfLifeWater:
+        required: no
+        default: ~
+        type: object
+      halfLifeSoil:
+        required: no
+        default: ~
+        type: object
+      halfLifeSediment:
+        required: no
+        default: ~
+        type: object
+      emissionRateAir:
+        required: no
+        default: ~
+        type: object
+      emissionRateWater:
+        required: no
+        default: ~
+        type: object
+      emissionRateSoil:
+        required: no
+        default: ~
+        type: object
+      emissionRateSediment:
+        required: no
+        default: ~
+        type: object
+      advectionTimeAir:
+        required: no
+        default: ~
+        type: object
+      advectionTimeWater:
+        required: no
+        default: ~
+        type: object
+      advectionTimeSoil:
+        required: no
+        default: ~
+        type: object
+      advectionTimeSediment:
+        required: no
+        default: ~
+        type: object
+      ohConcentrationE6OhPerCm3:
+        required: no
+        default: ~
+        type: object
+      ozoneConcentrationE11MolPerCm3:
+        required: no
+        default: ~
+        type: object
+      daylightHours:
+        required: no
+        default: 12.0
+        type: numeric
+      riverWindMPerSec:
+        required: no
+        default: ~
+        type: object
+      riverCurrentMPerSec:
+        required: no
+        default: ~
+        type: object
+      riverDepthMeters:
+        required: no
+        default: ~
+        type: object
+      lakeWindMPerSec:
+        required: no
+        default: ~
+        type: object
+      lakeCurrentMPerSec:
+        required: no
+        default: ~
+        type: object
+      lakeDepthMeters:
+        required: no
+        default: ~
+        type: object
+      carbonChainLength:
+        required: no
+        default: ~
+        type: object
+      mainCarbons:
+        required: no
+        default: ~
+        type: object
+      branchedCarbons:
+        required: no
+        default: ~
+        type: object
+      branches:
+        required: no
+        default: ~
+        type: object
+      propoxyGroups:
+        required: no
+        default: ~
+        type: object
+      ethoxylate:
+        required: no
+        default: ~
+        type: object
+      amineNitrogens:
+        required: no
+        default: ~
+        type: object
+      cationAnionRatio:
+        required: no
+        default: ~
+        type: object
+      mw500Percentage:
+        required: no
+        default: ~
+        type: object
+      mw1000Percentage:
+        required: no
+        default: ~
+        type: object
+      averageMolecularWeight:
+        required: no
+        default: ~
+        type: object
+      useSmiles:
+        required: no
+        default: ~
+        type: object
+      solubilityType:
+        required: no
+        default: ~
+        type: object
+      polymerType:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: submit
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        smiles:
+          from:
+          - params
+          - smiles
+        cas:
+          from:
+          - params
+          - cas
+        modules:
+          from:
+          - params
+          - modules
+        chemicalName:
+          from:
+          - params
+          - chemicalName
+        logKow:
+          from:
+          - params
+          - logKow
+        molecularWeight:
+          from:
+          - params
+          - molecularWeight
+        waterSolubilityMgPerL:
+          from:
+          - params
+          - waterSolubilityMgPerL
+        waterSolubility:
+          from:
+          - params
+          - waterSolubility
+        waterSolubilityProvider:
+          from:
+          - params
+          - waterSolubilityProvider
+        vaporPressureMmHg:
+          from:
+          - params
+          - vaporPressureMmHg
+        subcooledVaporPressureMmHg:
+          from:
+          - params
+          - subcooledVaporPressureMmHg
+        henryAtmM3PerMol:
+          from:
+          - params
+          - henryAtmM3PerMol
+        logKoa:
+          from:
+          - params
+          - logKoa
+        koc:
+          from:
+          - params
+          - koc
+        meltingPointC:
+          from:
+          - params
+          - meltingPointC
+        boilingPointC:
+          from:
+          - params
+          - boilingPointC
+        vaporPressureTemperatureC:
+          from:
+          - params
+          - vaporPressureTemperatureC
+        aopRateConstant:
+          from:
+          - params
+          - aopRateConstant
+        biowinScore:
+          from:
+          - params
+          - biowinScore
+        biowin3:
+          from:
+          - params
+          - biowin3
+        biowin5:
+          from:
+          - params
+          - biowin5
+        removeMetals:
+          from:
+          - params
+          - removeMetals
+        tspUgPerM3:
+          from:
+          - params
+          - tspUgPerM3
+        theta:
+          from:
+          - params
+          - theta
+        waterConcentrationMgPerCm3:
+          from:
+          - params
+          - waterConcentrationMgPerCm3
+        waterConcentrationMgPerLiter:
+          from:
+          - params
+          - waterConcentrationMgPerLiter
+        eventFrequencyPerDay:
+          from:
+          - params
+          - eventFrequencyPerDay
+        exposureDurationYears:
+          from:
+          - params
+          - exposureDurationYears
+        exposureFrequencyDaysPerYear:
+          from:
+          - params
+          - exposureFrequencyDaysPerYear
+        skinSurfaceAreaCm2:
+          from:
+          - params
+          - skinSurfaceAreaCm2
+        bodyWeightKg:
+          from:
+          - params
+          - bodyWeightKg
+        averagingTimeDays:
+          from:
+          - params
+          - averagingTimeDays
+        fractionAbsorbed:
+          from:
+          - params
+          - fractionAbsorbed
+        eventDurationHours:
+          from:
+          - params
+          - eventDurationHours
+        userKpCmPerHour:
+          from:
+          - params
+          - userKpCmPerHour
+        halfLifeHoursPrimaryClarifier:
+          from:
+          - params
+          - halfLifeHoursPrimaryClarifier
+        halfLifeHoursAerationVessel:
+          from:
+          - params
+          - halfLifeHoursAerationVessel
+        halfLifeHoursSettlingTank:
+          from:
+          - params
+          - halfLifeHoursSettlingTank
+        halfLifeAir:
+          from:
+          - params
+          - halfLifeAir
+        halfLifeWater:
+          from:
+          - params
+          - halfLifeWater
+        halfLifeSoil:
+          from:
+          - params
+          - halfLifeSoil
+        halfLifeSediment:
+          from:
+          - params
+          - halfLifeSediment
+        emissionRateAir:
+          from:
+          - params
+          - emissionRateAir
+        emissionRateWater:
+          from:
+          - params
+          - emissionRateWater
+        emissionRateSoil:
+          from:
+          - params
+          - emissionRateSoil
+        emissionRateSediment:
+          from:
+          - params
+          - emissionRateSediment
+        advectionTimeAir:
+          from:
+          - params
+          - advectionTimeAir
+        advectionTimeWater:
+          from:
+          - params
+          - advectionTimeWater
+        advectionTimeSoil:
+          from:
+          - params
+          - advectionTimeSoil
+        advectionTimeSediment:
+          from:
+          - params
+          - advectionTimeSediment
+        ohConcentrationE6OhPerCm3:
+          from:
+          - params
+          - ohConcentrationE6OhPerCm3
+        ozoneConcentrationE11MolPerCm3:
+          from:
+          - params
+          - ozoneConcentrationE11MolPerCm3
+        daylightHours:
+          from:
+          - params
+          - daylightHours
+        riverWindMPerSec:
+          from:
+          - params
+          - riverWindMPerSec
+        riverCurrentMPerSec:
+          from:
+          - params
+          - riverCurrentMPerSec
+        riverDepthMeters:
+          from:
+          - params
+          - riverDepthMeters
+        lakeWindMPerSec:
+          from:
+          - params
+          - lakeWindMPerSec
+        lakeCurrentMPerSec:
+          from:
+          - params
+          - lakeCurrentMPerSec
+        lakeDepthMeters:
+          from:
+          - params
+          - lakeDepthMeters
+        carbonChainLength:
+          from:
+          - params
+          - carbonChainLength
+        mainCarbons:
+          from:
+          - params
+          - mainCarbons
+        branchedCarbons:
+          from:
+          - params
+          - branchedCarbons
+        branches:
+          from:
+          - params
+          - branches
+        propoxyGroups:
+          from:
+          - params
+          - propoxyGroups
+        ethoxylate:
+          from:
+          - params
+          - ethoxylate
+        amineNitrogens:
+          from:
+          - params
+          - amineNitrogens
+        cationAnionRatio:
+          from:
+          - params
+          - cationAnionRatio
+        mw500Percentage:
+          from:
+          - params
+          - mw500Percentage
+        mw1000Percentage:
+          from:
+          - params
+          - mw1000Percentage
+        averageMolecularWeight:
+          from:
+          - params
+          - averageMolecularWeight
+        useSmiles:
+          from:
+          - params
+          - useSmiles
+        solubilityType:
+          from:
+          - params
+          - solubilityType
+        polymerType:
+          from:
+          - params
+          - polymerType
+  POST /api/submit/batch:
+    inputs:
+      modules:
+        required: yes
+      advectionTimeAir:
+        required: no
+        default: ~
+        type: object
+      advectionTimeSediment:
+        required: no
+        default: ~
+        type: object
+      advectionTimeSoil:
+        required: no
+        default: ~
+        type: object
+      advectionTimeWater:
+        required: no
+        default: ~
+        type: object
+      amineNitrogens:
+        required: no
+        default: ~
+        type: object
+      aopRateConstant:
+        required: no
+        default: ~
+        type: object
+      averageMolecularWeight:
+        required: no
+        default: ~
+        type: object
+      averagingTimeDays:
+        required: no
+        default: ~
+        type: object
+      biowin3:
+        required: no
+        default: ~
+        type: object
+      biowin5:
+        required: no
+        default: ~
+        type: object
+      biowinScore:
+        required: no
+        default: ~
+        type: object
+      bodyWeightKg:
+        required: no
+        default: ~
+        type: object
+      boilingPointC:
+        required: no
+        default: ~
+        type: object
+      branchedCarbons:
+        required: no
+        default: ~
+        type: object
+      branches:
+        required: no
+        default: ~
+        type: object
+      carbonChainLength:
+        required: no
+        default: ~
+        type: object
+      cas:
+        required: no
+        default: ~
+        type: object
+      cationAnionRatio:
+        required: no
+        default: ~
+        type: object
+      chemicalName:
+        required: no
+        default: ~
+        type: object
+      daylightHours:
+        required: no
+        default: ~
+        type: object
+      emissionRateAir:
+        required: no
+        default: ~
+        type: object
+      emissionRateSediment:
+        required: no
+        default: ~
+        type: object
+      emissionRateSoil:
+        required: no
+        default: ~
+        type: object
+      emissionRateWater:
+        required: no
+        default: ~
+        type: object
+      ethoxylate:
+        required: no
+        default: ~
+        type: object
+      eventDurationHours:
+        required: no
+        default: ~
+        type: object
+      eventFrequencyPerDay:
+        required: no
+        default: ~
+        type: object
+      exposureDurationYears:
+        required: no
+        default: ~
+        type: object
+      exposureFrequencyDaysPerYear:
+        required: no
+        default: ~
+        type: object
+      fractionAbsorbed:
+        required: no
+        default: ~
+        type: object
+      halfLifeAir:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursAerationVessel:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursPrimaryClarifier:
+        required: no
+        default: ~
+        type: object
+      halfLifeHoursSettlingTank:
+        required: no
+        default: ~
+        type: object
+      halfLifeSediment:
+        required: no
+        default: ~
+        type: object
+      halfLifeSoil:
+        required: no
+        default: ~
+        type: object
+      halfLifeWater:
+        required: no
+        default: ~
+        type: object
+      henryAtmM3PerMol:
+        required: no
+        default: ~
+        type: object
+      koc:
+        required: no
+        default: ~
+        type: object
+      lakeCurrentMPerSec:
+        required: no
+        default: ~
+        type: object
+      lakeDepthMeters:
+        required: no
+        default: ~
+        type: object
+      lakeWindMPerSec:
+        required: no
+        default: ~
+        type: object
+      logKoa:
+        required: no
+        default: ~
+        type: object
+      logKow:
+        required: no
+        default: ~
+        type: object
+      mainCarbons:
+        required: no
+        default: ~
+        type: object
+      meltingPointC:
+        required: no
+        default: ~
+        type: object
+      molecularWeight:
+        required: no
+        default: ~
+        type: object
+      mw1000Percentage:
+        required: no
+        default: ~
+        type: object
+      mw500Percentage:
+        required: no
+        default: ~
+        type: object
+      ohConcentrationE6OhPerCm3:
+        required: no
+        default: ~
+        type: object
+      ozoneConcentrationE11MolPerCm3:
+        required: no
+        default: ~
+        type: object
+      polymerType:
+        required: no
+        default: ~
+        type: object
+      propoxyGroups:
+        required: no
+        default: ~
+        type: object
+      removeMetals:
+        required: no
+        default: ~
+        type: object
+      riverCurrentMPerSec:
+        required: no
+        default: ~
+        type: object
+      riverDepthMeters:
+        required: no
+        default: ~
+        type: object
+      riverWindMPerSec:
+        required: no
+        default: ~
+        type: object
+      skinSurfaceAreaCm2:
+        required: no
+        default: ~
+        type: object
+      smiles:
+        required: no
+        default: ~
+        type: object
+      solubilityType:
+        required: no
+        default: ~
+        type: object
+      subcooledVaporPressureMmHg:
+        required: no
+        default: ~
+        type: object
+      theta:
+        required: no
+        default: ~
+        type: object
+      tspUgPerM3:
+        required: no
+        default: ~
+        type: object
+      useSmiles:
+        required: no
+        default: ~
+        type: object
+      userKpCmPerHour:
+        required: no
+        default: ~
+        type: object
+      vaporPressureMmHg:
+        required: no
+        default: ~
+        type: object
+      vaporPressureTemperatureC:
+        required: no
+        default: 25.0
+        type: numeric
+      waterConcentrationMgPerCm3:
+        required: no
+        default: ~
+        type: object
+      waterConcentrationMgPerLiter:
+        required: no
+        default: ~
+        type: object
+      waterSolubility:
+        required: no
+        default: ~
+        type: object
+      waterSolubilityMgPerL:
+        required: no
+        default: ~
+        type: object
+      waterSolubilityProvider:
+        required: no
+        default: ~
+        type: object
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: submit/batch
+        method:
+          value: POST
+        batch_limit:
+          callback: batch_limit_1000
+        body:
+          array:
+          - compact_object:
+              modules:
+                from:
+                - params
+                - modules
+              advectionTimeAir:
+                from:
+                - params
+                - advectionTimeAir
+              advectionTimeSediment:
+                from:
+                - params
+                - advectionTimeSediment
+              advectionTimeSoil:
+                from:
+                - params
+                - advectionTimeSoil
+              advectionTimeWater:
+                from:
+                - params
+                - advectionTimeWater
+              amineNitrogens:
+                from:
+                - params
+                - amineNitrogens
+              aopRateConstant:
+                from:
+                - params
+                - aopRateConstant
+              averageMolecularWeight:
+                from:
+                - params
+                - averageMolecularWeight
+              averagingTimeDays:
+                from:
+                - params
+                - averagingTimeDays
+              biowin3:
+                from:
+                - params
+                - biowin3
+              biowin5:
+                from:
+                - params
+                - biowin5
+              biowinScore:
+                from:
+                - params
+                - biowinScore
+              bodyWeightKg:
+                from:
+                - params
+                - bodyWeightKg
+              boilingPointC:
+                from:
+                - params
+                - boilingPointC
+              branchedCarbons:
+                from:
+                - params
+                - branchedCarbons
+              branches:
+                from:
+                - params
+                - branches
+              carbonChainLength:
+                from:
+                - params
+                - carbonChainLength
+              cas:
+                from:
+                - params
+                - cas
+              cationAnionRatio:
+                from:
+                - params
+                - cationAnionRatio
+              chemicalName:
+                from:
+                - params
+                - chemicalName
+              daylightHours:
+                from:
+                - params
+                - daylightHours
+              emissionRateAir:
+                from:
+                - params
+                - emissionRateAir
+              emissionRateSediment:
+                from:
+                - params
+                - emissionRateSediment
+              emissionRateSoil:
+                from:
+                - params
+                - emissionRateSoil
+              emissionRateWater:
+                from:
+                - params
+                - emissionRateWater
+              ethoxylate:
+                from:
+                - params
+                - ethoxylate
+              eventDurationHours:
+                from:
+                - params
+                - eventDurationHours
+              eventFrequencyPerDay:
+                from:
+                - params
+                - eventFrequencyPerDay
+              exposureDurationYears:
+                from:
+                - params
+                - exposureDurationYears
+              exposureFrequencyDaysPerYear:
+                from:
+                - params
+                - exposureFrequencyDaysPerYear
+              fractionAbsorbed:
+                from:
+                - params
+                - fractionAbsorbed
+              halfLifeAir:
+                from:
+                - params
+                - halfLifeAir
+              halfLifeHoursAerationVessel:
+                from:
+                - params
+                - halfLifeHoursAerationVessel
+              halfLifeHoursPrimaryClarifier:
+                from:
+                - params
+                - halfLifeHoursPrimaryClarifier
+              halfLifeHoursSettlingTank:
+                from:
+                - params
+                - halfLifeHoursSettlingTank
+              halfLifeSediment:
+                from:
+                - params
+                - halfLifeSediment
+              halfLifeSoil:
+                from:
+                - params
+                - halfLifeSoil
+              halfLifeWater:
+                from:
+                - params
+                - halfLifeWater
+              henryAtmM3PerMol:
+                from:
+                - params
+                - henryAtmM3PerMol
+              koc:
+                from:
+                - params
+                - koc
+              lakeCurrentMPerSec:
+                from:
+                - params
+                - lakeCurrentMPerSec
+              lakeDepthMeters:
+                from:
+                - params
+                - lakeDepthMeters
+              lakeWindMPerSec:
+                from:
+                - params
+                - lakeWindMPerSec
+              logKoa:
+                from:
+                - params
+                - logKoa
+              logKow:
+                from:
+                - params
+                - logKow
+              mainCarbons:
+                from:
+                - params
+                - mainCarbons
+              meltingPointC:
+                from:
+                - params
+                - meltingPointC
+              molecularWeight:
+                from:
+                - params
+                - molecularWeight
+              mw1000Percentage:
+                from:
+                - params
+                - mw1000Percentage
+              mw500Percentage:
+                from:
+                - params
+                - mw500Percentage
+              ohConcentrationE6OhPerCm3:
+                from:
+                - params
+                - ohConcentrationE6OhPerCm3
+              ozoneConcentrationE11MolPerCm3:
+                from:
+                - params
+                - ozoneConcentrationE11MolPerCm3
+              polymerType:
+                from:
+                - params
+                - polymerType
+              propoxyGroups:
+                from:
+                - params
+                - propoxyGroups
+              removeMetals:
+                from:
+                - params
+                - removeMetals
+              riverCurrentMPerSec:
+                from:
+                - params
+                - riverCurrentMPerSec
+              riverDepthMeters:
+                from:
+                - params
+                - riverDepthMeters
+              riverWindMPerSec:
+                from:
+                - params
+                - riverWindMPerSec
+              skinSurfaceAreaCm2:
+                from:
+                - params
+                - skinSurfaceAreaCm2
+              smiles:
+                from:
+                - params
+                - smiles
+              solubilityType:
+                from:
+                - params
+                - solubilityType
+              subcooledVaporPressureMmHg:
+                from:
+                - params
+                - subcooledVaporPressureMmHg
+              theta:
+                from:
+                - params
+                - theta
+              tspUgPerM3:
+                from:
+                - params
+                - tspUgPerM3
+              useSmiles:
+                from:
+                - params
+                - useSmiles
+              userKpCmPerHour:
+                from:
+                - params
+                - userKpCmPerHour
+              vaporPressureMmHg:
+                from:
+                - params
+                - vaporPressureMmHg
+              vaporPressureTemperatureC:
+                from:
+                - params
+                - vaporPressureTemperatureC
+              waterConcentrationMgPerCm3:
+                from:
+                - params
+                - waterConcentrationMgPerCm3
+              waterConcentrationMgPerLiter:
+                from:
+                - params
+                - waterConcentrationMgPerLiter
+              waterSolubility:
+                from:
+                - params
+                - waterSolubility
+              waterSolubilityMgPerL:
+                from:
+                - params
+                - waterSolubilityMgPerL
+              waterSolubilityProvider:
+                from:
+                - params
+                - waterSolubilityProvider
+        server:
+          value: epi_burl
+        auth:
+          value: no
