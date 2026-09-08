@@ -33,7 +33,7 @@
 Implementation and publication records include `8b785e4` (September support),
 `2facf3b` (harmonizer source merge), `e3b08c7` (reviewed endpoint/toolkit),
 `35e0d0c` (endpoint merge), `e2de0aa` (3.0.0 release), and `f3f8603` (withdrawal
-evidence). See `final-release.json` for the final artifact and verification IDs.
+evidence). The publication report contains final artifact and verification IDs.
 
 ## Publication checkpoint (2026-09-08 03:49 UTC)
 
@@ -70,7 +70,7 @@ evidence). See `final-release.json` for the final artifact and verification IDs.
   this evidence branch and record final commits. Do not hand-edit package versions
   or tags. Original `endpoint-audit.md` and `CONTEXT.md` changes remain untouched.
 
-See `dev/reports/migration/publication.md` and `database-withdrawal.json`.
+See `dev/reports/migration/publication.md`.
 Earlier pending publication statements below are superseded by this checkpoint.
 
 ## Integration checkpoint (2026-09-08)
