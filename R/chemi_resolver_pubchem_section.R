@@ -14,11 +14,7 @@
 #' \dontrun{
 #' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
-chemi_resolver_pubchem_section <- function(
-  query,
-  idType = "AnyId",
-  section = NULL
-) {
+chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {
@@ -64,23 +60,12 @@ chemi_resolver_pubchem_section <- function(
 #' \dontrun{
 #' chemi_resolver_pubchem_section_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_pubchem_section_bulk <- function(
-  query,
-  idType = "AnyId",
-  section = NULL
-) {
+chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section = NULL) {
   chemicals <- NULL
   req_data <- run_hook(
     "chemi_resolver_pubchem_section_bulk",
     "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `chemicals` = chemicals
-      )
-    )
+    list(params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals))
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)

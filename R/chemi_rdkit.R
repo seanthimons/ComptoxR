@@ -16,25 +16,11 @@
 #' \dontrun{
 #' chemi_rdkit(smiles = "DTXSID7020182")
 #' }
-chemi_rdkit <- function(
-  smiles,
-  type = NULL,
-  radius = NULL,
-  bits = NULL,
-  output = c("wide", "raw")
-) {
+chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
   req_data <- run_hook(
     "chemi_rdkit",
     "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `type` = type,
-        `radius` = radius,
-        `bits` = bits,
-        `output` = output
-      )
-    )
+    list(params = list(`smiles` = smiles, `type` = type, `radius` = radius, `bits` = bits, `output` = output))
   )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result

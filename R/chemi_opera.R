@@ -67,11 +67,7 @@ chemi_opera_bulk <- function(
   standardize = FALSE
 ) {
   if (
-    sum(c(
-      all(!vapply(list(smiles), is.null, logical(1))),
-      all(!vapply(list(chemicals), is.null, logical(1)))
-    )) !=
-      1L
+    sum(c(all(!vapply(list(smiles), is.null, logical(1))), all(!vapply(list(chemicals), is.null, logical(1))))) != 1L
   ) {
     cli::cli_abort("Supply exactly one supported request-body shape.")
   }

@@ -56,6 +56,11 @@ jobs:
             any::testthat
             any::vcr
 
+      - name: Install pinned formatter
+        uses: posit-dev/setup-air@v1
+        with:
+          version: '0.9.0'
+
       - name: Install pinned development toolkit
         run: Rscript dev/install_toolkit.R
 

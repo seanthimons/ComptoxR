@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_predictor_models_predict(smiles = "DTXSID7020182")
 #' }
-chemi_predictor_models_predict <- function(
-  model_id,
-  smiles = NULL,
-  identifier = NULL,
-  report_format = "json"
-) {
+chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier = NULL, report_format = "json") {
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {
@@ -66,11 +61,7 @@ chemi_predictor_models_predict <- function(
 #' \dontrun{
 #' chemi_predictor_models_predict_bulk(model_id = "DTXSID1024122")
 #' }
-chemi_predictor_models_predict_bulk <- function(
-  model_id,
-  smiles = NULL,
-  chemicals = NULL
-) {
+chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemicals = NULL) {
   if (
     sum(c(
       all(!vapply(list(smiles, model_id), is.null, logical(1))),

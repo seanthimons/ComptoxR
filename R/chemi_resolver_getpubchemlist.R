@@ -19,13 +19,7 @@
 #' \dontrun{
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getpubchemlist <- function(
-  query,
-  idType = "AnyId",
-  section = NULL,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
   chemicals <- NULL
   req_data <- run_hook(
     "chemi_resolver_getpubchemlist",

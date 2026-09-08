@@ -25,5 +25,3 @@ epi_ecosar_polymer_anionic <- function() {
 
   return(result)
 }
-
-

@@ -16,13 +16,7 @@
 #' \dontrun{
 #' chemi_webtest_predict(smiles = "DTXSID7020182")
 #' }
-chemi_webtest_predict <- function(
-  smiles,
-  endpoint,
-  method = "consensus",
-  format = "JSON",
-  output = c("wide", "raw")
-) {
+chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")) {
   if (missing(endpoint)) {
     endpoint <- NULL
   }
@@ -30,13 +24,7 @@ chemi_webtest_predict <- function(
     "chemi_webtest_predict",
     "pre_request",
     list(
-      params = list(
-        `smiles` = smiles,
-        `endpoint` = endpoint,
-        `method` = method,
-        `format` = format,
-        `output` = output
-      )
+      params = list(`smiles` = smiles, `endpoint` = endpoint, `method` = method, `format` = format, `output` = output)
     )
   )
   if (isTRUE(req_data$skip_request)) {

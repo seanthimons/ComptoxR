@@ -13,7 +13,7 @@ generate_comptox <- function(root, mode = c('check', 'plan', 'apply'), rebuild =
   stage <- tempfile('comptox-generation-')
   dir.create(stage)
   on.exit(unlink(stage, recursive = TRUE), add = TRUE)
-  inputs <- c('R', 'schema', 'inst', 'DESCRIPTION', 'NAMESPACE')
+  inputs <- c('R', 'schema', 'inst', 'DESCRIPTION', 'NAMESPACE', 'air.toml')
   stopifnot(all(file.copy(file.path(root, inputs), stage, recursive = TRUE)))
   dir.create(file.path(stage, 'data'))
   stopifnot(file.copy(file.path(root, 'data/testing_chemicals.rda'), file.path(stage, 'data')))
@@ -30,17 +30,20 @@ generate_comptox <- function(root, mode = c('check', 'plan', 'apply'), rebuild =
   context <- comptox_tools(stage)
   context$reset_endpoint_tracking()
   results <- lapply(context$api_specs, context$run_generator, pkg_dir = file.path(stage, 'R'))
-  # Preserve the existing formatter step for newly generated Chemi wrappers.
+  # Use the same formatter as the commit gate for Chemi and EPI wrappers.
   generated_files <- unlist(
     lapply(results, function(result) {
       if (!all(c('written', 'path') %in% names(result$scaffold))) {
         return(character())
       }
-      result$scaffold$path[result$scaffold$written & grepl('[/\\\\]chemi_', result$scaffold$path)]
+      result$scaffold$path[result$scaffold$written & grepl('[/\\\\](chemi|epi)_', result$scaffold$path)]
     }),
     use.names = FALSE
   )
-  if (length(generated_files) && nzchar(Sys.which('air'))) {
+  if (length(generated_files)) {
+    if (!nzchar(Sys.which('air'))) {
+      stop('Install Air 0.9.0 before generating wrappers.')
+    }
     stopifnot(system2('air', c('format', shQuote(generated_files))) == 0L)
   }
   files <- c(file.path('R', list.files(file.path(stage, 'R'), '\\.R$')), 'inst/hook_config_generated.yml')

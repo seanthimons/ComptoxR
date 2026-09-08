@@ -25,5 +25,3 @@ epi_ecosar_surfactant_cationic <- function() {
 
   return(result)
 }
-
-

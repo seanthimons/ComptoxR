@@ -21,10 +21,8 @@ epi_ecosar_dye <- function() {
     tidy = FALSE
   )
 
-    result <- run_hook("epi_ecosar_dye", "post_response", list(result = result, params = list()))
-# Additional post-processing can be added here
+  result <- run_hook("epi_ecosar_dye", "post_response", list(result = result, params = list()))
+  # Additional post-processing can be added here
 
   return(result)
 }
-
-

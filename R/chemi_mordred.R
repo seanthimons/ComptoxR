@@ -15,23 +15,11 @@
 #' \dontrun{
 #' chemi_mordred(smiles = "DTXSID7020182")
 #' }
-chemi_mordred <- function(
-  smiles,
-  headers = NULL,
-  inchi = NULL,
-  output = c("wide", "raw")
-) {
+chemi_mordred <- function(smiles, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
   req_data <- run_hook(
     "chemi_mordred",
     "pre_request",
-    list(
-      params = list(
-        `smiles` = smiles,
-        `headers` = headers,
-        `inchi` = inchi,
-        `output` = output
-      )
-    )
+    list(params = list(`smiles` = smiles, `headers` = headers, `inchi` = inchi, `output` = output))
   )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
@@ -73,13 +61,7 @@ chemi_mordred <- function(
 #' \dontrun{
 #' chemi_mordred_bulk(chemicals = "DTXSID1024122")
 #' }
-chemi_mordred_bulk <- function(
-  chemicals,
-  options = NULL,
-  headers = NULL,
-  inchi = NULL,
-  output = c("wide", "raw")
-) {
+chemi_mordred_bulk <- function(chemicals, options = NULL, headers = NULL, inchi = NULL, output = c("wide", "raw")) {
   req_data <- run_hook(
     "chemi_mordred_bulk",
     "pre_request",

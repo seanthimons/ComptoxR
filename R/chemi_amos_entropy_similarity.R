@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_amos_entropy_similarity(spectrum_1 = "DTXSID1024122")
 #' }
-chemi_amos_entropy_similarity <- function(
-  spectrum_1 = NULL,
-  spectrum_2 = NULL,
-  type = NULL,
-  window = NULL
-) {
+chemi_amos_entropy_similarity <- function(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL) {
   # Build options list for additional parameters
   options <- list()
   if (!is.null(spectrum_2)) {

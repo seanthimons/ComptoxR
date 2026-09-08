@@ -14,11 +14,7 @@
 #' \dontrun{
 #' chemi_search_substructure(smiles = "DTXSID7020182")
 #' }
-chemi_search_substructure <- function(
-  smiles,
-  exportSmiles = NULL,
-  exportMol = NULL
-) {
+chemi_search_substructure <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
   # Collect optional parameters
   options <- list()
   if (!is.null(smiles)) {

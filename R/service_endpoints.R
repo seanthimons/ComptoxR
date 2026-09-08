@@ -87,7 +87,7 @@
       }
     }
     if (!url_only) {
-      do.call(Sys.setenv, setNames(list(value), key))
+      do.call(Sys.setenv, stats::setNames(list(value), key))
       value <- .endpoint_target(key)
     }
   }

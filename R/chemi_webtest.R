@@ -18,9 +18,7 @@ chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
   req_data <- run_hook(
     "chemi_webtest",
     "pre_request",
-    list(
-      params = list(`smiles` = smiles, `headers` = headers, `output` = output)
-    )
+    list(params = list(`smiles` = smiles, `headers` = headers, `output` = output))
   )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result

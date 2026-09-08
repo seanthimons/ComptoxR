@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_counts(page = "DTXSID7020182")
 #' }
-chemi_chet_chemicals_counts <- function(
-  page = 0,
-  size = NULL,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE, max_pages = 100) {
   # Collect optional parameters
   options <- list()
   if (!is.null(page)) {

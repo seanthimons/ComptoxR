@@ -14,11 +14,7 @@
 #' \dontrun{
 #' chemi_chet_reaction(query = "DTXSID7020182")
 #' }
-chemi_chet_reaction <- function(
-  query = NULL,
-  searchType = NULL,
-  substringTF = NULL
-) {
+chemi_chet_reaction <- function(query = NULL, searchType = NULL, substringTF = NULL) {
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {

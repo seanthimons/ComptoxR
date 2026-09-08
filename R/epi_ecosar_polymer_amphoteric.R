@@ -25,5 +25,3 @@ epi_ecosar_polymer_amphoteric <- function() {
 
   return(result)
 }
-
-

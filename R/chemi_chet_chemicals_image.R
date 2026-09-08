@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
 #' }
-chemi_chet_chemicals_image <- function(
-  chemical_id,
-  width = NULL,
-  height = NULL,
-  format = "png"
-) {
+chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
   # Collect optional parameters
   options <- list()
   if (!is.null(width)) {

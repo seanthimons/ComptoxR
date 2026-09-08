@@ -13,10 +13,7 @@
 #' \dontrun{
 #' chemi_amos_get_similar_structures(identifier_type = "DTXSID7020182")
 #' }
-chemi_amos_get_similar_structures <- function(
-  identifier_type,
-  identifier = NULL
-) {
+chemi_amos_get_similar_structures <- function(identifier_type, identifier = NULL) {
   result <- generic_request(
     query = identifier_type,
     endpoint = "amos/get_similar_structures/",

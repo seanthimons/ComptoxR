@@ -13,10 +13,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020182")
 #' }
-chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(
-  pagenum,
-  searchterm = NULL
-) {
+chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(pagenum, searchterm = NULL) {
   result <- generic_request(
     query = pagenum,
     endpoint = "reaction/database-old/",

@@ -1,9 +1,9 @@
 {
   "artifact_schema": "unit_test_readiness_audit/v1",
   "metadata": {
-    "generated_at_utc": "2026-09-08T02:04:06Z",
+    "generated_at_utc": "2026-09-08T02:11:15Z",
     "source_branch": "feat/production-endpoints",
-    "source_commit": "a1b5536e34bcd8262fb1be3769b9eb724096ec9d",
+    "source_commit": "103445049c090f0cee5916d694e2d775cb00fbea",
     "issue": {
       "github_issue": 180,
       "bean": "ComptoxR-wsxo",
@@ -42,8 +42,8 @@
       "s3_methods": ["base::format,rd_section_apiStage", "print,genra_prediction"]
     },
     "files": {
-      "r_files": 346,
-      "rd_files": 453,
+      "r_files": 344,
+      "rd_files": 451,
       "test_files": 384,
       "test_helpers": 8,
       "test_tool_files": 0,
@@ -3852,7 +3852,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-endpoint_database_targets.R"],
+          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-ecotox_source_only.R", "tests/testthat/test-endpoint_database_targets.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3862,7 +3862,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": "tests/testthat/test-eco_functions.R",
+          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-ecotox_source_only.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3882,7 +3882,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": "tests/testthat/test-eco_functions.R",
+          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-ecotox_source_only.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3912,7 +3912,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": "tests/testthat/test-eco_functions.R",
+          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-ecotox_source_only.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -3922,7 +3922,7 @@
           "named_test_file": false,
           "named_test_files": [],
           "literal_test_reference": true,
-          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-endpoint_database_targets.R"],
+          "literal_reference_files": ["tests/testthat/test-eco_functions.R", "tests/testthat/test-ecotox_source_only.R", "tests/testthat/test-endpoint_database_targets.R"],
           "intentionally_excluded": false,
           "exclusion": []
         },
@@ -4691,13 +4691,13 @@
       "ccd_coverage": 100,
       "ccd_endpoints": 140,
       "ccd_functions": 140,
-      "chemi_coverage": 98.7,
-      "chemi_endpoints": 232,
-      "chemi_functions": 229,
+      "chemi_coverage": 99.5,
+      "chemi_endpoints": 191,
+      "chemi_functions": 190,
       "epi_coverage": 100,
       "epi_endpoints": 12,
       "epi_functions": 12,
-      "timestamp": "2026-08-28T17:36:25Z"
+      "timestamp": "2026-09-08T02:09:47Z"
     },
     "badge_files": {
       "ccd": {
@@ -4709,7 +4709,7 @@
       "chemi": {
         "schemaVersion": 1,
         "label": "Cheminformatic coverage",
-        "message": "98.7%",
+        "message": "99.5%",
         "color": "brightgreen"
       }
     }

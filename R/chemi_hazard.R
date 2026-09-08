@@ -14,11 +14,7 @@
 #' \dontrun{
 #' chemi_hazard(query = "DTXSID7020182")
 #' }
-chemi_hazard <- function(
-  query,
-  full = TRUE,
-  format = c("compact", "tidy", "raw")
-) {
+chemi_hazard <- function(query, full = TRUE, format = c("compact", "tidy", "raw")) {
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {
@@ -40,10 +36,7 @@ chemi_hazard <- function(
   result <- run_hook(
     "chemi_hazard",
     "post_response",
-    list(
-      result = result,
-      params = list(`query` = query, `full` = full, `format` = format)
-    )
+    list(result = result, params = list(`query` = query, `full` = full, `format` = format))
   )
   # Additional post-processing can be added here
 
@@ -130,25 +123,19 @@ chemi_hazard_bulk <- function(
     request.filesInfo <- req_data$params[["request.filesInfo"]]
   }
   if ("request.options.analogsSearchType" %in% names(req_data$params)) {
-    request.options.analogsSearchType <- req_data$params[[
-      "request.options.analogsSearchType"
-    ]]
+    request.options.analogsSearchType <- req_data$params[["request.options.analogsSearchType"]]
   }
   if ("request.options.cts" %in% names(req_data$params)) {
     request.options.cts <- req_data$params[["request.options.cts"]]
   }
   if ("request.options.minSimilarity" %in% names(req_data$params)) {
-    request.options.minSimilarity <- req_data$params[[
-      "request.options.minSimilarity"
-    ]]
+    request.options.minSimilarity <- req_data$params[["request.options.minSimilarity"]]
   }
   if ("request.options.noRecords" %in% names(req_data$params)) {
     request.options.noRecords <- req_data$params[["request.options.noRecords"]]
   }
   if ("request.options.usePredictions" %in% names(req_data$params)) {
-    request.options.usePredictions <- req_data$params[[
-      "request.options.usePredictions"
-    ]]
+    request.options.usePredictions <- req_data$params[["request.options.usePredictions"]]
   }
   if ("format" %in% names(req_data$params)) {
     format <- req_data$params[["format"]]

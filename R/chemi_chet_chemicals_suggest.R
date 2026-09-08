@@ -14,11 +14,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_suggest(query = "DTXSID7020182")
 #' }
-chemi_chet_chemicals_suggest <- function(
-  query,
-  limit = 8,
-  only_in_reactions = "true"
-) {
+chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
   # Collect optional parameters
   options <- list()
   if (!is.null(query)) {

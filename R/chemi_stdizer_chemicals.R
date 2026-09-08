@@ -18,25 +18,12 @@
 #' \dontrun{
 #' chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_stdizer_chemicals <- function(
-  query,
-  idType = "AnyId",
-  full = NULL,
-  options = NULL
-) {
+chemi_stdizer_chemicals <- function(query, idType = "AnyId", full = NULL, options = NULL) {
   chemicals <- NULL
   req_data <- run_hook(
     "chemi_stdizer_chemicals",
     "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `full` = full,
-        `options` = options,
-        `chemicals` = chemicals
-      )
-    )
+    list(params = list(`query` = query, `idType` = idType, `full` = full, `options` = options, `chemicals` = chemicals))
   )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)

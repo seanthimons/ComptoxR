@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_amos_safety_data_sheet_keyset_pagination(limit = "DTXSID7020182")
 #' }
-chemi_amos_safety_data_sheet_keyset_pagination <- function(
-  limit,
-  cursor = NULL,
-  all_pages = TRUE,
-  max_pages = 100
-) {
+chemi_amos_safety_data_sheet_keyset_pagination <- function(limit, cursor = NULL, all_pages = TRUE, max_pages = 100) {
   # Collect optional parameters
   options <- list()
   if (!is.null(cursor)) {

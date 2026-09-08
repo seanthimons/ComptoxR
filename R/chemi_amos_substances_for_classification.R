@@ -15,12 +15,7 @@
 #' \dontrun{
 #' chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
 #' }
-chemi_amos_substances_for_classification <- function(
-  kingdom = NULL,
-  klass = NULL,
-  subklass = NULL,
-  superklass = NULL
-) {
+chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
   # Build options list for additional parameters
   options <- list()
   if (!is.null(klass)) {
