@@ -34,6 +34,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect development-tool changes
+        id: dev-scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -z "$BASE_SHA" ] || ! git diff --quiet "$BASE_SHA" HEAD -- dev/endpoint_eval dev/stub_specs.R dev/generate_stubs.R 'tests/testthat/test-pipeline*'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Development tooling and its pipeline tests are unchanged."
+          fi
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
@@ -78,6 +92,7 @@ jobs:
 
       - name: Check dev/ coverage (>= 80%) - GHA only, not sent to Codecov
         id: dev-coverage
+        if: steps.dev-scope.outputs.changed == 'true'
         run: |
           Rscript -e '
             # Note: dev/ coverage is GHA-only enforcement, not uploaded to Codecov
