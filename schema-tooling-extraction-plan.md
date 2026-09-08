@@ -1,29 +1,31 @@
-# Schema, test generation, and hook extraction assessment
+# Schema, test generation, and hook validation extraction plan
 
 ## Executive summary
 
-**Feasible, with substantial separation work. Estimated effort: L, 10-17 working days for one maintainer.** A useful developer-tool package can come first in about 5-8 days. The complete estimate includes hook runtime extraction, a second consumer fixture, installed-package checks, and ComptoxR migration. It excludes full OpenAPI conformance and a general HTTP client library.
+**Feasible, with substantial separation work. Estimated effort: L, 9-15 working days for one maintainer.** A useful developer-tool package takes about 5-8 days within this workstream. The complete estimate includes hook validation, a second consumer fixture, installed-package checks, and ComptoxR migration. Hook runtime extraction, full OpenAPI conformance, and a general HTTP client library are outside scope.
 
-**For a general package that new users can use with a supplied default renderer, allow 13-22 days total.** The additional 3-5 days cover a neutral request mapping, removal of implicit service policies, and the broader second-client acceptance cases below. These estimates need confirmation during the first extraction step.
+**For a general package that new users can use with a supplied default renderer, allow 12-20 days total.** The additional 3-5 days cover a neutral request mapping, removal of implicit service policies, and the broader second-client acceptance cases below. These estimates need confirmation during the first extraction step.
 
 The reusable product is an **R API wrapper maintenance toolkit**: read schema snapshots, identify operations, compare changes, generate wrappers and offline tests, preserve manual code, and validate configured hook calls. The existing modules already provide much of that process. However, they also embed CompTox naming, chemical inputs, request helpers, stage selection, response fixtures, and repository paths.
 
-**Recommendation: one new package, extracted in two steps.** First move the development tools and keep ComptoxR's runtime unchanged. Then move the small, general hook runner into the same package, with per-client configuration and function lookup. Keep chemical and service-specific hook functions in ComptoxR. Do not combine this toolkit with the proposed environmental harmonization package: their users, runtime needs, and release reasons differ.
+**Agreed boundary: one development toolkit package; keep hook execution in ComptoxR.** Extract generation and validation only. Keep the hook registry, merge rules, cache, ordered runner, and domain hook functions local. Do not add a toolkit runtime dependency to ComptoxR or generated clients. Keep this toolkit separate from `envharmonizer`.
 
-A separate package is justified if another client can use this process with a small configuration and ordinary R callbacks. A second synthetic client is a release gate. If that client requires new chemistry-specific branches in the engine, the extraction is not complete. A package rename alone would only relocate the coupling.
+The [lifestage migration](lifestage-migration-plan.md) has first priority. Isolated toolkit preparation can run in parallel, but integrate its changes after the lifestage work. Prove installed-toolkit parity before applying the [endpoint migration](endpoint-migration-plan.md). See [HANDOFF.md](HANDOFF.md) for ownership and release gates. Toolkit branding and public publication are not settled and are not gates for this migration.
+
+A separate package is justified if another client can use this process with a small configuration and ordinary R callbacks. A second synthetic client is a migration completion gate. If that client requires new chemistry-specific branches in the engine, the extraction is not complete. A package rename alone would only relocate the coupling.
 
 ## Scope, assumptions, and success criteria
 
-Reconnaissance used the local ComptoxR tree at commit `2745f6b`, including `CONTRIBUTING.md`, the generator modules, representative generated wrappers, runtime hooks, test helpers, schema diff, and GitHub workflows. This document follows the assessment style of `endpoint-audit.md`. The existing untracked audit remains unchanged.
+Reconnaissance used the local ComptoxR tree at commit `2745f6b`, including `CONTRIBUTING.md`, the generator modules, representative generated wrappers, runtime hooks, test helpers, schema diff, and GitHub workflows. That commit is historical evidence; record the current baseline before implementation. The tracked [endpoint migration plan](endpoint-migration-plan.md) controls endpoint policy. The original untracked audit remains unchanged and is not required to execute this plan.
 
-"Hooks" here means `pre_request` and `post_response` hooks used by API wrappers, including their YAML configuration, generated invocation code, and validation script. Git pre-commit hooks and agent hooks are outside scope.
+"Hooks" here means `pre_request` and `post_response` hooks used by API wrappers. Only generation of their configuration/call sites and validation move. Runtime execution remains client-owned. Git pre-commit hooks and agent hooks are outside scope.
 
 Success means:
 
 - ComptoxR can regenerate the same supported wrapper contracts and offline tests using an installed toolkit from outside its checkout.
 - Generated files keep their current public function names, parameters, request behavior, and hook order unless a separate change is documented.
 - A second client with no chemical identifiers can generate, install, and test a wrapper with both hook stages.
-- Tool installation and loading cause no network requests, file generation, client package loading, or changes to global configuration.
+- Tool installation and loading cause no network requests, file generation, client package loading, or changes to global configuration. Installed clients run without the toolkit.
 - The package documents the schema constructs and test guarantees it actually supports.
 
 This is a feasibility assessment, not a full implementation audit or conformance test. No generator, schema refresh, cleanup script, or live endpoint was run for this document.
@@ -71,7 +73,7 @@ Hooks execute in generated wrappers, not centrally in `generic_request()`. Movin
 | `dev/generate_tests.R` | CLI modes, build/check process, global module sourcing, GitHub summaries. | Preserve CLI entry point as a thin adapter; engine functions must also be callable interactively. |
 | `tests/testthat/helper-generated-contracts.R` | Package loading, mocked chemical responses, resolver stand-ins. | Keep chemical fixtures local. Generalize only the small harness required by another client. |
 | `dev/detect_test_gaps.R`, `dev/calculate_coverage.R`, `dev/diff_schemas.R` | Inventory/coverage and schema change reports, with repository and service assumptions. | Move calculations and structured results; keep badges, output paths, baseline policy, and GitHub output writing local. |
-| `R/hook_registry.R` | YAML merge, lazy config cache, ordered runner, error wrapping; hard-coded ComptoxR namespace and paths. | Move merge/runner logic in step two. Keep a thin local adapter and client-owned cache if needed for compatibility. |
+| `R/hook_registry.R` | YAML merge, lazy config cache, ordered runner, error wrapping; hard-coded ComptoxR namespace and paths. | Keep entirely in ComptoxR, including merge, cache, lookup, execution, and error contracts. |
 | `inst/hook_config.yml`, `inst/hook_config_generated.yml` | Manual request/output policy plus generated stage support and fallback metadata. | Remain client-owned data. Toolkit reads explicit paths/configuration and emits the generated portion. |
 | `R/hooks_*.R` | Chemical resolution, descriptors, hazard/list/property/EPI/WebTEST transforms, validation, and server fallback. | Keep domain behavior in ComptoxR. Do not transfer it into generic hook execution. |
 | `dev/check_hook_config.R` | Sources hook files; checks hook names, parsed formals, emitted stages, and request templates. | Move validation functions; retain a client CLI and explicit hook environment. |
@@ -101,9 +103,9 @@ Keep that request model in a ComptoxR adapter. Reuse the existing spec-list patt
 
 The rendered test currently catches the wrapper result with `try(..., silent = TRUE)`, then asserts that a helper call was captured. A failure after that helper call can therefore escape detection by this template. Some dynamic arguments receive only presence/permissive shape checks. The chemical response fixture also cannot represent arbitrary APIs.
 
-Keep the existing generated tests as regression coverage, but name them accurately. Do not advertise response validation, transport validation, or proof of schema conformance. Before the first public toolkit release, add a small independent fixture with manually specified expected method/path/body and assert successful wrapper completion. Test a deliberate post-response failure to prove it fails the check. Do not generate those expected values by re-reading the wrapper under test.
+Keep the existing generated tests as regression coverage, but name them accurately. Do not advertise response validation, transport validation, or proof of schema conformance. Before completing the toolkit migration, add a small independent fixture with manually specified expected method/path/body and assert successful wrapper completion. Test a deliberate post-response failure to prove it fails the check. Do not generate those expected values by re-reading the wrapper under test.
 
-When the runner moves packages, keep request-helper mocks in the target client's namespace, where the wrapper resolves them. Moving `.package` to the toolkit would mock the wrong binding. This follows [testthat's binding-mocking guidance](https://testthat.r-lib.org/reference/local_mocked_bindings.html).
+When the test generator moves packages, keep request-helper mocks in the target client's namespace, where the wrapper resolves them. Moving `.package` to the toolkit would mock the wrong binding. This follows [testthat's binding-mocking guidance](https://testthat.r-lib.org/reference/local_mocked_bindings.html).
 
 ### 4. Hook state is an interface that must be preserved
 
@@ -111,7 +113,7 @@ The existing merge uses `utils::modifyList(manual, generated)`, then specially c
 
 Pre-hooks receive state that includes `params`; generated code handles parameter write-back and `skip_request`/`result`. Request-template paths can also carry request state. Post-hooks receive the result and parameter context, and can return a final value rather than another state list. The runner injects function/stage metadata into list values and wraps failures in stage-specific `comptoxr_*_hook_error` conditions.
 
-A generic runner must receive configuration and an explicit hook lookup environment or named function list. It must not search another client's namespace or share one global registry across installed clients. A thin ComptoxR adapter can preserve current error classes, cache behavior, and `run_hook()` calls. Test two clients that use the same wrapper and hook names.
+Keep the existing ComptoxR runner, error classes, cache behavior, and `run_hook()` calls. The toolkit validator receives explicit client configuration and a hook environment or named function list. Generated calls use the client's declared execution callback; the toolkit does not supply a shared runner or registry. The catalogue fixture supplies its own small local callback. Test two clients with the same wrapper and hook names to check validation and runtime isolation.
 
 ### 5. File ownership is part of the product
 
@@ -141,13 +143,12 @@ Illustrative public functions, not current APIs:
 | `compare_operations(old, new)` | Return bounded structural change findings. |
 | `generate_client(root, spec, mode = 'check')` | Render/validate wrappers, hook metadata, and tests; `plan` lists changes and `apply` writes validated owned files. Reuse existing generation stages internally. |
 | `validate_hooks(config, wrappers, hooks)` | Check names, supported stages, signatures, and generated call sites without making API requests. |
-| `run_hooks(config, hooks, function_name, stage, data)` | Execute an ordered chain with client-supplied lookup and compatible error handling. Added in step two. |
 
 Use explicit `root`, input paths, target package, and spec values. Return structured results; client CLI scripts translate them into exit codes, reports, or `GITHUB_OUTPUT`. Replace repeated source-file parsing with one per-run inventory passed to the consumers. For example, the current hook checker reparses R files for each configured wrapper; that cost grows with both wrapper count and file count.
 
-Keep the normal hook runtime small. Its imports need only the dependencies actually used there. Generator-only packages such as roxygen2/testthat and the generation data tools can be checked when generation functions are called. Do not require `library(tidyverse)` to run an installed client hook. Audit actual package calls before assigning DESCRIPTION dependencies; do not copy ComptoxR's DESCRIPTION wholesale.
+Audit actual toolkit package calls before assigning DESCRIPTION dependencies; do not copy ComptoxR's DESCRIPTION wholesale. Generation dependencies belong to development tooling. Keep ComptoxR's hook runtime and its dependencies unchanged during extraction.
 
-Generated clients keep their R wrappers, documentation, hooks, and tests in their own repository. Before runtime extraction, the toolkit is a pinned development dependency. After runtime extraction, ComptoxR imports the toolkit's compatible runtime API. The toolkit must never depend on ComptoxR. Pin the generator release in CI and record its version, input hashes, and client policy version in a small generation manifest.
+Generated clients keep their R wrappers, documentation, hooks, and tests in their own repository. The toolkit is a pinned development dependency only. It must never depend on ComptoxR, and ComptoxR must not import it at runtime. Pin a toolkit revision in CI and record its version, input hashes, and client policy version in a small generation manifest.
 
 YAML defaults and request-template expressions are maintainer-authored code, not untrusted schema data. Do not evaluate remote examples or descriptions as R expressions. Escape external strings when emitting code/docs, parse output before writing it, and resolve hook names only in the explicitly supplied environment. Test quotes, backticks, newlines, non-syntactic parameter names, invalid paths, and cyclic references at these boundaries.
 
@@ -159,13 +160,13 @@ OpenAPI Generator already supplies an R client generator with an `httr2` library
 
 The stronger product hypothesis is **safe maintenance of an existing R API package**: keep its public function names and manual code, regenerate supported operations, check request contracts, and preserve explicit hook customizations. That hypothesis comes from the local implementation; competitive advantage has not been demonstrated by running other tools.
 
-Compare these paths during step one:
+Compare these paths during step one to record existing-tool capabilities and avoid duplicate work. This comparison does not reopen the agreed extraction scope: retain the ComptoxR compatibility adapter and deliver the neutral renderer/catalogue gate. Reuse an existing rendering component only if it meets those same contracts without weakening parity or ownership checks.
 
 | Path | Suitable use | Decision test |
 |---|---|---|
 | Use OpenAPI Generator directly | New client without an established ComptoxR-style public API. | Generate the small neutral fixture with its R/httr2 option and inspect output, tests, and customization requirements. |
 | Extract this toolkit | Existing procedural R client with local request helpers, manual functions, and configured pre/post hooks. | Preserve the frozen ComptoxR contracts and maintain the neutral client without engine edits. |
-| Extract maintenance/checking only; reuse another renderer | Existing generator output already meets client needs. | If the fixture comparison shows no benefit from our rendering, keep inventories, ownership checks, and hook validation instead of maintaining another renderer. |
+| Reuse an existing rendering component | Existing generator output meets a supported client case. | Reuse only where it meets the same neutral helper, naming, hook, ownership and catalogue acceptance contracts. Do not reduce the migration to maintenance-only tooling. |
 
 Use httr2 for HTTP construction and execution if the neutral client needs a transport helper. Its own guidance describes the request/helper structure of an R API package. Do not add retries, OAuth, connection pools, or transport classes to this extraction. See [Wrapping APIs with httr2](https://httr2.r-lib.org/articles/wrapping-apis.html).
 
@@ -206,7 +207,15 @@ Prefer a supported, unique `operationId` for neutral names. Otherwise use a dete
 
 Test-value selection should use a reviewed override, then a suitable schema example/default/enum, then a type-based fixture for the supported subset. Validate the choice against the constraints the toolkit supports. If no valid input can be constructed, report the missing fixture; do not guess a chemical identifier or emit a vacuous passing test.
 
-Normal hook configuration remains an ordered list of local function names. Preserve the existing client payload during migration. New clients receive a documented state containing input parameters and optional skip/result information; post-hooks can return a final value. Do not expose an arbitrary event bus. Authentication and pagination continue to belong to the request helper unless the client deliberately implements them in a hook.
+Normal hook configuration remains an ordered list of local function names. Preserve the existing client payload during migration. Document the state expected by generated calls: input parameters and optional skip/result information; post-hooks can return a final value. Each client owns the callback that executes these calls. Do not expose an arbitrary event bus. Authentication and pagination continue to belong to the request helper unless the client deliberately implements them in a hook.
+
+### Public and local generation boundary
+
+The public ComptoxR package uses an explicit set of approved production schemas plus an allowlist for the shipped localhost Plumber APIs. `https://episuite.dev/api` is the approved EPI production URL. A hostname suffix is not a service classification rule. The endpoint migration owns this policy; toolkit extraction first preserves the baseline contracts.
+
+Keep dev/staging schemas, addresses, generated wrappers, tests, and metadata in private local inputs and a separate local package directory outside the public checkout. Use separate local installations for the public and development clients. Do not publish a development client package or copy its output into ComptoxR. When an operation reaches production, regenerate it from the approved production schema and review the public change. Explicit user-configured URLs remain supported.
+
+After toolkit parity passes, the endpoint work adds the production-operation release check, retains shipped Plumber routes, and removes exports without a production equivalent. Include generated metadata, package contents, and the rendered site in that check. Untracked inputs alone do not prevent accidental publication.
 
 ### Second-client acceptance example: a local catalogue API
 
@@ -230,9 +239,9 @@ For each generated wrapper, compare its call to a manually written expected meth
 
 ### Delivery choice
 
-Target generalization in the first design, but deliver through ComptoxR parity first. Add the default neutral renderer and the full catalogue fixture as the additional 3-5 day milestone within steps two and four. A real second consumer can follow after that; synthetic reuse proves the boundary, not market demand or compatibility with every API.
+Target generalization in the first design, but deliver through ComptoxR parity first. Add the default neutral renderer and the full catalogue fixture as the additional 3-5 day milestone within steps two and three. A real second consumer can follow after that; synthetic reuse proves the boundary, not market demand or compatibility with every API.
 
-If the existing-generator comparison wins, the reusable maintenance/checking package is still a useful result. If preserving the old renderer requires service policy inside the common parser, keep those branches in the ComptoxR adapter and narrow the advertised subset rather than expanding the toolkit indefinitely.
+Use the existing-generator comparison to identify reusable components, not to drop the neutral renderer or catalogue gate. If preserving the old renderer requires service policy inside the common parser, keep those branches in the ComptoxR adapter and narrow the advertised subset rather than expanding the toolkit indefinitely.
 
 ## Ordered migration plan and effort
 
@@ -251,29 +260,23 @@ If the existing-generator comparison wins, the reusable maintenance/checking pac
 - Render in isolation and compare against the frozen output before applying any change. Review necessary formatting differences separately from behavior.
 - **Gate:** same supported wrapper/test contracts, stable generated names, protected files untouched, and a second generation pass produces no changes. This completes the useful developer-tool milestone in an estimated 5-8 days total.
 
-### 3. Extract the hook runtime (1-2 days)
-
-- Move configuration merge and ordered execution with explicit client lookup. Keep domain hooks and request-state builders in the client adapter/generated wrappers.
-- Retain a small ComptoxR `run_hook()` adapter to preserve call sites and error contracts. Update config loading to use the client package's installed paths.
-- Test manual/generated merge, parameter write-back, skip, post-response transformations, errors, empty chains, and two-client isolation.
-- **Gate:** installed wrappers behave the same with only the declared runtime dependency; neither client can use the other's hook functions accidentally.
-
-### 4. Prove reuse and honest test coverage (2-4 days)
+### 3. Prove reuse, hook validation, and honest test coverage (2-4 days)
 
 - Create one small non-chemical test package with a local schema, a local request helper, and pre/post hooks. No live service is needed.
 - Generate, install, and test it from a directory outside either repository. Keep its fixture small enough to inspect by hand.
 - Add the independent request expectations and successful-completion check described above. Require unsupported schema features and inconclusive diffs to be reported clearly.
+- Extract hook validation with explicit client inputs. Keep the ComptoxR runtime unchanged. Test manual/generated merge, parameter write-back, skip, post-response transformations, errors, empty chains, and two-client isolation against client-owned execution.
 - Test malformed input, deletion containment, manual file protection, interrupted generation, deterministic operation naming, and repeated schema references. Measure the large-input path with a repeated-operation fixture.
-- **Gate:** no CompTox-specific imports, strings, or branch edits are needed for the second client; intentional request and post-hook faults fail the tests.
+- **Gate:** no CompTox-specific imports, strings, or branch edits are needed for the second client; intentional request and post-hook faults fail the tests. Both installed clients run with the toolkit absent from their runtime library.
 
-### 5. Switch CI and release (2-3 days)
+### 4. Switch maintenance CI and complete migration (2-3 days)
 
-- Install a pinned toolkit release in schema maintenance and readiness jobs. Keep download secrets, schedule, report publication, and PR creation in ComptoxR workflows.
+- Install a pinned toolkit revision in schema maintenance and readiness jobs. Public toolkit publication is not required. Keep download secrets, schedule, report publication, and PR creation in ComptoxR workflows.
 - Preserve existing wrapper lifecycle protection. Replace delete-first generation with validated output application. Keep manual code and existing cassettes untouched.
 - Make generation, test freshness, and hook validation required checks for a generated update. The inspected workflows invoke generated-test checking, but no invocation of `dev/check_hook_config.R` was found in `.github/workflows/`; wire that gate explicitly.
-- Update developer docs, relevant test-path/readiness checks, and package dependencies. Remove old implementation modules only after installed-toolkit parity passes.
-- Build/check both package tarballs and run the generated client suite. Record the generator/runtime compatibility range and provide rollback by pinning the previous toolkit and generated output.
-- **Gate:** a clean checkout can produce and validate an update without local source-path fallbacks; ordinary installed clients need no development tools or credentials.
+- Update developer docs, relevant test-path/readiness checks, and development dependencies. Remove old development modules only after installed-toolkit parity passes; retain the local hook registry and execution tests.
+- Build/check both package tarballs and run the generated client suite. Record compatibility between the generator and the client-owned hook contract. Provide rollback by pinning the previous toolkit and generated output.
+- **Gate:** a clean checkout can produce and validate an update without local source-path fallbacks; ordinary installed clients need no toolkit, development tools, or credentials. Record parity before handing generator policy changes to the endpoint workstream.
 
 ## Targeted verification inventory
 
@@ -283,12 +286,12 @@ If the existing-generator comparison wins, the reusable maintenance/checking pac
 | `test-stub_generation_call_shape.R` | Split generic request/body tests from WebTEST/descriptor/resolver policy tests; preserve all current cases. |
 | `test-stub_generation_multischema.R` | Move generic deterministic naming/default tests; retain Chemi stage and committed-tree assertions locally. |
 | `test-diff_schemas_counts.R` | Preserve accounting checks and add required-parameter/unknown classification cases for the public contract. |
-| `test-hooks_stage_server.R`, `test-hooks_hazard.R`, `test-hooks_compound.R`, `test-hooks-webtest.R`, descriptor/list hook suites | Retain domain behavior in ComptoxR. Move only general runner tests. |
+| `test-hooks_stage_server.R`, `test-hooks_hazard.R`, `test-hooks_compound.R`, `test-hooks-webtest.R`, descriptor/list hook suites | Retain runtime and domain behavior tests in ComptoxR. Only generic validation tests can move. |
 | `dev/check_hook_config.R` | Keep client command; test the new validation functions and call it in generated-update CI. |
 | `dev/generate_tests.R --check` | Retain compatibility command and verify it remains read-only. Check no changes before and after. |
 | Package build paths and tarball checks | Update tests that assume `dev/endpoint_eval` or `dev/test_generation` exist; run installed-toolkit tests instead of silently skipping. |
 
-Do not re-record cassettes for this extraction. Existing mocked and synthetic tests cover the intended changes. Because generated output and runtime dependencies cross module boundaries, final package checks and the complete offline client suite are justified after focused checks pass.
+Do not re-record cassettes for this extraction. Existing mocked and synthetic tests cover the intended changes. Because generated output and development-tool loading cross module boundaries, final package checks and the complete offline client suite are justified after focused checks pass. Include an installed-client check with no toolkit available to prove the runtime boundary.
 
 ## Main risks and decisions
 
@@ -298,14 +301,14 @@ Do not re-record cassettes for this extraction. Existing mocked and synthetic te
 | Generator updates change hundreds of public wrappers | High | Pinned inputs/version; signature and request parity; no unrelated endpoint-policy changes. |
 | Cleanup removes manual or usable files before a failure | High | Render/validate before applying; owned-file list, bounded paths, protected hashes. |
 | Generated tests repeat the implementation's mistake or hide post-hook failure | High | Independent fixed expected requests plus an asserted successful result; explicit limits on test claims. |
-| Hook namespace/cache or merge semantics change | High | Per-client state, local compatibility adapter, ordered-chain and error tests. |
+| Hook namespace/cache or merge semantics change | High | Retain the local runtime; explicit validation inputs, ordered-chain and error tests. |
 | Schema parsing/diff report overstates support | High | Tested subset, explicit unsupported/unknown outcomes, no generic compatibility guarantee. |
-| Toolkit adds development dependency cost to every client load | Medium | Small runtime path; generation-only dependencies loaded only by maintenance functions. |
-| Endpoint policy work conflicts with stage-fallback hooks | Medium | Coordinate with `endpoint-audit.md`; host/environment rules remain client-owned and change separately. |
+| Toolkit adds development dependency cost to every client load | Medium | No toolkit runtime dependency; verify installed clients with no toolkit available. |
+| Endpoint policy work conflicts with stage-fallback hooks | Medium | Follow [endpoint-migration-plan.md](endpoint-migration-plan.md) after toolkit parity; host/environment rules remain client-owned. |
 | Generation differs with formatter/tool versions | Medium | Pin formatting tools or compare parsed R structure where appropriate; keep signatures/docs separately checked. |
 
-The smallest useful release is the development engine with a ComptoxR adapter. Do not add a new transport layer, full schema validator, plugin registry, template DSL, web dashboard, or multiple packages to reach that milestone. Extend supported schema behavior when a real client requires it and a fixture can define the expected result.
+The smallest useful milestone is the development engine with a ComptoxR adapter. Do not add a new transport layer, full schema validator, plugin registry, template DSL, web dashboard, or multiple toolkit packages to reach that milestone. Extend supported schema behavior when a real client requires it and a fixture can define the expected result.
 
 ## Reconnaissance validation
 
-Validated the assessment by reading the local source and tests and tracing the workflow commands. Consulted the official OpenAPI and testthat documents for the external contracts cited above. No runtime tests were run: this change adds a planning document only, and sourcing the current generator or cleanup entry points would change files. The implementation gates in this plan are proposed checks, not reported passes.
+The original assessment read the local source and tests, traced the workflow commands, and consulted the official OpenAPI and testthat documents cited above. This revision reconciles the agreed migration boundaries and retains that technical background. No runtime tests were run for this document update; no generator or cleanup entry point was executed. The implementation gates in this plan are proposed checks, not reported passes.
