@@ -2,16 +2,16 @@
 
 **Updated**: 2026-09-08
 **Branch**: `feat/production-endpoints`
-**Status**: All three workstreams implemented and locally verified; client releases and database withdrawal pending CI.
+**Status**: envharmonizer and source-only ComptoxR 2.0.0 published; endpoint release and database verification remain.
 
 ## Integration checkpoint (2026-09-08)
 
 - envharmonizer v0.1.0 remains published and independently verified. Source
   PR 20 is merged. Original user changes in both initial checkouts are preserved.
-- Source-only PR 306 targets main from `feat/migration-coordination`, current
-  commit `cf8e18f`. All package/runtime changes are verified locally. CI fixes
-  use source packages on macOS R-devel and sequential Windows database tests.
-  Watch the complete check matrix, including workflow validation failures.
+- Source-only PR 306 passed all checks and merged as `1f61423b`. Normal Release
+  run `34180852761` published ComptoxR 2.0.0 at main commit `b55949c`.
+  The downloaded package passed hash, installation, API, and shipped-builder
+  checks. SHA-256: `a7b7bae7f4462b7d6fa95b77c6f113a664e756a93ff44b2c18beb1e13b2bd589`.
 - Toolkit source commit `aae88f9`, archive SHA-256
   `a9e8ff83f1316b1e3059c63ab84e7aa01567bb7c2156259400bf791781408fe0`.
   Extraction commits `7eeea37` and `a116dee` passed 387-file generator parity
@@ -33,10 +33,10 @@
   are supported and eight unsupported operations are reported. No local client
   is published. Fifty-four public dev/staging schemas were removed after hashes
   matched their external copies.
-- Remaining order: pass PR 306 CI; merge and run normal Release with a major
-  bump; upload the exact wrapmaint archive to the resulting v2.0.0 release;
-  verify pinned download/install from a clean checkout; force the new source-only
-  database workflow; verify its downloads; withdraw only affected old database
+- The reviewed wrapmaint archive is attached to v2.0.0. Forced source-only
+  database workflow run `34181519666` is started on main after client verification.
+- Remaining order: verify pinned download/install from a clean checkout;
+  verify the new database downloads; withdraw only affected old database
   assets. Then integrate and release the endpoint/toolkit branch through normal
   checks and release workflow. Keep old database workflow `306098499` disabled.
 - No database asset has been withdrawn. See `database-assets-before.json` for
