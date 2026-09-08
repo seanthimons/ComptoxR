@@ -32,6 +32,7 @@ data-raw/
 ^pkgdown$
 ^vignettes/articles$
 ^HANDOFF[.]md$
+^wrapmaint-generalization-handoff[.]md$
 ^endpoint-migration-plan[.]md$
 ^schema-tooling-extraction-plan[.]md$
 ^lifestage-migration-plan[.]md$
