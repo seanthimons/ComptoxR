@@ -1,8 +1,49 @@
 # Handoff: delegated package migrations
 
 **Updated**: 2026-09-07
-**Branch**: `docs/schema-tooling-extraction-plan`
-**Status**: Plans reconciled; implementation not started.
+**Branch**: `feat/migration-coordination`
+**Status**: Implementation in progress in isolated worktrees; no releases or withdrawals.
+
+## Current execution (2026-09-07)
+
+- Coordinator: `.worktrees/migration-coordination`, based on `integration`
+  `8f055b8`, then fast-forwarded to plans `516dfd4`.
+- ECOTOX: `.worktrees/ecotox-source-only`, branch `feat/ecotox-source-only`.
+- Toolkit: `.worktrees/schema-toolkit`, branch `feat/schema-toolkit`.
+- Harmonizer: `../amos-harmonizer/.worktrees/feat/envharmonizer-lifestage`,
+  based on `3872716`. No destination AGENTS.md or CONTRIBUTING.md exists;
+  CONTEXT.md was read. The original modified CONTEXT.md remains unchanged.
+- Coordinator commits pushed: `aeb1a89` (publication guard, CI preparation,
+  build exclusions), `ab04f0a` (frozen baseline reports).
+- Coordinator endpoint baseline: 454 passed assertions, 36 skipped tests,
+  zero test failures/errors/warnings. See `dev/reports/migration/`.
+- Worker-reported baselines awaiting final review: ECOTOX 183 passes;
+  AMOS 134 passes; toolkit 425 passes with four warnings.
+- `dev/validate_migration_release.R` checks native/derived publication tables,
+  a forced same-release rebuild, and the database workflow. No user DB is changed.
+- Affected download inventory: `db-latest/ecotox.duckdb`, its version sidecar,
+  and `v1.5.0/ecotox.duckdb`; SHA-256 and asset IDs are recorded in
+  `dev/reports/migration/database-assets-before.json`. Nothing withdrawn.
+- Old database workflow ID `306098499` must be disabled after harmonizer
+  verification, with active old runs cancelled. New source-only workflow has
+  a separate path, `db-ecotox-source-only.yml`; retain the old disabled state.
+- Production schema acquisition is frozen locally under
+  `.migration-evidence/production`. Alerts and Hazard return 502; existing
+  production snapshots must remain until an approved replacement is available.
+  No generation policy or endpoint implementation has changed yet.
+
+## Failed approaches during execution
+
+- Fetch encountered a moved `integration-latest` tag and refused to overwrite
+  it. Branch baseline remains `8f055b8`; no tag was changed.
+- Baseline CSV export initially failed on a testthat list column. The raw RDS
+  was preserved, then summarized without rerunning tests.
+- Windows R reports four pre-existing locale startup warnings. PowerShell's
+  UTF-8 BOM also prevented one temporary report script from parsing; the
+  replacement file has no BOM.
+
+The sections below retain the original ownership and dependency rules. Their
+planning-era state descriptions do not supersede the execution record above.
 
 ## Goal and authoritative documents
 

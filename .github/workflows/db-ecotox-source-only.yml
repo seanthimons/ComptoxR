@@ -1,4 +1,4 @@
-name: Build & Upload ECOTOX Database
+name: Build & Upload Source-only ECOTOX Database
 
 on:
   release:

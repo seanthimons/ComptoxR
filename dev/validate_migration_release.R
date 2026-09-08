@@ -15,6 +15,39 @@ validate_migration_release <- function() {
   }
   sys.source('R/z_db_version.R', checks)
   stopifnot(checks$.db_rebuild_needed('same', 'same', force = TRUE)$needed)
+  workflow <- yaml::read_yaml('.github/workflows/db-ecotox-source-only.yml')
+  steps <- workflow$jobs[['build-ecotox']]$steps
+  stopifnot(identical(steps[[1]]$with$ref, 'main'))
+  names <- vapply(steps, function(step) if (is.null(step$name)) '' else step$name, character(1))
+  stopifnot('Fail after unsuccessful ECOTOX build' %in% names)
+  stopifnot(!'Create ECOTOX vocabulary drift issue' %in% names)
+  # The same rolling URL must fetch replacement bytes, even with the same source release.
+  sys.source('R/z_db_download.R', checks)
+  destination <- withr::local_tempfile()
+  writeLines('old derived database', destination)
+  downloads <- 0L
+  testthat::local_mocked_bindings(
+    req_perform = function(req, path = NULL, ...) {
+      if (!is.null(path)) {
+        downloads <<- downloads + 1L
+        writeLines('source-only database', path)
+      }
+      httr2::response(status_code = 200L)
+    },
+    resp_body_json = function(...) {
+      list(
+        tag_name = 'db-latest',
+        assets = list(list(
+          name = 'ecotox.duckdb',
+          browser_download_url = 'https://example.invalid/ecotox.duckdb',
+          size = 1L
+        ))
+      )
+    },
+    .package = 'httr2'
+  )
+  checks$.db_download_release('ecotox', destination, tag = 'db-latest')
+  stopifnot(downloads == 1L, identical(readLines(destination), 'source-only database'))
   message('Source-only publication and forced same-release rebuild checks passed.')
   invisible(TRUE)
 }

@@ -127,8 +127,7 @@ cas_map <- identity |>
 ecotox_local <- eco_results(
   casrn = cas_map$casrn,
   eco_group = "Fish",
-  endpoint = c("LC50", "EC50"),
-  lifestage_details = TRUE
+  endpoint = c("LC50", "EC50")
 ) |>
   left_join(cas_map, by = c("test_cas" = "casrn"))
 ```

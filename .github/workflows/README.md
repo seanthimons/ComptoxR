@@ -55,6 +55,20 @@ Existing stable release assets should only be replaced by rebuilding the exact
 tagged source. Changed package code requires a new versioned release or the
 rolling `package-latest` prerelease.
 
+## Source-only ECOTOX database publication
+
+`db-ecotox-source-only.yml` builds from `main` and checks that the database has
+native lifestage codes and no derived dictionary or review tables before upload.
+Use `force=true` for the first replacement even when the EPA release is unchanged.
+The downloader retrieves replacement bytes without a source-version cache check.
+
+During migration, publish and verify envharmonizer first. Then disable the old
+`db-ecotox.yml` workflow (ID `306098499`) and cancel any active old runs before
+the breaking package release and database replacement. Keep the old workflow
+disabled. Do not re-enable or rerun historical database jobs. The new workflow
+has a separate path so scheduled publication does not require re-enabling it.
+Record the disabled state, publication checksums, and asset withdrawal results.
+
 ## Main Testing Workflows
 
 ### `cran-readiness.yml`
