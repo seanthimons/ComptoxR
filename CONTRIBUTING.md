@@ -36,7 +36,8 @@ install_toolkit()
 ```
 
 The archive URL and SHA-256 are pinned in `dev/toolkit-lock.json`. The toolkit
-is not a runtime dependency. Public generation uses approved production
+is not a runtime dependency. Install Air 0.9.0 for generation; CI uses that
+version with this repository's `air.toml`. Public generation uses approved production
 schemas only. Keep other schemas and generated clients outside this checkout.
 Regenerate a promoted operation from its approved production schema.
 

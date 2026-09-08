@@ -32,5 +32,30 @@ Manual review then found `chemi_safety()` calls a route absent from production.
 That operation is removed; its original source is preserved outside the public
 checkout. The remaining manual helpers use approved production operations,
 approved Dashboard-specific paths, Natural Products, or local/configuration
-logic. Final suite, package/site scans, toolkit archive retrieval, release,
-and database withdrawal remain coordinator gates.
+logic.
+
+Final local gates after removal:
+
+- Readiness: 4,727 passes in the main lane, 66 in the state-sensitive lane;
+  zero failures, 48 declared external/database skips, four known dependency
+  build-version warnings. The readiness command completed successfully.
+- Expanded source package: 1,206 text files passed the boundary scan.
+  `R CMD check --no-manual`: Status OK, zero errors, warnings, and notes.
+  The Windows session-information helper emitted a separate Quarto invocation
+  warning after check completion; the validation process exited zero.
+- Rendered pkgdown site: 504 text files passed the boundary scan. Existing
+  NEWS heading formatting produced a pkgdown warning; normal release rebuilds
+  NEWS through the existing release workflow.
+- Final generation check: no writes or removals. The adapter copies `air.toml`
+  and CI pins Air 0.9.0. All 38 formatter-only wrapper changes preserve parsed R.
+- Separate local package: deterministic generation, containment checks, and
+  installed mocked HTTP passed without ComptoxR or wrapmaint in its library.
+  Frozen alerts supports nine operations and reports eight unsupported ones.
+- Fifty-four development/staging schema files were removed only after SHA-256
+  matched their copies outside the repository. See `local-input-hashes.csv`.
+- `removed-exports.csv` records removed names and production replacements;
+  `production-acquisition.csv` records approved acquisition URLs and raw hashes.
+
+Remote toolkit archive retrieval, clean-checkout CI, releases, and database
+withdrawal remain coordinator gates. The envharmonizer publication gate passed
+before all source-only release actions.

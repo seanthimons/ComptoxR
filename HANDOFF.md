@@ -1,8 +1,50 @@
 # Handoff: delegated package migrations
 
-**Updated**: 2026-09-07
-**Branch**: `feat/migration-coordination`
-**Status**: Experimental envharmonizer published; source-only client release pending.
+**Updated**: 2026-09-08
+**Branch**: `feat/production-endpoints`
+**Status**: All three workstreams implemented and locally verified; client releases and database withdrawal pending CI.
+
+## Integration checkpoint (2026-09-08)
+
+- envharmonizer v0.1.0 remains published and independently verified. Source
+  PR 20 is merged. Original user changes in both initial checkouts are preserved.
+- Source-only PR 306 targets main from `feat/migration-coordination`, current
+  commit `cf8e18f`. All package/runtime changes are verified locally. CI fixes
+  use source packages on macOS R-devel and sequential Windows database tests.
+  Watch the complete check matrix, including workflow validation failures.
+- Toolkit source commit `aae88f9`, archive SHA-256
+  `a9e8ff83f1316b1e3059c63ab84e7aa01567bb7c2156259400bf791781408fe0`.
+  Extraction commits `7eeea37` and `a116dee` passed 387-file generator parity
+  before endpoint policy changed. Runtime hooks remain local.
+- Endpoint commits: `0104cc6` (resolution and production regeneration),
+  `67caa04` / `a1b5536` (isolated local clients), `ab755fd` / `31af64e`
+  (public input cleanup and evidence), `229f2ab` (formatter parity), through
+  `027ee6a` (CI fixes). All are pushed. Worker database tests from `8dbd5d7`
+  are included; latest ECOTOX tests are integrated as `2b92e0a` / `1034450`.
+- Final local readiness: 4,727 main-lane assertions and 66 state-sensitive
+  assertions passed, zero failures, 48 declared skips. Four main-lane warnings
+  concern dependencies built under newer R versions. Package check: Status OK.
+  Source tarball scan: 1,206 text files; rendered site scan: 504 text files.
+  Installed runtime: 336 contract files passed with wrapmaint unavailable.
+  Final generation and generated-test freshness checks pass without changes.
+- Local inputs and original wrappers are preserved outside the public checkout
+  at `C:/Users/sxthi/Documents/ComptoxR-local-clients/migration-516dfd4`.
+  The separate installed local alerts package passed mocked HTTP; nine operations
+  are supported and eight unsupported operations are reported. No local client
+  is published. Fifty-four public dev/staging schemas were removed after hashes
+  matched their external copies.
+- Remaining order: pass PR 306 CI; merge and run normal Release with a major
+  bump; upload the exact wrapmaint archive to the resulting v2.0.0 release;
+  verify pinned download/install from a clean checkout; force the new source-only
+  database workflow; verify its downloads; withdraw only affected old database
+  assets. Then integrate and release the endpoint/toolkit branch through normal
+  checks and release workflow. Keep old database workflow `306098499` disabled.
+- No database asset has been withdrawn. See `database-assets-before.json` for
+  exact asset IDs. Do not remove a newly replaced rolling asset by name.
+
+`dev/reports/migration/endpoint-progress.md` contains final local gate details.
+The older execution record below describes the earlier lifestage checkpoint;
+its pending toolkit/endpoint statements are superseded by this section.
 
 ## Current execution (2026-09-07)
 
