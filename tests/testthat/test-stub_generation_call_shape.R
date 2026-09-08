@@ -171,7 +171,7 @@ test_that("free-form object bodies are explicitly blocked", {
 
 test_that("oneOf wrapper sends exactly one body shape through explicit body", {
   source_pipeline_files()
-  schema_path <- testthat::test_path("..", "..", "schema", "chemi-predictor_models-staging.json")
+  schema_path <- testthat::test_path("..", "..", "schema", "chemi-predictor_models-prod.json")
   spec <- openapi_to_spec(jsonlite::fromJSON(schema_path, simplifyVector = FALSE))
   spec <- spec[spec$method == "POST", , drop = FALSE]
   spec$route <- "predictor_models/predict"
@@ -406,8 +406,8 @@ test_that("real descriptor schemas render all ten generic hook wrappers", {
   schema_inputs <- list(
     list(file = "chemi-descriptors-prod.json", service = "descriptors"),
     list(file = "chemi-padel-prod.json", service = "padel"),
-    list(file = "chemi-rdkit-staging.json", service = "rdkit"),
-    list(file = "chemi-mordred-staging.json", service = "mordred"),
+    list(file = "chemi-rdkit-prod.json", service = "rdkit"),
+    list(file = "chemi-mordred-prod.json", service = "mordred"),
     list(file = "chemi-webtest-prod.json", service = "webtest")
   )
   rows <- lapply(schema_inputs, function(input) {

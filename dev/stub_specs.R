@@ -1,3 +1,11 @@
+# Explicit roots are supplied by comptox_tools(); this fallback preserves source().
+if (!exists('toolkit_root', inherits = FALSE)) {
+  toolkit_root <- here::here()
+}
+client_path <- function(...) file.path(toolkit_root, ...)
+wrapmaint::bind_tools("runner", environment())
+formals(run_generator)$pkg_dir <- quote(client_path("R"))
+formals(endpoint_coverage)$pkg_dir <- quote(client_path("R"))
 # ==============================================================================
 # Stub Specs & Endpoint Coverage (sourceable module, no side effects)
 # ==============================================================================
@@ -14,12 +22,6 @@
 # generator builds.
 
 # Load required packages
-suppressPackageStartupMessages({
-  library(jsonlite)
-  library(tidyverse)
-  library(here)
-  library(cli)
-})
 
 # ==============================================================================
 # Configuration
@@ -58,18 +60,18 @@ epi_config <- list(
 cli_alert_info("Loading endpoint evaluation utilities...")
 
 # Source the modular utilities
-utils_dir <- here::here("dev", "endpoint_eval")
+utils_dir <- client_path("dev", "endpoint_eval")
 
-source(file.path(utils_dir, "00_config.R"))
-source(file.path(utils_dir, "01_schema_resolution.R"))
-source(file.path(utils_dir, "02_path_utils.R"))
-source(file.path(utils_dir, "03_codebase_search.R"))
-source(file.path(utils_dir, "04_openapi_parser.R"))
-source(file.path(utils_dir, "05_file_scaffold.R"))
-source(file.path(utils_dir, "06_param_parsing.R"))
-source(file.path(utils_dir, "07_stub_generation.R"))
-source(file.path(utils_dir, "08_drift_detection.R"))
-source(here::here("R", "hook_registry.R"))
+sys.source(file.path(utils_dir, "00_config.R"), envir = environment())
+sys.source(file.path(utils_dir, "01_schema_resolution.R"), envir = environment())
+sys.source(file.path(utils_dir, "02_path_utils.R"), envir = environment())
+sys.source(file.path(utils_dir, "03_codebase_search.R"), envir = environment())
+sys.source(file.path(utils_dir, "04_openapi_parser.R"), envir = environment())
+sys.source(file.path(utils_dir, "05_file_scaffold.R"), envir = environment())
+sys.source(file.path(utils_dir, "06_param_parsing.R"), envir = environment())
+sys.source(file.path(utils_dir, "07_stub_generation.R"), envir = environment())
+sys.source(file.path(utils_dir, "08_drift_detection.R"), envir = environment())
+sys.source(client_path("R", "hook_registry.R"), envir = environment())
 
 # ==============================================================================
 # Generic Runner
@@ -82,8 +84,6 @@ source(here::here("R", "hook_registry.R"))
 #
 # Note: select_schema_files() lives in dev/endpoint_eval/01_schema_resolution.R
 # for shared use between generate_stubs.R and diff_schemas.R.
-
-empty_scaffold <- function() tibble(action = character(), file = character())
 
 # ==============================================================================
 # Collision-only disambiguation (issue #214)
@@ -101,117 +101,17 @@ empty_scaffold <- function() tibble(action = character(), file = character())
 #' Derive the per-row function name from a file column using the existing
 #' bulk/method-suffix convention (grouped per file). Returns a character vector
 #' aligned with the input rows.
-derive_fn_from_file <- function(df, file_col) {
-  df %>%
-    mutate(.fn_file = .data[[file_col]]) %>%
-    group_by(.fn_file) %>%
-    mutate(
-      .mc = n(),
-      .fn = case_when(
-        .mc == 1 ~ tools::file_path_sans_ext(basename(.fn_file)),
-        method == "GET" ~ tools::file_path_sans_ext(basename(.fn_file)),
-        method == "POST" ~ paste0(tools::file_path_sans_ext(basename(.fn_file)), "_bulk"),
-        .default = paste0(tools::file_path_sans_ext(basename(.fn_file)), "_", tolower(method))
-      )
-    ) %>%
-    ungroup() %>%
-    pull(.fn)
-}
 
 #' Collision-only fallback. Expects columns file_short/file_full/fn_short/fn_full.
 #' Keeps the short names where the short fn is unique; rows whose short fn
 #' collides fall back to the full file/fn. Drops all helper columns (file_short,
 #' file_full, fn_short, fn_full, and any starting with ".").
-resolve_collisions <- function(df) {
-  df %>%
-    add_count(fn_short, name = "n_short_count") %>%
-    mutate(
-      file = if_else(n_short_count > 1, file_full, file_short),
-      fn = if_else(n_short_count > 1, fn_full, fn_short)
-    ) %>%
-    select(
-      -any_of(c("file_short", "file_full", "fn_short", "fn_full", "n_short_count")),
-      -starts_with(".")
-    )
-}
 
 #' Run the shared stub-generation pipeline for one API spec.
 #' @param spec list with prefix, heading, build_endpoints(), config, and
 #'   optional post() hook.
 #' @param pkg_dir Directory containing the R source files (default R/).
 #' @return list(scaffold = <scaffold tibble>, drift = <drift tibble>)
-run_generator <- function(spec, pkg_dir = here::here("R")) {
-  cli_h2(spec$heading)
-
-  endpoints <- spec$build_endpoints()
-
-  if (is.null(endpoints) || nrow(endpoints) == 0) {
-    return(list(scaffold = empty_scaffold(), drift = tibble()))
-  }
-
-  if (!is.null(spec$prepare)) {
-    spec$prepare(endpoints)
-  }
-
-  # Find missing endpoints
-  res <- find_endpoint_usages_base(
-    endpoints$route,
-    pkg_dir = pkg_dir,
-    files_regex = sprintf("^%s_.*\\.R$", spec$prefix),
-    expected_files = endpoints$file
-  )
-
-  # Detect parameter drift for existing endpoints
-  drift <- detect_parameter_drift(
-    endpoints = endpoints,
-    usage_summary = res$summary %>% filter(n_hits > 0),
-    pkg_dir = pkg_dir
-  )
-
-  endpoints_to_build <- endpoints %>%
-    filter(!purrr::map2_lgl(file, fn, is_operation_implemented, pkg_dir = pkg_dir))
-
-  if (nrow(endpoints_to_build) == 0) {
-    if (!is.null(spec$finalize)) {
-      spec$finalize(endpoints)
-    }
-    cli_alert_success("All {spec$prefix}_* endpoints already implemented")
-    return(list(scaffold = empty_scaffold(), drift = drift))
-  }
-
-  cli_alert_info("Found {nrow(endpoints_to_build)} endpoint(s) to generate")
-
-  # Generate stubs
-  spec_with_text <- render_endpoint_stubs(endpoints_to_build, config = spec$config)
-
-  # Empty check must precede spec$post(): a zero-row render result has no
-  # columns, and post hooks (e.g. chemi's group_by(file)) error on it.
-  if (nrow(spec_with_text) == 0) {
-    if (!is.null(spec$finalize)) {
-      spec$finalize(endpoints)
-    }
-    cli_alert_warning("No {spec$prefix} stubs generated (all skipped)")
-    return(list(scaffold = empty_scaffold(), drift = drift))
-  }
-
-  # Optional per-API post-processing (e.g. chemi aggregates by file)
-  if (!is.null(spec$post)) {
-    spec_with_text <- spec$post(spec_with_text)
-  }
-
-  scaffold <- scaffold_files(
-    spec_with_text,
-    base_dir = pkg_dir,
-    overwrite = FALSE,
-    append = TRUE,
-    quiet = TRUE
-  )
-  if (!is.null(spec$finalize)) {
-    spec$finalize(endpoints)
-  }
-
-  list(scaffold = scaffold, drift = drift)
-}
 
 # ==============================================================================
 # Per-API Specs
@@ -225,7 +125,7 @@ ct_spec <- list(
   config = ct_config,
   build_endpoints = function() {
     ctx_schema_files <- list.files(
-      path = here::here('schema'),
+      path = client_path('schema'),
       pattern = "^ctx-.*-prod\\.json$",
       full.names = FALSE
     )
@@ -240,7 +140,7 @@ ct_spec <- list(
     endpoints <- map(
       ctx_schema_files,
       ~ {
-        openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+        openapi <- jsonlite::fromJSON(client_path('schema', .x), simplifyVector = FALSE)
         openapi_to_spec(openapi)
       },
       .progress = FALSE
@@ -293,137 +193,13 @@ ct_spec <- list(
   }
 )
 
-chemi_stage_priority <- c("public", "staging", "development")
-
-chemi_schema_stage <- function(source_file) {
-  stage <- stringr::str_match(source_file, "-(prod|staging|dev)\\.json$")[, 2]
-  dplyr::recode(stage, prod = "public", dev = "development", .missing = "public")
-}
-
-normalize_chemi_operation_route <- function(route) {
-  route %>%
-    stringr::str_replace_all("/{2,}", "/") %>%
-    stringr::str_remove("^/+") %>%
-    stringr::str_remove("/+$") %>%
-    stringr::str_replace_all("\\{[^}]+\\}", "{}")
-}
-
-chemi_contract_value <- function(row, name, default = NULL) {
-  value <- row[[name]]
-  if (is.null(value)) {
-    return(default)
-  }
-  if (is.list(value) && length(value) == 1L) {
-    return(value[[1]])
-  }
-  value
-}
-
-normalize_chemi_parameter_metadata <- function(metadata) {
-  purrr::map(metadata, function(parameter) {
-    parameter$type <- NULL
-    parameter
-  })
-}
-
-normalize_chemi_content_type <- function(content_type) {
-  content_type <- content_type %||% ""
-  if (!nzchar(trimws(content_type))) "application/json" else content_type
-}
-
-canonical_chemi_request_contract <- function(row) {
-  contract <- list(
-    route = chemi_contract_value(row, "route", ""),
-    method = chemi_contract_value(row, "method", ""),
-    parameters = list(
-      path = chemi_contract_value(row, "path_params", ""),
-      query = chemi_contract_value(row, "query_params", ""),
-      body = chemi_contract_value(row, "body_params", ""),
-      path_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "path_param_metadata", list())
-      ),
-      query_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "query_param_metadata", list())
-      ),
-      body_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "body_param_metadata", list())
-      )
-    ),
-    request_body = list(
-      type = chemi_contract_value(row, "body_schema_type", "unknown"),
-      schema = chemi_contract_value(row, "body_schema_full", list()),
-      item_type = chemi_contract_value(row, "body_item_type", NA_character_)
-    ),
-    content_type = normalize_chemi_content_type(
-      chemi_contract_value(row, "content_type", "")
-    ),
-    request_type = chemi_contract_value(row, "request_type", ""),
-    pagination = chemi_contract_value(row, "pagination_metadata", list())
-  )
-  jsonlite::toJSON(contract, auto_unbox = TRUE, null = "null", na = "null")
-}
-
-collapse_chemi_stage_contracts <- function(endpoints) {
-  if (nrow(endpoints) == 0L) {
-    return(endpoints)
-  }
-
-  endpoints$schema_stage <- vapply(
-    endpoints$source_file,
-    chemi_schema_stage,
-    character(1)
-  )
-  endpoints$operation_route <- normalize_chemi_operation_route(endpoints$route)
-  endpoints$operation_key <- paste(
-    endpoints$service_slug,
-    endpoints$operation_route,
-    endpoints$method,
-    sep = "\034"
-  )
-  endpoints$contract_key <- vapply(
-    seq_len(nrow(endpoints)),
-    function(i) canonical_chemi_request_contract(endpoints[i, , drop = FALSE]),
-    character(1)
-  )
-
-  collapsed <- lapply(split(seq_len(nrow(endpoints)), endpoints$operation_key), function(indices) {
-    operation <- endpoints[indices, , drop = FALSE]
-    contracts <- split(seq_len(nrow(operation)), operation$contract_key)
-    variants <- lapply(contracts, function(contract_indices) {
-      rows <- operation[contract_indices, , drop = FALSE]
-      ranks <- match(rows$schema_stage, chemi_stage_priority)
-      representative <- rows[order(ranks, rows$source_file)[1], , drop = FALSE]
-      supported <- chemi_stage_priority[chemi_stage_priority %in% rows$schema_stage]
-      representative$supported_schema_stages <- list(supported)
-      representative$preferred_fallback_stage <- supported[[1]]
-      representative
-    }) %>%
-      dplyr::bind_rows()
-
-    ranks <- match(variants$schema_stage, chemi_stage_priority)
-    variants <- variants[order(ranks, variants$contract_key), , drop = FALSE]
-    variants$variant_suffix <- c(
-      "",
-      if (nrow(variants) > 1L) paste0("_", variants$schema_stage[-1L]) else character()
-    )
-    variants
-  }) %>%
-    dplyr::bind_rows()
-
-  collapsed %>%
-    arrange(
-      service_slug,
-      operation_route,
-      factor(method, levels = c("GET", "POST")),
-      match(schema_stage, chemi_stage_priority)
-    )
-}
-
-append_chemi_variant_suffix <- function(path, suffix) {
-  if (!nzchar(suffix)) {
-    return(path)
-  }
-  paste0(tools::file_path_sans_ext(path), suffix, ".R")
+prepare_chemi_operations <- function(endpoints) {
+  endpoints %>%
+    mutate(
+      schema_stage = 'public',
+      operation_key = paste(service_slug, route, method, sep = '\034')
+    ) %>%
+    distinct(operation_key, .keep_all = TRUE)
 }
 
 name_chemi_endpoints <- function(endpoints) {
@@ -474,50 +250,18 @@ name_chemi_endpoints <- function(endpoints) {
   endpoints %>%
     left_join(naming, by = "operation_key") %>%
     mutate(
-      file = purrr::map2_chr(file, variant_suffix, append_chemi_variant_suffix),
-      fn = paste0(fn, variant_suffix),
       route = strip_curly_params(route, leading_slash = "remove") %>% str_remove_all("^api/")
-    ) %>%
-    select(-contract_key, -operation_route, -variant_suffix)
+    )
 }
 
 write_generated_hook_config <- function(
   endpoints,
-  path = here::here("inst", "hook_config_generated.yml"),
+  path = client_path('inst', 'hook_config_generated.yml'),
   implemented_only = FALSE
 ) {
-  generated <- endpoints %>%
-    filter(purrr::map_lgl(file, function(file) {
-      source_path <- here::here("R", file)
-      !file.exists(source_path) || !has_protected_lifecycle(source_path)
-    }))
-
-  if (implemented_only) {
-    generated <- generated %>%
-      filter(purrr::map2_lgl(
-        file,
-        fn,
-        ~ is_operation_implemented(.x, .y, here::here("R"))
-      ))
-  }
-
-  generated <- generated %>%
-    arrange(fn)
-
-  config <- stats::setNames(
-    lapply(seq_len(nrow(generated)), function(i) {
-      supported <- generated$supported_schema_stages[[i]]
-      list(
-        supported_schema_stages = as.list(supported),
-        preferred_fallback_stage = generated$preferred_fallback_stage[[i]],
-        pre_request = list("enforce_stage_server")
-      )
-    }),
-    generated$fn
-  )
-
-  yaml::write_yaml(config, path)
-  invisible(config)
+  # No public operation changes its configured host through generated metadata.
+  yaml::write_yaml(list(), path)
+  invisible(list())
 }
 
 chemi_spec <- list(
@@ -526,8 +270,8 @@ chemi_spec <- list(
   config = chemi_config,
   build_endpoints = function() {
     chemi_schema_files <- sort(list.files(
-      path = here::here("schema"),
-      pattern = "^chemi-.*-(prod|staging|dev)\\.json$",
+      path = client_path("schema"),
+      pattern = "^chemi-.*-prod\\.json$",
       full.names = FALSE
     ))
     chemi_schema_files <- chemi_schema_files[!grepl("ui", chemi_schema_files, ignore.case = TRUE)]
@@ -546,11 +290,11 @@ chemi_spec <- list(
         ep <- map(
           chemi_schema_files,
           ~ {
-            openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+            openapi <- jsonlite::fromJSON(client_path('schema', .x), simplifyVector = FALSE)
             spec <- openapi_to_spec(openapi)
             spec$source_file <- .x
             spec$service_slug <- sub(
-              "^chemi-(.*)-(prod|staging|dev)\\.json$",
+              "^chemi-(.*)-prod\\.json$",
               "\\1",
               .x
             )
@@ -565,7 +309,7 @@ chemi_spec <- list(
           ) %>%
           mutate(batch_limit = 0)
 
-        ep %>% collapse_chemi_stage_contracts() %>% name_chemi_endpoints()
+        ep %>% prepare_chemi_operations() %>% name_chemi_endpoints()
       },
       error = function(e) {
         cli_alert_warning("Error parsing chemi schemas: {e$message}")
@@ -607,9 +351,9 @@ epi_spec <- list(
   config = epi_config,
   build_endpoints = function() {
     epi_schema_files <- select_schema_files(
-      pattern = "^epi-.*\\.json$",
+      pattern = "^epi-.*-prod\\.json$",
       exclude_pattern = NULL,
-      stage_priority = c("prod", "staging", "dev")
+      stage_priority = "prod"
     )
 
     if (length(epi_schema_files) == 0) {
@@ -630,7 +374,7 @@ epi_spec <- list(
         ep <- map(
           epi_schema_files,
           ~ {
-            openapi <- jsonlite::fromJSON(here::here('schema', .x), simplifyVector = FALSE)
+            openapi <- jsonlite::fromJSON(client_path('schema', .x), simplifyVector = FALSE)
             spec <- openapi_to_spec(openapi)
             spec$source_file <- .x
             spec
@@ -707,30 +451,9 @@ api_specs <- list(ct = ct_spec, chemi = chemi_spec, epi = epi_spec)
 #' @param fn Expected function name (e.g. "ct_chemical_detail_search" or "..._bulk")
 #' @param pkg_dir Directory containing the R source files
 #' @return Logical scalar
-is_operation_implemented <- function(file, fn, pkg_dir) {
-  path <- file.path(pkg_dir, file)
-  if (!file.exists(path)) {
-    return(FALSE)
-  }
-  lines <- tryCatch(readLines(path, warn = FALSE), error = function(e) character())
-  pattern <- sprintf("^\\s*%s\\s*(<-|=)\\s*function\\b", gsub("\\.", "\\\\.", fn))
-  any(grepl(pattern, lines))
-}
 
 #' Operation-level coverage for one API spec.
 #'
 #' @param spec One of ct_spec / chemi_spec.
 #' @param pkg_dir Directory containing the R source files (default R/).
 #' @return list(total = <int>, covered = <int>)
-endpoint_coverage <- function(spec, pkg_dir = here::here("R")) {
-  eps <- spec$build_endpoints()
-  if (is.null(eps) || nrow(eps) == 0) {
-    return(list(total = 0L, covered = 0L))
-  }
-  covered <- sum(vapply(
-    seq_len(nrow(eps)),
-    function(i) is_operation_implemented(eps$file[i], eps$fn[i], pkg_dir),
-    logical(1)
-  ))
-  list(total = nrow(eps), covered = as.integer(covered))
-}

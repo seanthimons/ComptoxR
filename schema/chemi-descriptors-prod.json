@@ -35,12 +35,6 @@
       },
       "DescriptorsRequest": {
         "properties": {
-          "chemicals": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
           "chemIdType": {
             "enum": [
               "DTXSID",
@@ -55,6 +49,12 @@
               "AnyId"
             ],
             "type": "string"
+          },
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "format": {
             "enum": [

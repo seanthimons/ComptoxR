@@ -2,6 +2,18 @@
 # This function generates diagnostic reports
 
 local_sitrep_env <- function() {
+  testthat::local_mocked_bindings(
+    req_perform = function(req, ...) {
+      httr2::response(
+        status_code = 200L,
+        headers = list(`Content-Type` = 'application/json'),
+        body = charToRaw('[{"is_available":true}]')
+      )
+    },
+    req_perform_parallel = function(reqs, ...) lapply(reqs, function(req) httr2::response(status_code = 200L)),
+    .package = "httr2",
+    .env = parent.frame()
+  )
   withr::local_envvar(
     c(
       ctx_burl = "",
@@ -112,15 +124,15 @@ test_that("package_sitrep returns ping results", {
   })
 })
 
-test_that("package_sitrep marks unconfigured servers as SKIPPED", {
+test_that("package_sitrep uses production defaults when settings are empty", {
   withr::with_tempdir({
     local_sitrep_env()
     result <- ComptoxR_package_sitrep()
 
-    # With all *_burl unset, no network is hit; pings report SKIPPED.
+    # Mocked production endpoints return successful responses.
     statuses <- vapply(result$ping_results, function(x) x$status, character(1))
-    expect_true(all(statuses == "SKIPPED"))
-    expect_true(all(is.na(vapply(
+    expect_true(all(statuses == "OK"))
+    expect_true(all(is.finite(vapply(
       result$ping_results,
       function(x) x$latency,
       numeric(1)

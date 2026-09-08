@@ -531,14 +531,14 @@ sample_test_dtxsids <- function(n = 3, custom_list = NULL) {
 
   chems <- tryCatch(
     {
-      if (
-        requireNamespace("ComptoxR", quietly = TRUE) &&
-          exists("testing_chemicals", envir = asNamespace("ComptoxR"))
-      ) {
-        get("testing_chemicals", envir = asNamespace("ComptoxR"))
-      } else if (file.exists("data/testing_chemicals.rda")) {
+      fixture <- if (exists('client_path', mode = 'function')) {
+        client_path('data/testing_chemicals.rda')
+      } else {
+        'data/testing_chemicals.rda'
+      }
+      if (file.exists(fixture)) {
         e <- new.env()
-        load("data/testing_chemicals.rda", envir = e)
+        load(fixture, envir = e)
         e$testing_chemicals
       } else {
         NULL

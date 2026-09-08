@@ -14,20 +14,6 @@
 #' chemi_chet_reaction_batchsearch(dtxsids = "DTXSID1024122")
 #' }
 chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_chet_reaction_batchsearch", "pre_request", list(params = list(`dtxsids` = dtxsids, `search_level` = search_level, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("dtxsids" %in% names(req_data$params)) {
-    dtxsids <- req_data$params[["dtxsids"]]
-  }
-  if ("search_level" %in% names(req_data$params)) {
-    search_level <- req_data$params[["search_level"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   # Build options list for additional parameters
   options <- list()
   options$search_level <- search_level
@@ -35,8 +21,7 @@ chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
     query = dtxsids,
     endpoint = "reaction/batchsearch",
     options = options,
-    tidy = FALSE,
-    server = server
+    tidy = FALSE
   )
 
   # Additional post-processing can be added here

@@ -22,8 +22,8 @@ test_that(".eco_get_con() aborts when DB missing", {
     old_con <- .ComptoxREnv$ecotox_db
     old_burl <- Sys.getenv("eco_burl")
     .ComptoxREnv$ecotox_db <- NULL
-    # Set eco_burl to non-duckdb value so it falls through to eco_path()
-    Sys.setenv("eco_burl" = "http://example.com")
+    # Clear the endpoint so the path option supplies the target.
+    Sys.unsetenv("eco_burl")
     on.exit(
       {
         .ComptoxREnv$ecotox_db <- old_con
@@ -70,12 +70,12 @@ test_that("eco_server(2) sets localhost URL", {
   expect_true(grepl("127\\.0\\.0\\.1", Sys.getenv("eco_burl")))
 })
 
-test_that("eco_server() with invalid option resets", {
+test_that("eco_server() rejects invalid modes without changing settings", {
   old_burl <- Sys.getenv("eco_burl")
   on.exit(Sys.setenv("eco_burl" = old_burl), add = TRUE)
 
-  suppressMessages(eco_server(99))
-  expect_equal(Sys.getenv("eco_burl"), "")
+  expect_error(eco_server(99), "not supported")
+  expect_equal(Sys.getenv("eco_burl"), old_burl)
 })
 
 test_that("eco_server() with invalid string path aborts", {

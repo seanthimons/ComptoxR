@@ -285,60 +285,6 @@
         "summary": "View error page (POST)"
       }
     },
-    "/auth/errorpage/{showhide}": {
-      "get": {
-        "operationId": "api.auth.errorpage_showhide_get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "showhide",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Error page response"
-          }
-        },
-        "summary": "View error page with filter (GET)"
-      },
-      "post": {
-        "operationId": "api.auth.errorpage_showhide_post",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "showhide",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Error page response"
-          }
-        },
-        "summary": "View error page with filter (POST)"
-      }
-    },
     "/auth/errorpage/complete/{idnum}": {
       "get": {
         "operationId": "api.auth.errorpage_complete_get",
@@ -391,6 +337,60 @@
           }
         },
         "summary": "Complete error report (POST)"
+      }
+    },
+    "/auth/errorpage/{showhide}": {
+      "get": {
+        "operationId": "api.auth.errorpage_showhide_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "showhide",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Error page response"
+          }
+        },
+        "summary": "View error page with filter (GET)"
+      },
+      "post": {
+        "operationId": "api.auth.errorpage_showhide_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "showhide",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Error page response"
+          }
+        },
+        "summary": "View error page with filter (POST)"
       }
     },
     "/auth/login": {
@@ -611,122 +611,6 @@
           }
         },
         "summary": "Run test page (POST)"
-      }
-    },
-    "/chemicals/{chemical_id}/image": {
-      "get": {
-        "operationId": "api.chemicals.image",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "chemical_id",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "width",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "height",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "format",
-            "required": false,
-            "schema": {
-              "default": "png",
-              "enum": [
-                "png",
-                "svg",
-                "pdf"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              },
-              "image/png": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              },
-              "image/svg+xml": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": "Rendered chemical image"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Bad render request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Chemical or renderable structure not found"
-          },
-          "503": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Renderer unavailable"
-          }
-        },
-        "summary": "Render a chemical structure image"
       }
     },
     "/chemicals/alias": {
@@ -1378,6 +1262,122 @@
         "summary": "Verify a DTXSID against DSSTOX"
       }
     },
+    "/chemicals/{chemical_id}/image": {
+      "get": {
+        "operationId": "api.chemicals.image",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chemical_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "png",
+              "enum": [
+                "png",
+                "svg",
+                "pdf"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Rendered chemical image"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad render request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Chemical or renderable structure not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Renderer unavailable"
+          }
+        },
+        "summary": "Render a chemical structure image"
+      }
+    },
     "/curators/change-password": {
       "post": {
         "operationId": "api.curators.update_password",
@@ -1577,6 +1577,46 @@
         "summary": "Create a reaction library from curator mode"
       }
     },
+    "/curators/libraries/detail-options": {
+      "get": {
+        "operationId": "api.curators.library_detail_options",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lib_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Detail option list"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator login required"
+          }
+        },
+        "summary": "List deduplicated detail definitions available to curator library editor"
+      }
+    },
     "/curators/libraries/{lib_id}": {
       "get": {
         "operationId": "api.curators.library_editor_payload",
@@ -1708,46 +1748,6 @@
           }
         },
         "summary": "Update one library and its detail definitions"
-      }
-    },
-    "/curators/libraries/detail-options": {
-      "get": {
-        "operationId": "api.curators.library_detail_options",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "lib_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Detail option list"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Curator login required"
-          }
-        },
-        "summary": "List deduplicated detail definitions available to curator library editor"
       }
     },
     "/curators/login": {
@@ -2077,27 +2077,6 @@
         "summary": "Search reactions"
       }
     },
-    "/reaction/database_old": {
-      "get": {
-        "operationId": "api.legacy.reaction.database_old",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "type": "object"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "Reaction list"
-          }
-        },
-        "summary": "List all reactions (legacy)"
-      }
-    },
     "/reaction/database-old/{pagenum}/{searchterm}": {
       "get": {
         "operationId": "api.legacy.reaction.database_old_search",
@@ -2160,6 +2139,27 @@
           }
         },
         "summary": "Reaction stats and filters"
+      }
+    },
+    "/reaction/database_old": {
+      "get": {
+        "operationId": "api.legacy.reaction.database_old",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Reaction list"
+          }
+        },
+        "summary": "List all reactions (legacy)"
       }
     },
     "/reaction/dbcounts": {
@@ -2230,103 +2230,6 @@
           }
         },
         "summary": "Download DB backup"
-      }
-    },
-    "/reaction/editor/{reaction_id}": {
-      "get": {
-        "operationId": "api.reaction.reaction_editor",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "reaction_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "lib_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Curator reaction editor payload"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Login required"
-          }
-        },
-        "summary": "Fetch curator reaction editor payload"
-      },
-      "post": {
-        "operationId": "api.reaction.reaction_editor_save",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "reaction_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "additionalProperties": true,
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Saved curator reaction editor payload"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Login required"
-          }
-        },
-        "summary": "Save curator reaction editor changes"
       }
     },
     "/reaction/editor/check-existing": {
@@ -2572,6 +2475,103 @@
           }
         },
         "summary": "Save a full ChemReg reaction scheme map to CheT"
+      }
+    },
+    "/reaction/editor/{reaction_id}": {
+      "get": {
+        "operationId": "api.reaction.reaction_editor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reaction_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lib_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Curator reaction editor payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Fetch curator reaction editor payload"
+      },
+      "post": {
+        "operationId": "api.reaction.reaction_editor_save",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reaction_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Saved curator reaction editor payload"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Login required"
+          }
+        },
+        "summary": "Save curator reaction editor changes"
       }
     },
     "/reaction/libraries": {

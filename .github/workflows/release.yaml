@@ -121,6 +121,20 @@ jobs:
           R CMD build .
           test -f "${PACKAGE}_${VERSION}.tar.gz"
 
+      - name: Check public source and package boundary
+        env:
+          PACKAGE: ${{ steps.metadata.outputs.package }}
+          VERSION: ${{ steps.metadata.outputs.version }}
+        shell: Rscript {0}
+        run: |
+          source('dev/check_public_api.R')
+          check_public_api('.', membership = FALSE)
+          expanded <- tempfile('release-source-')
+          dir.create(expanded)
+          archive <- paste0(Sys.getenv('PACKAGE'), '_', Sys.getenv('VERSION'), '.tar.gz')
+          utils::untar(archive, exdir = expanded)
+          check_public_api(file.path(expanded, Sys.getenv('PACKAGE')), membership = FALSE)
+
       - name: Push commits and tag
         env:
           VERSION: ${{ steps.metadata.outputs.version }}

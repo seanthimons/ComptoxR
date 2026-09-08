@@ -54,10 +54,6 @@ temp.R
 
 *.xlsx
 *.csv
-!inst/extdata/ecotox/lifestage_patch_seed.csv
-!dev/lifestage/source/*.csv
-!dev/lifestage/provenance/*.csv
-!dev/lifestage/curation/*.csv
 *.duckdb
 
 /roadmap/

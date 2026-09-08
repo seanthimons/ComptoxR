@@ -10,12 +10,11 @@ ct_schema(timeout = 30)
 \item{timeout}{Maximum time (in seconds) to wait for each download. Default: 30.}
 }
 \value{
-Invisibly sets the server to production and returns \code{NULL}.
+Invisibly returns \code{NULL} without changing endpoint settings.
 }
 \description{
 This function downloads the JSON schemas for the various ComptoxAI API
-endpoints (chemical, hazard, bioactivity, exposure) and for each server
-environment (production, staging, development). The schemas are saved in the
+endpoints (chemical, hazard, bioactivity, exposure) from production. The schemas are saved in the
 'schema' directory of the project.
 }
 \examples{

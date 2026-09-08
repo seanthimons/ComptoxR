@@ -17,9 +17,28 @@
 #' \dontrun{
 #' chemi_descriptors(smiles = "DTXSID7020182")
 #' }
-chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", timeout = NULL, output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_descriptors", "pre_request", list(params = list(`smiles` = smiles, `type` = type, `headers` = headers, `format` = format, `timeout` = timeout, `output` = output, `server` = server)))
+chemi_descriptors <- function(
+  smiles,
+  type,
+  headers = FALSE,
+  format = "JSON",
+  timeout = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_descriptors",
+    "pre_request",
+    list(
+      params = list(
+        `smiles` = smiles,
+        `type` = type,
+        `headers` = headers,
+        `format` = format,
+        `timeout` = timeout,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -62,9 +81,30 @@ chemi_descriptors <- function(smiles, type, headers = FALSE, format = "JSON", ti
 #' \dontrun{
 #' chemi_descriptors_bulk(query = "DTXSID1024122")
 #' }
-chemi_descriptors_bulk <- function(query, type, chemIdType = "AnyId", headers = FALSE, format = "JSON", timeout = NULL, output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_descriptors_bulk", "pre_request", list(params = list(`query` = query, `type` = type, `chemIdType` = chemIdType, `headers` = headers, `format` = format, `timeout` = timeout, `output` = output, `server` = server)))
+chemi_descriptors_bulk <- function(
+  query,
+  type,
+  chemIdType = "AnyId",
+  headers = FALSE,
+  format = "JSON",
+  timeout = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_descriptors_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `query` = query,
+        `type` = type,
+        `chemIdType` = chemIdType,
+        `headers` = headers,
+        `format` = format,
+        `timeout` = timeout,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

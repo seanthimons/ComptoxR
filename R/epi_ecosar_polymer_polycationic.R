@@ -25,5 +25,3 @@ epi_ecosar_polymer_polycationic <- function() {
 
   return(result)
 }
-
-

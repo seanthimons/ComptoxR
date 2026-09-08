@@ -2,20 +2,24 @@
 % Please edit documentation in R/zzz.R
 \name{epi_server}
 \alias{epi_server}
-\title{Set API endpoints for EPI Suite API endpoints}
+\title{Set the EPI Suite endpoint}
 \usage{
 epi_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target.}
+\item{server}{Use 1 for production, or supply an explicit HTTP(S) URL.
+NULL clears the environment setting and restores option/default resolution.}
 
-\item{url_only}{If \code{TRUE}, return the selected URL without changing
-\code{epi_burl}.}
+\item{url_only}{Return the selected target without changing settings or connections.}
 }
 \value{
-The selected URL when \code{url_only = TRUE}; otherwise the configured
-\code{epi_burl}.
+The selected target for \code{url_only = TRUE}; otherwise the effective target.
 }
 \description{
-Set API endpoints for EPI Suite API endpoints
+Set the EPI Suite endpoint
+}
+\details{
+The option \code{ComptoxR.epi_burl} takes precedence over the lowercase
+environment variable \code{epi_burl}. An unset option and empty environment variable
+use the package default. Removed development modes give a configuration error.
 }

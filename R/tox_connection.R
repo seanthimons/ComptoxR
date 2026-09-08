@@ -33,18 +33,14 @@ toxval_path <- function() {
     return(con)
   }
 
-  # Use cached connection if valid
-  cached <- .ComptoxREnv$toxval_db
-  if (!is.null(cached) && inherits(cached, "DBIConnection") && DBI::dbIsValid(cached)) {
-    return(cached)
+  path <- .endpoint_target('toxval_burl')
+  .sync_database_target('toxval_burl', path)
+  if (grepl('^https?://', path, ignore.case = TRUE)) {
+    cli::cli_abort('The selected target is an HTTP endpoint, not a database path.')
   }
-
-  # Resolve path: if toxval_burl ends in .duckdb use that, else use toxval_path()
-  toxval_burl <- Sys.getenv("toxval_burl")
-  if (nzchar(toxval_burl) && grepl("\\.duckdb$", toxval_burl)) {
-    path <- toxval_burl
-  } else {
-    path <- toxval_path()
+  cached <- .ComptoxREnv$toxval_db
+  if (!is.null(cached) && inherits(cached, 'DBIConnection') && DBI::dbIsValid(cached)) {
+    return(cached)
   }
 
   if (!file.exists(path)) {

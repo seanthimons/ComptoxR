@@ -17,9 +17,16 @@
 #' chemi_webtest_predict(smiles = "DTXSID7020182")
 #' }
 chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  if (missing(endpoint)) endpoint <- NULL
-  req_data <- run_hook("chemi_webtest_predict", "pre_request", list(params = list(`smiles` = smiles, `endpoint` = endpoint, `method` = method, `format` = format, `output` = output, `server` = server)))
+  if (missing(endpoint)) {
+    endpoint <- NULL
+  }
+  req_data <- run_hook(
+    "chemi_webtest_predict",
+    "pre_request",
+    list(
+      params = list(`smiles` = smiles, `endpoint` = endpoint, `method` = method, `format` = format, `output` = output)
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -59,10 +66,29 @@ chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format
 #' \dontrun{
 #' chemi_webtest_predict_bulk(endpoints = "DTXSID1024122")
 #' }
-chemi_webtest_predict_bulk <- function(structures, endpoints, methods = NULL, format = "JSON", output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  if (missing(endpoints)) endpoints <- NULL
-  req_data <- run_hook("chemi_webtest_predict_bulk", "pre_request", list(params = list(`structures` = structures, `endpoints` = endpoints, `methods` = methods, `format` = format, `output` = output, `server` = server)))
+chemi_webtest_predict_bulk <- function(
+  structures,
+  endpoints,
+  methods = NULL,
+  format = "JSON",
+  output = c("wide", "raw")
+) {
+  if (missing(endpoints)) {
+    endpoints <- NULL
+  }
+  req_data <- run_hook(
+    "chemi_webtest_predict_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `structures` = structures,
+        `endpoints` = endpoints,
+        `methods` = methods,
+        `format` = format,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

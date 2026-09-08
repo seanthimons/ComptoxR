@@ -20,8 +20,11 @@
 #' }
 chemi_stdizer_chemicals <- function(query, idType = "AnyId", full = NULL, options = NULL) {
   chemicals <- NULL
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_stdizer_chemicals", "pre_request", list(params = list(`query` = query, `idType` = idType, `full` = full, `options` = options, `chemicals` = chemicals, `server` = server)))
+  req_data <- run_hook(
+    "chemi_stdizer_chemicals",
+    "pre_request",
+    list(params = list(`query` = query, `idType` = idType, `full` = full, `options` = options, `chemicals` = chemicals))
+  )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -40,22 +43,22 @@ chemi_stdizer_chemicals <- function(query, idType = "AnyId", full = NULL, option
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(full)) extra_options$full <- full
-  if (!is.null(options)) extra_options$options <- options
+  if (!is.null(full)) {
+    extra_options$full <- full
+  }
+  if (!is.null(options)) {
+    extra_options$options <- options
+  }
 
   result <- generic_chemi_request(
     query = query,
     endpoint = "stdizer/chemicals",
     options = extra_options,
     tidy = FALSE,
-    chemicals = chemicals,
-    server = server
+    chemicals = chemicals
   )
 
   # Additional post-processing can be added here

@@ -22,15 +22,17 @@ epi_search <- function(query, limit = 20) {
     auth = FALSE,
     tidy = FALSE,
     query_params = list(
-    `query` = query,
-    `limit` = limit
+      `query` = query,
+      `limit` = limit
     )
   )
 
-    result <- run_hook("epi_search", "post_response", list(result = result, params = list(`query` = query, `limit` = limit)))
-# Additional post-processing can be added here
+  result <- run_hook(
+    "epi_search",
+    "post_response",
+    list(result = result, params = list(`query` = query, `limit` = limit))
+  )
+  # Additional post-processing can be added here
 
   return(result)
 }
-
-

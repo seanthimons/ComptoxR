@@ -5,26 +5,17 @@
 
 #' Determine ToxValDB routing mode
 #'
-#' Checks `toxval_burl` env var and returns the access mode.
+#' Resolves option, environment, and default settings and returns the access mode.
 #' @return `"duckdb"` or `"plumber"`.
 #' @keywords internal
+
 .tox_route <- function() {
-  burl <- Sys.getenv("toxval_burl")
-
-  if (nzchar(burl) && grepl("\\.duckdb$", burl)) {
-    return("duckdb")
+  target <- .endpoint_target('toxval_burl')
+  .sync_database_target('toxval_burl', target)
+  if (identical(target, 'https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL')) {
+    cli::cli_abort('The public browser site is not a REST API. Select a local database or configure your Plumber URL.')
   }
-
-  if (nzchar(burl) && grepl("^https?://(127\\.0\\.0\\.1|localhost)", burl)) {
-    return("plumber")
-  }
-
-  cli::cli_abort(c(
-    "ToxValDB has no public REST API.",
-    "i" = "Use {.code toxval_server()(1)} for local DuckDB access.",
-    "i" = "Use {.code toxval_server()(2)} for a self-hosted Plumber instance.",
-    "i" = "Run {.code toxval_install()} to set up the local database."
-  ))
+  if (grepl('^https?://', target, ignore.case = TRUE)) 'plumber' else 'duckdb'
 }
 
 #' Default columns returned by toxval_results()
@@ -104,7 +95,7 @@ toxval_tables <- function(con = NULL) {
     con <- .tox_get_con(con)
     DBI::dbListTables(con)
   } else {
-    burl <- Sys.getenv("toxval_burl")
+    burl <- .endpoint_target("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("tables") |>
       httr2::req_perform()
@@ -135,7 +126,7 @@ toxval_fields <- function(table_name, con = NULL) {
     con <- .tox_get_con(con)
     DBI::dbListFields(con, table_name)
   } else {
-    burl <- Sys.getenv("toxval_burl")
+    burl <- .endpoint_target("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("fields", table_name) |>
       httr2::req_perform()
@@ -163,7 +154,7 @@ toxval_health <- function(con = NULL) {
 
   if (route == "duckdb") {
     con <- .tox_get_con(con)
-    db_path <- Sys.getenv("toxval_burl")
+    db_path <- .endpoint_target("toxval_burl")
 
     meta <- tryCatch(
       {
@@ -180,7 +171,7 @@ toxval_health <- function(con = NULL) {
       db_size_mb = round(file.size(db_path) / (1024 * 1024), 2)
     )
   } else {
-    burl <- Sys.getenv("toxval_burl")
+    burl <- .endpoint_target("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("health-check") |>
       httr2::req_perform()
@@ -209,7 +200,7 @@ toxval_sources <- function(con = NULL) {
     result <- DBI::dbGetQuery(con, "SELECT DISTINCT source FROM toxval ORDER BY source")
     result$source
   } else {
-    burl <- Sys.getenv("toxval_burl")
+    burl <- .endpoint_target("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("sources") |>
       httr2::req_perform()
@@ -243,7 +234,7 @@ toxval_search <- function(dtxsid, limit = 1e5L, con = NULL) {
   route <- .tox_route()
 
   if (route == "plumber") {
-    burl <- Sys.getenv("toxval_burl")
+    burl <- .endpoint_target("toxval_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("search") |>
       httr2::req_body_json(list(dtxsid = dtxsid, limit = as.integer(limit))) |>
@@ -416,7 +407,7 @@ toxval_results <- function(
 #' @keywords internal
 #' @noRd
 .tox_results_plumber <- function(dtxsid, casrn, source, toxval_type, species, qc_status, cols) {
-  burl <- Sys.getenv("toxval_burl")
+  burl <- .endpoint_target("toxval_burl")
 
   body <- list(
     dtxsid = dtxsid,

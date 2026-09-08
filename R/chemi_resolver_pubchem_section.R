@@ -15,33 +15,22 @@
 #' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
 chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_resolver_pubchem_section", "pre_request", list(params = list(`query` = query, `idType` = idType, `section` = section, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("section" %in% names(req_data$params)) {
-    section <- req_data$params[["section"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(idType)) options[['idType']] <- idType
-  if (!is.null(section)) options[['section']] <- section
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(idType)) {
+    options[['idType']] <- idType
+  }
+  if (!is.null(section)) {
+    options[['section']] <- section
+  }
+  result <- generic_request(
     endpoint = "resolver/pubchem-section",
     method = "GET",
     batch_limit = 0,
-    server = server,
+    server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -73,8 +62,11 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 #' }
 chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section = NULL) {
   chemicals <- NULL
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_resolver_pubchem_section_bulk", "pre_request", list(params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals, `server` = server)))
+  req_data <- run_hook(
+    "chemi_resolver_pubchem_section_bulk",
+    "pre_request",
+    list(params = list(`query` = query, `idType` = idType, `section` = section, `chemicals` = chemicals))
+  )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -90,21 +82,19 @@ chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) extra_options$section <- section
+  if (!is.null(section)) {
+    extra_options$section <- section
+  }
 
   result <- generic_chemi_request(
     query = query,
     endpoint = "resolver/pubchem-section",
     options = extra_options,
     tidy = FALSE,
-    chemicals = chemicals,
-    server = server
+    chemicals = chemicals
   )
 
   # Additional post-processing can be added here

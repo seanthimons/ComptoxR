@@ -15,7 +15,7 @@ for (wrapper_name in descriptor_smiles_wrappers) {
     nm <- wrapper_name
 
     test_that(paste0(nm, " resolves identifier-like smiles before helper options"), {
-      withr::local_envvar(chemi_burl = "https://cim.sciencedataexperts.com/api")
+      withr::local_envvar(chemi_burl = "https://configured.example/api")
       captured <- NULL
       local_mocked_bindings(
         chemi_resolver_lookup_bulk = function(...) {

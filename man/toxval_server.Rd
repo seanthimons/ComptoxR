@@ -2,28 +2,24 @@
 % Please edit documentation in R/zzz.R
 \name{toxval_server}
 \alias{toxval_server}
-\title{Set API endpoints for ToxValDB endpoints}
+\title{Set the ToxValDB endpoint}
 \usage{
 toxval_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target. If \code{NULL}, the server URL is
-reset. Valid options are:
-\itemize{
-\item Local DuckDB: 1
-\item Plumber: 2
-\item EPA ToxValDB browser: 3
-\item Development: 4
-}
-A string argument is treated as a path to a custom \code{.duckdb} file.}
+\item{server}{Use 1 for the local database, 2 for localhost Plumber, or 3 for the public browser site. The browser site is not a REST API. A database file path or HTTP(S) URL is also accepted.
+NULL clears the environment setting and restores option/default resolution.}
 
-\item{url_only}{If \code{TRUE}, return the selected URL or database path without
-changing \code{toxval_burl} or closing a cached connection.}
+\item{url_only}{Return the selected target without changing settings or connections.}
 }
 \value{
-The selected URL or path when \code{url_only = TRUE}; otherwise the
-configured \code{toxval_burl}.
+The selected target for \code{url_only = TRUE}; otherwise the effective target.
 }
 \description{
-Set API endpoints for ToxValDB endpoints
+Set the ToxValDB endpoint
+}
+\details{
+The option \code{ComptoxR.toxval_burl} takes precedence over the lowercase
+environment variable \code{toxval_burl}. An unset option and empty environment variable
+use the package default. Removed development modes give a configuration error.
 }

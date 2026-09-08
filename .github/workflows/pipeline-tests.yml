@@ -37,18 +37,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detect development-tool changes
-        id: dev-scope
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          if [ -z "$BASE_SHA" ] || ! git diff --quiet "$BASE_SHA" HEAD -- dev/endpoint_eval dev/stub_specs.R dev/generate_stubs.R 'tests/testthat/test-pipeline*'; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "Development tooling and its pipeline tests are unchanged."
-          fi
-
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -65,6 +53,14 @@ jobs:
             any::withr
             any::here
             any::jsonlite
+
+      - name: Install pinned formatter
+        uses: posit-dev/setup-air@v1
+        with:
+          version: '0.9.0'
+
+      - name: Install pinned development toolkit
+        run: Rscript dev/install_toolkit.R
 
       - name: Delete cassettes if re-recording
         if: github.event.inputs.rerecord_cassettes == 'true'
@@ -90,24 +86,12 @@ jobs:
             cat("✅ R/ coverage meets rOpenSci requirement\n")
           '
 
-      - name: Check dev/ coverage (>= 80%) - GHA only, not sent to Codecov
-        id: dev-coverage
-        if: steps.dev-scope.outputs.changed == 'true'
+      - name: Check installed toolkit integration
         run: |
-          Rscript -e '
-            # Note: dev/ coverage is GHA-only enforcement, not uploaded to Codecov
-            # dev/ is internal tooling, Codecov focuses on shipped R/ package code
-            dev_files <- list.files("dev/endpoint_eval", pattern = "\\.R$", full.names = TRUE)
-            dev_tests <- list.files("tests/testthat", pattern = "^test-pipeline", full.names = TRUE)
-            dev_cov <- covr::file_coverage(source_files = dev_files, test_files = dev_tests)
-            dev_pct <- covr::percent_coverage(dev_cov)
-            cat(sprintf("\n📊 dev/endpoint_eval/ Coverage: %.2f%%\n", dev_pct))
-            if (dev_pct < 80) {
-              cat("❌ FAIL: dev/ coverage below 80% threshold (internal target)\n")
-              quit(status = 1)
-            }
-            cat("✅ dev/ coverage meets internal target\n")
-          '
+          Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+          Rscript dev/generate_tests.R --check
+          Rscript dev/check_hook_config.R
+          Rscript -e 'devtools::test(filter = "generate_tests_pipeline|stub_generation|diff_schemas|hooks", stop_on_failure = TRUE)'
 
       - name: Upload R/ coverage to Codecov (dev/ excluded intentionally)
         uses: codecov/codecov-action@v7

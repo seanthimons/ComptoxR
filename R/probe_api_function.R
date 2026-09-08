@@ -1,7 +1,7 @@
-#' Probe an API wrapper across configured servers
+#' Probe an API wrapper at its effective endpoint
 #'
-#' Runs one exported `chemi_*` or `ct_*` API wrapper against each server
-#' recognized by [chemi_server()] or [ctx_server()]. HTTP responses are observed
+#' Runs one exported `chemi_*` or `ct_*` API wrapper at its configured URL or
+#' production default. Option precedence is preserved. HTTP responses are observed
 #' internally without changing the wrapper's return value or public signature.
 #'
 #' @param function_name A single exported `chemi_*` or `ct_*` function name.
@@ -46,15 +46,10 @@ probe_api_function <- function(function_name, ...) {
       "chemi_predict",
       "chemi_safety_section"
     )
-  server_ids <- if (family == "chemi") 1:3 else c(1L, 2L, 3L, 5L)
-  environments <- if (family == "chemi") {
-    c("production", "staging", "development")
-  } else {
-    c("production", "staging", "development", "legacy staging")
-  }
-  server_function <- if (family == "chemi") chemi_server else ctx_server
-  envvar <- if (family == "chemi") "chemi_burl" else "ctx_burl"
-  configured_urls <- vapply(server_ids, server_function, character(1), url_only = TRUE)
+  server_ids <- 1L
+  envvar <- if (family == 'chemi') 'chemi_burl' else 'ctx_burl'
+  configured_urls <- .endpoint_target(envvar)
+  environments <- if (identical(configured_urls, .endpoint_default(envvar))) 'production' else 'configured'
 
   old_url <- Sys.getenv(envvar, unset = NA_character_)
   had_observer <- exists("probe_observer", envir = .ComptoxREnv, inherits = FALSE)
@@ -130,12 +125,12 @@ probe_api_function <- function(function_name, ...) {
         `function` = function_name,
         environment = environments[[index]],
         server_id = server_ids[[index]],
-        configured_url = configured_url,
-        observed_urls = list(observed_urls),
+        configured_url = .diagnostic_endpoint(configured_url),
+        observed_urls = list(.diagnostic_endpoint(observed_urls)),
         status_codes = list(status_codes),
         result = list(result),
         valid = valid,
-        error = if (is.null(error_message)) NA_character_ else error_message
+        error = if (is.null(error_message)) NA_character_ else .diagnostic_endpoint(error_message)
       )
     }
   )

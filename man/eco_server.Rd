@@ -2,20 +2,24 @@
 % Please edit documentation in R/zzz.R
 \name{eco_server}
 \alias{eco_server}
-\title{Set API endpoints for ECOTOX API endpoints}
+\title{Set the ECOTOX endpoint}
 \usage{
 eco_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target.}
+\item{server}{Use 1 for the local database, 2 for localhost Plumber, or 3 for the public browser site. The browser site is not a REST API. A database file path or HTTP(S) URL is also accepted.
+NULL clears the environment setting and restores option/default resolution.}
 
-\item{url_only}{If \code{TRUE}, return the selected URL or database path without
-changing \code{eco_burl} or closing a cached connection.}
+\item{url_only}{Return the selected target without changing settings or connections.}
 }
 \value{
-The selected URL or path when \code{url_only = TRUE}; otherwise the
-configured \code{eco_burl}.
+The selected target for \code{url_only = TRUE}; otherwise the effective target.
 }
 \description{
-Set API endpoints for ECOTOX API endpoints
+Set the ECOTOX endpoint
+}
+\details{
+The option \code{ComptoxR.eco_burl} takes precedence over the lowercase
+environment variable \code{eco_burl}. An unset option and empty environment variable
+use the package default. Removed development modes give a configuration error.
 }

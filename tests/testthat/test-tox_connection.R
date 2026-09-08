@@ -44,9 +44,9 @@ test_that("toxval_server(NULL) resets toxval_burl", {
   Sys.setenv("toxval_burl" = old)
 })
 
-test_that("toxval_server(99) warns invalid option", {
+test_that("toxval_server(99) rejects invalid modes", {
   old <- Sys.getenv("toxval_burl")
-  expect_message(toxval_server(99), "Invalid server option")
+  expect_error(toxval_server(99), "not supported")
   # Restore
   Sys.setenv("toxval_burl" = old)
 })

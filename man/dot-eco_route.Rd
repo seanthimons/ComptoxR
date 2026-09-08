@@ -10,6 +10,6 @@
 \code{"duckdb"} or \code{"plumber"}.
 }
 \description{
-Checks \code{eco_burl} env var and returns the access mode.
+Resolves option, environment, and default settings and returns the access mode.
 }
 \keyword{internal}

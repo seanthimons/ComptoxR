@@ -15,8 +15,11 @@
 #' chemi_webtest(smiles = "DTXSID7020182")
 #' }
 chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_webtest", "pre_request", list(params = list(`smiles` = smiles, `headers` = headers, `output` = output, `server` = server)))
+  req_data <- run_hook(
+    "chemi_webtest",
+    "pre_request",
+    list(params = list(`smiles` = smiles, `headers` = headers, `output` = output))
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -57,9 +60,26 @@ chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
 #' \dontrun{
 #' chemi_webtest_bulk(query = "DTXSID1024122")
 #' }
-chemi_webtest_bulk <- function(query, chemIdType = "AnyId", headers = FALSE, format = "JSON", output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_webtest_bulk", "pre_request", list(params = list(`query` = query, `chemIdType` = chemIdType, `headers` = headers, `format` = format, `output` = output, `server` = server)))
+chemi_webtest_bulk <- function(
+  query,
+  chemIdType = "AnyId",
+  headers = FALSE,
+  format = "JSON",
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_webtest_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `query` = query,
+        `chemIdType` = chemIdType,
+        `headers` = headers,
+        `format` = format,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

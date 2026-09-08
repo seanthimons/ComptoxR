@@ -9,7 +9,7 @@ test_that("eco_results() aborts when no filter params given", {
 
 test_that("eco_results() aborts with public URL eco_burl", {
   withr::with_envvar(c(eco_burl = "https://cfpub.epa.gov/ecotox/index.cfm"), {
-    expect_error(eco_results(casrn = "50-29-3"), "no public REST API")
+    expect_error(eco_results(casrn = "50-29-3"), "not a REST API")
   })
 })
 

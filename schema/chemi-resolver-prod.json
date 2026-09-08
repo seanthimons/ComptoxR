@@ -296,17 +296,6 @@
         },
         "type": "object"
       },
-      "FilesUploadRequest": {
-        "properties": {
-          "filesInfo": {
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "FileUploadInfo": {
         "properties": {
           "actField": {
@@ -323,6 +312,17 @@
           },
           "strField": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FilesUploadRequest": {
+        "properties": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -612,32 +612,6 @@
         },
         "type": "object"
       },
-      "PageableObject": {
-        "properties": {
-          "offset": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "paged": {
-            "type": "boolean"
-          },
-          "pageNumber": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "pageSize": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "sort": {
-            "$ref": "#/components/schemas/SortObject"
-          },
-          "unpaged": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
       "PageClassyfireRecord": {
         "properties": {
           "content": {
@@ -680,6 +654,32 @@
           "totalPages": {
             "format": "int32",
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "PageableObject": {
+        "properties": {
+          "offset": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "pageNumber": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "pageSize": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "unpaged": {
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -850,6 +850,31 @@
         },
         "type": "object"
       },
+      "ResolveRequest": {
+        "properties": {
+          "mol": {
+            "type": "boolean"
+          },
+          "queries": {
+            "items": {
+              "$ref": "#/components/schemas/Query"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ResolveResponse": {
+        "properties": {
+          "result": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ResolvedChemical"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "ResolvedChemical": {
         "properties": {
           "chemical": {
@@ -901,31 +926,6 @@
               "PUBCHEM"
             ],
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ResolveRequest": {
-        "properties": {
-          "mol": {
-            "type": "boolean"
-          },
-          "queries": {
-            "items": {
-              "$ref": "#/components/schemas/Query"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "ResolveResponse": {
-        "properties": {
-          "result": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/ResolvedChemical"
-            },
-            "type": "object"
           }
         },
         "type": "object"
@@ -1178,10 +1178,10 @@
           "loadCASRNs": {
             "type": "boolean"
           },
-          "loadDeletedCASRNs": {
+          "loadDTXSIDs": {
             "type": "boolean"
           },
-          "loadDTXSIDs": {
+          "loadDeletedCASRNs": {
             "type": "boolean"
           },
           "loadInChIKeys": {
@@ -1684,36 +1684,6 @@
         ]
       }
     },
-    "/api/resolver/export_classyfire": {
-      "post": {
-        "operationId": "exportClassyFire",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExportRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          ""
-        ]
-      }
-    },
     "/api/resolver/export-append": {
       "post": {
         "operationId": "exportAppendSafetyReportFromChemicals",
@@ -1854,6 +1824,36 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ExportSectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          ""
+        ]
+      }
+    },
+    "/api/resolver/export_classyfire": {
+      "post": {
+        "operationId": "exportClassyFire",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
               }
             }
           },

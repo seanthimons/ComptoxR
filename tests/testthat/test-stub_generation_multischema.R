@@ -4,11 +4,14 @@ load_multischema_pipeline <- function() {
   suppressWarnings(suppressPackageStartupMessages(source(path, local = FALSE)))
 }
 
-test_that("Cheminformatics generation loads and collapses all schema stages", {
+test_that("Cheminformatics generation uses only production operations", {
   load_multischema_pipeline()
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())
 
   expect_gt(nrow(endpoints), 0L)
+  expect_true(all(grepl('-prod[.]json$', endpoints$source_file)))
+  expect_true(all(endpoints$schema_stage == 'public'))
+  expect_false(any(grepl('_(staging|development)$', endpoints$fn)))
   expect_identical(anyDuplicated(endpoints$fn), 0L)
   expect_true(all(
     c(
@@ -29,7 +32,10 @@ test_that("OPERA oneOf wrapper keeps body and query parameters separate", {
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())
   opera <- endpoints[endpoints$fn == "chemi_opera_bulk", , drop = FALSE]
   generated_config <- write_generated_hook_config(endpoints, tempfile(fileext = ".yml"))
-  generated_config$chemi_opera_bulk$post_response <- list("test_post_hook")
+  generated_config$chemi_opera_bulk <- list(
+    pre_request = list('test_pre_hook'),
+    post_response = list('test_post_hook')
+  )
   rlang::local_bindings(
     stubgen_read_hook_config = function() generated_config,
     .env = environment(render_endpoint_stubs)
@@ -52,83 +58,13 @@ test_that("OPERA oneOf wrapper keeps body and query parameters separate", {
   expect_match(text, "cache_only = cache_only", fixed = TRUE)
   expect_match(text, "format = format", fixed = TRUE)
   expect_match(text, "standardize = standardize", fixed = TRUE)
-  expect_match(text, "server = server", fixed = TRUE)
+  expect_false(grepl("server = server", text, fixed = TRUE))
   expect_match(text, '"pre_request"', fixed = TRUE)
   expect_match(text, '"post_response"', fixed = TRUE)
   expect_true(regexpr('"pre_request"', text, fixed = TRUE) < regexpr("request_body <- Filter", text, fixed = TRUE))
 })
 
-test_that("identical stage contracts collapse and conflicts get deterministic suffixes", {
-  load_multischema_pipeline()
-  base <- tibble::tibble(
-    source_file = c("chemi-demo-prod.json", "chemi-demo-staging.json", "chemi-demo-dev.json"),
-    service_slug = "demo",
-    route = "/api/demo/items/{id}",
-    method = "GET",
-    path_params = "id",
-    query_params = "",
-    body_params = "",
-    path_param_metadata = list(list(), list(), list()),
-    query_param_metadata = list(list(), list(), list()),
-    body_param_metadata = list(list(), list(), list()),
-    body_schema_type = "unknown",
-    body_schema_full = list(list(), list(), list()),
-    body_item_type = NA_character_,
-    content_type = "application/json",
-    request_type = "path",
-    pagination_metadata = list(list(), list(), list())
-  )
-
-  identical_contracts <- collapse_chemi_stage_contracts(base)
-  expect_equal(nrow(identical_contracts), 1L)
-  expect_identical(
-    identical_contracts$supported_schema_stages[[1]],
-    c("public", "staging", "development")
-  )
-
-  base$query_params[2:3] <- "view"
-  conflicts <- collapse_chemi_stage_contracts(base)
-  expect_equal(nrow(conflicts), 2L)
-  expect_identical(conflicts$variant_suffix, c("", "_staging"))
-  expect_identical(conflicts$supported_schema_stages[[2]], c("staging", "development"))
-})
-
-test_that("Swagger omissions do not split equivalent stage contracts", {
-  load_multischema_pipeline()
-  endpoints <- tibble::tibble(
-    source_file = c("chemi-demo-staging.json", "chemi-demo-dev.json"),
-    service_slug = "demo",
-    route = "/api/demo/items/{id}",
-    method = "GET",
-    path_params = "id",
-    query_params = "cursor",
-    body_params = "",
-    path_param_metadata = list(
-      list(list(name = "id", type = "integer")),
-      list(list(name = "id", type = NA_character_))
-    ),
-    query_param_metadata = list(
-      list(list(name = "cursor", type = NA_character_)),
-      list(list(name = "cursor", type = "string"))
-    ),
-    body_param_metadata = list(list(), list()),
-    body_schema_type = "unknown",
-    body_schema_full = list(list(), list()),
-    body_item_type = c(NA_character_, NA_character_),
-    content_type = c("", "application/json"),
-    request_type = "path",
-    pagination_metadata = list(list(), list())
-  )
-
-  collapsed <- collapse_chemi_stage_contracts(endpoints)
-  expect_equal(nrow(collapsed), 1L)
-  expect_identical(
-    collapsed$supported_schema_stages[[1]],
-    c("staging", "development")
-  )
-})
-
-test_that("generated stage configuration and AMOS call shapes are deterministic", {
+test_that("production configuration and AMOS call shapes are deterministic", {
   load_multischema_pipeline()
   endpoints <- suppressWarnings(chemi_spec$build_endpoints())
   first <- tempfile(fileext = ".yml")
@@ -136,6 +72,7 @@ test_that("generated stage configuration and AMOS call shapes are deterministic"
   write_generated_hook_config(endpoints, first)
   write_generated_hook_config(endpoints, second)
   expect_identical(readLines(first), readLines(second))
+  expect_length(yaml::read_yaml(first), 0L)
 
   wanted <- c(
     "chemi_amos_method_keyset_pagination",
@@ -159,7 +96,7 @@ test_that("generated stage configuration and AMOS call shapes are deterministic"
     "path_params = c(limit = limit)",
     fixed = TRUE
   )
-  expect_true(all(vapply(text, grepl, logical(1), pattern = "server = server", fixed = TRUE)))
+  expect_true(all(vapply(text, grepl, logical(1), pattern = 'server = "chemi_burl"', fixed = TRUE)))
   expect_false(grepl(
     "chemicals = chemicals",
     text[["chemi_amos_method_keyset_pagination_bulk"]],

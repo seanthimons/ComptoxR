@@ -26,7 +26,7 @@ util_classyfire <- function(query) {
   # ---------------------------------------------------------------------------
   # --- Get configuration
   # ---------------------------------------------------------------------------
-  ctx_burl <- Sys.getenv("np_burl", unset = NA)
+  ctx_burl <- .endpoint_target("np_burl")
   run_debug <- .run_debug_enabled()
   run_verbose <- .run_verbose_enabled()
 

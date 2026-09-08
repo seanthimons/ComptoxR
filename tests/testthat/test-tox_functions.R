@@ -16,9 +16,9 @@ test_that(".tox_route() returns 'plumber' for localhost URLs", {
   })
 })
 
-test_that(".tox_route() aborts for public URLs", {
-  withr::with_envvar(c("toxval_burl" = "https://comptox.epa.gov/dashboard"), {
-    expect_error(.tox_route(), "no public REST API")
+test_that(".tox_route() aborts for the public browser site", {
+  withr::with_envvar(c("toxval_burl" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL"), {
+    expect_error(.tox_route(), "not a REST API")
   })
 })
 

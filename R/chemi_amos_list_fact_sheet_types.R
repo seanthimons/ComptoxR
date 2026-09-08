@@ -12,19 +12,11 @@
 #' chemi_amos_list_fact_sheet_types()
 #' }
 chemi_amos_list_fact_sheet_types <- function() {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_amos_list_fact_sheet_types", "pre_request", list(params = list(`server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   result <- generic_request(
     endpoint = "amos/list_fact_sheet_types/",
     method = "GET",
     batch_limit = 0,
-    server = server,
+    server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )

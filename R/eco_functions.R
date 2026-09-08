@@ -10,26 +10,17 @@ NULL
 
 #' Determine ECOTOX routing mode
 #'
-#' Checks `eco_burl` env var and returns the access mode.
+#' Resolves option, environment, and default settings and returns the access mode.
 #' @return `"duckdb"` or `"plumber"`.
 #' @keywords internal
+
 .eco_route <- function() {
-  burl <- Sys.getenv("eco_burl")
-
-  if (nzchar(burl) && grepl("\\.duckdb$", burl)) {
-    return("duckdb")
+  target <- .endpoint_target('eco_burl')
+  .sync_database_target('eco_burl', target)
+  if (identical(target, 'https://cfpub.epa.gov/ecotox/index.cfm')) {
+    cli::cli_abort('The public browser site is not a REST API. Select a local database or configure your Plumber URL.')
   }
-
-  if (nzchar(burl) && grepl("^https?://(127\\.0\\.0\\.1|localhost)", burl)) {
-    return("plumber")
-  }
-
-  cli::cli_abort(c(
-    "ECOTOX has no public REST API.",
-    "i" = "Use {.code eco_server(1)} for local DuckDB access.",
-    "i" = "Use {.code eco_server(2)} for a self-hosted Plumber instance.",
-    "i" = "Run {.code eco_install()} to set up the local database."
-  ))
+  if (grepl('^https?://', target, ignore.case = TRUE)) 'plumber' else 'duckdb'
 }
 
 
@@ -53,7 +44,7 @@ eco_tables <- function(con = NULL) {
     con <- .eco_get_con(con)
     DBI::dbListTables(con)
   } else {
-    burl <- Sys.getenv("eco_burl")
+    burl <- .endpoint_target("eco_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("all_tbls") |>
       httr2::req_perform()
@@ -84,7 +75,7 @@ eco_fields <- function(table_name, con = NULL) {
     con <- .eco_get_con(con)
     DBI::dbListFields(con, table_name)
   } else {
-    burl <- Sys.getenv("eco_burl")
+    burl <- .endpoint_target("eco_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("fields", table_name) |>
       httr2::req_perform()
@@ -113,7 +104,7 @@ eco_inventory <- function(con = NULL) {
     DBI::dbGetQuery(con, "SELECT * FROM chemicals") |>
       tibble::as_tibble()
   } else {
-    burl <- Sys.getenv("eco_burl")
+    burl <- .endpoint_target("eco_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("inventory") |>
       httr2::req_perform()
@@ -142,7 +133,7 @@ eco_health <- function(con = NULL) {
 
   if (route == "duckdb") {
     con <- .eco_get_con(con)
-    db_path <- Sys.getenv("eco_burl")
+    db_path <- .endpoint_target("eco_burl")
 
     # Read release date from the _metadata table written by the build
     version_date <- tryCatch(
@@ -157,7 +148,7 @@ eco_health <- function(con = NULL) {
       db_size_mb = round(file.size(db_path) / (1024 * 1024), 2)
     )
   } else {
-    burl <- Sys.getenv("eco_burl")
+    burl <- .endpoint_target("eco_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("health-check") |>
       httr2::req_perform()
@@ -193,7 +184,7 @@ eco_species <- function(query, field = c("common_name", "latin_name", "eco_group
   route <- .eco_route()
 
   if (route == "plumber") {
-    burl <- Sys.getenv("eco_burl")
+    burl <- .endpoint_target("eco_burl")
     resp <- httr2::request(burl) |>
       httr2::req_url_path_append("species") |>
       httr2::req_url_query(query = query, field = field) |>
@@ -342,7 +333,7 @@ eco_results <- function(
   test_cols,
   results_cols
 ) {
-  burl <- Sys.getenv("eco_burl")
+  burl <- .endpoint_target("eco_burl")
 
   body <- list(
     casrn = casrn,

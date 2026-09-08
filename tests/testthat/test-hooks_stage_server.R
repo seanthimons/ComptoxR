@@ -1,89 +1,25 @@
-local_stage_hook_config <- function(config) {
-  old <- .HookRegistry$config
-  withr::defer(.HookRegistry$config <- old, envir = parent.frame())
-  .HookRegistry$config <- config
-}
-
-test_that("stage routing preserves supported production, staging, and development servers", {
-  local_stage_hook_config(list(
-    example = list(
-      supported_schema_stages = c("public", "staging", "development"),
-      preferred_fallback_stage = "public"
-    )
-  ))
-
-  for (server in c("chemi_burl", chemi_server(2, TRUE), chemi_server(3, TRUE))) {
-    data <- list(fn_name = "example", params = list(server = server))
-    expect_identical(enforce_stage_server(data)$params$server, server)
-  }
+test_that('public wrappers retain the configured host without fallback hooks', {
+  withr::local_options(ComptoxR.chemi_burl = NULL)
+  withr::local_envvar(chemi_burl = NA_character_)
+  seen <- character()
+  local_mocked_bindings(generic_request = function(server, ...) {
+    seen <<- .endpoint_url(server)
+    list(ok = TRUE)
+  })
+  expect_identical(chemi_alerts_alerts(), list(ok = TRUE))
+  expect_identical(seen, 'https://hcd.rtpnc.epa.gov/api')
+  options(ComptoxR.chemi_burl = 'https://configured.example/api')
+  expect_identical(chemi_alerts_alerts(), list(ok = TRUE))
+  expect_identical(seen, 'https://configured.example/api')
+  expect_false(exists('enforce_stage_server', envir = asNamespace('ComptoxR'), inherits = FALSE))
 })
 
-test_that("stage routing falls back by public staging development priority", {
-  local_stage_hook_config(list(
-    public_only = list(
-      supported_schema_stages = "public",
-      preferred_fallback_stage = "public"
-    ),
-    preview = list(
-      supported_schema_stages = c("staging", "development"),
-      preferred_fallback_stage = "staging"
-    )
-  ))
-
-  expect_warning(
-    public <- enforce_stage_server(list(
-      fn_name = "public_only",
-      params = list(server = chemi_server(3, TRUE))
-    )),
-    "using public"
-  )
-  expect_identical(public$params$server, chemi_server(1, TRUE))
-
-  expect_warning(
-    preview <- enforce_stage_server(list(
-      fn_name = "preview",
-      params = list(server = "chemi_burl")
-    )),
-    "using staging"
-  )
-  expect_identical(preview$params$server, chemi_server(2, TRUE))
-})
-
-test_that("stage routing preserves custom URLs and updates request templates", {
-  local_stage_hook_config(list(
-    example = list(
-      supported_schema_stages = "staging",
-      preferred_fallback_stage = "staging"
-    )
-  ))
-
-  custom <- list(fn_name = "example", params = list(server = "https://custom.example/api"))
-  expect_identical(enforce_stage_server(custom), custom)
-
-  template <- list(
-    fn_name = "example",
-    params = list(server = "chemi_burl"),
-    request = list(server = "chemi_burl", endpoint = "demo")
-  )
-  expect_warning(routed <- enforce_stage_server(template), "using staging")
-  expect_identical(routed$params$server, chemi_server(2, TRUE))
-  expect_identical(routed$request$server, chemi_server(2, TRUE))
-})
-
-test_that("generated stage hooks run after manual pre-request hooks", {
+test_that('manual hook ordering remains independent of empty generated policy', {
   merged <- merge_hook_configs(
-    list(example = list(pre_request = c("first_hook", "second_hook"))),
-    list(
-      example = list(
-        supported_schema_stages = "public",
-        preferred_fallback_stage = "public",
-        pre_request = "enforce_stage_server"
-      )
-    )
+    list(example = list(pre_request = c('first_hook', 'second_hook'))),
+    list(example = list(pre_request = 'third_hook'))
   )
-
-  expect_identical(
-    merged$example$pre_request,
-    c("first_hook", "second_hook", "enforce_stage_server")
-  )
+  expect_identical(merged$example$pre_request, c('first_hook', 'second_hook', 'third_hook'))
+  generated <- system.file('hook_config_generated.yml', package = 'ComptoxR')
+  expect_length(yaml::read_yaml(generated), 0L)
 })
