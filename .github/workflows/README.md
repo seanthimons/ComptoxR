@@ -106,7 +106,9 @@ Informational coverage workflow.
 
 Scheduled and manual schema update workflow.
 
-- Downloads the CompTox Dashboard, Cheminformatics, and EPI Suite schemas.
+- Downloads and compares only production CompTox Dashboard, Cheminformatics,
+  and EPI Suite schemas. EPI Suite uses the approved `https://episuite.dev/api`.
+- Installs the checksum-pinned `wrapmaint` development toolkit.
 - Safely rebuilds experimental `ct_*`, `chemi_*`, and `epi_*` wrappers.
 - Reports `ok` and a comma-separated `failed_families` list from the download
   step.
@@ -116,6 +118,20 @@ Scheduled and manual schema update workflow.
   or validation fails, the workflow warns and keeps the last valid committed
   EPI Suite schema.
 - Creates an automated pull request when valid schema changes are present.
+- Detects new schema files as well as changes and removals. Updates documentation
+  and generated tests for every schema change, including operation removals.
+- Checks the public API boundary even when no schemas changed. Package artifact
+  and rolling publication workflows also check this boundary before each build.
+
+### `api-compatibility-probe.yml`
+
+Scheduled and manual live compatibility check.
+
+- Tests direct requests and wrapper contracts against the effective configured
+  URLs, which default to production. It does not cycle through other hosts.
+- Requires `CTX_API_KEY` for the CompTox formaldehyde check.
+- Publishes a sanitized result matrix. Known direct upstream defects remain
+  visible; wrapper contract failures and configuration errors fail the job.
 
 ### `record-cassettes.yml`
 
@@ -153,7 +169,7 @@ check_cassette_safety()
 
 ### `CTX_API_KEY`
 
-CompTox Dashboard API key. It is required only for intentional live recording through `record-cassettes.yml` or a local `dev/rerecord_cassettes.R --record-live` run. Routine CRAN-safe testing must pass without it.
+CompTox Dashboard API key. It is required for the live API compatibility probe and intentional live recording through `record-cassettes.yml` or a local `dev/rerecord_cassettes.R --record-live` run. Routine CRAN-safe testing must pass without it.
 
 ### `CODECOV_TOKEN`
 
