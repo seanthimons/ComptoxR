@@ -47,6 +47,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # Keep all tests, with sequential execution on Windows.
+      TESTTHAT_PARALLEL: ${{ runner.os == 'Windows' && 'false' || 'true' }}
       ctx_api_key: ${{ secrets.CTX_API_KEY }}
 
     steps:
