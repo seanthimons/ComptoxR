@@ -118,7 +118,7 @@ test_that("shipped localhost Plumber results match direct source-only queries", 
   expect_equal(nrow(eco_species("species absent from fixture")), 0L)
   health <- eco_health()
   expect_identical(unlist(health$status), "ok")
-  expect_identical(unlist(health$db_path), path)
+  expect_identical(normalizePath(unlist(health$db_path)), normalizePath(path))
   expect_gt(unlist(health$db_size_mb), 0)
   remote <- tryCatch(eco_results(casrn = "50-29-3"), error = function(e) {
     stop(paste(conditionMessage(e), paste(c(server$read_error_lines(), server$read_output_lines()), collapse = "\n")))
