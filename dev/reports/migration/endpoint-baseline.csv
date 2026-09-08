@@ -1,0 +1,172 @@
+"file","context","test","nb","failed","skipped","error","warning","user","system","real","passed"
+"test-chemi_descriptor_smiles_hooks.R","","chemi_padel resolves identifier-like smiles before helper options",2,0,FALSE,FALSE,0,0.02,0,0.00999999999999801,2
+"test-chemi_descriptor_smiles_hooks.R","","chemi_rdkit resolves identifier-like smiles before helper options",2,0,FALSE,FALSE,0,0,0,0.0200000000000031,2
+"test-chemi_descriptor_smiles_hooks.R","","chemi_mordred resolves identifier-like smiles before helper options",2,0,FALSE,FALSE,0,0.0199999999999998,0,0,2
+"test-chemi_descriptor_smiles_hooks.R","","chemi_webtest resolves identifier-like smiles before helper options",2,0,FALSE,FALSE,0,0,0,0,2
+"test-eco_connection.R","","eco_path() returns correct default path",2,0,FALSE,FALSE,0,0,0,0,2
+"test-eco_connection.R","","eco_path() respects ComptoxR.ecotox_path option",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","",".eco_get_con() aborts when DB missing",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","",".eco_close_con() is safe with no connection",2,0,FALSE,FALSE,0,0,0,0,2
+"test-eco_connection.R","","eco_server(NULL) resets eco_burl",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_server(3) sets EPA public URL",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_server(2) sets localhost URL",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_server() with invalid option resets",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_server() with invalid string path aborts",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_install() reports fallback build failure when release download is unavailable",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","","eco_install(source=) copies a local database file",2,0,FALSE,FALSE,0,0,0,0.0199999999999996,2
+"test-eco_connection.R","","eco_install() aborts when source file missing",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_connection.R","","eco_install() default path calls .db_download_release",1,0,TRUE,FALSE,0,0.0100000000000002,0,0.0100000000000016,0
+"test-eco_connection.R","","eco_install(build = TRUE) skips download",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","","eco_install() falls back to build on download failure",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","","eco_server(1) resolves to valid .duckdb path",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","","eco_server() with string path sets eco_burl",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","",".eco_get_con() returns valid connection",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","",".eco_get_con() reuses cached connection",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","",".eco_close_con() disconnects and clears cache",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_connection.R","","eco_server() mode switch closes existing connection",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_results() aborts when no filter params given",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_functions.R","","eco_results() aborts with public URL eco_burl",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_functions.R","","eco_fields() rejects non-character input",1,0,FALSE,FALSE,0,0,0,0.0199999999999996,1
+"test-eco_functions.R","","eco_species() rejects invalid field argument",1,0,FALSE,FALSE,0,0,0,0,1
+"test-eco_functions.R","","eco_results() returns enriched tibble for DDT",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_results() filters by common_name",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_results() default endpoints match curated regex",1,0,TRUE,FALSE,0,0.02,0,0,0
+"test-eco_functions.R","","eco_results() custom endpoint LC50",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_inventory() returns chemicals tibble",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_tables() returns character vector with core tables",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_fields() returns column names for tests table",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_species() finds Rainbow trout",1,0,TRUE,FALSE,0,0,0,0,0
+"test-eco_functions.R","","eco_health() returns status list",1,0,TRUE,FALSE,0,0,0,0,0
+"test-exported_utility_contracts.R","","server helpers set and reset exported API base URLs",8,0,FALSE,FALSE,0,0,0,0,8
+"test-exported_utility_contracts.R","","server helpers return URLs without changing process state",18,0,FALSE,FALSE,0,0,0,0,18
+"test-exported_utility_contracts.R","","database server URL lookup does not close cached connections",4,0,FALSE,FALSE,0,0,0,0.0199999999999996,4
+"test-exported_utility_contracts.R","","run_verbose and run_setup have offline-safe configuration contracts",3,0,FALSE,FALSE,0,0,0,0,3
+"test-exported_utility_contracts.R","","CAS coercion helper handles valid and invalid input",1,0,FALSE,FALSE,0,0,0,0,1
+"test-exported_utility_contracts.R","","small numeric and message formatting helpers keep their contracts",7,0,FALSE,FALSE,0,0,0,0,7
+"test-exported_utility_contracts.R","","API helper exports validate before external work",6,0,FALSE,FALSE,0,0,0,0,6
+"test-exported_utility_contracts.R","","ct_classify adds classification fields without network access",4,0,FALSE,FALSE,0,0,0,0,4
+"test-exported_utility_contracts.R","","dss_install can install from a local source file",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_chemi_request.R","","generic_chemi_request construction is correct",6,0,FALSE,FALSE,0,0,0,0.0199999999999996,6
+"test-generic_chemi_request.R","","generic_chemi_request handles unnested payload when wrap=FALSE",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_chemi_request.R","","generic_chemi_request sends explicit bodies exactly and preserves duplicates",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_chemi_request.R","","generic_chemi_request parses configured JSON, CSV, and TSV response types",7,0,FALSE,FALSE,0,0,0,0,7
+"test-generic_chemi_request.R","","generic_chemi_request propagates delimited response parsing failures",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_chemi_request.R","","generic_chemi_request appends named query parameters",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_chemi_request.R","","generic_chemi_request tidies results with matching query IDs",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_chemi_request.R","","generic_chemi_request with paginate=TRUE fetches multiple pages (offset/limit body)",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_chemi_request.R","","generic_chemi_request pagination stops on empty records",2,0,FALSE,FALSE,0,0,0,0,2
+"test-generic_chemi_request.R","","generic_chemi_request with paginate=FALSE still works normally",2,0,FALSE,FALSE,0,0,0,0,2
+"test-chemi_descriptor_contracts.R","","descriptor wrappers retain their public signatures",14,0,FALSE,FALSE,0,0,0,0.0100000000000016,14
+"test-chemi_descriptor_contracts.R","","scalar descriptor wrappers call generic_request with prepared GET state",11,0,FALSE,FALSE,0,0.00999999999999979,0,0,11
+"test-chemi_descriptor_contracts.R","","bulk descriptor wrappers call generic_chemi_request with exact bodies",16,0,FALSE,FALSE,0,0,0,0,16
+"test-chemi_descriptor_contracts.R","","bulk wide output preserves duplicates, invalid inputs, and ordinals",8,0,FALSE,FALSE,0,0,0,0,8
+"test-chemi_descriptor_contracts.R","","large descriptor responses map once by ordinal and identifier",3,0,FALSE,FALSE,0,0.02,0,0,3
+"test-chemi_descriptor_contracts.R","","all-invalid input skips HTTP but still runs descriptor post-hooks",5,0,FALSE,FALSE,0,0,0,0,5
+"test-chemi_descriptor_contracts.R","","header mismatches and empty successful responses become explicit rows",6,0,FALSE,FALSE,0,0,0,0,6
+"test-chemi_descriptor_contracts.R","","CSV and TSV successful responses use the same wide contract",4,0,FALSE,FALSE,0,0,0,0,4
+"test-chemi_descriptor_contracts.R","","raw descriptor output retains actual route provenance",4,0,FALSE,FALSE,0,0,0,0,4
+"test-chemi_descriptor_contracts.R","","known descriptor fallbacks are independent and carry provenance",10,0,FALSE,FALSE,0,0,0,0.00999999999999801,10
+"test-chemi_descriptor_contracts.R","","successful embedded service failures become descriptor status rows",2,0,FALSE,FALSE,0,0,0,0,2
+"test-chemi_descriptor_contracts.R","","generic-helper failures propagate without descriptor conversion",2,0,FALSE,FALSE,0,0,0,0,2
+"test-chemi_descriptor_contracts.R","","identifier resolution preserves original queries and duplicate positions",4,0,FALSE,FALSE,0,0,0,0,4
+"test-chemi_descriptor_contracts.R","","run_hook is identity when unconfigured and provides active context",3,0,FALSE,FALSE,0,0.0100000000000002,0,0,3
+"test-chemi_descriptor_contracts.R","","unexpected hook failures are stage-specific and retain parents",8,0,FALSE,FALSE,0,0,0,0,8
+"test-generic_request.R","","generic_request dry run works independently of network",4,0,FALSE,FALSE,0,0,0,0,4
+"test-generic_request.R","","generic_request respects different server environments",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request.R","","generic_request handles batching logic correctly",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request.R","","generic_request progress follows the verbose option",2,0,FALSE,FALSE,0,0,0,0,2
+"test-generic_request.R","","generic_request tidies simple results into tibbles",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request.R","","generic_request parses CSV and TSV responses",6,0,FALSE,FALSE,0,0,0,0,6
+"test-generic_request.R","","generic_request handles empty results gracefully",6,0,FALSE,FALSE,0,0,0,0,6
+"test-generic_request.R","","generic_request with paginate=FALSE preserves existing behavior",2,0,FALSE,FALSE,0,0,0,0.0199999999999996,2
+"test-generic_request.R","","generic_request with paginate=TRUE and page_number fetches multiple pages",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request.R","","generic_request with paginate=TRUE and page_size (Spring Boot) stops on last=TRUE",3,0,FALSE,FALSE,0,0.0100000000000002,0,0,3
+"test-generic_request.R","","generic_request pagination respects max_pages limit",2,0,FALSE,FALSE,0,0,0,0,2
+"test-generic_request.R","","generic_request pagination returns empty tibble on no results",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request.R","","generic_request pagination with tidy=FALSE returns list",2,0,FALSE,FALSE,0,0,0,0,2
+"test-generic_request.R","","generic_request with paginate=TRUE and cursor follows cursor tokens",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request.R","","generic_request advances nested query cursors and honors hasNext",4,0,FALSE,FALSE,0,0,0,0,4
+"test-generic_request.R","","generic_request advances body cursors without changing filters or sort",5,0,FALSE,FALSE,0,0,0,0,5
+"test-generic_request.R","","generic_request unwraps a single results collection",2,0,FALSE,FALSE,0,0,0,0,2
+"test-hooks_stage_server.R","","stage routing preserves supported production, staging, and development servers",3,0,FALSE,FALSE,0,0,0,0,3
+"test-hooks_stage_server.R","","stage routing falls back by public staging development priority",4,0,FALSE,FALSE,0,0,0,0,4
+"test-hooks_stage_server.R","","stage routing preserves custom URLs and updates request templates",4,0,FALSE,FALSE,0,0,0,0,4
+"test-hooks_stage_server.R","","generated stage hooks run after manual pre-request hooks",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request warns and returns empty tibble on 4xx (single request)",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request_edge.R","","generic_request warns on 5xx and drops the failed record when tidy=FALSE",3,0,FALSE,FALSE,0,0.0100000000000002,0,0,3
+"test-generic_request_edge.R","","generic_request drops failed batches but keeps successful ones (on_error='continue')",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request_edge.R","","generic_request errors on malformed JSON body (200 status)",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request tidy toggle: empty JSON array -> empty tibble vs empty list",6,0,FALSE,FALSE,0,0,0,0,6
+"test-generic_request_edge.R","","generic_request batch_limit=0 sends a static GET and tidies the result",3,0,FALSE,FALSE,0,0,0,0,3
+"test-generic_request_edge.R","","generic_request batch_limit=1 appends the query to the URL path (path-GET)",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request batch_limit>1 sends a bulk POST JSON array",2,0,FALSE,FALSE,0,0,0,0,2
+"test-generic_request_edge.R","","generic_request aborts when path_params combined with batch_limit>1",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request aborts on empty query for non-static endpoints",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request aborts when body is supplied for a non-POST request",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_request aborts on unnamed query_params",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_chemi_request aborts on 5xx status",1,0,FALSE,FALSE,0,0,0,0,1
+"test-generic_request_edge.R","","generic_chemi_request empty body returns empty tibble vs empty list by tidy",4,0,FALSE,FALSE,0,0,0,0,4
+"test-generic_request_edge.R","","generic_chemi_request aborts on empty query with no chemicals",1,0,FALSE,FALSE,0,0,0,0,1
+"test-probe_api_function.R","","probe resolves Chemi wrappers case-insensitively and forwards arguments",6,0,FALSE,FALSE,0,0,0,0.0199999999999996,6
+"test-probe_api_function.R","","probe enumerates all recognized CompTox servers",4,0,FALSE,FALSE,0,0,0,0,4
+"test-probe_api_function.R","","probe reports empty, non-200, redirected, and thrown results",5,0,FALSE,FALSE,0,0.02,0,0,5
+"test-probe_api_function.R","","probe reports wrappers whose HTTP status cannot be observed",9,0,FALSE,FALSE,0,0,0,0,9
+"test-probe_api_function.R","","probe rejects unsupported and non-wrapper names",5,0,FALSE,FALSE,0,0,0,0.00999999999999801,5
+"test-probe_api_function.R","","response observer sees batched and paginated helper responses",3,0,FALSE,FALSE,0,0,0,0,3
+"test-package_sitrep.R","","package_sitrep runs without errors",15,0,FALSE,FALSE,0,0,0,0.0199999999999996,15
+"test-package_sitrep.R","","package_sitrep creates timestamped log file",1,0,FALSE,FALSE,0,0,0,0,1
+"test-package_sitrep.R","","package_sitrep detects API token status correctly",2,0,FALSE,FALSE,0,0,0,0,2
+"test-package_sitrep.R","","package_sitrep captures server paths",3,0,FALSE,FALSE,0,0,0,0,3
+"test-package_sitrep.R","","package_sitrep returns ping results",17,0,FALSE,FALSE,0,0,0.02,0.0300000000000011,17
+"test-package_sitrep.R","","package_sitrep marks unconfigured servers as SKIPPED",2,0,FALSE,FALSE,0,0.0100000000000002,0,0,2
+"test-package_sitrep.R","","run_debug changes private session state",4,0,FALSE,FALSE,0,0,0,0,4
+"test-package_sitrep.R","","missing settings default to FALSE",2,0,FALSE,FALSE,0,0,0,0,2
+"test-package_sitrep.R","","invalid debug values warn and reset private state",6,0,FALSE,FALSE,0,0,0,0,6
+"test-package_sitrep.R","","run_verbose changes the namespaced option",4,0,FALSE,FALSE,0,0,0,0.0199999999999996,4
+"test-package_sitrep.R","","invalid verbose values warn and reset the option",6,0,FALSE,FALSE,0,0,0,0,6
+"test-package_sitrep.R","","legacy environment variables do not control runtime settings",2,0,FALSE,FALSE,0,0,0,0,2
+"test-package_sitrep.R","","setters leave legacy environment variables unchanged",2,0,FALSE,FALSE,0,0.02,0,0,2
+"test-package_sitrep.R","","package attachment uses a verbose option set before attachment",1,0,FALSE,FALSE,0,0,0,0,1
+"test-package_sitrep.R","","batch_limit sets the batch_limit env var to the given numeric",1,0,FALSE,FALSE,0,0,0,0,1
+"test-package_sitrep.R","","batch_limit defaults to 200",1,0,FALSE,FALSE,0,0,0,0,1
+"test-package_sitrep.R","","batch_limit with non-numeric input warns and leaves default",2,0,FALSE,FALSE,0,0,0,0,2
+"test-tox_functions.R","","toxval_results() aborts when all filters NULL",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_functions.R","",".tox_route() returns 'plumber' for localhost URLs",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_functions.R","",".tox_route() aborts for public URLs",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_functions.R","",".tox_route() returns 'duckdb' for .duckdb paths",1,0,FALSE,FALSE,0,0,0,0.0199999999999996,1
+"test-tox_functions.R","",".tox_default_cols() returns expected column count",6,0,FALSE,FALSE,0,0,0,0,6
+"test-tox_functions.R","","toxval_results(casrn) returns tibble with default columns",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","toxval_results(source) filters correctly",1,0,TRUE,FALSE,0,0.0100000000000007,0,0,0
+"test-tox_functions.R","","toxval_results(dtxsid, cols = 'all') returns all columns",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","toxval_sources() returns character vector with known sources",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","toxval_search() returns non-empty tibble for valid DTXSID",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","toxval_search() rejects non-character input",3,0,FALSE,FALSE,0,0,0,0,3
+"test-tox_functions.R","","toxval_tables() includes expected tables",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","human_eco column absent from v9.7.0 data",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","default columns all exist in database",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_functions.R","","toxval_results(qc_status = 'all') includes failed records",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","toxval_path() returns path ending in toxval.duckdb",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","toxval_path() respects options(ComptoxR.toxval_path)",1,0,FALSE,FALSE,0,0.0200000000000005,0,0,1
+"test-tox_connection.R","",".tox_get_con() aborts when DB missing",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","",".tox_close_con() is safe with no connection",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","toxval_server(NULL) resets toxval_burl",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","toxval_server(99) warns invalid option",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","toxval_server() with nonexistent file path aborts",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","",".db_download_release() aborts on 404 / missing asset",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","",".db_download_release() shows progress only for asset downloads",11,0,FALSE,FALSE,0,0,0,0,11
+"test-tox_connection.R","",".db_download_release() restores the previous timeout",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","toxval_install() default path calls .db_download_release",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","toxval_install(build = TRUE) skips download",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","toxval_install() falls back to build on download failure",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","toxval_install(source=) copies a local database file",2,0,FALSE,FALSE,0,0,0,0,2
+"test-tox_connection.R","","build script self-invokes when sourced into isolated env",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","",".build_toxval_db staleness check skips fresh database",2,0,FALSE,FALSE,0,0,0,0,2
+"test-tox_connection.R","",".build_toxval_db force=TRUE bypasses staleness",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","version extraction handles standard v97_0 format",3,0,FALSE,FALSE,0,0,0,0,3
+"test-tox_connection.R","","version extraction handles v100_1 format",2,0,FALSE,FALSE,0,0,0,0,2
+"test-tox_connection.R","","version extraction fallback on unrecognized filename",1,0,FALSE,FALSE,0,0,0,0,1
+"test-tox_connection.R","","atomic build produces valid DuckDB on success",2,0,FALSE,FALSE,0,0,0,0,2
+"test-tox_connection.R","","row count threshold constant is reasonable",3,0,FALSE,FALSE,0,0,0,0,3
+"test-tox_connection.R","","connection returns valid DBIConnection",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","",".tox_get_con() returns same cached connection",1,0,TRUE,FALSE,0,0,0,0,0
+"test-tox_connection.R","","toxval_health() returns expected fields",1,0,TRUE,FALSE,0,0,0,0,0
