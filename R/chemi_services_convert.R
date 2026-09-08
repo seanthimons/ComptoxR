@@ -14,29 +14,16 @@
 #' chemi_services_convert(content = "DTXSID1024122")
 #' }
 chemi_services_convert <- function(content = NULL, type = NULL) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_services_convert", "pre_request", list(params = list(`content` = content, `type` = type, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("content" %in% names(req_data$params)) {
-    content <- req_data$params[["content"]]
-  }
-  if ("type" %in% names(req_data$params)) {
-    type <- req_data$params[["type"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   # Build options list for additional parameters
   options <- list()
-  if (!is.null(type)) options$type <- type
+  if (!is.null(type)) {
+    options$type <- type
+  }
   result <- generic_chemi_request(
     query = content,
     endpoint = "services/convert",
     options = options,
-    tidy = FALSE,
-    server = server
+    tidy = FALSE
   )
 
   # Additional post-processing can be added here

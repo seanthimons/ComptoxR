@@ -53,6 +53,14 @@ jobs:
             any::withr
           needs: check
 
+      - name: Install pinned development toolkit
+        run: Rscript dev/install_toolkit.R
+
+      - name: Check generation and hooks
+        run: |
+          Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+          Rscript dev/check_hook_config.R
+
       - name: Generated-test smoke check
         run: |
           Rscript dev/generate_tests.R --check

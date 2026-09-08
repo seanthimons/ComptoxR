@@ -25,7 +25,7 @@ ComptoxR_package_sitrep <- function() {
 
   # Helper function to add lines to log
   add_log <- function(...) {
-    log_lines <<- c(log_lines, paste0(..., collapse = ""))
+    log_lines <<- c(log_lines, .diagnostic_endpoint(paste0(..., collapse = "")))
   }
 
   # Header
@@ -85,9 +85,9 @@ ComptoxR_package_sitrep <- function() {
   server_paths <- list()
   for (name in names(servers)) {
     env_var <- servers[[name]]
-    path <- Sys.getenv(env_var)
-    server_paths[[name]] <- path
-    add_log(sprintf("%-30s: %s", name, if (nzchar(path)) path else "NOT CONFIGURED"))
+    path <- .endpoint_target(env_var)
+    server_paths[[name]] <- .diagnostic_endpoint(path)
+    add_log(sprintf("%-30s: %s", name, .diagnostic_endpoint(path)))
   }
   add_log("")
 
@@ -98,11 +98,11 @@ ComptoxR_package_sitrep <- function() {
   # Define ping endpoints
   ping_endpoints <- list(
     "EPI Suite API" = list(
-      url = Sys.getenv("epi_burl"),
+      url = .endpoint_target("epi_burl"),
       ping_path = ""
     ),
     "PubChem PUG REST" = list(
-      url = Sys.getenv("pubchem_burl"),
+      url = .endpoint_target("pubchem_burl"),
       ping_path = "compound/cid/2244/property/MolecularFormula/JSON"
     )
   )
@@ -193,7 +193,7 @@ ComptoxR_package_sitrep <- function() {
   # Check CTX four-domain health (chemical/hazard/exposure/bioactivity)
   ctx_result <- tryCatch(
     {
-      ctx_url <- Sys.getenv("ctx_burl")
+      ctx_url <- .endpoint_target("ctx_burl")
       if (nzchar(ctx_url)) {
         ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
         reqs <- purrr::map(ctx_domains, function(domain) {
@@ -261,7 +261,7 @@ ComptoxR_package_sitrep <- function() {
   # Check Cheminformatics endpoints separately
   chemi_result <- tryCatch(
     {
-      chemi_url <- Sys.getenv('chemi_burl')
+      chemi_url <- .endpoint_target("chemi_burl")
       if (nzchar(chemi_url)) {
         start_time <- Sys.time()
         resp <- httr2::request(paste0(chemi_url, "/services/cim_component_info")) %>%
@@ -317,7 +317,7 @@ ComptoxR_package_sitrep <- function() {
   add_log(sprintf("%-30s: %-10s %-30s %s", chemi_result$name, chemi_result$status, chemi_result$message, latency_str))
 
   # ECOTOX — only ping when in Plumber mode (DuckDB handled via local DB section)
-  eco_url_ping <- Sys.getenv("eco_burl")
+  eco_url_ping <- .endpoint_target("eco_burl")
   if (nzchar(eco_url_ping) && grepl("127\\.0\\.0\\.1", eco_url_ping)) {
     eco_ping_result <- tryCatch(
       {
@@ -346,7 +346,7 @@ ComptoxR_package_sitrep <- function() {
   }
 
   # ToxValDB — only ping when in Plumber mode (DuckDB handled via local DB section)
-  toxval_url_ping <- Sys.getenv("toxval_burl")
+  toxval_url_ping <- .endpoint_target("toxval_burl")
   if (nzchar(toxval_url_ping) && grepl("127\\.0\\.0\\.1", toxval_url_ping)) {
     toxval_ping_result <- tryCatch(
       {

@@ -21,7 +21,10 @@ test_that("chemi_amos_get_similar_structures passes request metadata to helper",
     .package = "ComptoxR"
   )
 
-  result <- try(suppressWarnings(suppressMessages(ComptoxR::chemi_amos_get_similar_structures(identifier_type = "DTXSID7020182"))), silent = TRUE)
+  result <- try(
+    suppressWarnings(suppressMessages(ComptoxR::chemi_amos_get_similar_structures(identifier_type = "DTXSID7020182"))),
+    silent = TRUE
+  )
   expect_gt(length(calls), 0L)
   call <- calls[[1L]]
   expect_true(is.list(call))
@@ -30,6 +33,7 @@ test_that("chemi_amos_get_similar_structures passes request metadata to helper",
   expect_equal(call[["endpoint"]], "amos/get_similar_structures/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 1)
+  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
   expect_true("path_params" %in% names(call))

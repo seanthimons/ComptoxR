@@ -13,23 +13,12 @@
 #' chemi_amos_by_text(substr = "DTXSID7020182")
 #' }
 chemi_amos_by_text <- function(substr) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_amos_by_text", "pre_request", list(params = list(`substr` = substr, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("substr" %in% names(req_data$params)) {
-    substr <- req_data$params[["substr"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   result <- generic_request(
     query = substr,
     endpoint = "amos/search_by_text/",
     method = "GET",
     batch_limit = 1,
-    server = server,
+    server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE
   )

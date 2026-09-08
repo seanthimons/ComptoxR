@@ -14,34 +14,27 @@
 #' \dontrun{
 #' chemi_chet_chemicals_suggest(query = "DTXSID7020182")
 #' }
-chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_chet_chemicals_suggest", "pre_request", list(params = list(`query` = query, `limit` = limit, `only_in_reactions` = only_in_reactions, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("limit" %in% names(req_data$params)) {
-    limit <- req_data$params[["limit"]]
-  }
-  if ("only_in_reactions" %in% names(req_data$params)) {
-    only_in_reactions <- req_data$params[["only_in_reactions"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
+chemi_chet_chemicals_suggest <- function(
+  query,
+  limit = 8,
+  only_in_reactions = "true"
+) {
   # Collect optional parameters
   options <- list()
-  if (!is.null(query)) options[['query']] <- query
-  if (!is.null(limit)) options[['limit']] <- limit
-  if (!is.null(only_in_reactions)) options[['only_in_reactions']] <- only_in_reactions
-    result <- generic_request(
+  if (!is.null(query)) {
+    options[['query']] <- query
+  }
+  if (!is.null(limit)) {
+    options[['limit']] <- limit
+  }
+  if (!is.null(only_in_reactions)) {
+    options[['only_in_reactions']] <- only_in_reactions
+  }
+  result <- generic_request(
     endpoint = "chemicals/suggest",
     method = "GET",
     batch_limit = 0,
-    server = server,
+    server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
     options = options

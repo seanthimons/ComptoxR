@@ -33,6 +33,7 @@ test_that("chemi_amos_safety_data_sheet_keyset_pagination_bulk passes request me
   expect_equal(call[["endpoint"]], "amos/safety_data_sheet_keyset_pagination/")
   expect_equal(call[["method"]], "POST")
   expect_equal(call[["batch_limit"]], 0)
+  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
   expect_true("path_params" %in% names(call))

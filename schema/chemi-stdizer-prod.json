@@ -953,6 +953,43 @@
         ]
       }
     },
+    "/api/stdizer/groups/preflight": {
+      "post": {
+        "operationId": "groupCreatePostMultipartPreflight",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "files[]",
+            "required": true,
+            "schema": {
+              "items": {
+                "format": "binary",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LibraryGroupInfo"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "library-controller"
+        ]
+      }
+    },
     "/api/stdizer/groups/{id}": {
       "delete": {
         "operationId": "groupDelete",
@@ -1241,43 +1278,6 @@
         ]
       }
     },
-    "/api/stdizer/groups/preflight": {
-      "post": {
-        "operationId": "groupCreatePostMultipartPreflight",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/LibraryGroupInfo"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "library-controller"
-        ]
-      }
-    },
     "/api/stdizer/metadata": {
       "get": {
         "operationId": "getMetadata",
@@ -1391,6 +1391,39 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/Protocol"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "protocols-controller"
+        ]
+      }
+    },
+    "/api/stdizer/protocols/check": {
+      "get": {
+        "operationId": "protocolCheckGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
                 }
               }
             },
@@ -1751,39 +1784,6 @@
                     "type": "string"
                   },
                   "type": "array"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "protocols-controller"
-        ]
-      }
-    },
-    "/api/stdizer/protocols/check": {
-      "get": {
-        "operationId": "protocolCheckGet",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
                 }
               }
             },

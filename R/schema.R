@@ -2,13 +2,12 @@
 #'
 #' @description
 #' This function downloads the JSON schemas for the various ComptoxAI API
-#' endpoints (chemical, hazard, bioactivity, exposure) and for each server
-#' environment (production, staging, development). The schemas are saved in the
+#' endpoints (chemical, hazard, bioactivity, exposure) from production. The schemas are saved in the
 #' 'schema' directory of the project.
 #'
 #' @param timeout Maximum time (in seconds) to wait for each download. Default: 30.
 #'
-#' @return Invisibly sets the server to production and returns `NULL`.
+#' @return Invisibly returns `NULL` without changing endpoint settings.
 #'
 #' @examples
 #' if (interactive()) {
@@ -21,11 +20,7 @@ ct_schema <- function(timeout = 30) {
     dir.create(schema_dir, recursive = TRUE)
   }
 
-  serv <- list(
-    'prod' = 1,
-    'staging' = 2,
-    'dev' = 3
-  )
+  serv <- list('prod' = 1)
 
   endpoints <- c(
     'chemical',
@@ -39,9 +34,8 @@ ct_schema <- function(timeout = 30) {
     function(endpoint) {
       imap(serv, function(idx, server) {
         # Sets the path
-        ctx_server(idx)
 
-        url <- paste0(Sys.getenv('ctx_burl'), 'docs/', endpoint, '.json')
+        url <- paste0(.endpoint_default('ctx_burl'), 'docs/', endpoint, '.json')
         destfile <- here::here('schema', paste0("ctx-", endpoint, '-', server, '.json'))
 
         tryCatch(
@@ -75,21 +69,20 @@ ct_schema <- function(timeout = 30) {
     .progress = TRUE
   )
 
-  invisible(ctx_server(1))
+  invisible(NULL)
 }
 
 #' Download API schemas
 #'
 #' @description
 #' This function downloads the JSON schemas for the various Cheminformatic API
-#' endpoints (hazard, safety, etc.) and for each server
-#' environment (production, staging, development). The schemas are saved in the
+#' endpoints (hazard, safety, etc.) from production. The schemas are saved in the
 #' 'schema' directory of the project.
 #'
 #' @param record Logical. If TRUE, returns a tibble logging all download attempts.
 #' @param timeout Maximum time (in seconds) to wait for each download. Default: 30.
 #'
-#' @return Invisibly sets the server to production and returns `NULL`.
+#' @return Invisibly returns `NULL` without changing endpoint settings.
 #'
 #' @examples
 #' if (interactive()) {
@@ -102,11 +95,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
     dir.create(schema_dir, recursive = TRUE)
   }
 
-  serv <- list(
-    'prod' = 1,
-    'staging' = 2,
-    'dev' = 3
-  )
+  serv <- list('prod' = 1)
 
   ping_url <- function(url) {
     req <- httr2::request(url) %>%
@@ -221,13 +210,12 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
     serv,
     function(idx, server) {
       # Sets the path
-      chemi_server(idx)
 
       endpoints <-
         tryCatch(
           {
             request(paste0(
-              Sys.getenv('chemi_burl'),
+              .endpoint_default('chemi_burl'),
               '/services/cim_component_info'
             )) %>%
               req_timeout(timeout) %>%
@@ -244,58 +232,27 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
         )
 
       if (is.null(endpoints)) {
-        cli::cli_alert_warning(
-          "Could not retrieve endpoints for {server} server. Attempting to use development server as a fallback."
-        )
-
-        # Set server to last in list (dev) and try again
-        chemi_server(last(serv))
-
-        endpoints <-
-          tryCatch(
-            {
-              request(paste0(
-                Sys.getenv('chemi_burl'),
-                '/services/cim_component_info'
-              )) %>%
-                req_timeout(timeout) %>%
-                req_perform() %>%
-                resp_body_json() %>%
-                map(., ~ as_tibble(.x)) %>%
-                list_rbind() %>%
-                pull(name)
-            },
-            error = function(e) {
-              NULL
-            }
-          )
-
-        # Set server back to original for downloads
-        chemi_server(idx)
-
-        if (is.null(endpoints)) {
-          cli::cli_alert_warning("Fallback failed. Could not retrieve any endpoints for {server} server.")
-          return()
-        }
+        cli::cli_alert_warning('Could not retrieve production endpoints; existing schemas are preserved.')
+        return(NULL)
       }
 
       map(endpoints, function(endpoint) {
         # Candidate URL permutations to try (ordered by likelihood)
         url_candidates <- c(
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/api-docs'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/openapi.json'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/openapi.yaml'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/swagger.json'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/swagger.yaml'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/swagger.yml'),
-          paste0(Sys.getenv('chemi_burl'), '/api/', endpoint, '/openapi.json'),
-          paste0(Sys.getenv('chemi_burl'), '/api/', endpoint, '/openapi.yaml'),
-          paste0(Sys.getenv('chemi_burl'), '/api/', endpoint, '/swagger.yaml'),
-          paste0(Sys.getenv('chemi_burl'), '/api/', endpoint, '/swagger.json'),
-          paste0(Sys.getenv('chemi_burl'), '/api/', endpoint, '/api-docs'),
-          paste0(Sys.getenv('chemi_burl'), '/services/', endpoint, '/api-docs'),
-          paste0(Sys.getenv('chemi_burl'), '/services/', endpoint, '/swagger.json'),
-          paste0(Sys.getenv('chemi_burl'), "/", endpoint, '/swagger?format=json')
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/api-docs'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/openapi.json'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/openapi.yaml'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/swagger.json'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/swagger.yaml'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/swagger.yml'),
+          paste0(.endpoint_default('chemi_burl'), '/api/', endpoint, '/openapi.json'),
+          paste0(.endpoint_default('chemi_burl'), '/api/', endpoint, '/openapi.yaml'),
+          paste0(.endpoint_default('chemi_burl'), '/api/', endpoint, '/swagger.yaml'),
+          paste0(.endpoint_default('chemi_burl'), '/api/', endpoint, '/swagger.json'),
+          paste0(.endpoint_default('chemi_burl'), '/api/', endpoint, '/api-docs'),
+          paste0(.endpoint_default('chemi_burl'), '/services/', endpoint, '/api-docs'),
+          paste0(.endpoint_default('chemi_burl'), '/services/', endpoint, '/swagger.json'),
+          paste0(.endpoint_default('chemi_burl'), "/", endpoint, '/swagger?format=json')
         )
 
         for (u in url_candidates) {
@@ -324,9 +281,6 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
     },
     .progress = TRUE
   )
-
-  # Reset to production server
-  chemi_server(1)
 
   # Warn if no schemas were downloaded across all servers
   if (!any_schemas_downloaded && !isTRUE(record)) {

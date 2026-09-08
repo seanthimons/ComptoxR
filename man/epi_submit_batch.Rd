@@ -69,8 +69,8 @@ epi_submit_batch(
   subcooledVaporPressureMmHg = NULL,
   theta = NULL,
   tspUgPerM3 = NULL,
-  userKpCmPerHour = NULL,
   useSmiles = NULL,
+  userKpCmPerHour = NULL,
   vaporPressureMmHg = NULL,
   vaporPressureTemperatureC = 25,
   waterConcentrationMgPerCm3 = NULL,
@@ -209,9 +209,9 @@ epi_submit_batch(
 
 \item{tspUgPerM3}{Optional parameter}
 
-\item{userKpCmPerHour}{Optional parameter}
-
 \item{useSmiles}{Optional parameter}
+
+\item{userKpCmPerHour}{Optional parameter}
 
 \item{vaporPressureMmHg}{Optional resolved vapor pressure in mmHg. Its omission leaves structural HENRYWIN candidates available.}
 

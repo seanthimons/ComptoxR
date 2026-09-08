@@ -35,15 +35,15 @@ test_that("probe resolves Chemi wrappers case-insensitively and forwards argumen
 
   result <- probe_api_function("CHEMI_ALERTS_GROUPS_BY_ID", id = "group-42")
 
-  expect_identical(result$environment, c("production", "staging", "development"))
-  expect_identical(result$server_id, 1:3)
+  expect_identical(result$environment, "configured")
+  expect_identical(result$server_id, 1L)
   expect_true(all(result$valid))
   expect_true(all(grepl("group-42", request_urls, fixed = TRUE)))
   expect_identical(Sys.getenv("chemi_burl"), "https://original.example/api")
   expect_identical(.ComptoxREnv$probe_observer, sentinel)
 })
 
-test_that("probe enumerates all recognized CompTox servers", {
+test_that("probe uses the approved CompTox default", {
   testthat::local_mocked_bindings(
     req_perform = function(req) probe_json_response(req),
     .package = "httr2"
@@ -55,42 +55,36 @@ test_that("probe enumerates all recognized CompTox servers", {
     projection = "count"
   )
 
-  expect_identical(result$server_id, c(1L, 2L, 3L, 5L))
+  expect_identical(result$server_id, 1L)
   expect_identical(
     result$environment,
-    c("production", "staging", "development", "legacy staging")
+    "production"
   )
   expect_true(all(result$valid))
   expect_true(all(vapply(result$status_codes, identical, logical(1), 200L)))
 })
 
 test_that("probe reports empty, non-200, redirected, and thrown results", {
-  testthat::local_mocked_bindings(
-    req_perform = function(req) {
-      if (grepl("hcd.rtpnc", req$url, fixed = TRUE)) {
-        return(probe_json_response(req, body = "[]"))
-      }
-      if (grepl("cim.sciencedataexperts", req$url, fixed = TRUE)) {
-        return(probe_json_response(req, status = 503L))
-      }
-      probe_json_response(req, url = "https://redirect.example/api/alerts/groups/group-42")
-    },
-    .package = "httr2"
+  cases <- list(
+    list(body = '[]', message = 'Result is empty'),
+    list(status = 503L, message = 'HTTP status was not 200'),
+    list(url = 'https://redirect.example/api/alerts/groups/group-42', message = 'Observed URL does not match')
   )
-
-  result <- suppressWarnings(probe_api_function("chemi_alerts_groups_by_id", id = "group-42"))
-
-  expect_false(any(result$valid))
-  expect_match(result$error[[1]], "Result is empty", fixed = TRUE)
-  expect_match(result$error[[2]], "HTTP status was not 200", fixed = TRUE)
-  expect_match(result$error[[3]], "Observed URL does not match", fixed = TRUE)
-
-  testthat::local_mocked_bindings(
-    req_perform = function(req) stop("request exploded"),
-    .package = "httr2"
-  )
-  errors <- probe_api_function("chemi_alerts_groups_by_id", id = "group-42")
-  expect_true(all(errors$error == "request exploded"))
+  for (case in cases) {
+    testthat::local_mocked_bindings(
+      req_perform = function(req) {
+        args <- case[setdiff(names(case), 'message')]
+        do.call(probe_json_response, c(list(req = req), args))
+      },
+      .package = 'httr2'
+    )
+    result <- suppressWarnings(probe_api_function('chemi_alerts_groups_by_id', id = 'group-42'))
+    expect_false(any(result$valid))
+    expect_match(result$error[[1]], case$message, fixed = TRUE)
+  }
+  testthat::local_mocked_bindings(req_perform = function(req) stop('request exploded'), .package = 'httr2')
+  errors <- probe_api_function('chemi_alerts_groups_by_id', id = 'group-42')
+  expect_true(all(errors$error == 'request exploded'))
 })
 
 test_that("probe reports wrappers whose HTTP status cannot be observed", {

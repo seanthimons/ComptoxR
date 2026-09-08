@@ -5,21 +5,7 @@
 # post-response hooks validate and format the successful helper result.
 
 descriptor_selected_server <- function() {
-  selected <- Sys.getenv("chemi_burl", unset = "")
-  if (!nzchar(selected)) {
-    selected <- chemi_server(1, url_only = TRUE)
-  }
-  sub("/+$", "", selected)
-}
-
-descriptor_server_number <- function(url) {
-  urls <- vapply(
-    1:3,
-    chemi_server,
-    character(1),
-    url_only = TRUE
-  )
-  match(sub("/+$", "", url), sub("/+$", "", urls))
+  sub('/+$', '', .endpoint_target('chemi_burl'))
 }
 
 descriptor_scalar_chr <- function(x, default = NA_character_) {
@@ -538,34 +524,13 @@ descriptor_apply_fallback <- function(
   descriptor_refresh_request(data)
 }
 
-apply_aggregate_mordred_fallback <- function(data) {
-  params <- data$params
-  needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
-  if (
-    identical(descriptor_engine(data$fn_name, params), "mordred") &&
-      identical(descriptor_server_number(params$.route$server), 1L) &&
-      needs_headers
-  ) {
-    return(descriptor_apply_fallback(
-      data,
-      chemi_server(2, url_only = TRUE),
-      "mordred",
-      paste(
-        "Production aggregate Mordred cannot return validated headers;",
-        "using the staging dedicated Mordred service."
-      )
-    ))
-  }
-  data
-}
-
 apply_aggregate_rdkit_fallback <- function(data) {
   params <- data$params
-  selected_server <- descriptor_server_number(params$.route$server)
+  production <- identical(sub('/+$', '', params$.route$server), sub('/+$', '', .endpoint_default('chemi_burl')))
   needs_headers <- identical(params$output, "wide") || isTRUE(params$.request_headers)
   if (
     identical(descriptor_engine(data$fn_name, params), "rdkit") &&
-      (selected_server %in% c(2L, 3L) || (identical(selected_server, 1L) && needs_headers))
+      (production && needs_headers)
   ) {
     return(descriptor_apply_fallback(
       data,
@@ -576,21 +541,6 @@ apply_aggregate_rdkit_fallback <- function(data) {
         "using its dedicated RDKit service."
       ),
       engine_options = list(type = "ecfp", radius = 3L, bits = 1024L)
-    ))
-  }
-  data
-}
-
-apply_dedicated_mordred_fallback <- function(data) {
-  if (identical(descriptor_server_number(data$params$.route$server), 1L)) {
-    return(descriptor_apply_fallback(
-      data,
-      chemi_server(2, url_only = TRUE),
-      "mordred",
-      paste(
-        "Production dedicated Mordred is unavailable;",
-        "using the staging dedicated Mordred service."
-      )
     ))
   }
   data

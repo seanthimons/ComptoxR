@@ -240,7 +240,7 @@ generic_request <- function(
   # --- 1. Base URL Resolution ---
   # We check if 'server' refers to an environment variable (like 'ctx_burl').
   # If it doesn't exist, we assume 'server' is the literal URL.
-  base_url <- Sys.getenv(server, unset = server)
+  base_url <- .endpoint_url(server)
   if (base_url == "") {
     base_url <- server
   }
@@ -861,7 +861,7 @@ generic_chemi_request <- function(
   ...
 ) {
   # 1. Base URL Resolution
-  base_url <- Sys.getenv(server, unset = server)
+  base_url <- .endpoint_url(server)
   if (base_url == "") {
     base_url <- server
   }
@@ -1107,7 +1107,7 @@ generic_search_request <- function(
   tidy = TRUE
 ) {
   # 1. Base URL Resolution
-  base_url <- Sys.getenv(server, unset = server)
+  base_url <- .endpoint_url(server)
   if (base_url == "") {
     base_url <- server
   }
@@ -1199,7 +1199,7 @@ generic_pubchem_request <- function(
   tidy = TRUE
 ) {
   # --- 1. Base URL Resolution ---
-  base_url <- Sys.getenv(server, unset = server)
+  base_url <- .endpoint_url(server)
   if (base_url == "") {
     cli::cli_abort("PubChem server URL not configured. Run {.run pubchem_server(1)} first.")
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/probe_api_function.R
 \name{probe_api_function}
 \alias{probe_api_function}
-\title{Probe an API wrapper across configured servers}
+\title{Probe an API wrapper at its effective endpoint}
 \usage{
 probe_api_function(function_name, ...)
 }
@@ -21,8 +21,8 @@ returns nonempty data, every observed response has status 200, and every
 observed URL uses the configured server.
 }
 \description{
-Runs one exported \verb{chemi_*} or \verb{ct_*} API wrapper against each server
-recognized by \code{\link[=chemi_server]{chemi_server()}} or \code{\link[=ctx_server]{ctx_server()}}. HTTP responses are observed
+Runs one exported \verb{chemi_*} or \verb{ct_*} API wrapper at its configured URL or
+production default. Option precedence is preserved. HTTP responses are observed
 internally without changing the wrapper's return value or public signature.
 }
 \keyword{internal}

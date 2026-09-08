@@ -33,18 +33,14 @@ eco_path <- function() {
     return(con)
   }
 
-  # Use cached connection if valid
-  cached <- .ComptoxREnv$ecotox_db
-  if (!is.null(cached) && inherits(cached, "DBIConnection") && DBI::dbIsValid(cached)) {
-    return(cached)
+  path <- .endpoint_target('eco_burl')
+  .sync_database_target('eco_burl', path)
+  if (grepl('^https?://', path, ignore.case = TRUE)) {
+    cli::cli_abort('The selected target is an HTTP endpoint, not a database path.')
   }
-
-  # Resolve path: if eco_burl ends in .duckdb use that, else use eco_path()
-  eco_burl <- Sys.getenv("eco_burl")
-  if (nzchar(eco_burl) && grepl("\\.duckdb$", eco_burl)) {
-    path <- eco_burl
-  } else {
-    path <- eco_path()
+  cached <- .ComptoxREnv$ecotox_db
+  if (!is.null(cached) && inherits(cached, 'DBIConnection') && DBI::dbIsValid(cached)) {
+    return(cached)
   }
 
   if (!file.exists(path)) {

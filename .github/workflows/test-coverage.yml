@@ -78,6 +78,9 @@ jobs:
             any::vcr
           needs: check
 
+      - name: Install pinned development toolkit
+        run: Rscript dev/install_toolkit.R
+
       - name: Check package
         uses: r-lib/actions/check-r-package@v2
         with:

@@ -19,7 +19,7 @@ chemi_functional_use <- function(query) {
 
   req_list <- query %>%
     map(., function(dtxsid) {
-      request(Sys.getenv('chemi_burl')) %>%
+      request(.endpoint_target("chemi_burl")) %>%
         req_url_path_append("amos/functional_uses_for_dtxsid", dtxsid)
     })
 

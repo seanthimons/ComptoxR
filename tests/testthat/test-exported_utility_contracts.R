@@ -39,8 +39,8 @@ test_that("server helpers return URLs without changing process state", {
   ))
 
   cases <- list(
-    list(ctx_server, 2, "ctx_burl", "https://ctx-api-stg.ccte.epa.gov/"),
-    list(chemi_server, 2, "chemi_burl", "https://cim.sciencedataexperts.com/api"),
+    list(ctx_server, 1, "ctx_burl", "https://comptox.epa.gov/ctx-api/"),
+    list(chemi_server, 1, "chemi_burl", "https://hcd.rtpnc.epa.gov/api"),
     list(epi_server, 1, "epi_burl", "https://episuite.dev/api"),
     list(eco_server, 2, "eco_burl", "http://127.0.0.1:5555"),
     list(toxval_server, 2, "toxval_burl", "http://127.0.0.1:5556"),
@@ -53,8 +53,8 @@ test_that("server helpers return URLs without changing process state", {
     expect_match(Sys.getenv(case[[3]]), "-sentinel$")
   }
 
-  expect_identical(chemi_server(NULL, url_only = TRUE), "")
-  expect_identical(suppressMessages(chemi_server(99, url_only = TRUE)), "")
+  expect_error(chemi_server(NULL, url_only = TRUE), "HTTP")
+  expect_error(chemi_server(99, url_only = TRUE), "not supported")
   expect_identical(Sys.getenv("chemi_burl"), "chemi-sentinel")
   expect_error(chemi_server(1, url_only = NA), "url_only")
 })

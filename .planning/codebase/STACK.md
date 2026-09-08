@@ -77,13 +77,13 @@
 **Set via server configuration functions:**
 - `ctx_burl` - CompTox Dashboard API base URL
   - Production: `https://comptox.epa.gov/ctx-api/`
-  - Staging: `https://ctx-api-stg.ccte.epa.gov/`
-  - Development: `https://ctx-api-dev.ccte.epa.gov/`
+  - Staging: `LOCAL_CONFIGURATION_REQUIRED`
+  - Development: `LOCAL_CONFIGURATION_REQUIRED`
 
 - `chemi_burl` - Cheminformatics API base URL
   - Production: `https://hcd.rtpnc.epa.gov/api`
-  - Staging: `https://cim.sciencedataexperts.com/api`
-  - Development: `https://cim-dev.sciencedataexperts.com/api`
+  - Staging: `LOCAL_CONFIGURATION_REQUIRED`
+  - Development: `LOCAL_CONFIGURATION_REQUIRED`
 
 - `epi_burl` - EPI Suite API base URL
   - Production: `https://episuite.dev/api`

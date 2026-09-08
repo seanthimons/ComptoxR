@@ -193,137 +193,13 @@ ct_spec <- list(
   }
 )
 
-chemi_stage_priority <- c("public", "staging", "development")
-
-chemi_schema_stage <- function(source_file) {
-  stage <- stringr::str_match(source_file, "-(prod|staging|dev)\\.json$")[, 2]
-  dplyr::recode(stage, prod = "public", dev = "development", .missing = "public")
-}
-
-normalize_chemi_operation_route <- function(route) {
-  route %>%
-    stringr::str_replace_all("/{2,}", "/") %>%
-    stringr::str_remove("^/+") %>%
-    stringr::str_remove("/+$") %>%
-    stringr::str_replace_all("\\{[^}]+\\}", "{}")
-}
-
-chemi_contract_value <- function(row, name, default = NULL) {
-  value <- row[[name]]
-  if (is.null(value)) {
-    return(default)
-  }
-  if (is.list(value) && length(value) == 1L) {
-    return(value[[1]])
-  }
-  value
-}
-
-normalize_chemi_parameter_metadata <- function(metadata) {
-  purrr::map(metadata, function(parameter) {
-    parameter$type <- NULL
-    parameter
-  })
-}
-
-normalize_chemi_content_type <- function(content_type) {
-  content_type <- content_type %||% ""
-  if (!nzchar(trimws(content_type))) "application/json" else content_type
-}
-
-canonical_chemi_request_contract <- function(row) {
-  contract <- list(
-    route = chemi_contract_value(row, "route", ""),
-    method = chemi_contract_value(row, "method", ""),
-    parameters = list(
-      path = chemi_contract_value(row, "path_params", ""),
-      query = chemi_contract_value(row, "query_params", ""),
-      body = chemi_contract_value(row, "body_params", ""),
-      path_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "path_param_metadata", list())
-      ),
-      query_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "query_param_metadata", list())
-      ),
-      body_metadata = normalize_chemi_parameter_metadata(
-        chemi_contract_value(row, "body_param_metadata", list())
-      )
-    ),
-    request_body = list(
-      type = chemi_contract_value(row, "body_schema_type", "unknown"),
-      schema = chemi_contract_value(row, "body_schema_full", list()),
-      item_type = chemi_contract_value(row, "body_item_type", NA_character_)
-    ),
-    content_type = normalize_chemi_content_type(
-      chemi_contract_value(row, "content_type", "")
-    ),
-    request_type = chemi_contract_value(row, "request_type", ""),
-    pagination = chemi_contract_value(row, "pagination_metadata", list())
-  )
-  jsonlite::toJSON(contract, auto_unbox = TRUE, null = "null", na = "null")
-}
-
-collapse_chemi_stage_contracts <- function(endpoints) {
-  if (nrow(endpoints) == 0L) {
-    return(endpoints)
-  }
-
-  endpoints$schema_stage <- vapply(
-    endpoints$source_file,
-    chemi_schema_stage,
-    character(1)
-  )
-  endpoints$operation_route <- normalize_chemi_operation_route(endpoints$route)
-  endpoints$operation_key <- paste(
-    endpoints$service_slug,
-    endpoints$operation_route,
-    endpoints$method,
-    sep = "\034"
-  )
-  endpoints$contract_key <- vapply(
-    seq_len(nrow(endpoints)),
-    function(i) canonical_chemi_request_contract(endpoints[i, , drop = FALSE]),
-    character(1)
-  )
-
-  collapsed <- lapply(split(seq_len(nrow(endpoints)), endpoints$operation_key), function(indices) {
-    operation <- endpoints[indices, , drop = FALSE]
-    contracts <- split(seq_len(nrow(operation)), operation$contract_key)
-    variants <- lapply(contracts, function(contract_indices) {
-      rows <- operation[contract_indices, , drop = FALSE]
-      ranks <- match(rows$schema_stage, chemi_stage_priority)
-      representative <- rows[order(ranks, rows$source_file)[1], , drop = FALSE]
-      supported <- chemi_stage_priority[chemi_stage_priority %in% rows$schema_stage]
-      representative$supported_schema_stages <- list(supported)
-      representative$preferred_fallback_stage <- supported[[1]]
-      representative
-    }) %>%
-      dplyr::bind_rows()
-
-    ranks <- match(variants$schema_stage, chemi_stage_priority)
-    variants <- variants[order(ranks, variants$contract_key), , drop = FALSE]
-    variants$variant_suffix <- c(
-      "",
-      if (nrow(variants) > 1L) paste0("_", variants$schema_stage[-1L]) else character()
-    )
-    variants
-  }) %>%
-    dplyr::bind_rows()
-
-  collapsed %>%
-    arrange(
-      service_slug,
-      operation_route,
-      factor(method, levels = c("GET", "POST")),
-      match(schema_stage, chemi_stage_priority)
-    )
-}
-
-append_chemi_variant_suffix <- function(path, suffix) {
-  if (!nzchar(suffix)) {
-    return(path)
-  }
-  paste0(tools::file_path_sans_ext(path), suffix, ".R")
+prepare_chemi_operations <- function(endpoints) {
+  endpoints %>%
+    mutate(
+      schema_stage = 'public',
+      operation_key = paste(service_slug, route, method, sep = '\034')
+    ) %>%
+    distinct(operation_key, .keep_all = TRUE)
 }
 
 name_chemi_endpoints <- function(endpoints) {
@@ -374,50 +250,18 @@ name_chemi_endpoints <- function(endpoints) {
   endpoints %>%
     left_join(naming, by = "operation_key") %>%
     mutate(
-      file = purrr::map2_chr(file, variant_suffix, append_chemi_variant_suffix),
-      fn = paste0(fn, variant_suffix),
       route = strip_curly_params(route, leading_slash = "remove") %>% str_remove_all("^api/")
-    ) %>%
-    select(-contract_key, -operation_route, -variant_suffix)
+    )
 }
 
 write_generated_hook_config <- function(
   endpoints,
-  path = client_path("inst", "hook_config_generated.yml"),
+  path = client_path('inst', 'hook_config_generated.yml'),
   implemented_only = FALSE
 ) {
-  generated <- endpoints %>%
-    filter(purrr::map_lgl(file, function(file) {
-      source_path <- client_path("R", file)
-      !file.exists(source_path) || !has_protected_lifecycle(source_path)
-    }))
-
-  if (implemented_only) {
-    generated <- generated %>%
-      filter(purrr::map2_lgl(
-        file,
-        fn,
-        ~ is_operation_implemented(.x, .y, client_path("R"))
-      ))
-  }
-
-  generated <- generated %>%
-    arrange(fn)
-
-  config <- stats::setNames(
-    lapply(seq_len(nrow(generated)), function(i) {
-      supported <- generated$supported_schema_stages[[i]]
-      list(
-        supported_schema_stages = as.list(supported),
-        preferred_fallback_stage = generated$preferred_fallback_stage[[i]],
-        pre_request = list("enforce_stage_server")
-      )
-    }),
-    generated$fn
-  )
-
-  yaml::write_yaml(config, path)
-  invisible(config)
+  # No public operation changes its configured host through generated metadata.
+  yaml::write_yaml(list(), path)
+  invisible(list())
 }
 
 chemi_spec <- list(
@@ -427,7 +271,7 @@ chemi_spec <- list(
   build_endpoints = function() {
     chemi_schema_files <- sort(list.files(
       path = client_path("schema"),
-      pattern = "^chemi-.*-(prod|staging|dev)\\.json$",
+      pattern = "^chemi-.*-prod\\.json$",
       full.names = FALSE
     ))
     chemi_schema_files <- chemi_schema_files[!grepl("ui", chemi_schema_files, ignore.case = TRUE)]
@@ -450,7 +294,7 @@ chemi_spec <- list(
             spec <- openapi_to_spec(openapi)
             spec$source_file <- .x
             spec$service_slug <- sub(
-              "^chemi-(.*)-(prod|staging|dev)\\.json$",
+              "^chemi-(.*)-prod\\.json$",
               "\\1",
               .x
             )
@@ -465,7 +309,7 @@ chemi_spec <- list(
           ) %>%
           mutate(batch_limit = 0)
 
-        ep %>% collapse_chemi_stage_contracts() %>% name_chemi_endpoints()
+        ep %>% prepare_chemi_operations() %>% name_chemi_endpoints()
       },
       error = function(e) {
         cli_alert_warning("Error parsing chemi schemas: {e$message}")
@@ -507,9 +351,9 @@ epi_spec <- list(
   config = epi_config,
   build_endpoints = function() {
     epi_schema_files <- select_schema_files(
-      pattern = "^epi-.*\\.json$",
+      pattern = "^epi-.*-prod\\.json$",
       exclude_pattern = NULL,
-      stage_priority = c("prod", "staging", "dev")
+      stage_priority = "prod"
     )
 
     if (length(epi_schema_files) == 0) {

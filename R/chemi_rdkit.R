@@ -16,9 +16,26 @@
 #' \dontrun{
 #' chemi_rdkit(smiles = "DTXSID7020182")
 #' }
-chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_rdkit", "pre_request", list(params = list(`smiles` = smiles, `type` = type, `radius` = radius, `bits` = bits, `output` = output, `server` = server)))
+chemi_rdkit <- function(
+  smiles,
+  type = NULL,
+  radius = NULL,
+  bits = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_rdkit",
+    "pre_request",
+    list(
+      params = list(
+        `smiles` = smiles,
+        `type` = type,
+        `radius` = radius,
+        `bits` = bits,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {
@@ -60,9 +77,28 @@ chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output 
 #' \dontrun{
 #' chemi_rdkit_bulk(chemicals = "DTXSID1024122")
 #' }
-chemi_rdkit_bulk <- function(chemicals, options = NULL, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_rdkit_bulk", "pre_request", list(params = list(`chemicals` = chemicals, `options` = options, `type` = type, `radius` = radius, `bits` = bits, `output` = output, `server` = server)))
+chemi_rdkit_bulk <- function(
+  chemicals,
+  options = NULL,
+  type = NULL,
+  radius = NULL,
+  bits = NULL,
+  output = c("wide", "raw")
+) {
+  req_data <- run_hook(
+    "chemi_rdkit_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `chemicals` = chemicals,
+        `options` = options,
+        `type` = type,
+        `radius` = radius,
+        `bits` = bits,
+        `output` = output
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     result <- req_data$result
   } else {

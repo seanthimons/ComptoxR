@@ -19,10 +19,28 @@
 #' \dontrun{
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
+chemi_resolver_getpubchemlist <- function(
+  query,
+  idType = "AnyId",
+  section = NULL,
+  all_pages = TRUE,
+  max_pages = 100
+) {
   chemicals <- NULL
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_resolver_getpubchemlist", "pre_request", list(params = list(`query` = query, `idType` = idType, `section` = section, `all_pages` = all_pages, `max_pages` = max_pages, `chemicals` = chemicals, `server` = server)))
+  req_data <- run_hook(
+    "chemi_resolver_getpubchemlist",
+    "pre_request",
+    list(
+      params = list(
+        `query` = query,
+        `idType` = idType,
+        `section` = section,
+        `all_pages` = all_pages,
+        `max_pages` = max_pages,
+        `chemicals` = chemicals
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -44,13 +62,12 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(section)) extra_options$section <- section
+  if (!is.null(section)) {
+    extra_options$section <- section
+  }
 
   result <- generic_chemi_request(
     query = query,
@@ -58,7 +75,6 @@ chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NUL
     options = extra_options,
     tidy = FALSE,
     chemicals = chemicals,
-    server = server,
     paginate = all_pages,
     max_pages = max_pages,
     pagination_strategy = "page_size"

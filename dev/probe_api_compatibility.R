@@ -218,8 +218,8 @@ run_compatibility_probe <- function() {
     },
     add = TRUE
   )
-  labels <- c("production", "staging", "development")
-  urls <- vapply(1:3, chemi_server, character(1), url_only = TRUE)
+  labels <- "configured"
+  urls <- chemi_server(url_only = TRUE)
   inputs <- c("CCO", "DTXSID7020182", "DTXSID000000000")
   results <- list()
   add <- function(...) results[[length(results) + 1L]] <<- probe_case(...)

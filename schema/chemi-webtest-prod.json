@@ -200,94 +200,6 @@
         },
         "type": "object"
       },
-      "Descriptor": {
-        "properties": {
-          "coefficient": {
-            "type": "string"
-          },
-          "coefficientUncertainty": {
-            "type": "string"
-          },
-          "definition": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "value_x_coefficient": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "DescriptorsRequest": {
-        "properties": {
-          "chemicals": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "chemIdType": {
-            "enum": [
-              "DTXSID",
-              "DTXCID",
-              "SMILES",
-              "MOL",
-              "CAS",
-              "Name",
-              "InChI",
-              "InChIKey",
-              "InChIKey_1",
-              "AnyId"
-            ],
-            "type": "string"
-          },
-          "format": {
-            "enum": [
-              "JSON",
-              "CSV",
-              "TSV"
-            ],
-            "type": "string"
-          },
-          "options": {
-            "additionalProperties": {},
-            "type": "object"
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "DescriptorsResponse": {
-        "properties": {
-          "chemicals": {
-            "items": {
-              "$ref": "#/components/schemas/ChemicalDescriptors"
-            },
-            "type": "array"
-          },
-          "headers": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "info": {
-            "$ref": "#/components/schemas/VersionInfo"
-          },
-          "options": {
-            "additionalProperties": {},
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
       "DSSToxRecord": {
         "properties": {
           "averageMass": {
@@ -333,6 +245,94 @@
           },
           "smiles": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Descriptor": {
+        "properties": {
+          "coefficient": {
+            "type": "string"
+          },
+          "coefficientUncertainty": {
+            "type": "string"
+          },
+          "definition": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "value_x_coefficient": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DescriptorsRequest": {
+        "properties": {
+          "chemIdType": {
+            "enum": [
+              "DTXSID",
+              "DTXCID",
+              "SMILES",
+              "MOL",
+              "CAS",
+              "Name",
+              "InChI",
+              "InChIKey",
+              "InChIKey_1",
+              "AnyId"
+            ],
+            "type": "string"
+          },
+          "chemicals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "format": {
+            "enum": [
+              "JSON",
+              "CSV",
+              "TSV"
+            ],
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "DescriptorsResponse": {
+        "properties": {
+          "chemicals": {
+            "items": {
+              "$ref": "#/components/schemas/ChemicalDescriptors"
+            },
+            "type": "array"
+          },
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "info": {
+            "$ref": "#/components/schemas/VersionInfo"
+          },
+          "options": {
+            "additionalProperties": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -437,17 +437,6 @@
         },
         "type": "object"
       },
-      "MethodInfo": {
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "MOAPrediction": {
         "properties": {
           "clusterModelLC50": {
@@ -487,6 +476,17 @@
               "$ref": "#/components/schemas/MOAPrediction"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "MethodInfo": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -777,19 +777,13 @@
           "molarLogUnits": {
             "type": "string"
           },
-          "predictedValueNote": {
-            "type": "string"
-          },
-          "predictedValueSuperscript": {
+          "predMOA": {
             "type": "string"
           },
           "predMinMaxVal": {
             "type": "string"
           },
           "predMinMaxValMass": {
-            "type": "string"
-          },
-          "predMOA": {
             "type": "string"
           },
           "predToxValMass": {
@@ -799,6 +793,12 @@
             "type": "string"
           },
           "predValueEndpoint": {
+            "type": "string"
+          },
+          "predictedValueNote": {
+            "type": "string"
+          },
+          "predictedValueSuperscript": {
             "type": "string"
           },
           "source": {

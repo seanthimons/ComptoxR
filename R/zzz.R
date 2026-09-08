@@ -25,17 +25,17 @@ run_setup <- function() {
 
   server_urls <- list(
     "EPI Suite API" = list(
-      display_url = Sys.getenv("epi_burl"),
-      ping_url = Sys.getenv("epi_burl")
+      display_url = .endpoint_target("epi_burl"),
+      ping_url = .endpoint_target("epi_burl")
     ),
     "PubChem PUG REST" = list(
-      display_url = Sys.getenv("pubchem_burl"),
-      ping_url = paste0(Sys.getenv("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
+      display_url = .endpoint_target("pubchem_burl"),
+      ping_url = paste0(.endpoint_target("pubchem_burl"), "compound/cid/2244/property/MolecularFormula/JSON")
     )
   )
 
   # ECOTOX is handled as a custom entry below (not in the ping list)
-  eco_url <- Sys.getenv("eco_burl")
+  eco_url <- .endpoint_target("eco_burl")
 
   # Filter out any endpoints with empty/unset URLs
   active_endpoints <- purrr::keep(
@@ -113,7 +113,7 @@ run_setup <- function() {
     # verbose startup does not pay 4x5s serially. Ordered first in `results`.
     ctx_result <- tryCatch(
       {
-        ctx_burl <- Sys.getenv("ctx_burl")
+        ctx_burl <- .endpoint_target("ctx_burl")
         ctx_domains <- c("chemical", "hazard", "exposure", "bioactivity")
         reqs <- purrr::map(ctx_domains, function(domain) {
           httr2::request(paste0(ctx_burl, domain, "/health")) %>%
@@ -154,7 +154,7 @@ run_setup <- function() {
       error = function(e) {
         list(
           name = "CompTox Dashboard API",
-          url = Sys.getenv("ctx_burl"),
+          url = .endpoint_target("ctx_burl"),
           status_text = cli::col_red("ERROR (Failed to reach endpoints)"),
           latency = NA_real_,
           latency_fmt = ""
@@ -167,7 +167,7 @@ run_setup <- function() {
     tryCatch(
       {
         start_time <- Sys.time()
-        resp <- httr2::request(paste0(Sys.getenv('chemi_burl'), "/services/cim_component_info")) %>%
+        resp <- httr2::request(paste0(.endpoint_target("chemi_burl"), "/services/cim_component_info")) %>%
           httr2::req_timeout(5) %>%
           httr2::req_error(is_error = \(resp) FALSE) %>%
           httr2::req_perform()
@@ -192,7 +192,7 @@ run_setup <- function() {
           results,
           list(list(
             name = "Cheminformatics API",
-            url = Sys.getenv("chemi_burl"),
+            url = .endpoint_target("chemi_burl"),
             status_text = chemi_status,
             latency = latency,
             latency_fmt = latency_fmt
@@ -205,7 +205,7 @@ run_setup <- function() {
           results,
           list(list(
             name = "Cheminformatics API",
-            url = Sys.getenv("chemi_burl"),
+            url = .endpoint_target("chemi_burl"),
             status_text = chemi_status,
             latency = NA_real_,
             latency_fmt = ""
@@ -285,7 +285,7 @@ run_setup <- function() {
     )
 
     # ToxValDB — show active mode
-    toxval_url <- Sys.getenv("toxval_burl")
+    toxval_url <- .endpoint_target("toxval_burl")
     toxval_latency <- NA_real_
     toxval_latency_fmt <- ""
 
@@ -364,7 +364,7 @@ run_setup <- function() {
         ""
       }
       url_display <- if (nzchar(result$url)) {
-        paste0(result$url, " - ")
+        paste0(.diagnostic_endpoint(result$url), " - ")
       } else {
         ""
       }
@@ -393,391 +393,116 @@ run_setup <- function() {
 }
 
 
-#' Set API endpoints for Comptox API endpoints
+#' Set the CompTox endpoint
 #'
-#' @param server Defines what server to target. If `NULL` the server URL is
-#'   reset. Valid options are:
-#'   \itemize{
-#'     \item Production: 1
-#'     \item Staging: 2
-#'     \item Development: 3
-#'     \item Scraping: 9
-#'   }
-#' @param url_only If `TRUE`, return the selected URL without changing
-#'   `ctx_burl`.
-#'
-#' @return The selected URL when `url_only = TRUE`; otherwise the configured
-#'   `ctx_burl`.
+#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.ctx_burl` takes precedence over the lowercase
+#'   environment variable `ctx_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
-
 ctx_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("ctx_burl" = "")
-    }
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = "https://comptox.epa.gov/ctx-api/",
-      "2" = "https://ctx-api-stg.ccte.epa.gov/",
-      "3" = "https://ctx-api-dev.ccte.epa.gov/",
-      "5" = "https://comptoxstaging.rtpnc.epa.gov/ctx-api/",
-      {
-        cli::cli_alert_warning("\nInvalid server option selected!\n")
-        #cli::cli_alert_info("Valid options are 1 (Production), 2 (Staging), 3 (Development), and 9 (Scraping).")
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("ctx_burl" = url)
-    Sys.getenv('ctx_burl')
-  }
+  .set_endpoint('ctx_burl', server, url_only, list('1' = .endpoint_default('ctx_burl')))
 }
 
-#' Set API endpoints for Cheminformatics API endpoints
+#' Set the Cheminformatics endpoint
 #'
-#' This function sets the API endpoint for the Cheminformatics API based on the
-#' specified server. If no server is specified, the function resets the API
-#' endpoint to an empty string.
-#'
-#' @param server Defines what server to target. If `NULL`, the server URL is
-#'   reset. Valid options are:
-#'   \itemize{
-#'     \item Production: 1
-#'     \item Staging: 2
-#'     \item Development: 3
-#'   }
-#' @param url_only If `TRUE`, return the selected URL without changing
-#'   `chemi_burl`.
-#'
-#' @return The selected URL when `url_only = TRUE`; otherwise the configured
-#'   `chemi_burl`.
+#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.chemi_burl` takes precedence over the lowercase
+#'   environment variable `chemi_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
 chemi_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("chemi_burl" = "")
-    }
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = "https://hcd.rtpnc.epa.gov/api",
-      # "2" = Sys.setenv("chemi_burl" = "https://hazard-dev.sciencedataexperts.com/api"),
-      # "3" = Sys.setenv("chemi_burl" = "https://ccte-cced-cheminformatics.epa.gov/api"),
-      "2" = "https://cim.sciencedataexperts.com/api",
-      "3" = "https://cim-dev.sciencedataexperts.com/api",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info(
-          "Valid options are 1 (Production), 2 (Staging), 3 (Development)."
-        )
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("chemi_burl" = url)
-    Sys.getenv("chemi_burl")
-  }
+  .set_endpoint('chemi_burl', server, url_only, list('1' = .endpoint_default('chemi_burl')))
 }
 
-#' Set API endpoints for EPI Suite API endpoints
+#' Set the EPI Suite endpoint
 #'
-#' @param server Defines what server to target.
-#' @param url_only If `TRUE`, return the selected URL without changing
-#'   `epi_burl`.
-#'
-#' @return The selected URL when `url_only = TRUE`; otherwise the configured
-#'   `epi_burl`.
+#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.epi_burl` takes precedence over the lowercase
+#'   environment variable `epi_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
-
 epi_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("epi_burl" = "")
-    }
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = "https://episuite.dev/api",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info("Valid option is 1 (Production).")
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("epi_burl" = url)
-    Sys.getenv("epi_burl")
-  }
+  .set_endpoint('epi_burl', server, url_only, list('1' = .endpoint_default('epi_burl')))
 }
 
-#' Set API endpoints for ECOTOX API endpoints
+#' Set the ECOTOX endpoint
 #'
-#' @param server Defines what server to target.
-#' @param url_only If `TRUE`, return the selected URL or database path without
-#'   changing `eco_burl` or closing a cached connection.
-#'
-#' @return The selected URL or path when `url_only = TRUE`; otherwise the
-#'   configured `eco_burl`.
+#' @param server Use 1 for the local database, 2 for localhost Plumber, or 3 for the public browser site. The browser site is not a REST API. A database file path or HTTP(S) URL is also accepted.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.eco_burl` takes precedence over the lowercase
+#'   environment variable `eco_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
-
 eco_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  # Close stale connections on every mode switch
-  if (!url_only) {
-    .eco_close_con()
-  }
-
-  if (!is.null(server) && length(server) != 1) {
-    cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
-  }
-
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    cli::cli_alert_danger("Server URL reset!")
-    Sys.setenv("eco_burl" = "")
-  } else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
-    # String path to a local DuckDB file
-    if (!file.exists(server)) {
-      cli::cli_abort("ECOTOX database file not found: {.path {server}}")
-    }
-    url <- normalizePath(server, mustWork = TRUE)
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("eco_burl" = url)
-    Sys.getenv("eco_burl")
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = {
-        db_path <- eco_path()
-        if (!file.exists(db_path)) {
-          cli::cli_alert_warning(
-            "ECOTOX database not found at {.path {db_path}}. Run {.run eco_install()} to set up."
-          )
-        }
-        db_path
-      },
-      "2" = "http://127.0.0.1:5555",
-      "3" = "https://cfpub.epa.gov/ecotox/index.cfm",
-      "4" = "https://hcd.rtpnc.epa.gov/",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info(
-          "Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev site), or a file path."
-        )
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("eco_burl" = url)
-    Sys.getenv("eco_burl")
-  }
+  .set_endpoint(
+    'eco_burl',
+    server,
+    url_only,
+    list('1' = eco_path(), '2' = 'http://127.0.0.1:5555', '3' = 'https://cfpub.epa.gov/ecotox/index.cfm')
+  )
 }
 
-#' Set API endpoints for ToxValDB endpoints
+#' Set the ToxValDB endpoint
 #'
-#' @param server Defines what server to target. If `NULL`, the server URL is
-#'   reset. Valid options are:
-#'   \itemize{
-#'     \item Local DuckDB: 1
-#'     \item Plumber: 2
-#'     \item EPA ToxValDB browser: 3
-#'     \item Development: 4
-#'   }
-#'   A string argument is treated as a path to a custom `.duckdb` file.
-#' @param url_only If `TRUE`, return the selected URL or database path without
-#'   changing `toxval_burl` or closing a cached connection.
-#'
-#' @return The selected URL or path when `url_only = TRUE`; otherwise the
-#'   configured `toxval_burl`.
+#' @param server Use 1 for the local database, 2 for localhost Plumber, or 3 for the public browser site. The browser site is not a REST API. A database file path or HTTP(S) URL is also accepted.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.toxval_burl` takes precedence over the lowercase
+#'   environment variable `toxval_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
 toxval_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  # Close stale connections on every mode switch
-  if (!url_only) {
-    .tox_close_con()
-  }
-
-  if (!is.null(server) && length(server) != 1) {
-    cli::cli_abort("{.arg server} must be a single value, not length {length(server)}.")
-  }
-
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    cli::cli_alert_danger("Server URL reset!")
-    Sys.setenv("toxval_burl" = "")
-  } else if (is.character(server) && !server %in% c("1", "2", "3", "4")) {
-    # String path to a local DuckDB file
-    if (!file.exists(server)) {
-      cli::cli_abort("ToxValDB database file not found: {.path {server}}")
-    }
-    url <- normalizePath(server, mustWork = TRUE)
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("toxval_burl" = url)
-    Sys.getenv("toxval_burl")
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = {
-        db_path <- toxval_path()
-        if (!file.exists(db_path)) {
-          cli::cli_alert_warning(
-            "ToxValDB database not found at {.path {db_path}}. Run {.run toxval_install()} to set up."
-          )
-        }
-        db_path
-      },
-      "2" = "http://127.0.0.1:5556",
-      "3" = "https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL",
-      "4" = "",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info(
-          "Valid options are 1 (DuckDB), 2 (Plumber), 3 (Public site), 4 (Dev), or a file path."
-        )
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
+  .set_endpoint(
+    'toxval_burl',
+    server,
+    url_only,
+    list(
+      '1' = toxval_path(),
+      '2' = 'http://127.0.0.1:5556',
+      '3' = 'https://comptox.epa.gov/dashboard/chemical-lists/TOXVAL'
     )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("toxval_burl" = url)
-    Sys.getenv("toxval_burl")
-  }
+  )
 }
 
+#' Set the Natural Products endpoint
+#'
+#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.np_burl` takes precedence over the lowercase
+#'   environment variable `np_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
+#' @keywords internal
 np_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("np_burl" = "")
-    }
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = "https://api.naturalproducts.net/latest/",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info("Valid options are 1 (Production).")
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("np_burl" = url)
-    Sys.getenv("np_burl")
-  }
+  .set_endpoint('np_burl', server, url_only, list('1' = .endpoint_default('np_burl')))
 }
 
-#' Set API endpoint for PubChem PUG REST API
+#' Set the PubChem endpoint
 #'
-#' PubChem only has a production endpoint (no staging or development).
-#'
-#' @param server Defines what server to target. If `NULL`, the server URL is
-#'   reset. Only valid option is `1` (Production).
-#' @param url_only If `TRUE`, return the selected URL without changing
-#'   `pubchem_burl`.
-#'
-#' @return The selected URL when `url_only = TRUE`; otherwise the configured
-#'   `pubchem_burl`.
+#' @param server Use 1 for production, or supply an explicit HTTP(S) URL.
+#'   NULL clears the environment setting and restores option/default resolution.
+#' @param url_only Return the selected target without changing settings or connections.
+#' @details The option `ComptoxR.pubchem_burl` takes precedence over the lowercase
+#'   environment variable `pubchem_burl`. An unset option and empty environment variable
+#'   use the package default. Removed development modes give a configuration error.
+#' @return The selected target for `url_only = TRUE`; otherwise the effective target.
 #' @export
 pubchem_server <- function(server = NULL, url_only = FALSE) {
-  if (!rlang::is_bool(url_only)) {
-    cli::cli_abort("{.arg url_only} must be one TRUE or FALSE value.")
-  }
-  if (is.null(server)) {
-    if (url_only) {
-      return("")
-    }
-    {
-      cli::cli_alert_danger("Server URL reset!")
-      Sys.setenv("pubchem_burl" = "")
-    }
-  } else {
-    url <- switch(
-      as.character(server),
-      "1" = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/",
-      {
-        cli::cli_alert_warning("Invalid server option selected!")
-        cli::cli_alert_info("Valid option is 1 (Production). PubChem has no staging environment.")
-        if (!url_only) {
-          cli::cli_alert_warning("Server URL reset!")
-        }
-        ""
-      }
-    )
-    if (url_only) {
-      return(url)
-    }
-    Sys.setenv("pubchem_burl" = url)
-    Sys.getenv("pubchem_burl")
-  }
+  .set_endpoint('pubchem_burl', server, url_only, list('1' = .endpoint_default('pubchem_burl')))
 }
 
 #' Set debug mode
@@ -921,9 +646,7 @@ reset_servers <- function() {
 # Attach -----------------------------------------------------------------
 
 .onAttach <- function(libname, pkgname) {
-  # Server URLs and defaults are now set in .onLoad() so they're available
-  # even when using namespace access (ComptoxR::function) without library().
-  # .onAttach() only handles startup messages.
+  # Effective endpoints are resolved on use. Attach only handles startup messages.
 
   # Conditionally display startup message based on verbosity
   if (.run_verbose_enabled() && !identical(Sys.getenv("R_DEVTOOLS_LOAD"), "true")) {
@@ -963,61 +686,7 @@ reset_servers <- function() {
   s3_register("roxygen2::roxy_tag_rd", "roxy_tag_apiStage")
   s3_register("base::format", "rd_section_apiStage")
 
-  # Set up server URLs and defaults - must be in .onLoad() so they're
-  # available when using namespace access (e.g., ComptoxR::ct_hazard())
-  # without calling library(ComptoxR) first.
-  # Suppress messages during package load to comply with CRAN policy
-  suppressMessages({
-    if (is.na(utils::packageDate('ComptoxR'))) {
-      # DEV version defaults (only if not already set)
-      if (Sys.getenv("ctx_burl") == "") {
-        ctx_server(server = 2)
-      }
-      if (Sys.getenv("chemi_burl") == "") {
-        chemi_server(server = 3)
-      }
-      if (Sys.getenv("epi_burl") == "") {
-        epi_server(server = 1)
-      }
-      if (Sys.getenv("eco_burl") == "") {
-        eco_server(server = 1)
-      }
-      if (Sys.getenv("toxval_burl") == "") {
-        toxval_server(server = 1)
-      }
-      if (Sys.getenv("np_burl") == "") {
-        np_server(server = 1)
-      }
-      if (Sys.getenv("pubchem_burl") == "") {
-        pubchem_server(server = 1)
-      }
-      batch_limit(limit = 200)
-    } else {
-      # Production version defaults (only if not already set)
-      if (Sys.getenv("ctx_burl") == "") {
-        ctx_server(server = 1)
-      }
-      if (Sys.getenv("chemi_burl") == "") {
-        chemi_server(server = 1)
-      }
-      if (Sys.getenv("epi_burl") == "") {
-        epi_server(server = 1)
-      }
-      if (Sys.getenv("eco_burl") == "") {
-        eco_server(server = 1)
-      }
-      if (Sys.getenv("toxval_burl") == "") {
-        toxval_server(server = 1)
-      }
-      if (Sys.getenv("np_burl") == "") {
-        np_server(server = 1)
-      }
-      if (Sys.getenv("pubchem_burl") == "") {
-        pubchem_server(server = 1)
-      }
-      batch_limit(limit = 200)
-    }
-  })
+  batch_limit(limit = 200)
 
   #message("Is .extractor a function? ", is.function(.extractor))
   #message("Is .classifier a function? ", is.function(.classifier))

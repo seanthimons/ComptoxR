@@ -36,7 +36,7 @@ test_that("descriptor wrappers retain their public signatures", {
 })
 
 test_that("scalar descriptor wrappers call generic_request with prepared GET state", {
-  withr::local_envvar(chemi_burl = "https://cim.sciencedataexperts.com/api")
+  withr::local_envvar(chemi_burl = "https://configured.example/api")
   calls <- list()
   local_mocked_bindings(
     generic_request = function(...) {
@@ -74,7 +74,7 @@ test_that("scalar descriptor wrappers call generic_request with prepared GET sta
 })
 
 test_that("bulk descriptor wrappers call generic_chemi_request with exact bodies", {
-  withr::local_envvar(chemi_burl = "https://cim.sciencedataexperts.com/api")
+  withr::local_envvar(chemi_burl = "https://configured.example/api")
   calls <- list()
   local_mocked_bindings(
     generic_chemi_request = function(...) {
@@ -272,7 +272,7 @@ test_that("raw descriptor output retains actual route provenance", {
     generic_request = function(...) payload,
     .package = "ComptoxR"
   )
-  withr::local_envvar(chemi_burl = "https://cim.sciencedataexperts.com/api")
+  withr::local_envvar(chemi_burl = "https://configured.example/api")
 
   result <- chemi_padel("CCO", output = "raw")
 
@@ -282,14 +282,13 @@ test_that("raw descriptor output retains actual route provenance", {
   attr(result_payload, "fallback_used") <- NULL
   attr(result_payload, "input_map") <- NULL
   expect_identical(result_payload, payload)
-  expect_identical(attr(result, "source_server"), "https://cim.sciencedataexperts.com/api")
+  expect_identical(attr(result, "source_server"), "https://configured.example/api")
   expect_identical(attr(result, "source_endpoint"), "padel")
   expect_false(attr(result, "fallback_used"))
 })
 
-test_that("known descriptor fallbacks are independent and carry provenance", {
+test_that("descriptor routing stays on the effective production or explicit host", {
   production <- "https://hcd.rtpnc.epa.gov/api"
-  staging <- "https://cim.sciencedataexperts.com/api"
   withr::local_envvar(chemi_burl = production)
   calls <- list()
   local_mocked_bindings(
@@ -300,31 +299,25 @@ test_that("known descriptor fallbacks are independent and carry provenance", {
         records = list(descriptor_contract_record(
           descriptors = if (identical(call$endpoint, "rdkit")) seq_len(1024) else c(1, 2)
         )),
-        headers = if (identical(call$endpoint, "mordred")) c("a", "b") else character()
+        headers = if (!identical(call$endpoint, "rdkit")) c("a", "b") else character()
       )
     },
     .package = "ComptoxR"
   )
 
-  expect_warning(
-    aggregate_mordred <- chemi_descriptors("CCO", type = "mordred"),
-    "staging dedicated Mordred"
-  )
-  expect_warning(
-    dedicated_mordred <- chemi_mordred("CCO"),
-    "Production dedicated Mordred"
-  )
+  aggregate_mordred <- chemi_descriptors("CCO", type = "mordred")
+  dedicated_mordred <- chemi_mordred("CCO")
   expect_warning(
     aggregate_rdkit <- chemi_descriptors("CCO", type = "rdkit"),
     "dedicated RDKit"
   )
 
-  expect_identical(vapply(calls, `[[`, character(1), "server"), c(staging, staging, production))
-  expect_identical(vapply(calls, `[[`, character(1), "endpoint"), c("mordred", "mordred", "rdkit"))
+  expect_identical(vapply(calls, `[[`, character(1), "server"), rep(production, 3))
+  expect_identical(vapply(calls, `[[`, character(1), "endpoint"), c("descriptors", "mordred", "rdkit"))
   expect_identical(calls[[3]]$options$bits, 1024L)
   expect_identical(Sys.getenv("chemi_burl"), production)
-  expect_true(all(aggregate_mordred$fallback_used))
-  expect_true(all(dedicated_mordred$fallback_used))
+  expect_false(any(aggregate_mordred$fallback_used))
+  expect_false(any(dedicated_mordred$fallback_used))
   expect_true(all(aggregate_rdkit$fallback_used))
 })
 

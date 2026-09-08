@@ -20,10 +20,30 @@
 #' \dontrun{
 #' chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_alerts <- function(query, idType = "AnyId", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.resolve = NULL) {
+chemi_alerts <- function(
+  query,
+  idType = "AnyId",
+  options = NULL,
+  request.filesInfo = NULL,
+  request.options.alerts = NULL,
+  request.options.resolve = NULL
+) {
   chemicals <- NULL
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_alerts", "pre_request", list(params = list(`query` = query, `idType` = idType, `options` = options, `request.filesInfo` = request.filesInfo, `request.options.alerts` = request.options.alerts, `request.options.resolve` = request.options.resolve, `chemicals` = chemicals, `server` = server)))
+  req_data <- run_hook(
+    "chemi_alerts",
+    "pre_request",
+    list(
+      params = list(
+        `query` = query,
+        `idType` = idType,
+        `options` = options,
+        `request.filesInfo` = request.filesInfo,
+        `request.options.alerts` = request.options.alerts,
+        `request.options.resolve` = request.options.resolve,
+        `chemicals` = chemicals
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -48,13 +68,12 @@ chemi_alerts <- function(query, idType = "AnyId", options = NULL, request.filesI
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(options)) extra_options$options <- options
+  if (!is.null(options)) {
+    extra_options$options <- options
+  }
 
   result <- generic_chemi_request(
     query = query,
@@ -64,8 +83,7 @@ chemi_alerts <- function(query, idType = "AnyId", options = NULL, request.filesI
     chemicals = chemicals,
     request.filesInfo = request.filesInfo,
     request.options.alerts = request.options.alerts,
-    request.options.resolve = request.options.resolve,
-    server = server
+    request.options.resolve = request.options.resolve
   )
 
   # Additional post-processing can be added here

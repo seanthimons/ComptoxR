@@ -15,33 +15,22 @@
 #' chemi_toxprints_calculate(smiles = "DTXSID7020182")
 #' }
 chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_toxprints_calculate", "pre_request", list(params = list(`smiles` = smiles, `labels` = labels, `profile` = profile, `server` = server)))
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
-  }
-  if ("smiles" %in% names(req_data$params)) {
-    smiles <- req_data$params[["smiles"]]
-  }
-  if ("labels" %in% names(req_data$params)) {
-    labels <- req_data$params[["labels"]]
-  }
-  if ("profile" %in% names(req_data$params)) {
-    profile <- req_data$params[["profile"]]
-  }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
   # Collect optional parameters
   options <- list()
-  if (!is.null(smiles)) options[['smiles']] <- smiles
-  if (!is.null(labels)) options[['labels']] <- labels
-  if (!is.null(profile)) options[['profile']] <- profile
-    result <- generic_request(
+  if (!is.null(smiles)) {
+    options[['smiles']] <- smiles
+  }
+  if (!is.null(labels)) {
+    options[['labels']] <- labels
+  }
+  if (!is.null(profile)) {
+    options[['profile']] <- profile
+  }
+  result <- generic_request(
     endpoint = "toxprints/calculate",
     method = "GET",
     batch_limit = 0,
-    server = server,
+    server = "chemi_burl",
     auth = FALSE,
     tidy = FALSE,
     options = options
@@ -66,13 +55,13 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 #' @param options Optional parameter
 #' @param request.filesInfo Optional parameter
 #' @param request.labels Optional parameter
-#' @param request.options.or Optional parameter
 #' @param request.options.OR Optional parameter
+#' @param request.options.PV1 Optional parameter
+#' @param request.options.TP Optional parameter
+#' @param request.options.or Optional parameter
 #' @param request.options.profile Optional parameter
 #' @param request.options.pv1 Optional parameter
-#' @param request.options.PV1 Optional parameter
 #' @param request.options.tp Optional parameter
-#' @param request.options.TP Optional parameter
 #' @param request.resolve Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
@@ -82,10 +71,46 @@ chemi_toxprints_calculate <- function(smiles, labels = FALSE, profile = NULL) {
 #' \dontrun{
 #' chemi_toxprints_calculate_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NULL, options = NULL, request.filesInfo = NULL, request.labels = NULL, request.options.or = NULL, request.options.OR = NULL, request.options.profile = NULL, request.options.pv1 = NULL, request.options.PV1 = NULL, request.options.tp = NULL, request.options.TP = NULL, request.resolve = NULL) {
+chemi_toxprints_calculate_bulk <- function(
+  query,
+  idType = "AnyId",
+  labels = NULL,
+  options = NULL,
+  request.filesInfo = NULL,
+  request.labels = NULL,
+  request.options.OR = NULL,
+  request.options.PV1 = NULL,
+  request.options.TP = NULL,
+  request.options.or = NULL,
+  request.options.profile = NULL,
+  request.options.pv1 = NULL,
+  request.options.tp = NULL,
+  request.resolve = NULL
+) {
   chemicals <- NULL
-  server <- "chemi_burl"
-  req_data <- run_hook("chemi_toxprints_calculate_bulk", "pre_request", list(params = list(`query` = query, `idType` = idType, `labels` = labels, `options` = options, `request.filesInfo` = request.filesInfo, `request.labels` = request.labels, `request.options.or` = request.options.or, `request.options.OR` = request.options.OR, `request.options.profile` = request.options.profile, `request.options.pv1` = request.options.pv1, `request.options.PV1` = request.options.PV1, `request.options.tp` = request.options.tp, `request.options.TP` = request.options.TP, `request.resolve` = request.resolve, `chemicals` = chemicals, `server` = server)))
+  req_data <- run_hook(
+    "chemi_toxprints_calculate_bulk",
+    "pre_request",
+    list(
+      params = list(
+        `query` = query,
+        `idType` = idType,
+        `labels` = labels,
+        `options` = options,
+        `request.filesInfo` = request.filesInfo,
+        `request.labels` = request.labels,
+        `request.options.OR` = request.options.OR,
+        `request.options.PV1` = request.options.PV1,
+        `request.options.TP` = request.options.TP,
+        `request.options.or` = request.options.or,
+        `request.options.profile` = request.options.profile,
+        `request.options.pv1` = request.options.pv1,
+        `request.options.tp` = request.options.tp,
+        `request.resolve` = request.resolve,
+        `chemicals` = chemicals
+      )
+    )
+  )
   if (isTRUE(req_data$skip_request)) {
     return(req_data$result)
   }
@@ -107,11 +132,17 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
   if ("request.labels" %in% names(req_data$params)) {
     request.labels <- req_data$params[["request.labels"]]
   }
-  if ("request.options.or" %in% names(req_data$params)) {
-    request.options.or <- req_data$params[["request.options.or"]]
-  }
   if ("request.options.OR" %in% names(req_data$params)) {
     request.options.OR <- req_data$params[["request.options.OR"]]
+  }
+  if ("request.options.PV1" %in% names(req_data$params)) {
+    request.options.PV1 <- req_data$params[["request.options.PV1"]]
+  }
+  if ("request.options.TP" %in% names(req_data$params)) {
+    request.options.TP <- req_data$params[["request.options.TP"]]
+  }
+  if ("request.options.or" %in% names(req_data$params)) {
+    request.options.or <- req_data$params[["request.options.or"]]
   }
   if ("request.options.profile" %in% names(req_data$params)) {
     request.options.profile <- req_data$params[["request.options.profile"]]
@@ -119,14 +150,8 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
   if ("request.options.pv1" %in% names(req_data$params)) {
     request.options.pv1 <- req_data$params[["request.options.pv1"]]
   }
-  if ("request.options.PV1" %in% names(req_data$params)) {
-    request.options.PV1 <- req_data$params[["request.options.PV1"]]
-  }
   if ("request.options.tp" %in% names(req_data$params)) {
     request.options.tp <- req_data$params[["request.options.tp"]]
-  }
-  if ("request.options.TP" %in% names(req_data$params)) {
-    request.options.TP <- req_data$params[["request.options.TP"]]
   }
   if ("request.resolve" %in% names(req_data$params)) {
     request.resolve <- req_data$params[["request.resolve"]]
@@ -134,14 +159,15 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
   if ("chemicals" %in% names(req_data$params)) {
     chemicals <- req_data$params[["chemicals"]]
   }
-  if ("server" %in% names(req_data$params)) {
-    server <- req_data$params[["server"]]
-  }
 
   # Build options from additional parameters
   extra_options <- list()
-  if (!is.null(labels)) extra_options$labels <- labels
-  if (!is.null(options)) extra_options$options <- options
+  if (!is.null(labels)) {
+    extra_options$labels <- labels
+  }
+  if (!is.null(options)) {
+    extra_options$options <- options
+  }
 
   result <- generic_chemi_request(
     query = query,
@@ -151,15 +177,14 @@ chemi_toxprints_calculate_bulk <- function(query, idType = "AnyId", labels = NUL
     chemicals = chemicals,
     request.filesInfo = request.filesInfo,
     request.labels = request.labels,
-    request.options.or = request.options.or,
     request.options.OR = request.options.OR,
+    request.options.PV1 = request.options.PV1,
+    request.options.TP = request.options.TP,
+    request.options.or = request.options.or,
     request.options.profile = request.options.profile,
     request.options.pv1 = request.options.pv1,
-    request.options.PV1 = request.options.PV1,
     request.options.tp = request.options.tp,
-    request.options.TP = request.options.TP,
-    request.resolve = request.resolve,
-    server = server
+    request.resolve = request.resolve
   )
 
   # Additional post-processing can be added here

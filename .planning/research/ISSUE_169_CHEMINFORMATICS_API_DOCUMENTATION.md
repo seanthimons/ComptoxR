@@ -18,8 +18,8 @@ The public release notes do not report the exact issue #169 failure. Neither pag
 
 Sources checked:
 
-- [Server #2 / staging release notes](https://cim.sciencedataexperts.com/release_notes) and their [first-party JSON feed](https://cim.sciencedataexperts.com/api/services/release_notes)
-- [Development release notes](https://cim-dev.sciencedataexperts.com/release_notes) and their [first-party JSON feed](https://cim-dev.sciencedataexperts.com/api/services/release_notes)
+- Server #2 / staging release notes (historical non-production address omitted) and their first-party JSON feed (historical non-production address omitted)
+- Development release notes (historical non-production address omitted) and their first-party JSON feed (historical non-production address omitted)
 
 Both feeds returned 44,661 bytes and the same SHA-256 value, `980a0e0d693e48ec7e369484b0e17b189b3b44c1798e7bf617edb437271ac5f3`. The pages render the same 242 normalized entries. The page build banners differ: server #2 / staging shows July 7, 2026 at 10:40 AM, and development shows July 27, 2026 at 09:33 AM. These are page build times. They are not descriptor-service version identifiers.
 
@@ -78,7 +78,7 @@ POST shape:
 | Staging | Mordred | `false` | 200 | 200 | 1,613 values; no headers |
 | Staging | Mordred | `true` | 200 | 200 | 1,613 values and 1,613 headers |
 
-Sources: the official [production aggregate endpoint](https://hcd.rtpnc.epa.gov/api/descriptors), the official [staging aggregate endpoint](https://cim.sciencedataexperts.com/api/descriptors), and the dated [API compatibility run](https://github.com/seanthimons/ComptoxR/actions/runs/31387430057). The scheduled run independently found that production header-bearing RDKit GET and POST failed while the same staging and development checks passed.
+Sources: the official [production aggregate endpoint](https://hcd.rtpnc.epa.gov/api/descriptors), the official staging aggregate endpoint (historical non-production address omitted), and the dated [API compatibility run](https://github.com/seanthimons/ComptoxR/actions/runs/31387430057). The scheduled run independently found that production header-bearing RDKit GET and POST failed while the same staging and development checks passed.
 
 All four production RDKit and Mordred failures returned `application/json` and the same fields:
 
@@ -96,7 +96,7 @@ The response does not identify the engine, invalid field, failed dependency, or 
 
 ## OpenAPI and discovery gaps
 
-The official [production OpenAPI document](https://hcd.rtpnc.epa.gov/api/descriptors/api-docs) and [staging OpenAPI document](https://cim.sciencedataexperts.com/api/descriptors/api-docs) were reachable without credentials. The Swagger UIs are also public at the production [Swagger URL](https://hcd.rtpnc.epa.gov/api/descriptors/swagger) and staging [Swagger URL](https://cim.sciencedataexperts.com/api/descriptors/swagger). A schema check downloaded all three deployment schemas on 2026-08-10 and found no change from the repository copies ([workflow run](https://github.com/seanthimons/ComptoxR/actions/runs/31375144935)).
+The official [production OpenAPI document](https://hcd.rtpnc.epa.gov/api/descriptors/api-docs) and staging OpenAPI document (historical non-production address omitted) were reachable without credentials. The Swagger UIs are also public at the production [Swagger URL](https://hcd.rtpnc.epa.gov/api/descriptors/swagger) and staging Swagger URL (historical non-production address omitted). A schema check downloaded all three deployment schemas on 2026-08-10 and found no change from the repository copies ([workflow run](https://github.com/seanthimons/ComptoxR/actions/runs/31375144935)).
 
 Both documents report OpenAPI 3.1.0, `Descriptors Module`, and API version 1.0.0. Both define GET and POST on `/api/descriptors`. The GET document defines `headers` as an optional boolean with default `false`. The POST document refers to `DescriptorsRequest`, but it does not mark any body property as required. The request fields are `type`, `chemicals`, `chemIdType`, `format`, and `options` ([production schema lines 38-78](https://github.com/seanthimons/ComptoxR/blob/0b9306aa43e264211f343234838da4dc297a1a45/schema/chemi-descriptors-prod.json#L38-L78), [operation lines 113-209](https://github.com/seanthimons/ComptoxR/blob/0b9306aa43e264211f343234838da4dc297a1a45/schema/chemi-descriptors-prod.json#L113-L209)).
 
@@ -113,7 +113,7 @@ The production and staging OpenAPI documents are otherwise byte-equivalent after
 
 ## Deployment details that can help diagnosis
 
-Production and staging both report the descriptors module as version 1.0.0. However, [production `/version`](https://hcd.rtpnc.epa.gov/api/descriptors/version) reports a compile time of `1970-01-01T00:00:00.000+00:00`. [Staging `/version`](https://cim.sciencedataexperts.com/api/descriptors/version) reports `2026-07-09T21:04:36.000+00:00`.
+Production and staging both report the descriptors module as version 1.0.0. However, [production `/version`](https://hcd.rtpnc.epa.gov/api/descriptors/version) reports a compile time of `1970-01-01T00:00:00.000+00:00`. Staging `/version` (historical non-production address omitted) reports `2026-07-09T21:04:36.000+00:00`.
 
 The epoch value does not prove that production uses an old binary. It does show that production build provenance is not set. The developer can compare the deployed image digest, build commit, and header-path configuration with staging.
 

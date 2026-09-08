@@ -101,8 +101,8 @@
 - Pattern: Template splits query via `split()` and maps httr2 request construction
 
 **Server/Environment Abstraction:**
-- Purpose: Support multiple API environments (production, staging, development) without code changes
-- Examples: `ctx_server(1)` sets production, `ctx_server(2)` sets staging
+- Purpose: Select production defaults or explicit configured URLs without code changes
+- Examples: `ctx_server(1)` sets production; endpoint options take precedence
 - Pattern: Functions read from `Sys.getenv()` via variable name indirection
 
 **Resolver Abstraction:**
@@ -128,7 +128,7 @@
 
 **Server Configuration Functions:**
 - Location: `R/zzz.R` lines 213-406
-- Triggers: User calls `ctx_server(1)`, `chemi_server(2)`, etc.
+- Triggers: User calls `ctx_server(1)`, `chemi_server(1)`, or sets an explicit URL
 - Responsibilities: Switch API endpoint URLs
 
 **Debug/Verbose Mode Functions:**

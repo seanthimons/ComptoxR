@@ -298,11 +298,11 @@
             ],
             "type": "string"
           },
-          "nchemical": {
+          "nChemical": {
             "format": "int32",
             "type": "integer"
           },
-          "nChemical": {
+          "nchemical": {
             "format": "int32",
             "type": "integer"
           },
@@ -490,10 +490,6 @@
             "format": "double",
             "type": "number"
           },
-          "actives": {
-            "format": "int32",
-            "type": "integer"
-          },
           "BA": {
             "format": "double",
             "type": "number"
@@ -501,13 +497,6 @@
           "BM": {
             "format": "double",
             "type": "number"
-          },
-          "category": {
-            "type": "string"
-          },
-          "count": {
-            "format": "int32",
-            "type": "integer"
           },
           "CTE": {
             "type": "boolean"
@@ -544,9 +533,6 @@
             "format": "double",
             "type": "number"
           },
-          "label": {
-            "type": "string"
-          },
           "MCC": {
             "format": "double",
             "type": "number"
@@ -555,9 +541,6 @@
             "format": "double",
             "type": "number"
           },
-          "name": {
-            "type": "string"
-          },
           "NPV": {
             "format": "double",
             "type": "number"
@@ -565,10 +548,6 @@
           "OR": {
             "format": "double",
             "type": "number"
-          },
-          "ordinal": {
-            "format": "int32",
-            "type": "integer"
           },
           "PPV": {
             "format": "double",
@@ -594,10 +573,6 @@
             "format": "double",
             "type": "number"
           },
-          "total": {
-            "format": "int32",
-            "type": "integer"
-          },
           "TP": {
             "format": "int32",
             "type": "integer"
@@ -609,6 +584,31 @@
           "TS": {
             "format": "double",
             "type": "number"
+          },
+          "actives": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "category": {
+            "type": "string"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "total": {
+            "format": "int32",
+            "type": "integer"
           }
         },
         "type": "object"
@@ -649,10 +649,6 @@
             "format": "double",
             "type": "number"
           },
-          "count": {
-            "format": "int32",
-            "type": "integer"
-          },
           "CTE": {
             "type": "boolean"
           },
@@ -688,9 +684,6 @@
             "format": "double",
             "type": "number"
           },
-          "label": {
-            "type": "string"
-          },
           "MCC": {
             "format": "double",
             "type": "number"
@@ -706,10 +699,6 @@
           "OR": {
             "format": "double",
             "type": "number"
-          },
-          "ordinal": {
-            "format": "int32",
-            "type": "integer"
           },
           "PPV": {
             "format": "double",
@@ -746,6 +735,17 @@
           "TS": {
             "format": "double",
             "type": "number"
+          },
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "ordinal": {
+            "format": "int32",
+            "type": "integer"
           }
         },
         "type": "object"
@@ -877,11 +877,19 @@
       },
       "ToxprintsOptions": {
         "properties": {
-          "or": {
+          "OR": {
             "format": "double",
             "type": "number"
           },
-          "OR": {
+          "PV1": {
+            "format": "double",
+            "type": "number"
+          },
+          "TP": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "or": {
             "format": "double",
             "type": "number"
           },
@@ -892,15 +900,7 @@
             "format": "double",
             "type": "number"
           },
-          "PV1": {
-            "format": "double",
-            "type": "number"
-          },
           "tp": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "TP": {
             "format": "int32",
             "type": "integer"
           }
@@ -1097,6 +1097,39 @@
         ]
       }
     },
+    "/api/toxprints/assays/check": {
+      "get": {
+        "operationId": "assayCheckGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "toxprints-controller"
+        ]
+      }
+    },
     "/api/toxprints/assays/{id}": {
       "delete": {
         "operationId": "assayDelete",
@@ -1217,39 +1250,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Assay"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "toxprints-controller"
-        ]
-      }
-    },
-    "/api/toxprints/assays/check": {
-      "get": {
-        "operationId": "assayCheckGet",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
                 }
               }
             },

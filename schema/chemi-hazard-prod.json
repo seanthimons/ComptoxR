@@ -702,10 +702,10 @@
       },
       "ScoreRecord": {
         "properties": {
-          "cas": {
+          "CAS": {
             "type": "string"
           },
-          "CAS": {
+          "cas": {
             "type": "string"
           },
           "category": {
@@ -1149,6 +1149,39 @@
         ]
       }
     },
+    "/api/hazard/reports/check": {
+      "get": {
+        "operationId": "protocolCheckGet",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "hazard-controller"
+        ]
+      }
+    },
     "/api/hazard/reports/{id}": {
       "delete": {
         "operationId": "reportDelete",
@@ -1306,39 +1339,6 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "hazard-controller"
-        ]
-      }
-    },
-    "/api/hazard/reports/check": {
-      "get": {
-        "operationId": "protocolCheckGet",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
                   "type": "object"
                 }
               }

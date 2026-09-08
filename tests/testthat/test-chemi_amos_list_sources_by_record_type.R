@@ -29,6 +29,7 @@ test_that("chemi_amos_list_sources_by_record_type passes request metadata to hel
   expect_equal(call[["endpoint"]], "amos/list_sources_by_record_type/")
   expect_equal(call[["method"]], "GET")
   expect_equal(call[["batch_limit"]], 0)
+  expect_equal(call[["server"]], "chemi_burl")
   expect_equal(call[["auth"]], FALSE)
   expect_equal(call[["tidy"]], FALSE)
 })

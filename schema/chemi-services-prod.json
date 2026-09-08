@@ -127,12 +127,12 @@
           "description": {
             "type": "string"
           },
-          "is_available": {
-            "type": "boolean"
-          },
           "isAvailableResetRest": {
             "type": "boolean",
             "writeOnly": true
+          },
+          "is_available": {
+            "type": "boolean"
           },
           "name": {
             "type": "string"
@@ -243,17 +243,6 @@
         },
         "type": "object"
       },
-      "FilesUploadRequest": {
-        "properties": {
-          "filesInfo": {
-            "items": {
-              "$ref": "#/components/schemas/FileUploadInfo"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "FileUploadInfo": {
         "properties": {
           "actField": {
@@ -270,6 +259,17 @@
           },
           "strField": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FilesUploadRequest": {
+        "properties": {
+          "filesInfo": {
+            "items": {
+              "$ref": "#/components/schemas/FileUploadInfo"
+            },
+            "type": "array"
           }
         },
         "type": "object"

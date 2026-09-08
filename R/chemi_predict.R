@@ -36,7 +36,6 @@ chemi_predict <- function(query, report = "JSON") {
   # Check if chemi_resolver_lookup returned any results
   if (length(resolved_chemicals) == 0) {
     cli::cli_abort("No chemicals resolved for the given query.")
-    return(NULL)
   }
 
   # Validate the report parameter
@@ -73,7 +72,7 @@ chemi_predict <- function(query, report = "JSON") {
   cli_rule()
   cli_end()
 
-  resp <- request(Sys.getenv('chemi_burl')) %>%
+  resp <- request(.endpoint_target("chemi_burl")) %>%
     req_method("POST") %>%
     req_url_path_append("webtest/predict") %>%
     req_headers(Accept = "application/json, text/plain, */*") %>%

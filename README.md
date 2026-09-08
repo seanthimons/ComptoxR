@@ -41,6 +41,34 @@ Load the package in each R session in which you use it:
 library(ComptoxR)
 ```
 
+## Service configuration
+
+Public functions use approved production APIs. EPI Suite uses
+`https://episuite.dev/api`. ECOTOX and ToxVal use local databases by default;
+their shipped Plumber servers can provide localhost HTTP access.
+
+For each service, `ComptoxR.<key>` options take precedence over the lowercase
+environment variable, then the package default. The keys are `ctx_burl`,
+`chemi_burl`, `epi_burl`, `eco_burl`, `toxval_burl`, `np_burl`, and `pubchem_burl`.
+Loading the package does not change these environment variables.
+
+```r
+options(ComptoxR.chemi_burl = "https://api.example.org/api")
+options(ComptoxR.chemi_burl = NULL) # Use environment or production default
+eco_server(2) # Shipped localhost Plumber server
+```
+
+Selectors still set their environment variables. Call a selector with no
+argument to clear that setting; an option still takes precedence. Use
+`url_only = TRUE` to inspect a target without changing settings or connections.
+Explicit HTTP(S) URLs remain supported. Removed development numeric choices
+now give a configuration error. Public browser sites are not REST APIs.
+
+Update ComptoxR and the local Plumber server together, then restart the server.
+Keep existing local databases and mapping evidence. ECOTOX results contain
+native lifestage codes and descriptions; apply experimental envharmonizer
+mappings explicitly when needed.
+
 ## API key setup
 
 Many CompTox services require an API key. Request a key by emailing

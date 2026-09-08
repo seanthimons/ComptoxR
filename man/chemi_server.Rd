@@ -2,28 +2,24 @@
 % Please edit documentation in R/zzz.R
 \name{chemi_server}
 \alias{chemi_server}
-\title{Set API endpoints for Cheminformatics API endpoints}
+\title{Set the Cheminformatics endpoint}
 \usage{
 chemi_server(server = NULL, url_only = FALSE)
 }
 \arguments{
-\item{server}{Defines what server to target. If \code{NULL}, the server URL is
-reset. Valid options are:
-\itemize{
-\item Production: 1
-\item Staging: 2
-\item Development: 3
-}}
+\item{server}{Use 1 for production, or supply an explicit HTTP(S) URL.
+NULL clears the environment setting and restores option/default resolution.}
 
-\item{url_only}{If \code{TRUE}, return the selected URL without changing
-\code{chemi_burl}.}
+\item{url_only}{Return the selected target without changing settings or connections.}
 }
 \value{
-The selected URL when \code{url_only = TRUE}; otherwise the configured
-\code{chemi_burl}.
+The selected target for \code{url_only = TRUE}; otherwise the effective target.
 }
 \description{
-This function sets the API endpoint for the Cheminformatics API based on the
-specified server. If no server is specified, the function resets the API
-endpoint to an empty string.
+Set the Cheminformatics endpoint
+}
+\details{
+The option \code{ComptoxR.chemi_burl} takes precedence over the lowercase
+environment variable \code{chemi_burl}. An unset option and empty environment variable
+use the package default. Removed development modes give a configuration error.
 }

@@ -189,7 +189,6 @@ chemi_descriptors:
     - validate_descriptor_request
     - resolve_descriptor_inputs
     - prepare_aggregate_descriptor_request
-    - apply_aggregate_mordred_fallback
     - apply_aggregate_rdkit_fallback
   post_response: &descriptor_post
     - validate_descriptor_response
@@ -251,7 +250,6 @@ chemi_descriptors_bulk:
     - validate_descriptor_request
     - resolve_descriptor_inputs
     - prepare_aggregate_descriptor_request
-    - apply_aggregate_mordred_fallback
     - apply_aggregate_rdkit_fallback
   post_response: *descriptor_post
   request_template: &descriptor_post_request
@@ -446,7 +444,6 @@ chemi_mordred:
     - validate_descriptor_request
     - resolve_descriptor_inputs
     - prepare_mordred_descriptor_request
-    - apply_dedicated_mordred_fallback
   post_response: *descriptor_post
   request_template: *descriptor_get_request
 
@@ -481,7 +478,6 @@ chemi_mordred_bulk:
     - validate_descriptor_request
     - resolve_descriptor_inputs
     - prepare_mordred_descriptor_request
-    - apply_dedicated_mordred_fallback
   post_response: *descriptor_post
   request_template: *descriptor_post_request
 

@@ -28,6 +28,30 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
+Install the reviewed development toolkit before running schema commands:
+
+```r
+source("dev/install_toolkit.R")
+install_toolkit()
+```
+
+The archive URL and SHA-256 are pinned in `dev/toolkit-lock.json`. The toolkit
+is not a runtime dependency. Public generation uses approved production
+schemas only. Keep other schemas and generated clients outside this checkout.
+Regenerate a promoted operation from its approved production schema.
+
+```bash
+Rscript dev/generate_stubs.R --rebuild=ct --rebuild=chemi --rebuild=epi
+Rscript dev/generate_tests.R --generate
+Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
+Rscript dev/generate_tests.R --check
+Rscript dev/check_hook_config.R
+```
+
+Generation validates isolated output before it changes owned files. Manual
+files and runtime hooks stay in this repository. To roll back the toolkit,
+restore its previous pin and the matching generated output together.
+
 Run the targeted checks for what you changed:
 
 ```r
