@@ -1,0 +1,20 @@
+{
+  "verified_at_utc": "2026-09-08T03:45:48Z",
+  "client_release": "v2.0.0",
+  "harmonizer_release": "v0.1.1",
+  "harmonizer_source_merge": "2facf3b513394763194bbc3e02f216ea37cf3edf",
+  "database_workflow_run": 34181519666,
+  "ecotox_release": "ecotox_ascii_09_15_2026.zip",
+  "results": 1250611,
+  "verified_http_rows": 664,
+  "database_asset_id": 549783704,
+  "database_sha256": "2664e63ab9b6d37fbd8206d1747d7e8f77084897de80f2320c660873ef04c5db",
+  "version_asset_id": 549783706,
+  "version_sha256": "6a82043ba3d9c0ec6927ec01ba49c72edb386ed7b19ad6d9e7272718db349835",
+  "withdrawn_asset_ids": [548521627, 548521629, 464523912],
+  "withdrawn_asset_http_status": [404, 404, 404],
+  "local_databases_modified": false,
+  "legacy_derived_database_published": false,
+  "native_columns_and_row_order_preserved": true,
+  "database_hash_unchanged_after_verification": true
+}

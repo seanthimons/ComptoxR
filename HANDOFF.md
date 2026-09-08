@@ -1,8 +1,46 @@
 # Handoff: delegated package migrations
 
 **Updated**: 2026-09-08
-**Branch**: `feat/production-endpoints`
-**Status**: envharmonizer and source-only ComptoxR 2.0.0 published; endpoint release and database verification remain.
+**Branch**: `docs/migration-publication-evidence`
+**Status**: Lifestage publication and database withdrawal complete. Endpoint release awaits two R-devel checks.
+
+## Publication checkpoint (2026-09-08 03:49 UTC)
+
+- ComptoxR 2.0.0 and wrapmaint 0.1.0 are published and independently verified.
+- envharmonizer 0.1.1 is published after source PR 21 passed CI and merged as
+  `2facf3b`. All 12 downloaded payload checksums passed. An unauthenticated
+  package download, separate installation, and full database/HTTP checks passed.
+- The forced database build selected September, while the initial mapping package
+  supported June. Strict matching rejected this mismatch. September support now
+  has explicit artifacts, with June recorded as the mapping-evidence release.
+  All 139 native code-description pairs are identical. June tables and metadata
+  are unchanged. No independent mapping review is claimed.
+- Source-only database workflow `34181519666` passed. Published database asset
+  `549783704` has 1,250,611 results, builder version 2.0.0, and SHA-256
+  `2664e63ab9b6d37fbd8206d1747d7e8f77084897de80f2320c660873ef04c5db`.
+  Direct database and fresh localhost Plumber results match for 664 selected rows.
+  Explicit harmonization preserves every source column and row; DB hash unchanged.
+- Old asset IDs `548521627`, `548521629`, and `464523912` now return HTTP 404.
+  Only the last was explicitly deleted; the rolling upload replaced the first two.
+  Users' local databases and original checkout changes are preserved. No legacy
+  derived database was published. Old workflow `306098499` is now deleted because
+  its file was removed; do not restore it.
+- Endpoint PR 307 head `e3b08c7` is also on integration. Standard package checks on
+  all three operating systems, readiness, generation/toolkit, coverage, and site
+  checks passed. Linux/macOS R-devel were cancelled after stale status data showed
+  prolonged setup. Logs revealed long DuckDB source compilation; macOS had reached
+  package checks. Only cancelled jobs are being rerun in `34181879988`; allow the
+  source compilation to complete. Do not cancel based only on the status API.
+- Optional integration rolling publication stopped at its existing `.9000`
+  version guard because DESCRIPTION is stable 2.0.0. Retain this guard and use the
+  normal stable Release workflow. No development artifact was published.
+- Remaining: finish the two R-devel jobs; merge PR 307; run normal Release with a
+  major bump; verify the final downloaded package and published site; integrate
+  this evidence branch and record final commits. Do not hand-edit package versions
+  or tags. Original `endpoint-audit.md` and `CONTEXT.md` changes remain untouched.
+
+See `dev/reports/migration/publication.md` and `database-withdrawal.json`.
+Earlier pending publication statements below are superseded by this checkpoint.
 
 ## Integration checkpoint (2026-09-08)
 
