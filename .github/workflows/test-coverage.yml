@@ -65,6 +65,10 @@ jobs:
           echo "CPATH=$(brew --prefix gettext)/include" >> "$GITHUB_ENV"
           echo "LIBRARY_PATH=$(brew --prefix gettext)/lib:$(brew --prefix llhttp)/lib" >> "$GITHUB_ENV"
 
+      - name: Use source packages for macOS R-devel
+        if: runner.os == 'macOS' && matrix.r-version == 'devel'
+        run: echo "PKG_PLATFORMS=source" >> "$GITHUB_ENV"
+
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
