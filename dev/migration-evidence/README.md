@@ -27,6 +27,7 @@ locale here. This is a process setting, not a package metadata change.
 | Final installed-toolkit run of the same filter | 425 pass, 0 fail, 0 skip, same 4 warnings |
 | `Rscript dev/generate_tests.R --check` before and after | 376 generated contract tests current; static validation passes |
 | `Rscript dev/check_hook_config.R` before and after | 240 functions, 340 hooks, 34 extra parameters pass |
+| `Rscript dev/generate_stubs.R --check` final | Exit 0; 244 unchanged, 143 protected; 3 existing empty-body Chemi POST operations remain skipped by client policy; 14 warnings |
 | `Rscript dev/migration-evidence/generator-parity.R` | Old generator and installed toolkit compare 387 files: parsed code/signatures, roxygen and hook metadata; second pass has identical file hashes |
 | `Rscript dev/migration-evidence/verify-protected.R` | 474 runtime/schema/hook SHA256 values unchanged; explicit chemical fixture hash recorded |
 | `Rscript dev/migration-evidence/installed-runtime.R` | Both installed clients run with wrapmaint absent from every runtime library; all 376 committed generated client contract files run |
@@ -38,8 +39,9 @@ The exact targeted filter is
 Run it with `Rscript dev/migration-evidence/verify-toolkit.R`.
 The four test warnings say jsonlite and dplyr were built under R 4.5.3,
 and purrr and here under R 4.5.2. They occurred before extraction too.
-Legacy regeneration emits its existing warnings (including route pagination
-inference). These are not claims of generic schema or live transport coverage.
+The two installed regeneration passes emit 28 warnings in total from the
+retained legacy parsing path. These are not claims of generic schema or live
+transport coverage.
 
 The toolkit package check runs four sourceable scripts: `catalogue.R`,
 `boundaries.R`, `schema-versions.R` and `loading.R`. They cover all four catalogue
@@ -80,8 +82,8 @@ provide a replacement renderer. Its second installed namespace also needs no
 engine edits. `toolkit-comparison.md` records the actual OpenAPI Generator
 R/httr2 fixture comparison.
 
-The new ComptoxR entry adapter is 61 lines. Retained client policy is 615 lines
-in `stub_specs.R`, 553 in parameter parsing, 2,562 in the specialized wrapper
+The new ComptoxR entry adapter is 85 lines. Retained client policy is 615 lines
+in `stub_specs.R`, 555 in parameter parsing, 2,564 in the specialized wrapper
 renderer and 118 in the chemical test renderer. These are retained compatibility
 costs, not a claim that all rendering logic is generic. The neutral catalogue
 has a 30-line local helper, uses a 17-line generation specification before its
