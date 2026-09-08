@@ -29,26 +29,54 @@ These calls can use a large local download, so site builds do not run them.
 
 ## Run a focused query
 
-Filter by chemical, species, and endpoint in `eco_results()`. Request detailed
-life-stage fields, then filter life stage in R.
+Filter by chemical, species, and endpoint in `eco_results()`. Results retain
+the original ECOTOX life-stage code and description.
 
 ```{r}
 trout <- eco_results(
   casrn = "71-43-2",
   common_name = "Rainbow trout",
-  endpoint = "LC50",
-  lifestage_details = TRUE
+  endpoint = "LC50"
 ) |>
-  filter(harmonized_life_stage == "Juvenile") |>
   select(test_cas, common_name, latin_name, endpoint,
-         harmonized_life_stage, final_conc, obs_duration,
+         organism_lifestage, org_lifestage, final_conc, obs_duration,
          final_obs_duration)
 ```
 
-`eco_results()` does not have a direct life-stage filter argument. The
-`lifestage_details = TRUE` result supplies harmonized fields for a clear
-post-query filter. Keep concentration and duration units from the full result
-when you report values.
+Keep concentration and duration units from the full result when you report
+values. Apply life-stage harmonization explicitly with a versioned
+`envharmonizer` release that matches the ECOTOX source release.
+
+For a local database, read its recorded release before applying the optional
+mapping. Install the [experimental harmonizer package](https://github.com/seanthimons/envharmonizer-releases/releases/tag/v0.1.0)
+separately.
+
+```{r}
+con <- DBI::dbConnect(duckdb::duckdb(),
+                     dbdir = eco_health()$db_path, read_only = TRUE)
+release <- DBI::dbGetQuery(
+  con, "SELECT value FROM _metadata WHERE key = 'ecotox_release'"
+)$value
+source_results <- eco_results(casrn = "50-29-3", eco_group = "Fish",
+                              endpoint = c("LC50", "EC50"), con = con)
+mapped_results <- envharmonizer::harmonize_lifestage(source_results, release)
+DBI::dbDisconnect(con, shutdown = TRUE)
+```
+
+Experimental mappings; not independently reviewed. Users must assess
+suitability for their analysis. Keep the source results and mapping manifest.
+
+## Upgrade from derived life-stage output
+
+This is a breaking change. Results no longer include `harmonized_life_stage`
+or `reproductive_stage`. Remove the former `lifestage_details` argument from calls.
+The `con` argument is now in position 11 instead of position 12; use its name
+in calls that supply a connection.
+
+Update the ComptoxR client and the package used by the local Plumber server.
+Restart the server after the update. Existing local databases continue to
+work. Queries ignore old derived tables and do not change or delete them.
+Keep your local databases and mapping evidence for reproducibility.
 
 ## Advanced query design
 

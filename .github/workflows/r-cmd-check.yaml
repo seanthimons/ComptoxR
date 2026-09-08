@@ -51,6 +51,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ github.token }}
       R_KEEP_PKG_SOURCE: yes
+      # Native database tests can crash a parallel Windows subprocess.
+      TESTTHAT_PARALLEL: ${{ matrix.config.os == 'windows-latest' && 'false' || 'true' }}
 
     steps:
       - name: Checkout repository

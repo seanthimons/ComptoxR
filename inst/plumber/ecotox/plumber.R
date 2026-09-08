@@ -13,6 +13,8 @@ library(ComptoxR)
 eco_server(getOption("ComptoxR.ecotox_path", default = 1))
 
 # Note: Uses internal ComptoxR function. Requires matching ComptoxR version.
+# Update both client and server packages, then restart this server after upgrade.
+# Results retain native ECOTOX lifestage codes and descriptions only.
 .get_con <- function() ComptoxR:::.eco_get_con()
 
 #* @apiTitle ECOTOX API
@@ -74,6 +76,7 @@ function(query, field = "common_name") {
 #* @param threatened boolean to filter by threatened species
 #* @param test_cols Additional test table columns
 #* @param results_cols Additional results table columns
+#* @serializer json list(na = "null", digits = NA, dataframe = "columns")
 #* @post /results
 function(
   casrn = NULL,

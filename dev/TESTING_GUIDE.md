@@ -97,7 +97,7 @@ Use handwritten tests for behavior outside the generator model:
 - data cleanup and binding utilities
 - local database behavior for DSS, ECOTOX, and ToxVal
 - GenRA math, validation, printing, and offline workflow edge cases
-- lifestage curation gates and data integrity
+- source-only ECOTOX builders and matching localhost HTTP results
 - generator and audit tooling
 
 Delete or replace handwritten VCR tests that only duplicate ordinary wrapper request-contract coverage.

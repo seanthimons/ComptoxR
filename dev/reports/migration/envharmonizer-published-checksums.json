@@ -1,0 +1,57 @@
+[
+    {
+        "file":  "envharmonizer_0.1.0.tar.gz",
+        "sha256":  "4afe80e6d806fcb0279a93c159e9e7ce5c0d4cbdaca6fa36304d0579a914c6b0",
+        "verified":  true
+    },
+    {
+        "file":  "ATTRIBUTION.md",
+        "sha256":  "2245e63a2dc180fde365f1a65bb1b456190f931839ed0d7189e530a58511a4f4",
+        "verified":  true
+    },
+    {
+        "file":  "REVIEW.md",
+        "sha256":  "7622510f47127c73b681b6e5ec1fb40cc761ce027f9259a72267378fb1484143",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage-evidence.tar.gz",
+        "sha256":  "f2c61cc60f85bd5335616d57f284a98a699eaad58571a064f6b52e659d8e4050",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage-manifest.json",
+        "sha256":  "37dd56b0c01a8ead300cd52d15b1bdd5a462c8e2cf827380f6ba3d034593c497",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_dictionary.csv",
+        "sha256":  "b683d9ea2de94a19f9241978450ee2164a1762b786f74ca079b8c580f7dfdc8b",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_dictionary.parquet",
+        "sha256":  "022fdfa98210ce337c010da29f24be50c1d5f8a3a6ed792302ee19d4c6949378",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_review.csv",
+        "sha256":  "16945dff9c3b17825073beaaefb996edd7c07a02d1f566fdd7b373aaec81f7e3",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_review.parquet",
+        "sha256":  "92b783e248ef6abb4fa4dd5122ebc0353f370499a18894909b679c111c4dd0ab",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_seed.csv",
+        "sha256":  "ed31a2f7a3b35f05775605fcefa988593c155dbdf8803c9385c9c19d1c44dee1",
+        "verified":  true
+    },
+    {
+        "file":  "lifestage_seed.parquet",
+        "sha256":  "1f3963e09471c8659b32b67c860739cf9a65457be39ac81c03c34dd1f4fed0fb",
+        "verified":  true
+    }
+]

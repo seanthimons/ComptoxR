@@ -238,41 +238,11 @@ eco_species <- function(query, field = c("common_name", "latin_name", "eco_group
 #'   from the `tests` table.
 #' @param results_cols Optional character vector of additional columns to
 #'   select from the `results` table.
-#' @param lifestage_details Logical; include source-backed lifestage
-#'   provenance and join/debug columns? The default `FALSE` returns the compact
-#'   lifestage block: `org_lifestage`, `harmonized_life_stage`, and
-#'   `reproductive_stage`.
 #' @param con An optional `DBI::DBIConnection`.
 #' @return A tibble of enriched test results with concentration and duration
-#'   conversions applied. By default, lifestage output is compact:
-#'   \describe{
-#'     \item{org_lifestage}{Original ECOTOX lifestage description.}
-#'     \item{harmonized_life_stage}{One of 7 harmonized categories:
-#'       `"Egg/Embryo"`, `"Larva"`, `"Juvenile"`, `"Subadult"`, `"Adult"`,
-#'       `"Senescent/Dormant"`, `"Other/Unknown"`.}
-#'     \item{reproductive_stage}{`TRUE` when the resolved source concept
-#'       indicates active reproductive activity (spawning, gestation,
-#'       flowering, etc.), independent of developmental classification.}
-#'   }
-#'   With `lifestage_details = TRUE`, additional source-backed columns are
-#'   included:
-#'   \describe{
-#'     \item{organism_lifestage}{Original ECOTOX lifestage code used for
-#'       joining to the lifestage dictionary.}
-#'     \item{source_term_label}{Provider label for the resolved lifestage
-#'       concept.}
-#'     \item{source_ontology}{Source ontology used for the canonical
-#'       lifestage resolution (`UBERON`, `PO`, or `S11`) when available.}
-#'     \item{source_term_id}{Provider term identifier for the resolved
-#'       lifestage concept.}
-#'     \item{source_match_status}{Resolution status recorded in the canonical
-#'       lifestage dictionary.}
-#'     \item{source_match_method}{Method used to select or derive the source
-#'       lifestage match.}
-#'     \item{derivation_source}{Curated source-ID rule used to derive the
-#'       harmonized lifestage fields.}
-#'   }
-#'   `ontology_id` is not part of the runtime output contract in either mode.
+#'   conversions applied. `organism_lifestage` contains the original ECOTOX
+#'   code and `org_lifestage` contains its source description. No derived
+#'   life-stage categories or reproductive flags are added.
 #' @export
 #' @family ecotox
 #' @examples
@@ -297,11 +267,8 @@ eco_results <- function(
   threatened = FALSE,
   test_cols = NULL,
   results_cols = NULL,
-  lifestage_details = FALSE,
   con = NULL
 ) {
-  lifestage_details <- .eco_validate_lifestage_details(lifestage_details)
-
   # Guard clause — prevent full-table scans
   if (
     is.null(casrn) &&
@@ -331,8 +298,7 @@ eco_results <- function(
       standard = standard,
       threatened = threatened,
       test_cols = test_cols,
-      results_cols = results_cols,
-      lifestage_details = lifestage_details
+      results_cols = results_cols
     ))
   }
 
@@ -357,8 +323,7 @@ eco_results <- function(
   query <- .eco_apply_conversions(query, con)
 
   df <- dplyr::collect(query)
-  df <- .eco_post_process(df)
-  .eco_select_lifestage_output(df, lifestage_details = lifestage_details)
+  .eco_post_process(df)
 }
 
 
@@ -375,8 +340,7 @@ eco_results <- function(
   standard,
   threatened,
   test_cols,
-  results_cols,
-  lifestage_details
+  results_cols
 ) {
   burl <- Sys.getenv("eco_burl")
 
@@ -390,8 +354,7 @@ eco_results <- function(
     standard = standard,
     threatened = threatened,
     test_cols = test_cols,
-    results_cols = results_cols,
-    lifestage_details = lifestage_details
+    results_cols = results_cols
   )
   # Drop NULLs
   body <- body[!vapply(body, is.null, logical(1))]
@@ -412,80 +375,7 @@ eco_results <- function(
 
   httr2::resp_body_json(resp, simplifyVector = TRUE) |>
     tibble::as_tibble() |>
-    .eco_select_lifestage_output(lifestage_details = lifestage_details)
-}
-
-
-#' Validate the lifestage detail flag
-#' @keywords internal
-#' @noRd
-.eco_validate_lifestage_details <- function(lifestage_details) {
-  if (
-    !is.logical(lifestage_details) ||
-      length(lifestage_details) != 1L ||
-      is.na(lifestage_details)
-  ) {
-    cli::cli_abort("{.arg lifestage_details} must be a single non-missing logical value.")
-  }
-
-  lifestage_details
-}
-
-
-#' Select and order public lifestage output columns
-#' @keywords internal
-#' @noRd
-.eco_select_lifestage_output <- function(df, lifestage_details = FALSE) {
-  lifestage_details <- .eco_validate_lifestage_details(lifestage_details)
-
-  compact_cols <- c(
-    "org_lifestage",
-    "harmonized_life_stage",
-    "reproductive_stage"
-  )
-  detailed_cols <- c(
-    compact_cols,
-    "organism_lifestage",
-    "source_term_label",
-    "source_ontology",
-    "source_term_id",
-    "source_match_status",
-    "source_match_method",
-    "derivation_source"
-  )
-
-  if (isTRUE(lifestage_details)) {
-    df <- dplyr::select(df, -dplyr::any_of("ontology_id"))
-    return(.eco_relocate_lifestage_block(df, detailed_cols))
-  }
-
-  hidden_cols <- c(
-    setdiff(detailed_cols, compact_cols),
-    "ontology_id"
-  )
-  df <- dplyr::select(df, -dplyr::any_of(hidden_cols))
-  .eco_relocate_lifestage_block(df, compact_cols)
-}
-
-
-#' Relocate a lifestage block without requiring all columns to be present
-#' @keywords internal
-#' @noRd
-.eco_relocate_lifestage_block <- function(df, block_cols) {
-  present_block <- block_cols[block_cols %in% names(df)]
-  if (length(present_block) == 0L) {
-    return(df)
-  }
-
-  other_cols <- setdiff(names(df), present_block)
-  anchor <- match("test_type", other_cols)
-  if (is.na(anchor)) {
-    new_order <- c(other_cols, present_block)
-  } else {
-    new_order <- append(other_cols, present_block, after = anchor)
-  }
-
-  dplyr::select(df, dplyr::all_of(new_order))
+    dplyr::mutate(dplyr::across(c("organism_lifestage", "org_lifestage"), as.character))
 }
 
 
@@ -749,31 +639,14 @@ eco_results <- function(
       .after = "endpoint"
     )
 
-  # Lifestage codes + dictionary
-  .eco_validate_lifestage_runtime_schema(con)
-
+  # Native ECOTOX lifestage code and description
   query <- query |>
     dplyr::left_join(
       dplyr::tbl(con, "lifestage_codes") |>
-        dplyr::rename(org_lifestage = "description"),
+        dplyr::select("code", org_lifestage = "description"),
       by = dplyr::join_by("organism_lifestage" == "code")
     ) |>
-    dplyr::left_join(
-      dplyr::tbl(con, "lifestage_dictionary"),
-      by = dplyr::join_by("org_lifestage" == "org_lifestage")
-    ) |>
-    dplyr::relocate(
-      "org_lifestage",
-      "source_ontology",
-      "source_term_id",
-      "source_term_label",
-      "source_match_status",
-      "source_match_method",
-      "harmonized_life_stage",
-      "reproductive_stage",
-      "derivation_source",
-      .after = "organism_lifestage"
-    )
+    dplyr::relocate("org_lifestage", .after = "organism_lifestage")
 
   # Application frequencies
   query <- query |>
@@ -788,60 +661,6 @@ eco_results <- function(
     )
 
   query
-}
-
-
-#' Validate source-backed lifestage runtime tables before query joins
-#' @keywords internal
-#' @noRd
-.eco_validate_lifestage_runtime_schema <- function(con) {
-  required_tables <- c("lifestage_codes", "lifestage_dictionary")
-  tables <- DBI::dbListTables(con)
-  missing_tables <- setdiff(required_tables, tables)
-
-  missing_code_cols <- character()
-  if (!("lifestage_codes" %in% missing_tables)) {
-    code_cols <- DBI::dbListFields(con, "lifestage_codes")
-    missing_code_cols <- setdiff(c("code", "description"), code_cols)
-    if (length(missing_code_cols) > 0L) {
-      missing_code_cols <- paste0("lifestage_codes.", missing_code_cols)
-    }
-  }
-
-  required_dictionary_cols <- c(
-    "org_lifestage",
-    "source_ontology",
-    "source_term_id",
-    "source_term_label",
-    "source_match_status",
-    "source_match_method",
-    "harmonized_life_stage",
-    "reproductive_stage",
-    "derivation_source"
-  )
-  missing_dictionary_cols <- character()
-  if (!("lifestage_dictionary" %in% missing_tables)) {
-    dictionary_cols <- DBI::dbListFields(con, "lifestage_dictionary")
-    missing_dictionary_cols <- setdiff(required_dictionary_cols, dictionary_cols)
-    if (length(missing_dictionary_cols) > 0L) {
-      missing_dictionary_cols <- paste0("lifestage_dictionary.", missing_dictionary_cols)
-    }
-  }
-
-  missing_schema <- c(
-    missing_tables,
-    missing_code_cols,
-    missing_dictionary_cols
-  )
-  if (length(missing_schema) == 0L) {
-    return(invisible(TRUE))
-  }
-
-  cli::cli_abort(c(
-    "The ECOTOX lifestage runtime schema is stale or incomplete.",
-    "x" = "Missing required table or column{?s}: {.field {missing_schema}}.",
-    "i" = "Please patch or rebuild the ECOTOX database before calling {.fn eco_results}."
-  ))
 }
 
 

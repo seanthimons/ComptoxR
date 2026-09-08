@@ -13,7 +13,7 @@
 ^old/
 ^output/
 schema_hashes.csv
-build.R
+^build[.]R$
 ^testing.R$
 air.toml
 data-raw/
@@ -28,4 +28,9 @@ data-raw/
 ^pr_body[.]md$
 ^schema_diff_report[.]md$
 ^CONTRIBUTING[.]md$
+^_pkgdown[.]yml$
 ^vignettes/articles$
+^HANDOFF[.]md$
+^endpoint-migration-plan[.]md$
+^schema-tooling-extraction-plan[.]md$
+^lifestage-migration-plan[.]md$

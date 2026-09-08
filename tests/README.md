@@ -44,7 +44,7 @@ Keep handwritten tests for behavior the generator cannot model:
 - data shaping utilities such as Unicode cleanup and `safe_tidy_bind()`
 - local database install/query behavior for DSS, ECOTOX, and ToxVal
 - GenRA algorithms, validation, printing, and bespoke offline workflow behavior
-- lifestage curation gates and data-integrity checks
+- source-only ECOTOX builders and matching localhost HTTP results
 - generator and readiness-audit tooling
 
 Avoid handwritten API-wrapper tests that only assert ordinary request construction. Add those wrappers to the generator instead.

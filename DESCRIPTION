@@ -50,6 +50,7 @@ Roxygen: list(markdown = TRUE)
 Suggests:
     arrow,
     autonewsmd,
+    callr,
     pROC,
     ctxR (>= 1.0),
     fs,
@@ -61,6 +62,7 @@ Suggests:
     magick,
     mockery,
     pkgload,
+    plumber,
     readr,
     readxl,
     roxygen2,

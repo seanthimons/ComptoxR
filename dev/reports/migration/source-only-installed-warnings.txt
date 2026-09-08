@@ -1,0 +1,13 @@
+unable to translate '<U+00C4>' to native encoding
+unable to translate '<U+00D6>' to native encoding
+unable to translate '<U+00DC>' to native encoding
+unable to translate '<U+00E4>' to native encoding
+unable to translate '<U+00F6>' to native encoding
+unable to translate '<U+00FC>' to native encoding
+unable to translate '<U+00DF>' to native encoding
+unable to translate '<U+00C6>' to native encoding
+unable to translate '<U+00E6>' to native encoding
+unable to translate '<U+00D8>' to native encoding
+unable to translate '<U+00F8>' to native encoding
+unable to translate '<U+00C5>' to native encoding
+unable to translate '<U+00E5>' to native encoding
