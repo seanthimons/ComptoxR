@@ -1,0 +1,17 @@
+id: chemi-rdkit
+schemas:
+  files:
+  - schema/chemi-rdkit-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/rdkit: chemi_rdkit
+  POST /api/rdkit: chemi_rdkit_bulk
+

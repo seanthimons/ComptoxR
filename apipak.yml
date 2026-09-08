@@ -1,0 +1,28 @@
+config_version: 1
+package: ComptoxR
+services:
+- apis/chemi-alerts.yml
+- apis/chemi-amnb_nate.yml
+- apis/chemi-amos.yml
+- apis/chemi-arn_cats.yml
+- apis/chemi-chet.yml
+- apis/chemi-descriptors.yml
+- apis/chemi-hazard.yml
+- apis/chemi-mordred.yml
+- apis/chemi-ncc_cats.yml
+- apis/chemi-opera.yml
+- apis/chemi-padel.yml
+- apis/chemi-pfas_atlas.yml
+- apis/chemi-pfas_cats.yml
+- apis/chemi-predictor_models.yml
+- apis/chemi-rdkit.yml
+- apis/chemi-resolver.yml
+- apis/chemi-safety.yml
+- apis/chemi-search.yml
+- apis/chemi-services.yml
+- apis/chemi-stdizer.yml
+- apis/chemi-toxprints.yml
+- apis/chemi-webtest.yml
+- apis/ctx.yml
+- apis/epi.yml
+

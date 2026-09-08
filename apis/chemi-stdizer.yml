@@ -1,0 +1,25 @@
+id: chemi-stdizer
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/stdizer: chemi_stdizer
+  POST /api/stdizer: chemi_stdizer_bulk
+  POST /api/stdizer/chemicals: chemi_stdizer_chemicals
+  GET /api/stdizer/groups: chemi_stdizer_groups
+  POST /api/stdizer/groups: chemi_stdizer_groups_bulk
+  GET /api/stdizer/groups/{id}: chemi_stdizer_groups_by_id
+  GET /api/stdizer/groups/{id}/recursive: chemi_stdizer_groups_recursive
+  GET /api/stdizer/operations: chemi_stdizer_operations
+  POST /api/stdizer/records: chemi_stdizer_records
+  GET /api/stdizer/workflows: chemi_stdizer_workflows
+

@@ -1,0 +1,30 @@
+id: epi
+schemas:
+  files:
+  - schema/epi-suite-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - ^/api$
+  - ^/api/download
+  - ^/api/draw-chemical
+  - ^/api/ecosar/test
+helper: generic_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/ecosar/dye: epi_ecosar_dye
+  GET /api/ecosar/polymer/amphoteric: epi_ecosar_polymer_amphoteric
+  GET /api/ecosar/polymer/anionic: epi_ecosar_polymer_anionic
+  GET /api/ecosar/polymer/nonionic: epi_ecosar_polymer_nonionic
+  GET /api/ecosar/polymer/polycationic: epi_ecosar_polymer_polycationic
+  GET /api/ecosar/surfactant/amphoteric: epi_ecosar_surfactant_amphoteric
+  GET /api/ecosar/surfactant/anionic: epi_ecosar_surfactant_anionic
+  GET /api/ecosar/surfactant/cationic: epi_ecosar_surfactant_cationic
+  GET /api/ecosar/surfactant/nonionic: epi_ecosar_surfactant_nonionic
+  GET /api/search: epi_search
+  GET /api/submit: epi_submit
+  POST /api/submit/batch: epi_submit_batch
+

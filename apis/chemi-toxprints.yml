@@ -1,0 +1,29 @@
+id: chemi-toxprints
+schemas:
+  files:
+  - schema/chemi-toxprints-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/toxprints: chemi_toxprints
+  POST /api/toxprints: chemi_toxprints_bulk
+  GET /api/toxprints/assays: chemi_toxprints_assays
+  POST /api/toxprints/assays: chemi_toxprints_assays_bulk
+  GET /api/toxprints/assays/check: chemi_toxprints_assays_check
+  GET /api/toxprints/assays/{name}: chemi_toxprints_assays_by_name
+  GET /api/toxprints/calculate: chemi_toxprints_calculate
+  POST /api/toxprints/calculate: chemi_toxprints_calculate_bulk
+  POST /api/toxprints/chemicals_categories: chemi_toxprints_chemicals_categories
+  GET /api/toxprints/enrichments: chemi_toxprints_enrichments
+  GET /api/toxprints/global_assays: chemi_toxprints_global_assays
+  GET /api/toxprints/global_toxprints: chemi_toxprints_global_toxprints
+  GET /api/toxprints/toxprints: chemi_toxprints_toxprints
+  POST /api/toxprints/toxprints_categories: chemi_toxprints_toxprints_categories
+

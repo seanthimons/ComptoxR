@@ -1,0 +1,78 @@
+id: chemi-amos
+schemas:
+  files:
+  - schema/chemi-amos-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  POST /api/amos/all_similarities_by_dtxsid/: chemi_amos_all_similarities
+  POST /api/amos/analytical_qc_batch_search: chemi_amos_analytical_qc_batch
+  GET /api/amos/analytical_qc_keyset_pagination/{limit}: chemi_amos_analytical_qc_keyset_pagination
+  POST /api/amos/analytical_qc_keyset_pagination/{limit}: chemi_amos_analytical_qc_keyset_pagination_bulk
+  POST /api/amos/batch_search: chemi_amos_batch
+  POST /api/amos/count_substances_in_ids/: chemi_amos_count_substances_in_ids
+  GET /api/amos/database_summary/: chemi_amos_database
+  POST /api/amos/dtxsids/: chemi_amos_dtxsids
+  GET /api/amos/dtxsids_from_functional_use/{functional_use}: chemi_amos_dtxsids_from_functional_use
+  POST /api/amos/entropy_similarity/: chemi_amos_entropy_similarity
+  GET /api/amos/fact_sheet_keyset_pagination/{limit}: chemi_amos_fact_sheet_keyset_pagination
+  POST /api/amos/fact_sheet_keyset_pagination/{limit}: chemi_amos_fact_sheet_keyset_pagination_bulk
+  GET /api/amos/find_dtxsids/{internal_id}: chemi_amos_find_dtxsids
+  GET /api/amos/formula_search/{formula}: chemi_amos_formula
+  GET /api/amos/functional_class_search/{functional_class}: chemi_amos_functional_class
+  GET /api/amos/functional_uses_for_dtxsid/{dtxsid}: chemi_amos_functional_uses_for_dtxsid
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}: chemi_amos_get_classification_for_dtxsid
+  GET /api/amos/get_data_source_info/: chemi_amos_get_data_source_info
+  GET /api/amos/get_fact_sheet_editor_info/{internal_id}: chemi_amos_get_fact_sheet_editor_info
+  GET /api/amos/get_info_by_id/{internal_id}: chemi_amos_get_info_by_id
+  GET /api/amos/get_ir_spectrum/{internal_id}: chemi_amos_get_ir_spectrum
+  GET /api/amos/get_mass_spectrum/{internal_id}: chemi_amos_get_mass_spectrum
+  GET /api/amos/get_method_editor_info/{internal_id}: chemi_amos_get_method_editor_info
+  GET /api/amos/get_ms_ready_methods/{inchikey}: chemi_amos_get_ms_ready_methods
+  GET /api/amos/get_nmr_spectrum/{internal_id}: chemi_amos_get_nmr_spectrum
+  GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}: chemi_amos_get_nmr_spectrum_editor_info
+  GET /api/amos/get_pdf/{record_type}/{internal_id}: chemi_amos_get_pdf
+  GET /api/amos/get_product_declaration_editor_info/{internal_id}: chemi_amos_get_product_declaration_editor_info
+  GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}: chemi_amos_get_safety_data_sheet_editor_info
+  GET /api/amos/get_similar_structures/{identifier_type}/{identifier}: chemi_amos_get_similar_structures
+  GET /api/amos/get_substances_for_search_term/{search_term}: chemi_amos_get_substances_for_term
+  GET /api/amos/inchikey_first_block_search/{first_block}: chemi_amos_inchikey_first_block
+  GET /api/amos/list_fact_sheet_types/: chemi_amos_list_fact_sheet_types
+  GET /api/amos/list_functional_classes: chemi_amos_list_functional_classes
+  GET /api/amos/list_sources_by_record_type/{record_type}: chemi_amos_list_sources_by_record_type
+  POST /api/amos/mass_range_search/: chemi_amos_mass_range
+  POST /api/amos/mass_spectra_for_substances/: chemi_amos_mass_spectra_for_substances
+  POST /api/amos/mass_spectrum_similarity_search/: chemi_amos_mass_spectrum_similarity
+  POST /api/amos/max_similarity_by_dtxsid/: chemi_amos_max_similarity
+  GET /api/amos/method_keyset_pagination/{limit}: chemi_amos_method_keyset_pagination
+  POST /api/amos/method_keyset_pagination/{limit}: chemi_amos_method_keyset_pagination_bulk
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}: chemi_amos_method_with_spectra
+  POST /api/amos/next_level_classification/: chemi_amos_next_level_classification
+  GET /api/amos/product_declaration_keyset_pagination/{limit}: chemi_amos_product_declaration_keyset_pagination
+  POST /api/amos/product_declaration_keyset_pagination/{limit}: chemi_amos_product_declaration_keyset_pagination_bulk
+  POST /api/amos/record_counts_by_dtxsid/: chemi_amos_record_counts
+  GET /api/amos/record_id_search/{internal_id}: chemi_amos_record_id
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}: chemi_amos_record_ids_for_substance
+  GET /api/amos/record_type_count/{record_type}: chemi_amos_record_type_count
+  GET /api/amos/release_notes: chemi_amos_release_notes
+  POST /api/amos/retrieve_fact_sheets/: chemi_amos_retrieve_fact_sheets
+  POST /api/amos/retrieve_product_declarations/: chemi_amos_retrieve_product_declarations
+  POST /api/amos/retrieve_safety_data_sheets/: chemi_amos_retrieve_safety_data_sheets
+  GET /api/amos/safety_data_sheet_keyset_pagination/{limit}: chemi_amos_safety_data_sheet_keyset_pagination
+  POST /api/amos/safety_data_sheet_keyset_pagination/{limit}: chemi_amos_safety_data_sheet_keyset_pagination_bulk
+  GET /api/amos/search/{dtxsid}: chemi_amos
+  GET /api/amos/search_by_text/{substr}: chemi_amos_by_text
+  POST /api/amos/search_for_document_ids/{record_type}: chemi_amos_for_document_ids
+  POST /api/amos/spectral_entropy/: chemi_amos_spectral_entropy
+  POST /api/amos/spectrum_count_for_methodology/: chemi_amos_spectrum_count_for_methodology
+  POST /api/amos/substances_for_classification/: chemi_amos_substances_for_classification
+  POST /api/amos/substances_for_ids/: chemi_amos_substances_for_ids
+  GET /api/amos/substring_search/{substring}: chemi_amos_substring
+

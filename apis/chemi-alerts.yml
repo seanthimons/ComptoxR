@@ -1,0 +1,21 @@
+id: chemi-alerts
+schemas:
+  files:
+  - schema/chemi-alerts-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  POST /api/alerts: chemi_alerts
+  GET /api/alerts/alerts: chemi_alerts_alerts
+  GET /api/alerts/groups: chemi_alerts_groups
+  POST /api/alerts/groups: chemi_alerts_groups_bulk
+  GET /api/alerts/groups/{id}: chemi_alerts_groups_by_id
+  GET /api/alerts/operations: chemi_alerts_operations
+

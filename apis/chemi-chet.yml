@@ -1,0 +1,43 @@
+id: chemi-chet
+schemas:
+  files:
+  - schema/chemi-chet-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /chemicals/alias: chemi_chet_chemicals_alias
+  GET /chemicals/chemset: chemi_chet_chemicals_chemset
+  GET /chemicals/counts: chemi_chet_chemicals_counts
+  GET /chemicals/database: chemi_chet_chemicals_database
+  GET /chemicals/database-old: chemi_chet_chemicals_database_old
+  GET /chemicals/database/stats: chemi_chet_chemicals_database_stats
+  GET /chemicals/maps: chemi_chet_chemicals_maps
+  GET /chemicals/singlechemical: chemi_chet_chemicals_singlechemical
+  GET /chemicals/suggest: chemi_chet_chemicals_suggest
+  GET /chemicals/verify/{dtxsid}: chemi_chet_chemicals_verify
+  GET /chemicals/{chemical_id}/image: chemi_chet_chemicals_image
+  POST /reaction/batchsearch: chemi_chet_reaction_batchsearch
+  GET /reaction/database: chemi_chet_reaction_database
+  GET /reaction/database-old/{pagenum}/{searchterm}: chemi_chet_reaction_database_old_by_pagenum_and_searchterm
+  GET /reaction/database/stats: chemi_chet_reaction_database_stats
+  GET /reaction/database_old: chemi_chet_reaction_database_old
+  GET /reaction/dbcounts: chemi_chet_reaction_dbcounts
+  GET /reaction/details: chemi_chet_reaction_details
+  GET /reaction/libraries: chemi_chet_reaction_libraries
+  GET /reaction/mapid: chemi_chet_reaction_mapid
+  GET /reaction/mappositions/{map_id}: chemi_chet_reaction_mappositions
+  GET /reaction/maps: chemi_chet_reaction_maps
+  GET /reaction/react_maps: chemi_chet_reaction_react_maps
+  GET /reaction/reactionmap: chemi_chet_reaction_reactionmap
+  GET /reaction/search: chemi_chet_reaction
+  GET /reaction/searchcounts/{search_input}/{search_type}: chemi_chet_reaction_searchcounts
+  GET /reaction/singlereaction: chemi_chet_reaction_singlereaction
+  GET /reaction/table: chemi_chet_reaction_table
+

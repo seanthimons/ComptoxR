@@ -1,0 +1,44 @@
+id: chemi-resolver
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/resolver/ccte-list: chemi_resolver_ccte_list
+  GET /api/resolver/ccte-lists: chemi_resolver_ccte_lists
+  GET /api/resolver/classyfire: chemi_resolver_classyfire
+  GET /api/resolver/getallannotations: chemi_resolver_getallannotations
+  GET /api/resolver/getannotation: chemi_resolver_getannotation
+  GET /api/resolver/getannotationslist: chemi_resolver_getannotationslist
+  GET /api/resolver/getdatasources: chemi_resolver_getdatasources
+  POST /api/resolver/getpubchemlist: chemi_resolver_getpubchemlist
+  POST /api/resolver/getsimilaritylist: chemi_resolver_getsimilaritylist
+  POST /api/resolver/getsimilaritymap: chemi_resolver_getsimilaritymap
+  GET /api/resolver/getsubstance: chemi_resolver_getsubstance
+  GET /api/resolver/ghs-list: chemi_resolver_ghs_list
+  GET /api/resolver/ghs-list-count: chemi_resolver_ghs_list_count
+  POST /api/resolver/ghs-list-count: chemi_resolver_ghs_list_count_bulk
+  GET /api/resolver/ghs/classes: chemi_resolver_ghs_classes
+  GET /api/resolver/ghs/hcodes: chemi_resolver_ghs_hcodes
+  GET /api/resolver/ghs/pcodes: chemi_resolver_ghs_pcodes
+  GET /api/resolver/hcodes: chemi_resolver_hcodes
+  GET /api/resolver/links: chemi_resolver_links
+  GET /api/resolver/lookup: chemi_resolver_lookup
+  POST /api/resolver/lookup: chemi_resolver_lookup_bulk
+  GET /api/resolver/lookupCASRN: chemi_resolver_lookupCASRN
+  GET /api/resolver/mesh: chemi_resolver_mesh
+  POST /api/resolver/orderBySimilarity: chemi_resolver_orderBySimilarity
+  GET /api/resolver/pubchem-section: chemi_resolver_pubchem_section
+  POST /api/resolver/pubchem-section: chemi_resolver_pubchem_section_bulk
+  POST /api/resolver/resolve: chemi_resolver_resolve
+  GET /api/resolver/safety-flags: chemi_resolver_safety_flags
+  POST /api/resolver/safety-flags: chemi_resolver_safety_flags_bulk
+

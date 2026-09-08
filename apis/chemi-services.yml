@@ -1,0 +1,21 @@
+id: chemi-services
+schemas:
+  files:
+  - schema/chemi-services-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude:
+  - render|replace|add|freeze|metadata|version|reports|webtest/report|download|export|protocols|preflight|universalpreflight|caspreflight|file|admin|auth|login|logout|register|index|errorreport|testpage|curators|reaction/editor|chemdelete|reactiondelete|visibility|mapfix|newchem|newreact|newlibrary|_DL|_dl|chemtemp|resolver/(?:casharvest|universalharvest(?:_cart)?)$
+helper: generic_chemi_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /api/services/cim_component_info: chemi_services_cim_component_info
+  POST /api/services/collated_report: chemi_services_collated_report
+  POST /api/services/convert: chemi_services_convert
+  GET /api/services/layout: chemi_services_layout
+  GET /api/services/release_notes: chemi_services_release_notes
+  GET /api/services/smirks2rxn: chemi_services_smirks2rxn
+

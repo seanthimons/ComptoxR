@@ -1,0 +1,157 @@
+id: ctx
+schemas:
+  files:
+  - schema/ctx-bioactivity-prod.json
+  - schema/ctx-chemical-prod.json
+  - schema/ctx-exposure-prod.json
+  - schema/ctx-hazard-prod.json
+selection:
+  methods:
+  - GET
+  - POST
+  exclude: []
+helper: generic_request
+policy_version: comptox-maintenance-1
+hook_config: inst/hook_config.yml
+names:
+  GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}: ct_bioactivity_analyticalqc_search
+  GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}: ct_bioactivity_aop_search_by_entrez_gene_id
+  GET /bioactivity/aop/search/by-event-number/{eventNumber}: ct_bioactivity_aop_search_by_event_number
+  GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}: ct_bioactivity_aop_search_by_toxcast_aeid
+  GET /bioactivity/assay/: ct_bioactivity_assay
+  GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}: ct_bioactivity_assay_chemicals_search_by_aeid
+  GET /bioactivity/assay/count: ct_bioactivity_assay_count
+  POST /bioactivity/assay/search/by-aeid/: ct_bioactivity_assay_search_by_aeid_bulk
+  GET /bioactivity/assay/search/by-aeid/{aeid}: ct_bioactivity_assay_search_by_aeid
+  GET /bioactivity/assay/search/by-endpoint/: ct_bioactivity_assay_search_by_endpoint
+  GET /bioactivity/assay/search/by-gene/{geneSymbol}: ct_bioactivity_assay_search_by_gene
+  GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}: ct_bioactivity_assay_single_conc_search_by_aeid
+  POST /bioactivity/data/aed/search/by-dtxsid/: ct_bioactivity_data_aed_search_bulk
+  GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}: ct_bioactivity_data_aed_search
+  POST /bioactivity/data/search/by-aeid/: ct_bioactivity_data_search_by_aeid_bulk
+  GET /bioactivity/data/search/by-aeid/{aeid}: ct_bioactivity_data_search_by_aeid
+  POST /bioactivity/data/search/by-dtxsid/: ct_bioactivity_data_search_bulk
+  GET /bioactivity/data/search/by-dtxsid/{dtxsid}: ct_bioactivity_data_search_by_dtxsid
+  POST /bioactivity/data/search/by-m4id/: ct_bioactivity_data_search_by_m4id_bulk
+  GET /bioactivity/data/search/by-m4id/{m4id}: ct_bioactivity_data_search_by_m4id
+  POST /bioactivity/data/search/by-spid/: ct_bioactivity_data_search_by_spid_bulk
+  GET /bioactivity/data/search/by-spid/{spid}: ct_bioactivity_data_search_by_spid
+  GET /bioactivity/data/summary/search/by-aeid/{aeid}: ct_bioactivity_data_summary_search_by_aeid
+  GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}: ct_bioactivity_data_summary_search_by_dtxsid
+  GET /bioactivity/data/summary/search/by-tissue/: ct_bioactivity_data_search_by_tissue
+  GET /bioactivity/models/search/: ct_bioactivity_models_search
+  GET /bioactivity/models/search/by-dtxsid/{dtxsid}: ct_bioactivity_models_search_by_dtxsid
+  GET /bioactivity/search/contain/{value}: ct_bioactivity_search_contain
+  GET /bioactivity/search/equal/{value}: ct_bioactivity_search_equal
+  GET /bioactivity/search/start-with/{value}: ct_bioactivity_search_start_with
+  GET /chemical/count/by-exact-formula/{formula}: ct_chemical_count_by_exact_formula
+  GET /chemical/count/by-msready-formula/{formula}: ct_chemical_count_by_msready_formula
+  POST /chemical/detail/search/by-dtxcid/: ct_chemical_detail_search_by_dtxcid_bulk
+  GET /chemical/detail/search/by-dtxcid/{dtxcid}: ct_chemical_detail_search_by_dtxcid
+  POST /chemical/detail/search/by-dtxsid/: ct_chemical_detail_search_bulk
+  GET /chemical/detail/search/by-dtxsid/{dtxsid}: ct_chemical_detail_search
+  GET /chemical/detail/search/by-smiles/: ct_chemical_detail_search_by_smiles
+  POST /chemical/extra-data/search/by-dtxsid/: ct_chemical_extra_data_search_bulk
+  GET /chemical/extra-data/search/by-dtxsid/{dtxsid}: ct_chemical_extra_data_search
+  POST /chemical/fate/search/by-dtxsid/: ct_chemical_fate_search_bulk
+  GET /chemical/fate/search/by-dtxsid/{dtxsid}: ct_chemical_fate_search_by_dtxsid
+  GET /chemical/fate/summary/experimental/search/: ct_chemical_fate_experimental_search
+  GET /chemical/fate/summary/predicted/search/: ct_chemical_fate_predicted_search
+  GET /chemical/fate/summary/search/: ct_chemical_fate_summary_search
+  GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}: ct_chemical_fate_summary_search_by_dtxsid
+  GET /chemical/file/image/search/by-dtxcid/{dtxcid}: ct_chemical_file_image_search_by_dtxcid
+  GET /chemical/file/image/search/by-dtxsid/{dtxsid}: ct_chemical_file_image_search
+  GET /chemical/file/image/search/by-gsid/{gsid}: ct_chemical_file_image_search_by_gsid
+  GET /chemical/file/mol/search/by-dtxcid/{dtxcid}: ct_chemical_file_mol_search_by_dtxcid
+  GET /chemical/file/mol/search/by-dtxsid/{dtxsid}: ct_chemical_file_mol_search
+  GET /chemical/list/all: ct_chemical_list_all
+  GET /chemical/list/chemicals/search/by-listname/{list}: ct_chemical_list_chemicals_search_by_listname
+  GET /chemical/list/chemicals/search/contain/{list}/{word}: ct_chemical_list_chemicals_search_contain
+  GET /chemical/list/chemicals/search/equal/{list}/{word}: ct_chemical_list_chemicals_search_equal
+  GET /chemical/list/chemicals/search/start-with/{list}/{word}: ct_chemical_list_chemicals_search_start_with
+  GET /chemical/list/search/by-dtxsid/{dtxsid}: ct_chemical_list_search
+  GET /chemical/list/search/by-name/{listName}: ct_chemical_list_search_by_name
+  GET /chemical/list/search/by-type/{type}: ct_chemical_list_search_by_type
+  GET /chemical/list/type: ct_chemical_list_type
+  POST /chemical/msready/search/by-dtxcid/: ct_chemical_msready_search_by_dtxcid_bulk
+  GET /chemical/msready/search/by-dtxcid/{dtxcid}: ct_chemical_msready_search_by_dtxcid
+  GET /chemical/msready/search/by-formula/{formula}: ct_chemical_msready_search_by_formula
+  POST /chemical/msready/search/by-mass/: ct_chemical_msready_search_by_mass_bulk
+  GET /chemical/msready/search/by-mass/{start}/{end}: ct_chemical_msready_search_by_mass
+  GET /chemical/property/experimental/name: ct_chemical_property_experimental_name
+  POST /chemical/property/experimental/search/by-dtxsid/: ct_chemical_property_experimental_search_bulk
+  GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}: ct_chemical_property_experimental_search_by_dtxsid
+  GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}: ct_chemical_property_experimental_search_by_range
+  GET /chemical/property/predicted/name: ct_chemical_property_predicted_name
+  POST /chemical/property/predicted/search/by-dtxsid/: ct_chemical_property_predicted_search_bulk
+  GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}: ct_chemical_property_predicted_search_by_dtxsid
+  GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}: ct_chemical_property_predicted_search_by_range
+  GET /chemical/property/summary/experimental/search/: ct_chemical_property_summary_experimental_search
+  GET /chemical/property/summary/predicted/search/: ct_chemical_property_summary_predicted_search
+  GET /chemical/property/summary/search/: ct_chemical_property_summary_search
+  GET /chemical/property/summary/search/by-dtxsid/{dtxsid}: ct_chemical_property_summary_search_by_dtxsid
+  GET /chemical/search/by-exact-formula/{formula}: ct_chemical_search_by_exact_formula
+  POST /chemical/search/by-msready-formula/: ct_chemical_search_by_msready_formula_bulk
+  GET /chemical/search/by-msready-formula/{formula}: ct_chemical_search_by_msready_formula
+  GET /chemical/search/contain/{word}: ct_chemical_search_contain
+  POST /chemical/search/equal/: ct_chemical_search_equal_bulk
+  GET /chemical/search/equal/{word}: ct_chemical_search_equal
+  GET /chemical/search/start-with/{word}: ct_chemical_search_start_with
+  POST /chemical/synonym/search/by-dtxsid/: ct_chemical_synonym_search_bulk
+  GET /chemical/synonym/search/by-dtxsid/{dtxsid}: ct_chemical_synonym_search
+  GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_chem_weight_fractions_search
+  GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_functional_use_search
+  GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_keywords_search
+  GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_monitoring_data_search
+  GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_production_volume_search
+  GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}: ct_exposure_ccd_puc_search
+  GET /exposure/functional-use/category: ct_exposure_functional_use_category
+  GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}: ct_exposure_functional_use_probability_search
+  POST /exposure/functional-use/search/by-dtxsid/: ct_exposure_functional_use_search_bulk
+  GET /exposure/functional-use/search/by-dtxsid/{dtxsid}: ct_exposure_functional_use_search
+  POST /exposure/httk/search/by-dtxsid/: ct_exposure_httk_search_bulk
+  GET /exposure/httk/search/by-dtxsid/{dtxsid}: ct_exposure_httk_search
+  POST /exposure/list-presence/search/by-dtxsid/: ct_exposure_list_presence_search_bulk
+  GET /exposure/list-presence/search/by-dtxsid/{dtxsid}: ct_exposure_list_presence_search
+  GET /exposure/list-presence/tags: ct_exposure_list_presence_tags
+  GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}: ct_exposure_mmdb_aggregate
+  GET /exposure/mmdb/aggregate/by-medium: ct_exposure_mmdb_aggregate_by_medium
+  GET /exposure/mmdb/mediums: ct_exposure_mmdb_mediums
+  GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}: ct_exposure_mmdb_single_sample
+  GET /exposure/mmdb/single-sample/by-medium: ct_exposure_mmdb_single_sample_by_medium
+  GET /exposure/product-data/puc: ct_exposure_product_data_puc
+  POST /exposure/product-data/search/by-dtxsid/: ct_exposure_product_data_search_bulk
+  GET /exposure/product-data/search/by-dtxsid/{dtxsid}: ct_exposure_product_data_search
+  POST /exposure/seem/demographic/search/by-dtxsid/: ct_exposure_seem_demographic_search_bulk
+  GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}: ct_exposure_seem_demographic_search
+  POST /exposure/seem/general/search/by-dtxsid/: ct_exposure_seem_general_search_bulk
+  GET /exposure/seem/general/search/by-dtxsid/{dtxsid}: ct_exposure_seem_general_search
+  GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}: ct_hazard_adme_ivive_search
+  POST /hazard/cancer-summary/search/by-dtxsid/: ct_hazard_cancer_search_bulk
+  GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}: ct_hazard_cancer_search
+  POST /hazard/genetox/details/search/by-dtxsid/: ct_hazard_genetox_details_search_bulk
+  GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}: ct_hazard_genetox_details_search
+  POST /hazard/genetox/summary/search/by-dtxsid/: ct_hazard_genetox_search_bulk
+  GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}: ct_hazard_genetox_search
+  GET /hazard/hawc/search/by-dtxsid/{dtxsid}: ct_hazard_hawc_search
+  GET /hazard/iris/search/by-dtxsid/{dtxsid}: ct_hazard_iris_search
+  GET /hazard/pprtv/search/by-dtxsid/{dtxsid}: ct_hazard_pprtv_search
+  POST /hazard/skin-eye/search/by-dtxsid/: ct_hazard_skin_eye_search_bulk
+  GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}: ct_hazard_skin_eye_search
+  GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}: ct_hazard_toxref_data_search
+  GET /hazard/toxref/data/search/by-study-id/{studyId}: ct_hazard_toxref_data_search_by_study_id
+  GET /hazard/toxref/data/search/by-study-type/{studyType}: ct_hazard_toxref_data_search_by_study_type
+  GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}: ct_hazard_toxref_effects_search
+  GET /hazard/toxref/effects/search/by-study-id/{studyId}: ct_hazard_toxref_effects_search_by_study_id
+  GET /hazard/toxref/effects/search/by-study-type/{studyType}: ct_hazard_toxref_effects_search_by_study_type
+  GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}: ct_hazard_toxref_observations_search
+  GET /hazard/toxref/observations/search/by-study-id/{studyId}: ct_hazard_toxref_observations_search_by_study_id
+  GET /hazard/toxref/observations/search/by-study-type/{studyType}: ct_hazard_toxref_observations_search_by_study_type
+  GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}: ct_hazard_toxref_search
+  GET /hazard/toxref/summary/search/by-study-id/{studyId}: ct_hazard_toxref_search_by_study_id
+  GET /hazard/toxref/summary/search/by-study-type/{studyType}: ct_hazard_toxref_search_by_study_type
+  GET /hazard/toxval/search/by-category/{dtxsid}: ct_hazard_toxval_search_by_category
+  POST /hazard/toxval/search/by-dtxsid/: ct_hazard_toxval_search_bulk
+  GET /hazard/toxval/search/by-dtxsid/{dtxsid}: ct_hazard_toxval_search
+  GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}: ct_hazard_toxval_supercategory_search
+
