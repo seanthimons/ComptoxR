@@ -36,6 +36,10 @@ warnings without detail. The installed-tarball builder repeat also passed with
 1,242,356 results. Its output hashes are in `source-only-installed-hashes.csv`.
 The 13 warnings are native-encoding transliteration warnings under the C locale;
 each is recorded in `source-only-installed-warnings.txt`.
+The independent encoding check compared all 48 appendix tables (14,055 rows)
+and all 139 native lifestage rows to the frozen inputs: all values matched.
+The warnings also occur on ASCII-only dummy names and come from snakecase's
+internal transliteration dictionary. See `encoding-fidelity.txt`.
 
 An installed-package example ran outside the checkout against this database.
 It queried 664 records, read the recorded release from `_metadata`, and applied
@@ -68,3 +72,10 @@ with `Status: OK` under the CRAN-safe test environment. The two changed articles
 were rendered separately. ComptoxR's normal release workflow, source-only database upload,
 download verification and old asset withdrawal are still pending. No database
 asset has been withdrawn. Do not treat local artifact checks as publication.
+
+PR 306 is open. Its first CI run found two undeclared test dependencies (`callr`
+and `plumber`), now listed in Suggests, and `_pkgdown.yml` in the tarball, now
+excluded. Gitleaks reported 33 inventory MD5 values; each was verified against
+the frozen source file before adding an exact fingerprint exception. macOS
+R-devel could not install pak from its binary repository (HTTP 404); that lane
+now uses the configured CRAN repository. Other lanes retain their normal setup.

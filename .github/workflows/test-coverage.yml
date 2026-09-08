@@ -68,6 +68,8 @@ jobs:
       - name: Setup R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # The pak binary repository has no macOS ARM R-devel 4.7 build.
+          pak-version: ${{ runner.os == 'macOS' && matrix.r-version == 'devel' && 'repo' || 'stable' }}
           extra-packages: |
             any::devtools
             any::rcmdcheck

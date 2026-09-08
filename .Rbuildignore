@@ -28,6 +28,7 @@ data-raw/
 ^pr_body[.]md$
 ^schema_diff_report[.]md$
 ^CONTRIBUTING[.]md$
+^_pkgdown[.]yml$
 ^vignettes/articles$
 ^HANDOFF[.]md$
 ^endpoint-migration-plan[.]md$
