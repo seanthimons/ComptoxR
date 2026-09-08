@@ -30,13 +30,13 @@ test_that("ECOTOX queries ignore absent, present, and stale derived tables", {
   expect_identical(DBI::dbReadTable(con, "lifestage_dictionary"), data.frame(stale = 1L))
 })
 
-test_that("both ECOTOX builders have no harmonizer dependency and propagate failures", {
+test_that("the installed ECOTOX builder has no harmonizer dependency and propagates failures", {
   installed <- system.file("ecotox", "ecotox_build.R", package = "ComptoxR")
   source <- testthat::test_path("..", "..", "inst", "ecotox", "ecotox_build.R")
   if (file.exists(source)) {
     installed <- source
   }
-  paths <- c(installed, testthat::test_path("..", "..", "data-raw", "ecotox.R"))
+  paths <- installed
   paths <- paths[file.exists(paths)]
   expect_gte(length(paths), 1L)
   builders <- lapply(paths, function(path) {
@@ -111,16 +111,18 @@ test_that("shipped localhost Plumber results match direct source-only queries", 
   expect_identical(names(remote), names(direct))
   expect_equal(lapply(remote, as.character), lapply(direct, as.character))
   expect_equal(nrow(remote), nrow(direct))
-  expect_equal(remote$organism_lifestage, direct$organism_lifestage)
-  expect_equal(as.character(remote$org_lifestage), direct$org_lifestage)
+  expect_identical(remote$organism_lifestage, direct$organism_lifestage)
+  expect_identical(remote$org_lifestage, direct$org_lifestage)
   expect_equal(remote$final_conc, direct$final_conc)
   expect_false(any(c("harmonized_life_stage", "reproductive_stage") %in% names(remote)))
   empty <- eco_results(casrn = "not-in-fixture")
   expect_equal(nrow(empty), 0L)
   expect_identical(names(empty), names(direct))
+  expect_identical(empty$organism_lifestage, character())
+  expect_identical(empty$org_lifestage, character())
 })
 
-test_that("both builders import local source data without mapping artifacts", {
+check_ecotox_source_build <- function(path) {
   if (.Platform$OS.type == "windows") {
     withr::local_locale(c(LC_CTYPE = ".UTF-8"))
   }
@@ -182,13 +184,7 @@ test_that("both builders import local source data without mapping artifacts", {
   output_dir <- withr::local_tempdir()
   testthat::local_mocked_bindings(R_user_dir = function(...) output_dir, .package = "tools")
   withr::local_envvar(c(COMPTOXR_ECOTOX_RELEASE_ZIP = release))
-  installed <- system.file("ecotox", "ecotox_build.R", package = "ComptoxR")
-  source <- testthat::test_path("..", "..", "inst", "ecotox", "ecotox_build.R")
-  if (file.exists(source)) {
-    installed <- source
-  }
-  paths <- c(installed, testthat::test_path("..", "..", "data-raw", "ecotox.R"))
-  for (path in paths[file.exists(paths)]) {
+  {
     output_dir <- tempfile("source-only-build-")
     withr::defer(unlink(output_dir, recursive = TRUE))
     env <- new.env(parent = globalenv())
@@ -209,4 +205,19 @@ test_that("both builders import local source data without mapping artifacts", {
       finally = DBI::dbDisconnect(built_con, shutdown = TRUE)
     )
   }
+}
+
+test_that("the installed builder imports source data without mapping artifacts", {
+  path <- system.file("ecotox", "ecotox_build.R", package = "ComptoxR")
+  source <- testthat::test_path("..", "..", "inst", "ecotox", "ecotox_build.R")
+  if (file.exists(source)) {
+    path <- source
+  }
+  check_ecotox_source_build(path)
+})
+
+test_that("the maintainer builder imports source data without mapping artifacts", {
+  path <- testthat::test_path("..", "..", "data-raw", "ecotox.R")
+  skip_if_not(file.exists(path), "Maintainer builder is excluded from the CRAN source tarball")
+  check_ecotox_source_build(path)
 })

@@ -19,14 +19,18 @@ SHA256: `291f94feee5ee64ed57040e76ce9cab543b7ce1b823aff81998245ddfa85a791`.
 - Baseline: `devtools::test(filter = 'eco_functions|eco_lifestage|ecotox_vocabulary_drift|cran_tarball_test_paths')`:
   183 passes, no failures, warnings, or skips.
 - Source: `devtools::test(filter = 'eco_functions|ecotox_source_only')`:
-  62 passes, no failures, warnings, or skips. One further full HTTP value
-  comparison was then added and passed in the installed check below.
+  62 passes, no failures, warnings, or skips. Includes all HTTP values and
+  exact native field types for missing and empty results.
 - Installed: `R CMD INSTALL --no-multiarch --library=<isolated-library> .`:
   passed, including temporary and final location load checks. Load ComptoxR
   from this library, copy `helper-ecotox-db.R` and
   `test-ecotox_source_only.R` to a temporary directory outside the checkout,
   source the helper, and run `testthat::test_file('test-ecotox_source_only.R',
-  stop_on_failure = TRUE)`: 26 passes, no failures, warnings, or skips.
+  stop_on_failure = TRUE)`: 28 passes, no failures or test warnings. One
+  explicit skip: the maintainer-only builder is excluded outside the source
+  checkout. The installed full builder executes and passes.
+- `devtools::test(filter = 'cran_tarball_test_paths')`: one pass, no failures,
+  test warnings, or skips.
 - `roxygen2::roxygenise(roclets = 'rd')`: only `man/eco_results.Rd` changed.
 - `rmarkdown::render('vignettes/articles/ecotox.Rmd', output_format = 'html_document')`
   and `tools::Rd2HTML('man/eco_results.Rd')`: completed. Query chunks are
@@ -51,7 +55,8 @@ the removed argument fail.
 The HTTP test starts the shipped server with the matching package, uses real
 localhost requests, compares all values with a direct query, and checks
 missing descriptions and empty results. JSON uses named column arrays so an
-empty result retains its fields. Nulls preserve missing values. This is a
+empty result retains its fields. Nulls preserve missing values. The client
+restores character types for both native fields after JSON parsing. This is a
 breaking server/client update and requires a restart.
 
 Both builders run the full import, Parquet conversion, enrichment, database
