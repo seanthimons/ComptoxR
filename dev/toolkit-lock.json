@@ -1,0 +1,8 @@
+{
+  "package": "wrapmaint",
+  "version": "0.1.0",
+  "source_commit": "aae88f99f6bd355a06d3404fd100b86620609e83",
+  "asset": "wrapmaint_0.1.0.tar.gz",
+  "sha256": "a9e8ff83f1316b1e3059c63ab84e7aa01567bb7c2156259400bf791781408fe0",
+  "policy_version": "comptox-compatibility-1"
+}

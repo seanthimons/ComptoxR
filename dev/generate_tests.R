@@ -1,13 +1,7 @@
 #!/usr/bin/env Rscript
 # Parent entrypoint for generated offline wrapper contract tests.
 
-suppressPackageStartupMessages({
-  if (requireNamespace("cli", quietly = TRUE)) {
-    library(cli)
-  }
-})
-
-source_test_generation_pipeline <- function(root = ".") {
+source_test_generation_pipeline <- function(root = ".", envir = parent.frame()) {
   module_dir <- file.path(root, "dev", "test_generation")
   modules <- c(
     "00_config.R",
@@ -25,7 +19,7 @@ source_test_generation_pipeline <- function(root = ".") {
     if (!file.exists(path)) {
       stop("Missing test generation module: ", path, call. = FALSE)
     }
-    source(path, local = FALSE)
+    sys.source(path, envir = envir)
   }
 
   invisible(TRUE)
@@ -57,9 +51,9 @@ print_generate_tests_help <- function() {
   )
 }
 
-build_generated_test_specs <- function(root = ".") {
-  metadata <- tg_collect_wrapper_metadata(root)
-  bespoke <- tg_validate_bespoke_contracts(metadata, root)
+build_generated_test_specs <- function(root = ".", context = parent.frame()) {
+  metadata <- get("tg_collect_wrapper_metadata", envir = context)(root)
+  bespoke <- get("tg_validate_bespoke_contracts", envir = context)(metadata, root)
   if (!isTRUE(bespoke$valid)) {
     stop(
       paste(c("Invalid bespoke test exclusions:", bespoke$errors), collapse = "\n"),
@@ -67,7 +61,7 @@ build_generated_test_specs <- function(root = ".") {
     )
   }
   metadata <- metadata[setdiff(names(metadata), names(bespoke$suites))]
-  tg_render_all_tests(metadata)
+  get("tg_render_all_tests", envir = context)(metadata)
 }
 
 summarise_scaffold <- function(scaffold) {
@@ -89,12 +83,12 @@ generate_tests_main <- function(args = commandArgs(trailingOnly = TRUE), root = 
     return(invisible(NULL))
   }
 
-  source_test_generation_pipeline(root)
+  source_test_generation_pipeline(root, envir = environment())
   if (requireNamespace("cli", quietly = TRUE)) {
     cli::cli_h1("Generated Wrapper Contract Tests")
   }
 
-  specs <- build_generated_test_specs(root)
+  specs <- build_generated_test_specs(root, context = environment())
   tg_cli_info(sprintf("Discovered %d exported API wrapper function(s)", length(specs)))
 
   if (identical(parsed$mode, "dry-run")) {

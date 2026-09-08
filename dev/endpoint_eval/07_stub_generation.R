@@ -1,3 +1,6 @@
+if (!exists('client_path', mode = 'function')) {
+  client_path <- here::here
+}
 # ==============================================================================
 # Stub Generation
 # ==============================================================================
@@ -22,11 +25,11 @@ stubgen_example_value <- function(value) {
 
 stubgen_read_hook_config <- function() {
   if (!exists("read_hook_configs", mode = "function")) {
-    source(here::here("R", "hook_registry.R"), local = FALSE)
+    source(client_path("R", "hook_registry.R"), local = FALSE)
   }
   read_hook_configs(
-    here::here("inst", "hook_config.yml"),
-    here::here("inst", "hook_config_generated.yml")
+    client_path("inst", "hook_config.yml"),
+    client_path("inst", "hook_config_generated.yml")
   )
 }
 
