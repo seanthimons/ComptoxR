@@ -1,6 +1,13 @@
 #!/usr/bin/env Rscript
 # Sourceable command. Generated output needs httr2, but no development toolkit.
-generate_local_client <- function(repository_root, input_root, schema, output_root, base_url) {
+generate_local_client <- function(repository_root, input_root, schema, output_root, base_url, package_name) {
+  if (
+    length(package_name) != 1L ||
+      !grepl('^[A-Za-z][A-Za-z0-9.]*[A-Za-z0-9]$', package_name) ||
+      tolower(package_name) %in% c('comptoxr', 'wrapmaint', 'httr2')
+  ) {
+    stop('Supply a distinct valid local package name')
+  }
   repository_root <- fs::path_real(repository_root)
   input_root <- fs::path_real(input_root)
   if (read.dcf(file.path(repository_root, 'DESCRIPTION'))[1, 'Package'] != 'ComptoxR') {
@@ -102,7 +109,25 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   )
   parse(text = code)
   writeLines(code, file.path(stage, 'client.R'))
+  writeLines(code[1:3], file.path(stage, 'R/local_request.R'))
+  writeLines(
+    c(
+      paste0('Package: ', package_name),
+      'Version: 0.0.0.9000',
+      'Title: Explicitly Configured Local API Client',
+      'Description: Local-only generated operations from a frozen schema snapshot.',
+      'Authors@R: person("Sean", "Thimons", role = c("aut", "cre"), email = "sxthi@outlook.com")',
+      'License: MIT + file LICENSE',
+      'Encoding: UTF-8',
+      'Imports: httr2, jsonlite'
+    ),
+    file.path(stage, 'DESCRIPTION')
+  )
+  writeLines(c('YEAR: 2026', 'COPYRIGHT HOLDER: Sean Thimons'), file.path(stage, 'LICENSE'))
+  writeLines(paste0('export(', names(result$operations), ')'), file.path(stage, 'NAMESPACE'))
+  writeLines('^(client[.]R|manifest[.]json)$', file.path(stage, '.Rbuildignore'))
   result$manifest$base_url <- base_url
+  result$manifest$package <- package_name
   result$manifest$inputs <- as.list(result$manifest$inputs)
   result$manifest$supported <- names(result$operations)
   result$manifest$diagnostics <- result$diagnostics
@@ -114,7 +139,11 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
     null = 'null'
   )
   dir.create(output_root, recursive = TRUE, showWarnings = FALSE)
-  stopifnot(all(file.copy(file.path(stage, c('client.R', 'manifest.json')), output_root)))
+  stopifnot(all(file.copy(
+    list.files(stage, full.names = TRUE, all.files = TRUE, no.. = TRUE),
+    output_root,
+    recursive = TRUE
+  )))
   cat(sprintf(
     'Generated %d operation(s); %d unsupported operation(s). See manifest.json.\n',
     length(result$operations),
@@ -125,9 +154,9 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
 
 if (sys.nframe() == 0L) {
   args <- commandArgs(trailingOnly = TRUE)
-  if (length(args) != 5L) {
+  if (length(args) != 6L) {
     stop(
-      'Usage: Rscript dev/generate_local_client.R <repository_root> <input_root> <schema_file> <output_root> <base_url>'
+      'Usage: Rscript dev/generate_local_client.R <repository_root> <input_root> <schema_file> <output_root> <base_url> <package_name>'
     )
   }
   do.call(generate_local_client, as.list(args))
