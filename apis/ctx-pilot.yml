@@ -1,0 +1,44 @@
+id: ctx
+schemas:
+  files: [schema/ctx-chemical-prod.json]
+selection:
+  methods: [GET]
+  exclude: ['^(?!/chemical/list/all$)']
+helper: generic_request
+hook_config: inst/hook_config.yml
+documentation: true
+response_fixture: {listName: [LIST_A, LIST_B], dtxsids: ['DTXSID1,DTXSID2', DTXSID3]}
+contracts:
+  ct_chemical_list_all:
+    inputs: {}
+    request: {endpoint: chemical/list/all, method: GET, batch_limit: 0.0, projection: chemicallistall}
+    result: {listName: [LIST_A, LIST_B], dtxsids: ['DTXSID1,DTXSID2', DTXSID3]}
+operations:
+  GET /chemical/list/all:
+    name: ct_chemical_list_all
+    docs:
+      title: Get all lists
+      lifecycle: stable
+      parameters:
+        projection: 'Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)'
+      return: Returns a scalar value
+      tags: {apiStage: public}
+      examples: [{projection: chemicallistall}]
+    parameters:
+      query projection:
+        default: chemicallistall
+    extra_parameters:
+      return_dtxsid:
+        type: logical
+        default: false
+        description: Return all DTXSIDs contained within each list
+      coerce:
+        type: logical
+        default: false
+        description: Coerce DTXSID strings per list to list-column (requires return_dtxsid = TRUE)
+    request:
+      arguments:
+        endpoint: {value: chemical/list/all}
+        method: {value: GET}
+        batch_limit: {value: 0.0}
+        projection: {from: [params, projection]}
