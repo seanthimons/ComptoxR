@@ -29,3 +29,7 @@ data-raw/
 ^schema_diff_report[.]md$
 ^CONTRIBUTING[.]md$
 ^vignettes/articles$
+^HANDOFF[.]md$
+^endpoint-migration-plan[.]md$
+^schema-tooling-extraction-plan[.]md$
+^lifestage-migration-plan[.]md$

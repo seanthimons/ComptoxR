@@ -1,0 +1,26 @@
+[
+    {
+        "tag":  "db-latest",
+        "id":  548521627,
+        "name":  "ecotox.duckdb",
+        "size":  441724928,
+        "digest":  "sha256:534256626e452f3089c0b4d51e128ad6618ceac892fc3bdc4fb238cabcd85199",
+        "url":  "https://github.com/seanthimons/ComptoxR/releases/download/db-latest/ecotox.duckdb"
+    },
+    {
+        "tag":  "db-latest",
+        "id":  548521629,
+        "name":  "ecotox.version",
+        "size":  28,
+        "digest":  "sha256:6a82043ba3d9c0ec6927ec01ba49c72edb386ed7b19ad6d9e7272718db349835",
+        "url":  "https://github.com/seanthimons/ComptoxR/releases/download/db-latest/ecotox.version"
+    },
+    {
+        "tag":  "v1.5.0",
+        "id":  464523912,
+        "name":  "ecotox.duckdb",
+        "size":  438841344,
+        "digest":  "sha256:e616838c903b0f614d8d0cafa1c9c67390950f70aec934eba43d5ebd776e6a13",
+        "url":  "https://github.com/seanthimons/ComptoxR/releases/download/v1.5.0/ecotox.duckdb"
+    }
+]

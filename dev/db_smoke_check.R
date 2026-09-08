@@ -105,6 +105,10 @@
     cli::cli_abort("Metadata table {.table _metadata} not found in {.path {db_path}}.")
   }
 
+  if (identical(db_name, "ecotox")) {
+    .smoke_source_only_ecotox(con)
+  }
+
   row_count <- DBI::dbGetQuery(con, sprintf('SELECT count(*) AS n FROM "%s"', core_table))$n[[1]]
   if (is.na(row_count) || row_count < row_floor) {
     cli::cli_abort(c(
@@ -131,4 +135,17 @@
   invisible(TRUE)
 }
 
-.smoke_check()
+.smoke_source_only_ecotox <- function(con) {
+  derived <- intersect(DBI::dbListTables(con), c("lifestage_dictionary", "lifestage_review"))
+  if (length(derived)) {
+    cli::cli_abort("ECOTOX publication contains derived tables: {paste(derived, collapse = ', ')}.")
+  }
+  if (!DBI::dbExistsTable(con, "lifestage_codes")) {
+    cli::cli_abort("ECOTOX publication is missing native lifestage_codes.")
+  }
+  invisible(TRUE)
+}
+
+if (sys.nframe() == 0L) {
+  .smoke_check()
+}
