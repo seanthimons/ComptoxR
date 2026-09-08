@@ -77,3 +77,20 @@ destination inventory and parity approval. Complete the pinned production
 archive rebuild, final source-tarball contents/checks, installed cross-package
 example, release workflow, and public asset withdrawal. Local test success
 does not replace these release gates.
+
+## Public query regression extension
+
+Added deterministic native database inspection, metadata fallback, literal
+species searches, combined result filters, and optional-column checks.
+The existing real localhost server test now checks tables, fields, inventory,
+species searches, health, and a stopped-server error. No runtime code changed.
+
+- `devtools::test(filter = 'eco_functions|ecotox_source_only')`: 102 passes,
+  no failures, warnings, or skips.
+- Outside-checkout installed check: 68 passes, no failures or test warnings;
+  one explicit maintainer-builder skip.
+- Targeted `covr::file_coverage()` for `R/eco_functions.R`, using
+  `helper-ecotox-db.R` and `test-ecotox_source_only.R`: 277/394 lines before
+  (70.30%), 385/394 after (97.72%). This adds 108 covered lines in that file.
+  This is a targeted comparison, not a claim about total package coverage.
+- `air format`, `jarl check`, and `git diff --check`: passed.
