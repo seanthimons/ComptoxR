@@ -1,5 +1,45 @@
 # Migration publication evidence
 
+## Final public endpoint release
+
+ComptoxR 3.0.0 is published through normal Release run `34185471524`:
+https://github.com/seanthimons/ComptoxR/releases/tag/v3.0.0
+
+PR 307 merged as `35e0d0c952429a9bf2ae24ff9097e5df985ccd85`. The release commit
+is `e2de0aa9a39380990bbda446838bf888448469ac`, published at
+2026-09-08T04:05:03Z. Package asset `549832331` is 1,790,257 bytes, with SHA-256
+`2e6249b2185af035f5fc69fa10288446beaf50728c27c2f011572c60b3652991`.
+
+- All normal package/platform, readiness, coverage, toolkit, generation, and
+  site acceptance checks passed. The two cancelled R-devel jobs were rerun in
+  `34181879988` and passed. Their original logs show long source compilation;
+  intermediate API status had lagged behind actual progress.
+- The optional integration rolling publisher stopped at its existing `.9000`
+  development-version guard for stable 2.0.0 metadata. No development package
+  was published. This guard was retained; the normal stable release succeeded.
+- The release workflow's package check and final source/archive boundary scans
+  passed before publication. No package version or release tag was edited by hand.
+- The downloaded 3.0.0 archive matched its digest and installed into a separate
+  library. Its 1,206 text files passed the public boundary scan. Installed default
+  URLs, explicit override behavior, removed exports, and startup state passed.
+  wrapmaint was not loaded at runtime. `R/`, `inst/`, and `NAMESPACE` match the
+  reviewed endpoint commit `e3b08c7` exactly.
+- The published client and envharmonizer 0.1.1 passed the September database and
+  fresh local Plumber check for 664 selected rows. Every native source column and
+  row was preserved; database SHA-256 remained unchanged.
+- Release site workflow `34185724310` passed build and deployment. Its downloaded
+  `github-pages` artifact `10040517247` passed the 981-text-file boundary scan.
+  The live site shows 3.0.0, and the removed `chemi_safety` page returns HTTP 404.
+- Release-triggered source-only database workflow `34185724234` passed without
+  replacing the verified current database. Its builder metadata remains 2.0.0;
+  the 3.0.0 client and server were verified against that source-only schema.
+
+Final runtime verification logs are retained in the production-endpoints
+worktree under `.migration-evidence/published-3.0.0/` and
+`.migration-evidence/published-site/`. Users must update the client packages and
+restart local Plumber servers. Existing local databases and mapping evidence
+remain intact. Existing unrelated PRs 304 and 305 are outside this migration.
+
 ## Lifestage and source-only client
 
 Experimental envharmonizer 0.1.0 passed publication verification before the

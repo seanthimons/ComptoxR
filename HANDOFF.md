@@ -2,7 +2,38 @@
 
 **Updated**: 2026-09-08
 **Branch**: `docs/migration-publication-evidence`
-**Status**: Lifestage publication and database withdrawal complete. Endpoint release awaits two R-devel checks.
+**Status**: All three migrations are released and verified. Affected old database downloads are withdrawn.
+
+## Completion (2026-09-08)
+
+- Endpoint PR 307 merged as `35e0d0c` after all package/platform, readiness,
+  coverage, toolkit, generation, and site acceptance checks passed. R-devel rerun
+  `34181879988` completed successfully on Linux and macOS.
+- Normal Release run `34185471524` published ComptoxR 3.0.0 at `e2de0aa`.
+  Downloaded package SHA-256:
+  `2e6249b2185af035f5fc69fa10288446beaf50728c27c2f011572c60b3652991`.
+  Its runtime files match reviewed commit `e3b08c7`. Separate installation,
+  default/explicit URL behavior, startup state, and the 1,206-file source-package
+  boundary scan passed. No toolkit runtime dependency was loaded.
+- Published ComptoxR 3.0.0 plus published envharmonizer 0.1.1 passed the full
+  September database check: 664 selected rows match fresh localhost HTTP and
+  explicit mapping, with native columns, row order, and database hash preserved.
+- Release site workflow `34185724310` built and deployed successfully. Its
+  downloaded artifact passed the 981-text-file scan. The live site shows 3.0.0;
+  the removed `chemi_safety` reference page returns HTTP 404.
+- Database withdrawal and September mapping publication details are recorded
+  below and in `dev/reports/migration/publication.md`. Earlier pending statements
+  are historical. No migration implementation, publication, or withdrawal remains.
+- Users must update ComptoxR and envharmonizer, then restart local Plumber
+  servers. Existing local databases and mapping evidence remain intact.
+- The optional integration rolling package is withheld by its existing `.9000`
+  development-version guard. Stable publication succeeded through the normal
+  Release workflow. Existing unrelated PRs 304 and 305 were not merged.
+
+Implementation and publication records include `8b785e4` (September support),
+`2facf3b` (harmonizer source merge), `e3b08c7` (reviewed endpoint/toolkit),
+`35e0d0c` (endpoint merge), `e2de0aa` (3.0.0 release), and `f3f8603` (withdrawal
+evidence). See `final-release.json` for the final artifact and verification IDs.
 
 ## Publication checkpoint (2026-09-08 03:49 UTC)
 
