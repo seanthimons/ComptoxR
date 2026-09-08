@@ -2,6 +2,26 @@
 
 # ComptoxR NEWS
 
+## v2.0.0 (2026-09-08)
+
+#### Breaking changes
+
+- transfer lifestage mapping and publish source-only databases
+  ([1f61423](https://github.com/seanthimons/ComptoxR/tree/1f61423b4469ff7de39bb6f9459d33d8806f771b))
+
+#### CI
+
+- publish live test coverage badge
+  ([8f055b8](https://github.com/seanthimons/ComptoxR/tree/8f055b8ad143a4db8d6faead254c5e19fbd04671))
+
+#### Other changes
+
+- bump version to 2.0.0 \[skip ci\]
+  ([9e0281f](https://github.com/seanthimons/ComptoxR/tree/9e0281fbf411bc1b2a86b2f47996ec349b588d7c))
+
+Full set of changes:
+[`v1.7.1...v2.0.0`](https://github.com/seanthimons/ComptoxR/compare/v1.7.1...v2.0.0)
+
 ## v1.7.1 (2026-08-28)
 
 #### Bug fixes
@@ -17,6 +37,11 @@
 
 - support native WebTEST identifier type
   ([caae01d](https://github.com/seanthimons/ComptoxR/tree/caae01d00ad512befd34d1d172da293df3ab8e80))
+
+#### Docs
+
+- update NEWS.md for v1.7.1 \[skip ci\]
+  ([b196409](https://github.com/seanthimons/ComptoxR/tree/b196409273c7b7af7c90b21a9a0fa9671bfccf52))
 
 #### Other changes
 
