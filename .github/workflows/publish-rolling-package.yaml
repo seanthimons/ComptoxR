@@ -47,6 +47,12 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "commit=$commit" >> "$GITHUB_OUTPUT"
 
+      - name: Check public API boundary
+        shell: Rscript {0}
+        run: |
+          source('dev/check_public_api.R')
+          check_public_api('.', membership = FALSE)
+
       - name: Build source package
         id: build
         env:

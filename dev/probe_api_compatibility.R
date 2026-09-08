@@ -308,12 +308,12 @@ run_compatibility_probe <- function() {
   }
 
   ctx <- probe_http(
-    ctx_server(1, url_only = TRUE),
+    ctx_server(url_only = TRUE),
     "chemical/detail/search/by-dtxsid/50-00-0",
     query = list(projection = "chemicaldetailall"),
     api_key = key
   )
-  add("production", "direct", "formaldehyde detail SMILES", "formaldehyde", ctx, known_issue = TRUE)
+  add("configured", "direct", "formaldehyde detail SMILES", "formaldehyde", ctx, known_issue = TRUE)
   do.call(rbind, results)
 }
 

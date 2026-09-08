@@ -1,5 +1,14 @@
 # Handoff: delegated package migrations
 
+## Follow-up: wrapmaint generalization (2026-09-08)
+
+See [wrapmaint-generalization-handoff.md](wrapmaint-generalization-handoff.md)
+for the installed toolkit, remaining local implementation, proposed configuration
+interface, acceptance gates, and resume steps. Configuration-driven generalization
+is not implemented. Workflow/docs follow-up PR 309 contains commits `6c0970b`
+and `bc22753`; it was open when this follow-up was recorded. The completed
+migration record below remains historical evidence.
+
 **Updated**: 2026-09-08
 **Branch**: `docs/migration-publication-evidence`
 **Status**: All three migrations are released and verified. Affected old database downloads are withdrawn.

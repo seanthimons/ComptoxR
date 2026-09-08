@@ -19,6 +19,41 @@ test_that("count_diff_changes returns 0/0 for an empty result list", {
   expect_identical(count_diff_changes(list()), list(breaking = 0L, nonbreaking = 0L))
 })
 
+test_that("scheduled schema comparison excludes local stages and detects new production domains", {
+  skip_diff()
+  workflow <- yaml::yaml.load(paste(
+    readLines(
+      testthat::test_path("..", "..", ".github", "workflows", "schema-check.yml"),
+      encoding = "UTF-8"
+    ),
+    collapse = "\n"
+  ))
+  steps <- workflow$jobs[[1]]$steps
+  diff_step <- Filter(function(step) identical(step$id, "diff"), steps)[[1]]
+  assignment <- Filter(
+    function(expr) is.call(expr) && identical(expr[[1]], as.name("<-")) && identical(expr[[2]], as.name("results")),
+    as.list(parse(text = diff_step$run))
+  )[[1]]
+  root <- tempfile()
+  dir.create(root)
+  withr::defer(unlink(root, recursive = TRUE))
+  dir.create(file.path(root, "schema_old"))
+  dir.create(file.path(root, "schema"))
+  fixture <- list(
+    openapi = "3.0.0",
+    info = list(title = "Probe", version = "1"),
+    paths = list('/probe' = list(get = list(summary = "Probe", responses = list('200' = list(description = "OK")))))
+  )
+  jsonlite::write_json(fixture, file.path(root, "schema", "chemi-probe-dev.json"), auto_unbox = TRUE)
+  jsonlite::write_json(fixture, file.path(root, "schema", "chemi-probe-staging.json"), auto_unbox = TRUE)
+  withr::local_dir(root)
+  expect_length(eval(assignment), 0L)
+  jsonlite::write_json(fixture, "schema/chemi-probe-prod.json", auto_unbox = TRUE)
+  result <- eval(assignment)
+  expect_named(result, "chemi-probe-prod.json")
+  expect_equal(nrow(result[[1]]$added), 1L)
+})
+
 test_that("count_diff_changes tallies removed/added/modified correctly", {
   skip_diff()
   results <- list(

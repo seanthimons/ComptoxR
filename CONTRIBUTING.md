@@ -47,6 +47,7 @@ Rscript dev/generate_tests.R --generate
 Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
+Rscript dev/check_public_api.R
 ```
 
 Generation validates isolated output before it changes owned files. Manual
