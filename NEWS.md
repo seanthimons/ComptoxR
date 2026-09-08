@@ -2,6 +2,22 @@
 
 # ComptoxR NEWS
 
+## v3.0.0 (2026-09-08)
+
+#### Breaking changes
+
+- restrict public APIs to production and extract development tooling
+  (#307)
+  ([35e0d0c](https://github.com/seanthimons/ComptoxR/tree/35e0d0c952429a9bf2ae24ff9097e5df985ccd85))
+
+#### Other changes
+
+- bump version to 3.0.0 \[skip ci\]
+  ([cf323b7](https://github.com/seanthimons/ComptoxR/tree/cf323b75e9a93d2d995461476395b96ed0c6a168))
+
+Full set of changes:
+[`v2.0.0...v3.0.0`](https://github.com/seanthimons/ComptoxR/compare/v2.0.0...v3.0.0)
+
 ## v2.0.0 (2026-09-08)
 
 #### Breaking changes
@@ -13,6 +29,11 @@
 
 - publish live test coverage badge
   ([8f055b8](https://github.com/seanthimons/ComptoxR/tree/8f055b8ad143a4db8d6faead254c5e19fbd04671))
+
+#### Docs
+
+- update NEWS.md for v2.0.0 \[skip ci\]
+  ([b55949c](https://github.com/seanthimons/ComptoxR/tree/b55949c3036a7fae0b6b869f3581ce205c39c7ff))
 
 #### Other changes
 
