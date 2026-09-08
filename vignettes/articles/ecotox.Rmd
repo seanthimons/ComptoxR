@@ -47,6 +47,25 @@ Keep concentration and duration units from the full result when you report
 values. Apply life-stage harmonization explicitly with a versioned
 `envharmonizer` release that matches the ECOTOX source release.
 
+For a local database, read its recorded release before applying the optional
+mapping. Install the [experimental harmonizer package](https://github.com/seanthimons/envharmonizer-releases/releases/tag/v0.1.0)
+separately.
+
+```{r}
+con <- DBI::dbConnect(duckdb::duckdb(),
+                     dbdir = eco_health()$db_path, read_only = TRUE)
+release <- DBI::dbGetQuery(
+  con, "SELECT value FROM _metadata WHERE key = 'ecotox_release'"
+)$value
+source_results <- eco_results(casrn = "50-29-3", eco_group = "Fish",
+                              endpoint = c("LC50", "EC50"), con = con)
+mapped_results <- envharmonizer::harmonize_lifestage(source_results, release)
+DBI::dbDisconnect(con, shutdown = TRUE)
+```
+
+Experimental mappings; not independently reviewed. Users must assess
+suitability for their analysis. Keep the source results and mapping manifest.
+
 ## Upgrade from derived life-stage output
 
 This is a breaking change. Results no longer include `harmonized_life_stage`

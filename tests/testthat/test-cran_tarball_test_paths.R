@@ -9,7 +9,6 @@ cran_tarball_dependency_lines <- function(file) {
     "\\bhere::here\\s*\\(",
     "\\btestthat::test_path\\s*\\(",
     "\\bproject_path\\s*\\(",
-    "\\blifestage_project_file\\s*\\(",
     sep = "|"
   )
   path_lines <- which(code_lines & grepl(excluded_path_literal, lines, perl = TRUE))

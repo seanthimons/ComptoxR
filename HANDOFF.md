@@ -2,9 +2,27 @@
 
 **Updated**: 2026-09-07
 **Branch**: `feat/migration-coordination`
-**Status**: Implementation in progress in isolated worktrees; no releases or withdrawals.
+**Status**: Experimental envharmonizer published; source-only client release pending.
 
 ## Current execution (2026-09-07)
+
+envharmonizer v0.1.0 is now published and verified at
+https://github.com/seanthimons/envharmonizer-releases/releases/tag/v0.1.0 .
+Source remains private at `seanthimons/env-harmonizer`; PR 20 passed CI and
+merged as `72a41ae`. The coordinator verified all downloaded payload hashes,
+an unauthenticated package download, and a separate-library offline install.
+See `dev/reports/migration/lifestage-release.md` for exact evidence.
+
+ECOTOX commits are integrated locally as `a03879c`, `cceb4b7`. After destination
+hash/parity approval, 37 transferred files were removed. A full source-only EPA
+build has 1,242,356 rows; an installed cross-package example passed on 664 rows.
+The unanchored `build.R` exclusion was fixed so source tarballs ship the builder.
+Readiness passed 4,851 assertions with 48 skips and no test failures/warnings.
+The source tarball passed R CMD check (Status: OK). The installed builder also
+built 1,242,356 results and passed the source-only publication guard. Its 13
+encoding warnings are recorded in `source-only-installed-warnings.txt`.
+Old workflow `306098499` is disabled and had no active runs. No database asset
+has been withdrawn. Toolkit parity and endpoint migration are still pending.
 
 - Coordinator: `.worktrees/migration-coordination`, based on `integration`
   `8f055b8`, then fast-forwarded to plans `516dfd4`.
@@ -24,8 +42,8 @@
 - Affected download inventory: `db-latest/ecotox.duckdb`, its version sidecar,
   and `v1.5.0/ecotox.duckdb`; SHA-256 and asset IDs are recorded in
   `dev/reports/migration/database-assets-before.json`. Nothing withdrawn.
-- Old database workflow ID `306098499` must be disabled after harmonizer
-  verification, with active old runs cancelled. New source-only workflow has
+- Old database workflow ID `306098499` was disabled after harmonizer
+  verification; no old runs were active. New source-only workflow has
   a separate path, `db-ecotox-source-only.yml`; retain the old disabled state.
 - Production schema acquisition is frozen locally under
   `.migration-evidence/production`. Alerts and Hazard return 502; existing

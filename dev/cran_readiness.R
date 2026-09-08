@@ -100,7 +100,6 @@ cran_readiness_sequential_test_filter <- function() {
     "^(",
     paste(
       c(
-        "eco_lifestage_gate",
         "genra_predict",
         "util_pubchem_resolve_dtxsid"
       ),
