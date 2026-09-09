@@ -18,4 +18,303 @@ names:
   POST /api/alerts/groups: chemi_alerts_groups_bulk
   GET /api/alerts/groups/{id}: chemi_alerts_groups_by_id
   GET /api/alerts/operations: chemi_alerts_operations
-
+operations:
+  GET /api/alerts/alerts:
+    inputs: {}
+    file: R/chemi_alerts_alerts.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: alerts/alerts
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Alerts
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/alerts/groups:
+    inputs: {}
+    file: R/chemi_alerts_groups.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: alerts/groups
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/alerts/groups/{id}:
+    inputs:
+      id:
+        required: yes
+    file: R/chemi_alerts_groups_by_id.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - id
+        endpoint:
+          value: alerts/groups/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        id: 'Primary query parameter. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - id: DTXSID7020182
+  GET /api/alerts/operations:
+    inputs: {}
+    file: R/chemi_alerts_operations.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: alerts/operations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Operations
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/alerts:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      options:
+        required: no
+        default: ~
+        type: object
+      request.filesInfo:
+        required: no
+        default: ~
+        type: object
+      request.options.alerts:
+        required: no
+        default: ~
+        type: object
+      request.options.resolve:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_alerts.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: alerts
+        options:
+          compact_object:
+            options:
+              from:
+              - params
+              - options
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        request.filesInfo:
+          from:
+          - params
+          - request.filesInfo
+        request.options.alerts:
+          from:
+          - params
+          - request.options.alerts
+        request.options.resolve:
+          from:
+          - params
+          - request.options.resolve
+    docs:
+      title: Alerts
+      return: Returns a tibble with results
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        options: Optional parameter
+        request.filesInfo: Optional parameter
+        request.options.alerts: Optional parameter
+        request.options.resolve: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/alerts/groups:
+    inputs:
+      description:
+        required: no
+        default: ~
+        type: object
+      frozen:
+        required: no
+        default: ~
+        type: object
+      id:
+        required: no
+        default: ~
+        type: object
+      logicType:
+        required: no
+        default: ~
+        type: object
+      name:
+        required: no
+        default: ~
+        type: object
+      operations:
+        required: no
+        default: ~
+        type: object
+      text:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+      value:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_alerts_groups.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - description
+        endpoint:
+          value: alerts/groups
+        options:
+          compact_object:
+            frozen:
+              from:
+              - params
+              - frozen
+            id:
+              from:
+              - params
+              - id
+            logicType:
+              from:
+              - params
+              - logicType
+            name:
+              from:
+              - params
+              - name
+            operations:
+              from:
+              - params
+              - operations
+            text:
+              from:
+              - params
+              - text
+            type:
+              from:
+              - params
+              - type
+            value:
+              from:
+              - params
+              - value
+        tidy:
+          value: no
+    docs:
+      title: Alerts Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        description: Optional parameter
+        frozen: Optional parameter
+        id: Optional parameter
+        logicType: 'Optional parameter. Options: NONE, OR, AND, NOT'
+        name: Optional parameter
+        operations: Optional parameter
+        text: Optional parameter
+        type: 'Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD,
+          PROPERTY, GROUP, REFERENCE'
+        value: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - description: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-alerts.rds

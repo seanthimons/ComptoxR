@@ -14,4 +14,159 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/descriptors: chemi_descriptors
   POST /api/descriptors: chemi_descriptors_bulk
-
+operations:
+  GET /api/descriptors:
+    inputs:
+      smiles:
+        required: yes
+      type:
+        required: yes
+      headers:
+        required: no
+        default: no
+        type: logical
+      format:
+        required: no
+        default: JSON
+        type: character
+      timeout:
+        required: no
+        default: ~
+        type: object
+      output:
+        required: no
+        default:
+        - wide
+        - raw
+        type: character
+    file: R/chemi_descriptors.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        method:
+          from:
+          - hook_state
+          - request
+          - method
+        batch_limit:
+          value: 0.0
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+    post_state: hook_state
+    post_on_skip: yes
+    docs:
+      title: Descriptors
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        type: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+        headers: 'Request upstream descriptor headers (default: FALSE)'
+        format: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default:
+          JSON)'
+        timeout: Optional upstream calculation timeout
+        output: 'Output contract: validated wide tibble or raw payload'
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/descriptors:
+    inputs:
+      query:
+        required: yes
+      type:
+        required: yes
+      chemIdType:
+        required: no
+        default: AnyId
+        type: character
+      headers:
+        required: no
+        default: no
+        type: logical
+      format:
+        required: no
+        default: JSON
+        type: character
+      timeout:
+        required: no
+        default: ~
+        type: object
+      output:
+        required: no
+        default:
+        - wide
+        - raw
+        type: character
+    file: R/chemi_descriptors.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+    post_state: hook_state
+    post_on_skip: yes
+    docs:
+      title: Descriptors
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        query: Chemical identifiers or structures
+        type: 'Descriptor engine: padel, rdkit, mordred, or webtest'
+        chemIdType: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL,
+          CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        format: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default:
+          JSON)'
+        headers: Request descriptor headers
+        timeout: Optional upstream calculation timeout
+        output: 'Output contract: validated wide tibble or raw payload'
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-descriptors.rds

@@ -14,4 +14,81 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/amnb_nate: chemi_amnb_nate
   POST /api/amnb_nate: chemi_amnb_nate_bulk
-
+operations:
+  GET /api/amnb_nate:
+    inputs:
+      smiles:
+        required: yes
+    file: R/chemi_amnb_nate.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amnb_nate
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Amnb Nate
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/amnb_nate:
+    inputs:
+      chemicals:
+        required: no
+        default: ~
+        type: object
+      smiles:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amnb_nate.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: amnb_nate
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Generate predictions for multiple molecules
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        chemicals: Optional parameter
+        smiles: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-amnb_nate.rds

@@ -11,32 +11,1690 @@ selection:
 helper: generic_chemi_request
 policy_version: comptox-maintenance-1
 operations:
+  GET /api/resolver/ccte-list:
+    inputs:
+      name:
+        required: yes
+    file: R/chemi_resolver_ccte_list.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ccte-list
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Ccte List
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  GET /api/resolver/ccte-lists:
+    inputs: {}
+    file: R/chemi_resolver_ccte_lists.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ccte-lists
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ccte Lists
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/classyfire:
+    inputs:
+      query:
+        required: no
+        default: ~
+        type: object
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fuzzy:
+        required: no
+        default: Not
+        type: character
+      kingdom:
+        required: no
+        default: ~
+        type: object
+      superklass:
+        required: no
+        default: ~
+        type: object
+      klass:
+        required: no
+        default: ~
+        type: object
+      subklass:
+        required: no
+        default: ~
+        type: object
+      directParent:
+        required: no
+        default: ~
+        type: object
+      geometricDescriptor:
+        required: no
+        default: ~
+        type: object
+      alternativeParent:
+        required: no
+        default: ~
+        type: object
+      substituent:
+        required: no
+        default: ~
+        type: object
+      page:
+        required: no
+        default: 0.0
+        type: numeric
+      size:
+        required: no
+        default: 1000.0
+        type: numeric
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_resolver_classyfire.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/classyfire
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+            kingdom:
+              from:
+              - params
+              - kingdom
+            superklass:
+              from:
+              - params
+              - superklass
+            klass:
+              from:
+              - params
+              - klass
+            subklass:
+              from:
+              - params
+              - subklass
+            directParent:
+              from:
+              - params
+              - directParent
+            geometricDescriptor:
+              from:
+              - params
+              - geometricDescriptor
+            alternativeParent:
+              from:
+              - params
+              - alternativeParent
+            substituent:
+              from:
+              - params
+              - substituent
+            page:
+              from:
+              - params
+              - page
+            size:
+              from:
+              - params
+              - size
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_size
+    docs:
+      title: Resolver Classyfire
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        query: Optional parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+        kingdom: Optional parameter
+        superklass: Optional parameter
+        klass: Optional parameter
+        subklass: Optional parameter
+        directParent: Optional parameter
+        geometricDescriptor: Optional parameter
+        alternativeParent: Optional parameter
+        substituent: Optional parameter
+        page: 'Optional parameter (default: 0)'
+        size: 'Optional parameter (default: 1000)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  GET /api/resolver/getallannotations:
+    inputs: {}
+    file: R/chemi_resolver_getallannotations.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getallannotations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Getallannotations
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getannotation:
+    inputs:
+      name:
+        required: yes
+      heading:
+        required: yes
+    file: R/chemi_resolver_getannotation.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getannotation
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+            heading:
+              from:
+              - params
+              - heading
+    docs:
+      title: Resolver Getannotation
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+        heading: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  GET /api/resolver/getannotationslist:
+    inputs:
+      name:
+        required: yes
+    file: R/chemi_resolver_getannotationslist.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getannotationslist
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Getannotationslist
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  GET /api/resolver/getdatasources:
+    inputs: {}
+    file: R/chemi_resolver_getdatasources.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getdatasources
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Getdatasources
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getsubstance:
+    inputs:
+      name:
+        required: yes
+    file: R/chemi_resolver_getsubstance.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getsubstance
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Getsubstance
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  GET /api/resolver/ghs-list:
+    inputs:
+      name:
+        required: yes
+    file: R/chemi_resolver_ghs_list.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs-list
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Ghs List
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - name: DTXSID7020182
+  GET /api/resolver/ghs/classes:
+    inputs: {}
+    file: R/chemi_resolver_ghs_classes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/classes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Classes
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/hcodes:
+    inputs: {}
+    file: R/chemi_resolver_ghs_hcodes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/hcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Hcodes
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/pcodes:
+    inputs: {}
+    file: R/chemi_resolver_ghs_pcodes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/pcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Pcodes
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/hcodes:
+    inputs: {}
+    file: R/chemi_resolver_hcodes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/hcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Hcodes
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/links:
+    inputs:
+      query:
+        required: yes
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fuzzy:
+        required: no
+        default: Not
+        type: character
+    file: R/chemi_resolver_links.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/links
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+    docs:
+      title: Resolver Links
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  GET /api/resolver/lookup:
+    inputs:
+      query:
+        required: yes
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fuzzy:
+        required: no
+        default: Not
+        type: character
+      mol:
+        required: no
+        default: no
+        type: logical
+    file: R/chemi_resolver_lookup.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/lookup
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: yes
+        options:
+          compact_object:
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+            mol:
+              from:
+              - params
+              - mol
+    implementation: existing
+  GET /api/resolver/lookupCASRN:
+    inputs:
+      query:
+        required: yes
+    file: R/chemi_resolver_lookupCASRN.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/lookupCASRN
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+    docs:
+      title: Resolver lookupCASRN
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  GET /api/resolver/mesh:
+    inputs:
+      query:
+        required: yes
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fuzzy:
+        required: no
+        default: Not
+        type: character
+    file: R/chemi_resolver_mesh.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/mesh
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+    docs:
+      title: Resolver Mesh
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  GET /api/resolver/pubchem-section:
+    inputs:
+      query:
+        required: yes
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      section:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_pubchem_section.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/pubchem-section
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            section:
+              from:
+              - params
+              - section
+    docs:
+      title: Resolver Pubchem Section
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        section: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  POST /api/resolver/resolve:
+    inputs:
+      mol:
+        required: no
+        default: ~
+        type: object
+      queries:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_resolve.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - mol
+        endpoint:
+          value: resolver/resolve
+        options:
+          compact_object:
+            queries:
+              from:
+              - params
+              - queries
+        tidy:
+          value: no
+    docs:
+      title: Resolver Resolve
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        mol: Optional parameter
+        queries: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - mol: DTXSID1024122
+  GET /api/resolver/safety-flags:
+    inputs:
+      query:
+        required: yes
+      idType:
+        required: no
+        default: AnyId
+        type: character
+    file: R/chemi_resolver_safety_flags.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/safety-flags
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+    docs:
+      title: Resolver Safety Flags
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID7020182
+  POST /api/resolver/getpubchemlist:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      section:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_resolver_getpubchemlist.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/getpubchemlist
+        options:
+          compact_object:
+            section:
+              from:
+              - params
+              - section
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_size
+    docs:
+      title: Resolver Getpubchemlist
+      return: Returns a list with result object
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/resolver/getsimilaritylist:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fingerprintName:
+        required: no
+        default: ~
+        type: object
+      get_chemicals:
+        required: no
+        default: ~
+        type: object
+      main:
+        required: no
+        default: ~
+        type: object
+      padelCompute2D:
+        required: no
+        default: ~
+        type: object
+      padelCompute3D:
+        required: no
+        default: ~
+        type: object
+      padelComputeFingerprints:
+        required: no
+        default: ~
+        type: object
+      rdkitBits:
+        required: no
+        default: ~
+        type: object
+      rdkitRadius:
+        required: no
+        default: ~
+        type: object
+      rdkitType:
+        required: no
+        default: ~
+        type: object
+      scoreName:
+        required: no
+        default: ~
+        type: object
+      toxprintsProfile:
+        required: no
+        default: ~
+        type: object
+      tverskyI:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_getsimilaritylist.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/getsimilaritylist
+        options:
+          compact_object:
+            fingerprintName:
+              from:
+              - params
+              - fingerprintName
+            get_chemicals:
+              from:
+              - params
+              - get_chemicals
+            main:
+              from:
+              - params
+              - main
+            padelCompute2D:
+              from:
+              - params
+              - padelCompute2D
+            padelCompute3D:
+              from:
+              - params
+              - padelCompute3D
+            padelComputeFingerprints:
+              from:
+              - params
+              - padelComputeFingerprints
+            rdkitBits:
+              from:
+              - params
+              - rdkitBits
+            rdkitRadius:
+              from:
+              - params
+              - rdkitRadius
+            rdkitType:
+              from:
+              - params
+              - rdkitType
+            scoreName:
+              from:
+              - params
+              - scoreName
+            toxprintsProfile:
+              from:
+              - params
+              - toxprintsProfile
+            tverskyI:
+              from:
+              - params
+              - tverskyI
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver Getsimilaritylist
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        fingerprintName: Optional parameter
+        get_chemicals: Optional parameter
+        main: Optional parameter
+        padelCompute2D: Optional parameter
+        padelCompute3D: Optional parameter
+        padelComputeFingerprints: Optional parameter
+        rdkitBits: Optional parameter
+        rdkitRadius: Optional parameter
+        rdkitType: Optional parameter
+        scoreName: Optional parameter
+        toxprintsProfile: Optional parameter
+        tverskyI: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/resolver/getsimilaritymap:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      section:
+        required: no
+        default: ~
+        type: object
+      sort:
+        required: no
+        default: no
+        type: logical
+      hclust_method:
+        required: no
+        default: complete
+        type: character
+      format:
+        required: no
+        default:
+        - cluster
+        - long
+        - raw
+        type: character
+    file: R/chemi_resolver_getsimilaritymap.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/getsimilaritymap
+        options:
+          compact_object:
+            section:
+              from:
+              - params
+              - section
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        sort:
+          callback: lowercase_sort
+    docs:
+      title: Resolver Getsimilaritymap
+      return: A cluster list containing a named similarity matrix and hclust object,
+        long-form similarity tibble, or raw API response, selected by `format`
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+        sort: 'Logical value controlling API result ordering (default: FALSE)'
+        hclust_method: Hierarchical clustering method passed to stats::hclust()
+        format: 'Output format: cluster result, long-form similarities, or raw API
+          response'
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  GET /api/resolver/ghs-list-count:
+    inputs: {}
+    file: R/chemi_resolver_ghs_list_count.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs-list-count
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs List Count
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/resolver/lookup:
+    inputs:
+      ids:
+        required: yes
+      idsType:
+        required: no
+        default: AnyId
+        type: character
+      fuzzy:
+        required: no
+        default: Not
+        type: character
+      mol:
+        required: no
+        default: no
+        type: logical
+      filters:
+        required: no
+        default: ~
+        type: object
+      format:
+        required: no
+        default: ~
+        type: object
+      tidy:
+        required: no
+        default: yes
+        type: logical
+    file: R/chemi_resolver_lookup.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - ids
+        endpoint:
+          value: resolver/lookup
+        options:
+          compact_object:
+            filters:
+              from:
+              - params
+              - filters
+            format:
+              from:
+              - params
+              - format
+        sid_label:
+          value: ids
+        array_payload:
+          value: yes
+        tidy:
+          from:
+          - params
+          - tidy
+    implementation: existing
+  POST /api/resolver/orderBySimilarity:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      fingerprintName:
+        required: no
+        default: ~
+        type: object
+      get_chemicals:
+        required: no
+        default: ~
+        type: object
+      main:
+        required: no
+        default: ~
+        type: object
+      padelCompute2D:
+        required: no
+        default: ~
+        type: object
+      padelCompute3D:
+        required: no
+        default: ~
+        type: object
+      padelComputeFingerprints:
+        required: no
+        default: ~
+        type: object
+      rdkitBits:
+        required: no
+        default: ~
+        type: object
+      rdkitRadius:
+        required: no
+        default: ~
+        type: object
+      rdkitType:
+        required: no
+        default: ~
+        type: object
+      scoreName:
+        required: no
+        default: ~
+        type: object
+      toxprintsProfile:
+        required: no
+        default: ~
+        type: object
+      tverskyI:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_orderBySimilarity.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/orderBySimilarity
+        options:
+          compact_object:
+            fingerprintName:
+              from:
+              - params
+              - fingerprintName
+            get_chemicals:
+              from:
+              - params
+              - get_chemicals
+            main:
+              from:
+              - params
+              - main
+            padelCompute2D:
+              from:
+              - params
+              - padelCompute2D
+            padelCompute3D:
+              from:
+              - params
+              - padelCompute3D
+            padelComputeFingerprints:
+              from:
+              - params
+              - padelComputeFingerprints
+            rdkitBits:
+              from:
+              - params
+              - rdkitBits
+            rdkitRadius:
+              from:
+              - params
+              - rdkitRadius
+            rdkitType:
+              from:
+              - params
+              - rdkitType
+            scoreName:
+              from:
+              - params
+              - scoreName
+            toxprintsProfile:
+              from:
+              - params
+              - toxprintsProfile
+            tverskyI:
+              from:
+              - params
+              - tverskyI
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver orderBySimilarity
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        fingerprintName: Optional parameter
+        get_chemicals: Optional parameter
+        main: Optional parameter
+        padelCompute2D: Optional parameter
+        padelCompute3D: Optional parameter
+        padelComputeFingerprints: Optional parameter
+        rdkitBits: Optional parameter
+        rdkitRadius: Optional parameter
+        rdkitType: Optional parameter
+        scoreName: Optional parameter
+        toxprintsProfile: Optional parameter
+        tverskyI: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/resolver/pubchem-section:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      section:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_pubchem_section.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/pubchem-section
+        options:
+          compact_object:
+            section:
+              from:
+              - params
+              - section
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver Pubchem Section
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/resolver/safety-flags:
+    inputs:
+      additionalProps:
+        required: no
+        default: ~
+        type: object
+      averageMass:
+        required: no
+        default: ~
+        type: object
+      canonicalSmiles:
+        required: no
+        default: ~
+        type: object
+      casrn:
+        required: no
+        default: ~
+        type: object
+      chemId:
+        required: no
+        default: ~
+        type: object
+      cid:
+        required: no
+        default: ~
+        type: object
+      id:
+        required: no
+        default: ~
+        type: object
+      image:
+        required: no
+        default: ~
+        type: object
+      inchi:
+        required: no
+        default: ~
+        type: object
+      inchiKey:
+        required: no
+        default: ~
+        type: object
+      mol:
+        required: no
+        default: ~
+        type: object
+      molFormula:
+        required: no
+        default: ~
+        type: object
+      monoisotopicMass:
+        required: no
+        default: ~
+        type: object
+      name:
+        required: no
+        default: ~
+        type: object
+      sid:
+        required: no
+        default: ~
+        type: object
+      smiles:
+        required: no
+        default: ~
+        type: object
+      request.filesInfo:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_resolver_safety_flags.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - additionalProps
+        endpoint:
+          value: resolver/safety-flags
+        options:
+          compact_object:
+            averageMass:
+              from:
+              - params
+              - averageMass
+            canonicalSmiles:
+              from:
+              - params
+              - canonicalSmiles
+            casrn:
+              from:
+              - params
+              - casrn
+            chemId:
+              from:
+              - params
+              - chemId
+            cid:
+              from:
+              - params
+              - cid
+            id:
+              from:
+              - params
+              - id
+            image:
+              from:
+              - params
+              - image
+            inchi:
+              from:
+              - params
+              - inchi
+            inchiKey:
+              from:
+              - params
+              - inchiKey
+            mol:
+              from:
+              - params
+              - mol
+            molFormula:
+              from:
+              - params
+              - molFormula
+            monoisotopicMass:
+              from:
+              - params
+              - monoisotopicMass
+            name:
+              from:
+              - params
+              - name
+            sid:
+              from:
+              - params
+              - sid
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Resolver Safety Flags
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        additionalProps: Optional parameter
+        averageMass: Optional parameter
+        canonicalSmiles: Optional parameter
+        casrn: Optional parameter
+        chemId: Optional parameter
+        cid: Optional parameter
+        id: Optional parameter
+        image: Optional parameter
+        inchi: Optional parameter
+        inchiKey: Optional parameter
+        mol: Optional parameter
+        molFormula: Optional parameter
+        monoisotopicMass: Optional parameter
+        name: Optional parameter
+        sid: Optional parameter
+        smiles: Optional parameter
+        request.filesInfo: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - additionalProps: DTXSID1024122
   POST /api/resolver/ghs-list-count:
     inputs:
       body:
         type: object
         default: {}
-        description: JSON object represented by a named list whose values are lists of string arrays.
+        description: JSON object represented by a named list whose values are lists
+          of string arrays.
     request:
       arguments:
-        endpoint: {value: resolver/ghs-list-count}
-        body: {from: [params, body]}
-        tidy: {value: false}
+        endpoint:
+          value: resolver/ghs-list-count
+        body:
+          from:
+          - params
+          - body
+        tidy:
+          value: no
     docs:
       title: Count GHS list entries using a JSON request
       return: A list of H-code count records returned by the resolver.
       lifecycle: experimental
-      tags: {apiStage: public}
-      examples: [{}]
+      tags:
+        apiStage: public
+      examples:
+      - {}
 contracts:
   chemi_resolver_ghs_list_count_bulk:
     inputs: {}
     request:
       endpoint: resolver/ghs-list-count
       body: {}
-      tidy: false
-    response_fixture: [{hcode: H301, count: 2}]
-    result: [{hcode: H301, count: 2}]
+      tidy: no
+    response_fixture:
+    - hcode: H301
+      count: 2
+    result:
+    - hcode: H301
+      count: 2
 hook_config: inst/hook_config.yml
 names:
   GET /api/resolver/ccte-list: chemi_resolver_ccte_list
@@ -68,4 +1726,5 @@ names:
   POST /api/resolver/resolve: chemi_resolver_resolve
   GET /api/resolver/safety-flags: chemi_resolver_safety_flags
   POST /api/resolver/safety-flags: chemi_resolver_safety_flags_bulk
-
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-resolver.rds

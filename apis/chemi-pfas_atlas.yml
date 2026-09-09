@@ -14,4 +14,83 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/pfas_atlas: chemi_pfas_atlas
   POST /api/pfas_atlas: chemi_pfas_atlas_bulk
-
+operations:
+  GET /api/pfas_atlas:
+    inputs:
+      smiles:
+        required: yes
+    file: R/chemi_pfas_atlas.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: pfas_atlas
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Generate PFAS Atlas categories for one molecule
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES string of the molecule
+      tags:
+        apiStage: public
+      examples:
+      - smiles: O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F
+  POST /api/pfas_atlas:
+    inputs:
+      chemicals:
+        required: no
+        default: ~
+        type: object
+      smiles:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_pfas_atlas.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: pfas_atlas
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Generate PFAS Atlas categories for multiple molecules
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        chemicals: Either an array of input chemicals with optional id and required
+          smiles, or an array of SMILES strings for backward compatibility.
+        smiles: Array of SMILES strings, kept for backward compatibility with the
+          previous PFAS Atlas POST format.
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-pfas_atlas.rds

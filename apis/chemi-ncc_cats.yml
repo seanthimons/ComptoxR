@@ -14,4 +14,91 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/ncc_cats: chemi_ncc_cats
   POST /api/ncc_cats: chemi_ncc_cats_bulk
-
+operations:
+  GET /api/ncc_cats:
+    inputs:
+      smiles:
+        required: yes
+      logp:
+        required: no
+        default: ~
+        type: object
+      ws:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_ncc_cats.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: ncc_cats
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            logp:
+              from:
+              - params
+              - logp
+            ws:
+              from:
+              - params
+              - ws
+    docs:
+      title: Generate NCC categories for one molecule
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate NCC categories for
+        logp: Octanol-water partition coefficient
+        ws: Water solubility (mg/L)
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/ncc_cats:
+    inputs:
+      chemicals:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_ncc_cats.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: ncc_cats
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Generate NCC categories for multiple molecules
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        chemicals: Array of input chemicals with optional id, smiles, logp, and ws.
+          Missing smiles are returned as item-level errors.
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-ncc_cats.rds

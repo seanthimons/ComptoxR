@@ -22,4 +22,493 @@ names:
   GET /api/stdizer/operations: chemi_stdizer_operations
   POST /api/stdizer/records: chemi_stdizer_records
   GET /api/stdizer/workflows: chemi_stdizer_workflows
-
+operations:
+  GET /api/stdizer:
+    inputs:
+      workflow:
+        required: yes
+      smiles:
+        required: yes
+    file: R/chemi_stdizer.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: stdizer
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            workflow:
+              from:
+              - params
+              - workflow
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Stdizer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        workflow: Required parameter
+        smiles: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - workflow: DTXSID7020182
+  GET /api/stdizer/groups:
+    inputs: {}
+    file: R/chemi_stdizer_groups.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: stdizer/groups
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/stdizer/groups/{id}:
+    inputs:
+      id:
+        required: yes
+    file: R/chemi_stdizer_groups_by_id.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - id
+        endpoint:
+          value: stdizer/groups/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        id: 'Primary query parameter. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - id: DTXSID7020182
+  GET /api/stdizer/groups/{id}/recursive:
+    inputs:
+      id:
+        required: yes
+    file: R/chemi_stdizer_groups_recursive.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - id
+        endpoint:
+          value: stdizer/groups/recursive
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Groups Recursive
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        id: 'Primary query parameter. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - id: DTXSID7020182
+  GET /api/stdizer/operations:
+    inputs: {}
+    file: R/chemi_stdizer_operations.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: stdizer/operations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Operations
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/stdizer/workflows:
+    inputs: {}
+    file: R/chemi_stdizer_workflows.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: stdizer/workflows
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Workflows
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/stdizer:
+    inputs:
+      request.filesInfo:
+        required: no
+        default: ~
+        type: object
+      request.options.recordId:
+        required: no
+        default: ~
+        type: object
+      request.options.run:
+        required: no
+        default: ~
+        type: object
+      request.options.workflow:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_stdizer.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: stdizer
+        options:
+          compact_object:
+            request.filesInfo:
+              from:
+              - params
+              - request.filesInfo
+            request.options.recordId:
+              from:
+              - params
+              - request.options.recordId
+            request.options.run:
+              from:
+              - params
+              - request.options.run
+            request.options.workflow:
+              from:
+              - params
+              - request.options.workflow
+        tidy:
+          value: no
+    docs:
+      title: Stdizer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        request.filesInfo: Optional parameter
+        request.options.recordId: Optional parameter
+        request.options.run: Optional parameter
+        request.options.workflow: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - request.filesInfo: DTXSID7020182
+  POST /api/stdizer/chemicals:
+    inputs:
+      query:
+        required: yes
+        type: character
+      idType:
+        required: no
+        default: AnyId
+        type: character
+      full:
+        required: no
+        default: ~
+        type: object
+      options:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_stdizer_chemicals.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: stdizer/chemicals
+        options:
+          compact_object:
+            full:
+              from:
+              - params
+              - full
+            options:
+              from:
+              - params
+              - options
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Stdizer Chemicals
+      return: Returns a tibble with results
+      lifecycle: experimental
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        full: Optional parameter
+        options: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+  POST /api/stdizer/groups:
+    inputs:
+      acl:
+        required: no
+        default: ~
+        type: object
+      description:
+        required: no
+        default: ~
+        type: object
+      flag:
+        required: no
+        default: ~
+        type: object
+      frozen:
+        required: no
+        default: ~
+        type: object
+      id:
+        required: no
+        default: ~
+        type: object
+      invalid:
+        required: no
+        default: ~
+        type: object
+      invalidMessage:
+        required: no
+        default: ~
+        type: object
+      operations:
+        required: no
+        default: ~
+        type: object
+      text:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+      value:
+        required: no
+        default: ~
+        type: object
+      request.filesInfo:
+        required: no
+        default: ~
+        type: object
+      request.replace:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_stdizer_groups.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - acl
+        endpoint:
+          value: stdizer/groups
+        options:
+          compact_object:
+            description:
+              from:
+              - params
+              - description
+            flag:
+              from:
+              - params
+              - flag
+            frozen:
+              from:
+              - params
+              - frozen
+            id:
+              from:
+              - params
+              - id
+            invalid:
+              from:
+              - params
+              - invalid
+            invalidMessage:
+              from:
+              - params
+              - invalidMessage
+            operations:
+              from:
+              - params
+              - operations
+            text:
+              from:
+              - params
+              - text
+            type:
+              from:
+              - params
+              - type
+            value:
+              from:
+              - params
+              - value
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Groups
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        acl: Optional parameter
+        description: Optional parameter
+        flag: Optional parameter
+        frozen: Optional parameter
+        id: Optional parameter
+        invalid: Optional parameter
+        invalidMessage: Optional parameter
+        operations: Optional parameter
+        text: Optional parameter
+        type: 'Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP,
+          REFERENCE'
+        value: Optional parameter
+        request.filesInfo: Optional parameter
+        request.replace: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - acl: DTXSID1024122
+  POST /api/stdizer/records:
+    inputs:
+      full:
+        required: no
+        default: ~
+        type: object
+      options:
+        required: no
+        default: ~
+        type: object
+      records:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_stdizer_records.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - full
+        endpoint:
+          value: stdizer/records
+        options:
+          compact_object:
+            options:
+              object: {}
+            records:
+              from:
+              - params
+              - records
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Records
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        full: Optional parameter
+        options: Optional parameter
+        records: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - full: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-stdizer.rds

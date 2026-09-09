@@ -75,4 +75,3208 @@ names:
   POST /api/amos/substances_for_classification/: chemi_amos_substances_for_classification
   POST /api/amos/substances_for_ids/: chemi_amos_substances_for_ids
   GET /api/amos/substring_search/{substring}: chemi_amos_substring
-
+operations:
+  GET /api/amos/analytical_qc_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_analytical_qc_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/analytical_qc_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of Analytical QC documents using keyset
+        pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/count_substances_in_ids/:
+    inputs:
+      internal_id_list:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_count_substances_in_ids.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id_list
+        endpoint:
+          value: amos/count_substances_in_ids/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Counts the number of unique substances seen in a set of records.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id_list: Array of record IDs.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id_list: DTXSID1024122
+  GET /api/amos/database_summary/:
+    inputs: {}
+    file: R/chemi_amos_database.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/database_summary/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a summary of the records in the database, organized by record
+        types, methodologies, and sources.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/dtxsids_from_functional_use/{functional_use}:
+    inputs:
+      functional_use:
+        required: yes
+    file: R/chemi_amos_dtxsids_from_functional_use.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - functional_use
+        endpoint:
+          value: amos/dtxsids_from_functional_use/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns all substances associated with the specified functional use classification.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        functional_use: Functional use classification to search for.
+      tags:
+        apiStage: public
+      examples:
+      - functional_use: DTXSID7020182
+  GET /api/amos/fact_sheet_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_fact_sheet_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/fact_sheet_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of fact sheets using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  GET /api/amos/find_dtxsids/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_find_dtxsids.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/find_dtxsids/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of DTXSIDs associated with the specified internal ID,
+        along with additional substance information.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the record of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/formula_search/{formula}:
+    inputs:
+      formula:
+        required: yes
+    file: R/chemi_amos_formula.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - formula
+        endpoint:
+          value: amos/formula_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of substances that have the given molecular formula.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        formula: Molecular formula to search by.  Formula should be in Hill form.
+      tags:
+        apiStage: public
+      examples:
+      - formula: DTXSID7020182
+  GET /api/amos/functional_class_search/{functional_class}:
+    inputs:
+      functional_class:
+        required: yes
+    file: R/chemi_amos_functional_class.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - functional_class
+        endpoint:
+          value: amos/functional_class_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of DTXSIDs for the given functional use.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        functional_class: Functional use class.
+      tags:
+        apiStage: public
+      examples:
+      - functional_class: DTXSID7020182
+  GET /api/amos/functional_uses_for_dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    file: R/chemi_amos_functional_uses_for_dtxsid.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/functional_uses_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of functional use classifications for a substance.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    file: R/chemi_amos_get_classification_for_dtxsid.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/get_classification_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns the top four levels of a ClassyFire classification of a given
+        substance.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /api/amos/get_data_source_info/:
+    inputs: {}
+    file: R/chemi_amos_get_data_source_info.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/get_data_source_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of major data sources in AMOS with some supplemental information.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/get_fact_sheet_editor_info/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_fact_sheet_editor_info.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_fact_sheet_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves metadata from the database about a single fact sheet.  This
+        is not necessarily just the metadata that
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the fact sheet of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_info_by_id/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_info_by_id.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_info_by_id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns general information about a record by ID.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the record of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_ir_spectrum/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_ir_spectrum.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_ir_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns an IR spectrum by database ID.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the IR spectrum of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_mass_spectrum/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_mass_spectrum.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_mass_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a mass spectrum by its ID in AMOS's database with supporting
+        information.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the mass spectrum of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_method_editor_info/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_method_editor_info.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_method_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves metadata from the database about a single method.  This is
+        not necessarily just the metadata that appears
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the method of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_ms_ready_methods/{inchikey}:
+    inputs:
+      inchikey:
+        required: yes
+    file: R/chemi_amos_get_ms_ready_methods.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - inchikey
+        endpoint:
+          value: amos/get_ms_ready_methods/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a list of methods that contain the MS-Ready forms of a given
+        substance but not the substance itself.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        inchikey: InChIKey to search by.
+      tags:
+        apiStage: public
+      examples:
+      - inchikey: DTXSID7020182
+  GET /api/amos/get_nmr_spectrum/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_nmr_spectrum.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_nmr_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Endpoint for retrieving a specified NMR spectrum from the database.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the NMR spectrum of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_nmr_spectrum_editor_info.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_nmr_spectrum_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves metadata from the database about a single NMR spectrum.  It
+        is currently intended only to retrieve
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the NMR spectrum.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_pdf/{record_type}/{internal_id}:
+    inputs:
+      record_type:
+        required: yes
+      internal_id:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_get_pdf.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/get_pdf/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    docs:
+      title: Retrieves a PDF from the database by the internal ID and type of record.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        record_type: A string indicating which kind of record is being retrieved.  Valid
+          values are 'fact sheet', 'method', and 'spectrum'.
+        internal_id: Unique ID of the document of interest.
+      tags:
+        apiStage: public
+      examples:
+      - record_type: DTXSID7020182
+  GET /api/amos/get_product_declaration_editor_info/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_product_declaration_editor_info.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_product_declaration_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves metadata from the database about a single product declaration.  This
+        is not necessarily just the metadata
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the product declaration.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_get_safety_data_sheet_editor_info.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_safety_data_sheet_editor_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves metadata from the database about a single safety data sheet.  This
+        is not necessarily just the metadata
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the safety data sheet.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_similar_structures/{identifier_type}/{identifier}:
+    inputs:
+      identifier_type:
+        required: yes
+      identifier:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_get_similar_structures.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - identifier_type
+        endpoint:
+          value: amos/get_similar_structures/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            identifier:
+              from:
+              - params
+              - identifier
+    docs:
+      title: Returns lists of documents, each of which contain at least one substance
+        of sufficient similarity to the searched
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        identifier_type: Primary query parameter
+        identifier: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - identifier_type: DTXSID7020182
+  GET /api/amos/get_substances_for_search_term/{search_term}:
+    inputs:
+      search_term:
+        required: yes
+    file: R/chemi_amos_get_substances_for_term.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_term
+        endpoint:
+          value: amos/get_substances_for_search_term/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns substance(s) that match a search term.  Since some substance
+        names can have slashes in them, <path> is used
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        search_term: A substance identifier.  If it cannot be parsed as an InChIKey,
+          CASRN, or DTXSID, it is assumed to be a name.
+      tags:
+        apiStage: public
+      examples:
+      - search_term: DTXSID7020182
+  GET /api/amos/inchikey_first_block_search/{first_block}:
+    inputs:
+      first_block:
+        required: yes
+    file: R/chemi_amos_inchikey_first_block.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - first_block
+        endpoint:
+          value: amos/inchikey_first_block_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of substances found by InChIKey.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        first_block: First block of an InChIKey.
+      tags:
+        apiStage: public
+      examples:
+      - first_block: DTXSID7020182
+  GET /api/amos/list_fact_sheet_types/:
+    inputs: {}
+    file: R/chemi_amos_list_fact_sheet_types.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/list_fact_sheet_types/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of all unique fact sheet types, coming from the document_type
+        field of the fact sheet table.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/list_functional_classes:
+    inputs: {}
+    file: R/chemi_amos_list_functional_classes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/list_functional_classes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of all functional use classes that are assigned to at
+        least one substance.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/list_sources_by_record_type/{record_type}:
+    inputs: {}
+    file: R/chemi_amos_list_sources_by_record_type.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/list_sources_by_record_type/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of all unique source names in the database for a specific
+        record type.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/amos/mass_range_search/:
+    inputs:
+      lower_mass_limit:
+        required: no
+        default: ~
+        type: object
+      upper_mass_limit:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_mass_range.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - lower_mass_limit
+        endpoint:
+          value: amos/mass_range_search/
+        options:
+          compact_object:
+            upper_mass_limit:
+              from:
+              - params
+              - upper_mass_limit
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of substances whose monoisotopic mass falls within the
+        specified range.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        lower_mass_limit: Lower limit of the mass range to search for.
+        upper_mass_limit: Upper limit of the mass range to search for.
+      tags:
+        apiStage: public
+      examples:
+      - lower_mass_limit: DTXSID1024122
+  POST /api/amos/mass_spectra_for_substances/:
+    inputs:
+      dtxsids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_mass_spectra_for_substances.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsids
+        endpoint:
+          value: amos/mass_spectra_for_substances/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Given a list of DTXSIDs, return all mass spectra for those substances.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsids: List of DTXSIDs to search for.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids: DTXSID1024122
+  GET /api/amos/method_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_method_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/method_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of methods using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}:
+    inputs:
+      search_type:
+        required: yes
+      internal_id:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_method_with_spectra.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_type
+        endpoint:
+          value: amos/method_with_spectra/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    docs:
+      title: Returns information about a method with linked spectra, given an ID for
+        either a spectrum or a method.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        search_type: How to search the database.  Valid values are "spectrum" and
+          "method".
+        internal_id: Unique ID of the spectrum or method of interest.
+      tags:
+        apiStage: public
+      examples:
+      - search_type: DTXSID7020182
+  POST /api/amos/next_level_classification/:
+    inputs:
+      kingdom:
+        required: no
+        default: ~
+        type: object
+      klass:
+        required: no
+        default: ~
+        type: object
+      superklass:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_next_level_classification.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - kingdom
+        endpoint:
+          value: amos/next_level_classification/
+        options:
+          compact_object:
+            klass:
+              from:
+              - params
+              - klass
+            superklass:
+              from:
+              - params
+              - superklass
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of categories for the specified level of ClassyFire classification,
+        given the higher levels of classification.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        kingdom: Kingdom-level (highest) classification of a substance.  Always required.
+        klass: Class-level (third-highest) classification of a substance.  Required
+          if requesting a list of subclasses.
+        superklass: Superclass-level (second-highest) classification of a substance.  Required
+          if requesting a list of classes or subclasses.
+      tags:
+        apiStage: public
+      examples:
+      - kingdom: DTXSID1024122
+  GET /api/amos/product_declaration_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_product_declaration_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/product_declaration_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of product declarations using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/record_counts_by_dtxsid/:
+    inputs:
+      dtxsids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_record_counts.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsids
+        endpoint:
+          value: amos/record_counts_by_dtxsid/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a dictionary containing the counts of record types that are present
+        in the database for each supplied DTXSID.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsids: List of DTXSIDs to search for.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids: DTXSID1024122
+  GET /api/amos/record_id_search/{internal_id}:
+    inputs:
+      internal_id:
+        required: yes
+    file: R/chemi_amos_record_id.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/record_id_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Searches for a record in the database by ID.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id: Unique ID of the record of interest.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}:
+    inputs:
+      dtxsid:
+        required: yes
+      record_type:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_record_ids_for_substance.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/record_ids_for_substance/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            record_type:
+              from:
+              - params
+              - record_type
+    docs:
+      title: Returns a list of record IDs that are associated with the given DTXSID.  This
+        is intended to help when filtering
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+        record_type: The record type of interest.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /api/amos/record_type_count/{record_type}:
+    inputs:
+      record_type:
+        required: yes
+    file: R/chemi_amos_record_type_count.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/record_type_count/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns the number of records of the given type.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        record_type: Record type.  Accepted values are "analytical_qc", "fact_sheets",
+          and "methods".
+      tags:
+        apiStage: public
+      examples:
+      - record_type: DTXSID7020182
+  GET /api/amos/release_notes:
+    inputs: {}
+    file: R/chemi_amos_release_notes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/release_notes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of release notes for AMOS.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/safety_data_sheet_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ~
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_safety_data_sheet_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/safety_data_sheet_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of safety data sheets using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  GET /api/amos/search/{dtxsid}:
+    inputs:
+      dtxsid:
+        required: yes
+    file: R/chemi_amos.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a list of records from the database that contain a searched
+        DTXSID.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /api/amos/search_by_text/{substr}:
+    inputs:
+      substr:
+        required: yes
+    file: R/chemi_amos_by_text.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - substr
+        endpoint:
+          value: amos/search_by_text/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a list of records from the ElasticSearch database that contain
+        a searched substring
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        substr: The substring to search for.
+      tags:
+        apiStage: public
+      examples:
+      - substr: DTXSID7020182
+  POST /api/amos/spectrum_count_for_methodology/:
+    inputs:
+      dtxsid:
+        required: no
+        default: ~
+        type: object
+      spectrum_type:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_spectrum_count_for_methodology.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/spectrum_count_for_methodology/
+        options:
+          compact_object:
+            spectrum_type:
+              from:
+              - params
+              - spectrum_type
+        tidy:
+          value: no
+    docs:
+      title: Returns the number of spectra that have a specified methodology.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: DTXSID for the substance of interest.
+        spectrum_type: Analytical methodology to search for.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID1024122
+  POST /api/amos/substances_for_classification/:
+    inputs:
+      kingdom:
+        required: no
+        default: ~
+        type: object
+      klass:
+        required: no
+        default: ~
+        type: object
+      subklass:
+        required: no
+        default: ~
+        type: object
+      superklass:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_substances_for_classification.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - kingdom
+        endpoint:
+          value: amos/substances_for_classification/
+        options:
+          compact_object:
+            klass:
+              from:
+              - params
+              - klass
+            subklass:
+              from:
+              - params
+              - subklass
+            superklass:
+              from:
+              - params
+              - superklass
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of substances in the database which match the specified
+        top four levels of a ClassyFire classification.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        kingdom: Kingdom-level (highest) classification of a substance.
+        klass: Class-level (third-highest) classification of a substance.
+        subklass: Subclass-level (fourth-highest) classification of a substance.
+        superklass: Superclass-level (second-highest) classification of a substance.
+      tags:
+        apiStage: public
+      examples:
+      - kingdom: DTXSID1024122
+  POST /api/amos/substances_for_ids/:
+    inputs:
+      internal_id_list:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_substances_for_ids.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id_list
+        endpoint:
+          value: amos/substances_for_ids/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns an Excel file containing a deduplicated list of substances that
+        appear in a given set of database record IDs.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        internal_id_list: Array of record IDs.
+      tags:
+        apiStage: public
+      examples:
+      - internal_id_list: DTXSID1024122
+  GET /api/amos/substring_search/{substring}:
+    inputs:
+      substring:
+        required: yes
+    file: R/chemi_amos_substring.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - substring
+        endpoint:
+          value: amos/substring_search/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns information on substances where the specified substring is in
+        or equal to a name.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        substring: A name substring to search by.
+      tags:
+        apiStage: public
+      examples:
+      - substring: DTXSID7020182
+  POST /api/amos/all_similarities_by_dtxsid/:
+    inputs:
+      da_window:
+        required: no
+        default: ~
+        type: object
+      dtxsids:
+        required: no
+        default: ~
+        type: object
+      min_intensity:
+        required: no
+        default: ~
+        type: object
+      ms_level:
+        required: no
+        default: ~
+        type: object
+      ppm_window:
+        required: no
+        default: ~
+        type: object
+      spectra:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_all_similarities.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - da_window
+        endpoint:
+          value: amos/all_similarities_by_dtxsid/
+        options:
+          compact_object:
+            dtxsids:
+              from:
+              - params
+              - dtxsids
+            min_intensity:
+              from:
+              - params
+              - min_intensity
+            ms_level:
+              from:
+              - params
+              - ms_level
+            ppm_window:
+              from:
+              - params
+              - ppm_window
+            spectra:
+              from:
+              - params
+              - spectra
+        tidy:
+          value: no
+    docs:
+      title: Given a list of DTXSIDs and a list of mass spectra, return a highest
+        similarity score for each combination of DTXSID and spectrum.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        da_window: Mass window in units of daltons.  If not null, this will be used
+          for similarity calculations, regardless of whether ppm_window is supplied.
+        dtxsids: List of DTXSIDs to search for.
+        min_intensity: Minimum intensity level for peaks in both the user and database
+          spectra to consider.  All database spectra are scaled to have a maximum
+          intensity of 100, and all user spectra are assumed to be scaled the same.
+        ms_level: Level of mass spectrometry; if supplied, then only spectra at the
+          specified level will be returned.  Valid values are from 1 to 5.
+        ppm_window: Mass window in units of parts per million.  Will only be used
+          if da_window is null or not passed and ppm_window is not null.
+        spectra: A list of spectra, where each spectrum is an array of m/z-intensity
+          pairs formatted as two-element arrays.  Maximum intensity should be scaled
+          to 100.
+      tags:
+        apiStage: public
+      examples:
+      - da_window: DTXSID1024122
+  POST /api/amos/analytical_qc_batch_search:
+    inputs:
+      base_url:
+        required: no
+        default: ~
+        type: object
+      ids:
+        required: no
+        default: ~
+        type: object
+      include_classyfire:
+        required: no
+        default: ~
+        type: object
+      include_functional_uses:
+        required: no
+        default: ~
+        type: object
+      include_source_counts:
+        required: no
+        default: ~
+        type: object
+      methodologies:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_analytical_qc_batch.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - base_url
+        endpoint:
+          value: amos/analytical_qc_batch_search
+        options:
+          compact_object:
+            ids:
+              from:
+              - params
+              - ids
+            include_classyfire:
+              from:
+              - params
+              - include_classyfire
+            include_functional_uses:
+              from:
+              - params
+              - include_functional_uses
+            include_source_counts:
+              from:
+              - params
+              - include_source_counts
+            methodologies:
+              from:
+              - params
+              - methodologies
+        tidy:
+          value: no
+    docs:
+      title: Generates an Excel workbook containing information on all Analytical
+        QC records that contain a given list of DTXSIDs
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        base_url: URL for the AMOS frontend.  Used to construct the internal links
+          in the output file.
+        ids: List of DTXSIDs or other identifiers to search for.
+        include_classyfire: Flag for whether to include the top four levels of a ClassyFire
+          classification for each of the searched substances, if it exists.
+        include_functional_uses: Flag for whether to include functional use classifications
+          based on the ChemFuncT ontology.  Only exists for around 21,000 substances
+          in the database.
+        include_source_counts: Flag for whether to include counts of a substance's
+          appearances in patents, PubMed articles, and other external sources.
+        methodologies: Filters the returned results by analytical methodologies.  This
+          argument should be a dictionary with four keys with boolean values -- "all",
+          "GC/MS", "LC/MS", and "NMR".  There are some methodologies with small numbers
+          of records (e.g., IR spectra) which will only appear in the data if "all"
+          is set to true.
+      tags:
+        apiStage: public
+      examples:
+      - base_url: DTXSID1024122
+  POST /api/amos/analytical_qc_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ''
+        type: character
+      dtxsid:
+        required: no
+        default: ''
+        type: character
+      filterModel:
+        required: no
+        default: {}
+        type: object
+      filters:
+        required: no
+        default: {}
+        type: object
+      full_table:
+        required: no
+        default: ''
+        type: character
+      include_total:
+        required: no
+        default: no
+        type: logical
+      quickFilter:
+        required: no
+        default: ''
+        type: character
+      sortModel:
+        required: no
+        default: []
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_analytical_qc_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: amos/analytical_qc_keyset_pagination/
+        method:
+          value: POST
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            limit:
+              from:
+              - params
+              - limit
+        body:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            filterModel:
+              from:
+              - params
+              - filterModel
+            filters:
+              from:
+              - params
+              - filters
+            full_table:
+              from:
+              - params
+              - full_table
+            include_total:
+              from:
+              - params
+              - include_total
+            quickFilter:
+              from:
+              - params
+              - quickFilter
+            sortModel:
+              from:
+              - params
+              - sortModel
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: body
+    docs:
+      title: Returns filtered Analytical QC records using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: 'Optional keyset cursor returned by a previous response. (default:
+          )'
+        dtxsid: 'Optional DTXSID substance filter. (default: )'
+        filterModel: 'Alias for filters. (default: {})'
+        filters: 'AG Grid filter model keyed by table field name. (default: {})'
+        full_table: 'Text to match across searchable table columns. (default: )'
+        include_total: 'If true, include total filtered record count in pagination.
+          (default: FALSE)'
+        quickFilter: 'Alias for full_table. (default: )'
+        sortModel: 'Optional AG Grid sort model. The first entry is used; internal_id
+          is always used as a stable tie-breaker. Send the same sortModel with each
+          cursor request. (default: [])'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/batch_search:
+    inputs:
+      additional_record_info:
+        required: no
+        default: ~
+        type: object
+      always_download_file:
+        required: no
+        default: ~
+        type: object
+      base_url:
+        required: no
+        default: ~
+        type: object
+      ids:
+        required: no
+        default: ~
+        type: object
+      include_classyfire:
+        required: no
+        default: ~
+        type: object
+      include_external_links:
+        required: no
+        default: ~
+        type: object
+      include_functional_uses:
+        required: no
+        default: ~
+        type: object
+      include_source_counts:
+        required: no
+        default: ~
+        type: object
+      methodologies:
+        required: no
+        default: ~
+        type: object
+      record_types:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_batch.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - additional_record_info
+        endpoint:
+          value: amos/batch_search
+        options:
+          compact_object:
+            always_download_file:
+              from:
+              - params
+              - always_download_file
+            base_url:
+              from:
+              - params
+              - base_url
+            ids:
+              from:
+              - params
+              - ids
+            include_classyfire:
+              from:
+              - params
+              - include_classyfire
+            include_external_links:
+              from:
+              - params
+              - include_external_links
+            include_functional_uses:
+              from:
+              - params
+              - include_functional_uses
+            include_source_counts:
+              from:
+              - params
+              - include_source_counts
+            methodologies:
+              from:
+              - params
+              - methodologies
+            record_types:
+              from:
+              - params
+              - record_types
+        tidy:
+          value: no
+    docs:
+      title: Generates an Excel workbook which lists all records in the database that
+        contain a given set of DTXSIDs.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        additional_record_info: Optional parameter
+        always_download_file: If false, a search that does not find any matching records
+          in the database will just return a message instead of a file.
+        base_url: URL for the AMOS frontend.  Used to construct the internal links
+          in the output file.
+        ids: List of DTXSIDs or other identifiers to search for.
+        include_classyfire: Flag for whether to include the top four levels of a ClassyFire
+          classification for each of the searched substances, if it exists.
+        include_external_links: Flag for whether to include database records that
+          are purely external links (e.g., spectra that we can link to but cannot
+          store directly in the database).
+        include_functional_uses: Flag for whether to include functional use classifications
+          based on the ChemFuncT ontology.  Only exists for around 21,000 substances
+          in the database.
+        include_source_counts: Flag for whether to include counts of a substance's
+          appearances in patents, PubMed articles, and other external sources.
+        methodologies: Filters the returned results by analytical methodologies.  This
+          argument should be a dictionary with four keys with boolean values -- "all",
+          "GC/MS", "LC/MS", and "NMR".  There are some methodologies with small numbers
+          of records (e.g., IR spectra) which will only appear in the data if "all"
+          is set to true.
+        record_types: Filters returned results by record type.  This argument should
+          be a dictionary with three keys with boolean values -- "Fact Sheet", "Method",
+          and "Spectrum".  Note that the "Spectrum" flag will return spectra of all
+          types -- mass, NMR, etc.
+      tags:
+        apiStage: public
+      examples:
+      - additional_record_info: DTXSID1024122
+  POST /api/amos/dtxsids/:
+    inputs:
+      dtxsids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_dtxsids.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsids
+        endpoint:
+          value: amos/dtxsids/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns substance information and record counts for a list of DTXSIDs.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsids: Array of DTXSIDs as strings.
+      tags:
+        apiStage: public
+      examples:
+      - dtxsids: DTXSID1024122
+  POST /api/amos/entropy_similarity/:
+    inputs:
+      spectrum_1:
+        required: no
+        default: ~
+        type: object
+      spectrum_2:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+      window:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_entropy_similarity.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - spectrum_1
+        endpoint:
+          value: amos/entropy_similarity/
+        options:
+          compact_object:
+            spectrum_2:
+              from:
+              - params
+              - spectrum_2
+            type:
+              from:
+              - params
+              - type
+            window:
+              from:
+              - params
+              - window
+        tidy:
+          value: no
+    docs:
+      title: Calculates the entropy similarity for two spectra.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        spectrum_1: Array of m/z intensity pairs.  Should be formatted as an array
+          of two-element arrays, each of which has the m/z value and the intensity
+          value (in that order).  Peaks should be sorted in increasing order of m/z
+          values.
+        spectrum_2: Array of m/z intensity pairs.  Should be formatted as an array
+          of two-element arrays, each of which has the m/z value and the intensity
+          value (in that order).  Peaks should be sorted in increasing order of m/z
+          values.
+        type: Type of mass window to use.  Should be either "da" or "ppm".
+        window: Size of the mass window to use.  Will be in units of the 'type' argument.
+      tags:
+        apiStage: public
+      examples:
+      - spectrum_1: DTXSID1024122
+  POST /api/amos/fact_sheet_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ''
+        type: character
+      document_text:
+        required: no
+        default: ''
+        type: character
+      dtxsid:
+        required: no
+        default: ''
+        type: character
+      filterModel:
+        required: no
+        default: {}
+        type: object
+      filters:
+        required: no
+        default: {}
+        type: object
+      full_table:
+        required: no
+        default: ''
+        type: character
+      include_total:
+        required: no
+        default: no
+        type: logical
+      quickFilter:
+        required: no
+        default: ''
+        type: character
+      sortModel:
+        required: no
+        default: []
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_fact_sheet_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: amos/fact_sheet_keyset_pagination/
+        method:
+          value: POST
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            limit:
+              from:
+              - params
+              - limit
+        body:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+            document_text:
+              from:
+              - params
+              - document_text
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            filterModel:
+              from:
+              - params
+              - filterModel
+            filters:
+              from:
+              - params
+              - filters
+            full_table:
+              from:
+              - params
+              - full_table
+            include_total:
+              from:
+              - params
+              - include_total
+            quickFilter:
+              from:
+              - params
+              - quickFilter
+            sortModel:
+              from:
+              - params
+              - sortModel
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: body
+    docs:
+      title: Returns filtered fact sheets using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: 'Optional keyset cursor returned by a previous response. (default:
+          )'
+        document_text: 'Optional full-text document search. (default: )'
+        dtxsid: 'Optional DTXSID substance filter. (default: )'
+        filterModel: 'Alias for filters. (default: {})'
+        filters: 'AG Grid filter model keyed by table field name. (default: {})'
+        full_table: 'Text to match across searchable table columns. (default: )'
+        include_total: 'If true, include total filtered record count in pagination.
+          (default: FALSE)'
+        quickFilter: 'Alias for full_table. (default: )'
+        sortModel: 'Optional AG Grid sort model. The first entry is used; internal_id
+          is always used as a stable tie-breaker. Send the same sortModel with each
+          cursor request. (default: [])'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/mass_spectrum_similarity_search/:
+    inputs:
+      lower_mass_limit:
+        required: no
+        default: ~
+        type: object
+      methodology:
+        required: no
+        default: ~
+        type: object
+      spectrum:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+      upper_mass_limit:
+        required: no
+        default: ~
+        type: object
+      window:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_mass_spectrum_similarity.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - lower_mass_limit
+        endpoint:
+          value: amos/mass_spectrum_similarity_search/
+        options:
+          compact_object:
+            methodology:
+              from:
+              - params
+              - methodology
+            spectrum:
+              from:
+              - params
+              - spectrum
+            type:
+              from:
+              - params
+              - type
+            upper_mass_limit:
+              from:
+              - params
+              - upper_mass_limit
+            window:
+              from:
+              - params
+              - window
+        tidy:
+          value: no
+    docs:
+      title: Takes a mass range, methodology, and mass spectrum, and returns all spectra
+        that match the mass and methodology, with entropy similarities between the
+        database spectra and the user-supplied one.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        lower_mass_limit: Lower limit of the mass range to search for.
+        methodology: Analytical methodology to search for.  Values aside from "GC/MS"
+          and "LC/MS" are highly unlikely to produce results.
+        spectrum: Array of two-element numeric arrays.  The two-element arrays represent
+          a single peak in the spectrum, in the format [m/z, intensity].  Peaks should
+          be sorted in ascending order of m/z values.
+        type: Type of mass window to use for entropy similarity calculations.  Can
+          be either "da" or "ppm".
+        upper_mass_limit: Upper limit of the mass range to search for.
+        window: Size of mass window.  Is in units of `type`.
+      tags:
+        apiStage: public
+      examples:
+      - lower_mass_limit: DTXSID1024122
+  POST /api/amos/max_similarity_by_dtxsid/:
+    inputs:
+      da_window:
+        required: no
+        default: ~
+        type: object
+      dtxsids:
+        required: no
+        default: ~
+        type: object
+      ms_level:
+        required: no
+        default: ~
+        type: object
+      ppm_window:
+        required: no
+        default: ~
+        type: object
+      spectra:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_max_similarity.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - da_window
+        endpoint:
+          value: amos/max_similarity_by_dtxsid/
+        options:
+          compact_object:
+            dtxsids:
+              from:
+              - params
+              - dtxsids
+            ms_level:
+              from:
+              - params
+              - ms_level
+            ppm_window:
+              from:
+              - params
+              - ppm_window
+            spectra:
+              from:
+              - params
+              - spectra
+        tidy:
+          value: no
+    docs:
+      title: Given a list of DTXSIDs and a list of mass spectra, return the highest
+        similarity score for each combination of
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        da_window: Mass window in units of daltons.  If not null, this will be used
+          for similarity calculations, regardless of whether ppm_window is supplied.
+        dtxsids: List of DTXSIDs to search for.
+        ms_level: Level of mass spectrometry; if supplied, then only spectra at the
+          specified level will be returned.  Valid values are from 1 to 5.
+        ppm_window: Mass window in units of parts per million.  Will only be used
+          if da_window is null or not passed and ppm_window is not null.
+        spectra: A list of spectra, where each spectrum is an array of m/z-intensity
+          pairs formatted as two-element arrays.
+      tags:
+        apiStage: public
+      examples:
+      - da_window: DTXSID1024122
+  POST /api/amos/method_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ''
+        type: character
+      document_text:
+        required: no
+        default: ''
+        type: character
+      dtxsid:
+        required: no
+        default: ''
+        type: character
+      filterModel:
+        required: no
+        default: {}
+        type: object
+      filters:
+        required: no
+        default: {}
+        type: object
+      full_table:
+        required: no
+        default: ''
+        type: character
+      include_total:
+        required: no
+        default: no
+        type: logical
+      quickFilter:
+        required: no
+        default: ''
+        type: character
+      sortModel:
+        required: no
+        default: []
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_method_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: amos/method_keyset_pagination/
+        method:
+          value: POST
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            limit:
+              from:
+              - params
+              - limit
+        body:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+            document_text:
+              from:
+              - params
+              - document_text
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            filterModel:
+              from:
+              - params
+              - filterModel
+            filters:
+              from:
+              - params
+              - filters
+            full_table:
+              from:
+              - params
+              - full_table
+            include_total:
+              from:
+              - params
+              - include_total
+            quickFilter:
+              from:
+              - params
+              - quickFilter
+            sortModel:
+              from:
+              - params
+              - sortModel
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: body
+    docs:
+      title: Returns filtered methods using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: 'Optional keyset cursor returned by a previous response. (default:
+          )'
+        document_text: 'Optional full-text document search. (default: )'
+        dtxsid: 'Optional DTXSID substance filter. (default: )'
+        filterModel: 'Alias for filters. (default: {})'
+        filters: 'AG Grid filter model keyed by table field name. (default: {})'
+        full_table: 'Text to match across searchable table columns. (default: )'
+        include_total: 'If true, include total filtered record count in pagination.
+          (default: FALSE)'
+        quickFilter: 'Alias for full_table. (default: )'
+        sortModel: 'Optional AG Grid sort model. The first entry is used; internal_id
+          is always used as a stable tie-breaker. Send the same sortModel with each
+          cursor request. (default: [])'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/product_declaration_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ''
+        type: character
+      document_text:
+        required: no
+        default: ''
+        type: character
+      dtxsid:
+        required: no
+        default: ''
+        type: character
+      filterModel:
+        required: no
+        default: {}
+        type: object
+      filters:
+        required: no
+        default: {}
+        type: object
+      full_table:
+        required: no
+        default: ''
+        type: character
+      include_total:
+        required: no
+        default: no
+        type: logical
+      quickFilter:
+        required: no
+        default: ''
+        type: character
+      sortModel:
+        required: no
+        default: []
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_product_declaration_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: amos/product_declaration_keyset_pagination/
+        method:
+          value: POST
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            limit:
+              from:
+              - params
+              - limit
+        body:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+            document_text:
+              from:
+              - params
+              - document_text
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            filterModel:
+              from:
+              - params
+              - filterModel
+            filters:
+              from:
+              - params
+              - filters
+            full_table:
+              from:
+              - params
+              - full_table
+            include_total:
+              from:
+              - params
+              - include_total
+            quickFilter:
+              from:
+              - params
+              - quickFilter
+            sortModel:
+              from:
+              - params
+              - sortModel
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: body
+    docs:
+      title: Returns filtered product declarations using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: 'Optional keyset cursor returned by a previous response. (default:
+          )'
+        document_text: 'Optional full-text document search. (default: )'
+        dtxsid: 'Optional DTXSID substance filter. (default: )'
+        filterModel: 'Alias for filters. (default: {})'
+        filters: 'AG Grid filter model keyed by table field name. (default: {})'
+        full_table: 'Text to match across searchable table columns. (default: )'
+        include_total: 'If true, include total filtered record count in pagination.
+          (default: FALSE)'
+        quickFilter: 'Alias for full_table. (default: )'
+        sortModel: 'Optional AG Grid sort model. The first entry is used; internal_id
+          is always used as a stable tie-breaker. Send the same sortModel with each
+          cursor request. (default: [])'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/safety_data_sheet_keyset_pagination/{limit}:
+    inputs:
+      limit:
+        required: yes
+      cursor:
+        required: no
+        default: ''
+        type: character
+      document_text:
+        required: no
+        default: ''
+        type: character
+      dtxsid:
+        required: no
+        default: ''
+        type: character
+      filterModel:
+        required: no
+        default: {}
+        type: object
+      filters:
+        required: no
+        default: {}
+        type: object
+      full_table:
+        required: no
+        default: ''
+        type: character
+      include_total:
+        required: no
+        default: no
+        type: logical
+      quickFilter:
+        required: no
+        default: ''
+        type: character
+      sortModel:
+        required: no
+        default: []
+        type: object
+      all_pages:
+        required: no
+        default: yes
+        type: logical
+      max_pages:
+        required: no
+        default: 100.0
+        type: numeric
+    file: R/chemi_amos_safety_data_sheet_keyset_pagination.R
+    helper: generic_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: amos/safety_data_sheet_keyset_pagination/
+        method:
+          value: POST
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            limit:
+              from:
+              - params
+              - limit
+        body:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+            document_text:
+              from:
+              - params
+              - document_text
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            filterModel:
+              from:
+              - params
+              - filterModel
+            filters:
+              from:
+              - params
+              - filters
+            full_table:
+              from:
+              - params
+              - full_table
+            include_total:
+              from:
+              - params
+              - include_total
+            quickFilter:
+              from:
+              - params
+              - quickFilter
+            sortModel:
+              from:
+              - params
+              - sortModel
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: body
+    docs:
+      title: Returns filtered safety data sheets using keyset pagination.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: 'Optional keyset cursor returned by a previous response. (default:
+          )'
+        document_text: 'Optional full-text document search. (default: )'
+        dtxsid: 'Optional DTXSID substance filter. (default: )'
+        filterModel: 'Alias for filters. (default: {})'
+        filters: 'AG Grid filter model keyed by table field name. (default: {})'
+        full_table: 'Text to match across searchable table columns. (default: )'
+        include_total: 'If true, include total filtered record count in pagination.
+          (default: FALSE)'
+        quickFilter: 'Alias for full_table. (default: )'
+        sortModel: 'Optional AG Grid sort model. The first entry is used; internal_id
+          is always used as a stable tie-breaker. Send the same sortModel with each
+          cursor request. (default: [])'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - limit: DTXSID7020182
+  POST /api/amos/spectral_entropy/:
+    inputs:
+      spectrum:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_spectral_entropy.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - spectrum
+        endpoint:
+          value: amos/spectral_entropy/
+        wrap:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Calculates the spectral entropy for a single spectrum.
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        spectrum: Array of m/z intensity pairs.  Should be formatted as an array of
+          two-element arrays, each of which has the m/z value and the intensity value
+          (in that order).  Peaks should be sorted in increasing order of m/z values.
+      tags:
+        apiStage: public
+      examples:
+      - spectrum: DTXSID1024122
+  POST /api/amos/retrieve_fact_sheets/:
+    inputs:
+      internal_ids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_retrieve_fact_sheets.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/retrieve_fact_sheets/
+        options:
+          compact_object:
+            internal_ids:
+              from:
+              - params
+              - internal_ids
+        tidy:
+          value: no
+    implementation: existing
+  POST /api/amos/retrieve_product_declarations/:
+    inputs:
+      internal_ids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_retrieve_product_declarations.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/retrieve_product_declarations/
+        options:
+          compact_object:
+            internal_ids:
+              from:
+              - params
+              - internal_ids
+        tidy:
+          value: no
+    implementation: existing
+  POST /api/amos/retrieve_safety_data_sheets/:
+    inputs:
+      internal_ids:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_retrieve_safety_data_sheets.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: amos/retrieve_safety_data_sheets/
+        options:
+          compact_object:
+            internal_ids:
+              from:
+              - params
+              - internal_ids
+        tidy:
+          value: no
+    implementation: existing
+  POST /api/amos/search_for_document_ids/{record_type}:
+    inputs:
+      record_type:
+        required: yes
+      search_info:
+        required: no
+        default: ~
+        type: object
+      record_info_fields:
+        required: no
+        default: ~
+        type: object
+      table_fields:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_amos_for_document_ids.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/search_for_document_ids/
+        options:
+          compact_object:
+            search_info:
+              from:
+              - params
+              - search_info
+            record_info_fields:
+              from:
+              - params
+              - record_info_fields
+            table_fields:
+              from:
+              - params
+              - table_fields
+        tidy:
+          value: no
+    implementation: existing
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-amos.rds

@@ -18,4 +18,271 @@ names:
   GET /api/services/layout: chemi_services_layout
   GET /api/services/release_notes: chemi_services_release_notes
   GET /api/services/smirks2rxn: chemi_services_smirks2rxn
-
+operations:
+  GET /api/services/cim_component_info:
+    inputs: {}
+    file: R/chemi_services_cim_component_info.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: services/cim_component_info
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Services Cim Component Info
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  POST /api/services/collated_report:
+    inputs:
+      alertRequest:
+        required: no
+        default: ~
+        type: object
+      chemicals:
+        required: no
+        default: ~
+        type: object
+      exportAlerts:
+        required: no
+        default: ~
+        type: object
+      exportHazard:
+        required: no
+        default: ~
+        type: object
+      exportHazard2:
+        required: no
+        default: ~
+        type: object
+      exportPrediction:
+        required: no
+        default: ~
+        type: object
+      exportSafety:
+        required: no
+        default: ~
+        type: object
+      hazardRequest:
+        required: no
+        default: ~
+        type: object
+      predictionRequest:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_services_collated_report.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - alertRequest
+        endpoint:
+          value: services/collated_report
+        options:
+          compact_object:
+            chemicals:
+              from:
+              - params
+              - chemicals
+            exportAlerts:
+              from:
+              - params
+              - exportAlerts
+            exportHazard:
+              from:
+              - params
+              - exportHazard
+            exportHazard2:
+              from:
+              - params
+              - exportHazard2
+            exportPrediction:
+              from:
+              - params
+              - exportPrediction
+            exportSafety:
+              from:
+              - params
+              - exportSafety
+            hazardRequest:
+              from:
+              - params
+              - hazardRequest
+            predictionRequest:
+              from:
+              - params
+              - predictionRequest
+        tidy:
+          value: no
+    docs:
+      title: Services Collated Report
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        alertRequest: Optional parameter
+        chemicals: Optional parameter
+        exportAlerts: Optional parameter
+        exportHazard: Optional parameter
+        exportHazard2: Optional parameter
+        exportPrediction: Optional parameter
+        exportSafety: Optional parameter
+        hazardRequest: Optional parameter
+        predictionRequest: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - alertRequest: DTXSID1024122
+  POST /api/services/convert:
+    inputs:
+      content:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_services_convert.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - content
+        endpoint:
+          value: services/convert
+        options:
+          compact_object:
+            type:
+              from:
+              - params
+              - type
+        tidy:
+          value: no
+    docs:
+      title: Services Convert
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        content: Optional parameter
+        type: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - content: DTXSID1024122
+  GET /api/services/layout:
+    inputs:
+      smiles:
+        required: yes
+    file: R/chemi_services_layout.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: services/layout
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Services Layout
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  GET /api/services/release_notes:
+    inputs: {}
+    file: R/chemi_services_release_notes.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: services/release_notes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Services Release Notes
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/services/smirks2rxn:
+    inputs:
+      smirks:
+        required: yes
+    file: R/chemi_services_smirks2rxn.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: services/smirks2rxn
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smirks:
+              from:
+              - params
+              - smirks
+    docs:
+      title: Services Smirks2rxn
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smirks: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - smirks: DTXSID7020182
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-services.rds

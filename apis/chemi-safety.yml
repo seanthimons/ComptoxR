@@ -13,4 +13,19 @@ policy_version: comptox-maintenance-1
 hook_config: inst/hook_config.yml
 names:
   POST /api/safety/rqcodes: chemi_safety_rqcodes
-
+operations:
+  POST /api/safety/rqcodes:
+    inputs: {}
+    file: R/chemi_safety_rqcodes.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: safety/rqcodes
+        tidy:
+          value: no
+    implementation: existing
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-safety.rds

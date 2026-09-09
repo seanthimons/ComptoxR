@@ -159,6 +159,7 @@ operations:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_bioactivity_analyticalqc_search.R
     helper: generic_request
     request:
       arguments:
@@ -172,10 +173,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}:
     inputs:
       entrezGeneId:
         required: yes
+    file: R/ct_bioactivity_aop_search_by_entrez_gene_id.R
     helper: generic_request
     request:
       arguments:
@@ -189,10 +192,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/aop/search/by-event-number/{eventNumber}:
     inputs:
       eventNumber:
         required: yes
+    file: R/ct_bioactivity_aop_search_by_event_number.R
     helper: generic_request
     request:
       arguments:
@@ -206,10 +211,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}:
     inputs:
       toxcastAeid:
         required: yes
+    file: R/ct_bioactivity_aop_search_by_toxcast_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -223,12 +230,14 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/assay/:
     inputs:
       projection:
         required: no
         default: assay-all
         type: character
+    file: R/ct_bioactivity_assay.R
     helper: generic_request
     request:
       arguments:
@@ -242,6 +251,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}:
     inputs:
       aeid:
@@ -250,6 +260,7 @@ operations:
         required: no
         default: dtxsidsonly
         type: character
+    file: R/ct_bioactivity_assay_chemicals_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -267,8 +278,10 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /bioactivity/assay/count:
     inputs: {}
+    file: R/ct_bioactivity_assay_count.R
     helper: generic_request
     request:
       arguments:
@@ -278,10 +291,12 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    implementation: existing
   POST /bioactivity/assay/search/by-aeid/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_assay_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -295,6 +310,7 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/assay/search/by-aeid/{aeid}:
     inputs:
       aeid:
@@ -303,6 +319,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_bioactivity_assay_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -320,10 +337,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /bioactivity/assay/search/by-endpoint/:
     inputs:
       endpoint:
         required: yes
+    file: R/ct_bioactivity_assay_search_by_endpoint.R
     helper: generic_request
     request:
       arguments:
@@ -339,10 +358,12 @@ operations:
               from:
               - params
               - endpoint
+    implementation: existing
   GET /bioactivity/assay/search/by-gene/{geneSymbol}:
     inputs:
       geneSymbol:
         required: yes
+    file: R/ct_bioactivity_assay_search_by_gene.R
     helper: generic_request
     request:
       arguments:
@@ -356,6 +377,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}:
     inputs:
       aeid:
@@ -364,6 +386,7 @@ operations:
         required: no
         default: single-conc
         type: character
+    file: R/ct_bioactivity_assay_single_conc_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -381,10 +404,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /bioactivity/data/aed/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_data_aed_search.R
     helper: generic_request
     request:
       arguments:
@@ -398,10 +423,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_bioactivity_data_aed_search.R
     helper: generic_request
     request:
       arguments:
@@ -415,10 +442,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /bioactivity/data/search/by-aeid/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_data_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -432,10 +461,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/data/search/by-aeid/{aeid}:
     inputs:
       aeid:
         required: yes
+    file: R/ct_bioactivity_data_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -449,10 +480,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /bioactivity/data/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -466,6 +499,7 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/data/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -474,6 +508,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_bioactivity_data_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -491,10 +526,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /bioactivity/data/search/by-m4id/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_data_search_by_m4id.R
     helper: generic_request
     request:
       arguments:
@@ -508,10 +545,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/data/search/by-m4id/{m4id}:
     inputs:
       m4id:
         required: yes
+    file: R/ct_bioactivity_data_search_by_m4id.R
     helper: generic_request
     request:
       arguments:
@@ -525,10 +564,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /bioactivity/data/search/by-spid/:
     inputs:
       query:
         required: yes
+    file: R/ct_bioactivity_data_search_by_spid.R
     helper: generic_request
     request:
       arguments:
@@ -542,10 +583,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /bioactivity/data/search/by-spid/{spid}:
     inputs:
       spid:
         required: yes
+    file: R/ct_bioactivity_data_search_by_spid.R
     helper: generic_request
     request:
       arguments:
@@ -559,10 +602,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/data/summary/search/by-aeid/{aeid}:
     inputs:
       aeid:
         required: yes
+    file: R/ct_bioactivity_data_summary_search_by_aeid.R
     helper: generic_request
     request:
       arguments:
@@ -576,10 +621,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_bioactivity_data_summary_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -593,12 +640,14 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/data/summary/search/by-tissue/:
     inputs:
       dtxsid:
         required: yes
       tissue:
         required: yes
+    file: R/ct_bioactivity_data_search_by_tissue.R
     helper: generic_request
     request:
       arguments:
@@ -616,12 +665,14 @@ operations:
           from:
           - params
           - tissue
+    implementation: existing
   GET /bioactivity/models/search/:
     inputs:
       dtxsid:
         required: yes
       model:
         required: yes
+    file: R/ct_bioactivity_models_search.R
     helper: generic_request
     request:
       arguments:
@@ -639,10 +690,12 @@ operations:
           from:
           - params
           - model
+    implementation: existing
   GET /bioactivity/models/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_bioactivity_models_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -656,6 +709,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/search/contain/{value}:
     inputs:
       value:
@@ -664,6 +718,7 @@ operations:
         required: no
         default: 0.0
         type: numeric
+    file: R/ct_bioactivity_search_contain.R
     helper: generic_request
     request:
       arguments:
@@ -681,10 +736,12 @@ operations:
           from:
           - params
           - top
+    implementation: existing
   GET /bioactivity/search/equal/{value}:
     inputs:
       value:
         required: yes
+    file: R/ct_bioactivity_search_equal.R
     helper: generic_request
     request:
       arguments:
@@ -698,6 +755,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /bioactivity/search/start-with/{value}:
     inputs:
       value:
@@ -706,6 +764,7 @@ operations:
         required: no
         default: 500.0
         type: numeric
+    file: R/ct_bioactivity_search_start_with.R
     helper: generic_request
     request:
       arguments:
@@ -723,6 +782,7 @@ operations:
           from:
           - params
           - top
+    implementation: existing
   GET /chemical/count/by-exact-formula/{formula}:
     inputs:
       formula:
@@ -731,6 +791,7 @@ operations:
         required: no
         default: count
         type: character
+    file: R/ct_chemical_count_by_exact_formula.R
     helper: generic_request
     request:
       arguments:
@@ -748,6 +809,17 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get chemical count by exact formula
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        formula: 'Chemical formula. Type: string'
+        projection: 'Optional parameter (default: count)'
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
   GET /chemical/count/by-msready-formula/{formula}:
     inputs:
       formula:
@@ -756,6 +828,7 @@ operations:
         required: no
         default: count
         type: character
+    file: R/ct_chemical_count_by_msready_formula.R
     helper: generic_request
     request:
       arguments:
@@ -773,6 +846,17 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get chemical count by MS-ready formula
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        formula: 'Chemical formula. Type: string'
+        projection: 'Optional parameter (default: count)'
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
   POST /chemical/detail/search/by-dtxcid/:
     inputs:
       query:
@@ -781,6 +865,7 @@ operations:
         required: no
         default: chemicaldetailall
         type: character
+    file: R/ct_chemical_detail_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -798,6 +883,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/detail/search/by-dtxcid/{dtxcid}:
     inputs:
       dtxcid:
@@ -806,6 +892,7 @@ operations:
         required: no
         default: chemicaldetailall
         type: character
+    file: R/ct_chemical_detail_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -823,6 +910,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /chemical/detail/search/by-dtxsid/:
     inputs:
       query:
@@ -831,6 +919,7 @@ operations:
         required: no
         default: chemicaldetailall
         type: character
+    file: R/ct_chemical_detail_search.R
     helper: generic_request
     request:
       arguments:
@@ -848,6 +937,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/detail/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -856,6 +946,7 @@ operations:
         required: no
         default: chemicaldetailall
         type: character
+    file: R/ct_chemical_detail_search.R
     helper: generic_request
     request:
       arguments:
@@ -873,10 +964,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/detail/search/by-smiles/:
     inputs:
       smiles:
         required: yes
+    file: R/ct_chemical_detail_search_by_smiles.R
     helper: generic_request
     request:
       arguments:
@@ -890,10 +983,12 @@ operations:
           from:
           - params
           - smiles
+    implementation: existing
   POST /chemical/extra-data/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_extra_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -907,10 +1002,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get data for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /chemical/extra-data/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_extra_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -924,10 +1030,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID101296374
   POST /chemical/fate/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_fate_search.R
     helper: generic_request
     request:
       arguments:
@@ -941,10 +1058,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /chemical/fate/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_fate_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -958,12 +1077,14 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/fate/summary/experimental/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_fate_experimental_search.R
     helper: generic_request
     request:
       arguments:
@@ -981,12 +1102,14 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/fate/summary/predicted/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_fate_predicted_search.R
     helper: generic_request
     request:
       arguments:
@@ -1004,12 +1127,14 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/fate/summary/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_fate_summary_search.R
     helper: generic_request
     request:
       arguments:
@@ -1027,10 +1152,12 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_fate_summary_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -1044,10 +1171,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/file/image/search/by-dtxcid/{dtxcid}:
     inputs:
       dtxcid:
         required: yes
+    file: R/ct_chemical_file_image_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -1063,10 +1192,21 @@ operations:
           value: 1.0
         content_type:
           value: image/png
+    docs:
+      title: Get structure image by DTXCID
+      return: Returns image data (raw bytes or magick image object)
+      lifecycle: experimental
+      parameters:
+        dtxcid: 'DSSTox Compound Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID505
   GET /chemical/file/image/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_file_image_search.R
     helper: generic_request
     request:
       arguments:
@@ -1082,10 +1222,21 @@ operations:
           value: 1.0
         content_type:
           value: image/png
+    docs:
+      title: Get structure image by DTXSID
+      return: Returns image data (raw bytes or magick image object)
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /chemical/file/image/search/by-gsid/{gsid}:
     inputs:
       gsid:
         required: yes
+    file: R/ct_chemical_file_image_search_by_gsid.R
     helper: generic_request
     request:
       arguments:
@@ -1101,10 +1252,21 @@ operations:
           value: 1.0
         content_type:
           value: image/png
+    docs:
+      title: Get structure image by GSID
+      return: Returns image data (raw bytes or magick image object)
+      lifecycle: experimental
+      parameters:
+        gsid: 'Generic Substance Id. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - gsid: '20182'
   GET /chemical/file/mol/search/by-dtxcid/{dtxcid}:
     inputs:
       dtxcid:
         required: yes
+    file: R/ct_chemical_file_mol_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -1118,10 +1280,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get mol file by DTXCID
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxcid: 'DSSTox Compound Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID505
   GET /chemical/file/mol/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_file_mol_search.R
     helper: generic_request
     request:
       arguments:
@@ -1135,6 +1308,16 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get mol file by DTXSID
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /chemical/list/all:
     inputs:
       projection:
@@ -1149,6 +1332,7 @@ operations:
         required: no
         default: no
         type: logical
+    file: R/ct_chemical_list_all.R
     helper: generic_request
     request:
       arguments:
@@ -1162,10 +1346,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/list/chemicals/search/by-listname/{list}:
     inputs:
       list:
         required: yes
+    file: R/ct_chemical_list_chemicals_search_by_listname.R
     helper: generic_request
     request:
       arguments:
@@ -1179,6 +1365,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/list/chemicals/search/contain/{list}/{word}:
     inputs:
       list:
@@ -1187,6 +1374,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_list_chemicals_search_contain.R
     helper: generic_request
     request:
       arguments:
@@ -1206,6 +1394,7 @@ operations:
               from:
               - params
               - word
+    implementation: existing
   GET /chemical/list/chemicals/search/equal/{list}/{word}:
     inputs:
       list:
@@ -1214,6 +1403,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_list_chemicals_search_equal.R
     helper: generic_request
     request:
       arguments:
@@ -1233,6 +1423,7 @@ operations:
               from:
               - params
               - word
+    implementation: existing
   GET /chemical/list/chemicals/search/start-with/{list}/{word}:
     inputs:
       list:
@@ -1241,6 +1432,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_list_chemicals_search_start_with.R
     helper: generic_request
     request:
       arguments:
@@ -1260,6 +1452,7 @@ operations:
               from:
               - params
               - word
+    implementation: existing
   GET /chemical/list/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -1268,6 +1461,7 @@ operations:
         required: no
         default: chemicallistall
         type: character
+    file: R/ct_chemical_list_search.R
     helper: generic_request
     request:
       arguments:
@@ -1285,6 +1479,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/list/search/by-name/{listName}:
     inputs:
       listName:
@@ -1297,6 +1492,7 @@ operations:
         required: no
         default: no
         type: logical
+    file: R/ct_chemical_list_search_by_name.R
     helper: generic_request
     request:
       arguments:
@@ -1314,6 +1510,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/list/search/by-type/{type}:
     inputs:
       type:
@@ -1322,6 +1519,7 @@ operations:
         required: no
         default: chemicallistall
         type: character
+    file: R/ct_chemical_list_search_by_type.R
     helper: generic_request
     request:
       arguments:
@@ -1339,8 +1537,10 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/list/type:
     inputs: {}
+    file: R/ct_chemical_list_type.R
     helper: generic_request
     request:
       arguments:
@@ -1350,10 +1550,12 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    implementation: existing
   POST /chemical/msready/search/by-dtxcid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_msready_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -1367,10 +1569,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get MS-ready chemicals for a batch of DTXCIDs
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /chemical/msready/search/by-dtxcid/{dtxcid}:
     inputs:
       dtxcid:
         required: yes
+    file: R/ct_chemical_msready_search_by_dtxcid.R
     helper: generic_request
     request:
       arguments:
@@ -1384,10 +1597,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get MS-ready chemicals by DTXCID
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        dtxcid: 'DSSTox Compound Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxcid: DTXCID30182
   GET /chemical/msready/search/by-formula/{formula}:
     inputs:
       formula:
         required: yes
+    file: R/ct_chemical_msready_search_by_formula.R
     helper: generic_request
     request:
       arguments:
@@ -1401,12 +1625,23 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get MS-ready chemicals by formula
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        formula: 'Chemical formula. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - formula: C16H24N2O5S
   POST /chemical/msready/search/by-mass/:
     inputs:
       error:
         required: yes
       masses:
         required: yes
+    file: R/ct_chemical_msready_search_by_mass.R
     helper: generic_request
     request:
       arguments:
@@ -1428,6 +1663,17 @@ operations:
               from:
               - params
               - masses
+    docs:
+      title: Get MS-ready chemicals for a batch of mass ranges
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        error: Required parameter
+        masses: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - error: DTXSID1024122
   GET /chemical/msready/search/by-mass/{start}/{end}:
     inputs:
       start:
@@ -1436,6 +1682,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_msready_search_by_mass.R
     helper: generic_request
     request:
       arguments:
@@ -1455,8 +1702,20 @@ operations:
               from:
               - params
               - end
+    docs:
+      title: Get MS-ready chemicals using mass range
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        start: 'Starting mass value. Type: number'
+        end: 'Ending mass value. Type: number'
+      tags:
+        apiStage: public
+      examples:
+      - start: '200.9'
   GET /chemical/property/experimental/name:
     inputs: {}
+    file: R/ct_chemical_property_experimental_name.R
     helper: generic_request
     request:
       arguments:
@@ -1466,10 +1725,12 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    implementation: existing
   POST /chemical/property/experimental/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_property_experimental_search.R
     helper: generic_request
     request:
       arguments:
@@ -1483,10 +1744,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_property_experimental_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -1500,6 +1763,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}:
     inputs:
       propertyName:
@@ -1512,6 +1776,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_property_experimental_search_by_range.R
     helper: generic_request
     request:
       arguments:
@@ -1535,8 +1800,10 @@ operations:
               from:
               - params
               - end
+    implementation: existing
   GET /chemical/property/predicted/name:
     inputs: {}
+    file: R/ct_chemical_property_predicted_name.R
     helper: generic_request
     request:
       arguments:
@@ -1546,10 +1813,12 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    implementation: existing
   POST /chemical/property/predicted/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_property_predicted_search.R
     helper: generic_request
     request:
       arguments:
@@ -1563,10 +1832,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_property_predicted_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -1580,6 +1851,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}:
     inputs:
       propertyId:
@@ -1592,6 +1864,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_property_predicted_search_by_range.R
     helper: generic_request
     request:
       arguments:
@@ -1615,12 +1888,14 @@ operations:
               from:
               - params
               - end
+    implementation: existing
   GET /chemical/property/summary/experimental/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_property_summary_experimental_search.R
     helper: generic_request
     request:
       arguments:
@@ -1638,12 +1913,14 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/property/summary/predicted/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_property_summary_predicted_search.R
     helper: generic_request
     request:
       arguments:
@@ -1661,12 +1938,14 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/property/summary/search/:
     inputs:
       dtxsid:
         required: yes
       propName:
         required: yes
+    file: R/ct_chemical_property_summary_search.R
     helper: generic_request
     request:
       arguments:
@@ -1684,10 +1963,12 @@ operations:
           from:
           - params
           - propName
+    implementation: existing
   GET /chemical/property/summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_chemical_property_summary_search_by_dtxsid.R
     helper: generic_request
     request:
       arguments:
@@ -1701,10 +1982,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /chemical/search/by-exact-formula/{formula}:
     inputs:
       formula:
         required: yes
+    file: R/ct_chemical_search_by_exact_formula.R
     helper: generic_request
     request:
       arguments:
@@ -1718,10 +2001,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get chemicals by exact formula
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        formula: 'Chemical formula. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
   POST /chemical/search/by-msready-formula/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_search_by_msready_formula.R
     helper: generic_request
     request:
       arguments:
@@ -1735,10 +2029,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get chemicals for a batch of  MS-ready formulas
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /chemical/search/by-msready-formula/{formula}:
     inputs:
       formula:
         required: yes
+    file: R/ct_chemical_search_by_msready_formula.R
     helper: generic_request
     request:
       arguments:
@@ -1752,6 +2057,16 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get chemicals by MS-ready formula
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        formula: 'Chemical formula. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - formula: C15H16O2
   GET /chemical/search/contain/{word}:
     inputs:
       word:
@@ -1764,6 +2079,7 @@ operations:
         required: no
         default: chemicalsearchall
         type: character
+    file: R/ct_chemical_search_contain.R
     helper: generic_request
     request:
       arguments:
@@ -1785,10 +2101,25 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get chemicals by substring value
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        word: 'Substring of word to seach for. Values supplied as the ''word'' parameter
+          can include chemical name, DTXSID, DTXCID, CAS Registry Number (CASRN),
+          or InChIKey.. Type: string'
+        top: 'Optional parameter (default: 0)'
+        projection: 'Optional parameter (default: chemicalsearchall)'
+      tags:
+        apiStage: public
+      examples:
+      - word: DTXSID7020182
   POST /chemical/search/equal/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_search_equal.R
     helper: generic_request
     request:
       arguments:
@@ -1804,6 +2135,7 @@ operations:
           callback: batch_limit_1000
         body_type:
           value: raw_text
+    implementation: existing
   GET /chemical/search/equal/{word}:
     inputs:
       word:
@@ -1812,6 +2144,7 @@ operations:
         required: no
         default: chemicalsearchall
         type: character
+    file: R/ct_chemical_search_equal.R
     helper: generic_request
     request:
       arguments:
@@ -1829,6 +2162,7 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   GET /chemical/search/start-with/{word}:
     inputs:
       word:
@@ -1837,6 +2171,7 @@ operations:
         required: no
         default: 500.0
         type: numeric
+    file: R/ct_chemical_search_start_with.R
     helper: generic_request
     request:
       arguments:
@@ -1854,10 +2189,24 @@ operations:
           from:
           - params
           - top
+    docs:
+      title: Get chemicals by starting value
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        word: 'Starting string of word to search for. Values supplied as the ''word''
+          parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number
+          (CASRN), or InChIKey.. Type: string'
+        top: 'Optional parameter (default: 500)'
+      tags:
+        apiStage: public
+      examples:
+      - word: DTXSID7020182
   POST /chemical/synonym/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_chemical_synonym_search.R
     helper: generic_request
     request:
       arguments:
@@ -1871,6 +2220,16 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get synonyms for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /chemical/synonym/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -1879,6 +2238,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_chemical_synonym_search.R
     helper: generic_request
     request:
       arguments:
@@ -1896,10 +2256,23 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get synonyms by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Projections available include: ccd-synonyms and chemical-synonym-all.
+          By default, chemical-synonym-all will be returned.'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_ccd_chem_weight_fractions_search.R
     helper: generic_request
     request:
       arguments:
@@ -1913,10 +2286,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Chemical Weight Fractions data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_ccd_functional_use_search.R
     helper: generic_request
     request:
       arguments:
@@ -1930,10 +2314,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Reported Functional Use data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_ccd_keywords_search.R
     helper: generic_request
     request:
       arguments:
@@ -1947,6 +2342,16 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get General Use Keywords data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -1955,6 +2360,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_exposure_ccd_monitoring_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -1972,10 +2378,23 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get Biomonitoring data by DTXSID with CCD projection
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies if projection is used. Option: ccd-biomonitoring, If
+          omitted, the default CCDBiomonitoring data is returned.'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_ccd_production_volume_search.R
     helper: generic_request
     request:
       arguments:
@@ -1989,10 +2408,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Production Volume data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_ccd_puc_search.R
     helper: generic_request
     request:
       arguments:
@@ -2006,8 +2436,19 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Product Use Category data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/functional-use/category:
     inputs: {}
+    file: R/ct_exposure_functional_use_category.R
     helper: generic_request
     request:
       arguments:
@@ -2017,10 +2458,12 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    implementation: existing
   GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_functional_use_probability_search.R
     helper: generic_request
     request:
       arguments:
@@ -2034,10 +2477,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /exposure/functional-use/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_functional_use_search.R
     helper: generic_request
     request:
       arguments:
@@ -2051,10 +2496,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /exposure/functional-use/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_functional_use_search.R
     helper: generic_request
     request:
       arguments:
@@ -2068,10 +2515,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /exposure/httk/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_httk_search.R
     helper: generic_request
     request:
       arguments:
@@ -2085,10 +2534,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get httk data for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /exposure/httk/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_httk_search.R
     helper: generic_request
     request:
       arguments:
@@ -2102,10 +2562,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get httk data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   POST /exposure/list-presence/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_list_presence_search.R
     helper: generic_request
     request:
       arguments:
@@ -2119,10 +2590,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get List Presence data for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /exposure/list-presence/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_list_presence_search.R
     helper: generic_request
     request:
       arguments:
@@ -2136,8 +2618,19 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get List Presence data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /exposure/list-presence/tags:
     inputs: {}
+    file: R/ct_exposure_list_presence_tags.R
     helper: generic_request
     request:
       arguments:
@@ -2147,10 +2640,19 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    docs:
+      title: Get List Presence Tags
+      return: Returns a scalar value
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_mmdb_aggregate.R
     helper: generic_request
     request:
       arguments:
@@ -2164,6 +2666,16 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Aggregate data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /exposure/mmdb/aggregate/by-medium:
     inputs:
       medium:
@@ -2180,6 +2692,7 @@ operations:
         required: no
         default: 100.0
         type: numeric
+    file: R/ct_exposure_mmdb_aggregate_by_medium.R
     helper: generic_request
     request:
       arguments:
@@ -2207,8 +2720,23 @@ operations:
           - max_pages
         pagination_strategy:
           value: page_number
+    docs:
+      title: Get Aggregate data by Medium
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        medium: harmonized medium
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
   GET /exposure/mmdb/mediums:
     inputs: {}
+    file: R/ct_exposure_mmdb_mediums.R
     helper: generic_request
     request:
       arguments:
@@ -2218,10 +2746,19 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    docs:
+      title: Get all Media options
+      return: Returns a scalar value
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_mmdb_single_sample.R
     helper: generic_request
     request:
       arguments:
@@ -2235,6 +2772,16 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get Single Sample data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
   GET /exposure/mmdb/single-sample/by-medium:
     inputs:
       medium:
@@ -2251,6 +2798,7 @@ operations:
         required: no
         default: 100.0
         type: numeric
+    file: R/ct_exposure_mmdb_single_sample_by_medium.R
     helper: generic_request
     request:
       arguments:
@@ -2278,8 +2826,23 @@ operations:
           - max_pages
         pagination_strategy:
           value: page_number
+    docs:
+      title: Get Single Sample data by Medium
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        medium: harmonized medium
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      tags:
+        apiStage: public
+      examples:
+      - medium: surface water
   GET /exposure/product-data/puc:
     inputs: {}
+    file: R/ct_exposure_product_data_puc.R
     helper: generic_request
     request:
       arguments:
@@ -2289,10 +2852,19 @@ operations:
           value: GET
         batch_limit:
           value: 0.0
+    docs:
+      title: Get all product use categories
+      return: Returns a scalar value
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   POST /exposure/product-data/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_product_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -2306,10 +2878,21 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get product data for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /exposure/product-data/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_exposure_product_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -2323,10 +2906,21 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    docs:
+      title: Get product data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   POST /exposure/seem/demographic/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_seem_demographic_search.R
     helper: generic_request
     request:
       arguments:
@@ -2340,6 +2934,7 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -2348,6 +2943,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_exposure_seem_demographic_search.R
     helper: generic_request
     request:
       arguments:
@@ -2365,10 +2961,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /exposure/seem/general/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_exposure_seem_general_search.R
     helper: generic_request
     request:
       arguments:
@@ -2382,6 +2980,16 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    docs:
+      title: Get SEEM General Exposure Prediction data for a batch of DTXSIDs
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      tags:
+        apiStage: public
+      examples:
+      - query: DTXSID1024122
   GET /exposure/seem/general/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -2390,6 +2998,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_exposure_seem_general_search.R
     helper: generic_request
     request:
       arguments:
@@ -2407,6 +3016,17 @@ operations:
           from:
           - params
           - projection
+    docs:
+      title: Get SEEM General Exposure Prediction data by DTXSID
+      return: Returns a scalar value
+      lifecycle: experimental
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies whether to use projection. Optional: ccd-general.'
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID0020232
   GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -2415,6 +3035,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_hazard_adme_ivive_search.R
     helper: generic_request
     request:
       arguments:
@@ -2432,10 +3053,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /hazard/cancer-summary/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_hazard_cancer_search.R
     helper: generic_request
     request:
       arguments:
@@ -2449,10 +3072,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_cancer_search.R
     helper: generic_request
     request:
       arguments:
@@ -2466,10 +3091,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /hazard/genetox/details/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_hazard_genetox_details_search.R
     helper: generic_request
     request:
       arguments:
@@ -2483,6 +3110,7 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
@@ -2491,6 +3119,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/ct_hazard_genetox_details_search.R
     helper: generic_request
     request:
       arguments:
@@ -2508,10 +3137,12 @@ operations:
           from:
           - params
           - projection
+    implementation: existing
   POST /hazard/genetox/summary/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_hazard_genetox_search.R
     helper: generic_request
     request:
       arguments:
@@ -2525,10 +3156,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_genetox_search.R
     helper: generic_request
     request:
       arguments:
@@ -2542,10 +3175,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/hawc/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_hawc_search.R
     helper: generic_request
     request:
       arguments:
@@ -2559,10 +3194,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/iris/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_iris_search.R
     helper: generic_request
     request:
       arguments:
@@ -2576,10 +3213,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/pprtv/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_pprtv_search.R
     helper: generic_request
     request:
       arguments:
@@ -2593,10 +3232,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   POST /hazard/skin-eye/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_hazard_skin_eye_search.R
     helper: generic_request
     request:
       arguments:
@@ -2610,10 +3251,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_skin_eye_search.R
     helper: generic_request
     request:
       arguments:
@@ -2627,10 +3270,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxref_data_search.R
     helper: generic_request
     request:
       arguments:
@@ -2644,10 +3289,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/data/search/by-study-id/{studyId}:
     inputs:
       studyId:
         required: yes
+    file: R/ct_hazard_toxref_data_search_by_study_id.R
     helper: generic_request
     request:
       arguments:
@@ -2661,6 +3308,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/data/search/by-study-type/{studyType}:
     inputs:
       studyType:
@@ -2673,6 +3321,7 @@ operations:
         required: no
         default: yes
         type: logical
+    file: R/ct_hazard_toxref_data_search_by_study_type.R
     helper: generic_request
     request:
       arguments:
@@ -2698,10 +3347,12 @@ operations:
           value: 100.0
         pagination_strategy:
           value: page_number
+    implementation: existing
   GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxref_effects_search.R
     helper: generic_request
     request:
       arguments:
@@ -2715,10 +3366,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/effects/search/by-study-id/{studyId}:
     inputs:
       studyId:
         required: yes
+    file: R/ct_hazard_toxref_effects_search_by_study_id.R
     helper: generic_request
     request:
       arguments:
@@ -2732,6 +3385,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/effects/search/by-study-type/{studyType}:
     inputs:
       studyType:
@@ -2744,6 +3398,7 @@ operations:
         required: no
         default: yes
         type: logical
+    file: R/ct_hazard_toxref_effects_search_by_study_type.R
     helper: generic_request
     request:
       arguments:
@@ -2769,10 +3424,12 @@ operations:
           value: 100.0
         pagination_strategy:
           value: page_number
+    implementation: existing
   GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxref_observations_search.R
     helper: generic_request
     request:
       arguments:
@@ -2786,10 +3443,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/observations/search/by-study-id/{studyId}:
     inputs:
       studyId:
         required: yes
+    file: R/ct_hazard_toxref_observations_search_by_study_id.R
     helper: generic_request
     request:
       arguments:
@@ -2803,6 +3462,7 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/observations/search/by-study-type/{studyType}:
     inputs:
       studyType:
@@ -2815,6 +3475,7 @@ operations:
         required: no
         default: yes
         type: logical
+    file: R/ct_hazard_toxref_observations_search_by_study_type.R
     helper: generic_request
     request:
       arguments:
@@ -2840,10 +3501,12 @@ operations:
           value: 100.0
         pagination_strategy:
           value: page_number
+    implementation: existing
   GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxref_search.R
     helper: generic_request
     request:
       arguments:
@@ -2857,10 +3520,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/summary/search/by-study-id/{studyId}:
     inputs:
       studyId:
         required: yes
+    file: R/ct_hazard_toxref_search_by_study_id.R
     helper: generic_request
     request:
       arguments:
@@ -2874,10 +3539,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxref/summary/search/by-study-type/{studyType}:
     inputs:
       studyType:
         required: yes
+    file: R/ct_hazard_toxref_search_by_study_type.R
     helper: generic_request
     request:
       arguments:
@@ -2891,12 +3558,14 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxval/search/by-category/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
       category:
         required: yes
+    file: R/ct_hazard_toxval_search_by_category.R
     helper: generic_request
     request:
       arguments:
@@ -2914,10 +3583,12 @@ operations:
           from:
           - params
           - category
+    implementation: existing
   POST /hazard/toxval/search/by-dtxsid/:
     inputs:
       query:
         required: yes
+    file: R/ct_hazard_toxval_search.R
     helper: generic_request
     request:
       arguments:
@@ -2931,10 +3602,12 @@ operations:
           value: POST
         batch_limit:
           callback: batch_limit_100
+    implementation: existing
   GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxval_search.R
     helper: generic_request
     request:
       arguments:
@@ -2948,10 +3621,12 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
   GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
     inputs:
       dtxsid:
         required: yes
+    file: R/ct_hazard_toxval_supercategory_search.R
     helper: generic_request
     request:
       arguments:
@@ -2965,3 +3640,6 @@ operations:
           value: GET
         batch_limit:
           value: 1.0
+    implementation: existing
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/ctx.rds

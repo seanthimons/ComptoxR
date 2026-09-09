@@ -30,6 +30,7 @@ names:
 operations:
   GET /api/ecosar/dye:
     inputs: {}
+    file: R/epi_ecosar_dye.R
     helper: generic_request
     request:
       arguments:
@@ -45,8 +46,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate a cationic dye
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/polymer/amphoteric:
     inputs: {}
+    file: R/epi_ecosar_polymer_amphoteric.R
     helper: generic_request
     request:
       arguments:
@@ -62,8 +72,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate an amphoteric polymer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/polymer/anionic:
     inputs: {}
+    file: R/epi_ecosar_polymer_anionic.R
     helper: generic_request
     request:
       arguments:
@@ -79,8 +98,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate an anionic polymer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/polymer/nonionic:
     inputs: {}
+    file: R/epi_ecosar_polymer_nonionic.R
     helper: generic_request
     request:
       arguments:
@@ -96,8 +124,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate a nonionic polymer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/polymer/polycationic:
     inputs: {}
+    file: R/epi_ecosar_polymer_polycationic.R
     helper: generic_request
     request:
       arguments:
@@ -113,8 +150,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate a polycationic polymer
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/surfactant/amphoteric:
     inputs: {}
+    file: R/epi_ecosar_surfactant_amphoteric.R
     helper: generic_request
     request:
       arguments:
@@ -130,8 +176,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate an amphoteric surfactant
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/surfactant/anionic:
     inputs: {}
+    file: R/epi_ecosar_surfactant_anionic.R
     helper: generic_request
     request:
       arguments:
@@ -147,8 +202,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate an anionic surfactant
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/surfactant/cationic:
     inputs: {}
+    file: R/epi_ecosar_surfactant_cationic.R
     helper: generic_request
     request:
       arguments:
@@ -164,8 +228,17 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate a cationic surfactant
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/ecosar/surfactant/nonionic:
     inputs: {}
+    file: R/epi_ecosar_surfactant_nonionic.R
     helper: generic_request
     request:
       arguments:
@@ -181,6 +254,14 @@ operations:
           value: no
         tidy:
           value: no
+    docs:
+      title: Estimate a nonionic surfactant
+      return: Returns a tibble with results
+      lifecycle: experimental
+      tags:
+        apiStage: public
+      examples:
+      - {}
   GET /api/search:
     inputs:
       query:
@@ -189,6 +270,7 @@ operations:
         required: no
         default: 20.0
         type: numeric
+    file: R/epi_search.R
     helper: generic_request
     request:
       arguments:
@@ -214,6 +296,17 @@ operations:
               from:
               - params
               - limit
+    docs:
+      title: Search embedded experimental data
+      return: Returns a tibble with results (array of objects)
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        limit: 'Optional parameter (default: 20)'
+      tags:
+        apiStage: public
+      examples:
+      - query: benzene
   GET /api/submit:
     inputs:
       smiles:
@@ -508,6 +601,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/epi_submit.R
     helper: generic_request
     request:
       arguments:
@@ -815,6 +909,105 @@ operations:
           from:
           - params
           - polymerType
+    docs:
+      title: Estimate one chemical
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES; required when cas is absent.
+        cas: CAS Registry Number; required when smiles is absent.
+        modules: 'Comma-separated canonical public module names; defaults to all.
+          Array order does not control scientific precedence: selected modules run
+          in canonical dependency order, with waterSolubilityProvider controlling
+          the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for
+          CLI parity but public names are the durable HTTP contract.'
+        chemicalName: Optional parameter
+        logKow: Optional parameter
+        molecularWeight: Optional resolved molecular weight in g/mol. Together with
+          positive vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL
+          candidate; Bond and Group require only SMILES.
+        waterSolubilityMgPerL: Optional resolved water solubility in mg/L. A positive
+          VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does
+          not prevent Bond or Group estimation.
+        waterSolubility: Optional parameter
+        waterSolubilityProvider: 'Selects the source used for downstream resolved
+          water solubility. Both WSKOW and WaterNT independent results remain visible
+          when all modules run.. Options: wskow, waternt (default: wskow)'
+        vaporPressureMmHg: Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW
+          triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent
+          Bond or Group estimation.
+        subcooledVaporPressureMmHg: Optional parameter
+        henryAtmM3PerMol: Optional parameter
+        logKoa: Optional parameter
+        koc: Optional parameter
+        meltingPointC: Optional parameter
+        boilingPointC: Optional parameter
+        vaporPressureTemperatureC: 'Compatibility field for the maintained fixed-temperature
+          MPBPVP calculation. Only 25 °C is accepted.. Options: 25 (default: 25)'
+        aopRateConstant: Optional parameter
+        biowinScore: Optional parameter
+        biowin3: Optional parameter
+        biowin5: Optional parameter
+        removeMetals: 'Whether BIOWIN removes selected metal and salt counterions;
+          model default is true. (default: TRUE)'
+        tspUgPerM3: 'Total suspended particulate matter in ug/m3; AEROWIN default
+          is 80. (default: 80)'
+        theta: 'Combined Junge-Pankow cTheta in Pa (not particle surface-area Theta);
+          AEROWIN default is 0.00010836 Pa. (default: 0.00010836)'
+        waterConcentrationMgPerCm3: Optional parameter
+        waterConcentrationMgPerLiter: Optional parameter
+        eventFrequencyPerDay: Optional parameter
+        exposureDurationYears: Optional parameter
+        exposureFrequencyDaysPerYear: Optional parameter
+        skinSurfaceAreaCm2: Optional parameter
+        bodyWeightKg: Optional parameter
+        averagingTimeDays: Optional parameter
+        fractionAbsorbed: Optional parameter
+        eventDurationHours: Optional parameter
+        userKpCmPerHour: Optional parameter
+        halfLifeHoursPrimaryClarifier: Optional parameter
+        halfLifeHoursAerationVessel: Optional parameter
+        halfLifeHoursSettlingTank: Optional parameter
+        halfLifeAir: Optional parameter
+        halfLifeWater: Optional parameter
+        halfLifeSoil: Optional parameter
+        halfLifeSediment: Optional parameter
+        emissionRateAir: Optional parameter
+        emissionRateWater: Optional parameter
+        emissionRateSoil: Optional parameter
+        emissionRateSediment: Optional parameter
+        advectionTimeAir: Optional parameter
+        advectionTimeWater: Optional parameter
+        advectionTimeSoil: Optional parameter
+        advectionTimeSediment: Optional parameter
+        ohConcentrationE6OhPerCm3: Optional parameter
+        ozoneConcentrationE11MolPerCm3: Optional parameter
+        daylightHours: 'Atmospheric daylight period in hours; AOPWIN default is 12..
+          Options: 12, 24 (default: 12)'
+        riverWindMPerSec: Optional parameter
+        riverCurrentMPerSec: Optional parameter
+        riverDepthMeters: Optional parameter
+        lakeWindMPerSec: Optional parameter
+        lakeCurrentMPerSec: Optional parameter
+        lakeDepthMeters: Optional parameter
+        carbonChainLength: Optional parameter
+        mainCarbons: Optional parameter
+        branchedCarbons: Optional parameter
+        branches: Optional parameter
+        propoxyGroups: Optional parameter
+        ethoxylate: Optional parameter
+        amineNitrogens: Optional parameter
+        cationAnionRatio: Optional parameter
+        mw500Percentage: Optional parameter
+        mw1000Percentage: Optional parameter
+        averageMolecularWeight: Optional parameter
+        useSmiles: Optional parameter
+        solubilityType: Optional parameter
+        polymerType: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - smiles: CCO
   POST /api/submit/batch:
     inputs:
       modules:
@@ -1107,6 +1300,7 @@ operations:
         required: no
         default: ~
         type: object
+    file: R/epi_submit_batch.R
     helper: generic_request
     request:
       arguments:
@@ -1417,3 +1611,95 @@ operations:
           value: epi_burl
         auth:
           value: no
+    docs:
+      title: Estimate an ordered batch of chemicals
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        modules: Selected calculations. Items run in canonical dependency order rather
+          than submitted array order; use waterSolubilityProvider for the shared water-solubility
+          choice.
+        advectionTimeAir: Optional parameter
+        advectionTimeSediment: Optional parameter
+        advectionTimeSoil: Optional parameter
+        advectionTimeWater: Optional parameter
+        amineNitrogens: Optional parameter
+        aopRateConstant: Optional parameter
+        averageMolecularWeight: Optional parameter
+        averagingTimeDays: Optional parameter
+        biowin3: Optional parameter
+        biowin5: Optional parameter
+        biowinScore: Optional parameter
+        bodyWeightKg: Optional parameter
+        boilingPointC: Optional parameter
+        branchedCarbons: Optional parameter
+        branches: Optional parameter
+        carbonChainLength: Optional parameter
+        cas: CAS Registry Number. Only a CAS-identified batch item can resolve experimental
+          results; CAS takes precedence when SMILES is also supplied.
+        cationAnionRatio: Optional parameter
+        chemicalName: Optional parameter
+        daylightHours: Optional parameter
+        emissionRateAir: Optional parameter
+        emissionRateSediment: Optional parameter
+        emissionRateSoil: Optional parameter
+        emissionRateWater: Optional parameter
+        ethoxylate: Optional parameter
+        eventDurationHours: Optional parameter
+        eventFrequencyPerDay: Optional parameter
+        exposureDurationYears: Optional parameter
+        exposureFrequencyDaysPerYear: Optional parameter
+        fractionAbsorbed: Optional parameter
+        halfLifeAir: Optional parameter
+        halfLifeHoursAerationVessel: Optional parameter
+        halfLifeHoursPrimaryClarifier: Optional parameter
+        halfLifeHoursSettlingTank: Optional parameter
+        halfLifeSediment: Optional parameter
+        halfLifeSoil: Optional parameter
+        halfLifeWater: Optional parameter
+        henryAtmM3PerMol: Optional parameter
+        koc: Optional parameter
+        lakeCurrentMPerSec: Optional parameter
+        lakeDepthMeters: Optional parameter
+        lakeWindMPerSec: Optional parameter
+        logKoa: Optional parameter
+        logKow: Optional parameter
+        mainCarbons: Optional parameter
+        meltingPointC: Optional parameter
+        molecularWeight: Optional resolved molecular weight. Part of the complete
+          positive VP/WSOL/MW triplet that enables the HENRYWIN VP/WSOL candidate.
+        mw1000Percentage: Optional parameter
+        mw500Percentage: Optional parameter
+        ohConcentrationE6OhPerCm3: Optional parameter
+        ozoneConcentrationE11MolPerCm3: Optional parameter
+        polymerType: Optional parameter
+        propoxyGroups: Optional parameter
+        removeMetals: Optional parameter
+        riverCurrentMPerSec: Optional parameter
+        riverDepthMeters: Optional parameter
+        riverWindMPerSec: Optional parameter
+        skinSurfaceAreaCm2: Optional parameter
+        smiles: Raw structure input. A SMILES-only batch item is estimated without
+          experimental results.
+        solubilityType: Optional parameter
+        subcooledVaporPressureMmHg: Optional parameter
+        theta: Optional parameter
+        tspUgPerM3: Optional parameter
+        useSmiles: Optional parameter
+        userKpCmPerHour: Optional parameter
+        vaporPressureMmHg: Optional resolved vapor pressure in mmHg. Its omission
+          leaves structural HENRYWIN candidates available.
+        vaporPressureTemperatureC: 'Fixed MPBPVP calculation temperature in °C; values
+          other than 25 are rejected.. Options: 25 (default: 25)'
+        waterConcentrationMgPerCm3: Optional parameter
+        waterConcentrationMgPerLiter: Optional parameter
+        waterSolubility: Optional parameter
+        waterSolubilityMgPerL: Optional resolved water solubility in mg/L. Its omission
+          leaves structural HENRYWIN candidates available.
+        waterSolubilityProvider: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - modules: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/epi.rds

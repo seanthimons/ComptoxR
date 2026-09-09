@@ -17,4 +17,361 @@ names:
   GET /api/search/gethazard: chemi_search_gethazard
   GET /api/search/similar: chemi_search_similar
   GET /api/search/substructure: chemi_search_substructure
-
+operations:
+  GET /api/search/exact:
+    inputs:
+      smiles:
+        required: yes
+      exportSmiles:
+        required: no
+        default: ~
+        type: object
+      exportMol:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_search_exact.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: search/exact
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+    docs:
+      title: Search Exact
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  GET /api/search/gethazard:
+    inputs:
+      sid:
+        required: yes
+    file: R/chemi_search_gethazard.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: search/gethazard
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            sid:
+              from:
+              - params
+              - sid
+    docs:
+      title: Search Gethazard
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        sid: Required parameter
+      tags:
+        apiStage: public
+      examples:
+      - sid: DTXSID7020182
+  GET /api/search/similar:
+    inputs:
+      smiles:
+        required: no
+        default: ~
+        type: object
+      dtxsid:
+        required: no
+        default: ~
+        type: object
+      exportSmiles:
+        required: no
+        default: ~
+        type: object
+      exportMol:
+        required: no
+        default: ~
+        type: object
+      min:
+        required: no
+        default: ~
+        type: object
+      max:
+        required: no
+        default: ~
+        type: object
+      similarityType:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_search_similar.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: search/similar
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+            min:
+              from:
+              - params
+              - min
+            max:
+              from:
+              - params
+              - max
+            similarityType:
+              from:
+              - params
+              - similarityType
+    docs:
+      title: Search Similar
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: Optional parameter
+        dtxsid: Optional parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+        min: Optional parameter
+        max: Optional parameter
+        similarityType: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  GET /api/search/substructure:
+    inputs:
+      smiles:
+        required: yes
+      exportSmiles:
+        required: no
+        default: ~
+        type: object
+      exportMol:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_search_substructure.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: search/substructure
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            exportSmiles:
+              from:
+              - params
+              - exportSmiles
+            exportMol:
+              from:
+              - params
+              - exportMol
+    docs:
+      title: Search Substructure
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        exportSmiles: Optional parameter
+        exportMol: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/search:
+    inputs:
+      query:
+        required: no
+        default: ~
+        type: object
+      search_type:
+        required: no
+        default:
+        - exact
+        - substructure
+        - similar
+        - mass
+        - hazard
+        - features
+        type: character
+      similarity_type:
+        required: no
+        default:
+        - tanimoto
+        - euclid
+        - tversky
+        type: character
+      min_similarity:
+        required: no
+        default: 0.84999999999999998
+        type: numeric
+      hazard_name:
+        required: no
+        default: ~
+        type: object
+      min_toxicity:
+        required: no
+        default:
+        - VH
+        - H
+        - M
+        - L
+        - A
+        type: character
+      min_authority:
+        required: no
+        default:
+        - auth
+        - screen
+        - qsar
+        type: character
+      mass_type:
+        required: no
+        default:
+        - mono
+        - mw
+        - abu
+        type: character
+      min_mass:
+        required: no
+        default: ~
+        type: object
+      max_mass:
+        required: no
+        default: ~
+        type: object
+      filter_features:
+        required: no
+        default: no
+        type: logical
+      feature_filters:
+        required: no
+        default: ~
+        type: object
+      element_include:
+        required: no
+        default: ~
+        type: object
+      element_exclude:
+        required: no
+        default: ~
+        type: object
+      exclude_all_others:
+        required: no
+        default: no
+        type: logical
+      limit:
+        required: no
+        default: 50.0
+        type: numeric
+      all_pages:
+        required: no
+        default: no
+        type: logical
+    file: R/chemi_search.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: search
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+        tidy:
+          value: no
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: offset_limit
+    implementation: existing
+    post_state: hook_state
+    post_on_skip: yes
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-search.rds

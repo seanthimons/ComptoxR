@@ -15,4 +15,161 @@ names:
   GET /api/opera: chemi_opera
   POST /api/opera: chemi_opera_bulk
   GET /api/opera/report: chemi_opera_report
-
+operations:
+  GET /api/opera:
+    inputs:
+      smiles:
+        required: yes
+      format:
+        required: no
+        default: json
+        type: character
+      standardize:
+        required: no
+        default: no
+        type: logical
+    file: R/chemi_opera.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: opera
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            format:
+              from:
+              - params
+              - format
+            standardize:
+              from:
+              - params
+              - standardize
+    docs:
+      title: Opera
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
+        standardize: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  GET /api/opera/report:
+    inputs:
+      dtxsid:
+        required: yes
+      modelId:
+        required: yes
+    file: R/chemi_opera_report.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: opera/report
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            modelId:
+              from:
+              - params
+              - modelId
+    docs:
+      title: Generate a standalone OPERA calculation report
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        dtxsid: DSSTox substance identifier
+        modelId: Dashboard model ID for the OPERA endpoint
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  POST /api/opera:
+    inputs:
+      cache_only:
+        required: no
+        default: no
+        type: logical
+      smiles:
+        required: no
+        default: ~
+        type: object
+      chemicals:
+        required: no
+        default: ~
+        type: object
+      format:
+        required: no
+        default: json
+        type: character
+      standardize:
+        required: no
+        default: no
+        type: logical
+    file: R/chemi_opera.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: opera
+        body:
+          callback: prediction_body
+        tidy:
+          value: no
+        format:
+          from:
+          - params
+          - format
+        standardize:
+          from:
+          - params
+          - standardize
+    docs:
+      title: Generate predictions for multiple molecules
+      return: Returns a list with result object
+      lifecycle: experimental
+      parameters:
+        cache_only: 'Return only predictions found in the response cache and list
+          uncached inputs without running OPERA. If the persistent cache is unavailable,
+          OPERA falls back to in-memory cache and reports misses. (default: FALSE)'
+        smiles: Optional parameter
+        chemicals: Optional parameter
+        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
+        standardize: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+      tags:
+        apiStage: public
+      examples:
+      - cache_only: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-opera.rds

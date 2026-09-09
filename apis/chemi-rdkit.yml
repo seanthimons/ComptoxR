@@ -14,4 +14,150 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/rdkit: chemi_rdkit
   POST /api/rdkit: chemi_rdkit_bulk
-
+operations:
+  GET /api/rdkit:
+    inputs:
+      smiles:
+        required: yes
+      type:
+        required: no
+        default: ~
+        type: object
+      radius:
+        required: no
+        default: ~
+        type: object
+      bits:
+        required: no
+        default: ~
+        type: object
+      output:
+        required: no
+        default:
+        - wide
+        - raw
+        type: character
+    file: R/chemi_rdkit.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        method:
+          from:
+          - hook_state
+          - request
+          - method
+        batch_limit:
+          value: 0.0
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+    post_state: hook_state
+    post_on_skip: yes
+    docs:
+      title: Generate descriptors for one molecule
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        type: Fingerprint type
+        radius: ECFP radius
+        bits: Number of fingerprint bits
+        output: 'Output contract: validated wide tibble or raw payload'
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/rdkit:
+    inputs:
+      chemicals:
+        required: yes
+      options:
+        required: no
+        default: ~
+        type: object
+      type:
+        required: no
+        default: ~
+        type: object
+      radius:
+        required: no
+        default: ~
+        type: object
+      bits:
+        required: no
+        default: ~
+        type: object
+      output:
+        required: no
+        default:
+        - wide
+        - raw
+        type: character
+    file: R/chemi_rdkit.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+    post_state: hook_state
+    post_on_skip: yes
+    docs:
+      title: Generate descriptors for multiple molecules
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        chemicals: Chemical structures or resolvable identifiers
+        options: Named list of additional dedicated RDKit options
+        type: Fingerprint type
+        radius: ECFP radius
+        bits: Number of fingerprint bits
+        output: 'Output contract: validated wide tibble or raw payload'
+      tags:
+        apiStage: public
+      examples:
+      - chemicals: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-rdkit.rds

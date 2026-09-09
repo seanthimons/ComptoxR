@@ -14,4 +14,103 @@ hook_config: inst/hook_config.yml
 names:
   GET /api/predictor_models/predict: chemi_predictor_models_predict
   POST /api/predictor_models/predict: chemi_predictor_models_predict_bulk
-
+operations:
+  GET /api/predictor_models/predict:
+    inputs:
+      model_id:
+        required: yes
+      smiles:
+        required: no
+        default: ~
+        type: object
+      identifier:
+        required: no
+        default: ~
+        type: object
+      report_format:
+        required: no
+        default: json
+        type: character
+    file: R/chemi_predictor_models_predict.R
+    helper: generic_request
+    request:
+      arguments:
+        endpoint:
+          value: predictor_models/predict
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            identifier:
+              from:
+              - params
+              - identifier
+            model_id:
+              from:
+              - params
+              - model_id
+            report_format:
+              from:
+              - params
+              - report_format
+    docs:
+      title: Predictor Models Predict
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+        identifier: identifier to generate predictions for
+        model_id: Model ID to use
+        report_format: 'which format to return (default: json)'
+      tags:
+        apiStage: public
+      examples:
+      - smiles: DTXSID7020182
+  POST /api/predictor_models/predict:
+    inputs:
+      model_id:
+        required: yes
+      smiles:
+        required: no
+        default: ~
+        type: object
+      chemicals:
+        required: no
+        default: ~
+        type: object
+    file: R/chemi_predictor_models_predict.R
+    helper: generic_chemi_request
+    request:
+      arguments:
+        endpoint:
+          value: predictor_models/predict
+        body:
+          callback: prediction_body
+        tidy:
+          value: no
+    docs:
+      title: Generate predictions for multiple molecules
+      return: Returns a tibble with results
+      lifecycle: experimental
+      parameters:
+        model_id: Required parameter
+        smiles: Optional parameter
+        chemicals: Optional parameter
+      tags:
+        apiStage: public
+      examples:
+      - model_id: DTXSID1024122
+documentation: yes
+contracts_file: tests/testthat/fixtures/apipak/chemi-predictor_models.rds
