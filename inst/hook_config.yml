@@ -26,17 +26,6 @@ ct_similar:
   pre_request:
     - validate_similarity
 
-ct_chemical_list_by_name:
-  extra_params:
-    extract_dtxsids:
-      default: "TRUE"
-      type: "logical"
-      description: "Extract DTXSIDs from results"
-  pre_request:
-    - uppercase_query
-  post_response:
-    - extract_dtxsids_if_requested
-
 ct_chemical_list_search_by_name:
   extra_params:
     extract_dtxsids:
@@ -45,28 +34,6 @@ ct_chemical_list_search_by_name:
       description: "Extract DTXSIDs from results into character vector (requires projection = 'chemicallistwithdtxsids')"
   post_response:
     - extract_dtxsids_if_requested
-
-ct_chemical_list:
-  post_response:
-    - format_compound_list_result
-
-ct_chemical_property_experimental_bulk:
-  extra_params:
-    coerce:
-      default: "FALSE"
-      type: "logical"
-      description: "Split results by propertyId into named list of data frames"
-  post_response:
-    - coerce_by_property_id
-
-ct_chemical_property_predicted_bulk:
-  extra_params:
-    coerce:
-      default: "FALSE"
-      type: "logical"
-      description: "Split results by propertyId into named list of data frames"
-  post_response:
-    - coerce_by_property_id
 
 chemi_alerts:
   pre_request:
@@ -629,15 +596,7 @@ epi_submit:
   post_response:
     - unwrap_epi_result
 
-epi_ecosar_surfactant:
-  post_response:
-    - unwrap_epi_result
-
 epi_ecosar_surfactant_nonionic:
-  post_response:
-    - unwrap_epi_result
-
-epi_ecosar_polymer:
   post_response:
     - unwrap_epi_result
 

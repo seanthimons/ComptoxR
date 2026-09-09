@@ -1,0 +1,63 @@
+credential_name: ctx_api_key
+credential_pattern: ctx_api_key\s*:.*secrets\.|CTX_API_KEY|COMPTOX_API_KEY
+issue:
+  github_issue: 180.0
+  bean: ComptoxR-wsxo
+  title: Test inventory authority for CRAN readiness
+vcr_issue:
+  github_issue: 202.0
+  bean: ComptoxR-uvdd
+  title: VCR Test Classification Gate
+badge_files:
+  ccd: .github/badges/ccd-coverage.json
+  chemi: .github/badges/chemi-coverage.json
+coverage_files:
+- codecov.yml
+- schema/coverage_baseline.json
+- .github/badges/ccd-coverage.json
+- .github/badges/chemi-coverage.json
+testing_docs:
+- .planning/codebase/TESTING.md
+- dev/TESTING_GUIDE.md
+test_tiers:
+  cran_safe_unit_contract:
+    label: CRAN-safe unit/contract
+    requirements:
+    - No real ctx_api_key.
+    - No live network dependency.
+    - No local database requirement.
+    - No cassette recording.
+    activation:
+    - COMPTOXR_CRAN_SAFE_TESTS=true
+    - CRAN-like environment where NOT_CRAN is not true
+  replay_fixture_integration:
+    label: Replay/fixture integration
+    requirements:
+    - Committed fixtures only.
+    - No live cassette recording.
+    activation: Local or CI integration lanes with fixtures already present
+  live_recording:
+    label: Live recording
+    requirements:
+    - Explicit opt-in only.
+    - Requires a real ctx_api_key.
+    - Runs through isolated scripts or workflows.
+    activation:
+    - Rscript dev/rerecord_cassettes.R --record-live
+    - Record VCR Cassettes workflow
+cran_readiness_criteria:
+- CRAN-safe unit/contract tests pass without real ctx_api_key, live network dependency,
+  local database requirement, or cassette recording.
+- Replay/fixture integration tests use committed fixtures only and do not perform
+  live cassette recording.
+- Live recording tests are explicit opt-in only, require a real ctx_api_key, and run
+  through isolated scripts or workflows.
+- Every exported function has at least one intentional test reference or documented
+  exclusion.
+- Every current VCR test file is classified in dev/vcr_test_classification.json, and
+  stale classifications are removed.
+- dev/test_manifest.json remains absent or retired in favor of dev/reports/unit_test_readiness_audit.json.
+- All committed cassettes pass safety checks, parse checks, and an agreed policy for
+  expected error-response cassettes.
+- CI exposes one blocking CRAN-readiness path and one integration path with explicit
+  coverage thresholds and no contradictory badge/baseline ownership.

@@ -1,0 +1,17 @@
+forbidden_hosts: 'ctx-api-(stg|dev)[.]|comptoxstaging[.]|cim(-dev)?[.]sciencedataexperts[.]|hazard-dev[.]sciencedataexperts[.]|ccte-cced-cheminformatics[.]'
+forbidden_files: '_(staging|development)[.]'
+forbidden_exports: '_(staging|development)$|^chemi_safety$'
+forbidden_schemas: '-(dev|staging)[.]json$'
+api_exports: '^(ct_|chemi_|epi_)'
+manual_exports:
+- chemi_classyfire
+- chemi_functional_use
+- chemi_predict
+- chemi_safety_section
+- chemi_server
+- chemi_toxprint
+- ct_api_key
+- ct_classify
+- ct_related
+- ct_similar
+- epi_server
