@@ -13,6 +13,11 @@ on:
       - 'man/**'
       - 'vignettes/**'
   workflow_dispatch:
+    inputs:
+      toolkit_ref:
+        description: 'Optional exact apipak candidate commit for migration validation'
+        required: false
+        default: ''
 
 jobs:
   cran-readiness:
@@ -26,6 +31,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
       COMPTOXR_CRAN_SAFE_TESTS: "true"
       COMPTOXR_CRAN_READINESS_CPUS: "2"
+      COMPTOXR_CRAN_READINESS_SEQUENTIAL: "true"
       NOT_CRAN: "false"
       TESTTHAT_CPUS: "2"
       # Sequential: parallel testthat trips a callr subprocess "zero-length variable
@@ -59,7 +65,24 @@ jobs:
           version: '0.9.0'
 
       - name: Install pinned development toolkit
+        if: inputs.toolkit_ref == ''
         run: Rscript dev/install_toolkit.R
+
+      - name: Install explicitly selected toolkit candidate
+        if: inputs.toolkit_ref != ''
+        env:
+          APIPAK_CANDIDATE_REF: ${{ inputs.toolkit_ref }}
+        shell: Rscript {0}
+        run: |
+          ref <- Sys.getenv('APIPAK_CANDIDATE_REF')
+          stopifnot(grepl('^[0-9a-f]{40}$', ref))
+          archive <- tempfile(fileext = '.tar.gz')
+          curl::curl_download(paste0('https://github.com/seanthimons/apipak/archive/', ref, '.tar.gz'), archive)
+          status <- system2(file.path(R.home('bin'), 'R'), c('CMD', 'INSTALL', shQuote(archive)))
+          stopifnot(status == 0L)
+          # Upgrade only toolkit-version metadata; do not bless changed sources,
+          # input fingerprints, callback fingerprints, or generated output.
+          apipak::apply_files('.', list(), mode = 'apply')
 
       - name: Check generation and hooks
         run: |
