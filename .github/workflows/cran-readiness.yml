@@ -108,3 +108,23 @@ jobs:
         run: |
           Rscript dev/check_cassette_health.R
           Rscript dev/cran_readiness.R
+
+      - name: Explain generation drift after failure
+        if: failure()
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace('apipak', quietly = TRUE)) quit(status = 0)
+          callbacks <- new.env(parent = baseenv())
+          sys.source('dev/apipak_callbacks.R', callbacks)
+          plan <- apipak::generate_client('.', config = 'apipak.yml', callbacks = callbacks, mode = 'plan')
+          print(Filter(function(x) !x$action %in% c('unchanged', 'retained'), plan$files))
+          previous <- jsonlite::read_json('.apipak/manifest.json')
+          hashes <- plan$manifest$inputs
+          names(hashes) <- substring(names(hashes), nchar(normalizePath('.', winslash = '/')) + 2L)
+          for (path in intersect(names(hashes), names(previous$inputs))) {
+            if (!identical(hashes[[path]], previous$inputs[[path]])) cat('Input differs:', path, '\n')
+          }
+          current <- digest::digest(lapply(as.list(callbacks), function(x) {
+            if (is.function(x)) list(deparse(formals(x)), deparse(body(x))) else x
+          }), algo = 'sha256')
+          cat('Callback fingerprint:', previous$callbacks, current, '\n')
