@@ -1,8 +1,8 @@
 #' Search Similar
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param smiles Optional parameter
 #' @param dtxsid Optional parameter
 #' @param exportSmiles Optional parameter
@@ -13,11 +13,11 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_search_similar(smiles = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_search_similar <- function(
   smiles = NULL,
   dtxsid = NULL,
@@ -27,40 +27,37 @@ chemi_search_similar <- function(
   max = NULL,
   similarityType = NULL
 ) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
-  if (!is.null(dtxsid)) {
-    options[['dtxsid']] <- dtxsid
-  }
-  if (!is.null(exportSmiles)) {
-    options[['exportSmiles']] <- exportSmiles
-  }
-  if (!is.null(exportMol)) {
-    options[['exportMol']] <- exportMol
-  }
-  if (!is.null(min)) {
-    options[['min']] <- min
-  }
-  if (!is.null(max)) {
-    options[['max']] <- max
-  }
-  if (!is.null(similarityType)) {
-    options[['similarityType']] <- similarityType
-  }
-  result <- generic_request(
-    endpoint = "search/similar",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+  params <- list(
+    "smiles" = smiles,
+    "dtxsid" = dtxsid,
+    "exportSmiles" = exportSmiles,
+    "exportMol" = exportMol,
+    "min" = min,
+    "max" = max,
+    "similarityType" = similarityType
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_request(
+    "endpoint" = "search/similar",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "smiles" = params[["smiles"]],
+          "dtxsid" = params[["dtxsid"]],
+          "exportSmiles" = params[["exportSmiles"]],
+          "exportMol" = params[["exportMol"]],
+          "min" = params[["min"]],
+          "max" = params[["max"]],
+          "similarityType" = params[["similarityType"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    })
+  )
+  result
 }

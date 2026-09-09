@@ -1,67 +1,59 @@
 #' Amnb Nate
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param smiles SMILES to generate predictions for
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amnb_nate(smiles = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_amnb_nate <- function(smiles) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options[['smiles']] <- smiles
-  }
+  params <- list("smiles" = smiles)
   result <- generic_request(
-    endpoint = "amnb_nate",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "amnb_nate",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("smiles" = params[["smiles"]]))
+      if (length(.body)) .body else list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
 #' Generate predictions for multiple molecules
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param chemicals Optional parameter
 #' @param smiles Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amnb_nate_bulk(chemicals = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_amnb_nate_bulk <- function(chemicals = NULL, smiles = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
+  params <- list("chemicals" = chemicals, "smiles" = smiles)
   result <- generic_chemi_request(
-    query = chemicals,
-    endpoint = "amnb_nate",
-    options = options,
-    tidy = FALSE
+    "query" = params[["chemicals"]],
+    "endpoint" = "amnb_nate",
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("smiles" = params[["smiles"]]))
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

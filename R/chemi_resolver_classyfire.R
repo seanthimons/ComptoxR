@@ -1,8 +1,8 @@
 #' Resolver Classyfire
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param query Optional parameter
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
 #' @param fuzzy Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic, CloseSemantic (default: Not)
@@ -21,11 +21,11 @@
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_classyfire(query = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_resolver_classyfire <- function(
   query = NULL,
   idType = "AnyId",
@@ -43,61 +43,54 @@ chemi_resolver_classyfire <- function(
   all_pages = TRUE,
   max_pages = 100
 ) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
-  if (!is.null(fuzzy)) {
-    options[['fuzzy']] <- fuzzy
-  }
-  if (!is.null(kingdom)) {
-    options[['kingdom']] <- kingdom
-  }
-  if (!is.null(superklass)) {
-    options[['superklass']] <- superklass
-  }
-  if (!is.null(klass)) {
-    options[['klass']] <- klass
-  }
-  if (!is.null(subklass)) {
-    options[['subklass']] <- subklass
-  }
-  if (!is.null(directParent)) {
-    options[['directParent']] <- directParent
-  }
-  if (!is.null(geometricDescriptor)) {
-    options[['geometricDescriptor']] <- geometricDescriptor
-  }
-  if (!is.null(alternativeParent)) {
-    options[['alternativeParent']] <- alternativeParent
-  }
-  if (!is.null(substituent)) {
-    options[['substituent']] <- substituent
-  }
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  result <- generic_request(
-    endpoint = "resolver/classyfire",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "page_size"
+  params <- list(
+    "query" = query,
+    "idType" = idType,
+    "fuzzy" = fuzzy,
+    "kingdom" = kingdom,
+    "superklass" = superklass,
+    "klass" = klass,
+    "subklass" = subklass,
+    "directParent" = directParent,
+    "geometricDescriptor" = geometricDescriptor,
+    "alternativeParent" = alternativeParent,
+    "substituent" = substituent,
+    "page" = page,
+    "size" = size,
+    "all_pages" = all_pages,
+    "max_pages" = max_pages
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_request(
+    "endpoint" = "resolver/classyfire",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "query" = params[["query"]],
+          "idType" = params[["idType"]],
+          "fuzzy" = params[["fuzzy"]],
+          "kingdom" = params[["kingdom"]],
+          "superklass" = params[["superklass"]],
+          "klass" = params[["klass"]],
+          "subklass" = params[["subklass"]],
+          "directParent" = params[["directParent"]],
+          "geometricDescriptor" = params[["geometricDescriptor"]],
+          "alternativeParent" = params[["alternativeParent"]],
+          "substituent" = params[["substituent"]],
+          "page" = params[["page"]],
+          "size" = params[["size"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "paginate" = params[["all_pages"]],
+    "max_pages" = params[["max_pages"]],
+    "pagination_strategy" = "page_size"
+  )
+  result
 }

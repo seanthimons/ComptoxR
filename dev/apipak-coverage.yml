@@ -1,0 +1,14 @@
+baseline: schema/coverage_baseline.json
+groups:
+  ccd:
+    services: '^ctx$'
+    label: CCD coverage
+    badge: .github/badges/ccd-coverage.json
+  chemi:
+    services: '^chemi-'
+    label: Cheminformatic coverage
+    badge: .github/badges/chemi-coverage.json
+  epi:
+    services: '^epi$'
+    label: EPI Suite coverage
+    badge: .github/badges/epi-coverage.json

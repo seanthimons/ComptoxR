@@ -72,7 +72,6 @@ jobs:
 
       - name: Download schemas
         id: download
-        continue-on-error: true
         run: |
           pkgload::load_all()
           failed_families <- character()
@@ -96,7 +95,7 @@ jobs:
           cat(sprintf("failed_families=%s\n", paste(failed_families, collapse = ",")), file = gh_output, append = TRUE)
 
           if (!download_ok) {
-            cli::cli_alert_warning("Schema downloads failed for {paste(failed_families, collapse = ', ')}. The workflow will continue with available schemas.")
+            stop("Schema downloads failed: ", paste(failed_families, collapse = ", "))
           }
         shell: Rscript {0}
 
@@ -126,16 +125,12 @@ jobs:
 
       - name: Compute schema hashes
         id: hash
-        continue-on-error: true
         run: >
           schema_files <- list.files("schema", pattern = "\\.json$", full.names =
           TRUE)
 
           if (length(schema_files) == 0) {
-            cli::cli_alert_warning("No schema files found - skipping hash computation")
-            # Write empty hashes CSV so downstream steps don't fail
-            write.csv(data.frame(file = character(), hash = character()), "schema_hashes.csv", row.names = FALSE, quote = FALSE)
-            quit(save = "no", status = 0)
+            stop("No schema files found")
           }
 
           hashes <- data.frame(
@@ -151,7 +146,6 @@ jobs:
 
       - name: Diff schemas
         id: diff
-        continue-on-error: true
         run: |
           source("dev/diff_schemas.R")
           # Compare only approved production schemas, including newly added domains.
@@ -202,18 +196,12 @@ jobs:
           generate_stubs_main(args = c("--rebuild=ct", "--rebuild=chemi", "--rebuild=epi"))
         shell: Rscript {0}
 
-      - name: Update documentation
-        if: steps.schema_changes.outputs.changed == 'true'
-        run: |
-          devtools::document()
-        shell: Rscript {0}
-
       - name: Detect test gaps
         id: gaps
         if: steps.schema_changes.outputs.changed == 'true'
-        continue-on-error: true
         run: |
           source("dev/detect_test_gaps.R")
+          detect_gaps()
         shell: Rscript {0}
 
       - name: Generate missing tests
@@ -248,13 +236,14 @@ jobs:
         if: steps.schema_changes.outputs.changed == 'true'
         run: |
           source("dev/calculate_coverage.R")
+          calculate_coverage()
         shell: Rscript {0}
 
       - name: Check for all changes
         id: changes
         run: |
           # Check if there are any changes to commit
-          if [ -z "$(git status --porcelain --untracked-files=all -- schema/ R/ man/ NAMESPACE inst/ tests/ .github/badges/)" ]; then
+          if [ -z "$(git status --porcelain --untracked-files=all -- schema/ R/ man/ NAMESPACE inst/ tests/ .github/badges/ .apipak/manifest.json)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No changes to commit"
           else
@@ -314,7 +303,7 @@ jobs:
           echo "- **Stubs Generated:** ${{ steps.stubs.outputs.stubs_generated || '0' }}" >> pr_body.md
           echo "- **New Files Created:** ${{ steps.stubs.outputs.stubs_created || '0' }}" >> pr_body.md
           echo "- **Existing Files Updated:** ${{ steps.stubs.outputs.stubs_appended || '0' }}" >> pr_body.md
-          echo "- **Skipped (empty schema):** ${{ steps.stubs.outputs.stubs_skipped || '0' }}" >> pr_body.md
+          echo "- **Unchanged:** ${{ steps.stubs.outputs.stubs_skipped || '0' }}" >> pr_body.md
           echo "- **Protected (lifecycle guard):** ${{ steps.stubs.outputs.stubs_protected || '0' }}" >> pr_body.md
 
           # Add parameter drift section if detected
@@ -411,6 +400,7 @@ jobs:
             inst/
             tests/
             .github/badges/
+            .apipak/manifest.json
           branch: automated/schema-update
           delete-branch: true
           labels: |

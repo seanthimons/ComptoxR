@@ -1,11 +1,11 @@
 #' Stdizer Chemicals
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+#' This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
 #' then sends the resolved Chemical objects to the API endpoint.
-#'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param full Optional parameter
@@ -13,55 +13,28 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_stdizer_chemicals <- function(query, idType = "AnyId", full = NULL, options = NULL) {
-  chemicals <- NULL
-  req_data <- run_hook(
-    "chemi_stdizer_chemicals",
-    "pre_request",
-    list(params = list(`query` = query, `idType` = idType, `full` = full, `options` = options, `chemicals` = chemicals))
-  )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
+  params <- list("query" = query, "idType" = idType, "full" = full, "options" = options)
+  state <- run_hook("chemi_stdizer_chemicals", "pre_request", list(params = params))
+  if (isTRUE(state$skip_request)) {
+    return(state$result)
   }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("full" %in% names(req_data$params)) {
-    full <- req_data$params[["full"]]
-  }
-  if ("options" %in% names(req_data$params)) {
-    options <- req_data$params[["options"]]
-  }
-  if ("chemicals" %in% names(req_data$params)) {
-    chemicals <- req_data$params[["chemicals"]]
-  }
-
-  # Build options from additional parameters
-  extra_options <- list()
-  if (!is.null(full)) {
-    extra_options$full <- full
-  }
-  if (!is.null(options)) {
-    extra_options$options <- options
-  }
-
+  changed <- intersect(names(params), names(state$params))
+  params[changed] <- state$params[changed]
   result <- generic_chemi_request(
-    query = query,
-    endpoint = "stdizer/chemicals",
-    options = extra_options,
-    tidy = FALSE,
-    chemicals = chemicals
+    "query" = params[["query"]],
+    "endpoint" = "stdizer/chemicals",
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("full" = params[["full"]], "options" = params[["options"]]))
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE,
+    "chemicals" = state[["params"]][["chemicals"]]
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

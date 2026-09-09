@@ -86,6 +86,7 @@ operations:
         required: yes
       endpoint:
         required: yes
+        missing_as_null: yes
       method:
         required: no
         default: consensus
@@ -218,6 +219,7 @@ operations:
         required: yes
       endpoints:
         required: yes
+        missing_as_null: yes
       methods:
         required: no
         default: ~

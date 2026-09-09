@@ -137,11 +137,12 @@ tests/
     test-*.R                        # Generated and handwritten tests
 dev/
   generate_tests.R                  # Active generated-test entrypoint
-  test_generation/                  # Generator modules
+  apipak-testing.yml                # Gap-report policy
+  token_preflight.R                 # Client credential policy adapter
   unit_test_readiness_audit.R       # Canonical readiness inventory
   reports/unit_test_readiness_audit.json # Canonical readiness report
   vcr_test_classification.json      # VCR test classification gate
   export_test_exclusions.json       # Intentional export-gap exclusions
-  detect_test_gaps.R                # Legacy gap scan without manifest authority
+  detect_test_gaps.R                # Selected contracts and manual-wrapper gap report
   rerecord_cassettes.R              # Explicit live cassette recording
 ```

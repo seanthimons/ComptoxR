@@ -1,8 +1,8 @@
 #' Search chemicals
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param page Optional parameter
 #' @param size Optional parameter
 #' @param query Optional parameter
@@ -14,11 +14,11 @@
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_chet_chemicals_database(page = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_chet_chemicals_database <- function(
   page = 0,
   size = NULL,
@@ -29,40 +29,40 @@ chemi_chet_chemicals_database <- function(
   all_pages = TRUE,
   max_pages = 100
 ) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(exact_search)) {
-    options[['exact_search']] <- exact_search
-  }
-  if (!is.null(lib_name)) {
-    options[['lib_name']] <- lib_name
-  }
-  if (!is.null(only_in_reactions)) {
-    options[['only_in_reactions']] <- only_in_reactions
-  }
-  result <- generic_request(
-    endpoint = "chemicals/database",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "page_size"
+  params <- list(
+    "page" = page,
+    "size" = size,
+    "query" = query,
+    "exact_search" = exact_search,
+    "lib_name" = lib_name,
+    "only_in_reactions" = only_in_reactions,
+    "all_pages" = all_pages,
+    "max_pages" = max_pages
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_request(
+    "endpoint" = "chemicals/database",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "page" = params[["page"]],
+          "size" = params[["size"]],
+          "query" = params[["query"]],
+          "exact_search" = params[["exact_search"]],
+          "lib_name" = params[["lib_name"]],
+          "only_in_reactions" = params[["only_in_reactions"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "paginate" = params[["all_pages"]],
+    "max_pages" = params[["max_pages"]],
+    "pagination_strategy" = "page_size"
+  )
+  result
 }

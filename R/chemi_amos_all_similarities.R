@@ -1,8 +1,8 @@
 #' Given a list of DTXSIDs and a list of mass spectra, return a highest similarity score for each combination of DTXSID and spectrum.
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param da_window Mass window in units of daltons.  If not null, this will be used for similarity calculations, regardless of whether ppm_window is supplied.
 #' @param dtxsids List of DTXSIDs to search for.
 #' @param min_intensity Minimum intensity level for peaks in both the user and database spectra to consider.  All database spectra are scaled to have a maximum intensity of 100, and all user spectra are assumed to be scaled the same.
@@ -12,11 +12,11 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amos_all_similarities(da_window = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_amos_all_similarities <- function(
   da_window = NULL,
   dtxsids = NULL,
@@ -25,31 +25,31 @@ chemi_amos_all_similarities <- function(
   ppm_window = NULL,
   spectra = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(dtxsids)) {
-    options$dtxsids <- dtxsids
-  }
-  if (!is.null(min_intensity)) {
-    options$min_intensity <- min_intensity
-  }
-  if (!is.null(ms_level)) {
-    options$ms_level <- ms_level
-  }
-  if (!is.null(ppm_window)) {
-    options$ppm_window <- ppm_window
-  }
-  if (!is.null(spectra)) {
-    options$spectra <- spectra
-  }
-  result <- generic_chemi_request(
-    query = da_window,
-    endpoint = "amos/all_similarities_by_dtxsid/",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "da_window" = da_window,
+    "dtxsids" = dtxsids,
+    "min_intensity" = min_intensity,
+    "ms_level" = ms_level,
+    "ppm_window" = ppm_window,
+    "spectra" = spectra
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["da_window"]],
+    "endpoint" = "amos/all_similarities_by_dtxsid/",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "dtxsids" = params[["dtxsids"]],
+          "min_intensity" = params[["min_intensity"]],
+          "ms_level" = params[["ms_level"]],
+          "ppm_window" = params[["ppm_window"]],
+          "spectra" = params[["spectra"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

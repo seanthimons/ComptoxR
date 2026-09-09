@@ -1,3 +1,5 @@
+# Historical proof for the pre-generalization layout at 4fd720b.
+# Replay from that revision; current maintenance uses apipak.yml and fixed contracts.
 generator_parity <- function(root = '.') {
   root <- normalizePath(root, winslash = '/', mustWork = TRUE)
   baseline <- file.path(root, 'dev/migration-evidence/.render-baseline')

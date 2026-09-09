@@ -1,47 +1,40 @@
 #' Toxprints Assays
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param category Optional parameter
 #' @param label Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_assays(category = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_toxprints_assays <- function(category = NULL, label = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(category)) {
-    options[['category']] <- category
-  }
-  if (!is.null(label)) {
-    options[['label']] <- label
-  }
+  params <- list("category" = category, "label" = label)
   result <- generic_request(
-    endpoint = "toxprints/assays",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "toxprints/assays",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("category" = params[["category"]], "label" = params[["label"]]))
+      if (length(.body)) .body else list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
 #' Toxprints Assays
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param acl Optional parameter
 #' @param actives Optional parameter
 #' @param category Optional parameter
@@ -55,11 +48,11 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_assays_bulk(acl = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_toxprints_assays_bulk <- function(
   acl = NULL,
   actives = NULL,
@@ -72,43 +65,53 @@ chemi_toxprints_assays_bulk <- function(
   options = NULL,
   total = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(actives)) {
-    options$actives <- actives
-  }
-  if (!is.null(category)) {
-    options$category <- category
-  }
-  if (!is.null(chemicals)) {
-    options$chemicals <- chemicals
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(labels)) {
-    options$labels <- labels
-  }
-  if (!is.null(metrics)) {
-    options$metrics <- metrics
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(options)) {
-    options$options <- options
-  }
-  if (!is.null(total)) {
-    options$total <- total
-  }
-  result <- generic_chemi_request(
-    query = acl,
-    endpoint = "toxprints/assays",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "acl" = acl,
+    "actives" = actives,
+    "category" = category,
+    "chemicals" = chemicals,
+    "id" = id,
+    "labels" = labels,
+    "metrics" = metrics,
+    "name" = name,
+    "options" = options,
+    "total" = total
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["acl"]],
+    "endpoint" = "toxprints/assays",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "actives" = params[["actives"]],
+          "category" = params[["category"]],
+          "chemicals" = params[["chemicals"]],
+          "id" = params[["id"]],
+          "labels" = params[["labels"]],
+          "metrics" = params[["metrics"]],
+          "name" = params[["name"]],
+          "options" = local({
+            .body <- Filter(
+              Negate(is.null),
+              list(
+                "actives" = params[["actives"]],
+                "category" = params[["category"]],
+                "chemicals" = params[["chemicals"]],
+                "id" = params[["id"]],
+                "labels" = params[["labels"]],
+                "metrics" = params[["metrics"]],
+                "name" = params[["name"]]
+              )
+            )
+            if (length(.body)) .body else list()
+          }),
+          "total" = params[["total"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

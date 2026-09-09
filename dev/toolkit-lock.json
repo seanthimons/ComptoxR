@@ -1,9 +1,9 @@
 {
-  "package": "wrapmaint",
-  "version": "0.1.0",
-  "source_commit": "aae88f99f6bd355a06d3404fd100b86620609e83",
-  "asset": "wrapmaint_0.1.0.tar.gz",
-  "url": "https://github.com/seanthimons/ComptoxR/releases/download/v2.0.0/wrapmaint_0.1.0.tar.gz",
-  "sha256": "a9e8ff83f1316b1e3059c63ab84e7aa01567bb7c2156259400bf791781408fe0",
-  "policy_version": "comptox-compatibility-1"
+  "package": "apipak",
+  "version": "0.1.1",
+  "source_commit": "8627b8176969476a983e080b06753cf1bb679f60",
+  "asset": "apipak_0.1.1.tar.gz",
+  "url": "https://github.com/seanthimons/apipak/releases/download/v0.1.1/apipak_0.1.1.tar.gz",
+  "sha256": "48dd1b531ab29d2d6a86fe7a146b218b66a46d49c2af017166dc5ad67985baf9",
+  "policy_version": "comptox-public-1"
 }

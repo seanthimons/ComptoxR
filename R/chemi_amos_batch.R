@@ -1,8 +1,8 @@
 #' Generates an Excel workbook which lists all records in the database that contain a given set of DTXSIDs.
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param additional_record_info Optional parameter
 #' @param always_download_file If false, a search that does not find any matching records in the database will just return a message instead of a file.
 #' @param base_url URL for the AMOS frontend.  Used to construct the internal links in the output file.
@@ -16,11 +16,11 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amos_batch(additional_record_info = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_amos_batch <- function(
   additional_record_info = NULL,
   always_download_file = NULL,
@@ -33,43 +33,39 @@ chemi_amos_batch <- function(
   methodologies = NULL,
   record_types = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(always_download_file)) {
-    options$always_download_file <- always_download_file
-  }
-  if (!is.null(base_url)) {
-    options$base_url <- base_url
-  }
-  if (!is.null(ids)) {
-    options$ids <- ids
-  }
-  if (!is.null(include_classyfire)) {
-    options$include_classyfire <- include_classyfire
-  }
-  if (!is.null(include_external_links)) {
-    options$include_external_links <- include_external_links
-  }
-  if (!is.null(include_functional_uses)) {
-    options$include_functional_uses <- include_functional_uses
-  }
-  if (!is.null(include_source_counts)) {
-    options$include_source_counts <- include_source_counts
-  }
-  if (!is.null(methodologies)) {
-    options$methodologies <- methodologies
-  }
-  if (!is.null(record_types)) {
-    options$record_types <- record_types
-  }
-  result <- generic_chemi_request(
-    query = additional_record_info,
-    endpoint = "amos/batch_search",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "additional_record_info" = additional_record_info,
+    "always_download_file" = always_download_file,
+    "base_url" = base_url,
+    "ids" = ids,
+    "include_classyfire" = include_classyfire,
+    "include_external_links" = include_external_links,
+    "include_functional_uses" = include_functional_uses,
+    "include_source_counts" = include_source_counts,
+    "methodologies" = methodologies,
+    "record_types" = record_types
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["additional_record_info"]],
+    "endpoint" = "amos/batch_search",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "always_download_file" = params[["always_download_file"]],
+          "base_url" = params[["base_url"]],
+          "ids" = params[["ids"]],
+          "include_classyfire" = params[["include_classyfire"]],
+          "include_external_links" = params[["include_external_links"]],
+          "include_functional_uses" = params[["include_functional_uses"]],
+          "include_source_counts" = params[["include_source_counts"]],
+          "methodologies" = params[["methodologies"]],
+          "record_types" = params[["record_types"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

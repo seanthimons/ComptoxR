@@ -1,47 +1,40 @@
 #' Resolver Safety Flags
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param query Required parameter
 #' @param idType Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_safety_flags(query = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(idType)) {
-    options[['idType']] <- idType
-  }
+  params <- list("query" = query, "idType" = idType)
   result <- generic_request(
-    endpoint = "resolver/safety-flags",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "resolver/safety-flags",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("query" = params[["query"]], "idType" = params[["idType"]]))
+      if (length(.body)) .body else list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
 #' Resolver Safety Flags
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param additionalProps Optional parameter
 #' @param averageMass Optional parameter
 #' @param canonicalSmiles Optional parameter
@@ -62,11 +55,11 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_safety_flags_bulk(additionalProps = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_resolver_safety_flags_bulk <- function(
   additionalProps = NULL,
   averageMass = NULL,
@@ -86,61 +79,52 @@ chemi_resolver_safety_flags_bulk <- function(
   smiles = NULL,
   request.filesInfo = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(averageMass)) {
-    options$averageMass <- averageMass
-  }
-  if (!is.null(canonicalSmiles)) {
-    options$canonicalSmiles <- canonicalSmiles
-  }
-  if (!is.null(casrn)) {
-    options$casrn <- casrn
-  }
-  if (!is.null(chemId)) {
-    options$chemId <- chemId
-  }
-  if (!is.null(cid)) {
-    options$cid <- cid
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(image)) {
-    options$image <- image
-  }
-  if (!is.null(inchi)) {
-    options$inchi <- inchi
-  }
-  if (!is.null(inchiKey)) {
-    options$inchiKey <- inchiKey
-  }
-  if (!is.null(mol)) {
-    options$mol <- mol
-  }
-  if (!is.null(molFormula)) {
-    options$molFormula <- molFormula
-  }
-  if (!is.null(monoisotopicMass)) {
-    options$monoisotopicMass <- monoisotopicMass
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(sid)) {
-    options$sid <- sid
-  }
-  if (!is.null(smiles)) {
-    options$smiles <- smiles
-  }
-  result <- generic_chemi_request(
-    query = additionalProps,
-    endpoint = "resolver/safety-flags",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "additionalProps" = additionalProps,
+    "averageMass" = averageMass,
+    "canonicalSmiles" = canonicalSmiles,
+    "casrn" = casrn,
+    "chemId" = chemId,
+    "cid" = cid,
+    "id" = id,
+    "image" = image,
+    "inchi" = inchi,
+    "inchiKey" = inchiKey,
+    "mol" = mol,
+    "molFormula" = molFormula,
+    "monoisotopicMass" = monoisotopicMass,
+    "name" = name,
+    "sid" = sid,
+    "smiles" = smiles,
+    "request.filesInfo" = request.filesInfo
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["additionalProps"]],
+    "endpoint" = "resolver/safety-flags",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "averageMass" = params[["averageMass"]],
+          "canonicalSmiles" = params[["canonicalSmiles"]],
+          "casrn" = params[["casrn"]],
+          "chemId" = params[["chemId"]],
+          "cid" = params[["cid"]],
+          "id" = params[["id"]],
+          "image" = params[["image"]],
+          "inchi" = params[["inchi"]],
+          "inchiKey" = params[["inchiKey"]],
+          "mol" = params[["mol"]],
+          "molFormula" = params[["molFormula"]],
+          "monoisotopicMass" = params[["monoisotopicMass"]],
+          "name" = params[["name"]],
+          "sid" = params[["sid"]],
+          "smiles" = params[["smiles"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

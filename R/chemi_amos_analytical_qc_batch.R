@@ -1,8 +1,8 @@
 #' Generates an Excel workbook containing information on all Analytical QC records that contain a given list of DTXSIDs
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param base_url URL for the AMOS frontend.  Used to construct the internal links in the output file.
 #' @param ids List of DTXSIDs or other identifiers to search for.
 #' @param include_classyfire Flag for whether to include the top four levels of a ClassyFire classification for each of the searched substances, if it exists.
@@ -12,11 +12,11 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_amos_analytical_qc_batch(base_url = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_amos_analytical_qc_batch <- function(
   base_url = NULL,
   ids = NULL,
@@ -25,31 +25,31 @@ chemi_amos_analytical_qc_batch <- function(
   include_source_counts = NULL,
   methodologies = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(ids)) {
-    options$ids <- ids
-  }
-  if (!is.null(include_classyfire)) {
-    options$include_classyfire <- include_classyfire
-  }
-  if (!is.null(include_functional_uses)) {
-    options$include_functional_uses <- include_functional_uses
-  }
-  if (!is.null(include_source_counts)) {
-    options$include_source_counts <- include_source_counts
-  }
-  if (!is.null(methodologies)) {
-    options$methodologies <- methodologies
-  }
-  result <- generic_chemi_request(
-    query = base_url,
-    endpoint = "amos/analytical_qc_batch_search",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "base_url" = base_url,
+    "ids" = ids,
+    "include_classyfire" = include_classyfire,
+    "include_functional_uses" = include_functional_uses,
+    "include_source_counts" = include_source_counts,
+    "methodologies" = methodologies
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["base_url"]],
+    "endpoint" = "amos/analytical_qc_batch_search",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "ids" = params[["ids"]],
+          "include_classyfire" = params[["include_classyfire"]],
+          "include_functional_uses" = params[["include_functional_uses"]],
+          "include_source_counts" = params[["include_source_counts"]],
+          "methodologies" = params[["methodologies"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

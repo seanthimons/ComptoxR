@@ -1,27 +1,25 @@
 #' Stdizer Operations
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_stdizer_operations()
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_stdizer_operations <- function() {
+  params <- list()
   result <- generic_request(
-    endpoint = "stdizer/operations",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    "endpoint" = "stdizer/operations",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

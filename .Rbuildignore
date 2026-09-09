@@ -36,3 +36,4 @@ data-raw/
 ^endpoint-migration-plan[.]md$
 ^schema-tooling-extraction-plan[.]md$
 ^lifestage-migration-plan[.]md$
+^[.]apipak$

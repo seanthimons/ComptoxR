@@ -1,0 +1,3 @@
+helpers: [generic_request, generic_chemi_request, generic_pubchem_request]
+report_dir: dev/reports
+readiness_report: dev/reports/unit_test_readiness_audit.json

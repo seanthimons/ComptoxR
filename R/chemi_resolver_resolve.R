@@ -1,32 +1,28 @@
 #' Resolver Resolve
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param mol Optional parameter
 #' @param queries Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_resolve(mol = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_resolver_resolve <- function(mol = NULL, queries = NULL) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(queries)) {
-    options$queries <- queries
-  }
+  params <- list("mol" = mol, "queries" = queries)
   result <- generic_chemi_request(
-    query = mol,
-    endpoint = "resolver/resolve",
-    options = options,
-    tidy = FALSE
+    "query" = params[["mol"]],
+    "endpoint" = "resolver/resolve",
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("queries" = params[["queries"]]))
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

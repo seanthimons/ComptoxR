@@ -17,7 +17,7 @@
 # WHAT COUNTS AS "PUBLIC"
 # ------------------------------------------------------------------------------
 # Public == lifecycle badge "stable" OR the custom `@apiStage public` tag written
-# by the stub generator (dev/endpoint_eval/07_stub_generation.R). Functions whose
+# by the configured generator (dev/generate_stubs.R). Functions whose
 # only stage marker is a non-public `@apiStage` (staging/development) are dropped
 # from the public build; `@apiStage public` and unmarked functions are kept.
 # To extend: add a BADGE stage to KEEP_STAGES, or a custom TAG regex to

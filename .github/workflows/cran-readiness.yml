@@ -72,8 +72,8 @@ jobs:
           Rscript dev/generate_tests.R --check
           Rscript -e '
             files <- c(
-              "tests/testthat/test-chemi_search.R",
-              "tests/testthat/test-ct_chemical_detail_search.R",
+              "tests/testthat/test-contract-chemi_search.R",
+              "tests/testthat/test-contract-ct_chemical_detail_search.R",
               "tests/testthat/test-pubchem_search.R"
             )
             for (file in files) {

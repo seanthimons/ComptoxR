@@ -1,36 +1,34 @@
 #' Alerts Groups
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_alerts_groups()
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_alerts_groups <- function() {
+  params <- list()
   result <- generic_request(
-    endpoint = "alerts/groups",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    "endpoint" = "alerts/groups",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
 #' Alerts Groups
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param description Optional parameter
 #' @param frozen Optional parameter
 #' @param id Optional parameter
@@ -43,11 +41,11 @@ chemi_alerts_groups <- function() {
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_alerts_groups_bulk(description = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_alerts_groups_bulk <- function(
   description = NULL,
   frozen = NULL,
@@ -59,40 +57,37 @@ chemi_alerts_groups_bulk <- function(
   type = NULL,
   value = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(frozen)) {
-    options$frozen <- frozen
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(logicType)) {
-    options$logicType <- logicType
-  }
-  if (!is.null(name)) {
-    options$name <- name
-  }
-  if (!is.null(operations)) {
-    options$operations <- operations
-  }
-  if (!is.null(text)) {
-    options$text <- text
-  }
-  if (!is.null(type)) {
-    options$type <- type
-  }
-  if (!is.null(value)) {
-    options$value <- value
-  }
-  result <- generic_chemi_request(
-    query = description,
-    endpoint = "alerts/groups",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "description" = description,
+    "frozen" = frozen,
+    "id" = id,
+    "logicType" = logicType,
+    "name" = name,
+    "operations" = operations,
+    "text" = text,
+    "type" = type,
+    "value" = value
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["description"]],
+    "endpoint" = "alerts/groups",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "frozen" = params[["frozen"]],
+          "id" = params[["id"]],
+          "logicType" = params[["logicType"]],
+          "name" = params[["name"]],
+          "operations" = params[["operations"]],
+          "text" = params[["text"]],
+          "type" = params[["type"]],
+          "value" = params[["value"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

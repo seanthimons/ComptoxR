@@ -1,8 +1,8 @@
 #' Generate descriptors for one molecule
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param smiles One SMILES string or resolvable chemical identifier
 #' @param type Fingerprint type
 #' @param radius ECFP radius
@@ -11,44 +11,40 @@
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_rdkit(smiles = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
-  req_data <- run_hook(
-    "chemi_rdkit",
-    "pre_request",
-    list(params = list(`smiles` = smiles, `type` = type, `radius` = radius, `bits` = bits, `output` = output))
-  )
-  if (isTRUE(req_data$skip_request)) {
-    result <- req_data$result
+  params <- list("smiles" = smiles, "type" = type, "radius" = radius, "bits" = bits, "output" = output)
+  state <- run_hook("chemi_rdkit", "pre_request", list(params = params))
+  changed <- intersect(names(params), names(state$params))
+  params[changed] <- state$params[changed]
+  if (isTRUE(state$skip_request)) {
+    result <- state$result
   } else {
     result <- generic_request(
-      endpoint = req_data$request$endpoint,
-      method = req_data$request$method,
-      batch_limit = 0,
-      server = req_data$request$server,
-      auth = FALSE,
-      tidy = FALSE,
-      content_type = req_data$request$content_type,
-      options = req_data$request$options
+      "endpoint" = state[["request"]][["endpoint"]],
+      "method" = state[["request"]][["method"]],
+      "batch_limit" = 0,
+      "server" = state[["request"]][["server"]],
+      "auth" = FALSE,
+      "tidy" = FALSE,
+      "content_type" = state[["request"]][["content_type"]],
+      "options" = state[["request"]][["options"]]
     )
   }
-
-  post_data <- req_data
-  post_data$result <- result
-  result <- run_hook("chemi_rdkit", "post_response", post_data)
-
-  return(result)
+  state["result"] <- list(result)
+  result <- run_hook("chemi_rdkit", "post_response", state)
+  result
 }
 
 #' Generate descriptors for multiple molecules
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param chemicals Chemical structures or resolvable identifiers
 #' @param options Named list of additional dedicated RDKit options
 #' @param type Fingerprint type
@@ -58,11 +54,11 @@ chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output 
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_rdkit_bulk(chemicals = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_rdkit_bulk <- function(
   chemicals,
   options = NULL,
@@ -71,36 +67,30 @@ chemi_rdkit_bulk <- function(
   bits = NULL,
   output = c("wide", "raw")
 ) {
-  req_data <- run_hook(
-    "chemi_rdkit_bulk",
-    "pre_request",
-    list(
-      params = list(
-        `chemicals` = chemicals,
-        `options` = options,
-        `type` = type,
-        `radius` = radius,
-        `bits` = bits,
-        `output` = output
-      )
-    )
+  params <- list(
+    "chemicals" = chemicals,
+    "options" = options,
+    "type" = type,
+    "radius" = radius,
+    "bits" = bits,
+    "output" = output
   )
-  if (isTRUE(req_data$skip_request)) {
-    result <- req_data$result
+  state <- run_hook("chemi_rdkit_bulk", "pre_request", list(params = params))
+  changed <- intersect(names(params), names(state$params))
+  params[changed] <- state$params[changed]
+  if (isTRUE(state$skip_request)) {
+    result <- state$result
   } else {
     result <- generic_chemi_request(
-      endpoint = req_data$request$endpoint,
-      server = req_data$request$server,
-      auth = FALSE,
-      tidy = FALSE,
-      body = req_data$request$body,
-      content_type = req_data$request$content_type
+      "endpoint" = state[["request"]][["endpoint"]],
+      "server" = state[["request"]][["server"]],
+      "auth" = FALSE,
+      "tidy" = FALSE,
+      "body" = state[["request"]][["body"]],
+      "content_type" = state[["request"]][["content_type"]]
     )
   }
-
-  post_data <- req_data
-  post_data$result <- result
-  result <- run_hook("chemi_rdkit_bulk", "post_response", post_data)
-
-  return(result)
+  state["result"] <- list(result)
+  result <- run_hook("chemi_rdkit_bulk", "post_response", state)
+  result
 }

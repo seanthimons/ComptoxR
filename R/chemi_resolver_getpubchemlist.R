@@ -1,11 +1,11 @@
 #' Resolver Getpubchemlist
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
-#' This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+#' This function first resolves chemical identifiers using \code{chemi_resolver_lookup_bulk},
 #' then sends the resolved Chemical objects to the API endpoint.
-#'
 #' @param query Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI, etc.)
 #' @param idType Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default)
 #' @param section Optional parameter
@@ -14,67 +14,37 @@
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
-  chemicals <- NULL
-  req_data <- run_hook(
-    "chemi_resolver_getpubchemlist",
-    "pre_request",
-    list(
-      params = list(
-        `query` = query,
-        `idType` = idType,
-        `section` = section,
-        `all_pages` = all_pages,
-        `max_pages` = max_pages,
-        `chemicals` = chemicals
-      )
-    )
+  params <- list(
+    "query" = query,
+    "idType" = idType,
+    "section" = section,
+    "all_pages" = all_pages,
+    "max_pages" = max_pages
   )
-  if (isTRUE(req_data$skip_request)) {
-    return(req_data$result)
+  state <- run_hook("chemi_resolver_getpubchemlist", "pre_request", list(params = params))
+  if (isTRUE(state$skip_request)) {
+    return(state$result)
   }
-  if ("query" %in% names(req_data$params)) {
-    query <- req_data$params[["query"]]
-  }
-  if ("idType" %in% names(req_data$params)) {
-    idType <- req_data$params[["idType"]]
-  }
-  if ("section" %in% names(req_data$params)) {
-    section <- req_data$params[["section"]]
-  }
-  if ("all_pages" %in% names(req_data$params)) {
-    all_pages <- req_data$params[["all_pages"]]
-  }
-  if ("max_pages" %in% names(req_data$params)) {
-    max_pages <- req_data$params[["max_pages"]]
-  }
-  if ("chemicals" %in% names(req_data$params)) {
-    chemicals <- req_data$params[["chemicals"]]
-  }
-
-  # Build options from additional parameters
-  extra_options <- list()
-  if (!is.null(section)) {
-    extra_options$section <- section
-  }
-
+  changed <- intersect(names(params), names(state$params))
+  params[changed] <- state$params[changed]
   result <- generic_chemi_request(
-    query = query,
-    endpoint = "resolver/getpubchemlist",
-    options = extra_options,
-    tidy = FALSE,
-    chemicals = chemicals,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "page_size"
+    "query" = params[["query"]],
+    "endpoint" = "resolver/getpubchemlist",
+    "options" = local({
+      .body <- Filter(Negate(is.null), list("section" = params[["section"]]))
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE,
+    "chemicals" = state[["params"]][["chemicals"]],
+    "paginate" = params[["all_pages"]],
+    "max_pages" = params[["max_pages"]],
+    "pagination_strategy" = "page_size"
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

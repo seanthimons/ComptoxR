@@ -29,8 +29,7 @@ suppressPackageStartupMessages({
   library(mirai)
 })
 
-source(file.path("dev", "test_generation", "00_config.R"))
-source(file.path("dev", "test_generation", "07_token_preflight.R"))
+source(file.path("dev", "token_preflight.R"))
 
 # Configuration ----------------------------------------------------------------
 N_WORKERS <- 8 # Number of parallel workers

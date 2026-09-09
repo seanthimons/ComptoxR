@@ -1,87 +1,38 @@
-# Local schema clients
+﻿# Local schema clients
 
-Install the pinned development toolkit recorded in `dev/toolkit-lock.json`.
-Keep local schema snapshots and clients outside every ComptoxR checkout.
-The command takes six explicit positional arguments:
+Install the development toolkit from `dev/toolkit-lock.json`. Keep schema inputs
+and generated clients outside every ComptoxR checkout. The local command retains
+that boundary policy and delegates initialization and generation to apipak:
 
 ```text
-Rscript dev/generate_local_client.R <ComptoxR_checkout> <schema_directory> <schema_filename> <new_output_directory> <base_url> <local_package_name>
+Rscript dev/generate_local_client.R <ComptoxR_checkout> <schema_directory> <schema_filename> <new_output_directory> <base_url> <package_name> <metadata.json>
 ```
 
-For example, use the frozen external schema directory and an explicit local
-service URL. Choose the URL prefix to which the paths in that schema must be
-appended. A schema path that starts with `/api` already includes that segment;
-do not repeat it in the base URL. Schema `servers` never select or change the
-configured host. URLs can be production, development, staging or localhost
-when explicitly supplied. The URL must not contain credentials, query or
-fragment components. The command does not send HTTP requests during generation.
+Supply your own package metadata, for example:
 
-The output directory must be new or empty. The command rejects output inside
-the public repository, its worktrees or another ComptoxR checkout. It also
-rejects schema input inside the public repository and paths outside the given
-input root. Each output is a separate local package with `DESCRIPTION`,
-`NAMESPACE`, `R/` and a license file, plus convenient `client.R` and
-`manifest.json` files. Use a distinct package name such as `localalerts`.
-The manifest
-records the toolkit version, schema file hash, explicit URL, supported
-operation names and unsupported-operation reasons. It does not copy schemas
-into the public repository. Unsupported operations are not generated.
-
-Install the package into a separate local library:
-
-```r
-dir.create('/absolute/local/library', recursive = TRUE, showWarnings = FALSE)
-install.packages('/absolute/local/output', repos = NULL, type = 'source',
-                 lib = '/absolute/local/library')
-library(localalerts, lib.loc = '/absolute/local/library')
+```json
+{
+  "title": "Local API Client",
+  "author": {"given": "Test", "family": "Maintainer", "email": "maintainer@example.org"},
+  "license": "MIT + file LICENSE"
+}
 ```
 
-Alternatively, load the sourceable client into its own environment:
+The command requires a new or empty output directory and an explicit HTTP(S) URL
+without credentials, query or fragment. Generation performs no HTTP requests.
+The generated package owns its transport and runtime dependencies; it does not
+load ComptoxR or apipak. Its `apipak.yml` and service YAML drive subsequent
+`apipak::generate_client(root, config = 'apipak.yml', mode = 'plan')`, `apply`,
+and `check` calls. Unsupported selected operations produce diagnostics and block
+application; they do not disappear from the inventory.
 
-```r
-client <- new.env(parent = baseenv())
-sys.source('/absolute/local/output/client.R', envir = client)
-# Call a supported function listed in manifest.json:
-# response <- client$operationName(...)
-# httr2::resp_body_json(response)
-```
+For general initialization or adoption of an existing DESCRIPTION, use
+`apipak::initialize_client()` directly. Initialization writes only absent files
+and requires package metadata for a new package. Response decoding follows the
+explicit transport contract documented in apipak, including JSON, text, binary,
+and empty bodies. Natural Products remains schema stress testing only.
 
-The generated package declares httr2 and jsonlite at runtime. The latter is
-required by httr2's optional JSON functions. It returns an httr2 response and
-propagates HTTP errors. It does not load ComptoxR or wrapmaint. It has no
-automatic authentication, pagination or chemical resolution. Those behaviors
-need separately reviewed local helper code. Keep generated clients local;
-public operations must be regenerated from approved production schemas.
-
-Verification: `Rscript dev/migration-evidence/verify-local-client.R` generates
-the four-operation catalogue twice, compares both output hashes, rejects public
-output and replacement of existing files, reports an unsupported header, and
-starts a fresh R process. It also installs the generated package in a separate
-library that contains only its runtime dependencies, with wrapmaint and
-ComptoxR unavailable. Both forms check three mocked HTTP requests,
-path/query encoding, JSON placement and HTTP error propagation without loading
-the toolkit or ComptoxR. Mocking uses the httr2
-[documented mock interface](https://httr2.r-lib.org/reference/with_mocked_responses.html).
-
-The frozen `chemi-alerts-dev.json` snapshot generated 9 supported operations and
-8 diagnostics: 4 unsupported parameter types, 3 unsupported body properties and
-1 unsupported body media type. This is partial local generation, not support
-for the whole service schema. The local artifact was written outside the public
-repository under `ComptoxR-local-clients/migration-516dfd4/clients/localalerts`.
-The explicit `https://local.invalid` demonstration URL is not a live service
-configuration. Use an actual reviewed base URL prefix when generating a client
-for use.
-
-The frozen alerts output also passed a fresh-process mocked GET for
-`groupGet('a/b')`, with the fixed expected URL
-`https://local.invalid/api/alerts/groups/a%2Fb` and a parsed JSON response.
-Repeat that check with
-`Rscript --vanilla dev/migration-evidence/verify-local-client.R --alerts <absolute_client.R>`.
-The actual alerts package also passed installation and the same mocked GET in
-the separate `migration-516dfd4/library-localalerts-json` library, with wrapmaint
-and ComptoxR absent. Repeat with
-`Rscript dev/migration-evidence/verify-local-client.R --install-alerts <package_root> <new_local_library>`.
-Install output reports no man pages: these are minimal local packages, not
-packages prepared for public release.
-All verification commands passed with no skips. Air and Jarl passed for the
-command and verification script. No live network request was made.
+Historical local-alerts and standalone `client.R` evidence belongs to the
+[pre-migration client revision](https://github.com/seanthimons/ComptoxR/tree/4fd720b97fb2f7f2abf131925e9270b0c11b057a/dev/migration-evidence).
+Those scripts reproduce the old toolkit at that revision; they are not the
+current maintenance commands.

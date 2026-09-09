@@ -1,36 +1,34 @@
 #' Stdizer Groups
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_stdizer_groups()
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_stdizer_groups <- function() {
+  params <- list()
   result <- generic_request(
-    endpoint = "stdizer/groups",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE
+    "endpoint" = "stdizer/groups",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
 
 #' Stdizer Groups
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param acl Optional parameter
 #' @param description Optional parameter
 #' @param flag Optional parameter
@@ -47,11 +45,11 @@ chemi_stdizer_groups <- function() {
 #' @return Returns a tibble with results
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_stdizer_groups_bulk(acl = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_stdizer_groups_bulk <- function(
   acl = NULL,
   description = NULL,
@@ -67,46 +65,43 @@ chemi_stdizer_groups_bulk <- function(
   request.filesInfo = NULL,
   request.replace = NULL
 ) {
-  # Build options list for additional parameters
-  options <- list()
-  if (!is.null(description)) {
-    options$description <- description
-  }
-  if (!is.null(flag)) {
-    options$flag <- flag
-  }
-  if (!is.null(frozen)) {
-    options$frozen <- frozen
-  }
-  if (!is.null(id)) {
-    options$id <- id
-  }
-  if (!is.null(invalid)) {
-    options$invalid <- invalid
-  }
-  if (!is.null(invalidMessage)) {
-    options$invalidMessage <- invalidMessage
-  }
-  if (!is.null(operations)) {
-    options$operations <- operations
-  }
-  if (!is.null(text)) {
-    options$text <- text
-  }
-  if (!is.null(type)) {
-    options$type <- type
-  }
-  if (!is.null(value)) {
-    options$value <- value
-  }
-  result <- generic_chemi_request(
-    query = acl,
-    endpoint = "stdizer/groups",
-    options = options,
-    tidy = FALSE
+  params <- list(
+    "acl" = acl,
+    "description" = description,
+    "flag" = flag,
+    "frozen" = frozen,
+    "id" = id,
+    "invalid" = invalid,
+    "invalidMessage" = invalidMessage,
+    "operations" = operations,
+    "text" = text,
+    "type" = type,
+    "value" = value,
+    "request.filesInfo" = request.filesInfo,
+    "request.replace" = request.replace
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_chemi_request(
+    "query" = params[["acl"]],
+    "endpoint" = "stdizer/groups",
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "description" = params[["description"]],
+          "flag" = params[["flag"]],
+          "frozen" = params[["frozen"]],
+          "id" = params[["id"]],
+          "invalid" = params[["invalid"]],
+          "invalidMessage" = params[["invalidMessage"]],
+          "operations" = params[["operations"]],
+          "text" = params[["text"]],
+          "type" = params[["type"]],
+          "value" = params[["value"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "tidy" = FALSE
+  )
+  result
 }

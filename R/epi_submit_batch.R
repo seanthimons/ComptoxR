@@ -1,8 +1,8 @@
 #' Estimate an ordered batch of chemicals
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param modules Selected calculations. Items run in canonical dependency order rather than submitted array order; use waterSolubilityProvider for the shared water-solubility choice.
 #' @param advectionTimeAir Optional parameter
 #' @param advectionTimeSediment Optional parameter
@@ -79,11 +79,11 @@
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' epi_submit_batch(modules = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 epi_submit_batch <- function(
   modules,
   advectionTimeAir = NULL,
@@ -159,234 +159,169 @@ epi_submit_batch <- function(
   waterSolubilityMgPerL = NULL,
   waterSolubilityProvider = NULL
 ) {
-  # Build request body
-  request_body <- list()
-  request_body$modules <- modules
-  if (!is.null(advectionTimeAir)) {
-    request_body$advectionTimeAir <- advectionTimeAir
-  }
-  if (!is.null(advectionTimeSediment)) {
-    request_body$advectionTimeSediment <- advectionTimeSediment
-  }
-  if (!is.null(advectionTimeSoil)) {
-    request_body$advectionTimeSoil <- advectionTimeSoil
-  }
-  if (!is.null(advectionTimeWater)) {
-    request_body$advectionTimeWater <- advectionTimeWater
-  }
-  if (!is.null(amineNitrogens)) {
-    request_body$amineNitrogens <- amineNitrogens
-  }
-  if (!is.null(aopRateConstant)) {
-    request_body$aopRateConstant <- aopRateConstant
-  }
-  if (!is.null(averageMolecularWeight)) {
-    request_body$averageMolecularWeight <- averageMolecularWeight
-  }
-  if (!is.null(averagingTimeDays)) {
-    request_body$averagingTimeDays <- averagingTimeDays
-  }
-  if (!is.null(biowin3)) {
-    request_body$biowin3 <- biowin3
-  }
-  if (!is.null(biowin5)) {
-    request_body$biowin5 <- biowin5
-  }
-  if (!is.null(biowinScore)) {
-    request_body$biowinScore <- biowinScore
-  }
-  if (!is.null(bodyWeightKg)) {
-    request_body$bodyWeightKg <- bodyWeightKg
-  }
-  if (!is.null(boilingPointC)) {
-    request_body$boilingPointC <- boilingPointC
-  }
-  if (!is.null(branchedCarbons)) {
-    request_body$branchedCarbons <- branchedCarbons
-  }
-  if (!is.null(branches)) {
-    request_body$branches <- branches
-  }
-  if (!is.null(carbonChainLength)) {
-    request_body$carbonChainLength <- carbonChainLength
-  }
-  if (!is.null(cas)) {
-    request_body$cas <- cas
-  }
-  if (!is.null(cationAnionRatio)) {
-    request_body$cationAnionRatio <- cationAnionRatio
-  }
-  if (!is.null(chemicalName)) {
-    request_body$chemicalName <- chemicalName
-  }
-  if (!is.null(daylightHours)) {
-    request_body$daylightHours <- daylightHours
-  }
-  if (!is.null(emissionRateAir)) {
-    request_body$emissionRateAir <- emissionRateAir
-  }
-  if (!is.null(emissionRateSediment)) {
-    request_body$emissionRateSediment <- emissionRateSediment
-  }
-  if (!is.null(emissionRateSoil)) {
-    request_body$emissionRateSoil <- emissionRateSoil
-  }
-  if (!is.null(emissionRateWater)) {
-    request_body$emissionRateWater <- emissionRateWater
-  }
-  if (!is.null(ethoxylate)) {
-    request_body$ethoxylate <- ethoxylate
-  }
-  if (!is.null(eventDurationHours)) {
-    request_body$eventDurationHours <- eventDurationHours
-  }
-  if (!is.null(eventFrequencyPerDay)) {
-    request_body$eventFrequencyPerDay <- eventFrequencyPerDay
-  }
-  if (!is.null(exposureDurationYears)) {
-    request_body$exposureDurationYears <- exposureDurationYears
-  }
-  if (!is.null(exposureFrequencyDaysPerYear)) {
-    request_body$exposureFrequencyDaysPerYear <- exposureFrequencyDaysPerYear
-  }
-  if (!is.null(fractionAbsorbed)) {
-    request_body$fractionAbsorbed <- fractionAbsorbed
-  }
-  if (!is.null(halfLifeAir)) {
-    request_body$halfLifeAir <- halfLifeAir
-  }
-  if (!is.null(halfLifeHoursAerationVessel)) {
-    request_body$halfLifeHoursAerationVessel <- halfLifeHoursAerationVessel
-  }
-  if (!is.null(halfLifeHoursPrimaryClarifier)) {
-    request_body$halfLifeHoursPrimaryClarifier <- halfLifeHoursPrimaryClarifier
-  }
-  if (!is.null(halfLifeHoursSettlingTank)) {
-    request_body$halfLifeHoursSettlingTank <- halfLifeHoursSettlingTank
-  }
-  if (!is.null(halfLifeSediment)) {
-    request_body$halfLifeSediment <- halfLifeSediment
-  }
-  if (!is.null(halfLifeSoil)) {
-    request_body$halfLifeSoil <- halfLifeSoil
-  }
-  if (!is.null(halfLifeWater)) {
-    request_body$halfLifeWater <- halfLifeWater
-  }
-  if (!is.null(henryAtmM3PerMol)) {
-    request_body$henryAtmM3PerMol <- henryAtmM3PerMol
-  }
-  if (!is.null(koc)) {
-    request_body$koc <- koc
-  }
-  if (!is.null(lakeCurrentMPerSec)) {
-    request_body$lakeCurrentMPerSec <- lakeCurrentMPerSec
-  }
-  if (!is.null(lakeDepthMeters)) {
-    request_body$lakeDepthMeters <- lakeDepthMeters
-  }
-  if (!is.null(lakeWindMPerSec)) {
-    request_body$lakeWindMPerSec <- lakeWindMPerSec
-  }
-  if (!is.null(logKoa)) {
-    request_body$logKoa <- logKoa
-  }
-  if (!is.null(logKow)) {
-    request_body$logKow <- logKow
-  }
-  if (!is.null(mainCarbons)) {
-    request_body$mainCarbons <- mainCarbons
-  }
-  if (!is.null(meltingPointC)) {
-    request_body$meltingPointC <- meltingPointC
-  }
-  if (!is.null(molecularWeight)) {
-    request_body$molecularWeight <- molecularWeight
-  }
-  if (!is.null(mw1000Percentage)) {
-    request_body$mw1000Percentage <- mw1000Percentage
-  }
-  if (!is.null(mw500Percentage)) {
-    request_body$mw500Percentage <- mw500Percentage
-  }
-  if (!is.null(ohConcentrationE6OhPerCm3)) {
-    request_body$ohConcentrationE6OhPerCm3 <- ohConcentrationE6OhPerCm3
-  }
-  if (!is.null(ozoneConcentrationE11MolPerCm3)) {
-    request_body$ozoneConcentrationE11MolPerCm3 <- ozoneConcentrationE11MolPerCm3
-  }
-  if (!is.null(polymerType)) {
-    request_body$polymerType <- polymerType
-  }
-  if (!is.null(propoxyGroups)) {
-    request_body$propoxyGroups <- propoxyGroups
-  }
-  if (!is.null(removeMetals)) {
-    request_body$removeMetals <- removeMetals
-  }
-  if (!is.null(riverCurrentMPerSec)) {
-    request_body$riverCurrentMPerSec <- riverCurrentMPerSec
-  }
-  if (!is.null(riverDepthMeters)) {
-    request_body$riverDepthMeters <- riverDepthMeters
-  }
-  if (!is.null(riverWindMPerSec)) {
-    request_body$riverWindMPerSec <- riverWindMPerSec
-  }
-  if (!is.null(skinSurfaceAreaCm2)) {
-    request_body$skinSurfaceAreaCm2 <- skinSurfaceAreaCm2
-  }
-  if (!is.null(smiles)) {
-    request_body$smiles <- smiles
-  }
-  if (!is.null(solubilityType)) {
-    request_body$solubilityType <- solubilityType
-  }
-  if (!is.null(subcooledVaporPressureMmHg)) {
-    request_body$subcooledVaporPressureMmHg <- subcooledVaporPressureMmHg
-  }
-  if (!is.null(theta)) {
-    request_body$theta <- theta
-  }
-  if (!is.null(tspUgPerM3)) {
-    request_body$tspUgPerM3 <- tspUgPerM3
-  }
-  if (!is.null(useSmiles)) {
-    request_body$useSmiles <- useSmiles
-  }
-  if (!is.null(userKpCmPerHour)) {
-    request_body$userKpCmPerHour <- userKpCmPerHour
-  }
-  if (!is.null(vaporPressureMmHg)) {
-    request_body$vaporPressureMmHg <- vaporPressureMmHg
-  }
-  if (!is.null(vaporPressureTemperatureC)) {
-    request_body$vaporPressureTemperatureC <- vaporPressureTemperatureC
-  }
-  if (!is.null(waterConcentrationMgPerCm3)) {
-    request_body$waterConcentrationMgPerCm3 <- waterConcentrationMgPerCm3
-  }
-  if (!is.null(waterConcentrationMgPerLiter)) {
-    request_body$waterConcentrationMgPerLiter <- waterConcentrationMgPerLiter
-  }
-  if (!is.null(waterSolubility)) {
-    request_body$waterSolubility <- waterSolubility
-  }
-  if (!is.null(waterSolubilityMgPerL)) {
-    request_body$waterSolubilityMgPerL <- waterSolubilityMgPerL
-  }
-  if (!is.null(waterSolubilityProvider)) {
-    request_body$waterSolubilityProvider <- waterSolubilityProvider
-  }
-  result <- generic_request(
-    query = NULL,
-    endpoint = "submit/batch",
-    method = "POST",
-    batch_limit = as.numeric(Sys.getenv("batch_limit", "1000")),
-    body = request_body
+  params <- list(
+    "modules" = modules,
+    "advectionTimeAir" = advectionTimeAir,
+    "advectionTimeSediment" = advectionTimeSediment,
+    "advectionTimeSoil" = advectionTimeSoil,
+    "advectionTimeWater" = advectionTimeWater,
+    "amineNitrogens" = amineNitrogens,
+    "aopRateConstant" = aopRateConstant,
+    "averageMolecularWeight" = averageMolecularWeight,
+    "averagingTimeDays" = averagingTimeDays,
+    "biowin3" = biowin3,
+    "biowin5" = biowin5,
+    "biowinScore" = biowinScore,
+    "bodyWeightKg" = bodyWeightKg,
+    "boilingPointC" = boilingPointC,
+    "branchedCarbons" = branchedCarbons,
+    "branches" = branches,
+    "carbonChainLength" = carbonChainLength,
+    "cas" = cas,
+    "cationAnionRatio" = cationAnionRatio,
+    "chemicalName" = chemicalName,
+    "daylightHours" = daylightHours,
+    "emissionRateAir" = emissionRateAir,
+    "emissionRateSediment" = emissionRateSediment,
+    "emissionRateSoil" = emissionRateSoil,
+    "emissionRateWater" = emissionRateWater,
+    "ethoxylate" = ethoxylate,
+    "eventDurationHours" = eventDurationHours,
+    "eventFrequencyPerDay" = eventFrequencyPerDay,
+    "exposureDurationYears" = exposureDurationYears,
+    "exposureFrequencyDaysPerYear" = exposureFrequencyDaysPerYear,
+    "fractionAbsorbed" = fractionAbsorbed,
+    "halfLifeAir" = halfLifeAir,
+    "halfLifeHoursAerationVessel" = halfLifeHoursAerationVessel,
+    "halfLifeHoursPrimaryClarifier" = halfLifeHoursPrimaryClarifier,
+    "halfLifeHoursSettlingTank" = halfLifeHoursSettlingTank,
+    "halfLifeSediment" = halfLifeSediment,
+    "halfLifeSoil" = halfLifeSoil,
+    "halfLifeWater" = halfLifeWater,
+    "henryAtmM3PerMol" = henryAtmM3PerMol,
+    "koc" = koc,
+    "lakeCurrentMPerSec" = lakeCurrentMPerSec,
+    "lakeDepthMeters" = lakeDepthMeters,
+    "lakeWindMPerSec" = lakeWindMPerSec,
+    "logKoa" = logKoa,
+    "logKow" = logKow,
+    "mainCarbons" = mainCarbons,
+    "meltingPointC" = meltingPointC,
+    "molecularWeight" = molecularWeight,
+    "mw1000Percentage" = mw1000Percentage,
+    "mw500Percentage" = mw500Percentage,
+    "ohConcentrationE6OhPerCm3" = ohConcentrationE6OhPerCm3,
+    "ozoneConcentrationE11MolPerCm3" = ozoneConcentrationE11MolPerCm3,
+    "polymerType" = polymerType,
+    "propoxyGroups" = propoxyGroups,
+    "removeMetals" = removeMetals,
+    "riverCurrentMPerSec" = riverCurrentMPerSec,
+    "riverDepthMeters" = riverDepthMeters,
+    "riverWindMPerSec" = riverWindMPerSec,
+    "skinSurfaceAreaCm2" = skinSurfaceAreaCm2,
+    "smiles" = smiles,
+    "solubilityType" = solubilityType,
+    "subcooledVaporPressureMmHg" = subcooledVaporPressureMmHg,
+    "theta" = theta,
+    "tspUgPerM3" = tspUgPerM3,
+    "useSmiles" = useSmiles,
+    "userKpCmPerHour" = userKpCmPerHour,
+    "vaporPressureMmHg" = vaporPressureMmHg,
+    "vaporPressureTemperatureC" = vaporPressureTemperatureC,
+    "waterConcentrationMgPerCm3" = waterConcentrationMgPerCm3,
+    "waterConcentrationMgPerLiter" = waterConcentrationMgPerLiter,
+    "waterSolubility" = waterSolubility,
+    "waterSolubilityMgPerL" = waterSolubilityMgPerL,
+    "waterSolubilityProvider" = waterSolubilityProvider
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_request(
+    "query" = NULL,
+    "endpoint" = "submit/batch",
+    "method" = "POST",
+    "batch_limit" = as.numeric(Sys.getenv("batch_limit", "1000")),
+    "body" = list(local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "modules" = params[["modules"]],
+          "advectionTimeAir" = params[["advectionTimeAir"]],
+          "advectionTimeSediment" = params[["advectionTimeSediment"]],
+          "advectionTimeSoil" = params[["advectionTimeSoil"]],
+          "advectionTimeWater" = params[["advectionTimeWater"]],
+          "amineNitrogens" = params[["amineNitrogens"]],
+          "aopRateConstant" = params[["aopRateConstant"]],
+          "averageMolecularWeight" = params[["averageMolecularWeight"]],
+          "averagingTimeDays" = params[["averagingTimeDays"]],
+          "biowin3" = params[["biowin3"]],
+          "biowin5" = params[["biowin5"]],
+          "biowinScore" = params[["biowinScore"]],
+          "bodyWeightKg" = params[["bodyWeightKg"]],
+          "boilingPointC" = params[["boilingPointC"]],
+          "branchedCarbons" = params[["branchedCarbons"]],
+          "branches" = params[["branches"]],
+          "carbonChainLength" = params[["carbonChainLength"]],
+          "cas" = params[["cas"]],
+          "cationAnionRatio" = params[["cationAnionRatio"]],
+          "chemicalName" = params[["chemicalName"]],
+          "daylightHours" = params[["daylightHours"]],
+          "emissionRateAir" = params[["emissionRateAir"]],
+          "emissionRateSediment" = params[["emissionRateSediment"]],
+          "emissionRateSoil" = params[["emissionRateSoil"]],
+          "emissionRateWater" = params[["emissionRateWater"]],
+          "ethoxylate" = params[["ethoxylate"]],
+          "eventDurationHours" = params[["eventDurationHours"]],
+          "eventFrequencyPerDay" = params[["eventFrequencyPerDay"]],
+          "exposureDurationYears" = params[["exposureDurationYears"]],
+          "exposureFrequencyDaysPerYear" = params[["exposureFrequencyDaysPerYear"]],
+          "fractionAbsorbed" = params[["fractionAbsorbed"]],
+          "halfLifeAir" = params[["halfLifeAir"]],
+          "halfLifeHoursAerationVessel" = params[["halfLifeHoursAerationVessel"]],
+          "halfLifeHoursPrimaryClarifier" = params[["halfLifeHoursPrimaryClarifier"]],
+          "halfLifeHoursSettlingTank" = params[["halfLifeHoursSettlingTank"]],
+          "halfLifeSediment" = params[["halfLifeSediment"]],
+          "halfLifeSoil" = params[["halfLifeSoil"]],
+          "halfLifeWater" = params[["halfLifeWater"]],
+          "henryAtmM3PerMol" = params[["henryAtmM3PerMol"]],
+          "koc" = params[["koc"]],
+          "lakeCurrentMPerSec" = params[["lakeCurrentMPerSec"]],
+          "lakeDepthMeters" = params[["lakeDepthMeters"]],
+          "lakeWindMPerSec" = params[["lakeWindMPerSec"]],
+          "logKoa" = params[["logKoa"]],
+          "logKow" = params[["logKow"]],
+          "mainCarbons" = params[["mainCarbons"]],
+          "meltingPointC" = params[["meltingPointC"]],
+          "molecularWeight" = params[["molecularWeight"]],
+          "mw1000Percentage" = params[["mw1000Percentage"]],
+          "mw500Percentage" = params[["mw500Percentage"]],
+          "ohConcentrationE6OhPerCm3" = params[["ohConcentrationE6OhPerCm3"]],
+          "ozoneConcentrationE11MolPerCm3" = params[["ozoneConcentrationE11MolPerCm3"]],
+          "polymerType" = params[["polymerType"]],
+          "propoxyGroups" = params[["propoxyGroups"]],
+          "removeMetals" = params[["removeMetals"]],
+          "riverCurrentMPerSec" = params[["riverCurrentMPerSec"]],
+          "riverDepthMeters" = params[["riverDepthMeters"]],
+          "riverWindMPerSec" = params[["riverWindMPerSec"]],
+          "skinSurfaceAreaCm2" = params[["skinSurfaceAreaCm2"]],
+          "smiles" = params[["smiles"]],
+          "solubilityType" = params[["solubilityType"]],
+          "subcooledVaporPressureMmHg" = params[["subcooledVaporPressureMmHg"]],
+          "theta" = params[["theta"]],
+          "tspUgPerM3" = params[["tspUgPerM3"]],
+          "useSmiles" = params[["useSmiles"]],
+          "userKpCmPerHour" = params[["userKpCmPerHour"]],
+          "vaporPressureMmHg" = params[["vaporPressureMmHg"]],
+          "vaporPressureTemperatureC" = params[["vaporPressureTemperatureC"]],
+          "waterConcentrationMgPerCm3" = params[["waterConcentrationMgPerCm3"]],
+          "waterConcentrationMgPerLiter" = params[["waterConcentrationMgPerLiter"]],
+          "waterSolubility" = params[["waterSolubility"]],
+          "waterSolubilityMgPerL" = params[["waterSolubilityMgPerL"]],
+          "waterSolubilityProvider" = params[["waterSolubilityProvider"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    })),
+    "server" = "epi_burl",
+    "auth" = FALSE
+  )
+  result
 }

@@ -1,8 +1,8 @@
 #' Search reactions
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param page Optional parameter
 #' @param size Optional parameter
 #' @param query Optional parameter
@@ -17,11 +17,11 @@
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_chet_reaction_database(page = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_chet_reaction_database <- function(
   page = 0,
   size = NULL,
@@ -35,49 +35,46 @@ chemi_chet_reaction_database <- function(
   all_pages = TRUE,
   max_pages = 100
 ) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(page)) {
-    options[['page']] <- page
-  }
-  if (!is.null(size)) {
-    options[['size']] <- size
-  }
-  if (!is.null(query)) {
-    options[['query']] <- query
-  }
-  if (!is.null(lib_name)) {
-    options[['lib_name']] <- lib_name
-  }
-  if (!is.null(reaction_process)) {
-    options[['reaction_process']] <- reaction_process
-  }
-  if (!is.null(reaction_type)) {
-    options[['reaction_type']] <- reaction_type
-  }
-  if (!is.null(reaction_scheme)) {
-    options[['reaction_scheme']] <- reaction_scheme
-  }
-  if (!is.null(reaction_phase)) {
-    options[['reaction_phase']] <- reaction_phase
-  }
-  if (!is.null(craccm_id)) {
-    options[['craccm_id']] <- craccm_id
-  }
-  result <- generic_request(
-    endpoint = "reaction/database",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options,
-    paginate = all_pages,
-    max_pages = max_pages,
-    pagination_strategy = "page_size"
+  params <- list(
+    "page" = page,
+    "size" = size,
+    "query" = query,
+    "lib_name" = lib_name,
+    "reaction_process" = reaction_process,
+    "reaction_type" = reaction_type,
+    "reaction_scheme" = reaction_scheme,
+    "reaction_phase" = reaction_phase,
+    "craccm_id" = craccm_id,
+    "all_pages" = all_pages,
+    "max_pages" = max_pages
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result <- generic_request(
+    "endpoint" = "reaction/database",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = local({
+      .body <- Filter(
+        Negate(is.null),
+        list(
+          "page" = params[["page"]],
+          "size" = params[["size"]],
+          "query" = params[["query"]],
+          "lib_name" = params[["lib_name"]],
+          "reaction_process" = params[["reaction_process"]],
+          "reaction_type" = params[["reaction_type"]],
+          "reaction_scheme" = params[["reaction_scheme"]],
+          "reaction_phase" = params[["reaction_phase"]],
+          "craccm_id" = params[["craccm_id"]]
+        )
+      )
+      if (length(.body)) .body else list()
+    }),
+    "paginate" = params[["all_pages"]],
+    "max_pages" = params[["max_pages"]],
+    "pagination_strategy" = "page_size"
+  )
+  result
 }

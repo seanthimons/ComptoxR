@@ -29,9 +29,9 @@ chemi_amos_product_declaration_keyset_pagination_bulk(
 
 \item{dtxsid}{Optional DTXSID substance filter. (default: )}
 
-\item{filterModel}{Alias for filters. (default: {})}
+\item{filterModel}{Alias for filters. (default: \{\})}
 
-\item{filters}{AG Grid filter model keyed by table field name. (default: {})}
+\item{filters}{AG Grid filter model keyed by table field name. (default: \{\})}
 
 \item{full_table}{Text to match across searchable table columns. (default: )}
 

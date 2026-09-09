@@ -29,19 +29,36 @@ test_that("WebTEST prediction interfaces retain generated public contracts", {
   expect_identical(formals(chemi_webtest_predict_bulk)$output, quote(c("wide", "raw")))
 
   for (fn_name in c("chemi_webtest_predict", "chemi_webtest_predict_bulk")) {
-    body_text <- paste(
-      deparse(body(get(fn_name)), width.cutoff = 500L),
-      collapse = "\n"
+    calls <- character()
+    request <- function(...) {
+      calls <<- c(calls, "helper")
+      list(value = "response")
+    }
+    local_mocked_bindings(
+      generic_request = request,
+      generic_chemi_request = request,
+      run_hook = function(fn, stage, data) {
+        calls <<- c(calls, stage)
+        if (stage == "pre_request") {
+          return(list(
+            params = data$params,
+            marker = "retained",
+            request = list(endpoint = "probe", server = "fixture")
+          ))
+        }
+        expect_identical(data$marker, "retained")
+        expect_identical(data$result, list(value = "response"))
+        "post-processed"
+      },
+      .package = "ComptoxR"
     )
-    expect_true(
-      regexpr('"pre_request"', body_text, fixed = TRUE)[[1]] < regexpr("generic_", body_text, fixed = TRUE)[[1]],
-      info = fn_name
-    )
-    expect_true(
-      regexpr("generic_", body_text, fixed = TRUE)[[1]] < regexpr('"post_response"', body_text, fixed = TRUE)[[1]],
-      info = fn_name
-    )
-    expect_match(body_text, "post_data <- req_data", fixed = TRUE, info = fn_name)
+    args <- if (fn_name == "chemi_webtest_predict") {
+      list(smiles = "CCO", endpoint = "LC50")
+    } else {
+      list(structures = list("CCO"), endpoints = "LC50")
+    }
+    expect_identical(do.call(get(fn_name), args), "post-processed")
+    expect_identical(calls, c("pre_request", "helper", "post_response"))
   }
 })
 
@@ -271,6 +288,11 @@ test_that("WebTEST request validation throws identifiable pre-request conditions
     expect_identical(condition$function_name, "chemi_webtest_predict")
     expect_identical(condition$hook_name, "validate_webtest_prediction_request")
   }
+  condition <- rlang::catch_cnd(chemi_webtest_predict_bulk(list("CCO")))
+  expect_s3_class(condition, "comptoxr_webtest_pre_request_error")
+  expect_s3_class(condition, "comptoxr_webtest_error")
+  expect_identical(condition$function_name, "chemi_webtest_predict_bulk")
+  expect_identical(condition$hook_name, "validate_webtest_prediction_request")
   expect_false(called)
 })
 

@@ -1,173 +1,20 @@
-load_multischema_pipeline <- function() {
-  path <- testthat::test_path("..", "..", "dev", "stub_specs.R")
-  testthat::skip_if_not(file.exists(path), "Maintainer-only test requires dev pipeline")
-  suppressWarnings(suppressPackageStartupMessages(source(path, local = FALSE)))
+root <- normalizePath(testthat::test_path('..', '..'), winslash = '/')
+script <- file.path(root, 'dev/toolkit_adapter.R')
+if (!file.exists(script)) {
+  testthat::skip('Maintainer-only schema policy is excluded from source archives')
 }
+source(script, local = TRUE)
+source(file.path(root, 'dev/check_public_api.R'), local = TRUE)
 
-test_that("Cheminformatics generation uses only production operations", {
-  load_multischema_pipeline()
-  endpoints <- suppressWarnings(chemi_spec$build_endpoints())
-
-  expect_gt(nrow(endpoints), 0L)
-  expect_true(all(grepl('-prod[.]json$', endpoints$source_file)))
-  expect_true(all(endpoints$schema_stage == 'public'))
-  expect_false(any(grepl('_(staging|development)$', endpoints$fn)))
-  expect_identical(anyDuplicated(endpoints$fn), 0L)
-  expect_true(all(
-    c(
-      "chemi_predictor_models_predict_bulk",
-      "chemi_opera_bulk"
-    ) %in%
-      endpoints$fn
-  ))
-
-  predictor_get <- endpoints[
-    endpoints$route == "predictor_models/predict" & endpoints$method == "GET",
-  ]
-  expect_equal(nrow(predictor_get), 1L)
-})
-
-test_that("OPERA oneOf wrapper keeps body and query parameters separate", {
-  load_multischema_pipeline()
-  endpoints <- suppressWarnings(chemi_spec$build_endpoints())
-  opera <- endpoints[endpoints$fn == "chemi_opera_bulk", , drop = FALSE]
-  generated_config <- write_generated_hook_config(endpoints, tempfile(fileext = ".yml"))
-  generated_config$chemi_opera_bulk <- list(
-    pre_request = list('test_pre_hook'),
-    post_response = list('test_post_hook')
-  )
-  rlang::local_bindings(
-    stubgen_read_hook_config = function() generated_config,
-    .env = environment(render_endpoint_stubs)
-  )
-  text <- render_endpoint_stubs(opera, chemi_config)$text[[1]]
-  definition <- Filter(
-    function(expression) is.call(expression) && identical(expression[[1]], as.name("<-")),
-    as.list(parse(text = text))
-  )[[1]]
-  generated_fn <- eval(definition[[3]])
-
-  expect_identical(
-    names(formals(generated_fn)),
-    c("cache_only", "smiles", "chemicals", "format", "standardize")
-  )
-  expect_identical(formals(generated_fn)$cache_only, FALSE)
-  expect_identical(formals(generated_fn)$format, "json")
-  expect_identical(formals(generated_fn)$standardize, FALSE)
-  expect_match(text, "request_body <- Filter", fixed = TRUE)
-  expect_match(text, "cache_only = cache_only", fixed = TRUE)
-  expect_match(text, "format = format", fixed = TRUE)
-  expect_match(text, "standardize = standardize", fixed = TRUE)
-  expect_false(grepl("server = server", text, fixed = TRUE))
-  expect_match(text, '"pre_request"', fixed = TRUE)
-  expect_match(text, '"post_response"', fixed = TRUE)
-  expect_true(regexpr('"pre_request"', text, fixed = TRUE) < regexpr("request_body <- Filter", text, fixed = TRUE))
-})
-
-test_that("production configuration and AMOS call shapes are deterministic", {
-  load_multischema_pipeline()
-  endpoints <- suppressWarnings(chemi_spec$build_endpoints())
-  first <- tempfile(fileext = ".yml")
-  second <- tempfile(fileext = ".yml")
-  write_generated_hook_config(endpoints, first)
-  write_generated_hook_config(endpoints, second)
-  expect_identical(readLines(first), readLines(second))
-  expect_length(yaml::read_yaml(first), 0L)
-
-  wanted <- c(
-    "chemi_amos_method_keyset_pagination",
-    "chemi_amos_method_keyset_pagination_bulk"
-  )
-  rendered <- render_endpoint_stubs(endpoints[endpoints$fn %in% wanted, ], chemi_config)
-  text <- stats::setNames(rendered$text, rendered$fn)
-
-  expect_match(
-    text[["chemi_amos_method_keyset_pagination"]],
-    'pagination_cursor_location = "query"',
-    fixed = TRUE
-  )
-  expect_match(
-    text[["chemi_amos_method_keyset_pagination_bulk"]],
-    'pagination_cursor_location = "body"',
-    fixed = TRUE
-  )
-  expect_match(
-    text[["chemi_amos_method_keyset_pagination_bulk"]],
-    "path_params = c(limit = limit)",
-    fixed = TRUE
-  )
-  expect_true(all(vapply(text, grepl, logical(1), pattern = 'server = "chemi_burl"', fixed = TRUE)))
-  expect_false(grepl(
-    "chemicals = chemicals",
-    text[["chemi_amos_method_keyset_pagination_bulk"]],
-    fixed = TRUE
-  ))
-})
-
-test_that("object and array defaults render as valid R values", {
-  load_multischema_pipeline()
-  metadata <- list(
-    filters = list(required = FALSE, type = "object", default = stats::setNames(list(), character())),
-    sortModel = list(required = FALSE, type = "array", default = list())
-  )
-
-  parsed <- parse_function_params(
-    "filters,sortModel",
-    strategy = "options",
-    metadata = metadata,
-    has_path_params = TRUE
-  )
-  expect_silent(parse(text = paste0("function(", parsed$fn_signature, ") NULL")))
-  expect_match(parsed$param_docs, "default: {}", fixed = TRUE)
-  expect_match(parsed$param_docs, "default: []", fixed = TRUE)
-})
-
-test_that("bare schema brackets do not become Rd links", {
-  load_multischema_pipeline()
-  parsed <- parse_function_params(
-    "spectrum",
-    metadata = list(
-      spectrum = list(
-        required = FALSE,
-        description = "Use [m/z, intensity]; see [docs](https://example.com)."
-      )
-    )
-  )
-
-  expect_match(parsed$param_docs, "\\[m/z, intensity\\]", fixed = TRUE)
-  expect_match(parsed$param_docs, "[docs](https://example.com)", fixed = TRUE)
-})
-
-test_that("a configured parameter order keeps unconfigured parameters in place", {
-  load_multischema_pipeline()
-  order <- stubgen_configured_parameter_order(
-    list(extra_params = list(output = list(order = 5))),
-    'smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")'
-  )
-
-  expect_identical(order, c("smiles", "endpoint", "method", "format", "output"))
-})
-
-test_that("the rebuilt Cheminformatics tree has no obsolete experimental functions", {
-  load_multischema_pipeline()
-  remover <- testthat::test_path("..", "..", "dev", "remove_experimental.R")
-  testthat::skip_if_not(
-    file.exists(remover),
-    "Maintainer-only test requires dev scripts"
-  )
-  remover_env <- new.env(parent = globalenv())
-  source(remover, local = remover_env)
-
-  endpoints <- suppressWarnings(chemi_spec$build_endpoints())
-  report <- remover_env$scan_experimental_files(
-    testthat::test_path("..", "..", "R"),
-    prefix = "chemi"
-  )
-  selected <- report$file[report$status == "selected"]
-  exported <- unlist(lapply(selected, function(path) {
-    records <- remover_env$parse_exported_roxygen(path)
-    vapply(records, `[[`, character(1), "name")
-  }))
-
-  expect_setequal(setdiff(exported, endpoints$fn), character())
+test_that('all selected public operations have exported implementations and fixed contracts', {
+  inventory <- comptox_inventory(root)
+  expect_true(all(vapply(inventory$operations, `[[`, logical(1), 'implemented')))
+  expect_true(all(vapply(inventory$operations, `[[`, logical(1), 'contract_declared')))
+  expect_true(all(vapply(inventory$operations, function(x) !is.null(x$contract_file), logical(1))))
+  expect_true(all(vapply(
+    inventory$inventory,
+    function(x) x$status %in% c('selected', 'excluded', 'client-mapped', 'retained-unsupported'),
+    logical(1)
+  )))
+  expect_true(check_public_api(root))
 })

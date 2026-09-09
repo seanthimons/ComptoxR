@@ -1,28 +1,24 @@
 #' Get Single Sample data by DTXSID
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @return Returns a scalar value
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' ct_exposure_mmdb_single_sample(dtxsid = "DTXSID7020182")
 #' }
+# Generated with apipak; do not edit by hand.
 ct_exposure_mmdb_single_sample <- function(dtxsid) {
+  params <- list("dtxsid" = dtxsid)
   result <- generic_request(
-    query = dtxsid,
-    endpoint = "exposure/mmdb/single-sample/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1
+    "query" = params[["dtxsid"]],
+    "endpoint" = "exposure/mmdb/single-sample/by-dtxsid/",
+    "method" = "GET",
+    "batch_limit" = 1
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
-
-

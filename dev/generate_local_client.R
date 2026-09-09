@@ -1,10 +1,10 @@
 #!/usr/bin/env Rscript
 # Sourceable command. Generated output needs httr2, but no development toolkit.
-generate_local_client <- function(repository_root, input_root, schema, output_root, base_url, package_name) {
+generate_local_client <- function(repository_root, input_root, schema, output_root, base_url, package_name, metadata) {
   if (
     length(package_name) != 1L ||
       !grepl('^[A-Za-z][A-Za-z0-9.]*[A-Za-z0-9]$', package_name) ||
-      tolower(package_name) %in% c('comptoxr', 'wrapmaint', 'httr2')
+      tolower(package_name) %in% c('comptoxr', 'apipak', 'wrapmaint', 'httr2')
   ) {
     stop('Supply a distinct valid local package name')
   }
@@ -72,92 +72,24 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   ) {
     stop('Use a new or empty local output directory')
   }
-  stage <- tempfile('local-client-')
-  dir.create(stage)
-  on.exit(unlink(stage, recursive = TRUE), add = TRUE)
-  result <- wrapmaint::generate_client(
-    stage,
-    list(files = schema_path, helper = 'local_request', policy_version = 'local-explicit-url-1'),
-    'apply'
-  )
-  if (any(names(result$operations) %in% c('local_request', 'local_base_url'))) {
-    stop('Operation name conflicts with the local transport helper')
-  }
-  local_request <- function(method, path, path_params, query, body) {
-    for (name in names(path_params)) {
-      path <- gsub(
-        paste0('{', name, '}'),
-        utils::URLencode(as.character(path_params[[name]]), reserved = TRUE),
-        path,
-        fixed = TRUE
-      )
-    }
-    request <- httr2::req_method(httr2::request(local_base_url), method)
-    request <- do.call(httr2::req_url_query, c(list(request), query))
-    suffix <- if (grepl('?', request$url, fixed = TRUE)) sub('^[^?]*', '', request$url) else ''
-    request <- httr2::req_url(request, paste0(sub('/+$', '', local_base_url), '/', sub('^/+', '', path), suffix))
-    if (!is.null(body)) {
-      request <- httr2::req_body_json(request, body)
-    }
-    httr2::req_perform(request)
-  }
-  code <- c(
-    '# Local client. Keep outside the public ComptoxR package.',
-    paste0('local_base_url <- ', deparse(base_url)),
-    paste0('local_request <- ', paste(deparse(local_request), collapse = '\n')),
-    unlist(lapply(list.files(file.path(stage, 'R'), full.names = TRUE), readLines), use.names = FALSE)
-  )
-  parse(text = code)
-  writeLines(code, file.path(stage, 'client.R'))
-  writeLines(code[1:3], file.path(stage, 'R/local_request.R'))
-  writeLines(
-    c(
-      paste0('Package: ', package_name),
-      'Version: 0.0.0.9000',
-      'Title: Explicitly Configured Local API Client',
-      'Description: Local-only generated operations from a frozen schema snapshot.',
-      'Authors@R: person("Sean", "Thimons", role = c("aut", "cre"), email = "sxthi@outlook.com")',
-      'License: MIT + file LICENSE',
-      'Encoding: UTF-8',
-      'Imports: httr2, jsonlite'
-    ),
-    file.path(stage, 'DESCRIPTION')
-  )
-  writeLines(c('YEAR: 2026', 'COPYRIGHT HOLDER: Sean Thimons'), file.path(stage, 'LICENSE'))
-  writeLines(paste0('export(', names(result$operations), ')'), file.path(stage, 'NAMESPACE'))
-  writeLines('^(client[.]R|manifest[.]json)$', file.path(stage, '.Rbuildignore'))
-  result$manifest$base_url <- base_url
-  result$manifest$package <- package_name
-  result$manifest$inputs <- as.list(result$manifest$inputs)
-  result$manifest$supported <- names(result$operations)
-  result$manifest$diagnostics <- result$diagnostics
-  jsonlite::write_json(
-    result$manifest,
-    file.path(stage, 'manifest.json'),
-    auto_unbox = TRUE,
-    pretty = TRUE,
-    null = 'null'
-  )
-  dir.create(output_root, recursive = TRUE, showWarnings = FALSE)
-  stopifnot(all(file.copy(
-    list.files(stage, full.names = TRUE, all.files = TRUE, no.. = TRUE),
+  apipak::initialize_client(
     output_root,
-    recursive = TRUE
-  )))
-  cat(sprintf(
-    'Generated %d operation(s); %d unsupported operation(s). See manifest.json.\n',
-    length(result$operations),
-    length(result$diagnostics)
-  ))
-  invisible(result)
+    schema_path,
+    package = package_name,
+    title = metadata$title,
+    author = metadata$author,
+    license = metadata$license,
+    base_url = base_url
+  )
+  apipak::generate_client(output_root, config = 'apipak.yml', mode = 'apply')
 }
 
 if (sys.nframe() == 0L) {
   args <- commandArgs(trailingOnly = TRUE)
-  if (length(args) != 6L) {
+  if (length(args) != 7L) {
     stop(
-      'Usage: Rscript dev/generate_local_client.R <repository_root> <input_root> <schema_file> <output_root> <base_url> <package_name>'
+      'Usage: Rscript dev/generate_local_client.R <repository_root> <input_root> <schema_file> <output_root> <base_url> <package_name> <metadata.json>'
     )
   }
-  do.call(generate_local_client, as.list(args))
+  do.call(generate_local_client, c(as.list(args[1:6]), list(metadata = jsonlite::read_json(args[[7L]]))))
 }

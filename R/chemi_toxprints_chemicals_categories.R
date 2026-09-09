@@ -1,26 +1,24 @@
 #' Toxprints Chemicals Categories
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param chemicals Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_chemicals_categories(chemicals = "DTXSID1024122")
 #' }
+# Generated with apipak; do not edit by hand.
 chemi_toxprints_chemicals_categories <- function(chemicals = NULL) {
+  params <- list("chemicals" = chemicals)
   result <- generic_chemi_request(
-    query = chemicals,
-    endpoint = "toxprints/chemicals_categories",
-    wrap = FALSE,
-    tidy = FALSE
+    "query" = params[["chemicals"]],
+    "endpoint" = "toxprints/chemicals_categories",
+    "wrap" = FALSE,
+    "tidy" = FALSE
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

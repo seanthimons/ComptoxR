@@ -74,3 +74,8 @@ schema_old/
 
 # Planning docs
 !.planning
+
+# Keep reviewed generation ownership; locks and recovery files stay local.
+!/.apipak/
+/.apipak/*
+!/.apipak/manifest.json
