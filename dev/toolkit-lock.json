@@ -1,9 +1,9 @@
 {
   "package": "apipak",
-  "version": "0.1.1",
-  "source_commit": "8627b8176969476a983e080b06753cf1bb679f60",
-  "asset": "apipak_0.1.1.tar.gz",
-  "url": "https://github.com/seanthimons/apipak/releases/download/v0.1.1/apipak_0.1.1.tar.gz",
-  "sha256": "48dd1b531ab29d2d6a86fe7a146b218b66a46d49c2af017166dc5ad67985baf9",
+  "version": "0.1.2",
+  "source_commit": "8da0f990e650eb918a98f1851ed63926c88df46d",
+  "asset": "apipak_0.1.2.tar.gz",
+  "url": "https://github.com/seanthimons/apipak/releases/download/v0.1.2/apipak_0.1.2.tar.gz",
+  "sha256": "926fdd996241735f6105b8c2fd2dad1051f509daa4fdebc87bdc641f94ed38c6",
   "policy_version": "comptox-public-1"
 }

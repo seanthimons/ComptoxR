@@ -18,10 +18,10 @@ source('dev/install_toolkit.R')
 install_toolkit()
 ```
 
-The pin downloads immutable `apipak` 0.1.1 from
-`https://github.com/seanthimons/apipak/releases/tag/v0.1.1`, source
-`8627b8176969476a983e080b06753cf1bb679f60`. SHA-256 is
-`48dd1b531ab29d2d6a86fe7a146b218b66a46d49c2af017166dc5ad67985baf9`.
+The pin downloads immutable `apipak` 0.1.2 from
+`https://github.com/seanthimons/apipak/releases/tag/v0.1.2`, source
+`8da0f990e650eb918a98f1851ed63926c88df46d`. SHA-256 is
+`926fdd996241735f6105b8c2fd2dad1051f509daa4fdebc87bdc641f94ed38c6`.
 The installer resolves its lockfile relative to its own script and verifies the
 download before invoking R CMD INSTALL. It works when sourced from another
 working directory and has no dependency on the toolkit being installed.
