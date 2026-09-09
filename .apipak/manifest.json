@@ -3130,7 +3130,7 @@
       "operations": "epi POST /api/submit/batch"
     }
   },
-  "toolkit_version": "0.1.1",
+  "toolkit_version": "0.1.2",
   "inputs": {
     "DESCRIPTION": "f5744eb973520a886df631a9ec5937b6382213616f971385cc5246f425735998",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
@@ -3480,7 +3480,7 @@
     "R/z_db_version.R": "9e4e15ea5311098c605f0c13dd20df6acd635514435c26fa1da99c551559bc7e",
     "R/z_generic_request.R": "b77d71fafd615f0ace2733663a1a3138ca4fe87b6a7f64102bdf515f49572abd",
     "R/zzz.R": "0030a14d94dff8e0b90bc40014744a02ecc86dab2217e0ed8db6d0be2753008a",
-    "air.toml": "a30ef795a93c0fb50d4dd2db0995f05d6f8453e67ec6ce1db7ff089cdfae37b3",
+    "air.toml": "d6ee1db1e3257f56a52795e1977a9967c92dce2a2b93eb4e6ab884377539a4e1",
     "apipak.yml": "93624a4ea0748e7c0136803a179267691d00c963057c1ccf3d8eb1e5e6c1a831",
     "apis/chemi-alerts.yml": "3bce1cad8d33457c0604b762a9d7f8eb242be96690c230bd5ff1c47a8290cffc",
     "apis/chemi-amnb_nate.yml": "aef1343828f56a5df9d5bde648a48ce781ccbcef05fefbc3549dbd0a496d6c4f",
@@ -3520,7 +3520,7 @@
     "data/toxprint_dict.rda": "953f9e60d04f27ecc004087f96ce3ad1c70799dcc1ecfd759bf6b39e91e94cea",
     "data/toxvaldb_sourcedict.rda": "bae46b564a3c12d6a67b0ed8f7ed6706a8e952c25531a54efd87c2f8af37ffd4",
     "dev/apipak_callbacks.R": "bd8c1416aadb9755ae240cc7309d8f937f62e170268afbb6b6f1823d70a10a77",
-    "inst/WORDLIST": "46bd4cf5cb17d9f63c82b6f879b25e61af17a7a9268ae2743933f9efeee77d33",
+    "inst/WORDLIST": "fb105d0177706f87298f7211264987fbd6f28d6e1f18a9c62367cd4eb06522fa",
     "inst/dsstox/dsstox_build.R": "dab0d6864fcae58bd94ba9ed3214f5f5bc728d96a810bd276ab2bf6632ba743a",
     "inst/ecotox/ecotox_build.R": "aaf2b0cba9d6b89e68c8b398b3eb3731c6e674668aa25f5db5695708298adeec",
     "inst/hook_config.yml": "3cab6f1d0c6b74bf65b214a63e099321c478edc0ada9a1fd4e206d7766166ff6",
