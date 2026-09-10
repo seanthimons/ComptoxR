@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_ncc_cats(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
   params <- list("smiles" = smiles, "logp" = logp, "ws" = ws)
   result <- generic_request(
@@ -47,7 +47,7 @@ chemi_ncc_cats <- function(smiles, logp = NULL, ws = NULL) {
 #' \dontrun{
 #' chemi_ncc_cats_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_ncc_cats_bulk <- function(chemicals = NULL) {
   params <- list("chemicals" = chemicals)
   result <- generic_chemi_request(

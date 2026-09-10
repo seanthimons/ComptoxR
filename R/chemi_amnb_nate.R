@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amnb_nate(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amnb_nate <- function(smiles) {
   params <- list("smiles" = smiles)
   result <- generic_request(
@@ -43,7 +43,7 @@ chemi_amnb_nate <- function(smiles) {
 #' \dontrun{
 #' chemi_amnb_nate_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amnb_nate_bulk <- function(chemicals = NULL, smiles = NULL) {
   params <- list("chemicals" = chemicals, "smiles" = smiles)
   result <- generic_chemi_request(

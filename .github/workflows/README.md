@@ -108,7 +108,7 @@ Scheduled and manual schema update workflow.
 
 - Downloads and compares only production CompTox Dashboard, Cheminformatics,
   and EPI Suite schemas. EPI Suite uses the approved `https://episuite.dev/api`.
-- Installs the checksum-pinned `wrapmaint` development toolkit.
+- Installs the checksum-pinned `specmill` development toolkit.
 - Safely rebuilds experimental `ct_*`, `chemi_*`, and `epi_*` wrappers.
 - Reports `ok` and a comma-separated `failed_families` list from the download
   step.

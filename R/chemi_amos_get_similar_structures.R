@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_get_similar_structures(identifier_type = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_similar_structures <- function(identifier_type, identifier = NULL) {
   params <- list("identifier_type" = identifier_type, "identifier" = identifier)
   result <- generic_request(

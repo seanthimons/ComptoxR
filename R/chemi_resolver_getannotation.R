@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_resolver_getannotation(name = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_getannotation <- function(name, heading) {
   params <- list("name" = name, "heading" = heading)
   result <- generic_request(

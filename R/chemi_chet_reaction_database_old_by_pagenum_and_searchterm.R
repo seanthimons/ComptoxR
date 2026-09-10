@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_database_old_by_pagenum_and_searchterm(pagenum = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_database_old_by_pagenum_and_searchterm <- function(pagenum, searchterm = NULL) {
   params <- list("pagenum" = pagenum, "searchterm" = searchterm)
   result <- generic_request(

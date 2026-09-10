@@ -19,7 +19,7 @@
 #' \dontrun{
 #' chemi_alerts(query = c("50-00-0", "DTXSID7020182"))
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_alerts <- function(
   query,
   idType = "AnyId",

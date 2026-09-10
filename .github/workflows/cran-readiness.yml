@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
     inputs:
       toolkit_ref:
-        description: 'Optional exact apipak candidate commit for migration validation'
+        description: 'Optional exact specmill candidate commit for migration validation'
         required: false
         default: ''
 
@@ -71,18 +71,18 @@ jobs:
       - name: Install explicitly selected toolkit candidate
         if: inputs.toolkit_ref != ''
         env:
-          APIPAK_CANDIDATE_REF: ${{ inputs.toolkit_ref }}
+          SPECMILL_CANDIDATE_REF: ${{ inputs.toolkit_ref }}
         shell: Rscript {0}
         run: |
-          ref <- Sys.getenv('APIPAK_CANDIDATE_REF')
+          ref <- Sys.getenv('SPECMILL_CANDIDATE_REF')
           stopifnot(grepl('^[0-9a-f]{40}$', ref))
           archive <- tempfile(fileext = '.tar.gz')
-          curl::curl_download(paste0('https://github.com/seanthimons/apipak/archive/', ref, '.tar.gz'), archive)
+          curl::curl_download(paste0('https://github.com/seanthimons/specmill/archive/', ref, '.tar.gz'), archive)
           status <- system2(file.path(R.home('bin'), 'R'), c('CMD', 'INSTALL', shQuote(archive)))
           stopifnot(status == 0L)
           # Upgrade only toolkit-version metadata; do not bless changed sources,
           # input fingerprints, callback fingerprints, or generated output.
-          apipak::apply_files('.', list(), mode = 'apply')
+          specmill::apply_files('.', list(), mode = 'apply')
 
       - name: Check generation and hooks
         run: |
@@ -113,12 +113,12 @@ jobs:
         if: failure()
         shell: Rscript {0}
         run: |
-          if (!requireNamespace('apipak', quietly = TRUE)) quit(status = 0)
+          if (!requireNamespace('specmill', quietly = TRUE)) quit(status = 0)
           callbacks <- new.env(parent = baseenv())
-          sys.source('dev/apipak_callbacks.R', callbacks)
-          plan <- apipak::generate_client('.', config = 'apipak.yml', callbacks = callbacks, mode = 'plan')
+          sys.source('dev/specmill_callbacks.R', callbacks)
+          plan <- specmill::generate_client('.', config = 'specmill.yml', callbacks = callbacks, mode = 'plan')
           print(Filter(function(x) !x$action %in% c('unchanged', 'retained'), plan$files))
-          previous <- jsonlite::read_json('.apipak/manifest.json')
+          previous <- jsonlite::read_json('.specmill/manifest.json')
           hashes <- plan$manifest$inputs
           names(hashes) <- substring(names(hashes), nchar(normalizePath('.', winslash = '/')) + 2L)
           for (path in intersect(names(hashes), names(previous$inputs))) {

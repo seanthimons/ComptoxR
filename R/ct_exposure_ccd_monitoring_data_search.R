@@ -12,7 +12,7 @@
 #' \dontrun{
 #' ct_exposure_ccd_monitoring_data_search(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_ccd_monitoring_data_search <- function(dtxsid, projection = NULL) {
   params <- list("dtxsid" = dtxsid, "projection" = projection)
   result <- generic_request(

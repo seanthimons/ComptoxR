@@ -13,7 +13,7 @@
 #' \dontrun{
 #' ct_chemical_search_contain(word = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_search_contain <- function(word, top = 0, projection = "chemicalsearchall") {
   params <- list("word" = word, "top" = top, "projection" = projection)
   result <- generic_request(

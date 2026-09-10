@@ -93,4 +93,4 @@ operations:
       examples:
       - chemicals: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-pfas_atlas.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-pfas_atlas.rds

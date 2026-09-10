@@ -6,7 +6,7 @@ if (!file.exists(script)) {
 source(script, local = TRUE)
 
 test_that('generated ownership covers selected operations and leaves manual sources unowned', {
-  manifest <- jsonlite::read_json(file.path(root, '.apipak/manifest.json'))
+  manifest <- jsonlite::read_json(file.path(root, '.specmill/manifest.json'))
   inventory <- comptox_inventory(root)
   expect_true(all(file.exists(file.path(root, names(manifest$files)))))
   owners <- unlist(lapply(manifest$files, `[[`, 'operations'), use.names = FALSE)

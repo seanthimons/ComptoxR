@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_get_classification_for_dtxsid(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_classification_for_dtxsid <- function(dtxsid) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_extra_data_search_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_extra_data_search_bulk <- function(query) {
   params <- list("query" = query)
   result <- generic_request(
@@ -36,7 +36,7 @@ ct_chemical_extra_data_search_bulk <- function(query) {
 #' \dontrun{
 #' ct_chemical_extra_data_search(dtxsid = "DTXSID101296374")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_extra_data_search <- function(dtxsid) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

@@ -10,7 +10,7 @@
 #' \dontrun{
 #' epi_ecosar_polymer_nonionic()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 epi_ecosar_polymer_nonionic <- function() {
   params <- list()
   result <- generic_request(

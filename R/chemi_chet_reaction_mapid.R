@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_mapid(map_id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_mapid <- function(map_id = NULL) {
   params <- list("map_id" = map_id)
   result <- generic_request(

@@ -83,7 +83,7 @@
 #' \dontrun{
 #' epi_submit_batch(modules = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 epi_submit_batch <- function(
   modules,
   advectionTimeAir = NULL,

@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_dtxsids_from_functional_use(functional_use = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_dtxsids_from_functional_use <- function(functional_use) {
   params <- list("functional_use" = functional_use)
   result <- generic_request(

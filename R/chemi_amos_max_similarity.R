@@ -15,7 +15,7 @@
 #' \dontrun{
 #' chemi_amos_max_similarity(da_window = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_max_similarity <- function(
   da_window = NULL,
   dtxsids = NULL,

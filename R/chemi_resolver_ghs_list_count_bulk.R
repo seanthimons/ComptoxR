@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_resolver_ghs_list_count_bulk()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_ghs_list_count_bulk <- function(body = structure(list(), names = character(0))) {
   params <- list("body" = body)
   result <- generic_chemi_request("endpoint" = "resolver/ghs-list-count", "body" = params[["body"]], "tidy" = FALSE)

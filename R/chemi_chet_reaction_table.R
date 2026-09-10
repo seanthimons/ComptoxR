@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_table(reaction_id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_table <- function(reaction_id = NULL) {
   params <- list("reaction_id" = reaction_id)
   result <- generic_request(

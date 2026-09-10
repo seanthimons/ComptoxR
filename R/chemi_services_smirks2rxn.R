@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_services_smirks2rxn(smirks = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_services_smirks2rxn <- function(smirks) {
   params <- list("smirks" = smirks)
   result <- generic_request(

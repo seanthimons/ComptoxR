@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_alerts_alerts completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-alerts.rds"))[["chemi_alerts_alerts"]]
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-alerts.rds"))[["chemi_alerts_alerts"]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

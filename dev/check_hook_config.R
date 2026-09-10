@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-.hook_config_root <- apipak::script_root('check_hook_config.R')
+.hook_config_root <- specmill::script_root('check_hook_config.R')
 check_hook_config <- function(root = .hook_config_root) {
   root <- normalizePath(root, winslash = '/', mustWork = TRUE)
   hooks <- new.env(parent = baseenv())
@@ -11,7 +11,7 @@ check_hook_config <- function(root = .hook_config_root) {
     file.path(root, 'inst/hook_config.yml'),
     file.path(root, 'inst/hook_config_generated.yml')
   )
-  apipak::check_client_hooks(root, config, hooks)
+  specmill::check_client_hooks(root, config, hooks)
 }
 if (sys.nframe() == 0L) {
   check_hook_config()

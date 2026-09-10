@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_arn_cats(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_arn_cats <- function(smiles, model = "RF") {
   params <- list("smiles" = smiles, "model" = model)
   result <- generic_request(
@@ -45,7 +45,7 @@ chemi_arn_cats <- function(smiles, model = "RF") {
 #' \dontrun{
 #' chemi_arn_cats_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_arn_cats_bulk <- function(chemicals = NULL, model = "RF", smiles = NULL) {
   params <- list("chemicals" = chemicals, "model" = model, "smiles" = smiles)
   result <- generic_chemi_request(

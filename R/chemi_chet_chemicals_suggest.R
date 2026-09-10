@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_suggest(query = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
   params <- list("query" = query, "limit" = limit, "only_in_reactions" = only_in_reactions)
   result <- generic_request(

@@ -10,7 +10,7 @@
 #' \dontrun{
 #' ct_exposure_mmdb_mediums()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_mmdb_mediums <- function() {
   params <- list()
   result <- generic_request("endpoint" = "exposure/mmdb/mediums", "method" = "GET", "batch_limit" = 0)

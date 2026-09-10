@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_amos_list_functional_classes()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_list_functional_classes <- function() {
   params <- list()
   result <- generic_request(

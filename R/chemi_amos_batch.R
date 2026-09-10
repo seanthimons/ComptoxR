@@ -20,7 +20,7 @@
 #' \dontrun{
 #' chemi_amos_batch(additional_record_info = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_batch <- function(
   additional_record_info = NULL,
   always_download_file = NULL,

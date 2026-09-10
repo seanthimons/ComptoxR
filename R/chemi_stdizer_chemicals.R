@@ -17,7 +17,7 @@
 #' \dontrun{
 #' chemi_stdizer_chemicals(query = c("50-00-0", "DTXSID7020182"))
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_chemicals <- function(query, idType = "AnyId", full = NULL, options = NULL) {
   params <- list("query" = query, "idType" = idType, "full" = full, "options" = options)
   state <- run_hook("chemi_stdizer_chemicals", "pre_request", list(params = params))

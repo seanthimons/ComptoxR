@@ -196,4 +196,4 @@ operations:
         - 50-00-0
         - DTXSID7020182
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-hazard.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-hazard.rds

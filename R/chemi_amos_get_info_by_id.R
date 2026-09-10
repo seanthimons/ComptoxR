@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_get_info_by_id(internal_id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_info_by_id <- function(internal_id) {
   params <- list("internal_id" = internal_id)
   result <- generic_request(

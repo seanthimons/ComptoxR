@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_toxprints_toxprints_categories completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-toxprints.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-toxprints.rds"))[[
     "chemi_toxprints_toxprints_categories"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

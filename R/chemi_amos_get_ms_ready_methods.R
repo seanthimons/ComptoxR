@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_get_ms_ready_methods(inchikey = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_ms_ready_methods <- function(inchikey) {
   params <- list("inchikey" = inchikey)
   result <- generic_request(

@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_mass_range(lower_mass_limit = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_mass_range <- function(lower_mass_limit = NULL, upper_mass_limit = NULL) {
   params <- list("lower_mass_limit" = lower_mass_limit, "upper_mass_limit" = upper_mass_limit)
   result <- generic_chemi_request(

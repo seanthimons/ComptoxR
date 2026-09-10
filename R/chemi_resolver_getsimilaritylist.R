@@ -27,7 +27,7 @@
 #' \dontrun{
 #' chemi_resolver_getsimilaritylist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_getsimilaritylist <- function(
   query,
   idType = "AnyId",

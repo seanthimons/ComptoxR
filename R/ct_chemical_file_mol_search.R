@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_file_mol_search(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_file_mol_search <- function(dtxsid) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_resolver_pubchem_section(query = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NULL) {
   params <- list("query" = query, "idType" = idType, "section" = section)
   result <- generic_request(
@@ -52,7 +52,7 @@ chemi_resolver_pubchem_section <- function(query, idType = "AnyId", section = NU
 #' \dontrun{
 #' chemi_resolver_pubchem_section_bulk(query = c("50-00-0", "DTXSID7020182"))
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_pubchem_section_bulk <- function(query, idType = "AnyId", section = NULL) {
   params <- list("query" = query, "idType" = idType, "section" = section)
   state <- run_hook("chemi_resolver_pubchem_section_bulk", "pre_request", list(params = params))

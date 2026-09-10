@@ -16,7 +16,7 @@
 #' \dontrun{
 #' chemi_amos_all_similarities(da_window = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_all_similarities <- function(
   da_window = NULL,
   dtxsids = NULL,

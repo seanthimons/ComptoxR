@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_assay_single_conc_search_by_aeid completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/ctx.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/ctx.rds"))[[
     "ct_bioactivity_assay_single_conc_search_by_aeid"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

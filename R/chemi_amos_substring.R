@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_substring(substring = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_substring <- function(substring) {
   params <- list("substring" = substring)
   result <- generic_request(

@@ -15,7 +15,7 @@
 #' \dontrun{
 #' chemi_webtest_predict(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format = "JSON", output = c("wide", "raw")) {
   if (missing(endpoint)) {
     endpoint <- NULL
@@ -59,7 +59,7 @@ chemi_webtest_predict <- function(smiles, endpoint, method = "consensus", format
 #' \dontrun{
 #' chemi_webtest_predict_bulk(endpoints = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_webtest_predict_bulk <- function(
   structures,
   endpoints,

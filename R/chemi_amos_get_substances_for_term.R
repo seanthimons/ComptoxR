@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_get_substances_for_term(search_term = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_substances_for_term <- function(search_term) {
   params <- list("search_term" = search_term)
   result <- generic_request(

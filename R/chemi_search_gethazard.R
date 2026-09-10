@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_search_gethazard(sid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_search_gethazard <- function(sid) {
   params <- list("sid" = sid)
   result <- generic_request(

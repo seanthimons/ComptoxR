@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_toxprints_toxprints_categories(chemical = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_toxprints_categories <- function(chemical = NULL) {
   params <- list("chemical" = chemical)
   result <- generic_chemi_request(

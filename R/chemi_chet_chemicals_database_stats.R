@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_database_stats(total = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_database_stats <- function(total = NULL) {
   params <- list("total" = total)
   result <- generic_request(

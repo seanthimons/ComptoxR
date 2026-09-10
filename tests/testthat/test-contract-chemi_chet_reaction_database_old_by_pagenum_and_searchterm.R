@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_chet_reaction_database_old_by_pagenum_and_searchterm completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-chet.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-chet.rds"))[[
     "chemi_chet_reaction_database_old_by_pagenum_and_searchterm"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

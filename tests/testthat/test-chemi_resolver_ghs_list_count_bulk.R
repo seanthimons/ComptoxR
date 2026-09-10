@@ -1,4 +1,4 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_resolver_ghs_list_count_bulk completes the fixed request contract", {
   captured <- NULL
   calls <- 0L

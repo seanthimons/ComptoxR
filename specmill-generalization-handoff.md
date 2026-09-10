@@ -1,5 +1,9 @@
 # Handoff: generalize wrapmaint for other API clients
 
+Historical plan from before the specmill rename. Use CONTRIBUTING.md and
+dev/ENDPOINT_EVAL_UTILS_GUIDE.md for the implemented workflow; the old names below
+describe the original planning state.
+
 **Generated**: 2026-09-08 10:30 -04:00
 **Branch**: `fix/workflow-production-gaps` (ComptoxR)
 **Status**: Initial extraction released. Configuration-driven generalization is not implemented.

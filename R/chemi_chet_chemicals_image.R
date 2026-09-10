@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
   params <- list("chemical_id" = chemical_id, "width" = width, "height" = height, "format" = format)
   result <- generic_request(

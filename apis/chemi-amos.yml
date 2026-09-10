@@ -3279,4 +3279,4 @@ operations:
           value: no
     implementation: existing
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-amos.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-amos.rds

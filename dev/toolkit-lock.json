@@ -1,9 +1,9 @@
 {
-  "package": "apipak",
-  "version": "0.1.2",
-  "source_commit": "8da0f990e650eb918a98f1851ed63926c88df46d",
-  "asset": "apipak_0.1.2.tar.gz",
-  "url": "https://github.com/seanthimons/apipak/releases/download/v0.1.2/apipak_0.1.2.tar.gz",
-  "sha256": "926fdd996241735f6105b8c2fd2dad1051f509daa4fdebc87bdc641f94ed38c6",
+  "package": "specmill",
+  "version": "0.1.4",
+  "source_commit": "af66d3c95d7356651539253dba4c01972972d7ef",
+  "asset": "specmill_0.1.4.tar.gz",
+  "url": "https://github.com/seanthimons/specmill/releases/download/v0.1.4/specmill_0.1.4.tar.gz",
+  "sha256": "f5caeca7e26e05681fd114b76443939f31496649276fa267a38fa7842b9c7d30",
   "policy_version": "comptox-public-1"
 }

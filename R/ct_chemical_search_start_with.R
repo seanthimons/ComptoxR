@@ -12,7 +12,7 @@
 #' \dontrun{
 #' ct_chemical_search_start_with(word = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_search_start_with <- function(word, top = 500) {
   params <- list("word" = word, "top" = top)
   result <- generic_request(

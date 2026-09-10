@@ -16,7 +16,7 @@
 #' \dontrun{
 #' chemi_amos_analytical_qc_batch(base_url = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_analytical_qc_batch <- function(
   base_url = NULL,
   ids = NULL,

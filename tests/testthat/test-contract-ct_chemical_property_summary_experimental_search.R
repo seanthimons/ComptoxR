@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("ct_chemical_property_summary_experimental_search completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/ctx.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/ctx.rds"))[[
     "ct_chemical_property_summary_experimental_search"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

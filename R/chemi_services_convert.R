@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_services_convert(content = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_services_convert <- function(content = NULL, type = NULL) {
   params <- list("content" = content, "type" = type)
   result <- generic_chemi_request(

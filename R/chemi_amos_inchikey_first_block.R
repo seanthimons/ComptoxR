@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_inchikey_first_block(first_block = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_inchikey_first_block <- function(first_block) {
   params <- list("first_block" = first_block)
   result <- generic_request(

@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_webtest(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
   params <- list("smiles" = smiles, "headers" = headers, "output" = output)
   state <- run_hook("chemi_webtest", "pre_request", list(params = params))
@@ -55,7 +55,7 @@ chemi_webtest <- function(smiles, headers = FALSE, output = c("wide", "raw")) {
 #' \dontrun{
 #' chemi_webtest_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_webtest_bulk <- function(
   query,
   chemIdType = "AnyId",

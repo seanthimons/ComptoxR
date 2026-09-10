@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_opera(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_opera <- function(smiles, format = "json", standardize = FALSE) {
   params <- list("smiles" = smiles, "format" = format, "standardize" = standardize)
   result <- generic_request(
@@ -51,7 +51,7 @@ chemi_opera <- function(smiles, format = "json", standardize = FALSE) {
 #' \dontrun{
 #' chemi_opera_bulk(cache_only = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_opera_bulk <- function(
   cache_only = FALSE,
   smiles = NULL,

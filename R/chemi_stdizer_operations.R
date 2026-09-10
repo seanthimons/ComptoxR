@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_stdizer_operations()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_operations <- function() {
   params <- list()
   result <- generic_request(

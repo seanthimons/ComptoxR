@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_file_image_search_by_gsid(gsid = "20182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_file_image_search_by_gsid <- function(gsid) {
   params <- list("gsid" = gsid)
   result <- generic_request(

@@ -12,7 +12,7 @@
 #' \dontrun{
 #' ct_chemical_count_by_msready_formula(formula = "C15H16O2")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_count_by_msready_formula <- function(formula, projection = "count") {
   params <- list("formula" = formula, "projection" = projection)
   result <- generic_request(

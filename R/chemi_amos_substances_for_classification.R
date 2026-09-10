@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_amos_substances_for_classification(kingdom = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_substances_for_classification <- function(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL) {
   params <- list("kingdom" = kingdom, "klass" = klass, "subklass" = subklass, "superklass" = superklass)
   result <- generic_chemi_request(

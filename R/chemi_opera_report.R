@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_opera_report(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_opera_report <- function(dtxsid, modelId) {
   params <- list("dtxsid" = dtxsid, "modelId" = modelId)
   result <- generic_request(

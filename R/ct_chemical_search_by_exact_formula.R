@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_search_by_exact_formula(formula = "C15H16O2")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_search_by_exact_formula <- function(formula) {
   params <- list("formula" = formula)
   result <- generic_request(

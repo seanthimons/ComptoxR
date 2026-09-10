@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_reactionmap(id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_reactionmap <- function(id = NULL, searchtype = NULL) {
   params <- list("id" = id, "searchtype" = searchtype)
   result <- generic_request(

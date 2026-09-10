@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_amos_product_declaration_keyset_pagination_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-amos.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-amos.rds"))[[
     "chemi_amos_product_declaration_keyset_pagination_bulk"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

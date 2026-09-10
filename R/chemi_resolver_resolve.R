@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_resolver_resolve(mol = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_resolve <- function(mol = NULL, queries = NULL) {
   params <- list("mol" = mol, "queries" = queries)
   result <- generic_chemi_request(

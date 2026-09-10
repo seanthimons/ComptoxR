@@ -4,7 +4,7 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   if (
     length(package_name) != 1L ||
       !grepl('^[A-Za-z][A-Za-z0-9.]*[A-Za-z0-9]$', package_name) ||
-      tolower(package_name) %in% c('comptoxr', 'apipak', 'wrapmaint', 'httr2')
+      tolower(package_name) %in% c('comptoxr', 'specmill', 'httr2')
   ) {
     stop('Supply a distinct valid local package name')
   }
@@ -72,7 +72,7 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
   ) {
     stop('Use a new or empty local output directory')
   }
-  apipak::initialize_client(
+  specmill::initialize_client(
     output_root,
     schema_path,
     package = package_name,
@@ -81,7 +81,7 @@ generate_local_client <- function(repository_root, input_root, schema, output_ro
     license = metadata$license,
     base_url = base_url
   )
-  apipak::generate_client(output_root, config = 'apipak.yml', mode = 'apply')
+  specmill::generate_client(output_root, config = 'specmill.yml', mode = 'apply')
 }
 
 if (sys.nframe() == 0L) {

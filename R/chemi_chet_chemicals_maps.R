@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_maps(chemid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_maps <- function(chemid = NULL) {
   params <- list("chemid" = chemid)
   result <- generic_request(

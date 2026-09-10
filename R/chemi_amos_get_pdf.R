@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_get_pdf(record_type = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_pdf <- function(record_type, internal_id = NULL) {
   params <- list("record_type" = record_type, "internal_id" = internal_id)
   result <- generic_request(

@@ -14,7 +14,7 @@
 #' \dontrun{
 #' ct_exposure_mmdb_single_sample_by_medium(medium = "surface water")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_mmdb_single_sample_by_medium <- function(medium, pageNumber = 1, all_pages = TRUE, max_pages = 100) {
   params <- list("medium" = medium, "pageNumber" = pageNumber, "all_pages" = all_pages, "max_pages" = max_pages)
   result <- generic_request(

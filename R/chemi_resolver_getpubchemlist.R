@@ -18,7 +18,7 @@
 #' \dontrun{
 #' chemi_resolver_getpubchemlist(query = c("50-00-0", "DTXSID7020182"))
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_getpubchemlist <- function(query, idType = "AnyId", section = NULL, all_pages = TRUE, max_pages = 100) {
   params <- list(
     "query" = query,

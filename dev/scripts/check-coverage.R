@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-.coverage_check_root <- apipak::script_root('check-coverage.R')
+.coverage_check_root <- specmill::script_root('check-coverage.R')
 R_THRESHOLD <- 75
 check_coverage <- function(root = .coverage_check_root, threshold = R_THRESHOLD) {
   coverage <- covr::package_coverage(path = root)

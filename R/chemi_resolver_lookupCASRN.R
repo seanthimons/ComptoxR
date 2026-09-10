@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_resolver_lookupCASRN(query = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_lookupCASRN <- function(query) {
   params <- list("query" = query)
   result <- generic_request(

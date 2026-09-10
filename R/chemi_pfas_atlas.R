@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_pfas_atlas(smiles = "O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_pfas_atlas <- function(smiles) {
   params <- list("smiles" = smiles)
   result <- generic_request(
@@ -43,7 +43,7 @@ chemi_pfas_atlas <- function(smiles) {
 #' \dontrun{
 #' chemi_pfas_atlas_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_pfas_atlas_bulk <- function(chemicals = NULL, smiles = NULL) {
   params <- list("chemicals" = chemicals, "smiles" = smiles)
   result <- generic_chemi_request(

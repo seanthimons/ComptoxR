@@ -12,7 +12,7 @@
 #' \dontrun{
 #' ct_chemical_msready_search_by_mass_bulk(error = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_msready_search_by_mass_bulk <- function(error, masses) {
   params <- list("error" = error, "masses" = masses)
   result <- generic_request(
@@ -42,7 +42,7 @@ ct_chemical_msready_search_by_mass_bulk <- function(error, masses) {
 #' \dontrun{
 #' ct_chemical_msready_search_by_mass(start = "200.9")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_msready_search_by_mass <- function(start, end = NULL) {
   params <- list("start" = start, "end" = end)
   result <- generic_request(

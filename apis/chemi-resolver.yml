@@ -1727,4 +1727,4 @@ names:
   GET /api/resolver/safety-flags: chemi_resolver_safety_flags
   POST /api/resolver/safety-flags: chemi_resolver_safety_flags_bulk
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-resolver.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-resolver.rds

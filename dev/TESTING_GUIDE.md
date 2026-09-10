@@ -137,7 +137,7 @@ tests/
     test-*.R                        # Generated and handwritten tests
 dev/
   generate_tests.R                  # Active generated-test entrypoint
-  apipak-testing.yml                # Gap-report policy
+  specmill-testing.yml                # Gap-report policy
   token_preflight.R                 # Client credential policy adapter
   unit_test_readiness_audit.R       # Canonical readiness inventory
   reports/unit_test_readiness_audit.json # Canonical readiness report

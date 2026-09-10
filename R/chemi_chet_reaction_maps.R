@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_maps()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_maps <- function() {
   params <- list()
   result <- generic_request(

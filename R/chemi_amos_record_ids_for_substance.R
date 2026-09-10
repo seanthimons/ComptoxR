@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_record_ids_for_substance(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_record_ids_for_substance <- function(dtxsid, record_type = NULL) {
   params <- list("dtxsid" = dtxsid, "record_type" = record_type)
   result <- generic_request(

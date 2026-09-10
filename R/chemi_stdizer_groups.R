@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_stdizer_groups()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_groups <- function() {
   params <- list()
   result <- generic_request(
@@ -49,7 +49,7 @@ chemi_stdizer_groups <- function() {
 #' \dontrun{
 #' chemi_stdizer_groups_bulk(acl = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_groups_bulk <- function(
   acl = NULL,
   description = NULL,

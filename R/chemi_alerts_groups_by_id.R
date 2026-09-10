@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_alerts_groups_by_id(id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_alerts_groups_by_id <- function(id) {
   params <- list("id" = id)
   result <- generic_request(

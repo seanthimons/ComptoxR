@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_counts(page = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_counts <- function(page = 0, size = NULL, all_pages = TRUE, max_pages = 100) {
   params <- list("page" = page, "size" = size, "all_pages" = all_pages, "max_pages" = max_pages)
   result <- generic_request(

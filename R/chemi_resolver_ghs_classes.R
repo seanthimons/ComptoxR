@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_resolver_ghs_classes()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_ghs_classes <- function() {
   params <- list()
   result <- generic_request(

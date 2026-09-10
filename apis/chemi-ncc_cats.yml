@@ -101,4 +101,4 @@ operations:
       examples:
       - chemicals: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-ncc_cats.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-ncc_cats.rds

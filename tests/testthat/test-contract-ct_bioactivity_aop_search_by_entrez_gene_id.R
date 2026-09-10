@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("ct_bioactivity_aop_search_by_entrez_gene_id completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/ctx.rds"))[["ct_bioactivity_aop_search_by_entrez_gene_id"]]
+  contract <- readRDS(testthat::test_path("fixtures/specmill/ctx.rds"))[["ct_bioactivity_aop_search_by_entrez_gene_id"]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

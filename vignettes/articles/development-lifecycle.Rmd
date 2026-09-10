@@ -63,7 +63,7 @@ A URL override changes the target of existing wrappers. It does not add
 operations that are absent from the public package. Loading the package does
 not switch endpoint settings based on the date.
 
-Install the checksum-pinned `wrapmaint` toolkit from `dev/toolkit-lock.json`
+Install the checksum-pinned `specmill` toolkit from `dev/toolkit-lock.json`
 before running development generation or validation:
 
 ```{r}

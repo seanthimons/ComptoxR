@@ -317,4 +317,4 @@ operations:
       examples:
       - description: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-alerts.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-alerts.rds

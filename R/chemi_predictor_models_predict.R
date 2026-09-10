@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_predictor_models_predict(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier = NULL, report_format = "json") {
   params <- list("model_id" = model_id, "smiles" = smiles, "identifier" = identifier, "report_format" = report_format)
   result <- generic_request(
@@ -55,7 +55,7 @@ chemi_predictor_models_predict <- function(model_id, smiles = NULL, identifier =
 #' \dontrun{
 #' chemi_predictor_models_predict_bulk(model_id = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_predictor_models_predict_bulk <- function(model_id, smiles = NULL, chemicals = NULL) {
   params <- list("model_id" = model_id, "smiles" = smiles, "chemicals" = chemicals)
   result <- generic_chemi_request(

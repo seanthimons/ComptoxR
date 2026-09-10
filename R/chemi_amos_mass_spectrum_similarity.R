@@ -16,7 +16,7 @@
 #' \dontrun{
 #' chemi_amos_mass_spectrum_similarity(lower_mass_limit = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_mass_spectrum_similarity <- function(
   lower_mass_limit = NULL,
   methodology = NULL,

@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_services_layout(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_services_layout <- function(smiles) {
   params <- list("smiles" = smiles)
   result <- generic_request(

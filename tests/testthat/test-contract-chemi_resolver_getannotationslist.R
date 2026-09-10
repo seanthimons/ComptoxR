@@ -1,6 +1,8 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_resolver_getannotationslist completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-resolver.rds"))[["chemi_resolver_getannotationslist"]]
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-resolver.rds"))[[
+    "chemi_resolver_getannotationslist"
+  ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

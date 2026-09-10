@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_file_image_search_by_dtxcid(dtxcid = "DTXCID505")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_file_image_search_by_dtxcid <- function(dtxcid) {
   params <- list("dtxcid" = dtxcid)
   result <- generic_request(

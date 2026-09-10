@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_pfas_cats(smiles = "FC(C(C(C1OC(=O)C2C(=CC=CC=2)N=1)(F)F)(F)F)(F)F")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_pfas_cats <- function(smiles) {
   params <- list("smiles" = smiles)
   result <- generic_request(
@@ -43,7 +43,7 @@ chemi_pfas_cats <- function(smiles) {
 #' \dontrun{
 #' chemi_pfas_cats_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_pfas_cats_bulk <- function(chemicals = NULL, smiles = NULL) {
   params <- list("chemicals" = chemicals, "smiles" = smiles)
   result <- generic_chemi_request(

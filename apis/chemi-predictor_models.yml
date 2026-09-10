@@ -113,4 +113,4 @@ operations:
       examples:
       - model_id: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-predictor_models.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-predictor_models.rds

@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_amos_entropy_similarity(spectrum_1 = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_entropy_similarity <- function(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL) {
   params <- list("spectrum_1" = spectrum_1, "spectrum_2" = spectrum_2, "type" = type, "window" = window)
   result <- generic_chemi_request(

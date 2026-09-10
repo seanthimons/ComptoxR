@@ -1,13 +1,13 @@
 ﻿# API maintenance
 
-The public schema and `apipak.yml` control generated wrappers. Service policy is
+The public schema and `specmill.yml` control generated wrappers. Service policy is
 in `apis/*.yml`; request construction, authentication and runtime hooks stay in
 ComptoxR. An operation absent from the public schema must not be added.
 
 The previous endpoint-evaluation implementation is archived at
 [the production baseline](https://github.com/seanthimons/ComptoxR/tree/4fd720b97fb2f7f2abf131925e9270b0c11b057a/dev).
 Its renderer, metadata-derived tests and lifecycle-only remover have been
-replaced by the installed apipak engine and fixed offline contracts.
+replaced by the installed specmill engine and fixed offline contracts.
 
 ## Setup and commands
 
@@ -18,10 +18,9 @@ source('dev/install_toolkit.R')
 install_toolkit()
 ```
 
-The pin downloads immutable `apipak` 0.1.2 from
-`https://github.com/seanthimons/apipak/releases/tag/v0.1.2`, source
-`8da0f990e650eb918a98f1851ed63926c88df46d`. SHA-256 is
-`926fdd996241735f6105b8c2fd2dad1051f509daa4fdebc87bdc641f94ed38c6`.
+The pin downloads immutable `specmill` 0.1.4 from
+`https://github.com/seanthimons/specmill/releases/tag/v0.1.4`.
+`dev/toolkit-lock.json` records the reviewed source commit and SHA-256.
 The installer resolves its lockfile relative to its own script and verifies the
 download before invoking R CMD INSTALL. It works when sourced from another
 working directory and has no dependency on the toolkit being installed.
@@ -67,12 +66,12 @@ they are not counted as native support. Required-input presence and nullable
 values are separate. `missing_as_null` is reserved for an existing hook that
 must receive omission as NULL while keeping a required R formal.
 
-`dev/apipak_callbacks.R` contains the necessary development callbacks. They are
+`dev/specmill_callbacks.R` contains the necessary development callbacks. They are
 loaded explicitly by the thin commands; YAML is data and cannot execute code.
 Do not move request helpers or chemistry processing into the generator.
 
 Fixed successful helper-call sequences and results live in
-`tests/testthat/fixtures/apipak/*.rds`, referenced by each service. Review these
+`tests/testthat/fixtures/specmill/*.rds`, referenced by each service. Review these
 expectations independently of generated wrapper text. Preserve typed results,
 all request arguments and auxiliary calls. New selected operations need an
 explicit fixed contract; a helper call followed by an error is not a passing
@@ -80,7 +79,7 @@ test. Existing manually maintained suites remain in place.
 
 ## Ownership and recovery
 
-`.apipak/manifest.json` records reviewed ownership and generation inputs. A
+`.specmill/manifest.json` records reviewed ownership and generation inputs. A
 header or experimental lifecycle badge alone does not authorize replacement.
 Modified files, mixed implementations and protected lifecycle states block
 conflicting writes. Exclusions can retire only verified owned output.
@@ -88,21 +87,21 @@ conflicting writes. Exclusions can retire only verified owned output.
 Review a pending recovery before restoring it:
 
 ```r
-apipak::recover_client('.')
-apipak::recover_client('.', 'apply')
+specmill::recover_client('.')
+specmill::recover_client('.', 'apply')
 ```
 
 Do not delete journals or backups to make a failed generation appear to pass.
 For a lock left by a terminated process, confirm that the process exited and
-stop other writers, then follow apipak's documented empty-lock recovery procedure.
+stop other writers, then follow specmill's documented empty-lock recovery procedure.
 Resolve the recorded failure and verify a fresh check and unchanged
 second apply. Initial adoption is a one-time reviewed hash operation; routine
 maintenance does not re-adopt files.
 
 ## Reports and tests
 
-`dev/apipak-coverage.yml`, `dev/apipak-testing.yml`,
-`dev/apipak-public.yml` and `dev/apipak-readiness.yml` contain client report policy.
+`dev/specmill-coverage.yml`, `dev/specmill-testing.yml`,
+`dev/specmill-public.yml` and `dev/specmill-readiness.yml` contain client report policy.
 These sourceable commands provide a read-only plan:
 
 ```r
@@ -122,5 +121,5 @@ manual request wrappers, and file coverage never substitutes for executing tests
 Run the offline maintenance lane with `COMPTOXR_CRAN_SAFE_TESTS=true`,
 `NOT_CRAN=false`, no `ctx_api_key`, and existing fixtures. The toolkit is needed
 only for development commands; installed ComptoxR runtime and generated contracts
-do not depend on apipak. Recording scripts retain their separate `--record-live`
+do not depend on specmill. Recording scripts retain their separate `--record-live`
 gate and token preflight. Routine verification must not re-record cassettes.

@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("ct_exposure_product_data_puc completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/ctx.rds"))[["ct_exposure_product_data_puc"]]
+  contract <- readRDS(testthat::test_path("fixtures/specmill/ctx.rds"))[["ct_exposure_product_data_puc"]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))
   captured <- list()
   mock_for <- function(name) {

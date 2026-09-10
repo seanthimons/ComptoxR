@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_method_with_spectra(search_type = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_method_with_spectra <- function(search_type, internal_id = NULL) {
   params <- list("search_type" = search_type, "internal_id" = internal_id)
   result <- generic_request(

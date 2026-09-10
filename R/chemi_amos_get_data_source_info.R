@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_amos_get_data_source_info()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_get_data_source_info <- function() {
   params <- list()
   result <- generic_request(

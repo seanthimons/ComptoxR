@@ -10,7 +10,7 @@
 #' \dontrun{
 #' chemi_services_cim_component_info()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_services_cim_component_info <- function() {
   params <- list()
   result <- generic_request(

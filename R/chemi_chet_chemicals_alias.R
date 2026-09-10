@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_chet_chemicals_alias(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_alias <- function(dtxsid = NULL) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

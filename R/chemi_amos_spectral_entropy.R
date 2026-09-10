@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_spectral_entropy(spectrum = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_spectral_entropy <- function(spectrum = NULL) {
   params <- list("spectrum" = spectrum)
   result <- generic_chemi_request(

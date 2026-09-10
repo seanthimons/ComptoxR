@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_formula(formula = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_formula <- function(formula) {
   params <- list("formula" = formula)
   result <- generic_request(

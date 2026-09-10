@@ -374,4 +374,4 @@ operations:
     post_state: hook_state
     post_on_skip: yes
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-search.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-search.rds

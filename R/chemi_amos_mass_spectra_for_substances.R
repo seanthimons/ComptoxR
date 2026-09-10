@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_mass_spectra_for_substances(dtxsids = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_mass_spectra_for_substances <- function(dtxsids = NULL) {
   params <- list("dtxsids" = dtxsids)
   result <- generic_chemi_request(

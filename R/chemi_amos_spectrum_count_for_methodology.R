@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_amos_spectrum_count_for_methodology(dtxsid = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_spectrum_count_for_methodology <- function(dtxsid = NULL, spectrum_type = NULL) {
   params <- list("dtxsid" = dtxsid, "spectrum_type" = spectrum_type)
   result <- generic_chemi_request(

@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_resolver_links(query = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_links <- function(query, idType = "AnyId", fuzzy = "Not") {
   params <- list("query" = query, "idType" = idType, "fuzzy" = fuzzy)
   result <- generic_request(

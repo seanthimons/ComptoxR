@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_resolver_getsubstance(name = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_getsubstance <- function(name) {
   params <- list("name" = name)
   result <- generic_request(

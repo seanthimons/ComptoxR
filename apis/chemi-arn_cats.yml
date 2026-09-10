@@ -110,4 +110,4 @@ operations:
       examples:
       - chemicals: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-arn_cats.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-arn_cats.rds

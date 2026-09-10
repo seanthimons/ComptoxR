@@ -17,7 +17,7 @@
 #' \dontrun{
 #' chemi_padel(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_padel <- function(
   smiles,
   x2d = TRUE,
@@ -77,7 +77,7 @@ chemi_padel <- function(
 #' \dontrun{
 #' chemi_padel_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_padel_bulk <- function(
   query,
   x2d = TRUE,

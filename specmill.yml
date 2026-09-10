@@ -1,7 +1,7 @@
 config_version: 1
 package: ComptoxR
 formatter: {name: air, version: '0.9.0'}
-callback_files: [dev/apipak_callbacks.R]
+callback_files: [dev/specmill_callbacks.R]
 services:
 - apis/chemi-alerts.yml
 - apis/chemi-amnb_nate.yml

@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_functional_class(functional_class = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_functional_class <- function(functional_class) {
   params <- list("functional_class" = functional_class)
   result <- generic_request(

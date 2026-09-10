@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_synonym_search_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_synonym_search_bulk <- function(query) {
   params <- list("query" = query)
   result <- generic_request(
@@ -37,7 +37,7 @@ ct_chemical_synonym_search_bulk <- function(query) {
 #' \dontrun{
 #' ct_chemical_synonym_search(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_synonym_search <- function(dtxsid, projection = NULL) {
   params <- list("dtxsid" = dtxsid, "projection" = projection)
   result <- generic_request(

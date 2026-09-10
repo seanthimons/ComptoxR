@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_stdizer_records(full = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_records <- function(full = NULL, options = NULL, records = NULL) {
   params <- list("full" = full, "options" = options, "records" = records)
   result <- generic_chemi_request(

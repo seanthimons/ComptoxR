@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_exposure_mmdb_aggregate(dtxsid = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_mmdb_aggregate <- function(dtxsid) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

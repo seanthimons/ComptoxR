@@ -285,4 +285,4 @@ operations:
       examples:
       - smirks: DTXSID7020182
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-services.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-services.rds

@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_toxprints_assays(category = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_assays <- function(category = NULL, label = NULL) {
   params <- list("category" = category, "label" = label)
   result <- generic_request(
@@ -52,7 +52,7 @@ chemi_toxprints_assays <- function(category = NULL, label = NULL) {
 #' \dontrun{
 #' chemi_toxprints_assays_bulk(acl = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_assays_bulk <- function(
   acl = NULL,
   actives = NULL,

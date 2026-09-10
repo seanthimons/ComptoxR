@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_chemical_msready_search_by_formula(formula = "C16H24N2O5S")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_chemical_msready_search_by_formula <- function(formula) {
   params <- list("formula" = formula)
   result <- generic_request(

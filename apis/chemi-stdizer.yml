@@ -511,4 +511,4 @@ operations:
       examples:
       - full: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-stdizer.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-stdizer.rds

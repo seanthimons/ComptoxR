@@ -1,6 +1,6 @@
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 testthat::test_that("chemi_predictor_models_predict_bulk completes the fixed call sequence", {
-  contract <- readRDS(testthat::test_path("fixtures/apipak/chemi-predictor_models.rds"))[[
+  contract <- readRDS(testthat::test_path("fixtures/specmill/chemi-predictor_models.rds"))[[
     "chemi_predictor_models_predict_bulk"
   ]]
   withr::local_envvar(unlist(contract$environment, use.names = TRUE))

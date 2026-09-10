@@ -16,7 +16,7 @@
 #' \dontrun{
 #' chemi_descriptors(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_descriptors <- function(
   smiles,
   type,
@@ -74,7 +74,7 @@ chemi_descriptors <- function(
 #' \dontrun{
 #' chemi_descriptors_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_descriptors_bulk <- function(
   query,
   type,

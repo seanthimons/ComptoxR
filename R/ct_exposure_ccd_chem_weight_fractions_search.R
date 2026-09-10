@@ -11,7 +11,7 @@
 #' \dontrun{
 #' ct_exposure_ccd_chem_weight_fractions_search(dtxsid = "DTXSID0020232")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_ccd_chem_weight_fractions_search <- function(dtxsid) {
   params <- list("dtxsid" = dtxsid)
   result <- generic_request(

@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_stdizer(workflow = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer <- function(workflow, smiles) {
   params <- list("workflow" = workflow, "smiles" = smiles)
   result <- generic_request(
@@ -46,7 +46,7 @@ chemi_stdizer <- function(workflow, smiles) {
 #' \dontrun{
 #' chemi_stdizer_bulk(request.filesInfo = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_bulk <- function(
   request.filesInfo = NULL,
   request.options.recordId = NULL,

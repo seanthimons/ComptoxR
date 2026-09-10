@@ -12,7 +12,7 @@
 #' \dontrun{
 #' epi_search(query = "benzene")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 epi_search <- function(query, limit = 20) {
   params <- list("query" = query, "limit" = limit)
   result <- generic_request(

@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_toxprints(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
   params <- list("smiles" = smiles, "headers" = headers, "profile" = profile)
   result <- generic_request(
@@ -47,7 +47,7 @@ chemi_toxprints <- function(smiles, headers = FALSE, profile = NULL) {
 #' \dontrun{
 #' chemi_toxprints_bulk(query = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_bulk <- function(query) {
   params <- list("query" = query)
   result <- generic_request(

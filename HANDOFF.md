@@ -1,13 +1,14 @@
 # Handoff: delegated package migrations
 
-## Follow-up: wrapmaint generalization (2026-09-08)
+## Current toolkit: specmill (2026-09-10)
 
-See [wrapmaint-generalization-handoff.md](wrapmaint-generalization-handoff.md)
-for the installed toolkit, remaining local implementation, proposed configuration
-interface, acceptance gates, and resume steps. Configuration-driven generalization
-is not implemented. Workflow/docs follow-up PR 309 contains commits `6c0970b`
-and `bc22753`; it was open when this follow-up was recorded. The completed
-migration record below remains historical evidence.
+The maintained integration uses specmill 0.1.4, specmill.yml, .specmill ownership
+records, dev/specmill_callbacks.R, and fixtures/specmill. Install the reviewed
+archive with dev/install_toolkit.R; dev/toolkit-lock.json is the source of truth.
+Use CONTRIBUTING.md and dev/ENDPOINT_EVAL_UTILS_GUIDE.md for current commands.
+Configuration-driven generation is implemented. The generalization plan in
+[specmill-generalization-handoff.md](specmill-generalization-handoff.md) and the
+release records below are historical evidence, not current setup instructions.
 
 **Updated**: 2026-09-08
 **Branch**: `docs/migration-publication-evidence`

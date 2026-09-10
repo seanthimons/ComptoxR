@@ -14,7 +14,7 @@
 #' \dontrun{
 #' chemi_amos_safety_data_sheet_keyset_pagination(limit = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_safety_data_sheet_keyset_pagination <- function(limit, cursor = NULL, all_pages = TRUE, max_pages = 100) {
   params <- list("limit" = limit, "cursor" = cursor, "all_pages" = all_pages, "max_pages" = max_pages)
   result <- generic_request(
@@ -61,7 +61,7 @@ chemi_amos_safety_data_sheet_keyset_pagination <- function(limit, cursor = NULL,
 #' \dontrun{
 #' chemi_amos_safety_data_sheet_keyset_pagination_bulk(limit = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_safety_data_sheet_keyset_pagination_bulk <- function(
   limit,
   cursor = "",

@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_stdizer_groups_recursive(id = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_stdizer_groups_recursive <- function(id) {
   params <- list("id" = id)
   result <- generic_request(

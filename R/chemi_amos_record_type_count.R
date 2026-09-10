@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_record_type_count(record_type = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_record_type_count <- function(record_type) {
   params <- list("record_type" = record_type)
   result <- generic_request(

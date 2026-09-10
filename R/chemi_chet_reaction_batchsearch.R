@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_batchsearch(dtxsids = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_batchsearch <- function(dtxsids, search_level) {
   params <- list("dtxsids" = dtxsids, "search_level" = search_level)
   result <- generic_chemi_request(

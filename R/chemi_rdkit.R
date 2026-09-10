@@ -15,7 +15,7 @@
 #' \dontrun{
 #' chemi_rdkit(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output = c("wide", "raw")) {
   params <- list("smiles" = smiles, "type" = type, "radius" = radius, "bits" = bits, "output" = output)
   state <- run_hook("chemi_rdkit", "pre_request", list(params = params))
@@ -58,7 +58,7 @@ chemi_rdkit <- function(smiles, type = NULL, radius = NULL, bits = NULL, output 
 #' \dontrun{
 #' chemi_rdkit_bulk(chemicals = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_rdkit_bulk <- function(
   chemicals,
   options = NULL,

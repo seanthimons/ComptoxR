@@ -10,7 +10,7 @@
 #' \dontrun{
 #' ct_exposure_list_presence_tags()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_list_presence_tags <- function() {
   params <- list()
   result <- generic_request("endpoint" = "exposure/list-presence/tags", "method" = "GET", "batch_limit" = 0)

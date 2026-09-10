@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_chet_reaction_searchcounts(search_input = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_searchcounts <- function(search_input, search_type = NULL) {
   params <- list("search_input" = search_input, "search_type" = search_type)
   result <- generic_request(

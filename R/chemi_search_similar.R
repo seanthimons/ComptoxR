@@ -17,7 +17,7 @@
 #' \dontrun{
 #' chemi_search_similar(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_search_similar <- function(
   smiles = NULL,
   dtxsid = NULL,

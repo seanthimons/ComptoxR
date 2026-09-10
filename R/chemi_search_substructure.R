@@ -13,7 +13,7 @@
 #' \dontrun{
 #' chemi_search_substructure(smiles = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_search_substructure <- function(smiles, exportSmiles = NULL, exportMol = NULL) {
   params <- list("smiles" = smiles, "exportSmiles" = exportSmiles, "exportMol" = exportMol)
   result <- generic_request(

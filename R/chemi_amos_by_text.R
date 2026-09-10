@@ -11,7 +11,7 @@
 #' \dontrun{
 #' chemi_amos_by_text(substr = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_amos_by_text <- function(substr) {
   params <- list("substr" = substr)
   result <- generic_request(

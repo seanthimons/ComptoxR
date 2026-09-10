@@ -1,9 +1,9 @@
 # Client credential names and recording guidance; validation is development-only.
 ctx_api_key_status <- function(value = Sys.getenv('ctx_api_key')) {
-  apipak::credential_status(value, 'ctx_api_key')
+  specmill::credential_status(value, 'ctx_api_key')
 }
 ctx_api_key_preflight <- function(value = Sys.getenv('ctx_api_key'), abort = TRUE) {
-  apipak::credential_preflight(
+  specmill::credential_preflight(
     value,
     'ctx_api_key',
     abort,

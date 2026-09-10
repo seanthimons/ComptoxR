@@ -799,4 +799,4 @@ operations:
       examples:
       - chemical: DTXSID1024122
 documentation: yes
-contracts_file: tests/testthat/fixtures/apipak/chemi-toxprints.rds
+contracts_file: tests/testthat/fixtures/specmill/chemi-toxprints.rds

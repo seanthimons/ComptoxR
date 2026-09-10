@@ -10,7 +10,7 @@
 #' \dontrun{
 #' ct_exposure_product_data_puc()
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 ct_exposure_product_data_puc <- function() {
   params <- list()
   result <- generic_request("endpoint" = "exposure/product-data/puc", "method" = "GET", "batch_limit" = 0)

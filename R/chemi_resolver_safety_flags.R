@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_resolver_safety_flags(query = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
   params <- list("query" = query, "idType" = idType)
   result <- generic_request(
@@ -59,7 +59,7 @@ chemi_resolver_safety_flags <- function(query, idType = "AnyId") {
 #' \dontrun{
 #' chemi_resolver_safety_flags_bulk(additionalProps = "DTXSID1024122")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_resolver_safety_flags_bulk <- function(
   additionalProps = NULL,
   averageMass = NULL,

@@ -12,7 +12,7 @@
 #' \dontrun{
 #' chemi_toxprints_global_assays(category = "DTXSID7020182")
 #' }
-# Generated with apipak; do not edit by hand.
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_global_assays <- function(category = NULL, label = NULL) {
   params <- list("category" = category, "label" = label)
   result <- generic_request(
