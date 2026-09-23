@@ -1,11 +1,22 @@
 config_version: 1
 package: ComptoxR
-formatter: {name: air, version: '0.11.0'}
+formatter:
+  name: air
+  version: 0.11.0
 services:
 - apis/epi-pilot.yml
 - apis/alerts-pilot.yml
 - apis/amos-pilot.yml
 - apis/ctx-pilot.yml
 - apis/search-pilot.yml
+- apis/chemi-amos-prod-full.yml
+- apis/chemi-chet-prod-full.yml
+- apis/chemi-resolver-prod-full.yml
+- apis/chemi-services-prod-full.yml
+- apis/chemi-stdizer-prod-full.yml
+- apis/chemi-toxprints-prod-full.yml
+- apis/ctx-chemical-prod-full.yml
+- apis/ctx-exposure-prod-full.yml
+- apis/epi-suite-prod-full.yml
 callback_files:
 - dev/specmill_callbacks.R

@@ -31,7 +31,8 @@ stopifnot(all(names(old) %in% names(now)))
 changed <- names(old)[old != now[names(old)]]
 allowed <- c(
   names(jsonlite::read_json('dev/specmill-pilot/adoption-hashes.json')),
-  names(jsonlite::read_json('dev/specmill-pilot/adoption-hashes-lookup-expansion.json'))
+  names(jsonlite::read_json('dev/specmill-pilot/adoption-hashes-lookup-expansion.json')),
+  names(jsonlite::read_json('dev/specmill-full/adoption-hashes.json'))
 )
 stopifnot(setequal(changed, allowed))
 for (file in allowed) {

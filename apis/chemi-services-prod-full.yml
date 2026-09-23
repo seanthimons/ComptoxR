@@ -1,0 +1,70 @@
+id: chemi-services-prod-full
+schemas:
+  files:
+  - schema/chemi-services-prod.json
+selection:
+  include:
+  - GET /api/services/cim_component_info
+  - GET /api/services/release_notes
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/services/cim_component_info:
+    name: chemi_services_cim_component_info
+    file: R/chemi_services_cim_component_info.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: services/cim_component_info
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Services Cim Component Info
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/services/release_notes:
+    name: chemi_services_release_notes
+    file: R/chemi_services_release_notes.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: services/release_notes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Services Release Notes
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

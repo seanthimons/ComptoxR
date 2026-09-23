@@ -370,6 +370,9 @@ for (path in sort(list.files(file.path(root, "apis"), "-pilot[.]yml$", full.name
   stopifnot(length(config$schemas$files) == 1L)
   for (key in names(config$operations)) {
     operation <- config$operations[[key]]
+    if (!operation$name %in% names(case_groups)) {
+      next
+    }
     identities[[operation$name]] <- list(
       schema = config$schemas$files[[1]],
       method = sub(" .*", "", key),
