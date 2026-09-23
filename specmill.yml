@@ -4,6 +4,7 @@ formatter: {name: air, version: '0.11.0'}
 services:
 - apis/epi-pilot.yml
 - apis/alerts-pilot.yml
+- apis/amos-pilot.yml
 - apis/ctx-pilot.yml
 - apis/search-pilot.yml
 callback_files:

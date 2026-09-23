@@ -29,7 +29,10 @@ old <- hashes(baseline, setdiff(paths, c('tests', '.specmill')))
 now <- hashes(root, setdiff(paths, c('tests', '.specmill')))
 stopifnot(all(names(old) %in% names(now)))
 changed <- names(old)[old != now[names(old)]]
-allowed <- c('R/epi_search.R', 'R/chemi_alerts_groups_by_id.R')
+allowed <- c(
+  names(jsonlite::read_json('dev/specmill-pilot/adoption-hashes.json')),
+  names(jsonlite::read_json('dev/specmill-pilot/adoption-hashes-lookup-expansion.json'))
+)
 stopifnot(setequal(changed, allowed))
 for (file in allowed) {
   badge <- grep('lifecycle::badge', readLines(file.path(baseline, file)), value = TRUE)
@@ -203,5 +206,5 @@ local({
   jsonlite::write_json(report, 'dev/specmill-pilot/generation-results.json', pretty = TRUE, auto_unbox = TRUE)
 })
 cat(
-  'Baseline files preserved except two reviewed wrappers; second generation is byte-identical; ownership negative cases pass.\n'
+  'Only reviewed wrappers differ from baseline; second generation is byte-identical; ownership negative cases pass.\n'
 )

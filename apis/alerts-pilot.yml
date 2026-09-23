@@ -5,6 +5,8 @@ schemas:
 selection:
   include:
   - GET /api/alerts/groups/{id}
+  - GET /api/alerts/alerts
+  - GET /api/alerts/operations
 helper: generic_request
 documentation: yes
 operations:
@@ -43,4 +45,58 @@ operations:
         apiStage: public
       examples:
       - id: DTXSID7020182
+  GET /api/alerts/alerts:
+    name: chemi_alerts_alerts
+    file: R/chemi_alerts_alerts.R
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: alerts/alerts
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Alerts
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/alerts/operations:
+    name: chemi_alerts_operations
+    file: R/chemi_alerts_operations.R
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: alerts/operations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Alerts Operations
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
 contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds

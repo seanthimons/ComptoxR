@@ -89,4 +89,37 @@ contracts <- list(
     helper = 'generic_chemi_request'
   )
 )
+# Independent expectations for the lookup expansion. Paths retain trailing slashes.
+lookups <- list(
+  chemi_alerts_alerts = list(endpoint = 'alerts/alerts'),
+  chemi_alerts_operations = list(endpoint = 'alerts/operations'),
+  chemi_amos_release_notes = list(endpoint = 'amos/release_notes'),
+  chemi_amos_get_data_source_info = list(endpoint = 'amos/get_data_source_info/'),
+  chemi_amos_get_ir_spectrum = list(endpoint = 'amos/get_ir_spectrum/', parameter = 'internal_id', value = 'ir-1'),
+  chemi_amos_get_nmr_spectrum = list(endpoint = 'amos/get_nmr_spectrum/', parameter = 'internal_id', value = 'nmr-1'),
+  chemi_amos_get_mass_spectrum = list(endpoint = 'amos/get_mass_spectrum/', parameter = 'internal_id', value = 'ms-1'),
+  chemi_amos_get_info_by_id = list(endpoint = 'amos/get_info_by_id/', parameter = 'internal_id', value = 'record-1'),
+  chemi_amos_get_classification_for_dtxsid = list(
+    endpoint = 'amos/get_classification_for_dtxsid/',
+    parameter = 'dtxsid',
+    value = 'DTXSID7020182'
+  ),
+  chemi_amos_by_text = list(endpoint = 'amos/search_by_text/', parameter = 'substr', value = 'benzene')
+)
+for (name in names(lookups)) {
+  lookup <- lookups[[name]]
+  inputs <- if (is.null(lookup$parameter)) list() else setNames(list(lookup$value), lookup$parameter)
+  arguments <- list(
+    endpoint = lookup$endpoint,
+    method = 'GET',
+    batch_limit = if (length(inputs)) 1 else 0,
+    server = 'chemi_burl',
+    auth = FALSE,
+    tidy = FALSE
+  )
+  if (length(inputs)) {
+    arguments <- c(list(query = lookup$value), arguments)
+  }
+  contracts[[name]] <- contract(inputs, arguments, list(list(id = 'record-1')))
+}
 saveRDS(contracts, 'tests/testthat/fixtures/specmill-pilot-contracts.rds', version = 3)

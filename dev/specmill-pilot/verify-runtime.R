@@ -6,7 +6,23 @@ libs <- normalizePath(args[1:2], mustWork = TRUE)
 dir.create(args[[3]], recursive = TRUE, showWarnings = FALSE)
 out <- normalizePath(args[[3]])
 
-verify_client <- function(lib, out) {
+# Independent transport expectations for the second lookup tranche.
+lookup_cases <- list(
+  chemi_alerts_alerts = list(path = "/chemi/alerts/alerts"),
+  chemi_alerts_operations = list(path = "/chemi/alerts/operations"),
+  chemi_amos_release_notes = list(path = "/chemi/amos/release_notes"),
+  chemi_amos_get_data_source_info = list(path = "/chemi/amos/get_data_source_info/"),
+  chemi_amos_get_ir_spectrum = list(path = "/chemi/amos/get_ir_spectrum/", parameter = "internal_id"),
+  chemi_amos_get_nmr_spectrum = list(path = "/chemi/amos/get_nmr_spectrum/", parameter = "internal_id"),
+  chemi_amos_get_mass_spectrum = list(path = "/chemi/amos/get_mass_spectrum/", parameter = "internal_id"),
+  chemi_amos_get_info_by_id = list(path = "/chemi/amos/get_info_by_id/", parameter = "internal_id"),
+  chemi_amos_get_classification_for_dtxsid = list(
+    path = "/chemi/amos/get_classification_for_dtxsid/",
+    parameter = "dtxsid"
+  ),
+  chemi_amos_by_text = list(path = "/chemi/amos/search_by_text/", parameter = "substr")
+)
+verify_client <- function(lib, out, lookup_cases) {
   library(ComptoxR, lib.loc = lib)
   stopifnot(identical(normalizePath(find.package("ComptoxR")), normalizePath(file.path(lib, "ComptoxR"))))
   options(cli.num_colors = 1, width = 100, ComptoxR.run_verbose = FALSE)
@@ -197,6 +213,31 @@ verify_client <- function(lib, out) {
     status = 400L,
     error = TRUE
   )
+  for (name in names(lookup_cases)) {
+    item <- lookup_cases[[name]]
+    fun <- getExportedValue("ComptoxR", name)
+    inputs <- if (is.null(item$parameter)) list() else setNames(list("DTXSID7020182"), item$parameter)
+    path <- paste0(item$path, if (!is.null(item$parameter)) "DTXSID7020182" else "")
+    probe(paste0(name, "-minimal"), do.call(fun, inputs), list(expected("GET", path)))
+    if (!is.null(item$parameter)) {
+      probe(paste0("invalid-missing-", name), do.call(fun, list()), error = TRUE)
+      probe(paste0("invalid-empty-", name), do.call(fun, setNames(list(character()), item$parameter)), error = TRUE)
+      probe(paste0("invalid-blank-", name), do.call(fun, setNames(list(""), item$parameter)), error = TRUE)
+    }
+  }
+  probe(
+    "amos-text-encoded",
+    chemi_amos_by_text("caf\u00e9 +/&"),
+    list(expected("GET", "/chemi/amos/search_by_text/caf%C3%A9%20%2B%2F%26"))
+  )
+  probe(
+    "amos-id-batches",
+    chemi_amos_get_info_by_id(c("record 1", "record 2", "record 1", NA_character_, "")),
+    list(
+      expected("GET", "/chemi/amos/get_info_by_id/record%201"),
+      expected("GET", "/chemi/amos/get_info_by_id/record%202")
+    )
+  )
   registry <- get(".HookRegistry", asNamespace("ComptoxR"))
   saved <- registry$config
   hook <- function(name, fn) assign(name, fn, envir = .GlobalEnv)
@@ -273,8 +314,16 @@ verify_client <- function(lib, out) {
   snapshot
 }
 
-before <- callr::r(verify_client, list(libs[[1]], file.path(out, "before")), libpath = c(libs[[1]], .libPaths()))
-after <- callr::r(verify_client, list(libs[[2]], file.path(out, "after")), libpath = c(libs[[2]], .libPaths()))
+before <- callr::r(
+  verify_client,
+  list(libs[[1]], file.path(out, "before"), lookup_cases),
+  libpath = c(libs[[1]], .libPaths())
+)
+after <- callr::r(
+  verify_client,
+  list(libs[[2]], file.path(out, "after"), lookup_cases),
+  libpath = c(libs[[2]], .libPaths())
+)
 stopifnot(identical(before, after))
 # Resolve stable operation identities from the adopted mappings, not function-name guesses.
 script_arg <- grep("^--file=", commandArgs(FALSE), value = TRUE)
@@ -303,6 +352,17 @@ case_groups <- list(
     "post-hook-exception"
   )
 )
+for (name in names(lookup_cases)) {
+  case_groups[[name]] <- paste0(name, "-minimal")
+  if (!is.null(lookup_cases[[name]]$parameter)) {
+    case_groups[[name]] <- c(
+      case_groups[[name]],
+      paste0(c("invalid-missing-", "invalid-empty-", "invalid-blank-"), name)
+    )
+  }
+}
+case_groups$chemi_amos_by_text <- c(case_groups$chemi_amos_by_text, "amos-text-encoded")
+case_groups$chemi_amos_get_info_by_id <- c(case_groups$chemi_amos_get_info_by_id, "amos-id-batches")
 stopifnot(setequal(unlist(case_groups), names(before$cases)), !anyDuplicated(unlist(case_groups)))
 identities <- list()
 for (path in sort(list.files(file.path(root, "apis"), "-pilot[.]yml$", full.names = TRUE))) {
@@ -325,7 +385,7 @@ mode <- function(name) {
   if (name %in% c("epi-default", "detail-default")) {
     return("required input with public optional defaults")
   }
-  if (name == "alerts-minimal") {
+  if (grepl("-minimal$", name)) {
     return("minimal required public input")
   }
   if (grepl("^invalid-", name)) {

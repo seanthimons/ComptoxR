@@ -1,0 +1,285 @@
+id: amos-pilot
+schemas:
+  files:
+  - schema/chemi-amos-prod.json
+selection:
+  include:
+  - GET /api/amos/release_notes
+  - GET /api/amos/get_data_source_info/
+  - GET /api/amos/get_ir_spectrum/{internal_id}
+  - GET /api/amos/get_nmr_spectrum/{internal_id}
+  - GET /api/amos/get_mass_spectrum/{internal_id}
+  - GET /api/amos/get_info_by_id/{internal_id}
+  - GET /api/amos/get_classification_for_dtxsid/{dtxsid}
+  - GET /api/amos/search_by_text/{substr}
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/amos/release_notes:
+    name: chemi_amos_release_notes
+    file: R/chemi_amos_release_notes.R
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: amos/release_notes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of release notes for AMOS.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/get_data_source_info/:
+    name: chemi_amos_get_data_source_info
+    file: R/chemi_amos_get_data_source_info.R
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: amos/get_data_source_info/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns a list of major data sources in AMOS with some supplemental information.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/amos/get_ir_spectrum/{internal_id}:
+    name: chemi_amos_get_ir_spectrum
+    file: R/chemi_amos_get_ir_spectrum.R
+    implementation: generated
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the IR spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_ir_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns an IR spectrum by database ID.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_nmr_spectrum/{internal_id}:
+    name: chemi_amos_get_nmr_spectrum
+    file: R/chemi_amos_get_nmr_spectrum.R
+    implementation: generated
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the NMR spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_nmr_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Endpoint for retrieving a specified NMR spectrum from the database.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_mass_spectrum/{internal_id}:
+    name: chemi_amos_get_mass_spectrum
+    file: R/chemi_amos_get_mass_spectrum.R
+    implementation: generated
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the mass spectrum of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_mass_spectrum/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a mass spectrum by its ID in AMOS's database with supporting
+        information.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_info_by_id/{internal_id}:
+    name: chemi_amos_get_info_by_id
+    file: R/chemi_amos_get_info_by_id.R
+    implementation: generated
+    inputs:
+      internal_id:
+        required: yes
+        type: character
+        description: Unique ID of the record of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - internal_id
+        endpoint:
+          value: amos/get_info_by_id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns general information about a record by ID.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - internal_id: DTXSID7020182
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
+    name: chemi_amos_get_classification_for_dtxsid
+    file: R/chemi_amos_get_classification_for_dtxsid.R
+    implementation: generated
+    inputs:
+      dtxsid:
+        required: yes
+        type: character
+        description: The DTXSID for the substance of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/get_classification_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Returns the top four levels of a ClassyFire classification of a given
+        substance.
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /api/amos/search_by_text/{substr}:
+    name: chemi_amos_by_text
+    file: R/chemi_amos_by_text.R
+    implementation: generated
+    inputs:
+      substr:
+        required: yes
+        type: character
+        description: The substring to search for.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - substr
+        endpoint:
+          value: amos/search_by_text/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Retrieves a list of records from the ElasticSearch database that contain
+        a searched substring
+      lifecycle: experimental
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - substr: DTXSID7020182
+contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds

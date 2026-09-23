@@ -9,7 +9,17 @@
   },
   "baseline_files_compared": 855,
   "changed_baseline_files": [
+    "R/chemi_alerts_alerts.R",
     "R/chemi_alerts_groups_by_id.R",
+    "R/chemi_alerts_operations.R",
+    "R/chemi_amos_by_text.R",
+    "R/chemi_amos_get_classification_for_dtxsid.R",
+    "R/chemi_amos_get_data_source_info.R",
+    "R/chemi_amos_get_info_by_id.R",
+    "R/chemi_amos_get_ir_spectrum.R",
+    "R/chemi_amos_get_mass_spectrum.R",
+    "R/chemi_amos_get_nmr_spectrum.R",
+    "R/chemi_amos_release_notes.R",
     "R/epi_search.R"
   ],
   "second_apply_hashed_files": 1260,

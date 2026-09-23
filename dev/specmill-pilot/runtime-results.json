@@ -3,7 +3,7 @@
   "comparison": "identical objects, warnings, errors, exports and formals; independently asserted exact received methods, paths, query encoding, content types, body bytes and authentication",
   "fixture_modes": "Public defaults, explicit argument overrides, minimal public inputs, invalid inputs and hook overrides are labeled per case. Source-schema default/override/minimal fixtures remain separate in schema-results.json.",
   "baseline_commit": "4fd720b97fb2f7f2abf131925e9270b0c11b057a",
-  "passed_cases": 23,
+  "passed_cases": 53,
   "exported_names_compared": 409,
   "exported_function_formals_compared": 409,
   "operations": [
@@ -362,6 +362,496 @@
           "error_classes": ["comptoxr_post_response_hook_error", "rlang_error", "error", "condition"],
           "error_message": "`chemi_search()` failed in post-response hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception",
           "parent_error": "pilot hook exception",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "method": "GET",
+      "path": "/api/alerts/alerts",
+      "stable_key": "schema/chemi-alerts-prod.json | GET /api/alerts/alerts",
+      "function_name": "chemi_alerts_alerts",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_alerts_alerts-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "method": "GET",
+      "path": "/api/alerts/operations",
+      "stable_key": "schema/chemi-alerts-prod.json | GET /api/alerts/operations",
+      "function_name": "chemi_alerts_operations",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_alerts_operations-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/release_notes",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/release_notes",
+      "function_name": "chemi_amos_release_notes",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_release_notes-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_data_source_info/",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_data_source_info/",
+      "function_name": "chemi_amos_get_data_source_info",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_data_source_info-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_ir_spectrum/{internal_id}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_ir_spectrum/{internal_id}",
+      "function_name": "chemi_amos_get_ir_spectrum",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_ir_spectrum-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_get_ir_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"internal_id\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_get_ir_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_get_ir_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_nmr_spectrum/{internal_id}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_nmr_spectrum/{internal_id}",
+      "function_name": "chemi_amos_get_nmr_spectrum",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_nmr_spectrum-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_get_nmr_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"internal_id\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_get_nmr_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_get_nmr_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_mass_spectrum/{internal_id}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_mass_spectrum/{internal_id}",
+      "function_name": "chemi_amos_get_mass_spectrum",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_mass_spectrum-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_get_mass_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"internal_id\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_get_mass_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_get_mass_spectrum",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_info_by_id/{internal_id}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_info_by_id/{internal_id}",
+      "function_name": "chemi_amos_get_info_by_id",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_info_by_id-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_get_info_by_id",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"internal_id\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_get_info_by_id",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_get_info_by_id",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "amos-id-batches",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 2,
+          "authentication": ["x-api-key absent", "x-api-key absent"],
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/get_classification_for_dtxsid/{dtxsid}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+      "function_name": "chemi_amos_get_classification_for_dtxsid",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_get_classification_for_dtxsid-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_get_classification_for_dtxsid",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"dtxsid\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_get_classification_for_dtxsid",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_get_classification_for_dtxsid",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-amos-prod.json",
+      "method": "GET",
+      "path": "/api/amos/search_by_text/{substr}",
+      "stable_key": "schema/chemi-amos-prod.json | GET /api/amos/search_by_text/{substr}",
+      "function_name": "chemi_amos_by_text",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "chemi_amos_by_text-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-chemi_amos_by_text",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"substr\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-chemi_amos_by_text",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-blank-chemi_amos_by_text",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "amos-text-encoded",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
           "warnings": []
         }
       ]
