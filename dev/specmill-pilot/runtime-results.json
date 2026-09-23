@@ -1,0 +1,370 @@
+{
+  "scope": "Installed baseline and migrated clients, offline localhost only. Synthetic response fixtures; no verified live API behavior.",
+  "comparison": "identical objects, warnings, errors, exports and formals; independently asserted exact received methods, paths, query encoding, content types, body bytes and authentication",
+  "fixture_modes": "Public defaults, explicit argument overrides, minimal public inputs, invalid inputs and hook overrides are labeled per case. Source-schema default/override/minimal fixtures remain separate in schema-results.json.",
+  "baseline_commit": "4fd720b97fb2f7f2abf131925e9270b0c11b057a",
+  "passed_cases": 23,
+  "exported_names_compared": 409,
+  "exported_function_formals_compared": 409,
+  "operations": [
+    {
+      "schema": "schema/epi-suite-prod.json",
+      "method": "GET",
+      "path": "/api/search",
+      "stable_key": "schema/epi-suite-prod.json | GET /api/search",
+      "function_name": "epi_search",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "epi-default",
+          "mode": "required input with public optional defaults",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "epi-override-encoding",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-epi-query",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"query\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "public-without-auth",
+          "mode": "authentication environment override",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "http-400",
+          "mode": "HTTP error response override",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+          "error_message": "HTTP 400 Bad Request.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "generated-post-hook-exception",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["comptoxr_post_response_hook_error", "rlang_error", "error", "condition"],
+          "error_message": "`epi_search()` failed in post-response hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception",
+          "parent_error": "pilot hook exception",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-alerts-prod.json",
+      "method": "GET",
+      "path": "/api/alerts/groups/{id}",
+      "stable_key": "schema/chemi-alerts-prod.json | GET /api/alerts/groups/{id}",
+      "function_name": "chemi_alerts_groups_by_id",
+      "implementation": "generated",
+      "covered_cases": [
+        {
+          "case": "alerts-minimal",
+          "mode": "minimal required public input",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-missing-alert-id",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+          "error_message": "argument \"id\" is missing, with no default",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/ctx-chemical-prod.json",
+      "method": "GET",
+      "path": "/chemical/detail/search/by-dtxsid/{dtxsid}",
+      "stable_key": "schema/ctx-chemical-prod.json | GET /chemical/detail/search/by-dtxsid/{dtxsid}",
+      "function_name": "ct_chemical_detail_search",
+      "implementation": "existing",
+      "covered_cases": [
+        {
+          "case": "detail-default",
+          "mode": "required input with public optional defaults",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key equals local test key",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-detail",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "missing-auth",
+          "mode": "authentication environment override",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["purrr_error_indexed", "rlang_error", "error", "condition"],
+          "error_message": "ℹ In index: 1.\nCaused by error in `ct_api_key()`:\n✖ No CTX API key found.\nℹ Please set it using `Sys.setenv(ctx_api_key = 'YOUR_KEY_HERE')`.\nℹ You may need to restart your R session after setting it.",
+          "parent_error": "✖ No CTX API key found.\nℹ Please set it using `Sys.setenv(ctx_api_key = 'YOUR_KEY_HERE')`.\nℹ You may need to restart your R session after setting it.",
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/ctx-chemical-prod.json",
+      "method": "POST",
+      "path": "/chemical/detail/search/by-dtxsid/",
+      "stable_key": "schema/ctx-chemical-prod.json | POST /chemical/detail/search/by-dtxsid/",
+      "function_name": "ct_chemical_detail_search_bulk",
+      "implementation": "existing",
+      "covered_cases": [
+        {
+          "case": "bulk-batches",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 2,
+          "authentication": ["x-api-key equals local test key", "x-api-key equals local test key"],
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 2,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-empty-bulk",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["rlang_error", "error", "condition"],
+          "error_message": "Query must be a character vector.",
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/ctx-chemical-prod.json",
+      "method": "GET",
+      "path": "/chemical/list/all",
+      "stable_key": "schema/ctx-chemical-prod.json | GET /chemical/list/all",
+      "function_name": "ct_chemical_list_all",
+      "implementation": "existing",
+      "covered_cases": [
+        {
+          "case": "list-transform",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key equals local test key",
+          "result_classes": "list",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "partial-hook-update",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key equals local test key",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "list-skip",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": "character",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "schema": "schema/chemi-search-prod.json",
+      "method": "POST",
+      "path": "/api/search",
+      "stable_key": "schema/chemi-search-prod.json | POST /api/search",
+      "function_name": "chemi_search",
+      "implementation": "existing",
+      "covered_cases": [
+        {
+          "case": "mass-body",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 1,
+          "authentication": "x-api-key absent",
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 1,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "mass-pagination",
+          "mode": "explicit public argument overrides",
+          "exact_wire_equal": true,
+          "received_requests": 2,
+          "authentication": ["x-api-key absent", "x-api-key absent"],
+          "result_classes": ["tbl_df", "tbl", "data.frame"],
+          "result_rows": 0,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "invalid-search",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+          "error_message": "`chemi_search()` failed in pre-request hook `chemi_search_pre_request()`.\nCaused by error in `match.arg()`:\n! 'arg' should be one of “exact”, “substructure”, “similar”, “mass”, “hazard”, “features”",
+          "parent_error": "'arg' should be one of “exact”, “substructure”, “similar”, “mass”, “hazard”, “features”",
+          "warnings": []
+        },
+        {
+          "case": "invalid-similarity",
+          "mode": "invalid public input",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+          "error_message": "`chemi_search()` failed in pre-request hook `chemi_search_pre_request()`.\nCaused by error in `validate_search_inputs()`:\n! min_similarity must be a number between 0 and 1",
+          "parent_error": "min_similarity must be a number between 0 and 1",
+          "warnings": []
+        },
+        {
+          "case": "search-post-on-skip",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": "character",
+          "result_rows": null,
+          "error_classes": [],
+          "error_message": null,
+          "parent_error": null,
+          "warnings": []
+        },
+        {
+          "case": "pre-hook-exception",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+          "error_message": "`chemi_search()` failed in pre-request hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception",
+          "parent_error": "pilot hook exception",
+          "warnings": []
+        },
+        {
+          "case": "post-hook-exception",
+          "mode": "explicit test hook override",
+          "exact_wire_equal": true,
+          "received_requests": 0,
+          "authentication": "no request",
+          "result_classes": [],
+          "result_rows": null,
+          "error_classes": ["comptoxr_post_response_hook_error", "rlang_error", "error", "condition"],
+          "error_message": "`chemi_search()` failed in post-response hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception",
+          "parent_error": "pilot hook exception",
+          "warnings": []
+        }
+      ]
+    }
+  ]
+}

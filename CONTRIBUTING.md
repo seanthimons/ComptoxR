@@ -28,6 +28,21 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
+The six-operation specmill pilot has a separate pinned development library.
+Use Air 0.11.0 for this pilot, then run:
+
+```bash
+Rscript dev/install_specmill.R
+Rscript dev/generate_specmill.R --plan
+Rscript dev/generate_specmill.R --check
+```
+
+Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
+matching output; do not reuse initial adoption hashes. See the
+[pilot report](dev/specmill-pilot/REPORT.md) for localhost verification,
+retained implementations, offline reproduction and rollback. The legacy
+commands below continue to maintain operations outside that slice.
+
 Install the reviewed development toolkit before running schema commands:
 
 ```r

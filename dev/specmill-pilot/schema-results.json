@@ -1,0 +1,1141 @@
+{
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.4",
+    "source_commit": "f41eeb9bae628eeb1f0fee16227f5ee8373a7ae2",
+    "source_archive_sha256": "b2d3eecdb82d7dfd4fc1944197f4f4df904a0b032afb1756951cf7b2c7c8299d",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "scope": "Offline current production schema files. No schema repairs, policy overrides, live calls, or request construction.",
+  "schemas": {
+    "chemi-alerts-prod.json": {
+      "schema": "chemi-alerts-prod.json",
+      "sha256": "aabd653b436d793b92a84b09e61f033d5282b2877d5834bd908173e4a959002d",
+      "status": "parsed",
+      "supported_keys": ["GET /api/alerts/alerts", "POST /api/alerts/export", "POST /api/alerts/export-append", "GET /api/alerts/groups", "DELETE /api/alerts/groups/{id}", "GET /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "PATCH /api/alerts/groups/{id}/freeze", "GET /api/alerts/metadata", "GET /api/alerts/operations", "GET /api/alerts/render", "GET /api/alerts/version"],
+      "supported": 12,
+      "blocked": 4
+    },
+    "chemi-amnb_nate-prod.json": {
+      "schema": "chemi-amnb_nate-prod.json",
+      "sha256": "7d49e87491f78e61b211ddbc02a23c62eaaa56b8de059003be325aee09aed893",
+      "status": "parsed",
+      "supported_keys": ["GET /api/amnb_nate", "POST /api/amnb_nate", "GET /api/amnb_nate/metadata", "GET /api/amnb_nate/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-amos-prod.json": {
+      "schema": "chemi-amos-prod.json",
+      "sha256": "1d0ef1fbd813e2381a1e6e841d69e5070ee438e588a01dc3298b984ba7ca5f35",
+      "status": "parsed",
+      "supported_keys": ["GET /api/amos/additional_sources_for_substance/{dtxsid}", "GET /api/amos/analytical_qc_keyset_pagination/{limit}", "GET /api/amos/database_summary/", "GET /api/amos/dtxsids_from_functional_use/{functional_use}", "GET /api/amos/fact_sheet_keyset_pagination/{limit}", "GET /api/amos/find_dtxsids/{internal_id}", "GET /api/amos/formula_search/{formula}", "GET /api/amos/functional_class_search/{functional_class}", "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}", "GET /api/amos/get_classification_for_dtxsid/{dtxsid}", "GET /api/amos/get_data_source_info/", "GET /api/amos/get_fact_sheet_editor_info/{internal_id}", "GET /api/amos/get_info_by_id/{internal_id}", "GET /api/amos/get_ir_spectrum/{internal_id}", "GET /api/amos/get_mass_spectrum/{internal_id}", "GET /api/amos/get_method_editor_info/{internal_id}", "GET /api/amos/get_ms_ready_methods/{inchikey}", "GET /api/amos/get_nmr_spectrum/{internal_id}", "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}", "GET /api/amos/get_pdf/{record_type}/{internal_id}", "GET /api/amos/get_pdf_metadata/{record_type}/{internal_id}", "GET /api/amos/get_product_declaration_editor_info/{internal_id}", "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}", "GET /api/amos/get_substance_file_for_record/{internal_id}", "GET /api/amos/get_substances_for_search_term/{search_term}", "GET /api/amos/inchikey_first_block_search/{first_block}", "GET /api/amos/list_fact_sheet_types/", "GET /api/amos/list_functional_classes", "GET /api/amos/method_keyset_pagination/{limit}", "GET /api/amos/method_with_spectra/{search_type}/{internal_id}", "GET /api/amos/product_declaration_keyset_pagination/{limit}", "GET /api/amos/record_id_search/{internal_id}", "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}", "GET /api/amos/record_type_count/{record_type}", "GET /api/amos/release_notes", "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}", "GET /api/amos/search/{dtxsid}", "GET /api/amos/search_by_text/{substr}", "GET /api/amos/substring_search/{substring}", "PUT /api/amos/update_analytical_qc_pdf_info/{internal_id}", "PUT /api/amos/update_fact_sheet_info/{internal_id}", "PUT /api/amos/update_method_info/{internal_id}", "PUT /api/amos/update_nmr_spectrum_info/{internal_id}", "PUT /api/amos/update_product_declaration_info/{internal_id}", "PUT /api/amos/update_safety_data_sheet_info/{internal_id}"],
+      "supported": 45,
+      "blocked": 32
+    },
+    "chemi-arn_cats-prod.json": {
+      "schema": "chemi-arn_cats-prod.json",
+      "sha256": "24b78b34bdfba89c0060bbb17717ea30ec918b81aab4d3d62b05445f284e8bd5",
+      "status": "parsed",
+      "supported_keys": ["GET /api/arn_cats", "POST /api/arn_cats", "GET /api/arn_cats/metadata", "GET /api/arn_cats/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-chet-prod.json": {
+      "schema": "chemi-chet-prod.json",
+      "sha256": "df83f5d3fd7b59d23f556332526c330e579763d8a8858d222836931fe6321700",
+      "status": "schema_error",
+      "reason": "Operation name collision; supply reviewed name overrides"
+    },
+    "chemi-descriptors-prod.json": {
+      "schema": "chemi-descriptors-prod.json",
+      "sha256": "a05d61fd3b73a72a88ac73cf3c133fbce8e2d4fdd5fdca1de84bcc6792e780ff",
+      "status": "parsed",
+      "supported_keys": ["GET /api/descriptors", "POST /api/descriptors", "GET /api/descriptors/metadata", "GET /api/descriptors/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-hazard-prod.json": {
+      "schema": "chemi-hazard-prod.json",
+      "sha256": "ca80159bc348e7f2856b6c0b01d75a1e9268be8f992213fa362004da3127311d",
+      "status": "parsed",
+      "supported_keys": ["GET /api/hazard", "GET /api/hazard/download", "GET /api/hazard/metadata", "POST /api/hazard/report/export", "POST /api/hazard/report/export-append", "POST /api/hazard/report/export2", "GET /api/hazard/reports", "POST /api/hazard/reports", "GET /api/hazard/reports/check", "DELETE /api/hazard/reports/{id}", "GET /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}/acl", "POST /api/hazard/reports/{id}/export", "GET /api/hazard/version"],
+      "supported": 15,
+      "blocked": 1
+    },
+    "chemi-mordred-prod.json": {
+      "schema": "chemi-mordred-prod.json",
+      "sha256": "e1a07ac3988da8c237405ed77422111bfb95dbbfbc96bb2c6e387e2807ca8f1a",
+      "status": "parsed",
+      "supported_keys": ["GET /api/mordred", "POST /api/mordred", "GET /api/mordred/metadata", "GET /api/mordred/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-ncc_cats-prod.json": {
+      "schema": "chemi-ncc_cats-prod.json",
+      "sha256": "3f381065fa34a0ed4e72f233bd95cf0ed1828b757049902980714188fd878290",
+      "status": "parsed",
+      "supported_keys": ["GET /api/ncc_cats", "POST /api/ncc_cats", "GET /api/ncc_cats/metadata", "GET /api/ncc_cats/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-opera-prod.json": {
+      "schema": "chemi-opera-prod.json",
+      "sha256": "93547eb0abe3363a7713e5728f788ad39a355a8b420c0028d9fa6e7287f36443",
+      "status": "parsed",
+      "supported_keys": ["GET /api/opera", "POST /api/opera", "POST /api/opera/file", "GET /api/opera/metadata", "GET /api/opera/report", "GET /api/opera/version"],
+      "supported": 6,
+      "blocked": 0
+    },
+    "chemi-padel-prod.json": {
+      "schema": "chemi-padel-prod.json",
+      "sha256": "a0677362ebf29a16629455ab536235cb8f46706928b1ecb6315aa19684e03cf6",
+      "status": "parsed",
+      "supported_keys": ["GET /api/padel", "POST /api/padel", "GET /api/padel/metadata", "GET /api/padel/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-pfas_atlas-prod.json": {
+      "schema": "chemi-pfas_atlas-prod.json",
+      "sha256": "b9e20e9722aea6ff05607d7e7e1964b169ba6f5070c8cda25f729bf8e7e22903",
+      "status": "parsed",
+      "supported_keys": ["GET /api/pfas_atlas", "POST /api/pfas_atlas", "GET /api/pfas_atlas/metadata", "GET /api/pfas_atlas/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-pfas_cats-prod.json": {
+      "schema": "chemi-pfas_cats-prod.json",
+      "sha256": "d6932536598a6d1e4809e56fcb0232f30759b54186182c0a513b52ef7e7695aa",
+      "status": "parsed",
+      "supported_keys": ["GET /api/pfas_cats", "POST /api/pfas_cats", "GET /api/pfas_cats/metadata", "GET /api/pfas_cats/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-predictor_models-prod.json": {
+      "schema": "chemi-predictor_models-prod.json",
+      "sha256": "3460091052baaa7db76e440d04c373bf03e887fd518110d9c1febece6cceb2e1",
+      "status": "parsed",
+      "supported_keys": ["GET /api/predictor_models/metadata", "GET /api/predictor_models/model/file/", "GET /api/predictor_models/predict", "POST /api/predictor_models/predict", "GET /api/predictor_models/version"],
+      "supported": 5,
+      "blocked": 0
+    },
+    "chemi-rdkit-prod.json": {
+      "schema": "chemi-rdkit-prod.json",
+      "sha256": "d24369296c4d7972368f5c480e0bb3ff61483312f830acb013b4b99d2ab4856a",
+      "status": "parsed",
+      "supported_keys": ["GET /api/rdkit", "POST /api/rdkit", "GET /api/rdkit/metadata", "GET /api/rdkit/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-resolver-prod.json": {
+      "schema": "chemi-resolver-prod.json",
+      "sha256": "e979709d6eb80598e86fcd7dacee37b9d7a63a14f9cad9be6935bae1996f80d2",
+      "status": "parsed",
+      "supported_keys": ["GET /api/resolver/ccte-list", "GET /api/resolver/ccte-lists", "GET /api/resolver/classyfire", "GET /api/resolver/export", "POST /api/resolver/export", "POST /api/resolver/export-append", "POST /api/resolver/export-records", "GET /api/resolver/export-section", "POST /api/resolver/export-section", "POST /api/resolver/export_classyfire", "POST /api/resolver/exportpubchemlist", "POST /api/resolver/exportsimilaritylist", "POST /api/resolver/exportsimilaritymap", "GET /api/resolver/getallannotations", "GET /api/resolver/getannotation", "GET /api/resolver/getannotationslist", "GET /api/resolver/getdatasources", "GET /api/resolver/getintegrityreports", "POST /api/resolver/getpubchemlist", "POST /api/resolver/getsimilaritylist", "POST /api/resolver/getsimilaritymap", "GET /api/resolver/getsubstance", "GET /api/resolver/ghs-list", "POST /api/resolver/ghs-list-count", "GET /api/resolver/ghs/classes", "GET /api/resolver/ghs/hcodes", "GET /api/resolver/ghs/pcodes", "GET /api/resolver/hcodes", "GET /api/resolver/links", "GET /api/resolver/lookup", "POST /api/resolver/lookup", "GET /api/resolver/lookupCASRN", "GET /api/resolver/mesh", "GET /api/resolver/metadata", "POST /api/resolver/orderBySimilarity", "GET /api/resolver/pubchem-section", "POST /api/resolver/pubchem-section", "GET /api/resolver/render", "POST /api/resolver/resolve", "GET /api/resolver/safety-flags", "POST /api/resolver/universalharvest_cart", "GET /api/resolver/version"],
+      "supported": 42,
+      "blocked": 4
+    },
+    "chemi-safety-prod.json": {
+      "schema": "chemi-safety-prod.json",
+      "sha256": "54f3888c7e989693a6f9567634e16f588fc547d851ac7b047f49711b3537d4a3",
+      "status": "parsed",
+      "supported_keys": ["GET /api/alerts/render", "GET /api/safety/metadata", "POST /api/safety/rqcodes", "GET /api/safety/version"],
+      "supported": 4,
+      "blocked": 0
+    },
+    "chemi-search-prod.json": {
+      "schema": "chemi-search-prod.json",
+      "sha256": "6ad41bc28903f3fa2f94dda015552ffcb925c07080012885a648a21373646640",
+      "status": "parsed",
+      "supported_keys": ["POST /api/search", "POST /api/search/download", "GET /api/search/download/mol", "GET /api/search/download/mol-by-smiles", "POST /api/search/download/properties", "POST /api/search/download/search-result-as-sdf", "GET /api/search/exact", "GET /api/search/gethazard", "GET /api/search/metadata", "GET /api/search/render/png", "GET /api/search/render/svg", "GET /api/search/similar", "GET /api/search/substructure", "GET /api/search/version"],
+      "supported": 14,
+      "blocked": 0
+    },
+    "chemi-services-prod.json": {
+      "schema": "chemi-services-prod.json",
+      "sha256": "e8cc0a082162d0e00fbaf61388e24cea0a6b3cfe1b17ec986e2d8f6c083b26ad",
+      "status": "parsed",
+      "supported_keys": ["GET /api/services/cim_component_info", "POST /api/services/collated_report", "POST /api/services/convert", "POST /api/services/export", "POST /api/services/export_json_report", "GET /api/services/layout", "GET /api/services/metadata", "GET /api/services/release_notes", "GET /api/services/smirks2rxn", "GET /api/services/version"],
+      "supported": 10,
+      "blocked": 4
+    },
+    "chemi-stdizer-prod.json": {
+      "schema": "chemi-stdizer-prod.json",
+      "sha256": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec",
+      "status": "parsed",
+      "supported_keys": ["GET /api/stdizer", "POST /api/stdizer/chemicals", "GET /api/stdizer/groups", "DELETE /api/stdizer/groups/{id}", "GET /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}/acl", "PATCH /api/stdizer/groups/{id}/freeze", "GET /api/stdizer/groups/{id}/recursive", "GET /api/stdizer/metadata", "GET /api/stdizer/operations", "POST /api/stdizer/protocol/export", "GET /api/stdizer/protocols", "POST /api/stdizer/protocols", "GET /api/stdizer/protocols/check", "DELETE /api/stdizer/protocols/{id}", "PATCH /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}/acl", "GET /api/stdizer/protocols/{id}/changes", "POST /api/stdizer/protocols/{id}/export", "GET /api/stdizer/protocols/{id}/issues", "POST /api/stdizer/records", "GET /api/stdizer/render", "GET /api/stdizer/version", "GET /api/stdizer/workflows"],
+      "supported": 26,
+      "blocked": 7
+    },
+    "chemi-toxprints-prod.json": {
+      "schema": "chemi-toxprints-prod.json",
+      "sha256": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
+      "status": "parsed",
+      "supported_keys": ["GET /api/toxprints", "POST /api/toxprints", "GET /api/toxprints/assays", "POST /api/toxprints/assays", "GET /api/toxprints/assays/check", "DELETE /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}/acl", "GET /api/toxprints/assays/{name}", "GET /api/toxprints/calculate", "POST /api/toxprints/chemicals_categories", "GET /api/toxprints/download", "GET /api/toxprints/enrichments", "POST /api/toxprints/export", "POST /api/toxprints/export_global", "GET /api/toxprints/global_assays", "GET /api/toxprints/global_toxprints", "GET /api/toxprints/metadata", "GET /api/toxprints/render", "GET /api/toxprints/toxprints", "POST /api/toxprints/toxprints_categories", "GET /api/toxprints/version"],
+      "supported": 22,
+      "blocked": 1
+    },
+    "chemi-webtest-prod.json": {
+      "schema": "chemi-webtest-prod.json",
+      "sha256": "cf70437924a4074476c8802f78e6442ddc1b9d4be7311ccd442b6f4c294eca26",
+      "status": "parsed",
+      "supported_keys": ["GET /api/webtest", "POST /api/webtest", "POST /api/webtest/export-append", "GET /api/webtest/metadata", "GET /api/webtest/predict", "POST /api/webtest/predict", "POST /api/webtest/predict/export", "GET /api/webtest/report", "GET /api/webtest/version"],
+      "supported": 9,
+      "blocked": 0
+    },
+    "ctx_bioactivity_prod.json": {
+      "schema": "ctx_bioactivity_prod.json",
+      "sha256": "23fa9ee4ed4bb81352937a22ed61dc52325ca7b563f16ed1ac1e70b410a9fd34",
+      "status": "parsed",
+      "supported_keys": ["GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}", "GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}", "GET /bioactivity/aop/search/by-event-number/{eventNumber}", "GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}", "GET /bioactivity/assay/", "GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}", "GET /bioactivity/assay/count", "POST /bioactivity/assay/search/by-aeid/", "GET /bioactivity/assay/search/by-aeid/{aeid}", "GET /bioactivity/assay/search/by-endpoint/", "GET /bioactivity/assay/search/by-gene/{geneSymbol}", "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}", "POST /bioactivity/data/aed/search/by-dtxsid/", "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}", "POST /bioactivity/data/search/by-aeid/", "GET /bioactivity/data/search/by-aeid/{aeid}", "POST /bioactivity/data/search/by-dtxsid/", "GET /bioactivity/data/search/by-dtxsid/{dtxsid}", "POST /bioactivity/data/search/by-m4id/", "GET /bioactivity/data/search/by-m4id/{m4id}", "POST /bioactivity/data/search/by-spid/", "GET /bioactivity/data/search/by-spid/{spid}", "GET /bioactivity/data/summary/search/by-aeid/{aeid}", "GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}", "GET /bioactivity/data/summary/search/by-tissue/", "GET /bioactivity/models/search/", "GET /bioactivity/models/search/by-dtxsid/{dtxsid}", "GET /bioactivity/search/contain/{value}", "GET /bioactivity/search/equal/{value}", "GET /bioactivity/search/start-with/{value}"],
+      "supported": 30,
+      "blocked": 0
+    },
+    "ctx_chemical_prod.json": {
+      "schema": "ctx_chemical_prod.json",
+      "sha256": "6c981168916dd85486de8c76530e1cb9e22ac1377b18bd2d4519f5c5367dddca",
+      "status": "parsed",
+      "supported_keys": ["GET /chemical/count/by-exact-formula/{formula}", "GET /chemical/count/by-msready-formula/{formula}", "POST /chemical/detail/search/by-dtxcid/", "GET /chemical/detail/search/by-dtxcid/{dtxcid}", "POST /chemical/detail/search/by-dtxsid/", "GET /chemical/detail/search/by-dtxsid/{dtxsid}", "GET /chemical/detail/search/by-smiles/", "POST /chemical/extra-data/search/by-dtxsid/", "GET /chemical/extra-data/search/by-dtxsid/{dtxsid}", "POST /chemical/fate/search/by-dtxsid/", "GET /chemical/fate/search/by-dtxsid/{dtxsid}", "GET /chemical/fate/summary/experimental/search/", "GET /chemical/fate/summary/predicted/search/", "GET /chemical/fate/summary/search/", "GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}", "GET /chemical/file/image/search/by-dtxcid/{dtxcid}", "GET /chemical/file/image/search/by-dtxsid/{dtxsid}", "GET /chemical/file/image/search/by-gsid/{gsid}", "GET /chemical/file/mol/search/by-dtxcid/{dtxcid}", "GET /chemical/file/mol/search/by-dtxsid/{dtxsid}", "GET /chemical/list/all", "GET /chemical/list/chemicals/search/by-listname/{list}", "GET /chemical/list/chemicals/search/contain/{list}/{word}", "GET /chemical/list/chemicals/search/equal/{list}/{word}", "GET /chemical/list/chemicals/search/start-with/{list}/{word}", "GET /chemical/list/search/by-dtxsid/{dtxsid}", "GET /chemical/list/search/by-name/{listName}", "GET /chemical/list/search/by-type/{type}", "GET /chemical/list/type", "POST /chemical/msready/search/by-dtxcid/", "GET /chemical/msready/search/by-dtxcid/{dtxcid}", "GET /chemical/msready/search/by-formula/{formula}", "POST /chemical/msready/search/by-mass/", "GET /chemical/msready/search/by-mass/{start}/{end}", "GET /chemical/property/experimental/name", "POST /chemical/property/experimental/search/by-dtxsid/", "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}", "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}", "GET /chemical/property/predicted/name", "POST /chemical/property/predicted/search/by-dtxsid/", "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}", "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}", "GET /chemical/property/summary/experimental/search/", "GET /chemical/property/summary/predicted/search/", "GET /chemical/property/summary/search/", "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}", "GET /chemical/search/by-exact-formula/{formula}", "POST /chemical/search/by-msready-formula/", "GET /chemical/search/by-msready-formula/{formula}", "GET /chemical/search/contain/{word}", "POST /chemical/search/equal/", "GET /chemical/search/equal/{word}", "GET /chemical/search/start-with/{word}", "POST /chemical/synonym/search/by-dtxsid/", "GET /chemical/synonym/search/by-dtxsid/{dtxsid}"],
+      "supported": 55,
+      "blocked": 0
+    },
+    "ctx_exposure_prod.json": {
+      "schema": "ctx_exposure_prod.json",
+      "sha256": "5a60a185a3eb8472bc23315631a2557e805a315ecf3e11d260303d848c26702e",
+      "status": "parsed",
+      "supported_keys": ["GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}", "GET /exposure/functional-use/category", "GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}", "POST /exposure/functional-use/search/by-dtxsid/", "GET /exposure/functional-use/search/by-dtxsid/{dtxsid}", "POST /exposure/httk/search/by-dtxsid/", "GET /exposure/httk/search/by-dtxsid/{dtxsid}", "POST /exposure/list-presence/search/by-dtxsid/", "GET /exposure/list-presence/search/by-dtxsid/{dtxsid}", "GET /exposure/list-presence/tags", "GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}", "GET /exposure/mmdb/aggregate/by-medium", "GET /exposure/mmdb/mediums", "GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}", "GET /exposure/mmdb/single-sample/by-medium", "GET /exposure/product-data/puc", "POST /exposure/product-data/search/by-dtxsid/", "GET /exposure/product-data/search/by-dtxsid/{dtxsid}", "POST /exposure/seem/demographic/search/by-dtxsid/", "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}", "POST /exposure/seem/general/search/by-dtxsid/", "GET /exposure/seem/general/search/by-dtxsid/{dtxsid}"],
+      "supported": 27,
+      "blocked": 0
+    },
+    "ctx_hazard_prod.json": {
+      "schema": "ctx_hazard_prod.json",
+      "sha256": "efe9341a4aa9409fc5fbd2aea2017ddfcc2dc91090c2828a8e3392857b75b67c",
+      "status": "parsed",
+      "supported_keys": ["GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}", "POST /hazard/cancer-summary/search/by-dtxsid/", "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}", "POST /hazard/genetox/details/search/by-dtxsid/", "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}", "POST /hazard/genetox/summary/search/by-dtxsid/", "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}", "GET /hazard/hawc/search/by-dtxsid/{dtxsid}", "GET /hazard/iris/search/by-dtxsid/{dtxsid}", "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}", "POST /hazard/skin-eye/search/by-dtxsid/", "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/data/search/by-study-id/{studyId}", "GET /hazard/toxref/data/search/by-study-type/{studyType}", "GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/effects/search/by-study-id/{studyId}", "GET /hazard/toxref/effects/search/by-study-type/{studyType}", "GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/observations/search/by-study-id/{studyId}", "GET /hazard/toxref/observations/search/by-study-type/{studyType}", "GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/summary/search/by-study-id/{studyId}", "GET /hazard/toxref/summary/search/by-study-type/{studyType}", "GET /hazard/toxval/search/by-category/{dtxsid}", "POST /hazard/toxval/search/by-dtxsid/", "GET /hazard/toxval/search/by-dtxsid/{dtxsid}", "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"],
+      "supported": 28,
+      "blocked": 0
+    },
+    "ctx-bioactivity-prod.json": {
+      "schema": "ctx-bioactivity-prod.json",
+      "sha256": "13a57153fb4ddbceeb7e55cbe9c236030247e698e6a4d1b758fc57a034762e52",
+      "status": "parsed",
+      "supported_keys": ["GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}", "GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}", "GET /bioactivity/aop/search/by-event-number/{eventNumber}", "GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}", "GET /bioactivity/assay/", "GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}", "GET /bioactivity/assay/count", "POST /bioactivity/assay/search/by-aeid/", "GET /bioactivity/assay/search/by-aeid/{aeid}", "GET /bioactivity/assay/search/by-endpoint/", "GET /bioactivity/assay/search/by-gene/{geneSymbol}", "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}", "POST /bioactivity/data/aed/search/by-dtxsid/", "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}", "POST /bioactivity/data/search/by-aeid/", "GET /bioactivity/data/search/by-aeid/{aeid}", "POST /bioactivity/data/search/by-dtxsid/", "GET /bioactivity/data/search/by-dtxsid/{dtxsid}", "POST /bioactivity/data/search/by-m4id/", "GET /bioactivity/data/search/by-m4id/{m4id}", "POST /bioactivity/data/search/by-spid/", "GET /bioactivity/data/search/by-spid/{spid}", "GET /bioactivity/data/summary/search/by-aeid/{aeid}", "GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}", "GET /bioactivity/data/summary/search/by-tissue/", "GET /bioactivity/models/search/", "GET /bioactivity/models/search/by-dtxsid/{dtxsid}", "GET /bioactivity/search/contain/{value}", "GET /bioactivity/search/equal/{value}", "GET /bioactivity/search/start-with/{value}"],
+      "supported": 30,
+      "blocked": 0
+    },
+    "ctx-chemical-prod.json": {
+      "schema": "ctx-chemical-prod.json",
+      "sha256": "36ef02ed4594e7fee972ba882b69246d4bf7b0c65c8d43edfb79d38f2885baa1",
+      "status": "parsed",
+      "supported_keys": ["GET /chemical/count/by-exact-formula/{formula}", "GET /chemical/count/by-msready-formula/{formula}", "POST /chemical/detail/search/by-dtxcid/", "GET /chemical/detail/search/by-dtxcid/{dtxcid}", "POST /chemical/detail/search/by-dtxsid/", "GET /chemical/detail/search/by-dtxsid/{dtxsid}", "GET /chemical/detail/search/by-smiles/", "POST /chemical/extra-data/search/by-dtxsid/", "GET /chemical/extra-data/search/by-dtxsid/{dtxsid}", "POST /chemical/fate/search/by-dtxsid/", "GET /chemical/fate/search/by-dtxsid/{dtxsid}", "GET /chemical/fate/summary/experimental/search/", "GET /chemical/fate/summary/predicted/search/", "GET /chemical/fate/summary/search/", "GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}", "GET /chemical/file/image/search/by-dtxcid/{dtxcid}", "GET /chemical/file/image/search/by-dtxsid/{dtxsid}", "GET /chemical/file/image/search/by-gsid/{gsid}", "GET /chemical/file/mol/search/by-dtxcid/{dtxcid}", "GET /chemical/file/mol/search/by-dtxsid/{dtxsid}", "GET /chemical/list/all", "GET /chemical/list/chemicals/search/by-listname/{list}", "GET /chemical/list/chemicals/search/contain/{list}/{word}", "GET /chemical/list/chemicals/search/equal/{list}/{word}", "GET /chemical/list/chemicals/search/start-with/{list}/{word}", "GET /chemical/list/search/by-dtxsid/{dtxsid}", "GET /chemical/list/search/by-name/{listName}", "GET /chemical/list/search/by-type/{type}", "GET /chemical/list/type", "POST /chemical/msready/search/by-dtxcid/", "GET /chemical/msready/search/by-dtxcid/{dtxcid}", "GET /chemical/msready/search/by-formula/{formula}", "POST /chemical/msready/search/by-mass/", "GET /chemical/msready/search/by-mass/{start}/{end}", "GET /chemical/property/experimental/name", "POST /chemical/property/experimental/search/by-dtxsid/", "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}", "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}", "GET /chemical/property/predicted/name", "POST /chemical/property/predicted/search/by-dtxsid/", "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}", "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}", "GET /chemical/property/summary/experimental/search/", "GET /chemical/property/summary/predicted/search/", "GET /chemical/property/summary/search/", "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}", "GET /chemical/search/by-exact-formula/{formula}", "POST /chemical/search/by-msready-formula/", "GET /chemical/search/by-msready-formula/{formula}", "GET /chemical/search/contain/{word}", "POST /chemical/search/equal/", "GET /chemical/search/equal/{word}", "GET /chemical/search/start-with/{word}", "POST /chemical/synonym/search/by-dtxsid/", "GET /chemical/synonym/search/by-dtxsid/{dtxsid}"],
+      "supported": 55,
+      "blocked": 0
+    },
+    "ctx-exposure-prod.json": {
+      "schema": "ctx-exposure-prod.json",
+      "sha256": "4aafb940577a0cda7fbcef37da11ad66ffd5ede2d65cf580090e0b1fb2418cdb",
+      "status": "parsed",
+      "supported_keys": ["GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}", "GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}", "GET /exposure/functional-use/category", "GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}", "POST /exposure/functional-use/search/by-dtxsid/", "GET /exposure/functional-use/search/by-dtxsid/{dtxsid}", "POST /exposure/httk/search/by-dtxsid/", "GET /exposure/httk/search/by-dtxsid/{dtxsid}", "POST /exposure/list-presence/search/by-dtxsid/", "GET /exposure/list-presence/search/by-dtxsid/{dtxsid}", "GET /exposure/list-presence/tags", "GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}", "GET /exposure/mmdb/aggregate/by-medium", "GET /exposure/mmdb/mediums", "GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}", "GET /exposure/mmdb/single-sample/by-medium", "GET /exposure/product-data/puc", "POST /exposure/product-data/search/by-dtxsid/", "GET /exposure/product-data/search/by-dtxsid/{dtxsid}", "POST /exposure/seem/demographic/search/by-dtxsid/", "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}", "POST /exposure/seem/general/search/by-dtxsid/", "GET /exposure/seem/general/search/by-dtxsid/{dtxsid}"],
+      "supported": 27,
+      "blocked": 0
+    },
+    "ctx-hazard-prod.json": {
+      "schema": "ctx-hazard-prod.json",
+      "sha256": "efe9341a4aa9409fc5fbd2aea2017ddfcc2dc91090c2828a8e3392857b75b67c",
+      "status": "parsed",
+      "supported_keys": ["GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}", "POST /hazard/cancer-summary/search/by-dtxsid/", "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}", "POST /hazard/genetox/details/search/by-dtxsid/", "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}", "POST /hazard/genetox/summary/search/by-dtxsid/", "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}", "GET /hazard/hawc/search/by-dtxsid/{dtxsid}", "GET /hazard/iris/search/by-dtxsid/{dtxsid}", "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}", "POST /hazard/skin-eye/search/by-dtxsid/", "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/data/search/by-study-id/{studyId}", "GET /hazard/toxref/data/search/by-study-type/{studyType}", "GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/effects/search/by-study-id/{studyId}", "GET /hazard/toxref/effects/search/by-study-type/{studyType}", "GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/observations/search/by-study-id/{studyId}", "GET /hazard/toxref/observations/search/by-study-type/{studyType}", "GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}", "GET /hazard/toxref/summary/search/by-study-id/{studyId}", "GET /hazard/toxref/summary/search/by-study-type/{studyType}", "GET /hazard/toxval/search/by-category/{dtxsid}", "POST /hazard/toxval/search/by-dtxsid/", "GET /hazard/toxval/search/by-dtxsid/{dtxsid}", "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"],
+      "supported": 28,
+      "blocked": 0
+    },
+    "epi-suite-prod.json": {
+      "schema": "epi-suite-prod.json",
+      "sha256": "9600acaee2f82c502cece3b2d613ccdac85c2c60983d1b45125c19efe735cad3",
+      "status": "parsed",
+      "supported_keys": ["GET /api", "GET /api/download", "GET /api/ecosar/dye", "GET /api/ecosar/polymer/amphoteric", "GET /api/ecosar/polymer/anionic", "GET /api/ecosar/polymer/nonionic", "GET /api/ecosar/polymer/polycationic", "GET /api/ecosar/surfactant/amphoteric", "GET /api/ecosar/surfactant/anionic", "GET /api/ecosar/surfactant/cationic", "GET /api/ecosar/surfactant/nonionic", "GET /api/search", "GET /api/submit", "POST /api/submit/batch"],
+      "supported": 14,
+      "blocked": 0
+    }
+  },
+  "primary_blockers": [
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1alerts/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts/groups",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1alerts~1groups/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts/groups/{id}/add",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1add/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts/groups/{id}/replace",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1alerts~1groups~1{id}~1replace/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_aqc_spectrum/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1add_aqc_spectrum~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_fact_sheet/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1add_new_fact_sheet~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_method/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1add_new_method~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_product_declaration/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1add_new_product_declaration~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_safety_data_sheet/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1add_new_safety_data_sheet~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/all_similarities_by_dtxsid/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1all_similarities_by_dtxsid~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/analytical_qc_batch_search",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1analytical_qc_batch_search/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1analytical_qc_keyset_pagination~1{limit}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/batch_search",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1batch_search/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/count_substances_in_ids/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1count_substances_in_ids~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/dtxsids/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1dtxsids~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/entropy_similarity/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1entropy_similarity~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1fact_sheet_keyset_pagination~1{limit}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
+      "issue": 27,
+      "code": "unmatched_path_parameter",
+      "reason": "Unmatched path parameter: dtxsid",
+      "source_location": "#/paths/~1api~1amos~1get_similar_structures~1{identifier_type}~1{identifier}/get/parameters/0",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/list_sources_by_record_type/{record_type}",
+      "issue": 27,
+      "code": "missing_path_parameter",
+      "reason": "Missing path parameter: record_type",
+      "source_location": "#/paths/~1api~1amos~1list_sources_by_record_type~1{record_type}",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/mass_range_search/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1mass_range_search~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/mass_spectra_for_substances/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1mass_spectra_for_substances~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/mass_spectrum_similarity_search/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1mass_spectrum_similarity_search~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/max_similarity_by_dtxsid/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1max_similarity_by_dtxsid~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/method_keyset_pagination/{limit}",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1method_keyset_pagination~1{limit}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/next_level_classification/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1next_level_classification~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/product_declaration_keyset_pagination/{limit}",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1product_declaration_keyset_pagination~1{limit}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/record_counts_by_dtxsid/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1record_counts_by_dtxsid~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/retrieve_fact_sheets/",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "source_location": "#/paths/~1api~1amos~1retrieve_fact_sheets~1/post/parameters/0/type",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/retrieve_product_declarations/",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "source_location": "#/paths/~1api~1amos~1retrieve_product_declarations~1/post/parameters/0/type",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/retrieve_safety_data_sheets/",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "source_location": "#/paths/~1api~1amos~1retrieve_safety_data_sheets~1/post/parameters/0/type",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1safety_data_sheet_keyset_pagination~1{limit}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/search_for_document_ids/{record_type}",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "source_location": "#/paths/~1api~1amos~1search_for_document_ids~1{record_type}/post/parameters/1/type",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/spectral_entropy/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1spectral_entropy~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/spectrum_count_for_methodology/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1spectrum_count_for_methodology~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/substances_for_classification/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1substances_for_classification~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/substances_for_ids/",
+      "issue": 26,
+      "code": "body_media_type",
+      "reason": "Ambiguous body media type",
+      "source_location": "#/paths/~1api~1amos~1substances_for_ids~1/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-hazard-prod.json",
+      "key": "POST /api/hazard",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1hazard/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/casharvest",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1resolver~1casharvest/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/ghs-list-count",
+      "issue": 29,
+      "code": "request_body_method",
+      "reason": "OAS 3.1 GET request body requires an explicit operation body_media review",
+      "source_location": "#/paths/~1api~1resolver~1ghs-list-count/get/requestBody",
+      "disposition": "unsupported (#29)"
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/safety-flags",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1resolver~1safety-flags/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/universalharvest",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1resolver~1universalharvest/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/caspreflight",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1services~1caspreflight/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/files",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1services~1files/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/preflight",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1services~1preflight/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/universalpreflight",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1services~1universalpreflight/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1stdizer/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1stdizer~1groups/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups/preflight",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1stdizer~1groups~1preflight/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups/{id}/add",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1add/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups/{id}/replace",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16)",
+      "source_location": "#/paths/~1api~1stdizer~1groups~1{id}~1replace/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "GET /api/stdizer/protocols/{id}",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/get/parameters/6/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/protocols/{id}",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/post/parameters/1/schema",
+      "disposition": "blocked pending upstream contract"
+    },
+    {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "POST /api/toxprints/calculate",
+      "issue": 28,
+      "code": "binary_parameter",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+      "disposition": "blocked pending upstream contract"
+    }
+  ],
+  "independent_defects": [
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts/groups/{id}/add",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_aqc_spectrum/",
+      "parameter": "body",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "primary_code": "body_media_type",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_fact_sheet/",
+      "parameter": "body",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "primary_code": "body_media_type",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_method/",
+      "parameter": "body",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "primary_code": "body_media_type",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_product_declaration/",
+      "parameter": "body",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "primary_code": "body_media_type",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-amos-prod.json",
+      "key": "POST /api/amos/add_new_safety_data_sheet/",
+      "parameter": "body",
+      "issue": 27,
+      "code": "invalid_type",
+      "reason": "Invalid input schema type",
+      "primary_code": "body_media_type",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-hazard-prod.json",
+      "key": "POST /api/hazard",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/casharvest",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/safety-flags",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/universalharvest",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/files",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups/{id}/add",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "GET /api/stdizer/protocols/{id}",
+      "parameter": "pageable",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "nested_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/protocols/{id}",
+      "parameter": "pageable",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "nested_parameter",
+      "rejected": true
+    },
+    {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "POST /api/toxprints/calculate",
+      "parameter": "request",
+      "issue": 31,
+      "code": "nested_parameter",
+      "reason": "Unsupported nested parameter object",
+      "primary_code": "binary_parameter",
+      "rejected": true
+    }
+  ],
+  "native_pilot_fixtures": [
+    {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/search",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "query": "benzene",
+        "limit": 20
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/search",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "query": "benzene"
+      },
+      "omitted_inputs": [
+        "limit"
+      ]
+    },
+    {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/search",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "not_requested"
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "GET /api/alerts/groups/{id}",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "id": "example"
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "GET /api/alerts/groups/{id}",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "id": "example"
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "chemi-alerts-prod.json",
+      "key": "GET /api/alerts/groups/{id}",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "not_requested"
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/detail/search/by-dtxsid/{dtxsid}",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "dtxsid": "DTXSID7020182",
+        "projection": "chemicaldetailall"
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/detail/search/by-dtxsid/{dtxsid}",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "dtxsid": "DTXSID7020182"
+      },
+      "omitted_inputs": [
+        "projection"
+      ]
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/detail/search/by-dtxsid/{dtxsid}",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "not_requested"
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "POST /chemical/detail/search/by-dtxsid/",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "failed",
+      "reason": "POST /chemical/detail/search/by-dtxsid/ (required body) Invalid body scalar type"
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "POST /chemical/detail/search/by-dtxsid/",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "failed",
+      "reason": "POST /chemical/detail/search/by-dtxsid/ (required body) Invalid body scalar type"
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "POST /chemical/detail/search/by-dtxsid/",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "explicit_inputs": {
+        "body": [
+          "DTXSID7020182",
+          "DTXSID7020005"
+        ]
+      },
+      "rationale": "Explicit array replaces incompatible scalar example only for this separately recorded mode.",
+      "status": "passed",
+      "inputs": {
+        "projection": "chemicaldetailall",
+        "body": [
+          "DTXSID7020182",
+          "DTXSID7020005"
+        ]
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/all",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "projection": "chemicallistall"
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/all",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {},
+      "omitted_inputs": [
+        "projection"
+      ]
+    },
+    {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/all",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "not_requested"
+    },
+    {
+      "schema": "chemi-search-prod.json",
+      "key": "POST /api/search",
+      "mode": "default",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "body": {
+          "hazardNames": [
+            "example"
+          ],
+          "inputType": "UNKNOWN",
+          "limit": 1,
+          "maxNumber": 1,
+          "minNumber": 1,
+          "offset": 1,
+          "params": {},
+          "query": "example",
+          "querySmiles": "example",
+          "searchType": "EXACT",
+          "smiles": "example",
+          "sortBy": "example",
+          "sortDirection": "example"
+        }
+      },
+      "omitted_inputs": []
+    },
+    {
+      "schema": "chemi-search-prod.json",
+      "key": "POST /api/search",
+      "mode": "minimal",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "passed",
+      "inputs": {
+        "body": {}
+      },
+      "omitted_inputs": [
+        "body.hazardNames",
+        "body.inputType",
+        "body.limit",
+        "body.maxNumber",
+        "body.minNumber",
+        "body.offset",
+        "body.params",
+        "body.query",
+        "body.querySmiles",
+        "body.searchType",
+        "body.smiles",
+        "body.sortBy",
+        "body.sortDirection"
+      ]
+    },
+    {
+      "schema": "chemi-search-prod.json",
+      "key": "POST /api/search",
+      "mode": "explicit_override",
+      "scope": "native schema fixtures only; not mapped public API or received wire",
+      "status": "not_requested"
+    }
+  ]
+}

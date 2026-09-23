@@ -1,0 +1,53 @@
+{
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.4",
+    "source_commit": "f41eeb9bae628eeb1f0fee16227f5ee8373a7ae2",
+    "source_archive_sha256": "b2d3eecdb82d7dfd4fc1944197f4f4df904a0b032afb1756951cf7b2c7c8299d",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "baseline_files_compared": 855,
+  "changed_baseline_files": [
+    "R/chemi_alerts_groups_by_id.R",
+    "R/epi_search.R"
+  ],
+  "second_apply_hashed_files": 1260,
+  "second_apply_byte_identical": true,
+  "generation_fresh": true,
+  "lifecycle_badges_preserved": true,
+  "repeated_helper_inspection_read_only": true,
+  "helper_baselines": {
+    "generic_request": {
+      "helper": "generic_request",
+      "file": "/home/sxthi/Documents/Projects/ComptoxR/R/z_generic_request.R",
+      "baseline": "unknown",
+      "behavior": "unverified: run relevant request/transport checks after manual adoption"
+    },
+    "generic_chemi_request": {
+      "helper": "generic_chemi_request",
+      "file": "/home/sxthi/Documents/Projects/ComptoxR/R/z_generic_request.R",
+      "baseline": "unknown",
+      "behavior": "unverified: run relevant request/transport checks after manual adoption"
+    }
+  },
+  "manually_adopted_helper_changes": [],
+  "stale_adoption_rejected": "Reviewed adoption hash differs: R/epi_search.R",
+  "protected_file_retained_independent_output_generated": true,
+  "protected_contract_conflict_rejected": "Protected implementation public contract differs: epi_search",
+  "blocked_contract_diagnostic": {
+    "id": "blocked-stdizer GET /api/stdizer/protocols/{id}",
+    "service": "blocked-stdizer",
+    "key": "GET /api/stdizer/protocols/{id}",
+    "source": "schema/chemi-stdizer-prod.json",
+    "status": "unsupported",
+    "reason": "Unsupported nested parameter object",
+    "classification": "capability_gap",
+    "code": "nested_parameter",
+    "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/get/parameters/6/schema",
+    "guidance": "Review supported configuration or a complete client mapping; keep the operation visible until generator support is available."
+  },
+  "mixed_selection_apply_rejected_without_writes": "Unsupported selected operations; inspect plan diagnostics before generation",
+  "independent_supported_generation_after_explicit_scoping": true,
+  "scope": "Offline ownership and generation checks. No production requests."
+}
