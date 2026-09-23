@@ -1,5 +1,9 @@
 # Verified specmill migration pilot
 
+This is the historical report for the initial six-operation pilot. See
+[current migration status](MIGRATION-STATUS.md) for the expanded migration and
+[upstream findings](UPSTREAM-ISSUES.md) for the complete schema audit.
+
 Branch: `feat/specmill-migration-pilot`. Baseline:
 `4fd720b97fb2f7f2abf131925e9270b0c11b057a`, the existing local `origin/main`
 snapshot. Local `main` was clean but 68 commits behind this snapshot. It and
