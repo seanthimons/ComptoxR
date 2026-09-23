@@ -28,7 +28,7 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
-The sixteen-operation specmill pilot has a separate pinned development library.
+The 105-operation specmill migration has a separate pinned development library.
 Use Air 0.11.0 for this pilot, then run:
 
 ```bash
@@ -39,7 +39,7 @@ Rscript dev/generate_specmill.R --check
 
 Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
 matching output; do not reuse initial adoption hashes. See the
-[current migration status](dev/specmill-pilot/MIGRATION-STATUS.md) for localhost verification,
+[current migration report](dev/specmill-full/REPORT.md) for localhost verification,
 retained implementations, offline reproduction and rollback. The legacy
 commands below continue to maintain operations outside that slice.
 

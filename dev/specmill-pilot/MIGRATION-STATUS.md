@@ -1,5 +1,9 @@
 # Migration status — 23 September 2026
 
+This records the earlier ten-wrapper expansion. The subsequent
+[whole-client attempt](../specmill-full/REPORT.md) added 89 more verified wrappers
+and is the current status report.
+
 **The expansion succeeded. Ten more functions now use specmill generation, and
 their tested behavior matches the original installed ComptoxR package. The full
 package migration is still unfinished.**

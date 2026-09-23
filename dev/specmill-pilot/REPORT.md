@@ -1,7 +1,7 @@
 # Verified specmill migration pilot
 
-This is the historical report for the initial six-operation pilot. See
-[current migration status](MIGRATION-STATUS.md) for the expanded migration and
+This is the historical report for the initial six-operation pilot. See the
+[current migration report](../specmill-full/REPORT.md) for the expanded migration and
 [upstream findings](UPSTREAM-ISSUES.md) for the complete schema audit.
 
 Branch: `feat/specmill-migration-pilot`. Baseline:
