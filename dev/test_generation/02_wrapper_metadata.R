@@ -60,6 +60,13 @@ tg_bespoke_contracts <- function(root = ".") {
   config <- tg_read_hook_config(root)
   suites <- lapply(config, `[[`, "bespoke_test")
   suites <- suites[!vapply(suites, is.null, logical(1))]
+  # Fixed specmill contracts replace legacy metadata-derived tests for the pilot.
+  manifest <- file.path(root, ".specmill/manifest.json")
+  if (file.exists(manifest)) {
+    paths <- grep("^tests/testthat/test-contract-.*[.]R$", names(jsonlite::read_json(manifest)$files), value = TRUE)
+    names(paths) <- sub("[.]R$", "", sub("^test-contract-", "", basename(paths)))
+    suites <- c(suites, as.list(paths[setdiff(names(paths), names(suites))]))
+  }
   vapply(suites, as.character, character(1))
 }
 

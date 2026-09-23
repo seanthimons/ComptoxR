@@ -1,0 +1,10 @@
+config_version: 1
+package: ComptoxR
+formatter: {name: air, version: '0.11.0'}
+services:
+- apis/epi-pilot.yml
+- apis/alerts-pilot.yml
+- apis/ctx-pilot.yml
+- apis/search-pilot.yml
+callback_files:
+- dev/specmill_callbacks.R

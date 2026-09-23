@@ -58,7 +58,14 @@ generate_comptox <- function(root, mode = c('check', 'plan', 'apply'), rebuild =
     winslash = '/',
     mustWork = FALSE
   )
+  manifest <- file.path(root, '.specmill/manifest.json')
+  specmill_files <- if (file.exists(manifest)) names(jsonlite::read_json(manifest)$files) else character()
   owns <- function(path) {
+    # specmill-owned wrappers must never be replaced by the legacy generator.
+    relative <- substring(normalizePath(path, winslash = '/', mustWork = FALSE), nchar(root) + 2L)
+    if (relative %in% specmill_files) {
+      return(FALSE)
+    }
     if (identical(normalizePath(path, winslash = '/', mustWork = FALSE), generated_metadata)) {
       return(TRUE)
     }
