@@ -102,6 +102,19 @@ Informational coverage workflow.
 - Does not block merges on coverage percentage.
 - Must not auto-record cassettes from production APIs.
 
+### `specmill-maintenance.yml`
+
+Offline checks for the specmill-maintained portion of the client, on every pull
+request, pushes to `main` and `integration`, and manual dispatch.
+
+- Reads the specmill revision from `dev/specmill-lock.json`, checks out that
+  commit, and uses the existing installer to verify its archive checksum and
+  installed namespace provenance.
+- Uses Air 0.11.0 in its own job, leaving legacy generation on Air 0.9.0.
+- Checks wrapper and test freshness, runs fixed contracts and client policy
+  tests, and requires regeneration to leave no modified or untracked files.
+- Needs no API credentials or sibling repository checkout on the runner.
+
 ### `schema-check.yml`
 
 Scheduled and manual schema update workflow.

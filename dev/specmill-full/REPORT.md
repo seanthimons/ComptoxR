@@ -1,5 +1,36 @@
 # Whole-client migration attempt
 
+## Maintenance continuation, 24 September 2026
+
+The migration now has a dedicated **Specmill Maintenance** CI workflow. The
+previous workflows checked only legacy generation. This job checks the existing
+105-operation specmill configuration on every pull request, pushes to `main` and
+`integration`, and manual dispatch. It reads the existing source pin, checks out
+that revision into ignored development artifacts, and verifies the archive
+checksum and installed namespace with `dev/install_specmill.R`.
+
+The job uses Air 0.11.0 separately from the legacy jobs' Air 0.9.0. It runs the
+public-address boundary check, generation freshness, fixed contracts and client
+policy tests, then requires apply/check to leave no modified or new files.
+The address check uses `membership = FALSE` because export membership is already
+checked with the legacy toolkit in the CRAN readiness job. No API credentials are
+provided. Verification stays offline or on localhost, and migration remains
+limited to public API endpoints.
+
+Local verification reinstalled and verified the pinned specmill package and
+passed all 412 focused assertions with no failures, warnings or skips. Workflow
+YAML, embedded R, and shell commands passed parsing checks. Generation freshness
+passed, and a repeated apply preserved all tracked file hashes. The existing full
+public-boundary check also passed. It emitted two pre-existing encoding warnings
+while scanning a UTF-16 text file. Hosted GitHub Actions execution remains
+unverified until this branch is pushed.
+
+This continuation adds no wrapper mappings. Counts and upstream blockers below
+remain unchanged. To roll it back, revert the dedicated CI continuation commit;
+the earlier wrapper adoption does not need to be reverted.
+
+## Wrapper migration results
+
 The broad attempt succeeded for **89 additional wrappers**. Together with the
 previous pilot, specmill now generates **101 wrappers** and maintains fixed
 contracts for **four retained implementations**. The complete package migration
