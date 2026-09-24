@@ -1,5 +1,8 @@
 # Whole-client migration attempt
 
+The remaining review work is tracked in [five GitHub category issues](REVIEW-ISSUES.md),
+with complete function checklists, acceptance criteria, and supporting evidence.
+
 ## Maintenance continuation, 24 September 2026
 
 The migration now has a dedicated **Specmill Maintenance** CI workflow. The
