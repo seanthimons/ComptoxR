@@ -143,6 +143,9 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         fn <- eval(expr[[3]])
         code <- as.list(body(fn))[-1L]
         prelude <- options_prelude(code)
+        if (!is.null(prelude) && 'options' %in% names(formals(fn))) {
+          stop('Options prelude overwrites the public options argument (original defect); retained')
+        }
         if (!is.null(prelude)) code <- code[-seq_len(prelude$statements)]
         if (
           length(code) != 2L || !is.call(code[[1]]) || !identical(code[[1]][[1]], as.name('<-')) ||
@@ -256,9 +259,14 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       optional <- record$option_params %||% character()
       variants <- list(omitted = supplied)
       if (length(optional)) {
-        variants$explicit <- c(supplied, setNames(as.list(sprintf('pilot-option-%d', seq_along(optional))), optional))
-        variants$false <- c(supplied, setNames(rep(list(FALSE), length(optional)), optional))
-        variants$zero <- c(supplied, setNames(rep(list(0), length(optional)), optional))
+        set <- function(values) {
+          x <- supplied
+          x[optional] <- values
+          x
+        }
+        variants$explicit <- set(as.list(sprintf('pilot-option-%d', seq_along(optional))))
+        variants$false <- set(list(FALSE))
+        variants$zero <- set(list(0))
       }
       env <- new.env(parent = environment(original))
       eval(parse(text = code), env)
