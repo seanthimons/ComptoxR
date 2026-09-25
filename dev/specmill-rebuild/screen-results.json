@@ -1131,78 +1131,6 @@
     "schema": null,
     "key": null
   },
-  "ct_bioactivity_analyticalqc_search": {
-    "name": "ct_bioactivity_analyticalqc_search",
-    "file": "R/ct_bioactivity_analyticalqc_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_aop_search_by_entrez_gene_id": {
-    "name": "ct_bioactivity_aop_search_by_entrez_gene_id",
-    "file": "R/ct_bioactivity_aop_search_by_entrez_gene_id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_aop_search_by_event_number": {
-    "name": "ct_bioactivity_aop_search_by_event_number",
-    "file": "R/ct_bioactivity_aop_search_by_event_number.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/aop/search/by-event-number/{eventNumber}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_aop_search_by_toxcast_aeid": {
-    "name": "ct_bioactivity_aop_search_by_toxcast_aeid",
-    "file": "R/ct_bioactivity_aop_search_by_toxcast_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay_chemicals_search_by_aeid": {
-    "name": "ct_bioactivity_assay_chemicals_search_by_aeid",
-    "file": "R/ct_bioactivity_assay_chemicals_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay_count": {
-    "name": "ct_bioactivity_assay_count",
-    "file": "R/ct_bioactivity_assay_count.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/count",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay_search_by_aeid_bulk": {
-    "name": "ct_bioactivity_assay_search_by_aeid_bulk",
-    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/assay/search/by-aeid/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay_search_by_aeid": {
-    "name": "ct_bioactivity_assay_search_by_aeid",
-    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/search/by-aeid/{aeid}",
-    "lifecycle": "stable"
-  },
   "ct_bioactivity_assay_search_by_endpoint": {
     "name": "ct_bioactivity_assay_search_by_endpoint",
     "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
@@ -1210,33 +1138,6 @@
     "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-bioactivity-prod.json",
     "key": "GET /bioactivity/assay/search/by-endpoint/"
-  },
-  "ct_bioactivity_assay_search_by_gene": {
-    "name": "ct_bioactivity_assay_search_by_gene",
-    "file": "R/ct_bioactivity_assay_search_by_gene.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/search/by-gene/{geneSymbol}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay_single_conc_search_by_aeid": {
-    "name": "ct_bioactivity_assay_single_conc_search_by_aeid",
-    "file": "R/ct_bioactivity_assay_single_conc_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_assay": {
-    "name": "ct_bioactivity_assay",
-    "file": "R/ct_bioactivity_assay.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/",
-    "lifecycle": "stable"
   },
   "ct_bioactivity_data_aed_search_bulk": {
     "name": "ct_bioactivity_data_aed_search_bulk",
@@ -1255,78 +1156,6 @@
     "key": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
   },
-  "ct_bioactivity_data_search_by_aeid_bulk": {
-    "name": "ct_bioactivity_data_search_by_aeid_bulk",
-    "file": "R/ct_bioactivity_data_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-aeid/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_aeid": {
-    "name": "ct_bioactivity_data_search_by_aeid",
-    "file": "R/ct_bioactivity_data_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/search/by-aeid/{aeid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_dtxsid": {
-    "name": "ct_bioactivity_data_search_by_dtxsid",
-    "file": "R/ct_bioactivity_data_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_m4id_bulk": {
-    "name": "ct_bioactivity_data_search_by_m4id_bulk",
-    "file": "R/ct_bioactivity_data_search_by_m4id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-m4id/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_m4id": {
-    "name": "ct_bioactivity_data_search_by_m4id",
-    "file": "R/ct_bioactivity_data_search_by_m4id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/search/by-m4id/{m4id}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_spid_bulk": {
-    "name": "ct_bioactivity_data_search_by_spid_bulk",
-    "file": "R/ct_bioactivity_data_search_by_spid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-spid/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_spid": {
-    "name": "ct_bioactivity_data_search_by_spid",
-    "file": "R/ct_bioactivity_data_search_by_spid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/search/by-spid/{spid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_by_tissue": {
-    "name": "ct_bioactivity_data_search_by_tissue",
-    "file": "R/ct_bioactivity_data_search_by_tissue.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/summary/search/by-tissue/",
-    "lifecycle": "stable"
-  },
   "ct_bioactivity_data_search_bulk": {
     "name": "ct_bioactivity_data_search_bulk",
     "file": "R/ct_bioactivity_data_search.R",
@@ -1335,123 +1164,6 @@
     "schema": "ctx-bioactivity-prod.json",
     "key": "POST /bioactivity/data/search/by-dtxsid/"
   },
-  "ct_bioactivity_data_summary_search_by_aeid": {
-    "name": "ct_bioactivity_data_summary_search_by_aeid",
-    "file": "R/ct_bioactivity_data_summary_search_by_aeid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/summary/search/by-aeid/{aeid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_summary_search_by_dtxsid": {
-    "name": "ct_bioactivity_data_summary_search_by_dtxsid",
-    "file": "R/ct_bioactivity_data_summary_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_models_search_by_dtxsid": {
-    "name": "ct_bioactivity_models_search_by_dtxsid",
-    "file": "R/ct_bioactivity_models_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/models/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_models_search": {
-    "name": "ct_bioactivity_models_search",
-    "file": "R/ct_bioactivity_models_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/models/search/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_search_contain": {
-    "name": "ct_bioactivity_search_contain",
-    "file": "R/ct_bioactivity_search_contain.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/search/contain/{value}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_search_equal": {
-    "name": "ct_bioactivity_search_equal",
-    "file": "R/ct_bioactivity_search_equal.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/search/equal/{value}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_search_start_with": {
-    "name": "ct_bioactivity_search_start_with",
-    "file": "R/ct_bioactivity_search_start_with.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/search/start-with/{value}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_detail_search_by_dtxcid_bulk": {
-    "name": "ct_chemical_detail_search_by_dtxcid_bulk",
-    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/detail/search/by-dtxcid/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_detail_search_by_dtxcid": {
-    "name": "ct_chemical_detail_search_by_dtxcid",
-    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/detail/search/by-dtxcid/{dtxcid}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_detail_search_by_smiles": {
-    "name": "ct_chemical_detail_search_by_smiles",
-    "file": "R/ct_chemical_detail_search_by_smiles.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/detail/search/by-smiles/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_experimental_search": {
-    "name": "ct_chemical_fate_experimental_search",
-    "file": "R/ct_chemical_fate_experimental_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/fate/summary/experimental/search/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_predicted_search": {
-    "name": "ct_chemical_fate_predicted_search",
-    "file": "R/ct_chemical_fate_predicted_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/fate/summary/predicted/search/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_search_by_dtxsid": {
-    "name": "ct_chemical_fate_search_by_dtxsid",
-    "file": "R/ct_chemical_fate_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/fate/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
   "ct_chemical_fate_search_bulk": {
     "name": "ct_chemical_fate_search_bulk",
     "file": "R/ct_chemical_fate_search.R",
@@ -1459,33 +1171,6 @@
     "reason": "Computed example needs manual mapping",
     "schema": "ctx-chemical-prod.json",
     "key": "POST /chemical/fate/search/by-dtxsid/"
-  },
-  "ct_chemical_fate_summary_search_by_dtxsid": {
-    "name": "ct_chemical_fate_summary_search_by_dtxsid",
-    "file": "R/ct_chemical_fate_summary_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_summary_search": {
-    "name": "ct_chemical_fate_summary_search",
-    "file": "R/ct_chemical_fate_summary_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/fate/summary/search/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_list_chemicals_search_by_listname": {
-    "name": "ct_chemical_list_chemicals_search_by_listname",
-    "file": "R/ct_chemical_list_chemicals_search_by_listname.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/chemicals/search/by-listname/{list}",
-    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
@@ -1519,33 +1204,6 @@
     "schema": null,
     "key": null
   },
-  "ct_chemical_list_search_by_type": {
-    "name": "ct_chemical_list_search_by_type",
-    "file": "R/ct_chemical_list_search_by_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/search/by-type/{type}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_list_search": {
-    "name": "ct_chemical_list_search",
-    "file": "R/ct_chemical_list_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_list_type": {
-    "name": "ct_chemical_list_type",
-    "file": "R/ct_chemical_list_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/type",
-    "lifecycle": "stable"
-  },
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
     "file": "R/ct_chemical_msready_search_by_mass.R",
@@ -1562,24 +1220,6 @@
     "schema": null,
     "key": null
   },
-  "ct_chemical_property_experimental_name": {
-    "name": "ct_chemical_property_experimental_name",
-    "file": "R/ct_chemical_property_experimental_name.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/experimental/name",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_experimental_search_by_dtxsid": {
-    "name": "ct_chemical_property_experimental_search_by_dtxsid",
-    "file": "R/ct_chemical_property_experimental_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
   "ct_chemical_property_experimental_search_by_range": {
     "name": "ct_chemical_property_experimental_search_by_range",
     "file": "R/ct_chemical_property_experimental_search_by_range.R",
@@ -1588,33 +1228,6 @@
     "schema": null,
     "key": null
   },
-  "ct_chemical_property_experimental_search_bulk": {
-    "name": "ct_chemical_property_experimental_search_bulk",
-    "file": "R/ct_chemical_property_experimental_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/property/experimental/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_predicted_name": {
-    "name": "ct_chemical_property_predicted_name",
-    "file": "R/ct_chemical_property_predicted_name.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/predicted/name",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_predicted_search_by_dtxsid": {
-    "name": "ct_chemical_property_predicted_search_by_dtxsid",
-    "file": "R/ct_chemical_property_predicted_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
   "ct_chemical_property_predicted_search_by_range": {
     "name": "ct_chemical_property_predicted_search_by_range",
     "file": "R/ct_chemical_property_predicted_search_by_range.R",
@@ -1622,51 +1235,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "ct_chemical_property_predicted_search_bulk": {
-    "name": "ct_chemical_property_predicted_search_bulk",
-    "file": "R/ct_chemical_property_predicted_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/property/predicted/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_summary_experimental_search": {
-    "name": "ct_chemical_property_summary_experimental_search",
-    "file": "R/ct_chemical_property_summary_experimental_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/summary/experimental/search/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_summary_predicted_search": {
-    "name": "ct_chemical_property_summary_predicted_search",
-    "file": "R/ct_chemical_property_summary_predicted_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/summary/predicted/search/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_summary_search_by_dtxsid": {
-    "name": "ct_chemical_property_summary_search_by_dtxsid",
-    "file": "R/ct_chemical_property_summary_search_by_dtxsid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_summary_search": {
-    "name": "ct_chemical_property_summary_search",
-    "file": "R/ct_chemical_property_summary_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/summary/search/",
-    "lifecycle": "stable"
   },
   "ct_chemical_search_equal_bulk": {
     "name": "ct_chemical_search_equal_bulk",
@@ -1692,60 +1260,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "ct_exposure_functional_use_category": {
-    "name": "ct_exposure_functional_use_category",
-    "file": "R/ct_exposure_functional_use_category.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "GET /exposure/functional-use/category",
-    "lifecycle": "stable"
-  },
-  "ct_exposure_functional_use_probability_search": {
-    "name": "ct_exposure_functional_use_probability_search",
-    "file": "R/ct_exposure_functional_use_probability_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_exposure_functional_use_search_bulk": {
-    "name": "ct_exposure_functional_use_search_bulk",
-    "file": "R/ct_exposure_functional_use_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "POST /exposure/functional-use/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_exposure_functional_use_search": {
-    "name": "ct_exposure_functional_use_search",
-    "file": "R/ct_exposure_functional_use_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "GET /exposure/functional-use/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_exposure_seem_demographic_search_bulk": {
-    "name": "ct_exposure_seem_demographic_search_bulk",
-    "file": "R/ct_exposure_seem_demographic_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "POST /exposure/seem/demographic/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_exposure_seem_demographic_search": {
-    "name": "ct_exposure_seem_demographic_search",
-    "file": "R/ct_exposure_seem_demographic_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-exposure-prod.json",
-    "key": "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
   },
   "ct_hazard_cancer_search_bulk": {
     "name": "ct_hazard_cancer_search_bulk",
@@ -1813,123 +1327,6 @@
     "reason": "Inseparable grouped file contains a retained or unaccounted definition",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_data_search_by_study_id": {
-    "name": "ct_hazard_toxref_data_search_by_study_id",
-    "file": "R/ct_hazard_toxref_data_search_by_study_id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/data/search/by-study-id/{studyId}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_data_search_by_study_type": {
-    "name": "ct_hazard_toxref_data_search_by_study_type",
-    "file": "R/ct_hazard_toxref_data_search_by_study_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/data/search/by-study-type/{studyType}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_data_search": {
-    "name": "ct_hazard_toxref_data_search",
-    "file": "R/ct_hazard_toxref_data_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_effects_search_by_study_id": {
-    "name": "ct_hazard_toxref_effects_search_by_study_id",
-    "file": "R/ct_hazard_toxref_effects_search_by_study_id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/effects/search/by-study-id/{studyId}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_effects_search_by_study_type": {
-    "name": "ct_hazard_toxref_effects_search_by_study_type",
-    "file": "R/ct_hazard_toxref_effects_search_by_study_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/effects/search/by-study-type/{studyType}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_effects_search": {
-    "name": "ct_hazard_toxref_effects_search",
-    "file": "R/ct_hazard_toxref_effects_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_observations_search_by_study_id": {
-    "name": "ct_hazard_toxref_observations_search_by_study_id",
-    "file": "R/ct_hazard_toxref_observations_search_by_study_id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/observations/search/by-study-id/{studyId}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_observations_search_by_study_type": {
-    "name": "ct_hazard_toxref_observations_search_by_study_type",
-    "file": "R/ct_hazard_toxref_observations_search_by_study_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/observations/search/by-study-type/{studyType}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_observations_search": {
-    "name": "ct_hazard_toxref_observations_search",
-    "file": "R/ct_hazard_toxref_observations_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_search_by_study_id": {
-    "name": "ct_hazard_toxref_search_by_study_id",
-    "file": "R/ct_hazard_toxref_search_by_study_id.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/summary/search/by-study-id/{studyId}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_search_by_study_type": {
-    "name": "ct_hazard_toxref_search_by_study_type",
-    "file": "R/ct_hazard_toxref_search_by_study_type.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/summary/search/by-study-type/{studyType}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxref_search": {
-    "name": "ct_hazard_toxref_search",
-    "file": "R/ct_hazard_toxref_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_search_by_category": {
-    "name": "ct_hazard_toxval_search_by_category",
-    "file": "R/ct_hazard_toxval_search_by_category.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxval/search/by-category/{dtxsid}",
     "lifecycle": "stable"
   },
   "ct_hazard_toxval_search_bulk": {
