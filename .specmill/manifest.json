@@ -794,7 +794,7 @@
       "operations": "epi-pilot GET /api/search"
     }
   },
-  "toolkit_version": "0.1.4",
+  "toolkit_version": "0.1.6",
   "inputs": {
     "DESCRIPTION": "f5744eb973520a886df631a9ec5937b6382213616f971385cc5246f425735998",
     "LICENSE": "83456c4041c4825259753d7261e209c8e8a2f279eb4657cc946538a155274e7e",
