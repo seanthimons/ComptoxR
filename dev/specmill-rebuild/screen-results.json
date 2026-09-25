@@ -24,24 +24,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amnb_nate": {
-    "name": "chemi_amnb_nate",
-    "file": "R/chemi_amnb_nate.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amnb_nate-prod.json",
-    "key": "GET /api/amnb_nate",
-    "lifecycle": "experimental"
-  },
-  "chemi_amnb_nate_bulk": {
-    "name": "chemi_amnb_nate_bulk",
-    "file": "R/chemi_amnb_nate.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amnb_nate-prod.json",
-    "key": "POST /api/amnb_nate",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_all_similarities": {
     "name": "chemi_amos_all_similarities",
     "file": "R/chemi_amos_all_similarities.R",
@@ -327,69 +309,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_arn_cats": {
-    "name": "chemi_arn_cats",
-    "file": "R/chemi_arn_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-arn_cats-prod.json",
-    "key": "GET /api/arn_cats",
-    "lifecycle": "experimental"
-  },
-  "chemi_arn_cats_bulk": {
-    "name": "chemi_arn_cats_bulk",
-    "file": "R/chemi_arn_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-arn_cats-prod.json",
-    "key": "POST /api/arn_cats",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_alias": {
-    "name": "chemi_chet_chemicals_alias",
-    "file": "R/chemi_chet_chemicals_alias.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/alias",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_chemset": {
-    "name": "chemi_chet_chemicals_chemset",
-    "file": "R/chemi_chet_chemicals_chemset.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/chemset",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_counts": {
-    "name": "chemi_chet_chemicals_counts",
-    "file": "R/chemi_chet_chemicals_counts.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/counts",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_database_stats": {
-    "name": "chemi_chet_chemicals_database_stats",
-    "file": "R/chemi_chet_chemicals_database_stats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/database/stats",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_database": {
-    "name": "chemi_chet_chemicals_database",
-    "file": "R/chemi_chet_chemicals_database.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/database",
-    "lifecycle": "experimental"
-  },
   "chemi_chet_chemicals_image": {
     "name": "chemi_chet_chemicals_image",
     "file": "R/chemi_chet_chemicals_image.R",
@@ -397,33 +316,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "chemi_chet_chemicals_maps": {
-    "name": "chemi_chet_chemicals_maps",
-    "file": "R/chemi_chet_chemicals_maps.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/maps",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_singlechemical": {
-    "name": "chemi_chet_chemicals_singlechemical",
-    "file": "R/chemi_chet_chemicals_singlechemical.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/singlechemical",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_chemicals_suggest": {
-    "name": "chemi_chet_chemicals_suggest",
-    "file": "R/chemi_chet_chemicals_suggest.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/suggest",
-    "lifecycle": "experimental"
   },
   "chemi_chet_reaction_batchsearch": {
     "name": "chemi_chet_reaction_batchsearch",
@@ -442,60 +334,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_chet_reaction_database_stats": {
-    "name": "chemi_chet_reaction_database_stats",
-    "file": "R/chemi_chet_reaction_database_stats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/database/stats",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_database": {
-    "name": "chemi_chet_reaction_database",
-    "file": "R/chemi_chet_reaction_database.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/database",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_details": {
-    "name": "chemi_chet_reaction_details",
-    "file": "R/chemi_chet_reaction_details.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/details",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_mapid": {
-    "name": "chemi_chet_reaction_mapid",
-    "file": "R/chemi_chet_reaction_mapid.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/mapid",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_react_maps": {
-    "name": "chemi_chet_reaction_react_maps",
-    "file": "R/chemi_chet_reaction_react_maps.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/react_maps",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_reactionmap": {
-    "name": "chemi_chet_reaction_reactionmap",
-    "file": "R/chemi_chet_reaction_reactionmap.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/reactionmap",
-    "lifecycle": "experimental"
-  },
   "chemi_chet_reaction_searchcounts": {
     "name": "chemi_chet_reaction_searchcounts",
     "file": "R/chemi_chet_reaction_searchcounts.R",
@@ -503,33 +341,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "chemi_chet_reaction_singlereaction": {
-    "name": "chemi_chet_reaction_singlereaction",
-    "file": "R/chemi_chet_reaction_singlereaction.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/singlereaction",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_table": {
-    "name": "chemi_chet_reaction_table",
-    "file": "R/chemi_chet_reaction_table.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/table",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction": {
-    "name": "chemi_chet_reaction",
-    "file": "R/chemi_chet_reaction.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/search",
-    "lifecycle": "experimental"
   },
   "chemi_classyfire": {
     "name": "chemi_classyfire",
@@ -595,33 +406,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_ncc_cats": {
-    "name": "chemi_ncc_cats",
-    "file": "R/chemi_ncc_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-ncc_cats-prod.json",
-    "key": "GET /api/ncc_cats",
-    "lifecycle": "experimental"
-  },
-  "chemi_ncc_cats_bulk": {
-    "name": "chemi_ncc_cats_bulk",
-    "file": "R/chemi_ncc_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-ncc_cats-prod.json",
-    "key": "POST /api/ncc_cats",
-    "lifecycle": "experimental"
-  },
-  "chemi_opera_report": {
-    "name": "chemi_opera_report",
-    "file": "R/chemi_opera_report.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-opera-prod.json",
-    "key": "GET /api/opera/report",
-    "lifecycle": "experimental"
-  },
   "chemi_opera": {
     "name": "chemi_opera",
     "file": "R/chemi_opera.R",
@@ -654,42 +438,6 @@
     "reason": "Client hook policy requires manual review",
     "schema": null,
     "key": null
-  },
-  "chemi_pfas_atlas": {
-    "name": "chemi_pfas_atlas",
-    "file": "R/chemi_pfas_atlas.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-pfas_atlas-prod.json",
-    "key": "GET /api/pfas_atlas",
-    "lifecycle": "experimental"
-  },
-  "chemi_pfas_atlas_bulk": {
-    "name": "chemi_pfas_atlas_bulk",
-    "file": "R/chemi_pfas_atlas.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-pfas_atlas-prod.json",
-    "key": "POST /api/pfas_atlas",
-    "lifecycle": "experimental"
-  },
-  "chemi_pfas_cats": {
-    "name": "chemi_pfas_cats",
-    "file": "R/chemi_pfas_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-pfas_cats-prod.json",
-    "key": "GET /api/pfas_cats",
-    "lifecycle": "experimental"
-  },
-  "chemi_pfas_cats_bulk": {
-    "name": "chemi_pfas_cats_bulk",
-    "file": "R/chemi_pfas_cats.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-pfas_cats-prod.json",
-    "key": "POST /api/pfas_cats",
-    "lifecycle": "experimental"
   },
   "chemi_predict": {
     "name": "chemi_predict",
@@ -732,42 +480,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_ccte_list": {
-    "name": "chemi_resolver_ccte_list",
-    "file": "R/chemi_resolver_ccte_list.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/ccte-list",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_classyfire": {
-    "name": "chemi_resolver_classyfire",
-    "file": "R/chemi_resolver_classyfire.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/classyfire",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_getannotation": {
-    "name": "chemi_resolver_getannotation",
-    "file": "R/chemi_resolver_getannotation.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/getannotation",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_getannotationslist": {
-    "name": "chemi_resolver_getannotationslist",
-    "file": "R/chemi_resolver_getannotationslist.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/getannotationslist",
-    "lifecycle": "experimental"
-  },
   "chemi_resolver_getpubchemlist": {
     "name": "chemi_resolver_getpubchemlist",
     "file": "R/chemi_resolver_getpubchemlist.R",
@@ -792,15 +504,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_getsubstance": {
-    "name": "chemi_resolver_getsubstance",
-    "file": "R/chemi_resolver_getsubstance.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/getsubstance",
-    "lifecycle": "experimental"
-  },
   "chemi_resolver_ghs_list_count": {
     "name": "chemi_resolver_ghs_list_count",
     "file": "R/chemi_resolver_ghs_list_count.R",
@@ -808,24 +511,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "chemi_resolver_ghs_list": {
-    "name": "chemi_resolver_ghs_list",
-    "file": "R/chemi_resolver_ghs_list.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/ghs-list",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_links": {
-    "name": "chemi_resolver_links",
-    "file": "R/chemi_resolver_links.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/links",
-    "lifecycle": "experimental"
   },
   "chemi_resolver_lookup": {
     "name": "chemi_resolver_lookup",
@@ -843,24 +528,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "chemi_resolver_lookupCASRN": {
-    "name": "chemi_resolver_lookupCASRN",
-    "file": "R/chemi_resolver_lookupCASRN.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/lookupCASRN",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_mesh": {
-    "name": "chemi_resolver_mesh",
-    "file": "R/chemi_resolver_mesh.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/mesh",
-    "lifecycle": "experimental"
   },
   "chemi_resolver_orderBySimilarity": {
     "name": "chemi_resolver_orderBySimilarity",
@@ -886,15 +553,6 @@
     "reason": "Client hook policy requires manual review",
     "schema": null,
     "key": null
-  },
-  "chemi_resolver_resolve": {
-    "name": "chemi_resolver_resolve",
-    "file": "R/chemi_resolver_resolve.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/resolve",
-    "lifecycle": "experimental"
   },
   "chemi_resolver_safety_flags": {
     "name": "chemi_resolver_safety_flags",
@@ -928,78 +586,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "chemi_search_exact": {
-    "name": "chemi_search_exact",
-    "file": "R/chemi_search_exact.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-search-prod.json",
-    "key": "GET /api/search/exact",
-    "lifecycle": "experimental"
-  },
-  "chemi_search_gethazard": {
-    "name": "chemi_search_gethazard",
-    "file": "R/chemi_search_gethazard.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-search-prod.json",
-    "key": "GET /api/search/gethazard",
-    "lifecycle": "experimental"
-  },
-  "chemi_search_similar": {
-    "name": "chemi_search_similar",
-    "file": "R/chemi_search_similar.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-search-prod.json",
-    "key": "GET /api/search/similar",
-    "lifecycle": "experimental"
-  },
-  "chemi_search_substructure": {
-    "name": "chemi_search_substructure",
-    "file": "R/chemi_search_substructure.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-search-prod.json",
-    "key": "GET /api/search/substructure",
-    "lifecycle": "experimental"
-  },
-  "chemi_services_collated_report": {
-    "name": "chemi_services_collated_report",
-    "file": "R/chemi_services_collated_report.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-services-prod.json",
-    "key": "POST /api/services/collated_report",
-    "lifecycle": "experimental"
-  },
-  "chemi_services_convert": {
-    "name": "chemi_services_convert",
-    "file": "R/chemi_services_convert.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-services-prod.json",
-    "key": "POST /api/services/convert",
-    "lifecycle": "experimental"
-  },
-  "chemi_services_layout": {
-    "name": "chemi_services_layout",
-    "file": "R/chemi_services_layout.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-services-prod.json",
-    "key": "GET /api/services/layout",
-    "lifecycle": "experimental"
-  },
-  "chemi_services_smirks2rxn": {
-    "name": "chemi_services_smirks2rxn",
-    "file": "R/chemi_services_smirks2rxn.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-services-prod.json",
-    "key": "GET /api/services/smirks2rxn",
-    "lifecycle": "experimental"
   },
   "chemi_stdizer_chemicals": {
     "name": "chemi_stdizer_chemicals",
@@ -1067,15 +653,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_toxprints_assays_check": {
-    "name": "chemi_toxprints_assays_check",
-    "file": "R/chemi_toxprints_assays_check.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/assays/check",
-    "lifecycle": "experimental"
-  },
   "chemi_toxprints_assays": {
     "name": "chemi_toxprints_assays",
     "file": "R/chemi_toxprints_assays.R",
@@ -1109,51 +686,6 @@
     "reason": "Client hook policy requires manual review",
     "schema": null,
     "key": null
-  },
-  "chemi_toxprints_global_assays": {
-    "name": "chemi_toxprints_global_assays",
-    "file": "R/chemi_toxprints_global_assays.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/global_assays",
-    "lifecycle": "experimental"
-  },
-  "chemi_toxprints_global_toxprints": {
-    "name": "chemi_toxprints_global_toxprints",
-    "file": "R/chemi_toxprints_global_toxprints.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/global_toxprints",
-    "lifecycle": "experimental"
-  },
-  "chemi_toxprints_toxprints": {
-    "name": "chemi_toxprints_toxprints",
-    "file": "R/chemi_toxprints_toxprints.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/toxprints",
-    "lifecycle": "experimental"
-  },
-  "chemi_toxprints": {
-    "name": "chemi_toxprints",
-    "file": "R/chemi_toxprints.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints",
-    "lifecycle": "experimental"
-  },
-  "chemi_toxprints_bulk": {
-    "name": "chemi_toxprints_bulk",
-    "file": "R/chemi_toxprints.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "POST /api/toxprints",
-    "lifecycle": "experimental"
   },
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
