@@ -1,0 +1,5244 @@
+{
+  "chemi_classyfire": {
+    "issue": 310,
+    "name": "chemi_classyfire",
+    "file": "R/chemi_classyfire.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/get_classification_for_dtxsid/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/get_classification_for_dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_functional_use": {
+    "issue": 310,
+    "name": "chemi_functional_use",
+    "file": "R/chemi_functional_use.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping"
+  },
+  "chemi_predict": {
+    "issue": 310,
+    "name": "chemi_predict",
+    "file": "R/chemi_predict.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , report = \"JSON\"))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping"
+  },
+  "chemi_resolver_lookup": {
+    "issue": 310,
+    "name": "chemi_resolver_lookup",
+    "file": "R/chemi_resolver_lookup.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))",
+    "siblings": [
+      "chemi_resolver_lookup_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "resolver/lookup",
+      "supported": [
+        "chemi-resolver-prod.json GET /api/resolver/lookup"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_resolver_lookup_bulk": {
+    "issue": 310,
+    "name": "chemi_resolver_lookup_bulk",
+    "file": "R/chemi_resolver_lookup.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))",
+    "siblings": [
+      "chemi_resolver_lookup"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/lookup",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/lookup"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_safety_rqcodes": {
+    "issue": 310,
+    "name": "chemi_safety_rqcodes",
+    "file": "R/chemi_safety_rqcodes.R",
+    "lifecycle": "stable",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "safety/rqcodes",
+      "supported": [
+        "chemi-safety-prod.json POST /api/safety/rqcodes"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_safety_section": {
+    "issue": 310,
+    "name": "chemi_safety_section",
+    "file": "R/chemi_safety_sections.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , section = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping"
+  },
+  "chemi_server": {
+    "issue": 310,
+    "name": "chemi_server",
+    "file": "R/zzz.R",
+    "lifecycle": null,
+    "formals": "pairlist(server = NULL, url_only = FALSE)",
+    "siblings": [
+      ".ComptoxREnv",
+      ".run_debug_enabled",
+      ".run_verbose_enabled",
+      "run_setup",
+      "ctx_server",
+      "epi_server",
+      "eco_server",
+      "toxval_server",
+      "np_server",
+      "pubchem_server",
+      "run_debug",
+      "run_verbose",
+      "batch_limit",
+      "reset_servers",
+      ".onAttach",
+      ".onLoad",
+      ".onUnload",
+      ".header"
+    ],
+    "disposition": "retained_client_utility",
+    "reason": "Client configuration utility, not a schema endpoint wrapper; stays outside schema generation."
+  },
+  "chemi_toxprint": {
+    "issue": 310,
+    "name": "chemi_toxprint",
+    "file": "R/chemi_toxprint.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "toxprints/calculate",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-toxprints-prod.json",
+          "key": "POST /api/toxprints/calculate",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    }
+  },
+  "ct_api_key": {
+    "issue": 310,
+    "name": "ct_api_key",
+    "file": "R/ct_api_key.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained_client_utility",
+    "reason": "Client configuration utility, not a schema endpoint wrapper; stays outside schema generation."
+  },
+  "ct_bioactivity_analyticalqc_search": {
+    "issue": 310,
+    "name": "ct_bioactivity_analyticalqc_search",
+    "file": "R/ct_bioactivity_analyticalqc_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_bioactivity_analyticalqc_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_aop_search_by_entrez_gene_id": {
+    "issue": 310,
+    "name": "ct_bioactivity_aop_search_by_entrez_gene_id",
+    "file": "R/ct_bioactivity_aop_search_by_entrez_gene_id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(entrezGeneId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}",
+      "file": "R/ct_bioactivity_aop_search_by_entrez_gene_id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_aop_search_by_event_number": {
+    "issue": 310,
+    "name": "ct_bioactivity_aop_search_by_event_number",
+    "file": "R/ct_bioactivity_aop_search_by_event_number.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(eventNumber = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/aop/search/by-event-number/{eventNumber}",
+      "file": "R/ct_bioactivity_aop_search_by_event_number.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_aop_search_by_toxcast_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_aop_search_by_toxcast_aeid",
+    "file": "R/ct_bioactivity_aop_search_by_toxcast_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(toxcastAeid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}",
+      "file": "R/ct_bioactivity_aop_search_by_toxcast_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay",
+    "file": "R/ct_bioactivity_assay.R",
+    "lifecycle": null,
+    "formals": "pairlist(projection = \"assay-all\")",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/",
+      "file": "R/ct_bioactivity_assay.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_chemicals_search_by_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_chemicals_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_chemicals_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(aeid = , projection = \"dtxsidsonly\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}",
+      "file": "R/ct_bioactivity_assay_chemicals_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_count": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_count",
+    "file": "R/ct_bioactivity_assay_count.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/count",
+      "file": "R/ct_bioactivity_assay_count.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_search_by_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(aeid = , projection = NULL))",
+    "siblings": [
+      "ct_bioactivity_assay_search_by_aeid_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/search/by-aeid/{aeid}",
+      "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_search_by_aeid_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_search_by_aeid_bulk",
+    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_bioactivity_assay_search_by_aeid"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "POST /bioactivity/assay/search/by-aeid/",
+      "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_search_by_endpoint": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_search_by_endpoint",
+    "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(endpoint = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Nonliteral helper argument needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "bioactivity/assay/search/by-endpoint/",
+      "supported": [
+        "ctx-bioactivity-prod.json GET /bioactivity/assay/search/by-endpoint/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_bioactivity_assay_search_by_gene": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_search_by_gene",
+    "file": "R/ct_bioactivity_assay_search_by_gene.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(geneSymbol = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/search/by-gene/{geneSymbol}",
+      "file": "R/ct_bioactivity_assay_search_by_gene.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_assay_single_conc_search_by_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_assay_single_conc_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_single_conc_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(aeid = , projection = \"single-conc\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}",
+      "file": "R/ct_bioactivity_assay_single_conc_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_aed_search": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_aed_search",
+    "file": "R/ct_bioactivity_data_aed_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_bioactivity_data_aed_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "bioactivity/data/aed/search/by-dtxsid/",
+      "supported": [
+        "ctx-bioactivity-prod.json GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_bioactivity_data_aed_search_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_aed_search_bulk",
+    "file": "R/ct_bioactivity_data_aed_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_bioactivity_data_aed_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "bioactivity/data/aed/search/by-dtxsid/",
+      "supported": [
+        "ctx-bioactivity-prod.json POST /bioactivity/data/aed/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_bioactivity_data_search_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_bulk",
+    "file": "R/ct_bioactivity_data_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "bioactivity/data/search/by-dtxsid/",
+      "supported": [
+        "ctx-bioactivity-prod.json POST /bioactivity/data/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_bioactivity_data_search_by_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_aeid",
+    "file": "R/ct_bioactivity_data_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(aeid = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_aeid_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/search/by-aeid/{aeid}",
+      "file": "R/ct_bioactivity_data_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_aeid_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_aeid_bulk",
+    "file": "R/ct_bioactivity_data_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_aeid"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "POST /bioactivity/data/search/by-aeid/",
+      "file": "R/ct_bioactivity_data_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_dtxsid",
+    "file": "R/ct_bioactivity_data_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , projection = NULL))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_bioactivity_data_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_m4id": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_m4id",
+    "file": "R/ct_bioactivity_data_search_by_m4id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(m4id = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_m4id_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/search/by-m4id/{m4id}",
+      "file": "R/ct_bioactivity_data_search_by_m4id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_m4id_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_m4id_bulk",
+    "file": "R/ct_bioactivity_data_search_by_m4id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_m4id"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "POST /bioactivity/data/search/by-m4id/",
+      "file": "R/ct_bioactivity_data_search_by_m4id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_spid": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_spid",
+    "file": "R/ct_bioactivity_data_search_by_spid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(spid = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_spid_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/search/by-spid/{spid}",
+      "file": "R/ct_bioactivity_data_search_by_spid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_spid_bulk": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_spid_bulk",
+    "file": "R/ct_bioactivity_data_search_by_spid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_bioactivity_data_search_by_spid"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "POST /bioactivity/data/search/by-spid/",
+      "file": "R/ct_bioactivity_data_search_by_spid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_search_by_tissue": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_search_by_tissue",
+    "file": "R/ct_bioactivity_data_search_by_tissue.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , tissue = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/summary/search/by-tissue/",
+      "file": "R/ct_bioactivity_data_search_by_tissue.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_summary_search_by_aeid": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_summary_search_by_aeid",
+    "file": "R/ct_bioactivity_data_summary_search_by_aeid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(aeid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/summary/search/by-aeid/{aeid}",
+      "file": "R/ct_bioactivity_data_summary_search_by_aeid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_data_summary_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_bioactivity_data_summary_search_by_dtxsid",
+    "file": "R/ct_bioactivity_data_summary_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_bioactivity_data_summary_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_models_search": {
+    "issue": 310,
+    "name": "ct_bioactivity_models_search",
+    "file": "R/ct_bioactivity_models_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , model = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/models/search/",
+      "file": "R/ct_bioactivity_models_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_models_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_bioactivity_models_search_by_dtxsid",
+    "file": "R/ct_bioactivity_models_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/models/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_bioactivity_models_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_search_contain": {
+    "issue": 310,
+    "name": "ct_bioactivity_search_contain",
+    "file": "R/ct_bioactivity_search_contain.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(value = , top = 0))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/search/contain/{value}",
+      "file": "R/ct_bioactivity_search_contain.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_search_equal": {
+    "issue": 310,
+    "name": "ct_bioactivity_search_equal",
+    "file": "R/ct_bioactivity_search_equal.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(value = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/search/equal/{value}",
+      "file": "R/ct_bioactivity_search_equal.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_bioactivity_search_start_with": {
+    "issue": 310,
+    "name": "ct_bioactivity_search_start_with",
+    "file": "R/ct_bioactivity_search_start_with.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(value = , top = 500))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/search/start-with/{value}",
+      "file": "R/ct_bioactivity_search_start_with.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_detail_search_by_dtxcid": {
+    "issue": 310,
+    "name": "ct_chemical_detail_search_by_dtxcid",
+    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxcid = , projection = \"chemicaldetailall\"))",
+    "siblings": [
+      "ct_chemical_detail_search_by_dtxcid_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/detail/search/by-dtxcid/{dtxcid}",
+      "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_detail_search_by_dtxcid_bulk": {
+    "issue": 310,
+    "name": "ct_chemical_detail_search_by_dtxcid_bulk",
+    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , projection = \"chemicaldetailall\"))",
+    "siblings": [
+      "ct_chemical_detail_search_by_dtxcid"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "POST /chemical/detail/search/by-dtxcid/",
+      "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_detail_search_by_smiles": {
+    "issue": 310,
+    "name": "ct_chemical_detail_search_by_smiles",
+    "file": "R/ct_chemical_detail_search_by_smiles.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/detail/search/by-smiles/",
+      "file": "R/ct_chemical_detail_search_by_smiles.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_fate_experimental_search": {
+    "issue": 310,
+    "name": "ct_chemical_fate_experimental_search",
+    "file": "R/ct_chemical_fate_experimental_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/fate/summary/experimental/search/",
+      "file": "R/ct_chemical_fate_experimental_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_fate_predicted_search": {
+    "issue": 310,
+    "name": "ct_chemical_fate_predicted_search",
+    "file": "R/ct_chemical_fate_predicted_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/fate/summary/predicted/search/",
+      "file": "R/ct_chemical_fate_predicted_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_fate_search_bulk": {
+    "issue": 310,
+    "name": "ct_chemical_fate_search_bulk",
+    "file": "R/ct_chemical_fate_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "chemical/fate/search/by-dtxsid/",
+      "supported": [
+        "ctx-chemical-prod.json POST /chemical/fate/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_fate_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_chemical_fate_search_by_dtxsid",
+    "file": "R/ct_chemical_fate_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/fate/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_fate_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_fate_summary_search": {
+    "issue": 310,
+    "name": "ct_chemical_fate_summary_search",
+    "file": "R/ct_chemical_fate_summary_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/fate/summary/search/",
+      "file": "R/ct_chemical_fate_summary_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_fate_summary_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_chemical_fate_summary_search_by_dtxsid",
+    "file": "R/ct_chemical_fate_summary_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_fate_summary_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_list_chemicals_search_by_listname": {
+    "issue": 310,
+    "name": "ct_chemical_list_chemicals_search_by_listname",
+    "file": "R/ct_chemical_list_chemicals_search_by_listname.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(list = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/chemicals/search/by-listname/{list}",
+      "file": "R/ct_chemical_list_chemicals_search_by_listname.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_list_chemicals_search_contain": {
+    "issue": 310,
+    "name": "ct_chemical_list_chemicals_search_contain",
+    "file": "R/ct_chemical_list_chemicals_search_contain.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(list = , word = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/list/chemicals/search/contain/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/contain/{list}/{word}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_list_chemicals_search_equal": {
+    "issue": 310,
+    "name": "ct_chemical_list_chemicals_search_equal",
+    "file": "R/ct_chemical_list_chemicals_search_equal.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(list = , word = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/list/chemicals/search/equal/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/equal/{list}/{word}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_list_chemicals_search_start_with": {
+    "issue": 310,
+    "name": "ct_chemical_list_chemicals_search_start_with",
+    "file": "R/ct_chemical_list_chemicals_search_start_with.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(list = , word = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/list/chemicals/search/start-with/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/start-with/{list}/{word}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_list_search": {
+    "issue": 310,
+    "name": "ct_chemical_list_search",
+    "file": "R/ct_chemical_list_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , projection = \"chemicallistall\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_list_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_list_search_by_name": {
+    "issue": 310,
+    "name": "ct_chemical_list_search_by_name",
+    "file": "R/ct_chemical_list_search_by_name.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(listName = , projection = \"chemicallistall\", extract_dtxsids = FALSE))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/list/search/by-name/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/list/search/by-name/{listName}"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "extract_dtxsids_if_requested"
+      ],
+      "extra_params": [
+        "extract_dtxsids"
+      ],
+      "defined_in": [
+        "R/hooks_list.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "ct_chemical_list_search_by_type": {
+    "issue": 310,
+    "name": "ct_chemical_list_search_by_type",
+    "file": "R/ct_chemical_list_search_by_type.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(type = , projection = \"chemicallistall\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/search/by-type/{type}",
+      "file": "R/ct_chemical_list_search_by_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_list_type": {
+    "issue": 310,
+    "name": "ct_chemical_list_type",
+    "file": "R/ct_chemical_list_type.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/type",
+      "file": "R/ct_chemical_list_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_experimental_name": {
+    "issue": 310,
+    "name": "ct_chemical_property_experimental_name",
+    "file": "R/ct_chemical_property_experimental_name.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/experimental/name",
+      "file": "R/ct_chemical_property_experimental_name.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_experimental_search_bulk": {
+    "issue": 310,
+    "name": "ct_chemical_property_experimental_search_bulk",
+    "file": "R/ct_chemical_property_experimental_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "POST /chemical/property/experimental/search/by-dtxsid/",
+      "file": "R/ct_chemical_property_experimental_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_experimental_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_chemical_property_experimental_search_by_dtxsid",
+    "file": "R/ct_chemical_property_experimental_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_property_experimental_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_experimental_search_by_range": {
+    "issue": 310,
+    "name": "ct_chemical_property_experimental_search_by_range",
+    "file": "R/ct_chemical_property_experimental_search_by_range.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(propertyName = , start = NULL, end = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/property/experimental/search/by-range/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_property_predicted_name": {
+    "issue": 310,
+    "name": "ct_chemical_property_predicted_name",
+    "file": "R/ct_chemical_property_predicted_name.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/predicted/name",
+      "file": "R/ct_chemical_property_predicted_name.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_predicted_search_bulk": {
+    "issue": 310,
+    "name": "ct_chemical_property_predicted_search_bulk",
+    "file": "R/ct_chemical_property_predicted_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "POST /chemical/property/predicted/search/by-dtxsid/",
+      "file": "R/ct_chemical_property_predicted_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_predicted_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_chemical_property_predicted_search_by_dtxsid",
+    "file": "R/ct_chemical_property_predicted_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_property_predicted_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_predicted_search_by_range": {
+    "issue": 310,
+    "name": "ct_chemical_property_predicted_search_by_range",
+    "file": "R/ct_chemical_property_predicted_search_by_range.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(propertyId = , start = NULL, end = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/property/predicted/search/by-range/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_property_summary_experimental_search": {
+    "issue": 310,
+    "name": "ct_chemical_property_summary_experimental_search",
+    "file": "R/ct_chemical_property_summary_experimental_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/summary/experimental/search/",
+      "file": "R/ct_chemical_property_summary_experimental_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_summary_predicted_search": {
+    "issue": 310,
+    "name": "ct_chemical_property_summary_predicted_search",
+    "file": "R/ct_chemical_property_summary_predicted_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/summary/predicted/search/",
+      "file": "R/ct_chemical_property_summary_predicted_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_summary_search": {
+    "issue": 310,
+    "name": "ct_chemical_property_summary_search",
+    "file": "R/ct_chemical_property_summary_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , propName = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/summary/search/",
+      "file": "R/ct_chemical_property_summary_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_property_summary_search_by_dtxsid": {
+    "issue": 310,
+    "name": "ct_chemical_property_summary_search_by_dtxsid",
+    "file": "R/ct_chemical_property_summary_search_by_dtxsid.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_chemical_property_summary_search_by_dtxsid.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_chemical_search_equal": {
+    "issue": 310,
+    "name": "ct_chemical_search_equal",
+    "file": "R/ct_chemical_search_equal.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(word = , projection = \"chemicalsearchall\"))",
+    "siblings": [
+      "ct_chemical_search_equal_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/search/equal/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/search/equal/{word}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_search_equal_bulk": {
+    "issue": 310,
+    "name": "ct_chemical_search_equal_bulk",
+    "file": "R/ct_chemical_search_equal.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_chemical_search_equal"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "chemical/search/equal/",
+      "supported": [
+        "ctx-chemical-prod.json POST /chemical/search/equal/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_classify": {
+    "issue": 310,
+    "name": "ct_classify",
+    "file": "R/ct_classify.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(df = ))",
+    "siblings": [
+      "create_compound_classifier"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping"
+  },
+  "ct_exposure_functional_use_category": {
+    "issue": 310,
+    "name": "ct_exposure_functional_use_category",
+    "file": "R/ct_exposure_functional_use_category.R",
+    "lifecycle": null,
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "GET /exposure/functional-use/category",
+      "file": "R/ct_exposure_functional_use_category.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_exposure_functional_use_probability_search": {
+    "issue": 310,
+    "name": "ct_exposure_functional_use_probability_search",
+    "file": "R/ct_exposure_functional_use_probability_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_exposure_functional_use_probability_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_exposure_functional_use_search": {
+    "issue": 310,
+    "name": "ct_exposure_functional_use_search",
+    "file": "R/ct_exposure_functional_use_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_exposure_functional_use_search_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "GET /exposure/functional-use/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_exposure_functional_use_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_exposure_functional_use_search_bulk": {
+    "issue": 310,
+    "name": "ct_exposure_functional_use_search_bulk",
+    "file": "R/ct_exposure_functional_use_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_exposure_functional_use_search"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "POST /exposure/functional-use/search/by-dtxsid/",
+      "file": "R/ct_exposure_functional_use_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_exposure_seem_demographic_search": {
+    "issue": 310,
+    "name": "ct_exposure_seem_demographic_search",
+    "file": "R/ct_exposure_seem_demographic_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , projection = NULL))",
+    "siblings": [
+      "ct_exposure_seem_demographic_search_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_exposure_seem_demographic_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_exposure_seem_demographic_search_bulk": {
+    "issue": 310,
+    "name": "ct_exposure_seem_demographic_search_bulk",
+    "file": "R/ct_exposure_seem_demographic_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_exposure_seem_demographic_search"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-exposure-prod-rebuild",
+      "key": "POST /exposure/seem/demographic/search/by-dtxsid/",
+      "file": "R/ct_exposure_seem_demographic_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_adme_ivive_search": {
+    "issue": 310,
+    "name": "ct_hazard_adme_ivive_search",
+    "file": "R/ct_hazard_adme_ivive_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , projection = NULL))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_adme_ivive_search.R",
+      "wave": "hazard-pilot"
+    }
+  },
+  "ct_hazard_cancer_search": {
+    "issue": 310,
+    "name": "ct_hazard_cancer_search",
+    "file": "R/ct_hazard_cancer_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_hazard_cancer_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard/cancer-summary/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_cancer_search_bulk": {
+    "issue": 310,
+    "name": "ct_hazard_cancer_search_bulk",
+    "file": "R/ct_hazard_cancer_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_hazard_cancer_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard/cancer-summary/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json POST /hazard/cancer-summary/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_genetox_details_search": {
+    "issue": 310,
+    "name": "ct_hazard_genetox_details_search",
+    "file": "R/ct_hazard_genetox_details_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = , projection = NULL))",
+    "siblings": [
+      "ct_hazard_genetox_details_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard/genetox/details/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_genetox_details_search_bulk": {
+    "issue": 310,
+    "name": "ct_hazard_genetox_details_search_bulk",
+    "file": "R/ct_hazard_genetox_details_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_hazard_genetox_details_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard/genetox/details/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json POST /hazard/genetox/details/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_genetox_search": {
+    "issue": 310,
+    "name": "ct_hazard_genetox_search",
+    "file": "R/ct_hazard_genetox_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_hazard_genetox_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard/genetox/summary/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_genetox_search_bulk": {
+    "issue": 310,
+    "name": "ct_hazard_genetox_search_bulk",
+    "file": "R/ct_hazard_genetox_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_hazard_genetox_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard/genetox/summary/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json POST /hazard/genetox/summary/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_hawc_search": {
+    "issue": 310,
+    "name": "ct_hazard_hawc_search",
+    "file": "R/ct_hazard_hawc_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/hawc/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_hawc_search.R",
+      "wave": "hazard-pilot"
+    }
+  },
+  "ct_hazard_iris_search": {
+    "issue": 310,
+    "name": "ct_hazard_iris_search",
+    "file": "R/ct_hazard_iris_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/iris/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_iris_search.R",
+      "wave": "hazard-pilot"
+    }
+  },
+  "ct_hazard_pprtv_search": {
+    "issue": 310,
+    "name": "ct_hazard_pprtv_search",
+    "file": "R/ct_hazard_pprtv_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_pprtv_search.R",
+      "wave": "hazard-pilot"
+    }
+  },
+  "ct_hazard_skin_eye_search": {
+    "issue": 310,
+    "name": "ct_hazard_skin_eye_search",
+    "file": "R/ct_hazard_skin_eye_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_hazard_skin_eye_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard/skin-eye/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_skin_eye_search_bulk": {
+    "issue": 310,
+    "name": "ct_hazard_skin_eye_search_bulk",
+    "file": "R/ct_hazard_skin_eye_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_hazard_skin_eye_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard/skin-eye/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json POST /hazard/skin-eye/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_toxref_data_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_data_search",
+    "file": "R/ct_hazard_toxref_data_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_toxref_data_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_data_search_by_study_id": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_data_search_by_study_id",
+    "file": "R/ct_hazard_toxref_data_search_by_study_id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/data/search/by-study-id/{studyId}",
+      "file": "R/ct_hazard_toxref_data_search_by_study_id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_data_search_by_study_type": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_data_search_by_study_type",
+    "file": "R/ct_hazard_toxref_data_search_by_study_type.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/data/search/by-study-type/{studyType}",
+      "file": "R/ct_hazard_toxref_data_search_by_study_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_effects_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_effects_search",
+    "file": "R/ct_hazard_toxref_effects_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_toxref_effects_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_effects_search_by_study_id": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_effects_search_by_study_id",
+    "file": "R/ct_hazard_toxref_effects_search_by_study_id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/effects/search/by-study-id/{studyId}",
+      "file": "R/ct_hazard_toxref_effects_search_by_study_id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_effects_search_by_study_type": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_effects_search_by_study_type",
+    "file": "R/ct_hazard_toxref_effects_search_by_study_type.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/effects/search/by-study-type/{studyType}",
+      "file": "R/ct_hazard_toxref_effects_search_by_study_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_observations_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_observations_search",
+    "file": "R/ct_hazard_toxref_observations_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_toxref_observations_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_observations_search_by_study_id": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_observations_search_by_study_id",
+    "file": "R/ct_hazard_toxref_observations_search_by_study_id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/observations/search/by-study-id/{studyId}",
+      "file": "R/ct_hazard_toxref_observations_search_by_study_id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_observations_search_by_study_type": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_observations_search_by_study_type",
+    "file": "R/ct_hazard_toxref_observations_search_by_study_type.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/observations/search/by-study-type/{studyType}",
+      "file": "R/ct_hazard_toxref_observations_search_by_study_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_search",
+    "file": "R/ct_hazard_toxref_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_toxref_search.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_search_by_study_id": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_search_by_study_id",
+    "file": "R/ct_hazard_toxref_search_by_study_id.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/summary/search/by-study-id/{studyId}",
+      "file": "R/ct_hazard_toxref_search_by_study_id.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxref_search_by_study_type": {
+    "issue": 310,
+    "name": "ct_hazard_toxref_search_by_study_type",
+    "file": "R/ct_hazard_toxref_search_by_study_type.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(studyType = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxref/summary/search/by-study-type/{studyType}",
+      "file": "R/ct_hazard_toxref_search_by_study_type.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxval_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxval_search",
+    "file": "R/ct_hazard_toxval_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [
+      "ct_hazard_toxval_search_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard/toxval/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json GET /hazard/toxval/search/by-dtxsid/{dtxsid}"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_toxval_search_bulk": {
+    "issue": 310,
+    "name": "ct_hazard_toxval_search_bulk",
+    "file": "R/ct_hazard_toxval_search.R",
+    "lifecycle": "stable",
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "ct_hazard_toxval_search"
+    ],
+    "disposition": "retained",
+    "reason": "Computed example needs manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard/toxval/search/by-dtxsid/",
+      "supported": [
+        "ctx-hazard-prod.json POST /hazard/toxval/search/by-dtxsid/"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_hazard_toxval_search_by_category": {
+    "issue": 310,
+    "name": "ct_hazard_toxval_search_by_category",
+    "file": "R/ct_hazard_toxval_search_by_category.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , category = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxval/search/by-category/{dtxsid}",
+      "file": "R/ct_hazard_toxval_search_by_category.R",
+      "wave": "stable-batch"
+    }
+  },
+  "ct_hazard_toxval_supercategory_search": {
+    "issue": 310,
+    "name": "ct_hazard_toxval_supercategory_search",
+    "file": "R/ct_hazard_toxval_supercategory_search.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-hazard-prod-rebuild",
+      "key": "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}",
+      "file": "R/ct_hazard_toxval_supercategory_search.R",
+      "wave": "hazard-pilot"
+    }
+  },
+  "ct_related": {
+    "issue": 310,
+    "name": "ct_related",
+    "file": "R/ct_related.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , inclusive = FALSE))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "related-substances/search/by-dtxsid",
+      "supported": [],
+      "blocked": []
+    }
+  },
+  "ct_similar": {
+    "issue": 310,
+    "name": "ct_similar",
+    "file": "R/ct_similar.R",
+    "lifecycle": "questioning",
+    "formals": "as.pairlist(alist(query = , similarity = 0.8))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "similar-compound/by-dtxsid/",
+      "supported": [],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_similarity"
+      ],
+      "post_response": [],
+      "extra_params": [
+        "similarity"
+      ],
+      "defined_in": [
+        "R/hooks_validation.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "epi_server": {
+    "issue": 310,
+    "name": "epi_server",
+    "file": "R/zzz.R",
+    "lifecycle": null,
+    "formals": "pairlist(server = NULL, url_only = FALSE)",
+    "siblings": [
+      ".ComptoxREnv",
+      ".run_debug_enabled",
+      ".run_verbose_enabled",
+      "run_setup",
+      "ctx_server",
+      "chemi_server",
+      "eco_server",
+      "toxval_server",
+      "np_server",
+      "pubchem_server",
+      "run_debug",
+      "run_verbose",
+      "batch_limit",
+      "reset_servers",
+      ".onAttach",
+      ".onLoad",
+      ".onUnload",
+      ".header"
+    ],
+    "disposition": "retained_client_utility",
+    "reason": "Client configuration utility, not a schema endpoint wrapper; stays outside schema generation."
+  },
+  "chemi_alerts_groups_bulk": {
+    "issue": 311,
+    "name": "chemi_alerts_groups_bulk",
+    "file": "R/chemi_alerts_groups.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(description = NULL, frozen = NULL, id = NULL, logicType = NULL, name = NULL, operations = NULL, text = NULL, type = NULL, value = NULL)",
+    "siblings": [
+      "chemi_alerts_groups"
+    ],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "alerts/groups",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-alerts-prod.json",
+          "key": "POST /api/alerts/groups",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16)",
+          "pointer": "#/paths/~1api~1alerts~1groups/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    }
+  },
+  "chemi_amnb_nate": {
+    "issue": 311,
+    "name": "chemi_amnb_nate",
+    "file": "R/chemi_amnb_nate.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = ))",
+    "siblings": [
+      "chemi_amnb_nate_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amnb_nate-prod-rebuild",
+      "key": "GET /api/amnb_nate",
+      "file": "R/chemi_amnb_nate.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_amnb_nate_bulk": {
+    "issue": 311,
+    "name": "chemi_amnb_nate_bulk",
+    "file": "R/chemi_amnb_nate.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemicals = NULL, smiles = NULL)",
+    "siblings": [
+      "chemi_amnb_nate"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amnb_nate-prod-rebuild",
+      "key": "POST /api/amnb_nate",
+      "file": "R/chemi_amnb_nate.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_amos_all_similarities": {
+    "issue": 311,
+    "name": "chemi_amos_all_similarities",
+    "file": "R/chemi_amos_all_similarities.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/all_similarities_by_dtxsid/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/all_similarities_by_dtxsid/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1all_similarities_by_dtxsid~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_analytical_qc_batch": {
+    "issue": 311,
+    "name": "chemi_amos_analytical_qc_batch",
+    "file": "R/chemi_amos_analytical_qc_batch.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(base_url = NULL, ids = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/analytical_qc_batch_search",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/analytical_qc_batch_search",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1analytical_qc_batch_search/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_analytical_qc_keyset_pagination": {
+    "issue": 311,
+    "name": "chemi_amos_analytical_qc_keyset_pagination",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_analytical_qc_keyset_pagination_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/analytical_qc_keyset_pagination/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/analytical_qc_keyset_pagination/{limit}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_analytical_qc_keyset_pagination_bulk": {
+    "issue": 311,
+    "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_analytical_qc_keyset_pagination"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/analytical_qc_keyset_pagination/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/analytical_qc_keyset_pagination/{limit}",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1analytical_qc_keyset_pagination~1{limit}/post/parameters/1/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_batch": {
+    "issue": 311,
+    "name": "chemi_amos_batch",
+    "file": "R/chemi_amos_batch.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(additional_record_info = NULL, always_download_file = NULL, base_url = NULL, ids = NULL, include_classyfire = NULL, include_external_links = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL, record_types = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/batch_search",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/batch_search",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1batch_search/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_entropy_similarity": {
+    "issue": 311,
+    "name": "chemi_amos_entropy_similarity",
+    "file": "R/chemi_amos_entropy_similarity.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/entropy_similarity/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/entropy_similarity/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1entropy_similarity~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_fact_sheet_keyset_pagination": {
+    "issue": 311,
+    "name": "chemi_amos_fact_sheet_keyset_pagination",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_fact_sheet_keyset_pagination_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/fact_sheet_keyset_pagination/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/fact_sheet_keyset_pagination/{limit}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_fact_sheet_keyset_pagination_bulk": {
+    "issue": 311,
+    "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_fact_sheet_keyset_pagination"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/fact_sheet_keyset_pagination/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/fact_sheet_keyset_pagination/{limit}",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1fact_sheet_keyset_pagination~1{limit}/post/parameters/1/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_for_document_ids": {
+    "issue": 311,
+    "name": "chemi_amos_for_document_ids",
+    "file": "R/chemi_amos_for_document_ids.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(record_type = , search_info = NULL, record_info_fields = NULL, table_fields = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/search_for_document_ids/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/search_for_document_ids/{record_type}",
+          "code": "invalid_type",
+          "reason": "Invalid input schema type",
+          "pointer": "#/paths/~1api~1amos~1search_for_document_ids~1{record_type}/post/parameters/1/type",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_mass_range": {
+    "issue": 311,
+    "name": "chemi_amos_mass_range",
+    "file": "R/chemi_amos_mass_range.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(lower_mass_limit = NULL, upper_mass_limit = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/mass_range_search/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/mass_range_search/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1mass_range_search~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_mass_spectrum_similarity": {
+    "issue": 311,
+    "name": "chemi_amos_mass_spectrum_similarity",
+    "file": "R/chemi_amos_mass_spectrum_similarity.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(lower_mass_limit = NULL, methodology = NULL, spectrum = NULL, type = NULL, upper_mass_limit = NULL, window = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/mass_spectrum_similarity_search/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/mass_spectrum_similarity_search/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1mass_spectrum_similarity_search~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_max_similarity": {
+    "issue": 311,
+    "name": "chemi_amos_max_similarity",
+    "file": "R/chemi_amos_max_similarity.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(da_window = NULL, dtxsids = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/max_similarity_by_dtxsid/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/max_similarity_by_dtxsid/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1max_similarity_by_dtxsid~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_method_keyset_pagination": {
+    "issue": 311,
+    "name": "chemi_amos_method_keyset_pagination",
+    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_method_keyset_pagination_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/method_keyset_pagination/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/method_keyset_pagination/{limit}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_method_keyset_pagination_bulk": {
+    "issue": 311,
+    "name": "chemi_amos_method_keyset_pagination_bulk",
+    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_method_keyset_pagination"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/method_keyset_pagination/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/method_keyset_pagination/{limit}",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1method_keyset_pagination~1{limit}/post/parameters/1/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_next_level_classification": {
+    "issue": 311,
+    "name": "chemi_amos_next_level_classification",
+    "file": "R/chemi_amos_next_level_classification.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(kingdom = NULL, klass = NULL, superklass = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/next_level_classification/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/next_level_classification/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1next_level_classification~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_product_declaration_keyset_pagination": {
+    "issue": 311,
+    "name": "chemi_amos_product_declaration_keyset_pagination",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_product_declaration_keyset_pagination_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/product_declaration_keyset_pagination/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/product_declaration_keyset_pagination/{limit}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_product_declaration_keyset_pagination_bulk": {
+    "issue": 311,
+    "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_product_declaration_keyset_pagination"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/product_declaration_keyset_pagination/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/product_declaration_keyset_pagination/{limit}",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1product_declaration_keyset_pagination~1{limit}/post/parameters/1/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_retrieve_fact_sheets": {
+    "issue": 311,
+    "name": "chemi_amos_retrieve_fact_sheets",
+    "file": "R/chemi_amos_retrieve_fact_sheets.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(internal_ids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/retrieve_fact_sheets/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/retrieve_fact_sheets/",
+          "code": "invalid_type",
+          "reason": "Invalid input schema type",
+          "pointer": "#/paths/~1api~1amos~1retrieve_fact_sheets~1/post/parameters/0/type",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_retrieve_product_declarations": {
+    "issue": 311,
+    "name": "chemi_amos_retrieve_product_declarations",
+    "file": "R/chemi_amos_retrieve_product_declarations.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(internal_ids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/retrieve_product_declarations/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/retrieve_product_declarations/",
+          "code": "invalid_type",
+          "reason": "Invalid input schema type",
+          "pointer": "#/paths/~1api~1amos~1retrieve_product_declarations~1/post/parameters/0/type",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_retrieve_safety_data_sheets": {
+    "issue": 311,
+    "name": "chemi_amos_retrieve_safety_data_sheets",
+    "file": "R/chemi_amos_retrieve_safety_data_sheets.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(internal_ids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/retrieve_safety_data_sheets/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/retrieve_safety_data_sheets/",
+          "code": "invalid_type",
+          "reason": "Invalid input schema type",
+          "pointer": "#/paths/~1api~1amos~1retrieve_safety_data_sheets~1/post/parameters/0/type",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_safety_data_sheet_keyset_pagination": {
+    "issue": 311,
+    "name": "chemi_amos_safety_data_sheet_keyset_pagination",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_safety_data_sheet_keyset_pagination_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/safety_data_sheet_keyset_pagination/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/safety_data_sheet_keyset_pagination/{limit}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_safety_data_sheet_keyset_pagination_bulk": {
+    "issue": 311,
+    "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
+    "siblings": [
+      "chemi_amos_safety_data_sheet_keyset_pagination"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/safety_data_sheet_keyset_pagination/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1safety_data_sheet_keyset_pagination~1{limit}/post/parameters/1/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_spectrum_count_for_methodology": {
+    "issue": 311,
+    "name": "chemi_amos_spectrum_count_for_methodology",
+    "file": "R/chemi_amos_spectrum_count_for_methodology.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(dtxsid = NULL, spectrum_type = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/spectrum_count_for_methodology/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/spectrum_count_for_methodology/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1spectrum_count_for_methodology~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_substances_for_classification": {
+    "issue": 311,
+    "name": "chemi_amos_substances_for_classification",
+    "file": "R/chemi_amos_substances_for_classification.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/substances_for_classification/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/substances_for_classification/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1substances_for_classification~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_arn_cats": {
+    "issue": 311,
+    "name": "chemi_arn_cats",
+    "file": "R/chemi_arn_cats.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = , model = \"RF\"))",
+    "siblings": [
+      "chemi_arn_cats_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-arn_cats-prod-rebuild",
+      "key": "GET /api/arn_cats",
+      "file": "R/chemi_arn_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_arn_cats_bulk": {
+    "issue": 311,
+    "name": "chemi_arn_cats_bulk",
+    "file": "R/chemi_arn_cats.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemicals = NULL, model = \"RF\", smiles = NULL)",
+    "siblings": [
+      "chemi_arn_cats"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-arn_cats-prod-rebuild",
+      "key": "POST /api/arn_cats",
+      "file": "R/chemi_arn_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_alias": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_alias",
+    "file": "R/chemi_chet_chemicals_alias.R",
+    "lifecycle": null,
+    "formals": "pairlist(dtxsid = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/alias",
+      "file": "R/chemi_chet_chemicals_alias.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_chemset": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_chemset",
+    "file": "R/chemi_chet_chemicals_chemset.R",
+    "lifecycle": null,
+    "formals": "pairlist(setid = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/chemset",
+      "file": "R/chemi_chet_chemicals_chemset.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_counts": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_counts",
+    "file": "R/chemi_chet_chemicals_counts.R",
+    "lifecycle": null,
+    "formals": "pairlist(page = 0, size = NULL, all_pages = TRUE, max_pages = 100)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/counts",
+      "file": "R/chemi_chet_chemicals_counts.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_database": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_database",
+    "file": "R/chemi_chet_chemicals_database.R",
+    "lifecycle": null,
+    "formals": "pairlist(page = 0, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/database",
+      "file": "R/chemi_chet_chemicals_database.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_database_stats": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_database_stats",
+    "file": "R/chemi_chet_chemicals_database_stats.R",
+    "lifecycle": null,
+    "formals": "pairlist(total = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/database/stats",
+      "file": "R/chemi_chet_chemicals_database_stats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_image": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_image",
+    "file": "R/chemi_chet_chemicals_image.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(chemical_id = , width = NULL, height = NULL, format = \"png\"))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemicals/image",
+      "supported": [
+        "chemi-chet-prod.json GET /chemicals/{chemical_id}/image"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_chet_chemicals_maps": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_maps",
+    "file": "R/chemi_chet_chemicals_maps.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemid = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/maps",
+      "file": "R/chemi_chet_chemicals_maps.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_singlechemical": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_singlechemical",
+    "file": "R/chemi_chet_chemicals_singlechemical.R",
+    "lifecycle": null,
+    "formals": "pairlist(dtxsid = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/singlechemical",
+      "file": "R/chemi_chet_chemicals_singlechemical.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_chemicals_suggest": {
+    "issue": 311,
+    "name": "chemi_chet_chemicals_suggest",
+    "file": "R/chemi_chet_chemicals_suggest.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , limit = 8, only_in_reactions = \"true\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/suggest",
+      "file": "R/chemi_chet_chemicals_suggest.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction": {
+    "issue": 311,
+    "name": "chemi_chet_reaction",
+    "file": "R/chemi_chet_reaction.R",
+    "lifecycle": null,
+    "formals": "pairlist(query = NULL, searchType = NULL, substringTF = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/search",
+      "file": "R/chemi_chet_reaction.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_batchsearch": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_batchsearch",
+    "file": "R/chemi_chet_reaction_batchsearch.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(dtxsids = , search_level = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Candidate rejected: identical(run(env[[name]], list()), run(original, list())) is not TRUE",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "reaction/batchsearch",
+      "supported": [
+        "chemi-chet-prod.json POST /reaction/batchsearch"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_chet_reaction_database": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_database",
+    "file": "R/chemi_chet_reaction_database.R",
+    "lifecycle": null,
+    "formals": "pairlist(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/database",
+      "file": "R/chemi_chet_reaction_database.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_database_stats": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_database_stats",
+    "file": "R/chemi_chet_reaction_database_stats.R",
+    "lifecycle": null,
+    "formals": "pairlist(reaction_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/database/stats",
+      "file": "R/chemi_chet_reaction_database_stats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_details": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_details",
+    "file": "R/chemi_chet_reaction_details.R",
+    "lifecycle": null,
+    "formals": "pairlist(lib_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/details",
+      "file": "R/chemi_chet_reaction_details.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_mapid": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_mapid",
+    "file": "R/chemi_chet_reaction_mapid.R",
+    "lifecycle": null,
+    "formals": "pairlist(map_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/mapid",
+      "file": "R/chemi_chet_reaction_mapid.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_react_maps": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_react_maps",
+    "file": "R/chemi_chet_reaction_react_maps.R",
+    "lifecycle": null,
+    "formals": "pairlist(react_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/react_maps",
+      "file": "R/chemi_chet_reaction_react_maps.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_reactionmap": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_reactionmap",
+    "file": "R/chemi_chet_reaction_reactionmap.R",
+    "lifecycle": null,
+    "formals": "pairlist(id = NULL, searchtype = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/reactionmap",
+      "file": "R/chemi_chet_reaction_reactionmap.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_singlereaction": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_singlereaction",
+    "file": "R/chemi_chet_reaction_singlereaction.R",
+    "lifecycle": null,
+    "formals": "pairlist(reaction_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/singlereaction",
+      "file": "R/chemi_chet_reaction_singlereaction.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_chet_reaction_table": {
+    "issue": 311,
+    "name": "chemi_chet_reaction_table",
+    "file": "R/chemi_chet_reaction_table.R",
+    "lifecycle": null,
+    "formals": "pairlist(reaction_id = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/table",
+      "file": "R/chemi_chet_reaction_table.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_ncc_cats": {
+    "issue": 311,
+    "name": "chemi_ncc_cats",
+    "file": "R/chemi_ncc_cats.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = , logp = NULL, ws = NULL))",
+    "siblings": [
+      "chemi_ncc_cats_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-ncc_cats-prod-rebuild",
+      "key": "GET /api/ncc_cats",
+      "file": "R/chemi_ncc_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_opera": {
+    "issue": 311,
+    "name": "chemi_opera",
+    "file": "R/chemi_opera.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , format = \"json\", standardize = FALSE))",
+    "siblings": [
+      "chemi_opera_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "opera",
+      "supported": [
+        "chemi-opera-prod.json GET /api/opera"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_opera_bulk": {
+    "issue": 311,
+    "name": "chemi_opera_bulk",
+    "file": "R/chemi_opera.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(cache_only = FALSE, smiles = NULL, chemicals = NULL, format = \"json\", standardize = FALSE)",
+    "siblings": [
+      "chemi_opera"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "opera",
+      "supported": [
+        "chemi-opera-prod.json POST /api/opera"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_opera_report": {
+    "issue": 311,
+    "name": "chemi_opera_report",
+    "file": "R/chemi_opera_report.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(dtxsid = , modelId = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-opera-prod-rebuild",
+      "key": "GET /api/opera/report",
+      "file": "R/chemi_opera_report.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_pfas_atlas": {
+    "issue": 311,
+    "name": "chemi_pfas_atlas",
+    "file": "R/chemi_pfas_atlas.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = ))",
+    "siblings": [
+      "chemi_pfas_atlas_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-pfas_atlas-prod-rebuild",
+      "key": "GET /api/pfas_atlas",
+      "file": "R/chemi_pfas_atlas.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_pfas_atlas_bulk": {
+    "issue": 311,
+    "name": "chemi_pfas_atlas_bulk",
+    "file": "R/chemi_pfas_atlas.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemicals = NULL, smiles = NULL)",
+    "siblings": [
+      "chemi_pfas_atlas"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-pfas_atlas-prod-rebuild",
+      "key": "POST /api/pfas_atlas",
+      "file": "R/chemi_pfas_atlas.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_pfas_cats": {
+    "issue": 311,
+    "name": "chemi_pfas_cats",
+    "file": "R/chemi_pfas_cats.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = ))",
+    "siblings": [
+      "chemi_pfas_cats_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-pfas_cats-prod-rebuild",
+      "key": "GET /api/pfas_cats",
+      "file": "R/chemi_pfas_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_pfas_cats_bulk": {
+    "issue": 311,
+    "name": "chemi_pfas_cats_bulk",
+    "file": "R/chemi_pfas_cats.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemicals = NULL, smiles = NULL)",
+    "siblings": [
+      "chemi_pfas_cats"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-pfas_cats-prod-rebuild",
+      "key": "POST /api/pfas_cats",
+      "file": "R/chemi_pfas_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_predictor_models_predict": {
+    "issue": 311,
+    "name": "chemi_predictor_models_predict",
+    "file": "R/chemi_predictor_models_predict.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(model_id = , smiles = NULL, identifier = NULL, report_format = \"json\"))",
+    "siblings": [
+      "chemi_predictor_models_predict_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "predictor_models/predict",
+      "supported": [
+        "chemi-predictor_models-prod.json GET /api/predictor_models/predict"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_predictor_models_predict_bulk": {
+    "issue": 311,
+    "name": "chemi_predictor_models_predict_bulk",
+    "file": "R/chemi_predictor_models_predict.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(model_id = , smiles = NULL, chemicals = NULL))",
+    "siblings": [
+      "chemi_predictor_models_predict"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "predictor_models/predict",
+      "supported": [
+        "chemi-predictor_models-prod.json POST /api/predictor_models/predict"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_resolver_ccte_list": {
+    "issue": 311,
+    "name": "chemi_resolver_ccte_list",
+    "file": "R/chemi_resolver_ccte_list.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/ccte-list",
+      "file": "R/chemi_resolver_ccte_list.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_classyfire": {
+    "issue": 311,
+    "name": "chemi_resolver_classyfire",
+    "file": "R/chemi_resolver_classyfire.R",
+    "lifecycle": null,
+    "formals": "pairlist(query = NULL, idType = \"AnyId\", fuzzy = \"Not\", kingdom = NULL, superklass = NULL, klass = NULL, subklass = NULL, directParent = NULL, geometricDescriptor = NULL, alternativeParent = NULL, substituent = NULL, page = 0, size = 1000, all_pages = TRUE, max_pages = 100)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/classyfire",
+      "file": "R/chemi_resolver_classyfire.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_getannotation": {
+    "issue": 311,
+    "name": "chemi_resolver_getannotation",
+    "file": "R/chemi_resolver_getannotation.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = , heading = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/getannotation",
+      "file": "R/chemi_resolver_getannotation.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_getannotationslist": {
+    "issue": 311,
+    "name": "chemi_resolver_getannotationslist",
+    "file": "R/chemi_resolver_getannotationslist.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/getannotationslist",
+      "file": "R/chemi_resolver_getannotationslist.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_getsubstance": {
+    "issue": 311,
+    "name": "chemi_resolver_getsubstance",
+    "file": "R/chemi_resolver_getsubstance.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/getsubstance",
+      "file": "R/chemi_resolver_getsubstance.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_ghs_list": {
+    "issue": 311,
+    "name": "chemi_resolver_ghs_list",
+    "file": "R/chemi_resolver_ghs_list.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/ghs-list",
+      "file": "R/chemi_resolver_ghs_list.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_links": {
+    "issue": 311,
+    "name": "chemi_resolver_links",
+    "file": "R/chemi_resolver_links.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/links",
+      "file": "R/chemi_resolver_links.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_lookupCASRN": {
+    "issue": 311,
+    "name": "chemi_resolver_lookupCASRN",
+    "file": "R/chemi_resolver_lookupCASRN.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/lookupCASRN",
+      "file": "R/chemi_resolver_lookupCASRN.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_mesh": {
+    "issue": 311,
+    "name": "chemi_resolver_mesh",
+    "file": "R/chemi_resolver_mesh.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/mesh",
+      "file": "R/chemi_resolver_mesh.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_pubchem_section": {
+    "issue": 311,
+    "name": "chemi_resolver_pubchem_section",
+    "file": "R/chemi_resolver_pubchem_section.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))",
+    "siblings": [
+      "chemi_resolver_pubchem_section_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "resolver/pubchem-section",
+      "supported": [
+        "chemi-resolver-prod.json GET /api/resolver/pubchem-section"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_resolver_resolve": {
+    "issue": 311,
+    "name": "chemi_resolver_resolve",
+    "file": "R/chemi_resolver_resolve.R",
+    "lifecycle": null,
+    "formals": "pairlist(mol = NULL, queries = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/resolve",
+      "file": "R/chemi_resolver_resolve.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_resolver_safety_flags": {
+    "issue": 311,
+    "name": "chemi_resolver_safety_flags",
+    "file": "R/chemi_resolver_safety_flags.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\"))",
+    "siblings": [
+      "chemi_resolver_safety_flags_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "resolver/safety-flags",
+      "supported": [
+        "chemi-resolver-prod.json GET /api/resolver/safety-flags"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_resolver_safety_flags_bulk": {
+    "issue": 311,
+    "name": "chemi_resolver_safety_flags_bulk",
+    "file": "R/chemi_resolver_safety_flags.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(additionalProps = NULL, averageMass = NULL, canonicalSmiles = NULL, casrn = NULL, chemId = NULL, cid = NULL, id = NULL, image = NULL, inchi = NULL, inchiKey = NULL, mol = NULL, molFormula = NULL, monoisotopicMass = NULL, name = NULL, sid = NULL, smiles = NULL, request.filesInfo = NULL)",
+    "siblings": [
+      "chemi_resolver_safety_flags"
+    ],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/safety-flags",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-resolver-prod.json",
+          "key": "POST /api/resolver/safety-flags",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1resolver~1safety-flags/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    }
+  },
+  "chemi_search_exact": {
+    "issue": 311,
+    "name": "chemi_search_exact",
+    "file": "R/chemi_search_exact.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = , exportSmiles = NULL, exportMol = NULL))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-search-prod-rebuild",
+      "key": "GET /api/search/exact",
+      "file": "R/chemi_search_exact.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_search_gethazard": {
+    "issue": 311,
+    "name": "chemi_search_gethazard",
+    "file": "R/chemi_search_gethazard.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(sid = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-search-prod-rebuild",
+      "key": "GET /api/search/gethazard",
+      "file": "R/chemi_search_gethazard.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_search_similar": {
+    "issue": 311,
+    "name": "chemi_search_similar",
+    "file": "R/chemi_search_similar.R",
+    "lifecycle": null,
+    "formals": "pairlist(smiles = NULL, dtxsid = NULL, exportSmiles = NULL, exportMol = NULL, min = NULL, max = NULL, similarityType = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-search-prod-rebuild",
+      "key": "GET /api/search/similar",
+      "file": "R/chemi_search_similar.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_search_substructure": {
+    "issue": 311,
+    "name": "chemi_search_substructure",
+    "file": "R/chemi_search_substructure.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = , exportSmiles = NULL, exportMol = NULL))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-search-prod-rebuild",
+      "key": "GET /api/search/substructure",
+      "file": "R/chemi_search_substructure.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_services_collated_report": {
+    "issue": 311,
+    "name": "chemi_services_collated_report",
+    "file": "R/chemi_services_collated_report.R",
+    "lifecycle": null,
+    "formals": "pairlist(alertRequest = NULL, chemicals = NULL, exportAlerts = NULL, exportHazard = NULL, exportHazard2 = NULL, exportPrediction = NULL, exportSafety = NULL, hazardRequest = NULL, predictionRequest = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-services-prod-rebuild",
+      "key": "POST /api/services/collated_report",
+      "file": "R/chemi_services_collated_report.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_services_convert": {
+    "issue": 311,
+    "name": "chemi_services_convert",
+    "file": "R/chemi_services_convert.R",
+    "lifecycle": null,
+    "formals": "pairlist(content = NULL, type = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-services-prod-rebuild",
+      "key": "POST /api/services/convert",
+      "file": "R/chemi_services_convert.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_services_layout": {
+    "issue": 311,
+    "name": "chemi_services_layout",
+    "file": "R/chemi_services_layout.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-services-prod-rebuild",
+      "key": "GET /api/services/layout",
+      "file": "R/chemi_services_layout.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_services_smirks2rxn": {
+    "issue": 311,
+    "name": "chemi_services_smirks2rxn",
+    "file": "R/chemi_services_smirks2rxn.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smirks = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-services-prod-rebuild",
+      "key": "GET /api/services/smirks2rxn",
+      "file": "R/chemi_services_smirks2rxn.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_stdizer": {
+    "issue": 311,
+    "name": "chemi_stdizer",
+    "file": "R/chemi_stdizer.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(workflow = , smiles = ))",
+    "siblings": [
+      "chemi_stdizer_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "stdizer",
+      "supported": [
+        "chemi-stdizer-prod.json GET /api/stdizer"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_stdizer_bulk": {
+    "issue": 311,
+    "name": "chemi_stdizer_bulk",
+    "file": "R/chemi_stdizer.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(request.filesInfo = NULL, request.options.recordId = NULL, request.options.run = NULL, request.options.workflow = NULL)",
+    "siblings": [
+      "chemi_stdizer"
+    ],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "stdizer",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-stdizer-prod.json",
+          "key": "POST /api/stdizer",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1stdizer/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    }
+  },
+  "chemi_stdizer_groups_bulk": {
+    "issue": 311,
+    "name": "chemi_stdizer_groups_bulk",
+    "file": "R/chemi_stdizer_groups.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(acl = NULL, description = NULL, flag = NULL, frozen = NULL, id = NULL, invalid = NULL, invalidMessage = NULL, operations = NULL, text = NULL, type = NULL, value = NULL, request.filesInfo = NULL, request.replace = NULL)",
+    "siblings": [
+      "chemi_stdizer_groups"
+    ],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "stdizer/groups",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-stdizer-prod.json",
+          "key": "POST /api/stdizer/groups",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1stdizer~1groups/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    }
+  },
+  "chemi_stdizer_records": {
+    "issue": 311,
+    "name": "chemi_stdizer_records",
+    "file": "R/chemi_stdizer_records.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(full = NULL, options = NULL, records = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Options prelude overwrites the public options argument (original defect); retained",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "stdizer/records",
+      "supported": [
+        "chemi-stdizer-prod.json POST /api/stdizer/records"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_toxprints": {
+    "issue": 311,
+    "name": "chemi_toxprints",
+    "file": "R/chemi_toxprints.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(smiles = , headers = FALSE, profile = NULL))",
+    "siblings": [
+      "chemi_toxprints_bulk"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints",
+      "file": "R/chemi_toxprints.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_toxprints_assays": {
+    "issue": 311,
+    "name": "chemi_toxprints_assays",
+    "file": "R/chemi_toxprints_assays.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(category = NULL, label = NULL)",
+    "siblings": [
+      "chemi_toxprints_assays_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "toxprints/assays",
+      "supported": [
+        "chemi-toxprints-prod.json GET /api/toxprints/assays",
+        "chemi-toxprints-prod.json GET /api/toxprints/assays/{name}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_toxprints_assays_bulk": {
+    "issue": 311,
+    "name": "chemi_toxprints_assays_bulk",
+    "file": "R/chemi_toxprints_assays.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL)",
+    "siblings": [
+      "chemi_toxprints_assays"
+    ],
+    "disposition": "retained",
+    "reason": "Options prelude overwrites the public options argument (original defect); retained",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "toxprints/assays",
+      "supported": [
+        "chemi-toxprints-prod.json POST /api/toxprints/assays"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_toxprints_assays_check": {
+    "issue": 311,
+    "name": "chemi_toxprints_assays_check",
+    "file": "R/chemi_toxprints_assays_check.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(name = ))",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/assays/check",
+      "file": "R/chemi_toxprints_assays_check.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_toxprints_calculate": {
+    "issue": 311,
+    "name": "chemi_toxprints_calculate",
+    "file": "R/chemi_toxprints_calculate.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , labels = FALSE, profile = NULL))",
+    "siblings": [
+      "chemi_toxprints_calculate_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "toxprints/calculate",
+      "supported": [
+        "chemi-toxprints-prod.json GET /api/toxprints/calculate"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_toxprints_global_assays": {
+    "issue": 311,
+    "name": "chemi_toxprints_global_assays",
+    "file": "R/chemi_toxprints_global_assays.R",
+    "lifecycle": null,
+    "formals": "pairlist(category = NULL, label = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/global_assays",
+      "file": "R/chemi_toxprints_global_assays.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_toxprints_global_toxprints": {
+    "issue": 311,
+    "name": "chemi_toxprints_global_toxprints",
+    "file": "R/chemi_toxprints_global_toxprints.R",
+    "lifecycle": null,
+    "formals": "pairlist(category = NULL, label = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/global_toxprints",
+      "file": "R/chemi_toxprints_global_toxprints.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_toxprints_toxprints": {
+    "issue": 311,
+    "name": "chemi_toxprints_toxprints",
+    "file": "R/chemi_toxprints_toxprints.R",
+    "lifecycle": null,
+    "formals": "pairlist(category = NULL, label = NULL)",
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/toxprints",
+      "file": "R/chemi_toxprints_toxprints.R",
+      "wave": "options-batch"
+    }
+  },
+  "ct_chemical_msready_search_by_mass_bulk": {
+    "issue": 311,
+    "name": "ct_chemical_msready_search_by_mass_bulk",
+    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(error = , masses = ))",
+    "siblings": [
+      "ct_chemical_msready_search_by_mass"
+    ],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "chemical/msready/search/by-mass/",
+      "supported": [
+        "ctx-chemical-prod.json POST /chemical/msready/search/by-mass/"
+      ],
+      "blocked": []
+    }
+  },
+  "epi_submit_batch": {
+    "issue": 311,
+    "name": "epi_submit_batch",
+    "file": "R/epi_submit_batch.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(modules = , advectionTimeAir = NULL, advectionTimeSediment = NULL, advectionTimeSoil = NULL, advectionTimeWater = NULL, amineNitrogens = NULL, aopRateConstant = NULL, averageMolecularWeight = NULL, averagingTimeDays = NULL, biowin3 = NULL, biowin5 = NULL, biowinScore = NULL, bodyWeightKg = NULL, boilingPointC = NULL, branchedCarbons = NULL, branches = NULL, carbonChainLength = NULL, cas = NULL, cationAnionRatio = NULL, chemicalName = NULL, daylightHours = NULL, emissionRateAir = NULL, emissionRateSediment = NULL, emissionRateSoil = NULL, emissionRateWater = NULL, ethoxylate = NULL, eventDurationHours = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, fractionAbsorbed = NULL, halfLifeAir = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursSettlingTank = NULL, halfLifeSediment = NULL, halfLifeSoil = NULL, halfLifeWater = NULL, henryAtmM3PerMol = NULL, koc = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, lakeWindMPerSec = NULL, logKoa = NULL, logKow = NULL, mainCarbons = NULL, meltingPointC = NULL, molecularWeight = NULL, mw1000Percentage = NULL, mw500Percentage = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, polymerType = NULL, propoxyGroups = NULL, removeMetals = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, riverWindMPerSec = NULL, skinSurfaceAreaCm2 = NULL, smiles = NULL, solubilityType = NULL, subcooledVaporPressureMmHg = NULL, theta = NULL, tspUgPerM3 = NULL, useSmiles = NULL, userKpCmPerHour = NULL, vaporPressureMmHg = NULL, vaporPressureTemperatureC = 25, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, waterSolubility = NULL, waterSolubilityMgPerL = NULL, waterSolubilityProvider = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "submit/batch",
+      "supported": [
+        "epi-suite-prod.json POST /api/submit/batch"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_alerts": {
+    "issue": 312,
+    "name": "chemi_alerts",
+    "file": "R/chemi_alerts.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.resolve = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "alerts",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-alerts-prod.json",
+          "key": "POST /api/alerts",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1alerts/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_descriptors": {
+    "issue": 312,
+    "name": "chemi_descriptors",
+    "file": "R/chemi_descriptors.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , type = , headers = FALSE, format = \"JSON\", timeout = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_descriptors_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_aggregate_descriptor_request",
+        "apply_aggregate_rdkit_fallback"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_descriptors_bulk": {
+    "issue": 312,
+    "name": "chemi_descriptors_bulk",
+    "file": "R/chemi_descriptors.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , type = , chemIdType = \"AnyId\", headers = FALSE, format = \"JSON\", timeout = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_descriptors"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_aggregate_descriptor_request",
+        "apply_aggregate_rdkit_fallback"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "headers",
+        "timeout",
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_hazard": {
+    "issue": 312,
+    "name": "chemi_hazard",
+    "file": "R/chemi_hazard.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , full = TRUE, format = c(\"compact\", \"tidy\", \"raw\")))",
+    "siblings": [
+      "chemi_hazard_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "hazard",
+      "supported": [
+        "chemi-hazard-prod.json GET /api/hazard"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "format_chemi_hazard_result"
+      ],
+      "extra_params": [
+        "format"
+      ],
+      "defined_in": [
+        "R/hooks_hazard.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "chemi_hazard_bulk": {
+    "issue": 312,
+    "name": "chemi_hazard_bulk",
+    "file": "R/chemi_hazard.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", empty = NULL, options = NULL, request.filesInfo = NULL, request.options.analogsSearchType = NULL, request.options.cts = NULL, request.options.minSimilarity = NULL, request.options.noRecords = NULL, request.options.usePredictions = NULL, format = c(\"compact\", \"tidy\", \"raw\")))",
+    "siblings": [
+      "chemi_hazard"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "hazard",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-hazard-prod.json",
+          "key": "POST /api/hazard",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1hazard/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [
+        "format_chemi_hazard_result"
+      ],
+      "extra_params": [
+        "format"
+      ],
+      "defined_in": [
+        "R/hooks_compound.R",
+        "R/hooks_hazard.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_mordred": {
+    "issue": 312,
+    "name": "chemi_mordred",
+    "file": "R/chemi_mordred.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , headers = NULL, inchi = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_mordred_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_mordred_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_mordred_bulk": {
+    "issue": 312,
+    "name": "chemi_mordred_bulk",
+    "file": "R/chemi_mordred.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(chemicals = , options = NULL, headers = NULL, inchi = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_mordred"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_mordred_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "headers",
+        "inchi",
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_padel": {
+    "issue": 312,
+    "name": "chemi_padel",
+    "file": "R/chemi_padel.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_padel_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_padel_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_padel_bulk": {
+    "issue": 312,
+    "name": "chemi_padel_bulk",
+    "file": "R/chemi_padel.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_padel"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_padel_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "x2d",
+        "x3d",
+        "fp",
+        "headers",
+        "timeout",
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_rdkit": {
+    "issue": 312,
+    "name": "chemi_rdkit",
+    "file": "R/chemi_rdkit.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , type = NULL, radius = NULL, bits = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_rdkit_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_rdkit_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_rdkit_bulk": {
+    "issue": 312,
+    "name": "chemi_rdkit_bulk",
+    "file": "R/chemi_rdkit.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(chemicals = , options = NULL, type = NULL, radius = NULL, bits = NULL, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_rdkit"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_rdkit_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "type",
+        "radius",
+        "bits",
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_resolver_getpubchemlist": {
+    "issue": 312,
+    "name": "chemi_resolver_getpubchemlist",
+    "file": "R/chemi_resolver_getpubchemlist.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, all_pages = TRUE, max_pages = 100))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/getpubchemlist",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/getpubchemlist"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_resolver_getsimilaritylist": {
+    "issue": 312,
+    "name": "chemi_resolver_getsimilaritylist",
+    "file": "R/chemi_resolver_getsimilaritylist.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/getsimilaritylist",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/getsimilaritylist"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_resolver_getsimilaritymap": {
+    "issue": 312,
+    "name": "chemi_resolver_getsimilaritymap",
+    "file": "R/chemi_resolver_getsimilaritymap.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, sort = FALSE, hclust_method = \"complete\", format = c(\"cluster\", \"long\", \"raw\")))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/getsimilaritymap",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/getsimilaritymap"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records",
+        "flatten_similarity_map_chemicals"
+      ],
+      "post_response": [
+        "format_similarity_map_result"
+      ],
+      "extra_params": [
+        "hclust_method",
+        "format"
+      ],
+      "defined_in": [
+        "R/hooks_compound.R",
+        "R/hooks_compound.R",
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_resolver_orderBySimilarity": {
+    "issue": 312,
+    "name": "chemi_resolver_orderBySimilarity",
+    "file": "R/chemi_resolver_orderBySimilarity.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/orderBySimilarity",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/orderBySimilarity"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_resolver_pubchem_section_bulk": {
+    "issue": 312,
+    "name": "chemi_resolver_pubchem_section_bulk",
+    "file": "R/chemi_resolver_pubchem_section.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))",
+    "siblings": [
+      "chemi_resolver_pubchem_section"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "resolver/pubchem-section",
+      "supported": [
+        "chemi-resolver-prod.json POST /api/resolver/pubchem-section"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_stdizer_chemicals": {
+    "issue": 312,
+    "name": "chemi_stdizer_chemicals",
+    "file": "R/chemi_stdizer_chemicals.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", full = NULL, options = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "stdizer/chemicals",
+      "supported": [
+        "chemi-stdizer-prod.json POST /api/stdizer/chemicals"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_toxprints_calculate_bulk": {
+    "issue": 312,
+    "name": "chemi_toxprints_calculate_bulk",
+    "file": "R/chemi_toxprints_calculate.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , idType = \"AnyId\", labels = NULL, options = NULL, request.filesInfo = NULL, request.labels = NULL, request.options.OR = NULL, request.options.PV1 = NULL, request.options.TP = NULL, request.options.or = NULL, request.options.profile = NULL, request.options.pv1 = NULL, request.options.tp = NULL, request.resolve = NULL))",
+    "siblings": [
+      "chemi_toxprints_calculate"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "toxprints/calculate",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-toxprints-prod.json",
+          "key": "POST /api/toxprints/calculate",
+          "code": "binary_parameter",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+          "issue": 28
+        }
+      ]
+    },
+    "hooks": {
+      "pre_request": [
+        "resolve_query_to_chemical_records"
+      ],
+      "post_response": [],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_compound.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": false,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_webtest": {
+    "issue": 312,
+    "name": "chemi_webtest",
+    "file": "R/chemi_webtest.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , headers = FALSE, output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_webtest_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_webtest_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_webtest_bulk": {
+    "issue": 312,
+    "name": "chemi_webtest_bulk",
+    "file": "R/chemi_webtest.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(query = , chemIdType = \"AnyId\", headers = FALSE, format = \"JSON\", output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_webtest"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_descriptor_request",
+        "resolve_descriptor_inputs",
+        "prepare_webtest_descriptor_request"
+      ],
+      "post_response": [
+        "validate_descriptor_response",
+        "recover_descriptor_rows",
+        "add_descriptor_provenance",
+        "format_descriptor_result"
+      ],
+      "extra_params": [
+        "chemIdType",
+        "headers",
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R",
+        "R/hooks_descriptors.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_webtest_predict": {
+    "issue": 312,
+    "name": "chemi_webtest_predict",
+    "file": "R/chemi_webtest_predict.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(smiles = , endpoint = , method = \"consensus\", format = \"JSON\", output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_webtest_predict_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_webtest_prediction_request",
+        "resolve_webtest_prediction_inputs",
+        "prepare_webtest_prediction_request"
+      ],
+      "post_response": [
+        "filter_webtest_prediction_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "chemi_webtest_predict_bulk": {
+    "issue": 312,
+    "name": "chemi_webtest_predict_bulk",
+    "file": "R/chemi_webtest_predict.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(structures = , endpoints = , methods = NULL, format = \"JSON\", output = c(\"wide\", \"raw\")))",
+    "siblings": [
+      "chemi_webtest_predict"
+    ],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "endpoint": "computed"
+    },
+    "hooks": {
+      "pre_request": [
+        "validate_webtest_prediction_request",
+        "resolve_webtest_prediction_inputs",
+        "prepare_webtest_prediction_request"
+      ],
+      "post_response": [
+        "filter_webtest_prediction_result"
+      ],
+      "extra_params": [
+        "output"
+      ],
+      "defined_in": [
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R",
+        "R/hooks_webtest.R"
+      ],
+      "invokes_pre_request": true,
+      "invokes_post_response": true,
+      "handles_skip_request": true
+    }
+  },
+  "epi_ecosar_dye": {
+    "issue": 312,
+    "name": "epi_ecosar_dye",
+    "file": "R/epi_ecosar_dye.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "ecosar/dye",
+      "supported": [
+        "epi-suite-prod.json GET /api/ecosar/dye"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "unwrap_epi_result"
+      ],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_epi.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "epi_ecosar_polymer_nonionic": {
+    "issue": 312,
+    "name": "epi_ecosar_polymer_nonionic",
+    "file": "R/epi_ecosar_polymer_nonionic.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "ecosar/polymer/nonionic",
+      "supported": [
+        "epi-suite-prod.json GET /api/ecosar/polymer/nonionic"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "unwrap_epi_result"
+      ],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_epi.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "epi_ecosar_surfactant_nonionic": {
+    "issue": 312,
+    "name": "epi_ecosar_surfactant_nonionic",
+    "file": "R/epi_ecosar_surfactant_nonionic.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "ecosar/surfactant/nonionic",
+      "supported": [
+        "epi-suite-prod.json GET /api/ecosar/surfactant/nonionic"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "unwrap_epi_result"
+      ],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_epi.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "epi_submit": {
+    "issue": 312,
+    "name": "epi_submit",
+    "file": "R/epi_submit.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(smiles = NULL, cas = NULL, modules = NULL, chemicalName = NULL, logKow = NULL, molecularWeight = NULL, waterSolubilityMgPerL = NULL, waterSolubility = NULL, waterSolubilityProvider = \"wskow\", vaporPressureMmHg = NULL, subcooledVaporPressureMmHg = NULL, henryAtmM3PerMol = NULL, logKoa = NULL, koc = NULL, meltingPointC = NULL, boilingPointC = NULL, vaporPressureTemperatureC = 25, aopRateConstant = NULL, biowinScore = NULL, biowin3 = NULL, biowin5 = NULL, removeMetals = TRUE, tspUgPerM3 = 80, theta = 0.00010836, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, skinSurfaceAreaCm2 = NULL, bodyWeightKg = NULL, averagingTimeDays = NULL, fractionAbsorbed = NULL, eventDurationHours = NULL, userKpCmPerHour = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursSettlingTank = NULL, halfLifeAir = NULL, halfLifeWater = NULL, halfLifeSoil = NULL, halfLifeSediment = NULL, emissionRateAir = NULL, emissionRateWater = NULL, emissionRateSoil = NULL, emissionRateSediment = NULL, advectionTimeAir = NULL, advectionTimeWater = NULL, advectionTimeSoil = NULL, advectionTimeSediment = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, daylightHours = 12, riverWindMPerSec = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, lakeWindMPerSec = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, carbonChainLength = NULL, mainCarbons = NULL, branchedCarbons = NULL, branches = NULL, propoxyGroups = NULL, ethoxylate = NULL, amineNitrogens = NULL, cationAnionRatio = NULL, mw500Percentage = NULL, mw1000Percentage = NULL, averageMolecularWeight = NULL, useSmiles = NULL, solubilityType = NULL, polymerType = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "Client hook policy requires manual review",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "submit",
+      "supported": [
+        "epi-suite-prod.json GET /api/submit"
+      ],
+      "blocked": []
+    },
+    "hooks": {
+      "pre_request": [],
+      "post_response": [
+        "unwrap_epi_result"
+      ],
+      "extra_params": [],
+      "defined_in": [
+        "R/hooks_epi.R"
+      ],
+      "invokes_pre_request": false,
+      "invokes_post_response": true,
+      "handles_skip_request": false
+    }
+  },
+  "chemi_amos_count_substances_in_ids": {
+    "issue": 313,
+    "name": "chemi_amos_count_substances_in_ids",
+    "file": "R/chemi_amos_count_substances_in_ids.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(internal_id_list = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/count_substances_in_ids/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/count_substances_in_ids/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1count_substances_in_ids~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_dtxsids": {
+    "issue": 313,
+    "name": "chemi_amos_dtxsids",
+    "file": "R/chemi_amos_dtxsids.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(dtxsids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/dtxsids/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/dtxsids/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1dtxsids~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_get_pdf": {
+    "issue": 313,
+    "name": "chemi_amos_get_pdf",
+    "file": "R/chemi_amos_get_pdf.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(record_type = , internal_id = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/get_pdf/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/get_pdf/{record_type}/{internal_id}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_get_similar_structures": {
+    "issue": 313,
+    "name": "chemi_amos_get_similar_structures",
+    "file": "R/chemi_amos_get_similar_structures.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(identifier_type = , identifier = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/get_similar_structures/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "GET /api/amos/get_similar_structures/{identifier_type}/{identifier}",
+          "code": "unmatched_path_parameter",
+          "reason": "Unmatched path parameter: dtxsid",
+          "pointer": "#/paths/~1api~1amos~1get_similar_structures~1{identifier_type}~1{identifier}/get/parameters/0",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_list_sources_by_record_type": {
+    "issue": 313,
+    "name": "chemi_amos_list_sources_by_record_type",
+    "file": "R/chemi_amos_list_sources_by_record_type.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/list_sources_by_record_type/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "GET /api/amos/list_sources_by_record_type/{record_type}",
+          "code": "missing_path_parameter",
+          "reason": "Missing path parameter: record_type",
+          "pointer": "#/paths/~1api~1amos~1list_sources_by_record_type~1{record_type}",
+          "issue": 27
+        }
+      ]
+    }
+  },
+  "chemi_amos_mass_spectra_for_substances": {
+    "issue": 313,
+    "name": "chemi_amos_mass_spectra_for_substances",
+    "file": "R/chemi_amos_mass_spectra_for_substances.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(dtxsids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/mass_spectra_for_substances/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/mass_spectra_for_substances/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1mass_spectra_for_substances~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_method_with_spectra": {
+    "issue": 313,
+    "name": "chemi_amos_method_with_spectra",
+    "file": "R/chemi_amos_method_with_spectra.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(search_type = , internal_id = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/method_with_spectra/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_record_counts": {
+    "issue": 313,
+    "name": "chemi_amos_record_counts",
+    "file": "R/chemi_amos_record_counts.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(dtxsids = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/record_counts_by_dtxsid/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/record_counts_by_dtxsid/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1record_counts_by_dtxsid~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_record_ids_for_substance": {
+    "issue": 313,
+    "name": "chemi_amos_record_ids_for_substance",
+    "file": "R/chemi_amos_record_ids_for_substance.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(dtxsid = , record_type = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "amos/record_ids_for_substance/",
+      "supported": [
+        "chemi-amos-prod.json GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_amos_spectral_entropy": {
+    "issue": 313,
+    "name": "chemi_amos_spectral_entropy",
+    "file": "R/chemi_amos_spectral_entropy.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(spectrum = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/spectral_entropy/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/spectral_entropy/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1spectral_entropy~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_amos_substances_for_ids": {
+    "issue": 313,
+    "name": "chemi_amos_substances_for_ids",
+    "file": "R/chemi_amos_substances_for_ids.R",
+    "lifecycle": "experimental",
+    "formals": "pairlist(internal_id_list = NULL)",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_chemi_request",
+      "helper_calls": 1,
+      "method": "POST",
+      "endpoint": "amos/substances_for_ids/",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-amos-prod.json",
+          "key": "POST /api/amos/substances_for_ids/",
+          "code": "body_media_type",
+          "reason": "Ambiguous body media type",
+          "pointer": "#/paths/~1api~1amos~1substances_for_ids~1/post/parameters/0/schema",
+          "issue": 26
+        }
+      ]
+    }
+  },
+  "chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
+    "issue": 313,
+    "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
+    "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(pagenum = , searchterm = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "reaction/database-old/",
+      "supported": [
+        "chemi-chet-prod.json GET /reaction/database-old/{pagenum}/{searchterm}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_chet_reaction_searchcounts": {
+    "issue": 313,
+    "name": "chemi_chet_reaction_searchcounts",
+    "file": "R/chemi_chet_reaction_searchcounts.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(search_input = , search_type = NULL))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "reaction/searchcounts/",
+      "supported": [
+        "chemi-chet-prod.json GET /reaction/searchcounts/{search_input}/{search_type}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_resolver_ghs_list_count": {
+    "issue": 313,
+    "name": "chemi_resolver_ghs_list_count",
+    "file": "R/chemi_resolver_ghs_list_count.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "resolver/ghs-list-count",
+      "supported": [],
+      "blocked": [
+        {
+          "schema": "chemi-resolver-prod.json",
+          "key": "GET /api/resolver/ghs-list-count",
+          "code": "request_body_method",
+          "reason": "OAS 3.1 GET request body requires an explicit operation body_media review",
+          "pointer": "#/paths/~1api~1resolver~1ghs-list-count/get/requestBody",
+          "issue": 29
+        }
+      ]
+    }
+  },
+  "chemi_stdizer_groups_recursive": {
+    "issue": 313,
+    "name": "chemi_stdizer_groups_recursive",
+    "file": "R/chemi_stdizer_groups_recursive.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(id = ))",
+    "siblings": [],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "stdizer/groups/recursive",
+      "supported": [
+        "chemi-stdizer-prod.json GET /api/stdizer/groups/{id}/recursive"
+      ],
+      "blocked": []
+    }
+  },
+  "ct_chemical_msready_search_by_mass": {
+    "issue": 313,
+    "name": "ct_chemical_msready_search_by_mass",
+    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "lifecycle": "experimental",
+    "formals": "as.pairlist(alist(start = , end = NULL))",
+    "siblings": [
+      "ct_chemical_msready_search_by_mass_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "chemical/msready/search/by-mass/",
+      "supported": [
+        "ctx-chemical-prod.json GET /chemical/msready/search/by-mass/{start}/{end}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_alerts_groups": {
+    "issue": 314,
+    "name": "chemi_alerts_groups",
+    "file": "R/chemi_alerts_groups.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [
+      "chemi_alerts_groups_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "alerts/groups",
+      "supported": [
+        "chemi-alerts-prod.json GET /api/alerts/groups",
+        "chemi-alerts-prod.json GET /api/alerts/groups/{id}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_ncc_cats_bulk": {
+    "issue": 314,
+    "name": "chemi_ncc_cats_bulk",
+    "file": "R/chemi_ncc_cats.R",
+    "lifecycle": null,
+    "formals": "pairlist(chemicals = NULL)",
+    "siblings": [
+      "chemi_ncc_cats"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-ncc_cats-prod-rebuild",
+      "key": "POST /api/ncc_cats",
+      "file": "R/chemi_ncc_cats.R",
+      "wave": "options-batch"
+    }
+  },
+  "chemi_stdizer_groups": {
+    "issue": 314,
+    "name": "chemi_stdizer_groups",
+    "file": "R/chemi_stdizer_groups.R",
+    "lifecycle": "experimental",
+    "formals": "NULL",
+    "siblings": [
+      "chemi_stdizer_groups_bulk"
+    ],
+    "disposition": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "route": {
+      "helper": "generic_request",
+      "helper_calls": 1,
+      "method": "GET",
+      "endpoint": "stdizer/groups",
+      "supported": [
+        "chemi-stdizer-prod.json GET /api/stdizer/groups",
+        "chemi-stdizer-prod.json GET /api/stdizer/groups/{id}"
+      ],
+      "blocked": []
+    }
+  },
+  "chemi_toxprints_bulk": {
+    "issue": 314,
+    "name": "chemi_toxprints_bulk",
+    "file": "R/chemi_toxprints.R",
+    "lifecycle": null,
+    "formals": "as.pairlist(alist(query = ))",
+    "siblings": [
+      "chemi_toxprints"
+    ],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "POST /api/toxprints",
+      "file": "R/chemi_toxprints.R",
+      "wave": "options-batch"
+    }
+  }
+}
