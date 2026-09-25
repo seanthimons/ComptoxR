@@ -104,10 +104,14 @@ for (name in names(full_cases)) {
         a <- arguments
         a$query <- encoded[[query_parameter]]
         probe(paste0(name, '-encoding'), do.call(fun, encoded), wire_for(a), response)
-        batched <- supplied
-        batched[[query_parameter]] <- c('record 1', 'record 2', 'record 1', 'record 3')
-        a$query <- batched[[query_parameter]]
-        probe(paste0(name, '-batches'), do.call(fun, batched), wire_for(a), response)
+        # The original paginated helper requests only the first query of a batch, so
+        # batching is probed for non-paginated wrappers only.
+        if (!isTRUE(arguments$paginate)) {
+          batched <- supplied
+          batched[[query_parameter]] <- c('record 1', 'record 2', 'record 1', 'record 3')
+          a$query <- batched[[query_parameter]]
+          probe(paste0(name, '-batches'), do.call(fun, batched), wire_for(a), response)
+        }
       }
       NULL
     },
