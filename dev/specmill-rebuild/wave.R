@@ -269,7 +269,7 @@ file.symlink(file.path(root, 'dev/specmill-pilot/artifacts/toolkit-library'), fi
 # output of the generated worktree with roxygen output of its baseline.
 roxygenise <- function() {
   stopifnot(system(sprintf("cd %s && Rscript -e 'roxygen2::roxygenise(roclets = c(\"rd\", \"namespace\"))' > /dev/null 2>&1", shQuote(work))) == 0L)
-  docs <- c(file.path(work, 'NAMESPACE'), list.files(file.path(work, 'man'), full.names = TRUE))
+  docs <- c(file.path(work, 'NAMESPACE'), list.files(file.path(work, 'man'), pattern = '[.]Rd$', full.names = TRUE))
   hashes <- setNames(vapply(docs, digest::digest, '', file = TRUE, algo = 'sha256'), basename(docs))
   stopifnot(system(sprintf('cd %s && git checkout -- man NAMESPACE && git clean -fdq man', shQuote(work))) == 0L)
   hashes
