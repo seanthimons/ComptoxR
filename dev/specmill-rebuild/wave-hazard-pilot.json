@@ -1,0 +1,39 @@
+{
+  "wave": "hazard-pilot",
+  "base_commit": "18696a47b60f092ce3fd0b922d74fbc548eb3150",
+  "worktree": "/home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/wave-hazard-pilot",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.6",
+    "source_commit": "66c5e1f4d5a8b1a24d4a4946a6d2c1efe9c68d10",
+    "source_archive_sha256": "6b2d5e647032acfa265892cb8ec9464293dc5d4689f5a3c5a3977c853085fe99",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 5,
+  "files": [
+    "R/ct_hazard_iris_search.R",
+    "R/ct_hazard_pprtv_search.R",
+    "R/ct_hazard_hawc_search.R",
+    "R/ct_hazard_adme_ivive_search.R",
+    "R/ct_hazard_toxval_supercategory_search.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M DESCRIPTION",
+    " M R/ct_hazard_adme_ivive_search.R",
+    " M R/ct_hazard_hawc_search.R",
+    " M R/ct_hazard_iris_search.R",
+    " M R/ct_hazard_pprtv_search.R",
+    " M R/ct_hazard_toxval_supercategory_search.R",
+    " M specmill.yml",
+    "?? apis/ctx-hazard-prod-rebuild.yml",
+    "?? dev/specmill-rebuild/runtime-cases.rds",
+    "?? tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? tests/testthat/test-contract-ct_hazard_adme_ivive_search.R",
+    "?? tests/testthat/test-contract-ct_hazard_hawc_search.R",
+    "?? tests/testthat/test-contract-ct_hazard_iris_search.R",
+    "?? tests/testthat/test-contract-ct_hazard_pprtv_search.R",
+    "?? tests/testthat/test-contract-ct_hazard_toxval_supercategory_search.R"
+  ]
+}

@@ -1,0 +1,176 @@
+id: ctx-hazard-prod-rebuild
+schemas:
+  files:
+  - schema/ctx-hazard-prod.json
+selection:
+  include:
+  - GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}
+  - GET /hazard/hawc/search/by-dtxsid/{dtxsid}
+  - GET /hazard/iris/search/by-dtxsid/{dtxsid}
+  - GET /hazard/pprtv/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}
+helper: generic_request
+documentation: yes
+operations:
+  GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_adme_ivive_search
+    file: R/ct_hazard_adme_ivive_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: ~
+        description: 'Specifies if projection is used. Option: ccd-adme-data. If omitted,
+          the default ADME-IVIVE projection is returned.'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/adme-ivive/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get ADME data for IVIVE by DTXSID with CCD projection
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies if projection is used. Option: ccd-adme-data. If omitted,
+          the default ADME-IVIVE projection is returned.'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /hazard/hawc/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_hawc_search
+    file: R/ct_hazard_hawc_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/hawc/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get HAWC link by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /hazard/iris/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_iris_search
+    file: R/ct_hazard_iris_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/iris/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get IRIS data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /hazard/pprtv/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_pprtv_search
+    file: R/ct_hazard_pprtv_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/pprtv/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get PPRTV data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID2040282
+  GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxval_supercategory_search
+    file: R/ct_hazard_toxval_supercategory_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/supercategory/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get all toxval supercategories by dtxsid
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
