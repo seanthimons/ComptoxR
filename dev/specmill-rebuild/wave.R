@@ -248,6 +248,11 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       original <- eval(record$original, envir = new.env(parent = baseenv()))
       required <- names(Filter(function(x) isTRUE(x$required), record$proposal$inputs))
       supplied <- setNames(as.list(sprintf('pilot-%d', seq_along(required))), required)
+      # Chemi helpers reject an empty query at runtime, so observed option wrappers also supply the query input.
+      query <- record$proposal$request$arguments$query$from
+      if (length(record$option_params) && identical(record$proposal$helper, 'generic_chemi_request') && identical(query[[1L]], 'params')) {
+        supplied[[query[[2L]]]] <- supplied[[query[[2L]]]] %||% 'pilot-query'
+      }
       calls <- list()
       helper <- record$proposal$helper
       assign(helper, function(...) {
