@@ -1,0 +1,239 @@
+id: chemi-services-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-services-prod.json
+selection:
+  include:
+  - GET /api/services/layout
+  - GET /api/services/smirks2rxn
+  - POST /api/services/collated_report
+  - POST /api/services/convert
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/services/layout:
+    name: chemi_services_layout
+    file: R/chemi_services_layout.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: services/layout
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Services Layout
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/services/smirks2rxn:
+    name: chemi_services_smirks2rxn
+    file: R/chemi_services_smirks2rxn.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smirks:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: services/smirks2rxn
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smirks:
+              from:
+              - params
+              - smirks
+    docs:
+      title: Services Smirks2rxn
+      lifecycle: experimental
+      parameters:
+        smirks: Required parameter
+      return: Returns a tibble with results
+      examples:
+      - smirks: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/services/collated_report:
+    name: chemi_services_collated_report
+    file: R/chemi_services_collated_report.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      alertRequest:
+        type: character
+        default: ~
+        description: Optional parameter
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportAlerts:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportHazard:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportHazard2:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportPrediction:
+        type: character
+        default: ~
+        description: Optional parameter
+      exportSafety:
+        type: character
+        default: ~
+        description: Optional parameter
+      hazardRequest:
+        type: character
+        default: ~
+        description: Optional parameter
+      predictionRequest:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - alertRequest
+        endpoint:
+          value: services/collated_report
+        options:
+          compact_object:
+            chemicals:
+              from:
+              - params
+              - chemicals
+            exportAlerts:
+              from:
+              - params
+              - exportAlerts
+            exportHazard:
+              from:
+              - params
+              - exportHazard
+            exportHazard2:
+              from:
+              - params
+              - exportHazard2
+            exportPrediction:
+              from:
+              - params
+              - exportPrediction
+            exportSafety:
+              from:
+              - params
+              - exportSafety
+            hazardRequest:
+              from:
+              - params
+              - hazardRequest
+            predictionRequest:
+              from:
+              - params
+              - predictionRequest
+        tidy:
+          value: no
+    docs:
+      title: Services Collated Report
+      lifecycle: experimental
+      parameters:
+        alertRequest: Optional parameter
+        chemicals: Optional parameter
+        exportAlerts: Optional parameter
+        exportHazard: Optional parameter
+        exportHazard2: Optional parameter
+        exportPrediction: Optional parameter
+        exportSafety: Optional parameter
+        hazardRequest: Optional parameter
+        predictionRequest: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - alertRequest: DTXSID1024122
+      tags:
+        apiStage: public
+  POST /api/services/convert:
+    name: chemi_services_convert
+    file: R/chemi_services_convert.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      content:
+        type: character
+        default: ~
+        description: Optional parameter
+      type:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - content
+        endpoint:
+          value: services/convert
+        options:
+          compact_object:
+            type:
+              from:
+              - params
+              - type
+        tidy:
+          value: no
+    docs:
+      title: Services Convert
+      lifecycle: experimental
+      parameters:
+        content: Optional parameter
+        type: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - content: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 834,
+  "passed_cases": 1015,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -369,6 +369,214 @@
     "epi_ecosar_surfactant_cationic": {
       "schema": "epi-suite-prod.json",
       "key": "GET /api/ecosar/surfactant/cationic"
+    },
+    "chemi_amnb_nate": {
+      "schema": "chemi-amnb_nate-prod.json",
+      "key": "GET /api/amnb_nate"
+    },
+    "chemi_amnb_nate_bulk": {
+      "schema": "chemi-amnb_nate-prod.json",
+      "key": "POST /api/amnb_nate"
+    },
+    "chemi_arn_cats": {
+      "schema": "chemi-arn_cats-prod.json",
+      "key": "GET /api/arn_cats"
+    },
+    "chemi_arn_cats_bulk": {
+      "schema": "chemi-arn_cats-prod.json",
+      "key": "POST /api/arn_cats"
+    },
+    "chemi_chet_chemicals_alias": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/alias"
+    },
+    "chemi_chet_chemicals_chemset": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/chemset"
+    },
+    "chemi_chet_chemicals_counts": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/counts"
+    },
+    "chemi_chet_chemicals_database": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/database"
+    },
+    "chemi_chet_chemicals_database_stats": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/database/stats"
+    },
+    "chemi_chet_chemicals_maps": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/maps"
+    },
+    "chemi_chet_chemicals_singlechemical": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/singlechemical"
+    },
+    "chemi_chet_chemicals_suggest": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/suggest"
+    },
+    "chemi_chet_reaction": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/search"
+    },
+    "chemi_chet_reaction_database": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/database"
+    },
+    "chemi_chet_reaction_database_stats": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/database/stats"
+    },
+    "chemi_chet_reaction_details": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/details"
+    },
+    "chemi_chet_reaction_mapid": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/mapid"
+    },
+    "chemi_chet_reaction_react_maps": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/react_maps"
+    },
+    "chemi_chet_reaction_reactionmap": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/reactionmap"
+    },
+    "chemi_chet_reaction_singlereaction": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/singlereaction"
+    },
+    "chemi_chet_reaction_table": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/table"
+    },
+    "chemi_ncc_cats": {
+      "schema": "chemi-ncc_cats-prod.json",
+      "key": "GET /api/ncc_cats"
+    },
+    "chemi_ncc_cats_bulk": {
+      "schema": "chemi-ncc_cats-prod.json",
+      "key": "POST /api/ncc_cats"
+    },
+    "chemi_opera_report": {
+      "schema": "chemi-opera-prod.json",
+      "key": "GET /api/opera/report"
+    },
+    "chemi_pfas_atlas": {
+      "schema": "chemi-pfas_atlas-prod.json",
+      "key": "GET /api/pfas_atlas"
+    },
+    "chemi_pfas_atlas_bulk": {
+      "schema": "chemi-pfas_atlas-prod.json",
+      "key": "POST /api/pfas_atlas"
+    },
+    "chemi_pfas_cats": {
+      "schema": "chemi-pfas_cats-prod.json",
+      "key": "GET /api/pfas_cats"
+    },
+    "chemi_pfas_cats_bulk": {
+      "schema": "chemi-pfas_cats-prod.json",
+      "key": "POST /api/pfas_cats"
+    },
+    "chemi_resolver_ccte_list": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/ccte-list"
+    },
+    "chemi_resolver_classyfire": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/classyfire"
+    },
+    "chemi_resolver_getannotation": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/getannotation"
+    },
+    "chemi_resolver_getannotationslist": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/getannotationslist"
+    },
+    "chemi_resolver_getsubstance": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/getsubstance"
+    },
+    "chemi_resolver_ghs_list": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/ghs-list"
+    },
+    "chemi_resolver_links": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/links"
+    },
+    "chemi_resolver_lookupCASRN": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/lookupCASRN"
+    },
+    "chemi_resolver_mesh": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/mesh"
+    },
+    "chemi_resolver_resolve": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/resolve"
+    },
+    "chemi_search_exact": {
+      "schema": "chemi-search-prod.json",
+      "key": "GET /api/search/exact"
+    },
+    "chemi_search_gethazard": {
+      "schema": "chemi-search-prod.json",
+      "key": "GET /api/search/gethazard"
+    },
+    "chemi_search_similar": {
+      "schema": "chemi-search-prod.json",
+      "key": "GET /api/search/similar"
+    },
+    "chemi_search_substructure": {
+      "schema": "chemi-search-prod.json",
+      "key": "GET /api/search/substructure"
+    },
+    "chemi_services_collated_report": {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/collated_report"
+    },
+    "chemi_services_convert": {
+      "schema": "chemi-services-prod.json",
+      "key": "POST /api/services/convert"
+    },
+    "chemi_services_layout": {
+      "schema": "chemi-services-prod.json",
+      "key": "GET /api/services/layout"
+    },
+    "chemi_services_smirks2rxn": {
+      "schema": "chemi-services-prod.json",
+      "key": "GET /api/services/smirks2rxn"
+    },
+    "chemi_toxprints": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints"
+    },
+    "chemi_toxprints_assays_check": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/assays/check"
+    },
+    "chemi_toxprints_bulk": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "POST /api/toxprints"
+    },
+    "chemi_toxprints_global_assays": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/global_assays"
+    },
+    "chemi_toxprints_global_toxprints": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/global_toxprints"
+    },
+    "chemi_toxprints_toxprints": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/toxprints"
     },
     "ct_bioactivity_analyticalqc_search": {
       "schema": "ctx-bioactivity-prod.json",
@@ -3867,6 +4075,1273 @@
       "error_message": null
     },
     "epi_ecosar_surfactant_cationic-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_amnb_nate-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amnb_nate-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amnb_nate-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_amnb_nate": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_amnb_nate_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amnb_nate_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amnb_nate_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_arn_cats-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_arn_cats-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_arn_cats-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_arn_cats": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_arn_cats_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_arn_cats_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_arn_cats_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_alias-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_alias-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_alias-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_chemset-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_chemset-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_chemset-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_counts-minimal": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/counts\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_counts-explicit": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/counts\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_counts-pagination": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 2 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/counts\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database-minimal": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database-explicit": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database-pagination": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 2 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"chemicals/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database_stats-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database_stats-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_database_stats-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_maps-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_maps-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_maps-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_singlechemical-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_singlechemical-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_singlechemical-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_chemicals_suggest-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_suggest-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_chemicals_suggest-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_chet_chemicals_suggest": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_chet_reaction-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_database-minimal": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"reaction/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database-explicit": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"reaction/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database-pagination": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 2 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"reaction/database\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_stats-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_stats-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_stats-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_details-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_details-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_details-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_mapid-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_mapid-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_mapid-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_react_maps-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_react_maps-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_react_maps-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_reactionmap-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_reactionmap-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_reactionmap-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_singlereaction-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_singlereaction-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_singlereaction-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_table-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_table-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_table-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_ncc_cats-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_ncc_cats-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_ncc_cats-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_ncc_cats": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_ncc_cats_bulk-public-defaults": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Either query or chemicals parameter must be provided."
+    },
+    "chemi_ncc_cats_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_ncc_cats_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_opera_report-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_opera_report-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_opera_report-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_opera_report": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "chemi_pfas_atlas-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_atlas-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_atlas-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_pfas_atlas": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_pfas_atlas_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_atlas_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_atlas_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_pfas_cats-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_cats-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_cats-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_pfas_cats": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_pfas_cats_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_cats_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_pfas_cats_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_resolver_ccte_list-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_ccte_list-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_ccte_list-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_ccte_list": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_resolver_classyfire-minimal": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"resolver/classyfire\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_classyfire-explicit": {
+      "requests": 100,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 100 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"resolver/classyfire\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_classyfire-pagination": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": ["Pagination stopped at 2 pages (the `max_pages` limit).\nℹ More data may be available. Increase `max_pages` to fetch additional pages.", "No results found for the given query in \"resolver/classyfire\"."],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getannotation-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getannotation-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getannotation-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_getannotation": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_resolver_getannotationslist-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getannotationslist-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getannotationslist-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_getannotationslist": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_resolver_getsubstance-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getsubstance-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getsubstance-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_getsubstance": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_resolver_ghs_list-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_ghs_list-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_ghs_list-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_ghs_list": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_resolver_links-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_links-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_links-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_links": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_lookupCASRN-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookupCASRN-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookupCASRN-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_lookupCASRN": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_mesh-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_mesh-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_mesh-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_mesh": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_resolve-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_resolve-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_resolve-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_search_exact-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_exact-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_exact-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_search_exact": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_search_gethazard-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_gethazard-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_gethazard-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_search_gethazard": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"sid\" is missing, with no default"
+    },
+    "chemi_search_similar-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_similar-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_similar-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_search_substructure-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_substructure-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_search_substructure-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_search_substructure": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_services_collated_report-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_collated_report-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_collated_report-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_services_convert-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_convert-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_convert-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_services_layout-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_layout-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_layout-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_services_layout": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_services_smirks2rxn-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_smirks2rxn-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_services_smirks2rxn-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_services_smirks2rxn": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smirks\" is missing, with no default"
+    },
+    "chemi_toxprints-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_toxprints": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_toxprints_assays_check-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_assays_check-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_assays_check-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_toxprints_assays_check": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"name\" is missing, with no default"
+    },
+    "chemi_toxprints_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_toxprints_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-chemi_toxprints_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_toxprints_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_global_assays-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_global_assays-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_global_assays-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_toxprints_global_toxprints-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_global_toxprints-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_global_toxprints-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_toxprints_toxprints-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_toxprints-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_toxprints-http-400": {
       "requests": 1,
       "classes": "list",
       "warnings": [],

@@ -1,0 +1,60 @@
+id: chemi-opera-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-opera-prod.json
+selection:
+  include:
+  - GET /api/opera/report
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/opera/report:
+    name: chemi_opera_report
+    file: R/chemi_opera_report.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: DSSTox substance identifier
+      modelId:
+        type: character
+        required: yes
+        description: Dashboard model ID for the OPERA endpoint
+    request:
+      arguments:
+        endpoint:
+          value: opera/report
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            dtxsid:
+              from:
+              - params
+              - dtxsid
+            modelId:
+              from:
+              - params
+              - modelId
+    docs:
+      title: Generate a standalone OPERA calculation report
+      lifecycle: experimental
+      parameters:
+        dtxsid: DSSTox substance identifier
+        modelId: Dashboard model ID for the OPERA endpoint
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

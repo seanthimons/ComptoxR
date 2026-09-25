@@ -1,0 +1,293 @@
+id: chemi-toxprints-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-toxprints-prod.json
+selection:
+  include:
+  - GET /api/toxprints
+  - GET /api/toxprints/assays/check
+  - GET /api/toxprints/global_assays
+  - GET /api/toxprints/global_toxprints
+  - GET /api/toxprints/toxprints
+  - POST /api/toxprints
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/toxprints:
+    name: chemi_toxprints
+    file: R/chemi_toxprints.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+      headers:
+        type: logical
+        default: no
+        description: 'Optional parameter (default: FALSE)'
+      profile:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            headers:
+              from:
+              - params
+              - headers
+            profile:
+              from:
+              - params
+              - profile
+    docs:
+      title: Toxprints
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        headers: 'Optional parameter (default: FALSE)'
+        profile: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/assays/check:
+    name: chemi_toxprints_assays_check
+    file: R/chemi_toxprints_assays_check.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/assays/check
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Toxprints Assays Check
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      return: Returns a list with result object
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/global_assays:
+    name: chemi_toxprints_global_assays
+    file: R/chemi_toxprints_global_assays.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      label:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/global_assays
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            category:
+              from:
+              - params
+              - category
+            label:
+              from:
+              - params
+              - label
+    docs:
+      title: Toxprints Global Assays
+      lifecycle: experimental
+      parameters:
+        category: Optional parameter
+        label: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - category: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/global_toxprints:
+    name: chemi_toxprints_global_toxprints
+    file: R/chemi_toxprints_global_toxprints.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      label:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/global_toxprints
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            category:
+              from:
+              - params
+              - category
+            label:
+              from:
+              - params
+              - label
+    docs:
+      title: Toxprints Global Toxprints
+      lifecycle: experimental
+      parameters:
+        category: Optional parameter
+        label: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - category: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/toxprints:
+    name: chemi_toxprints_toxprints
+    file: R/chemi_toxprints_toxprints.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      label:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/toxprints
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            category:
+              from:
+              - params
+              - category
+            label:
+              from:
+              - params
+              - label
+    docs:
+      title: Toxprints Toxprints
+      lifecycle: experimental
+      parameters:
+        category: Optional parameter
+        label: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - category: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/toxprints:
+    name: chemi_toxprints_bulk
+    file: R/chemi_toxprints.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: toxprints
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Toxprints
+      lifecycle: experimental
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a list with result object
+      examples:
+      - query: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

@@ -1,34 +1,30 @@
 #' Fetch a single reaction
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param reaction_id Optional parameter
 #' @return Returns a tibble with results (array of objects)
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_chet_reaction_singlereaction(reaction_id = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_chet_reaction_singlereaction <- function(reaction_id = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(reaction_id)) {
-    options[['reaction_id']] <- reaction_id
-  }
+  params <- base::list("reaction_id" = reaction_id)
   result <- generic_request(
-    endpoint = "reaction/singlereaction",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "reaction/singlereaction",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = base::local({
+      .body <- base::Filter(base::Negate(base::is.null), base::list("reaction_id" = params[["reaction_id"]]))
+      if (base::length(.body)) .body else base::list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

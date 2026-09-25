@@ -1,0 +1,93 @@
+id: chemi-amnb_nate-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-amnb_nate-prod.json
+selection:
+  include:
+  - GET /api/amnb_nate
+  - POST /api/amnb_nate
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/amnb_nate:
+    name: chemi_amnb_nate
+    file: R/chemi_amnb_nate.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: SMILES to generate predictions for
+    request:
+      arguments:
+        endpoint:
+          value: amnb_nate
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Amnb Nate
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+      return: Returns a list with result object
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/amnb_nate:
+    name: chemi_amnb_nate_bulk
+    file: R/chemi_amnb_nate.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      smiles:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: amnb_nate
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Generate predictions for multiple molecules
+      lifecycle: experimental
+      parameters:
+        chemicals: Optional parameter
+        smiles: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - chemicals: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

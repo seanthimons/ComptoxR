@@ -1,0 +1,608 @@
+id: chemi-resolver-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - GET /api/resolver/ccte-list
+  - GET /api/resolver/classyfire
+  - GET /api/resolver/getannotation
+  - GET /api/resolver/getannotationslist
+  - GET /api/resolver/getsubstance
+  - GET /api/resolver/ghs-list
+  - GET /api/resolver/links
+  - GET /api/resolver/lookupCASRN
+  - GET /api/resolver/mesh
+  - POST /api/resolver/resolve
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/resolver/ccte-list:
+    name: chemi_resolver_ccte_list
+    file: R/chemi_resolver_ccte_list.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ccte-list
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Ccte List
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/classyfire:
+    name: chemi_resolver_classyfire
+    file: R/chemi_resolver_classyfire.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        default: ~
+        description: Optional parameter
+      idType:
+        type: character
+        default: AnyId
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      fuzzy:
+        type: character
+        default: Not
+        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      kingdom:
+        type: character
+        default: ~
+        description: Optional parameter
+      superklass:
+        type: character
+        default: ~
+        description: Optional parameter
+      klass:
+        type: character
+        default: ~
+        description: Optional parameter
+      subklass:
+        type: character
+        default: ~
+        description: Optional parameter
+      directParent:
+        type: character
+        default: ~
+        description: Optional parameter
+      geometricDescriptor:
+        type: character
+        default: ~
+        description: Optional parameter
+      alternativeParent:
+        type: character
+        default: ~
+        description: Optional parameter
+      substituent:
+        type: character
+        default: ~
+        description: Optional parameter
+      page:
+        type: numeric
+        default: 0.0
+        description: 'Optional parameter (default: 0)'
+      size:
+        type: numeric
+        default: 1000.0
+        description: 'Optional parameter (default: 1000)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        endpoint:
+          value: resolver/classyfire
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+            kingdom:
+              from:
+              - params
+              - kingdom
+            superklass:
+              from:
+              - params
+              - superklass
+            klass:
+              from:
+              - params
+              - klass
+            subklass:
+              from:
+              - params
+              - subklass
+            directParent:
+              from:
+              - params
+              - directParent
+            geometricDescriptor:
+              from:
+              - params
+              - geometricDescriptor
+            alternativeParent:
+              from:
+              - params
+              - alternativeParent
+            substituent:
+              from:
+              - params
+              - substituent
+            page:
+              from:
+              - params
+              - page
+            size:
+              from:
+              - params
+              - size
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_size
+    docs:
+      title: Resolver Classyfire
+      lifecycle: experimental
+      parameters:
+        query: Optional parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+        kingdom: Optional parameter
+        superklass: Optional parameter
+        klass: Optional parameter
+        subklass: Optional parameter
+        directParent: Optional parameter
+        geometricDescriptor: Optional parameter
+        alternativeParent: Optional parameter
+        substituent: Optional parameter
+        page: 'Optional parameter (default: 0)'
+        size: 'Optional parameter (default: 1000)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a list with result object
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/getannotation:
+    name: chemi_resolver_getannotation
+    file: R/chemi_resolver_getannotation.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+      heading:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getannotation
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+            heading:
+              from:
+              - params
+              - heading
+    docs:
+      title: Resolver Getannotation
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+        heading: Required parameter
+      return: Returns a list with result object
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/getannotationslist:
+    name: chemi_resolver_getannotationslist
+    file: R/chemi_resolver_getannotationslist.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getannotationslist
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Getannotationslist
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/getsubstance:
+    name: chemi_resolver_getsubstance
+    file: R/chemi_resolver_getsubstance.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getsubstance
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Getsubstance
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      return: Returns a list with result object
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/ghs-list:
+    name: chemi_resolver_ghs_list
+    file: R/chemi_resolver_ghs_list.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      name:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs-list
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            name:
+              from:
+              - params
+              - name
+    docs:
+      title: Resolver Ghs List
+      lifecycle: experimental
+      parameters:
+        name: Required parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/links:
+    name: chemi_resolver_links
+    file: R/chemi_resolver_links.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+      idType:
+        type: character
+        default: AnyId
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      fuzzy:
+        type: character
+        default: Not
+        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+    request:
+      arguments:
+        endpoint:
+          value: resolver/links
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+    docs:
+      title: Resolver Links
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/lookupCASRN:
+    name: chemi_resolver_lookupCASRN
+    file: R/chemi_resolver_lookupCASRN.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/lookupCASRN
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+    docs:
+      title: Resolver lookupCASRN
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+      return: Returns a list with result object
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/resolver/mesh:
+    name: chemi_resolver_mesh
+    file: R/chemi_resolver_mesh.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+      idType:
+        type: character
+        default: AnyId
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      fuzzy:
+        type: character
+        default: Not
+        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+    request:
+      arguments:
+        endpoint:
+          value: resolver/mesh
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+    docs:
+      title: Resolver Mesh
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/resolver/resolve:
+    name: chemi_resolver_resolve
+    file: R/chemi_resolver_resolve.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      mol:
+        type: character
+        default: ~
+        description: Optional parameter
+      queries:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - mol
+        endpoint:
+          value: resolver/resolve
+        options:
+          compact_object:
+            queries:
+              from:
+              - params
+              - queries
+        tidy:
+          value: no
+    docs:
+      title: Resolver Resolve
+      lifecycle: experimental
+      parameters:
+        mol: Optional parameter
+        queries: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - mol: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

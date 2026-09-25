@@ -1,38 +1,34 @@
 #' Toxprints Global Toxprints
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param category Optional parameter
 #' @param label Optional parameter
 #' @return Returns a list with result object
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_toxprints_global_toxprints(category = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_toxprints_global_toxprints <- function(category = NULL, label = NULL) {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(category)) {
-    options[['category']] <- category
-  }
-  if (!is.null(label)) {
-    options[['label']] <- label
-  }
+  params <- base::list("category" = category, "label" = label)
   result <- generic_request(
-    endpoint = "toxprints/global_toxprints",
-    method = "GET",
-    batch_limit = 0,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    options = options
+    "endpoint" = "toxprints/global_toxprints",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "options" = base::local({
+      .body <- base::Filter(
+        base::Negate(base::is.null),
+        base::list("category" = params[["category"]], "label" = params[["label"]])
+      )
+      if (base::length(.body)) .body else base::list()
+    })
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
