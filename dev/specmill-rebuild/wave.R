@@ -291,7 +291,9 @@ for (schema in unique(vapply(candidates, `[[`, '', 'schema'))) {
   id <- sub('[.]json$', '-rebuild', schema)
   path <- file.path('apis', paste0(id, '.yml'))
   service <- if (file.exists(path)) {
-    yaml::read_yaml(path)
+    existing <- yaml::read_yaml(path)
+    existing$schemas$files <- as.list(existing$schemas$files)
+    existing
   } else {
     project$services <- c(project$services, list(path))
     list(
