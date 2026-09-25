@@ -184,8 +184,8 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
   record <- records[[name]]
   checked <- tryCatch(
     {
-      out <- tempfile('wave-')
-      dir.create(out)
+      out <- file.path('dev/specmill-pilot/artifacts/wave-review', name)
+      dir.create(out, recursive = TRUE, showWarnings = FALSE)
       config <- list(
         id = 'review', schemas = list(files = list(file.path('schema', record$schema))),
         selection = list(include = list(record$key)), helper = record$proposal$helper,
