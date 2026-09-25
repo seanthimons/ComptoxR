@@ -1,6 +1,6 @@
 {
-  "commit": "b67790cdb93993bd5226755fdc35e77124d8ab8b",
-  "operations": 101,
+  "commit": "77de2d69da2dd4d3fd858ba605797fe6f78d3f87",
+  "operations": 106,
   "files": {
     "R/chemi_alerts_alerts.R": "031ba567542a373b2b19a68b404cd3ea4916bdd4c39b94a4409b0d8fa9d423c7",
     "R/chemi_alerts_groups_by_id.R": "28a36fe1b1f422a995b10f9295b0e5f64b7a112c2547b9115b31426c996a156d",
@@ -88,6 +88,11 @@
     "R/ct_exposure_product_data_puc.R": "72794a5d3e61e8d2b9b7f64c8ec002860f1bd65e09c0f76221a6383678de5364",
     "R/ct_exposure_product_data_search.R": "a18ce6d6ac3442a7f9c04e5a2137e11a86884f3f9c6fab931ea7f3063291e972",
     "R/ct_exposure_seem_general_search.R": "4d984f3f03a14ba8456ac08f54dcb64b6c63301ffd9ac622bd02ae4692c38ce5",
+    "R/ct_hazard_adme_ivive_search.R": "a59f1e364218b284c886b9e6db6ebf3086fb7fc5a3c73e285916746f1d10b49d",
+    "R/ct_hazard_hawc_search.R": "f2f1a4cc328cd378ea3fed14faec2594607ddf1123f53484983b15de59a1dbcc",
+    "R/ct_hazard_iris_search.R": "66f10d23b265b115922cee97fe0aa2139932ec819d4b89cc59f912983b61b9bf",
+    "R/ct_hazard_pprtv_search.R": "59866f04023228efd76f9392a21eb9e1a9c38f1df6f8c8f52c07c6b9c2bb6317",
+    "R/ct_hazard_toxval_supercategory_search.R": "03dfd3cceccda9fcfce82d9d443df6e30d17b7a89cc0f63d5fd3ede4536daabc",
     "R/epi_ecosar_polymer_amphoteric.R": "73b0d02a9efc7201cc5b6f5cce9e60519f5982f296baf2993d9f85c37ac9127b",
     "R/epi_ecosar_polymer_anionic.R": "d6f0eab801b9dfc2221209763e488860421d9226cf89f94fd606b792525af860",
     "R/epi_ecosar_polymer_polycationic.R": "ff7c2442c85b3c0b75daee97dc05206edb6f126a0a2ccd95068fcee8de65445f",

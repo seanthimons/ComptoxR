@@ -1,10 +1,10 @@
 {
-  "commit": "b67790cdb93993bd5226755fdc35e77124d8ab8b",
+  "commit": "77de2d69da2dd4d3fd858ba605797fe6f78d3f87",
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.4",
-    "source_commit": "f41eeb9bae628eeb1f0fee16227f5ee8373a7ae2",
-    "source_archive_sha256": "b2d3eecdb82d7dfd4fc1944197f4f4df904a0b032afb1756951cf7b2c7c8299d",
+    "version": "0.1.6",
+    "source_commit": "66c5e1f4d5a8b1a24d4a4946a6d2c1efe9c68d10",
+    "source_archive_sha256": "6b2d5e647032acfa265892cb8ec9464293dc5d4689f5a3c5a3977c853085fe99",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 101,
+    "generated": 106,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 246,
+    "unmapped_wrapper": 241,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 93,
+  "removable_files": 98,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -3271,10 +3271,10 @@
       "name": "ct_hazard_adme_ivive_search",
       "file": "R/ct_hazard_adme_ivive_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3341,30 +3341,30 @@
       "name": "ct_hazard_hawc_search",
       "file": "R/ct_hazard_hawc_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
       "name": "ct_hazard_iris_search",
       "file": "R/ct_hazard_iris_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/iris/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
       "name": "ct_hazard_pprtv_search",
       "file": "R/ct_hazard_pprtv_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3541,10 +3541,10 @@
       "name": "ct_hazard_toxval_supercategory_search",
       "file": "R/ct_hazard_toxval_supercategory_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {

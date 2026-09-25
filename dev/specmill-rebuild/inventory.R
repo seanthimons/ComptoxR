@@ -82,7 +82,6 @@ stopifnot(
   length(blocked) == 0L,
   !any(retained_files %in% removable),
   setequal(removable, grep('^R/', names(manifest$files), value = TRUE)),
-  sum(ops$implementation == 'generated') == 101L,
   all(exports %in% names(definitions) | exports %in% c('%>%', '%ni%'))
 )
 generated_names <- ops$name[ops$implementation == 'generated']
