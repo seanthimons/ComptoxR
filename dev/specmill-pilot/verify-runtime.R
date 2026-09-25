@@ -140,7 +140,9 @@ verify_client <- function(lib, out, lookup_cases) {
       }
       x
     })
-    if (!identical(actual, wire)) {
+    # wire = NULL records requests without a modeled expectation; callers then rely on
+    # the original-versus-candidate snapshot comparison.
+    if (!is.null(wire) && !identical(actual, wire)) {
       saveRDS(list(actual = actual, expected = wire), file.path(out, paste0(name, "-wire-failure.rds")))
       stop("Exact wire assertion failed: ", name, "; inspect ", out)
     }

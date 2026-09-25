@@ -37,6 +37,36 @@ binding <- function(x, parameters) {
   }
   list(value = x)
 }
+# Recognize the optional-options prelude used by many chemi wrappers:
+#   options <- list(); [if (!is.null(p))] options[["k"]] <- p (or options$k <- p); ...
+# The resulting list equals specmill's compact_object: NULL values are never added and an
+# empty result is list(). Returns NULL when the body does not start with this prelude.
+options_prelude <- function(code) {
+  if (!length(code) || !identical(code[[1]], quote(options <- list()))) {
+    return(NULL)
+  }
+  bindings <- list()
+  i <- 2L
+  while (i <= length(code)) {
+    s <- code[[i]]
+    guard <- NULL
+    if (is.call(s) && identical(s[[1]], as.name('if')) && length(s) == 3L) {
+      guard <- s[[2]]
+      s <- s[[3]]
+      if (is.call(s) && identical(s[[1]], as.name('{')) && length(s) == 2L) s <- s[[2]]
+    }
+    target <- if (is.call(s) && identical(s[[1]], as.name('<-'))) s[[2]]
+    ok <- is.call(target) && length(target) == 3L && identical(target[[2]], as.name('options')) &&
+      (identical(target[[1]], as.name('$')) || (identical(target[[1]], as.name('[[')) && is.character(target[[3]]))) &&
+      is.symbol(s[[3]]) && (is.null(guard) || identical(guard, call('!', call('is.null', s[[3]]))))
+    if (!ok) break
+    key <- as.character(target[[3]])
+    if (key %in% names(bindings)) stop('Repeated option key needs manual mapping')
+    bindings[[key]] <- list(from = list('params', as.character(s[[3]])))
+    i <- i + 1L
+  }
+  list(statements = i - 1L, bindings = bindings)
+}
 allowed_tags <- c('@description', '@param', '@return', '@apiStage', '@export', '@examples', '@md')
 documentation <- function(lines, start, name) {
   block <- lines[seq_len(start - 1L)]
@@ -112,6 +142,8 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         if (name %in% hooks) stop('Client hook policy requires manual review')
         fn <- eval(expr[[3]])
         code <- as.list(body(fn))[-1L]
+        prelude <- options_prelude(code)
+        if (!is.null(prelude)) code <- code[-seq_len(prelude$statements)]
         if (
           length(code) != 2L || !is.call(code[[1]]) || !identical(code[[1]][[1]], as.name('<-')) ||
             !identical(code[[1]][[2]], as.name('result')) || !identical(code[[2]], quote(return(result)))
@@ -122,6 +154,13 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         helper <- as.character(call[[1]])
         if (!helper %in% c('generic_request', 'generic_chemi_request')) stop('Helper outside schema migration scope')
         args <- as.list(call)[-1L]
+        if (!is.null(prelude)) {
+          uses <- vapply(args, function(x) 'options' %in% all.names(x), FALSE)
+          if (sum(uses) != 1L || !identical(args$options, as.name('options'))) {
+            stop('Options list used outside options = options needs manual mapping')
+          }
+          record$option_params <- vapply(prelude$bindings, function(b) b$from[[2]], '')
+        }
         method <- args$method %||% if (helper == 'generic_chemi_request') 'POST' else 'GET'
         prefix <- if (startsWith(name, 'ct_')) 'ctx-' else if (startsWith(name, 'epi_')) 'epi-' else 'chemi-'
         matches <- Filter(function(op) {
@@ -148,7 +187,9 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         names(inputs) <- if (length(formal_list)) names(formal_list) else character()
         list(
           name = name, file = file, helper = helper, implementation = 'generated', inputs = inputs,
-          request = list(arguments = lapply(args, binding, parameters = names(inputs))), docs = docs
+          request = list(arguments = Map(function(x, key) {
+            if (!is.null(prelude) && identical(key, 'options')) list(compact_object = prelude$bindings) else binding(x, names(inputs))
+          }, args, names(args))), docs = docs
         )
       },
       error = identity
@@ -210,20 +251,40 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         calls[[length(calls) + 1L]] <<- list(helper = helper, arguments = list(...), response = list(list(id = 'pilot-response')))
         list(list(id = 'pilot-response'))
       }, envir = environment(original))
-      result <- do.call(original, supplied)
-      stopifnot(length(calls) == 1L)
-      expected_calls <- calls
+      # Option-bound inputs are compared omitted, explicit, FALSE, and zero; NULL
+      # omission and falsy values must reach the helper exactly as in the original.
+      optional <- record$option_params %||% character()
+      variants <- list(omitted = supplied)
+      if (length(optional)) {
+        variants$explicit <- c(supplied, setNames(as.list(sprintf('pilot-option-%d', seq_along(optional))), optional))
+        variants$false <- c(supplied, setNames(rep(list(FALSE), length(optional)), optional))
+        variants$zero <- c(supplied, setNames(rep(list(0), length(optional)), optional))
+      }
       env <- new.env(parent = environment(original))
       eval(parse(text = code), env)
       stopifnot(identical(formals(original), formals(env[[name]])))
-      calls <- list()
-      stopifnot(identical(do.call(env[[name]], supplied), result), identical(calls, expected_calls))
+      run <- function(f, inputs) {
+        calls <<- list()
+        value <- tryCatch(do.call(f, inputs), error = function(e) list(error = conditionMessage(e)))
+        list(value = value, calls = calls)
+      }
+      for (variant in variants) {
+        reference <- run(original, variant)
+        stopifnot(length(reference$calls) == 1L, identical(run(env[[name]], variant), reference))
+      }
       stopifnot(identical(readLines(record$file), readLines(file.path(baseline, record$file))))
-      contracts[[name]] <- list(inputs = supplied, calls = expected_calls, result = result, environment = list(batch_limit = '2'))
+      primary <- variants[[if (length(optional)) 'explicit' else 'omitted']]
+      reference <- run(original, primary)
+      contracts[[name]] <- list(inputs = primary, calls = reference$calls, result = reference$value, environment = list(batch_limit = '2'))
       cases[[name]] <- list(
-        schema = record$schema, key = record$key, inputs = supplied, arguments = expected_calls[[1L]]$arguments,
+        schema = record$schema, key = record$key, inputs = primary, arguments = reference$calls[[1L]]$arguments,
         helper = helper, required = as.list(required)
       )
+      if (length(optional)) {
+        # Wire is observed and compared original-versus-generated rather than modeled.
+        cases[[name]]$observe <- TRUE
+        cases[[name]]$variants <- variants['omitted']
+      }
       code
     },
     error = identity

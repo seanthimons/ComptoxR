@@ -8,12 +8,16 @@ for (name in names(full_cases)) {
       fun <- getExportedValue('ComptoxR', name)
       arguments <- item$arguments
       supplied <- item$inputs
-      if (item$helper == 'generic_chemi_request' && is.null(arguments$query)) {
+      observe <- isTRUE(item$observe)
+      if (item$helper == 'generic_chemi_request' && is.null(arguments$query) && !observe) {
         probe(paste0(name, '-public-defaults'), do.call(fun, supplied), error = TRUE)
         supplied[[names(formals(fun))[[1L]]]] <- 'pilot-1'
         arguments$query <- 'pilot-1'
       }
       wire_for <- function(a) {
+        if (observe) {
+          return(NULL)
+        }
         if (item$helper == 'generic_chemi_request') {
           stopifnot(identical(a$wrap, FALSE), identical(a$query, 'pilot-1'))
           return(list(expected('POST', paste0('/chemi/', a$endpoint), body = '[{"sid":"pilot-1"}]')))
@@ -65,6 +69,9 @@ for (name in names(full_cases)) {
       wire <- wire_for(arguments)
       response <- if (isTRUE(arguments$paginate)) '[]' else '[{"id":"pilot-response"}]'
       probe(paste0(name, '-minimal'), do.call(fun, supplied), wire, response)
+      for (variant in names(item$variants)) {
+        probe(paste0(name, '-', variant), do.call(fun, item$variants[[variant]]), NULL, response)
+      }
       # Wrappers that fix max_pages internally cannot be bounded; the minimal probe covers page one.
       if (isTRUE(arguments$paginate) && 'max_pages' %in% names(formals(fun))) {
         bounded <- supplied
