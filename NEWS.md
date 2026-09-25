@@ -1,8 +1,7 @@
 
 
-# ComptoxR NEWS
 
-## v3.0.0 (2026-09-08)
+## ComptoxR v3.0.0 (2026-09-08)
 
 #### Breaking changes
 
@@ -18,7 +17,7 @@
 Full set of changes:
 [`v2.0.0...v3.0.0`](https://github.com/seanthimons/ComptoxR/compare/v2.0.0...v3.0.0)
 
-## v2.0.0 (2026-09-08)
+## ComptoxR v2.0.0 (2026-09-08)
 
 #### Breaking changes
 
@@ -43,7 +42,7 @@ Full set of changes:
 Full set of changes:
 [`v1.7.1...v2.0.0`](https://github.com/seanthimons/ComptoxR/compare/v1.7.1...v2.0.0)
 
-## v1.7.1 (2026-08-28)
+## ComptoxR v1.7.1 (2026-08-28)
 
 #### Bug fixes
 
@@ -78,7 +77,7 @@ Full set of changes:
 Full set of changes:
 [`v1.7.0...v1.7.1`](https://github.com/seanthimons/ComptoxR/compare/v1.7.0...v1.7.1)
 
-## v1.7.0 (2026-08-27)
+## ComptoxR v1.7.0 (2026-08-27)
 
 #### New features
 
@@ -175,7 +174,7 @@ Full set of changes:
 Full set of changes:
 [`v1.6.0...v1.7.0`](https://github.com/seanthimons/ComptoxR/compare/v1.6.0...v1.7.0)
 
-## v1.6.0 (2026-08-07)
+## ComptoxR v1.6.0 (2026-08-07)
 
 #### Breaking changes
 
@@ -270,7 +269,7 @@ Full set of changes:
 Full set of changes:
 [`v1.5.1...v1.6.0`](https://github.com/seanthimons/ComptoxR/compare/v1.5.1...v1.6.0)
 
-## v1.5.1 (2026-07-13)
+## ComptoxR v1.5.1 (2026-07-13)
 
 #### New features
 
@@ -362,7 +361,7 @@ Full set of changes:
 Full set of changes:
 [`v1.5.0...v1.5.1`](https://github.com/seanthimons/ComptoxR/compare/v1.5.0...v1.5.1)
 
-## v1.5.0 (2026-07-02)
+## ComptoxR v1.5.0 (2026-07-02)
 
 #### Breaking changes
 
@@ -1034,7 +1033,7 @@ Full set of changes:
 Full set of changes:
 [`v1.3.0...v1.5.0`](https://github.com/seanthimons/ComptoxR/compare/v1.3.0...v1.5.0)
 
-## v1.3.0 (2025-10-02)
+## ComptoxR v1.3.0 (2025-10-02)
 
 #### New features
 
@@ -1092,7 +1091,7 @@ Full set of changes:
 Full set of changes:
 [`v1.2.2.9009...v1.3.0`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9009...v1.3.0)
 
-## v1.2.2.9009 (2025-08-27)
+## ComptoxR v1.2.2.9009 (2025-08-27)
 
 #### New features
 
@@ -1124,7 +1123,7 @@ Full set of changes:
 Full set of changes:
 [`v1.2.2.9008...v1.2.2.9009`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9008...v1.2.2.9009)
 
-## v1.2.2.9008 (2025-08-18)
+## ComptoxR v1.2.2.9008 (2025-08-18)
 
 #### Style
 
@@ -1134,57 +1133,57 @@ Full set of changes:
 Full set of changes:
 [`v1.2.2.9007...v1.2.2.9008`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9007...v1.2.2.9008)
 
-## v1.2.2.9007 (2025-07-16)
+## ComptoxR v1.2.2.9007 (2025-07-16)
 
 Full set of changes:
 [`v1.2.2.9006...v1.2.2.9007`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9006...v1.2.2.9007)
 
-## v1.2.2.9006 (2025-06-18)
+## ComptoxR v1.2.2.9006 (2025-06-18)
 
 Full set of changes:
 [`v1.2.2.9005...v1.2.2.9006`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9005...v1.2.2.9006)
 
-## v1.2.2.9005 (2025-06-17)
+## ComptoxR v1.2.2.9005 (2025-06-17)
 
 Full set of changes:
 [`v1.2.2.9004...v1.2.2.9005`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9004...v1.2.2.9005)
 
-## v1.2.2.9004 (2025-06-10)
+## ComptoxR v1.2.2.9004 (2025-06-10)
 
 Full set of changes:
 [`v1.2.2.9003...v1.2.2.9004`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9003...v1.2.2.9004)
 
-## v1.2.2.9003 (2024-08-21)
+## ComptoxR v1.2.2.9003 (2024-08-21)
 
 Full set of changes:
 [`v1.2.2.9002...v1.2.2.9003`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9002...v1.2.2.9003)
 
-## v1.2.2.9002 (2024-06-04)
+## ComptoxR v1.2.2.9002 (2024-06-04)
 
 Full set of changes:
 [`v1.2.2.9001...v1.2.2.9002`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9001...v1.2.2.9002)
 
-## v1.2.2.9001 (2024-05-23)
+## ComptoxR v1.2.2.9001 (2024-05-23)
 
 Full set of changes:
 [`v1.2.2.9000...v1.2.2.9001`](https://github.com/seanthimons/ComptoxR/compare/v1.2.2.9000...v1.2.2.9001)
 
-## v1.2.2.9000 (2024-05-14)
+## ComptoxR v1.2.2.9000 (2024-05-14)
 
 Full set of changes:
 [`v1.2.0...v1.2.2.9000`](https://github.com/seanthimons/ComptoxR/compare/v1.2.0...v1.2.2.9000)
 
-## v1.2.0 (2023-12-19)
+## ComptoxR v1.2.0 (2023-12-19)
 
 Full set of changes:
 [`v1.1.0...v1.2.0`](https://github.com/seanthimons/ComptoxR/compare/v1.1.0...v1.2.0)
 
-## v1.1.0 (2023-12-06)
+## ComptoxR v1.1.0 (2023-12-06)
 
 Full set of changes:
 [`v1.0.0...v1.1.0`](https://github.com/seanthimons/ComptoxR/compare/v1.0.0...v1.1.0)
 
-## v1.0.0 (2023-07-18)
+## ComptoxR v1.0.0 (2023-07-18)
 
 Full set of changes:
 [`d95fcd1...v1.0.0`](https://github.com/seanthimons/ComptoxR/compare/d95fcd1...v1.0.0)
