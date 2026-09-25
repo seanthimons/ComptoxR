@@ -280,6 +280,8 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         reference <- run(original, variant)
         stopifnot(length(reference$calls) == 1L, identical(run(env[[name]], variant), reference))
       }
+      # Missing-argument errors must name the same argument (evaluation order is observable).
+      stopifnot(identical(run(env[[name]], list()), run(original, list())))
       stopifnot(identical(readLines(record$file), readLines(file.path(baseline, record$file))))
       primary <- variants[[if (length(optional)) 'explicit' else 'omitted']]
       reference <- run(original, primary)
