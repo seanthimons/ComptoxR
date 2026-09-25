@@ -265,6 +265,16 @@ if (dir.exists(work)) system(sprintf('git worktree remove --force %s', shQuote(w
 stopifnot(system(sprintf('git worktree add --detach %s %s', shQuote(work), commit)) == 0L)
 dir.create(file.path(work, 'dev/specmill-pilot/artifacts'), recursive = TRUE)
 file.symlink(file.path(root, 'dev/specmill-pilot/artifacts/toolkit-library'), file.path(work, 'dev/specmill-pilot/artifacts/toolkit-library'))
+# The local roxygen may already differ from committed man/, so compare roxygen
+# output of the generated worktree with roxygen output of its baseline.
+roxygenise <- function() {
+  stopifnot(system(sprintf("cd %s && Rscript -e 'roxygen2::roxygenise(roclets = c(\"rd\", \"namespace\"))' > /dev/null 2>&1", shQuote(work))) == 0L)
+  docs <- c(file.path(work, 'NAMESPACE'), list.files(file.path(work, 'man'), full.names = TRUE))
+  hashes <- setNames(vapply(docs, digest::digest, '', file = TRUE, algo = 'sha256'), basename(docs))
+  stopifnot(system(sprintf('cd %s && git checkout -- man NAMESPACE && git clean -fdq man', shQuote(work))) == 0L)
+  hashes
+}
+docs_before <- roxygenise()
 fixture <- 'tests/testthat/fixtures/specmill-rebuild-contracts.rds'
 all_contracts <- if (file.exists(fixture)) readRDS(fixture) else list()
 all_contracts[names(candidates)] <- contracts[names(candidates)]
@@ -300,11 +310,10 @@ files <- unique(vapply(candidates, `[[`, '', 'file'))
 stopifnot(all(file.remove(file.path(work, files))))
 generate <- function(mode) system(sprintf('cd %s && Rscript dev/generate_specmill.R --%s', shQuote(work), mode))
 stopifnot(generate('apply') == 0L, generate('apply') == 0L, generate('check') == 0L)
-stopifnot(system(sprintf("cd %s && Rscript -e 'roxygen2::roxygenise(roclets = c(\"rd\", \"namespace\"))' > /dev/null 2>&1", shQuote(work))) == 0L)
+docs_after <- roxygenise()
 changed <- system(sprintf('cd %s && git status --porcelain', shQuote(work)), intern = TRUE)
-docs_changed <- grep(' (man/|NAMESPACE)', changed, value = TRUE)
-if (length(docs_changed)) {
-  print(docs_changed)
+if (!identical(docs_before, docs_after)) {
+  print(names(docs_after)[docs_after != docs_before[names(docs_after)]])
   stop('Generated wrappers change documentation; worktree kept at ', work)
 }
 jsonlite::write_json(
