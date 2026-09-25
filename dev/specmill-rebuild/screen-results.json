@@ -1747,15 +1747,6 @@
     "key": "GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
   },
-  "ct_hazard_adme_ivive_search": {
-    "name": "ct_hazard_adme_ivive_search",
-    "file": "R/ct_hazard_adme_ivive_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
   "ct_hazard_cancer_search_bulk": {
     "name": "ct_hazard_cancer_search_bulk",
     "file": "R/ct_hazard_cancer_search.R",
@@ -1805,33 +1796,6 @@
     "reason": "Inseparable grouped file contains a retained or unaccounted definition",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_hawc_search": {
-    "name": "ct_hazard_hawc_search",
-    "file": "R/ct_hazard_hawc_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/hawc/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_iris_search": {
-    "name": "ct_hazard_iris_search",
-    "file": "R/ct_hazard_iris_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/iris/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_pprtv_search": {
-    "name": "ct_hazard_pprtv_search",
-    "file": "R/ct_hazard_pprtv_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
   },
   "ct_hazard_skin_eye_search_bulk": {
@@ -1983,15 +1947,6 @@
     "reason": "Inseparable grouped file contains a retained or unaccounted definition",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_supercategory_search": {
-    "name": "ct_hazard_toxval_supercategory_search",
-    "file": "R/ct_hazard_toxval_supercategory_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
   },
   "ct_related": {
