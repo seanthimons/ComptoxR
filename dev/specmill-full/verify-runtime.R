@@ -1,6 +1,7 @@
 # Reuse the pilot's real localhost server and request/object assertions.
 args <- commandArgs(TRUE)
-stopifnot(length(args) == 3L)
+stopifnot(length(args) %in% 3:4)
+results_file <- if (length(args) == 4L) args[[4]] else 'dev/specmill-full/runtime-results.json'
 libs <- normalizePath(args[1:2])
 out <- args[[3]]
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
@@ -16,6 +17,10 @@ for (expr in expressions) {
   }
 }
 full_cases <- readRDS('dev/specmill-full/runtime-cases.rds')
+# Later rebuild waves add their frozen cases alongside the original tranche.
+if (file.exists('dev/specmill-rebuild/runtime-cases.rds')) {
+  full_cases <- c(full_cases, readRDS('dev/specmill-rebuild/runtime-cases.rds'))
+}
 formals(verify_client) <- c(formals(verify_client), alist(full_cases = ))
 code <- as.list(body(verify_client))
 position <- which(vapply(
@@ -63,7 +68,7 @@ report <- list(
     )
   })
 )
-jsonlite::write_json(report, 'dev/specmill-full/runtime-results.json', pretty = TRUE, auto_unbox = TRUE, null = 'null')
+jsonlite::write_json(report, results_file, pretty = TRUE, auto_unbox = TRUE, null = 'null')
 cat('Compared', length(before$cases), 'cases;', length(before$full_failures), 'candidate failures\n')
 print(before$full_failures)
 stopifnot(length(before$full_failures) == 0L, length(after$full_failures) == 0L)
