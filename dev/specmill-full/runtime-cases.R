@@ -65,7 +65,8 @@ for (name in names(full_cases)) {
       wire <- wire_for(arguments)
       response <- if (isTRUE(arguments$paginate)) '[]' else '[{"id":"pilot-response"}]'
       probe(paste0(name, '-minimal'), do.call(fun, supplied), wire, response)
-      if (isTRUE(arguments$paginate)) {
+      # Wrappers that fix max_pages internally cannot be bounded; the minimal probe covers page one.
+      if (isTRUE(arguments$paginate) && 'max_pages' %in% names(formals(fun))) {
         bounded <- supplied
         bounded$max_pages <- 2
         second <- arguments

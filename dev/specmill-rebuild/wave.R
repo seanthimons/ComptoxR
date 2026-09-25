@@ -203,7 +203,7 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       code <- specmill::render_operation(mapped$operation, mapped$spec)
       original <- eval(record$original, envir = new.env(parent = baseenv()))
       required <- names(Filter(function(x) isTRUE(x$required), record$proposal$inputs))
-      supplied <- setNames(as.list(rep('pilot-1', length(required))), required)
+      supplied <- setNames(as.list(paste0('pilot-', seq_along(required))), required)
       calls <- list()
       helper <- record$proposal$helper
       assign(helper, function(...) {
