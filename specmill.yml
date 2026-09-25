@@ -19,5 +19,8 @@ services:
 - apis/ctx-exposure-prod-full.yml
 - apis/epi-suite-prod-full.yml
 - apis/ctx-hazard-prod-rebuild.yml
+- apis/ctx-bioactivity-prod-rebuild.yml
+- apis/ctx-chemical-prod-rebuild.yml
+- apis/ctx-exposure-prod-rebuild.yml
 callback_files:
 - dev/specmill_callbacks.R

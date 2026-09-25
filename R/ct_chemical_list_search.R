@@ -1,27 +1,25 @@
 #' Get lists containing DTXSID
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
 #' @param dtxsid DSSTox Substance Identifier. Type: string
 #' @param projection Projection options for chemical List APIs . Options: chemicallistall, chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default: chemicallistall)
 #' @return Returns a scalar value
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' ct_chemical_list_search(dtxsid = "DTXSID1020560")
 #' }
+# Generated with specmill; do not edit by hand.
 ct_chemical_list_search <- function(dtxsid, projection = "chemicallistall") {
+  params <- base::list("dtxsid" = dtxsid, "projection" = projection)
   result <- generic_request(
-    query = dtxsid,
-    endpoint = "chemical/list/search/by-dtxsid/",
-    method = "GET",
-    batch_limit = 1,
-    `projection` = projection
+    "query" = params[["dtxsid"]],
+    "endpoint" = "chemical/list/search/by-dtxsid/",
+    "method" = "GET",
+    "batch_limit" = 1,
+    "projection" = params[["projection"]]
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

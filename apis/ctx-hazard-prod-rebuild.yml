@@ -8,6 +8,19 @@ selection:
   - GET /hazard/hawc/search/by-dtxsid/{dtxsid}
   - GET /hazard/iris/search/by-dtxsid/{dtxsid}
   - GET /hazard/pprtv/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxref/data/search/by-study-id/{studyId}
+  - GET /hazard/toxref/data/search/by-study-type/{studyType}
+  - GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxref/effects/search/by-study-id/{studyId}
+  - GET /hazard/toxref/effects/search/by-study-type/{studyType}
+  - GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxref/observations/search/by-study-id/{studyId}
+  - GET /hazard/toxref/observations/search/by-study-type/{studyType}
+  - GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}
+  - GET /hazard/toxref/summary/search/by-study-id/{studyId}
+  - GET /hazard/toxref/summary/search/by-study-type/{studyType}
+  - GET /hazard/toxval/search/by-category/{dtxsid}
   - GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}
 helper: generic_request
 documentation: yes
@@ -143,6 +156,477 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID2040282
+  GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_data_search
+    file: R/ct_hazard_toxref_data_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'dtxsid. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/data/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get all data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'dtxsid. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID1037806
+  GET /hazard/toxref/data/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_data_search_by_study_id
+    file: R/ct_hazard_toxref_data_search_by_study_id.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyId:
+        type: character
+        required: yes
+        description: 'Study ID. Type: integer'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/data/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get all data by Study ID
+      lifecycle: stable
+      parameters:
+        studyId: 'Study ID. Type: integer'
+      return: Returns a scalar value
+      examples:
+      - studyId: '63'
+  GET /hazard/toxref/data/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_data_search_by_study_type
+    file: R/ct_hazard_toxref_data_search_by_study_type.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyType:
+        type: character
+        required: yes
+        description: 'Study Type. Type: string'
+      pageNumber:
+        type: numeric
+        default: 1.0
+        description: 'Optional parameter (default: 1)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/data/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+    docs:
+      title: Get all data by Study Type
+      lifecycle: stable
+      parameters:
+        studyType: 'Study Type. Type: string'
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+      return: Returns a scalar value
+      examples:
+      - studyType: DEV
+  GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_effects_search
+    file: R/ct_hazard_toxref_effects_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'dtxsid. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/effects/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get effects data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'dtxsid. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID1037806
+  GET /hazard/toxref/effects/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_effects_search_by_study_id
+    file: R/ct_hazard_toxref_effects_search_by_study_id.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyId:
+        type: character
+        required: yes
+        description: 'Study ID. Type: integer'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/effects/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get effects data by Study ID
+      lifecycle: stable
+      parameters:
+        studyId: 'Study ID. Type: integer'
+      return: Returns a scalar value
+      examples:
+      - studyId: '63'
+  GET /hazard/toxref/effects/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_effects_search_by_study_type
+    file: R/ct_hazard_toxref_effects_search_by_study_type.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyType:
+        type: character
+        required: yes
+        description: 'Study Type. Type: string'
+      pageNumber:
+        type: numeric
+        default: 1.0
+        description: 'Optional parameter (default: 1)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/effects/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+    docs:
+      title: Get effects data by Study Type
+      lifecycle: stable
+      parameters:
+        studyType: 'Study Type. Type: string'
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+      return: Returns a scalar value
+      examples:
+      - studyType: DEV
+  GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_observations_search
+    file: R/ct_hazard_toxref_observations_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'dtxsid. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/observations/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get observations by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'dtxsid. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID1037806
+  GET /hazard/toxref/observations/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_observations_search_by_study_id
+    file: R/ct_hazard_toxref_observations_search_by_study_id.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyId:
+        type: character
+        required: yes
+        description: 'Study ID. Type: integer'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/observations/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get observations by Study ID
+      lifecycle: stable
+      parameters:
+        studyId: 'Study ID. Type: integer'
+      return: Returns a scalar value
+      examples:
+      - studyId: '63'
+  GET /hazard/toxref/observations/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_observations_search_by_study_type
+    file: R/ct_hazard_toxref_observations_search_by_study_type.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyType:
+        type: character
+        required: yes
+        description: 'Study Type. Type: string'
+      pageNumber:
+        type: numeric
+        default: 1.0
+        description: 'Optional parameter (default: 1)'
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/observations/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        pageNumber:
+          from:
+          - params
+          - pageNumber
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: page_number
+    docs:
+      title: Get observations by Study Type
+      lifecycle: stable
+      parameters:
+        studyType: 'Study Type. Type: string'
+        pageNumber: 'Optional parameter (default: 1)'
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+      return: Returns a scalar value
+      examples:
+      - studyType: DEV
+  GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxref_search
+    file: R/ct_hazard_toxref_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'dtxsid. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxref/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get summary data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'dtxsid. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID1037806
+  GET /hazard/toxref/summary/search/by-study-id/{studyId}:
+    name: ct_hazard_toxref_search_by_study_id
+    file: R/ct_hazard_toxref_search_by_study_id.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyId:
+        type: character
+        required: yes
+        description: 'Study ID. Type: integer'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyId
+        endpoint:
+          value: hazard/toxref/summary/search/by-study-id/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get summary data by Study ID
+      lifecycle: stable
+      parameters:
+        studyId: 'Study ID. Type: integer'
+      return: Returns a scalar value
+      examples:
+      - studyId: '63'
+  GET /hazard/toxref/summary/search/by-study-type/{studyType}:
+    name: ct_hazard_toxref_search_by_study_type
+    file: R/ct_hazard_toxref_search_by_study_type.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      studyType:
+        type: character
+        required: yes
+        description: 'Study Type. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - studyType
+        endpoint:
+          value: hazard/toxref/summary/search/by-study-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get summary data by Study Type
+      lifecycle: stable
+      parameters:
+        studyType: 'Study Type. Type: string'
+      return: Returns a scalar value
+      examples:
+      - studyType: DEV
+  GET /hazard/toxval/search/by-category/{dtxsid}:
+    name: ct_hazard_toxval_search_by_category
+    file: R/ct_hazard_toxval_search_by_category.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      category:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/search/by-category/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        category:
+          from:
+          - params
+          - category
+    docs:
+      title: Get all data by dtxsid and category
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        category: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
   GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_toxval_supercategory_search
     file: R/ct_hazard_toxval_supercategory_search.R

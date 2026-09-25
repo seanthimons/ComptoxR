@@ -1,0 +1,771 @@
+id: ctx-chemical-prod-rebuild
+schemas:
+  files:
+  - schema/ctx-chemical-prod.json
+selection:
+  include:
+  - GET /chemical/detail/search/by-dtxcid/{dtxcid}
+  - GET /chemical/detail/search/by-smiles/
+  - GET /chemical/fate/search/by-dtxsid/{dtxsid}
+  - GET /chemical/fate/summary/experimental/search/
+  - GET /chemical/fate/summary/predicted/search/
+  - GET /chemical/fate/summary/search/
+  - GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}
+  - GET /chemical/list/chemicals/search/by-listname/{list}
+  - GET /chemical/list/search/by-dtxsid/{dtxsid}
+  - GET /chemical/list/search/by-type/{type}
+  - GET /chemical/list/type
+  - GET /chemical/property/experimental/name
+  - GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}
+  - GET /chemical/property/predicted/name
+  - GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}
+  - GET /chemical/property/summary/experimental/search/
+  - GET /chemical/property/summary/predicted/search/
+  - GET /chemical/property/summary/search/
+  - GET /chemical/property/summary/search/by-dtxsid/{dtxsid}
+  - POST /chemical/detail/search/by-dtxcid/
+  - POST /chemical/property/experimental/search/by-dtxsid/
+  - POST /chemical/property/predicted/search/by-dtxsid/
+helper: generic_request
+documentation: yes
+operations:
+  GET /chemical/detail/search/by-dtxcid/{dtxcid}:
+    name: ct_chemical_detail_search_by_dtxcid
+    file: R/ct_chemical_detail_search_by_dtxcid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxcid:
+        type: character
+        required: yes
+        description: 'DSSTox Compound Identifier. Type: string'
+      projection:
+        type: character
+        default: chemicaldetailall
+        description: 'Projection options for chemical details APIs . Options: chemicaldetailstandard,
+          chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails,
+          chemicaldetailall, compact (default: chemicaldetailall)'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxcid
+        endpoint:
+          value: chemical/detail/search/by-dtxcid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get data by DTXCID
+      lifecycle: stable
+      parameters:
+        dtxcid: 'DSSTox Compound Identifier. Type: string'
+        projection: 'Projection options for chemical details APIs . Options: chemicaldetailstandard,
+          chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails,
+          chemicaldetailall, compact (default: chemicaldetailall)'
+      return: Returns a scalar value
+      examples:
+      - dtxcid: DTXCID505
+  GET /chemical/detail/search/by-smiles/:
+    name: ct_chemical_detail_search_by_smiles
+    file: R/ct_chemical_detail_search_by_smiles.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: SMILES String
+    request:
+      arguments:
+        endpoint:
+          value: chemical/detail/search/by-smiles/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        smiles:
+          from:
+          - params
+          - smiles
+    docs:
+      title: Get data by SMILES
+      lifecycle: stable
+      parameters:
+        smiles: SMILES String
+      return: Returns a scalar value
+      examples:
+      - smiles: CC(C)(C1=CC=C(O)C=C1)C1=CC=C(O)C=C1
+  GET /chemical/fate/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_fate_search_by_dtxsid
+    file: R/ct_chemical_fate_search_by_dtxsid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/fate/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get fate data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/experimental/search/:
+    name: ct_chemical_fate_experimental_search
+    file: R/ct_chemical_fate_experimental_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/experimental/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get experimental fate summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/predicted/search/:
+    name: ct_chemical_fate_predicted_search
+    file: R/ct_chemical_fate_predicted_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/predicted/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get predicted fate summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/search/:
+    name: ct_chemical_fate_summary_search
+    file: R/ct_chemical_fate_summary_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/fate/summary/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get fate summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_fate_summary_search_by_dtxsid
+    file: R/ct_chemical_fate_summary_search_by_dtxsid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/fate/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get fate summary by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/list/chemicals/search/by-listname/{list}:
+    name: ct_chemical_list_chemicals_search_by_listname
+    file: R/ct_chemical_list_chemicals_search_by_listname.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      list:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - list
+        endpoint:
+          value: chemical/list/chemicals/search/by-listname/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get DTXSIDs by list
+      lifecycle: stable
+      parameters:
+        list: 'Primary query parameter. Type: string'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - list: 40CFR1164
+  GET /chemical/list/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_list_search
+    file: R/ct_chemical_list_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: chemicallistall
+        description: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/list/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get lists containing DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID1020560
+  GET /chemical/list/search/by-type/{type}:
+    name: ct_chemical_list_search_by_type
+    file: R/ct_chemical_list_search_by_type.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      type:
+        type: character
+        required: yes
+        description: 'Chemical List Type. Type: string'
+      projection:
+        type: character
+        default: chemicallistall
+        description: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - type
+        endpoint:
+          value: chemical/list/search/by-type/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get lists by list type
+      lifecycle: stable
+      parameters:
+        type: 'Chemical List Type. Type: string'
+        projection: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+      return: Returns a scalar value
+      examples:
+      - type: other
+  GET /chemical/list/type:
+    name: ct_chemical_list_type
+    file: R/ct_chemical_list_type.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: chemical/list/type
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get all list types
+      lifecycle: stable
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - {}
+  GET /chemical/property/experimental/name:
+    name: ct_chemical_property_experimental_name
+    file: R/ct_chemical_property_experimental_name.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/experimental/name
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get all experimental property options
+      lifecycle: stable
+      parameters: {}
+      return: Returns a scalar value
+      examples:
+      - {}
+  GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_experimental_search_by_dtxsid
+    file: R/ct_chemical_property_experimental_search_by_dtxsid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/experimental/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get experimental properties by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/predicted/name:
+    name: ct_chemical_property_predicted_name
+    file: R/ct_chemical_property_predicted_name.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/predicted/name
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+    docs:
+      title: Get all predicted property options
+      lifecycle: stable
+      parameters: {}
+      return: Returns a scalar value
+      examples:
+      - {}
+  GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_predicted_search_by_dtxsid
+    file: R/ct_chemical_property_predicted_search_by_dtxsid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/predicted/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get predicted properties by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/experimental/search/:
+    name: ct_chemical_property_summary_experimental_search
+    file: R/ct_chemical_property_summary_experimental_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/experimental/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get experimental summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/predicted/search/:
+    name: ct_chemical_property_summary_predicted_search
+    file: R/ct_chemical_property_summary_predicted_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/predicted/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get predicted property summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/search/:
+    name: ct_chemical_property_summary_search
+    file: R/ct_chemical_property_summary_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: Required parameter
+      propName:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: chemical/property/summary/search/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        dtxsid:
+          from:
+          - params
+          - dtxsid
+        propName:
+          from:
+          - params
+          - propName
+    docs:
+      title: Get summary by DTXSID and property
+      lifecycle: stable
+      parameters:
+        dtxsid: Required parameter
+        propName: Required parameter
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /chemical/property/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_property_summary_search_by_dtxsid
+    file: R/ct_chemical_property_summary_search_by_dtxsid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/property/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get summary by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  POST /chemical/detail/search/by-dtxcid/:
+    name: ct_chemical_detail_search_by_dtxcid_bulk
+    file: R/ct_chemical_detail_search_by_dtxcid.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+      projection:
+        type: character
+        default: chemicaldetailall
+        description: 'Projection options for chemical details APIs . Options: chemicaldetailstandard,
+          chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails,
+          chemicaldetailall, compact (default: chemicaldetailall)'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/detail/search/by-dtxcid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get data for a batch of DTXCIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+        projection: 'Projection options for chemical details APIs . Options: chemicaldetailstandard,
+          chemicalidentifier, chemicalstructure, ntatoolkit, ccdchemicaldetails, ccdassaydetails,
+          chemicaldetailall, compact (default: chemicaldetailall)'
+      return: Returns a scalar value
+      examples:
+      - query: DTXSID1024122
+  POST /chemical/property/experimental/search/by-dtxsid/:
+    name: ct_chemical_property_experimental_search_bulk
+    file: R/ct_chemical_property_experimental_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/property/experimental/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get experimental properties for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query: DTXSID1024122
+  POST /chemical/property/predicted/search/by-dtxsid/:
+    name: ct_chemical_property_predicted_search_bulk
+    file: R/ct_chemical_property_predicted_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/property/predicted/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get predicted properties for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query: DTXSID1024122
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

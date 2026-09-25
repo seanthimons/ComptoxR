@@ -1,27 +1,25 @@
 #' Get experimental summary by DTXSID and property
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("stable")`
-#'
 #' @param dtxsid Required parameter
 #' @param propName Required parameter
 #' @return Returns a scalar value
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' ct_chemical_property_summary_experimental_search(dtxsid = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 ct_chemical_property_summary_experimental_search <- function(dtxsid, propName) {
+  params <- base::list("dtxsid" = dtxsid, "propName" = propName)
   result <- generic_request(
-    endpoint = "chemical/property/summary/experimental/search/",
-    method = "GET",
-    batch_limit = 0,
-    `dtxsid` = dtxsid,
-    `propName` = propName
+    "endpoint" = "chemical/property/summary/experimental/search/",
+    "method" = "GET",
+    "batch_limit" = 0,
+    "dtxsid" = params[["dtxsid"]],
+    "propName" = params[["propName"]]
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }
