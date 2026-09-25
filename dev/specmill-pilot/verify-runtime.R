@@ -146,7 +146,9 @@ verify_client <- function(lib, out, lookup_cases) {
       saveRDS(list(actual = actual, expected = wire), file.path(out, paste0(name, "-wire-failure.rds")))
       stop("Exact wire assertion failed: ", name, "; inspect ", out)
     }
-    stopifnot(identical(is.list(value) && "error_class" %in% names(value), error))
+    if (!identical(is.list(value) && "error_class" %in% names(value), error)) {
+      stop("Unexpected ", if (error) "success" else paste("error:", value$message), " in ", name)
+    }
     results[[name]] <<- list(value = value, warnings = warnings, requests = actual)
     invisible(value)
   }

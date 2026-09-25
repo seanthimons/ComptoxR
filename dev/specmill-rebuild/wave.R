@@ -264,7 +264,10 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
           x[optional] <- values
           x
         }
-        variants$explicit <- set(as.list(sprintf('pilot-option-%d', seq_along(optional))))
+        # Explicit values follow each input's declared type so the localhost probe stays valid.
+        variants$explicit <- set(Map(function(p, k) {
+          switch(record$proposal$inputs[[p]]$type, numeric = k + 1, logical = TRUE, sprintf('pilot-option-%d', k))
+        }, optional, seq_along(optional)))
         variants$false <- set(list(FALSE))
         variants$zero <- set(list(0))
       }
@@ -293,7 +296,9 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       if (length(optional)) {
         # Wire is observed and compared original-versus-generated rather than modeled.
         cases[[name]]$observe <- TRUE
-        cases[[name]]$variants <- variants['omitted']
+        cases[[name]]$inputs <- variants$omitted
+        cases[[name]]$arguments <- run(original, variants$omitted)$calls[[1L]]$arguments
+        cases[[name]]$variants <- variants['explicit']
       }
       code
     },
