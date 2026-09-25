@@ -107,11 +107,6 @@ documentation <- function(lines, start, name) {
       return(setNames(list(), character()))
     }
     lapply(args, function(x) {
-      # A c() of scalar literals is a sequence example; specmill renders it back as c(...).
-      if (is.call(x) && identical(x[[1L]], as.name('c')) && length(x) > 1L &&
-        all(vapply(as.list(x)[-1L], function(v) is.atomic(v) && length(v) == 1L, FALSE))) {
-        return(as.list(eval(x, baseenv())))
-      }
       if (is.call(x) || is.symbol(x)) stop('Computed example needs manual mapping')
       x
     })
