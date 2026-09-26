@@ -122,7 +122,7 @@ base::baseenv())`, which would change the Rd examples. Nine `*_bulk` wrappers
 stay retained for that reason
 ([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
 
-## Defects found in the original client (reported, not fixed)
+## Defects found in the original client (#329, #330; not fixed here)
 
 - Paginated `generic_request` wrappers send only the first query of a batch.
   Queries 2..n are dropped. The runtime batch probe is skipped for these
