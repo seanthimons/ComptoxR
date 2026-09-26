@@ -187,3 +187,22 @@ it can bind a value a hook adds (such as `chemicals`) via
 - `wave.R` does not yet propose hook mappings
   ([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54)
   proposes moving that tooling into specmill).
+
+## Full rebuild rehearsal (#328)
+
+Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
+each one is classified. The rehearsal ran `rehearse.R` at `a542bb40` with the
+expanded allowlist. In a detached worktree, it removed the 204 allowlisted
+files. Regeneration, a second `--apply`, and `--check` were each
+byte-identical, and `git status` stayed empty. The rebuilt client was then
+installed into `artifacts/rebuild-final-library` and checked two ways:
+
+- The contract, request-edge, and hook tests passed.
+- All 1015 localhost cases (409 exported signatures) matched the original
+  `4fd720b9` client, with no candidate failures.
+
+No output was promoted: the rebuilt tree is identical to the branch.
+
+Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`) to
+restore the hand-written files and legacy tests. Revert the other
+`dev/specmill-rebuild/` commits to remove the tooling.
