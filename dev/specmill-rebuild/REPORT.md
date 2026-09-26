@@ -119,7 +119,8 @@ modelled.
 A trial `vector-examples` wave was rejected, and nothing from it was promoted.
 Specmill renders a `c("a", "b")` example as `base::evalq(c(...), envir =
 base::baseenv())`, which would change the Rd examples. Nine `*_bulk` wrappers
-stay retained for that reason.
+stay retained for that reason
+([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
 
 ## Defects found in the original client (reported, not fixed)
 
@@ -174,28 +175,15 @@ All 28 hooked wrappers are retained as client-owned. Every stage declared in
 `inst/hook_config.yml` is invoked by its wrapper, every pre-request chain
 honors `skip_request`, and the chains are exercised by the existing
 `hooks_stage_server`, `ct_chemical_list_all_hooks`, `test-hooks_*`, and
-webtest hook tests. Specmill's `run_hook` flow cannot represent these chains
-without changing semantics, for two reasons:
+webtest hook tests. Specmill's hook flow could represent these chains. It
+supports `extra_parameters`, `skip_request`, `post_on_skip`, and `post_state`,
+it writes changed `params` back after pre-request (as these wrappers do), and
+it can bind a value a hook adds (such as `chemicals`) via
+`{from: [hook_state, params, chemicals]}`. Two things block adoption today:
 
-- Seventeen of them use `extra_params`, which specmill does not have.
-- The wrappers rebind parameters by hand after the pre-request stage, whereas
-  specmill copies back only the changed `params`.
-
-## Full rebuild rehearsal (#328)
-
-Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `a542bb40` with the
-expanded allowlist. In a detached worktree, it removed the 204 allowlisted
-files. Regeneration, a second `--apply`, and `--check` were each
-byte-identical, and `git status` stayed empty. The rebuilt client was then
-installed into `artifacts/rebuild-final-library` and checked two ways:
-
-- The contract, request-edge, and hook tests passed.
-- All 1015 localhost cases (409 exported signatures) matched the original
-  `4fd720b9` client, with no candidate failures.
-
-No output was promoted: the rebuilt tree is identical to the branch.
-
-Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`) to
-restore the hand-written files and legacy tests. Revert the other
-`dev/specmill-rebuild/` commits to remove the tooling.
+- Specmill renders vector defaults like `format = c("compact", "tidy", "raw")`
+  as `base::evalq(...)`, which changes the public formals
+  ([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
+- `wave.R` does not yet propose hook mappings
+  ([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54)
+  proposes moving that tooling into specmill).
