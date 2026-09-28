@@ -154,10 +154,10 @@ documentation <- function(lines, start, name) {
   if (length(badge) != 1L) {
     stop('Missing or multiple lifecycle badges need manual mapping')
   }
-  prose <- desc[nzchar(desc) & !grepl('lifecycle::badge', desc, fixed = TRUE)]
-  if (length(prose)) {
-    stop('Description prose needs manual mapping')
-  }
+  # Prose after the badge maps to docs$description, as specmill's adoption reader does.
+  prose <- desc[!grepl('lifecycle::badge', desc, fixed = TRUE)]
+  prose <- prose[seq_len(max(c(0L, which(nzchar(prose)))))]
+  prose <- prose[cumsum(nzchar(prose)) > 0L]
   if (sum(nzchar(text[seq_len(desc_row - 1L)])) != 1L) {
     stop('Multi-line title or details need manual mapping')
   }
@@ -193,6 +193,7 @@ documentation <- function(lines, start, name) {
     return = sub('^@return ', '', grep('^@return ', text, value = TRUE)),
     examples = examples
   )
+  if (length(prose)) docs$description <- paste(prose, collapse = '\n')
   if (length(stage)) docs$tags <- list(apiStage = sub('^@apiStage ', '', stage))
   docs
 }
@@ -256,10 +257,15 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         inputs <- lapply(names(formal_list), function(parameter) {
           default <- formal_list[parameter]
           required <- identical(default, setNames(as.list(formals(function(x) NULL)), parameter))
-          if (!required && (is.call(default[[1]]) || is.symbol(default[[1]]))) {
+          value <- if (required) NULL else default[[1]]
+          # A c() of scalar literals is a vector default; specmill renders a sequence back as c(...).
+          if (is.call(value) && identical(value[[1L]], as.name('c')) && length(value) > 1L &&
+            all(vapply(as.list(value)[-1L], function(v) is.atomic(v) && length(v) == 1L, FALSE))) {
+            value <- eval(value, baseenv())
+          }
+          if (!required && (is.call(value) || is.symbol(value))) {
             stop('Computed default requires manual mapping')
           }
-          value <- if (required) NULL else default[[1]]
           settings <- list(type = if (is.numeric(value)) 'numeric' else if (is.logical(value)) 'logical' else 'character')
           if (required) settings$required <- TRUE else settings['default'] <- list(value)
           settings$description <- docs$parameters[[parameter]]
