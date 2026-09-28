@@ -15,14 +15,14 @@ with SHA-256 hashes.
 
 | Export category | Exports |
 | --- | ---: |
-| generated (specmill-owned) | 225 |
+| generated (specmill-owned) | 261 |
 | retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 122 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 85 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
 | re-exported `%>%` | 1 |
-| **Total** | **409** |
+| **Total** | **408** |
 
 The inventory categorizes exports by source file and mapping, not by name
 prefix. As a result, `chemi_server()` and `epi_server()` are classified as
@@ -117,6 +117,8 @@ A wave is adopted only when all of the following hold:
 | vector-examples | 14 | 1099 | `30a4dc49` |
 | hooks | 5 | 1113 | `b5bccc97` |
 | prose-defaults | 6 | 1137 | `f547ff22` |
+| multipart | 9 | 1166 | `27ca365d` |
+| hazard | 2 | 1174 | `2ac52814` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -161,18 +163,18 @@ operation key, file, and wave. Each retained export records:
 
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
-| #310 | 87 | 19 | 3 |
-| #311 | 51 | 42 | 0 |
-| #312 | 9 | 17 | 0 |
+| #310 | 87 | 18 | 3 |
+| #311 | 56 | 37 | 0 |
+| #312 | 13 | 13 | 0 |
 | #313 | 0 | 16 | 0 |
-| #314 | 2 | 2 | 0 |
+| #314 | 4 | 0 | 0 |
 
 Reasons for keeping an export retained:
 
-- no unique supported schema route (44), including the ambiguous-media and
+- no unique supported schema route (37), including the ambiguous-media and
   malformed-route blockers in #313;
 - a hand-written implementation (18);
-- an inseparable grouped file (16);
+- an inseparable grouped file (11);
 - a request built by a pre-request hook (12);
 - a nonliteral helper argument (3);
 - a candidate whose no-argument call differs (1);
@@ -205,37 +207,61 @@ generated `chemi_resolver_getpubchemlist`, `_getsimilaritylist`,
 `_orderBySimilarity`, `_pubchem_section`, `_pubchem_section_bulk`, and
 `chemi_stdizer_chemicals`; `man/` is unchanged.
 
-The other 18 hooked wrappers stay client-owned:
+The multipart and hazard waves (below) generated `chemi_alerts`,
+`chemi_hazard`, `chemi_hazard_bulk`, and `chemi_toxprints_calculate_bulk`.
+`ct_similar` was removed (below). The other 13 hooked wrappers stay
+client-owned:
 
 - 12 descriptor and webtest wrappers build the request inside a pre-request
   hook, so no route is guessed;
-- `chemi_resolver_getsimilaritymap` computes `sort` inline in the helper call;
-- `chemi_hazard` now screens clean but shares a file with `chemi_hazard_bulk`;
-- `chemi_alerts`, `chemi_hazard_bulk`, and `chemi_toxprints_calculate_bulk`
-  call real endpoints, but the audit blocks them (`binary_parameter`, issue
-  28): springdoc folded the multipart `files[]` and `request` query parameters
-  into the JSON POST. A schema overlay that drops those two parameters would
-  unblock them. The wrappers also send `request.*` options as ignored query
-  strings and nest a non-NULL `options` twice (`{"options":{"options":...}}`);
-- `ct_similar` calls the undocumented `dashboard-api/similar-compound`
-  endpoint, which is in no schema, and stays hand-written (`questioning`).
+- `chemi_resolver_getsimilaritymap` computes `sort` inline in the helper call.
+
+## Springdoc multipart parameters
+
+The published chemi schemas (public, staging, and dev alike) fold the
+multipart upload variant into JSON POST operations as stray query parameters:
+`files[]` (binary) and `request` (object). The audit blocked those operations
+as `binary_parameter`. `chemi_schema()` in `R/schema.R` now strips them before
+writing each snapshot, via `strip_multipart_query()`. It touches only
+operations with an `application/json` body. It drops binary query parameters,
+and drops `request` only when a binary parameter was dropped from the same
+operation. Six operations changed: POST `/api/alerts`, `/api/alerts/groups`,
+`/api/hazard`, `/api/resolver/safety-flags`, `/api/stdizer/groups`, and
+`/api/toxprints/calculate`. The audit's blockers went from 53 to 47.
+
+The multipart wave generated 9 wrappers from those files. The regenerated
+wrappers no longer send `request.*` options as ignored query strings or nest
+a non-NULL `options` twice. `chemi_hazard` first failed on formals because
+`wave.R` rendered operations on their own, and specmill then guards literals
+as `base::evalq(c(...))`. Full generation guards them only when the package
+shadows a base constructor, so `wave.R` now renders without guards.
+
+## Removed: `ct_similar`
+
+`ct_similar` scraped the undocumented `dashboard-api/similar-compound`
+endpoint, which is in no schema. It was removed along with its only hook,
+`validate_similarity`. `genra_predict()` now finds analogues with
+`chemi_search(target, "similar", min_similarity = , all_pages = TRUE)` and
+drops the query's own "parent" row. `verify-runtime.R` lists `ct_similar` as
+an intentionally removed export; every other interface must still match the
+original client.
 
 ## Full rebuild rehearsal (#328)
 
-Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `65303506`
+Scope is frozen at the 408 exports in [inventory.json](inventory.json), and
+each one is classified. The rehearsal ran `rehearse.R` at `8d3a2986`
 (specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
-removed the 222 allowlisted files. Regeneration, a second `--apply`, and
+removed the 228 allowlisted files. Regeneration, a second `--apply`, and
 `--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
 - The contract, request-edge, and hook tests passed.
-- All 1137 localhost cases (409 exported signatures) matched the original
+- All 1174 localhost cases (408 exported signatures) matched the original
   `4fd720b9` client, with no candidate failures.
 
 No output was promoted: the rebuilt tree is identical to the branch.
 
 Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
-`30a4dc49`, `b5bccc97`, `f547ff22`) to
+`30a4dc49`, `b5bccc97`, `f547ff22`, `27ca365d`, `2ac52814`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
