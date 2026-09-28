@@ -1,9 +1,9 @@
 {
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.4",
-    "source_commit": "f41eeb9bae628eeb1f0fee16227f5ee8373a7ae2",
-    "source_archive_sha256": "b2d3eecdb82d7dfd4fc1944197f4f4df904a0b032afb1756951cf7b2c7c8299d",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -11,11 +11,11 @@
   "schemas": {
     "chemi-alerts-prod.json": {
       "schema": "chemi-alerts-prod.json",
-      "sha256": "aabd653b436d793b92a84b09e61f033d5282b2877d5834bd908173e4a959002d",
+      "sha256": "c14bfadd6998465c7e233345e2c27473151b610089ff4a37c722a9ae27856531",
       "status": "parsed",
-      "supported_keys": ["GET /api/alerts/alerts", "POST /api/alerts/export", "POST /api/alerts/export-append", "GET /api/alerts/groups", "DELETE /api/alerts/groups/{id}", "GET /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "PATCH /api/alerts/groups/{id}/freeze", "GET /api/alerts/metadata", "GET /api/alerts/operations", "GET /api/alerts/render", "GET /api/alerts/version"],
-      "supported": 12,
-      "blocked": 4
+      "supported_keys": ["POST /api/alerts", "GET /api/alerts/alerts", "POST /api/alerts/export", "POST /api/alerts/export-append", "GET /api/alerts/groups", "POST /api/alerts/groups", "DELETE /api/alerts/groups/{id}", "GET /api/alerts/groups/{id}", "PUT /api/alerts/groups/{id}", "PATCH /api/alerts/groups/{id}/freeze", "GET /api/alerts/metadata", "GET /api/alerts/operations", "GET /api/alerts/render", "GET /api/alerts/version"],
+      "supported": 14,
+      "blocked": 2
     },
     "chemi-amnb_nate-prod.json": {
       "schema": "chemi-amnb_nate-prod.json",
@@ -45,7 +45,7 @@
       "schema": "chemi-chet-prod.json",
       "sha256": "df83f5d3fd7b59d23f556332526c330e579763d8a8858d222836931fe6321700",
       "status": "schema_error",
-      "reason": "Operation name collision; supply reviewed name overrides"
+      "reason": "Operation name collision; supply reviewed name overrides:\n  api.reaction.map_dl_options:\n    OPTIONS /reaction/batchsearch\n    OPTIONS /reaction/map_DL\nReview these example names and pass policy = list(names = list(\n  \"OPTIONS /reaction/batchsearch\" = \"api.reaction.map_dl_options\",\n  \"OPTIONS /reaction/map_DL\" = \"api.reaction.map_dl_options_1\"\n)).\nFor a generated client, edit the service YAML names: map written by initialize_client() before calling generate_client(). configure_client() reports collisions for review."
     },
     "chemi-descriptors-prod.json": {
       "schema": "chemi-descriptors-prod.json",
@@ -57,11 +57,11 @@
     },
     "chemi-hazard-prod.json": {
       "schema": "chemi-hazard-prod.json",
-      "sha256": "ca80159bc348e7f2856b6c0b01d75a1e9268be8f992213fa362004da3127311d",
+      "sha256": "eba2ef057483653c9c43991f6381f93b153ec40c79fd12ef4d6aae5fce0e4086",
       "status": "parsed",
-      "supported_keys": ["GET /api/hazard", "GET /api/hazard/download", "GET /api/hazard/metadata", "POST /api/hazard/report/export", "POST /api/hazard/report/export-append", "POST /api/hazard/report/export2", "GET /api/hazard/reports", "POST /api/hazard/reports", "GET /api/hazard/reports/check", "DELETE /api/hazard/reports/{id}", "GET /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}/acl", "POST /api/hazard/reports/{id}/export", "GET /api/hazard/version"],
-      "supported": 15,
-      "blocked": 1
+      "supported_keys": ["GET /api/hazard", "POST /api/hazard", "GET /api/hazard/download", "GET /api/hazard/metadata", "POST /api/hazard/report/export", "POST /api/hazard/report/export-append", "POST /api/hazard/report/export2", "GET /api/hazard/reports", "POST /api/hazard/reports", "GET /api/hazard/reports/check", "DELETE /api/hazard/reports/{id}", "GET /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}", "PUT /api/hazard/reports/{id}/acl", "POST /api/hazard/reports/{id}/export", "GET /api/hazard/version"],
+      "supported": 16,
+      "blocked": 0
     },
     "chemi-mordred-prod.json": {
       "schema": "chemi-mordred-prod.json",
@@ -129,11 +129,11 @@
     },
     "chemi-resolver-prod.json": {
       "schema": "chemi-resolver-prod.json",
-      "sha256": "e979709d6eb80598e86fcd7dacee37b9d7a63a14f9cad9be6935bae1996f80d2",
+      "sha256": "af7eac180825459ee9db584e9b29c40f7df95083657e005c01f601251ffc8fac",
       "status": "parsed",
-      "supported_keys": ["GET /api/resolver/ccte-list", "GET /api/resolver/ccte-lists", "GET /api/resolver/classyfire", "GET /api/resolver/export", "POST /api/resolver/export", "POST /api/resolver/export-append", "POST /api/resolver/export-records", "GET /api/resolver/export-section", "POST /api/resolver/export-section", "POST /api/resolver/export_classyfire", "POST /api/resolver/exportpubchemlist", "POST /api/resolver/exportsimilaritylist", "POST /api/resolver/exportsimilaritymap", "GET /api/resolver/getallannotations", "GET /api/resolver/getannotation", "GET /api/resolver/getannotationslist", "GET /api/resolver/getdatasources", "GET /api/resolver/getintegrityreports", "POST /api/resolver/getpubchemlist", "POST /api/resolver/getsimilaritylist", "POST /api/resolver/getsimilaritymap", "GET /api/resolver/getsubstance", "GET /api/resolver/ghs-list", "POST /api/resolver/ghs-list-count", "GET /api/resolver/ghs/classes", "GET /api/resolver/ghs/hcodes", "GET /api/resolver/ghs/pcodes", "GET /api/resolver/hcodes", "GET /api/resolver/links", "GET /api/resolver/lookup", "POST /api/resolver/lookup", "GET /api/resolver/lookupCASRN", "GET /api/resolver/mesh", "GET /api/resolver/metadata", "POST /api/resolver/orderBySimilarity", "GET /api/resolver/pubchem-section", "POST /api/resolver/pubchem-section", "GET /api/resolver/render", "POST /api/resolver/resolve", "GET /api/resolver/safety-flags", "POST /api/resolver/universalharvest_cart", "GET /api/resolver/version"],
-      "supported": 42,
-      "blocked": 4
+      "supported_keys": ["GET /api/resolver/ccte-list", "GET /api/resolver/ccte-lists", "GET /api/resolver/classyfire", "GET /api/resolver/export", "POST /api/resolver/export", "POST /api/resolver/export-append", "POST /api/resolver/export-records", "GET /api/resolver/export-section", "POST /api/resolver/export-section", "POST /api/resolver/export_classyfire", "POST /api/resolver/exportpubchemlist", "POST /api/resolver/exportsimilaritylist", "POST /api/resolver/exportsimilaritymap", "GET /api/resolver/getallannotations", "GET /api/resolver/getannotation", "GET /api/resolver/getannotationslist", "GET /api/resolver/getdatasources", "GET /api/resolver/getintegrityreports", "POST /api/resolver/getpubchemlist", "POST /api/resolver/getsimilaritylist", "POST /api/resolver/getsimilaritymap", "GET /api/resolver/getsubstance", "GET /api/resolver/ghs-list", "POST /api/resolver/ghs-list-count", "GET /api/resolver/ghs/classes", "GET /api/resolver/ghs/hcodes", "GET /api/resolver/ghs/pcodes", "GET /api/resolver/hcodes", "GET /api/resolver/links", "GET /api/resolver/lookup", "POST /api/resolver/lookup", "GET /api/resolver/lookupCASRN", "GET /api/resolver/mesh", "GET /api/resolver/metadata", "POST /api/resolver/orderBySimilarity", "GET /api/resolver/pubchem-section", "POST /api/resolver/pubchem-section", "GET /api/resolver/render", "POST /api/resolver/resolve", "GET /api/resolver/safety-flags", "POST /api/resolver/safety-flags", "POST /api/resolver/universalharvest_cart", "GET /api/resolver/version"],
+      "supported": 43,
+      "blocked": 3
     },
     "chemi-safety-prod.json": {
       "schema": "chemi-safety-prod.json",
@@ -161,19 +161,19 @@
     },
     "chemi-stdizer-prod.json": {
       "schema": "chemi-stdizer-prod.json",
-      "sha256": "178680219fccf31ecd6778532e69deff196e3767e3f8b6b3558d1cc3256f12ec",
+      "sha256": "2bc303a96599dab65b349b9a57168731c8c8640ce90fec47b964bdbe30859ff3",
       "status": "parsed",
-      "supported_keys": ["GET /api/stdizer", "POST /api/stdizer/chemicals", "GET /api/stdizer/groups", "DELETE /api/stdizer/groups/{id}", "GET /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}/acl", "PATCH /api/stdizer/groups/{id}/freeze", "GET /api/stdizer/groups/{id}/recursive", "GET /api/stdizer/metadata", "GET /api/stdizer/operations", "POST /api/stdizer/protocol/export", "GET /api/stdizer/protocols", "POST /api/stdizer/protocols", "GET /api/stdizer/protocols/check", "DELETE /api/stdizer/protocols/{id}", "PATCH /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}/acl", "GET /api/stdizer/protocols/{id}/changes", "POST /api/stdizer/protocols/{id}/export", "GET /api/stdizer/protocols/{id}/issues", "POST /api/stdizer/records", "GET /api/stdizer/render", "GET /api/stdizer/version", "GET /api/stdizer/workflows"],
-      "supported": 26,
-      "blocked": 7
+      "supported_keys": ["GET /api/stdizer", "POST /api/stdizer/chemicals", "GET /api/stdizer/groups", "POST /api/stdizer/groups", "DELETE /api/stdizer/groups/{id}", "GET /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}", "PUT /api/stdizer/groups/{id}/acl", "PATCH /api/stdizer/groups/{id}/freeze", "GET /api/stdizer/groups/{id}/recursive", "GET /api/stdizer/metadata", "GET /api/stdizer/operations", "POST /api/stdizer/protocol/export", "GET /api/stdizer/protocols", "POST /api/stdizer/protocols", "GET /api/stdizer/protocols/check", "DELETE /api/stdizer/protocols/{id}", "PATCH /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}", "PUT /api/stdizer/protocols/{id}/acl", "GET /api/stdizer/protocols/{id}/changes", "POST /api/stdizer/protocols/{id}/export", "GET /api/stdizer/protocols/{id}/issues", "POST /api/stdizer/records", "GET /api/stdizer/render", "GET /api/stdizer/version", "GET /api/stdizer/workflows"],
+      "supported": 27,
+      "blocked": 6
     },
     "chemi-toxprints-prod.json": {
       "schema": "chemi-toxprints-prod.json",
-      "sha256": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
+      "sha256": "253ae392298e808e0953e2fd92d080a0ac79eb8a1a39a81b6ad0fc93b221972d",
       "status": "parsed",
-      "supported_keys": ["GET /api/toxprints", "POST /api/toxprints", "GET /api/toxprints/assays", "POST /api/toxprints/assays", "GET /api/toxprints/assays/check", "DELETE /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}/acl", "GET /api/toxprints/assays/{name}", "GET /api/toxprints/calculate", "POST /api/toxprints/chemicals_categories", "GET /api/toxprints/download", "GET /api/toxprints/enrichments", "POST /api/toxprints/export", "POST /api/toxprints/export_global", "GET /api/toxprints/global_assays", "GET /api/toxprints/global_toxprints", "GET /api/toxprints/metadata", "GET /api/toxprints/render", "GET /api/toxprints/toxprints", "POST /api/toxprints/toxprints_categories", "GET /api/toxprints/version"],
-      "supported": 22,
-      "blocked": 1
+      "supported_keys": ["GET /api/toxprints", "POST /api/toxprints", "GET /api/toxprints/assays", "POST /api/toxprints/assays", "GET /api/toxprints/assays/check", "DELETE /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}", "PUT /api/toxprints/assays/{id}/acl", "GET /api/toxprints/assays/{name}", "GET /api/toxprints/calculate", "POST /api/toxprints/calculate", "POST /api/toxprints/chemicals_categories", "GET /api/toxprints/download", "GET /api/toxprints/enrichments", "POST /api/toxprints/export", "POST /api/toxprints/export_global", "GET /api/toxprints/global_assays", "GET /api/toxprints/global_toxprints", "GET /api/toxprints/metadata", "GET /api/toxprints/render", "GET /api/toxprints/toxprints", "POST /api/toxprints/toxprints_categories", "GET /api/toxprints/version"],
+      "supported": 23,
+      "blocked": 0
     },
     "chemi-webtest-prod.json": {
       "schema": "chemi-webtest-prod.json",
@@ -257,24 +257,6 @@
     }
   },
   "primary_blockers": [
-    {
-      "schema": "chemi-alerts-prod.json",
-      "key": "POST /api/alerts",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-      "source_location": "#/paths/~1api~1alerts/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
-    },
-    {
-      "schema": "chemi-alerts-prod.json",
-      "key": "POST /api/alerts/groups",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16)",
-      "source_location": "#/paths/~1api~1alerts~1groups/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
-    },
     {
       "schema": "chemi-alerts-prod.json",
       "key": "POST /api/alerts/groups/{id}/add",
@@ -582,15 +564,6 @@
       "disposition": "blocked pending upstream contract"
     },
     {
-      "schema": "chemi-hazard-prod.json",
-      "key": "POST /api/hazard",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-      "source_location": "#/paths/~1api~1hazard/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
-    },
-    {
       "schema": "chemi-resolver-prod.json",
       "key": "POST /api/resolver/casharvest",
       "issue": 28,
@@ -607,15 +580,6 @@
       "reason": "OAS 3.1 GET request body requires an explicit operation body_media review",
       "source_location": "#/paths/~1api~1resolver~1ghs-list-count/get/requestBody",
       "disposition": "unsupported (#29)"
-    },
-    {
-      "schema": "chemi-resolver-prod.json",
-      "key": "POST /api/resolver/safety-flags",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-      "source_location": "#/paths/~1api~1resolver~1safety-flags/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
     },
     {
       "schema": "chemi-resolver-prod.json",
@@ -673,15 +637,6 @@
     },
     {
       "schema": "chemi-stdizer-prod.json",
-      "key": "POST /api/stdizer/groups",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-      "source_location": "#/paths/~1api~1stdizer~1groups/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
-    },
-    {
-      "schema": "chemi-stdizer-prod.json",
       "key": "POST /api/stdizer/groups/preflight",
       "issue": 28,
       "code": "binary_parameter",
@@ -724,28 +679,9 @@
       "reason": "Unsupported nested parameter object",
       "source_location": "#/paths/~1api~1stdizer~1protocols~1{id}/post/parameters/1/schema",
       "disposition": "blocked pending upstream contract"
-    },
-    {
-      "schema": "chemi-toxprints-prod.json",
-      "key": "POST /api/toxprints/calculate",
-      "issue": 28,
-      "code": "binary_parameter",
-      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-      "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
-      "disposition": "blocked pending upstream contract"
     }
   ],
   "independent_defects": [
-    {
-      "schema": "chemi-alerts-prod.json",
-      "key": "POST /api/alerts",
-      "parameter": "request",
-      "issue": 31,
-      "code": "nested_parameter",
-      "reason": "Unsupported nested parameter object",
-      "primary_code": "binary_parameter",
-      "rejected": true
-    },
     {
       "schema": "chemi-alerts-prod.json",
       "key": "POST /api/alerts/groups/{id}/add",
@@ -807,28 +743,8 @@
       "rejected": true
     },
     {
-      "schema": "chemi-hazard-prod.json",
-      "key": "POST /api/hazard",
-      "parameter": "request",
-      "issue": 31,
-      "code": "nested_parameter",
-      "reason": "Unsupported nested parameter object",
-      "primary_code": "binary_parameter",
-      "rejected": true
-    },
-    {
       "schema": "chemi-resolver-prod.json",
       "key": "POST /api/resolver/casharvest",
-      "parameter": "request",
-      "issue": 31,
-      "code": "nested_parameter",
-      "reason": "Unsupported nested parameter object",
-      "primary_code": "binary_parameter",
-      "rejected": true
-    },
-    {
-      "schema": "chemi-resolver-prod.json",
-      "key": "POST /api/resolver/safety-flags",
       "parameter": "request",
       "issue": 31,
       "code": "nested_parameter",
@@ -868,16 +784,6 @@
     },
     {
       "schema": "chemi-stdizer-prod.json",
-      "key": "POST /api/stdizer/groups",
-      "parameter": "request",
-      "issue": 31,
-      "code": "nested_parameter",
-      "reason": "Unsupported nested parameter object",
-      "primary_code": "binary_parameter",
-      "rejected": true
-    },
-    {
-      "schema": "chemi-stdizer-prod.json",
       "key": "POST /api/stdizer/groups/{id}/add",
       "parameter": "request",
       "issue": 31,
@@ -904,16 +810,6 @@
       "code": "nested_parameter",
       "reason": "Unsupported nested parameter object",
       "primary_code": "nested_parameter",
-      "rejected": true
-    },
-    {
-      "schema": "chemi-toxprints-prod.json",
-      "key": "POST /api/toxprints/calculate",
-      "parameter": "request",
-      "issue": 31,
-      "code": "nested_parameter",
-      "reason": "Unsupported nested parameter object",
-      "primary_code": "binary_parameter",
       "rejected": true
     }
   ],
