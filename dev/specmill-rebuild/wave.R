@@ -477,7 +477,14 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       target <- function(calls) Filter(function(x) identical(x$arguments$endpoint, endpoint), calls)
       # The definition and its roxygen block, not the whole file, must be the 4fd720b9
       # original, so a grouped file split after the baseline still compares against it.
-      stopifnot(grepl(record$source, paste(readLines(file.path(baseline, record$file)), collapse = '\n'), fixed = TRUE))
+      original_text <- paste(readLines(file.path(baseline, record$file)), collapse = '\n')
+      if (name %in% names(corrections) && !grepl(record$source, original_text, fixed = TRUE)) {
+        # Fixed in place after the baseline (#339): the corrected baseline must be the file.
+        base_expr <- Find(function(e) identical(e[[2L]], as.name(name)), parse(file.path(baseline, record$file), keep.source = FALSE))
+        stopifnot(identical(deparse(correct(base_expr, corrections[[name]])[[3L]]), deparse(record$original)))
+      } else {
+        stopifnot(grepl(record$source, original_text, fixed = TRUE))
+      }
       primary <- variants[[if (length(optional)) 'explicit' else 'omitted']]
       reference <- run(original, primary)
       # A hook that fails before the request would make the comparison vacuous.
