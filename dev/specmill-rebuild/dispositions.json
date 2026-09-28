@@ -887,35 +887,15 @@
     "issue": 310,
     "name": "ct_chemical_list_search_by_name",
     "file": "R/ct_chemical_list_search_by_name.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(listName = , projection = \"chemicallistall\", extract_dtxsids = FALSE))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/list/search/by-name/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/list/search/by-name/{listName}"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "extract_dtxsids_if_requested"
-      ],
-      "extra_params": [
-        "extract_dtxsids"
-      ],
-      "defined_in": [
-        "R/hooks_list.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/search/by-name/{listName}",
+      "file": "R/ct_chemical_list_search_by_name.R",
+      "wave": "hooks"
     }
   },
   "ct_chemical_list_search_by_type": {
@@ -1758,7 +1738,7 @@
     "formals": "as.pairlist(alist(query = , similarity = 0.8))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3662,7 +3642,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.resolve = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3704,7 +3684,7 @@
       "chemi_descriptors_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3751,7 +3731,7 @@
       "chemi_descriptors"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3800,7 +3780,7 @@
       "chemi_hazard_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Computed default requires manual mapping",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3837,7 +3817,7 @@
       "chemi_hazard"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3884,7 +3864,7 @@
       "chemi_mordred_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3929,7 +3909,7 @@
       "chemi_mordred"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3976,7 +3956,7 @@
       "chemi_padel_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4021,7 +4001,7 @@
       "chemi_padel"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4071,7 +4051,7 @@
       "chemi_rdkit_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4116,7 +4096,7 @@
       "chemi_rdkit"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4162,7 +4142,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, all_pages = TRUE, max_pages = 100))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4195,7 +4175,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4228,7 +4208,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, sort = FALSE, hclust_method = \"complete\", format = c(\"cluster\", \"long\", \"raw\")))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4269,7 +4249,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4304,7 +4284,7 @@
       "chemi_resolver_pubchem_section"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4337,7 +4317,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", full = NULL, options = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Description prose needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4372,7 +4352,7 @@
       "chemi_toxprints_calculate"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4414,7 +4394,7 @@
       "chemi_webtest_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4459,7 +4439,7 @@
       "chemi_webtest"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4506,7 +4486,7 @@
       "chemi_webtest_predict_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4545,7 +4525,7 @@
       "chemi_webtest_predict"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4578,132 +4558,60 @@
     "issue": 312,
     "name": "epi_ecosar_dye",
     "file": "R/epi_ecosar_dye.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "NULL",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "ecosar/dye",
-      "supported": [
-        "epi-suite-prod.json GET /api/ecosar/dye"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "unwrap_epi_result"
-      ],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_epi.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "epi-suite-prod-rebuild",
+      "key": "GET /api/ecosar/dye",
+      "file": "R/epi_ecosar_dye.R",
+      "wave": "hooks"
     }
   },
   "epi_ecosar_polymer_nonionic": {
     "issue": 312,
     "name": "epi_ecosar_polymer_nonionic",
     "file": "R/epi_ecosar_polymer_nonionic.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "NULL",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "ecosar/polymer/nonionic",
-      "supported": [
-        "epi-suite-prod.json GET /api/ecosar/polymer/nonionic"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "unwrap_epi_result"
-      ],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_epi.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "epi-suite-prod-rebuild",
+      "key": "GET /api/ecosar/polymer/nonionic",
+      "file": "R/epi_ecosar_polymer_nonionic.R",
+      "wave": "hooks"
     }
   },
   "epi_ecosar_surfactant_nonionic": {
     "issue": 312,
     "name": "epi_ecosar_surfactant_nonionic",
     "file": "R/epi_ecosar_surfactant_nonionic.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "NULL",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "ecosar/surfactant/nonionic",
-      "supported": [
-        "epi-suite-prod.json GET /api/ecosar/surfactant/nonionic"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "unwrap_epi_result"
-      ],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_epi.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "epi-suite-prod-rebuild",
+      "key": "GET /api/ecosar/surfactant/nonionic",
+      "file": "R/epi_ecosar_surfactant_nonionic.R",
+      "wave": "hooks"
     }
   },
   "epi_submit": {
     "issue": 312,
     "name": "epi_submit",
     "file": "R/epi_submit.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "pairlist(smiles = NULL, cas = NULL, modules = NULL, chemicalName = NULL, logKow = NULL, molecularWeight = NULL, waterSolubilityMgPerL = NULL, waterSolubility = NULL, waterSolubilityProvider = \"wskow\", vaporPressureMmHg = NULL, subcooledVaporPressureMmHg = NULL, henryAtmM3PerMol = NULL, logKoa = NULL, koc = NULL, meltingPointC = NULL, boilingPointC = NULL, vaporPressureTemperatureC = 25, aopRateConstant = NULL, biowinScore = NULL, biowin3 = NULL, biowin5 = NULL, removeMetals = TRUE, tspUgPerM3 = 80, theta = 0.00010836, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, skinSurfaceAreaCm2 = NULL, bodyWeightKg = NULL, averagingTimeDays = NULL, fractionAbsorbed = NULL, eventDurationHours = NULL, userKpCmPerHour = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursSettlingTank = NULL, halfLifeAir = NULL, halfLifeWater = NULL, halfLifeSoil = NULL, halfLifeSediment = NULL, emissionRateAir = NULL, emissionRateWater = NULL, emissionRateSoil = NULL, emissionRateSediment = NULL, advectionTimeAir = NULL, advectionTimeWater = NULL, advectionTimeSoil = NULL, advectionTimeSediment = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, daylightHours = 12, riverWindMPerSec = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, lakeWindMPerSec = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, carbonChainLength = NULL, mainCarbons = NULL, branchedCarbons = NULL, branches = NULL, propoxyGroups = NULL, ethoxylate = NULL, amineNitrogens = NULL, cationAnionRatio = NULL, mw500Percentage = NULL, mw1000Percentage = NULL, averageMolecularWeight = NULL, useSmiles = NULL, solubilityType = NULL, polymerType = NULL)",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "submit",
-      "supported": [
-        "epi-suite-prod.json GET /api/submit"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "unwrap_epi_result"
-      ],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_epi.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "epi-suite-prod-rebuild",
+      "key": "GET /api/submit",
+      "file": "R/epi_submit.R",
+      "wave": "hooks"
     }
   },
   "chemi_amos_count_substances_in_ids": {
