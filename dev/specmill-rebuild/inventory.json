@@ -1,5 +1,5 @@
 {
-  "commit": "2cdc50cc0066ee0b5974a02ec0198f074992cc5b",
+  "commit": "2ac528149e170bafcdc9c0022fc4e65b3f4e0069",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 259,
+    "generated": 261,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 87,
+    "unmapped_wrapper": 85,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 227,
+  "removable_files": 228,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -1091,20 +1091,20 @@
       "name": "chemi_hazard",
       "file": "R/chemi_hazard.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-hazard-prod-rebuild GET /api/hazard",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , full = TRUE, format = c(\"compact\", \"tidy\", \"raw\")))"
     },
     {
       "name": "chemi_hazard_bulk",
       "file": "R/chemi_hazard.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-hazard-prod-rebuild POST /api/hazard",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", empty = NULL, options = NULL, request.filesInfo = NULL, request.options.analogsSearchType = NULL, request.options.cts = NULL, request.options.minSimilarity = NULL, request.options.noRecords = NULL, request.options.usePredictions = NULL, format = c(\"compact\", \"tidy\", \"raw\")))"
     },
     {

@@ -1,6 +1,6 @@
 {
-  "commit": "2cdc50cc0066ee0b5974a02ec0198f074992cc5b",
-  "operations": 259,
+  "commit": "2ac528149e170bafcdc9c0022fc4e65b3f4e0069",
+  "operations": 261,
   "files": {
     "R/chemi_alerts_alerts.R": "031ba567542a373b2b19a68b404cd3ea4916bdd4c39b94a4409b0d8fa9d423c7",
     "R/chemi_alerts_groups_by_id.R": "28a36fe1b1f422a995b10f9295b0e5f64b7a112c2547b9115b31426c996a156d",
@@ -61,6 +61,7 @@
     "R/chemi_chet_reaction_singlereaction.R": "32441130b4c0c410ec7e595da3f511c30d2f0c18fae69b0ec92e18b6f6e3946d",
     "R/chemi_chet_reaction_table.R": "dd6e48957ecdea20bd58d275e98e9797932b2b6fb3394606423c47c0f0463d78",
     "R/chemi_chet_reaction.R": "53e87590a7c9d15725008402937ed5aa0252331e5938e1484aff4174699c3217",
+    "R/chemi_hazard.R": "b5f8052fee0bcecfd91a8c061259b16000bb46e58b46d7079f7ba0ac685e327e",
     "R/chemi_ncc_cats.R": "4446518a2fe421e9f6f055d2ef69460a786b9484cd6af6e1011d1ed57e4c2dc8",
     "R/chemi_opera_report.R": "697bf131f0b2b49d7556761485b71894d0a0209b311fe29d9e89eab56e6b149d",
     "R/chemi_pfas_atlas.R": "7aa53cdb79940ddac7c998f5cf150afab8a94770dc2362047d3cfc4adaccc528",
