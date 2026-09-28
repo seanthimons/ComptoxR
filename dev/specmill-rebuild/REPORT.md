@@ -2,8 +2,8 @@
 
 Work stays on `feat/specmill-migration-pilot`. Deletion experiments run only in
 detached worktrees under the ignored `dev/specmill-pilot/artifacts/rebuild-<commit>/`.
-Toolkit pin: specmill v0.1.6 `66c5e1f4d5a8b1a24d4a4946a6d2c1efe9c68d10`, archive SHA-256
-`6b2d5e647032acfa265892cb8ec9464293dc5d4689f5a3c5a3977c853085fe99`. Air 0.11.0.
+Toolkit pin: specmill v0.1.8 `2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c`, archive SHA-256
+`6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091`. Air 0.11.0.
 
 ## Preservation inventory (#326)
 
@@ -81,6 +81,13 @@ schema audit at 0.1.6 gave the same 53 parser blockers and 102 fixture failures
 as 0.1.4. Only the CHET collision reason text changed, and it now has more
 detail. The re-audit output was not committed.
 
+v0.1.8 renders data-literal defaults and examples as plain R
+([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53))
+and adds `propose_mappings()` and `verify_adoption()`
+([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54)).
+Re-pinning changed no generated wrapper: `--apply` only updated the manifest's
+`toolkit_version`, and the 204-file rehearsal stayed byte-identical.
+
 ## Generation waves (#310, #311, #314)
 
 `Rscript dev/specmill-rebuild/wave.R <name>` screens every unmapped export and
@@ -107,6 +114,7 @@ A wave is adopted only when all of the following hold:
 | hazard-pilot | 5 | 489 | `77de2d69` |
 | stable-batch | 67 | 834 | `0fb6f4d5` |
 | options-batch | 52 | 1015 | `b851a6cd` |
+| vector-examples | 14 | 1099 | `30a4dc49` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -116,11 +124,12 @@ the helper exactly as the original does. On localhost, the requests are
 observed and compared between the original and generated clients, not
 modelled.
 
-A trial `vector-examples` wave was rejected, and nothing from it was promoted.
-Specmill renders a `c("a", "b")` example as `base::evalq(c(...), envir =
-base::baseenv())`, which would change the Rd examples. Nine `*_bulk` wrappers
-stay retained for that reason
-([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
+The vector-examples wave maps a `c()` of scalar literals in an example to a
+sequence example. At 0.1.6 it was rejected because specmill rendered it as
+`base::evalq(c(...), envir = base::baseenv())`, which changed the Rd examples.
+At 0.1.8 the Rd output is unchanged. The wave adopts the nine `*_bulk`
+wrappers and five siblings that were retained only because they share a file
+with one of them.
 
 ## Defects found in the original client (#329, #330; not fixed here)
 
@@ -150,7 +159,7 @@ operation key, file, and wave. Each retained export records:
 
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
-| #310 | 72 | 34 | 3 |
+| #310 | 86 | 20 | 3 |
 | #311 | 50 | 43 | 0 |
 | #312 | 0 | 26 | 0 |
 | #313 | 0 | 16 | 0 |
@@ -161,10 +170,9 @@ Reasons for keeping an export retained:
 - no unique supported schema route (40), including the ambiguous-media and
   malformed-route blockers in #313;
 - a client hook chain (28);
-- a hand-written implementation (19);
-- an inseparable grouped file (22);
-- a computed example (9);
-- a nonliteral helper argument (1);
+- a hand-written implementation (18);
+- an inseparable grouped file (16);
+- a nonliteral helper argument (2);
 - the three original defects above.
 
 A retained function is a valid completion state. No contract is guessed.
@@ -179,30 +187,33 @@ webtest hook tests. Specmill's hook flow could represent these chains. It
 supports `extra_parameters`, `skip_request`, `post_on_skip`, and `post_state`,
 it writes changed `params` back after pre-request (as these wrappers do), and
 it can bind a value a hook adds (such as `chemicals`) via
-`{from: [hook_state, params, chemicals]}`. Two things block adoption today:
-
-- Specmill renders vector defaults like `format = c("compact", "tidy", "raw")`
-  as `base::evalq(...)`, which changes the public formals
-  ([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
-- `wave.R` does not yet propose hook mappings
-  ([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54)
-  proposes moving that tooling into specmill).
+`{from: [hook_state, params, chemicals]}`. At 0.1.8, vector defaults like
+`format = c("compact", "tidy", "raw")` render as plain `c()`, so formals are
+no longer a blocker
+([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
+One blocker remains: nothing proposes hook mappings. `wave.R` retains every
+hooked wrapper, and specmill's `propose_mappings()`
+([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54))
+accepts only a body that is a single helper call after an optional prelude. A
+wrapper that runs a `post_response` hook after the call is retained with "Body
+is not a single call".
 
 ## Full rebuild rehearsal (#328)
 
 Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `a542bb40` with the
-expanded allowlist. In a detached worktree, it removed the 204 allowlisted
-files. Regeneration, a second `--apply`, and `--check` were each
-byte-identical, and `git status` stayed empty. The rebuilt client was then
+each one is classified. The rehearsal ran `rehearse.R` at `ee7a80c6`
+(specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
+removed the 212 allowlisted files. Regeneration, a second `--apply`, and
+`--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
 - The contract, request-edge, and hook tests passed.
-- All 1015 localhost cases (409 exported signatures) matched the original
+- All 1099 localhost cases (409 exported signatures) matched the original
   `4fd720b9` client, with no candidate failures.
 
 No output was promoted: the rebuilt tree is identical to the branch.
 
-Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`) to
+Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
+`30a4dc49`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
