@@ -293,6 +293,9 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
       record$status <- 'candidate'
       record$proposal <- proposal
       record$original <- expr[[3]]
+      start <- refs[[i]][[1L]]
+      while (start > 1L && grepl("^#'", lines[start - 1L])) start <- start - 1L
+      record$source <- paste(lines[start:refs[[i]][[3L]]], collapse = '\n')
     }
     records[[name]] <- record
   }
@@ -419,7 +422,9 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       scenario <- scenarios[[1L]]
       endpoint <- record$proposal$request$arguments$endpoint$value
       target <- function(calls) Filter(function(x) identical(x$arguments$endpoint, endpoint), calls)
-      stopifnot(identical(readLines(record$file), readLines(file.path(baseline, record$file))))
+      # The definition and its roxygen block, not the whole file, must be the 4fd720b9
+      # original, so a grouped file split after the baseline still compares against it.
+      stopifnot(grepl(record$source, paste(readLines(file.path(baseline, record$file)), collapse = '\n'), fixed = TRUE))
       primary <- variants[[if (length(optional)) 'explicit' else 'omitted']]
       reference <- run(original, primary)
       # A hook that fails before the request would make the comparison vacuous.
