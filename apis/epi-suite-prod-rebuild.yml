@@ -1,0 +1,822 @@
+id: epi-suite-prod-rebuild
+schemas:
+  files:
+  - schema/epi-suite-prod.json
+selection:
+  include:
+  - GET /api/ecosar/dye
+  - GET /api/ecosar/polymer/nonionic
+  - GET /api/ecosar/surfactant/nonionic
+  - GET /api/submit
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/ecosar/dye:
+    name: epi_ecosar_dye
+    file: R/epi_ecosar_dye.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/dye
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Estimate a cationic dye
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/ecosar/polymer/nonionic:
+    name: epi_ecosar_polymer_nonionic
+    file: R/epi_ecosar_polymer_nonionic.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/polymer/nonionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Estimate a nonionic polymer
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/ecosar/surfactant/nonionic:
+    name: epi_ecosar_surfactant_nonionic
+    file: R/epi_ecosar_surfactant_nonionic.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: ecosar/surfactant/nonionic
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Estimate a nonionic surfactant
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      examples:
+      - {}
+      tags:
+        apiStage: public
+  GET /api/submit:
+    name: epi_submit
+    file: R/epi_submit.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        default: ~
+        description: SMILES; required when cas is absent.
+      cas:
+        type: character
+        default: ~
+        description: CAS Registry Number; required when smiles is absent.
+      modules:
+        type: character
+        default: ~
+        description: 'Comma-separated canonical public module names; defaults to all.
+          Array order does not control scientific precedence: selected modules run
+          in canonical dependency order, with waterSolubilityProvider controlling
+          the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for
+          CLI parity but public names are the durable HTTP contract.'
+      chemicalName:
+        type: character
+        default: ~
+        description: Optional parameter
+      logKow:
+        type: character
+        default: ~
+        description: Optional parameter
+      molecularWeight:
+        type: character
+        default: ~
+        description: Optional resolved molecular weight in g/mol. Together with positive
+          vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL candidate;
+          Bond and Group require only SMILES.
+      waterSolubilityMgPerL:
+        type: character
+        default: ~
+        description: Optional resolved water solubility in mg/L. A positive VP/WSOL/MW
+          triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent
+          Bond or Group estimation.
+      waterSolubility:
+        type: character
+        default: ~
+        description: Optional parameter
+      waterSolubilityProvider:
+        type: character
+        default: wskow
+        description: 'Selects the source used for downstream resolved water solubility.
+          Both WSKOW and WaterNT independent results remain visible when all modules
+          run.. Options: wskow, waternt (default: wskow)'
+      vaporPressureMmHg:
+        type: character
+        default: ~
+        description: Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW
+          triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent
+          Bond or Group estimation.
+      subcooledVaporPressureMmHg:
+        type: character
+        default: ~
+        description: Optional parameter
+      henryAtmM3PerMol:
+        type: character
+        default: ~
+        description: Optional parameter
+      logKoa:
+        type: character
+        default: ~
+        description: Optional parameter
+      koc:
+        type: character
+        default: ~
+        description: Optional parameter
+      meltingPointC:
+        type: character
+        default: ~
+        description: Optional parameter
+      boilingPointC:
+        type: character
+        default: ~
+        description: Optional parameter
+      vaporPressureTemperatureC:
+        type: numeric
+        default: 25.0
+        description: 'Compatibility field for the maintained fixed-temperature MPBPVP
+          calculation. Only 25 °C is accepted.. Options: 25 (default: 25)'
+      aopRateConstant:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowinScore:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowin3:
+        type: character
+        default: ~
+        description: Optional parameter
+      biowin5:
+        type: character
+        default: ~
+        description: Optional parameter
+      removeMetals:
+        type: logical
+        default: yes
+        description: 'Whether BIOWIN removes selected metal and salt counterions;
+          model default is true. (default: TRUE)'
+      tspUgPerM3:
+        type: numeric
+        default: 80.0
+        description: 'Total suspended particulate matter in ug/m3; AEROWIN default
+          is 80. (default: 80)'
+      theta:
+        type: numeric
+        default: 0.00010836
+        description: 'Combined Junge-Pankow cTheta in Pa (not particle surface-area
+          Theta); AEROWIN default is 0.00010836 Pa. (default: 0.00010836)'
+      waterConcentrationMgPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      waterConcentrationMgPerLiter:
+        type: character
+        default: ~
+        description: Optional parameter
+      eventFrequencyPerDay:
+        type: character
+        default: ~
+        description: Optional parameter
+      exposureDurationYears:
+        type: character
+        default: ~
+        description: Optional parameter
+      exposureFrequencyDaysPerYear:
+        type: character
+        default: ~
+        description: Optional parameter
+      skinSurfaceAreaCm2:
+        type: character
+        default: ~
+        description: Optional parameter
+      bodyWeightKg:
+        type: character
+        default: ~
+        description: Optional parameter
+      averagingTimeDays:
+        type: character
+        default: ~
+        description: Optional parameter
+      fractionAbsorbed:
+        type: character
+        default: ~
+        description: Optional parameter
+      eventDurationHours:
+        type: character
+        default: ~
+        description: Optional parameter
+      userKpCmPerHour:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursPrimaryClarifier:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursAerationVessel:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeHoursSettlingTank:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      halfLifeSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      emissionRateSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeAir:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeWater:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeSoil:
+        type: character
+        default: ~
+        description: Optional parameter
+      advectionTimeSediment:
+        type: character
+        default: ~
+        description: Optional parameter
+      ohConcentrationE6OhPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      ozoneConcentrationE11MolPerCm3:
+        type: character
+        default: ~
+        description: Optional parameter
+      daylightHours:
+        type: numeric
+        default: 12.0
+        description: 'Atmospheric daylight period in hours; AOPWIN default is 12..
+          Options: 12, 24 (default: 12)'
+      riverWindMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      riverCurrentMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      riverDepthMeters:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeWindMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeCurrentMPerSec:
+        type: character
+        default: ~
+        description: Optional parameter
+      lakeDepthMeters:
+        type: character
+        default: ~
+        description: Optional parameter
+      carbonChainLength:
+        type: character
+        default: ~
+        description: Optional parameter
+      mainCarbons:
+        type: character
+        default: ~
+        description: Optional parameter
+      branchedCarbons:
+        type: character
+        default: ~
+        description: Optional parameter
+      branches:
+        type: character
+        default: ~
+        description: Optional parameter
+      propoxyGroups:
+        type: character
+        default: ~
+        description: Optional parameter
+      ethoxylate:
+        type: character
+        default: ~
+        description: Optional parameter
+      amineNitrogens:
+        type: character
+        default: ~
+        description: Optional parameter
+      cationAnionRatio:
+        type: character
+        default: ~
+        description: Optional parameter
+      mw500Percentage:
+        type: character
+        default: ~
+        description: Optional parameter
+      mw1000Percentage:
+        type: character
+        default: ~
+        description: Optional parameter
+      averageMolecularWeight:
+        type: character
+        default: ~
+        description: Optional parameter
+      useSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      solubilityType:
+        type: character
+        default: ~
+        description: Optional parameter
+      polymerType:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: submit
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: epi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        smiles:
+          from:
+          - params
+          - smiles
+        cas:
+          from:
+          - params
+          - cas
+        modules:
+          from:
+          - params
+          - modules
+        chemicalName:
+          from:
+          - params
+          - chemicalName
+        logKow:
+          from:
+          - params
+          - logKow
+        molecularWeight:
+          from:
+          - params
+          - molecularWeight
+        waterSolubilityMgPerL:
+          from:
+          - params
+          - waterSolubilityMgPerL
+        waterSolubility:
+          from:
+          - params
+          - waterSolubility
+        waterSolubilityProvider:
+          from:
+          - params
+          - waterSolubilityProvider
+        vaporPressureMmHg:
+          from:
+          - params
+          - vaporPressureMmHg
+        subcooledVaporPressureMmHg:
+          from:
+          - params
+          - subcooledVaporPressureMmHg
+        henryAtmM3PerMol:
+          from:
+          - params
+          - henryAtmM3PerMol
+        logKoa:
+          from:
+          - params
+          - logKoa
+        koc:
+          from:
+          - params
+          - koc
+        meltingPointC:
+          from:
+          - params
+          - meltingPointC
+        boilingPointC:
+          from:
+          - params
+          - boilingPointC
+        vaporPressureTemperatureC:
+          from:
+          - params
+          - vaporPressureTemperatureC
+        aopRateConstant:
+          from:
+          - params
+          - aopRateConstant
+        biowinScore:
+          from:
+          - params
+          - biowinScore
+        biowin3:
+          from:
+          - params
+          - biowin3
+        biowin5:
+          from:
+          - params
+          - biowin5
+        removeMetals:
+          from:
+          - params
+          - removeMetals
+        tspUgPerM3:
+          from:
+          - params
+          - tspUgPerM3
+        theta:
+          from:
+          - params
+          - theta
+        waterConcentrationMgPerCm3:
+          from:
+          - params
+          - waterConcentrationMgPerCm3
+        waterConcentrationMgPerLiter:
+          from:
+          - params
+          - waterConcentrationMgPerLiter
+        eventFrequencyPerDay:
+          from:
+          - params
+          - eventFrequencyPerDay
+        exposureDurationYears:
+          from:
+          - params
+          - exposureDurationYears
+        exposureFrequencyDaysPerYear:
+          from:
+          - params
+          - exposureFrequencyDaysPerYear
+        skinSurfaceAreaCm2:
+          from:
+          - params
+          - skinSurfaceAreaCm2
+        bodyWeightKg:
+          from:
+          - params
+          - bodyWeightKg
+        averagingTimeDays:
+          from:
+          - params
+          - averagingTimeDays
+        fractionAbsorbed:
+          from:
+          - params
+          - fractionAbsorbed
+        eventDurationHours:
+          from:
+          - params
+          - eventDurationHours
+        userKpCmPerHour:
+          from:
+          - params
+          - userKpCmPerHour
+        halfLifeHoursPrimaryClarifier:
+          from:
+          - params
+          - halfLifeHoursPrimaryClarifier
+        halfLifeHoursAerationVessel:
+          from:
+          - params
+          - halfLifeHoursAerationVessel
+        halfLifeHoursSettlingTank:
+          from:
+          - params
+          - halfLifeHoursSettlingTank
+        halfLifeAir:
+          from:
+          - params
+          - halfLifeAir
+        halfLifeWater:
+          from:
+          - params
+          - halfLifeWater
+        halfLifeSoil:
+          from:
+          - params
+          - halfLifeSoil
+        halfLifeSediment:
+          from:
+          - params
+          - halfLifeSediment
+        emissionRateAir:
+          from:
+          - params
+          - emissionRateAir
+        emissionRateWater:
+          from:
+          - params
+          - emissionRateWater
+        emissionRateSoil:
+          from:
+          - params
+          - emissionRateSoil
+        emissionRateSediment:
+          from:
+          - params
+          - emissionRateSediment
+        advectionTimeAir:
+          from:
+          - params
+          - advectionTimeAir
+        advectionTimeWater:
+          from:
+          - params
+          - advectionTimeWater
+        advectionTimeSoil:
+          from:
+          - params
+          - advectionTimeSoil
+        advectionTimeSediment:
+          from:
+          - params
+          - advectionTimeSediment
+        ohConcentrationE6OhPerCm3:
+          from:
+          - params
+          - ohConcentrationE6OhPerCm3
+        ozoneConcentrationE11MolPerCm3:
+          from:
+          - params
+          - ozoneConcentrationE11MolPerCm3
+        daylightHours:
+          from:
+          - params
+          - daylightHours
+        riverWindMPerSec:
+          from:
+          - params
+          - riverWindMPerSec
+        riverCurrentMPerSec:
+          from:
+          - params
+          - riverCurrentMPerSec
+        riverDepthMeters:
+          from:
+          - params
+          - riverDepthMeters
+        lakeWindMPerSec:
+          from:
+          - params
+          - lakeWindMPerSec
+        lakeCurrentMPerSec:
+          from:
+          - params
+          - lakeCurrentMPerSec
+        lakeDepthMeters:
+          from:
+          - params
+          - lakeDepthMeters
+        carbonChainLength:
+          from:
+          - params
+          - carbonChainLength
+        mainCarbons:
+          from:
+          - params
+          - mainCarbons
+        branchedCarbons:
+          from:
+          - params
+          - branchedCarbons
+        branches:
+          from:
+          - params
+          - branches
+        propoxyGroups:
+          from:
+          - params
+          - propoxyGroups
+        ethoxylate:
+          from:
+          - params
+          - ethoxylate
+        amineNitrogens:
+          from:
+          - params
+          - amineNitrogens
+        cationAnionRatio:
+          from:
+          - params
+          - cationAnionRatio
+        mw500Percentage:
+          from:
+          - params
+          - mw500Percentage
+        mw1000Percentage:
+          from:
+          - params
+          - mw1000Percentage
+        averageMolecularWeight:
+          from:
+          - params
+          - averageMolecularWeight
+        useSmiles:
+          from:
+          - params
+          - useSmiles
+        solubilityType:
+          from:
+          - params
+          - solubilityType
+        polymerType:
+          from:
+          - params
+          - polymerType
+    docs:
+      title: Estimate one chemical
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES; required when cas is absent.
+        cas: CAS Registry Number; required when smiles is absent.
+        modules: 'Comma-separated canonical public module names; defaults to all.
+          Array order does not control scientific precedence: selected modules run
+          in canonical dependency order, with waterSolubilityProvider controlling
+          the shared WSKOW/WaterNT choice. Exact implementation IDs are accepted for
+          CLI parity but public names are the durable HTTP contract.'
+        chemicalName: Optional parameter
+        logKow: Optional parameter
+        molecularWeight: Optional resolved molecular weight in g/mol. Together with
+          positive vapor pressure and water solubility, it enables the HENRYWIN VP/WSOL
+          candidate; Bond and Group require only SMILES.
+        waterSolubilityMgPerL: Optional resolved water solubility in mg/L. A positive
+          VP/WSOL/MW triplet enables the HENRYWIN VP/WSOL candidate; omission does
+          not prevent Bond or Group estimation.
+        waterSolubility: Optional parameter
+        waterSolubilityProvider: 'Selects the source used for downstream resolved
+          water solubility. Both WSKOW and WaterNT independent results remain visible
+          when all modules run.. Options: wskow, waternt (default: wskow)'
+        vaporPressureMmHg: Optional resolved vapor pressure in mmHg. A positive VP/WSOL/MW
+          triplet enables the HENRYWIN VP/WSOL candidate; omission does not prevent
+          Bond or Group estimation.
+        subcooledVaporPressureMmHg: Optional parameter
+        henryAtmM3PerMol: Optional parameter
+        logKoa: Optional parameter
+        koc: Optional parameter
+        meltingPointC: Optional parameter
+        boilingPointC: Optional parameter
+        vaporPressureTemperatureC: 'Compatibility field for the maintained fixed-temperature
+          MPBPVP calculation. Only 25 °C is accepted.. Options: 25 (default: 25)'
+        aopRateConstant: Optional parameter
+        biowinScore: Optional parameter
+        biowin3: Optional parameter
+        biowin5: Optional parameter
+        removeMetals: 'Whether BIOWIN removes selected metal and salt counterions;
+          model default is true. (default: TRUE)'
+        tspUgPerM3: 'Total suspended particulate matter in ug/m3; AEROWIN default
+          is 80. (default: 80)'
+        theta: 'Combined Junge-Pankow cTheta in Pa (not particle surface-area Theta);
+          AEROWIN default is 0.00010836 Pa. (default: 0.00010836)'
+        waterConcentrationMgPerCm3: Optional parameter
+        waterConcentrationMgPerLiter: Optional parameter
+        eventFrequencyPerDay: Optional parameter
+        exposureDurationYears: Optional parameter
+        exposureFrequencyDaysPerYear: Optional parameter
+        skinSurfaceAreaCm2: Optional parameter
+        bodyWeightKg: Optional parameter
+        averagingTimeDays: Optional parameter
+        fractionAbsorbed: Optional parameter
+        eventDurationHours: Optional parameter
+        userKpCmPerHour: Optional parameter
+        halfLifeHoursPrimaryClarifier: Optional parameter
+        halfLifeHoursAerationVessel: Optional parameter
+        halfLifeHoursSettlingTank: Optional parameter
+        halfLifeAir: Optional parameter
+        halfLifeWater: Optional parameter
+        halfLifeSoil: Optional parameter
+        halfLifeSediment: Optional parameter
+        emissionRateAir: Optional parameter
+        emissionRateWater: Optional parameter
+        emissionRateSoil: Optional parameter
+        emissionRateSediment: Optional parameter
+        advectionTimeAir: Optional parameter
+        advectionTimeWater: Optional parameter
+        advectionTimeSoil: Optional parameter
+        advectionTimeSediment: Optional parameter
+        ohConcentrationE6OhPerCm3: Optional parameter
+        ozoneConcentrationE11MolPerCm3: Optional parameter
+        daylightHours: 'Atmospheric daylight period in hours; AOPWIN default is 12..
+          Options: 12, 24 (default: 12)'
+        riverWindMPerSec: Optional parameter
+        riverCurrentMPerSec: Optional parameter
+        riverDepthMeters: Optional parameter
+        lakeWindMPerSec: Optional parameter
+        lakeCurrentMPerSec: Optional parameter
+        lakeDepthMeters: Optional parameter
+        carbonChainLength: Optional parameter
+        mainCarbons: Optional parameter
+        branchedCarbons: Optional parameter
+        branches: Optional parameter
+        propoxyGroups: Optional parameter
+        ethoxylate: Optional parameter
+        amineNitrogens: Optional parameter
+        cationAnionRatio: Optional parameter
+        mw500Percentage: Optional parameter
+        mw1000Percentage: Optional parameter
+        averageMolecularWeight: Optional parameter
+        useSmiles: Optional parameter
+        solubilityType: Optional parameter
+        polymerType: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - smiles: CCO
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml

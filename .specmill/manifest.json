@@ -569,6 +569,10 @@
       "hash": "2c704e064367ef24bb07fdd2f92862c5a5d21d0b6efa27a896044a2020dcdbd0",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-dtxsid/{dtxsid}"
     },
+    "R/ct_chemical_list_search_by_name.R": {
+      "hash": "cbffbc7f648db28d74b60797763fee51e1143a501bb63492c8c25dbd7b508eb2",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-name/{listName}"
+    },
     "R/ct_chemical_list_search_by_type.R": {
       "hash": "1e0300465668c9f7c8e06e495110b333607650766de2b69ccf0b2cfca230551f",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-type/{type}"
@@ -821,6 +825,10 @@
       "hash": "8fb82eca5658121fb57706c332f77cc508b933eb3027b2d5a2cc572767b2f699",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
     },
+    "R/epi_ecosar_dye.R": {
+      "hash": "0334b4f2b6fa1aa295fb2238b99cc3c8f94d0eb29da1a6f796659cb85ba18b58",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/dye"
+    },
     "R/epi_ecosar_polymer_amphoteric.R": {
       "hash": "e08c11d2603f6e1243943eef2fbefc808b8f72942d668854e30c83caf9b69327",
       "operations": "epi-suite-prod-full GET /api/ecosar/polymer/amphoteric"
@@ -828,6 +836,10 @@
     "R/epi_ecosar_polymer_anionic.R": {
       "hash": "d2490b10278cb6a8610df3f3a863e1f83a6f279db9c87741268ad5aba0dc789c",
       "operations": "epi-suite-prod-full GET /api/ecosar/polymer/anionic"
+    },
+    "R/epi_ecosar_polymer_nonionic.R": {
+      "hash": "21eaaaf52a9ace4cedb68db0a532351e6cc17ad7568e2e6e308d264c5c32446d",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/polymer/nonionic"
     },
     "R/epi_ecosar_polymer_polycationic.R": {
       "hash": "2589adde6446d574674684f3857af204902dc4a4229c60611face56345c9462e",
@@ -845,9 +857,17 @@
       "hash": "9da7714058d8549e49f948b2d79fb533e0c186274946682e726208d19e8c2d9b",
       "operations": "epi-suite-prod-full GET /api/ecosar/surfactant/cationic"
     },
+    "R/epi_ecosar_surfactant_nonionic.R": {
+      "hash": "d701fa90a1f37bf2522948f84e2a80c728441f57805c0e00288ca1fa715e2994",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/surfactant/nonionic"
+    },
     "R/epi_search.R": {
       "hash": "72b8f0d9050e07ac7c76e90b5b6ecd8a264889261e5e4874da6df63226bc31a3",
       "operations": "epi-pilot GET /api/search"
+    },
+    "R/epi_submit.R": {
+      "hash": "f897e8cee35191e3de05231a53410aeae5cb07d06d3a998af862f101233c30a8",
+      "operations": "epi-suite-prod-rebuild GET /api/submit"
     },
     "tests/testthat/test-contract-chemi_alerts_alerts.R": {
       "hash": "710ee3eba07503177dde2a98f303c218d4ce9855c0cbaf98d9c25a8db077b135",
@@ -1485,6 +1505,10 @@
       "hash": "ad18e44e81a618ad09ceaeb2fa5e45846eaaa8213f40d8c25da78c1fef54eed6",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-dtxsid/{dtxsid}"
     },
+    "tests/testthat/test-contract-ct_chemical_list_search_by_name.R": {
+      "hash": "a72bb6e5ffd54c7eccb0c4deae05008c37e22fc468a57ca4036e817b1985eec9",
+      "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-name/{listName}"
+    },
     "tests/testthat/test-contract-ct_chemical_list_search_by_type.R": {
       "hash": "383fce98270927595ec04a886d5a6d13195eb31eb75adb3d46a12f9f0b903ae2",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-type/{type}"
@@ -1793,6 +1817,10 @@
       "hash": "221fb60ec15f488c7bf78d1d755a182fd880eb712f4fee5c7030d06cc34ad953",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
     },
+    "tests/testthat/test-contract-epi_ecosar_dye.R": {
+      "hash": "9a07ea3e30394b7a88d236ef33a2d45a24b241b193753107af79a5c59738f6c8",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/dye"
+    },
     "tests/testthat/test-contract-epi_ecosar_polymer_amphoteric.R": {
       "hash": "8192cce76022882a7e97955b3dbffa5815add5563421e305af595a44bc14e222",
       "operations": "epi-suite-prod-full GET /api/ecosar/polymer/amphoteric"
@@ -1800,6 +1828,10 @@
     "tests/testthat/test-contract-epi_ecosar_polymer_anionic.R": {
       "hash": "014f65c4acf6679157190cec0decedb946e43bbc8dcb83b66707a84ffc8117c0",
       "operations": "epi-suite-prod-full GET /api/ecosar/polymer/anionic"
+    },
+    "tests/testthat/test-contract-epi_ecosar_polymer_nonionic.R": {
+      "hash": "8bf1186be4ab4ab146f03aea7c3e34cd725c42c1f63ac7beb058c760d23ffd8b",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/polymer/nonionic"
     },
     "tests/testthat/test-contract-epi_ecosar_polymer_polycationic.R": {
       "hash": "1aa4c8f8560c3896c3022707c2d6f62db1a868783e29874d2fd0c7f094ac5920",
@@ -1817,9 +1849,17 @@
       "hash": "4125275044dd8d1ec5748cd276d03f31878625b47a9be4d21545e559fe61e03a",
       "operations": "epi-suite-prod-full GET /api/ecosar/surfactant/cationic"
     },
+    "tests/testthat/test-contract-epi_ecosar_surfactant_nonionic.R": {
+      "hash": "6d09ef1e245f28246297a79ba7454b59a61a6076f8d9b8ea8633577f1444f20e",
+      "operations": "epi-suite-prod-rebuild GET /api/ecosar/surfactant/nonionic"
+    },
     "tests/testthat/test-contract-epi_search.R": {
       "hash": "59ab3357e9797df2f968cdd5d2c89dc5e88ab944bc7b8619a825999ddb9f2fb6",
       "operations": "epi-pilot GET /api/search"
+    },
+    "tests/testthat/test-contract-epi_submit.R": {
+      "hash": "6b1ffbe3359d7c29fade83891ad4c7f1d70f4bc6b9a48eedc455b99474c29ce7",
+      "operations": "epi-suite-prod-rebuild GET /api/submit"
     }
   },
   "toolkit_version": "0.1.8",
@@ -2047,7 +2087,7 @@
     "R/ct_chemical_list_chemicals_search_equal.R": "621305b9a57c6598af3c2eb1aad4b7bac286dbf4dbf8046ed9e9581a0b4552dd",
     "R/ct_chemical_list_chemicals_search_start_with.R": "d81f739cdc76d36a9b7d8c8d44b166dfa4e6424bfdda4ed1ba9c4db2e354ad99",
     "R/ct_chemical_list_search.R": "2c704e064367ef24bb07fdd2f92862c5a5d21d0b6efa27a896044a2020dcdbd0",
-    "R/ct_chemical_list_search_by_name.R": "81376b91b6deaa28ca5c41b09c3861c4b9aceffaa67634a54d56ae12e3111b67",
+    "R/ct_chemical_list_search_by_name.R": "cbffbc7f648db28d74b60797763fee51e1143a501bb63492c8c25dbd7b508eb2",
     "R/ct_chemical_list_search_by_type.R": "1e0300465668c9f7c8e06e495110b333607650766de2b69ccf0b2cfca230551f",
     "R/ct_chemical_list_type.R": "9b4082067472ca6309cffca4bdc8fc69e6159fc8b10ae2e5d0b84559ec623fa0",
     "R/ct_chemical_msready_search_by_dtxcid.R": "25c4f4bc09ee94776287c09285c2c8271259a52bf9d122371bdfe9e065cf9974",
@@ -2123,17 +2163,17 @@
     "R/dss_functions.R": "577662091454ddd99ee2d6eda2ab53fb7a035e2945e4faa9cc7d4f36077787fc",
     "R/eco_connection.R": "d9f2211b731b42d7863f307854e67def829f3b892229df8efabd377662e7fea1",
     "R/eco_functions.R": "1c6d754381d8f17c5635067abf56bd80bd35f67fabce5b3f2986916347c1e804",
-    "R/epi_ecosar_dye.R": "87d341ff31bd8bba6dacdbf591c4e2c3251393ba161820ff03c6acb5c6f7c46a",
+    "R/epi_ecosar_dye.R": "0334b4f2b6fa1aa295fb2238b99cc3c8f94d0eb29da1a6f796659cb85ba18b58",
     "R/epi_ecosar_polymer_amphoteric.R": "e08c11d2603f6e1243943eef2fbefc808b8f72942d668854e30c83caf9b69327",
     "R/epi_ecosar_polymer_anionic.R": "d2490b10278cb6a8610df3f3a863e1f83a6f279db9c87741268ad5aba0dc789c",
-    "R/epi_ecosar_polymer_nonionic.R": "31f8ca4a3d279482efba5241336d24c958cace8fef3a2b4ea02d0b508c60f511",
+    "R/epi_ecosar_polymer_nonionic.R": "21eaaaf52a9ace4cedb68db0a532351e6cc17ad7568e2e6e308d264c5c32446d",
     "R/epi_ecosar_polymer_polycationic.R": "2589adde6446d574674684f3857af204902dc4a4229c60611face56345c9462e",
     "R/epi_ecosar_surfactant_amphoteric.R": "161744795a1dafd97eda6a9d91e98155c21bbc53519ba492144f2e822ad66596",
     "R/epi_ecosar_surfactant_anionic.R": "86962fee2e6e641f2d1d4a705368032c02c935967936233ddd2db4ad09a7502e",
     "R/epi_ecosar_surfactant_cationic.R": "9da7714058d8549e49f948b2d79fb533e0c186274946682e726208d19e8c2d9b",
-    "R/epi_ecosar_surfactant_nonionic.R": "f8c00cbe2f04116b4c7fed59513323d40c292d5e159fd666730bf131c4bc9865",
+    "R/epi_ecosar_surfactant_nonionic.R": "d701fa90a1f37bf2522948f84e2a80c728441f57805c0e00288ca1fa715e2994",
     "R/epi_search.R": "72b8f0d9050e07ac7c76e90b5b6ecd8a264889261e5e4874da6df63226bc31a3",
-    "R/epi_submit.R": "89af243ada605545aa54315d167001d6da734cd861a75dc81e852ec5ffb8e887",
+    "R/epi_submit.R": "f897e8cee35191e3de05231a53410aeae5cb07d06d3a998af862f101233c30a8",
     "R/epi_submit_batch.R": "299a7022073821989ffce996c2770c6a2d67f254dabf80eececb3fba2ff7959e",
     "R/genra_get_tox_data.R": "0e3d3554d59ed6dfb9deeb0c844430fe2f91b486b4d6110664efceabe722eada",
     "R/genra_predict.R": "120462653371764e3db98f9febd743220e17563b6069841d19f1b0b2d1a22ee7",
@@ -2193,13 +2233,14 @@
     "apis/chemi-toxprints-prod-rebuild.yml": "963170018d1e6a7bf95e0da83a6921af48b66ffc18eb59226a731cdf5be6017d",
     "apis/ctx-bioactivity-prod-rebuild.yml": "dfa3fce0a8de6bee06898c7b445638a2130f28c96e4f1a54505aa5d88a269c71",
     "apis/ctx-chemical-prod-full.yml": "503d1e5761d6a2c721086c9f5ec571f8138d8daba8574edc1a92e1406476f80c",
-    "apis/ctx-chemical-prod-rebuild.yml": "7db871b95edae543fd32c97dac8aaceafd219ac2211b9471970c42c32a6cdcd6",
+    "apis/ctx-chemical-prod-rebuild.yml": "bd793a27a85eeaea8cf61a504d7be69131431e7eafad3167fc142dd495a7bcf3",
     "apis/ctx-exposure-prod-full.yml": "6367d9d468e79d009e8e889fb8f687dadb17d746126ec58e20a9ffac46033714",
     "apis/ctx-exposure-prod-rebuild.yml": "18e010df260acc9b789278e833f223f5be3ebf65502485ed0fae13172d76db30",
     "apis/ctx-hazard-prod-rebuild.yml": "8487abfb96e0bae007aeb03cdd1f2c5f496f13e5a92e8d37d6790f8b97c2fb37",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
     "apis/epi-pilot.yml": "4a81753827c8d51b245f307a318bb0565442d8f7fbafeda14e762484a2d3e66a",
     "apis/epi-suite-prod-full.yml": "5749a0815a8e96a197f345d69a6aa70269a9cf132aedfcae7d835b2dd49eb0bc",
+    "apis/epi-suite-prod-rebuild.yml": "b417eb47c126dce6a829ceb6a6bb313029f9a2986630f72ed879d1e6b8dfed53",
     "apis/search-pilot.yml": "2b081209a403f7d211f43a0b27e34aa9c54b40c27769bab5046e81a3481e0715",
     "data/cheminformatics_hazard_pal.rda": "281fa896294e8cd2a1690e6a7f240add3b39f6a2d7620427c03659202e785207",
     "data/cust_pal.rda": "c026cc11536c28919b0ec588108ece09ba8e5bf3ae2f4b163e8d1868fdaf16df",
@@ -2695,10 +2736,10 @@
     "schema/ctx-exposure-prod.json": "1af4a35e7998d2a1a00a675ae3da850164b2afa2dd595f4be6cb3b4b37ed582d",
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
-    "specmill.yml": "f4c0abe28afae3861804e74028cc61726ba6b35f121e3b4ab0abc36709acd3ab",
+    "specmill.yml": "03caa8dc00c2a82c540bbe979a83e92127ce9f5f6a89a39b8c111a6eca5d87c9",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "932d884caa24c57f4cafe43d9b252e27c5f3b1d4dbce4ad716db410298289088",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "cc440ae51472cfbdaf5ced2f5d7c114538b56e2627a698a87e3e7033659c1588"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "8f892821b82588ec14698f02eabff0314710d23c41a9f84ef67b029036e15d5c"
   },
   "callbacks": "19f9ea013410d4c0ef9ffb6710f1bc5ec9ab07008b422dd87ffbd0bd94f35920",
   "formatter": {

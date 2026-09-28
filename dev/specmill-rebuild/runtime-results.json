@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1099,
+  "passed_cases": 1113,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -738,6 +738,10 @@
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/list/search/by-dtxsid/{dtxsid}"
     },
+    "ct_chemical_list_search_by_name": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/search/by-name/{listName}"
+    },
     "ct_chemical_list_search_by_type": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/list/search/by-type/{type}"
@@ -921,6 +925,22 @@
     "ct_hazard_toxval_supercategory_search": {
       "schema": "ctx-hazard-prod.json",
       "key": "GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}"
+    },
+    "epi_ecosar_dye": {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/ecosar/dye"
+    },
+    "epi_ecosar_polymer_nonionic": {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/ecosar/polymer/nonionic"
+    },
+    "epi_ecosar_surfactant_nonionic": {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/ecosar/surfactant/nonionic"
+    },
+    "epi_submit": {
+      "schema": "epi-suite-prod.json",
+      "key": "GET /api/submit"
     }
   },
   "cases": {
@@ -6902,6 +6922,48 @@
       "error_classes": null,
       "error_message": null
     },
+    "ct_chemical_list_search_by_name-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_search_by_name-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_list_search_by_name": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"listName\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_list_search_by_name": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_list_search_by_name-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_search_by_name-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_chemical_list_search_by_type-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -8616,6 +8678,62 @@
       "warnings": [],
       "error_classes": null,
       "error_message": null
+    },
+    "epi_ecosar_dye-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "epi_ecosar_dye-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "epi_ecosar_polymer_nonionic-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "epi_ecosar_polymer_nonionic-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "epi_ecosar_surfactant_nonionic-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "epi_ecosar_surfactant_nonionic-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "epi_submit-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "epi_submit-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
     }
   }
 }

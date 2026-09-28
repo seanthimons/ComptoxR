@@ -13,6 +13,7 @@ selection:
   - GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}
   - GET /chemical/list/chemicals/search/by-listname/{list}
   - GET /chemical/list/search/by-dtxsid/{dtxsid}
+  - GET /chemical/list/search/by-name/{listName}
   - GET /chemical/list/search/by-type/{type}
   - GET /chemical/list/type
   - GET /chemical/property/experimental/name
@@ -353,6 +354,58 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID1020560
+  GET /chemical/list/search/by-name/{listName}:
+    name: ct_chemical_list_search_by_name
+    file: R/ct_chemical_list_search_by_name.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      listName:
+        type: character
+        required: yes
+        description: 'Chemical List Name. Type: string'
+      projection:
+        type: character
+        default: chemicallistall
+        description: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+      extract_dtxsids:
+        type: logical
+        default: no
+        description: Extract DTXSIDs from results into character vector (requires
+          projection = 'chemicallistwithdtxsids')
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - listName
+        endpoint:
+          value: chemical/list/search/by-name/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get lists by name
+      lifecycle: stable
+      parameters:
+        listName: 'Chemical List Name. Type: string'
+        projection: 'Projection options for chemical List APIs . Options: chemicallistall,
+          chemicallistwithdtxsids, chemicallistname, ccdchemicaldetaillists (default:
+          chemicallistall)'
+        extract_dtxsids: Extract DTXSIDs from results into character vector (requires
+          projection = 'chemicallistwithdtxsids')
+      return: Returns a scalar value
+      examples:
+      - listName: 40CFR1164
+      tags:
+        apiStage: public
   GET /chemical/list/search/by-type/{type}:
     name: ct_chemical_list_search_by_type
     file: R/ct_chemical_list_search_by_type.R
@@ -803,3 +856,4 @@ operations:
       examples:
       - query: DTXSID1024122
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
