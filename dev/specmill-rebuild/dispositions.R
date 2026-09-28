@@ -10,7 +10,12 @@ audit <- jsonlite::read_json('dev/specmill-pilot/all-schema-diagnostics.json')
 hooks <- yaml::read_yaml('inst/hook_config.yml')
 # Evidence matching is looser than wave.R: repeated and trailing slashes left by removed
 # placeholders are collapsed, so multi-parameter routes are reported (never adopted) here.
-short_path <- function(key) sub('/$', '', gsub('/+', '/', sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))))
+# ChET paths sit below its schema server, /api/chet (#339).
+# ponytail: ChET is the only schema whose server has a path below /api; read servers[[1]]$url if another appears.
+server_base <- function(schema) if (identical(schema, 'chemi-chet-prod.json')) 'chet/' else ''
+short_path <- function(key, schema = '') {
+  paste0(server_base(schema), sub('/$', '', gsub('/+', '/', sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key))))))
+}
 
 # Generated operations and the wave (or original tranche) that adopted each file.
 waves <- list()
@@ -60,7 +65,7 @@ route <- function(name, file) {
   }
   prefix <- if (startsWith(name, 'ct_')) 'ctx-' else if (startsWith(name, 'epi_')) 'epi-' else 'chemi-'
   on_route <- function(x) {
-    startsWith(x$key, paste0(method, ' ')) && identical(short_path(x$key), sub('/$', '', endpoint)) &&
+    startsWith(x$key, paste0(method, ' ')) && identical(short_path(x$key, x$schema), sub('/$', '', endpoint)) &&
       startsWith(x$schema, prefix) && !grepl('_prod[.]json$', x$schema)
   }
   list(

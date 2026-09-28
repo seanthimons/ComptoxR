@@ -25,10 +25,13 @@ hook_config <- yaml::read_yaml('inst/hook_config.yml')
 hooks <- names(hook_config)
 callbacks <- new.env(parent = baseenv())
 sys.source('dev/specmill_callbacks.R', callbacks)
-short_path <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))
+# ChET paths sit below its schema server, /api/chet (#339).
+# ponytail: ChET is the only schema whose server has a path below /api; read servers[[1]]$url if another appears.
+server_base <- function(schema) if (identical(schema, 'chemi-chet-prod.json')) 'chet/' else ''
+short_path <- function(key, schema = '') paste0(server_base(schema), sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key))))
 # Routes with extra path parameters: the query fills the first placeholder and each
 # path_params element fills the next one (a parameter) or is a literal segment.
-route <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '{}', sub('^[A-Z]+ ', '', key)))
+route <- function(key, schema = '') paste0(server_base(schema), sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '{}', sub('^[A-Z]+ ', '', key))))
 route_names <- function(key) gsub('[{}]', '', regmatches(key, gregexpr('\\{[^}]+\\}', key))[[1L]])
 path_template <- function(endpoint, path_params) {
   parts <- if (is.call(path_params)) as.list(path_params)[-1L] else as.list(path_params)
@@ -279,9 +282,9 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         template <- if (!is.null(args$path_params)) path_template(args$endpoint, args$path_params)
         matches <- Filter(function(op) {
           same_path <- if (is.null(template)) {
-            identical(short_path(op$key), args$endpoint)
+            identical(short_path(op$key, op$schema), args$endpoint)
           } else {
-            identical(route(op$key), template$path) && identical(route_names(op$key)[-1L], template$names)
+            identical(route(op$key, op$schema), template$path) && identical(route_names(op$key)[-1L], template$names)
           }
           startsWith(op$key, paste0(method, ' ')) && same_path && startsWith(op$schema, prefix)
         }, operations)
