@@ -1,5 +1,5 @@
 {
-  "commit": "f547ff22e1ea391757d4cceedb0a5688b80c8bc5",
+  "commit": "2cdc50cc0066ee0b5974a02ec0198f074992cc5b",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -8,16 +8,16 @@
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
-  "exports": 409,
+  "exports": 408,
   "exports_defined_elsewhere": [
     "%>%"
   ],
   "export_categories": {
-    "generated": 250,
+    "generated": 259,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 97,
+    "unmapped_wrapper": 87,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 222,
+  "removable_files": 227,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -61,20 +61,20 @@
       "name": "chemi_alerts_groups",
       "file": "R/chemi_alerts_groups.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Inseparable grouped file contains a retained or unaccounted definition",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-alerts-prod-rebuild GET /api/alerts/groups",
+      "lifecycle": null,
       "formals": "NULL"
     },
     {
       "name": "chemi_alerts_groups_bulk",
       "file": "R/chemi_alerts_groups.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-alerts-prod-rebuild POST /api/alerts/groups",
+      "lifecycle": null,
       "formals": "pairlist(description = NULL, frozen = NULL, id = NULL, logicType = NULL, name = NULL, operations = NULL, text = NULL, type = NULL, value = NULL)"
     },
     {
@@ -91,10 +91,10 @@
       "name": "chemi_alerts",
       "file": "R/chemi_alerts.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-alerts-prod-rebuild POST /api/alerts",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.resolve = NULL))"
     },
     {
@@ -1551,20 +1551,20 @@
       "name": "chemi_resolver_safety_flags",
       "file": "R/chemi_resolver_safety_flags.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild GET /api/resolver/safety-flags",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\"))"
     },
     {
       "name": "chemi_resolver_safety_flags_bulk",
       "file": "R/chemi_resolver_safety_flags.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/safety-flags",
+      "lifecycle": null,
       "formals": "pairlist(additionalProps = NULL, averageMass = NULL, canonicalSmiles = NULL, casrn = NULL, chemId = NULL, cid = NULL, id = NULL, image = NULL, inchi = NULL, inchiKey = NULL, mol = NULL, molFormula = NULL, monoisotopicMass = NULL, name = NULL, sid = NULL, smiles = NULL, request.filesInfo = NULL)"
     },
     {
@@ -1861,20 +1861,20 @@
       "name": "chemi_stdizer_groups",
       "file": "R/chemi_stdizer_groups.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Inseparable grouped file contains a retained or unaccounted definition",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-stdizer-prod-rebuild GET /api/stdizer/groups",
+      "lifecycle": null,
       "formals": "NULL"
     },
     {
       "name": "chemi_stdizer_groups_bulk",
       "file": "R/chemi_stdizer_groups.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-stdizer-prod-rebuild POST /api/stdizer/groups",
+      "lifecycle": null,
       "formals": "pairlist(acl = NULL, description = NULL, flag = NULL, frozen = NULL, id = NULL, invalid = NULL, invalidMessage = NULL, operations = NULL, text = NULL, type = NULL, value = NULL, request.filesInfo = NULL, request.replace = NULL)"
     },
     {
@@ -1981,20 +1981,20 @@
       "name": "chemi_toxprints_calculate",
       "file": "R/chemi_toxprints_calculate.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/calculate",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(smiles = , labels = FALSE, profile = NULL))"
     },
     {
       "name": "chemi_toxprints_calculate_bulk",
       "file": "R/chemi_toxprints_calculate.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-toxprints-prod-rebuild POST /api/toxprints/calculate",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", labels = NULL, options = NULL, request.filesInfo = NULL, request.labels = NULL, request.options.OR = NULL, request.options.PV1 = NULL, request.options.TP = NULL, request.options.or = NULL, request.options.profile = NULL, request.options.pv1 = NULL, request.options.tp = NULL, request.resolve = NULL))"
     },
     {
@@ -3558,16 +3558,6 @@
       "formals": "as.pairlist(alist(query = , inclusive = FALSE))"
     },
     {
-      "name": "ct_similar",
-      "file": "R/ct_similar.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "questioning",
-      "formals": "as.pairlist(alist(query = , similarity = 0.8))"
-    },
-    {
       "name": "dss_path",
       "file": "R/dss_connection.R",
       "exported": false,
@@ -4988,16 +4978,6 @@
       "formals": "as.pairlist(alist(data = ))"
     },
     {
-      "name": "validate_similarity",
-      "file": "R/hooks_validation.R",
-      "exported": false,
-      "category": "runtime",
-      "review_reason": null,
-      "operation": null,
-      "lifecycle": null,
-      "formals": "as.pairlist(alist(data = ))"
-    },
-    {
       "name": "webtest_prediction_abort",
       "file": "R/hooks_webtest.R",
       "exported": false,
@@ -5356,6 +5336,16 @@
       "operation": null,
       "lifecycle": null,
       "formals": "pairlist(record = FALSE, timeout = 30)"
+    },
+    {
+      "name": "strip_multipart_query",
+      "file": "R/schema.R",
+      "exported": false,
+      "category": "runtime",
+      "review_reason": null,
+      "operation": null,
+      "lifecycle": null,
+      "formals": "as.pairlist(alist(schema = ))"
     },
     {
       "name": "epi_schema",
