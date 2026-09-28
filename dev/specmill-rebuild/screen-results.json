@@ -23,15 +23,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_analytical_qc_keyset_pagination": {
-    "name": "chemi_amos_analytical_qc_keyset_pagination",
-    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_batch": {
     "name": "chemi_amos_batch",
     "file": "R/chemi_amos_batch.R",
@@ -72,15 +63,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_fact_sheet_keyset_pagination": {
-    "name": "chemi_amos_fact_sheet_keyset_pagination",
-    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_for_document_ids": {
     "name": "chemi_amos_for_document_ids",
     "file": "R/chemi_amos_for_document_ids.R",
@@ -92,10 +74,11 @@
   "chemi_amos_get_pdf": {
     "name": "chemi_amos_get_pdf",
     "file": "R/chemi_amos_get_pdf.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_get_similar_structures": {
     "name": "chemi_amos_get_similar_structures",
@@ -153,22 +136,14 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_method_keyset_pagination": {
-    "name": "chemi_amos_method_keyset_pagination",
-    "file": "R/chemi_amos_method_keyset_pagination.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/method_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_method_with_spectra": {
     "name": "chemi_amos_method_with_spectra",
     "file": "R/chemi_amos_method_with_spectra.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_next_level_classification": {
     "name": "chemi_amos_next_level_classification",
@@ -186,15 +161,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_product_declaration_keyset_pagination": {
-    "name": "chemi_amos_product_declaration_keyset_pagination",
-    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_record_counts": {
     "name": "chemi_amos_record_counts",
     "file": "R/chemi_amos_record_counts.R",
@@ -206,10 +172,11 @@
   "chemi_amos_record_ids_for_substance": {
     "name": "chemi_amos_record_ids_for_substance",
     "file": "R/chemi_amos_record_ids_for_substance.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_retrieve_fact_sheets": {
     "name": "chemi_amos_retrieve_fact_sheets",
@@ -242,15 +209,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "chemi_amos_safety_data_sheet_keyset_pagination": {
-    "name": "chemi_amos_safety_data_sheet_keyset_pagination",
-    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
   },
   "chemi_amos_spectral_entropy": {
     "name": "chemi_amos_spectral_entropy",
@@ -287,10 +245,11 @@
   "chemi_chet_chemicals_image": {
     "name": "chemi_chet_chemicals_image",
     "file": "R/chemi_chet_chemicals_image.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /chemicals/{chemical_id}/image",
+    "lifecycle": "experimental"
   },
   "chemi_chet_reaction_batchsearch": {
     "name": "chemi_chet_reaction_batchsearch",
@@ -304,18 +263,20 @@
   "chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
     "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
     "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/database-old/{pagenum}/{searchterm}",
+    "lifecycle": "experimental"
   },
   "chemi_chet_reaction_searchcounts": {
     "name": "chemi_chet_reaction_searchcounts",
     "file": "R/chemi_chet_reaction_searchcounts.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/searchcounts/{search_input}/{search_type}",
+    "lifecycle": "experimental"
   },
   "chemi_classyfire": {
     "name": "chemi_classyfire",
@@ -373,15 +334,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_opera": {
-    "name": "chemi_opera",
-    "file": "R/chemi_opera.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-opera-prod.json",
-    "key": "GET /api/opera",
-    "lifecycle": "experimental"
-  },
   "chemi_padel": {
     "name": "chemi_padel",
     "file": "R/chemi_padel.R",
@@ -413,15 +365,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "chemi_predictor_models_predict": {
-    "name": "chemi_predictor_models_predict",
-    "file": "R/chemi_predictor_models_predict.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-predictor_models-prod.json",
-    "key": "GET /api/predictor_models/predict",
-    "lifecycle": "experimental"
   },
   "chemi_rdkit": {
     "name": "chemi_rdkit",
@@ -499,10 +442,11 @@
   "chemi_stdizer_groups_recursive": {
     "name": "chemi_stdizer_groups_recursive",
     "file": "R/chemi_stdizer_groups_recursive.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "GET /api/stdizer/groups/{id}/recursive",
+    "lifecycle": "experimental"
   },
   "chemi_stdizer_records": {
     "name": "chemi_stdizer_records",
@@ -511,15 +455,6 @@
     "reason": "Options prelude overwrites the public options argument (original defect); retained",
     "schema": null,
     "key": null
-  },
-  "chemi_stdizer": {
-    "name": "chemi_stdizer",
-    "file": "R/chemi_stdizer.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-stdizer-prod.json",
-    "key": "GET /api/stdizer",
-    "lifecycle": "experimental"
   },
   "chemi_toxprint": {
     "name": "chemi_toxprint",
@@ -536,15 +471,6 @@
     "reason": "Options prelude overwrites the public options argument (original defect); retained",
     "schema": null,
     "key": null
-  },
-  "chemi_toxprints_assays": {
-    "name": "chemi_toxprints_assays",
-    "file": "R/chemi_toxprints_assays.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/assays",
-    "lifecycle": "experimental"
   },
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
@@ -597,30 +523,33 @@
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
     "file": "R/ct_chemical_list_chemicals_search_contain.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/list/chemicals/search/contain/{list}/{word}",
+    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_equal": {
     "name": "ct_chemical_list_chemicals_search_equal",
     "file": "R/ct_chemical_list_chemicals_search_equal.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/list/chemicals/search/equal/{list}/{word}",
+    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_start_with": {
     "name": "ct_chemical_list_chemicals_search_start_with",
     "file": "R/ct_chemical_list_chemicals_search_start_with.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/list/chemicals/search/start-with/{list}/{word}",
+    "lifecycle": "stable"
   },
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
-    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "file": "R/ct_chemical_msready_search_by_mass_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
@@ -629,26 +558,29 @@
   "ct_chemical_msready_search_by_mass": {
     "name": "ct_chemical_msready_search_by_mass",
     "file": "R/ct_chemical_msready_search_by_mass.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/msready/search/by-mass/{start}/{end}",
+    "lifecycle": "experimental"
   },
   "ct_chemical_property_experimental_search_by_range": {
     "name": "ct_chemical_property_experimental_search_by_range",
     "file": "R/ct_chemical_property_experimental_search_by_range.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}",
+    "lifecycle": "stable"
   },
   "ct_chemical_property_predicted_search_by_range": {
     "name": "ct_chemical_property_predicted_search_by_range",
     "file": "R/ct_chemical_property_predicted_search_by_range.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}",
+    "lifecycle": "stable"
   },
   "ct_chemical_search_equal_bulk": {
     "name": "ct_chemical_search_equal_bulk",
@@ -657,15 +589,6 @@
     "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-chemical-prod.json",
     "key": "POST /chemical/search/equal/"
-  },
-  "ct_chemical_search_equal": {
-    "name": "ct_chemical_search_equal",
-    "file": "R/ct_chemical_search_equal.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/search/equal/{word}",
-    "lifecycle": "stable"
   },
   "ct_classify": {
     "name": "ct_classify",
