@@ -21,7 +21,8 @@ operations <- Filter(function(x) !grepl('_prod[.]json$', x$schema), audit$operat
 inventory <- jsonlite::read_json('dev/specmill-rebuild/inventory.json')$definitions
 pending <- Filter(function(d) identical(d$category, 'unmapped_wrapper'), inventory)
 names(pending) <- vapply(pending, `[[`, '', 'name')
-hooks <- names(yaml::read_yaml('inst/hook_config.yml'))
+hook_config <- yaml::read_yaml('inst/hook_config.yml')
+hooks <- names(hook_config)
 callbacks <- new.env(parent = baseenv())
 sys.source('dev/specmill_callbacks.R', callbacks)
 short_path <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))
@@ -39,12 +40,15 @@ binding <- function(x, parameters) {
 }
 # Recognize the optional-options prelude used by many chemi wrappers:
 #   options <- list(); [if (!is.null(p))] options[["k"]] <- p (or options$k <- p); ...
+# Hooked wrappers build the same list as extra_options.
 # The resulting list equals specmill's compact_object: NULL values are never added and an
 # empty result is list(). Returns NULL when the body does not start with this prelude.
 options_prelude <- function(code) {
-  if (!length(code) || !identical(code[[1]], quote(options <- list()))) {
+  if (!length(code) || !is.call(code[[1]]) || !identical(code[[1]][[1]], as.name('<-')) ||
+    !deparse(code[[1]][[2]]) %in% c('options', 'extra_options') || !identical(code[[1]][[3]], quote(list()))) {
     return(NULL)
   }
+  list_name <- code[[1]][[2]]
   bindings <- list()
   i <- 2L
   while (i <= length(code)) {
@@ -56,7 +60,7 @@ options_prelude <- function(code) {
       if (is.call(s) && identical(s[[1]], as.name('{')) && length(s) == 2L) s <- s[[2]]
     }
     target <- if (is.call(s) && identical(s[[1]], as.name('<-'))) s[[2]]
-    ok <- is.call(target) && length(target) == 3L && identical(target[[2]], as.name('options')) &&
+    ok <- is.call(target) && length(target) == 3L && identical(target[[2]], list_name) &&
       (identical(target[[1]], as.name('$')) || (identical(target[[1]], as.name('[[')) && is.character(target[[3]]))) &&
       is.symbol(s[[3]]) && (is.null(guard) || identical(guard, call('!', call('is.null', s[[3]]))))
     if (!ok) break
@@ -65,8 +69,72 @@ options_prelude <- function(code) {
     bindings[[key]] <- list(from = list('params', as.character(s[[3]])))
     i <- i + 1L
   }
-  list(statements = i - 1L, bindings = bindings)
+  list(statements = i - 1L, bindings = bindings, name = as.character(list_name))
 }
+# Recognize the hook chain that specmill generates from hook_config for a wrapper:
+#   [chemicals <- NULL]
+#   req_data <- run_hook(name, "pre_request", list(params = list(<formals>[, chemicals])))
+#   if (isTRUE(req_data$skip_request)) { return(req_data$result) }
+#   if ("p" %in% names(req_data$params)) { p <- req_data$params[["p"]] }   # every formal, in order
+#   ... helper call ...
+#   result <- run_hook(name, "post_response", list(result = result, params = list(<formals>)))
+# Returns the remaining body, or stops with the reason the chain needs manual mapping.
+hook_body <- function(code, name, formal_names) {
+  same <- function(a, b) identical(deparse(a), deparse(b))
+  params <- function(extra = character()) {
+    keys <- c(formal_names, extra)
+    as.call(c(list(as.name('list')), setNames(lapply(keys, as.name), keys)))
+  }
+  declared <- hook_config[[name]]
+  stages <- names(Filter(length, declared[intersect(names(declared), c('pre_request', 'post_response'))]))
+  if (any(grepl('req_data$request', vapply(code, function(x) paste(deparse(x), collapse = ' '), ''), fixed = TRUE))) {
+    stop('Request built by a pre-request hook; no route guessed')
+  }
+  chemicals <- length(code) > 0L && same(code[[1]], quote(chemicals <- NULL))
+  if (chemicals) code <- code[-1L]
+  extra <- if (chemicals) 'chemicals'
+  pre <- length(code) > 0L && same(code[[1]], bquote(req_data <- run_hook(.(name), 'pre_request', list(params = .(params(extra))))))
+  if (pre) {
+    expected <- c(
+      list(quote(if (isTRUE(req_data$skip_request)) {
+        return(req_data$result)
+      })),
+      lapply(c(formal_names, extra), function(p) {
+        bquote(if (.(p) %in% names(req_data$params)) {
+          .(as.name(p)) <- req_data$params[[.(p)]]
+        })
+      })
+    )
+    n <- length(expected)
+    if (length(code) < n + 1L || !all(mapply(same, code[seq_len(n) + 1L], expected))) {
+      stop('Pre-request hook write-back differs from the generated pattern')
+    }
+    code <- code[-seq_len(n + 1L)]
+  } else if (chemicals) {
+    stop('Pre-request hook call differs from the generated pattern')
+  }
+  post_call <- bquote(result <- run_hook(.(name), 'post_response', list(result = result, params = .(params()))))
+  post <- length(code) >= 2L && same(code[[length(code) - 1L]], post_call)
+  if (post) code <- code[-(length(code) - 1L)]
+  if (any(grepl('run_hook', vapply(code, function(x) paste(deparse(x), collapse = ' '), ''), fixed = TRUE))) {
+    stop('Hook call differs from the generated pattern')
+  }
+  if (!identical(stages, c(if (pre) 'pre_request', if (post) 'post_response'))) {
+    stop('Hook stages in the body differ from hook_config')
+  }
+  list(code = code, pre = pre, chemicals = chemicals)
+}
+# Hooked wrappers are compared inside the loaded package so the real hook chains run.
+comptox_ns <- local({
+  ns <- NULL
+  function() {
+    if (is.null(ns)) {
+      pkgload::load_all('.', export_all = TRUE, helpers = FALSE, quiet = TRUE)
+      ns <<- asNamespace('ComptoxR')
+    }
+    ns
+  }
+})
 allowed_tags <- c('@description', '@param', '@return', '@apiStage', '@export', '@examples', '@md')
 documentation <- function(lines, start, name) {
   block <- lines[seq_len(start - 1L)]
@@ -144,11 +212,16 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
     record <- list(name = name, file = file, status = 'retained', reason = '', schema = NULL, key = NULL)
     proposal <- tryCatch(
       {
-        if (name %in% hooks) stop('Client hook policy requires manual review')
         fn <- eval(expr[[3]])
         code <- as.list(body(fn))[-1L]
+        hook <- NULL
+        if (name %in% hooks) {
+          hook <- hook_body(code, name, names(formals(fn)))
+          code <- hook$code
+          record$hooked <- TRUE
+        }
         prelude <- options_prelude(code)
-        if (!is.null(prelude) && 'options' %in% names(formals(fn))) {
+        if (!is.null(prelude) && prelude$name %in% names(formals(fn))) {
           stop('Options prelude overwrites the public options argument (original defect); retained')
         }
         if (!is.null(prelude)) code <- code[-seq_len(prelude$statements)]
@@ -163,8 +236,8 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         if (!helper %in% c('generic_request', 'generic_chemi_request')) stop('Helper outside schema migration scope')
         args <- as.list(call)[-1L]
         if (!is.null(prelude)) {
-          uses <- vapply(args, function(x) 'options' %in% all.names(x), FALSE)
-          if (sum(uses) != 1L || !identical(args$options, as.name('options'))) {
+          uses <- vapply(args, function(x) prelude$name %in% all.names(x), FALSE)
+          if (sum(uses) != 1L || !identical(args$options, as.name(prelude$name))) {
             stop('Options list used outside options = options needs manual mapping')
           }
           record$option_params <- vapply(prelude$bindings, function(b) b$from[[2]], '')
@@ -196,7 +269,13 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         list(
           name = name, file = file, helper = helper, implementation = 'generated', inputs = inputs,
           request = list(arguments = Map(function(x, key) {
-            if (!is.null(prelude) && identical(key, 'options')) list(compact_object = prelude$bindings) else binding(x, names(inputs))
+            if (!is.null(prelude) && identical(key, 'options')) {
+              list(compact_object = prelude$bindings)
+            } else if (isTRUE(hook$chemicals) && identical(x, as.name('chemicals'))) {
+              list(from = list('hook_state', 'params', 'chemicals'))
+            } else {
+              binding(x, names(inputs))
+            }
           }, args, names(args))), docs = docs
         )
       },
@@ -240,6 +319,8 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         selection = list(include = list(record$key)), helper = record$proposal$helper,
         documentation = TRUE, operations = setNames(list(record$proposal), record$key)
       )
+      hooked <- isTRUE(record$hooked)
+      if (hooked) config$hook_config <- 'inst/hook_config.yml'
       yaml::write_yaml(config, file.path(out, 'review.yml'))
       yaml::write_yaml(
         list(config_version = 1L, package = 'ComptoxR', services = list(file.path(out, 'review.yml'))),
@@ -250,7 +331,7 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       stopifnot(length(native$operations) == 1L, length(native$diagnostics) == 0L)
       mapped <- specmill:::configure_operation(native$operations[[1L]], project$services[[1L]])
       code <- specmill::render_operation(mapped$operation, mapped$spec)
-      original <- eval(record$original, envir = new.env(parent = baseenv()))
+      original <- eval(record$original, envir = new.env(parent = if (hooked) comptox_ns() else baseenv()))
       required <- names(Filter(function(x) isTRUE(x$required), record$proposal$inputs))
       supplied <- setNames(as.list(sprintf('pilot-%d', seq_along(required))), required)
       # Chemi helpers reject an empty query at runtime, so observed option wrappers also supply the query input.
@@ -260,10 +341,21 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       }
       calls <- list()
       helper <- record$proposal$helper
-      assign(helper, function(...) {
-        calls[[length(calls) + 1L]] <<- list(helper = helper, arguments = list(...), response = list(list(id = 'pilot-response')))
-        list(list(id = 'pilot-response'))
-      }, envir = environment(original))
+      # Resolver pre-request hooks call the same helper; they get resolver records.
+      scenario <- list(resolved = list(), response = list(list(id = 'pilot-response')))
+      stub <- function(...) {
+        arguments <- list(...)
+        response <- if (identical(arguments$endpoint, 'resolver/lookup')) scenario$resolved else scenario$response
+        calls[[length(calls) + 1L]] <<- list(helper = helper, arguments = arguments, response = response)
+        response
+      }
+      if (hooked) {
+        # Hooks run in the package namespace, so the helper is replaced there.
+        unlockBinding(helper, comptox_ns())
+        assign(helper, stub, envir = comptox_ns())
+      } else {
+        assign(helper, stub, envir = environment(original))
+      }
       # Option-bound inputs are compared omitted, explicit, FALSE, and zero; NULL
       # omission and falsy values must reach the helper exactly as in the original.
       optional <- record$option_params %||% character()
@@ -286,18 +378,43 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       stopifnot(identical(formals(original), formals(env[[name]])))
       run <- function(f, inputs) {
         calls <<- list()
-        value <- tryCatch(do.call(f, inputs), error = function(e) list(error = conditionMessage(e)))
-        list(value = value, calls = calls)
+        warnings <- character()
+        value <- withCallingHandlers(
+          tryCatch(do.call(f, inputs), error = function(e) list(error = conditionMessage(e))),
+          warning = function(w) {
+            warnings <<- c(warnings, conditionMessage(w))
+            invokeRestart('muffleWarning')
+          }
+        )
+        list(value = value, calls = calls, warnings = warnings)
       }
-      for (variant in variants) {
-        reference <- run(original, variant)
-        stopifnot(length(reference$calls) == 1L, identical(run(env[[name]], variant), reference))
+      # Hooked wrappers also run with resolved and unresolved records and two response shapes.
+      found <- list(list(result = 'FOUND', chemical = list(chemId = 'DTXSID7020182', canonicalSmiles = 'CCO', casrn = '64-17-5', name = 'pilot')))
+      scenarios <- if (hooked) {
+        list(
+          list(resolved = found, response = list(list(id = 'pilot-response'))),
+          list(resolved = found, response = tibble::tibble(dtxsid = 'DTXSID7020182', dtxsids = 'DTXSID1;DTXSID2')),
+          list(resolved = list(), response = list(list(id = 'pilot-response')))
+        )
+      } else {
+        list(scenario)
       }
-      # Missing-argument errors must name the same argument (evaluation order is observable).
-      stopifnot(identical(run(env[[name]], list()), run(original, list())))
+      for (scenario in scenarios) {
+        for (variant in variants) {
+          reference <- run(original, variant)
+          stopifnot(length(reference$calls) == 1L || hooked, identical(run(env[[name]], variant), reference))
+        }
+        # Missing-argument errors must name the same argument (evaluation order is observable).
+        stopifnot(identical(run(env[[name]], list()), run(original, list())))
+      }
+      scenario <- scenarios[[1L]]
+      endpoint <- record$proposal$request$arguments$endpoint$value
+      target <- function(calls) Filter(function(x) identical(x$arguments$endpoint, endpoint), calls)
       stopifnot(identical(readLines(record$file), readLines(file.path(baseline, record$file))))
       primary <- variants[[if (length(optional)) 'explicit' else 'omitted']]
       reference <- run(original, primary)
+      # A hook that fails before the request would make the comparison vacuous.
+      stopifnot(length(target(reference$calls)) == 1L)
       contracts[[name]] <- list(inputs = primary, calls = reference$calls, result = reference$value, environment = list(batch_limit = '2'))
       cases[[name]] <- list(
         schema = record$schema, key = record$key, inputs = primary, arguments = reference$calls[[1L]]$arguments,
@@ -309,6 +426,10 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         cases[[name]]$inputs <- variants$omitted
         cases[[name]]$arguments <- run(original, variants$omitted)$calls[[1L]]$arguments
         cases[[name]]$variants <- variants['explicit']
+      }
+      if (hooked) {
+        cases[[name]]$observe <- TRUE
+        cases[[name]]$arguments <- target(run(original, cases[[name]]$inputs)$calls)[[1L]]$arguments
       }
       code
     },
@@ -390,6 +511,10 @@ for (schema in unique(vapply(candidates, `[[`, '', 'schema'))) {
   keys <- vapply(selected, `[[`, '', 'key')
   service$selection$include <- as.list(sort(unique(c(unlist(service$selection$include), keys))))
   service$operations[keys] <- lapply(selected, `[[`, 'proposal')
+  if (any(vapply(selected, function(x) isTRUE(x$hooked), FALSE))) {
+    stopifnot(is.null(service$hooks))
+    service$hook_config <- 'inst/hook_config.yml'
+  }
   service$operations <- service$operations[sort(names(service$operations))]
   yaml::write_yaml(service, file.path(work, path))
 }
