@@ -64,7 +64,7 @@ for (name in names(full_cases)) {
             encoded <- gsub('%2F', '/', encoded, fixed = TRUE)
           }
           # Extra path parameters are appended unescaped after the query value.
-          suffix <- paste0('/', as.character(a$path_params), collapse = '')
+          suffix <- if (length(a$path_params)) paste0('/', as.character(a$path_params), collapse = '') else ''
           expected(method, paste0(sub('/$', '', path), '/', encoded, suffix), query, auth = auth)
         })
       }
