@@ -1,31 +1,4 @@
 {
-  "chemi_alerts_groups": {
-    "name": "chemi_alerts_groups",
-    "file": "R/chemi_alerts_groups.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-alerts-prod.json",
-    "key": "GET /api/alerts/groups",
-    "lifecycle": "experimental"
-  },
-  "chemi_alerts_groups_bulk": {
-    "name": "chemi_alerts_groups_bulk",
-    "file": "R/chemi_alerts_groups.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-alerts-prod.json",
-    "key": "POST /api/alerts/groups",
-    "lifecycle": "experimental"
-  },
-  "chemi_alerts": {
-    "name": "chemi_alerts",
-    "file": "R/chemi_alerts.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-alerts-prod.json",
-    "key": "POST /api/alerts",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_all_similarities": {
     "name": "chemi_amos_all_similarities",
     "file": "R/chemi_amos_all_similarities.R",
@@ -379,8 +352,8 @@
   "chemi_hazard": {
     "name": "chemi_hazard",
     "file": "R/chemi_hazard.R",
-    "status": "retained",
-    "reason": "Candidate rejected: identical(formals(original), formals(env[[name]])) is not TRUE",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-hazard-prod.json",
     "key": "GET /api/hazard",
     "lifecycle": "experimental"
@@ -388,8 +361,8 @@
   "chemi_hazard_bulk": {
     "name": "chemi_hazard_bulk",
     "file": "R/chemi_hazard.R",
-    "status": "retained",
-    "reason": "Candidate rejected: identical(formals(original), formals(env[[name]])) is not TRUE",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-hazard-prod.json",
     "key": "POST /api/hazard",
     "lifecycle": "experimental"
@@ -517,24 +490,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_safety_flags": {
-    "name": "chemi_resolver_safety_flags",
-    "file": "R/chemi_resolver_safety_flags.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/safety-flags",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_safety_flags_bulk": {
-    "name": "chemi_resolver_safety_flags_bulk",
-    "file": "R/chemi_resolver_safety_flags.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/safety-flags",
-    "lifecycle": "experimental"
-  },
   "chemi_safety_rqcodes": {
     "name": "chemi_safety_rqcodes",
     "file": "R/chemi_safety_rqcodes.R",
@@ -558,24 +513,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "chemi_stdizer_groups": {
-    "name": "chemi_stdizer_groups",
-    "file": "R/chemi_stdizer_groups.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-stdizer-prod.json",
-    "key": "GET /api/stdizer/groups",
-    "lifecycle": "experimental"
-  },
-  "chemi_stdizer_groups_bulk": {
-    "name": "chemi_stdizer_groups_bulk",
-    "file": "R/chemi_stdizer_groups.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-stdizer-prod.json",
-    "key": "POST /api/stdizer/groups",
-    "lifecycle": "experimental"
   },
   "chemi_stdizer_records": {
     "name": "chemi_stdizer_records",
@@ -626,24 +563,6 @@
     "reason": "Options prelude overwrites the public options argument (original defect); retained",
     "schema": null,
     "key": null
-  },
-  "chemi_toxprints_calculate": {
-    "name": "chemi_toxprints_calculate",
-    "file": "R/chemi_toxprints_calculate.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/calculate",
-    "lifecycle": "experimental"
-  },
-  "chemi_toxprints_calculate_bulk": {
-    "name": "chemi_toxprints_calculate_bulk",
-    "file": "R/chemi_toxprints_calculate.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "POST /api/toxprints/calculate",
-    "lifecycle": "experimental"
   },
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
@@ -779,14 +698,6 @@
     "file": "R/ct_related.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
-  },
-  "ct_similar": {
-    "name": "ct_similar",
-    "file": "R/ct_similar.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
