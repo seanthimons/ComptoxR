@@ -71,15 +71,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_get_pdf": {
-    "name": "chemi_amos_get_pdf",
-    "file": "R/chemi_amos_get_pdf.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_get_similar_structures": {
     "name": "chemi_amos_get_similar_structures",
     "file": "R/chemi_amos_get_similar_structures.R",
@@ -136,15 +127,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_method_with_spectra": {
-    "name": "chemi_amos_method_with_spectra",
-    "file": "R/chemi_amos_method_with_spectra.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_next_level_classification": {
     "name": "chemi_amos_next_level_classification",
     "file": "R/chemi_amos_next_level_classification.R",
@@ -168,15 +150,6 @@
     "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
-  },
-  "chemi_amos_record_ids_for_substance": {
-    "name": "chemi_amos_record_ids_for_substance",
-    "file": "R/chemi_amos_record_ids_for_substance.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
-    "lifecycle": "experimental"
   },
   "chemi_amos_retrieve_fact_sheets": {
     "name": "chemi_amos_retrieve_fact_sheets",
@@ -242,40 +215,13 @@
     "schema": null,
     "key": null
   },
-  "chemi_chet_chemicals_image": {
-    "name": "chemi_chet_chemicals_image",
-    "file": "R/chemi_chet_chemicals_image.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /chemicals/{chemical_id}/image",
-    "lifecycle": "experimental"
-  },
   "chemi_chet_reaction_batchsearch": {
     "name": "chemi_chet_reaction_batchsearch",
     "file": "R/chemi_chet_reaction_batchsearch.R",
     "status": "retained",
-    "reason": "Candidate rejected: identical(run(env[[name]], list()), run(original, list())) is not TRUE",
+    "reason": "Candidate rejected: identical(deparse(correct(base_expr, corrections[[name]])[[3L]]),  .... is not TRUE",
     "schema": "chemi-chet-prod.json",
     "key": "POST /reaction/batchsearch",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
-    "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
-    "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/database-old/{pagenum}/{searchterm}",
-    "lifecycle": "experimental"
-  },
-  "chemi_chet_reaction_searchcounts": {
-    "name": "chemi_chet_reaction_searchcounts",
-    "file": "R/chemi_chet_reaction_searchcounts.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-chet-prod.json",
-    "key": "GET /reaction/searchcounts/{search_input}/{search_type}",
     "lifecycle": "experimental"
   },
   "chemi_classyfire": {
@@ -439,15 +385,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_stdizer_groups_recursive": {
-    "name": "chemi_stdizer_groups_recursive",
-    "file": "R/chemi_stdizer_groups_recursive.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-stdizer-prod.json",
-    "key": "GET /api/stdizer/groups/{id}/recursive",
-    "lifecycle": "experimental"
-  },
   "chemi_stdizer_records": {
     "name": "chemi_stdizer_records",
     "file": "R/chemi_stdizer_records.R",
@@ -520,33 +457,6 @@
     "schema": "ctx-bioactivity-prod.json",
     "key": "GET /bioactivity/assay/search/by-endpoint/"
   },
-  "ct_chemical_list_chemicals_search_contain": {
-    "name": "ct_chemical_list_chemicals_search_contain",
-    "file": "R/ct_chemical_list_chemicals_search_contain.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/chemicals/search/contain/{list}/{word}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_list_chemicals_search_equal": {
-    "name": "ct_chemical_list_chemicals_search_equal",
-    "file": "R/ct_chemical_list_chemicals_search_equal.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/chemicals/search/equal/{list}/{word}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_list_chemicals_search_start_with": {
-    "name": "ct_chemical_list_chemicals_search_start_with",
-    "file": "R/ct_chemical_list_chemicals_search_start_with.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/chemicals/search/start-with/{list}/{word}",
-    "lifecycle": "stable"
-  },
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
     "file": "R/ct_chemical_msready_search_by_mass_bulk.R",
@@ -554,33 +464,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "ct_chemical_msready_search_by_mass": {
-    "name": "ct_chemical_msready_search_by_mass",
-    "file": "R/ct_chemical_msready_search_by_mass.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/msready/search/by-mass/{start}/{end}",
-    "lifecycle": "experimental"
-  },
-  "ct_chemical_property_experimental_search_by_range": {
-    "name": "ct_chemical_property_experimental_search_by_range",
-    "file": "R/ct_chemical_property_experimental_search_by_range.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_property_predicted_search_by_range": {
-    "name": "ct_chemical_property_predicted_search_by_range",
-    "file": "R/ct_chemical_property_predicted_search_by_range.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}",
-    "lifecycle": "stable"
   },
   "ct_chemical_search_equal_bulk": {
     "name": "ct_chemical_search_equal_bulk",
