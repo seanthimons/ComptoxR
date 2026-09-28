@@ -116,6 +116,7 @@ A wave is adopted only when all of the following hold:
 | options-batch | 52 | 1015 | `b851a6cd` |
 | vector-examples | 14 | 1099 | `30a4dc49` |
 | hooks | 5 | 1113 | `b5bccc97` |
+| prose-defaults | 6 | 1137 | `f547ff22` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -161,8 +162,8 @@ operation key, file, and wave. Each retained export records:
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
 | #310 | 87 | 19 | 3 |
-| #311 | 50 | 43 | 0 |
-| #312 | 4 | 22 | 0 |
+| #311 | 51 | 42 | 0 |
+| #312 | 9 | 17 | 0 |
 | #313 | 0 | 16 | 0 |
 | #314 | 2 | 2 | 0 |
 
@@ -173,9 +174,7 @@ Reasons for keeping an export retained:
 - a hand-written implementation (18);
 - an inseparable grouped file (16);
 - a request built by a pre-request hook (12);
-- description prose that needs a manual mapping (6);
-- a nonliteral helper argument (2);
-- a computed default (1, `chemi_hazard`);
+- a nonliteral helper argument (3);
 - a candidate whose no-argument call differs (1);
 - the original defects above.
 
@@ -199,32 +198,44 @@ The hooks wave generated 5 of the 28 hooked wrappers:
 truncated `theta = 0.00010836` to 7 significant digits. The wave now writes
 YAML with `precision = 15`.
 
-The other 23 stay client-owned:
+The prose-defaults wave maps description prose after the lifecycle badge to
+`docs$description` (as specmill's adoption reader does) and maps a `c()` of
+scalar literals as a vector default (rendered back as `c()` since #53). It
+generated `chemi_resolver_getpubchemlist`, `_getsimilaritylist`,
+`_orderBySimilarity`, `_pubchem_section`, `_pubchem_section_bulk`, and
+`chemi_stdizer_chemicals`; `man/` is unchanged.
+
+The other 18 hooked wrappers stay client-owned:
 
 - 12 descriptor and webtest wrappers build the request inside a pre-request
   hook, so no route is guessed;
-- 6 resolver and stdizer wrappers match the hook pattern but need manual
-  description mapping;
-- 4 have no unique supported route (`chemi_alerts`, `chemi_hazard_bulk`,
-  `chemi_toxprints_calculate_bulk`, `ct_similar`);
-- `chemi_hazard` has a computed `format = c(...)` default.
+- `chemi_resolver_getsimilaritymap` computes `sort` inline in the helper call;
+- `chemi_hazard` now screens clean but shares a file with `chemi_hazard_bulk`;
+- `chemi_alerts`, `chemi_hazard_bulk`, and `chemi_toxprints_calculate_bulk`
+  call real endpoints, but the audit blocks them (`binary_parameter`, issue
+  28): springdoc folded the multipart `files[]` and `request` query parameters
+  into the JSON POST. A schema overlay that drops those two parameters would
+  unblock them. The wrappers also send `request.*` options as ignored query
+  strings and nest a non-NULL `options` twice (`{"options":{"options":...}}`);
+- `ct_similar` calls the undocumented `dashboard-api/similar-compound`
+  endpoint, which is in no schema, and stays hand-written (`questioning`).
 
 ## Full rebuild rehearsal (#328)
 
 Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `b64adbf8`
+each one is classified. The rehearsal ran `rehearse.R` at `65303506`
 (specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
-removed the 217 allowlisted files. Regeneration, a second `--apply`, and
+removed the 222 allowlisted files. Regeneration, a second `--apply`, and
 `--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
 - The contract, request-edge, and hook tests passed.
-- All 1113 localhost cases (409 exported signatures) matched the original
+- All 1137 localhost cases (409 exported signatures) matched the original
   `4fd720b9` client, with no candidate failures.
 
 No output was promoted: the rebuilt tree is identical to the branch.
 
 Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
-`30a4dc49`, `b5bccc97`) to
+`30a4dc49`, `b5bccc97`, `f547ff22`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
