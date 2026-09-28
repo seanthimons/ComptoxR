@@ -3,14 +3,14 @@
   "baseline_commit": "4fd720b97fb2f7f2abf131925e9270b0c11b057a",
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.6",
-    "source_commit": "66c5e1f4d5a8b1a24d4a4946a6d2c1efe9c68d10",
-    "source_archive_sha256": "6b2d5e647032acfa265892cb8ec9464293dc5d4689f5a3c5a3977c853085fe99",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1015,
+  "passed_cases": 1099,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -622,6 +622,18 @@
       "schema": "ctx-bioactivity-prod.json",
       "key": "GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}"
     },
+    "ct_bioactivity_data_aed_search": {
+      "schema": "ctx-bioactivity-prod.json",
+      "key": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_bioactivity_data_aed_search_bulk": {
+      "schema": "ctx-bioactivity-prod.json",
+      "key": "POST /bioactivity/data/aed/search/by-dtxsid/"
+    },
+    "ct_bioactivity_data_search_bulk": {
+      "schema": "ctx-bioactivity-prod.json",
+      "key": "POST /bioactivity/data/search/by-dtxsid/"
+    },
     "ct_bioactivity_data_search_by_aeid": {
       "schema": "ctx-bioactivity-prod.json",
       "key": "GET /bioactivity/data/search/by-aeid/{aeid}"
@@ -701,6 +713,10 @@
     "ct_chemical_fate_predicted_search": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/fate/summary/predicted/search/"
+    },
+    "ct_chemical_fate_search_bulk": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "POST /chemical/fate/search/by-dtxsid/"
     },
     "ct_chemical_fate_search_by_dtxsid": {
       "schema": "ctx-chemical-prod.json",
@@ -798,6 +814,30 @@
       "schema": "ctx-hazard-prod.json",
       "key": "GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"
     },
+    "ct_hazard_cancer_search": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_cancer_search_bulk": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "POST /hazard/cancer-summary/search/by-dtxsid/"
+    },
+    "ct_hazard_genetox_details_search": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_genetox_details_search_bulk": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "POST /hazard/genetox/details/search/by-dtxsid/"
+    },
+    "ct_hazard_genetox_search": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_genetox_search_bulk": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "POST /hazard/genetox/summary/search/by-dtxsid/"
+    },
     "ct_hazard_hawc_search": {
       "schema": "ctx-hazard-prod.json",
       "key": "GET /hazard/hawc/search/by-dtxsid/{dtxsid}"
@@ -809,6 +849,14 @@
     "ct_hazard_pprtv_search": {
       "schema": "ctx-hazard-prod.json",
       "key": "GET /hazard/pprtv/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_skin_eye_search": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_skin_eye_search_bulk": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "POST /hazard/skin-eye/search/by-dtxsid/"
     },
     "ct_hazard_toxref_data_search": {
       "schema": "ctx-hazard-prod.json",
@@ -857,6 +905,14 @@
     "ct_hazard_toxref_search_by_study_type": {
       "schema": "ctx-hazard-prod.json",
       "key": "GET /hazard/toxref/summary/search/by-study-type/{studyType}"
+    },
+    "ct_hazard_toxval_search": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_hazard_toxval_search_bulk": {
+      "schema": "ctx-hazard-prod.json",
+      "key": "POST /hazard/toxval/search/by-dtxsid/"
     },
     "ct_hazard_toxval_search_by_category": {
       "schema": "ctx-hazard-prod.json",
@@ -5754,6 +5810,132 @@
       "error_classes": null,
       "error_message": null
     },
+    "ct_bioactivity_data_aed_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_aed_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_bioactivity_data_aed_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_bioactivity_data_aed_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_bioactivity_data_aed_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_aed_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_aed_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_aed_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_bioactivity_data_aed_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_bioactivity_data_aed_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_bioactivity_data_aed_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_aed_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_bioactivity_data_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_bioactivity_data_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_bioactivity_data_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_data_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_bioactivity_data_search_by_aeid-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -6488,6 +6670,48 @@
       "warnings": [],
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "ct_chemical_fate_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_fate_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_fate_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_fate_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_fate_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_fate_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
     },
     "ct_chemical_fate_search_by_dtxsid-minimal": {
       "requests": 1,
@@ -7301,6 +7525,258 @@
       "error_classes": null,
       "error_message": null
     },
+    "ct_hazard_cancer_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_cancer_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_cancer_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_cancer_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_cancer_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_cancer_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_cancer_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_cancer_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_cancer_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_cancer_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_cancer_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_cancer_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_genetox_details_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_genetox_details_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_genetox_details_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_genetox_details_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_genetox_details_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_genetox_details_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_details_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_genetox_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_genetox_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_genetox_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_genetox_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_genetox_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_genetox_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_genetox_search_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_hazard_hawc_search-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -7422,6 +7898,90 @@
     },
     "ct_hazard_pprtv_search-batches": {
       "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_skin_eye_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_skin_eye_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_skin_eye_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_skin_eye_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_skin_eye_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_skin_eye_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_skin_eye_search_bulk-batches": {
+      "requests": 2,
       "classes": ["tbl_df", "tbl", "data.frame"],
       "warnings": [],
       "error_classes": null,
@@ -7884,6 +8444,90 @@
     },
     "ct_hazard_toxref_search_by_study_type-batches": {
       "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_toxval_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_toxval_search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_toxval_search-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_hazard_toxval_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_hazard_toxval_search_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_hazard_toxval_search_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_hazard_toxval_search_bulk-batches": {
+      "requests": 2,
       "classes": ["tbl_df", "tbl", "data.frame"],
       "warnings": [],
       "error_classes": null,

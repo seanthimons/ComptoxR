@@ -14,6 +14,7 @@ selection:
   - GET /bioactivity/assay/search/by-aeid/{aeid}
   - GET /bioactivity/assay/search/by-gene/{geneSymbol}
   - GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}
+  - GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}
   - GET /bioactivity/data/search/by-aeid/{aeid}
   - GET /bioactivity/data/search/by-dtxsid/{dtxsid}
   - GET /bioactivity/data/search/by-m4id/{m4id}
@@ -27,7 +28,9 @@ selection:
   - GET /bioactivity/search/equal/{value}
   - GET /bioactivity/search/start-with/{value}
   - POST /bioactivity/assay/search/by-aeid/
+  - POST /bioactivity/data/aed/search/by-dtxsid/
   - POST /bioactivity/data/search/by-aeid/
+  - POST /bioactivity/data/search/by-dtxsid/
   - POST /bioactivity/data/search/by-m4id/
   - POST /bioactivity/data/search/by-spid/
 helper: generic_request
@@ -355,6 +358,36 @@ operations:
       return: Returns a scalar value
       examples:
       - aeid: '3032'
+  GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}:
+    name: ct_bioactivity_data_aed_search
+    file: R/ct_bioactivity_data_aed_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: bioactivity/data/aed/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get AED data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'Primary query parameter. Type: string'
+      return: Returns a list with result object
+      examples:
+      - dtxsid: DTXSID5021209
   GET /bioactivity/data/search/by-aeid/{aeid}:
     name: ct_bioactivity_data_search_by_aeid
     file: R/ct_bioactivity_data_search_by_aeid.R
@@ -792,6 +825,39 @@ operations:
       return: Returns a scalar value
       examples:
       - query: DTXSID1024122
+  POST /bioactivity/data/aed/search/by-dtxsid/:
+    name: ct_bioactivity_data_aed_search_bulk
+    file: R/ct_bioactivity_data_aed_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/aed/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get AED data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
   POST /bioactivity/data/search/by-aeid/:
     name: ct_bioactivity_data_search_by_aeid_bulk
     file: R/ct_bioactivity_data_search_by_aeid.R
@@ -822,6 +888,39 @@ operations:
       return: Returns a scalar value
       examples:
       - query: DTXSID1024122
+  POST /bioactivity/data/search/by-dtxsid/:
+    name: ct_bioactivity_data_search_bulk
+    file: R/ct_bioactivity_data_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: bioactivity/data/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get bioactivity data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
   POST /bioactivity/data/search/by-m4id/:
     name: ct_bioactivity_data_search_by_m4id_bulk
     file: R/ct_bioactivity_data_search_by_m4id.R

@@ -5,9 +5,13 @@ schemas:
 selection:
   include:
   - GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}
+  - GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}
+  - GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}
+  - GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}
   - GET /hazard/hawc/search/by-dtxsid/{dtxsid}
   - GET /hazard/iris/search/by-dtxsid/{dtxsid}
   - GET /hazard/pprtv/search/by-dtxsid/{dtxsid}
+  - GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}
   - GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}
   - GET /hazard/toxref/data/search/by-study-id/{studyId}
   - GET /hazard/toxref/data/search/by-study-type/{studyType}
@@ -21,7 +25,13 @@ selection:
   - GET /hazard/toxref/summary/search/by-study-id/{studyId}
   - GET /hazard/toxref/summary/search/by-study-type/{studyType}
   - GET /hazard/toxval/search/by-category/{dtxsid}
+  - GET /hazard/toxval/search/by-dtxsid/{dtxsid}
   - GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}
+  - POST /hazard/cancer-summary/search/by-dtxsid/
+  - POST /hazard/genetox/details/search/by-dtxsid/
+  - POST /hazard/genetox/summary/search/by-dtxsid/
+  - POST /hazard/skin-eye/search/by-dtxsid/
+  - POST /hazard/toxval/search/by-dtxsid/
 helper: generic_request
 documentation: yes
 operations:
@@ -66,6 +76,107 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID7020182
+  GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_cancer_search
+    file: R/ct_hazard_cancer_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/cancer-summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
+  GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_genetox_details_search
+    file: R/ct_hazard_genetox_details_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+      projection:
+        type: character
+        default: ~
+        description: 'Specifies if projection is used. Option: ccd-genetox-details.
+          If no projection is specified, the default GenetoxDetail projection is returned.'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/genetox/details/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get detailed data by DTXSID with CCD projection
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+        projection: 'Specifies if projection is used. Option: ccd-genetox-details.
+          If no projection is specified, the default GenetoxDetail projection is returned.'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID7020182
+  GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_genetox_search
+    file: R/ct_hazard_genetox_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/genetox/summary/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get summary data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
   GET /hazard/hawc/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_hawc_search
     file: R/ct_hazard_hawc_search.R
@@ -156,6 +267,36 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID2040282
+  GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_skin_eye_search
+    file: R/ct_hazard_skin_eye_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/skin-eye/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
   GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_toxref_data_search
     file: R/ct_hazard_toxref_data_search.R
@@ -627,6 +768,36 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID0021125
+  GET /hazard/toxval/search/by-dtxsid/{dtxsid}:
+    name: ct_hazard_toxval_search
+    file: R/ct_hazard_toxval_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: 'DSSTox Substance Identifier. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: hazard/toxval/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+    docs:
+      title: Get data by DTXSID
+      lifecycle: stable
+      parameters:
+        dtxsid: 'DSSTox Substance Identifier. Type: string'
+      return: Returns a scalar value
+      examples:
+      - dtxsid: DTXSID0021125
   GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}:
     name: ct_hazard_toxval_supercategory_search
     file: R/ct_hazard_toxval_supercategory_search.R
@@ -657,4 +828,169 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID0021125
+  POST /hazard/cancer-summary/search/by-dtxsid/:
+    name: ct_hazard_cancer_search_bulk
+    file: R/ct_hazard_cancer_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/cancer-summary/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
+  POST /hazard/genetox/details/search/by-dtxsid/:
+    name: ct_hazard_genetox_details_search_bulk
+    file: R/ct_hazard_genetox_details_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/genetox/details/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get detailed data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
+  POST /hazard/genetox/summary/search/by-dtxsid/:
+    name: ct_hazard_genetox_search_bulk
+    file: R/ct_hazard_genetox_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/genetox/summary/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get summary data for a batch of DTXSID
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
+  POST /hazard/skin-eye/search/by-dtxsid/:
+    name: ct_hazard_skin_eye_search_bulk
+    file: R/ct_hazard_skin_eye_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/skin-eye/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get data for a batch of DTXSID(s)
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
+  POST /hazard/toxval/search/by-dtxsid/:
+    name: ct_hazard_toxval_search_bulk
+    file: R/ct_hazard_toxval_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard/toxval/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get data for a batch of DTXSID(s).
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

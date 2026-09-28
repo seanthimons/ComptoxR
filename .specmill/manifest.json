@@ -441,6 +441,14 @@
       "hash": "f98a6e106af170e65a4ac02d30e2ecb11830d24ce58ad865ea25c7164d0cfeb8",
       "operations": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}"
     },
+    "R/ct_bioactivity_data_aed_search.R": {
+      "hash": "48865c925bef4c19fe51df2872efa8fd02770de30ecfaa7bcba36ba03742b762",
+      "operations": ["ctx-bioactivity-prod-rebuild POST /bioactivity/data/aed/search/by-dtxsid/", "ctx-bioactivity-prod-rebuild GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}"]
+    },
+    "R/ct_bioactivity_data_search.R": {
+      "hash": "a54c24780a0637894dc96999f743ddf094f0eb2e98cd2e57bf03f44bb82ffcad",
+      "operations": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-dtxsid/"
+    },
     "R/ct_bioactivity_data_search_by_aeid.R": {
       "hash": "ebf6acce311c950fed078686fb9fb3071e58cb4f9e70c2515eb2eee7dea4bd82",
       "operations": ["ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-aeid/", "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-aeid/{aeid}"]
@@ -516,6 +524,10 @@
     "R/ct_chemical_fate_predicted_search.R": {
       "hash": "755b319d757323cdb985431a0f3d5e701ae12eb55758f3fec788090a19b55233",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/predicted/search/"
+    },
+    "R/ct_chemical_fate_search.R": {
+      "hash": "3639274abcf69496ce7aa97edefb94b1e9743257fc4624c538e7db0fcd13022c",
+      "operations": "ctx-chemical-prod-rebuild POST /chemical/fate/search/by-dtxsid/"
     },
     "R/ct_chemical_fate_search_by_dtxsid.R": {
       "hash": "9e9d56b05218d3a66f12df3e6f6e785ee3a6d325cc2b2ea92ac22369a34a7c16",
@@ -721,6 +733,18 @@
       "hash": "4f62789d40069b71f8ea949b434c096d6f2852c5ea85876415e8137fa30301e6",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"
     },
+    "R/ct_hazard_cancer_search.R": {
+      "hash": "0800ef0065269eb7e4435b17d608be9a676c45634ae7f4dd16e08bfe6360e0ee",
+      "operations": ["ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"]
+    },
+    "R/ct_hazard_genetox_details_search.R": {
+      "hash": "86de1d5a27c57b5047665107dcf1059e41edcc8df7942612a7c623dcf4c3caf1",
+      "operations": ["ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"]
+    },
+    "R/ct_hazard_genetox_search.R": {
+      "hash": "1df4ab6c5c98aee03a633921e656cf1df291a8ef144e20917391eab66de0aa2e",
+      "operations": ["ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"]
+    },
     "R/ct_hazard_hawc_search.R": {
       "hash": "b719ee9d326ad76a921bf73b6084df989a6cc36ec70dd1c9adf9049f00aefd5b",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}"
@@ -732,6 +756,10 @@
     "R/ct_hazard_pprtv_search.R": {
       "hash": "a8836276d456819b585bbd8203382c4e01d2b8abf86a9cbfaf94da2acbffd5e6",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}"
+    },
+    "R/ct_hazard_skin_eye_search.R": {
+      "hash": "7e4782c1cb05a1a4548875291d9d964bb9c4329ae73637385325d1fe01ae697c",
+      "operations": ["ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxref_data_search.R": {
       "hash": "db03b24566c0cecd2037249a56fcf2d4ad24fcf4da35c22449429ab55c9edbb1",
@@ -780,6 +808,10 @@
     "R/ct_hazard_toxref_search_by_study_type.R": {
       "hash": "4dbbb352fd000390d07cc0182f1e97dc7e3025e8f197f1d89842b3c24da37f20",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}"
+    },
+    "R/ct_hazard_toxval_search.R": {
+      "hash": "888f9c63f086a7f0e31e01b77cf377884ff1b771049a3618b213e32a0791b0c9",
+      "operations": ["ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/", "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"]
     },
     "R/ct_hazard_toxval_search_by_category.R": {
       "hash": "8b2022e6accb3277cfca5b56886e14e875b2062cf2d03fa9b733ffae38ae105f",
@@ -1289,6 +1321,18 @@
       "hash": "fb37baa81800396f572eba0dea23ee893a1aa8c2c88e437fcc85ed6312b5119b",
       "operations": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}"
     },
+    "tests/testthat/test-contract-ct_bioactivity_data_aed_search.R": {
+      "hash": "72c2f9002ca1263096bbdb6ff8bf93add1ab0769009928a77cb9e6bd95819248",
+      "operations": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_bioactivity_data_aed_search_bulk.R": {
+      "hash": "b608fee8283f1658969187a6ad2098deb700383d76714a0da8e76bb6184a975a",
+      "operations": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/aed/search/by-dtxsid/"
+    },
+    "tests/testthat/test-contract-ct_bioactivity_data_search_bulk.R": {
+      "hash": "259619fd8924330e41cacbd346208d44db71d71b5d5efc347a8d09fa8c352056",
+      "operations": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-dtxsid/"
+    },
     "tests/testthat/test-contract-ct_bioactivity_data_search_by_aeid.R": {
       "hash": "25384b816d4424dc91d465bbe6b74e7f35bda90f283df841697f04a48cc63c28",
       "operations": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-aeid/{aeid}"
@@ -1392,6 +1436,10 @@
     "tests/testthat/test-contract-ct_chemical_fate_predicted_search.R": {
       "hash": "5f2b47e13f85542d1206057b512e3bc3d511a34e439cbff3859c2502ecd8a004",
       "operations": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/predicted/search/"
+    },
+    "tests/testthat/test-contract-ct_chemical_fate_search_bulk.R": {
+      "hash": "6ce55606798bb6bdfcd22c77ad2212ef2a0943524701baa7fd31bae535aedd53",
+      "operations": "ctx-chemical-prod-rebuild POST /chemical/fate/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_chemical_fate_search_by_dtxsid.R": {
       "hash": "6034a734738e8bd7911dea8bd914ac734831b422cc6827788307ce66a8e57e48",
@@ -1637,6 +1685,30 @@
       "hash": "e4d1d661cdf490b54cfa125fee5906dde426b5a190962a7e6233a3089d11b4bf",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}"
     },
+    "tests/testthat/test-contract-ct_hazard_cancer_search.R": {
+      "hash": "62dd2836589e07866c11917809e0c9967d9010f2e358b6afc59dc0ccc595b4b8",
+      "operations": "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_cancer_search_bulk.R": {
+      "hash": "5b309db1606b846189f3b3dfb1a71a5ffd1f147f68e481865cb16b426274ab0b",
+      "operations": "ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/"
+    },
+    "tests/testthat/test-contract-ct_hazard_genetox_details_search.R": {
+      "hash": "cd581bc5dac4c8582d8bdc80d589514e984683ed27a13ffe71ec13399230a5cd",
+      "operations": "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_genetox_details_search_bulk.R": {
+      "hash": "6cc62cc41e0fb9d4d5a695d631535d6cd28fd38d5902658385a2c9ef0780c3ee",
+      "operations": "ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/"
+    },
+    "tests/testthat/test-contract-ct_hazard_genetox_search.R": {
+      "hash": "b5dd032037ec3c94bd66e5984d71ad7b95d4ddb083f64663ac972b8ce8a84902",
+      "operations": "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_genetox_search_bulk.R": {
+      "hash": "e2837cdbc9891ecca08b0b1ef8e7dbbfc902d1509b216779ae5e4d4632ddfb0a",
+      "operations": "ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/"
+    },
     "tests/testthat/test-contract-ct_hazard_hawc_search.R": {
       "hash": "805c1612a51e8dce58f16f731bed9fa414d471bf420a138443e099d655f3d332",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}"
@@ -1648,6 +1720,14 @@
     "tests/testthat/test-contract-ct_hazard_pprtv_search.R": {
       "hash": "d0d69d606096aa2157529ec010da5faeea24f30a1803f6a45ed7163f5e6f2bb8",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_skin_eye_search.R": {
+      "hash": "79cda89ed3d8b5b3fe309ef4ad94fefb8525f3102193699f2f4ae0a6a38b2142",
+      "operations": "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_skin_eye_search_bulk.R": {
+      "hash": "fdc0f39a96fd3ffbce94f3a9d927748c4b05298e58ea3fe79749372571321f9d",
+      "operations": "ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_toxref_data_search.R": {
       "hash": "0ca37a25d98548c5351c8c0644c79e36e75e10dc67fcc168fc0fa98e444fc717",
@@ -1696,6 +1776,14 @@
     "tests/testthat/test-contract-ct_hazard_toxref_search_by_study_type.R": {
       "hash": "3b73180a8e9ce1b9e3f9e19d501564e5b7556a6a54350c5d99878157744447bb",
       "operations": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}"
+    },
+    "tests/testthat/test-contract-ct_hazard_toxval_search.R": {
+      "hash": "c3a5de468cb732a905643bbf8b3cd3eb228f3f7b463a73f2abaad0365401ce33",
+      "operations": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}"
+    },
+    "tests/testthat/test-contract-ct_hazard_toxval_search_bulk.R": {
+      "hash": "ddd7ec520b5d1998f00da8c9829caaba61480bbcce08423b95d005a2e2389319",
+      "operations": "ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/"
     },
     "tests/testthat/test-contract-ct_hazard_toxval_search_by_category.R": {
       "hash": "5a7ae11081328ba29a78c353647195b2fcbcb93e98380a75705b637c8614013c",
@@ -1922,8 +2010,8 @@
     "R/ct_bioactivity_assay_search_by_endpoint.R": "8a44e30a130f6b5ab90f70491493a6d0a1d4ee014ff719b11a9dfedd9eedf1b8",
     "R/ct_bioactivity_assay_search_by_gene.R": "9015c09a421383cf83e22e5b9d1bce26a15b8b9c72028ac5daf336f9911cd406",
     "R/ct_bioactivity_assay_single_conc_search_by_aeid.R": "f98a6e106af170e65a4ac02d30e2ecb11830d24ce58ad865ea25c7164d0cfeb8",
-    "R/ct_bioactivity_data_aed_search.R": "2ac1150b3084affb2095dd61fc928ec54dcc1935f0ab13258a8681484eb5e0e7",
-    "R/ct_bioactivity_data_search.R": "0e288eefd5ad03781b06693850053f7b5a9a1140ac101abc09d8eba93f73feee",
+    "R/ct_bioactivity_data_aed_search.R": "48865c925bef4c19fe51df2872efa8fd02770de30ecfaa7bcba36ba03742b762",
+    "R/ct_bioactivity_data_search.R": "a54c24780a0637894dc96999f743ddf094f0eb2e98cd2e57bf03f44bb82ffcad",
     "R/ct_bioactivity_data_search_by_aeid.R": "ebf6acce311c950fed078686fb9fb3071e58cb4f9e70c2515eb2eee7dea4bd82",
     "R/ct_bioactivity_data_search_by_dtxsid.R": "06e471c6999b586ba451aed39f4a5f2830518b7d16d4b76c489e3fe9f2d02140",
     "R/ct_bioactivity_data_search_by_m4id.R": "07c42edb624a2c310a4208261def9c121a944f5a58ec5b57ed09bd866fb3d2a3",
@@ -1944,7 +2032,7 @@
     "R/ct_chemical_extra_data_search.R": "62b68a3efce1ad28e6c06398652d23a52f8e1187a7e2fb1ccb60d6a9a36df2c7",
     "R/ct_chemical_fate_experimental_search.R": "48fc80f7d80b46fb6220bdfecfd413cd505112cda6511d79322db13e74358475",
     "R/ct_chemical_fate_predicted_search.R": "755b319d757323cdb985431a0f3d5e701ae12eb55758f3fec788090a19b55233",
-    "R/ct_chemical_fate_search.R": "da23465dfbae231a247c7afc46775dc3356e798a4b81f42f14ad95e678b019f8",
+    "R/ct_chemical_fate_search.R": "3639274abcf69496ce7aa97edefb94b1e9743257fc4624c538e7db0fcd13022c",
     "R/ct_chemical_fate_search_by_dtxsid.R": "9e9d56b05218d3a66f12df3e6f6e785ee3a6d325cc2b2ea92ac22369a34a7c16",
     "R/ct_chemical_fate_summary_search.R": "7db3b9c20bcfd35a9039a2196ef7806a32c5979031cff4d979c6c303c304fce8",
     "R/ct_chemical_fate_summary_search_by_dtxsid.R": "dca6c36974da5ca3305eabe4c7bafb6fb7bc4a88b90a8def80b3d7e41553a26e",
@@ -2006,13 +2094,13 @@
     "R/ct_exposure_seem_demographic_search.R": "921e51a3253177911af87cd3b45c62d7aa7d51939b933226adf6621ebdea8465",
     "R/ct_exposure_seem_general_search.R": "161e0987f6ee694c593bf1affa24cb9231bbe84d692a431925fa9ab004488ecd",
     "R/ct_hazard_adme_ivive_search.R": "4f62789d40069b71f8ea949b434c096d6f2852c5ea85876415e8137fa30301e6",
-    "R/ct_hazard_cancer_search.R": "76524981a0545faee2fe4837422d05bf62bb3128c64e646076786baabd054f53",
-    "R/ct_hazard_genetox_details_search.R": "d2162efb8379ea1b95e03826dbd7981ae459807fcdcd1be6f7c6d561e5d7accc",
-    "R/ct_hazard_genetox_search.R": "8e221813a31b2009e83ac46e8f2cb67d06ca8b78b410782edbfa240de4547290",
+    "R/ct_hazard_cancer_search.R": "0800ef0065269eb7e4435b17d608be9a676c45634ae7f4dd16e08bfe6360e0ee",
+    "R/ct_hazard_genetox_details_search.R": "86de1d5a27c57b5047665107dcf1059e41edcc8df7942612a7c623dcf4c3caf1",
+    "R/ct_hazard_genetox_search.R": "1df4ab6c5c98aee03a633921e656cf1df291a8ef144e20917391eab66de0aa2e",
     "R/ct_hazard_hawc_search.R": "b719ee9d326ad76a921bf73b6084df989a6cc36ec70dd1c9adf9049f00aefd5b",
     "R/ct_hazard_iris_search.R": "ab69fb8f3146e1608388cb368606eca59060b305521b094ecfa9a8096792925b",
     "R/ct_hazard_pprtv_search.R": "a8836276d456819b585bbd8203382c4e01d2b8abf86a9cbfaf94da2acbffd5e6",
-    "R/ct_hazard_skin_eye_search.R": "b51b95e466e7480dae2066554fcb98763abf0a31aea7d5e8820d843aae16fcd6",
+    "R/ct_hazard_skin_eye_search.R": "7e4782c1cb05a1a4548875291d9d964bb9c4329ae73637385325d1fe01ae697c",
     "R/ct_hazard_toxref_data_search.R": "db03b24566c0cecd2037249a56fcf2d4ad24fcf4da35c22449429ab55c9edbb1",
     "R/ct_hazard_toxref_data_search_by_study_id.R": "840531dd8d3bbb683ed261749765340846686038a62b884297fd64f613a5d8a1",
     "R/ct_hazard_toxref_data_search_by_study_type.R": "1fcb05c48d3b01c524810d5745864b3ed5dd5fdb6651a0b77d9f99076ec86f91",
@@ -2025,7 +2113,7 @@
     "R/ct_hazard_toxref_search.R": "4188bccd0f35d4f27a47a54f23ee28a6cf1a9e52edc3c6a1cb65ffd108a53981",
     "R/ct_hazard_toxref_search_by_study_id.R": "cfdde9e84d86bcdc653c11ee7576f3d36db75161af25dbe352f06ee25ebd037f",
     "R/ct_hazard_toxref_search_by_study_type.R": "4dbbb352fd000390d07cc0182f1e97dc7e3025e8f197f1d89842b3c24da37f20",
-    "R/ct_hazard_toxval_search.R": "8ef1d3284b500d6f9bb8e7014031c9e500707e76fa9c93375b6fcd0b54b75852",
+    "R/ct_hazard_toxval_search.R": "888f9c63f086a7f0e31e01b77cf377884ff1b771049a3618b213e32a0791b0c9",
     "R/ct_hazard_toxval_search_by_category.R": "8b2022e6accb3277cfca5b56886e14e875b2062cf2d03fa9b733ffae38ae105f",
     "R/ct_hazard_toxval_supercategory_search.R": "8fb82eca5658121fb57706c332f77cc508b933eb3027b2d5a2cc572767b2f699",
     "R/ct_related.R": "6903c01d8b08f861fb8065fdf1f70d93ce3a8e3308af541f561f4549b3ae9b4d",
@@ -2103,12 +2191,12 @@
     "apis/chemi-stdizer-prod-full.yml": "802a6a143c9f823729f70af35f67dc609084a4d85943a30dfe191ab911b17d6f",
     "apis/chemi-toxprints-prod-full.yml": "8d655f58e52cb2f8f38435f49a372ca7ff1bbd4c293786e57d0935d63606ed65",
     "apis/chemi-toxprints-prod-rebuild.yml": "963170018d1e6a7bf95e0da83a6921af48b66ffc18eb59226a731cdf5be6017d",
-    "apis/ctx-bioactivity-prod-rebuild.yml": "2b663d7890b07acd12544a382f2c54048f31f7158cd1dd8ad936a64c5de02616",
+    "apis/ctx-bioactivity-prod-rebuild.yml": "dfa3fce0a8de6bee06898c7b445638a2130f28c96e4f1a54505aa5d88a269c71",
     "apis/ctx-chemical-prod-full.yml": "503d1e5761d6a2c721086c9f5ec571f8138d8daba8574edc1a92e1406476f80c",
-    "apis/ctx-chemical-prod-rebuild.yml": "53ac8278def3d2c20fadb4fab1b00840712db69ee441e528ad0daf66bfb68c68",
+    "apis/ctx-chemical-prod-rebuild.yml": "7db871b95edae543fd32c97dac8aaceafd219ac2211b9471970c42c32a6cdcd6",
     "apis/ctx-exposure-prod-full.yml": "6367d9d468e79d009e8e889fb8f687dadb17d746126ec58e20a9ffac46033714",
     "apis/ctx-exposure-prod-rebuild.yml": "18e010df260acc9b789278e833f223f5be3ebf65502485ed0fae13172d76db30",
-    "apis/ctx-hazard-prod-rebuild.yml": "48b3fb164f712bb5b185f9d465ceefdce1d25591f41929ba4dd541f5a15691b4",
+    "apis/ctx-hazard-prod-rebuild.yml": "8487abfb96e0bae007aeb03cdd1f2c5f496f13e5a92e8d37d6790f8b97c2fb37",
     "apis/ctx-pilot.yml": "008550b2b74bee1b9cdeb6f69770d2556299eac31c69d84c62c0040903edc847",
     "apis/epi-pilot.yml": "4a81753827c8d51b245f307a318bb0565442d8f7fbafeda14e762484a2d3e66a",
     "apis/epi-suite-prod-full.yml": "5749a0815a8e96a197f345d69a6aa70269a9cf132aedfcae7d835b2dd49eb0bc",
@@ -2610,7 +2698,7 @@
     "specmill.yml": "f4c0abe28afae3861804e74028cc61726ba6b35f121e3b4ab0abc36709acd3ab",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "932d884caa24c57f4cafe43d9b252e27c5f3b1d4dbce4ad716db410298289088",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "5a068616c93d745298e2f62b6138ef666aee9ee338534c63f5b5bb80bb7bbf02"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "cc440ae51472cfbdaf5ced2f5d7c114538b56e2627a698a87e3e7033659c1588"
   },
   "callbacks": "19f9ea013410d4c0ef9ffb6710f1bc5ec9ab07008b422dd87ffbd0bd94f35920",
   "formatter": {

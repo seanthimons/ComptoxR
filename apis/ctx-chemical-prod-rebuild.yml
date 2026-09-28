@@ -24,6 +24,7 @@ selection:
   - GET /chemical/property/summary/search/
   - GET /chemical/property/summary/search/by-dtxsid/{dtxsid}
   - POST /chemical/detail/search/by-dtxcid/
+  - POST /chemical/fate/search/by-dtxsid/
   - POST /chemical/property/experimental/search/by-dtxsid/
   - POST /chemical/property/predicted/search/by-dtxsid/
 helper: generic_request
@@ -708,6 +709,39 @@ operations:
       return: Returns a scalar value
       examples:
       - query: DTXSID1024122
+  POST /chemical/fate/search/by-dtxsid/:
+    name: ct_chemical_fate_search_bulk
+    file: R/ct_chemical_fate_search.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of strings to send in request body
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/fate/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+    docs:
+      title: Get fate data for a batch of DTXSIDs
+      lifecycle: stable
+      parameters:
+        query: Character vector of strings to send in request body
+      return: Returns a scalar value
+      examples:
+      - query:
+        - DTXSID1024122
+        - DTXSID4020533
+        - DTXSID00205033
   POST /chemical/property/experimental/search/by-dtxsid/:
     name: ct_chemical_property_experimental_search_bulk
     file: R/ct_chemical_property_experimental_search.R
