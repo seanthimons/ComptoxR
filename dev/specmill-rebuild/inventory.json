@@ -1,5 +1,5 @@
 {
-  "commit": "b5bccc974e9cf6f376a1ead271718a19fdb47962",
+  "commit": "f547ff22e1ea391757d4cceedb0a5688b80c8bc5",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 244,
+    "generated": 250,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 103,
+    "unmapped_wrapper": 97,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 217,
+  "removable_files": 222,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -1361,20 +1361,20 @@
       "name": "chemi_resolver_getpubchemlist",
       "file": "R/chemi_resolver_getpubchemlist.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/getpubchemlist",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_resolver_getsimilaritylist",
       "file": "R/chemi_resolver_getsimilaritylist.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/getsimilaritylist",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))"
     },
     {
@@ -1511,30 +1511,30 @@
       "name": "chemi_resolver_orderBySimilarity",
       "file": "R/chemi_resolver_orderBySimilarity.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/orderBySimilarity",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))"
     },
     {
       "name": "chemi_resolver_pubchem_section",
       "file": "R/chemi_resolver_pubchem_section.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild GET /api/resolver/pubchem-section",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))"
     },
     {
       "name": "chemi_resolver_pubchem_section_bulk",
       "file": "R/chemi_resolver_pubchem_section.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/pubchem-section",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))"
     },
     {
@@ -1831,10 +1831,10 @@
       "name": "chemi_stdizer_chemicals",
       "file": "R/chemi_stdizer_chemicals.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-stdizer-prod-rebuild POST /api/stdizer/chemicals",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", full = NULL, options = NULL))"
     },
     {
