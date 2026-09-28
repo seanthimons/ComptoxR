@@ -54,9 +54,10 @@ after <- callr::r(
 removed_exports <- 'ct_similar'
 stopifnot(all(removed_exports %in% names(before$interfaces)))
 before$interfaces <- before$interfaces[setdiff(names(before$interfaces), removed_exports)]
-# Exports whose original request path was not in the schema (#335). The fix changes the
-# wire on purpose, so their cases are checked against the model only, not the original.
-corrected_exports <- c('chemi_chet_chemicals_image', 'chemi_stdizer_groups_recursive')
+# Exports whose original request path was not in the schema (#335), or whose original
+# body was rejected (batchsearch, #339). The fix changes the wire on purpose, so their
+# cases are checked against the model only, not the original.
+corrected_exports <- c('chemi_chet_chemicals_image', 'chemi_stdizer_groups_recursive', 'chemi_chet_reaction_batchsearch')
 corrected <- sprintf('^(invalid-[a-z]+-)?(%s)(-.+)?$', paste(corrected_exports, collapse = '|'))
 before$cases <- before$cases[!grepl(corrected, names(before$cases))]
 before$full_failures <- before$full_failures[!names(before$full_failures) %in% corrected_exports]

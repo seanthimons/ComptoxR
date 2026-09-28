@@ -218,8 +218,8 @@
   "chemi_chet_reaction_batchsearch": {
     "name": "chemi_chet_reaction_batchsearch",
     "file": "R/chemi_chet_reaction_batchsearch.R",
-    "status": "retained",
-    "reason": "Candidate rejected: identical(deparse(correct(base_expr, corrections[[name]])[[3L]]),  .... is not TRUE",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-chet-prod.json",
     "key": "POST /reaction/batchsearch",
     "lifecycle": "experimental"
