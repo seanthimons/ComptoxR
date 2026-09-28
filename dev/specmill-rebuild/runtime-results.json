@@ -11,7 +11,8 @@
   },
   "exact_requests_and_objects_equal": true,
   "passed_cases": 1137,
-  "exported_signatures": 409,
+  "exported_signatures": 408,
+  "removed_exports": "ct_similar",
   "failures": [],
   "operations": {
     "chemi_amos_database": {

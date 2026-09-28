@@ -42,6 +42,10 @@ after <- callr::r(
   list(libs[[2]], file.path(out, 'after'), lookup_cases, full_cases),
   libpath = c(libs[[2]], .libPaths())
 )
+# Exports removed on purpose (ct_similar scraped an undocumented dashboard endpoint).
+removed_exports <- 'ct_similar'
+stopifnot(all(removed_exports %in% names(before$interfaces)))
+before$interfaces <- before$interfaces[setdiff(names(before$interfaces), removed_exports)]
 # Failure diagnostics contain output directory names; compare successful cases directly.
 stopifnot(
   identical(before$interfaces, after$interfaces),
@@ -55,6 +59,7 @@ report <- list(
   exact_requests_and_objects_equal = TRUE,
   passed_cases = length(before$cases),
   exported_signatures = length(before$interfaces),
+  removed_exports = removed_exports,
   failures = before$full_failures,
   operations = lapply(full_cases, function(x) x[c('schema', 'key')]),
   cases = lapply(before$cases, function(x) {
