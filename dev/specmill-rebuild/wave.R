@@ -336,6 +336,9 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       native <- specmill::read_operations(file.path('schema', record$schema), policy = project$services[[1L]]$policy)
       stopifnot(length(native$operations) == 1L, length(native$diagnostics) == 0L)
       mapped <- specmill:::configure_operation(native$operations[[1L]], project$services[[1L]])
+      # ponytail: full generation guards literals only when the package shadows a base
+      # constructor; ComptoxR does not, and verify-wave's --check catches a mismatch.
+      mapped$operation$guard_literals <- FALSE
       code <- specmill::render_operation(mapped$operation, mapped$spec)
       original <- eval(record$original, envir = new.env(parent = if (hooked) comptox_ns() else baseenv()))
       required <- names(Filter(function(x) isTRUE(x$required), record$proposal$inputs))
