@@ -15,9 +15,9 @@ with SHA-256 hashes.
 
 | Export category | Exports |
 | --- | ---: |
-| generated (specmill-owned) | 284 |
+| generated (specmill-owned) | 285 |
 | retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 62 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 61 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
@@ -31,7 +31,7 @@ stay retained as runtime configuration. Counts are after the adopted waves
 below; the original tranche was 101 generated and 246 unmapped.
 
 The allowlist is derived from the generated operation mappings and the specmill
-manifest. It now contains the 251 whole files that hold the 284 generated wrappers
+manifest. It now contains the 252 whole files that hold the 285 generated wrappers
 (originally 93 files for 101 wrappers).
 A file is allowlisted only if every top-level definition in it is generated.
 The script stops if a generated file has a retained or unaccounted neighbor.
@@ -121,6 +121,7 @@ A wave is adopted only when all of the following hold:
 | hazard | 2 | 1174 | `2ac52814` |
 | split | 10 | 1225 | `4c1e796f` |
 | path-params | 13 | 1302 | `9327f81a` |
+| batchsearch | 1 | 1302 | `b5209f72` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -144,9 +145,11 @@ with one of them.
   wrappers, and the before/after snapshots keep the original behavior.
 - `chemi_stdizer_records` and `chemi_toxprints_assays_bulk` overwrite their
   public `options` argument with a locally built list. They are retained.
-- `chemi_chet_reaction_batchsearch` evaluates its missing arguments in a
-  different order from its signature, so a generated wrapper would give a
-  different missing-argument error. It is retained.
+- `chemi_chet_reaction_batchsearch` evaluated its missing arguments in a
+  different order from its signature. The batchsearch wave generates it
+  anyway: the changed missing-argument error was accepted (#338), so the
+  wave only requires both versions to error. Because its wire was also
+  corrected (#339), it is a corrected export in `verify-runtime.R`.
 
 ## Dispositions (#310–#314)
 
@@ -166,7 +169,7 @@ operation key, file, and wave. Each retained export records:
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
 | #310 | 93 | 12 | 3 |
-| #311 | 66 | 27 | 0 |
+| #311 | 67 | 26 | 0 |
 | #312 | 13 | 13 | 0 |
 | #313 | 7 | 9 | 0 |
 | #314 | 4 | 0 | 0 |
@@ -178,7 +181,6 @@ Reasons for keeping an export retained:
 - a hand-written implementation (18);
 - a request built by a pre-request hook (12);
 - a nonliteral helper argument (3);
-- a candidate whose no-argument call differs (1);
 - a candidate whose contract test disagrees with the original (1,
   `chemi_resolver_lookup`, below);
 - the original defects above (2).
@@ -304,7 +306,7 @@ original `4fd720b9` client had the same bug.
 
 - Both ChET service configs now prefix every endpoint with `chet/`, and the 27
   generated wrappers were regenerated. The only change in each is the prefix.
-- `chemi_chet_reaction_batchsearch` (retained, #337) got the same prefix. Once
+- `chemi_chet_reaction_batchsearch` (then retained, now generated) got the same prefix. Once
   the path was correct, its `{"chemicals": [...], "options": {...}}` body was
   rejected with HTTP 400, so it now sends the schema's
   `{"dtxsids": [...], "search_level": ...}` (`array_payload`).
@@ -334,7 +336,7 @@ audit issues: #26 `body_media_type` (16 AMOS POSTs), #27 (6: four
 Scope is frozen at the 408 exports in [inventory.json](inventory.json), and
 each one is classified. The rehearsal ran `rehearse.R` at `9fecef98`
 (specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
-removed the 251 allowlisted files. Regeneration, a second `--apply`, and
+removed the allowlisted files (251 then, 252 at `09d21ba3` after the batchsearch wave). Regeneration, a second `--apply`, and
 `--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
@@ -346,6 +348,6 @@ installed into `artifacts/rebuild-final-library` and checked two ways:
 No output was promoted: the rebuilt tree is identical to the branch.
 
 Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
-`30a4dc49`, `b5bccc97`, `f547ff22`, `27ca365d`, `2ac52814`, `4c1e796f`, `9327f81a`) to
+`30a4dc49`, `b5bccc97`, `f547ff22`, `27ca365d`, `2ac52814`, `4c1e796f`, `9327f81a`, `b5209f72`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
