@@ -35,5 +35,6 @@ services:
 - apis/chemi-toxprints-prod-rebuild.yml
 - apis/epi-suite-prod-rebuild.yml
 - apis/chemi-stdizer-prod-rebuild.yml
+- apis/chemi-alerts-prod-rebuild.yml
 callback_files:
 - dev/specmill_callbacks.R

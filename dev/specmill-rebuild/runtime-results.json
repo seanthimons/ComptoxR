@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1137,
+  "passed_cases": 1166,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -370,6 +370,18 @@
       "schema": "epi-suite-prod.json",
       "key": "GET /api/ecosar/surfactant/cationic"
     },
+    "chemi_alerts": {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts"
+    },
+    "chemi_alerts_groups": {
+      "schema": "chemi-alerts-prod.json",
+      "key": "GET /api/alerts/groups"
+    },
+    "chemi_alerts_groups_bulk": {
+      "schema": "chemi-alerts-prod.json",
+      "key": "POST /api/alerts/groups"
+    },
     "chemi_amnb_nate": {
       "schema": "chemi-amnb_nate-prod.json",
       "key": "GET /api/amnb_nate"
@@ -542,6 +554,14 @@
       "schema": "chemi-resolver-prod.json",
       "key": "POST /api/resolver/resolve"
     },
+    "chemi_resolver_safety_flags": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/safety-flags"
+    },
+    "chemi_resolver_safety_flags_bulk": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/safety-flags"
+    },
     "chemi_search_exact": {
       "schema": "chemi-search-prod.json",
       "key": "GET /api/search/exact"
@@ -578,6 +598,14 @@
       "schema": "chemi-stdizer-prod.json",
       "key": "POST /api/stdizer/chemicals"
     },
+    "chemi_stdizer_groups": {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "GET /api/stdizer/groups"
+    },
+    "chemi_stdizer_groups_bulk": {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/groups"
+    },
     "chemi_toxprints": {
       "schema": "chemi-toxprints-prod.json",
       "key": "GET /api/toxprints"
@@ -589,6 +617,14 @@
     "chemi_toxprints_bulk": {
       "schema": "chemi-toxprints-prod.json",
       "key": "POST /api/toxprints"
+    },
+    "chemi_toxprints_calculate": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/calculate"
+    },
+    "chemi_toxprints_calculate_bulk": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "POST /api/toxprints/calculate"
     },
     "chemi_toxprints_global_assays": {
       "schema": "chemi-toxprints-prod.json",
@@ -4181,6 +4217,69 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "chemi_alerts-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_alerts()` failed in pre-request hook `resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_alerts": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_alerts_groups-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts_groups-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_alerts_groups_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts_groups_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts_groups_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
     "chemi_amnb_nate-minimal": {
       "requests": 1,
       "classes": "list",
@@ -5224,6 +5323,55 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "chemi_resolver_safety_flags-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_safety_flags-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_safety_flags-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_safety_flags": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_safety_flags_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_safety_flags_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_safety_flags_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
     "chemi_search_exact-minimal": {
       "requests": 1,
       "classes": "list",
@@ -5455,6 +5603,41 @@
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"query\" is missing, with no default"
     },
+    "chemi_stdizer_groups-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer_groups-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_stdizer_groups_bulk-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer_groups_bulk-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer_groups_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
     "chemi_toxprints-minimal": {
       "requests": 1,
       "classes": "list",
@@ -5552,6 +5735,62 @@
       "warnings": [],
       "error_classes": null,
       "error_message": null
+    },
+    "chemi_toxprints_calculate-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_calculate-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_calculate-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_toxprints_calculate": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_toxprints_calculate_bulk-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_calculate_bulk-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_calculate_bulk-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_toxprints_calculate_bulk()` failed in pre-request hook\n`resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_toxprints_calculate_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
     },
     "chemi_toxprints_global_assays-minimal": {
       "requests": 1,
