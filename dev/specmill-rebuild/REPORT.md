@@ -115,6 +115,7 @@ A wave is adopted only when all of the following hold:
 | stable-batch | 67 | 834 | `0fb6f4d5` |
 | options-batch | 52 | 1015 | `b851a6cd` |
 | vector-examples | 14 | 1099 | `30a4dc49` |
+| hooks | 5 | 1113 | `b5bccc97` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -159,61 +160,71 @@ operation key, file, and wave. Each retained export records:
 
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
-| #310 | 86 | 20 | 3 |
+| #310 | 87 | 19 | 3 |
 | #311 | 50 | 43 | 0 |
-| #312 | 0 | 26 | 0 |
+| #312 | 4 | 22 | 0 |
 | #313 | 0 | 16 | 0 |
 | #314 | 2 | 2 | 0 |
 
 Reasons for keeping an export retained:
 
-- no unique supported schema route (40), including the ambiguous-media and
+- no unique supported schema route (44), including the ambiguous-media and
   malformed-route blockers in #313;
-- a client hook chain (28);
 - a hand-written implementation (18);
 - an inseparable grouped file (16);
+- a request built by a pre-request hook (12);
+- description prose that needs a manual mapping (6);
 - a nonliteral helper argument (2);
-- the three original defects above.
+- a computed default (1, `chemi_hazard`);
+- a candidate whose no-argument call differs (1);
+- the original defects above.
 
 A retained function is a valid completion state. No contract is guessed.
 
 ## Hooks (#312)
 
-All 28 hooked wrappers are retained as client-owned. Every stage declared in
-`inst/hook_config.yml` is invoked by its wrapper, every pre-request chain
-honors `skip_request`, and the chains are exercised by the existing
-`hooks_stage_server`, `ct_chemical_list_all_hooks`, `test-hooks_*`, and
-webtest hook tests. Specmill's hook flow could represent these chains. It
-supports `extra_parameters`, `skip_request`, `post_on_skip`, and `post_state`,
-it writes changed `params` back after pre-request (as these wrappers do), and
-it can bind a value a hook adds (such as `chemicals`) via
-`{from: [hook_state, params, chemicals]}`. At 0.1.8, vector defaults like
-`format = c("compact", "tidy", "raw")` render as plain `c()`, so formals are
-no longer a blocker
-([seanthimons/specmill#53](https://github.com/seanthimons/specmill/issues/53)).
-One blocker remains: nothing proposes hook mappings. `wave.R` retains every
-hooked wrapper, and specmill's `propose_mappings()`
-([seanthimons/specmill#54](https://github.com/seanthimons/specmill/issues/54))
-accepts only a body that is a single helper call after an optional prelude. A
-wrapper that runs a `post_response` hook after the call is retained with "Body
-is not a single call".
+`wave.R` now screens hooked wrappers against `inst/hook_config.yml`. It
+recognises the generated hook pattern: a pre-request call with `skip_request`
+and `params` write-back, an optional `chemicals` binding from
+`{from: [hook_state, params, chemicals]}`, and an optional `post_response`
+call. The stages in the body must match `hook_config`. Staged services set
+`hook_config: inst/hook_config.yml`. Comparisons run the real hooks in the
+package namespace, with the helper stubbed. Resolver calls get a found item, a
+tibble response, and an empty result (the skip path).
+
+The hooks wave generated 5 of the 28 hooked wrappers:
+`ct_chemical_list_search_by_name`, `epi_ecosar_dye`,
+`epi_ecosar_polymer_nonionic`, `epi_ecosar_surfactant_nonionic`, and
+`epi_submit`. `epi_submit` first failed on formals because `write_yaml`
+truncated `theta = 0.00010836` to 7 significant digits. The wave now writes
+YAML with `precision = 15`.
+
+The other 23 stay client-owned:
+
+- 12 descriptor and webtest wrappers build the request inside a pre-request
+  hook, so no route is guessed;
+- 6 resolver and stdizer wrappers match the hook pattern but need manual
+  description mapping;
+- 4 have no unique supported route (`chemi_alerts`, `chemi_hazard_bulk`,
+  `chemi_toxprints_calculate_bulk`, `ct_similar`);
+- `chemi_hazard` has a computed `format = c(...)` default.
 
 ## Full rebuild rehearsal (#328)
 
 Scope is frozen at the 409 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `ee7a80c6`
+each one is classified. The rehearsal ran `rehearse.R` at `b64adbf8`
 (specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
-removed the 212 allowlisted files. Regeneration, a second `--apply`, and
+removed the 217 allowlisted files. Regeneration, a second `--apply`, and
 `--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
 - The contract, request-edge, and hook tests passed.
-- All 1099 localhost cases (409 exported signatures) matched the original
+- All 1113 localhost cases (409 exported signatures) matched the original
   `4fd720b9` client, with no candidate failures.
 
 No output was promoted: the rebuilt tree is identical to the branch.
 
 Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
-`30a4dc49`) to
+`30a4dc49`, `b5bccc97`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
