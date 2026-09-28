@@ -2,8 +2,8 @@
   "chemi_alerts_groups": {
     "name": "chemi_alerts_groups",
     "file": "R/chemi_alerts_groups.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-alerts-prod.json",
     "key": "GET /api/alerts/groups",
     "lifecycle": "experimental"
@@ -11,18 +11,20 @@
   "chemi_alerts_groups_bulk": {
     "name": "chemi_alerts_groups_bulk",
     "file": "R/chemi_alerts_groups.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-alerts-prod.json",
+    "key": "POST /api/alerts/groups",
+    "lifecycle": "experimental"
   },
   "chemi_alerts": {
     "name": "chemi_alerts",
     "file": "R/chemi_alerts.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-alerts-prod.json",
+    "key": "POST /api/alerts",
+    "lifecycle": "experimental"
   },
   "chemi_amos_all_similarities": {
     "name": "chemi_amos_all_similarities",
@@ -378,7 +380,7 @@
     "name": "chemi_hazard",
     "file": "R/chemi_hazard.R",
     "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "reason": "Candidate rejected: identical(formals(original), formals(env[[name]])) is not TRUE",
     "schema": "chemi-hazard-prod.json",
     "key": "GET /api/hazard",
     "lifecycle": "experimental"
@@ -387,9 +389,10 @@
     "name": "chemi_hazard_bulk",
     "file": "R/chemi_hazard.R",
     "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "reason": "Candidate rejected: identical(formals(original), formals(env[[name]])) is not TRUE",
+    "schema": "chemi-hazard-prod.json",
+    "key": "POST /api/hazard",
+    "lifecycle": "experimental"
   },
   "chemi_mordred": {
     "name": "chemi_mordred",
@@ -481,24 +484,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_getpubchemlist": {
-    "name": "chemi_resolver_getpubchemlist",
-    "file": "R/chemi_resolver_getpubchemlist.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/getpubchemlist",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_getsimilaritylist": {
-    "name": "chemi_resolver_getsimilaritylist",
-    "file": "R/chemi_resolver_getsimilaritylist.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/getsimilaritylist",
-    "lifecycle": "experimental"
-  },
   "chemi_resolver_getsimilaritymap": {
     "name": "chemi_resolver_getsimilaritymap",
     "file": "R/chemi_resolver_getsimilaritymap.R",
@@ -532,38 +517,11 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_orderBySimilarity": {
-    "name": "chemi_resolver_orderBySimilarity",
-    "file": "R/chemi_resolver_orderBySimilarity.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/orderBySimilarity",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_pubchem_section": {
-    "name": "chemi_resolver_pubchem_section",
-    "file": "R/chemi_resolver_pubchem_section.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/pubchem-section",
-    "lifecycle": "experimental"
-  },
-  "chemi_resolver_pubchem_section_bulk": {
-    "name": "chemi_resolver_pubchem_section_bulk",
-    "file": "R/chemi_resolver_pubchem_section.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/pubchem-section",
-    "lifecycle": "experimental"
-  },
   "chemi_resolver_safety_flags": {
     "name": "chemi_resolver_safety_flags",
     "file": "R/chemi_resolver_safety_flags.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
     "key": "GET /api/resolver/safety-flags",
     "lifecycle": "experimental"
@@ -571,10 +529,11 @@
   "chemi_resolver_safety_flags_bulk": {
     "name": "chemi_resolver_safety_flags_bulk",
     "file": "R/chemi_resolver_safety_flags.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/safety-flags",
+    "lifecycle": "experimental"
   },
   "chemi_safety_rqcodes": {
     "name": "chemi_safety_rqcodes",
@@ -592,15 +551,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_stdizer_chemicals": {
-    "name": "chemi_stdizer_chemicals",
-    "file": "R/chemi_stdizer_chemicals.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-stdizer-prod.json",
-    "key": "POST /api/stdizer/chemicals",
-    "lifecycle": "experimental"
-  },
   "chemi_stdizer_groups_recursive": {
     "name": "chemi_stdizer_groups_recursive",
     "file": "R/chemi_stdizer_groups_recursive.R",
@@ -612,8 +562,8 @@
   "chemi_stdizer_groups": {
     "name": "chemi_stdizer_groups",
     "file": "R/chemi_stdizer_groups.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-stdizer-prod.json",
     "key": "GET /api/stdizer/groups",
     "lifecycle": "experimental"
@@ -621,10 +571,11 @@
   "chemi_stdizer_groups_bulk": {
     "name": "chemi_stdizer_groups_bulk",
     "file": "R/chemi_stdizer_groups.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "POST /api/stdizer/groups",
+    "lifecycle": "experimental"
   },
   "chemi_stdizer_records": {
     "name": "chemi_stdizer_records",
@@ -679,8 +630,8 @@
   "chemi_toxprints_calculate": {
     "name": "chemi_toxprints_calculate",
     "file": "R/chemi_toxprints_calculate.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-toxprints-prod.json",
     "key": "GET /api/toxprints/calculate",
     "lifecycle": "experimental"
@@ -688,10 +639,11 @@
   "chemi_toxprints_calculate_bulk": {
     "name": "chemi_toxprints_calculate_bulk",
     "file": "R/chemi_toxprints_calculate.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/calculate",
+    "lifecycle": "experimental"
   },
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
