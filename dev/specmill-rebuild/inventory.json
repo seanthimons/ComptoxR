@@ -1,5 +1,5 @@
 {
-  "commit": "16c9bd278e1cff3be03a4cd157ed1240f749f73d",
+  "commit": "9327f81a6f5e339c1d6291efd304ad2fd367b056",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 271,
+    "generated": 284,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 75,
+    "unmapped_wrapper": 62,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 238,
+  "removable_files": 251,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -401,10 +401,10 @@
       "name": "chemi_amos_get_pdf",
       "file": "R/chemi_amos_get_pdf.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/get_pdf/{record_type}/{internal_id}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(record_type = , internal_id = NULL))"
     },
     {
@@ -551,10 +551,10 @@
       "name": "chemi_amos_method_with_spectra",
       "file": "R/chemi_amos_method_with_spectra.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(search_type = , internal_id = NULL))"
     },
     {
@@ -611,10 +611,10 @@
       "name": "chemi_amos_record_ids_for_substance",
       "file": "R/chemi_amos_record_ids_for_substance.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = , record_type = NULL))"
     },
     {
@@ -831,10 +831,10 @@
       "name": "chemi_chet_chemicals_image",
       "file": "R/chemi_chet_chemicals_image.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-chet-prod-rebuild GET /chemicals/{chemical_id}/image",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(chemical_id = , width = NULL, height = NULL, format = \"png\"))"
     },
     {
@@ -891,10 +891,10 @@
       "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
       "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-chet-prod-rebuild GET /reaction/database-old/{pagenum}/{searchterm}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(pagenum = , searchterm = NULL))"
     },
     {
@@ -1011,10 +1011,10 @@
       "name": "chemi_chet_reaction_searchcounts",
       "file": "R/chemi_chet_reaction_searchcounts.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-chet-prod-rebuild GET /reaction/searchcounts/{search_input}/{search_type}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(search_input = , search_type = NULL))"
     },
     {
@@ -1861,10 +1861,10 @@
       "name": "chemi_stdizer_groups_recursive",
       "file": "R/chemi_stdizer_groups_recursive.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-stdizer-prod-rebuild GET /api/stdizer/groups/{id}/recursive",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(id = ))"
     },
     {
@@ -2651,30 +2651,30 @@
       "name": "ct_chemical_list_chemicals_search_contain",
       "file": "R/ct_chemical_list_chemicals_search_contain.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/contain/{list}/{word}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(list = , word = NULL))"
     },
     {
       "name": "ct_chemical_list_chemicals_search_equal",
       "file": "R/ct_chemical_list_chemicals_search_equal.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/equal/{list}/{word}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(list = , word = NULL))"
     },
     {
       "name": "ct_chemical_list_chemicals_search_start_with",
       "file": "R/ct_chemical_list_chemicals_search_start_with.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/start-with/{list}/{word}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(list = , word = NULL))"
     },
     {
@@ -2761,10 +2761,10 @@
       "name": "ct_chemical_msready_search_by_mass",
       "file": "R/ct_chemical_msready_search_by_mass.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/msready/search/by-mass/{start}/{end}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(start = , end = NULL))"
     },
     {
@@ -2791,10 +2791,10 @@
       "name": "ct_chemical_property_experimental_search_by_range",
       "file": "R/ct_chemical_property_experimental_search_by_range.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(propertyName = , start = NULL, end = NULL))"
     },
     {
@@ -2831,10 +2831,10 @@
       "name": "ct_chemical_property_predicted_search_by_range",
       "file": "R/ct_chemical_property_predicted_search_by_range.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(propertyId = , start = NULL, end = NULL))"
     },
     {
