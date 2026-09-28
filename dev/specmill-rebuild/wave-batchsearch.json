@@ -1,0 +1,25 @@
+{
+  "wave": "batchsearch",
+  "base_commit": "1d85a6981984996f054ff943cda65ff93c6b956b",
+  "worktree": "/home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/hook-pilot/dev/specmill-pilot/artifacts/wave-batchsearch",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 1,
+  "files": [
+    "R/chemi_chet_reaction_batchsearch.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/chemi_chet_reaction_batchsearch.R",
+    " M apis/chemi-chet-prod-rebuild.yml",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? tests/testthat/test-contract-chemi_chet_reaction_batchsearch.R"
+  ]
+}

@@ -24,6 +24,7 @@ selection:
   - GET /reaction/searchcounts/{search_input}/{search_type}
   - GET /reaction/singlereaction
   - GET /reaction/table
+  - POST /reaction/batchsearch
 helper: generic_request
 documentation: yes
 operations:
@@ -1114,6 +1115,51 @@ operations:
       return: Returns a tibble with results (array of objects)
       examples:
       - reaction_id: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /reaction/batchsearch:
+    name: chemi_chet_reaction_batchsearch
+    file: R/chemi_chet_reaction_batchsearch.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      dtxsids:
+        type: character
+        required: yes
+        description: Required parameter
+      search_level:
+        type: character
+        required: yes
+        description: 'Required parameter. Options: chemical, reaction'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsids
+        endpoint:
+          value: chet/reaction/batchsearch
+        options:
+          compact_object:
+            search_level:
+              from:
+              - params
+              - search_level
+        tidy:
+          value: no
+        sid_label:
+          value: dtxsids
+        array_payload:
+          value: yes
+    docs:
+      title: Batch search reactions and chemicals
+      lifecycle: experimental
+      parameters:
+        dtxsids: Required parameter
+        search_level: 'Required parameter. Options: chemical, reaction'
+      return: Returns a list with result object
+      examples:
+      - dtxsids: DTXSID1024122
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
