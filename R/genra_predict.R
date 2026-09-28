@@ -32,7 +32,7 @@
 #' @details
 #' The workflow:
 #' \enumerate{
-#'   \item Find structural analogues using ct_similar()
+#'   \item Find structural analogues using chemi_search(search_type = "similar")
 #'   \item Filter to top k analogues meeting min_similarity threshold
 #'   \item Retrieve ToxValDB activity data for analogues
 #'   \item Calculate Similarity-Weighted Activity (SWA) prediction
@@ -46,7 +46,7 @@
 #'   \item NA or insufficient data: "uncertain"
 #' }
 #'
-#' @seealso [genra_swa()], [genra_uncertainty()], [genra_get_tox_data()], [ct_similar()]
+#' @seealso [genra_swa()], [genra_uncertainty()], [genra_get_tox_data()], [chemi_search()]
 #'
 #' @export
 #'
@@ -87,7 +87,13 @@ genra_predict <- function(target, k = 10L, min_similarity = 0.5, study_filter = 
 
   # Step 1: Find analogues
   cli::cli_alert_info("Finding analogues for {.val {target}}...")
-  analogues_raw <- ct_similar(target, similarity = min_similarity)
+  analogues_raw <- chemi_search(target, "similar", min_similarity = min_similarity, all_pages = TRUE)
+  # chemi_search returns the query itself as the "parent" row; an empty result has no columns
+  if ("sid" %in% names(analogues_raw)) {
+    analogues_raw <- analogues_raw |>
+      dplyr::filter(.data$sid != target) |>
+      dplyr::rename(dtxsid = "sid")
+  }
 
   if (is.null(analogues_raw) || nrow(analogues_raw) == 0) {
     cli::cli_warn("No analogues found for {.val {target}} at similarity >= {min_similarity}.")
@@ -113,14 +119,6 @@ genra_predict <- function(target, k = 10L, min_similarity = 0.5, study_filter = 
         n_permutations = n_permutations
       )
     ))
-  }
-
-  # Standardize column names
-  if ("relatedSubstanceDTXSID" %in% names(analogues_raw)) {
-    analogues_raw <- dplyr::rename(analogues_raw, dtxsid = relatedSubstanceDTXSID)
-  }
-  if ("structuralSimilarity" %in% names(analogues_raw)) {
-    analogues_raw <- dplyr::rename(analogues_raw, similarity = structuralSimilarity)
   }
 
   # Sort by similarity and take top k

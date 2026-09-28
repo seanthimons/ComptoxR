@@ -46,7 +46,6 @@ check_public_api <- function(root = '.', membership = dir.exists(file.path(root,
         'ct_api_key',
         'ct_classify',
         'ct_related',
-        'ct_similar',
         'epi_server'
       )
       api <- grep('^(ct_|chemi_|epi_)', exports, value = TRUE)

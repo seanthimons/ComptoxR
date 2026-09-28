@@ -50,7 +50,7 @@ Similarity-Weighted Activity (SWA) with ToxValDB data.
 \details{
 The workflow:
 \enumerate{
-\item Find structural analogues using ct_similar()
+\item Find structural analogues using chemi_search(search_type = "similar")
 \item Filter to top k analogues meeting min_similarity threshold
 \item Retrieve ToxValDB activity data for analogues
 \item Calculate Similarity-Weighted Activity (SWA) prediction
@@ -82,5 +82,5 @@ pred$analogues
 }
 }
 \seealso{
-\code{\link[=genra_swa]{genra_swa()}}, \code{\link[=genra_uncertainty]{genra_uncertainty()}}, \code{\link[=genra_get_tox_data]{genra_get_tox_data()}}, \code{\link[=ct_similar]{ct_similar()}}
+\code{\link[=genra_swa]{genra_swa()}}, \code{\link[=genra_uncertainty]{genra_uncertainty()}}, \code{\link[=genra_get_tox_data]{genra_get_tox_data()}}, \code{\link[=chemi_search]{chemi_search()}}
 }

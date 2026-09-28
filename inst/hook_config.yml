@@ -17,15 +17,6 @@ ct_chemical_list_all:
   post_response:
     - format_chemical_list_all_result
 
-ct_similar:
-  extra_params:
-    similarity:
-      default: "0.8"
-      type: "numeric"
-      description: "Similarity threshold (0-1)"
-  pre_request:
-    - validate_similarity
-
 ct_chemical_list_by_name:
   extra_params:
     extract_dtxsids:

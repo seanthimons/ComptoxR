@@ -56,7 +56,7 @@ ct_related <- function(query, inclusive = FALSE) {
         method = "GET",
         batch_limit = 0,
         # Legacy Dashboard ccdapp2 route: production ctx-api does not expose this
-        # endpoint yet. Passed directly like ct_similar, not via ctx_server().
+        # endpoint yet. Passed directly, not via ctx_server().
         server = "https://comptox.epa.gov/dashboard-api/ccdapp2/",
         auth = FALSE,
         tidy = FALSE,

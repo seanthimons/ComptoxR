@@ -6,7 +6,7 @@ test_that("ct_related uses the legacy ccdapp2 route and restores ctx server", {
   testthat::local_mocked_bindings(
     generic_request = function(...) {
       # ct_related passes the legacy ccdapp2 route as an explicit `server` argument
-      # (like ct_similar), not by mutating the ctx_burl env var.
+      # not by mutating the ctx_burl env var.
       called_server <<- list(...)[["server"]]
       list(
         data = list(

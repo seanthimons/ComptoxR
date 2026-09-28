@@ -57,12 +57,14 @@ test_that("genra_predict validates inputs before API-dependent work", {
 
 test_that("genra_predict builds a prediction object from mocked analogues and activity", {
   testthat::local_mocked_bindings(
-    ct_similar = function(query, similarity) {
+    chemi_search = function(query, search_type, min_similarity, all_pages) {
       expect_equal(query, "DTXSID7020182")
-      expect_equal(similarity, 0.5)
+      expect_equal(search_type, "similar")
+      expect_equal(min_similarity, 0.5)
       tibble::tibble(
-        relatedSubstanceDTXSID = c("DTXSID1", "DTXSID2", "DTXSID3"),
-        structuralSimilarity = c(0.9, 0.8, 0.7)
+        sid = c("DTXSID7020182", "DTXSID1", "DTXSID2", "DTXSID3"),
+        similarity = c(1, 0.9, 0.8, 0.7),
+        relationship = c("parent", "child", "child", "child")
       )
     },
     genra_get_tox_data = function(dtxsids, study_filter = NULL) {
@@ -113,11 +115,8 @@ test_that("genra_predict builds a prediction object from mocked analogues and ac
 
 test_that("genra_predict returns uncertain result when no analogues are found", {
   testthat::local_mocked_bindings(
-    ct_similar = function(query, similarity) {
-      tibble::tibble(
-        relatedSubstanceDTXSID = character(),
-        structuralSimilarity = numeric()
-      )
+    chemi_search = function(query, search_type, min_similarity, all_pages) {
+      tibble::tibble()
     },
     .package = "ComptoxR"
   )
@@ -133,10 +132,11 @@ test_that("genra_predict returns uncertain result when no analogues are found", 
 
 test_that("genra_predict keeps analogue rows when no activity data are available", {
   testthat::local_mocked_bindings(
-    ct_similar = function(query, similarity) {
+    chemi_search = function(query, search_type, min_similarity, all_pages) {
       tibble::tibble(
-        relatedSubstanceDTXSID = c("DTXSID1", "DTXSID2"),
-        structuralSimilarity = c(0.9, 0.8)
+        sid = c("DTXSID1", "DTXSID2"),
+        similarity = c(0.9, 0.8),
+        relationship = "child"
       )
     },
     genra_get_tox_data = function(dtxsids, study_filter = NULL) {

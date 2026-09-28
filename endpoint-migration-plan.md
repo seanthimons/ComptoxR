@@ -42,7 +42,7 @@ validation can increase this estimate.
 | Generic transport in `R/z_generic_request.R` | `generic_request()`, `generic_chemi_request()`, `generic_search_request()`, and `generic_pubchem_request()` repeat environment lookup. Route them through shared resolution. Preserve exported signatures and literal URLs. |
 | Direct readers | Diagnostics in `R/zzz.R` and routing, connection, and HTTP paths in `R/eco_functions.R` and `R/tox_functions.R` read environment variables directly. Update all readers before stopping startup initialization. |
 | Stage hook | `R/hooks_stage_server.R` builds its stage map by calling `chemi_server(2/3, url_only = TRUE)`. Generated configuration from `dev/stub_specs.R` invokes it. Remove public stage enforcement and fallback metadata before removing numeric modes, or retained wrappers will fail before requests. |
-| Dashboard calls | `R/ct_similar.R` and `R/ct_related.R` use distinct literal production bases. Preserve their service-specific paths. |
+| Dashboard calls | `R/ct_related.R` uses a distinct literal production base. Preserve its service-specific path. |
 | Public wrappers | The audit found 31 `_staging`/`_development` exports: three staging and 28 development wrappers, with matching source and help files. They use `chemi_burl`; absence of embedded hosts does not make these production operations. |
 | Payload fields | Two AMOS wrappers have a `base_url` API payload field. Do not mistake it for transport configuration. |
 | Other selectors | `np_server()` and `pubchem_server()` also participate in endpoint configuration. Include them in shared-default and diagnostic checks. |
