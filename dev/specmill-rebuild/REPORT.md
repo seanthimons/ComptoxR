@@ -295,6 +295,32 @@ The path-params wave generated all 13. On the pinned toolkit, 1302 localhost
 cases (408 signatures) matched the original client apart from the corrected
 two, with no candidate failures.
 
+## ChET server path (#339)
+
+The ChET schema's server is `/api/chet`, but all 28 `chemi_chet_*` wrappers sent
+`chemi_burl` plus `reaction/...` or `chemicals/...`. That path returns the web
+app's HTML shell with status 200, so no call failed but none returned data. The
+original `4fd720b9` client had the same bug.
+
+- Both ChET service configs now prefix every endpoint with `chet/`, and the 27
+  generated wrappers were regenerated. The only change in each is the prefix.
+- `chemi_chet_reaction_batchsearch` (retained, #337) got the same prefix. Once
+  the path was correct, its `{"chemicals": [...], "options": {...}}` body was
+  rejected with HTTP 400, so it now sends the schema's
+  `{"dtxsids": [...], "search_level": ...}` (`array_payload`).
+- The frozen ChET runtime cases and contract fixtures carry the corrected
+  endpoint. `verify-runtime.R` runs the original client against its own paths,
+  then compares its requests and endpoint warnings with `/chet` inserted. The
+  check still covers ChET; the cases aren't just excluded.
+- `wave.R` and `dispositions.R` match ChET routes below `chet/`.
+
+Result at `4806c6d3`: all 1302 localhost cases matched, with no candidate
+failures. `--check` was clean, and the contract and hook tests passed.
+`rehearse.R` removed 251 files, and the rebuild was byte-identical. Live, every
+ChET wrapper without required arguments, plus `batchsearch`, returned JSON, with
+one exception: `chemi_chet_reaction_database_old`, whose upstream route
+`GET /api/chet/reaction/database_old` returns HTTP 500.
+
 ## Remaining no-route wrappers
 
 None of the 24 "no unique supported route" exports is an orphan, helper, or
