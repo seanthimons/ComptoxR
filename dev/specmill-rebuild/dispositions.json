@@ -2550,7 +2550,7 @@
       "helper": "generic_chemi_request",
       "helper_calls": 1,
       "method": "POST",
-      "endpoint": "reaction/batchsearch",
+      "endpoint": "chet/reaction/batchsearch",
       "supported": [
         "chemi-chet-prod.json POST /reaction/batchsearch"
       ],
