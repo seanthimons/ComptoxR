@@ -15,9 +15,9 @@ with SHA-256 hashes.
 
 | Export category | Exports |
 | --- | ---: |
-| generated (specmill-owned) | 261 |
+| generated (specmill-owned) | 271 |
 | retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 85 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 75 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
@@ -27,11 +27,11 @@ with SHA-256 hashes.
 The inventory categorizes exports by source file and mapping, not by name
 prefix. As a result, `chemi_server()` and `epi_server()` are classified as
 runtime, not endpoint wrappers. They are two of the 248 functions in #310 and
-stay retained as runtime configuration. Counts are after the three adopted waves
+stay retained as runtime configuration. Counts are after the adopted waves
 below; the original tranche was 101 generated and 246 unmapped.
 
 The allowlist is derived from the generated operation mappings and the specmill
-manifest. It now contains the 204 whole files that hold the 225 generated wrappers
+manifest. It now contains the 238 whole files that hold the 271 generated wrappers
 (originally 93 files for 101 wrappers).
 A file is allowlisted only if every top-level definition in it is generated.
 The script stops if a generated file has a retained or unaccounted neighbor.
@@ -119,6 +119,7 @@ A wave is adopted only when all of the following hold:
 | prose-defaults | 6 | 1137 | `f547ff22` |
 | multipart | 9 | 1166 | `27ca365d` |
 | hazard | 2 | 1174 | `2ac52814` |
+| split | 10 | 1225 | `4c1e796f` |
 
 The options-batch wave covers wrappers with an optional `options <- list();
 if (!is.null(x)) options$k <- x` prelude, which is mapped to specmill
@@ -163,8 +164,8 @@ operation key, file, and wave. Each retained export records:
 
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
-| #310 | 87 | 18 | 3 |
-| #311 | 56 | 37 | 0 |
+| #310 | 88 | 17 | 3 |
+| #311 | 65 | 28 | 0 |
 | #312 | 13 | 13 | 0 |
 | #313 | 0 | 16 | 0 |
 | #314 | 4 | 0 | 0 |
@@ -174,11 +175,12 @@ Reasons for keeping an export retained:
 - no unique supported schema route (37), including the ambiguous-media and
   malformed-route blockers in #313;
 - a hand-written implementation (18);
-- an inseparable grouped file (11);
 - a request built by a pre-request hook (12);
 - a nonliteral helper argument (3);
 - a candidate whose no-argument call differs (1);
-- the original defects above.
+- a candidate whose contract test disagrees with the original (1,
+  `chemi_resolver_lookup`, below);
+- the original defects above (2).
 
 A retained function is a valid completion state. No contract is guessed.
 
@@ -246,22 +248,53 @@ drops the query's own "parent" row. `verify-runtime.R` lists `ct_similar` as
 an intentionally removed export; every other interface must still match the
 original client.
 
+## Grouped files split
+
+Eleven files held a single wrapper and its `_bulk` sibling, so a generated
+single was blocked by its retained neighbor. Each `_bulk` definition moved to
+`R/<single>_bulk.R`; the only `man/` change is the source-path comment in the
+eleven `*_bulk.Rd` files. `wave.R` now compares a candidate's own definition
+and roxygen block with the baseline source (`55445fcd`), not its whole file.
+
+The split wave generated 10 singles: `ct_chemical_search_equal`, five
+`chemi_amos_*_keyset_pagination`, `chemi_opera`,
+`chemi_predictor_models_predict`, `chemi_stdizer`, and
+`chemi_toxprints_assays`. `chemi_resolver_lookup` was held back: its contract
+check `invalid-empty-chemi_resolver_lookup` expects an error, but the original
+and generated clients both send the request.
+
+## Remaining no-route wrappers
+
+None of the 37 "no unique supported route" exports is an orphan, helper, or
+scraper; each targets a live schema operation.
+
+- 24 are blocked by specmill audit issues: #26 `body_media_type` (16 AMOS
+  POSTs), #27 (6: four `invalid_type`, two path-parameter routes), #28
+  (`chemi_stdizer_bulk`), and #29 (`chemi_resolver_ghs_list_count`, a GET with
+  a body).
+- 11 end in several path parameters. `short_path()` collapses them to `//`,
+  and `binding()` maps only one path parameter.
+- 2 are wrapper bugs: `chemi_chet_chemicals_image` requests
+  `chemicals/image/{id}` and `chemi_stdizer_groups_recursive` requests
+  `groups/recursive/{id}`, but the schema routes are
+  `/chemicals/{chemical_id}/image` and `/api/stdizer/groups/{id}/recursive`.
+
 ## Full rebuild rehearsal (#328)
 
 Scope is frozen at the 408 exports in [inventory.json](inventory.json), and
-each one is classified. The rehearsal ran `rehearse.R` at `8d3a2986`
+each one is classified. The rehearsal ran `rehearse.R` at `6bd23275`
 (specmill 0.1.8) with the expanded allowlist. In a detached worktree, it
-removed the 228 allowlisted files. Regeneration, a second `--apply`, and
+removed the 238 allowlisted files. Regeneration, a second `--apply`, and
 `--check` were each byte-identical, and `git status` stayed empty. The rebuilt client was then
 installed into `artifacts/rebuild-final-library` and checked two ways:
 
 - The contract, request-edge, and hook tests passed.
-- All 1174 localhost cases (408 exported signatures) matched the original
+- All 1225 localhost cases (408 exported signatures) matched the original
   `4fd720b9` client, with no candidate failures.
 
 No output was promoted: the rebuilt tree is identical to the branch.
 
 Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
-`30a4dc49`, `b5bccc97`, `f547ff22`, `27ca365d`, `2ac52814`) to
+`30a4dc49`, `b5bccc97`, `f547ff22`, `27ca365d`, `2ac52814`, `4c1e796f`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
