@@ -1,5 +1,5 @@
 {
-  "commit": "2ac528149e170bafcdc9c0022fc4e65b3f4e0069",
+  "commit": "e89c36313270ea0774830ab76865166c634a8651",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -138,6 +138,16 @@
       "formals": "pairlist(base_url = NULL, ids = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL)"
     },
     {
+      "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
+      "file": "R/chemi_amos_analytical_qc_keyset_pagination_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(limit = , cursor = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
+    },
+    {
       "name": "chemi_amos_analytical_qc_keyset_pagination",
       "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
       "exported": true,
@@ -146,16 +156,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
-    },
-    {
-      "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
-      "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(limit = , cursor = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_amos_batch",
@@ -228,6 +228,16 @@
       "formals": "pairlist(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL)"
     },
     {
+      "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
+      "file": "R/chemi_amos_fact_sheet_keyset_pagination_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
+    },
+    {
       "name": "chemi_amos_fact_sheet_keyset_pagination",
       "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
       "exported": true,
@@ -236,16 +246,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
-    },
-    {
-      "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
-      "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_amos_find_dtxsids",
@@ -528,6 +528,16 @@
       "formals": "pairlist(da_window = NULL, dtxsids = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL)"
     },
     {
+      "name": "chemi_amos_method_keyset_pagination_bulk",
+      "file": "R/chemi_amos_method_keyset_pagination_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
+    },
+    {
       "name": "chemi_amos_method_keyset_pagination",
       "file": "R/chemi_amos_method_keyset_pagination.R",
       "exported": true,
@@ -536,16 +546,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
-    },
-    {
-      "name": "chemi_amos_method_keyset_pagination_bulk",
-      "file": "R/chemi_amos_method_keyset_pagination.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_amos_method_with_spectra",
@@ -568,6 +568,16 @@
       "formals": "pairlist(kingdom = NULL, klass = NULL, superklass = NULL)"
     },
     {
+      "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
+      "file": "R/chemi_amos_product_declaration_keyset_pagination_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
+    },
+    {
       "name": "chemi_amos_product_declaration_keyset_pagination",
       "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
       "exported": true,
@@ -576,16 +586,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
-    },
-    {
-      "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
-      "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_amos_record_counts",
@@ -668,6 +668,16 @@
       "formals": "pairlist(internal_ids = NULL)"
     },
     {
+      "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
+      "file": "R/chemi_amos_safety_data_sheet_keyset_pagination_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
+    },
+    {
       "name": "chemi_amos_safety_data_sheet_keyset_pagination",
       "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
       "exported": true,
@@ -676,16 +686,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
-    },
-    {
-      "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
-      "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))"
     },
     {
       "name": "chemi_amos_spectral_entropy",
@@ -1148,6 +1148,16 @@
       "formals": "pairlist(chemicals = NULL)"
     },
     {
+      "name": "chemi_opera_bulk",
+      "file": "R/chemi_opera_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "pairlist(cache_only = FALSE, smiles = NULL, chemicals = NULL, format = \"json\", standardize = FALSE)"
+    },
+    {
       "name": "chemi_opera_report",
       "file": "R/chemi_opera_report.R",
       "exported": true,
@@ -1166,16 +1176,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , format = \"json\", standardize = FALSE))"
-    },
-    {
-      "name": "chemi_opera_bulk",
-      "file": "R/chemi_opera.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "pairlist(cache_only = FALSE, smiles = NULL, chemicals = NULL, format = \"json\", standardize = FALSE)"
     },
     {
       "name": "chemi_padel",
@@ -1248,6 +1248,16 @@
       "formals": "as.pairlist(alist(query = , report = \"JSON\"))"
     },
     {
+      "name": "chemi_predictor_models_predict_bulk",
+      "file": "R/chemi_predictor_models_predict_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "as.pairlist(alist(model_id = , smiles = NULL, chemicals = NULL))"
+    },
+    {
       "name": "chemi_predictor_models_predict",
       "file": "R/chemi_predictor_models_predict.R",
       "exported": true,
@@ -1256,16 +1266,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(model_id = , smiles = NULL, identifier = NULL, report_format = \"json\"))"
-    },
-    {
-      "name": "chemi_predictor_models_predict_bulk",
-      "file": "R/chemi_predictor_models_predict.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "as.pairlist(alist(model_id = , smiles = NULL, chemicals = NULL))"
     },
     {
       "name": "chemi_rdkit",
@@ -1468,6 +1468,16 @@
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))"
     },
     {
+      "name": "chemi_resolver_lookup_bulk",
+      "file": "R/chemi_resolver_lookup_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Protected or incomplete lifecycle/ownership metadata",
+      "operation": null,
+      "lifecycle": "stable",
+      "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))"
+    },
+    {
       "name": "chemi_resolver_lookup",
       "file": "R/chemi_resolver_lookup.R",
       "exported": true,
@@ -1476,16 +1486,6 @@
       "operation": null,
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))"
-    },
-    {
-      "name": "chemi_resolver_lookup_bulk",
-      "file": "R/chemi_resolver_lookup.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
-      "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))"
     },
     {
       "name": "chemi_resolver_lookupCASRN",
@@ -1828,6 +1828,16 @@
       "formals": "as.pairlist(alist(smirks = ))"
     },
     {
+      "name": "chemi_stdizer_bulk",
+      "file": "R/chemi_stdizer_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "pairlist(request.filesInfo = NULL, request.options.recordId = NULL, request.options.run = NULL, request.options.workflow = NULL)"
+    },
+    {
       "name": "chemi_stdizer_chemicals",
       "file": "R/chemi_stdizer_chemicals.R",
       "exported": true,
@@ -1918,16 +1928,6 @@
       "formals": "as.pairlist(alist(workflow = , smiles = ))"
     },
     {
-      "name": "chemi_stdizer_bulk",
-      "file": "R/chemi_stdizer.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "pairlist(request.filesInfo = NULL, request.options.recordId = NULL, request.options.run = NULL, request.options.workflow = NULL)"
-    },
-    {
       "name": "chemi_toxprint",
       "file": "R/chemi_toxprint.R",
       "exported": true,
@@ -1936,6 +1936,16 @@
       "operation": null,
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3))"
+    },
+    {
+      "name": "chemi_toxprints_assays_bulk",
+      "file": "R/chemi_toxprints_assays_bulk.R",
+      "exported": true,
+      "category": "unmapped_wrapper",
+      "review_reason": "Custom implementation requires manual mapping",
+      "operation": null,
+      "lifecycle": "experimental",
+      "formals": "pairlist(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL)"
     },
     {
       "name": "chemi_toxprints_assays_by_name",
@@ -1966,16 +1976,6 @@
       "operation": null,
       "lifecycle": "experimental",
       "formals": "pairlist(category = NULL, label = NULL)"
-    },
-    {
-      "name": "chemi_toxprints_assays_bulk",
-      "file": "R/chemi_toxprints_assays.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
-      "formals": "pairlist(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL)"
     },
     {
       "name": "chemi_toxprints_calculate",
@@ -2929,7 +2929,7 @@
     },
     {
       "name": "ct_chemical_search_equal_bulk",
-      "file": "R/ct_chemical_search_equal.R",
+      "file": "R/ct_chemical_search_equal_bulk.R",
       "exported": true,
       "category": "unmapped_wrapper",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
