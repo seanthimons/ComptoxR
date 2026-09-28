@@ -1,10 +1,10 @@
 {
-  "commit": "b851a6cd7d8af1c133a74c98fbe8ba8e548dfbd8",
+  "commit": "30a4dc4912ae67cc655807c05796acf84e36c404",
   "toolkit": {
     "package": "specmill",
-    "version": "0.1.6",
-    "source_commit": "66c5e1f4d5a8b1a24d4a4946a6d2c1efe9c68d10",
-    "source_archive_sha256": "6b2d5e647032acfa265892cb8ec9464293dc5d4689f5a3c5a3977c853085fe99",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
     "source_repository": "https://github.com/seanthimons/specmill",
     "archive_format": "git archive --format=tar <source_commit>"
   },
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 225,
+    "generated": 239,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 122,
+    "unmapped_wrapper": 108,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 204,
+  "removable_files": 212,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -2251,20 +2251,20 @@
       "name": "ct_bioactivity_data_aed_search_bulk",
       "file": "R/ct_bioactivity_data_aed_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/aed/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_bioactivity_data_aed_search",
       "file": "R/ct_bioactivity_data_aed_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2351,10 +2351,10 @@
       "name": "ct_bioactivity_data_search_bulk",
       "file": "R/ct_bioactivity_data_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2551,10 +2551,10 @@
       "name": "ct_chemical_fate_search_bulk",
       "file": "R/ct_chemical_fate_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild POST /chemical/fate/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3281,60 +3281,60 @@
       "name": "ct_hazard_cancer_search_bulk",
       "file": "R/ct_hazard_cancer_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_hazard_cancer_search",
       "file": "R/ct_hazard_cancer_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
       "name": "ct_hazard_genetox_details_search_bulk",
       "file": "R/ct_hazard_genetox_details_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_hazard_genetox_details_search",
       "file": "R/ct_hazard_genetox_details_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
       "name": "ct_hazard_genetox_search_bulk",
       "file": "R/ct_hazard_genetox_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_hazard_genetox_search",
       "file": "R/ct_hazard_genetox_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3371,20 +3371,20 @@
       "name": "ct_hazard_skin_eye_search_bulk",
       "file": "R/ct_hazard_skin_eye_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_hazard_skin_eye_search",
       "file": "R/ct_hazard_skin_eye_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3521,20 +3521,20 @@
       "name": "ct_hazard_toxval_search_bulk",
       "file": "R/ct_hazard_toxval_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "ct_hazard_toxval_search",
       "file": "R/ct_hazard_toxval_search.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
