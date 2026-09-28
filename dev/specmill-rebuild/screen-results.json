@@ -378,9 +378,10 @@
     "name": "chemi_hazard",
     "file": "R/chemi_hazard.R",
     "status": "retained",
-    "reason": "Computed default requires manual mapping",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
     "schema": "chemi-hazard-prod.json",
-    "key": "GET /api/hazard"
+    "key": "GET /api/hazard",
+    "lifecycle": "experimental"
   },
   "chemi_hazard_bulk": {
     "name": "chemi_hazard_bulk",
@@ -483,24 +484,26 @@
   "chemi_resolver_getpubchemlist": {
     "name": "chemi_resolver_getpubchemlist",
     "file": "R/chemi_resolver_getpubchemlist.R",
-    "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/getpubchemlist"
+    "key": "POST /api/resolver/getpubchemlist",
+    "lifecycle": "experimental"
   },
   "chemi_resolver_getsimilaritylist": {
     "name": "chemi_resolver_getsimilaritylist",
     "file": "R/chemi_resolver_getsimilaritylist.R",
-    "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/getsimilaritylist"
+    "key": "POST /api/resolver/getsimilaritylist",
+    "lifecycle": "experimental"
   },
   "chemi_resolver_getsimilaritymap": {
     "name": "chemi_resolver_getsimilaritymap",
     "file": "R/chemi_resolver_getsimilaritymap.R",
     "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "chemi-resolver-prod.json",
     "key": "POST /api/resolver/getsimilaritymap"
   },
@@ -532,16 +535,17 @@
   "chemi_resolver_orderBySimilarity": {
     "name": "chemi_resolver_orderBySimilarity",
     "file": "R/chemi_resolver_orderBySimilarity.R",
-    "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/orderBySimilarity"
+    "key": "POST /api/resolver/orderBySimilarity",
+    "lifecycle": "experimental"
   },
   "chemi_resolver_pubchem_section": {
     "name": "chemi_resolver_pubchem_section",
     "file": "R/chemi_resolver_pubchem_section.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
     "key": "GET /api/resolver/pubchem-section",
     "lifecycle": "experimental"
@@ -549,10 +553,11 @@
   "chemi_resolver_pubchem_section_bulk": {
     "name": "chemi_resolver_pubchem_section_bulk",
     "file": "R/chemi_resolver_pubchem_section.R",
-    "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-resolver-prod.json",
-    "key": "POST /api/resolver/pubchem-section"
+    "key": "POST /api/resolver/pubchem-section",
+    "lifecycle": "experimental"
   },
   "chemi_resolver_safety_flags": {
     "name": "chemi_resolver_safety_flags",
@@ -590,10 +595,11 @@
   "chemi_stdizer_chemicals": {
     "name": "chemi_stdizer_chemicals",
     "file": "R/chemi_stdizer_chemicals.R",
-    "status": "retained",
-    "reason": "Description prose needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-stdizer-prod.json",
-    "key": "POST /api/stdizer/chemicals"
+    "key": "POST /api/stdizer/chemicals",
+    "lifecycle": "experimental"
   },
   "chemi_stdizer_groups_recursive": {
     "name": "chemi_stdizer_groups_recursive",
@@ -759,15 +765,6 @@
     "schema": null,
     "key": null
   },
-  "ct_chemical_list_search_by_name": {
-    "name": "ct_chemical_list_search_by_name",
-    "file": "R/ct_chemical_list_search_by_name.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "GET /chemical/list/search/by-name/{listName}",
-    "lifecycle": "stable"
-  },
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
     "file": "R/ct_chemical_msready_search_by_mass.R",
@@ -841,33 +838,6 @@
     "schema": null,
     "key": null
   },
-  "epi_ecosar_dye": {
-    "name": "epi_ecosar_dye",
-    "file": "R/epi_ecosar_dye.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "epi-suite-prod.json",
-    "key": "GET /api/ecosar/dye",
-    "lifecycle": "experimental"
-  },
-  "epi_ecosar_polymer_nonionic": {
-    "name": "epi_ecosar_polymer_nonionic",
-    "file": "R/epi_ecosar_polymer_nonionic.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "epi-suite-prod.json",
-    "key": "GET /api/ecosar/polymer/nonionic",
-    "lifecycle": "experimental"
-  },
-  "epi_ecosar_surfactant_nonionic": {
-    "name": "epi_ecosar_surfactant_nonionic",
-    "file": "R/epi_ecosar_surfactant_nonionic.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "epi-suite-prod.json",
-    "key": "GET /api/ecosar/surfactant/nonionic",
-    "lifecycle": "experimental"
-  },
   "epi_submit_batch": {
     "name": "epi_submit_batch",
     "file": "R/epi_submit_batch.R",
@@ -875,14 +845,5 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "epi_submit": {
-    "name": "epi_submit",
-    "file": "R/epi_submit.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "epi-suite-prod.json",
-    "key": "GET /api/submit",
-    "lifecycle": "experimental"
   }
 }
