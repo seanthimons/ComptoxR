@@ -45,8 +45,13 @@ path_template <- function(endpoint, path_params) {
 # is not in the schema. The corrected helper call, not the original, is the reference.
 corrections <- list(
   chemi_chet_chemicals_image = list(endpoint = 'chemicals/', path_params = 'image'),
-  chemi_stdizer_groups_recursive = list(endpoint = 'stdizer/groups/', path_params = 'recursive')
+  chemi_stdizer_groups_recursive = list(endpoint = 'stdizer/groups/', path_params = 'recursive'),
+  # #339: the ChET server path and the schema's {"dtxsids": [...], "search_level": ...} body.
+  chemi_chet_reaction_batchsearch = list(endpoint = 'chet/reaction/batchsearch', sid_label = 'dtxsids', array_payload = TRUE)
 )
+# Accepted on purpose (#338): the original named `search_level` when called with no
+# arguments; the generated wrapper names the first missing argument, `dtxsids`.
+reordered <- 'chemi_chet_reaction_batchsearch'
 correct <- function(expr, fix) {
   body <- expr[[3L]][[3L]]
   at <- which(vapply(as.list(body), function(s) is.call(s) && identical(s[[1L]], as.name('<-')) && identical(s[[2L]], as.name('result')), FALSE))
@@ -461,7 +466,11 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
           stopifnot(length(reference$calls) == 1L || hooked, identical(run(env[[name]], variant), reference))
         }
         # Missing-argument errors must name the same argument (evaluation order is observable).
-        stopifnot(identical(run(env[[name]], list()), run(original, list())))
+        if (name %in% reordered) {
+          stopifnot(!is.null(run(env[[name]], list())$value$error), !is.null(run(original, list())$value$error))
+        } else {
+          stopifnot(identical(run(env[[name]], list()), run(original, list())))
+        }
       }
       scenario <- scenarios[[1L]]
       endpoint <- record$proposal$request$arguments$endpoint$value
