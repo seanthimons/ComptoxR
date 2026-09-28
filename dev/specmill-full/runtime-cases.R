@@ -63,7 +63,9 @@ for (name in names(full_cases)) {
           if (has_query_arguments) {
             encoded <- gsub('%2F', '/', encoded, fixed = TRUE)
           }
-          expected(method, paste0(sub('/$', '', path), '/', encoded), query, auth = auth)
+          # Extra path parameters are appended unescaped after the query value.
+          suffix <- paste0('/', as.character(a$path_params), collapse = '')
+          expected(method, paste0(sub('/$', '', path), '/', encoded, suffix), query, auth = auth)
         })
       }
       wire <- wire_for(arguments)
@@ -117,7 +119,12 @@ for (name in names(full_cases)) {
           batched <- supplied
           batched[[query_parameter]] <- c('record 1', 'record 2', 'record 1', 'record 3')
           a$query <- batched[[query_parameter]]
-          probe(paste0(name, '-batches'), do.call(fun, batched), wire_for(a), response)
+          # generic_request refuses to batch when path_params are set.
+          if (is.null(a$path_params)) {
+            probe(paste0(name, '-batches'), do.call(fun, batched), wire_for(a), response)
+          } else {
+            probe(paste0(name, '-batches'), do.call(fun, batched), list(), error = TRUE)
+          }
         }
       }
       NULL

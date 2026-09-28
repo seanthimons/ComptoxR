@@ -26,9 +26,39 @@ hooks <- names(hook_config)
 callbacks <- new.env(parent = baseenv())
 sys.source('dev/specmill_callbacks.R', callbacks)
 short_path <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))
+# Routes with extra path parameters: the query fills the first placeholder and each
+# path_params element fills the next one (a parameter) or is a literal segment.
+route <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '{}', sub('^[A-Z]+ ', '', key)))
+route_names <- function(key) gsub('[{}]', '', regmatches(key, gregexpr('\\{[^}]+\\}', key))[[1L]])
+path_template <- function(endpoint, path_params) {
+  parts <- if (is.call(path_params)) as.list(path_params)[-1L] else as.list(path_params)
+  segments <- vapply(parts, function(x) if (is.symbol(x)) '{}' else as.character(x), '')
+  list(
+    path = paste0(sub('/$', '', endpoint), '/{}', paste0('/', segments, collapse = '')),
+    names = unname(vapply(Filter(is.symbol, parts), as.character, ''))
+  )
+}
+# Original-client defects fixed on purpose (#335): these wrappers requested a path that
+# is not in the schema. The corrected helper call, not the original, is the reference.
+corrections <- list(
+  chemi_chet_chemicals_image = list(endpoint = 'chemicals/', path_params = 'image'),
+  chemi_stdizer_groups_recursive = list(endpoint = 'stdizer/groups/', path_params = 'recursive')
+)
+correct <- function(expr, fix) {
+  body <- expr[[3L]][[3L]]
+  at <- which(vapply(as.list(body), function(s) is.call(s) && identical(s[[1L]], as.name('<-')) && identical(s[[2L]], as.name('result')), FALSE))
+  stopifnot(length(at) == 1L)
+  for (key in names(fix)) body[[at]][[3L]][[key]] <- fix[[key]]
+  expr[[3L]][[3L]] <- body
+  expr
+}
 binding <- function(x, parameters) {
   if (is.symbol(x) && as.character(x) %in% parameters) {
     return(list(from = list('params', as.character(x))))
+  }
+  # A named c() (e.g. path_params = c(word = word)) is specmill's vector binding.
+  if (is.call(x) && identical(x[[1L]], as.name('c')) && length(x) > 1L && !is.null(names(x)) && all(nzchar(names(x)[-1L]))) {
+    return(list(vector = lapply(as.list(x)[-1L], binding, parameters)))
   }
   if (identical(x, quote(as.numeric(Sys.getenv('batch_limit', '100'))))) {
     return(list(callback = 'detail_batch_limit'))
@@ -211,6 +241,7 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
     }
     name <- as.character(expr[[2]])
     record <- list(name = name, file = file, status = 'retained', reason = '', schema = NULL, key = NULL)
+    if (name %in% names(corrections)) expr <- correct(expr, corrections[[name]])
     proposal <- tryCatch(
       {
         fn <- eval(expr[[3]])
@@ -245,9 +276,14 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         }
         method <- args$method %||% if (helper == 'generic_chemi_request') 'POST' else 'GET'
         prefix <- if (startsWith(name, 'ct_')) 'ctx-' else if (startsWith(name, 'epi_')) 'epi-' else 'chemi-'
+        template <- if (!is.null(args$path_params)) path_template(args$endpoint, args$path_params)
         matches <- Filter(function(op) {
-          startsWith(op$key, paste0(method, ' ')) && identical(short_path(op$key), args$endpoint) &&
-            startsWith(op$schema, prefix)
+          same_path <- if (is.null(template)) {
+            identical(short_path(op$key), args$endpoint)
+          } else {
+            identical(route(op$key), template$path) && identical(route_names(op$key)[-1L], template$names)
+          }
+          startsWith(op$key, paste0(method, ' ')) && same_path && startsWith(op$schema, prefix)
         }, operations)
         if (length(matches) != 1L) stop('No unique supported schema/method/path match; no route guessed')
         record$schema <- matches[[1L]]$schema
@@ -385,6 +421,11 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         variants$false <- set(list(FALSE))
         variants$zero <- set(list(0))
       }
+      # Extra path parameters are also compared supplied, not only omitted (NULL).
+      path_inputs <- vapply(record$proposal$request$arguments$path_params$vector %||% list(), function(b) b$from[[2L]], '')
+      if (length(path_inputs)) {
+        variants$path <- replace(supplied, path_inputs, as.list(sprintf('pilot-path-%d', seq_along(path_inputs))))
+      }
       env <- new.env(parent = environment(original))
       eval(parse(text = code), env)
       stopifnot(identical(formals(original), formals(env[[name]])))
@@ -440,6 +481,9 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         cases[[name]]$inputs <- variants$omitted
         cases[[name]]$arguments <- run(original, variants$omitted)$calls[[1L]]$arguments
         cases[[name]]$variants <- variants['explicit']
+      }
+      if (length(path_inputs)) {
+        cases[[name]]$variants <- c(cases[[name]]$variants, variants['path'])
       }
       if (hooked) {
         cases[[name]]$observe <- TRUE

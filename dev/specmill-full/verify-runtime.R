@@ -46,6 +46,14 @@ after <- callr::r(
 removed_exports <- 'ct_similar'
 stopifnot(all(removed_exports %in% names(before$interfaces)))
 before$interfaces <- before$interfaces[setdiff(names(before$interfaces), removed_exports)]
+# Exports whose original request path was not in the schema (#335). The fix changes the
+# wire on purpose, so their cases are checked against the model only, not the original.
+corrected_exports <- c('chemi_chet_chemicals_image', 'chemi_stdizer_groups_recursive')
+corrected <- sprintf('^(invalid-[a-z]+-)?(%s)(-.+)?$', paste(corrected_exports, collapse = '|'))
+before$cases <- before$cases[!grepl(corrected, names(before$cases))]
+before$full_failures <- before$full_failures[setdiff(names(before$full_failures), corrected_exports)]
+corrected_cases <- names(after$cases)[grepl(corrected, names(after$cases))]
+after$cases <- after$cases[!grepl(corrected, names(after$cases))]
 # Failure diagnostics contain output directory names; compare successful cases directly.
 stopifnot(
   identical(before$interfaces, after$interfaces),
@@ -60,6 +68,8 @@ report <- list(
   passed_cases = length(before$cases),
   exported_signatures = length(before$interfaces),
   removed_exports = removed_exports,
+  corrected_exports = corrected_exports,
+  corrected_cases = corrected_cases,
   failures = before$full_failures,
   operations = lapply(full_cases, function(x) x[c('schema', 'key')]),
   cases = lapply(before$cases, function(x) {
