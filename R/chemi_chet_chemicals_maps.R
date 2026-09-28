@@ -15,7 +15,7 @@
 chemi_chet_chemicals_maps <- function(chemid = NULL) {
   params <- base::list("chemid" = chemid)
   result <- generic_request(
-    "endpoint" = "chemicals/maps",
+    "endpoint" = "chet/chemicals/maps",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

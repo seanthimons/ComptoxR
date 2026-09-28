@@ -19,7 +19,7 @@ chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL,
   params <- base::list("chemical_id" = chemical_id, "width" = width, "height" = height, "format" = format)
   result <- generic_request(
     "query" = params[["chemical_id"]],
-    "endpoint" = "chemicals/",
+    "endpoint" = "chet/chemicals/",
     "method" = "GET",
     "batch_limit" = 1,
     "server" = "chemi_burl",

@@ -15,7 +15,7 @@
 chemi_chet_reaction_singlereaction <- function(reaction_id = NULL) {
   params <- base::list("reaction_id" = reaction_id)
   result <- generic_request(
-    "endpoint" = "reaction/singlereaction",
+    "endpoint" = "chet/reaction/singlereaction",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

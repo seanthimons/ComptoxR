@@ -15,7 +15,7 @@
 chemi_chet_chemicals_chemset <- function(setid = NULL) {
   params <- base::list("setid" = setid)
   result <- generic_request(
-    "endpoint" = "chemicals/chemset",
+    "endpoint" = "chet/chemicals/chemset",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

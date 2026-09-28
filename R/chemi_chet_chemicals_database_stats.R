@@ -15,7 +15,7 @@
 chemi_chet_chemicals_database_stats <- function(total = NULL) {
   params <- base::list("total" = total)
   result <- generic_request(
-    "endpoint" = "chemicals/database/stats",
+    "endpoint" = "chet/chemicals/database/stats",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

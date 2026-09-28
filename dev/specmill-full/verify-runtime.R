@@ -32,9 +32,17 @@ code <- append(code, as.list(parse('dev/specmill-full/runtime-cases.R')), after 
 position <- which(vapply(code, function(x) is.call(x) && identical(x[[1]], as.name('saveRDS')), FALSE))
 code <- append(code, list(quote(snapshot$full_failures <- full_failures)), after = position - 1L)
 body(verify_client) <- as.call(code)
+# ChET wrappers omitted the schema's /api/chet server path (#339). The frozen cases carry
+# the corrected endpoint; the original client is run against its own path, and its
+# requests and endpoint warnings are compared below with the chet segment inserted.
+chet_exports <- grep('^chemi_chet_', names(full_cases), value = TRUE)
+original_cases <- full_cases
+for (name in chet_exports) {
+  original_cases[[name]]$arguments$endpoint <- sub('^chet/', '', full_cases[[name]]$arguments$endpoint)
+}
 before <- callr::r(
   verify_client,
-  list(libs[[1]], file.path(out, 'before'), lookup_cases, full_cases),
+  list(libs[[1]], file.path(out, 'before'), lookup_cases, original_cases),
   libpath = c(libs[[1]], .libPaths())
 )
 after <- callr::r(
@@ -53,6 +61,16 @@ corrected <- sprintf('^(invalid-[a-z]+-)?(%s)(-.+)?$', paste(corrected_exports, 
 before$cases <- before$cases[!grepl(corrected, names(before$cases))]
 before$full_failures <- before$full_failures[!names(before$full_failures) %in% corrected_exports]
 if (!length(before$full_failures)) before$full_failures <- list()
+chet <- grepl('^(invalid-[a-z]+-)?chemi_chet_', names(before$cases))
+before$cases[chet] <- lapply(before$cases[chet], function(x) {
+  x$requests <- lapply(x$requests, function(r) {
+    r$path <- sub('^/chemi/', '/chemi/chet/', r$path)
+    r
+  })
+  x$warnings <- sub('in "(chemicals|reaction)/', 'in "chet/\\1/', x$warnings)
+  x
+})
+chet_cases <- names(before$cases)[chet]
 corrected_cases <- names(after$cases)[grepl(corrected, names(after$cases))]
 after$cases <- after$cases[!grepl(corrected, names(after$cases))]
 # Failure diagnostics contain output directory names; compare successful cases directly.
@@ -71,6 +89,7 @@ report <- list(
   removed_exports = removed_exports,
   corrected_exports = corrected_exports,
   corrected_cases = corrected_cases,
+  chet_path_cases = chet_cases,
   failures = before$full_failures,
   operations = lapply(full_cases, function(x) x[c('schema', 'key')]),
   cases = lapply(before$cases, function(x) {

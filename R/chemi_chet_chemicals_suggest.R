@@ -17,7 +17,7 @@
 chemi_chet_chemicals_suggest <- function(query, limit = 8, only_in_reactions = "true") {
   params <- base::list("query" = query, "limit" = limit, "only_in_reactions" = only_in_reactions)
   result <- generic_request(
-    "endpoint" = "chemicals/suggest",
+    "endpoint" = "chet/chemicals/suggest",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

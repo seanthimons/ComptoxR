@@ -56,7 +56,7 @@ operations:
           - params
           - chemical_id
         endpoint:
-          value: chemicals/
+          value: chet/chemicals/
         method:
           value: GET
         batch_limit:
@@ -111,7 +111,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/alias
+          value: chet/chemicals/alias
         method:
           value: GET
         batch_limit:
@@ -151,7 +151,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/chemset
+          value: chet/chemicals/chemset
         method:
           value: GET
         batch_limit:
@@ -204,7 +204,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/counts
+          value: chet/chemicals/counts
         method:
           value: GET
         batch_limit:
@@ -291,7 +291,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/database
+          value: chet/chemicals/database
         method:
           value: GET
         batch_limit:
@@ -369,7 +369,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/database/stats
+          value: chet/chemicals/database/stats
         method:
           value: GET
         batch_limit:
@@ -409,7 +409,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/maps
+          value: chet/chemicals/maps
         method:
           value: GET
         batch_limit:
@@ -449,7 +449,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/singlechemical
+          value: chet/chemicals/singlechemical
         method:
           value: GET
         batch_limit:
@@ -499,7 +499,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/suggest
+          value: chet/chemicals/suggest
         method:
           value: GET
         batch_limit:
@@ -591,7 +591,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/database
+          value: chet/reaction/database
         method:
           value: GET
         batch_limit:
@@ -692,7 +692,7 @@ operations:
           - params
           - pagenum
         endpoint:
-          value: reaction/database-old/
+          value: chet/reaction/database-old/
         method:
           value: GET
         batch_limit:
@@ -733,7 +733,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/database/stats
+          value: chet/reaction/database/stats
         method:
           value: GET
         batch_limit:
@@ -773,7 +773,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/details
+          value: chet/reaction/details
         method:
           value: GET
         batch_limit:
@@ -813,7 +813,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/mapid
+          value: chet/reaction/mapid
         method:
           value: GET
         batch_limit:
@@ -853,7 +853,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/react_maps
+          value: chet/reaction/react_maps
         method:
           value: GET
         batch_limit:
@@ -897,7 +897,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/reactionmap
+          value: chet/reaction/reactionmap
         method:
           value: GET
         batch_limit:
@@ -950,7 +950,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/search
+          value: chet/reaction/search
         method:
           value: GET
         batch_limit:
@@ -1008,7 +1008,7 @@ operations:
           - params
           - search_input
         endpoint:
-          value: reaction/searchcounts/
+          value: chet/reaction/searchcounts/
         method:
           value: GET
         batch_limit:
@@ -1049,7 +1049,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/singlereaction
+          value: chet/reaction/singlereaction
         method:
           value: GET
         batch_limit:
@@ -1089,7 +1089,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/table
+          value: chet/reaction/table
         method:
           value: GET
         batch_limit:

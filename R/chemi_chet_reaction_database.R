@@ -49,7 +49,7 @@ chemi_chet_reaction_database <- function(
     "max_pages" = max_pages
   )
   result <- generic_request(
-    "endpoint" = "reaction/database",
+    "endpoint" = "chet/reaction/database",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",
