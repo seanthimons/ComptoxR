@@ -1,6 +1,6 @@
 {
-  "commit": "30a4dc4912ae67cc655807c05796acf84e36c404",
-  "operations": 239,
+  "commit": "b5bccc974e9cf6f376a1ead271718a19fdb47962",
+  "operations": 244,
   "files": {
     "R/chemi_alerts_alerts.R": "031ba567542a373b2b19a68b404cd3ea4916bdd4c39b94a4409b0d8fa9d423c7",
     "R/chemi_alerts_groups_by_id.R": "28a36fe1b1f422a995b10f9295b0e5f64b7a112c2547b9115b31426c996a156d",
@@ -143,6 +143,7 @@
     "R/ct_chemical_file_mol_search_by_dtxcid.R": "94df995bbfe9626bcf2ef29fc00af833c9619b22cb611f40aeaf9958fdd98649",
     "R/ct_chemical_file_mol_search.R": "03c842f469a2b85ac4cf0e04a2419f5ce7bec5b9e2db805292c9b71d4875ee5e",
     "R/ct_chemical_list_chemicals_search_by_listname.R": "38e335a9353c3bee84b8910e7ac6de05a2f274d494d9707cbbae6eaefec7ecf7",
+    "R/ct_chemical_list_search_by_name.R": "5a04ea423f1cf125336d882bd9cb8f26c1860c776066deba1896bf72e3ff8657",
     "R/ct_chemical_list_search_by_type.R": "7da076ff0ad2123cccbaa758280a257023319c5672f4bb80d2ae63a224b2787e",
     "R/ct_chemical_list_search.R": "89da46f223aada666195903b83f55af810eaee6a59f2fd3c639c5a86444023de",
     "R/ct_chemical_list_type.R": "b9e776c851e8eb0b2b81658a476ec8c77f37430977ecbdc18f0eb63c4bdcf5d1",
@@ -207,12 +208,16 @@
     "R/ct_hazard_toxval_search_by_category.R": "bee4f62f6f736c0e984e66007e93977cd406d978614f868821dd6ff0a94869a3",
     "R/ct_hazard_toxval_search.R": "17c37cf41e17753cee66d68ebfa33c66f86e9bc7c8ddbeb6e4f85b0a265d2960",
     "R/ct_hazard_toxval_supercategory_search.R": "03dfd3cceccda9fcfce82d9d443df6e30d17b7a89cc0f63d5fd3ede4536daabc",
+    "R/epi_ecosar_dye.R": "2fb3a8e23b8490fbccafaa0cca630b346dab8c057536be99ec5aeb99af0367c5",
     "R/epi_ecosar_polymer_amphoteric.R": "73b0d02a9efc7201cc5b6f5cce9e60519f5982f296baf2993d9f85c37ac9127b",
     "R/epi_ecosar_polymer_anionic.R": "d6f0eab801b9dfc2221209763e488860421d9226cf89f94fd606b792525af860",
+    "R/epi_ecosar_polymer_nonionic.R": "e49431e459abe9435ddf7dbf65cd82cd1015b37771e186a0cffc52b7dcdbe57e",
     "R/epi_ecosar_polymer_polycationic.R": "ff7c2442c85b3c0b75daee97dc05206edb6f126a0a2ccd95068fcee8de65445f",
     "R/epi_ecosar_surfactant_amphoteric.R": "7084c4e3bffc76f7bf4d4994137fc721119a07031cda083a2e4b9b0e8522084b",
     "R/epi_ecosar_surfactant_anionic.R": "b72d783630732a70da282cf018fa9416e63b622e3f44112f7b30a871e69c3333",
     "R/epi_ecosar_surfactant_cationic.R": "b9ddf645ff034702e86b257195430647bdff408275ce41225f67d14a8e16f0c7",
-    "R/epi_search.R": "c505494cee505f502c59033492daa1d8be8413d18fd1ac9a9754e4d20e2970ba"
+    "R/epi_ecosar_surfactant_nonionic.R": "1e285109a1efb0becf81a071a42b5bba7d0e06e75ae25fad02681cbd1b628f98",
+    "R/epi_search.R": "c505494cee505f502c59033492daa1d8be8413d18fd1ac9a9754e4d20e2970ba",
+    "R/epi_submit.R": "907049f4b17ac5712f39274432d7bd177d3109baff1da6531b49d22e0e9b990e"
   }
 }

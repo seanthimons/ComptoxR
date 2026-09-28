@@ -1,5 +1,5 @@
 {
-  "commit": "30a4dc4912ae67cc655807c05796acf84e36c404",
+  "commit": "b5bccc974e9cf6f376a1ead271718a19fdb47962",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 239,
+    "generated": 244,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 108,
+    "unmapped_wrapper": 103,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 212,
+  "removable_files": 217,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -2681,10 +2681,10 @@
       "name": "ct_chemical_list_search_by_name",
       "file": "R/ct_chemical_list_search_by_name.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-name/{listName}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(listName = , projection = \"chemicallistall\", extract_dtxsids = FALSE))"
     },
     {
@@ -3881,10 +3881,10 @@
       "name": "epi_ecosar_dye",
       "file": "R/epi_ecosar_dye.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "epi-suite-prod-rebuild GET /api/ecosar/dye",
+      "lifecycle": null,
       "formals": "NULL"
     },
     {
@@ -3911,10 +3911,10 @@
       "name": "epi_ecosar_polymer_nonionic",
       "file": "R/epi_ecosar_polymer_nonionic.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "epi-suite-prod-rebuild GET /api/ecosar/polymer/nonionic",
+      "lifecycle": null,
       "formals": "NULL"
     },
     {
@@ -3961,10 +3961,10 @@
       "name": "epi_ecosar_surfactant_nonionic",
       "file": "R/epi_ecosar_surfactant_nonionic.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "epi-suite-prod-rebuild GET /api/ecosar/surfactant/nonionic",
+      "lifecycle": null,
       "formals": "NULL"
     },
     {
@@ -3991,10 +3991,10 @@
       "name": "epi_submit",
       "file": "R/epi_submit.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "epi-suite-prod-rebuild GET /api/submit",
+      "lifecycle": null,
       "formals": "pairlist(smiles = NULL, cas = NULL, modules = NULL, chemicalName = NULL, logKow = NULL, molecularWeight = NULL, waterSolubilityMgPerL = NULL, waterSolubility = NULL, waterSolubilityProvider = \"wskow\", vaporPressureMmHg = NULL, subcooledVaporPressureMmHg = NULL, henryAtmM3PerMol = NULL, logKoa = NULL, koc = NULL, meltingPointC = NULL, boilingPointC = NULL, vaporPressureTemperatureC = 25, aopRateConstant = NULL, biowinScore = NULL, biowin3 = NULL, biowin5 = NULL, removeMetals = TRUE, tspUgPerM3 = 80, theta = 0.00010836, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, skinSurfaceAreaCm2 = NULL, bodyWeightKg = NULL, averagingTimeDays = NULL, fractionAbsorbed = NULL, eventDurationHours = NULL, userKpCmPerHour = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursSettlingTank = NULL, halfLifeAir = NULL, halfLifeWater = NULL, halfLifeSoil = NULL, halfLifeSediment = NULL, emissionRateAir = NULL, emissionRateWater = NULL, emissionRateSoil = NULL, emissionRateSediment = NULL, advectionTimeAir = NULL, advectionTimeWater = NULL, advectionTimeSoil = NULL, advectionTimeSediment = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, daylightHours = 12, riverWindMPerSec = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, lakeWindMPerSec = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, carbonChainLength = NULL, mainCarbons = NULL, branchedCarbons = NULL, branches = NULL, propoxyGroups = NULL, ethoxylate = NULL, amineNitrogens = NULL, cationAnionRatio = NULL, mw500Percentage = NULL, mw1000Percentage = NULL, averageMolecularWeight = NULL, useSmiles = NULL, solubilityType = NULL, polymerType = NULL)"
     },
     {
