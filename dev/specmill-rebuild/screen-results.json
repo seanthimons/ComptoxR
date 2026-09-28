@@ -20,7 +20,7 @@
     "name": "chemi_alerts",
     "file": "R/chemi_alerts.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
@@ -354,7 +354,7 @@
     "name": "chemi_descriptors",
     "file": "R/chemi_descriptors.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -362,7 +362,7 @@
     "name": "chemi_descriptors_bulk",
     "file": "R/chemi_descriptors.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -378,15 +378,15 @@
     "name": "chemi_hazard",
     "file": "R/chemi_hazard.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Computed default requires manual mapping",
+    "schema": "chemi-hazard-prod.json",
+    "key": "GET /api/hazard"
   },
   "chemi_hazard_bulk": {
     "name": "chemi_hazard_bulk",
     "file": "R/chemi_hazard.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
@@ -394,7 +394,7 @@
     "name": "chemi_mordred",
     "file": "R/chemi_mordred.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -402,7 +402,7 @@
     "name": "chemi_mordred_bulk",
     "file": "R/chemi_mordred.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -427,7 +427,7 @@
     "name": "chemi_padel",
     "file": "R/chemi_padel.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -435,7 +435,7 @@
     "name": "chemi_padel_bulk",
     "file": "R/chemi_padel.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -468,7 +468,7 @@
     "name": "chemi_rdkit",
     "file": "R/chemi_rdkit.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -476,7 +476,7 @@
     "name": "chemi_rdkit_bulk",
     "file": "R/chemi_rdkit.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -484,25 +484,25 @@
     "name": "chemi_resolver_getpubchemlist",
     "file": "R/chemi_resolver_getpubchemlist.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/getpubchemlist"
   },
   "chemi_resolver_getsimilaritylist": {
     "name": "chemi_resolver_getsimilaritylist",
     "file": "R/chemi_resolver_getsimilaritylist.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/getsimilaritylist"
   },
   "chemi_resolver_getsimilaritymap": {
     "name": "chemi_resolver_getsimilaritymap",
     "file": "R/chemi_resolver_getsimilaritymap.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/getsimilaritymap"
   },
   "chemi_resolver_ghs_list_count": {
     "name": "chemi_resolver_ghs_list_count",
@@ -533,9 +533,9 @@
     "name": "chemi_resolver_orderBySimilarity",
     "file": "R/chemi_resolver_orderBySimilarity.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/orderBySimilarity"
   },
   "chemi_resolver_pubchem_section": {
     "name": "chemi_resolver_pubchem_section",
@@ -550,9 +550,9 @@
     "name": "chemi_resolver_pubchem_section_bulk",
     "file": "R/chemi_resolver_pubchem_section.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/pubchem-section"
   },
   "chemi_resolver_safety_flags": {
     "name": "chemi_resolver_safety_flags",
@@ -591,9 +591,9 @@
     "name": "chemi_stdizer_chemicals",
     "file": "R/chemi_stdizer_chemicals.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "reason": "Description prose needs manual mapping",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "POST /api/stdizer/chemicals"
   },
   "chemi_stdizer_groups_recursive": {
     "name": "chemi_stdizer_groups_recursive",
@@ -683,7 +683,7 @@
     "name": "chemi_toxprints_calculate_bulk",
     "file": "R/chemi_toxprints_calculate.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
@@ -691,7 +691,7 @@
     "name": "chemi_webtest_predict",
     "file": "R/chemi_webtest_predict.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -699,7 +699,7 @@
     "name": "chemi_webtest_predict_bulk",
     "file": "R/chemi_webtest_predict.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -707,7 +707,7 @@
     "name": "chemi_webtest",
     "file": "R/chemi_webtest.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -715,7 +715,7 @@
     "name": "chemi_webtest_bulk",
     "file": "R/chemi_webtest.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Request built by a pre-request hook; no route guessed",
     "schema": null,
     "key": null
   },
@@ -734,42 +734,6 @@
     "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-bioactivity-prod.json",
     "key": "GET /bioactivity/assay/search/by-endpoint/"
-  },
-  "ct_bioactivity_data_aed_search_bulk": {
-    "name": "ct_bioactivity_data_aed_search_bulk",
-    "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/aed/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_aed_search": {
-    "name": "ct_bioactivity_data_aed_search",
-    "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_bulk": {
-    "name": "ct_bioactivity_data_search_bulk",
-    "file": "R/ct_bioactivity_data_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_search_bulk": {
-    "name": "ct_chemical_fate_search_bulk",
-    "file": "R/ct_chemical_fate_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/fate/search/by-dtxsid/",
-    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
@@ -798,10 +762,11 @@
   "ct_chemical_list_search_by_name": {
     "name": "ct_chemical_list_search_by_name",
     "file": "R/ct_chemical_list_search_by_name.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/list/search/by-name/{listName}",
+    "lifecycle": "stable"
   },
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
@@ -860,96 +825,6 @@
     "schema": null,
     "key": null
   },
-  "ct_hazard_cancer_search_bulk": {
-    "name": "ct_hazard_cancer_search_bulk",
-    "file": "R/ct_hazard_cancer_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/cancer-summary/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_cancer_search": {
-    "name": "ct_hazard_cancer_search",
-    "file": "R/ct_hazard_cancer_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_details_search_bulk": {
-    "name": "ct_hazard_genetox_details_search_bulk",
-    "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/details/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_details_search": {
-    "name": "ct_hazard_genetox_details_search",
-    "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_search_bulk": {
-    "name": "ct_hazard_genetox_search_bulk",
-    "file": "R/ct_hazard_genetox_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/summary/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_search": {
-    "name": "ct_hazard_genetox_search",
-    "file": "R/ct_hazard_genetox_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_skin_eye_search_bulk": {
-    "name": "ct_hazard_skin_eye_search_bulk",
-    "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/skin-eye/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_skin_eye_search": {
-    "name": "ct_hazard_skin_eye_search",
-    "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_search_bulk": {
-    "name": "ct_hazard_toxval_search_bulk",
-    "file": "R/ct_hazard_toxval_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/toxval/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_search": {
-    "name": "ct_hazard_toxval_search",
-    "file": "R/ct_hazard_toxval_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
   "ct_related": {
     "name": "ct_related",
     "file": "R/ct_related.R",
@@ -962,33 +837,36 @@
     "name": "ct_similar",
     "file": "R/ct_similar.R",
     "status": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
   "epi_ecosar_dye": {
     "name": "epi_ecosar_dye",
     "file": "R/epi_ecosar_dye.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/dye",
+    "lifecycle": "experimental"
   },
   "epi_ecosar_polymer_nonionic": {
     "name": "epi_ecosar_polymer_nonionic",
     "file": "R/epi_ecosar_polymer_nonionic.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/polymer/nonionic",
+    "lifecycle": "experimental"
   },
   "epi_ecosar_surfactant_nonionic": {
     "name": "epi_ecosar_surfactant_nonionic",
     "file": "R/epi_ecosar_surfactant_nonionic.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/surfactant/nonionic",
+    "lifecycle": "experimental"
   },
   "epi_submit_batch": {
     "name": "epi_submit_batch",
@@ -1001,9 +879,10 @@
   "epi_submit": {
     "name": "epi_submit",
     "file": "R/epi_submit.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/submit",
+    "lifecycle": "experimental"
   }
 }
