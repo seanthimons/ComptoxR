@@ -3144,22 +3144,17 @@
     "issue": 311,
     "name": "chemi_resolver_pubchem_section",
     "file": "R/chemi_resolver_pubchem_section.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))",
     "siblings": [
       "chemi_resolver_pubchem_section_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "resolver/pubchem-section",
-      "supported": [
-        "chemi-resolver-prod.json GET /api/resolver/pubchem-section"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/pubchem-section",
+      "file": "R/chemi_resolver_pubchem_section.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_resolver_resolve": {
@@ -3780,7 +3775,7 @@
       "chemi_hazard_bulk"
     ],
     "disposition": "retained",
-    "reason": "Computed default requires manual mapping",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4138,66 +4133,30 @@
     "issue": 312,
     "name": "chemi_resolver_getpubchemlist",
     "file": "R/chemi_resolver_getpubchemlist.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, all_pages = TRUE, max_pages = 100))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "resolver/getpubchemlist",
-      "supported": [
-        "chemi-resolver-prod.json POST /api/resolver/getpubchemlist"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/getpubchemlist",
+      "file": "R/chemi_resolver_getpubchemlist.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_resolver_getsimilaritylist": {
     "issue": 312,
     "name": "chemi_resolver_getsimilaritylist",
     "file": "R/chemi_resolver_getsimilaritylist.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "resolver/getsimilaritylist",
-      "supported": [
-        "chemi-resolver-prod.json POST /api/resolver/getsimilaritylist"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/getsimilaritylist",
+      "file": "R/chemi_resolver_getsimilaritylist.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_resolver_getsimilaritymap": {
@@ -4208,7 +4167,7 @@
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, sort = FALSE, hclust_method = \"complete\", format = c(\"cluster\", \"long\", \"raw\")))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
+    "reason": "Nonliteral helper argument needs manual mapping",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4245,101 +4204,47 @@
     "issue": 312,
     "name": "chemi_resolver_orderBySimilarity",
     "file": "R/chemi_resolver_orderBySimilarity.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fingerprintName = NULL, get_chemicals = NULL, main = NULL, padelCompute2D = NULL, padelCompute3D = NULL, padelComputeFingerprints = NULL, rdkitBits = NULL, rdkitRadius = NULL, rdkitType = NULL, scoreName = NULL, toxprintsProfile = NULL, tverskyI = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "resolver/orderBySimilarity",
-      "supported": [
-        "chemi-resolver-prod.json POST /api/resolver/orderBySimilarity"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/orderBySimilarity",
+      "file": "R/chemi_resolver_orderBySimilarity.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_resolver_pubchem_section_bulk": {
     "issue": 312,
     "name": "chemi_resolver_pubchem_section_bulk",
     "file": "R/chemi_resolver_pubchem_section.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL))",
     "siblings": [
       "chemi_resolver_pubchem_section"
     ],
-    "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "resolver/pubchem-section",
-      "supported": [
-        "chemi-resolver-prod.json POST /api/resolver/pubchem-section"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/pubchem-section",
+      "file": "R/chemi_resolver_pubchem_section.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_stdizer_chemicals": {
     "issue": 312,
     "name": "chemi_stdizer_chemicals",
     "file": "R/chemi_stdizer_chemicals.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", full = NULL, options = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Description prose needs manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "stdizer/chemicals",
-      "supported": [
-        "chemi-stdizer-prod.json POST /api/stdizer/chemicals"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "POST /api/stdizer/chemicals",
+      "file": "R/chemi_stdizer_chemicals.R",
+      "wave": "prose-defaults"
     }
   },
   "chemi_toxprints_calculate_bulk": {
