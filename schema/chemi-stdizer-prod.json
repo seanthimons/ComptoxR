@@ -894,28 +894,6 @@
       },
       "post": {
         "operationId": "groupCreatePost",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "in": "query",
-            "name": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/LibraryGroupUploadRequest"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {

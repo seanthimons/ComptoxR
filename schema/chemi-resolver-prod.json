@@ -3192,28 +3192,6 @@
       },
       "post": {
         "operationId": "safetyDataFlagsGet_1",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "in": "query",
-            "name": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/FilesUploadRequest"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {

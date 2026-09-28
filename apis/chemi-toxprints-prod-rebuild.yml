@@ -6,10 +6,12 @@ selection:
   include:
   - GET /api/toxprints
   - GET /api/toxprints/assays/check
+  - GET /api/toxprints/calculate
   - GET /api/toxprints/global_assays
   - GET /api/toxprints/global_toxprints
   - GET /api/toxprints/toxprints
   - POST /api/toxprints
+  - POST /api/toxprints/calculate
 helper: generic_request
 documentation: yes
 operations:
@@ -109,6 +111,64 @@ operations:
       return: Returns a list with result object
       examples:
       - name: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/calculate:
+    name: chemi_toxprints_calculate
+    file: R/chemi_toxprints_calculate.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+      labels:
+        type: logical
+        default: no
+        description: 'Optional parameter (default: FALSE)'
+      profile:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/calculate
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            labels:
+              from:
+              - params
+              - labels
+            profile:
+              from:
+              - params
+              - profile
+    docs:
+      title: Toxprints Calculate
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        labels: 'Optional parameter (default: FALSE)'
+        profile: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - smiles: DTXSID7020182
       tags:
         apiStage: public
   GET /api/toxprints/global_assays:
@@ -290,4 +350,164 @@ operations:
       - query: DTXSID1024122
       tags:
         apiStage: public
+  POST /api/toxprints/calculate:
+    name: chemi_toxprints_calculate_bulk
+    file: R/chemi_toxprints_calculate.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      labels:
+        type: character
+        default: ~
+        description: Optional parameter
+      options:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.filesInfo:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.labels:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.OR:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.PV1:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.TP:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.or:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.profile:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.pv1:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.tp:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.resolve:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: toxprints/calculate
+        options:
+          compact_object:
+            labels:
+              from:
+              - params
+              - labels
+            options:
+              from:
+              - params
+              - options
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        request.filesInfo:
+          from:
+          - params
+          - request.filesInfo
+        request.labels:
+          from:
+          - params
+          - request.labels
+        request.options.OR:
+          from:
+          - params
+          - request.options.OR
+        request.options.PV1:
+          from:
+          - params
+          - request.options.PV1
+        request.options.TP:
+          from:
+          - params
+          - request.options.TP
+        request.options.or:
+          from:
+          - params
+          - request.options.or
+        request.options.profile:
+          from:
+          - params
+          - request.options.profile
+        request.options.pv1:
+          from:
+          - params
+          - request.options.pv1
+        request.options.tp:
+          from:
+          - params
+          - request.options.tp
+        request.resolve:
+          from:
+          - params
+          - request.resolve
+    docs:
+      title: Toxprints Calculate
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        labels: Optional parameter
+        options: Optional parameter
+        request.filesInfo: Optional parameter
+        request.labels: Optional parameter
+        request.options.OR: Optional parameter
+        request.options.PV1: Optional parameter
+        request.options.TP: Optional parameter
+        request.options.or: Optional parameter
+        request.options.profile: Optional parameter
+        request.options.pv1: Optional parameter
+        request.options.tp: Optional parameter
+        request.resolve: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml

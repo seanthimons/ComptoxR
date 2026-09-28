@@ -14,11 +14,13 @@ selection:
   - GET /api/resolver/lookupCASRN
   - GET /api/resolver/mesh
   - GET /api/resolver/pubchem-section
+  - GET /api/resolver/safety-flags
   - POST /api/resolver/getpubchemlist
   - POST /api/resolver/getsimilaritylist
   - POST /api/resolver/orderBySimilarity
   - POST /api/resolver/pubchem-section
   - POST /api/resolver/resolve
+  - POST /api/resolver/safety-flags
 helper: generic_request
 documentation: yes
 operations:
@@ -629,6 +631,57 @@ operations:
       - query: DTXSID7020182
       tags:
         apiStage: public
+  GET /api/resolver/safety-flags:
+    name: chemi_resolver_safety_flags
+    file: R/chemi_resolver_safety_flags.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+      idType:
+        type: character
+        default: AnyId
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+    request:
+      arguments:
+        endpoint:
+          value: resolver/safety-flags
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+    docs:
+      title: Resolver Safety Flags
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      return: Returns a list with result object
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
   POST /api/resolver/getpubchemlist:
     name: chemi_resolver_getpubchemlist
     file: R/chemi_resolver_getpubchemlist.R
@@ -1128,6 +1181,178 @@ operations:
       return: Returns a list with result object
       examples:
       - mol: DTXSID1024122
+      tags:
+        apiStage: public
+  POST /api/resolver/safety-flags:
+    name: chemi_resolver_safety_flags_bulk
+    file: R/chemi_resolver_safety_flags.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      additionalProps:
+        type: character
+        default: ~
+        description: Optional parameter
+      averageMass:
+        type: character
+        default: ~
+        description: Optional parameter
+      canonicalSmiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      casrn:
+        type: character
+        default: ~
+        description: Optional parameter
+      chemId:
+        type: character
+        default: ~
+        description: Optional parameter
+      cid:
+        type: character
+        default: ~
+        description: Optional parameter
+      id:
+        type: character
+        default: ~
+        description: Optional parameter
+      image:
+        type: character
+        default: ~
+        description: Optional parameter
+      inchi:
+        type: character
+        default: ~
+        description: Optional parameter
+      inchiKey:
+        type: character
+        default: ~
+        description: Optional parameter
+      mol:
+        type: character
+        default: ~
+        description: Optional parameter
+      molFormula:
+        type: character
+        default: ~
+        description: Optional parameter
+      monoisotopicMass:
+        type: character
+        default: ~
+        description: Optional parameter
+      name:
+        type: character
+        default: ~
+        description: Optional parameter
+      sid:
+        type: character
+        default: ~
+        description: Optional parameter
+      smiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.filesInfo:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - additionalProps
+        endpoint:
+          value: resolver/safety-flags
+        options:
+          compact_object:
+            averageMass:
+              from:
+              - params
+              - averageMass
+            canonicalSmiles:
+              from:
+              - params
+              - canonicalSmiles
+            casrn:
+              from:
+              - params
+              - casrn
+            chemId:
+              from:
+              - params
+              - chemId
+            cid:
+              from:
+              - params
+              - cid
+            id:
+              from:
+              - params
+              - id
+            image:
+              from:
+              - params
+              - image
+            inchi:
+              from:
+              - params
+              - inchi
+            inchiKey:
+              from:
+              - params
+              - inchiKey
+            mol:
+              from:
+              - params
+              - mol
+            molFormula:
+              from:
+              - params
+              - molFormula
+            monoisotopicMass:
+              from:
+              - params
+              - monoisotopicMass
+            name:
+              from:
+              - params
+              - name
+            sid:
+              from:
+              - params
+              - sid
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Resolver Safety Flags
+      lifecycle: experimental
+      parameters:
+        additionalProps: Optional parameter
+        averageMass: Optional parameter
+        canonicalSmiles: Optional parameter
+        casrn: Optional parameter
+        chemId: Optional parameter
+        cid: Optional parameter
+        id: Optional parameter
+        image: Optional parameter
+        inchi: Optional parameter
+        inchiKey: Optional parameter
+        mol: Optional parameter
+        molFormula: Optional parameter
+        monoisotopicMass: Optional parameter
+        name: Optional parameter
+        sid: Optional parameter
+        smiles: Optional parameter
+        request.filesInfo: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - additionalProps: DTXSID1024122
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

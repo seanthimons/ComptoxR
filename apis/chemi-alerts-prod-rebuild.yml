@@ -1,25 +1,25 @@
-id: chemi-stdizer-prod-rebuild
+id: chemi-alerts-prod-rebuild
 schemas:
   files:
-  - schema/chemi-stdizer-prod.json
+  - schema/chemi-alerts-prod.json
 selection:
   include:
-  - GET /api/stdizer/groups
-  - POST /api/stdizer/chemicals
-  - POST /api/stdizer/groups
+  - GET /api/alerts/groups
+  - POST /api/alerts
+  - POST /api/alerts/groups
 helper: generic_request
 documentation: yes
 operations:
-  GET /api/stdizer/groups:
-    name: chemi_stdizer_groups
-    file: R/chemi_stdizer_groups.R
+  GET /api/alerts/groups:
+    name: chemi_alerts_groups
+    file: R/chemi_alerts_groups.R
     helper: generic_request
     implementation: generated
     inputs: {}
     request:
       arguments:
         endpoint:
-          value: stdizer/groups
+          value: alerts/groups
         method:
           value: GET
         batch_limit:
@@ -31,7 +31,7 @@ operations:
         tidy:
           value: no
     docs:
-      title: Stdizer Groups
+      title: Alerts Groups
       lifecycle: experimental
       parameters: {}
       return: Returns a tibble with results
@@ -39,9 +39,9 @@ operations:
       - {}
       tags:
         apiStage: public
-  POST /api/stdizer/chemicals:
-    name: chemi_stdizer_chemicals
-    file: R/chemi_stdizer_chemicals.R
+  POST /api/alerts:
+    name: chemi_alerts
+    file: R/chemi_alerts.R
     helper: generic_chemi_request
     implementation: generated
     inputs:
@@ -55,11 +55,19 @@ operations:
         default: AnyId
         description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
           Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
-      full:
+      options:
         type: character
         default: ~
         description: Optional parameter
-      options:
+      request.filesInfo:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.alerts:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.resolve:
         type: character
         default: ~
         description: Optional parameter
@@ -70,13 +78,9 @@ operations:
           - params
           - query
         endpoint:
-          value: stdizer/chemicals
+          value: alerts
         options:
           compact_object:
-            full:
-              from:
-              - params
-              - full
             options:
               from:
               - params
@@ -88,16 +92,30 @@ operations:
           - hook_state
           - params
           - chemicals
+        request.filesInfo:
+          from:
+          - params
+          - request.filesInfo
+        request.options.alerts:
+          from:
+          - params
+          - request.options.alerts
+        request.options.resolve:
+          from:
+          - params
+          - request.options.resolve
     docs:
-      title: Stdizer Chemicals
+      title: Alerts
       lifecycle: experimental
       parameters:
         query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
           etc.)
         idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
           InChI, InChIKey, InChIKey_1, AnyId (default)'
-        full: Optional parameter
         options: Optional parameter
+        request.filesInfo: Optional parameter
+        request.options.alerts: Optional parameter
+        request.options.resolve: Optional parameter
       return: Returns a tibble with results
       examples:
       - query:
@@ -108,21 +126,13 @@ operations:
         then sends the resolved Chemical objects to the API endpoint.
       tags:
         apiStage: public
-  POST /api/stdizer/groups:
-    name: chemi_stdizer_groups_bulk
-    file: R/chemi_stdizer_groups.R
+  POST /api/alerts/groups:
+    name: chemi_alerts_groups_bulk
+    file: R/chemi_alerts_groups.R
     helper: generic_chemi_request
     implementation: generated
     inputs:
-      acl:
-        type: character
-        default: ~
-        description: Optional parameter
       description:
-        type: character
-        default: ~
-        description: Optional parameter
-      flag:
         type: character
         default: ~
         description: Optional parameter
@@ -134,11 +144,11 @@ operations:
         type: character
         default: ~
         description: Optional parameter
-      invalid:
+      logicType:
         type: character
         default: ~
-        description: Optional parameter
-      invalidMessage:
+        description: 'Optional parameter. Options: NONE, OR, AND, NOT'
+      name:
         type: character
         default: ~
         description: Optional parameter
@@ -153,17 +163,9 @@ operations:
       type:
         type: character
         default: ~
-        description: 'Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS,
-          GROUP, REFERENCE'
+        description: 'Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT,
+          HAZARD, PROPERTY, GROUP, REFERENCE'
       value:
-        type: character
-        default: ~
-        description: Optional parameter
-      request.filesInfo:
-        type: character
-        default: ~
-        description: Optional parameter
-      request.replace:
         type: character
         default: ~
         description: Optional parameter
@@ -172,19 +174,11 @@ operations:
         query:
           from:
           - params
-          - acl
+          - description
         endpoint:
-          value: stdizer/groups
+          value: alerts/groups
         options:
           compact_object:
-            description:
-              from:
-              - params
-              - description
-            flag:
-              from:
-              - params
-              - flag
             frozen:
               from:
               - params
@@ -193,14 +187,14 @@ operations:
               from:
               - params
               - id
-            invalid:
+            logicType:
               from:
               - params
-              - invalid
-            invalidMessage:
+              - logicType
+            name:
               from:
               - params
-              - invalidMessage
+              - name
             operations:
               from:
               - params
@@ -220,26 +214,22 @@ operations:
         tidy:
           value: no
     docs:
-      title: Stdizer Groups
+      title: Alerts Groups
       lifecycle: experimental
       parameters:
-        acl: Optional parameter
         description: Optional parameter
-        flag: Optional parameter
         frozen: Optional parameter
         id: Optional parameter
-        invalid: Optional parameter
-        invalidMessage: Optional parameter
+        logicType: 'Optional parameter. Options: NONE, OR, AND, NOT'
+        name: Optional parameter
         operations: Optional parameter
         text: Optional parameter
-        type: 'Optional parameter. Options: METHOD, SMIRKS, SMILES, SMARTS, GROUP,
-          REFERENCE'
+        type: 'Optional parameter. Options: METHOD, SMILES, SMARTS, TOXPRINT, HAZARD,
+          PROPERTY, GROUP, REFERENCE'
         value: Optional parameter
-        request.filesInfo: Optional parameter
-        request.replace: Optional parameter
       return: Returns a tibble with results
       examples:
-      - acl: DTXSID1024122
+      - description: DTXSID1024122
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

@@ -187,7 +187,7 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
         error = function(e) NULL
       )
       if (!is.null(parsed)) {
-        jsonlite::write_json(parsed, destfile, pretty = TRUE, auto_unbox = TRUE)
+        jsonlite::write_json(strip_multipart_query(parsed), destfile, pretty = TRUE, auto_unbox = TRUE)
       } else {
         writeBin(body_raw, destfile)
       }
@@ -292,6 +292,29 @@ chemi_schema <- function(record = FALSE, timeout = 30) {
   }
 
   invisible(NULL)
+}
+
+# Springdoc folds a @RequestPart upload variant into the JSON operation it shares
+# a route with: a JSON requestBody plus query `files[]` (binary) and `request`
+# (the multipart metadata object). Services cannot send files in a query string,
+# so drop those parameters from operations that already have a JSON body.
+# ponytail: `request` is only dropped alongside a binary param, so a genuine
+# query param of that name on another operation is never touched.
+strip_multipart_query <- function(schema) {
+  is_binary <- function(x) identical(x$format, 'binary') || identical(x$items$format, 'binary')
+  for (path in names(schema$paths)) {
+    for (method in names(schema$paths[[path]])) {
+      op <- schema$paths[[path]][[method]]
+      if (!is.list(op) || is.null(op$requestBody$content[['application/json']])) next
+      query <- vapply(op$parameters, function(p) identical(p[['in']], 'query'), logical(1))
+      binary <- query & vapply(op$parameters, function(p) is_binary(p$schema), logical(1))
+      if (!any(binary)) next
+      request <- query & vapply(op$parameters, function(p) identical(p$name, 'request'), logical(1))
+      kept <- op$parameters[!(binary | request)]
+      schema$paths[[path]][[method]]$parameters <- if (length(kept)) kept
+    }
+  }
+  schema
 }
 
 #' Download the EPI Suite API schema

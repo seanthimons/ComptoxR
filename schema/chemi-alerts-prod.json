@@ -421,28 +421,6 @@
     "/api/alerts": {
       "post": {
         "operationId": "alertRequestPost",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "in": "query",
-            "name": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/AlertFilesRequest"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -588,20 +566,6 @@
       },
       "post": {
         "operationId": "groupCreatePost",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {

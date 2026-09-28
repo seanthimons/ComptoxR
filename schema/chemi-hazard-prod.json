@@ -898,28 +898,6 @@
       },
       "post": {
         "operationId": "hazardPost",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "files[]",
-            "required": true,
-            "schema": {
-              "items": {
-                "format": "binary",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "in": "query",
-            "name": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/HazardMultipartRequest"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {

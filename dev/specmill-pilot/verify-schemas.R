@@ -130,11 +130,13 @@ for (schema in names(pilot)) {
   }
 }
 counts <- table(vapply(blockers, function(x) as.character(x$issue), ''))
+# chemi_schema() strips Springdoc multipart query params (files[], request) from six
+# JSON-body routes, removing six #28 blockers and five masked nested `request` objects.
 stopifnot(
-  length(blockers) == 53L,
-  identical(as.integer(counts[c('26', '27', '28', '29', '31')]), c(26L, 6L, 18L, 1L, 2L)),
+  length(blockers) == 47L,
+  identical(as.integer(counts[c('26', '27', '28', '29', '31')]), c(26L, 6L, 12L, 1L, 2L)),
   sum(vapply(latent, function(x) x$code == 'invalid_type', FALSE)) == 5L,
-  sum(vapply(latent, function(x) x$code == 'nested_parameter', FALSE)) == 13L
+  sum(vapply(latent, function(x) x$code == 'nested_parameter', FALSE)) == 8L
 )
 failed <- Filter(function(x) identical(x$status, 'failed'), fixtures)
 stopifnot(
@@ -168,5 +170,5 @@ cat(
   'schemas;',
   length(blockers),
   'primary blockers; five masked AMOS file defects;',
-  '13 nested query defects; six pilot keys; two native fixture failures retained.\n'
+  '8 nested query defects; six pilot keys; two native fixture failures retained.\n'
 )

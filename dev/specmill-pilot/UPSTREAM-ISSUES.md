@@ -1,12 +1,12 @@
 # Migration blockers and source corrections
 
-The 27 canonical production files declare 548 operations: 495 parse individually and 53 remain contract-blocked or unsupported. 1 whole-service parse is also blocked by a duplicated operation ID. Of the individually parsed canonical routes, 25 have invalid default examples; minimal mode fails for 27, including two empty-multipart fixture limitations. The four legacy snapshots are counted separately below.
+The 27 canonical production files declare 548 operations: 501 parse individually and 47 remain contract-blocked or unsupported. 1 whole-service parse is also blocked by a duplicated operation ID. Of the individually parsed canonical routes, 25 have invalid default examples; minimal mode fails for 27, including two empty-multipart fixture limitations. The four legacy snapshots are counted separately below.
 
 The legacy generator selects the 27 canonical hyphenated production files. Four underscore-named CTX files are legacy snapshots and are audited separately, not additional production services. These results describe source bytes and offline native fixtures, not production behavior or compatibility of existing ComptoxR wrappers. Only declared source types and values determine invalid-example findings; domain plausibility and generated client documentation examples are not evaluated.
 
 | Source group | Files | Declared routes | Individually parsed | Parser blockers | Default failures | Minimal failures |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| canonical_production | 27 | 548 | 495 | 53 | 25 | 27 |
+| canonical_production | 27 | 548 | 501 | 47 | 25 | 27 |
 | legacy_snapshot | 4 | 140 | 140 | 0 | 25 | 25 |
 
 ## What to fix next
@@ -21,8 +21,8 @@ The legacy generator selects the 27 canonical hyphenated production files. Four 
 
 | Mode | Pass | Fail |
 | --- | ---: | ---: |
-| default | 585 | 50 |
-| minimal | 583 | 52 |
+| default | 591 | 50 |
+| minimal | 589 | 52 |
 
 Minimal mode omits optional inputs and reduces coverage. It cannot repair an invalid required example. Explicit overrides were not used. No type/enum contradiction was observed in this corpus; the JSON inventory keeps parser fixture diagnostics separately if future schemas introduce them.
 
@@ -30,8 +30,6 @@ Minimal mode omits optional inputs and reduces coverage. It cannot repair an inv
 
 | Schema | Method and path | Issue | Diagnostic / upstream action | Source pointer |
 | --- | --- | --- | --- | --- |
-| `chemi-alerts-prod.json` | `POST /api/alerts` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1alerts/post/parameters/0/schema` |
-| `chemi-alerts-prod.json` | `POST /api/alerts/groups` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1alerts~1groups/post/parameters/0/schema` |
 | `chemi-alerts-prod.json` | `POST /api/alerts/groups/{id}/add` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1alerts~1groups~1{id}~1add/post/parameters/1/schema` |
 | `chemi-alerts-prod.json` | `POST /api/alerts/groups/{id}/replace` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1alerts~1groups~1{id}~1replace/post/parameters/1/schema` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_aqc_spectrum/` | #26 | Ambiguous body media type Declare service-owned consumes/media and body representation. | `#/paths/~1api~1amos~1add_aqc_spectrum~1/post/parameters/0/schema` |
@@ -66,23 +64,19 @@ Minimal mode omits optional inputs and reduces coverage. It cannot repair an inv
 | `chemi-amos-prod.json` | `POST /api/amos/spectrum_count_for_methodology/` | #26 | Ambiguous body media type Declare service-owned consumes/media and body representation. | `#/paths/~1api~1amos~1spectrum_count_for_methodology~1/post/parameters/0/schema` |
 | `chemi-amos-prod.json` | `POST /api/amos/substances_for_classification/` | #26 | Ambiguous body media type Declare service-owned consumes/media and body representation. | `#/paths/~1api~1amos~1substances_for_classification~1/post/parameters/0/schema` |
 | `chemi-amos-prod.json` | `POST /api/amos/substances_for_ids/` | #26 | Ambiguous body media type Declare service-owned consumes/media and body representation. | `#/paths/~1api~1amos~1substances_for_ids~1/post/parameters/0/schema` |
-| `chemi-hazard-prod.json` | `POST /api/hazard` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1hazard/post/parameters/0/schema` |
 | `chemi-resolver-prod.json` | `POST /api/resolver/casharvest` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1resolver~1casharvest/post/parameters/0/schema` |
 | `chemi-resolver-prod.json` | `GET /api/resolver/ghs-list-count` | #29 | OAS 3.1 GET request body requires an explicit operation body_media review GET-body route remains unsupported (#29); upstream must clarify its supported contract. | `#/paths/~1api~1resolver~1ghs-list-count/get/requestBody` |
-| `chemi-resolver-prod.json` | `POST /api/resolver/safety-flags` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1resolver~1safety-flags/post/parameters/0/schema` |
 | `chemi-resolver-prod.json` | `POST /api/resolver/universalharvest` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1resolver~1universalharvest/post/parameters/0/schema` |
 | `chemi-services-prod.json` | `POST /api/services/caspreflight` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1services~1caspreflight/post/parameters/0/schema` |
 | `chemi-services-prod.json` | `POST /api/services/files` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1services~1files/post/parameters/0/schema` |
 | `chemi-services-prod.json` | `POST /api/services/preflight` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1services~1preflight/post/parameters/0/schema` |
 | `chemi-services-prod.json` | `POST /api/services/universalpreflight` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1services~1universalpreflight/post/parameters/0/schema` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1stdizer/post/parameters/0/schema` |
-| `chemi-stdizer-prod.json` | `POST /api/stdizer/groups` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1stdizer~1groups/post/parameters/0/schema` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/groups/preflight` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1stdizer~1groups~1preflight/post/parameters/0/schema` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/groups/{id}/add` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1stdizer~1groups~1{id}~1add/post/parameters/1/schema` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/groups/{id}/replace` | #28 | Binary parameter requires source contract review (#16) Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1stdizer~1groups~1{id}~1replace/post/parameters/1/schema` |
 | `chemi-stdizer-prod.json` | `GET /api/stdizer/protocols/{id}` | #31 | Unsupported nested parameter object Specify nested-query field names and exact serialization, including arrays. | `#/paths/~1api~1stdizer~1protocols~1{id}/get/parameters/6/schema` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/protocols/{id}` | #31 | Unsupported nested parameter object Specify nested-query field names and exact serialization, including arrays. | `#/paths/~1api~1stdizer~1protocols~1{id}/post/parameters/1/schema` |
-| `chemi-toxprints-prod.json` | `POST /api/toxprints/calculate` | #28 | Binary parameter requires source contract review (#16); Unsupported nested parameter object Specify file location, representation, media and relation to metadata. | `#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema` |
 
 ## Independent defects masked by the first parser error
 
@@ -90,24 +84,19 @@ Correcting a primary blocker alone does not resolve these additional defects. So
 
 | Schema | Method and path | Issue | Input | Additional defect | Source pointer |
 | --- | --- | --- | --- | --- | --- |
-| `chemi-alerts-prod.json` | `POST /api/alerts` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1alerts/post/parameters/1` |
 | `chemi-alerts-prod.json` | `POST /api/alerts/groups/{id}/add` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1alerts~1groups~1{id}~1add/post/parameters/2` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_aqc_spectrum/` | #27 | `body` | Invalid input schema type | `#/definitions/NewAnalyticalQCSpectrum/properties/file/type` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_new_fact_sheet/` | #27 | `body` | Invalid input schema type | `#/definitions/NewFactSheet/properties/file/type` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_new_method/` | #27 | `body` | Invalid input schema type | `#/definitions/NewMethod/properties/file/type` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_new_product_declaration/` | #27 | `body` | Invalid input schema type | `#/definitions/NewDocument/properties/file/type` |
 | `chemi-amos-prod.json` | `POST /api/amos/add_new_safety_data_sheet/` | #27 | `body` | Invalid input schema type | `#/definitions/NewDocument/properties/file/type` |
-| `chemi-hazard-prod.json` | `POST /api/hazard` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1hazard/post/parameters/1` |
 | `chemi-resolver-prod.json` | `POST /api/resolver/casharvest` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1resolver~1casharvest/post/parameters/1` |
-| `chemi-resolver-prod.json` | `POST /api/resolver/safety-flags` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1resolver~1safety-flags/post/parameters/1` |
 | `chemi-resolver-prod.json` | `POST /api/resolver/universalharvest` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1resolver~1universalharvest/post/parameters/1` |
 | `chemi-services-prod.json` | `POST /api/services/files` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1services~1files/post/parameters/1` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1stdizer/post/parameters/1` |
-| `chemi-stdizer-prod.json` | `POST /api/stdizer/groups` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1stdizer~1groups/post/parameters/1` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/groups/{id}/add` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1stdizer~1groups~1{id}~1add/post/parameters/2` |
 | `chemi-stdizer-prod.json` | `GET /api/stdizer/protocols/{id}` | #31 | `pageable` | Unsupported nested parameter object | `#/paths/~1api~1stdizer~1protocols~1{id}/get/parameters/6` |
 | `chemi-stdizer-prod.json` | `POST /api/stdizer/protocols/{id}` | #31 | `pageable` | Unsupported nested parameter object | `#/paths/~1api~1stdizer~1protocols~1{id}/post/parameters/1` |
-| `chemi-toxprints-prod.json` | `POST /api/toxprints/calculate` | #31 | `request` | Unsupported nested parameter object | `#/paths/~1api~1toxprints~1calculate/post/parameters/1` |
 
 ## Invalid fixture examples by stable route
 
@@ -177,7 +166,15 @@ These routes pass native default fixtures. Minimal mode omits every optional pro
 
 ## Unparsed schema: chemi-chet-prod.json
 
-Operation name collision; supply reviewed name overrides
+Operation name collision; supply reviewed name overrides:
+  api.reaction.map_dl_options:
+    OPTIONS /reaction/batchsearch
+    OPTIONS /reaction/map_DL
+Review these example names and pass policy = list(names = list(
+  "OPTIONS /reaction/batchsearch" = "api.reaction.map_dl_options",
+  "OPTIONS /reaction/map_DL" = "api.reaction.map_dl_options_1"
+)).
+For a generated client, edit the service YAML names: map written by initialize_client() before calling generate_client(). configure_client() reports collisions for review.
 
 Duplicate IDs block whole-service parsing. All routes below were also parsed and fixture-tested independently using their exact method/path include key, without naming overrides. Individual success does not remove the whole-service naming conflict.
 
@@ -331,4 +328,4 @@ Do not file their repeated failures as extra canonical-production defects. Byte 
 
 Run `Rscript dev/specmill-pilot/audit-all-schemas.R` after installing the isolated toolkit with `Rscript dev/install_specmill.R`.
 
-Toolkit commit: `f41eeb9bae628eeb1f0fee16227f5ee8373a7ae2`. Source hashes, stable keys and complete per-mode outcomes are in `all-schema-diagnostics.json`. No schemas, client policies or production endpoints are changed.
+Toolkit commit: `2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c`. Source hashes, stable keys and complete per-mode outcomes are in `all-schema-diagnostics.json`. No schemas, client policies or production endpoints are changed.
