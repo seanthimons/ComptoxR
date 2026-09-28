@@ -801,60 +801,45 @@
     "issue": 310,
     "name": "ct_chemical_list_chemicals_search_contain",
     "file": "R/ct_chemical_list_chemicals_search_contain.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(list = , word = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/list/chemicals/search/contain/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/contain/{list}/{word}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/chemicals/search/contain/{list}/{word}",
+      "file": "R/ct_chemical_list_chemicals_search_contain.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_list_chemicals_search_equal": {
     "issue": 310,
     "name": "ct_chemical_list_chemicals_search_equal",
     "file": "R/ct_chemical_list_chemicals_search_equal.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(list = , word = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/list/chemicals/search/equal/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/equal/{list}/{word}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/chemicals/search/equal/{list}/{word}",
+      "file": "R/ct_chemical_list_chemicals_search_equal.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_list_chemicals_search_start_with": {
     "issue": 310,
     "name": "ct_chemical_list_chemicals_search_start_with",
     "file": "R/ct_chemical_list_chemicals_search_start_with.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(list = , word = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/list/chemicals/search/start-with/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/list/chemicals/search/start-with/{list}/{word}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/list/chemicals/search/start-with/{list}/{word}",
+      "file": "R/ct_chemical_list_chemicals_search_start_with.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_list_search": {
@@ -966,20 +951,15 @@
     "issue": 310,
     "name": "ct_chemical_property_experimental_search_by_range",
     "file": "R/ct_chemical_property_experimental_search_by_range.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(propertyName = , start = NULL, end = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/property/experimental/search/by-range/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}",
+      "file": "R/ct_chemical_property_experimental_search_by_range.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_property_predicted_name": {
@@ -1031,20 +1011,15 @@
     "issue": 310,
     "name": "ct_chemical_property_predicted_search_by_range",
     "file": "R/ct_chemical_property_predicted_search_by_range.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(propertyId = , start = NULL, end = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/property/predicted/search/by-range/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}",
+      "file": "R/ct_chemical_property_predicted_search_by_range.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_property_summary_experimental_search": {
@@ -2491,20 +2466,15 @@
     "issue": 311,
     "name": "chemi_chet_chemicals_image",
     "file": "R/chemi_chet_chemicals_image.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(chemical_id = , width = NULL, height = NULL, format = \"png\"))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemicals/image",
-      "supported": [
-        "chemi-chet-prod.json GET /chemicals/{chemical_id}/image"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /chemicals/{chemical_id}/image",
+      "file": "R/chemi_chet_chemicals_image.R",
+      "wave": "path-params"
     }
   },
   "chemi_chet_chemicals_maps": {
@@ -3409,12 +3379,10 @@
   "ct_chemical_msready_search_by_mass_bulk": {
     "issue": 311,
     "name": "ct_chemical_msready_search_by_mass_bulk",
-    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "file": "R/ct_chemical_msready_search_by_mass_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(error = , masses = ))",
-    "siblings": [
-      "ct_chemical_msready_search_by_mass"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -4296,20 +4264,15 @@
     "issue": 313,
     "name": "chemi_amos_get_pdf",
     "file": "R/chemi_amos_get_pdf.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(record_type = , internal_id = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/get_pdf/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/get_pdf/{record_type}/{internal_id}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/get_pdf/{record_type}/{internal_id}",
+      "file": "R/chemi_amos_get_pdf.R",
+      "wave": "path-params"
     }
   },
   "chemi_amos_get_similar_structures": {
@@ -4397,20 +4360,15 @@
     "issue": 313,
     "name": "chemi_amos_method_with_spectra",
     "file": "R/chemi_amos_method_with_spectra.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(search_type = , internal_id = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/method_with_spectra/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}",
+      "file": "R/chemi_amos_method_with_spectra.R",
+      "wave": "path-params"
     }
   },
   "chemi_amos_record_counts": {
@@ -4444,20 +4402,15 @@
     "issue": 313,
     "name": "chemi_amos_record_ids_for_substance",
     "file": "R/chemi_amos_record_ids_for_substance.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(dtxsid = , record_type = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/record_ids_for_substance/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}",
+      "file": "R/chemi_amos_record_ids_for_substance.R",
+      "wave": "path-params"
     }
   },
   "chemi_amos_spectral_entropy": {
@@ -4518,40 +4471,30 @@
     "issue": 313,
     "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
     "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(pagenum = , searchterm = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "reaction/database-old/",
-      "supported": [
-        "chemi-chet-prod.json GET /reaction/database-old/{pagenum}/{searchterm}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/database-old/{pagenum}/{searchterm}",
+      "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
+      "wave": "path-params"
     }
   },
   "chemi_chet_reaction_searchcounts": {
     "issue": 313,
     "name": "chemi_chet_reaction_searchcounts",
     "file": "R/chemi_chet_reaction_searchcounts.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(search_input = , search_type = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "reaction/searchcounts/",
-      "supported": [
-        "chemi-chet-prod.json GET /reaction/searchcounts/{search_input}/{search_type}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "GET /reaction/searchcounts/{search_input}/{search_type}",
+      "file": "R/chemi_chet_reaction_searchcounts.R",
+      "wave": "path-params"
     }
   },
   "chemi_resolver_ghs_list_count": {
@@ -4585,42 +4528,30 @@
     "issue": 313,
     "name": "chemi_stdizer_groups_recursive",
     "file": "R/chemi_stdizer_groups_recursive.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(id = ))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "stdizer/groups/recursive",
-      "supported": [
-        "chemi-stdizer-prod.json GET /api/stdizer/groups/{id}/recursive"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "GET /api/stdizer/groups/{id}/recursive",
+      "file": "R/chemi_stdizer_groups_recursive.R",
+      "wave": "path-params"
     }
   },
   "ct_chemical_msready_search_by_mass": {
     "issue": 313,
     "name": "ct_chemical_msready_search_by_mass",
     "file": "R/ct_chemical_msready_search_by_mass.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(start = , end = NULL))",
-    "siblings": [
-      "ct_chemical_msready_search_by_mass_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/msready/search/by-mass/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/msready/search/by-mass/{start}/{end}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/msready/search/by-mass/{start}/{end}",
+      "file": "R/ct_chemical_msready_search_by_mass.R",
+      "wave": "path-params"
     }
   },
   "chemi_alerts_groups": {
