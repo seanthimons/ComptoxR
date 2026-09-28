@@ -51,7 +51,8 @@ before$interfaces <- before$interfaces[setdiff(names(before$interfaces), removed
 corrected_exports <- c('chemi_chet_chemicals_image', 'chemi_stdizer_groups_recursive')
 corrected <- sprintf('^(invalid-[a-z]+-)?(%s)(-.+)?$', paste(corrected_exports, collapse = '|'))
 before$cases <- before$cases[!grepl(corrected, names(before$cases))]
-before$full_failures <- before$full_failures[setdiff(names(before$full_failures), corrected_exports)]
+before$full_failures <- before$full_failures[!names(before$full_failures) %in% corrected_exports]
+if (!length(before$full_failures)) before$full_failures <- list()
 corrected_cases <- names(after$cases)[grepl(corrected, names(after$cases))]
 after$cases <- after$cases[!grepl(corrected, names(after$cases))]
 # Failure diagnostics contain output directory names; compare successful cases directly.
