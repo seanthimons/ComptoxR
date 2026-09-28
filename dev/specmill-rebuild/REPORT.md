@@ -88,7 +88,7 @@ and adds `propose_mappings()` and `verify_adoption()`
 Re-pinning changed no generated wrapper: `--apply` only updated the manifest's
 `toolkit_version`, and the 204-file rehearsal stayed byte-identical.
 
-## Generation waves (#310, #311, #314)
+## Generation waves (#310-#312, #314)
 
 `Rscript dev/specmill-rebuild/wave.R <name>` screens every unmapped export and
 stages mechanical candidates in a detached worktree. It stops if the generated
