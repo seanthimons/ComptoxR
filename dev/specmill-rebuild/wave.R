@@ -321,7 +321,7 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       )
       hooked <- isTRUE(record$hooked)
       if (hooked) config$hook_config <- 'inst/hook_config.yml'
-      yaml::write_yaml(config, file.path(out, 'review.yml'))
+      yaml::write_yaml(config, file.path(out, 'review.yml'), precision = 15L)
       yaml::write_yaml(
         list(config_version = 1L, package = 'ComptoxR', services = list(file.path(out, 'review.yml'))),
         file.path(out, 'project.yml')
@@ -516,7 +516,7 @@ for (schema in unique(vapply(candidates, `[[`, '', 'schema'))) {
     service$hook_config <- 'inst/hook_config.yml'
   }
   service$operations <- service$operations[sort(names(service$operations))]
-  yaml::write_yaml(service, file.path(work, path))
+  yaml::write_yaml(service, file.path(work, path), precision = 15L)
 }
 yaml::write_yaml(project, file.path(work, 'specmill.yml'))
 files <- unique(vapply(candidates, `[[`, '', 'file'))
