@@ -1,0 +1,381 @@
+id: chemi-amos-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-amos-prod.json
+selection:
+  include:
+  - GET /api/amos/analytical_qc_keyset_pagination/{limit}
+  - GET /api/amos/fact_sheet_keyset_pagination/{limit}
+  - GET /api/amos/method_keyset_pagination/{limit}
+  - GET /api/amos/product_declaration_keyset_pagination/{limit}
+  - GET /api/amos/safety_data_sheet_keyset_pagination/{limit}
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/amos/analytical_qc_keyset_pagination/{limit}:
+    name: chemi_amos_analytical_qc_keyset_pagination
+    file: R/chemi_amos_analytical_qc_keyset_pagination.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      limit:
+        type: character
+        required: yes
+        description: Limit of records to return.
+      cursor:
+        type: character
+        default: ~
+        description: Optional keyset cursor returned by a previous response.
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/analytical_qc_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of Analytical QC documents using keyset
+        pagination.
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a tibble with results
+      examples:
+      - limit: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/amos/fact_sheet_keyset_pagination/{limit}:
+    name: chemi_amos_fact_sheet_keyset_pagination
+    file: R/chemi_amos_fact_sheet_keyset_pagination.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      limit:
+        type: character
+        required: yes
+        description: Limit of records to return.
+      cursor:
+        type: character
+        default: ~
+        description: Optional keyset cursor returned by a previous response.
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/fact_sheet_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of fact sheets using keyset pagination.
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a tibble with results
+      examples:
+      - limit: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/amos/method_keyset_pagination/{limit}:
+    name: chemi_amos_method_keyset_pagination
+    file: R/chemi_amos_method_keyset_pagination.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      limit:
+        type: character
+        required: yes
+        description: Limit of records to return.
+      cursor:
+        type: character
+        default: ~
+        description: Optional keyset cursor returned by a previous response.
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/method_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of methods using keyset pagination.
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a tibble with results
+      examples:
+      - limit: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/amos/product_declaration_keyset_pagination/{limit}:
+    name: chemi_amos_product_declaration_keyset_pagination
+    file: R/chemi_amos_product_declaration_keyset_pagination.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      limit:
+        type: character
+        required: yes
+        description: Limit of records to return.
+      cursor:
+        type: character
+        default: ~
+        description: Optional keyset cursor returned by a previous response.
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/product_declaration_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of product declarations using keyset pagination.
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a tibble with results
+      examples:
+      - limit: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/amos/safety_data_sheet_keyset_pagination/{limit}:
+    name: chemi_amos_safety_data_sheet_keyset_pagination
+    file: R/chemi_amos_safety_data_sheet_keyset_pagination.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      limit:
+        type: character
+        required: yes
+        description: Limit of records to return.
+      cursor:
+        type: character
+        default: ~
+        description: Optional keyset cursor returned by a previous response.
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - limit
+        endpoint:
+          value: amos/safety_data_sheet_keyset_pagination/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            cursor:
+              from:
+              - params
+              - cursor
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: cursor
+        pagination_cursor_location:
+          value: query
+    docs:
+      title: Returns information on a batch of safety data sheets using keyset pagination.
+      lifecycle: experimental
+      parameters:
+        limit: Limit of records to return.
+        cursor: Optional keyset cursor returned by a previous response.
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a tibble with results
+      examples:
+      - limit: DTXSID7020182
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

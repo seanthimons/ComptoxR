@@ -4,12 +4,62 @@ schemas:
   - schema/chemi-stdizer-prod.json
 selection:
   include:
+  - GET /api/stdizer
   - GET /api/stdizer/groups
   - POST /api/stdizer/chemicals
   - POST /api/stdizer/groups
 helper: generic_request
 documentation: yes
 operations:
+  GET /api/stdizer:
+    name: chemi_stdizer
+    file: R/chemi_stdizer.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      workflow:
+        type: character
+        required: yes
+        description: Required parameter
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+    request:
+      arguments:
+        endpoint:
+          value: stdizer
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            workflow:
+              from:
+              - params
+              - workflow
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Stdizer
+      lifecycle: experimental
+      parameters:
+        workflow: Required parameter
+        smiles: Required parameter
+      return: Returns a tibble with results
+      examples:
+      - workflow: DTXSID7020182
+      tags:
+        apiStage: public
   GET /api/stdizer/groups:
     name: chemi_stdizer_groups
     file: R/chemi_stdizer_groups.R

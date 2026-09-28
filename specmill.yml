@@ -37,5 +37,7 @@ services:
 - apis/chemi-stdizer-prod-rebuild.yml
 - apis/chemi-alerts-prod-rebuild.yml
 - apis/chemi-hazard-prod-rebuild.yml
+- apis/chemi-amos-prod-rebuild.yml
+- apis/chemi-predictor_models-prod-rebuild.yml
 callback_files:
 - dev/specmill_callbacks.R

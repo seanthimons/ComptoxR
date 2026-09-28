@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1174,
+  "passed_cases": 1225,
   "exported_signatures": 408,
   "removed_exports": "ct_similar",
   "failures": [],
@@ -391,6 +391,26 @@
       "schema": "chemi-amnb_nate-prod.json",
       "key": "POST /api/amnb_nate"
     },
+    "chemi_amos_analytical_qc_keyset_pagination": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/analytical_qc_keyset_pagination/{limit}"
+    },
+    "chemi_amos_fact_sheet_keyset_pagination": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}"
+    },
+    "chemi_amos_method_keyset_pagination": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/method_keyset_pagination/{limit}"
+    },
+    "chemi_amos_product_declaration_keyset_pagination": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}"
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}"
+    },
     "chemi_arn_cats": {
       "schema": "chemi-arn_cats-prod.json",
       "key": "GET /api/arn_cats"
@@ -483,6 +503,10 @@
       "schema": "chemi-ncc_cats-prod.json",
       "key": "POST /api/ncc_cats"
     },
+    "chemi_opera": {
+      "schema": "chemi-opera-prod.json",
+      "key": "GET /api/opera"
+    },
     "chemi_opera_report": {
       "schema": "chemi-opera-prod.json",
       "key": "GET /api/opera/report"
@@ -502,6 +526,10 @@
     "chemi_pfas_cats_bulk": {
       "schema": "chemi-pfas_cats-prod.json",
       "key": "POST /api/pfas_cats"
+    },
+    "chemi_predictor_models_predict": {
+      "schema": "chemi-predictor_models-prod.json",
+      "key": "GET /api/predictor_models/predict"
     },
     "chemi_resolver_ccte_list": {
       "schema": "chemi-resolver-prod.json",
@@ -603,6 +631,10 @@
       "schema": "chemi-services-prod.json",
       "key": "GET /api/services/smirks2rxn"
     },
+    "chemi_stdizer": {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "GET /api/stdizer"
+    },
     "chemi_stdizer_chemicals": {
       "schema": "chemi-stdizer-prod.json",
       "key": "POST /api/stdizer/chemicals"
@@ -618,6 +650,10 @@
     "chemi_toxprints": {
       "schema": "chemi-toxprints-prod.json",
       "key": "GET /api/toxprints"
+    },
+    "chemi_toxprints_assays": {
+      "schema": "chemi-toxprints-prod.json",
+      "key": "GET /api/toxprints/assays"
     },
     "chemi_toxprints_assays_check": {
       "schema": "chemi-toxprints-prod.json",
@@ -858,6 +894,10 @@
     "ct_chemical_property_summary_search_by_dtxsid": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/property/summary/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_chemical_search_equal": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/search/equal/{word}"
     },
     "ct_exposure_functional_use_category": {
       "schema": "ctx-exposure-prod.json",
@@ -4338,6 +4378,216 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "chemi_amos_analytical_qc_keyset_pagination-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/analytical_qc_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_analytical_qc_keyset_pagination-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/analytical_qc_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_analytical_qc_keyset_pagination-pagination": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_analytical_qc_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"limit\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_analytical_qc_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_analytical_qc_keyset_pagination-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/analytical_qc_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_fact_sheet_keyset_pagination-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/fact_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_fact_sheet_keyset_pagination-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/fact_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_fact_sheet_keyset_pagination-pagination": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_fact_sheet_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"limit\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_fact_sheet_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_fact_sheet_keyset_pagination-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/fact_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_keyset_pagination-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/method_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_keyset_pagination-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/method_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_keyset_pagination-pagination": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_method_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"limit\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_method_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_method_keyset_pagination-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/method_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_product_declaration_keyset_pagination-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/product_declaration_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_product_declaration_keyset_pagination-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/product_declaration_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_product_declaration_keyset_pagination-pagination": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_product_declaration_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"limit\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_product_declaration_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_product_declaration_keyset_pagination-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/product_declaration_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/safety_data_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/safety_data_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination-pagination": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_safety_data_sheet_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"limit\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_safety_data_sheet_keyset_pagination": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_safety_data_sheet_keyset_pagination-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "No results found for the given query in \"amos/safety_data_sheet_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
     "chemi_arn_cats-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4856,6 +5106,34 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "chemi_opera-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_opera-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_opera-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_opera": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
     "chemi_opera_report-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4981,6 +5259,34 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_predictor_models_predict-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_predictor_models_predict-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_predictor_models_predict-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_predictor_models_predict": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"model_id\" is missing, with no default"
     },
     "chemi_resolver_ccte_list-minimal": {
       "requests": 1,
@@ -5640,6 +5946,34 @@
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"smirks\" is missing, with no default"
     },
+    "chemi_stdizer-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_stdizer": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"workflow\" is missing, with no default"
+    },
     "chemi_stdizer_chemicals-minimal": {
       "requests": 1,
       "classes": "NULL",
@@ -5730,6 +6064,27 @@
       "warnings": [],
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_toxprints_assays-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_assays-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_toxprints_assays-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
     },
     "chemi_toxprints_assays_check-minimal": {
       "requests": 1,
@@ -7811,6 +8166,48 @@
       "error_message": null
     },
     "ct_chemical_property_summary_search_by_dtxsid-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"word\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_search_equal-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-batches": {
       "requests": 3,
       "classes": ["tbl_df", "tbl", "data.frame"],
       "warnings": [],

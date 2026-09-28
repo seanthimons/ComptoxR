@@ -4,10 +4,72 @@ schemas:
   - schema/chemi-opera-prod.json
 selection:
   include:
+  - GET /api/opera
   - GET /api/opera/report
 helper: generic_request
 documentation: yes
 operations:
+  GET /api/opera:
+    name: chemi_opera
+    file: R/chemi_opera.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: SMILES to generate predictions for
+      format:
+        type: character
+        default: json
+        description: 'Format to return predictions in (json, csv, xlsx) (default:
+          json)'
+      standardize:
+        type: logical
+        default: no
+        description: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+    request:
+      arguments:
+        endpoint:
+          value: opera
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            format:
+              from:
+              - params
+              - format
+            standardize:
+              from:
+              - params
+              - standardize
+    docs:
+      title: Opera
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
+        standardize: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+      return: Returns a list with result object
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
   GET /api/opera/report:
     name: chemi_opera_report
     file: R/chemi_opera_report.R

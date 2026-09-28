@@ -5,6 +5,7 @@ schemas:
 selection:
   include:
   - GET /api/toxprints
+  - GET /api/toxprints/assays
   - GET /api/toxprints/assays/check
   - GET /api/toxprints/calculate
   - GET /api/toxprints/global_assays
@@ -71,6 +72,55 @@ operations:
       return: Returns a list with result object
       examples:
       - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/assays:
+    name: chemi_toxprints_assays
+    file: R/chemi_toxprints_assays.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      label:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/assays
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            category:
+              from:
+              - params
+              - category
+            label:
+              from:
+              - params
+              - label
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        category: Optional parameter
+        label: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - category: DTXSID7020182
       tags:
         apiStage: public
   GET /api/toxprints/assays/check:
