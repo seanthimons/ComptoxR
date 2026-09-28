@@ -15,22 +15,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_analytical_qc_keyset_pagination": {
-    "name": "chemi_amos_analytical_qc_keyset_pagination",
-    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_analytical_qc_keyset_pagination_bulk": {
     "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
-    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_amos_analytical_qc_keyset_pagination": {
+    "name": "chemi_amos_analytical_qc_keyset_pagination",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_batch": {
     "name": "chemi_amos_batch",
@@ -64,22 +64,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_fact_sheet_keyset_pagination": {
-    "name": "chemi_amos_fact_sheet_keyset_pagination",
-    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_fact_sheet_keyset_pagination_bulk": {
     "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
-    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_amos_fact_sheet_keyset_pagination": {
+    "name": "chemi_amos_fact_sheet_keyset_pagination",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_for_document_ids": {
     "name": "chemi_amos_for_document_ids",
@@ -145,22 +145,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_method_keyset_pagination": {
-    "name": "chemi_amos_method_keyset_pagination",
-    "file": "R/chemi_amos_method_keyset_pagination.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/method_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_method_keyset_pagination_bulk": {
     "name": "chemi_amos_method_keyset_pagination_bulk",
-    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "file": "R/chemi_amos_method_keyset_pagination_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_amos_method_keyset_pagination": {
+    "name": "chemi_amos_method_keyset_pagination",
+    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/method_keyset_pagination/{limit}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_method_with_spectra": {
     "name": "chemi_amos_method_with_spectra",
@@ -178,22 +178,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_product_declaration_keyset_pagination": {
-    "name": "chemi_amos_product_declaration_keyset_pagination",
-    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_product_declaration_keyset_pagination_bulk": {
     "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
-    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_amos_product_declaration_keyset_pagination": {
+    "name": "chemi_amos_product_declaration_keyset_pagination",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_record_counts": {
     "name": "chemi_amos_record_counts",
@@ -235,22 +235,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_amos_safety_data_sheet_keyset_pagination": {
-    "name": "chemi_amos_safety_data_sheet_keyset_pagination",
-    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-amos-prod.json",
-    "key": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
-    "lifecycle": "experimental"
-  },
   "chemi_amos_safety_data_sheet_keyset_pagination_bulk": {
     "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
-    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_amos_safety_data_sheet_keyset_pagination": {
+    "name": "chemi_amos_safety_data_sheet_keyset_pagination",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+    "lifecycle": "experimental"
   },
   "chemi_amos_spectral_entropy": {
     "name": "chemi_amos_spectral_entropy",
@@ -349,24 +349,6 @@
     "schema": null,
     "key": null
   },
-  "chemi_hazard": {
-    "name": "chemi_hazard",
-    "file": "R/chemi_hazard.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-hazard-prod.json",
-    "key": "GET /api/hazard",
-    "lifecycle": "experimental"
-  },
-  "chemi_hazard_bulk": {
-    "name": "chemi_hazard_bulk",
-    "file": "R/chemi_hazard.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "chemi-hazard-prod.json",
-    "key": "POST /api/hazard",
-    "lifecycle": "experimental"
-  },
   "chemi_mordred": {
     "name": "chemi_mordred",
     "file": "R/chemi_mordred.R",
@@ -383,22 +365,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_opera": {
-    "name": "chemi_opera",
-    "file": "R/chemi_opera.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-opera-prod.json",
-    "key": "GET /api/opera",
-    "lifecycle": "experimental"
-  },
   "chemi_opera_bulk": {
     "name": "chemi_opera_bulk",
-    "file": "R/chemi_opera.R",
+    "file": "R/chemi_opera_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_opera": {
+    "name": "chemi_opera",
+    "file": "R/chemi_opera.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-opera-prod.json",
+    "key": "GET /api/opera",
+    "lifecycle": "experimental"
   },
   "chemi_padel": {
     "name": "chemi_padel",
@@ -424,22 +406,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_predictor_models_predict": {
-    "name": "chemi_predictor_models_predict",
-    "file": "R/chemi_predictor_models_predict.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-predictor_models-prod.json",
-    "key": "GET /api/predictor_models/predict",
-    "lifecycle": "experimental"
-  },
   "chemi_predictor_models_predict_bulk": {
     "name": "chemi_predictor_models_predict_bulk",
-    "file": "R/chemi_predictor_models_predict.R",
+    "file": "R/chemi_predictor_models_predict_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_predictor_models_predict": {
+    "name": "chemi_predictor_models_predict",
+    "file": "R/chemi_predictor_models_predict.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-predictor_models-prod.json",
+    "key": "GET /api/predictor_models/predict",
+    "lifecycle": "experimental"
   },
   "chemi_rdkit": {
     "name": "chemi_rdkit",
@@ -473,22 +455,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_resolver_lookup": {
-    "name": "chemi_resolver_lookup",
-    "file": "R/chemi_resolver_lookup.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-resolver-prod.json",
-    "key": "GET /api/resolver/lookup",
-    "lifecycle": "stable"
-  },
   "chemi_resolver_lookup_bulk": {
     "name": "chemi_resolver_lookup_bulk",
-    "file": "R/chemi_resolver_lookup.R",
+    "file": "R/chemi_resolver_lookup_bulk.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
+  },
+  "chemi_resolver_lookup": {
+    "name": "chemi_resolver_lookup",
+    "file": "R/chemi_resolver_lookup.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/lookup",
+    "lifecycle": "stable"
   },
   "chemi_safety_rqcodes": {
     "name": "chemi_safety_rqcodes",
@@ -503,6 +485,14 @@
     "file": "R/chemi_safety_sections.R",
     "status": "retained",
     "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_bulk": {
+    "name": "chemi_stdizer_bulk",
+    "file": "R/chemi_stdizer_bulk.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
     "schema": null,
     "key": null
   },
@@ -525,19 +515,11 @@
   "chemi_stdizer": {
     "name": "chemi_stdizer",
     "file": "R/chemi_stdizer.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-stdizer-prod.json",
     "key": "GET /api/stdizer",
     "lifecycle": "experimental"
-  },
-  "chemi_stdizer_bulk": {
-    "name": "chemi_stdizer_bulk",
-    "file": "R/chemi_stdizer.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
   },
   "chemi_toxprint": {
     "name": "chemi_toxprint",
@@ -547,22 +529,22 @@
     "schema": null,
     "key": null
   },
-  "chemi_toxprints_assays": {
-    "name": "chemi_toxprints_assays",
-    "file": "R/chemi_toxprints_assays.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "schema": "chemi-toxprints-prod.json",
-    "key": "GET /api/toxprints/assays",
-    "lifecycle": "experimental"
-  },
   "chemi_toxprints_assays_bulk": {
     "name": "chemi_toxprints_assays_bulk",
-    "file": "R/chemi_toxprints_assays.R",
+    "file": "R/chemi_toxprints_assays_bulk.R",
     "status": "retained",
     "reason": "Options prelude overwrites the public options argument (original defect); retained",
     "schema": null,
     "key": null
+  },
+  "chemi_toxprints_assays": {
+    "name": "chemi_toxprints_assays",
+    "file": "R/chemi_toxprints_assays.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "GET /api/toxprints/assays",
+    "lifecycle": "experimental"
   },
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
@@ -670,7 +652,7 @@
   },
   "ct_chemical_search_equal_bulk": {
     "name": "ct_chemical_search_equal_bulk",
-    "file": "R/ct_chemical_search_equal.R",
+    "file": "R/ct_chemical_search_equal_bulk.R",
     "status": "retained",
     "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-chemical-prod.json",
@@ -679,8 +661,8 @@
   "ct_chemical_search_equal": {
     "name": "ct_chemical_search_equal",
     "file": "R/ct_chemical_search_equal.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-chemical-prod.json",
     "key": "GET /chemical/search/equal/{word}",
     "lifecycle": "stable"
