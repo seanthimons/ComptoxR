@@ -1,0 +1,27 @@
+{
+  "wave": "hazard",
+  "base_commit": "8ad0c6b1324305687f97952ef27225e80591a03e",
+  "worktree": "/home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/hook-pilot/dev/specmill-pilot/artifacts/wave-hazard",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 2,
+  "files": [
+    "R/chemi_hazard.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/chemi_hazard.R",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M specmill.yml",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? apis/chemi-hazard-prod-rebuild.yml",
+    "?? tests/testthat/test-contract-chemi_hazard.R",
+    "?? tests/testthat/test-contract-chemi_hazard_bulk.R"
+  ]
+}

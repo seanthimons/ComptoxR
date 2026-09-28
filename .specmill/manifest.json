@@ -237,6 +237,10 @@
       "hash": "0e25d5c5471cebc82199aefef2dd994df4f81c23dd29d033caa6ed4966d4e2e9",
       "operations": "chemi-chet-prod-rebuild GET /reaction/table"
     },
+    "R/chemi_hazard.R": {
+      "hash": "13768a6c65b13aecc98ca91844bf768927dac314574cabb568589521bd521219",
+      "operations": ["chemi-hazard-prod-rebuild GET /api/hazard", "chemi-hazard-prod-rebuild POST /api/hazard"]
+    },
     "R/chemi_ncc_cats.R": {
       "hash": "8b29854d1d1911e3d8c145858b81ec5c0426fb60194ed6c78315f97621398499",
       "operations": ["chemi-ncc_cats-prod-rebuild GET /api/ncc_cats", "chemi-ncc_cats-prod-rebuild POST /api/ncc_cats"]
@@ -1157,6 +1161,14 @@
       "hash": "687300fd21998012b6d9698545b786d329743edecd92c3ef553c303591f623d1",
       "operations": "chemi-chet-prod-rebuild GET /reaction/table"
     },
+    "tests/testthat/test-contract-chemi_hazard.R": {
+      "hash": "f22cc09f4feaba29a1cef09beaaba749325748e8698faf8d12e0768b70b3d614",
+      "operations": "chemi-hazard-prod-rebuild GET /api/hazard"
+    },
+    "tests/testthat/test-contract-chemi_hazard_bulk.R": {
+      "hash": "c42e6951970dd4e019c3d1aee2c712d16683e4121be5a792edc741abb039d3c7",
+      "operations": "chemi-hazard-prod-rebuild POST /api/hazard"
+    },
     "tests/testthat/test-contract-chemi_ncc_cats.R": {
       "hash": "2e81521e65ea27565c2eadf2635c8d1c8151353e029c384420663469fcd6f07e",
       "operations": "chemi-ncc_cats-prod-rebuild GET /api/ncc_cats"
@@ -2064,7 +2076,7 @@
     "R/chemi_classyfire.R": "ed76f3dba77a60db89f2eeea1c3d30a40eeac31b3dc21c9cb465d9e0321615f7",
     "R/chemi_descriptors.R": "15f9fc5b946f820b2b86de9273af34f005735bc80a86610ed601aa1396d7c5e6",
     "R/chemi_functional_use.R": "a599d571068cb0734e54b805c88ac4097386897687f97a1d336c34e6399b4549",
-    "R/chemi_hazard.R": "a8ba4a502b4ff0f392ee6eb109d9666814f11b4638358ee1b3f0978e704f5689",
+    "R/chemi_hazard.R": "13768a6c65b13aecc98ca91844bf768927dac314574cabb568589521bd521219",
     "R/chemi_mordred.R": "ace844f179b84c65c1cb16228c9a2762252674d15c3d6ebbec83da4c80a4f432",
     "R/chemi_ncc_cats.R": "8b29854d1d1911e3d8c145858b81ec5c0426fb60194ed6c78315f97621398499",
     "R/chemi_opera.R": "0a13fc413603081b28edfbb59a828f929e3846f2fefcb3a0efe019539bfd1784",
@@ -2318,6 +2330,7 @@
     "apis/chemi-arn_cats-prod-rebuild.yml": "f8410d269f647de82ffd26ca42639dddbc4f0ad2a1c9a9afc5a28e869b8b1162",
     "apis/chemi-chet-prod-full.yml": "6889d5ac349c6faedf5f6fe4e6a557d3ccf67c39452218cc9bb96efd087e3531",
     "apis/chemi-chet-prod-rebuild.yml": "4251005f3e460af08ea2f0dfabe509193ebe9852892c08999ca34b07418935c6",
+    "apis/chemi-hazard-prod-rebuild.yml": "c177682b67ad0acf5a474aa9aa8a18c7aff794af6feac4af86f910034d84fcea",
     "apis/chemi-ncc_cats-prod-rebuild.yml": "f8f958f20a8b4a9c80e6bff726816c09adf8387ce758a7f1dd54b802d8913c0b",
     "apis/chemi-opera-prod-rebuild.yml": "c22d4be1cbe5e4c4c99be52b8817fdd7603aa2294c86fb3be8e759593e64e41d",
     "apis/chemi-pfas_atlas-prod-rebuild.yml": "29e5b95ec3c93240542f4dc7892befee6644f29c23c1f7a8e9e03ade06137417",
@@ -2821,6 +2834,7 @@
     "schema/chemi-amos-prod.json": "af48cfae59b5d4d7c3adc09f4a42e67b92f8646cba16770947e02153e1fbdefe",
     "schema/chemi-arn_cats-prod.json": "34206d545144e2a03e0b5faff3cacc10e1322929d3d4ee646f9ff0aa4396112f",
     "schema/chemi-chet-prod.json": "a92a5bb5b616f268f87bb980e75339d31ec26b3eaa14f3a0bdc3f6ad8636abcd",
+    "schema/chemi-hazard-prod.json": "77be98a135fb9890f85502bdcf3c3b5f4f06cc1e1cc4aa03b1648b64bbc0045b",
     "schema/chemi-ncc_cats-prod.json": "db617be49fd53baf2f6ad6a2eefae5d0fba61ab46bfc61a301324deabbc9d200",
     "schema/chemi-opera-prod.json": "5ce86ab409b4e077fc0d6f3df3545d196edbd2fc7532dee3e5ce9c01bb7aab54",
     "schema/chemi-pfas_atlas-prod.json": "a609b3852f2c7695e923dd7df0ff2ecf88dbe8f8ea0facb56a7605429dba8ea5",
@@ -2835,10 +2849,10 @@
     "schema/ctx-exposure-prod.json": "1af4a35e7998d2a1a00a675ae3da850164b2afa2dd595f4be6cb3b4b37ed582d",
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
-    "specmill.yml": "86eb3aa7c37ec013b2dbc44d17797c9054f13a068b16fefb187e7560d6455863",
+    "specmill.yml": "d9923bc9ad5338f8a465883addc82f9304320c4a47b93f297aed6e5f2e4920c8",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "932d884caa24c57f4cafe43d9b252e27c5f3b1d4dbce4ad716db410298289088",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "bf6c3d6528808f36a7b8e0eb70e68762bb859a2b2b5c696dcd574bb4a1bf322c"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "0bfa8efb16427004ecb04fe23c29e33f68324a42effeebcf08fd598605cb2c27"
   },
   "callbacks": "19f9ea013410d4c0ef9ffb6710f1bc5ec9ab07008b422dd87ffbd0bd94f35920",
   "formatter": {

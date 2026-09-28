@@ -10,8 +10,9 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1166,
-  "exported_signatures": 409,
+  "passed_cases": 1174,
+  "exported_signatures": 408,
+  "removed_exports": "ct_similar",
   "failures": [],
   "operations": {
     "chemi_amos_database": {
@@ -465,6 +466,14 @@
     "chemi_chet_reaction_table": {
       "schema": "chemi-chet-prod.json",
       "key": "GET /reaction/table"
+    },
+    "chemi_hazard": {
+      "schema": "chemi-hazard-prod.json",
+      "key": "GET /api/hazard"
+    },
+    "chemi_hazard_bulk": {
+      "schema": "chemi-hazard-prod.json",
+      "key": "POST /api/hazard"
     },
     "chemi_ncc_cats": {
       "schema": "chemi-ncc_cats-prod.json",
@@ -4741,6 +4750,62 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_hazard-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_hazard-explicit": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_hazard-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_hazard": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_hazard_bulk-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_hazard_bulk-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_hazard_bulk-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_hazard_bulk()` failed in pre-request hook `resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_hazard_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
     },
     "chemi_ncc_cats-minimal": {
       "requests": 1,

@@ -1,0 +1,203 @@
+id: chemi-hazard-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-hazard-prod.json
+selection:
+  include:
+  - GET /api/hazard
+  - POST /api/hazard
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/hazard:
+    name: chemi_hazard
+    file: R/chemi_hazard.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+      full:
+        type: logical
+        default: yes
+        description: 'Optional parameter (default: TRUE)'
+      format:
+        type: character
+        default:
+        - compact
+        - tidy
+        - raw
+        description: Output format. One of 'compact', 'tidy', or 'raw'
+    request:
+      arguments:
+        endpoint:
+          value: hazard
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            full:
+              from:
+              - params
+              - full
+    docs:
+      title: Hazard
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        full: 'Optional parameter (default: TRUE)'
+        format: Output format. One of 'compact', 'tidy', or 'raw'
+      return: Returns a tibble with results
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/hazard:
+    name: chemi_hazard_bulk
+    file: R/chemi_hazard.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      empty:
+        type: character
+        default: ~
+        description: Optional parameter
+      options:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.filesInfo:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.analogsSearchType:
+        type: character
+        default: ~
+        description: 'Optional parameter. Options: EXACT, SUBSTRUCTURE, SIMILAR, TOXPRINTS,
+          FORMULA, MASS, FEATURES, HAZARD, ADVANCED'
+      request.options.cts:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.minSimilarity:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.noRecords:
+        type: character
+        default: ~
+        description: Optional parameter
+      request.options.usePredictions:
+        type: character
+        default: ~
+        description: Optional parameter
+      format:
+        type: character
+        default:
+        - compact
+        - tidy
+        - raw
+        description: Output format. One of 'compact', 'tidy', or 'raw'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: hazard
+        options:
+          compact_object:
+            empty:
+              from:
+              - params
+              - empty
+            options:
+              from:
+              - params
+              - options
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        request.filesInfo:
+          from:
+          - params
+          - request.filesInfo
+        request.options.analogsSearchType:
+          from:
+          - params
+          - request.options.analogsSearchType
+        request.options.cts:
+          from:
+          - params
+          - request.options.cts
+        request.options.minSimilarity:
+          from:
+          - params
+          - request.options.minSimilarity
+        request.options.noRecords:
+          from:
+          - params
+          - request.options.noRecords
+        request.options.usePredictions:
+          from:
+          - params
+          - request.options.usePredictions
+    docs:
+      title: Hazard
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        empty: Optional parameter
+        options: Optional parameter
+        request.filesInfo: Optional parameter
+        request.options.analogsSearchType: 'Optional parameter. Options: EXACT, SUBSTRUCTURE,
+          SIMILAR, TOXPRINTS, FORMULA, MASS, FEATURES, HAZARD, ADVANCED'
+        request.options.cts: Optional parameter
+        request.options.minSimilarity: Optional parameter
+        request.options.noRecords: Optional parameter
+        request.options.usePredictions: Optional parameter
+        format: Output format. One of 'compact', 'tidy', or 'raw'
+      return: Returns a tibble with results
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
