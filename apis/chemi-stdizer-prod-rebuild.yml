@@ -6,6 +6,7 @@ selection:
   include:
   - GET /api/stdizer
   - GET /api/stdizer/groups
+  - GET /api/stdizer/groups/{id}/recursive
   - POST /api/stdizer/chemicals
   - POST /api/stdizer/groups
 helper: generic_request
@@ -87,6 +88,46 @@ operations:
       return: Returns a tibble with results
       examples:
       - {}
+      tags:
+        apiStage: public
+  GET /api/stdizer/groups/{id}/recursive:
+    name: chemi_stdizer_groups_recursive
+    file: R/chemi_stdizer_groups_recursive.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      id:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - id
+        endpoint:
+          value: stdizer/groups/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          value: recursive
+    docs:
+      title: Stdizer Groups Recursive
+      lifecycle: experimental
+      parameters:
+        id: 'Primary query parameter. Type: string'
+      return: Returns a tibble with results
+      examples:
+      - id: DTXSID7020182
       tags:
         apiStage: public
   POST /api/stdizer/chemicals:

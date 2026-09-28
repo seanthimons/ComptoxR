@@ -6,8 +6,11 @@ selection:
   include:
   - GET /api/amos/analytical_qc_keyset_pagination/{limit}
   - GET /api/amos/fact_sheet_keyset_pagination/{limit}
+  - GET /api/amos/get_pdf/{record_type}/{internal_id}
   - GET /api/amos/method_keyset_pagination/{limit}
+  - GET /api/amos/method_with_spectra/{search_type}/{internal_id}
   - GET /api/amos/product_declaration_keyset_pagination/{limit}
+  - GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}
   - GET /api/amos/safety_data_sheet_keyset_pagination/{limit}
 helper: generic_request
 documentation: yes
@@ -159,6 +162,57 @@ operations:
       - limit: DTXSID7020182
       tags:
         apiStage: public
+  GET /api/amos/get_pdf/{record_type}/{internal_id}:
+    name: chemi_amos_get_pdf
+    file: R/chemi_amos_get_pdf.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      record_type:
+        type: character
+        required: yes
+        description: A string indicating which kind of record is being retrieved.  Valid
+          values are 'fact sheet', 'method', and 'spectrum'.
+      internal_id:
+        type: character
+        default: ~
+        description: Unique ID of the document of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - record_type
+        endpoint:
+          value: amos/get_pdf/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    docs:
+      title: Retrieves a PDF from the database by the internal ID and type of record.
+      lifecycle: experimental
+      parameters:
+        record_type: A string indicating which kind of record is being retrieved.  Valid
+          values are 'fact sheet', 'method', and 'spectrum'.
+        internal_id: Unique ID of the document of interest.
+      return: Returns a tibble with results
+      examples:
+      - record_type: DTXSID7020182
+      tags:
+        apiStage: public
   GET /api/amos/method_keyset_pagination/{limit}:
     name: chemi_amos_method_keyset_pagination
     file: R/chemi_amos_method_keyset_pagination.R
@@ -232,6 +286,58 @@ operations:
       - limit: DTXSID7020182
       tags:
         apiStage: public
+  GET /api/amos/method_with_spectra/{search_type}/{internal_id}:
+    name: chemi_amos_method_with_spectra
+    file: R/chemi_amos_method_with_spectra.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      search_type:
+        type: character
+        required: yes
+        description: How to search the database.  Valid values are "spectrum" and
+          "method".
+      internal_id:
+        type: character
+        default: ~
+        description: Unique ID of the spectrum or method of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_type
+        endpoint:
+          value: amos/method_with_spectra/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            internal_id:
+              from:
+              - params
+              - internal_id
+    docs:
+      title: Returns information about a method with linked spectra, given an ID for
+        either a spectrum or a method.
+      lifecycle: experimental
+      parameters:
+        search_type: How to search the database.  Valid values are "spectrum" and
+          "method".
+        internal_id: Unique ID of the spectrum or method of interest.
+      return: Returns a tibble with results
+      examples:
+      - search_type: DTXSID7020182
+      tags:
+        apiStage: public
   GET /api/amos/product_declaration_keyset_pagination/{limit}:
     name: chemi_amos_product_declaration_keyset_pagination
     file: R/chemi_amos_product_declaration_keyset_pagination.R
@@ -303,6 +409,56 @@ operations:
       return: Returns a tibble with results
       examples:
       - limit: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}:
+    name: chemi_amos_record_ids_for_substance
+    file: R/chemi_amos_record_ids_for_substance.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      dtxsid:
+        type: character
+        required: yes
+        description: The DTXSID for the substance of interest.
+      record_type:
+        type: character
+        default: ~
+        description: The record type of interest.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: amos/record_ids_for_substance/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            record_type:
+              from:
+              - params
+              - record_type
+    docs:
+      title: Returns a list of record IDs that are associated with the given DTXSID.  This
+        is intended to help when filtering
+      lifecycle: experimental
+      parameters:
+        dtxsid: The DTXSID for the substance of interest.
+        record_type: The record type of interest.
+      return: Returns a tibble with results
+      examples:
+      - dtxsid: DTXSID7020182
       tags:
         apiStage: public
   GET /api/amos/safety_data_sheet_keyset_pagination/{limit}:

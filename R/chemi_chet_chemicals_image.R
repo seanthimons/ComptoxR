@@ -1,8 +1,8 @@
 #' Render a chemical structure image
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param chemical_id Primary query parameter. Type: integer
 #' @param width Optional parameter
 #' @param height Optional parameter
@@ -10,36 +10,30 @@
 #' @return Returns image data (raw bytes or magick image object)
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
 #' }
+# Generated with specmill; do not edit by hand.
 chemi_chet_chemicals_image <- function(chemical_id, width = NULL, height = NULL, format = "png") {
-  # Collect optional parameters
-  options <- list()
-  if (!is.null(width)) {
-    options[['width']] <- width
-  }
-  if (!is.null(height)) {
-    options[['height']] <- height
-  }
-  if (!is.null(format)) {
-    options[['format']] <- format
-  }
+  params <- base::list("chemical_id" = chemical_id, "width" = width, "height" = height, "format" = format)
   result <- generic_request(
-    query = chemical_id,
-    endpoint = "chemicals/image",
-    method = "GET",
-    batch_limit = 1,
-    server = "chemi_burl",
-    auth = FALSE,
-    tidy = FALSE,
-    content_type = "application/pdf, image/png, image/svg+xml",
-    options = options
+    "query" = params[["chemical_id"]],
+    "endpoint" = "chemicals/",
+    "method" = "GET",
+    "batch_limit" = 1,
+    "server" = "chemi_burl",
+    "auth" = FALSE,
+    "tidy" = FALSE,
+    "content_type" = "application/pdf, image/png, image/svg+xml",
+    "options" = base::local({
+      .body <- base::Filter(
+        base::Negate(base::is.null),
+        base::list("width" = params[["width"]], "height" = params[["height"]], "format" = params[["format"]])
+      )
+      if (base::length(.body)) .body else base::list()
+    }),
+    "path_params" = "image"
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

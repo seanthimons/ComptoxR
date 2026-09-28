@@ -10,9 +10,11 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1225,
+  "passed_cases": 1302,
   "exported_signatures": 408,
   "removed_exports": "ct_similar",
+  "corrected_exports": ["chemi_chet_chemicals_image", "chemi_stdizer_groups_recursive"],
+  "corrected_cases": ["chemi_chet_chemicals_image-minimal", "chemi_chet_chemicals_image-explicit", "chemi_chet_chemicals_image-http-400", "invalid-missing-chemi_chet_chemicals_image", "invalid-empty-chemi_chet_chemicals_image", "chemi_chet_chemicals_image-encoding", "chemi_chet_chemicals_image-batches", "chemi_stdizer_groups_recursive-minimal", "chemi_stdizer_groups_recursive-http-400", "invalid-missing-chemi_stdizer_groups_recursive", "invalid-empty-chemi_stdizer_groups_recursive", "chemi_stdizer_groups_recursive-encoding", "chemi_stdizer_groups_recursive-batches"],
   "failures": [],
   "operations": {
     "chemi_amos_database": {
@@ -399,13 +401,25 @@
       "schema": "chemi-amos-prod.json",
       "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}"
     },
+    "chemi_amos_get_pdf": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/get_pdf/{record_type}/{internal_id}"
+    },
     "chemi_amos_method_keyset_pagination": {
       "schema": "chemi-amos-prod.json",
       "key": "GET /api/amos/method_keyset_pagination/{limit}"
     },
+    "chemi_amos_method_with_spectra": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/method_with_spectra/{search_type}/{internal_id}"
+    },
     "chemi_amos_product_declaration_keyset_pagination": {
       "schema": "chemi-amos-prod.json",
       "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}"
+    },
+    "chemi_amos_record_ids_for_substance": {
+      "schema": "chemi-amos-prod.json",
+      "key": "GET /api/amos/record_ids_for_substance/{dtxsid}/{record_type}"
     },
     "chemi_amos_safety_data_sheet_keyset_pagination": {
       "schema": "chemi-amos-prod.json",
@@ -439,6 +453,10 @@
       "schema": "chemi-chet-prod.json",
       "key": "GET /chemicals/database/stats"
     },
+    "chemi_chet_chemicals_image": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /chemicals/{chemical_id}/image"
+    },
     "chemi_chet_chemicals_maps": {
       "schema": "chemi-chet-prod.json",
       "key": "GET /chemicals/maps"
@@ -459,6 +477,10 @@
       "schema": "chemi-chet-prod.json",
       "key": "GET /reaction/database"
     },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/database-old/{pagenum}/{searchterm}"
+    },
     "chemi_chet_reaction_database_stats": {
       "schema": "chemi-chet-prod.json",
       "key": "GET /reaction/database/stats"
@@ -478,6 +500,10 @@
     "chemi_chet_reaction_reactionmap": {
       "schema": "chemi-chet-prod.json",
       "key": "GET /reaction/reactionmap"
+    },
+    "chemi_chet_reaction_searchcounts": {
+      "schema": "chemi-chet-prod.json",
+      "key": "GET /reaction/searchcounts/{search_input}/{search_type}"
     },
     "chemi_chet_reaction_singlereaction": {
       "schema": "chemi-chet-prod.json",
@@ -646,6 +672,10 @@
     "chemi_stdizer_groups_bulk": {
       "schema": "chemi-stdizer-prod.json",
       "key": "POST /api/stdizer/groups"
+    },
+    "chemi_stdizer_groups_recursive": {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "GET /api/stdizer/groups/{id}/recursive"
     },
     "chemi_toxprints": {
       "schema": "chemi-toxprints-prod.json",
@@ -839,6 +869,18 @@
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/list/chemicals/search/by-listname/{list}"
     },
+    "ct_chemical_list_chemicals_search_contain": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/chemicals/search/contain/{list}/{word}"
+    },
+    "ct_chemical_list_chemicals_search_equal": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/chemicals/search/equal/{list}/{word}"
+    },
+    "ct_chemical_list_chemicals_search_start_with": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/list/chemicals/search/start-with/{list}/{word}"
+    },
     "ct_chemical_list_search": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/list/search/by-dtxsid/{dtxsid}"
@@ -855,6 +897,10 @@
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/list/type"
     },
+    "ct_chemical_msready_search_by_mass": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/msready/search/by-mass/{start}/{end}"
+    },
     "ct_chemical_property_experimental_name": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/property/experimental/name"
@@ -867,6 +913,10 @@
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}"
     },
+    "ct_chemical_property_experimental_search_by_range": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/property/experimental/search/by-range/{propertyName}/{start}/{end}"
+    },
     "ct_chemical_property_predicted_name": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/property/predicted/name"
@@ -878,6 +928,10 @@
     "ct_chemical_property_predicted_search_by_dtxsid": {
       "schema": "ctx-chemical-prod.json",
       "key": "GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}"
+    },
+    "ct_chemical_property_predicted_search_by_range": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/property/predicted/search/by-range/{propertyId}/{start}/{end}"
     },
     "ct_chemical_property_summary_experimental_search": {
       "schema": "ctx-chemical-prod.json",
@@ -4462,6 +4516,55 @@
       "error_classes": null,
       "error_message": null
     },
+    "chemi_amos_get_pdf-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_get_pdf-path": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_get_pdf-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_amos_get_pdf": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"record_type\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_pdf": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_get_pdf-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_get_pdf-batches": {
+      "requests": 3,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "chemi_amos_method_keyset_pagination-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4504,6 +4607,55 @@
       "error_classes": null,
       "error_message": null
     },
+    "chemi_amos_method_with_spectra-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_with_spectra-path": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_with_spectra-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_amos_method_with_spectra": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"search_type\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_method_with_spectra": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_method_with_spectra-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_method_with_spectra-batches": {
+      "requests": 3,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "chemi_amos_product_declaration_keyset_pagination-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4543,6 +4695,55 @@
       "requests": 1,
       "classes": "list",
       "warnings": "No results found for the given query in \"amos/product_declaration_keyset_pagination/\".",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_record_ids_for_substance-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_record_ids_for_substance-path": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_record_ids_for_substance-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_amos_record_ids_for_substance": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_record_ids_for_substance": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_record_ids_for_substance-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_record_ids_for_substance-batches": {
+      "requests": 3,
+      "classes": "list",
+      "warnings": [],
       "error_classes": null,
       "error_message": null
     },
@@ -4854,6 +5055,55 @@
       "error_classes": null,
       "error_message": null
     },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm-path": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"pagenum\" is missing, with no default"
+    },
+    "invalid-empty-chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_database_old_by_pagenum_and_searchterm-batches": {
+      "requests": 3,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "chemi_chet_reaction_database_stats-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4958,6 +5208,55 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_chet_reaction_searchcounts-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_searchcounts-path": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_searchcounts-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_chet_reaction_searchcounts": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"search_input\" is missing, with no default"
+    },
+    "invalid-empty-chemi_chet_reaction_searchcounts": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_chet_reaction_searchcounts-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_chet_reaction_searchcounts-batches": {
+      "requests": 3,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
     },
     "chemi_chet_reaction_singlereaction-minimal": {
       "requests": 1,
@@ -7731,6 +8030,153 @@
       "error_classes": null,
       "error_message": null
     },
+    "ct_chemical_list_chemicals_search_contain-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_contain-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_contain-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_list_chemicals_search_contain": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"list\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_list_chemicals_search_contain": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_list_chemicals_search_contain-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_contain-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_equal-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_equal-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_equal-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_list_chemicals_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"list\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_list_chemicals_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_list_chemicals_search_equal-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_equal-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_start_with-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_start_with-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_start_with-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_list_chemicals_search_start_with": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"list\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_list_chemicals_search_start_with": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_list_chemicals_search_start_with-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_list_chemicals_search_start_with-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_chemical_list_search-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -7871,6 +8317,55 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "ct_chemical_msready_search_by_mass-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_msready_search_by_mass-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_msready_search_by_mass-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_msready_search_by_mass": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"start\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_msready_search_by_mass": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_msready_search_by_mass-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_msready_search_by_mass-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_chemical_property_experimental_name-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -7969,6 +8464,55 @@
       "error_classes": null,
       "error_message": null
     },
+    "ct_chemical_property_experimental_search_by_range-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_experimental_search_by_range-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_experimental_search_by_range-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_property_experimental_search_by_range": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"propertyName\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_property_experimental_search_by_range": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_property_experimental_search_by_range-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_experimental_search_by_range-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
     "ct_chemical_property_predicted_name-minimal": {
       "requests": 1,
       "classes": ["tbl_df", "tbl", "data.frame"],
@@ -8061,6 +8605,55 @@
       "error_message": null
     },
     "ct_chemical_property_predicted_search_by_dtxsid-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_predicted_search_by_range-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_predicted_search_by_range-path": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_predicted_search_by_range-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_property_predicted_search_by_range": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"propertyId\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_property_predicted_search_by_range": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_property_predicted_search_by_range-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_property_predicted_search_by_range-batches": {
       "requests": 3,
       "classes": ["tbl_df", "tbl", "data.frame"],
       "warnings": [],

@@ -1,28 +1,26 @@
 #' Get MS-ready chemicals using mass range
 #'
+#' @md
 #' @description
 #' `r lifecycle::badge("experimental")`
-#'
 #' @param start Starting mass value. Type: number
 #' @param end Ending mass value. Type: number
 #' @return Returns a tibble with results (array of objects)
 #' @apiStage public
 #' @export
-#'
 #' @examples
 #' \dontrun{
 #' ct_chemical_msready_search_by_mass(start = "200.9")
 #' }
+# Generated with specmill; do not edit by hand.
 ct_chemical_msready_search_by_mass <- function(start, end = NULL) {
+  params <- base::list("start" = start, "end" = end)
   result <- generic_request(
-    query = start,
-    endpoint = "chemical/msready/search/by-mass/",
-    method = "GET",
-    batch_limit = 1,
-    path_params = c(end = end)
+    "query" = params[["start"]],
+    "endpoint" = "chemical/msready/search/by-mass/",
+    "method" = "GET",
+    "batch_limit" = 1,
+    "path_params" = base::c("end" = params[["end"]])
   )
-
-  # Additional post-processing can be added here
-
-  return(result)
+  result
 }

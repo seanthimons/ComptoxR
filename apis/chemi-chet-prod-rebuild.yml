@@ -4,6 +4,7 @@ schemas:
   - schema/chemi-chet-prod.json
 selection:
   include:
+  - GET /chemicals/{chemical_id}/image
   - GET /chemicals/alias
   - GET /chemicals/chemset
   - GET /chemicals/counts
@@ -13,17 +14,90 @@ selection:
   - GET /chemicals/singlechemical
   - GET /chemicals/suggest
   - GET /reaction/database
+  - GET /reaction/database-old/{pagenum}/{searchterm}
   - GET /reaction/database/stats
   - GET /reaction/details
   - GET /reaction/mapid
   - GET /reaction/react_maps
   - GET /reaction/reactionmap
   - GET /reaction/search
+  - GET /reaction/searchcounts/{search_input}/{search_type}
   - GET /reaction/singlereaction
   - GET /reaction/table
 helper: generic_request
 documentation: yes
 operations:
+  GET /chemicals/{chemical_id}/image:
+    name: chemi_chet_chemicals_image
+    file: R/chemi_chet_chemicals_image.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      chemical_id:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: integer'
+      width:
+        type: character
+        default: ~
+        description: Optional parameter
+      height:
+        type: character
+        default: ~
+        description: Optional parameter
+      format:
+        type: character
+        default: png
+        description: 'Optional parameter. Options: png, svg, pdf (default: png)'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemical_id
+        endpoint:
+          value: chemicals/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        content_type:
+          value: application/pdf, image/png, image/svg+xml
+        options:
+          compact_object:
+            width:
+              from:
+              - params
+              - width
+            height:
+              from:
+              - params
+              - height
+            format:
+              from:
+              - params
+              - format
+        path_params:
+          value: image
+    docs:
+      title: Render a chemical structure image
+      lifecycle: experimental
+      parameters:
+        chemical_id: 'Primary query parameter. Type: integer'
+        width: Optional parameter
+        height: Optional parameter
+        format: 'Optional parameter. Options: png, svg, pdf (default: png)'
+      return: Returns image data (raw bytes or magick image object)
+      examples:
+      - chemical_id: DTXSID7020182
+      tags:
+        apiStage: public
   GET /chemicals/alias:
     name: chemi_chet_chemicals_alias
     file: R/chemi_chet_chemicals_alias.R
@@ -597,6 +671,55 @@ operations:
       - page: DTXSID7020182
       tags:
         apiStage: public
+  GET /reaction/database-old/{pagenum}/{searchterm}:
+    name: chemi_chet_reaction_database_old_by_pagenum_and_searchterm
+    file: R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      pagenum:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: integer'
+      searchterm:
+        type: character
+        default: ~
+        description: 'Optional parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - pagenum
+        endpoint:
+          value: reaction/database-old/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            searchterm:
+              from:
+              - params
+              - searchterm
+    docs:
+      title: Search reactions (legacy)
+      lifecycle: experimental
+      parameters:
+        pagenum: 'Primary query parameter. Type: integer'
+        searchterm: 'Optional parameter. Type: string'
+      return: Returns a list with result object
+      examples:
+      - pagenum: DTXSID7020182
+      tags:
+        apiStage: public
   GET /reaction/database/stats:
     name: chemi_chet_reaction_database_stats
     file: R/chemi_chet_reaction_database_stats.R
@@ -862,6 +985,55 @@ operations:
       return: Returns a tibble with results (array of objects)
       examples:
       - query: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /reaction/searchcounts/{search_input}/{search_type}:
+    name: chemi_chet_reaction_searchcounts
+    file: R/chemi_chet_reaction_searchcounts.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      search_input:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+      search_type:
+        type: character
+        default: ~
+        description: 'Optional parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - search_input
+        endpoint:
+          value: reaction/searchcounts/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        path_params:
+          vector:
+            search_type:
+              from:
+              - params
+              - search_type
+    docs:
+      title: Count search results
+      lifecycle: experimental
+      parameters:
+        search_input: 'Primary query parameter. Type: string'
+        search_type: 'Optional parameter. Type: string'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - search_input: DTXSID7020182
       tags:
         apiStage: public
   GET /reaction/singlereaction:
