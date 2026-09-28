@@ -738,16 +738,17 @@
   "ct_bioactivity_data_aed_search_bulk": {
     "name": "ct_bioactivity_data_aed_search_bulk",
     "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/aed/search/by-dtxsid/"
+    "key": "POST /bioactivity/data/aed/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_bioactivity_data_aed_search": {
     "name": "ct_bioactivity_data_aed_search",
     "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-bioactivity-prod.json",
     "key": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
@@ -755,18 +756,20 @@
   "ct_bioactivity_data_search_bulk": {
     "name": "ct_bioactivity_data_search_bulk",
     "file": "R/ct_bioactivity_data_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-dtxsid/"
+    "key": "POST /bioactivity/data/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_chemical_fate_search_bulk": {
     "name": "ct_chemical_fate_search_bulk",
     "file": "R/ct_chemical_fate_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/fate/search/by-dtxsid/"
+    "key": "POST /chemical/fate/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
@@ -836,7 +839,7 @@
     "name": "ct_chemical_search_equal_bulk",
     "file": "R/ct_chemical_search_equal.R",
     "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-chemical-prod.json",
     "key": "POST /chemical/search/equal/"
   },
@@ -860,16 +863,17 @@
   "ct_hazard_cancer_search_bulk": {
     "name": "ct_hazard_cancer_search_bulk",
     "file": "R/ct_hazard_cancer_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/cancer-summary/search/by-dtxsid/"
+    "key": "POST /hazard/cancer-summary/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_hazard_cancer_search": {
     "name": "ct_hazard_cancer_search",
     "file": "R/ct_hazard_cancer_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
@@ -877,16 +881,17 @@
   "ct_hazard_genetox_details_search_bulk": {
     "name": "ct_hazard_genetox_details_search_bulk",
     "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/details/search/by-dtxsid/"
+    "key": "POST /hazard/genetox/details/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_hazard_genetox_details_search": {
     "name": "ct_hazard_genetox_details_search",
     "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
@@ -894,16 +899,17 @@
   "ct_hazard_genetox_search_bulk": {
     "name": "ct_hazard_genetox_search_bulk",
     "file": "R/ct_hazard_genetox_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/summary/search/by-dtxsid/"
+    "key": "POST /hazard/genetox/summary/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_hazard_genetox_search": {
     "name": "ct_hazard_genetox_search",
     "file": "R/ct_hazard_genetox_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
@@ -911,16 +917,17 @@
   "ct_hazard_skin_eye_search_bulk": {
     "name": "ct_hazard_skin_eye_search_bulk",
     "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/skin-eye/search/by-dtxsid/"
+    "key": "POST /hazard/skin-eye/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_hazard_skin_eye_search": {
     "name": "ct_hazard_skin_eye_search",
     "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
@@ -928,16 +935,17 @@
   "ct_hazard_toxval_search_bulk": {
     "name": "ct_hazard_toxval_search_bulk",
     "file": "R/ct_hazard_toxval_search.R",
-    "status": "retained",
-    "reason": "Computed example needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/toxval/search/by-dtxsid/"
+    "key": "POST /hazard/toxval/search/by-dtxsid/",
+    "lifecycle": "stable"
   },
   "ct_hazard_toxval_search": {
     "name": "ct_hazard_toxval_search",
     "file": "R/ct_hazard_toxval_search.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-hazard-prod.json",
     "key": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
     "lifecycle": "stable"
