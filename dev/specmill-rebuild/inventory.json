@@ -1,5 +1,5 @@
 {
-  "commit": "b5b037c5dea188b93ee71e45c8621224b1525805",
+  "commit": "b5209f726d9d3b3f9c6a30e7bd76027c67adef7a",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 284,
+    "generated": 285,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 62,
+    "unmapped_wrapper": 61,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 251,
+  "removable_files": 252,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -881,10 +881,10 @@
       "name": "chemi_chet_reaction_batchsearch",
       "file": "R/chemi_chet_reaction_batchsearch.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-chet-prod-rebuild POST /reaction/batchsearch",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(dtxsids = , search_level = ))"
     },
     {

@@ -1,6 +1,6 @@
 {
-  "commit": "b5b037c5dea188b93ee71e45c8621224b1525805",
-  "operations": 284,
+  "commit": "b5209f726d9d3b3f9c6a30e7bd76027c67adef7a",
+  "operations": 285,
   "files": {
     "R/chemi_alerts_alerts.R": "031ba567542a373b2b19a68b404cd3ea4916bdd4c39b94a4409b0d8fa9d423c7",
     "R/chemi_alerts_groups_by_id.R": "28a36fe1b1f422a995b10f9295b0e5f64b7a112c2547b9115b31426c996a156d",
@@ -56,6 +56,7 @@
     "R/chemi_chet_chemicals_singlechemical.R": "4720eadfbd415faa2c88185c1c245067823e01fcdbf41947ce984f6201b980bf",
     "R/chemi_chet_chemicals_suggest.R": "f966cb8bbd74bef9318d31cba0865ad767d18757369fba2fee16760caabf81f5",
     "R/chemi_chet_chemicals_verify.R": "d020ad500ad8d452fab7564aa97ed0242b23d1f99b805eba93ef69aff04cca87",
+    "R/chemi_chet_reaction_batchsearch.R": "c6290de5054d042adac08a23001ff88c46c6e7cc8e17b7ab37962410d7898f1b",
     "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R": "9bfbab6e549037a18da19dcf4d6bf33736f7e08247dcea349059d707431914bd",
     "R/chemi_chet_reaction_database_old.R": "69a37bfa0cfc1dc4b22d2317910fa84ab2b7c304b19f998e022d913d6cb538cd",
     "R/chemi_chet_reaction_database_stats.R": "edab24132d040b19dda43a8ac4735e8724851081eb51ac823f2152512df93777",

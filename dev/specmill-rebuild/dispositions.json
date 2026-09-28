@@ -2541,20 +2541,15 @@
     "issue": 311,
     "name": "chemi_chet_reaction_batchsearch",
     "file": "R/chemi_chet_reaction_batchsearch.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(dtxsids = , search_level = ))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Candidate rejected: identical(run(env[[name]], list()), run(original, list())) is not TRUE",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "chet/reaction/batchsearch",
-      "supported": [
-        "chemi-chet-prod.json POST /reaction/batchsearch"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-chet-prod-rebuild",
+      "key": "POST /reaction/batchsearch",
+      "file": "R/chemi_chet_reaction_batchsearch.R",
+      "wave": "batchsearch"
     }
   },
   "chemi_chet_reaction_database": {
