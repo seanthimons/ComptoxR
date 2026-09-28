@@ -1,5 +1,5 @@
 {
-  "commit": "4c1e796ff9d7bc514f8b695e83a4d2ddbbf1006e",
+  "commit": "16c9bd278e1cff3be03a4cd157ed1240f749f73d",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -2749,7 +2749,7 @@
     },
     {
       "name": "ct_chemical_msready_search_by_mass_bulk",
-      "file": "R/ct_chemical_msready_search_by_mass.R",
+      "file": "R/ct_chemical_msready_search_by_mass_bulk.R",
       "exported": true,
       "category": "unmapped_wrapper",
       "review_reason": "Custom implementation requires manual mapping",
