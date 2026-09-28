@@ -1,5 +1,5 @@
 {
-  "commit": "e89c36313270ea0774830ab76865166c634a8651",
+  "commit": "4c1e796ff9d7bc514f8b695e83a4d2ddbbf1006e",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 261,
+    "generated": 271,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 85,
+    "unmapped_wrapper": 75,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 228,
+  "removable_files": 238,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -151,10 +151,10 @@
       "name": "chemi_amos_analytical_qc_keyset_pagination",
       "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/analytical_qc_keyset_pagination/{limit}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -241,10 +241,10 @@
       "name": "chemi_amos_fact_sheet_keyset_pagination",
       "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/fact_sheet_keyset_pagination/{limit}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -541,10 +541,10 @@
       "name": "chemi_amos_method_keyset_pagination",
       "file": "R/chemi_amos_method_keyset_pagination.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/method_keyset_pagination/{limit}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -581,10 +581,10 @@
       "name": "chemi_amos_product_declaration_keyset_pagination",
       "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/product_declaration_keyset_pagination/{limit}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -681,10 +681,10 @@
       "name": "chemi_amos_safety_data_sheet_keyset_pagination",
       "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-amos-prod-rebuild GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -1171,10 +1171,10 @@
       "name": "chemi_opera",
       "file": "R/chemi_opera.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-opera-prod-rebuild GET /api/opera",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(smiles = , format = \"json\", standardize = FALSE))"
     },
     {
@@ -1261,10 +1261,10 @@
       "name": "chemi_predictor_models_predict",
       "file": "R/chemi_predictor_models_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-predictor_models-prod-rebuild GET /api/predictor_models/predict",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(model_id = , smiles = NULL, identifier = NULL, report_format = \"json\"))"
     },
     {
@@ -1921,10 +1921,10 @@
       "name": "chemi_stdizer",
       "file": "R/chemi_stdizer.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-stdizer-prod-rebuild GET /api/stdizer",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(workflow = , smiles = ))"
     },
     {
@@ -1971,10 +1971,10 @@
       "name": "chemi_toxprints_assays",
       "file": "R/chemi_toxprints_assays.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
-      "lifecycle": "experimental",
+      "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/assays",
+      "lifecycle": null,
       "formals": "pairlist(category = NULL, label = NULL)"
     },
     {
@@ -2941,10 +2941,10 @@
       "name": "ct_chemical_search_equal",
       "file": "R/ct_chemical_search_equal.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/search/equal/{word}",
+      "lifecycle": null,
       "formals": "as.pairlist(alist(word = , projection = \"chemicalsearchall\"))"
     },
     {
