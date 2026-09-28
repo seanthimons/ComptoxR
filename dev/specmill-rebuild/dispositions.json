@@ -156,17 +156,10 @@
       "helper_calls": 1,
       "method": "POST",
       "endpoint": "toxprints/calculate",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-toxprints-prod.json",
-          "key": "POST /api/toxprints/calculate",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
+      "supported": [
+        "chemi-toxprints-prod.json POST /api/toxprints/calculate"
+      ],
+      "blocked": []
     }
   },
   "ct_api_key": {
@@ -1730,39 +1723,6 @@
       "blocked": []
     }
   },
-  "ct_similar": {
-    "issue": 310,
-    "name": "ct_similar",
-    "file": "R/ct_similar.R",
-    "lifecycle": "questioning",
-    "formals": "as.pairlist(alist(query = , similarity = 0.8))",
-    "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "similar-compound/by-dtxsid/",
-      "supported": [],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [
-        "validate_similarity"
-      ],
-      "post_response": [],
-      "extra_params": [
-        "similarity"
-      ],
-      "defined_in": [
-        "R/hooks_validation.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
-    }
-  },
   "epi_server": {
     "issue": 310,
     "name": "epi_server",
@@ -1796,29 +1756,17 @@
     "issue": 311,
     "name": "chemi_alerts_groups_bulk",
     "file": "R/chemi_alerts_groups.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "pairlist(description = NULL, frozen = NULL, id = NULL, logicType = NULL, name = NULL, operations = NULL, text = NULL, type = NULL, value = NULL)",
     "siblings": [
       "chemi_alerts_groups"
     ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "alerts/groups",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-alerts-prod.json",
-          "key": "POST /api/alerts/groups",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16)",
-          "pointer": "#/paths/~1api~1alerts~1groups/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-alerts-prod-rebuild",
+      "key": "POST /api/alerts/groups",
+      "file": "R/chemi_alerts_groups.R",
+      "wave": "multipart"
     }
   },
   "chemi_amnb_nate": {
@@ -3176,51 +3124,34 @@
     "issue": 311,
     "name": "chemi_resolver_safety_flags",
     "file": "R/chemi_resolver_safety_flags.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\"))",
     "siblings": [
       "chemi_resolver_safety_flags_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "resolver/safety-flags",
-      "supported": [
-        "chemi-resolver-prod.json GET /api/resolver/safety-flags"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/safety-flags",
+      "file": "R/chemi_resolver_safety_flags.R",
+      "wave": "multipart"
     }
   },
   "chemi_resolver_safety_flags_bulk": {
     "issue": 311,
     "name": "chemi_resolver_safety_flags_bulk",
     "file": "R/chemi_resolver_safety_flags.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "pairlist(additionalProps = NULL, averageMass = NULL, canonicalSmiles = NULL, casrn = NULL, chemId = NULL, cid = NULL, id = NULL, image = NULL, inchi = NULL, inchiKey = NULL, mol = NULL, molFormula = NULL, monoisotopicMass = NULL, name = NULL, sid = NULL, smiles = NULL, request.filesInfo = NULL)",
     "siblings": [
       "chemi_resolver_safety_flags"
     ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "resolver/safety-flags",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-resolver-prod.json",
-          "key": "POST /api/resolver/safety-flags",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1resolver~1safety-flags/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/safety-flags",
+      "file": "R/chemi_resolver_safety_flags.R",
+      "wave": "multipart"
     }
   },
   "chemi_search_exact": {
@@ -3398,29 +3329,17 @@
     "issue": 311,
     "name": "chemi_stdizer_groups_bulk",
     "file": "R/chemi_stdizer_groups.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "pairlist(acl = NULL, description = NULL, flag = NULL, frozen = NULL, id = NULL, invalid = NULL, invalidMessage = NULL, operations = NULL, text = NULL, type = NULL, value = NULL, request.filesInfo = NULL, request.replace = NULL)",
     "siblings": [
       "chemi_stdizer_groups"
     ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "stdizer/groups",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-stdizer-prod.json",
-          "key": "POST /api/stdizer/groups",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1stdizer~1groups/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "POST /api/stdizer/groups",
+      "file": "R/chemi_stdizer_groups.R",
+      "wave": "multipart"
     }
   },
   "chemi_stdizer_records": {
@@ -3524,22 +3443,17 @@
     "issue": 311,
     "name": "chemi_toxprints_calculate",
     "file": "R/chemi_toxprints_calculate.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(smiles = , labels = FALSE, profile = NULL))",
     "siblings": [
       "chemi_toxprints_calculate_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "toxprints/calculate",
-      "supported": [
-        "chemi-toxprints-prod.json GET /api/toxprints/calculate"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/calculate",
+      "file": "R/chemi_toxprints_calculate.R",
+      "wave": "multipart"
     }
   },
   "chemi_toxprints_global_assays": {
@@ -3633,40 +3547,15 @@
     "issue": 312,
     "name": "chemi_alerts",
     "file": "R/chemi_alerts.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", options = NULL, request.filesInfo = NULL, request.options.alerts = NULL, request.options.resolve = NULL))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "alerts",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-alerts-prod.json",
-          "key": "POST /api/alerts",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1alerts/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-alerts-prod-rebuild",
+      "key": "POST /api/alerts",
+      "file": "R/chemi_alerts.R",
+      "wave": "multipart"
     }
   },
   "chemi_descriptors": {
@@ -3769,84 +3658,34 @@
     "issue": 312,
     "name": "chemi_hazard",
     "file": "R/chemi_hazard.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , full = TRUE, format = c(\"compact\", \"tidy\", \"raw\")))",
     "siblings": [
       "chemi_hazard_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "hazard",
-      "supported": [
-        "chemi-hazard-prod.json GET /api/hazard"
-      ],
-      "blocked": []
-    },
-    "hooks": {
-      "pre_request": [],
-      "post_response": [
-        "format_chemi_hazard_result"
-      ],
-      "extra_params": [
-        "format"
-      ],
-      "defined_in": [
-        "R/hooks_hazard.R"
-      ],
-      "invokes_pre_request": false,
-      "invokes_post_response": true,
-      "handles_skip_request": false
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-hazard-prod-rebuild",
+      "key": "GET /api/hazard",
+      "file": "R/chemi_hazard.R",
+      "wave": "hazard"
     }
   },
   "chemi_hazard_bulk": {
     "issue": 312,
     "name": "chemi_hazard_bulk",
     "file": "R/chemi_hazard.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", empty = NULL, options = NULL, request.filesInfo = NULL, request.options.analogsSearchType = NULL, request.options.cts = NULL, request.options.minSimilarity = NULL, request.options.noRecords = NULL, request.options.usePredictions = NULL, format = c(\"compact\", \"tidy\", \"raw\")))",
     "siblings": [
       "chemi_hazard"
     ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "hazard",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-hazard-prod.json",
-          "key": "POST /api/hazard",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1hazard/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [
-        "format_chemi_hazard_result"
-      ],
-      "extra_params": [
-        "format"
-      ],
-      "defined_in": [
-        "R/hooks_compound.R",
-        "R/hooks_hazard.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": true,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-hazard-prod-rebuild",
+      "key": "POST /api/hazard",
+      "file": "R/chemi_hazard.R",
+      "wave": "hazard"
     }
   },
   "chemi_mordred": {
@@ -4251,42 +4090,17 @@
     "issue": 312,
     "name": "chemi_toxprints_calculate_bulk",
     "file": "R/chemi_toxprints_calculate.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", labels = NULL, options = NULL, request.filesInfo = NULL, request.labels = NULL, request.options.OR = NULL, request.options.PV1 = NULL, request.options.TP = NULL, request.options.or = NULL, request.options.profile = NULL, request.options.pv1 = NULL, request.options.tp = NULL, request.resolve = NULL))",
     "siblings": [
       "chemi_toxprints_calculate"
     ],
-    "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "toxprints/calculate",
-      "supported": [],
-      "blocked": [
-        {
-          "schema": "chemi-toxprints-prod.json",
-          "key": "POST /api/toxprints/calculate",
-          "code": "binary_parameter",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "pointer": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
-          "issue": 28
-        }
-      ]
-    },
-    "hooks": {
-      "pre_request": [
-        "resolve_query_to_chemical_records"
-      ],
-      "post_response": [],
-      "extra_params": [],
-      "defined_in": [
-        "R/hooks_compound.R"
-      ],
-      "invokes_pre_request": true,
-      "invokes_post_response": false,
-      "handles_skip_request": true
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "POST /api/toxprints/calculate",
+      "file": "R/chemi_toxprints_calculate.R",
+      "wave": "multipart"
     }
   },
   "chemi_webtest": {
@@ -4908,23 +4722,17 @@
     "issue": 314,
     "name": "chemi_alerts_groups",
     "file": "R/chemi_alerts_groups.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "NULL",
     "siblings": [
       "chemi_alerts_groups_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "alerts/groups",
-      "supported": [
-        "chemi-alerts-prod.json GET /api/alerts/groups",
-        "chemi-alerts-prod.json GET /api/alerts/groups/{id}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-alerts-prod-rebuild",
+      "key": "GET /api/alerts/groups",
+      "file": "R/chemi_alerts_groups.R",
+      "wave": "multipart"
     }
   },
   "chemi_ncc_cats_bulk": {
@@ -4948,23 +4756,17 @@
     "issue": 314,
     "name": "chemi_stdizer_groups",
     "file": "R/chemi_stdizer_groups.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "NULL",
     "siblings": [
       "chemi_stdizer_groups_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "stdizer/groups",
-      "supported": [
-        "chemi-stdizer-prod.json GET /api/stdizer/groups",
-        "chemi-stdizer-prod.json GET /api/stdizer/groups/{id}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "GET /api/stdizer/groups",
+      "file": "R/chemi_stdizer_groups.R",
+      "wave": "multipart"
     }
   },
   "chemi_toxprints_bulk": {

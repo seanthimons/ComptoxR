@@ -105,7 +105,6 @@
 310	ct_hazard_toxval_search_by_category
 310	ct_hazard_toxval_supercategory_search
 310	ct_related
-310	ct_similar
 310	epi_server
 311	chemi_alerts_groups_bulk
 311	chemi_amnb_nate
