@@ -45,11 +45,9 @@
     "file": "R/chemi_resolver_lookup.R",
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))",
-    "siblings": [
-      "chemi_resolver_lookup_bulk"
-    ],
+    "siblings": [],
     "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "reason": "",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -64,12 +62,10 @@
   "chemi_resolver_lookup_bulk": {
     "issue": 310,
     "name": "chemi_resolver_lookup_bulk",
-    "file": "R/chemi_resolver_lookup.R",
+    "file": "R/chemi_resolver_lookup_bulk.R",
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))",
-    "siblings": [
-      "chemi_resolver_lookup"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -1115,33 +1111,24 @@
     "issue": 310,
     "name": "ct_chemical_search_equal",
     "file": "R/ct_chemical_search_equal.R",
-    "lifecycle": "stable",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(word = , projection = \"chemicalsearchall\"))",
-    "siblings": [
-      "ct_chemical_search_equal_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/search/equal/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/search/equal/{word}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/search/equal/{word}",
+      "file": "R/ct_chemical_search_equal.R",
+      "wave": "split"
     }
   },
   "ct_chemical_search_equal_bulk": {
     "issue": 310,
     "name": "ct_chemical_search_equal_bulk",
-    "file": "R/ct_chemical_search_equal.R",
+    "file": "R/ct_chemical_search_equal_bulk.R",
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(query = ))",
-    "siblings": [
-      "ct_chemical_search_equal"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Nonliteral helper argument needs manual mapping",
     "route": {
@@ -1861,33 +1848,24 @@
     "issue": 311,
     "name": "chemi_amos_analytical_qc_keyset_pagination",
     "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_analytical_qc_keyset_pagination_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/analytical_qc_keyset_pagination/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/analytical_qc_keyset_pagination/{limit}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/analytical_qc_keyset_pagination/{limit}",
+      "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+      "wave": "split"
     }
   },
   "chemi_amos_analytical_qc_keyset_pagination_bulk": {
     "issue": 311,
     "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
-    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(limit = , cursor = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_analytical_qc_keyset_pagination"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -1966,33 +1944,24 @@
     "issue": 311,
     "name": "chemi_amos_fact_sheet_keyset_pagination",
     "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_fact_sheet_keyset_pagination_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/fact_sheet_keyset_pagination/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/fact_sheet_keyset_pagination/{limit}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/fact_sheet_keyset_pagination/{limit}",
+      "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+      "wave": "split"
     }
   },
   "chemi_amos_fact_sheet_keyset_pagination_bulk": {
     "issue": 311,
     "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
-    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_fact_sheet_keyset_pagination"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -2125,33 +2094,24 @@
     "issue": 311,
     "name": "chemi_amos_method_keyset_pagination",
     "file": "R/chemi_amos_method_keyset_pagination.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_method_keyset_pagination_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/method_keyset_pagination/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/method_keyset_pagination/{limit}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/method_keyset_pagination/{limit}",
+      "file": "R/chemi_amos_method_keyset_pagination.R",
+      "wave": "split"
     }
   },
   "chemi_amos_method_keyset_pagination_bulk": {
     "issue": 311,
     "name": "chemi_amos_method_keyset_pagination_bulk",
-    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "file": "R/chemi_amos_method_keyset_pagination_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_method_keyset_pagination"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -2203,33 +2163,24 @@
     "issue": 311,
     "name": "chemi_amos_product_declaration_keyset_pagination",
     "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_product_declaration_keyset_pagination_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/product_declaration_keyset_pagination/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/product_declaration_keyset_pagination/{limit}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/product_declaration_keyset_pagination/{limit}",
+      "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+      "wave": "split"
     }
   },
   "chemi_amos_product_declaration_keyset_pagination_bulk": {
     "issue": 311,
     "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
-    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_product_declaration_keyset_pagination"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -2335,33 +2286,24 @@
     "issue": 311,
     "name": "chemi_amos_safety_data_sheet_keyset_pagination",
     "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(limit = , cursor = NULL, all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_safety_data_sheet_keyset_pagination_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "amos/safety_data_sheet_keyset_pagination/",
-      "supported": [
-        "chemi-amos-prod.json GET /api/amos/safety_data_sheet_keyset_pagination/{limit}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-amos-prod-rebuild",
+      "key": "GET /api/amos/safety_data_sheet_keyset_pagination/{limit}",
+      "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+      "wave": "split"
     }
   },
   "chemi_amos_safety_data_sheet_keyset_pagination_bulk": {
     "issue": 311,
     "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
-    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(limit = , cursor = \"\", document_text = \"\", dtxsid = \"\", filterModel = structure(list(), names = character(0)), filters = structure(list(), names = character(0)), full_table = \"\", include_total = FALSE, quickFilter = \"\", sortModel = list(), all_pages = TRUE, max_pages = 100))",
-    "siblings": [
-      "chemi_amos_safety_data_sheet_keyset_pagination"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -2786,33 +2728,24 @@
     "issue": 311,
     "name": "chemi_opera",
     "file": "R/chemi_opera.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(smiles = , format = \"json\", standardize = FALSE))",
-    "siblings": [
-      "chemi_opera_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "opera",
-      "supported": [
-        "chemi-opera-prod.json GET /api/opera"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-opera-prod-rebuild",
+      "key": "GET /api/opera",
+      "file": "R/chemi_opera.R",
+      "wave": "split"
     }
   },
   "chemi_opera_bulk": {
     "issue": 311,
     "name": "chemi_opera_bulk",
-    "file": "R/chemi_opera.R",
+    "file": "R/chemi_opera_bulk.R",
     "lifecycle": "experimental",
     "formals": "pairlist(cache_only = FALSE, smiles = NULL, chemicals = NULL, format = \"json\", standardize = FALSE)",
-    "siblings": [
-      "chemi_opera"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -2913,33 +2846,24 @@
     "issue": 311,
     "name": "chemi_predictor_models_predict",
     "file": "R/chemi_predictor_models_predict.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(model_id = , smiles = NULL, identifier = NULL, report_format = \"json\"))",
-    "siblings": [
-      "chemi_predictor_models_predict_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "predictor_models/predict",
-      "supported": [
-        "chemi-predictor_models-prod.json GET /api/predictor_models/predict"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-predictor_models-prod-rebuild",
+      "key": "GET /api/predictor_models/predict",
+      "file": "R/chemi_predictor_models_predict.R",
+      "wave": "split"
     }
   },
   "chemi_predictor_models_predict_bulk": {
     "issue": 311,
     "name": "chemi_predictor_models_predict_bulk",
-    "file": "R/chemi_predictor_models_predict.R",
+    "file": "R/chemi_predictor_models_predict_bulk.R",
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(model_id = , smiles = NULL, chemicals = NULL))",
-    "siblings": [
-      "chemi_predictor_models_predict"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -3278,33 +3202,24 @@
     "issue": 311,
     "name": "chemi_stdizer",
     "file": "R/chemi_stdizer.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "as.pairlist(alist(workflow = , smiles = ))",
-    "siblings": [
-      "chemi_stdizer_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "stdizer",
-      "supported": [
-        "chemi-stdizer-prod.json GET /api/stdizer"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "GET /api/stdizer",
+      "file": "R/chemi_stdizer.R",
+      "wave": "split"
     }
   },
   "chemi_stdizer_bulk": {
     "issue": 311,
     "name": "chemi_stdizer_bulk",
-    "file": "R/chemi_stdizer.R",
+    "file": "R/chemi_stdizer_bulk.R",
     "lifecycle": "experimental",
     "formals": "pairlist(request.filesInfo = NULL, request.options.recordId = NULL, request.options.run = NULL, request.options.workflow = NULL)",
-    "siblings": [
-      "chemi_stdizer"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "No unique supported schema/method/path match; no route guessed",
     "route": {
@@ -3383,34 +3298,24 @@
     "issue": 311,
     "name": "chemi_toxprints_assays",
     "file": "R/chemi_toxprints_assays.R",
-    "lifecycle": "experimental",
+    "lifecycle": null,
     "formals": "pairlist(category = NULL, label = NULL)",
-    "siblings": [
-      "chemi_toxprints_assays_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "toxprints/assays",
-      "supported": [
-        "chemi-toxprints-prod.json GET /api/toxprints/assays",
-        "chemi-toxprints-prod.json GET /api/toxprints/assays/{name}"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/assays",
+      "file": "R/chemi_toxprints_assays.R",
+      "wave": "split"
     }
   },
   "chemi_toxprints_assays_bulk": {
     "issue": 311,
     "name": "chemi_toxprints_assays_bulk",
-    "file": "R/chemi_toxprints_assays.R",
+    "file": "R/chemi_toxprints_assays_bulk.R",
     "lifecycle": "experimental",
     "formals": "pairlist(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL)",
-    "siblings": [
-      "chemi_toxprints_assays"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Options prelude overwrites the public options argument (original defect); retained",
     "route": {
