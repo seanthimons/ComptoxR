@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1113,
+  "passed_cases": 1137,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -498,6 +498,14 @@
       "schema": "chemi-resolver-prod.json",
       "key": "GET /api/resolver/getannotationslist"
     },
+    "chemi_resolver_getpubchemlist": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/getpubchemlist"
+    },
+    "chemi_resolver_getsimilaritylist": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/getsimilaritylist"
+    },
     "chemi_resolver_getsubstance": {
       "schema": "chemi-resolver-prod.json",
       "key": "GET /api/resolver/getsubstance"
@@ -517,6 +525,18 @@
     "chemi_resolver_mesh": {
       "schema": "chemi-resolver-prod.json",
       "key": "GET /api/resolver/mesh"
+    },
+    "chemi_resolver_orderBySimilarity": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/orderBySimilarity"
+    },
+    "chemi_resolver_pubchem_section": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/pubchem-section"
+    },
+    "chemi_resolver_pubchem_section_bulk": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "POST /api/resolver/pubchem-section"
     },
     "chemi_resolver_resolve": {
       "schema": "chemi-resolver-prod.json",
@@ -553,6 +573,10 @@
     "chemi_services_smirks2rxn": {
       "schema": "chemi-services-prod.json",
       "key": "GET /api/services/smirks2rxn"
+    },
+    "chemi_stdizer_chemicals": {
+      "schema": "chemi-stdizer-prod.json",
+      "key": "POST /api/stdizer/chemicals"
     },
     "chemi_toxprints": {
       "schema": "chemi-toxprints-prod.json",
@@ -4899,6 +4923,62 @@
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"name\" is missing, with no default"
     },
+    "chemi_resolver_getpubchemlist-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getpubchemlist-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getpubchemlist-pagination": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_resolver_getpubchemlist": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_getsimilaritylist-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getsimilaritylist-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_getsimilaritylist-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_resolver_getsimilaritylist()` failed in pre-request hook\n`resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_getsimilaritylist": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
     "chemi_resolver_getsubstance-minimal": {
       "requests": 1,
       "classes": "list",
@@ -5033,6 +5113,90 @@
       "error_message": "HTTP 400 Bad Request."
     },
     "invalid-missing-chemi_resolver_mesh": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_orderBySimilarity-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_orderBySimilarity-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_orderBySimilarity-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_resolver_orderBySimilarity()` failed in pre-request hook\n`resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_orderBySimilarity": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_pubchem_section-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_pubchem_section-explicit": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_pubchem_section-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_pubchem_section": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_resolver_pubchem_section_bulk-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_pubchem_section_bulk-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_pubchem_section_bulk-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_resolver_pubchem_section_bulk()` failed in pre-request hook\n`resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_resolver_pubchem_section_bulk": {
       "requests": 0,
       "classes": "list",
       "warnings": [],
@@ -5262,6 +5426,34 @@
       "warnings": [],
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"smirks\" is missing, with no default"
+    },
+    "chemi_stdizer_chemicals-minimal": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer_chemicals-explicit": {
+      "requests": 1,
+      "classes": "NULL",
+      "warnings": "No chemicals could be resolved from the provided identifiers",
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_stdizer_chemicals-http-400": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_stdizer_chemicals()` failed in pre-request hook\n`resolve_query_to_chemical_records()`.\nCaused by error in `value[[3L]]()`:\n! chemi_resolver_lookup_bulk failed: HTTP 400 Bad Request."
+    },
+    "invalid-missing-chemi_stdizer_chemicals": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
     },
     "chemi_toxprints-minimal": {
       "requests": 1,

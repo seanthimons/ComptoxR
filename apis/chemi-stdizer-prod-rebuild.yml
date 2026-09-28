@@ -1,0 +1,81 @@
+id: chemi-stdizer-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - POST /api/stdizer/chemicals
+helper: generic_request
+documentation: yes
+operations:
+  POST /api/stdizer/chemicals:
+    name: chemi_stdizer_chemicals
+    file: R/chemi_stdizer_chemicals.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      full:
+        type: character
+        default: ~
+        description: Optional parameter
+      options:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: stdizer/chemicals
+        options:
+          compact_object:
+            full:
+              from:
+              - params
+              - full
+            options:
+              from:
+              - params
+              - options
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Stdizer Chemicals
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        full: Optional parameter
+        options: Optional parameter
+      return: Returns a tibble with results
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml

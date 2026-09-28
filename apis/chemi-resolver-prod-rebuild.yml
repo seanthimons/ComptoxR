@@ -13,6 +13,11 @@ selection:
   - GET /api/resolver/links
   - GET /api/resolver/lookupCASRN
   - GET /api/resolver/mesh
+  - GET /api/resolver/pubchem-section
+  - POST /api/resolver/getpubchemlist
+  - POST /api/resolver/getsimilaritylist
+  - POST /api/resolver/orderBySimilarity
+  - POST /api/resolver/pubchem-section
   - POST /api/resolver/resolve
 helper: generic_request
 documentation: yes
@@ -564,6 +569,526 @@ operations:
       - query: DTXSID7020182
       tags:
         apiStage: public
+  GET /api/resolver/pubchem-section:
+    name: chemi_resolver_pubchem_section
+    file: R/chemi_resolver_pubchem_section.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Required parameter
+      idType:
+        type: character
+        default: AnyId
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      section:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        endpoint:
+          value: resolver/pubchem-section
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            query:
+              from:
+              - params
+              - query
+            idType:
+              from:
+              - params
+              - idType
+            section:
+              from:
+              - params
+              - section
+    docs:
+      title: Resolver Pubchem Section
+      lifecycle: experimental
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        section: Optional parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/resolver/getpubchemlist:
+    name: chemi_resolver_getpubchemlist
+    file: R/chemi_resolver_getpubchemlist.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      section:
+        type: character
+        default: ~
+        description: Optional parameter
+      all_pages:
+        type: logical
+        default: yes
+        description: Logical; if TRUE (default), automatically fetches all pages.
+          If FALSE, returns a single page using manual pagination parameters.
+      max_pages:
+        type: numeric
+        default: 100.0
+        description: Maximum number of pages to fetch when all_pages is TRUE.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/getpubchemlist
+        options:
+          compact_object:
+            section:
+              from:
+              - params
+              - section
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          from:
+          - params
+          - max_pages
+        pagination_strategy:
+          value: page_size
+    docs:
+      title: Resolver Getpubchemlist
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+        all_pages: Logical; if TRUE (default), automatically fetches all pages. If
+          FALSE, returns a single page using manual pagination parameters.
+        max_pages: Maximum number of pages to fetch when all_pages is TRUE.
+      return: Returns a list with result object
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
+  POST /api/resolver/getsimilaritylist:
+    name: chemi_resolver_getsimilaritylist
+    file: R/chemi_resolver_getsimilaritylist.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      fingerprintName:
+        type: character
+        default: ~
+        description: Optional parameter
+      get_chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      main:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelCompute2D:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelCompute3D:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelComputeFingerprints:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitBits:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitRadius:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitType:
+        type: character
+        default: ~
+        description: Optional parameter
+      scoreName:
+        type: character
+        default: ~
+        description: Optional parameter
+      toxprintsProfile:
+        type: character
+        default: ~
+        description: Optional parameter
+      tverskyI:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/getsimilaritylist
+        options:
+          compact_object:
+            fingerprintName:
+              from:
+              - params
+              - fingerprintName
+            get_chemicals:
+              from:
+              - params
+              - get_chemicals
+            main:
+              from:
+              - params
+              - main
+            padelCompute2D:
+              from:
+              - params
+              - padelCompute2D
+            padelCompute3D:
+              from:
+              - params
+              - padelCompute3D
+            padelComputeFingerprints:
+              from:
+              - params
+              - padelComputeFingerprints
+            rdkitBits:
+              from:
+              - params
+              - rdkitBits
+            rdkitRadius:
+              from:
+              - params
+              - rdkitRadius
+            rdkitType:
+              from:
+              - params
+              - rdkitType
+            scoreName:
+              from:
+              - params
+              - scoreName
+            toxprintsProfile:
+              from:
+              - params
+              - toxprintsProfile
+            tverskyI:
+              from:
+              - params
+              - tverskyI
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver Getsimilaritylist
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        fingerprintName: Optional parameter
+        get_chemicals: Optional parameter
+        main: Optional parameter
+        padelCompute2D: Optional parameter
+        padelCompute3D: Optional parameter
+        padelComputeFingerprints: Optional parameter
+        rdkitBits: Optional parameter
+        rdkitRadius: Optional parameter
+        rdkitType: Optional parameter
+        scoreName: Optional parameter
+        toxprintsProfile: Optional parameter
+        tverskyI: Optional parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
+  POST /api/resolver/orderBySimilarity:
+    name: chemi_resolver_orderBySimilarity
+    file: R/chemi_resolver_orderBySimilarity.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      fingerprintName:
+        type: character
+        default: ~
+        description: Optional parameter
+      get_chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      main:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelCompute2D:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelCompute3D:
+        type: character
+        default: ~
+        description: Optional parameter
+      padelComputeFingerprints:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitBits:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitRadius:
+        type: character
+        default: ~
+        description: Optional parameter
+      rdkitType:
+        type: character
+        default: ~
+        description: Optional parameter
+      scoreName:
+        type: character
+        default: ~
+        description: Optional parameter
+      toxprintsProfile:
+        type: character
+        default: ~
+        description: Optional parameter
+      tverskyI:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/orderBySimilarity
+        options:
+          compact_object:
+            fingerprintName:
+              from:
+              - params
+              - fingerprintName
+            get_chemicals:
+              from:
+              - params
+              - get_chemicals
+            main:
+              from:
+              - params
+              - main
+            padelCompute2D:
+              from:
+              - params
+              - padelCompute2D
+            padelCompute3D:
+              from:
+              - params
+              - padelCompute3D
+            padelComputeFingerprints:
+              from:
+              - params
+              - padelComputeFingerprints
+            rdkitBits:
+              from:
+              - params
+              - rdkitBits
+            rdkitRadius:
+              from:
+              - params
+              - rdkitRadius
+            rdkitType:
+              from:
+              - params
+              - rdkitType
+            scoreName:
+              from:
+              - params
+              - scoreName
+            toxprintsProfile:
+              from:
+              - params
+              - toxprintsProfile
+            tverskyI:
+              from:
+              - params
+              - tverskyI
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver orderBySimilarity
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        fingerprintName: Optional parameter
+        get_chemicals: Optional parameter
+        main: Optional parameter
+        padelCompute2D: Optional parameter
+        padelCompute3D: Optional parameter
+        padelComputeFingerprints: Optional parameter
+        rdkitBits: Optional parameter
+        rdkitRadius: Optional parameter
+        rdkitType: Optional parameter
+        scoreName: Optional parameter
+        toxprintsProfile: Optional parameter
+        tverskyI: Optional parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
+  POST /api/resolver/pubchem-section:
+    name: chemi_resolver_pubchem_section_bulk
+    file: R/chemi_resolver_pubchem_section.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES,
+          InChI, etc.)
+      idType:
+        type: character
+        default: AnyId
+        description: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default)'
+      section:
+        type: character
+        default: ~
+        description: Optional parameter
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/pubchem-section
+        options:
+          compact_object:
+            section:
+              from:
+              - params
+              - section
+        tidy:
+          value: no
+        chemicals:
+          from:
+          - hook_state
+          - params
+          - chemicals
+    docs:
+      title: Resolver Pubchem Section
+      lifecycle: experimental
+      parameters:
+        query: Character vector of chemical identifiers (DTXSIDs, CAS, SMILES, InChI,
+          etc.)
+        idType: 'Type of identifier. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default)'
+        section: Optional parameter
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query:
+        - 50-00-0
+        - DTXSID7020182
+      description: |-
+        This function first resolves chemical identifiers using `chemi_resolver_lookup_bulk`,
+        then sends the resolved Chemical objects to the API endpoint.
+      tags:
+        apiStage: public
   POST /api/resolver/resolve:
     name: chemi_resolver_resolve
     file: R/chemi_resolver_resolve.R
@@ -606,3 +1131,4 @@ operations:
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hook_config: inst/hook_config.yml
