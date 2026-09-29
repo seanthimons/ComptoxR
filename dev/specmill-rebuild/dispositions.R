@@ -17,9 +17,12 @@ policy <- c(
     'generating it needs specmill support for hook-owned or multi-route operations'
   )), length(hook_owned)), hook_owned),
   list(chemi_resolver_lookup = paste(
-    'Retained by policy (#338): original-client defect, not fixed here. The required `query` string parameter rides',
-    'the static batch_limit = 0 path, which skips input checks: an empty query is sent without `query`, NA is sent',
-    'as "NA", and several values fail in httr2. The contract check invalid-empty is right; the wrapper is wrong'
+    'Retained by policy (#338): original-client defect. The required `query` string parameter rides the static',
+    'batch_limit = 0 path, which skips input checks: an empty query is sent without `query`, NA is sent as "NA",',
+    'and several values fail in httr2. The contract check invalid-empty is right; the wrapper is wrong. Fix by',
+    'generating it from schema parameters instead of explicit `inputs:`: specmill 0.1.8 checks them and rejects',
+    'empty, NA, and multi-value queries. Its signature already matches the schema. Not patched in generic_request,',
+    'which specmill is replacing'
   ))
 )
 # Evidence matching is looser than wave.R: repeated and trailing slashes left by removed

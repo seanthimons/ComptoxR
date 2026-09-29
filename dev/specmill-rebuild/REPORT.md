@@ -155,7 +155,13 @@ with one of them.
   checks. An empty query is sent without `query`, `NA` is sent as `query=NA`,
   and several values fail inside httr2. The contract check
   `invalid-empty-chemi_resolver_lookup` is right and the wrapper is wrong. It
-  is retained by policy (#338).
+  is retained by policy (#338). The fix is to generate it from schema
+  parameters instead of explicit `inputs:`. specmill 0.1.8 checks schema
+  parameters and rejects empty, `NA`, and multi-value queries, and the
+  wrapper's signature already matches the schema. `generic_request` is not
+  patched because specmill is replacing it. The generated
+  `chemi_resolver_lookupCASRN` has the same gap under `inputs:` and gets the
+  same fix.
 
 ## Dispositions (#310–#314)
 
