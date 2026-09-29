@@ -8,14 +8,18 @@ names(inventory) <- vapply(inventory, `[[`, '', 'name')
 screen <- jsonlite::read_json(file.path(out, 'screen-results.json'))
 audit <- jsonlite::read_json('dev/specmill-pilot/all-schema-diagnostics.json')
 hooks <- yaml::read_yaml('inst/hook_config.yml')
-# Policy decisions (#338) replace the screen reason for exports kept hand-written on purpose.
-hook_owned <- paste0('chemi_', rep(c('descriptors', 'mordred', 'padel', 'rdkit', 'webtest', 'webtest_predict'), each = 2), c('', '_bulk'))
+# Policy decisions (#338, #340, #341) replace the screen reason for these exports.
+hook_owned <- paste0('chemi_', rep(c('mordred', 'padel', 'rdkit', 'webtest', 'webtest_predict'), each = 2), c('', '_bulk'))
 policy <- c(
   setNames(rep(list(paste(
-    'Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body)',
-    'with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route;',
-    'generating it needs specmill support for hook-owned or multi-route operations'
+    'Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill',
+    'binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch'
   )), length(hook_owned)), hook_owned),
+  setNames(rep(list(paste(
+    'Pending #341: apply_aggregate_rdkit_fallback redirects RDKit requests to /api/rdkit (another schema file)',
+    'because /api/descriptors returns 512 values for some structures on prod, staging and dev (2026-09-29);',
+    'declaring the second route needs specmill#61'
+  )), 2L), c('chemi_descriptors', 'chemi_descriptors_bulk')),
   list(chemi_resolver_lookup = paste(
     'Retained by policy (#338): original-client defect. The required `query` string parameter rides the static',
     'batch_limit = 0 path, which skips input checks: an empty query is sent without `query`, NA is sent as "NA",',

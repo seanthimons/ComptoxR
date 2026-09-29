@@ -195,7 +195,8 @@ Reasons for keeping an export retained:
 - no unique supported schema route (24), including the ambiguous-media and
   malformed-route blockers in #313;
 - a hand-written implementation (18);
-- a request built by a pre-request hook (12, retained by policy in #338);
+- a request built by a pre-request hook (12: 10 fixed-route wrappers pending
+  #340, and `chemi_descriptors`/`_bulk` pending #341);
 - a nonliteral helper argument (3);
 - an original defect caught by its contract test (1, `chemi_resolver_lookup`,
   retained by policy in #338; see the defects above);
@@ -234,10 +235,12 @@ The multipart and hazard waves (below) generated `chemi_alerts`,
 client-owned:
 
 - 12 descriptor and webtest wrappers build the request inside a pre-request
-  hook, so no route is guessed. They are retained by policy (#338): the hook
-  owns endpoint, method, server, and body, with runtime fallbacks such as
-  `apply_aggregate_rdkit_fallback`. Generating them needs specmill support for
-  hook-owned or multi-route operations;
+  hook, so the screen guesses no route. specmill can already bind those
+  arguments from `hook_state`. Ten have a fixed schema route and wait on a
+  hook-owned branch in `wave.R` (#340). `chemi_descriptors` and `_bulk` fall
+  back to `/api/rdkit`: on 2026-09-29, `/api/descriptors?type=rdkit` returned
+  512 values against 1,024 headers for bisphenol A on prod, staging, and dev.
+  Declaring that second route needs specmill#61 (#341);
 - `chemi_resolver_getsimilaritymap` computes `sort` inline in the helper call.
 
 ## Springdoc multipart parameters

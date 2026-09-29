@@ -3436,7 +3436,7 @@
       "chemi_descriptors_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #341: apply_aggregate_rdkit_fallback redirects RDKit requests to /api/rdkit (another schema file) because /api/descriptors returns 512 values for some structures on prod, staging and dev (2026-09-29); declaring the second route needs specmill#61",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3483,7 +3483,7 @@
       "chemi_descriptors"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #341: apply_aggregate_rdkit_fallback redirects RDKit requests to /api/rdkit (another schema file) because /api/descriptors returns 512 values for some structures on prod, staging and dev (2026-09-29); declaring the second route needs specmill#61",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3566,7 +3566,7 @@
       "chemi_mordred_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3611,7 +3611,7 @@
       "chemi_mordred"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3658,7 +3658,7 @@
       "chemi_padel_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3703,7 +3703,7 @@
       "chemi_padel"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3753,7 +3753,7 @@
       "chemi_rdkit_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -3798,7 +3798,7 @@
       "chemi_rdkit"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3981,7 +3981,7 @@
       "chemi_webtest_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4026,7 +4026,7 @@
       "chemi_webtest"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4073,7 +4073,7 @@
       "chemi_webtest_predict_bulk"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4112,7 +4112,7 @@
       "chemi_webtest_predict"
     ],
     "disposition": "retained",
-    "reason": "Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body) with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route; generating it needs specmill support for hook-owned or multi-route operations",
+    "reason": "Pending #340: the pre-request hook builds the request, but the route is fixed and in the schema; specmill binds endpoint, method, server, options and body from hook_state, and wave.R needs a hook-owned branch",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
