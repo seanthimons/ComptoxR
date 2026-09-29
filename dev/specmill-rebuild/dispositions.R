@@ -25,6 +25,12 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
     op <- service$operations[[key]]
     if (identical(op$implementation, 'generated')) {
       generated[[op$name]] <- list(service = service$id, key = key, file = op$file, wave = waves[[op$file]] %||% 'initial tranche')
+      if (identical(op$post_state, 'hook_state')) {
+        generated[[op$name]]$policy <- list(
+          request_owner = 'pre_request_hooks', hooks = service$hooks[[op$name]],
+          request = op$request, post_state = op$post_state, post_on_skip = op$post_on_skip
+        )
+      }
     }
   }
 }

@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": true,
-  "passed_cases": 1099,
+  "passed_cases": 1151,
   "exported_signatures": 409,
   "failures": [],
   "operations": {
@@ -454,6 +454,14 @@
       "schema": "chemi-chet-prod.json",
       "key": "GET /reaction/table"
     },
+    "chemi_mordred": {
+      "schema": "chemi-mordred-prod.json",
+      "key": "GET /api/mordred"
+    },
+    "chemi_mordred_bulk": {
+      "schema": "chemi-mordred-prod.json",
+      "key": "POST /api/mordred"
+    },
     "chemi_ncc_cats": {
       "schema": "chemi-ncc_cats-prod.json",
       "key": "GET /api/ncc_cats"
@@ -465,6 +473,14 @@
     "chemi_opera_report": {
       "schema": "chemi-opera-prod.json",
       "key": "GET /api/opera/report"
+    },
+    "chemi_padel": {
+      "schema": "chemi-padel-prod.json",
+      "key": "GET /api/padel"
+    },
+    "chemi_padel_bulk": {
+      "schema": "chemi-padel-prod.json",
+      "key": "POST /api/padel"
     },
     "chemi_pfas_atlas": {
       "schema": "chemi-pfas_atlas-prod.json",
@@ -481,6 +497,14 @@
     "chemi_pfas_cats_bulk": {
       "schema": "chemi-pfas_cats-prod.json",
       "key": "POST /api/pfas_cats"
+    },
+    "chemi_rdkit": {
+      "schema": "chemi-rdkit-prod.json",
+      "key": "GET /api/rdkit"
+    },
+    "chemi_rdkit_bulk": {
+      "schema": "chemi-rdkit-prod.json",
+      "key": "POST /api/rdkit"
     },
     "chemi_resolver_ccte_list": {
       "schema": "chemi-resolver-prod.json",
@@ -577,6 +601,22 @@
     "chemi_toxprints_toxprints": {
       "schema": "chemi-toxprints-prod.json",
       "key": "GET /api/toxprints/toxprints"
+    },
+    "chemi_webtest": {
+      "schema": "chemi-webtest-prod.json",
+      "key": "GET /api/webtest"
+    },
+    "chemi_webtest_bulk": {
+      "schema": "chemi-webtest-prod.json",
+      "key": "POST /api/webtest"
+    },
+    "chemi_webtest_predict": {
+      "schema": "chemi-webtest-prod.json",
+      "key": "GET /api/webtest/predict"
+    },
+    "chemi_webtest_predict_bulk": {
+      "schema": "chemi-webtest-prod.json",
+      "key": "POST /api/webtest/predict"
     },
     "ct_bioactivity_analyticalqc_search": {
       "schema": "ctx-bioactivity-prod.json",
@@ -4599,6 +4639,76 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
+    "chemi_mordred-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_mordred": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_mordred_bulk-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred_bulk-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred_bulk-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_mordred_bulk-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_mordred_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"chemicals\" is missing, with no default"
+    },
     "chemi_ncc_cats-minimal": {
       "requests": 1,
       "classes": "list",
@@ -4675,6 +4785,76 @@
       "warnings": [],
       "error_classes": ["getvarError", "missingArgError", "error", "condition"],
       "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "chemi_padel-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_padel": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_padel_bulk-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel_bulk-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel_bulk-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_padel_bulk-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_padel_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
     },
     "chemi_pfas_atlas-minimal": {
       "requests": 1,
@@ -4773,6 +4953,76 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_rdkit-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_rdkit": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_rdkit_bulk-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit_bulk-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit_bulk-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_rdkit_bulk-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_rdkit_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"chemicals\" is missing, with no default"
     },
     "chemi_resolver_ccte_list-minimal": {
       "requests": 1,
@@ -5403,6 +5653,160 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_webtest-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_webtest": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_webtest_bulk-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_bulk-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_bulk-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_bulk-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_webtest_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "chemi_webtest_predict-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict-missing-endpoint": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "comptoxr_webtest_pre_request_error", "comptoxr_webtest_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_webtest_predict()` failed in WebTEST pre-request hook\n`validate_webtest_prediction_request()`.\n✖ endpoint must be one non-empty string."
+    },
+    "chemi_webtest_predict-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": "Unresolved WebTEST identifiers retained as error rows.\n! DTXSID0000000",
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_webtest_predict": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"smiles\" is missing, with no default"
+    },
+    "chemi_webtest_predict_bulk-resolved-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict_bulk-raw": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict_bulk-missing-endpoint": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "comptoxr_webtest_pre_request_error", "comptoxr_webtest_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_webtest_predict_bulk()` failed in WebTEST pre-request hook\n`validate_webtest_prediction_request()`.\n✖ endpoints must contain at least one non-empty string."
+    },
+    "chemi_webtest_predict_bulk-skip": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_webtest_predict_bulk-unresolved": {
+      "requests": 0,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": "Unresolved WebTEST identifiers retained as error rows.\n! DTXSID0000000",
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_webtest_predict_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"structures\" is missing, with no default"
     },
     "ct_bioactivity_analyticalqc_search-minimal": {
       "requests": 1,

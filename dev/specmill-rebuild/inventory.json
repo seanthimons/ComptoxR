@@ -1,5 +1,5 @@
 {
-  "commit": "30a4dc4912ae67cc655807c05796acf84e36c404",
+  "commit": "d5c4224dfd2932463987e9f77d53cc8f46893842",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 239,
+    "generated": 249,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 108,
+    "unmapped_wrapper": 98,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 212,
+  "removable_files": 217,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -44,7 +44,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "alerts-pilot GET /api/alerts/alerts",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -54,7 +54,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "alerts-pilot GET /api/alerts/groups/{id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(id = ))"
     },
     {
@@ -84,7 +84,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "alerts-pilot GET /api/alerts/operations",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -104,7 +104,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-amnb_nate-prod-rebuild GET /api/amnb_nate",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = ))"
     },
     {
@@ -114,7 +114,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-amnb_nate-prod-rebuild POST /api/amnb_nate",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL, smiles = NULL)"
     },
     {
@@ -174,7 +174,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/search_by_text/{substr}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(substr = ))"
     },
     {
@@ -194,7 +194,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/database_summary/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -204,7 +204,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/dtxsids_from_functional_use/{functional_use}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(functional_use = ))"
     },
     {
@@ -254,7 +254,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/find_dtxsids/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -274,7 +274,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/formula_search/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = ))"
     },
     {
@@ -284,7 +284,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/functional_class_search/{functional_class}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(functional_class = ))"
     },
     {
@@ -294,7 +294,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -304,7 +304,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -314,7 +314,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_data_source_info/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -324,7 +324,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_fact_sheet_editor_info/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -334,7 +334,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_info_by_id/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -344,7 +344,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_ir_spectrum/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -354,7 +354,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_mass_spectrum/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -364,7 +364,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_method_editor_info/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -374,7 +374,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_ms_ready_methods/{inchikey}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(inchikey = ))"
     },
     {
@@ -384,7 +384,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -394,7 +394,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/get_nmr_spectrum/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -414,7 +414,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_product_declaration_editor_info/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -424,7 +424,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -444,7 +444,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/get_substances_for_search_term/{search_term}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(search_term = ))"
     },
     {
@@ -454,7 +454,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/inchikey_first_block_search/{first_block}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(first_block = ))"
     },
     {
@@ -464,7 +464,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/list_fact_sheet_types/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -474,7 +474,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/list_functional_classes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -604,7 +604,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/record_id_search/{internal_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(internal_id = ))"
     },
     {
@@ -624,7 +624,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/record_type_count/{record_type}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(record_type = ))"
     },
     {
@@ -634,7 +634,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "amos-pilot GET /api/amos/release_notes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -734,7 +734,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/substring_search/{substring}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(substring = ))"
     },
     {
@@ -744,7 +744,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-amos-prod-full GET /api/amos/search/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -754,7 +754,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-arn_cats-prod-rebuild GET /api/arn_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , model = \"RF\"))"
     },
     {
@@ -764,7 +764,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-arn_cats-prod-rebuild POST /api/arn_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL, model = \"RF\", smiles = NULL)"
     },
     {
@@ -774,7 +774,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/alias",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(dtxsid = NULL)"
     },
     {
@@ -784,7 +784,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/chemset",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(setid = NULL)"
     },
     {
@@ -794,7 +794,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/counts",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(page = 0, size = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
@@ -804,7 +804,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /chemicals/database-old",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -814,7 +814,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/database/stats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(total = NULL)"
     },
     {
@@ -824,7 +824,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/database",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(page = 0, size = NULL, query = NULL, exact_search = NULL, lib_name = NULL, only_in_reactions = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
@@ -844,7 +844,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/maps",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemid = NULL)"
     },
     {
@@ -854,7 +854,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/singlechemical",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(dtxsid = NULL)"
     },
     {
@@ -864,7 +864,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /chemicals/suggest",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , limit = 8, only_in_reactions = \"true\"))"
     },
     {
@@ -874,7 +874,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /chemicals/verify/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -904,7 +904,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /reaction/database_old",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -914,7 +914,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/database/stats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(reaction_id = NULL)"
     },
     {
@@ -924,7 +924,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/database",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(page = 0, size = NULL, query = NULL, lib_name = NULL, reaction_process = NULL, reaction_type = NULL, reaction_scheme = NULL, reaction_phase = NULL, craccm_id = NULL, all_pages = TRUE, max_pages = 100)"
     },
     {
@@ -934,7 +934,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /reaction/dbcounts",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -944,7 +944,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/details",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(lib_id = NULL)"
     },
     {
@@ -954,7 +954,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /reaction/libraries",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -964,7 +964,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/mapid",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(map_id = NULL)"
     },
     {
@@ -974,7 +974,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /reaction/mappositions/{map_id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(map_id = ))"
     },
     {
@@ -984,7 +984,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-chet-prod-full GET /reaction/maps",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -994,7 +994,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/react_maps",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(react_id = NULL)"
     },
     {
@@ -1004,7 +1004,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/reactionmap",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(id = NULL, searchtype = NULL)"
     },
     {
@@ -1024,7 +1024,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/singlereaction",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(reaction_id = NULL)"
     },
     {
@@ -1034,7 +1034,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/table",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(reaction_id = NULL)"
     },
     {
@@ -1044,7 +1044,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-chet-prod-rebuild GET /reaction/search",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(query = NULL, searchType = NULL, substringTF = NULL)"
     },
     {
@@ -1111,9 +1111,9 @@
       "name": "chemi_mordred",
       "file": "R/chemi_mordred.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-mordred-prod-rebuild GET /api/mordred",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , headers = NULL, inchi = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1121,9 +1121,9 @@
       "name": "chemi_mordred_bulk",
       "file": "R/chemi_mordred.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-mordred-prod-rebuild POST /api/mordred",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(chemicals = , options = NULL, headers = NULL, inchi = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1134,7 +1134,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-ncc_cats-prod-rebuild GET /api/ncc_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , logp = NULL, ws = NULL))"
     },
     {
@@ -1144,7 +1144,7 @@
       "category": "generated",
       "review_reason": "Inseparable grouped file contains a retained or unaccounted definition",
       "operation": "chemi-ncc_cats-prod-rebuild POST /api/ncc_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL)"
     },
     {
@@ -1154,7 +1154,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-opera-prod-rebuild GET /api/opera/report",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = , modelId = ))"
     },
     {
@@ -1181,9 +1181,9 @@
       "name": "chemi_padel",
       "file": "R/chemi_padel.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-padel-prod-rebuild GET /api/padel",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1191,9 +1191,9 @@
       "name": "chemi_padel_bulk",
       "file": "R/chemi_padel.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-padel-prod-rebuild POST /api/padel",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , x2d = TRUE, x3d = FALSE, fp = FALSE, headers = FALSE, timeout = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1204,7 +1204,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-pfas_atlas-prod-rebuild GET /api/pfas_atlas",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = ))"
     },
     {
@@ -1214,7 +1214,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-pfas_atlas-prod-rebuild POST /api/pfas_atlas",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL, smiles = NULL)"
     },
     {
@@ -1224,7 +1224,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-pfas_cats-prod-rebuild GET /api/pfas_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = ))"
     },
     {
@@ -1234,7 +1234,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-pfas_cats-prod-rebuild POST /api/pfas_cats",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL, smiles = NULL)"
     },
     {
@@ -1271,9 +1271,9 @@
       "name": "chemi_rdkit",
       "file": "R/chemi_rdkit.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-rdkit-prod-rebuild GET /api/rdkit",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , type = NULL, radius = NULL, bits = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1281,9 +1281,9 @@
       "name": "chemi_rdkit_bulk",
       "file": "R/chemi_rdkit.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-rdkit-prod-rebuild POST /api/rdkit",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(chemicals = , options = NULL, type = NULL, radius = NULL, bits = NULL, output = c(\"wide\", \"raw\")))"
     },
@@ -1294,7 +1294,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/ccte-list",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -1304,7 +1304,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/ccte-lists",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1314,7 +1314,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/classyfire",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(query = NULL, idType = \"AnyId\", fuzzy = \"Not\", kingdom = NULL, superklass = NULL, klass = NULL, subklass = NULL, directParent = NULL, geometricDescriptor = NULL, alternativeParent = NULL, substituent = NULL, page = 0, size = 1000, all_pages = TRUE, max_pages = 100)"
     },
     {
@@ -1324,7 +1324,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/getallannotations",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1334,7 +1334,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/getannotation",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = , heading = ))"
     },
     {
@@ -1344,7 +1344,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/getannotationslist",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -1354,7 +1354,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/getdatasources",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1394,7 +1394,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/getsubstance",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -1404,7 +1404,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/ghs/classes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1414,7 +1414,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/ghs/hcodes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1434,7 +1434,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/ghs-list",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -1444,7 +1444,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/ghs/pcodes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1454,7 +1454,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-resolver-prod-full GET /api/resolver/hcodes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1464,7 +1464,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/links",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))"
     },
     {
@@ -1494,7 +1494,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/lookupCASRN",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -1504,7 +1504,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild GET /api/resolver/mesh",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))"
     },
     {
@@ -1544,7 +1544,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-resolver-prod-rebuild POST /api/resolver/resolve",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(mol = NULL, queries = NULL)"
     },
     {
@@ -1604,7 +1604,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-search-prod-rebuild GET /api/search/exact",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , exportSmiles = NULL, exportMol = NULL))"
     },
     {
@@ -1614,7 +1614,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-search-prod-rebuild GET /api/search/gethazard",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(sid = ))"
     },
     {
@@ -1744,7 +1744,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-search-prod-rebuild GET /api/search/similar",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(smiles = NULL, dtxsid = NULL, exportSmiles = NULL, exportMol = NULL, min = NULL, max = NULL, similarityType = NULL)"
     },
     {
@@ -1754,7 +1754,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-search-prod-rebuild GET /api/search/substructure",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , exportSmiles = NULL, exportMol = NULL))"
     },
     {
@@ -1774,7 +1774,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-services-prod-full GET /api/services/cim_component_info",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1784,7 +1784,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-services-prod-rebuild POST /api/services/collated_report",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(alertRequest = NULL, chemicals = NULL, exportAlerts = NULL, exportHazard = NULL, exportHazard2 = NULL, exportPrediction = NULL, exportSafety = NULL, hazardRequest = NULL, predictionRequest = NULL)"
     },
     {
@@ -1794,7 +1794,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-services-prod-rebuild POST /api/services/convert",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(content = NULL, type = NULL)"
     },
     {
@@ -1804,7 +1804,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-services-prod-rebuild GET /api/services/layout",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = ))"
     },
     {
@@ -1814,7 +1814,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-services-prod-full GET /api/services/release_notes",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1824,7 +1824,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-services-prod-rebuild GET /api/services/smirks2rxn",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smirks = ))"
     },
     {
@@ -1844,7 +1844,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-stdizer-prod-full GET /api/stdizer/groups/{id}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(id = ))"
     },
     {
@@ -1884,7 +1884,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-stdizer-prod-full GET /api/stdizer/operations",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1904,7 +1904,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-stdizer-prod-full GET /api/stdizer/workflows",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -1944,7 +1944,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-toxprints-prod-full GET /api/toxprints/assays/{name}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -1954,7 +1954,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/assays/check",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(name = ))"
     },
     {
@@ -2004,7 +2004,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-toxprints-prod-full POST /api/toxprints/chemicals_categories",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemicals = NULL)"
     },
     {
@@ -2014,7 +2014,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-toxprints-prod-full GET /api/toxprints/enrichments",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -2024,7 +2024,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/global_assays",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(category = NULL, label = NULL)"
     },
     {
@@ -2034,7 +2034,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/global_toxprints",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(category = NULL, label = NULL)"
     },
     {
@@ -2044,7 +2044,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "chemi-toxprints-prod-full POST /api/toxprints/toxprints_categories",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(chemical = NULL)"
     },
     {
@@ -2054,7 +2054,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/toxprints",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "pairlist(category = NULL, label = NULL)"
     },
     {
@@ -2064,7 +2064,7 @@
       "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
       "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , headers = FALSE, profile = NULL))"
     },
     {
@@ -2074,16 +2074,16 @@
       "category": "generated",
       "review_reason": "Inseparable grouped file contains a retained or unaccounted definition",
       "operation": "chemi-toxprints-prod-rebuild POST /api/toxprints",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
       "name": "chemi_webtest_predict",
       "file": "R/chemi_webtest_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-webtest-prod-rebuild GET /api/webtest/predict",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , endpoint = , method = \"consensus\", format = \"JSON\", output = c(\"wide\", \"raw\")))"
     },
@@ -2091,9 +2091,9 @@
       "name": "chemi_webtest_predict_bulk",
       "file": "R/chemi_webtest_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-webtest-prod-rebuild POST /api/webtest/predict",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(structures = , endpoints = , methods = NULL, format = \"JSON\", output = c(\"wide\", \"raw\")))"
     },
@@ -2101,9 +2101,9 @@
       "name": "chemi_webtest",
       "file": "R/chemi_webtest.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-webtest-prod-rebuild GET /api/webtest",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , headers = FALSE, output = c(\"wide\", \"raw\")))"
     },
@@ -2111,9 +2111,9 @@
       "name": "chemi_webtest_bulk",
       "file": "R/chemi_webtest.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-webtest-prod-rebuild POST /api/webtest",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , chemIdType = \"AnyId\", headers = FALSE, format = \"JSON\", output = c(\"wide\", \"raw\")))"
     },
@@ -2134,7 +2134,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/analyticalqc/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2144,7 +2144,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/aop/search/by-entrez-gene-id/{entrezGeneId}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(entrezGeneId = ))"
     },
     {
@@ -2154,7 +2154,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/aop/search/by-event-number/{eventNumber}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(eventNumber = ))"
     },
     {
@@ -2164,7 +2164,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/aop/search/by-toxcast-aeid/{toxcastAeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(toxcastAeid = ))"
     },
     {
@@ -2174,7 +2174,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(aeid = , projection = \"dtxsidsonly\"))"
     },
     {
@@ -2184,7 +2184,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/count",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "NULL"
     },
     {
@@ -2194,7 +2194,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/assay/search/by-aeid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2204,7 +2204,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/search/by-aeid/{aeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(aeid = , projection = NULL))"
     },
     {
@@ -2224,7 +2224,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/search/by-gene/{geneSymbol}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(geneSymbol = ))"
     },
     {
@@ -2234,7 +2234,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(aeid = , projection = \"single-conc\"))"
     },
     {
@@ -2244,7 +2244,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "pairlist(projection = \"assay-all\")"
     },
     {
@@ -2254,7 +2254,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/aed/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2264,7 +2264,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2274,7 +2274,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-aeid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2284,7 +2284,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-aeid/{aeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(aeid = ))"
     },
     {
@@ -2294,7 +2294,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -2304,7 +2304,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-m4id/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2314,7 +2314,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-m4id/{m4id}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(m4id = ))"
     },
     {
@@ -2324,7 +2324,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-spid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2334,7 +2334,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/search/by-spid/{spid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(spid = ))"
     },
     {
@@ -2344,7 +2344,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/summary/search/by-tissue/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , tissue = ))"
     },
     {
@@ -2354,7 +2354,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild POST /bioactivity/data/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2364,7 +2364,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/summary/search/by-aeid/{aeid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(aeid = ))"
     },
     {
@@ -2374,7 +2374,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/data/summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2384,7 +2384,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/models/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2394,7 +2394,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/models/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , model = ))"
     },
     {
@@ -2404,7 +2404,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/search/contain/{value}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(value = , top = 0))"
     },
     {
@@ -2414,7 +2414,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/search/equal/{value}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(value = ))"
     },
     {
@@ -2424,7 +2424,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/search/start-with/{value}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(value = , top = 500))"
     },
     {
@@ -2434,7 +2434,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/count/by-exact-formula/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = , projection = \"count\"))"
     },
     {
@@ -2444,7 +2444,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/count/by-msready-formula/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = , projection = \"count\"))"
     },
     {
@@ -2454,7 +2454,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild POST /chemical/detail/search/by-dtxcid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = , projection = \"chemicaldetailall\"))"
     },
     {
@@ -2464,7 +2464,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/detail/search/by-dtxcid/{dtxcid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxcid = , projection = \"chemicaldetailall\"))"
     },
     {
@@ -2474,7 +2474,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/detail/search/by-smiles/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(smiles = ))"
     },
     {
@@ -2504,7 +2504,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full POST /chemical/extra-data/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2514,7 +2514,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/extra-data/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2524,7 +2524,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/experimental/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2534,7 +2534,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/predicted/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2544,7 +2544,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/fate/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2554,7 +2554,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild POST /chemical/fate/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2564,7 +2564,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2574,7 +2574,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/fate/summary/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2584,7 +2584,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/file/image/search/by-dtxcid/{dtxcid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxcid = ))"
     },
     {
@@ -2594,7 +2594,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/file/image/search/by-gsid/{gsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(gsid = ))"
     },
     {
@@ -2604,7 +2604,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/file/image/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2614,7 +2614,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/file/mol/search/by-dtxcid/{dtxcid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxcid = ))"
     },
     {
@@ -2624,7 +2624,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/file/mol/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2644,7 +2644,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/list/chemicals/search/by-listname/{list}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(list = ))"
     },
     {
@@ -2694,7 +2694,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-type/{type}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(type = , projection = \"chemicallistall\"))"
     },
     {
@@ -2704,7 +2704,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/list/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , projection = \"chemicallistall\"))"
     },
     {
@@ -2714,7 +2714,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/list/type",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "NULL"
     },
     {
@@ -2724,7 +2724,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full POST /chemical/msready/search/by-dtxcid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2734,7 +2734,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/msready/search/by-dtxcid/{dtxcid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxcid = ))"
     },
     {
@@ -2744,7 +2744,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/msready/search/by-formula/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = ))"
     },
     {
@@ -2774,7 +2774,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/name",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "NULL"
     },
     {
@@ -2784,7 +2784,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2804,7 +2804,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild POST /chemical/property/experimental/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2814,7 +2814,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/name",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "NULL"
     },
     {
@@ -2824,7 +2824,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/predicted/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2844,7 +2844,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild POST /chemical/property/predicted/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2854,7 +2854,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/summary/experimental/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2864,7 +2864,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/summary/predicted/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2874,7 +2874,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -2884,7 +2884,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-chemical-prod-rebuild GET /chemical/property/summary/search/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , propName = ))"
     },
     {
@@ -2894,7 +2894,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/search/by-exact-formula/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = ))"
     },
     {
@@ -2904,7 +2904,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full POST /chemical/search/by-msready-formula/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2914,7 +2914,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/search/by-msready-formula/{formula}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(formula = ))"
     },
     {
@@ -2924,7 +2924,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/search/contain/{word}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(word = , top = 0, projection = \"chemicalsearchall\"))"
     },
     {
@@ -2954,7 +2954,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/search/start-with/{word}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(word = , top = 500))"
     },
     {
@@ -2964,7 +2964,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full POST /chemical/synonym/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -2974,7 +2974,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-chemical-prod-full GET /chemical/synonym/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3004,7 +3004,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3014,7 +3014,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3024,7 +3024,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3034,7 +3034,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3044,7 +3044,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3054,7 +3054,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3064,7 +3064,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild GET /exposure/functional-use/category",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "NULL"
     },
     {
@@ -3074,7 +3074,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild GET /exposure/functional-use/probability/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3084,7 +3084,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild POST /exposure/functional-use/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3094,7 +3094,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild GET /exposure/functional-use/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3104,7 +3104,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full POST /exposure/httk/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3114,7 +3114,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/httk/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3124,7 +3124,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full POST /exposure/list-presence/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3134,7 +3134,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/list-presence/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3144,7 +3144,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/list-presence/tags",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3154,7 +3154,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-medium",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(medium = , pageNumber = 1, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -3164,7 +3164,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3174,7 +3174,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/mmdb/mediums",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3184,7 +3184,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-medium",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(medium = , pageNumber = 1, all_pages = TRUE, max_pages = 100))"
     },
     {
@@ -3194,7 +3194,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3204,7 +3204,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/product-data/puc",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3214,7 +3214,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full POST /exposure/product-data/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3224,7 +3224,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/product-data/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3234,7 +3234,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild POST /exposure/seem/demographic/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3244,7 +3244,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-exposure-prod-rebuild GET /exposure/seem/demographic/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3254,7 +3254,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full POST /exposure/seem/general/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3264,7 +3264,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "ctx-exposure-prod-full GET /exposure/seem/general/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3274,7 +3274,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/adme-ivive/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3284,7 +3284,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild POST /hazard/cancer-summary/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3294,7 +3294,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3304,7 +3304,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild POST /hazard/genetox/details/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3314,7 +3314,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , projection = NULL))"
     },
     {
@@ -3324,7 +3324,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild POST /hazard/genetox/summary/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3334,7 +3334,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3344,7 +3344,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/hawc/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3354,7 +3354,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/iris/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3364,7 +3364,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/pprtv/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3374,7 +3374,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild POST /hazard/skin-eye/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3384,7 +3384,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3394,7 +3394,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-id/{studyId}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyId = ))"
     },
     {
@@ -3404,7 +3404,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-study-type/{studyType}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))"
     },
     {
@@ -3414,7 +3414,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/data/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3424,7 +3424,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-id/{studyId}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyId = ))"
     },
     {
@@ -3434,7 +3434,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-study-type/{studyType}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))"
     },
     {
@@ -3444,7 +3444,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/effects/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3454,7 +3454,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-id/{studyId}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyId = ))"
     },
     {
@@ -3464,7 +3464,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-study-type/{studyType}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyType = , pageNumber = 1, all_pages = TRUE))"
     },
     {
@@ -3474,7 +3474,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/observations/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3484,7 +3484,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-id/{studyId}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyId = ))"
     },
     {
@@ -3494,7 +3494,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-study-type/{studyType}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(studyType = ))"
     },
     {
@@ -3504,7 +3504,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxref/summary/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3514,7 +3514,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-category/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = , category = ))"
     },
     {
@@ -3524,7 +3524,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild POST /hazard/toxval/search/by-dtxsid/",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
     {
@@ -3534,7 +3534,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3544,7 +3544,7 @@
       "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": "ctx-hazard-prod-rebuild GET /hazard/toxval/supercategory/search/by-dtxsid/{dtxsid}",
-      "lifecycle": null,
+      "lifecycle": "stable",
       "formals": "as.pairlist(alist(dtxsid = ))"
     },
     {
@@ -3894,7 +3894,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/polymer/amphoteric",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3904,7 +3904,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/polymer/anionic",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3924,7 +3924,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/polymer/polycationic",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3934,7 +3934,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/surfactant/amphoteric",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3944,7 +3944,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/surfactant/anionic",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3954,7 +3954,7 @@
       "category": "generated",
       "review_reason": "",
       "operation": "epi-suite-prod-full GET /api/ecosar/surfactant/cationic",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "NULL"
     },
     {
@@ -3974,7 +3974,7 @@
       "category": "generated",
       "review_reason": "Already in the verified pilot",
       "operation": "epi-pilot GET /api/search",
-      "lifecycle": null,
+      "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , limit = 20))"
     },
     {

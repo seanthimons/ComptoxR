@@ -6,6 +6,57 @@ for (name in names(full_cases)) {
   failure <- tryCatch(
     {
       fun <- getExportedValue('ComptoxR', name)
+      if (isTRUE(item$hook_owned)) {
+        engine <- sub('^chemi_', '', sub('_bulk$', '', name))
+        input <- names(formals(fun))[[1L]]
+        supplied <- setNames(list('DTXSID7020182'), input)
+        options <- switch(engine,
+          padel = list(x2d = FALSE, x3d = TRUE, fp = TRUE, headers = TRUE, timeout = 30),
+          rdkit = list(type = 'ecfp', radius = 2, bits = 2),
+          mordred = list(headers = TRUE, inchi = FALSE),
+          webtest = list(headers = TRUE),
+          webtest_predict = if (endsWith(name, '_bulk')) list(endpoints = 'LC50', methods = 'consensus') else list(endpoint = 'LC50', method = 'consensus')
+        )
+        supplied <- c(supplied, options)
+        response <- if (engine == 'webtest_predict') {
+          '{"chemicals":[{"chemical":{"smiles":"CCO"},"endpoints":[{"endpoint":{"id":"LC50"},"predicted":[{"method":"consensus","value":3.241}]}]}]}'
+        } else '{"headers":["a","b"],"chemicals":[{"smiles":"CCO","descriptors":[1,2]}]}'
+        testthat::with_mocked_bindings({
+          first <- length(results)
+          probe(paste0(name, '-resolved-options'), do.call(fun, supplied), NULL, response)
+          captured <- results[[length(results)]]$requests
+          stopifnot(length(captured) == 1L,
+            identical(captured[[1L]]$method, sub(' .*', '', item$key)),
+            identical(captured[[1L]]$path, sub('^.* /api/', '/chemi/', item$key)))
+          raw <- supplied
+          raw$output <- 'raw'
+          probe(paste0(name, '-raw'), do.call(fun, raw), NULL, response)
+          if (engine == 'webtest_predict') {
+            omitted <- supplied
+            omitted[c('endpoint', 'endpoints')] <- NULL
+            probe(paste0(name, '-missing-endpoint'), do.call(fun, omitted), list(), response, error = TRUE)
+          }
+          skipped <- supplied
+          skipped[[input]] <- NA_character_
+          probe(paste0(name, '-skip'), do.call(fun, skipped), list(), response)
+          # Resolver failures must also skip transport and run the post chain.
+          skipped[[input]] <- 'DTXSID0000000'
+          probe(paste0(name, '-unresolved'), do.call(fun, skipped), list(), response)
+          probe(paste0('invalid-missing-', name), do.call(fun, list()), error = TRUE)
+          # Server provenance contains each process's random localhost port.
+          normalize_server <- function(x) {
+            if (is.character(x)) x[] <- gsub(base, 'http://localhost', x, fixed = TRUE)
+            if (is.list(x)) x[] <- lapply(x, normalize_server)
+            attributes(x) <- lapply(attributes(x), normalize_server)
+            x
+          }
+          for (i in seq.int(first + 1L, length(results))) results[[i]]$value <- normalize_server(results[[i]]$value)
+        }, chemi_resolver_lookup_bulk = function(ids, idsType, tidy) {
+          lapply(ids, function(id) if (id == 'DTXSID0000000') list(result = 'NOT_FOUND') else
+            list(result = 'FOUND', chemical = list(sid = id, canonicalSmiles = 'CCO')))
+        }, .package = 'ComptoxR')
+        next
+      }
       arguments <- item$arguments
       supplied <- item$inputs
       observe <- isTRUE(item$observe)

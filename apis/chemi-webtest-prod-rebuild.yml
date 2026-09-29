@@ -1,0 +1,333 @@
+id: chemi-webtest-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-webtest-prod.json
+selection:
+  include:
+  - GET /api/webtest
+  - GET /api/webtest/predict
+  - POST /api/webtest
+  - POST /api/webtest/predict
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/webtest:
+    name: chemi_webtest
+    file: R/chemi_webtest.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: One SMILES string or resolvable chemical identifier
+      headers:
+        type: logical
+        default: no
+        description: 'Request upstream descriptor headers (default: FALSE)'
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        method:
+          from:
+          - hook_state
+          - request
+          - method
+        batch_limit:
+          value: 0.0
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+    docs:
+      title: Webtest
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        headers: 'Request upstream descriptor headers (default: FALSE)'
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/webtest/predict:
+    name: chemi_webtest_predict
+    file: R/chemi_webtest_predict.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: Required parameter
+      endpoint:
+        type: character
+        required: yes
+        missing_as_null: yes
+        description: Optional parameter
+      method:
+        type: character
+        default: consensus
+        description: 'Optional parameter (default: consensus)'
+      format:
+        type: character
+        default: JSON
+        description: 'Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV,
+          JSON, XLSX, PDF, HTML, XML, DOCX'
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: normalized wide tibble or raw PredictionResult'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+    docs:
+      title: Webtest Predict
+      lifecycle: experimental
+      parameters:
+        smiles: Required parameter
+        endpoint: Optional parameter
+        method: 'Optional parameter (default: consensus)'
+        format: 'Optional parameter. Options: UNKNOWN, SDF, SMI, MOL, CSV, TSV, JSON,
+          XLSX, PDF, HTML, XML, DOCX'
+        output: 'Output contract: normalized wide tibble or raw PredictionResult'
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/webtest:
+    name: chemi_webtest_bulk
+    file: R/chemi_webtest.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Chemical structures or resolvable identifiers
+      chemIdType:
+        type: character
+        default: AnyId
+        description: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL,
+          CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      headers:
+        type: logical
+        default: no
+        description: Request descriptor headers
+      format:
+        type: character
+        default: JSON
+        description: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV
+          (default: JSON)'
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+    docs:
+      title: Webtest
+      lifecycle: experimental
+      parameters:
+        query: Chemical structures or resolvable identifiers
+        chemIdType: 'Input identifier type. Options: DTXSID, DTXCID, SMILES, MOL,
+          CAS, Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        format: 'Response format: JSON, CSV, or TSV. Options: JSON, CSV, TSV (default:
+          JSON)'
+        headers: Request descriptor headers
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - query: DTXSID1024122
+      tags:
+        apiStage: public
+  POST /api/webtest/predict:
+    name: chemi_webtest_predict_bulk
+    file: R/chemi_webtest_predict.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      structures:
+        type: character
+        required: yes
+        description: Molecule expressed as SMILES or MOL
+      endpoints:
+        type: character
+        required: yes
+        missing_as_null: yes
+        description: Endpoint to predict
+      methods:
+        type: character
+        default: ~
+        description: 'Prediction method: hc (Hierarchical Clustering), sm (Single
+          Model), nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)'
+      format:
+        type: character
+        default: JSON
+        description: 'Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI,
+          MOL, CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: normalized wide tibble or raw PredictionResult'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+    docs:
+      title: Webtest Predict
+      lifecycle: experimental
+      parameters:
+        endpoints: Endpoint to predict
+        format: 'Report type: JSON, HTML or PDF. Options: UNKNOWN, SDF, SMI, MOL,
+          CSV, TSV, JSON, XLSX, PDF, HTML, XML, DOCX'
+        methods: 'Prediction method: hc (Hierarchical Clustering), sm (Single Model),
+          nn (Nearest Neighbour), gc (Group Contribution) or consensus (Default)'
+        structures: Molecule expressed as SMILES or MOL
+        output: 'Output contract: normalized wide tibble or raw PredictionResult'
+      return: Returns a tibble with results
+      examples:
+      - endpoints: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hooks:
+  chemi_webtest:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_webtest_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  chemi_webtest_bulk:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_webtest_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  chemi_webtest_predict:
+    pre_request:
+    - validate_webtest_prediction_request
+    - resolve_webtest_prediction_inputs
+    - prepare_webtest_prediction_request
+    post_response:
+    - filter_webtest_prediction_result
+  chemi_webtest_predict_bulk:
+    pre_request:
+    - validate_webtest_prediction_request
+    - resolve_webtest_prediction_inputs
+    - prepare_webtest_prediction_request
+    post_response:
+    - filter_webtest_prediction_result
+prepare: preserve_choice_defaults

@@ -38,6 +38,7 @@ definitions <- do.call(c, lapply(sort(Sys.glob('R/*.R')), function(file) {
     start <- refs[[i]][[1]]
     block <- if (start > 1L) {
       above <- rev(lines[seq_len(start - 1L)])
+      if (above[[1L]] == '# Generated with specmill; do not edit by hand.') above <- above[-1L]
       rev(above[cumprod(grepl("^#'", above)) == 1L])
     } else character()
     badge <- regmatches(block, regexpr('lifecycle::badge\\("[a-z]+"\\)', block))

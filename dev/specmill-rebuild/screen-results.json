@@ -393,18 +393,20 @@
   "chemi_mordred": {
     "name": "chemi_mordred",
     "file": "R/chemi_mordred.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-mordred-prod.json",
+    "key": "GET /api/mordred",
+    "lifecycle": "experimental"
   },
   "chemi_mordred_bulk": {
     "name": "chemi_mordred_bulk",
     "file": "R/chemi_mordred.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-mordred-prod.json",
+    "key": "POST /api/mordred",
+    "lifecycle": "experimental"
   },
   "chemi_opera": {
     "name": "chemi_opera",
@@ -426,18 +428,20 @@
   "chemi_padel": {
     "name": "chemi_padel",
     "file": "R/chemi_padel.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-padel-prod.json",
+    "key": "GET /api/padel",
+    "lifecycle": "experimental"
   },
   "chemi_padel_bulk": {
     "name": "chemi_padel_bulk",
     "file": "R/chemi_padel.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-padel-prod.json",
+    "key": "POST /api/padel",
+    "lifecycle": "experimental"
   },
   "chemi_predict": {
     "name": "chemi_predict",
@@ -467,18 +471,20 @@
   "chemi_rdkit": {
     "name": "chemi_rdkit",
     "file": "R/chemi_rdkit.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-rdkit-prod.json",
+    "key": "GET /api/rdkit",
+    "lifecycle": "experimental"
   },
   "chemi_rdkit_bulk": {
     "name": "chemi_rdkit_bulk",
     "file": "R/chemi_rdkit.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-rdkit-prod.json",
+    "key": "POST /api/rdkit",
+    "lifecycle": "experimental"
   },
   "chemi_resolver_getpubchemlist": {
     "name": "chemi_resolver_getpubchemlist",
@@ -690,34 +696,38 @@
   "chemi_webtest_predict": {
     "name": "chemi_webtest_predict",
     "file": "R/chemi_webtest_predict.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-webtest-prod.json",
+    "key": "GET /api/webtest/predict",
+    "lifecycle": "experimental"
   },
   "chemi_webtest_predict_bulk": {
     "name": "chemi_webtest_predict_bulk",
     "file": "R/chemi_webtest_predict.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-webtest-prod.json",
+    "key": "POST /api/webtest/predict",
+    "lifecycle": "experimental"
   },
   "chemi_webtest": {
     "name": "chemi_webtest",
     "file": "R/chemi_webtest.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-webtest-prod.json",
+    "key": "GET /api/webtest",
+    "lifecycle": "experimental"
   },
   "chemi_webtest_bulk": {
     "name": "chemi_webtest_bulk",
     "file": "R/chemi_webtest.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-webtest-prod.json",
+    "key": "POST /api/webtest",
+    "lifecycle": "experimental"
   },
   "ct_api_key": {
     "name": "ct_api_key",
@@ -734,42 +744,6 @@
     "reason": "Nonliteral helper argument needs manual mapping",
     "schema": "ctx-bioactivity-prod.json",
     "key": "GET /bioactivity/assay/search/by-endpoint/"
-  },
-  "ct_bioactivity_data_aed_search_bulk": {
-    "name": "ct_bioactivity_data_aed_search_bulk",
-    "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/aed/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_aed_search": {
-    "name": "ct_bioactivity_data_aed_search",
-    "file": "R/ct_bioactivity_data_aed_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_bioactivity_data_search_bulk": {
-    "name": "ct_bioactivity_data_search_bulk",
-    "file": "R/ct_bioactivity_data_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-bioactivity-prod.json",
-    "key": "POST /bioactivity/data/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_chemical_fate_search_bulk": {
-    "name": "ct_chemical_fate_search_bulk",
-    "file": "R/ct_chemical_fate_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/fate/search/by-dtxsid/",
-    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
@@ -859,96 +833,6 @@
     "reason": "Custom implementation requires manual mapping",
     "schema": null,
     "key": null
-  },
-  "ct_hazard_cancer_search_bulk": {
-    "name": "ct_hazard_cancer_search_bulk",
-    "file": "R/ct_hazard_cancer_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/cancer-summary/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_cancer_search": {
-    "name": "ct_hazard_cancer_search",
-    "file": "R/ct_hazard_cancer_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/cancer-summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_details_search_bulk": {
-    "name": "ct_hazard_genetox_details_search_bulk",
-    "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/details/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_details_search": {
-    "name": "ct_hazard_genetox_details_search",
-    "file": "R/ct_hazard_genetox_details_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/genetox/details/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_search_bulk": {
-    "name": "ct_hazard_genetox_search_bulk",
-    "file": "R/ct_hazard_genetox_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/genetox/summary/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_genetox_search": {
-    "name": "ct_hazard_genetox_search",
-    "file": "R/ct_hazard_genetox_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/genetox/summary/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_skin_eye_search_bulk": {
-    "name": "ct_hazard_skin_eye_search_bulk",
-    "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/skin-eye/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_skin_eye_search": {
-    "name": "ct_hazard_skin_eye_search",
-    "file": "R/ct_hazard_skin_eye_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/skin-eye/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_search_bulk": {
-    "name": "ct_hazard_toxval_search_bulk",
-    "file": "R/ct_hazard_toxval_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "POST /hazard/toxval/search/by-dtxsid/",
-    "lifecycle": "stable"
-  },
-  "ct_hazard_toxval_search": {
-    "name": "ct_hazard_toxval_search",
-    "file": "R/ct_hazard_toxval_search.R",
-    "status": "candidate",
-    "reason": "",
-    "schema": "ctx-hazard-prod.json",
-    "key": "GET /hazard/toxval/search/by-dtxsid/{dtxsid}",
-    "lifecycle": "stable"
   },
   "ct_related": {
     "name": "ct_related",
