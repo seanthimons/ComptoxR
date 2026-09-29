@@ -8,6 +8,20 @@ names(inventory) <- vapply(inventory, `[[`, '', 'name')
 screen <- jsonlite::read_json(file.path(out, 'screen-results.json'))
 audit <- jsonlite::read_json('dev/specmill-pilot/all-schema-diagnostics.json')
 hooks <- yaml::read_yaml('inst/hook_config.yml')
+# Policy decisions (#338) replace the screen reason for exports kept hand-written on purpose.
+hook_owned <- paste0('chemi_', rep(c('descriptors', 'mordred', 'padel', 'rdkit', 'webtest', 'webtest_predict'), each = 2), c('', '_bulk'))
+policy <- c(
+  setNames(rep(list(paste(
+    'Retained by policy (#338): the pre-request hook builds the whole request (endpoint, method, server, body)',
+    'with runtime fallbacks such as apply_aggregate_rdkit_fallback, so there is no single schema route;',
+    'generating it needs specmill support for hook-owned or multi-route operations'
+  )), length(hook_owned)), hook_owned),
+  list(chemi_resolver_lookup = paste(
+    'Retained by policy (#338): original-client defect, not fixed here. The required `query` string parameter rides',
+    'the static batch_limit = 0 path, which skips input checks: an empty query is sent without `query`, NA is sent',
+    'as "NA", and several values fail in httr2. The contract check invalid-empty is right; the wrapper is wrong'
+  ))
+)
 # Evidence matching is looser than wave.R: repeated and trailing slashes left by removed
 # placeholders are collapsed, so multi-parameter routes are reported (never adopted) here.
 # ChET paths sit below its schema server, /api/chet (#339).
@@ -94,7 +108,7 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
     return(entry)
   }
   entry$disposition <- 'retained'
-  entry$reason <- screen[[name]]$reason
+  entry$reason <- policy[[name]] %||% screen[[name]]$reason
   entry$route <- route(name, d$file)
   if (!is.null(hooks[[name]])) {
     chain <- hooks[[name]]

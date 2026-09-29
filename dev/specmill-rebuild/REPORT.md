@@ -150,6 +150,12 @@ with one of them.
   anyway: the changed missing-argument error was accepted (#338), so the
   wave only requires both versions to error. Because its wire was also
   corrected (#339), it is a corrected export in `verify-runtime.R`.
+- `chemi_resolver_lookup` sends its required `query` string parameter through
+  the static `batch_limit = 0` path of `generic_request`, which skips input
+  checks. An empty query is sent without `query`, `NA` is sent as `query=NA`,
+  and several values fail inside httr2. The contract check
+  `invalid-empty-chemi_resolver_lookup` is right and the wrapper is wrong. It
+  is retained by policy (#338).
 
 ## Dispositions (#310–#314)
 
@@ -174,15 +180,19 @@ operation key, file, and wave. Each retained export records:
 | #313 | 7 | 9 | 0 |
 | #314 | 4 | 0 | 0 |
 
+The client utilities (`chemi_server`, `ct_api_key`, `epi_server`) configure
+the client and wrap no schema endpoint. They stay outside schema generation by
+policy (#338 for `ct_api_key`).
+
 Reasons for keeping an export retained:
 
 - no unique supported schema route (24), including the ambiguous-media and
   malformed-route blockers in #313;
 - a hand-written implementation (18);
-- a request built by a pre-request hook (12);
+- a request built by a pre-request hook (12, retained by policy in #338);
 - a nonliteral helper argument (3);
-- a candidate whose contract test disagrees with the original (1,
-  `chemi_resolver_lookup`, below);
+- an original defect caught by its contract test (1, `chemi_resolver_lookup`,
+  retained by policy in #338; see the defects above);
 - the original defects above (2).
 
 A retained function is a valid completion state. No contract is guessed.
@@ -218,7 +228,10 @@ The multipart and hazard waves (below) generated `chemi_alerts`,
 client-owned:
 
 - 12 descriptor and webtest wrappers build the request inside a pre-request
-  hook, so no route is guessed;
+  hook, so no route is guessed. They are retained by policy (#338): the hook
+  owns endpoint, method, server, and body, with runtime fallbacks such as
+  `apply_aggregate_rdkit_fallback`. Generating them needs specmill support for
+  hook-owned or multi-route operations;
 - `chemi_resolver_getsimilaritymap` computes `sort` inline in the helper call.
 
 ## Springdoc multipart parameters
@@ -264,7 +277,8 @@ The split wave generated 10 singles: `ct_chemical_search_equal`, five
 `chemi_predictor_models_predict`, `chemi_stdizer`, and
 `chemi_toxprints_assays`. `chemi_resolver_lookup` was held back: its contract
 check `invalid-empty-chemi_resolver_lookup` expects an error, but the original
-and generated clients both send the request.
+and generated clients both send the request. The wrapper is at fault (see the
+defects above), and it is retained by policy (#338).
 
 ## Path-parameter routes and corrected paths (#335)
 
