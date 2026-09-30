@@ -662,3 +662,105 @@ returned objects/classes, errors/warnings, 409 exported signatures and helper
 signatures match, apart from the previously recorded 12 query and 14 options
 corrections, which remain separately asserted. Evidence is recorded in
 `runtime-custom-transforms-results.json` and `wave-custom-transforms.json`.
+
+## Prediction and local classifier (#337)
+
+Reviewed `chemi_predict` and `ct_classify` through their original implementations,
+helpers, request builders, hook registry and production callers. At user
+direction, `ct_related` is excluded from generation as a legacy Dashboard scraper
+wrapper. Source, public signatures/defaults, documentation, lifecycle badges or
+their absence, imports and runtime behavior remain unchanged.
+
+Prediction's exact schema/method/path is `chemi-webtest-prod.json POST
+/api/webtest/predict`. The wrapper first checks query using its original
+`is.null(query) | missing(query)` expression, then calls `chemi_resolver_lookup`
+with the original query. Missing query retains its native missing-argument error;
+NULL query fails before report is evaluated. Resolver errors propagate, and
+`length(resolved_chemicals)==0` fails before report validation. No normalization,
+chemical-name extraction or SMILES conversion is added. Resolved objects become
+the structures payload unchanged, including NULL fields, FALSE and zero.
+
+Report validation accepts eleven original formats. UNKNOWN is documented and
+present in the schema enum but rejected by this wrapper, with the existing
+warning and JSON fallback. FALSE, zero, NA and other invalid scalar formats also
+warn and use JSON; NULL/empty/vector formats retain native condition errors.
+The direct request uses POST webtest/predict, an explicit Accept header,
+`auto_unbox=TRUE`, no authentication/retry policy and ordered structures/report
+fields. Schema `PredictionRequest` declares format; the original sends report.
+This discrepancy is preserved without correction. CLI messages are unconditional,
+with no debug shortcut or hook calls. Parsed JSON returns unchanged, including
+NULL, empty lists, FALSE/zero and malformed-JSON errors. Actual httr2 HTTP failures
+occur before the wrapper's status guard; mocked responses separately cover that
+guard. Transport failures propagate.
+
+The exact resolver operation is `chemi-resolver-prod.json GET
+/api/resolver/lookup`. Its shared helper still owns normalization, batching,
+encoding and authentication behavior. The earlier intentional resolver input
+corrections remain separately asserted in `verify-runtime.R`. New prediction
+runtime cases mock the resolver to isolate the unchanged wrapper from those
+already-authorized dependency corrections. Existing resolver and caller tests
+remain in the broad suite. `probe_api_function` treats prediction as a legacy
+probe; no other direct production caller or hook configuration was found.
+
+Pinned native generation exposes a body parameter instead of query/report.
+The retained-contract diagnostic also rejects imported `req_perform` as a client
+helper. The explicit `retained_direct` mapping in `screen-results.json` records
+the confirmed schema key and original transport. The inactive `retained-predict.yml`
+and `probe-prediction-classifier.R` reproduce the compatibility review. A frozen
+handwritten contract captures all nine original resolver/request/response calls.
+No shim, new hook, toolkit pin change or generated wrapper is introduced.
+The existing prediction-body callback requires schema oneOf alternatives, which
+this request lacks. Existing WebTEST prediction hooks require endpoint/method
+inputs, resolve canonical SMILES in bulk, emit skip/error rows and build
+format=JSON bodies. Reusing them would change this wrapper's validation order,
+payload, warnings/errors and returned objects.
+
+`ct_classify` has no schema/method/path key: it is a local dataframe utility.
+`create_compound_classifier` shares its source file, and `.onLoad` in `zzz.R`
+creates and caches that closure in `.ComptoxREnv$classifier`. The wrapper reuses
+the cached value; only NULL causes lazy creation and storage. Nonfunction cached
+values retain their errors. Cached return visibility and inputs, including
+NULL/FALSE/zero, are preserved. The grouped source file is retained as runtime
+code and stays outside the removal allowlist.
+
+Original single-row and batch outputs are frozen independently. Whole-column
+`isTRUE(isMarkush)` and `isTRUE(isotope==1L)` cause different classification
+results in batches; this review records that behavior without correction.
+Tests cover formula/SMILES decisions, mixture composition, original column order,
+metadata containing NULL/FALSE/zero, tibble/data.frame classes, empty data,
+missing columns/arguments, and cache initialization/reuse/error behavior. The
+classifier neither sends requests nor executes hooks and has no lifecycle badge.
+`probe_api_function` skips it as a client utility; the existing caller tests pass.
+
+`ct_related` retains its questioning badge and explicit legacy
+https://comptox.epa.gov/dashboard-api/ccdapp2/ server, GET
+related-substances/search/by-dtxsid, auth=FALSE and per-item id parameters.
+No production schema key is guessed. Its disposition is `retained_excluded`,
+its inventory category excludes it from future migration screening, and its
+existing mocked compatibility tests are run without accessing the legacy server.
+The five upstream-blocked AMOS entries are untouched.
+
+Both installed original and candidate pass 118 focused assertions. Contract,
+regression, request-helper, caller/hook, legacy stub and related-wrapper
+compatibility suites pass 1,952 assertions with no failures, errors or warnings.
+Legacy test generation/check passes without retiring tests. This wave generates
+zero wrappers, maps one retained prediction wrapper, retains one local utility,
+and records the requested scraper exclusion. Six #337 entries remain: five
+upstream-blocked AMOS entries and the previously reviewed ToxPrint parser blocker.
+
+The isolated snapshot `0cf48ad6` deleted all 226 allowlisted files and rebuilt
+263 operations. Regeneration, second apply and check were byte-identical, with
+no differences. Final generation inputs and allowlisted file bytes match that
+snapshot. All reviewed source hashes, the toolkit pin, hook configuration,
+documentation and the uncommitted mirror-selection plan are unchanged.
+
+The installed original/candidate localhost comparison passes all 1,453 cases,
+including 57 new prediction/classifier cases, with zero candidate failures.
+Exact request fields, objects/classes, errors/warnings, 409 exported signatures
+and helper signatures match apart from the previously recorded 12 query and 14
+options corrections, which remain separately asserted. The temporary parallel
+runner redirects subprocess output to files and reads completed immutable
+request records once to avoid blocked output channels and repeated disk reads;
+client code, modeled expectations and comparison assertions are unchanged.
+Evidence is in `runtime-prediction-classifier-results.json` and
+`wave-prediction-classifier.json`.

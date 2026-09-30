@@ -156,7 +156,7 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
     if (identical(entry$mapping$mode, 'retained_direct')) {
       key <- entry$mapping$key
       schema <- sub('^schema/', '', entry$mapping$schema)
-      entry$route <- list(helper = 'req_perform_sequential', method = 'GET', endpoint = sub('^GET /api/', '', key),
+      entry$route <- list(helper = entry$mapping$helper, method = sub(' .*', '', key), endpoint = sub('^[A-Z]+ /api/', '', key),
         supported = list(paste(schema, key)), blocked = list(),
         request_builder = 'Direct httr2 request/path/query calls traced in source; fixed contract freezes request-builder calls.')
     }
@@ -171,9 +171,15 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
       blocked = screen[[name]]$schema_blocker)
     return(entry)
   }
+  if (identical(screen[[name]]$status, 'retained_excluded')) {
+    entry$disposition <- 'retained_excluded'
+    entry$reason <- screen[[name]]$reason
+    entry$request_scope <- screen[[name]]$request_scope
+    return(entry)
+  }
   if (identical(d$category, 'runtime') || name == 'ct_api_key') {
     entry$disposition <- 'retained_client_utility'
-    entry$reason <- 'Client configuration utility, not a schema endpoint wrapper; stays outside schema generation.'
+    entry$reason <- if (identical(screen[[name]]$status, 'retained_client_utility')) screen[[name]]$reason else 'Client configuration utility, not a schema endpoint wrapper; stays outside schema generation.'
     return(entry)
   }
   entry$disposition <- 'retained'

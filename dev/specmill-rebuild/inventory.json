@@ -1,5 +1,5 @@
 {
-  "commit": "7d10d98fea29dbbd348783bf02cc85740e255e62",
+  "commit": "3ddbe3f3df100c22cf51c91ba7e66a71e66f4e05",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,12 @@
     "%>%"
   ],
   "export_categories": {
+    "excluded_wrapper": 1,
     "generated": 263,
-    "retained_mapped": 10,
-    "runtime": 20,
+    "retained_mapped": 11,
+    "runtime": 21,
     "sidecar": 26,
-    "unmapped_wrapper": 78,
+    "unmapped_wrapper": 75,
     "utility": 11
   },
   "runtime_files": [
@@ -33,7 +34,8 @@
     "R/data.R",
     "R/package_sitrep.R",
     "R/probe_api_function.R",
-    "R/misc_functions.R"
+    "R/misc_functions.R",
+    "R/ct_classify.R"
   ],
   "removable_files": 226,
   "definitions": [
@@ -1241,9 +1243,9 @@
       "name": "chemi_predict",
       "file": "R/chemi_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-prediction-classifier-rebuild POST /api/webtest/predict",
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = , report = \"JSON\"))"
     },
@@ -2981,7 +2983,7 @@
       "name": "ct_classify",
       "file": "R/ct_classify.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "runtime",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": null,
       "lifecycle": null,
@@ -2991,7 +2993,7 @@
       "name": "create_compound_classifier",
       "file": "R/ct_classify.R",
       "exported": false,
-      "category": "utility",
+      "category": "runtime",
       "review_reason": null,
       "operation": null,
       "lifecycle": null,
@@ -3551,7 +3553,7 @@
       "name": "ct_related",
       "file": "R/ct_related.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "excluded_wrapper",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": null,
       "lifecycle": null,

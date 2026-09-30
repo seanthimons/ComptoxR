@@ -29,7 +29,7 @@ attempt <- jsonlite::read_json('dev/specmill-full/attempt-results.json')
 runtime_files <- c(
   'R/z_generic_request.R', 'R/zzz.R', 'R/hook_registry.R', 'R/schema.R', 'R/service_endpoints.R',
   'R/mappings.R', 'R/roxy_apistage.R', 'R/utils-pipe.R', 'R/ComptoxR-package.R', 'R/data.R',
-  'R/package_sitrep.R', 'R/probe_api_function.R', 'R/misc_functions.R'
+  'R/package_sitrep.R', 'R/probe_api_function.R', 'R/misc_functions.R', 'R/ct_classify.R'
 )
 sidecar <- '^R/(dss_|eco_|tox_|z_db_)'
 
@@ -56,6 +56,8 @@ definitions <- do.call(c, lapply(sort(Sys.glob('R/*.R')), function(file) {
     op <- ops[ops$name == name, ]
     category <- if (nrow(op)) {
       if (op$implementation == 'generated') 'generated' else 'retained_mapped'
+    } else if (identical(review[[name]]$status, 'retained_excluded')) {
+      'excluded_wrapper'
     } else if (file %in% runtime_files || startsWith(file, 'R/hooks_')) {
       'runtime'
     } else if (grepl(sidecar, file)) {

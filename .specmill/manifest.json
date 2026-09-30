@@ -2881,7 +2881,7 @@
     "specmill.yml": "0b8ec6b83d3900674a9234fe13f61cd9c0e2c51fa7a552d04c118bf2a3e6a10a",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "28f3d20c6914b09dbac37ad2f2de173a5c39274a12b2257b70e512f717b9fc55",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "88ae46fcab7da4fb60c08d6516158e28e52adf5e926563f64ae4cdf1e623fe5c"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "071f61f5113269f91e67a53962f440f9b448228585d875f4fde9dc1862d8c792"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {

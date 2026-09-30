@@ -57,6 +57,49 @@ for (name in names(full_cases)) {
         }, .package = 'ComptoxR')
         next
       }
+      # #337: prediction orchestration and local classifier, original behavior unchanged.
+      if (isTRUE(item$prediction_classifier)) {
+        if (name == 'ct_classify') {
+          fixture <- readRDS('tests/testthat/fixtures/specmill-classifier-contract.rds')
+          settings <- get('.ComptoxREnv', asNamespace('ComptoxR'))
+          saved <- settings$classifier
+          settings$classifier <- NULL
+          probe('ct_classify-cold-batch', fun(fixture$input))
+          probe('ct_classify-warm-batch', fun(fixture$input))
+          for (i in seq_len(nrow(fixture$input))) probe(paste0('ct_classify-row-',i), fun(fixture$input[i,]))
+          probe('ct_classify-dataframe', fun(as.data.frame(fixture$input)))
+          for (variant in c('empty','null','false','zero','missing')) {
+            inputs <- switch(variant, empty = list(df = fixture$input[0,]), null = list(df = NULL), false = list(df = FALSE), zero = list(df = 0), missing = list())
+            probe(paste0('ct_classify-',variant), do.call(fun, inputs), error = TRUE)
+          }
+          settings$classifier <- saved
+        } else {
+          resolved <- list(list(sid = 'one', smiles = 'CCO', mol = NULL, flag = FALSE, count = 0))
+          wire_for <- function(report = 'JSON') list(expected('POST','/chemi/webtest/predict', body = as.character(jsonlite::toJSON(list(structures = resolved, report = report), auto_unbox = TRUE, null = 'null', digits = 22))))
+          testthat::with_mocked_bindings({
+            for (variant in c('default','false','zero','empty','blank','na','duplicates','encoding')) {
+              inputs <- switch(variant, default = list(query = 'one'), false = list(query = FALSE), zero = list(query = 0), empty = list(query = character()), blank = list(query = ''), na = list(query = NA_character_), duplicates = list(query = c('one','one')), encoding = list(query = 'caf\u00e9 +/&'))
+              probe(paste0('chemi_predict-',variant), do.call(fun,inputs), wire_for(), '{"score":0,"flag":false,"absent":null}')
+            }
+            for (report in c('SDF','SMI','MOL','CSV','TSV','JSON','XLSX','PDF','HTML','XML','DOCX')) probe(paste0('chemi_predict-report-',report), fun('one',report), wire_for(report))
+            for (variant in c('unknown','false','zero','na','null','empty','multiple')) {
+              report <- switch(variant, unknown = 'UNKNOWN', false = FALSE, zero = 0, na = NA_character_, null = NULL, empty = character(), multiple = c('JSON','SDF'))
+              bad <- variant %in% c('null','empty','multiple')
+              probe(paste0('chemi_predict-invalid-report-',variant), fun('one',report), if (bad) list() else wire_for(), error = bad)
+            }
+            probe('chemi_predict-null-query', fun(NULL), error = TRUE)
+            probe('chemi_predict-missing', fun(), error = TRUE)
+            for (body in c('null','[]','{}')) probe(paste0('chemi_predict-response-',body),fun('one'),wire_for(),body)
+            probe('chemi_predict-http-400',fun('one'),wire_for(),'{"error":"bad request"}',status = 400L,error = TRUE)
+            probe('chemi_predict-invalid-json',fun('one'),wire_for(),'not-json',error = TRUE)
+            for (value in list(NULL,list(),character(),tibble::tibble())) {
+              resolved <- value
+              probe(paste0('chemi_predict-no-resolution-',class(value)[[1]]),fun('one',report = stop('report evaluated')),error = TRUE)
+            }
+          }, chemi_resolver_lookup = function(query, ...) resolved, .package = 'ComptoxR')
+        }
+        next
+      }
       # #337: direct request policies and retained latent defects; localhost only.
       if (isTRUE(item$custom_transforms)) {
         if (name == 'chemi_toxprint') {

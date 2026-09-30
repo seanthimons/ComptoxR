@@ -67,8 +67,31 @@
     "lifecycle": null,
     "formals": "as.pairlist(alist(query = , report = \"JSON\"))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping"
+    "disposition": "retained_mapped",
+    "reason": "Retain identifier resolution before report validation; preserve resolved objects as structures, ordered structures/report body fields with retained NULL/FALSE/zero, legacy report field despite schema format, auto_unbox, explicit Accept header, no authentication/retries/hooks, unconditional CLI messages, invalid-report warnings and JSON fallback, empty resolution errors, native report/missing-argument errors and parsed response/error behavior. Imported req_perform and the complete resolver/transport/response flow cannot be replaced by an existing compatible toolkit binding or callback.",
+    "mapping": {
+      "service": "chemi-prediction-classifier-rebuild",
+      "key": "POST /api/webtest/predict",
+      "file": "R/chemi_predict.R",
+      "helper": "req_perform",
+      "mode": "retained_direct",
+      "schema": "schema/chemi-webtest-prod.json",
+      "wave": "prediction-classifier",
+      "policy": "Retain identifier resolution before report validation; preserve resolved objects as structures, ordered structures/report body fields with retained NULL/FALSE/zero, legacy report field despite schema format, auto_unbox, explicit Accept header, no authentication/retries/hooks, unconditional CLI messages, invalid-report warnings and JSON fallback, empty resolution errors, native report/missing-argument errors and parsed response/error behavior. Imported req_perform and the complete resolver/transport/response flow cannot be replaced by an existing compatible toolkit binding or callback.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+      "proposal_file": "dev/specmill-rebuild/retained-predict.yml",
+      "toolkit_limit": "Missing client helper: req_perform; imported httr2 transport stays handwritten."
+    },
+    "route": {
+      "helper": "req_perform",
+      "method": "POST",
+      "endpoint": "webtest/predict",
+      "supported": [
+        "chemi-webtest-prod.json POST /api/webtest/predict"
+      ],
+      "blocked": [],
+      "request_builder": "Direct httr2 request/path/query calls traced in source; fixed contract freezes request-builder calls."
+    }
   },
   "chemi_resolver_lookup": {
     "issue": 310,
@@ -1242,8 +1265,8 @@
     "siblings": [
       "create_compound_classifier"
     ],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping"
+    "disposition": "retained_client_utility",
+    "reason": "Local dataframe classifier, not an HTTP endpoint: .onLoad initializes create_compound_classifier in .ComptoxREnv; ct_classify reuses it with a NULL-only lazy fallback. Retain grouped factory file, original vectorized isTRUE decisions, field order, classes, cache and errors. No schema/method/path keys, transport, hooks or lifecycle badge."
   },
   "ct_exposure_functional_use_category": {
     "issue": 310,
@@ -1790,15 +1813,14 @@
     "lifecycle": null,
     "formals": "as.pairlist(alist(query = , inclusive = FALSE))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
+    "disposition": "retained_excluded",
+    "reason": "Excluded from generation at user direction: legacy Dashboard scraper endpoint, not production ctx-api. Preserve explicit https://comptox.epa.gov/dashboard-api/ccdapp2/ server, GET related-substances/search/by-dtxsid, auth=FALSE, per-item id queries and existing questioning badge; do not infer a supported production schema key.",
+    "request_scope": {
+      "server": "https://comptox.epa.gov/dashboard-api/ccdapp2/",
       "method": "GET",
       "endpoint": "related-substances/search/by-dtxsid",
-      "supported": [],
-      "blocked": []
+      "auth": false,
+      "excluded_by_user": true
     }
   },
   "ct_similar": {
