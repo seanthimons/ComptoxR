@@ -33,14 +33,21 @@ test_that('ToxPrint keeps ordered NULL options, defaults, falsy values and helpe
 })
 
 test_that('ToxPrint rejects queries before forcing options and propagates helper failures', {
-  for (q in list(NULL, character(), '', NA_character_)) {
-    expect_error(
-      chemi_toxprint(q, odds_ratio = stop('option evaluated')),
-      'Either query or chemicals parameter must be provided.',
-      fixed = TRUE
-    )
+  for (q in list(NULL, character(), '', NA_character_, c('', NA_character_))) {
+    for (option in c('odds_ratio', 'p_val', 'true_pos')) {
+      args <- list(q)
+      args[option] <- list(quote(stop('option evaluated')))
+      expect_error(
+        eval(as.call(c(list(as.name('chemi_toxprint')), args))),
+        'Either query or chemicals parameter must be provided.', fixed = TRUE
+      )
+    }
   }
-  expect_error(chemi_toxprint(odds_ratio = stop('option evaluated')), 'argument "query" is missing', fixed = TRUE)
+  for (option in c('odds_ratio', 'p_val', 'true_pos')) {
+    args <- setNames(list(quote(stop('option evaluated'))), option)
+    expect_error(eval(as.call(c(list(as.name('chemi_toxprint')), args))),
+      'argument "query" is missing', fixed = TRUE)
+  }
   local_mocked_bindings(generic_chemi_request = function(...) stop('transport sentinel'), .package = 'ComptoxR')
   expect_error(chemi_toxprint('one'), 'transport sentinel', fixed = TRUE)
 })
@@ -193,4 +200,22 @@ test_that('latent transformations retain named aggregation, sections and falsy d
     env$resp_body_json <- function(...) data.frame(functionalClass = value)
     expect_identical(suppressMessages(fun('one'))$functional_classes, value)
   }
+})
+
+
+test_that('ToxPrint freezes formals, option forcing order, warnings and response classes', {
+  expect_identical(formals(chemi_toxprint), as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3)))
+  forced <- character()
+  mark <- function(name, value) { forced <<- c(forced, name); value }
+  response <- structure(list(flag = FALSE, count = 0, absent = NULL), class = 'original_toxprint')
+  local_mocked_bindings(generic_chemi_request = function(query, endpoint, options) {
+    force(query)
+    expect_identical(options, list(OR = NULL, PV1 = FALSE, TP = 0))
+    warning('helper warning')
+    invisible(response)
+  }, .package = 'ComptoxR')
+  expect_warning(value <- withVisible(chemi_toxprint(mark('query', 'one'),
+    mark('OR', NULL), mark('PV1', FALSE), mark('TP', 0))), 'helper warning')
+  expect_identical(forced, c('query', 'OR', 'PV1', 'TP'))
+  expect_identical(value, list(value = response, visible = FALSE))
 })

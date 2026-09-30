@@ -1357,6 +1357,10 @@
       "hash": "9ccf873f5588edc1ad9b3af5496cd6baf3e3963c4c40d87269e2723820ec3fff",
       "operations": "chemi-stdizer-prod-full GET /api/stdizer/workflows"
     },
+    "tests/testthat/test-contract-chemi_toxprint.R": {
+      "hash": "9775f4108888894682b866fa8a5f4b796334af6a62beab9eda68cd69c2019e28",
+      "operations": "chemi-toxprint-prod-rebuild POST /api/toxprints/calculate"
+    },
     "tests/testthat/test-contract-chemi_toxprints.R": {
       "hash": "78f103a2349c151e89b4f043abda7210bbf737efe9d780a2a838f54cd9e0246f",
       "operations": "chemi-toxprints-prod-rebuild GET /api/toxprints"
@@ -2364,6 +2368,7 @@
     "apis/chemi-services-prod-rebuild.yml": "b27c1b1c7b4a8bdaa84a4cbc08dbebaaba9b4864647bd66e3f65788b5ffec54e",
     "apis/chemi-stdizer-prod-full.yml": "802a6a143c9f823729f70af35f67dc609084a4d85943a30dfe191ab911b17d6f",
     "apis/chemi-stdizer-prod-rebuild.yml": "4ae26b9a23a2f25263a7fce901e230a35a963ddb0260b366f0f222a9dd92e8e9",
+    "apis/chemi-toxprint-prod-rebuild.yml": "443f847d268171f0e49e715fa99fe6bed4efe914b1d47c759dd1a20f70e2dd15",
     "apis/chemi-toxprints-prod-full.yml": "8d655f58e52cb2f8f38435f49a372ca7ff1bbd4c293786e57d0935d63606ed65",
     "apis/chemi-toxprints-prod-rebuild.yml": "a9aa54380aac2a97dfe903d9f8a9596ad2b41b641f251f6ab4c550db2a6ec79d",
     "apis/chemi-webtest-prod-rebuild.yml": "c778b142f3b7092a4b633dbf9bdebe169c04f23acf18877b76abc18ebcf300e0",
@@ -2878,10 +2883,10 @@
     "schema/ctx-exposure-prod.json": "1af4a35e7998d2a1a00a675ae3da850164b2afa2dd595f4be6cb3b4b37ed582d",
     "schema/ctx-hazard-prod.json": "32d868c25d6685de99f41470c3ae0724a675578a48e6e385172de18e2b3ce299",
     "schema/epi-suite-prod.json": "f87790438759460b8aabb6c404d9df57dcedb85a76ce41394e57524bbec2802f",
-    "specmill.yml": "0b8ec6b83d3900674a9234fe13f61cd9c0e2c51fa7a552d04c118bf2a3e6a10a",
+    "specmill.yml": "674557a651ee9da7c96e545e4c0290e4d70215d1230551ac8ac73304fa221664",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "28f3d20c6914b09dbac37ad2f2de173a5c39274a12b2257b70e512f717b9fc55",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "071f61f5113269f91e67a53962f440f9b448228585d875f4fde9dc1862d8c792"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "124ae63f70c60f15bdae4d4ab5ffcf5c395d06ae100a7e010c50a7a9617975f0"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {

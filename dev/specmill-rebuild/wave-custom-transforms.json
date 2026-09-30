@@ -11,7 +11,7 @@
   },
   "operations": 3,
   "generated_operations": 0,
-  "retained_operations": 2,
+  "retained_operations": 3,
   "files": {
     "chemi_toxprint": "R/chemi_toxprint.R",
     "chemi_functional_use": "R/chemi_functional_use.R",
@@ -23,12 +23,12 @@
     "chemi_safety_section": "chemi-resolver-prod.json GET /api/resolver/pubchem-section"
   },
   "policies": {
-    "chemi_toxprint": "Pinned native parser rejects files[] (binary parameter requiring source-contract review #16) and the nested request parameter object. No generation or retained toolkit mapping is authorized. Preserve original lazy helper-call evaluation, OR/PV1/TP field order, retained NULL/FALSE/zero, defaults, visibility and errors. The parser diagnostic does not establish schema validity.",
+    "chemi_toxprint": "Reviewed explicit retained JSON client contract. Preserve lazy query-before-options evaluation and helper return visibility; pinned generation eagerly captures options and returns visibly. Native binary/nested diagnostics remain source evidence; no server schema validity claim or schema correction.",
     "chemi_functional_use": "Retain direct httr2 requests, nonempty-character validation before messages, raw path appending, duplicate/NA/blank identifiers, no auth/retry, unconditional messages/progress, first-request debug dry run, success filtering and named functional_classes tibble aggregation when parsing/list utilities are mocked. Real JSON currently parses to a list and jsonlite::flatten rejects it; unqualified list_c is also unavailable in the package namespace; preserve this existing error without correction. Generic helper normalization, retries, errors and return shaping differ; no existing callback preserves the entire flow. No hooks or lifecycle badge.",
     "chemi_safety_section": "Retain direct httr2 requests and section-before-query validation/evaluation order, including missing-argument errors. Preserve per-query query/idType=DTXSID/section order, duplicate/NULL/empty/FALSE/zero behavior, no auth/retry or debug short-circuit, unconditional messages/progress, success filtering, named nested sections, Value extraction, Markup removal and NULL no-response result. Real named JSON currently fails in resps_data with a name-merging error. Unqualified list_c/keep_at/discard_at are also unavailable in the package namespace; preserve their current errors and test transformations with mocked utilities. Pinned generation returns unprocessed responses and forces query before section validation. No hooks or lifecycle badge."
   },
   "dispositions": {
-    "chemi_toxprint": "blocked",
+    "chemi_toxprint": "retained_mapped",
     "chemi_functional_use": "retained_mapped",
     "chemi_safety_section": "retained_mapped"
   },
@@ -38,7 +38,7 @@
     "chemi_safety_section": "99b3bc9168c72ce09c5f2bb13dfb8107bac212d98e74ab935a2a175b1a7aafe4"
   },
   "behavior_corrections": [],
-  "issue_337_entries_remaining": 9,
+  "issue_337_entries_remaining": 5,
   "upstream_blocked_amos_entries": 5,
   "compatibility_probe": {
     "chemi_functional_use": {
@@ -62,7 +62,6 @@
       "toolkit_retention_limit": "Missing client helper: req_perform_sequential"
     },
     "chemi_toxprint": {
-      "disposition": "blocked",
       "diagnostics": [
         {
           "id": "chemi-custom-toxprint-rebuild POST /api/toxprints/calculate",
@@ -77,12 +76,12 @@
           "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
         }
       ],
-      "original_lazy_option_error": "Either query or chemicals parameter must be provided."
+      "original_lazy_option_error": "Either query or chemicals parameter must be provided.",
+      "historical_disposition": "blocked"
     }
   },
-  "blocked_operations": 1,
-  "schema_or_parser_blocked_entries": 6,
-  "blocked_proposal_file": "dev/specmill-rebuild/blocked-toxprint.yml",
+  "blocked_operations": 0,
+  "schema_or_parser_blocked_entries": 5,
   "verification": {
     "tests": {
       "passed": 1824,
@@ -120,5 +119,7 @@
       "prior_query_corrections_asserted": 12,
       "prior_options_corrections_asserted": 14
     }
-  }
+  },
+  "toxprint_resolution": "dev/specmill-rebuild/wave-toxprint.json",
+  "historical_blocked_proposal_file": "dev/specmill-rebuild/blocked-toxprint.yml"
 }

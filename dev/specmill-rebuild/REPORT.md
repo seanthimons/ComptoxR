@@ -764,3 +764,61 @@ request records once to avoid blocked output channels and repeated disk reads;
 client code, modeled expectations and comparison assertions are unchanged.
 Evidence is in `runtime-prediction-classifier-results.json` and
 `wave-prediction-classifier.json`.
+
+## ToxPrint retained contract (#337)
+
+Starting from `cef28d1d`, `chemi_toxprint` is now `retained_mapped` through
+`apis/chemi-toxprint-prod-rebuild.yml`. Five #337 entries remain, all excluded
+upstream-blocked AMOS entries. `ct_related` remains the excluded legacy scraper.
+
+The confirmed key is `schema/chemi-toxprints-prod.json POST
+/api/toxprints/calculate`. The original wrapper calls `generic_chemi_request`
+with endpoint `toxprints/calculate` and ordered `OR/PV1/TP` options. The helper
+normalizes query before forcing options and builds JSON `chemicals/options`,
+with each identifier under `sid`. Its default authentication is FALSE; request
+headers, retries, debug/verbose behavior, response observation and conversion
+remain unchanged. No production caller or hook references this singular wrapper.
+The plural `chemi_toxprints_calculate_bulk` shares the route but owns different
+hook and request contracts; it is untouched.
+
+The schema's POST operation already declares `application/json` CalculateRequest
+with chemicals/options; ToxprintsOptions declares OR/PV1/TP. It also declares
+binary `files[]` and nested `request` query parameters. Chemical omits the
+helper's sid field. These discrepancies are recorded without a schema correction
+or an assertion about the server's accepted contracts. The original schema hash
+is frozen in `wave-toxprint.json`; file-upload alternatives are not removed.
+
+Pinned Specmill 0.1.8 `read_service_operations` supports explicit inputs/request
+mappings and `implementation: existing` for unsupported operations. Existing
+`from` and `object` bindings preserve five successful helper-call variants,
+including retained NULL, mixed FALSE/zero and nested values. The integer input
+hint preserves the literal odds_ratio=3L default; it adds no client validation.
+The public signature remains exactly
+`chemi_toxprint(query, odds_ratio = 3L, p_val = 0.05, true_pos = 3)`.
+
+The pinned renderer eagerly captures options before helper query rejection and
+returns an invisible helper result visibly. `probe-toxprint.R` reproduces both
+mismatches and freezes the original helper call and returned class. The supported
+retained mapping keeps the source byte-for-byte. No callback, hook, lifecycle
+badge, documentation change, runtime correction or toolkit pin change is added.
+Only its fixed contract test is generated; that test supersedes the legacy
+metadata stub retired by the existing legacy test generator.
+
+The generation entry point accepts exactly the reviewed retained diagnostic,
+with matching source/schema/helper/mapping hashes. Native binary/nested
+diagnostics remain in the wave evidence. Changed hashes, changed diagnostics,
+unrelated retained diagnostics and generated mapping diagnostics still stop
+maintenance. This records a reviewed client facade, not native parser support
+for binary or nested query parameters.
+
+Contract, regression, request-helper and relevant caller/hook suites passed
+1,839 assertions with no failures, errors or warnings. The expanded regression
+passed 99 assertions against each installed original and candidate client.
+Legacy generation/check and native check passed. The installed-client localhost
+comparison passed all 1,474 cases, including 21 new ToxPrint cases, with zero
+candidate failures. Request bytes, objects/classes, errors/warnings, 409 exported
+signatures and helper signatures agree, apart from the previously recorded
+12 query and 14 options corrections, whose assertions are unchanged.
+`runtime-toxprint-results.json` records the comparison. The existing temporary
+runner caches completed immutable request records and redirects process output;
+its expectations and comparison assertions match `verify-runtime.R`.

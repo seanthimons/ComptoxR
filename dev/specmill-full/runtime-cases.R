@@ -104,9 +104,10 @@ for (name in names(full_cases)) {
       if (isTRUE(item$custom_transforms)) {
         if (name == 'chemi_toxprint') {
           variants <- list(defaults = list(query = 'one'), multiple = list(query = c('one', 'two', 'one')), false_query = list(query = FALSE), zero_query = list(query = 0), encoding = list(query = 'caf\u00e9 +/&'))
-          for (variant in c('null', 'false', 'zero', 'empty')) {
-            value <- switch(variant, null = NULL, false = FALSE, zero = 0, empty = list())
-            variants[[paste0(variant, '-options')]] <- list(query = 'one', odds_ratio = value, p_val = value, true_pos = value)
+          for (variant in c('null', 'false', 'zero', 'empty', 'nested', 'mixed')) {
+            value <- switch(variant, null = NULL, false = FALSE, zero = 0, empty = list(),
+              nested = list(absent = NULL, flag = FALSE, count = 0), mixed = NULL)
+            variants[[paste0(variant, '-options')]] <- if (variant == 'mixed') list(query = 'one', odds_ratio = NULL, p_val = FALSE, true_pos = 0) else list(query = 'one', odds_ratio = value, p_val = value, true_pos = value)
           }
           wire_for_tox <- function(inputs) {
             options <- list(OR = 3L, PV1 = .05, TP = 3)
@@ -119,6 +120,24 @@ for (name in names(full_cases)) {
           for (variant in c('null', 'empty', 'blank', 'na', 'missing')) {
             inputs <- switch(variant, null = list(query = NULL), empty = list(query = character()), blank = list(query = ''), na = list(query = NA_character_), missing = list())
             probe(paste0(name, '-', variant), do.call(fun, inputs), list(), error = TRUE)
+          }
+          invalid_queries <- list(NULL, character(), '', NA_character_)
+          for (i in seq_along(invalid_queries)) {
+            q <- invalid_queries[[i]]
+            for (option in c('odds_ratio', 'p_val', 'true_pos')) {
+              args <- list(q)
+              args[option] <- list(quote(stop('option evaluated')))
+              probe(paste0(name, '-lazy-', option, '-', i),
+                eval(as.call(c(list(fun), args))), list(), error = TRUE)
+            }
+          }
+          for (option in c('odds_ratio', 'p_val', 'true_pos')) {
+            args <- setNames(list(quote(stop('option evaluated'))), option)
+            probe(paste0(name, '-missing-lazy-', option), eval(as.call(c(list(fun), args))), list(), error = TRUE)
+          }
+          probe(paste0(name, '-invalid-json'), fun('one'), wire_for_tox(variants$defaults), 'not-json', error = TRUE)
+          for (body in c('null', '{}', '{"one":{"score":0,"flag":false,"absent":null}}')) {
+            probe(paste0(name, '-response-', body), fun('one'), wire_for_tox(variants$defaults), body)
           }
           probe(paste0(name, '-lazy-option'), fun(NULL, odds_ratio = stop('option evaluated')), list(), error = TRUE)
           probe(paste0(name, '-empty-response'), fun('one'), wire_for_tox(variants$defaults), '[]')

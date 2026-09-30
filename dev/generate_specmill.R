@@ -17,10 +17,25 @@ generate_specmill <- function(mode = c("check", "plan", "apply"), adopt = NULL) 
   }
   plan <- do.call(specmill::generate_client, args)
   print(plan)
+  # Reviewed retained ToxPrint facade, not an assertion about server schema validity.
+  # Any change to source, schema, mapping or diagnostics requires a new review.
+  retained <- plan$retained_diagnostics
+  if (length(retained)) {
+    review <- jsonlite::read_json("dev/specmill-rebuild/wave-toxprint.json")
+    hashes <- review$reviewed_contract_sha256
+    actual <- lapply(names(hashes), function(path) digest::digest(file = path, algo = "sha256"))
+    names(actual) <- names(hashes)
+    normalized <- lapply(retained, function(d) {
+      d$source <- sub(paste0(normalizePath("."), "/"), "", d$source, fixed = TRUE)
+      d
+    })
+    stopifnot(identical(actual, hashes), identical(normalized, review$reviewed_retained_diagnostics))
+    retained <- list()
+  }
   if (
     length(plan$diagnostics) ||
       length(plan$mapping_diagnostics) ||
-      length(plan$retained_diagnostics) ||
+      length(retained) ||
       length(plan$drift)
   ) {
     stop("Pilot contract drift or unsupported operation: review the plan before applying.")

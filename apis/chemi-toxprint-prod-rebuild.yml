@@ -1,6 +1,4 @@
-# Historical inactive proposal; superseded by apis/chemi-toxprint-prod-rebuild.yml
-# and the reviewed retained contract in wave-toxprint.json. Schema unchanged.
-id: chemi-custom-toxprint-rebuild
+id: chemi-toxprint-prod-rebuild
 schemas:
   files:
   - schema/chemi-toxprints-prod.json
@@ -20,7 +18,7 @@ operations:
         type: character
         required: yes
       odds_ratio:
-        type: numeric
+        type: integer
         default: 3
       p_val:
         type: numeric
@@ -50,9 +48,11 @@ operations:
               from:
               - params
               - true_pos
-    specialization: 'Inactive proposal: pinned native parsing blocks files[] (binary,
-      source contract review #16) and the nested request query parameter. This does
-      not establish schema validity. Preserve the original lazy helper evaluation,
-      OR/PV1/TP field order, explicit NULL/FALSE/zero, defaults, visibility and
-      errors; no schema, toolkit-pin or behavior correction is authorized.'
+    specialization: Retain the original lazy generic_chemi_request call. Query rejection,
+      including missing arguments, precedes option evaluation; OR/PV1/TP retain
+      NULL/FALSE/zero and defaults; helper return visibility propagates. Explicit
+      inputs/request mapping reviews the existing JSON client contract, not the
+      server's file-upload query contract. Native binary/nested diagnostics remain
+      recorded; the source schema is unchanged. Generated eager parameter capture
+      and visible return are incompatible. No hooks or lifecycle badge.
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

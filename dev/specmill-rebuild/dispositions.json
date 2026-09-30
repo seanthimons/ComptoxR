@@ -233,27 +233,30 @@
     "lifecycle": null,
     "formals": "as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3))",
     "siblings": [],
-    "disposition": "blocked",
-    "reason": "Pinned specmill 0.1.8 cannot parse POST /api/toxprints/calculate: binary files[] and nested request query parameters. Retain original source and lazy helper evaluation; no schema/pin/behavior correction.",
+    "disposition": "retained_mapped",
+    "reason": "Reviewed explicit retained JSON client contract. Preserve lazy query-before-options evaluation and helper return visibility; pinned generation eagerly captures options and returns visibly. Native binary/nested diagnostics remain source evidence; no server schema validity claim or schema correction.",
+    "mapping": {
+      "service": "chemi-toxprint-prod-rebuild",
+      "key": "POST /api/toxprints/calculate",
+      "file": "R/chemi_toxprint.R",
+      "wave": "toxprint",
+      "policy": "Retain the original lazy generic_chemi_request call. Query rejection, including missing arguments, precedes option evaluation; OR/PV1/TP retain NULL/FALSE/zero and defaults; helper return visibility propagates. Explicit inputs/request mapping reviews the existing JSON client contract, not the server's file-upload query contract. Native binary/nested diagnostics remain recorded; the source schema is unchanged. Generated eager parameter capture and visible return are incompatible. No hooks or lifecycle badge.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds"
+    },
     "route": {
       "helper": "generic_chemi_request",
+      "helper_calls": 1,
       "method": "POST",
       "endpoint": "toxprints/calculate",
-      "schema": "chemi-toxprints-prod.json",
-      "key": "POST /api/toxprints/calculate",
       "supported": [],
       "blocked": [
         {
-          "id": "chemi-custom-toxprint-rebuild POST /api/toxprints/calculate",
-          "service": "chemi-custom-toxprint-rebuild",
+          "schema": "chemi-toxprints-prod.json",
           "key": "POST /api/toxprints/calculate",
-          "source": "schema/chemi-toxprints-prod.json",
-          "status": "unsupported",
-          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
-          "classification": "review_required",
           "code": "binary_parameter",
-          "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
-          "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "pointer": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+          "issue": 28
         }
       ]
     }

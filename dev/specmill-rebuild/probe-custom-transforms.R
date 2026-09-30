@@ -7,7 +7,7 @@ sys.source('dev/specmill_callbacks.R', callbacks)
 contracts <- readRDS('tests/testthat/fixtures/specmill-rebuild-contracts.rds')
 w <- jsonlite::read_json('dev/specmill-rebuild/wave-custom-transforms.json')
 probe <- list()
-for (path in c('dev/specmill-rebuild/retained-functional-use.yml', 'dev/specmill-rebuild/retained-safety-section.yml', 'dev/specmill-rebuild/blocked-toxprint.yml')) {
+for (path in c('dev/specmill-rebuild/retained-functional-use.yml', 'dev/specmill-rebuild/retained-safety-section.yml')) {
   s <- yaml::read_yaml(path)
   key <- names(s$operations)[[1L]]
   op <- s$operations[[key]]
@@ -29,17 +29,6 @@ for (path in c('dev/specmill-rebuild/retained-functional-use.yml', 'dev/specmill
   schema <- paste0('schema/', sub(' .*', '', w$reviewed_routes[[name]]))
   stopifnot(schema %in% unlist(draft$schemas$files))
   native <- specmill::read_operations(schema, policy = project$services[[1]]$policy)
-  if (name == 'chemi_toxprint' && length(native$diagnostics)) {
-    probe[[name]] <- list(
-      disposition = 'blocked',
-      diagnostics = native$diagnostics,
-      original_lazy_option_error = tryCatch(
-        ComptoxR::chemi_toxprint(NULL, odds_ratio = stop('option evaluated')),
-        error = conditionMessage
-      )
-    )
-    next
-  }
   stopifnot(length(native$diagnostics) == 0L, length(native$operations) == 1L)
   mapped <- specmill:::configure_operation(native$operations[[1]], project$services[[1]])
   code <- specmill::render_operation(mapped$operation, mapped$spec)
@@ -65,10 +54,13 @@ for (path in c('dev/specmill-rebuild/retained-functional-use.yml', 'dev/specmill
   probe[[name]]$toolkit_retention_limit <- limit
 
 }
-w$compatibility_probe <- probe
-w$retained_operations <- 2L
-w$blocked_operations <- 1L
-w$dispositions$chemi_toxprint <- 'blocked'
-w$issue_337_entries_remaining <- 9L
-w$schema_or_parser_blocked_entries <- 6L
+w$compatibility_probe[names(probe)] <- probe
+w$retained_operations <- 3L
+w$blocked_operations <- 0L
+w$dispositions$chemi_toxprint <- 'retained_mapped'
+w$issue_337_entries_remaining <- 5L
+w$schema_or_parser_blocked_entries <- 5L
+w$toxprint_resolution <- 'dev/specmill-rebuild/wave-toxprint.json'
 jsonlite::write_json(w, 'dev/specmill-rebuild/wave-custom-transforms.json', pretty = TRUE, auto_unbox = TRUE)
+
+source('dev/specmill-rebuild/probe-toxprint.R')

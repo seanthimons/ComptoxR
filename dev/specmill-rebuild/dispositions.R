@@ -24,7 +24,7 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
   service <- yaml::read_yaml(path)
   for (key in names(service$operations)) {
     op <- service$operations[[key]]
-    if (identical(op$implementation, 'existing') && op$name %in% c('chemi_resolver_lookup_bulk', 'chemi_resolver_getsimilaritymap', 'chemi_classyfire', 'chemi_safety_rqcodes')) {
+    if (identical(op$implementation, 'existing') && op$name %in% c('chemi_resolver_lookup_bulk', 'chemi_resolver_getsimilaritymap', 'chemi_classyfire', 'chemi_safety_rqcodes', 'chemi_toxprint')) {
       retained[[op$name]] <- list(service = service$id, key = key, file = op$file,
         wave = waves[[op$file]], policy = op$specialization, contracts_file = service$contracts_file)
     }

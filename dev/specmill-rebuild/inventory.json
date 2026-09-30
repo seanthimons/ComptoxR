@@ -1,5 +1,5 @@
 {
-  "commit": "3ddbe3f3df100c22cf51c91ba7e66a71e66f4e05",
+  "commit": "cef28d1d5caeb87c521fa07713aa00dfde8df165",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -15,10 +15,10 @@
   "export_categories": {
     "excluded_wrapper": 1,
     "generated": 263,
-    "retained_mapped": 11,
+    "retained_mapped": 12,
     "runtime": 21,
     "sidecar": 26,
-    "unmapped_wrapper": 75,
+    "unmapped_wrapper": 74,
     "utility": 11
   },
   "runtime_files": [
@@ -1933,9 +1933,9 @@
       "name": "chemi_toxprint",
       "file": "R/chemi_toxprint.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-toxprint-prod-rebuild POST /api/toxprints/calculate",
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = , odds_ratio = 3L, p_val = 0.05, true_pos = 3))"
     },

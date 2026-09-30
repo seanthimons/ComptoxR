@@ -697,10 +697,10 @@
   "chemi_toxprint": {
     "name": "chemi_toxprint",
     "file": "R/chemi_toxprint.R",
-    "status": "blocked",
+    "status": "retained_mapped",
     "schema": "chemi-toxprints-prod.json",
     "key": "POST /api/toxprints/calculate",
-    "reason": "Pinned specmill 0.1.8 cannot parse POST /api/toxprints/calculate: binary files[] and nested request query parameters. Retain original source and lazy helper evaluation; no schema/pin/behavior correction.",
+    "reason": "Reviewed explicit retained JSON client contract. Preserve lazy query-before-options evaluation and helper return visibility; pinned generation eagerly captures options and returns visibly. Native binary/nested diagnostics remain source evidence; no server schema validity claim or schema correction.",
     "schema_blocker": [
       {
         "id": "chemi-custom-toxprint-rebuild POST /api/toxprints/calculate",
@@ -714,7 +714,16 @@
         "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
         "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
       }
-    ]
+    ],
+    "mapping": {
+      "service": "chemi-toxprint-prod-rebuild",
+      "key": "POST /api/toxprints/calculate",
+      "file": "R/chemi_toxprint.R",
+      "wave": "toxprint",
+      "mode": "retained_existing",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+      "evidence": "dev/specmill-rebuild/wave-toxprint.json"
+    }
   },
   "chemi_toxprints_assays": {
     "name": "chemi_toxprints_assays",
