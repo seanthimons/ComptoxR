@@ -1,5 +1,5 @@
 {
-  "commit": "5bab21b5b1390ac6cba1cef992a1b1a8ef6e05d8",
+  "commit": "6435a7599a99bae0eab925b5c38c2ba9fb796b9d",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 260,
+    "generated": 263,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 87,
+    "unmapped_wrapper": 84,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 224,
+  "removable_files": 226,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -2751,9 +2751,9 @@
       "name": "ct_chemical_msready_search_by_mass_bulk",
       "file": "R/ct_chemical_msready_search_by_mass.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "ctx-chemical-prod-rebuild POST /chemical/msready/search/by-mass/",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(error = , masses = ))"
     },
@@ -2761,9 +2761,9 @@
       "name": "ct_chemical_msready_search_by_mass",
       "file": "R/ct_chemical_msready_search_by_mass.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "No unique supported schema/method/path match; no route guessed",
-      "operation": null,
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/msready/search/by-mass/{start}/{end}",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(start = , end = NULL))"
     },
@@ -3981,9 +3981,9 @@
       "name": "epi_submit_batch",
       "file": "R/epi_submit_batch.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "epi-suite-prod-rebuild POST /api/submit/batch",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(modules = , advectionTimeAir = NULL, advectionTimeSediment = NULL, advectionTimeSoil = NULL, advectionTimeWater = NULL, amineNitrogens = NULL, aopRateConstant = NULL, averageMolecularWeight = NULL, averagingTimeDays = NULL, biowin3 = NULL, biowin5 = NULL, biowinScore = NULL, bodyWeightKg = NULL, boilingPointC = NULL, branchedCarbons = NULL, branches = NULL, carbonChainLength = NULL, cas = NULL, cationAnionRatio = NULL, chemicalName = NULL, daylightHours = NULL, emissionRateAir = NULL, emissionRateSediment = NULL, emissionRateSoil = NULL, emissionRateWater = NULL, ethoxylate = NULL, eventDurationHours = NULL, eventFrequencyPerDay = NULL, exposureDurationYears = NULL, exposureFrequencyDaysPerYear = NULL, fractionAbsorbed = NULL, halfLifeAir = NULL, halfLifeHoursAerationVessel = NULL, halfLifeHoursPrimaryClarifier = NULL, halfLifeHoursSettlingTank = NULL, halfLifeSediment = NULL, halfLifeSoil = NULL, halfLifeWater = NULL, henryAtmM3PerMol = NULL, koc = NULL, lakeCurrentMPerSec = NULL, lakeDepthMeters = NULL, lakeWindMPerSec = NULL, logKoa = NULL, logKow = NULL, mainCarbons = NULL, meltingPointC = NULL, molecularWeight = NULL, mw1000Percentage = NULL, mw500Percentage = NULL, ohConcentrationE6OhPerCm3 = NULL, ozoneConcentrationE11MolPerCm3 = NULL, polymerType = NULL, propoxyGroups = NULL, removeMetals = NULL, riverCurrentMPerSec = NULL, riverDepthMeters = NULL, riverWindMPerSec = NULL, skinSurfaceAreaCm2 = NULL, smiles = NULL, solubilityType = NULL, subcooledVaporPressureMmHg = NULL, theta = NULL, tspUgPerM3 = NULL, useSmiles = NULL, userKpCmPerHour = NULL, vaporPressureMmHg = NULL, vaporPressureTemperatureC = 25, waterConcentrationMgPerCm3 = NULL, waterConcentrationMgPerLiter = NULL, waterSolubility = NULL, waterSolubilityMgPerL = NULL, waterSolubilityProvider = NULL))"
     },

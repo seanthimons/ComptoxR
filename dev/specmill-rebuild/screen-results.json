@@ -785,18 +785,20 @@
   "ct_chemical_msready_search_by_mass_bulk": {
     "name": "ct_chemical_msready_search_by_mass_bulk",
     "file": "R/ct_chemical_msready_search_by_mass.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "POST /chemical/msready/search/by-mass/",
+    "lifecycle": "experimental"
   },
   "ct_chemical_msready_search_by_mass": {
     "name": "ct_chemical_msready_search_by_mass",
     "file": "R/ct_chemical_msready_search_by_mass.R",
-    "status": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/msready/search/by-mass/{start}/{end}",
+    "lifecycle": "experimental"
   },
   "ct_chemical_property_experimental_search_by_range": {
     "name": "ct_chemical_property_experimental_search_by_range",
@@ -883,10 +885,11 @@
   "epi_submit_batch": {
     "name": "epi_submit_batch",
     "file": "R/epi_submit_batch.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "POST /api/submit/batch",
+    "lifecycle": "experimental"
   },
   "epi_submit": {
     "name": "epi_submit",

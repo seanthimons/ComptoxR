@@ -25,9 +25,9 @@ with SHA-256 hashes.
 
 | Export category | Exports |
 | --- | ---: |
-| generated (specmill-owned) | 260 |
+| generated (specmill-owned) | 263 |
 | retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 87 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 84 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
@@ -40,7 +40,7 @@ runtime, not endpoint wrappers. They are two of the 248 functions in #310 and
 stay retained as runtime configuration. Counts include the #337 waves below; the original tranche was 101 generated and 246 unmapped.
 
 The allowlist is derived from the generated operation mappings and the specmill
-manifest. It now contains the 224 whole files that hold the 260 generated wrappers
+manifest. It now contains the 226 whole files that hold the 263 generated wrappers
 (originally 93 files for 101 wrappers).
 A file is allowlisted only if every top-level definition in it is generated.
 The script stops if a generated file has a retained or unaccounted neighbor.
@@ -379,3 +379,60 @@ and dispositions now reflect this wave. Evidence is recorded in
 `wave-prediction-bodies.json` and `runtime-prediction-bodies-results.json`.
 Two more #337 entries are complete; 17 remain to review. Both GET siblings
 were also migrated to preserve whole-file ownership.
+
+## Explicit request-body builders (#337)
+
+The `request-bodies` wave generates `ct_chemical_msready_search_by_mass_bulk`
+and `epi_submit_batch`, plus the grouped GET sibling
+`ct_chemical_msready_search_by_mass`. Reviewed schema routes are
+`POST /chemical/msready/search/by-mass/` and
+`GET /chemical/msready/search/by-mass/{start}/{end}` in
+`ctx-chemical-prod.json`, and `POST /api/submit/batch` in
+`epi-suite-prod.json`.
+
+The mapper now recognizes `request_body <- list()` followed by direct or
+NULL-guarded field assignments, using the existing `compact_object` binding.
+The existing `search_equal_batch_limit` callback preserves the environment
+setting and fallback of 1000. Both explicit bodies still bypass query batching
+and send one request. Public field order, defaults, required-argument errors,
+NULL omission, FALSE/zero/empty values, helper defaults, authentication,
+response handling, experimental badges, documentation, examples, and namespace
+output are preserved. The small `mass_range_path_params` development callback
+emits the original `c(end = end)` expression. The GET public `end = NULL`
+default remains optional despite the schema requiring both path parameters.
+
+EPI discrepancy disposition: the schema requires an array of 1-100
+`BatchEstimateRequest` objects, but the public wrapper builds one object from
+73 public fields. This migration generates that existing object without wrapping,
+batching, or additional schema validation. The wrapper also retains its
+current default `ctx_burl` server and `auth = TRUE`, even though the reviewed
+schema route belongs to EPI. Correcting these public request policies requires
+separate API review. The discrepancy is recorded in `dispositions.json` and
+`wave-request-bodies.json`; no behavior correction is introduced here.
+
+All 1152 contract and regression assertions passed, including 51 focused
+assertions. The focused suite covers all body fields in original order,
+omitted and explicit NULL inputs, FALSE/zero/empty values, missing arguments,
+batch-limit defaults and overrides, and optional GET path parameters.
+Three superseded legacy generated tests were retired; the legacy generator
+check passed. Roxygen output and namespace output are unchanged. The prior
+resolver query and public-options corrections remain recorded separately in
+`dev/specmill-full/verify-runtime.R`.
+
+The installed original and migrated clients passed all 1291 localhost cases
+with zero candidate failures. The 42 new cases matched exact requests, objects,
+warnings and errors, including JSON precision, empty accumulators, GET start
+encoding, the existing reserved-end URL parsing error, and HTTP 400 responses.
+All 409 exported signatures and all four helper signatures are preserved.
+The existing verifier ran the independent clients concurrently; its comparison
+and prior-correction assertions were unchanged. Results are recorded in
+`runtime-request-bodies-results.json`.
+
+The final disposable snapshot `b47f3d8d` removed all 226 allowlisted files
+and regenerated 263 wrappers. Regeneration, a second apply and check were
+byte-identical. Evidence is recorded in `wave-request-bodies.json`.
+
+The inventory, removal allowlist, dispositions and wave evidence are updated.
+The mirror-selection plan and all unrelated uncommitted work were preserved.
+Two more #337 entries are complete; 15 remain to review. The GET sibling was
+also migrated to preserve whole-file ownership.

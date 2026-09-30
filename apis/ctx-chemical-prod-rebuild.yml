@@ -15,6 +15,7 @@ selection:
   - GET /chemical/list/search/by-dtxsid/{dtxsid}
   - GET /chemical/list/search/by-type/{type}
   - GET /chemical/list/type
+  - GET /chemical/msready/search/by-mass/{start}/{end}
   - GET /chemical/property/experimental/name
   - GET /chemical/property/experimental/search/by-dtxsid/{dtxsid}
   - GET /chemical/property/predicted/name
@@ -26,6 +27,7 @@ selection:
   - GET /chemical/search/equal/{word}
   - POST /chemical/detail/search/by-dtxcid/
   - POST /chemical/fate/search/by-dtxsid/
+  - POST /chemical/msready/search/by-mass/
   - POST /chemical/property/experimental/search/by-dtxsid/
   - POST /chemical/property/predicted/search/by-dtxsid/
   - POST /chemical/search/equal/
@@ -419,6 +421,47 @@ operations:
       return: Returns a tibble with results (array of objects)
       examples:
       - {}
+  GET /chemical/msready/search/by-mass/{start}/{end}:
+    name: ct_chemical_msready_search_by_mass
+    file: R/ct_chemical_msready_search_by_mass.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      start:
+        type: character
+        required: yes
+        description: 'Starting mass value. Type: number'
+      end:
+        type: character
+        default: ~
+        description: 'Ending mass value. Type: number'
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - start
+        endpoint:
+          value: chemical/msready/search/by-mass/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        path_params:
+          callback: mass_range_path_params
+    docs:
+      title: Get MS-ready chemicals using mass range
+      lifecycle: experimental
+      parameters:
+        start: 'Starting mass value. Type: number'
+        end: 'Ending mass value. Type: number'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - start: '200.9'
+      tags:
+        apiStage: public
   GET /chemical/property/experimental/name:
     name: ct_chemical_property_experimental_name
     file: R/ct_chemical_property_experimental_name.R
@@ -789,6 +832,53 @@ operations:
         - DTXSID1024122
         - DTXSID4020533
         - DTXSID00205033
+  POST /chemical/msready/search/by-mass/:
+    name: ct_chemical_msready_search_by_mass_bulk
+    file: R/ct_chemical_msready_search_by_mass.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      error:
+        type: character
+        required: yes
+        description: Required parameter
+      masses:
+        type: character
+        required: yes
+        description: Required parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          value: ~
+        endpoint:
+          value: chemical/msready/search/by-mass/
+        method:
+          value: POST
+        batch_limit:
+          callback: search_equal_batch_limit
+        body:
+          compact_object:
+            error:
+              from:
+              - params
+              - error
+            masses:
+              from:
+              - params
+              - masses
+    docs:
+      title: Get MS-ready chemicals for a batch of mass ranges
+      lifecycle: experimental
+      parameters:
+        error: Required parameter
+        masses: Required parameter
+      return: Returns a list with result object
+      examples:
+      - error: DTXSID1024122
+      tags:
+        apiStage: public
   POST /chemical/property/experimental/search/by-dtxsid/:
     name: ct_chemical_property_experimental_search_bulk
     file: R/ct_chemical_property_experimental_search.R

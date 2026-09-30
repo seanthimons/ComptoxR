@@ -48,6 +48,9 @@ binding <- function(x, parameters) {
   if (identical(x, quote(as.numeric(Sys.getenv('batch_limit', '1000'))))) {
     return(list(callback = 'search_equal_batch_limit'))
   }
+  if (identical(x, quote(c(end = end)))) {
+    return(list(callback = 'mass_range_path_params'))
+  }
   if (is.call(x) && identical(x[[1]], as.name('list')) && length(x) > 1L) {
     fields <- as.list(x)[-1L]
     if (is.null(names(fields)) || any(!nzchar(names(fields))) || anyDuplicated(names(fields))) {
@@ -64,12 +67,12 @@ binding <- function(x, parameters) {
   }
   list(value = x)
 }
-# Recognize the optional-options prelude used by many chemi wrappers:
+# Recognize options and explicit request-body accumulators:
 #   options <- list(); [if (!is.null(p))] options[["k"]] <- p (or options$k <- p); ...
 # The resulting list equals specmill's compact_object: NULL values are never added and an
 # empty result is list(). Returns NULL when the body does not start with this prelude.
 options_prelude <- function(code) {
-  if (!length(code) || !any(vapply(c('options', 'request_options'), function(variable) {
+  if (!length(code) || !any(vapply(c('options', 'request_options', 'request_body'), function(variable) {
     identical(code[[1]], call('<-', as.name(variable), quote(list())))
   }, FALSE))) {
     return(NULL)
@@ -225,14 +228,20 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
           }
           if (!is.null(prelude)) {
             uses <- vapply(args, function(x) as.character(prelude$accumulator) %in% all.names(x), FALSE)
-            if (sum(uses) != 1L || !identical(args$options, prelude$accumulator)) {
-              stop('Options list used outside options = options needs manual mapping')
+            slot <- if (identical(prelude$accumulator, as.name('request_body'))) 'body' else 'options'
+            if (sum(uses) != 1L || !identical(args[[slot]], prelude$accumulator)) {
+              stop('Accumulator used outside its helper argument needs manual mapping')
             }
             record$option_params <- vapply(prelude$bindings, function(b) b$from[[2]], '')
+            if (slot == 'body') record$request_body <- TRUE
           }
           method <- args$method %||% if (helper == 'generic_chemi_request') 'POST' else 'GET'
           prefix <- if (startsWith(name, 'ct_')) 'ctx-' else if (startsWith(name, 'epi_')) 'epi-' else 'chemi-'
           matches <- Filter(function(op) {
+            if (name == 'ct_chemical_msready_search_by_mass') {
+              return(identical(op$schema, 'ctx-chemical-prod.json') &&
+                identical(op$key, 'GET /chemical/msready/search/by-mass/{start}/{end}'))
+            }
             startsWith(op$key, paste0(method, ' ')) && identical(short_path(op$key), args$endpoint) &&
               startsWith(op$schema, prefix)
           }, operations)
@@ -271,7 +280,7 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
           post_state = if (hook_owned) 'hook_state' else 'parameters',
           request = list(arguments = Map(function(x, key) {
             if (name %in% prediction_bodies && identical(key, 'body')) list(callback = 'prediction_body') else
-              if (!is.null(prelude) && identical(key, 'options')) list(compact_object = prelude$bindings) else binding(x, names(inputs))
+              if (!is.null(prelude) && identical(x, prelude$accumulator)) list(compact_object = prelude$bindings) else binding(x, names(inputs))
           }, args, names(args))), docs = docs
         )
       },
@@ -373,6 +382,7 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
           x
         }
         # Explicit values follow each input's declared type so the localhost probe stays valid.
+        variants$null <- set(list(NULL))
         variants$explicit <- set(Map(function(p, k) {
           switch(record$proposal$inputs[[p]]$type, numeric = k + 1, logical = TRUE, sprintf('pilot-option-%d', k))
         }, optional, seq_along(optional)))
@@ -445,6 +455,8 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         helper = helper, required = as.list(required)
       )
       if (name %in% prediction_bodies) cases[[name]]$prediction_body <- TRUE
+      if (isTRUE(record$request_body)) cases[[name]]$request_body <- TRUE
+      if (name == 'ct_chemical_msready_search_by_mass') cases[[name]]$mass_range <- TRUE
       if (name %in% names(hook_routes)) cases[[name]] <- c(cases[[name]], list(hook_owned = TRUE))
       if (length(optional)) {
         # Wire is observed and compared original-versus-generated rather than modeled.

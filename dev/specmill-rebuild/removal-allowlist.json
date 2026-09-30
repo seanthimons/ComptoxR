@@ -1,6 +1,6 @@
 {
-  "commit": "5bab21b5b1390ac6cba1cef992a1b1a8ef6e05d8",
-  "operations": 260,
+  "commit": "6435a7599a99bae0eab925b5c38c2ba9fb796b9d",
+  "operations": 263,
   "files": {
     "R/chemi_alerts_alerts.R": "031ba567542a373b2b19a68b404cd3ea4916bdd4c39b94a4409b0d8fa9d423c7",
     "R/chemi_alerts_groups_by_id.R": "28a36fe1b1f422a995b10f9295b0e5f64b7a112c2547b9115b31426c996a156d",
@@ -159,6 +159,7 @@
     "R/ct_chemical_list_type.R": "b9e776c851e8eb0b2b81658a476ec8c77f37430977ecbdc18f0eb63c4bdcf5d1",
     "R/ct_chemical_msready_search_by_dtxcid.R": "dd6514fc979cb894ae09d015dcfa28aedcf726c370c25c0e448ff09d1fb39c00",
     "R/ct_chemical_msready_search_by_formula.R": "3033ed7fe81f8fc888be8a9b702f1614f62f3f826a055c67b6764c08c7dee976",
+    "R/ct_chemical_msready_search_by_mass.R": "d0bad7b3ea60c9322634ef4c8980db69a5145a427d9495639355bd444df16a3f",
     "R/ct_chemical_property_experimental_name.R": "165c3c6053bc79cd73e4f35d6efb8d83eb567cf886fb49f15b7c2a2fd83594cc",
     "R/ct_chemical_property_experimental_search_by_dtxsid.R": "e4e13a3e048e63417555e2e35bec90dd8ff24aaedc852bacc968a050cd7dbebc",
     "R/ct_chemical_property_experimental_search.R": "6e2c425ccbfc7fc7fdccd949780895610dc2ca8ee3498c8d182ad23f3178e389",
@@ -225,6 +226,7 @@
     "R/epi_ecosar_surfactant_amphoteric.R": "7084c4e3bffc76f7bf4d4994137fc721119a07031cda083a2e4b9b0e8522084b",
     "R/epi_ecosar_surfactant_anionic.R": "b72d783630732a70da282cf018fa9416e63b622e3f44112f7b30a871e69c3333",
     "R/epi_ecosar_surfactant_cationic.R": "b9ddf645ff034702e86b257195430647bdff408275ce41225f67d14a8e16f0c7",
-    "R/epi_search.R": "c505494cee505f502c59033492daa1d8be8413d18fd1ac9a9754e4d20e2970ba"
+    "R/epi_search.R": "c505494cee505f502c59033492daa1d8be8413d18fd1ac9a9754e4d20e2970ba",
+    "R/epi_submit_batch.R": "eda1aa01de25c6df4fbcf6899bdcfbc7a15b9a65a4b54437dedec8153a20bee8"
   }
 }

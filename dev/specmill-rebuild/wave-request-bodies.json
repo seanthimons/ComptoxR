@@ -1,0 +1,99 @@
+{
+  "wave": "request-bodies",
+  "base_commit": "6435a7599a99bae0eab925b5c38c2ba9fb796b9d",
+  "worktree": "/tmp/comptoxr-request-bodies/dev/specmill-pilot/artifacts/wave-request-bodies",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 3,
+  "files": [
+    "R/ct_chemical_msready_search_by_mass.R",
+    "R/epi_submit_batch.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/ct_chemical_msready_search_by_mass.R",
+    " M R/epi_submit_batch.R",
+    " M apis/ctx-chemical-prod-rebuild.yml",
+    " M dev/specmill-full/runtime-cases.R",
+    " M dev/specmill-rebuild/dispositions.R",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M dev/specmill-rebuild/screen-results.json",
+    " M dev/specmill-rebuild/verify-wave.sh",
+    " M specmill.yml",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    " D tests/testthat/test-ct_chemical_msready_search_by_mass.R",
+    " D tests/testthat/test-ct_chemical_msready_search_by_mass_bulk.R",
+    " D tests/testthat/test-epi_submit_batch.R",
+    "?? apis/epi-suite-prod-rebuild.yml",
+    "?? tests/testthat/test-contract-ct_chemical_msready_search_by_mass.R",
+    "?? tests/testthat/test-contract-ct_chemical_msready_search_by_mass_bulk.R",
+    "?? tests/testthat/test-contract-epi_submit_batch.R",
+    "?? tests/testthat/test-explicit_request_bodies.R"
+  ],
+  "reviewed_routes": {
+    "ct_chemical_msready_search_by_mass_bulk": "ctx-chemical-prod.json POST /chemical/msready/search/by-mass/",
+    "ct_chemical_msready_search_by_mass": "ctx-chemical-prod.json GET /chemical/msready/search/by-mass/{start}/{end}",
+    "epi_submit_batch": "epi-suite-prod.json POST /api/submit/batch"
+  },
+  "body_policy": {
+    "binding": "Existing compact_object, public field order, omit only NULL, preserve FALSE/zero/empty values",
+    "batch_limit": "Existing search_equal_batch_limit callback, environment fallback 1000; explicit bodies still send one request",
+    "epi_schema_discrepancy": "Schema expects an array of 1-100 BatchEstimateRequest objects; preserve the current object payload. No wrapping or batching; a corrected public API requires separate review. Preserve helper default ctx_burl and auth=TRUE.",
+    "get_end": "Preserve optional end=NULL and c(end=end) path_params; do not impose schema-required end",
+    "behavior_corrections": []
+  },
+  "retired_tests": [
+    "tests/testthat/test-ct_chemical_msready_search_by_mass.R",
+    "tests/testthat/test-ct_chemical_msready_search_by_mass_bulk.R",
+    "tests/testthat/test-epi_submit_batch.R"
+  ],
+  "issue_337_entries_remaining": 15,
+  "verification": {
+    "contract_and_regression_tests": "passed",
+    "regression_assertions": 1152,
+    "focused_regression_assertions": 51,
+    "test_failures": 0,
+    "test_errors": 0,
+    "test_warnings": 0,
+    "legacy_generator_check": "passed",
+    "documentation_and_namespace_unchanged": true,
+    "existing_uncommitted_work_preserved": true,
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "rehearsal": {
+      "commit": "b47f3d8dfa3a8aea8f58ffa4fda49caaa2258678",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "byte_identical": true,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": []
+    },
+    "runtime_results": "dev/specmill-rebuild/runtime-request-bodies-results.json",
+    "runtime_scope": "Installed original and migrated client, localhost only; synthetic responses",
+    "localhost_cases": 1291,
+    "new_wave_cases": 42,
+    "new_wave_requests_and_objects_equal": true,
+    "candidate_failures": 0,
+    "prior_corrected_query_cases": 12,
+    "prior_corrected_options_cases": 14,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "unchanged_request_fields_and_objects_equal": true,
+    "runtime_scheduler": "Existing dev/specmill-full/verify-runtime.R, with only the independent callr::r client runs scheduled concurrently through callr::r_bg in /tmp/request-body-parallel-runtime.R. All comparison and prior-correction assertions unchanged.",
+    "wire_expectations": "Match httr2 JSON digits=22 and unnamed empty accumulator []; retain the original reserved-end URL parsing error.",
+    "commands": [
+      "Rscript dev/specmill-rebuild/wave.R request-bodies ct_chemical_msready_search_by_mass_bulk ct_chemical_msready_search_by_mass epi_submit_batch",
+      "bash /tmp/verify-request-bodies.sh request-bodies",
+      "COMPTOXR_CRAN_SAFE_TESTS=true NOT_CRAN=false Rscript -e testthat::test_local(...)",
+      "Rscript /tmp/request-body-parallel-runtime.R <before-library> <wave-library> <runtime-output> dev/specmill-rebuild/runtime-request-bodies-results.json",
+      "Rscript dev/specmill-rebuild/rehearse.R"
+    ],
+    "sequential_runtime_replay": "Rscript dev/specmill-full/verify-runtime.R <before-library> <wave-library> <runtime-output> dev/specmill-rebuild/runtime-request-bodies-results.json"
+  }
+}

@@ -41,3 +41,8 @@ prediction_body <- function(operation) {
     base::Filter(base::Negate(base::is.null), BODY)
   }), list(A = present[[1L]], B = present[[2L]], BODY = payload))
 }
+
+# Keep the GET mass-range sibling's optional end and vector coercion.
+mass_range_path_params <- function(operation) {
+  quote(c(end = params[["end"]]))
+}

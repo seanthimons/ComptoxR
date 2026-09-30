@@ -151,6 +151,63 @@ for (name in names(full_cases)) {
         probe(paste0('invalid-missing-', name), fun(), list(), error = TRUE)
         next
       }
+      # #337: preserve explicit objects, including the EPI schema-array discrepancy.
+      if (isTRUE(item$request_body)) {
+        epi <- name == 'epi_submit_batch'
+        fields <- names(item$variants$explicit)
+        required <- if (epi) 'modules' else c('error', 'masses')
+        minimal <- if (epi) list(modules = c('logKow', 'physicalProperties')) else list(error = 0, masses = c(200.9, 200.95))
+        variants <- list(minimal = minimal, explicit = item$variants$explicit)
+        for (variant in c('null', 'false', 'zero', 'empty', 'encoding')) {
+          value <- switch(variant, null = NULL, false = FALSE, zero = 0, empty = list(), encoding = 'caf\u00e9 +/&')
+          variants[[variant]] <- setNames(rep(list(value), length(fields)), fields)
+        }
+        wire_for_body <- function(inputs) {
+          body <- if (epi) list(modules = NULL, vaporPressureTemperatureC = 25) else list()
+          body[names(inputs)] <- inputs
+          body <- Filter(Negate(is.null), body[intersect(fields, names(body))])
+          list(expected('POST', paste0('/ctx/', item$arguments$endpoint),
+            body = as.character(jsonlite::toJSON(if (length(body)) body else list(), auto_unbox = TRUE, digits = 22)), auth = TRUE))
+        }
+        for (variant in names(variants)) {
+          probe(paste0(name, '-', variant), do.call(fun, variants[[variant]]), wire_for_body(variants[[variant]]))
+        }
+        for (setting in c(NA_character_, '2', '0', '1001')) {
+          withr::with_envvar(c(batch_limit = setting), {
+            probe(paste0(name, '-batch-limit-', if (is.na(setting)) 'default' else setting),
+              do.call(fun, minimal), wire_for_body(minimal))
+          })
+        }
+        for (field in required) {
+          inputs <- minimal
+          inputs[[field]] <- NULL
+          probe(paste0(name, '-missing-', field), do.call(fun, inputs), list(), error = TRUE)
+        }
+        probe(paste0(name, '-missing-all'), fun(), list(), error = TRUE)
+        probe(paste0(name, '-http-400'), do.call(fun, minimal), wire_for_body(minimal),
+          '{"error":"pilot bad request"}', status = 400L, error = TRUE)
+        next
+      }
+      if (isTRUE(item$mass_range)) {
+        endpoint <- '/ctx/chemical/msready/search/by-mass/'
+        for (variant in c('omitted', 'null', 'explicit', 'false', 'zero', 'vector')) {
+          end <- switch(variant, omitted =, null = NULL, explicit = 200.95, false = FALSE, zero = 0, vector = c(201, 202))
+          inputs <- list(start = 200.9)
+          if (variant != 'omitted') inputs['end'] <- list(end)
+          suffix <- if (is.null(end)) '' else paste0('/', paste(end, collapse = '/'))
+          probe(paste0(name, '-', variant), do.call(fun, inputs),
+            list(expected('GET', paste0(endpoint, '200.9', suffix), auth = TRUE)))
+        }
+        probe(paste0(name, '-start-encoding'), fun('caf\u00e9 +/&'), NULL)
+        probe(paste0(name, '-end-encoding'), fun(200.9, 'end +/&'), list(), error = TRUE)
+        probe(paste0(name, '-null-start'), fun(NULL), list(), error = TRUE)
+        probe(paste0(name, '-empty-start'), fun(character()), list(), error = TRUE)
+        probe(paste0(name, '-missing-start'), fun(), list(), error = TRUE)
+        probe(paste0(name, '-batched-end'), fun(c(200, 201), 202), list(), error = TRUE)
+        probe(paste0(name, '-http-400'), fun(200.9), list(expected('GET', paste0(endpoint, '200.9'), auth = TRUE)),
+          '{"error":"pilot bad request"}', status = 400L, error = TRUE)
+        next
+      }
       arguments <- item$arguments
       supplied <- item$inputs
       observe <- isTRUE(item$observe)

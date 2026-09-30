@@ -37,6 +37,21 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
           request = op$request
         )
       }
+      if (op$name %in% c('ct_chemical_msready_search_by_mass_bulk', 'epi_submit_batch')) {
+        generated[[op$name]]$policy <- list(
+          body_policy = 'Preserve the original explicit object in public field order, omitting only NULL; retain helper defaults and the 1000-fallback batch-limit callback.',
+          request = op$request
+        )
+        if (op$name == 'epi_submit_batch') {
+          generated[[op$name]]$policy$schema_discrepancy <- 'POST /api/submit/batch declares an array of BatchEstimateRequest (1-100 items); the public wrapper builds one object. Generate the existing object unchanged. Array wrapping, batching, schema validation, server and authentication corrections require separate public API review; retain current default ctx_burl and auth=TRUE.'
+        }
+      }
+      if (op$name == 'ct_chemical_msready_search_by_mass') {
+        generated[[op$name]]$policy <- list(
+          path_policy = 'Schema requires end; preserve the public end=NULL default and c(end=end) path_params without adding required-end validation.',
+          request = op$request
+        )
+      }
       if (identical(op$post_state, 'hook_state')) {
         generated[[op$name]]$policy <- list(
           request_owner = 'pre_request_hooks', hooks = service$hooks[[op$name]],
