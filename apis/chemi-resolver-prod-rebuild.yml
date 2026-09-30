@@ -16,6 +16,7 @@ selection:
   - GET /api/resolver/mesh
   - POST /api/resolver/lookup
   - POST /api/resolver/resolve
+  - POST /api/resolver/getsimilaritymap
 helper: generic_request
 documentation: yes
 operations:
@@ -701,4 +702,40 @@ operations:
       - mol: DTXSID1024122
       tags:
         apiStage: public
+  POST /api/resolver/getsimilaritymap:
+    name: chemi_resolver_getsimilaritymap
+    file: R/chemi_resolver_getsimilaritymap.R
+    helper: generic_chemi_request
+    implementation: existing
+    inputs:
+      query:
+        type: character
+        required: yes
+      idType:
+        type: character
+        default: AnyId
+      section:
+        type: character
+        default: ~
+      sort:
+        type: logical
+        default: no
+      hclust_method:
+        type: character
+        default: complete
+      format:
+        type: character
+        default:
+        - cluster
+        - long
+        - raw
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getsimilaritymap
+    specialization: Retain initial chemicals=NULL in pre-hook params, partial parameter
+      updates, flat resolved chemicals, skip before post hooks, optional section omission,
+      lowercase sort serialization and post-hook params excluding chemicals. Pinned
+      generation captures only public inputs and cannot reproduce both exact hook
+      states with existing bindings. No hook is added to force generation.
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

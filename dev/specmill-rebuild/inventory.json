@@ -1,5 +1,5 @@
 {
-  "commit": "b53fd06307769ccd5b9b4f36371debb997e07561",
+  "commit": "7cfeeafb3233eb05dc4dff1e11579a1aec33d932",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -14,10 +14,10 @@
   ],
   "export_categories": {
     "generated": 263,
-    "retained_mapped": 5,
+    "retained_mapped": 8,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 83,
+    "unmapped_wrapper": 80,
     "utility": 11
   },
   "runtime_files": [
@@ -1051,9 +1051,9 @@
       "name": "chemi_classyfire",
       "file": "R/chemi_classyfire.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-amos-prod-full GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
@@ -1381,9 +1381,9 @@
       "name": "chemi_resolver_getsimilaritymap",
       "file": "R/chemi_resolver_getsimilaritymap.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Client hook policy requires manual review",
-      "operation": null,
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/getsimilaritymap",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, sort = FALSE, hclust_method = \"complete\", format = c(\"cluster\", \"long\", \"raw\")))"
     },
@@ -1571,9 +1571,9 @@
       "name": "chemi_safety_rqcodes",
       "file": "R/chemi_safety_rqcodes.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-safety-prod-rebuild POST /api/safety/rqcodes",
       "lifecycle": "stable",
       "formals": "NULL"
     },

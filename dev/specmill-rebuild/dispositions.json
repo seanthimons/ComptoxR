@@ -6,8 +6,16 @@
     "lifecycle": null,
     "formals": "as.pairlist(alist(query = ))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
+    "disposition": "retained_mapped",
+    "reason": "Retain nrow-gated dplyr::select with any_of aliases, exact classification column order and unchanged empty results; no lifecycle badge. Pinned generation without new hooks returns the untransformed helper response.",
+    "mapping": {
+      "service": "chemi-amos-prod-full",
+      "key": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+      "file": "R/chemi_classyfire.R",
+      "wave": "resolver-transformations",
+      "policy": "Retain nrow-gated dplyr::select with any_of aliases, exact classification column order and unchanged empty results; no lifecycle badge. Pinned generation without new hooks returns the untransformed helper response.",
+      "contracts_file": "tests/testthat/fixtures/specmill-full-contracts.rds"
+    },
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -89,8 +97,16 @@
     "lifecycle": "stable",
     "formals": "NULL",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
+    "disposition": "retained_mapped",
+    "reason": "Retain query=NULL and the existing generic_chemi_request empty-query error before transport. When helper is mocked, retain rqCode pluck/compact, NULL empty result, row binding, rq splitting and numeric pounds/kilograms conversion with existing errors/warnings. Schema requires a Chemical array; correction needs separate authorization. Pinned generation without new hooks returns the untransformed helper response.",
+    "mapping": {
+      "service": "chemi-safety-prod-rebuild",
+      "key": "POST /api/safety/rqcodes",
+      "file": "R/chemi_safety_rqcodes.R",
+      "wave": "resolver-transformations",
+      "policy": "Retain query=NULL and the existing generic_chemi_request empty-query error before transport. When helper is mocked, retain rqCode pluck/compact, NULL empty result, row binding, rq splitting and numeric pounds/kilograms conversion with existing errors/warnings. Schema requires a Chemical array; correction needs separate authorization. Pinned generation without new hooks returns the untransformed helper response.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds"
+    },
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4574,8 +4590,16 @@
     "lifecycle": "experimental",
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", section = NULL, sort = FALSE, hclust_method = \"complete\", format = c(\"cluster\", \"long\", \"raw\")))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "disposition": "retained_mapped",
+    "reason": "Retain initial chemicals=NULL in pre-hook params, partial parameter updates, flat resolved chemicals, skip before post hooks, optional section omission, lowercase sort serialization and post-hook params excluding chemicals. Pinned generation captures only public inputs and cannot reproduce both exact hook states with existing bindings. No hook is added to force generation.",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/getsimilaritymap",
+      "file": "R/chemi_resolver_getsimilaritymap.R",
+      "wave": "resolver-transformations",
+      "policy": "Retain initial chemicals=NULL in pre-hook params, partial parameter updates, flat resolved chemicals, skip before post hooks, optional section omission, lowercase sort serialization and post-hook params excluding chemicals. Pinned generation captures only public inputs and cannot reproduce both exact hook states with existing bindings. No hook is added to force generation.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds"
+    },
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,

@@ -345,10 +345,10 @@
   "chemi_classyfire": {
     "name": "chemi_classyfire",
     "file": "R/chemi_classyfire.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "retained_mapped",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_classification_for_dtxsid/{dtxsid}",
+    "reason": "Retain nrow-gated dplyr::select with any_of aliases, exact classification column order and unchanged empty results; no lifecycle badge. Pinned generation without new hooks returns the untransformed helper response."
   },
   "chemi_descriptors": {
     "name": "chemi_descriptors",
@@ -507,10 +507,10 @@
   "chemi_resolver_getsimilaritymap": {
     "name": "chemi_resolver_getsimilaritymap",
     "file": "R/chemi_resolver_getsimilaritymap.R",
-    "status": "retained",
-    "reason": "Client hook policy requires manual review",
-    "schema": null,
-    "key": null
+    "status": "retained_mapped",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/getsimilaritymap",
+    "reason": "Retain initial chemicals=NULL in pre-hook params, partial parameter updates, flat resolved chemicals, skip before post hooks, optional section omission, lowercase sort serialization and post-hook params excluding chemicals. Pinned generation captures only public inputs and cannot reproduce both exact hook states with existing bindings. No hook is added to force generation."
   },
   "chemi_resolver_ghs_list_count": {
     "name": "chemi_resolver_ghs_list_count",
@@ -583,10 +583,10 @@
   "chemi_safety_rqcodes": {
     "name": "chemi_safety_rqcodes",
     "file": "R/chemi_safety_rqcodes.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "retained_mapped",
+    "schema": "chemi-safety-prod.json",
+    "key": "POST /api/safety/rqcodes",
+    "reason": "Retain query=NULL and the existing generic_chemi_request empty-query error before transport. When helper is mocked, retain rqCode pluck/compact, NULL empty result, row binding, rq splitting and numeric pounds/kilograms conversion with existing errors/warnings. Schema requires a Chemical array; correction needs separate authorization. Pinned generation without new hooks returns the untransformed helper response."
   },
   "chemi_safety_section": {
     "name": "chemi_safety_section",

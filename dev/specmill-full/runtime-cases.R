@@ -57,6 +57,69 @@ for (name in names(full_cases)) {
         }, .package = 'ComptoxR')
         next
       }
+      # #337: retained transformations and exact empty-query failure.
+      if (isTRUE(item$transformations)) {
+        if (name == 'chemi_safety_rqcodes') {
+          value <- probe(paste0(name, '-empty-query'), fun(), list(), error = TRUE)
+          stopifnot(identical(value$message, 'Either query or chemicals parameter must be provided.'))
+          testthat::with_mocked_bindings({
+            probe(paste0(name, '-mocked-transform'), fun(), list())
+          }, generic_chemi_request = function(...) list(list(rqCode = list(code = 'A', rq = '1,000 (454)', flag = FALSE, count = 0))), .package = 'ComptoxR')
+        } else if (name == 'chemi_classyfire') {
+          response <- '[{"kingdom":"K","superklass":"S","klass":"C","subklass":"SC"}]'
+          for (query in list('one', FALSE, 0, 'caf\u00e9 +/&', c('one', 'two', 'one'))) {
+            suffix <- paste(as.character(query), collapse = '-')
+            wire <- lapply(unique(query), function(q) expected('GET', paste0('/chemi/amos/get_classification_for_dtxsid/', curl::curl_escape(as.character(q)))))
+            probe(paste0(name, '-', suffix), fun(query), wire, response)
+          }
+          probe(paste0(name, '-empty-response'), fun('one'), list(expected('GET', '/chemi/amos/get_classification_for_dtxsid/one')), '[]')
+          for (variant in c('null', 'empty', 'blank', 'na', 'missing')) {
+            args <- switch(variant, null = list(query = NULL), empty = list(query = character()), blank = list(query = ''), na = list(query = NA_character_), missing = list())
+            probe(paste0(name, '-', variant), do.call(fun, args), list(), error = TRUE)
+          }
+          probe(paste0(name, '-http-400'), fun('one'), list(expected('GET', '/chemi/amos/get_classification_for_dtxsid/one')), '{"error":"bad request"}', status = 400L, error = TRUE)
+        } else {
+          response <- '{"order":[{"chemical":{"sid":"A","name":"first"}},{"chemical":{"name":"second"}}],"similarity":[[{"sim":0},{"sim":0.25}],[{"sim":0.25},{"sim":0}]]}'
+          chemicals <- list(list(sid = 'A', smiles = 'C', casrn = NULL, inchi = NULL, inchiKey = NULL, name = 'first'),
+            list(sid = 'B', smiles = 'CC', casrn = NULL, inchi = NULL, inchiKey = NULL, name = NULL))
+          wire_for_map <- function(section = NULL, sort = FALSE) {
+            options <- if (is.null(section)) list() else list(section = section)
+            body <- list(chemicals = chemicals, options = if (length(options)) options else setNames(list(), character()))
+            list(expected('POST', '/chemi/resolver/getsimilaritymap',
+              if (is.null(sort)) '' else paste0('sort=', curl::curl_escape(tolower(as.character(sort)))),
+              as.character(jsonlite::toJSON(body, auto_unbox = TRUE, null = 'null', digits = 22))))
+          }
+          testthat::with_mocked_bindings({
+            for (format in c('cluster', 'long', 'raw')) {
+              probe(paste0(name, '-', format), fun('one', format = format, hclust_method = 'single'), wire_for_map(), response)
+            }
+            for (variant in c('omitted', 'null', 'false', 'zero', 'true', 'encoding')) {
+              inputs <- list(query = 'one')
+              value <- switch(variant, omitted =, null = NULL, false = FALSE, zero = 0, true = TRUE, encoding = 'caf\u00e9 +/&')
+              if (variant != 'omitted') inputs[c('section', 'sort', 'idType')] <- rep(list(value), 3L)
+              probe(paste0(name, '-', variant), do.call(fun, inputs), wire_for_map(value, if (variant == 'omitted') FALSE else value), response)
+            }
+            for (variant in c('null-format', 'null-method', 'invalid-format', 'false-format', 'invalid-method', 'null-query', 'false-query', 'zero-query', 'missing')) {
+              inputs <- switch(variant, 'null-format' = list(query = 'one', format = NULL), 'null-method' = list(query = 'one', hclust_method = NULL),
+                'invalid-format' = list(query = 'one', format = 'invalid'), 'false-format' = list(query = 'one', format = FALSE),
+                'invalid-method' = list(query = 'one', hclust_method = 'invalid'), 'null-query' = list(query = NULL),
+                'false-query' = list(query = FALSE), 'zero-query' = list(query = 0), missing = list())
+              probe(paste0(name, '-', variant), do.call(fun, inputs), if (variant == 'missing') list() else wire_for_map(), response,
+                error = variant %in% c('invalid-format', 'false-format', 'invalid-method', 'missing'))
+            }
+            probe(paste0(name, '-http-400'), fun('one'), wire_for_map(), '{"error":"bad request"}', status = 400L, error = TRUE)
+            probe(paste0(name, '-empty-response'), fun('one'), wire_for_map(), '[]')
+          }, chemi_resolver_lookup_bulk = function(...) list(list(result = 'FOUND', chemical = list(chemId = 'A', canonicalSmiles = 'C', name = 'first')),
+            list(result = 'NOT_FOUND'), list(result = 'FOUND', chemical = list(sid = 'B', smiles = 'CC'))), .package = 'ComptoxR')
+          testthat::with_mocked_bindings({
+            probe(paste0(name, '-unresolved'), fun('one', format = 'invalid'), list(), response)
+          }, chemi_resolver_lookup_bulk = function(...) list(list(result = 'NOT_FOUND')), .package = 'ComptoxR')
+          testthat::with_mocked_bindings({
+            probe(paste0(name, '-resolver-error'), fun('one'), list(), response, error = TRUE)
+          }, chemi_resolver_lookup_bulk = function(...) stop('resolver sentinel'), .package = 'ComptoxR')
+        }
+        next
+      }
       # #337: valid transport stays identical; schema validation corrects invalid queries.
       if (name %in% c('chemi_resolver_lookup', 'chemi_resolver_lookupCASRN')) {
         endpoint <- sub('^.* /api/', '/chemi/', item$key)

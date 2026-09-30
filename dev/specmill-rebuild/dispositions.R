@@ -24,7 +24,7 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
   service <- yaml::read_yaml(path)
   for (key in names(service$operations)) {
     op <- service$operations[[key]]
-    if (identical(op$implementation, 'existing') && op$name == 'chemi_resolver_lookup_bulk') {
+    if (identical(op$implementation, 'existing') && op$name %in% c('chemi_resolver_lookup_bulk', 'chemi_resolver_getsimilaritymap', 'chemi_classyfire', 'chemi_safety_rqcodes')) {
       retained[[op$name]] <- list(service = service$id, key = key, file = op$file,
         wave = waves[[op$file]], policy = op$specialization, contracts_file = service$contracts_file)
     }
@@ -108,6 +108,26 @@ route <- function(name, file) {
   )
 }
 
+hook_evidence <- function(name, d) {
+  if (!is.null(hooks[[name]])) {
+    chain <- hooks[[name]]
+    evidence <- list(
+      pre_request = as.list(chain$pre_request), post_response = as.list(chain$post_response),
+      extra_params = as.list(names(chain$extra_params)),
+      defined_in = lapply(c(chain$pre_request, chain$post_response), function(h) hook_files[[h]] %||% 'missing')
+    )
+    # Which declared stages the wrapper actually executes; undeclared calls are inert at runtime.
+    env <- new.env()
+    sys.source(d$file, env, keep.source = FALSE)
+    text <- paste(deparse(body(env[[name]])), collapse = '\n')
+    evidence$invokes_pre_request <- grepl('run_hook("', text, fixed = TRUE) && grepl('"pre_request"', text, fixed = TRUE)
+    evidence$invokes_post_response <- grepl('"post_response"', text, fixed = TRUE)
+    evidence$handles_skip_request <- grepl('skip_request', text, fixed = TRUE)
+    return(evidence)
+  }
+  NULL
+}
+
 ledger <- lapply(seq_len(nrow(checklist)), function(i) {
   name <- checklist$name[[i]]
   d <- inventory[[name]]
@@ -126,6 +146,7 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
     entry$reason <- screen[[name]]$reason
     entry$mapping <- retained[[name]]
     entry$route <- route(name, d$file)
+    entry$hooks <- hook_evidence(name, d)
     return(entry)
   }
   if (identical(d$category, 'runtime') || name == 'ct_api_key') {
@@ -136,21 +157,7 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
   entry$disposition <- 'retained'
   entry$reason <- screen[[name]]$reason
   entry$route <- route(name, d$file)
-  if (!is.null(hooks[[name]])) {
-    chain <- hooks[[name]]
-    entry$hooks <- list(
-      pre_request = as.list(chain$pre_request), post_response = as.list(chain$post_response),
-      extra_params = as.list(names(chain$extra_params)),
-      defined_in = lapply(c(chain$pre_request, chain$post_response), function(h) hook_files[[h]] %||% 'missing')
-    )
-    # Which declared stages the wrapper actually executes; undeclared calls are inert at runtime.
-    env <- new.env()
-    sys.source(d$file, env, keep.source = FALSE)
-    text <- paste(deparse(body(env[[name]])), collapse = '\n')
-    entry$hooks$invokes_pre_request <- grepl('run_hook("', text, fixed = TRUE) && grepl('"pre_request"', text, fixed = TRUE)
-    entry$hooks$invokes_post_response <- grepl('"post_response"', text, fixed = TRUE)
-    entry$hooks$handles_skip_request <- grepl('skip_request', text, fixed = TRUE)
-  }
+  entry$hooks <- hook_evidence(name, d)
   entry
 })
 names(ledger) <- checklist$name

@@ -24,6 +24,7 @@ selection:
   - GET /api/amos/record_type_count/{record_type}
   - GET /api/amos/substring_search/{substring}
   - GET /api/amos/search/{dtxsid}
+  - GET /api/amos/get_classification_for_dtxsid/{dtxsid}
 helper: generic_request
 documentation: yes
 operations:
@@ -777,4 +778,32 @@ operations:
         apiStage: public
       examples:
       - dtxsid: DTXSID7020182
+  GET /api/amos/get_classification_for_dtxsid/{dtxsid}:
+    name: chemi_classyfire
+    file: R/chemi_classyfire.R
+    helper: generic_request
+    implementation: existing
+    inputs:
+      query:
+        type: character
+        required: yes
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: amos/get_classification_for_dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+    specialization: Retain nrow-gated dplyr::select with any_of aliases, exact classification
+      column order and unchanged empty results; no lifecycle badge. Pinned generation
+      without new hooks returns the untransformed helper response.
 contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

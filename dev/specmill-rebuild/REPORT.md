@@ -496,3 +496,91 @@ Prior intentional corrections remain recorded separately in
 `dev/specmill-full/verify-runtime.R`. The original branch and unrelated work,
 including the mirror-selection plan, were preserved. This completes one
 retained #337 disposition; 14 entries remain to review.
+
+## Resolver, classification and RQ transformations (#337)
+
+The `resolver-transformations` wave reviews three more entries and records each
+as `retained_mapped`, with fixed Specmill contracts and byte-identical source:
+
+| Wrapper | Schema | Exact operation key | Mapping service |
+| --- | --- | --- | --- |
+| `chemi_resolver_getsimilaritymap` | `chemi-resolver-prod.json` | `POST /api/resolver/getsimilaritymap` | `chemi-resolver-prod-rebuild` |
+| `chemi_classyfire` | `chemi-amos-prod.json` | `GET /api/amos/get_classification_for_dtxsid/{dtxsid}` | `chemi-amos-prod-full` |
+| `chemi_safety_rqcodes` | `chemi-safety-prod.json` | `POST /api/safety/rqcodes` | `chemi-safety-prod-rebuild` |
+
+These keys were checked against the schema path/method definitions and parser
+operations, then against the literal helper calls. The supported ClassyFire
+route is also mapped by `amos-pilot` for its separate public wrapper. The five
+upstream-blocked AMOS entries are excluded from this wave.
+
+Similarity-map starts with `chemicals=NULL` in its pre-hook parameters. The
+registered chain in `inst/hook_config.yml` resolves through the retained shared
+`chemi_resolver_lookup_bulk`, retries without `idsType` on resolver failure,
+keeps only FOUND records, selects chemical fields in the original order with
+retained NULL values, clears query to NULL, and flattens the nested chemical
+records. These primitives live in `R/hooks_compound.R`; their sibling callers
+are covered by the existing resolution, descriptor, hazard and WebTEST tests.
+There are no other direct production callers of these three public wrappers.
+The wrapper returns a skip result immediately, without a request or post hook.
+It applies partial parameter updates, omits only NULL section, serializes sort
+with `tolower(as.character())`, and calls `generic_chemi_request(tidy=FALSE)`.
+The helper uses default `chemi_burl`, auth=FALSE and wrap=TRUE, retains NULL
+chemical fields, omits NULL URL parameters and preserves HTTP failures.
+
+The schema's `PubchemRequest` declares `chemicals` and a top-level `section`;
+the original helper places section inside `options`. This wave preserves that
+existing request. Its required boolean sort also keeps the public FALSE default
+and permissive NULL/zero/string behavior. The post-hook state contains the
+updated public parameters and excludes chemicals. The registered formatter
+returns a named matrix, molecule-name tibble and hclust object for cluster,
+row-major off-diagonal pairs for long, or the unchanged response for raw.
+NULL format and method use the original defaults; invalid choices retain the
+post-hook error class. `hook_registry.R` still owns hook chaining/error wrapping.
+
+ClassyFire uses `generic_request` with GET, batch_limit=1, chemi_burl and
+auth=FALSE. Query normalization, deduplication, URL encoding, sequential requests,
+tidy binding and request errors remain in that helper. For nonempty results,
+its `any_of` selection preserves available query/value/sid aliases under dtxsid
+and selects kingdom, superklass, klass and subklass in that order, renaming the
+last three. Multiple identifier columns retain dplyr's dtxsid1/2/3 naming.
+Empty data frames return unchanged; malformed NULL helper results retain their
+original error. The wrapper has no lifecycle badge and invokes no hooks.
+
+RQ codes has no parameters or hook calls. It passes explicit `query=NULL` to
+`generic_chemi_request`, which rejects an empty query before constructing or
+sending an HTTP request with `Either query or chemicals parameter must be
+provided.` The schema requires a Chemical array; changing this call or signature
+requires separately authorized correction. Mocked helper responses exercise its
+otherwise unreachable transformation: pluck rqCode, compact missing records,
+return NULL when empty, bind tibble rows, split rq on a space, remove parentheses
+and commas, then convert pounds/kilograms to numeric. Field order, FALSE/zero
+metadata, malformed split errors and numeric-coercion warnings are preserved.
+
+`probe-transformations.R` replays the pinned 0.1.8 rendering probes using existing
+bindings and the existing choice-default callback. Similarity-map generation
+omits chemicals from the initial pre-hook state; ClassyFire returns the original
+column names and extra fields; RQ codes returns the raw list instead of a tibble.
+Results are recorded in `wave-resolver-transformations.json`. No hooks were added
+to force generation, and the toolkit pin and prior intentional corrections in
+`verify-runtime.R` are unchanged. Retained mappings generate contract tests,
+not replacement wrappers, and remain outside the removal allowlist.
+
+The installed original and candidate both pass the 92 focused regression
+assertions. The contract, regression, caller/hook, helper and legacy stub
+suites pass 1,651 assertions with zero failures, errors or warnings. The
+legacy generator check passes. The installed-client localhost comparison
+passes all 1,353 cases, including 36 new cases for these wrappers, with zero
+candidate failures. It compares exact wire bytes, authentication, classes,
+objects, warnings/errors, all 409 exported signatures and helper signatures.
+The 12 prior query corrections and 14 options corrections remain separately
+asserted by `verify-runtime.R`. Evidence is in
+`runtime-resolver-transformations-results.json` and
+`wave-resolver-transformations.json`.
+
+The isolated snapshot `95b83b4c` deleted all 226 allowlisted files and rebuilt
+263 generated operations. Regeneration, second apply and check were
+byte-identical, with no differences. The three retained source files were
+excluded from deletion and kept their original hashes. The inventory,
+dispositions, removal allowlist and wave evidence are updated. This completes
+three more #337 entries; 11 remain, including the five upstream-blocked AMOS
+entries. The mirror-selection plan remains uncommitted and unchanged.
