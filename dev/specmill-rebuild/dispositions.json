@@ -61,8 +61,16 @@
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
+    "disposition": "retained_mapped",
+    "reason": "Supported schema route; retain the handwritten guard before parameter capture/helper invocation, coercion, and mixed NULL option policy under a fixed contract.",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "POST /api/resolver/lookup",
+      "file": "R/chemi_resolver_lookup_bulk.R",
+      "wave": "resolver-bulk",
+      "policy": "Retain the original pre-helper NULL/empty ids guard, as.character coercion, evaluation order, mandatory options with explicit NULL values, optional filters/format omission, and array_payload transport. Computed helper arguments remain owned by the source; the frozen calls in contracts_file verify them.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds"
+    },
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,

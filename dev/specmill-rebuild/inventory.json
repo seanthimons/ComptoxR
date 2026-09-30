@@ -1,5 +1,5 @@
 {
-  "commit": "6435a7599a99bae0eab925b5c38c2ba9fb796b9d",
+  "commit": "b53fd06307769ccd5b9b4f36371debb997e07561",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -14,10 +14,10 @@
   ],
   "export_categories": {
     "generated": 263,
-    "retained_mapped": 4,
+    "retained_mapped": 5,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 84,
+    "unmapped_wrapper": 83,
     "utility": 11
   },
   "runtime_files": [
@@ -1471,9 +1471,9 @@
       "name": "chemi_resolver_lookup_bulk",
       "file": "R/chemi_resolver_lookup_bulk.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-resolver-prod-rebuild POST /api/resolver/lookup",
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))"
     },

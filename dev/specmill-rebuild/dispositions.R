@@ -19,10 +19,15 @@ for (path in Sys.glob(file.path(out, 'wave-*.json'))) {
   for (f in unlist(w$files)) waves[[f]] <- w$wave
 }
 generated <- list()
+retained <- list()
 for (path in yaml::read_yaml('specmill.yml')$services) {
   service <- yaml::read_yaml(path)
   for (key in names(service$operations)) {
     op <- service$operations[[key]]
+    if (identical(op$implementation, 'existing') && op$name == 'chemi_resolver_lookup_bulk') {
+      retained[[op$name]] <- list(service = service$id, key = key, file = op$file,
+        wave = waves[[op$file]], policy = op$specialization, contracts_file = service$contracts_file)
+    }
     if (identical(op$implementation, 'generated')) {
       generated[[op$name]] <- list(service = service$id, key = key, file = op$file, wave = waves[[op$file]] %||% 'initial tranche')
       if (op$name %in% c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')) {
@@ -116,6 +121,13 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
     entry$mapping <- generated[[name]]
     return(entry)
   }
+  if (!is.null(retained[[name]])) {
+    entry$disposition <- 'retained_mapped'
+    entry$reason <- screen[[name]]$reason
+    entry$mapping <- retained[[name]]
+    entry$route <- route(name, d$file)
+    return(entry)
+  }
   if (identical(d$category, 'runtime') || name == 'ct_api_key') {
     entry$disposition <- 'retained_client_utility'
     entry$reason <- 'Client configuration utility, not a schema endpoint wrapper; stays outside schema generation.'
@@ -155,6 +167,9 @@ for (issue in unique(checklist$issue)) {
   for (x in rows) {
     evidence <- if (x$disposition == 'generated') {
       sprintf('`%s` %s (%s)', x$mapping$service, x$mapping$key, x$mapping$wave)
+    } else if (x$disposition == 'retained_mapped') {
+      paste(x$reason, sprintf('`%s` %s (%s); fixed contract `%s`',
+        x$mapping$service, x$mapping$key, x$mapping$wave, x$mapping$contracts_file), sep = '; ')
     } else {
       r <- x$route
       blocked <- vapply(r$blocked %||% list(), function(b) sprintf('%s: %s', b$code, b$reason), '')

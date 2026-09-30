@@ -14,6 +14,7 @@ selection:
   - GET /api/resolver/lookup
   - GET /api/resolver/lookupCASRN
   - GET /api/resolver/mesh
+  - POST /api/resolver/lookup
   - POST /api/resolver/resolve
 helper: generic_request
 documentation: yes
@@ -624,6 +625,41 @@ operations:
       - query: DTXSID7020182
       tags:
         apiStage: public
+  POST /api/resolver/lookup:
+    name: chemi_resolver_lookup_bulk
+    file: R/chemi_resolver_lookup_bulk.R
+    helper: generic_chemi_request
+    implementation: existing
+    inputs:
+      ids:
+        type: character
+        required: yes
+      idsType:
+        type: character
+        default: AnyId
+      fuzzy:
+        type: character
+        default: Not
+      mol:
+        type: logical
+        default: no
+      filters:
+        type: character
+        default: ~
+      format:
+        type: character
+        default: ~
+      tidy:
+        type: logical
+        default: yes
+    request:
+      arguments:
+        endpoint:
+          value: resolver/lookup
+    specialization: Retain the original pre-helper NULL/empty ids guard, as.character
+      coercion, evaluation order, mandatory options with explicit NULL values, optional
+      filters/format omission, and array_payload transport. Computed helper arguments
+      remain owned by the source; the frozen calls in contracts_file verify them.
   POST /api/resolver/resolve:
     name: chemi_resolver_resolve
     file: R/chemi_resolver_resolve.R

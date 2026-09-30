@@ -208,6 +208,49 @@ for (name in names(full_cases)) {
           '{"error":"pilot bad request"}', status = 400L, error = TRUE)
         next
       }
+      # #337: retained shared resolver policy, flat array_payload and mixed NULL options.
+      if (isTRUE(item$resolver_bulk)) {
+        variants <- list(minimal = list(ids = 'DTXSID7020182'), numeric = list(ids = c(1L, 2L)),
+          false = list(ids = FALSE), zero = list(ids = 0), factor = list(ids = factor(c('b', 'a'))),
+          list = list(ids = list('one', 'two')), filtered = list(ids = c('one', 'one', NA_character_, '', 'two')),
+          encoding = list(ids = 'caf\u00e9 +/&'),
+          null_options = list(ids = 'one', idsType = NULL, fuzzy = NULL, mol = NULL, filters = NULL, format = NULL),
+          false_options = list(ids = 'one', idsType = FALSE, fuzzy = FALSE, mol = FALSE, filters = FALSE, format = FALSE),
+          zero_options = list(ids = 'one', idsType = 0, fuzzy = 0, mol = 0, filters = 0, format = 0),
+          empty_options = list(ids = 'one', filters = list(), format = ''),
+          nested_options = list(ids = 'one', filters = list(flag = FALSE, count = 0), format = 'JSON'),
+          unknown_enums = list(ids = 'one', idsType = 'unreviewed', fuzzy = 'unreviewed', format = 'unreviewed'),
+          raw = list(ids = 'one', tidy = FALSE))
+        wire_for_resolver <- function(inputs) {
+          query <- unique(as.character(inputs$ids))
+          query <- query[!is.na(query) & query != '']
+          options <- list(idsType = 'AnyId', fuzzy = 'Not', mol = FALSE, filters = NULL, format = NULL)
+          keys <- intersect(names(options), names(inputs))
+          options[keys] <- inputs[keys]
+          options <- c(options[c('idsType', 'fuzzy', 'mol')], Filter(Negate(is.null), options[c('filters', 'format')]))
+          body <- c(list(ids = I(query)), options)
+          list(expected('POST', '/chemi/resolver/lookup',
+            body = as.character(jsonlite::toJSON(body, auto_unbox = TRUE, digits = 22, null = 'null'))))
+        }
+        for (variant in names(variants)) {
+          probe(paste0(name, '-', variant), do.call(fun, variants[[variant]]), wire_for_resolver(variants[[variant]]))
+        }
+        for (setting in c(NA_character_, '0', '2', '1000')) {
+          withr::with_envvar(c(batch_limit = setting), {
+            inputs <- list(ids = c('one', 'two', 'three'))
+            probe(paste0(name, '-batch-limit-', if (is.na(setting)) 'default' else setting),
+              do.call(fun, inputs), wire_for_resolver(inputs))
+          })
+        }
+        invalid <- list(missing = list(), null = list(ids = NULL), empty = list(ids = character()),
+          empty_list = list(ids = list()), blank = list(ids = ''), na = list(ids = NA_character_))
+        for (variant in names(invalid)) {
+          probe(paste0(name, '-', variant), do.call(fun, invalid[[variant]]), list(), error = TRUE)
+        }
+        probe(paste0(name, '-http-400'), do.call(fun, variants$minimal), wire_for_resolver(variants$minimal),
+          '{"error":"pilot bad request"}', status = 400L, error = TRUE)
+        next
+      }
       arguments <- item$arguments
       supplied <- item$inputs
       observe <- isTRUE(item$observe)

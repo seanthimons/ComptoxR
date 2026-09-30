@@ -531,11 +531,12 @@
   },
   "chemi_resolver_lookup_bulk": {
     "name": "chemi_resolver_lookup_bulk",
-    "file": "R/chemi_resolver_lookup.R",
+    "file": "R/chemi_resolver_lookup_bulk.R",
     "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "reason": "Supported schema route; retain the handwritten guard before parameter capture/helper invocation, coercion, and mixed NULL option policy under a fixed contract.",
+    "schema": "chemi-resolver-prod.json",
+    "key": "POST /api/resolver/lookup",
+    "lifecycle": "stable"
   },
   "chemi_resolver_orderBySimilarity": {
     "name": "chemi_resolver_orderBySimilarity",

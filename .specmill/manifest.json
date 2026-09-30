@@ -1273,6 +1273,10 @@
       "hash": "ae6b5316dd909bb2d4fd21ea8739670276dd8b6f5012cc8997a4b87f1f0ea1e7",
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/lookupCASRN"
     },
+    "tests/testthat/test-contract-chemi_resolver_lookup_bulk.R": {
+      "hash": "3519ec5ef579489662e5727d6b67ef0699b510dbf158b15fa6d3045ecac09d9e",
+      "operations": "chemi-resolver-prod-rebuild POST /api/resolver/lookup"
+    },
     "tests/testthat/test-contract-chemi_resolver_mesh.R": {
       "hash": "ba289dc997496f1d281735891d1aa2562a9ad7b6ba7e231f7278ac3d9663f279",
       "operations": "chemi-resolver-prod-rebuild GET /api/resolver/mesh"
@@ -2341,7 +2345,7 @@
     "apis/chemi-predictor_models-prod-rebuild.yml": "f3e060b0b5a0a6909607c2494d0b828db1510e1cb2dca2aeae6e2fb6c938c939",
     "apis/chemi-rdkit-prod-rebuild.yml": "355e1d2edd354f838244c2911878f39366ed9a73087eb3f43ccfb4df6c413cf3",
     "apis/chemi-resolver-prod-full.yml": "c4c51ce64d464dbf7897fb104a30c29a1904e357a90223157efa90872fe39d15",
-    "apis/chemi-resolver-prod-rebuild.yml": "0f9c8040a04aad99fba0046e6a361a68bbff10942e3081f616b2119a4fd70ccf",
+    "apis/chemi-resolver-prod-rebuild.yml": "b42e9c1f3bd82ed607d92575ea1d0e41ccb01bd51163593f3b57dd06269b1016",
     "apis/chemi-search-prod-rebuild.yml": "fb7a78c3b9d627e27a8276bfb7e12b3014e974b2c52bf330679ad70c57a3b230",
     "apis/chemi-services-prod-full.yml": "c72f48dd317efe672545e64188c70bd68b3a08a1c936e3f601979fc1f6ed68e4",
     "apis/chemi-services-prod-rebuild.yml": "b27c1b1c7b4a8bdaa84a4cbc08dbebaaba9b4864647bd66e3f65788b5ffec54e",
@@ -2863,7 +2867,7 @@
     "specmill.yml": "2f765604a7a2dff63dcf213eb9d735484d6e92006f36527a53717711d43efc62",
     "tests/testthat/fixtures/specmill-full-contracts.rds": "932d884caa24c57f4cafe43d9b252e27c5f3b1d4dbce4ad716db410298289088",
     "tests/testthat/fixtures/specmill-pilot-contracts.rds": "bacc40d10413140b808c5cf7c3ec6775c391ff8eb959b1ca948986bc5f8878b3",
-    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "12df9a37a3938549ac923c1027b2f9b3258ec4202a3bad116035dba319ccb5b0"
+    "tests/testthat/fixtures/specmill-rebuild-contracts.rds": "e4abc5cf109682aa58b7d5198dbab4925b6eb86cbac31aeeda1182e47133d661"
   },
   "callbacks": "23e34ca9247ace1050f34cdd42449e7b6b8f8602e517a6ee68d4fcd93b14ec40",
   "formatter": {

@@ -26,8 +26,8 @@ with SHA-256 hashes.
 | Export category | Exports |
 | --- | ---: |
 | generated (specmill-owned) | 263 |
-| retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 84 |
+| retained_mapped (fixed contract, existing implementation) | 5 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 83 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
@@ -44,8 +44,9 @@ manifest. It now contains the 226 whole files that hold the 263 generated wrappe
 (originally 93 files for 101 wrappers).
 A file is allowlisted only if every top-level definition in it is generated.
 The script stops if a generated file has a retained or unaccounted neighbor.
-The three retained files (`R/ct_chemical_detail_search.R`,
-`R/ct_chemical_list_all.R`, and `R/chemi_search.R`) are excluded.
+The four retained files (`R/ct_chemical_detail_search.R`,
+`R/ct_chemical_list_all.R`, `R/chemi_search.R`, and
+`R/chemi_resolver_lookup_bulk.R`) are excluded.
 
 Preservation check: after rebuilding in the worktree, `git status --porcelain`
 must be empty. That compares every tracked file byte for byte, including runtime
@@ -168,13 +169,13 @@ operation key, file, and wave. Each retained export records:
 - for hooked wrappers, the hook chain, with the file that defines each hook and
   the stages the wrapper actually invokes.
 
-| Issue | Generated | Retained | Client utility |
-| --- | ---: | ---: | ---: |
-| #310 | 90 | 16 | 3 |
-| #311 | 57 | 36 | 0 |
-| #312 | 10 | 16 | 0 |
-| #313 | 0 | 16 | 0 |
-| #314 | 2 | 2 | 0 |
+| Issue | Generated | Retained | Retained mapped | Client utility |
+| --- | ---: | ---: | ---: | ---: |
+| #310 | 90 | 15 | 1 | 3 |
+| #311 | 59 | 34 | 0 | 0 |
+| #312 | 10 | 16 | 0 | 0 |
+| #313 | 1 | 15 | 0 | 0 |
+| #314 | 2 | 2 | 0 | 0 |
 
 Reasons for keeping an export retained:
 
@@ -436,3 +437,62 @@ The inventory, removal allowlist, dispositions and wave evidence are updated.
 The mirror-selection plan and all unrelated uncommitted work were preserved.
 Two more #337 entries are complete; 15 remain to review. The GET sibling was
 also migrated to preserve whole-file ownership.
+
+## Bulk resolver compatibility (#337)
+
+`chemi_resolver_lookup_bulk` now has an explicit supported mapping for
+`chemi-resolver-prod.json POST /api/resolver/lookup` and a fixed helper-call
+contract in `specmill-rebuild-contracts.rds`. Its disposition is
+`retained_mapped`, using specmill's existing `implementation: existing` policy.
+The stable handwritten source is byte-identical and remains outside the
+removal allowlist. Specmill checks its public signature and generates the
+fixed contract test. The prior generic legacy test was retired.
+
+The wrapper is a shared resolution root for compound, descriptor, hazard and
+WebTEST hooks and the resolve-then-POST wrappers. It rejects NULL/length-zero
+`ids` before evaluating any other argument or entering `generic_chemi_request`,
+then calls `as.character`. It retains `idsType`, `fuzzy` and `mol` options even
+when explicitly NULL, but omits NULL `filters` and `format`. The helper keeps
+identifiers in an array through `I(query)`, deduplicates and removes NA/blank
+values, merges options at the top level and sends one request. The original
+helper defaults, caller `tidy`, defaults, field order, scalar/FALSE/zero/list
+acceptance, missing-argument errors, badges, documentation and authentication
+are preserved without imposing schema enum/type validation.
+
+A prototype rendered by pinned specmill 0.1.8 confirmed why generation was
+rejected. Request-binding callbacks run after `params <- list(...)` and inside
+the helper invocation. With a query callback, NULL ids enter the helper before
+raising the original guard error. With `idsType = stop("option evaluated")`,
+parameter capture raises that option error before checking NULL ids, whereas
+the original raises `ids must be a non-empty character vector` without
+forcing the option. The probe results are recorded in `wave-resolver-bulk.json`.
+A generated replacement needs reviewed guard/coercion support before public
+parameter capture; callbacks inside helper arguments do not preserve that
+boundary. No runtime hooks or callbacks were added for this retained mapping.
+
+All 1360 contract, regression and hook assertions passed with no failures,
+errors or warnings. The resolver/caller suite has 128 assertions, including
+45 direct resolver assertions. Tests cover the guard before helper/option
+execution, coercion, mixed NULL options, FALSE/zero/empty/nested values,
+field order, no environment-driven batching, returned objects, and the shared
+resolution callers. The legacy generator check passed.
+
+All 1317 installed-client localhost cases passed with zero candidate failures.
+The 26 new bulk-resolver cases matched exact requests, returned objects,
+warnings and errors. They cover singleton-array serialization, numeric/logical/
+factor/list coercion, duplicate/NA/blank filtering, encoded identifiers, default
+and mixed NULL/FALSE/zero/empty/nested options, unknown enum passthrough, raw
+results, environment batch settings, missing/NULL/empty ids, and HTTP 400.
+All 409 exported signatures and all four helper signatures are preserved.
+Results are recorded in `runtime-resolver-bulk-results.json`.
+
+The disposable snapshot `8ff314c1` removed all 226 allowlisted files and
+regenerated 263 wrappers. Regeneration, a second apply and check were
+byte-identical. The retained resolver source was never deleted and its hash
+remained unchanged. Evidence is recorded in `wave-resolver-bulk.json`.
+
+The inventory, dispositions, removal allowlist and wave evidence are updated.
+Prior intentional corrections remain recorded separately in
+`dev/specmill-full/verify-runtime.R`. The original branch and unrelated work,
+including the mirror-selection plan, were preserved. This completes one
+retained #337 disposition; 14 entries remain to review.
