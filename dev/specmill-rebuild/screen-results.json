@@ -369,10 +369,23 @@
   "chemi_functional_use": {
     "name": "chemi_functional_use",
     "file": "R/chemi_functional_use.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "retained_mapped",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+    "reason": "Retain direct httr2 requests, nonempty-character validation before messages, raw path appending, duplicate/NA/blank identifiers, no auth/retry, unconditional messages/progress, first-request debug dry run, success filtering and named functional_classes tibble aggregation when parsing/list utilities are mocked. Real JSON currently parses to a list and jsonlite::flatten rejects it; unqualified list_c is also unavailable in the package namespace; preserve this existing error without correction. Generic helper normalization, retries, errors and return shaping differ; no existing callback preserves the entire flow. No hooks or lifecycle badge.",
+    "mapping": {
+      "service": "chemi-custom-functional_use-rebuild",
+      "key": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+      "file": "R/chemi_functional_use.R",
+      "helper": "req_perform_sequential",
+      "mode": "retained_direct",
+      "schema": "schema/chemi-amos-prod.json",
+      "wave": "custom-transforms",
+      "policy": "Retain direct httr2 requests, nonempty-character validation before messages, raw path appending, duplicate/NA/blank identifiers, no auth/retry, unconditional messages/progress, first-request debug dry run, success filtering and named functional_classes tibble aggregation when parsing/list utilities are mocked. Real JSON currently parses to a list and jsonlite::flatten rejects it; unqualified list_c is also unavailable in the package namespace; preserve this existing error without correction. Generic helper normalization, retries, errors and return shaping differ; no existing callback preserves the entire flow. No hooks or lifecycle badge.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+      "proposal_file": "dev/specmill-rebuild/retained-functional-use.yml",
+      "toolkit_limit": "Missing client helper: req_perform_sequential; direct imported httr2 transport remains handwritten."
+    }
   },
   "chemi_hazard": {
     "name": "chemi_hazard",
@@ -591,10 +604,23 @@
   "chemi_safety_section": {
     "name": "chemi_safety_section",
     "file": "R/chemi_safety_sections.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "retained_mapped",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/pubchem-section",
+    "reason": "Retain direct httr2 requests and section-before-query validation/evaluation order, including missing-argument errors. Preserve per-query query/idType=DTXSID/section order, duplicate/NULL/empty/FALSE/zero behavior, no auth/retry or debug short-circuit, unconditional messages/progress, success filtering, named nested sections, Value extraction, Markup removal and NULL no-response result. Real named JSON currently fails in resps_data with a name-merging error. Unqualified list_c/keep_at/discard_at are also unavailable in the package namespace; preserve their current errors and test transformations with mocked utilities. Pinned generation returns unprocessed responses and forces query before section validation. No hooks or lifecycle badge.",
+    "mapping": {
+      "service": "chemi-custom-safety_section-rebuild",
+      "key": "GET /api/resolver/pubchem-section",
+      "file": "R/chemi_safety_sections.R",
+      "helper": "req_perform_sequential",
+      "mode": "retained_direct",
+      "schema": "schema/chemi-resolver-prod.json",
+      "wave": "custom-transforms",
+      "policy": "Retain direct httr2 requests and section-before-query validation/evaluation order, including missing-argument errors. Preserve per-query query/idType=DTXSID/section order, duplicate/NULL/empty/FALSE/zero behavior, no auth/retry or debug short-circuit, unconditional messages/progress, success filtering, named nested sections, Value extraction, Markup removal and NULL no-response result. Real named JSON currently fails in resps_data with a name-merging error. Unqualified list_c/keep_at/discard_at are also unavailable in the package namespace; preserve their current errors and test transformations with mocked utilities. Pinned generation returns unprocessed responses and forces query before section validation. No hooks or lifecycle badge.",
+      "contracts_file": "tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+      "proposal_file": "dev/specmill-rebuild/retained-safety-section.yml",
+      "toolkit_limit": "Missing client helper: req_perform_sequential; direct imported httr2 transport remains handwritten."
+    }
   },
   "chemi_stdizer_chemicals": {
     "name": "chemi_stdizer_chemicals",
@@ -658,10 +684,24 @@
   "chemi_toxprint": {
     "name": "chemi_toxprint",
     "file": "R/chemi_toxprint.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "blocked",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/calculate",
+    "reason": "Pinned specmill 0.1.8 cannot parse POST /api/toxprints/calculate: binary files[] and nested request query parameters. Retain original source and lazy helper evaluation; no schema/pin/behavior correction.",
+    "schema_blocker": [
+      {
+        "id": "chemi-custom-toxprint-rebuild POST /api/toxprints/calculate",
+        "service": "chemi-custom-toxprint-rebuild",
+        "key": "POST /api/toxprints/calculate",
+        "source": "schema/chemi-toxprints-prod.json",
+        "status": "unsupported",
+        "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+        "classification": "review_required",
+        "code": "binary_parameter",
+        "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+        "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
+      }
+    ]
   },
   "chemi_toxprints_assays": {
     "name": "chemi_toxprints_assays",

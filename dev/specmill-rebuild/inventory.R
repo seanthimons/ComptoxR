@@ -13,6 +13,15 @@ ops <- do.call(rbind, lapply(config$services, function(path) {
     data.frame(service = y$id, key = key, name = o$name, file = o$file, implementation = o$implementation)
   }))
 }))
+# Reviewed direct transports have explicit mappings outside the toolkit's helper renderer.
+review <- jsonlite::read_json(file.path(out, 'screen-results.json'))
+for (entry in review) {
+  mapping <- entry$mapping
+  if (!is.null(mapping) && identical(mapping$mode, 'retained_direct')) {
+    ops <- rbind(ops, data.frame(service = mapping$service, key = mapping$key,
+      name = entry$name, file = mapping$file, implementation = 'existing'))
+  }
+}
 manifest <- jsonlite::read_json('.specmill/manifest.json')
 exports <- parseNamespaceFile('.', '.')$exports
 attempt <- jsonlite::read_json('dev/specmill-full/attempt-results.json')

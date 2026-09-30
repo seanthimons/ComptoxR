@@ -1,0 +1,124 @@
+{
+  "wave": "custom-transforms",
+  "base_commit": "7d10d98fea29dbbd348783bf02cc85740e255e62",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 3,
+  "generated_operations": 0,
+  "retained_operations": 2,
+  "files": {
+    "chemi_toxprint": "R/chemi_toxprint.R",
+    "chemi_functional_use": "R/chemi_functional_use.R",
+    "chemi_safety_section": "R/chemi_safety_sections.R"
+  },
+  "reviewed_routes": {
+    "chemi_toxprint": "chemi-toxprints-prod.json POST /api/toxprints/calculate",
+    "chemi_functional_use": "chemi-amos-prod.json GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
+    "chemi_safety_section": "chemi-resolver-prod.json GET /api/resolver/pubchem-section"
+  },
+  "policies": {
+    "chemi_toxprint": "Pinned native parser rejects files[] (binary parameter requiring source-contract review #16) and the nested request parameter object. No generation or retained toolkit mapping is authorized. Preserve original lazy helper-call evaluation, OR/PV1/TP field order, retained NULL/FALSE/zero, defaults, visibility and errors. The parser diagnostic does not establish schema validity.",
+    "chemi_functional_use": "Retain direct httr2 requests, nonempty-character validation before messages, raw path appending, duplicate/NA/blank identifiers, no auth/retry, unconditional messages/progress, first-request debug dry run, success filtering and named functional_classes tibble aggregation when parsing/list utilities are mocked. Real JSON currently parses to a list and jsonlite::flatten rejects it; unqualified list_c is also unavailable in the package namespace; preserve this existing error without correction. Generic helper normalization, retries, errors and return shaping differ; no existing callback preserves the entire flow. No hooks or lifecycle badge.",
+    "chemi_safety_section": "Retain direct httr2 requests and section-before-query validation/evaluation order, including missing-argument errors. Preserve per-query query/idType=DTXSID/section order, duplicate/NULL/empty/FALSE/zero behavior, no auth/retry or debug short-circuit, unconditional messages/progress, success filtering, named nested sections, Value extraction, Markup removal and NULL no-response result. Real named JSON currently fails in resps_data with a name-merging error. Unqualified list_c/keep_at/discard_at are also unavailable in the package namespace; preserve their current errors and test transformations with mocked utilities. Pinned generation returns unprocessed responses and forces query before section validation. No hooks or lifecycle badge."
+  },
+  "dispositions": {
+    "chemi_toxprint": "blocked",
+    "chemi_functional_use": "retained_mapped",
+    "chemi_safety_section": "retained_mapped"
+  },
+  "source_sha256": {
+    "chemi_toxprint": "957f17fcfcd470b83ee911a728c3bb31d3bf6f3a6175da7750f9b2746b47be24",
+    "chemi_functional_use": "c7022ab195698e8a9844c0910bafa91524eda3c18bed37273f3c0ff50dbf522f",
+    "chemi_safety_section": "99b3bc9168c72ce09c5f2bb13dfb8107bac212d98e74ab935a2a175b1a7aafe4"
+  },
+  "behavior_corrections": [],
+  "issue_337_entries_remaining": 9,
+  "upstream_blocked_amos_entries": 5,
+  "compatibility_probe": {
+    "chemi_functional_use": {
+      "original_class": [
+        "data.frame"
+      ],
+      "generated_class": [
+        "list"
+      ],
+      "compatible": false,
+      "toolkit_retention_limit": "Missing client helper: req_perform_sequential"
+    },
+    "chemi_safety_section": {
+      "original_class": [
+        "NULL"
+      ],
+      "generated_class": [
+        "list"
+      ],
+      "compatible": false,
+      "toolkit_retention_limit": "Missing client helper: req_perform_sequential"
+    },
+    "chemi_toxprint": {
+      "disposition": "blocked",
+      "diagnostics": [
+        {
+          "id": "chemi-custom-toxprint-rebuild POST /api/toxprints/calculate",
+          "service": "chemi-custom-toxprint-rebuild",
+          "key": "POST /api/toxprints/calculate",
+          "source": "schema/chemi-toxprints-prod.json",
+          "status": "unsupported",
+          "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+          "classification": "review_required",
+          "code": "binary_parameter",
+          "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+          "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
+        }
+      ],
+      "original_lazy_option_error": "Either query or chemicals parameter must be provided."
+    }
+  },
+  "blocked_operations": 1,
+  "schema_or_parser_blocked_entries": 6,
+  "blocked_proposal_file": "dev/specmill-rebuild/blocked-toxprint.yml",
+  "verification": {
+    "tests": {
+      "passed": 1824,
+      "failed": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "installed_original_focused_assertions": 85,
+    "installed_candidate_focused_assertions": 85,
+    "legacy_generator_check": true,
+    "native_generator_check": true,
+    "prior_query_corrections": 12,
+    "prior_options_corrections": 14,
+    "rehearsal": {
+      "commit": "febc39b6946f5244b6956b4c5c680b06231708b5",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": [],
+      "byte_identical": true
+    },
+    "generation_inputs_unchanged_since_rehearsal": true,
+    "source_documentation_hooks_pin_unchanged": true,
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "runtime": {
+      "results_file": "dev/specmill-rebuild/runtime-custom-transforms-results.json",
+      "scope": "Installed original and migrated client, localhost only; synthetic responses",
+      "passed_cases": 1396,
+      "new_cases": 43,
+      "unchanged_request_fields_and_objects_equal": true,
+      "candidate_failures": 0,
+      "exported_signatures_compared": 409,
+      "helper_signatures_equal": true,
+      "prior_query_corrections_asserted": 12,
+      "prior_options_corrections_asserted": 14
+    }
+  }
+}

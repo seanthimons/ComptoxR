@@ -57,6 +57,61 @@ for (name in names(full_cases)) {
         }, .package = 'ComptoxR')
         next
       }
+      # #337: direct request policies and retained latent defects; localhost only.
+      if (isTRUE(item$custom_transforms)) {
+        if (name == 'chemi_toxprint') {
+          variants <- list(defaults = list(query = 'one'), multiple = list(query = c('one', 'two', 'one')), false_query = list(query = FALSE), zero_query = list(query = 0), encoding = list(query = 'caf\u00e9 +/&'))
+          for (variant in c('null', 'false', 'zero', 'empty')) {
+            value <- switch(variant, null = NULL, false = FALSE, zero = 0, empty = list())
+            variants[[paste0(variant, '-options')]] <- list(query = 'one', odds_ratio = value, p_val = value, true_pos = value)
+          }
+          wire_for_tox <- function(inputs) {
+            options <- list(OR = 3L, PV1 = .05, TP = 3)
+            fields <- c(odds_ratio = 'OR', p_val = 'PV1', true_pos = 'TP')
+            for (field in intersect(names(fields), names(inputs))) options[fields[[field]]] <- inputs[field]
+            body <- list(chemicals = lapply(unique(inputs$query), function(q) list(sid = q)), options = options)
+            list(expected('POST', '/chemi/toxprints/calculate', body = as.character(jsonlite::toJSON(body, auto_unbox = TRUE, null = 'null', digits = 22))))
+          }
+          for (variant in names(variants)) probe(paste0(name, '-', variant), do.call(fun, variants[[variant]]), wire_for_tox(variants[[variant]]), '[{"score":0,"flag":false}]')
+          for (variant in c('null', 'empty', 'blank', 'na', 'missing')) {
+            inputs <- switch(variant, null = list(query = NULL), empty = list(query = character()), blank = list(query = ''), na = list(query = NA_character_), missing = list())
+            probe(paste0(name, '-', variant), do.call(fun, inputs), list(), error = TRUE)
+          }
+          probe(paste0(name, '-lazy-option'), fun(NULL, odds_ratio = stop('option evaluated')), list(), error = TRUE)
+          probe(paste0(name, '-empty-response'), fun('one'), wire_for_tox(variants$defaults), '[]')
+          probe(paste0(name, '-http-400'), fun('one'), wire_for_tox(variants$defaults), '{"error":"bad request"}', status = 400L, error = TRUE)
+        } else {
+          safety <- name == 'chemi_safety_section'
+          response <- if (safety) '{"swr":[{"section":{"Section":[{"TOCHeading":"Hazards","Information":[{"Value":{"StringWithMarkup":[{"String":"Danger"}]} }]}]}}]}' else '[{"functionalClass":"solvent"}]'
+          inputs_for <- function(q) if (safety) list(query = q, section = 'GHS Classification') else list(query = q)
+          wire_for <- function(q) lapply(q, function(value) {
+            if (safety) expected('GET', '/chemi/resolver/pubchem-section', paste0('query=', curl::curl_escape(as.character(value)), '&idType=DTXSID&section=GHS%20Classification')) else
+              expected('GET', paste0('/chemi/amos/functional_uses_for_dtxsid/', curl::curl_escape(as.character(value))))
+          })
+          for (variant in c('single', 'duplicates', 'encoding')) {
+            q <- switch(variant, single = 'one', duplicates = c('one', 'one', 'two'), encoding = 'caf\u00e9 +/&')
+            probe(paste0(name, '-', variant), do.call(fun, inputs_for(q)), if (!safety && variant == 'encoding') list() else wire_for(q), response, error = safety || variant != 'encoding')
+          }
+          probe(paste0(name, '-empty-response'), do.call(fun, inputs_for('one')), wire_for('one'), '[]', error = !safety)
+          probe(paste0(name, '-http-400'), do.call(fun, inputs_for(c('one', 'two'))), wire_for(c('one', 'two')), '{"error":"bad request"}', status = 400L)
+          for (variant in c('null', 'empty', 'false', 'zero', 'missing')) {
+            q <- switch(variant, null = NULL, empty = character(), false = FALSE, zero = 0, missing = NULL)
+            inputs <- inputs_for(q)
+            if (variant == 'missing') inputs$query <- NULL
+            if (safety && variant %in% c('false', 'zero')) {
+              probe(paste0(name, '-', variant), do.call(fun, inputs), wire_for(q), response, error = TRUE)
+            } else probe(paste0(name, '-', variant), do.call(fun, inputs), list(), response, error = !(safety && variant == 'empty'))
+          }
+          if (safety) {
+            for (variant in c('omitted', 'null', 'false', 'zero', 'empty', 'invalid')) {
+              inputs <- list(query = 'one')
+              if (variant != 'omitted') inputs['section'] <- list(switch(variant, null = NULL, false = FALSE, zero = 0, empty = character(), invalid = 'invalid'))
+              probe(paste0(name, '-section-', variant), do.call(fun, inputs), list(), error = TRUE)
+            }
+          }
+        }
+        next
+      }
       # #337: retained transformations and exact empty-query failure.
       if (isTRUE(item$transformations)) {
         if (name == 'chemi_safety_rqcodes') {

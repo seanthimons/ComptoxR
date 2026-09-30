@@ -1,5 +1,5 @@
 {
-  "commit": "7cfeeafb3233eb05dc4dff1e11579a1aec33d932",
+  "commit": "7d10d98fea29dbbd348783bf02cc85740e255e62",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -14,10 +14,10 @@
   ],
   "export_categories": {
     "generated": 263,
-    "retained_mapped": 8,
+    "retained_mapped": 10,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 80,
+    "unmapped_wrapper": 78,
     "utility": 11
   },
   "runtime_files": [
@@ -1081,9 +1081,9 @@
       "name": "chemi_functional_use",
       "file": "R/chemi_functional_use.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-custom-functional_use-rebuild GET /api/amos/functional_uses_for_dtxsid/{dtxsid}",
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = ))"
     },
@@ -1581,9 +1581,9 @@
       "name": "chemi_safety_section",
       "file": "R/chemi_safety_sections.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "retained_mapped",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "chemi-custom-safety_section-rebuild GET /api/resolver/pubchem-section",
       "lifecycle": null,
       "formals": "as.pairlist(alist(query = , section = NULL))"
     },

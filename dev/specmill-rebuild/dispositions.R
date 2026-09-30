@@ -67,6 +67,13 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
   }
 }
 
+# Direct httr2 helpers are imported, so the pinned toolkit cannot own their contracts.
+for (entry in screen) {
+  if (!is.null(entry$mapping) && identical(entry$mapping$mode, 'retained_direct')) {
+    retained[[entry$name]] <- entry$mapping
+  }
+}
+
 # Hook functions and the client file that defines each.
 hook_files <- list()
 for (f in Sys.glob('R/hooks_*.R')) {
@@ -146,7 +153,22 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
     entry$reason <- screen[[name]]$reason
     entry$mapping <- retained[[name]]
     entry$route <- route(name, d$file)
+    if (identical(entry$mapping$mode, 'retained_direct')) {
+      key <- entry$mapping$key
+      schema <- sub('^schema/', '', entry$mapping$schema)
+      entry$route <- list(helper = 'req_perform_sequential', method = 'GET', endpoint = sub('^GET /api/', '', key),
+        supported = list(paste(schema, key)), blocked = list(),
+        request_builder = 'Direct httr2 request/path/query calls traced in source; fixed contract freezes request-builder calls.')
+    }
     entry$hooks <- hook_evidence(name, d)
+    return(entry)
+  }
+  if (identical(screen[[name]]$status, 'blocked')) {
+    entry$disposition <- 'blocked'
+    entry$reason <- screen[[name]]$reason
+    entry$route <- list(helper = 'generic_chemi_request', method = 'POST', endpoint = 'toxprints/calculate',
+      schema = screen[[name]]$schema, key = screen[[name]]$key, supported = list(),
+      blocked = screen[[name]]$schema_blocker)
     return(entry)
   }
   if (identical(d$category, 'runtime') || name == 'ct_api_key') {

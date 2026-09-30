@@ -584,3 +584,81 @@ excluded from deletion and kept their original hashes. The inventory,
 dispositions, removal allowlist and wave evidence are updated. This completes
 three more #337 entries; 11 remain, including the five upstream-blocked AMOS
 entries. The mirror-selection plan remains uncommitted and unchanged.
+
+## Custom transformations (#337)
+
+Reviewed `chemi_toxprint`, `chemi_functional_use` and `chemi_safety_section`
+from original wrappers through helpers, imported request builders, hook registry,
+callers and exact schema operations. There are no lifecycle badges or hook calls
+in these three wrappers. `probe_api_function` categorizes functional-use and
+safety-section as legacy probes; its caller tests and exported utility contracts
+are included in verification. Public signatures, source, documentation and
+imports are unchanged.
+
+ToxPrint's exact key is `chemi-toxprints-prod.json POST /api/toxprints/calculate`.
+The pinned native parser rejects its binary `files[]` query parameter and nested
+`request` query object, reporting `binary_parameter`, `review_required` and
+source location `#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema`.
+This requires source contract review (#16); it does not establish schema validity.
+`blocked-toxprint.yml` is an inactive proposal, not an adopted mapping. Original
+behavior remains: `generic_chemi_request` receives ordered OR/PV1/TP options,
+retains explicit NULL/FALSE/zero, uses its existing default transport and returns
+with helper visibility. Query rejection precedes forcing lazy options. The
+schema differs from this existing chemicals/options payload; no correction is
+made. Regression and localhost cases cover this preserved behavior despite the
+parser blocker.
+
+Functional-use's exact key is `chemi-amos-prod.json GET
+/api/amos/functional_uses_for_dtxsid/{dtxsid}`. This supported operation is
+separate from the five excluded upstream-blocked AMOS entries. Its direct httr2
+requests validate nonempty character input, preserve duplicate/blank/NA values,
+and append identifiers literally to the path. Invalid URLs containing spaces
+send no request; sequential `on_error='continue'` swallows their errors and
+returns an empty data frame. Authentication and retries are absent. CLI messages
+and progress are unconditional; run-debug returns the first dry run. Normal
+JSON parses to a list and currently fails `jsonlite::flatten` with
+`is.data.frame(x) is not TRUE`. Unqualified `list_c` is also unavailable in the
+namespace. Mocked parsing/utilities exercise the otherwise unreachable named
+`dtxsid,functional_classes` tibble transformation, retaining FALSE/zero.
+
+Safety-section's exact key is `chemi-resolver-prod.json GET
+/api/resolver/pubchem-section`. Section validation precedes forcing query,
+including omitted arguments and native errors. Ordered URL parameters are
+query, idType=DTXSID, section. Duplicates and FALSE/zero survive; empty query
+creates no requests and returns NULL. There is no debug shortcut, auth or retry.
+All failed responses return NULL. Normal named JSON currently fails inside
+`resps_data` with `Can't merge the outer name` before reaching the unavailable
+unqualified `list_c`, `keep_at` and `discard_at`. Copied original closures with
+mocked collaborators exercise section naming, Value extraction and Markup
+removal without adding bindings to the package namespace. Existing failures,
+messages and returned classes remain unchanged.
+
+Pinned rendering probes return raw response lists rather than the originals'
+empty data frame/NULL. The toolkit also rejects `req_perform_sequential` as a
+client helper because it is imported from httr2 rather than defined in `R/`.
+The two supported operations therefore have explicit `retained_direct` mappings
+in `screen-results.json`, consumed by inventory and dispositions, with frozen
+handwritten request-builder contracts. Their YAML proposals remain outside
+active `specmill.yml`. No shim or hook was introduced to force generation.
+Neither direct wrapper nor blocked ToxPrint is on the removal allowlist.
+
+The installed original passes all 85 focused regression/contract assertions.
+The candidate's contract, regression, caller/hook, request helper and legacy
+stub suites pass 1,824 assertions with no failures, errors or warnings. The
+legacy generator check passes. Prior intentional corrections remain unchanged
+in `verify-runtime.R`; the toolkit pin and mirror-selection plan are unchanged.
+This wave generates zero wrappers, retains two mapped wrappers and records one
+parser-blocked wrapper. Nine #337 entries remain: five upstream-blocked AMOS
+entries, this ToxPrint parser blocker and three unreviewed entries.
+
+The isolated snapshot `febc39b6` deleted 226 allowlisted files and rebuilt
+263 operations. Regeneration, second apply and check were byte-identical.
+All final generation inputs and allowlisted file bytes match that snapshot.
+All three reviewed source files retain their original hashes.
+
+The installed original/candidate localhost comparison passes all 1,396 cases
+(including 43 new cases), with zero candidate failures. Exact wire requests,
+returned objects/classes, errors/warnings, 409 exported signatures and helper
+signatures match, apart from the previously recorded 12 query and 14 options
+corrections, which remain separately asserted. Evidence is recorded in
+`runtime-custom-transforms-results.json` and `wave-custom-transforms.json`.
