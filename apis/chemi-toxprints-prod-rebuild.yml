@@ -5,11 +5,13 @@ schemas:
 selection:
   include:
   - GET /api/toxprints
+  - GET /api/toxprints/assays
   - GET /api/toxprints/assays/check
   - GET /api/toxprints/global_assays
   - GET /api/toxprints/global_toxprints
   - GET /api/toxprints/toxprints
   - POST /api/toxprints
+  - POST /api/toxprints/assays
 helper: generic_request
 documentation: yes
 operations:
@@ -69,6 +71,57 @@ operations:
       return: Returns a list with result object
       examples:
       - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  GET /api/toxprints/assays:
+    name: chemi_toxprints_assays
+    file: R/chemi_toxprints_assays.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      label:
+        type: character
+        default: ~
+        description: Optional parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        endpoint:
+          value: toxprints/assays
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            category:
+              from:
+              - params
+              - category
+            label:
+              from:
+              - params
+              - label
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        category: Optional parameter
+        label: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - category: DTXSID7020182
       tags:
         apiStage: public
   GET /api/toxprints/assays/check:
@@ -288,6 +341,121 @@ operations:
       return: Returns a list with result object
       examples:
       - query: DTXSID1024122
+      tags:
+        apiStage: public
+  POST /api/toxprints/assays:
+    name: chemi_toxprints_assays_bulk
+    file: R/chemi_toxprints_assays.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      acl:
+        type: character
+        default: ~
+        description: Optional parameter
+      actives:
+        type: character
+        default: ~
+        description: Optional parameter
+      category:
+        type: character
+        default: ~
+        description: Optional parameter
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      id:
+        type: character
+        default: ~
+        description: Optional parameter
+      labels:
+        type: character
+        default: ~
+        description: Optional parameter
+      metrics:
+        type: character
+        default: ~
+        description: Optional parameter
+      name:
+        type: character
+        default: ~
+        description: Optional parameter
+      options:
+        type: character
+        default: ~
+        description: Optional parameter
+      total:
+        type: character
+        default: ~
+        description: Optional parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - acl
+        endpoint:
+          value: toxprints/assays
+        options:
+          compact_object:
+            actives:
+              from:
+              - params
+              - actives
+            category:
+              from:
+              - params
+              - category
+            chemicals:
+              from:
+              - params
+              - chemicals
+            id:
+              from:
+              - params
+              - id
+            labels:
+              from:
+              - params
+              - labels
+            metrics:
+              from:
+              - params
+              - metrics
+            name:
+              from:
+              - params
+              - name
+            options:
+              from:
+              - params
+              - options
+            total:
+              from:
+              - params
+              - total
+        tidy:
+          value: no
+    docs:
+      title: Toxprints Assays
+      lifecycle: experimental
+      parameters:
+        acl: Optional parameter
+        actives: Optional parameter
+        category: Optional parameter
+        chemicals: Optional parameter
+        id: Optional parameter
+        labels: Optional parameter
+        metrics: Optional parameter
+        name: Optional parameter
+        options: Optional parameter
+        total: Optional parameter
+      return: Returns a list with result object
+      examples:
+      - acl: DTXSID1024122
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

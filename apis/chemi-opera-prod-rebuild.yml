@@ -4,10 +4,75 @@ schemas:
   - schema/chemi-opera-prod.json
 selection:
   include:
+  - GET /api/opera
   - GET /api/opera/report
+  - POST /api/opera
 helper: generic_request
 documentation: yes
 operations:
+  GET /api/opera:
+    name: chemi_opera
+    file: R/chemi_opera.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: SMILES to generate predictions for
+      format:
+        type: character
+        default: json
+        description: 'Format to return predictions in (json, csv, xlsx) (default:
+          json)'
+      standardize:
+        type: logical
+        default: no
+        description: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        endpoint:
+          value: opera
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+            format:
+              from:
+              - params
+              - format
+            standardize:
+              from:
+              - params
+              - standardize
+    docs:
+      title: Opera
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES to generate predictions for
+        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
+        standardize: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+      return: Returns a list with result object
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
   GET /api/opera/report:
     name: chemi_opera_report
     file: R/chemi_opera_report.R
@@ -55,6 +120,71 @@ operations:
       return: Returns a tibble with results
       examples:
       - dtxsid: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/opera:
+    name: chemi_opera_bulk
+    file: R/chemi_opera.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      cache_only:
+        type: logical
+        default: no
+        description: 'Return only predictions found in the response cache and list
+          uncached inputs without running OPERA. If the persistent cache is unavailable,
+          OPERA falls back to in-memory cache and reports misses. (default: FALSE)'
+      smiles:
+        type: character
+        default: ~
+        description: Optional parameter
+      chemicals:
+        type: character
+        default: ~
+        description: Optional parameter
+      format:
+        type: character
+        default: json
+        description: 'Format to return predictions in (json, csv, xlsx) (default:
+          json)'
+      standardize:
+        type: logical
+        default: no
+        description: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        endpoint:
+          value: opera
+        body:
+          callback: prediction_body
+        tidy:
+          value: no
+        format:
+          from:
+          - params
+          - format
+        standardize:
+          from:
+          - params
+          - standardize
+    docs:
+      title: Generate predictions for multiple molecules
+      lifecycle: experimental
+      parameters:
+        cache_only: 'Return only predictions found in the response cache and list
+          uncached inputs without running OPERA. If the persistent cache is unavailable,
+          OPERA falls back to in-memory cache and reports misses. (default: FALSE)'
+        smiles: Optional parameter
+        chemicals: Optional parameter
+        format: 'Format to return predictions in (json, csv, xlsx) (default: json)'
+        standardize: 'Standardize chemical before calculating predictions (default:
+          FALSE)'
+      return: Returns a list with result object
+      examples:
+      - cache_only: DTXSID1024122
       tags:
         apiStage: public
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

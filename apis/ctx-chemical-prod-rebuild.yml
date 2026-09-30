@@ -23,10 +23,12 @@ selection:
   - GET /chemical/property/summary/predicted/search/
   - GET /chemical/property/summary/search/
   - GET /chemical/property/summary/search/by-dtxsid/{dtxsid}
+  - GET /chemical/search/equal/{word}
   - POST /chemical/detail/search/by-dtxcid/
   - POST /chemical/fate/search/by-dtxsid/
   - POST /chemical/property/experimental/search/by-dtxsid/
   - POST /chemical/property/predicted/search/by-dtxsid/
+  - POST /chemical/search/equal/
 helper: generic_request
 documentation: yes
 operations:
@@ -666,6 +668,51 @@ operations:
       return: Returns a scalar value
       examples:
       - dtxsid: DTXSID7020182
+  GET /chemical/search/equal/{word}:
+    name: ct_chemical_search_equal
+    file: R/ct_chemical_search_equal.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      word:
+        type: character
+        required: yes
+        description: 'Exact string of word to search for. Values supplied as the ''word''
+          parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number
+          (CASRN), or InChIKey.. Type: string'
+      projection:
+        type: character
+        default: chemicalsearchall
+        description: 'Optional parameter (default: chemicalsearchall)'
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - word
+        endpoint:
+          value: chemical/search/equal/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    docs:
+      title: Get chemicals by exact value
+      lifecycle: stable
+      parameters:
+        word: 'Exact string of word to search for. Values supplied as the ''word''
+          parameter can include chemical name, DTXSID, DTXCID, CAS Registry Number
+          (CASRN), or InChIKey.. Type: string'
+        projection: 'Optional parameter (default: chemicalsearchall)'
+      return: Returns a scalar value
+      examples:
+      - word: DTXSID7020182
   POST /chemical/detail/search/by-dtxcid/:
     name: ct_chemical_detail_search_by_dtxcid_bulk
     file: R/ct_chemical_detail_search_by_dtxcid.R
@@ -802,4 +849,40 @@ operations:
       return: Returns a scalar value
       examples:
       - query: DTXSID1024122
+  POST /chemical/search/equal/:
+    name: ct_chemical_search_equal_bulk
+    file: R/ct_chemical_search_equal.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      query:
+        type: character
+        required: yes
+        description: Character vector of values to search for
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/search/equal/
+        method:
+          value: POST
+        batch_limit:
+          callback: search_equal_batch_limit
+        body_type:
+          value: raw_text
+    docs:
+      title: Get chemicals for a batch of exact values
+      lifecycle: stable
+      parameters:
+        query: Character vector of values to search for
+      return: A tibble with search results
+      examples:
+      - query:
+        - DTXSID7020182
+        - DTXSID9020112
 contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

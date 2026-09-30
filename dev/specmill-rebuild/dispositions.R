@@ -25,6 +25,18 @@ for (path in yaml::read_yaml('specmill.yml')$services) {
     op <- service$operations[[key]]
     if (identical(op$implementation, 'generated')) {
       generated[[op$name]] <- list(service = service$id, key = key, file = op$file, wave = waves[[op$file]] %||% 'initial tranche')
+      if (op$name %in% c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')) {
+        generated[[op$name]]$policy <- list(
+          behavior_correction = 'Preserve caller options in helper options$options; omit only NULL. Other request behavior is unchanged.',
+          request = op$request
+        )
+      }
+      if (op$name %in% c('chemi_opera_bulk', 'chemi_predictor_models_predict_bulk')) {
+        generated[[op$name]]$policy <- list(
+          body_shape_policy = 'Exactly one schema oneOf required-field set must be non-NULL; preserve the original error and omit only NULL body fields.',
+          request = op$request
+        )
+      }
       if (identical(op$post_state, 'hook_state')) {
         generated[[op$name]]$policy <- list(
           request_owner = 'pre_request_hooks', hooks = service$hooks[[op$name]],

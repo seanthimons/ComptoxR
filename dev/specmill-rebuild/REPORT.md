@@ -5,6 +5,16 @@ detached worktrees under the ignored `dev/specmill-pilot/artifacts/rebuild-<comm
 Toolkit pin: specmill v0.1.8 `2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c`, archive SHA-256
 `6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091`. Air 0.11.0.
 
+## Generic request migration (#331)
+
+[The assessment in #331](https://github.com/seanthimons/ComptoxR/issues/331) inventories all four transport helpers
+and identifies the upstream ports needed before replacement: response policy,
+generated batch/pagination support, and plain-text bodies. Existing native
+serialization, authentication, form encoding, and retry controls can be reused.
+The helpers remain client-owned while compatibility is verified; #331 is open.
+The installed-client verifier now checks internal search/PubChem transport and
+all four helper signatures as well as exported wrapper contracts.
+
 ## Preservation inventory (#326)
 
 `Rscript dev/specmill-rebuild/inventory.R` parses every top-level definition in
@@ -15,9 +25,9 @@ with SHA-256 hashes.
 
 | Export category | Exports |
 | --- | ---: |
-| generated (specmill-owned) | 249 |
+| generated (specmill-owned) | 260 |
 | retained_mapped (fixed contract, existing implementation) | 4 |
-| unmapped_wrapper (retained with recorded reason, #310–#314) | 98 |
+| unmapped_wrapper (retained with recorded reason, #310–#314) | 87 |
 | runtime (request helpers, hook registry/hooks, startup, server setters) | 20 |
 | sidecar (DSSTox/ECOTOX/ToxVal local databases) | 26 |
 | utility | 11 |
@@ -27,11 +37,10 @@ with SHA-256 hashes.
 The inventory categorizes exports by source file and mapping, not by name
 prefix. As a result, `chemi_server()` and `epi_server()` are classified as
 runtime, not endpoint wrappers. They are two of the 248 functions in #310 and
-stay retained as runtime configuration. Counts include the hook-owned wave
-below; the original tranche was 101 generated and 246 unmapped.
+stay retained as runtime configuration. Counts include the #337 waves below; the original tranche was 101 generated and 246 unmapped.
 
 The allowlist is derived from the generated operation mappings and the specmill
-manifest. It now contains the 217 whole files that hold the 249 generated wrappers
+manifest. It now contains the 224 whole files that hold the 260 generated wrappers
 (originally 93 files for 101 wrappers).
 A file is allowlisted only if every top-level definition in it is generated.
 The script stops if a generated file has a retained or unaccounted neighbor.
@@ -132,13 +141,14 @@ At 0.1.8 the Rd output is unchanged. The wave adopts the nine `*_bulk`
 wrappers and five siblings that were retained only because they share a file
 with one of them.
 
-## Defects found in the original client (#329, #330; not fixed here)
+## Defects found in the original client (#329, #330)
 
 - Paginated `generic_request` wrappers send only the first query of a batch.
   Queries 2..n are dropped. The runtime batch probe is skipped for these
   wrappers, and the before/after snapshots keep the original behavior.
 - `chemi_stdizer_records` and `chemi_toxprints_assays_bulk` overwrite their
-  public `options` argument with a locally built list. They are retained.
+  public `options` argument with a locally built list. The #337 options-correction
+  wave below fixes both and generates their wrappers.
 - `chemi_chet_reaction_batchsearch` evaluates its missing arguments in a
   different order from its signature, so a generated wrapper would give a
   different missing-argument error. It is retained.
@@ -160,8 +170,8 @@ operation key, file, and wave. Each retained export records:
 
 | Issue | Generated | Retained | Client utility |
 | --- | ---: | ---: | ---: |
-| #310 | 86 | 20 | 3 |
-| #311 | 50 | 43 | 0 |
+| #310 | 90 | 16 | 3 |
+| #311 | 57 | 36 | 0 |
 | #312 | 10 | 16 | 0 |
 | #313 | 0 | 16 | 0 |
 | #314 | 2 | 2 | 0 |
@@ -171,10 +181,9 @@ Reasons for keeping an export retained:
 - no unique supported schema route (40), including the ambiguous-media and
   malformed-route blockers in #313;
 - a client hook chain (18);
-- a hand-written implementation (19);
-- an inseparable grouped file (16);
-- a nonliteral helper argument (2);
-- the three original defects above.
+- a hand-written implementation (16);
+- an inseparable grouped file (11);
+- the remaining original evaluation-order defect above.
 
 A retained function is a valid completion state. No contract is guessed.
 
@@ -242,3 +251,131 @@ Rollback: revert the wave commits (`77de2d69`, `0fb6f4d5`, `b851a6cd`,
 `30a4dc49`) to
 restore the hand-written files and legacy tests. Revert the other
 `dev/specmill-rebuild/` commits to remove the tooling.
+
+## Resolver query validation (#337)
+
+`chemi_resolver_lookup` and `chemi_resolver_lookupCASRN` now use schema
+parameters instead of explicit `inputs`. Both reject missing, NULL, empty,
+blank, NA, and multiple query values before transport. Lookup's optional
+parameters also use the schema's types and enums. Public signatures,
+lifecycle badges, valid request bytes, and returned objects are preserved.
+The bulk lookup wrapper moved unchanged into its own file and remains retained.
+
+The contract suite, resolver regression tests, and legacy generator checks
+passed. The installed-client localhost comparison passed 1172 cases with
+zero candidate failures and preserved all 409 exported signatures and helper
+signatures. The 12 corrected invalid-query cases are recorded separately in
+`runtime-results.json`; all make zero requests in the generated client.
+
+In a detached worktree with the current changes applied over `5bab21b5`,
+removing all 218 allowlisted wrapper files and regenerating restored every
+managed file byte-for-byte. A second apply and check were also identical.
+Evidence is recorded in `wave-resolver-query.json`.
+
+## Inline CT mappings (#337)
+
+The `inline-ct` wave generated `ct_bioactivity_assay_search_by_endpoint`,
+`ct_chemical_search_equal_bulk`, and its grouped sibling `ct_chemical_search_equal`.
+The wave mapper now supports named inline request lists and the exact-search
+batch-limit callback. Public signatures, stable badges, documentation,
+namespace, query encoding, and returned objects are preserved. Bulk exact
+search still sends newline-delimited `text/plain` with a `1000` fallback when
+`batch_limit` is unset.
+
+The contract, request-edge, hook, batch-limit regression, and PubChem CAS
+fallback tests passed. Three superseded legacy tests were retired, and the
+legacy generator check passed. A focused installed-client comparison passed
+96 localhost cases with zero failures. It covered all three CT exports,
+the prior resolver corrections, and existing pilot/helper probes, and
+preserved all 409 exported signatures and retained helper signatures.
+The verifier now uses an exact lookup of `query` so `query_params` is never
+mistaken for a batch query through R's partial list-name matching.
+
+The deletion/rebuild rehearsal at the disposable snapshot `12c9a72c` removed
+220 allowlisted files. Regeneration, a second apply, and check were
+byte-identical. Evidence is recorded in `wave-inline-ct.json` and
+`runtime-inline-ct-results.json`. This completes two more #337 entries;
+21 remain to review.
+
+## Public options correction (#337)
+
+The `options-correction` wave fixes and generates `chemi_stdizer_records` and
+`chemi_toxprints_assays_bulk`, plus the grouped GET sibling
+`chemi_toxprints_assays`. The reviewed routes are `POST /api/stdizer/records`
+in `chemi-stdizer-prod.json`, and `GET /api/toxprints/assays` and
+`POST /api/toxprints/assays` in `chemi-toxprints-prod.json`. The GET listing
+route has optional query parameters `category` and `label`; the schema's
+`GET /api/toxprints/assays/{name}` is a separate operation.
+
+Both POST schemas declare an `options` property. The wrappers previously
+replaced caller options with their accumulator before assigning that property.
+The wave freezes a corrected reference using a separate accumulator and maps
+it to the existing `compact_object` binding. Caller options now reach
+`generic_chemi_request` at `options$options` and the existing wrapped payload
+at `payload.options.options`. NULL values are omitted; empty lists, nested
+lists, FALSE, and zero are preserved. The helper's existing query, wrapping,
+sibling fields, authentication, error handling, and returned objects stay
+unchanged. Public signatures, experimental badges, documentation, examples,
+and namespace output are preserved.
+
+The contract, options regression, request-edge, and hook suites passed.
+The focused regression adds 57 assertions, and three superseded generated
+legacy tests were retired. The legacy generator check passed. All 1209
+installed-client localhost cases passed with zero candidate failures, preserving
+409 exported signatures and all helper signatures. `verify-runtime.R` records
+14 intentional options-correction cases separately from the prior 12 resolver
+query corrections. It asserts the corrected nested options field and compares
+every other request field, results, warnings, and errors with the original.
+`runtime-options-correction-results.json` records the full comparison; exact
+parity is intentionally false for the recorded corrections.
+
+The disposable snapshot `e4afc155` includes the existing uncommitted work.
+Its rehearsal removed all 222 allowlisted files and regenerated 256 wrappers.
+Regeneration, a second apply, and check were byte-identical. The user's branch
+and index were preserved; no files were deleted in the primary checkout for
+the rehearsal. The inventory, allowlist, and dispositions now reflect this
+wave. Evidence is in `wave-options-correction.json` and
+`runtime-options-correction-results.json`. Two more #337 entries are complete;
+19 remain to review. The GET sibling was also migrated as part of whole-file
+ownership.
+
+## Prediction body alternatives (#337)
+
+The `prediction-bodies` wave generates `chemi_opera_bulk` and
+`chemi_predictor_models_predict_bulk`, plus their grouped GET siblings
+`chemi_opera` and `chemi_predictor_models_predict`. The reviewed routes are
+`GET /api/opera` and `POST /api/opera` in `chemi-opera-prod.json`, and
+`GET /api/predictor_models/predict` and `POST /api/predictor_models/predict`
+in `chemi-predictor_models-prod.json`.
+
+Both POST schemas have two `oneOf` body alternatives. The development callback
+`prediction_body` renders the existing non-NULL shape check from each schema's
+required-field sets, then compacts schema properties in public input order.
+Exactly one of smiles or chemicals must be supplied; the predictor also
+requires a non-NULL model ID. The original error message, explicit JSON body,
+NULL omission, scalar/empty/FALSE/zero acceptance, and field order are preserved.
+OPERA's cache_only body field and format/standardize query fields retain their
+defaults and explicit NULL behavior. Both GET wrappers retain their options
+and transport settings. No new behavior correction is introduced. Public
+signatures, experimental badges, documentation, examples, namespace output,
+helper defaults, and returned objects are unchanged.
+
+The contract, prediction regression, request-edge, and hook suites passed.
+The focused regression has 122 assertions. Four superseded generated legacy
+tests were retired, and the legacy generator check passed. All 1249
+installed-client localhost cases passed with zero candidate failures and
+preserved all 409 exported signatures and helper signatures. The 40 cases
+added for this group matched exact requests, returned objects, warnings,
+and errors. They cover both POST shapes, encoding, empty/FALSE/zero values,
+OPERA controls, neither/both body shapes, NULL or missing model IDs, HTTP 400,
+and both GET siblings. The prior resolver and options corrections remain
+recorded separately in `verify-runtime.R`.
+
+The disposable snapshot `ad813f74` contains the existing uncommitted work.
+Its rehearsal removed all 224 allowlisted files and regenerated 260 wrappers.
+Regeneration, a second apply, and check were byte-identical. The original
+branch, index, and unrelated work were preserved. The inventory, allowlist,
+and dispositions now reflect this wave. Evidence is recorded in
+`wave-prediction-bodies.json` and `runtime-prediction-bodies-results.json`.
+Two more #337 entries are complete; 17 remain to review. Both GET siblings
+were also migrated to preserve whole-file ownership.

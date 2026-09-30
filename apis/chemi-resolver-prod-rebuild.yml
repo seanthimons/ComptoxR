@@ -11,6 +11,7 @@ selection:
   - GET /api/resolver/getsubstance
   - GET /api/resolver/ghs-list
   - GET /api/resolver/links
+  - GET /api/resolver/lookup
   - GET /api/resolver/lookupCASRN
   - GET /api/resolver/mesh
   - POST /api/resolver/resolve
@@ -462,16 +463,72 @@ operations:
       - query: DTXSID7020182
       tags:
         apiStage: public
+  GET /api/resolver/lookup:
+    name: chemi_resolver_lookup
+    file: R/chemi_resolver_lookup.R
+    helper: generic_request
+    implementation: generated
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: resolver/lookup
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: yes
+        options:
+          compact_object:
+            idType:
+              from:
+              - params
+              - idType
+            fuzzy:
+              from:
+              - params
+              - fuzzy
+            mol:
+              from:
+              - params
+              - mol
+    docs:
+      title: Resolver Lookup
+      lifecycle: stable
+      parameters:
+        query: Required parameter
+        idType: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS, Name,
+          InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+        fuzzy: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+        mol: 'Optional parameter (default: FALSE)'
+      return: Returns a tibble with results (array of objects)
+      examples:
+      - query: DTXSID7020182
+    parameters:
+      query query:
+        description: Required parameter
+      query idType:
+        description: 'Optional parameter. Options: DTXSID, DTXCID, SMILES, MOL, CAS,
+          Name, InChI, InChIKey, InChIKey_1, AnyId (default: AnyId)'
+      query fuzzy:
+        description: 'Optional parameter. Options: Not, Anywhere, Start, Word, CloseSyntactic,
+          CloseSemantic (default: Not)'
+      query mol:
+        description: 'Optional parameter (default: FALSE)'
   GET /api/resolver/lookupCASRN:
     name: chemi_resolver_lookupCASRN
     file: R/chemi_resolver_lookupCASRN.R
     helper: generic_request
     implementation: generated
-    inputs:
-      query:
-        type: character
-        required: yes
-        description: Required parameter
     request:
       arguments:
         endpoint:
@@ -502,6 +559,9 @@ operations:
       - query: DTXSID7020182
       tags:
         apiStage: public
+    parameters:
+      query query:
+        description: Required parameter
   GET /api/resolver/mesh:
     name: chemi_resolver_mesh
     file: R/chemi_resolver_mesh.R

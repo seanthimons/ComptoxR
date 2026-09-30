@@ -10,7 +10,7 @@
     "archive_format": "git archive --format=tar <source_commit>"
   },
   "exact_requests_and_objects_equal": false,
-  "passed_cases": 1249,
+  "passed_cases": 1209,
   "corrected_exports": [
     "chemi_resolver_lookup",
     "chemi_resolver_lookupCASRN"
@@ -516,14 +516,6 @@
       "schema": "chemi-ncc_cats-prod.json",
       "key": "POST /api/ncc_cats"
     },
-    "chemi_opera": {
-      "schema": "chemi-opera-prod.json",
-      "key": "GET /api/opera"
-    },
-    "chemi_opera_bulk": {
-      "schema": "chemi-opera-prod.json",
-      "key": "POST /api/opera"
-    },
     "chemi_opera_report": {
       "schema": "chemi-opera-prod.json",
       "key": "GET /api/opera/report"
@@ -551,14 +543,6 @@
     "chemi_pfas_cats_bulk": {
       "schema": "chemi-pfas_cats-prod.json",
       "key": "POST /api/pfas_cats"
-    },
-    "chemi_predictor_models_predict": {
-      "schema": "chemi-predictor_models-prod.json",
-      "key": "GET /api/predictor_models/predict"
-    },
-    "chemi_predictor_models_predict_bulk": {
-      "schema": "chemi-predictor_models-prod.json",
-      "key": "POST /api/predictor_models/predict"
     },
     "chemi_rdkit": {
       "schema": "chemi-rdkit-prod.json",
@@ -4897,146 +4881,6 @@
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
     },
-    "chemi_opera-minimal": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera-explicit": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera-http-400": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
-      "error_message": "HTTP 400 Bad Request."
-    },
-    "invalid-missing-chemi_opera": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
-      "error_message": "argument \"smiles\" is missing, with no default"
-    },
-    "chemi_opera_bulk-smiles": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-chemicals": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-encoding": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-smiles-empty": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-smiles-false": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-smiles-zero": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-chemicals-empty": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-chemicals-false": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-chemicals-zero": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-options": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-null_options": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_opera_bulk-neither": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_opera_bulk-both": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_opera_bulk-null": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_opera_bulk-http-400": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
-      "error_message": "HTTP 400 Bad Request."
-    },
-    "invalid-missing-chemi_opera_bulk": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
     "chemi_opera_report-minimal": {
       "requests": 1,
       "classes": "list",
@@ -5232,146 +5076,6 @@
       "warnings": [],
       "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
       "error_message": "HTTP 400 Bad Request."
-    },
-    "chemi_predictor_models_predict-minimal": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict-explicit": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict-http-400": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
-      "error_message": "HTTP 400 Bad Request."
-    },
-    "invalid-missing-chemi_predictor_models_predict": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
-      "error_message": "argument \"model_id\" is missing, with no default"
-    },
-    "chemi_predictor_models_predict_bulk-smiles": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-chemicals": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-encoding": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-smiles-empty": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-smiles-false": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-smiles-zero": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-chemicals-empty": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-chemicals-false": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-chemicals-zero": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": null,
-      "error_message": null
-    },
-    "chemi_predictor_models_predict_bulk-neither": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_predictor_models_predict_bulk-both": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_predictor_models_predict_bulk-null": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_predictor_models_predict_bulk-null_model": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["rlang_error", "error", "condition"],
-      "error_message": "Supply exactly one supported request-body shape."
-    },
-    "chemi_predictor_models_predict_bulk-missing_model": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
-      "error_message": "argument \"model_id\" is missing, with no default"
-    },
-    "chemi_predictor_models_predict_bulk-http-400": {
-      "requests": 1,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
-      "error_message": "HTTP 400 Bad Request."
-    },
-    "invalid-missing-chemi_predictor_models_predict_bulk": {
-      "requests": 0,
-      "classes": "list",
-      "warnings": [],
-      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
-      "error_message": "argument \"model_id\" is missing, with no default"
     },
     "chemi_rdkit-resolved-options": {
       "requests": 1,

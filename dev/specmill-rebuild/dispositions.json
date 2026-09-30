@@ -45,31 +45,22 @@
     "file": "R/chemi_resolver_lookup.R",
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))",
-    "siblings": [
-      "chemi_resolver_lookup_bulk"
-    ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "resolver/lookup",
-      "supported": [
-        "chemi-resolver-prod.json GET /api/resolver/lookup"
-      ],
-      "blocked": []
+    "siblings": [],
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-resolver-prod-rebuild",
+      "key": "GET /api/resolver/lookup",
+      "file": "R/chemi_resolver_lookup.R",
+      "wave": "resolver-query"
     }
   },
   "chemi_resolver_lookup_bulk": {
     "issue": 310,
     "name": "chemi_resolver_lookup_bulk",
-    "file": "R/chemi_resolver_lookup.R",
+    "file": "R/chemi_resolver_lookup_bulk.R",
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))",
-    "siblings": [
-      "chemi_resolver_lookup"
-    ],
+    "siblings": [],
     "disposition": "retained",
     "reason": "Custom implementation requires manual mapping",
     "route": {
@@ -325,17 +316,12 @@
     "lifecycle": "stable",
     "formals": "as.pairlist(alist(endpoint = ))",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Nonliteral helper argument needs manual mapping",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "bioactivity/assay/search/by-endpoint/",
-      "supported": [
-        "ctx-bioactivity-prod.json GET /bioactivity/assay/search/by-endpoint/"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-bioactivity-prod-rebuild",
+      "key": "GET /bioactivity/assay/search/by-endpoint/",
+      "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
+      "wave": "inline-ct"
     }
   },
   "ct_bioactivity_assay_search_by_gene": {
@@ -1147,17 +1133,12 @@
     "siblings": [
       "ct_chemical_search_equal_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "chemical/search/equal/",
-      "supported": [
-        "ctx-chemical-prod.json GET /chemical/search/equal/{word}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "GET /chemical/search/equal/{word}",
+      "file": "R/ct_chemical_search_equal.R",
+      "wave": "inline-ct"
     }
   },
   "ct_chemical_search_equal_bulk": {
@@ -1169,17 +1150,12 @@
     "siblings": [
       "ct_chemical_search_equal"
     ],
-    "disposition": "retained",
-    "reason": "Nonliteral helper argument needs manual mapping",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "chemical/search/equal/",
-      "supported": [
-        "ctx-chemical-prod.json POST /chemical/search/equal/"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "ctx-chemical-prod-rebuild",
+      "key": "POST /chemical/search/equal/",
+      "file": "R/ct_chemical_search_equal.R",
+      "wave": "inline-ct"
     }
   },
   "ct_classify": {
@@ -2863,17 +2839,12 @@
     "siblings": [
       "chemi_opera_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "opera",
-      "supported": [
-        "chemi-opera-prod.json GET /api/opera"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-opera-prod-rebuild",
+      "key": "GET /api/opera",
+      "file": "R/chemi_opera.R",
+      "wave": "prediction-bodies"
     }
   },
   "chemi_opera_bulk": {
@@ -2885,17 +2856,34 @@
     "siblings": [
       "chemi_opera"
     ],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "opera",
-      "supported": [
-        "chemi-opera-prod.json POST /api/opera"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-opera-prod-rebuild",
+      "key": "POST /api/opera",
+      "file": "R/chemi_opera.R",
+      "wave": "prediction-bodies",
+      "policy": {
+        "body_shape_policy": "Exactly one schema oneOf required-field set must be non-NULL; preserve the original error and omit only NULL body fields.",
+        "request": {
+          "arguments": {
+            "endpoint": {
+              "value": "opera"
+            },
+            "body": {
+              "callback": "prediction_body"
+            },
+            "tidy": {
+              "value": false
+            },
+            "format": {
+              "from": ["params", "format"]
+            },
+            "standardize": {
+              "from": ["params", "standardize"]
+            }
+          }
+        }
+      }
     }
   },
   "chemi_opera_report": {
@@ -2990,17 +2978,12 @@
     "siblings": [
       "chemi_predictor_models_predict_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "predictor_models/predict",
-      "supported": [
-        "chemi-predictor_models-prod.json GET /api/predictor_models/predict"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-predictor_models-prod-rebuild",
+      "key": "GET /api/predictor_models/predict",
+      "file": "R/chemi_predictor_models_predict.R",
+      "wave": "prediction-bodies"
     }
   },
   "chemi_predictor_models_predict_bulk": {
@@ -3012,17 +2995,28 @@
     "siblings": [
       "chemi_predictor_models_predict"
     ],
-    "disposition": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "predictor_models/predict",
-      "supported": [
-        "chemi-predictor_models-prod.json POST /api/predictor_models/predict"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-predictor_models-prod-rebuild",
+      "key": "POST /api/predictor_models/predict",
+      "file": "R/chemi_predictor_models_predict.R",
+      "wave": "prediction-bodies",
+      "policy": {
+        "body_shape_policy": "Exactly one schema oneOf required-field set must be non-NULL; preserve the original error and omit only NULL body fields.",
+        "request": {
+          "arguments": {
+            "endpoint": {
+              "value": "predictor_models/predict"
+            },
+            "body": {
+              "callback": "prediction_body"
+            },
+            "tidy": {
+              "value": false
+            }
+          }
+        }
+      }
     }
   },
   "chemi_resolver_ccte_list": {
@@ -3142,7 +3136,7 @@
       "service": "chemi-resolver-prod-rebuild",
       "key": "GET /api/resolver/lookupCASRN",
       "file": "R/chemi_resolver_lookupCASRN.R",
-      "wave": "options-batch"
+      "wave": "resolver-query"
     }
   },
   "chemi_resolver_mesh": {
@@ -3455,17 +3449,38 @@
     "lifecycle": "experimental",
     "formals": "pairlist(full = NULL, options = NULL, records = NULL)",
     "siblings": [],
-    "disposition": "retained",
-    "reason": "Options prelude overwrites the public options argument (original defect); retained",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "stdizer/records",
-      "supported": [
-        "chemi-stdizer-prod.json POST /api/stdizer/records"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-stdizer-prod-rebuild",
+      "key": "POST /api/stdizer/records",
+      "file": "R/chemi_stdizer_records.R",
+      "wave": "options-correction",
+      "policy": {
+        "behavior_correction": "Preserve caller options in helper options$options; omit only NULL. Other request behavior is unchanged.",
+        "request": {
+          "arguments": {
+            "query": {
+              "from": ["params", "full"]
+            },
+            "endpoint": {
+              "value": "stdizer/records"
+            },
+            "options": {
+              "compact_object": {
+                "options": {
+                  "from": ["params", "options"]
+                },
+                "records": {
+                  "from": ["params", "records"]
+                }
+              }
+            },
+            "tidy": {
+              "value": false
+            }
+          }
+        }
+      }
     }
   },
   "chemi_toxprints": {
@@ -3494,18 +3509,12 @@
     "siblings": [
       "chemi_toxprints_assays_bulk"
     ],
-    "disposition": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
-    "route": {
-      "helper": "generic_request",
-      "helper_calls": 1,
-      "method": "GET",
-      "endpoint": "toxprints/assays",
-      "supported": [
-        "chemi-toxprints-prod.json GET /api/toxprints/assays",
-        "chemi-toxprints-prod.json GET /api/toxprints/assays/{name}"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "GET /api/toxprints/assays",
+      "file": "R/chemi_toxprints_assays.R",
+      "wave": "options-correction"
     }
   },
   "chemi_toxprints_assays_bulk": {
@@ -3517,17 +3526,59 @@
     "siblings": [
       "chemi_toxprints_assays"
     ],
-    "disposition": "retained",
-    "reason": "Options prelude overwrites the public options argument (original defect); retained",
-    "route": {
-      "helper": "generic_chemi_request",
-      "helper_calls": 1,
-      "method": "POST",
-      "endpoint": "toxprints/assays",
-      "supported": [
-        "chemi-toxprints-prod.json POST /api/toxprints/assays"
-      ],
-      "blocked": []
+    "disposition": "generated",
+    "mapping": {
+      "service": "chemi-toxprints-prod-rebuild",
+      "key": "POST /api/toxprints/assays",
+      "file": "R/chemi_toxprints_assays.R",
+      "wave": "options-correction",
+      "policy": {
+        "behavior_correction": "Preserve caller options in helper options$options; omit only NULL. Other request behavior is unchanged.",
+        "request": {
+          "arguments": {
+            "query": {
+              "from": ["params", "acl"]
+            },
+            "endpoint": {
+              "value": "toxprints/assays"
+            },
+            "options": {
+              "compact_object": {
+                "actives": {
+                  "from": ["params", "actives"]
+                },
+                "category": {
+                  "from": ["params", "category"]
+                },
+                "chemicals": {
+                  "from": ["params", "chemicals"]
+                },
+                "id": {
+                  "from": ["params", "id"]
+                },
+                "labels": {
+                  "from": ["params", "labels"]
+                },
+                "metrics": {
+                  "from": ["params", "metrics"]
+                },
+                "name": {
+                  "from": ["params", "name"]
+                },
+                "options": {
+                  "from": ["params", "options"]
+                },
+                "total": {
+                  "from": ["params", "total"]
+                }
+              }
+            },
+            "tidy": {
+              "value": false
+            }
+          }
+        }
+      }
     }
   },
   "chemi_toxprints_assays_check": {

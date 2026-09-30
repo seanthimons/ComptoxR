@@ -32,6 +32,9 @@ for (engine in c('padel', 'mordred', 'rdkit', 'webtest', 'webtest_predict')) {
   hook_routes[[paste0('chemi_', engine)]] <- list(schema = schema, key = paste('GET', path))
   hook_routes[[paste0('chemi_', engine, '_bulk')]] <- list(schema = schema, key = paste('POST', path))
 }
+# #337: freeze the corrected helper boundary for the two public-options defects.
+options_corrections <- c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')
+prediction_bodies <- c('chemi_opera_bulk', 'chemi_predictor_models_predict_bulk')
 callbacks <- new.env(parent = baseenv())
 sys.source('dev/specmill_callbacks.R', callbacks)
 short_path <- function(key) sub('^/(api/)?', '', gsub('\\{[^}]+\\}', '', sub('^[A-Z]+ ', '', key)))
@@ -41,6 +44,16 @@ binding <- function(x, parameters) {
   }
   if (identical(x, quote(as.numeric(Sys.getenv('batch_limit', '100'))))) {
     return(list(callback = 'detail_batch_limit'))
+  }
+  if (identical(x, quote(as.numeric(Sys.getenv('batch_limit', '1000'))))) {
+    return(list(callback = 'search_equal_batch_limit'))
+  }
+  if (is.call(x) && identical(x[[1]], as.name('list')) && length(x) > 1L) {
+    fields <- as.list(x)[-1L]
+    if (is.null(names(fields)) || any(!nzchar(names(fields))) || anyDuplicated(names(fields))) {
+      stop('Inline request lists require distinct names')
+    }
+    return(list(object = lapply(fields, binding, parameters = parameters)))
   }
   if (is.call(x) && identical(x[[1]], as.name('$')) &&
       identical(x[[2]], quote(req_data$request)) && is.symbol(x[[3]])) {
@@ -56,9 +69,12 @@ binding <- function(x, parameters) {
 # The resulting list equals specmill's compact_object: NULL values are never added and an
 # empty result is list(). Returns NULL when the body does not start with this prelude.
 options_prelude <- function(code) {
-  if (!length(code) || !identical(code[[1]], quote(options <- list()))) {
+  if (!length(code) || !any(vapply(c('options', 'request_options'), function(variable) {
+    identical(code[[1]], call('<-', as.name(variable), quote(list())))
+  }, FALSE))) {
     return(NULL)
   }
+  accumulator <- code[[1]][[2]]
   bindings <- list()
   i <- 2L
   while (i <= length(code)) {
@@ -70,7 +86,7 @@ options_prelude <- function(code) {
       if (is.call(s) && identical(s[[1]], as.name('{')) && length(s) == 2L) s <- s[[2]]
     }
     target <- if (is.call(s) && identical(s[[1]], as.name('<-'))) s[[2]]
-    ok <- is.call(target) && length(target) == 3L && identical(target[[2]], as.name('options')) &&
+    ok <- is.call(target) && length(target) == 3L && identical(target[[2]], accumulator) &&
       (identical(target[[1]], as.name('$')) || (identical(target[[1]], as.name('[[')) && is.character(target[[3]]))) &&
       is.symbol(s[[3]]) && (is.null(guard) || identical(guard, call('!', call('is.null', s[[3]]))))
     if (!ok) break
@@ -79,7 +95,7 @@ options_prelude <- function(code) {
     bindings[[key]] <- list(from = list('params', as.character(s[[3]])))
     i <- i + 1L
   }
-  list(statements = i - 1L, bindings = bindings)
+  list(statements = i - 1L, bindings = bindings, accumulator = accumulator)
 }
 allowed_tags <- c('@description', '@param', '@return', '@apiStage', '@export', '@examples', '@md')
 documentation <- function(lines, start, name) {
@@ -161,6 +177,13 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
         hook_owned <- name %in% names(hook_routes)
         if (name %in% hooks && !hook_owned) stop('Client hook policy requires manual review')
         fn <- eval(expr[[3]])
+        if (name %in% options_corrections) {
+          corrected <- paste(deparse(body(fn)), collapse = '\n')
+          corrected <- sub('options <- list()', 'request_options <- list()', corrected, fixed = TRUE)
+          corrected <- gsub('options$', 'request_options$', corrected, fixed = TRUE)
+          corrected <- sub('options = options', 'options = request_options', corrected, fixed = TRUE)
+          body(fn) <- parse(text = corrected)[[1L]]
+        }
         if (hook_owned) {
           route <- hook_routes[[name]]
           matches <- Filter(function(op) identical(op$schema, route$schema) && identical(op$key, route$key), operations)
@@ -171,8 +194,19 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
           prelude <- NULL
         } else {
           code <- as.list(body(fn))[-1L]
+          prediction_body_owned <- name %in% prediction_bodies
+          if (prediction_body_owned) {
+            # Reviewed guard + NULL-compacted explicit body, followed by the helper call.
+            stopifnot(length(code) == 4L, identical(code[[1L]][[1L]], as.name('if')),
+              identical(code[[1L]][[3L]][[2L]], quote(cli::cli_abort("Supply exactly one supported request-body shape."))),
+              identical(code[[2L]][[2L]], as.name('request_body')),
+              identical(code[[2L]][[3L]][[1L]], as.name('Filter')),
+              identical(code[[2L]][[3L]][[2L]], quote(Negate(is.null))),
+              identical(code[[2L]][[3L]][[3L]][[1L]], as.name('list')))
+            code <- code[-(1:2)]
+          }
           prelude <- options_prelude(code)
-          if (!is.null(prelude) && 'options' %in% names(formals(fn))) {
+          if (!is.null(prelude) && identical(prelude$accumulator, as.name('options')) && 'options' %in% names(formals(fn))) {
             stop('Options prelude overwrites the public options argument (original defect); retained')
           }
           if (!is.null(prelude)) code <- code[-seq_len(prelude$statements)]
@@ -186,9 +220,12 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
           helper <- as.character(call[[1]])
           if (!helper %in% c('generic_request', 'generic_chemi_request')) stop('Helper outside schema migration scope')
           args <- as.list(call)[-1L]
+          if (prediction_body_owned) {
+            stopifnot(identical(helper, 'generic_chemi_request'), identical(args$body, as.name('request_body')))
+          }
           if (!is.null(prelude)) {
-            uses <- vapply(args, function(x) 'options' %in% all.names(x), FALSE)
-            if (sum(uses) != 1L || !identical(args$options, as.name('options'))) {
+            uses <- vapply(args, function(x) as.character(prelude$accumulator) %in% all.names(x), FALSE)
+            if (sum(uses) != 1L || !identical(args$options, prelude$accumulator)) {
               stop('Options list used outside options = options needs manual mapping')
             }
             record$option_params <- vapply(prelude$bindings, function(b) b$from[[2]], '')
@@ -200,6 +237,10 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
               startsWith(op$schema, prefix)
           }, operations)
           if (length(matches) != 1L) stop('No unique supported schema/method/path match; no route guessed')
+          if (name == 'chemi_toxprints_assays') {
+            stopifnot(identical(matches[[1L]]$schema, 'chemi-toxprints-prod.json'),
+              identical(matches[[1L]]$key, 'GET /api/toxprints/assays'))
+          }
         }
         record$schema <- matches[[1L]]$schema
         record$key <- matches[[1L]]$key
@@ -229,7 +270,8 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
           post_on_skip = if (hook_owned) isTRUE(hook_config[[name]]$request_template$post_on_skip) else FALSE,
           post_state = if (hook_owned) 'hook_state' else 'parameters',
           request = list(arguments = Map(function(x, key) {
-            if (!is.null(prelude) && identical(key, 'options')) list(compact_object = prelude$bindings) else binding(x, names(inputs))
+            if (name %in% prediction_bodies && identical(key, 'body')) list(callback = 'prediction_body') else
+              if (!is.null(prelude) && identical(key, 'options')) list(compact_object = prelude$bindings) else binding(x, names(inputs))
           }, args, names(args))), docs = docs
         )
       },
@@ -240,7 +282,7 @@ for (file in unique(vapply(pending, `[[`, '', 'file'))) {
     } else {
       record$status <- 'candidate'
       record$proposal <- proposal
-      record$original <- expr[[3]]
+      record$original <- as.call(list(as.name('function'), formals(fn), body(fn)))
     }
     records[[name]] <- record
   }
@@ -291,8 +333,12 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
       original <- eval(record$original, envir = new.env(parent = baseenv()))
       required <- names(Filter(function(x) isTRUE(x$required), record$proposal$inputs))
       supplied <- setNames(as.list(sprintf('pilot-%d', seq_along(required))), required)
+      if (name %in% prediction_bodies) {
+        supplied$smiles <- c('CCO', 'CCCC')
+        if ('model_id' %in% names(supplied)) supplied$model_id <- 1065L
+      }
       # Chemi helpers reject an empty query at runtime, so observed option wrappers also supply the query input.
-      query <- record$proposal$request$arguments$query$from
+      query <- record$proposal$request$arguments[['query']]$from
       if (length(record$option_params) && identical(record$proposal$helper, 'generic_chemi_request') && identical(query[[1L]], 'params')) {
         supplied[[query[[2L]]]] <- supplied[[query[[2L]]]] %||% 'pilot-query'
       }
@@ -333,6 +379,26 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         variants$false <- set(list(FALSE))
         variants$zero <- set(list(0))
       }
+      if (name %in% prediction_bodies) {
+        chemicals <- supplied
+        chemicals$smiles <- NULL
+        chemicals$chemicals <- list(list(id = 1L, smiles = 'CCO'), list(id = 'ext-2', smiles = 'CCCC'))
+        variants$chemicals <- chemicals
+        variants$empty <- supplied
+        variants$empty$smiles <- character()
+        variants$false <- supplied
+        variants$false$smiles <- FALSE
+        variants$zero <- supplied
+        variants$zero$smiles <- 0
+        if (name == 'chemi_opera_bulk') {
+          variants$query_options <- supplied
+          variants$query_options$cache_only <- TRUE
+          variants$query_options$format <- 'csv'
+          variants$query_options$standardize <- TRUE
+          variants$null_options <- supplied
+          variants$null_options[c('cache_only', 'format', 'standardize')] <- list(NULL)
+        }
+      }
       env <- new.env(parent = environment(original))
       eval(parse(text = code), env)
       stopifnot(identical(formals(original), formals(env[[name]])))
@@ -345,6 +411,21 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         reference <- run(original, variant)
         stopifnot(length(reference$calls) == if (name %in% names(hook_routes)) 3L else 1L,
           identical(run(env[[name]], variant), reference))
+      }
+      if (name %in% prediction_bodies) {
+        invalid <- list(neither = supplied, both = c(supplied, list(chemicals = list(list(id = 1L, smiles = 'CCO')))))
+        invalid$neither$smiles <- NULL
+        if (name == 'chemi_predictor_models_predict_bulk') {
+          invalid$null_model <- supplied
+          invalid$null_model['model_id'] <- list(NULL)
+          invalid$missing_model <- supplied
+          invalid$missing_model$model_id <- NULL
+        }
+        for (variant in invalid) {
+          reference <- run(original, variant)
+          stopifnot(length(reference$calls) == 0L, !is.null(reference$value$error),
+            identical(run(env[[name]], variant), reference))
+        }
       }
       if (name %in% names(hook_routes)) {
         skipping <- TRUE
@@ -363,6 +444,7 @@ for (name in names(Filter(function(x) x$status == 'candidate', records))) {
         schema = record$schema, key = record$key, inputs = primary, arguments = request_call$arguments,
         helper = helper, required = as.list(required)
       )
+      if (name %in% prediction_bodies) cases[[name]]$prediction_body <- TRUE
       if (name %in% names(hook_routes)) cases[[name]] <- c(cases[[name]], list(hook_owned = TRUE))
       if (length(optional)) {
         # Wire is observed and compared original-versus-generated rather than modeled.

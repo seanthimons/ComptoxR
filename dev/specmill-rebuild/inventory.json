@@ -1,5 +1,5 @@
 {
-  "commit": "d5c4224dfd2932463987e9f77d53cc8f46893842",
+  "commit": "5bab21b5b1390ac6cba1cef992a1b1a8ef6e05d8",
   "toolkit": {
     "package": "specmill",
     "version": "0.1.8",
@@ -13,11 +13,11 @@
     "%>%"
   ],
   "export_categories": {
-    "generated": 249,
+    "generated": 260,
     "retained_mapped": 4,
     "runtime": 20,
     "sidecar": 26,
-    "unmapped_wrapper": 98,
+    "unmapped_wrapper": 87,
     "utility": 11
   },
   "runtime_files": [
@@ -35,7 +35,7 @@
     "R/probe_api_function.R",
     "R/misc_functions.R"
   ],
-  "removable_files": 217,
+  "removable_files": 224,
   "definitions": [
     {
       "name": "chemi_alerts_alerts",
@@ -1161,9 +1161,9 @@
       "name": "chemi_opera",
       "file": "R/chemi_opera.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-opera-prod-rebuild GET /api/opera",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(smiles = , format = \"json\", standardize = FALSE))"
     },
@@ -1171,9 +1171,9 @@
       "name": "chemi_opera_bulk",
       "file": "R/chemi_opera.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-opera-prod-rebuild POST /api/opera",
       "lifecycle": "experimental",
       "formals": "pairlist(cache_only = FALSE, smiles = NULL, chemicals = NULL, format = \"json\", standardize = FALSE)"
     },
@@ -1251,9 +1251,9 @@
       "name": "chemi_predictor_models_predict",
       "file": "R/chemi_predictor_models_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-predictor_models-prod-rebuild GET /api/predictor_models/predict",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(model_id = , smiles = NULL, identifier = NULL, report_format = \"json\"))"
     },
@@ -1261,9 +1261,9 @@
       "name": "chemi_predictor_models_predict_bulk",
       "file": "R/chemi_predictor_models_predict.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-predictor_models-prod-rebuild POST /api/predictor_models/predict",
       "lifecycle": "experimental",
       "formals": "as.pairlist(alist(model_id = , smiles = NULL, chemicals = NULL))"
     },
@@ -1468,24 +1468,24 @@
       "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\"))"
     },
     {
-      "name": "chemi_resolver_lookup",
-      "file": "R/chemi_resolver_lookup.R",
-      "exported": true,
-      "category": "unmapped_wrapper",
-      "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
-      "lifecycle": "stable",
-      "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))"
-    },
-    {
       "name": "chemi_resolver_lookup_bulk",
-      "file": "R/chemi_resolver_lookup.R",
+      "file": "R/chemi_resolver_lookup_bulk.R",
       "exported": true,
       "category": "unmapped_wrapper",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
       "operation": null,
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(ids = , idsType = \"AnyId\", fuzzy = \"Not\", mol = FALSE, filters = NULL, format = NULL, tidy = TRUE))"
+    },
+    {
+      "name": "chemi_resolver_lookup",
+      "file": "R/chemi_resolver_lookup.R",
+      "exported": true,
+      "category": "generated",
+      "review_reason": "Protected or incomplete lifecycle/ownership metadata",
+      "operation": "chemi-resolver-prod-rebuild GET /api/resolver/lookup",
+      "lifecycle": "stable",
+      "formals": "as.pairlist(alist(query = , idType = \"AnyId\", fuzzy = \"Not\", mol = FALSE))"
     },
     {
       "name": "chemi_resolver_lookupCASRN",
@@ -1891,9 +1891,9 @@
       "name": "chemi_stdizer_records",
       "file": "R/chemi_stdizer_records.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-stdizer-prod-rebuild POST /api/stdizer/records",
       "lifecycle": "experimental",
       "formals": "pairlist(full = NULL, options = NULL, records = NULL)"
     },
@@ -1961,9 +1961,9 @@
       "name": "chemi_toxprints_assays",
       "file": "R/chemi_toxprints_assays.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-toxprints-prod-rebuild GET /api/toxprints/assays",
       "lifecycle": "experimental",
       "formals": "pairlist(category = NULL, label = NULL)"
     },
@@ -1971,9 +1971,9 @@
       "name": "chemi_toxprints_assays_bulk",
       "file": "R/chemi_toxprints_assays.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Custom implementation requires manual mapping",
-      "operation": null,
+      "operation": "chemi-toxprints-prod-rebuild POST /api/toxprints/assays",
       "lifecycle": "experimental",
       "formals": "pairlist(acl = NULL, actives = NULL, category = NULL, chemicals = NULL, id = NULL, labels = NULL, metrics = NULL, name = NULL, options = NULL, total = NULL)"
     },
@@ -2211,9 +2211,9 @@
       "name": "ct_bioactivity_assay_search_by_endpoint",
       "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "ctx-bioactivity-prod-rebuild GET /bioactivity/assay/search/by-endpoint/",
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(endpoint = ))"
     },
@@ -2931,9 +2931,9 @@
       "name": "ct_chemical_search_equal_bulk",
       "file": "R/ct_chemical_search_equal.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "ctx-chemical-prod-rebuild POST /chemical/search/equal/",
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(query = ))"
     },
@@ -2941,9 +2941,9 @@
       "name": "ct_chemical_search_equal",
       "file": "R/ct_chemical_search_equal.R",
       "exported": true,
-      "category": "unmapped_wrapper",
+      "category": "generated",
       "review_reason": "Protected or incomplete lifecycle/ownership metadata",
-      "operation": null,
+      "operation": "ctx-chemical-prod-rebuild GET /chemical/search/equal/{word}",
       "lifecycle": "stable",
       "formals": "as.pairlist(alist(word = , projection = \"chemicalsearchall\"))"
     },

@@ -37,5 +37,7 @@ services:
 - apis/chemi-mordred-prod-rebuild.yml
 - apis/chemi-rdkit-prod-rebuild.yml
 - apis/chemi-webtest-prod-rebuild.yml
+- apis/chemi-stdizer-prod-rebuild.yml
+- apis/chemi-predictor_models-prod-rebuild.yml
 callback_files:
 - dev/specmill_callbacks.R

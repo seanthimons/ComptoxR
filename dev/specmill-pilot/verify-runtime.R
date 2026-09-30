@@ -146,7 +146,7 @@ verify_client <- function(lib, out, lookup_cases) {
       saveRDS(list(actual = actual, expected = wire), file.path(out, paste0(name, "-wire-failure.rds")))
       stop("Exact wire assertion failed: ", name, "; inspect ", out)
     }
-    if (!identical(is.list(value) && "error_class" %in% names(value), error)) {
+    if (!is.null(error) && !identical(is.list(value) && "error_class" %in% names(value), error)) {
       stop("Unexpected ", if (error) "success" else paste("error:", value$message), " in ", name)
     }
     results[[name]] <<- list(value = value, warnings = warnings, requests = actual)
@@ -298,6 +298,55 @@ verify_client <- function(lib, out, lookup_cases) {
     error = TRUE
   )
   registry$config <- saved
+  # #331: retained internal helpers need real transport checks too.
+  search_request <- get("generic_search_request", asNamespace("ComptoxR"))
+  pubchem_request <- get("generic_pubchem_request", asNamespace("ComptoxR"))
+  search_wire <- list(expected(
+    "POST", "/chemi/search",
+    body = '{"inputType":"MOL","searchType":"EXACT","params":{"limit":1},"query":"CCO"}'
+  ))
+  stopifnot(identical(probe(
+    "generic-search-body",
+    search_request("EXACT", query = "CCO", params = list(limit = 1, omitted = NULL)),
+    search_wire, '{"results":[{"id":1}]}'
+  ), list(results = list(list(id = 1L)))))
+  probe(
+    "generic-search-http-400",
+    search_request("EXACT", query = "CCO", params = list(limit = 1)),
+    search_wire, '{"error":"bad request"}', status = 400L, error = TRUE
+  )
+  pubchem_wire <- list(expected("GET", "/pubchem/compound/name/ethyl%20alcohol/cids/JSON"))
+  stopifnot(identical(probe(
+    "generic-pubchem-get",
+    pubchem_request("ethyl alcohol", namespace = "name", operation = "cids",
+                    pluck_path = c("IdentifierList", "CID"), tidy = FALSE),
+    pubchem_wire, '{"IdentifierList":{"CID":[702]}}'
+  ), list(702L)))
+  pubchem_form <- expected("POST", "/pubchem/compound/smiles/cids/JSON", body = "smiles=CCO")
+  pubchem_form$content_type <- "application/x-www-form-urlencoded"
+  stopifnot(identical(probe(
+    "generic-pubchem-post",
+    pubchem_request(namespace = "smiles", operation = "cids", method = "POST",
+                    body = list(smiles = "CCO"), pluck_path = c("IdentifierList", "CID")),
+    list(pubchem_form), '{"IdentifierList":{"CID":[702]}}'
+  ), tibble::tibble(value = 702L)))
+  for (status in c(200L, 404L)) {
+    value <- probe(
+      paste0("generic-pubchem-fault-", status),
+      pubchem_request("ethyl alcohol", namespace = "name", operation = "cids"),
+      pubchem_wire, '{"Fault":{"Code":"NotFound","Message":"No match"}}', status = status
+    )
+    stopifnot(identical(value, tibble::tibble()), length(results[[paste0("generic-pubchem-fault-", status)]]$warnings) == 1L)
+  }
+  stopifnot(identical(probe(
+    "generic-pubchem-malformed-json",
+    pubchem_request("ethyl alcohol", namespace = "name", operation = "cids", tidy = FALSE),
+    pubchem_wire, "invalid json"
+  ), list()))
+  helper_names <- c("generic_request", "generic_chemi_request", "generic_search_request", "generic_pubchem_request")
+  helper_interfaces <- setNames(lapply(helper_names, function(name) {
+    formals(get(name, asNamespace("ComptoxR")))
+  }), helper_names)
   exports <- sort(getNamespaceExports("ComptoxR"))
   stopifnot(!any(c("specmill", "wrapmaint") %in% loadedNamespaces()))
   interfaces <- lapply(exports, function(name) {
@@ -307,6 +356,7 @@ verify_client <- function(lib, out, lookup_cases) {
   names(interfaces) <- exports
   snapshot <- list(
     interfaces = interfaces,
+    helper_interfaces = helper_interfaces,
     exported_function_count = sum(vapply(
       exports,
       function(name) is.function(getExportedValue("ComptoxR", name)),

@@ -42,22 +42,64 @@ after <- callr::r(
   list(libs[[2]], file.path(out, 'after'), lookup_cases, full_cases),
   libpath = c(libs[[2]], .libPaths())
 )
+# #337: these exports deliberately reject queries the original sent or failed in httr2.
+corrected_exports <- c('chemi_resolver_lookup', 'chemi_resolver_lookupCASRN')
+corrected_cases <- grep(paste0('^corrected-(', paste(corrected_exports, collapse = '|'), ')-'),
+  names(after$cases), value = TRUE)
+stopifnot(length(corrected_cases) == 6L * length(corrected_exports))
+for (name in corrected_cases) {
+  case <- after$cases[[name]]
+  stopifnot(length(case$requests) == 0L, 'error_class' %in% names(case$value),
+    grepl('query', case$value$message, fixed = TRUE))
+}
+# #337: only payload$options$options changes; all other wire fields and results stay equal.
+options_exports <- c('chemi_stdizer_records', 'chemi_toxprints_assays_bulk')
+options_cases <- grep(paste0('^corrected-options-(', paste(options_exports, collapse = '|'), ')-'),
+  names(after$cases), value = TRUE)
+stopifnot(length(options_cases) == 7L * length(options_exports))
+for (name in options_cases) {
+  old <- before$cases[[name]]
+  new <- after$cases[[name]]
+  stopifnot(length(old$requests) == 1L, length(new$requests) == 1L)
+  payload <- jsonlite::fromJSON(rawToChar(new$requests[[1L]]$body), simplifyVector = FALSE)
+  variant <- sub('^.*-', '', name)
+  wanted <- switch(variant, nested =, `400` = list(flag = FALSE, count = 0L, nested = list(label = 'caf\u00e9 +/&')),
+    empty = list(), false = FALSE, zero = 0L, NULL)
+  stopifnot(identical(payload$options$options, wanted),
+    identical('options' %in% names(payload$options), !variant %in% c('omitted', 'null')))
+  strip_options <- function(case) {
+    body <- jsonlite::fromJSON(rawToChar(case$requests[[1L]]$body), simplifyVector = FALSE)
+    body$options$options <- NULL
+    case$requests[[1L]]$body <- body
+    case
+  }
+  stopifnot(identical(strip_options(old), strip_options(new)))
+}
+unchanged_cases <- setdiff(names(before$cases), c(corrected_cases, options_cases))
 # Failure diagnostics contain output directory names; compare successful cases directly.
 stopifnot(
   identical(before$interfaces, after$interfaces),
-  identical(before$cases, after$cases),
+  identical(before$helper_interfaces, after$helper_interfaces),
+  identical(before$cases[unchanged_cases], after$cases[unchanged_cases]),
   identical(names(before$full_failures), names(after$full_failures))
 )
 report <- list(
   scope = 'Installed original and migrated client, localhost only; synthetic responses',
   baseline_commit = '4fd720b97fb2f7f2abf131925e9270b0c11b057a',
   toolkit = jsonlite::read_json('dev/specmill-lock.json'),
-  exact_requests_and_objects_equal = TRUE,
+  exact_requests_and_objects_equal = identical(before$cases, after$cases),
   passed_cases = length(before$cases),
+  corrected_exports = as.list(corrected_exports),
+  corrected_query_cases = as.list(corrected_cases),
+  corrected_options_exports = as.list(options_exports),
+  corrected_options_cases = as.list(options_cases),
+  unchanged_request_fields_and_objects_equal = TRUE,
   exported_signatures = length(before$interfaces),
+  helper_signatures_equal = TRUE,
+  helper_signatures = as.list(names(before$helper_interfaces)),
   failures = before$full_failures,
   operations = lapply(full_cases, function(x) x[c('schema', 'key')]),
-  cases = lapply(before$cases, function(x) {
+  cases = lapply(after$cases, function(x) {
     failed <- is.list(x$value) && 'error_class' %in% names(x$value)
     list(
       requests = length(x$requests),

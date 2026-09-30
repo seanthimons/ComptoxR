@@ -12,6 +12,7 @@ selection:
   - GET /bioactivity/assay/chemicals/search/by-aeid/{aeid}
   - GET /bioactivity/assay/count
   - GET /bioactivity/assay/search/by-aeid/{aeid}
+  - GET /bioactivity/assay/search/by-endpoint/
   - GET /bioactivity/assay/search/by-gene/{geneSymbol}
   - GET /bioactivity/assay/single-conc/search/by-aeid/{aeid}
   - GET /bioactivity/data/aed/search/by-dtxsid/{dtxsid}
@@ -289,6 +290,40 @@ operations:
       return: Returns a scalar value
       examples:
       - aeid: '3032'
+  GET /bioactivity/assay/search/by-endpoint/:
+    name: ct_bioactivity_assay_search_by_endpoint
+    file: R/ct_bioactivity_assay_search_by_endpoint.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      endpoint:
+        type: character
+        required: yes
+        description: Required parameter
+    post_on_skip: no
+    post_state: parameters
+    request:
+      arguments:
+        endpoint:
+          value: bioactivity/assay/search/by-endpoint/
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        query_params:
+          object:
+            endpoint:
+              from:
+              - params
+              - endpoint
+    docs:
+      title: Get AEID by assay component endpoint name
+      lifecycle: stable
+      parameters:
+        endpoint: Required parameter
+      return: Returns a scalar value
+      examples:
+      - endpoint: DTXSID7020182
   GET /bioactivity/assay/search/by-gene/{geneSymbol}:
     name: ct_bioactivity_assay_search_by_gene
     file: R/ct_bioactivity_assay_search_by_gene.R

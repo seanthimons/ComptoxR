@@ -51,7 +51,14 @@ tg_metadata_for_wrapper <- function(record, helper_names = tg_config$helper_name
 tg_collect_wrapper_metadata <- function(root = ".") {
   wrappers <- tg_inventory_wrappers(root)
   hook_config <- tg_read_hook_config(root)
-  metadata <- lapply(wrappers, tg_metadata_for_wrapper, hook_config = hook_config)
+  # Fixed contracts already own these wrappers; their generated validators need no legacy scan.
+  suites <- tg_bespoke_contracts(root)
+  metadata <- lapply(wrappers, function(record) {
+    if (record$function_name %in% names(suites)) {
+      return(list(function_name = record$function_name))
+    }
+    tg_metadata_for_wrapper(record, hook_config = hook_config)
+  })
   metadata <- metadata[!vapply(metadata, is.null, logical(1))]
   metadata[sort(names(metadata))]
 }

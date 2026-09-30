@@ -411,8 +411,8 @@
   "chemi_opera": {
     "name": "chemi_opera",
     "file": "R/chemi_opera.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-opera-prod.json",
     "key": "GET /api/opera",
     "lifecycle": "experimental"
@@ -420,10 +420,11 @@
   "chemi_opera_bulk": {
     "name": "chemi_opera_bulk",
     "file": "R/chemi_opera.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-opera-prod.json",
+    "key": "POST /api/opera",
+    "lifecycle": "experimental"
   },
   "chemi_padel": {
     "name": "chemi_padel",
@@ -454,8 +455,8 @@
   "chemi_predictor_models_predict": {
     "name": "chemi_predictor_models_predict",
     "file": "R/chemi_predictor_models_predict.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-predictor_models-prod.json",
     "key": "GET /api/predictor_models/predict",
     "lifecycle": "experimental"
@@ -463,10 +464,11 @@
   "chemi_predictor_models_predict_bulk": {
     "name": "chemi_predictor_models_predict_bulk",
     "file": "R/chemi_predictor_models_predict.R",
-    "status": "retained",
-    "reason": "Custom implementation requires manual mapping",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-predictor_models-prod.json",
+    "key": "POST /api/predictor_models/predict",
+    "lifecycle": "experimental"
   },
   "chemi_rdkit": {
     "name": "chemi_rdkit",
@@ -629,10 +631,11 @@
   "chemi_stdizer_records": {
     "name": "chemi_stdizer_records",
     "file": "R/chemi_stdizer_records.R",
-    "status": "retained",
-    "reason": "Options prelude overwrites the public options argument (original defect); retained",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "POST /api/stdizer/records",
+    "lifecycle": "experimental"
   },
   "chemi_stdizer": {
     "name": "chemi_stdizer",
@@ -662,8 +665,8 @@
   "chemi_toxprints_assays": {
     "name": "chemi_toxprints_assays",
     "file": "R/chemi_toxprints_assays.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "chemi-toxprints-prod.json",
     "key": "GET /api/toxprints/assays",
     "lifecycle": "experimental"
@@ -671,10 +674,11 @@
   "chemi_toxprints_assays_bulk": {
     "name": "chemi_toxprints_assays_bulk",
     "file": "R/chemi_toxprints_assays.R",
-    "status": "retained",
-    "reason": "Options prelude overwrites the public options argument (original defect); retained",
-    "schema": null,
-    "key": null
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/assays",
+    "lifecycle": "experimental"
   },
   "chemi_toxprints_calculate": {
     "name": "chemi_toxprints_calculate",
@@ -740,10 +744,11 @@
   "ct_bioactivity_assay_search_by_endpoint": {
     "name": "ct_bioactivity_assay_search_by_endpoint",
     "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
-    "status": "retained",
-    "reason": "Nonliteral helper argument needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-bioactivity-prod.json",
-    "key": "GET /bioactivity/assay/search/by-endpoint/"
+    "key": "GET /bioactivity/assay/search/by-endpoint/",
+    "lifecycle": "stable"
   },
   "ct_chemical_list_chemicals_search_contain": {
     "name": "ct_chemical_list_chemicals_search_contain",
@@ -812,16 +817,17 @@
   "ct_chemical_search_equal_bulk": {
     "name": "ct_chemical_search_equal_bulk",
     "file": "R/ct_chemical_search_equal.R",
-    "status": "retained",
-    "reason": "Nonliteral helper argument needs manual mapping",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-chemical-prod.json",
-    "key": "POST /chemical/search/equal/"
+    "key": "POST /chemical/search/equal/",
+    "lifecycle": "stable"
   },
   "ct_chemical_search_equal": {
     "name": "ct_chemical_search_equal",
     "file": "R/ct_chemical_search_equal.R",
-    "status": "retained",
-    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "status": "candidate",
+    "reason": "",
     "schema": "ctx-chemical-prod.json",
     "key": "GET /chemical/search/equal/{word}",
     "lifecycle": "stable"
