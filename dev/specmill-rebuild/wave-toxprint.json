@@ -94,6 +94,18 @@
       "prior_query_corrections_asserted": 12,
       "prior_options_corrections_asserted": 14
     },
-    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f"
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "reviewed_diagnostic_gate_checked": true,
+    "rehearsal": {
+      "commit": "d996565e9a8ae91e499e6c0a818cdf80173d0703",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": [],
+      "byte_identical": true
+    },
+    "generation_inputs_unchanged_since_rehearsal": true,
+    "source_documentation_hooks_pin_unchanged": true
   }
 }

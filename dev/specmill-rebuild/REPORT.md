@@ -822,3 +822,11 @@ signatures and helper signatures agree, apart from the previously recorded
 `runtime-toxprint-results.json` records the comparison. The existing temporary
 runner caches completed immutable request records and redirects process output;
 its expectations and comparison assertions match `verify-runtime.R`.
+
+The deletion/rebuild snapshot `d996565e` removed all 226 allowlisted files and
+rebuilt 263 generated operations. First apply, second apply and final check were
+byte-identical, with no differences. ToxPrint's retained source is deliberately
+outside that allowlist. Final generation inputs, maintenance gate and manifest
+match the snapshot. The wrapper, shared helper, schemas, documentation, hooks,
+callbacks, toolkit pin and `verify-runtime.R` are byte-identical to `cef28d1d`.
+The uncommitted mirror-selection plan retains its recorded SHA256.

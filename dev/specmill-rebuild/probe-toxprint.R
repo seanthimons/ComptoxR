@@ -79,3 +79,15 @@ w <- list(wave = 'toxprint', base_commit = 'cef28d1d5caeb87c521fa07713aa00dfde8d
   schema_corrections = list(), behavior_corrections = list(),
   issue_337_entries_remaining = 5L, upstream_blocked_amos_entries = 5L)
 jsonlite::write_json(w, 'dev/specmill-rebuild/wave-toxprint.json', pretty = TRUE, auto_unbox = TRUE)
+
+# The maintenance gate must reject changed or additional retained diagnostics.
+source('dev/generate_specmill.R', local = TRUE)
+review <- jsonlite::read_json('dev/specmill-rebuild/wave-toxprint.json')
+plan <- list(retained_diagnostics = review$reviewed_retained_diagnostics, files = list())
+testthat::with_mocked_bindings({
+  generate_specmill('check')
+  plan$retained_diagnostics[[1L]]$reason <- 'unreviewed diagnostic'
+  testthat::expect_error(generate_specmill('check'), 'is not TRUE', fixed = TRUE)
+  plan$retained_diagnostics <- c(review$reviewed_retained_diagnostics, review$reviewed_retained_diagnostics)
+  testthat::expect_error(generate_specmill('check'), 'is not TRUE', fixed = TRUE)
+}, generate_client = function(...) plan, .package = 'specmill')
