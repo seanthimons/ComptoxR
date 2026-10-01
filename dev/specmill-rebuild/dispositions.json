@@ -1959,7 +1959,7 @@
     "formals": "pairlist(da_window = NULL, dtxsids = NULL, min_intensity = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -1986,7 +1986,7 @@
     "formals": "pairlist(base_url = NULL, ids = NULL, include_classyfire = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2064,7 +2064,7 @@
     "formals": "pairlist(additional_record_info = NULL, always_download_file = NULL, base_url = NULL, ids = NULL, include_classyfire = NULL, include_external_links = NULL, include_functional_uses = NULL, include_source_counts = NULL, methodologies = NULL, record_types = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2091,7 +2091,7 @@
     "formals": "pairlist(spectrum_1 = NULL, spectrum_2 = NULL, type = NULL, window = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2169,7 +2169,7 @@
     "formals": "as.pairlist(alist(record_type = , search_info = NULL, record_info_fields = NULL, table_fields = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2196,7 +2196,7 @@
     "formals": "pairlist(lower_mass_limit = NULL, upper_mass_limit = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2223,7 +2223,7 @@
     "formals": "pairlist(lower_mass_limit = NULL, methodology = NULL, spectrum = NULL, type = NULL, upper_mass_limit = NULL, window = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2250,7 +2250,7 @@
     "formals": "pairlist(da_window = NULL, dtxsids = NULL, ms_level = NULL, ppm_window = NULL, spectra = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2328,7 +2328,7 @@
     "formals": "pairlist(kingdom = NULL, klass = NULL, superklass = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2406,7 +2406,7 @@
     "formals": "pairlist(internal_ids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2433,7 +2433,7 @@
     "formals": "pairlist(internal_ids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2460,7 +2460,7 @@
     "formals": "pairlist(internal_ids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2538,7 +2538,7 @@
     "formals": "pairlist(dtxsid = NULL, spectrum_type = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -2565,7 +2565,7 @@
     "formals": "pairlist(kingdom = NULL, klass = NULL, subklass = NULL, superklass = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -3494,7 +3494,7 @@
       "chemi_stdizer"
     ],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/28 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -4117,7 +4117,7 @@
       "chemi_descriptors_bulk"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Client hook policy requires manual review Policy retention approved in #341; preserve apply_aggregate_rdkit_fallback and its cross-schema GET/POST /api/rdkit route until https://github.com/seanthimons/specmill/issues/61 supports declared additional routes, or a verified service repair removes the fallback; adoption requires a reviewed wave.",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -4164,7 +4164,7 @@
       "chemi_descriptors"
     ],
     "disposition": "retained",
-    "reason": "Client hook policy requires manual review",
+    "reason": "Client hook policy requires manual review Policy retention approved in #341; preserve apply_aggregate_rdkit_fallback and its cross-schema GET/POST /api/rdkit route until https://github.com/seanthimons/specmill/issues/61 supports declared additional routes, or a verified service repair removes the fallback; adoption requires a reviewed wave.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5189,7 +5189,7 @@
     "formals": "pairlist(internal_id_list = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5216,7 +5216,7 @@
     "formals": "pairlist(dtxsids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5263,7 +5263,7 @@
     "formals": "as.pairlist(alist(identifier_type = , identifier = NULL))",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -5290,7 +5290,7 @@
     "formals": "NULL",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/27 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,
@@ -5317,7 +5317,7 @@
     "formals": "pairlist(dtxsids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5364,7 +5364,7 @@
     "formals": "pairlist(dtxsids = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5411,7 +5411,7 @@
     "formals": "pairlist(spectrum = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5438,7 +5438,7 @@
     "formals": "pairlist(internal_id_list = NULL)",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/26 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_chemi_request",
       "helper_calls": 1,
@@ -5505,7 +5505,7 @@
     "formals": "NULL",
     "siblings": [],
     "disposition": "retained",
-    "reason": "No unique supported schema/method/path match; no route guessed",
+    "reason": "No unique supported schema/method/path match; no route guessed Policy retention approved in #336; preserve the hand-written contract until https://github.com/seanthimons/specmill/issues/29 is resolved and a reviewed generation wave verifies compatibility.",
     "route": {
       "helper": "generic_request",
       "helper_calls": 1,

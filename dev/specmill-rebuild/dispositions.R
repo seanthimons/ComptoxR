@@ -135,6 +135,41 @@ hook_evidence <- function(name, d) {
   NULL
 }
 
+# Maintainer-approved retention closes #336/#341 without guessing upstream contracts.
+retention_groups <- list(
+  `26` = paste0('chemi_amos_', c(
+    'all_similarities', 'analytical_qc_batch', 'batch', 'count_substances_in_ids',
+    'dtxsids', 'entropy_similarity', 'mass_range', 'mass_spectra_for_substances',
+    'mass_spectrum_similarity', 'max_similarity', 'next_level_classification',
+    'record_counts', 'spectral_entropy', 'spectrum_count_for_methodology',
+    'substances_for_classification', 'substances_for_ids'
+  )),
+  `27` = paste0('chemi_amos_', c(
+    'for_document_ids', 'retrieve_fact_sheets', 'retrieve_product_declarations',
+    'retrieve_safety_data_sheets', 'get_similar_structures', 'list_sources_by_record_type'
+  )),
+  `28` = 'chemi_stdizer_bulk',
+  `29` = 'chemi_resolver_ghs_list_count'
+)
+retention_policy <- list()
+for (upstream in names(retention_groups)) {
+  for (name in retention_groups[[upstream]]) {
+    retention_policy[[name]] <- paste0(
+      'Policy retention approved in #336; preserve the hand-written contract until ',
+      'https://github.com/seanthimons/specmill/issues/', upstream,
+      ' is resolved and a reviewed generation wave verifies compatibility.'
+    )
+  }
+}
+for (name in c('chemi_descriptors', 'chemi_descriptors_bulk')) {
+  retention_policy[[name]] <- paste0(
+    'Policy retention approved in #341; preserve apply_aggregate_rdkit_fallback ',
+    'and its cross-schema GET/POST /api/rdkit route until ',
+    'https://github.com/seanthimons/specmill/issues/61 supports declared additional routes, ',
+    'or a verified service repair removes the fallback; adoption requires a reviewed wave.'
+  )
+}
+
 ledger <- lapply(seq_len(nrow(checklist)), function(i) {
   name <- checklist$name[[i]]
   d <- inventory[[name]]
@@ -184,6 +219,9 @@ ledger <- lapply(seq_len(nrow(checklist)), function(i) {
   }
   entry$disposition <- 'retained'
   entry$reason <- screen[[name]]$reason
+  if (!is.null(retention_policy[[name]])) {
+    entry$reason <- paste(entry$reason, retention_policy[[name]])
+  }
   entry$route <- route(name, d$file)
   entry$hooks <- hook_evidence(name, d)
   entry

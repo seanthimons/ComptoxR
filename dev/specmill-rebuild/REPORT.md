@@ -830,3 +830,28 @@ outside that allowlist. Final generation inputs, maintenance gate and manifest
 match the snapshot. The wrapper, shared helper, schemas, documentation, hooks,
 callbacks, toolkit pin and `verify-runtime.R` are byte-identical to `cef28d1d`.
 The uncommitted mirror-selection plan retains its recorded SHA256.
+
+
+## Approved policy retention (#336 and #341), 1 October 2026
+
+#336 is completed by explicit maintenance disposition: all 24 wrappers remain
+hand-written. The ledger records the upstream link for every wrapper. The groups
+are [specmill#26](https://github.com/seanthimons/specmill/issues/26): 16 AMOS
+body-media contracts; [specmill#27](https://github.com/seanthimons/specmill/issues/27):
+four invalid-type and two malformed-path AMOS contracts;
+[specmill#28](https://github.com/seanthimons/specmill/issues/28): `chemi_stdizer_bulk`
+binary/nested contract; and
+[specmill#29](https://github.com/seanthimons/specmill/issues/29):
+`chemi_resolver_ghs_list_count` GET-body review. This policy neither fixes upstream
+contracts nor adopts unsupported routes. A resolved contract still requires a
+reviewed generation wave and compatibility verification.
+
+#341 is completed by retaining both `chemi_descriptors` and
+`chemi_descriptors_bulk`. Their existing `apply_aggregate_rdkit_fallback` switches
+GET/POST `/api/descriptors` to the separate RDKit schema's GET/POST `/api/rdkit`
+route when required. Preserve this fallback until
+[specmill#61](https://github.com/seanthimons/specmill/issues/61) can declare and
+verify the additional routes, or a verified upstream service repair allows its
+removal. Future adoption requires reviewed localhost fallback cases and a wave.
+The retention reasons cite #341 and the upstream blocker. No wrapper, hook,
+schema, mapping or runtime behavior changes in this closeout.
