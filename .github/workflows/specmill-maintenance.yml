@@ -34,6 +34,8 @@ jobs:
             any::digest
             any::testthat
             any::yaml12
+            any::jsonvalidate
+            any::V8
           needs: check
 
       - name: Read reviewed specmill revision
