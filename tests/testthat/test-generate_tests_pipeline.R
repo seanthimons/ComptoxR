@@ -214,3 +214,23 @@ test_that("token preflight rejects empty placeholder and redacted-looking values
   expect_false(ctx_api_key_status("xxxxxxxx")$valid)
   expect_true(ctx_api_key_status("realistic-token-value-123")$valid)
 })
+
+test_that("fixed contracts bypass legacy scans of generated validators", {
+  root <- make_generation_repo()
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  writeLines(c(
+    "alpha <- function(query) {",
+    "  base::evalq(function(x) x, base::baseenv())(query)",
+    "  generic_request(query = query, endpoint = 'lookup')",
+    "}",
+    "beta <- function() generic_request(endpoint = 'list')"
+  ), file.path(root, "R", "wrappers.R"))
+  dir.create(file.path(root, ".specmill"))
+  suite <- "tests/testthat/test-contract-alpha.R"
+  jsonlite::write_json(list(files = setNames(list(list()), suite)),
+    file.path(root, ".specmill", "manifest.json"), auto_unbox = TRUE)
+  writeLines("testthat::test_that('alpha contract', { alpha('query') })", file.path(root, suite))
+
+  specs <- build_generated_test_specs(root, context = environment(tg_collect_wrapper_metadata))
+  expect_identical(vapply(specs, `[[`, character(1), "function_name"), c(beta = "beta"))
+})

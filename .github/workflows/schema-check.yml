@@ -154,11 +154,12 @@ jobs:
         continue-on-error: true
         run: |
           source("dev/diff_schemas.R")
-          # Use stage priority for chemi schemas to ensure diff and stub generator agree
+          # Compare only approved production schemas, including newly added domains.
           results <- diff_schemas(
             "schema_old",
             "schema",
-            stage_priority = c("prod", "staging", "dev"),
+            pattern = "-prod[.]json$",
+            stage_priority = "prod",
             exclude_pattern = "ui|coverage_baseline|schema_hashes"
           )
           md <- format_diff_markdown(results)
@@ -184,13 +185,13 @@ jobs:
       - name: Check for schema changes
         id: schema_changes
         run: |
-          if git diff --quiet schema/; then
+          if [ -z "$(git status --porcelain --untracked-files=all -- schema/)" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "No schema changes detected"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Schema changes detected!"
-            git diff --stat schema/ schema_hashes.csv
+            git diff --stat -- schema/ schema_hashes.csv
           fi
 
       - name: Generate function stubs
@@ -202,14 +203,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Update documentation
-        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated != '0' && steps.stubs.outputs.stubs_generated != ''
+        if: steps.schema_changes.outputs.changed == 'true'
         run: |
           devtools::document()
         shell: Rscript {0}
 
       - name: Detect test gaps
         id: gaps
-        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated != '0' && steps.stubs.outputs.stubs_generated != ''
+        if: steps.schema_changes.outputs.changed == 'true'
         continue-on-error: true
         run: |
           source("dev/detect_test_gaps.R")
@@ -217,7 +218,7 @@ jobs:
 
       - name: Generate missing tests
         id: tests
-        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated != '0' && steps.stubs.outputs.stubs_generated != ''
+        if: steps.schema_changes.outputs.changed == 'true'
         run: |
           status <- system2("Rscript", c("dev/generate_tests.R", "--generate"))
           quit(save = "no", status = status)
@@ -225,7 +226,7 @@ jobs:
 
       - name: Check generated tests
         id: generated_test_check
-        if: steps.schema_changes.outputs.changed == 'true' && steps.stubs.outputs.stubs_generated != '0' && steps.stubs.outputs.stubs_generated != ''
+        if: steps.schema_changes.outputs.changed == 'true'
         run: |
           status <- system2("Rscript", c("dev/generate_tests.R", "--check"))
           quit(save = "no", status = status)
@@ -237,6 +238,9 @@ jobs:
           Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
           Rscript dev/generate_tests.R --check
           Rscript dev/check_hook_config.R
+
+      - name: Check public API boundary
+        run: |
           Rscript dev/check_public_api.R
 
       - name: Calculate coverage
@@ -250,7 +254,7 @@ jobs:
         id: changes
         run: |
           # Check if there are any changes to commit
-          if git diff --quiet && git diff --cached --quiet; then
+          if [ -z "$(git status --porcelain --untracked-files=all -- schema/ R/ man/ NAMESPACE inst/ tests/ .github/badges/)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No changes to commit"
           else
@@ -399,6 +403,14 @@ jobs:
           commit-message: "chore: update API schemas, generate function stubs and tests"
           title: "chore: API schema and test updates"
           body-path: pr_body.md
+          add-paths: |
+            schema/
+            R/
+            man/
+            NAMESPACE
+            inst/
+            tests/
+            .github/badges/
           branch: automated/schema-update
           delete-branch: true
           labels: |

@@ -74,3 +74,8 @@ schema_old/
 
 # Planning docs
 !.planning
+
+# Reviewed specmill ownership is source; isolated builds are disposable.
+!.specmill/
+!.specmill/**
+/dev/specmill-pilot/artifacts/

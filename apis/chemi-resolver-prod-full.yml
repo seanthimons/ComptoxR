@@ -1,0 +1,220 @@
+id: chemi-resolver-prod-full
+schemas:
+  files:
+  - schema/chemi-resolver-prod.json
+selection:
+  include:
+  - GET /api/resolver/ccte-lists
+  - GET /api/resolver/getallannotations
+  - GET /api/resolver/getdatasources
+  - GET /api/resolver/ghs/classes
+  - GET /api/resolver/ghs/hcodes
+  - GET /api/resolver/ghs/pcodes
+  - GET /api/resolver/hcodes
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/resolver/ccte-lists:
+    name: chemi_resolver_ccte_lists
+    file: R/chemi_resolver_ccte_lists.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ccte-lists
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ccte Lists
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getallannotations:
+    name: chemi_resolver_getallannotations
+    file: R/chemi_resolver_getallannotations.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getallannotations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Getallannotations
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/getdatasources:
+    name: chemi_resolver_getdatasources
+    file: R/chemi_resolver_getdatasources.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/getdatasources
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Getdatasources
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/classes:
+    name: chemi_resolver_ghs_classes
+    file: R/chemi_resolver_ghs_classes.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/classes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Classes
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/hcodes:
+    name: chemi_resolver_ghs_hcodes
+    file: R/chemi_resolver_ghs_hcodes.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/hcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Hcodes
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/ghs/pcodes:
+    name: chemi_resolver_ghs_pcodes
+    file: R/chemi_resolver_ghs_pcodes.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/ghs/pcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Ghs Pcodes
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/resolver/hcodes:
+    name: chemi_resolver_hcodes
+    file: R/chemi_resolver_hcodes.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: resolver/hcodes
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Resolver Hcodes
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results (array of objects)
+      tags:
+        apiStage: public
+      examples:
+      - {}
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

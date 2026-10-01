@@ -48,8 +48,10 @@ values. Apply life-stage harmonization explicitly with a versioned
 `envharmonizer` release that matches the ECOTOX source release.
 
 For a local database, read its recorded release before applying the optional
-mapping. Install the [experimental harmonizer package](https://github.com/seanthimons/envharmonizer-releases/releases/tag/v0.1.0)
-separately.
+mapping. Install the [experimental envharmonizer 0.1.1 package](https://github.com/seanthimons/envharmonizer-releases/releases/tag/v0.1.1)
+separately. This release supports the June and September 2026 ECOTOX source
+releases. Use the database's recorded release; do not relabel earlier mapping
+evidence to match a newer database.
 
 ```{r}
 con <- DBI::dbConnect(duckdb::duckdb(),

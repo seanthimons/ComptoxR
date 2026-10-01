@@ -1,0 +1,102 @@
+{
+  "wave": "resolver-bulk",
+  "base_commit": "b53fd06307769ccd5b9b4f36371debb997e07561",
+  "worktree": "/tmp/comptoxr-resolver-bulk",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 1,
+  "generated_operations": 0,
+  "retained_operations": 1,
+  "files": [
+    "R/chemi_resolver_lookup_bulk.R"
+  ],
+  "reviewed_routes": {
+    "chemi_resolver_lookup_bulk": "chemi-resolver-prod.json POST /api/resolver/lookup"
+  },
+  "disposition": "retained_mapped",
+  "reason": "Retain original pre-helper guard and evaluation order under a supported schema mapping and frozen helper contract. Pinned generated wrappers capture all public arguments before request callbacks.",
+  "compatibility_probe": {
+    "original_null": {
+      "message": "ids must be a non-empty character vector",
+      "helper_entered": false
+    },
+    "generated_null": {
+      "message": "ids must be a non-empty character vector",
+      "helper_entered": true
+    },
+    "original_null_lazy_option": {
+      "message": "ids must be a non-empty character vector",
+      "helper_entered": false
+    },
+    "generated_null_lazy_option": {
+      "message": "option evaluated",
+      "helper_entered": false
+    }
+  },
+  "request_policy": {
+    "ids": "Reject NULL/length-zero with the original cli error before options or helper invocation, then as.character; shared helper deduplicates and removes NA/blank values.",
+    "options": "Always retain idsType, fuzzy and mol including explicit NULL; omit only NULL filters and format, preserving original order and FALSE/zero/empty values.",
+    "transport": "Existing generic_chemi_request, sid_label=ids, array_payload=TRUE, caller tidy, default chemi_burl/auth=FALSE; a singleton is an array, no batching or wrapping.",
+    "behavior_corrections": []
+  },
+  "retired_tests": [
+    "tests/testthat/test-chemi_resolver_lookup_bulk.R"
+  ],
+  "issue_337_entries_remaining": 14,
+  "retained_source_sha256": "d63d0829e410c295965599d5a47711ab038e539d92e992e833bd6f994ca20e3b",
+  "retained_source_byte_identical": true,
+  "verification": {
+    "contract_and_regression_tests": "passed",
+    "regression_assertions": 1360,
+    "resolver_and_caller_assertions": 128,
+    "direct_resolver_assertions": 45,
+    "test_failures": 0,
+    "test_errors": 0,
+    "test_warnings": 0,
+    "legacy_generator_check": "passed",
+    "retained_source_byte_identical": true,
+    "retained_source_excluded_from_removal_allowlist": true,
+    "documentation_and_namespace_unchanged": true,
+    "existing_uncommitted_work_preserved": true,
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "runtime_results": "dev/specmill-rebuild/runtime-resolver-bulk-results.json",
+    "runtime_scope": "Installed original and migrated client, localhost only; synthetic responses",
+    "localhost_cases": 1317,
+    "new_wave_cases": 26,
+    "new_wave_requests_and_objects_equal": true,
+    "candidate_failures": 0,
+    "prior_corrected_query_cases": 12,
+    "prior_corrected_options_cases": 14,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "unchanged_request_fields_and_objects_equal": true,
+    "runtime_scheduler": "Existing dev/specmill-full/verify-runtime.R with only independent clients scheduled concurrently through callr::r_bg; comparison and prior-correction assertions unchanged.",
+    "commands": [
+      "Rscript /tmp/stage-resolver-bulk.R",
+      "Rscript /tmp/probe-resolver-generation.R",
+      "Rscript dev/generate_specmill.R --apply",
+      "R_LIBS=dev/specmill-pilot/artifacts/legacy-toolkit-library Rscript dev/generate_tests.R --generate",
+      "R_LIBS=dev/specmill-pilot/artifacts/legacy-toolkit-library Rscript dev/generate_tests.R --check",
+      "R CMD INSTALL --library=dev/specmill-pilot/artifacts/resolver-bulk-library .",
+      "COMPTOXR_CRAN_SAFE_TESTS=true NOT_CRAN=false Rscript -e testthat::test_local(...)",
+      "Rscript /tmp/resolver-bulk-parallel-runtime.R <before-library> <candidate-library> <runtime-output> dev/specmill-rebuild/runtime-resolver-bulk-results.json",
+      "Rscript dev/specmill-rebuild/rehearse.R"
+    ],
+    "sequential_runtime_replay": "Rscript dev/specmill-full/verify-runtime.R <before-library> <candidate-library> <runtime-output> dev/specmill-rebuild/runtime-resolver-bulk-results.json",
+    "rehearsal": {
+      "commit": "8ff314c14fbb33ea9f1845e4815ccc27273e4f21",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "byte_identical": true,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": []
+    }
+  }
+}

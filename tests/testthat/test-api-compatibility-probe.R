@@ -4,6 +4,25 @@ if (!file.exists(probe_script)) {
 }
 source(probe_script)
 
+test_that("live probes use the effective configured URLs without changing the session", {
+  probe <- new.env(parent = environment())
+  sys.source(probe_script, envir = probe)
+  testthat::local_mocked_bindings(load_all = function(...) invisible(NULL), .package = "pkgload")
+  withr::local_envvar(c(CTX_API_KEY = "test-only", chemi_burl = "https://example.invalid/chemi"))
+  withr::local_options(list(ComptoxR.ctx_burl = "https://example.invalid/ctx"))
+  calls <- character()
+  probe$probe_http <- function(base_url, ...) {
+    calls <<- c(calls, base_url)
+    probe_response(FALSE)
+  }
+  probe$chemi_descriptors_bulk <- function(...) data.frame()
+  probe$chemi_webtest_predict_bulk <- function(...) data.frame()
+  result <- probe$run_compatibility_probe()
+  expect_identical(unique(calls), c("https://example.invalid/chemi", "https://example.invalid/ctx"))
+  expect_true(all(result$environment == "configured"))
+  expect_identical(Sys.getenv("chemi_burl"), "https://example.invalid/chemi")
+})
+
 test_that("probe evaluator checks descriptor alignment and metadata", {
   descriptor <- probe_response(
     TRUE,

@@ -198,12 +198,12 @@ unwrap_collection_envelope <- function(body) {
 #' @param query_params Optional named list of URL query parameters. Use this for
 #'        API parameters whose names collide with `generic_request()` formals.
 #' @param paginate Boolean; whether to automatically fetch all pages for paginated endpoints.
-#'        Defaults to FALSE. When TRUE, uses httr2::req_perform_iterative() to loop through
+#'        Defaults to FALSE. When TRUE, uses generated pagination support to loop through
 #'        pages until exhausted or max_pages is reached. Requires pagination_strategy to be set.
 #' @param max_pages Maximum number of pages to fetch when paginate=TRUE. Defaults to 100.
 #'        Acts as a safety limit to prevent runaway pagination loops.
 #' @param pagination_strategy The pagination strategy to use. One of: "offset_limit", "page_number",
-#'        "page_size", "cursor", or NULL. When NULL, paginate is ignored.
+#'        "page_size", "chet_page", "cursor", or NULL. When NULL, paginate is ignored.
 #'        Usually set by generated stubs from Phase 19 metadata.
 #' @param pagination_cursor_location For cursor pagination, the schema-derived
 #'        cursor location: "query" or "body". Defaults to "query".
@@ -215,7 +215,7 @@ unwrap_collection_envelope <- function(body) {
 #' @return Depends on content_type:
 #'         - JSON: A tidy tibble (if tidy=TRUE) or a cleaned list (if tidy=FALSE).
 #'         - text/plain: A character string.
-#'         - image/*: Raw bytes, or a magick image object if the magick package is available.
+#'         - image/*: A magick image object, with raw bytes as a fallback for unreadable images.
 #'         If no results are found, returns an empty tibble, empty list, or NULL.
 #' @export
 generic_request <- function(
@@ -287,10 +287,7 @@ generic_request <- function(
     mult_count <- ceiling(length(query) / batch_limit)
 
     if (length(query) > batch_limit) {
-      query_list <- split(
-        query,
-        rep(1:mult_count, each = batch_limit, length.out = length(query))
-      )
+      query_list <- .ct_request_batched(identity, query, size = batch_limit)
     } else {
       query_list <- list(query)
     }
@@ -346,31 +343,26 @@ generic_request <- function(
   req_list <- purrr::map(
     query_list,
     function(query_part) {
-      req <- httr2::request(base_url) %>%
-        httr2::req_url_path_append(endpoint) %>%
-        httr2::req_headers(
-          Accept = content_type
-        )
-
+      req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
+      request_body <- NULL
+      body_media <- "application/json"
+      headers <- list(Accept = content_type)
       if (auth) {
-        req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+        headers[["x-api-key"]] <- ct_api_key()
       }
 
       # Implementation for POST requests (Typically bulk searches)
       if (toupper(method) == "POST") {
-        req <- req %>%
-          httr2::req_method("POST")
-
         # Set request body based on body_type
         if (body_type == "raw_text") {
           # Send as newline-delimited plain text (e.g., /chemical/search/equal/)
-          body_text <- paste(query_part, collapse = "\n")
-          req <- req %>% httr2::req_body_raw(body_text, type = "text/plain")
+          request_body <- paste(query_part, collapse = "\n")
+          body_media <- "text/plain"
         } else if (!is.null(body)) {
-          req <- req %>% httr2::req_body_json(body, auto_unbox = TRUE)
+          request_body <- body
         } else {
           # Default: Send as JSON array
-          req <- req %>% httr2::req_body_json(query_part, auto_unbox = FALSE)
+          request_body <- I(query_part)
         }
 
         # Append additional path parameters if provided
@@ -384,8 +376,6 @@ generic_request <- function(
         req <- req %>% httr2::req_url_query(!!!ellipsis_args)
       } else {
         # Implementation for GET requests
-        req <- req %>% httr2::req_method("GET")
-
         # Scenario A: Static endpoint (no query appending)
         if (batch_limit == 0) {
           # Add original query value to query parameters if provided
@@ -432,14 +422,7 @@ generic_request <- function(
         }
       }
 
-      # Add retry with exponential backoff for transient errors (429, 5xx)
-      req <- req %>%
-        httr2::req_retry(
-          max_tries = 3,
-          is_transient = is_transient_error
-        )
-
-      return(req)
+      .ct_request_build(req, if (toupper(method) == "POST") "POST" else "GET", request_body, headers, body_media)
     }
   )
 
@@ -450,11 +433,11 @@ generic_request <- function(
   }
 
   # --- 5.5. Pagination ---
-  # When paginate=TRUE, use httr2::req_perform_iterative() instead of normal execution
+  # When paginate=TRUE, use .ct_request_pages() instead of normal execution
   if (paginate && !is.null(pagination_strategy) && pagination_strategy != "none") {
     first_req <- req_list[[1]]
 
-    # Build strategy-specific next_req callback for httr2::req_perform_iterative()
+    # Build strategy-specific next_req callback for .ct_request_pages()
     if (pagination_strategy == "offset_limit" && !is.null(path_params)) {
       # AMOS-style: limit in path (query), offset in path_params
       # iterate_with_offset doesn't support path params, so use custom next_req
@@ -462,7 +445,7 @@ generic_request <- function(
       initial_offset <- as.numeric(path_params[["offset"]] %||% path_params[[1]] %||% 0)
 
       next_req <- function(resp, req) {
-        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        body <- .ct_response_json(resp)
         # Unwrap if response is wrapped in a named container (e.g., {"results": [...]})
         records <- if (is.list(body) && !is.null(names(body))) {
           body[["results"]] %||% body[["records"]] %||% body[["data"]] %||% body
@@ -493,8 +476,19 @@ generic_request <- function(
         start = as.numeric(ellipsis_args[["pageNumber"]] %||% 1),
         offset = 1,
         resp_complete = function(resp) {
-          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+          body <- .ct_response_json(resp)
           length(body) == 0
+        }
+      )
+    } else if (pagination_strategy == "chet_page") {
+      next_req <- httr2::iterate_with_offset(
+        "page",
+        start = as.numeric(ellipsis_args[["page"]] %||% 1),
+        offset = 1,
+        resp_complete = function(resp) {
+          value <- .ct_response_json(resp)
+          records <- value[["data"]] %||% value
+          length(records) == 0L
         }
       )
     } else if (pagination_strategy == "page_size") {
@@ -505,10 +499,10 @@ generic_request <- function(
         start = start_page,
         offset = 1,
         resp_pages = function(resp) {
-          httr2::resp_body_json(resp, simplifyVector = FALSE)[["totalPages"]]
+          .ct_response_json(resp)[["totalPages"]]
         },
         resp_complete = function(resp) {
-          isTRUE(httr2::resp_body_json(resp, simplifyVector = FALSE)[["last"]])
+          isTRUE(.ct_response_json(resp)[["last"]])
         }
       )
     } else if (pagination_strategy == "offset_limit" && is.null(path_params)) {
@@ -523,7 +517,7 @@ generic_request <- function(
         start = initial_offset,
         offset = page_size,
         resp_complete = function(resp) {
-          body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+          body <- .ct_response_json(resp)
           # Check various response shapes for exhaustion
           records <- body[["results"]] %||%
             body[["data"]] %||%
@@ -543,7 +537,7 @@ generic_request <- function(
         )
       }
       next_req <- function(resp, req) {
-        response_body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        response_body <- .ct_response_json(resp)
         pagination <- response_body[["pagination"]] %||% list()
         if (identical(pagination[["hasNext"]], FALSE)) {
           return(NULL)
@@ -565,7 +559,7 @@ generic_request <- function(
     }
 
     # Execute iterative pagination
-    resps <- httr2::req_perform_iterative(
+    resps <- .ct_request_pages(
       first_req,
       next_req = next_req,
       max_reqs = max_pages,
@@ -597,10 +591,12 @@ generic_request <- function(
 
     # Extract records from all responses based on strategy
     body_list <- purrr::map(resps, function(resp) {
-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      body <- .ct_response_json(resp)
 
       # Strategy-specific record extraction
-      records <- if (pagination_strategy == "page_size") {
+      records <- if (pagination_strategy == "chet_page") {
+        body[["data"]] %||% body
+      } else if (pagination_strategy == "page_size") {
         # Spring Boot wraps in "content"
         body[["content"]] %||% list()
       } else if (!is.null(body[["results"]])) {
@@ -654,85 +650,57 @@ generic_request <- function(
 
   # --- 7. Response Processing ---
 
-  # Determine response type from content_type parameter
-
-  is_image <- grepl("^image/", content_type)
-  is_delimited <- grepl(
-    "^text/(csv|tab-separated-values|tsv)",
-    content_type,
-    ignore.case = TRUE
+  # Actual response media selects decoding; the caller still owns status policy.
+  media <- vapply(
+    resp_list,
+    function(r) {
+      if (inherits(r, "httr2_error")) {
+        r <- r$resp
+      }
+      if (!inherits(r, "httr2_response")) {
+        return("")
+      }
+      tolower(sub(";.*$", "", httr2::resp_header(r, "content-type") %||% ""))
+    },
+    character(1)
   )
-  is_text <- grepl("^text/plain", content_type, ignore.case = TRUE) || is_delimited
-
-  # For non-JSON content types, we handle responses differently
-
-  if (is_image) {
-    # Image responses: return raw bytes or magick image
-    body_list <- resp_list %>%
-      purrr::map2(query_list, function(r, qp) {
-        if (inherits(r, "httr2_error")) {
-          r <- r$resp
-        }
-        if (!inherits(r, "httr2_response")) {
-          return(NULL)
-        }
-
-        status <- httr2::resp_status(r)
-        if (status < 200 || status >= 300) {
-          qp_label <- if (length(qp) > 0) qp[1] else endpoint
-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
-          return(NULL)
-        }
-
-        raw_bytes <- httr2::resp_body_raw(r)
-
-        # Try to convert to magick image if package is available
-        if (requireNamespace("magick", quietly = TRUE)) {
-          tryCatch(
-            magick::image_read(raw_bytes),
-            error = function(e) raw_bytes
-          )
+  non_json <- grepl("^(image/|text/|application/(pdf|csv))", media)
+  declared_non_json <- grepl("^(image/|text/)", content_type, ignore.case = TRUE)
+  if (declared_non_json || (grepl(",", content_type, fixed = TRUE) && any(non_json))) {
+    body_list <- purrr::map2(resp_list, query_list, function(r, qp) {
+      if (inherits(r, "httr2_error")) {
+        r <- r$resp
+      }
+      if (!inherits(r, "httr2_response")) {
+        return(NULL)
+      }
+      status <- httr2::resp_status(r)
+      if (status < 200 || status >= 300) {
+        qp_label <- if (length(qp) > 0) qp[1] else endpoint
+        cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
+        return(NULL)
+      }
+      .ct_request_decode(r, response_policy = function(response, context, decode) {
+        value <- if (declared_non_json && !startsWith(tolower(content_type), context$media)) {
+          if (grepl("^image/", content_type)) {
+            httr2::resp_body_raw(response)
+          } else if (grepl("^text/(csv|tab-separated-values|tsv)", content_type, ignore.case = TRUE)) {
+            parse_delimited_response(httr2::resp_body_string(response), content_type)
+          } else {
+            httr2::resp_body_string(response)
+          }
         } else {
-          raw_bytes
+          .ct_response_delimited(response, context, decode)
         }
+        if (startsWith(context$media, "image/") || grepl("^image/", content_type)) {
+          # PDF stays raw; converting it would require Ghostscript.
+          return(tryCatch(magick::image_read(httr2::resp_body_raw(response)), error = function(e) value))
+        }
+        value
       })
-
-    # For single query, return the image directly (not as a list)
-    if (length(body_list) == 1) {
-      return(body_list[[1]])
-    }
-    return(body_list)
-  }
-
-  if (is_text) {
-    # Text responses: return as character string
-    body_list <- resp_list %>%
-      purrr::map2(query_list, function(r, qp) {
-        if (inherits(r, "httr2_error")) {
-          r <- r$resp
-        }
-        if (!inherits(r, "httr2_response")) {
-          return(NULL)
-        }
-
-        status <- httr2::resp_status(r)
-        if (status < 200 || status >= 300) {
-          qp_label <- if (length(qp) > 0) qp[1] else endpoint
-          cli::cli_warn("API request to {.val {endpoint}} failed for {.val {qp_label}} with status {status}")
-          return(NULL)
-        }
-
-        text <- httr2::resp_body_string(r)
-        if (is_delimited) {
-          parse_delimited_response(text, content_type)
-        } else {
-          text
-        }
-      })
-
-    # For single query, return the string directly
-    if (length(body_list) == 1) {
-      return(body_list[[1]])
+    })
+    if (length(body_list) == 1L) {
+      return(body_list[[1L]])
     }
     return(body_list)
   }
@@ -755,7 +723,7 @@ generic_request <- function(
         return(NULL)
       }
 
-      body <- unwrap_collection_envelope(httr2::resp_body_json(r))
+      body <- unwrap_collection_envelope(.ct_response_json(r))
 
       # If we are in path-based GET (batch_limit=1), we want to preserve the query ID
       if (length(qp) == 1 && is.list(body)) {
@@ -833,7 +801,7 @@ generic_request <- function(
 #' @param content_type Expected response content type. JSON responses are parsed
 #'        as lists; CSV and TSV responses are parsed as data frames.
 #' @param paginate Boolean; whether to automatically fetch all pages. Defaults to FALSE.
-#'        When TRUE, uses httr2::req_perform_iterative() to loop through pages.
+#'        When TRUE, uses generated pagination support to loop through pages.
 #' @param max_pages Maximum pages to fetch when paginate=TRUE. Defaults to 100.
 #' @param pagination_strategy Pagination strategy. For chemi search, usually "offset_limit" (body).
 #' @param ... Named query parameters appended to the request URL.
@@ -941,27 +909,16 @@ generic_chemi_request <- function(
     cli::cli_end()
   }
 
-  # 4. Request building
-  req <- httr2::request(base_url) %>%
-    httr2::req_url_path_append(endpoint) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_body_json(payload) %>%
-    httr2::req_headers(Accept = content_type)
-
+  # Client policy supplies the URL, credentials and chemical payload.
+  req <- httr2::request(base_url) %>% httr2::req_url_path_append(endpoint)
   if (length(query_params) > 0) {
     req <- do.call(httr2::req_url_query, c(list(req), query_params))
   }
-
+  headers <- list(Accept = content_type)
   if (auth) {
-    req <- req %>% httr2::req_headers(`x-api-key` = ct_api_key())
+    headers[["x-api-key"]] <- ct_api_key()
   }
-
-  # Add retry with exponential backoff for transient errors (429, 5xx)
-  req <- req %>%
-    httr2::req_retry(
-      max_tries = 3,
-      is_transient = is_transient_error
-    )
+  req <- .ct_request_build(req, "POST", payload, headers)
 
   # 5. Debugging
   if (run_debug) {
@@ -976,7 +933,7 @@ generic_chemi_request <- function(
     page_limit <- as.numeric(options[["limit"]] %||% 100)
 
     next_req <- function(resp, req) {
-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      body <- .ct_response_json(resp)
       total <- body[["totalRecordsCount"]] %||% 0
       current_offset <- body[["offset"]] %||% 0
       records_count <- body[["recordsCount"]] %||% length(body[["records"]] %||% list())
@@ -990,7 +947,7 @@ generic_chemi_request <- function(
       req %>% httr2::req_body_json_modify(offset = new_offset)
     }
 
-    resps <- httr2::req_perform_iterative(
+    resps <- .ct_request_pages(
       req,
       next_req = next_req,
       max_reqs = max_pages,
@@ -1012,7 +969,7 @@ generic_chemi_request <- function(
 
     # Extract records from each page
     body_list <- purrr::map(resps, function(resp) {
-      body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+      body <- .ct_response_json(resp)
       records <- body[["records"]] %||% list()
       if (!is.null(pluck_res)) {
         records <- purrr::map(records, ~ purrr::pluck(.x, pluck_res))
@@ -1048,9 +1005,9 @@ generic_chemi_request <- function(
     ignore.case = TRUE
   )
   body <- if (is_csv || is_tsv) {
-    parse_delimited_response(httr2::resp_body_string(resp), content_type)
+    .ct_request_decode(resp, response_policy = .ct_response_delimited)
   } else {
-    httr2::resp_body_json(resp, simplifyVector = FALSE)
+    .ct_response_json(resp)
   }
 
   if (!is.null(pluck_res)) {
@@ -1337,4 +1294,95 @@ generic_pubchem_request <- function(
   }
 
   tibble::tibble()
+}
+
+# Client-owned adapter: preserve historical URL bytes and unbounded timeout.
+.ct_request_build <- function(target, method, body, headers, body_media = "application/json") {
+  previous <- options(
+    comptoxr_native.dry_run = TRUE,
+    comptoxr_native.request = list(),
+    comptoxr_native.run_verbose = FALSE
+  )
+  on.exit(options(previous), add = TRUE)
+  curl::curl_parse_url(target$url)
+  origin <- httr2::url_modify(target$url, path = "", query = NULL, fragment = NULL)
+  path <- substring(target$url, nchar(origin) + 1L)
+  req <- .ct_request(
+    method,
+    path,
+    list(),
+    list(),
+    body,
+    headers = headers,
+    body_media = body_media,
+    server = list(url = origin),
+    request_controls = list(max_retries = 2, retry_writes = TRUE, retry_policy = is_transient_error)
+  )
+  httr2::req_options(req, timeout_ms = NULL)
+}
+
+# Preserve httr2 JSON errors and explicitly requested JSON when a server mislabels it.
+.ct_response_json <- function(response) {
+  .ct_request_decode(response, response_policy = function(response, context, decode) {
+    if (grepl("(/json|\\+json)$", context$media) && httr2::resp_has_body(response)) {
+      tryCatch(decode(check_status = FALSE), error = function(e) {
+        httr2::resp_body_json(response, simplifyVector = FALSE)
+      })
+    } else {
+      httr2::resp_body_json(response, simplifyVector = FALSE)
+    }
+  })
+}
+
+# Native iteration owns the loop; existing callbacks own URL/body advancement.
+# Retain responses, including the final empty page/error, for the observer.
+.ct_request_pages <- function(req, next_req, max_reqs, on_error = "return", progress = FALSE) {
+  total <- max_reqs
+  bar <- if (progress) cli::cli_progress_bar("Fetching pages", total = max_reqs) else NULL
+  if (progress) {
+    on.exit(cli::cli_progress_done(id = bar), add = TRUE)
+  }
+  result <- .ct_request_paginated(
+    function(page, size) {
+      response <- tryCatch(httr2::req_perform(req), httr2_error = function(e) {
+        if (on_error == "return") e else stop(e)
+      })
+      if (progress) {
+        cli::cli_progress_update(id = bar)
+      }
+      list(response)
+    },
+    mode = "page",
+    parameter = "page",
+    size_parameter = "size",
+    page_size = 1,
+    start = 1,
+    items = identity,
+    max_pages = max_reqs,
+    max_items = NULL,
+    warn_limits = FALSE,
+    policy = list(),
+    completed = function(response, state) {
+      response <- response[[1L]]
+      if (inherits(response, "httr2_error")) {
+        return(TRUE)
+      }
+      req <<- withCallingHandlers(next_req(response, req), httr2_total_pages = function(cnd) {
+        total <<- min(total, cnd$n)
+      })
+      is.null(req) || state$requests >= total
+    }
+  )
+  unlist(result$pages, recursive = FALSE)
+}
+
+# Native strict CSV decoding is preferred; preserve legacy malformed-table errors.
+.ct_response_delimited <- function(response, context, decode) {
+  tryCatch(decode(format = "delimited", check_status = FALSE), error = function(e) {
+    if (context$media %in% c("text/csv", "application/csv", "text/tab-separated-values", "text/tsv")) {
+      parse_delimited_response(httr2::resp_body_string(response), context$media)
+    } else {
+      stop(e)
+    }
+  })
 }

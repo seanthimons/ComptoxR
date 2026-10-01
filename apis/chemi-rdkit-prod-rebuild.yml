@@ -1,0 +1,186 @@
+id: chemi-rdkit-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-rdkit-prod.json
+selection:
+  include:
+  - GET /api/rdkit
+  - POST /api/rdkit
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/rdkit:
+    name: chemi_rdkit
+    file: R/chemi_rdkit.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: One SMILES string or resolvable chemical identifier
+      type:
+        type: character
+        default: ~
+        description: Fingerprint type
+      radius:
+        type: character
+        default: ~
+        description: ECFP radius
+      bits:
+        type: character
+        default: ~
+        description: Number of fingerprint bits
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        method:
+          from:
+          - hook_state
+          - request
+          - method
+        batch_limit:
+          value: 0.0
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+    docs:
+      title: Generate descriptors for one molecule
+      lifecycle: experimental
+      parameters:
+        smiles: One SMILES string or resolvable chemical identifier
+        type: Fingerprint type
+        radius: ECFP radius
+        bits: Number of fingerprint bits
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - smiles: DTXSID7020182
+      tags:
+        apiStage: public
+  POST /api/rdkit:
+    name: chemi_rdkit_bulk
+    file: R/chemi_rdkit.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        required: yes
+        description: Chemical structures or resolvable identifiers
+      options:
+        type: character
+        default: ~
+        description: Named list of additional dedicated RDKit options
+      type:
+        type: character
+        default: ~
+        description: Fingerprint type
+      radius:
+        type: character
+        default: ~
+        description: ECFP radius
+      bits:
+        type: character
+        default: ~
+        description: Number of fingerprint bits
+      output:
+        type: character
+        default:
+        - wide
+        - raw
+        description: 'Output contract: validated wide tibble or raw payload'
+    post_on_skip: yes
+    post_state: hook_state
+    request:
+      arguments:
+        endpoint:
+          from:
+          - hook_state
+          - request
+          - endpoint
+        server:
+          from:
+          - hook_state
+          - request
+          - server
+        auth:
+          value: no
+        tidy:
+          value: no
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        content_type:
+          from:
+          - hook_state
+          - request
+          - content_type
+    docs:
+      title: Generate descriptors for multiple molecules
+      lifecycle: experimental
+      parameters:
+        chemicals: Chemical structures or resolvable identifiers
+        options: Named list of additional dedicated RDKit options
+        type: Fingerprint type
+        radius: ECFP radius
+        bits: Number of fingerprint bits
+        output: 'Output contract: validated wide tibble or raw payload'
+      return: Returns a tibble with results
+      examples:
+      - chemicals: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds
+hooks:
+  chemi_rdkit:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_rdkit_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+  chemi_rdkit_bulk:
+    pre_request:
+    - validate_descriptor_request
+    - resolve_descriptor_inputs
+    - prepare_rdkit_descriptor_request
+    post_response:
+    - validate_descriptor_response
+    - recover_descriptor_rows
+    - add_descriptor_provenance
+    - format_descriptor_result
+prepare: preserve_choice_defaults

@@ -2,6 +2,7 @@ name: CRAN Readiness
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
       - 'NEWS.md'
       - '**/*.md'
@@ -16,7 +17,7 @@ on:
 
 jobs:
   cran-readiness:
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     name: CRAN-safe Test Readiness
     timeout-minutes: 30

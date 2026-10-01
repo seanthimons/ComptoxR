@@ -48,6 +48,12 @@ jobs:
         shell: bash
         run: Rscript dev/build_stable.R
 
+      - name: Check public API boundary
+        shell: Rscript {0}
+        run: |
+          source('dev/check_public_api.R')
+          check_public_api('.', membership = FALSE)
+
       - name: Build source package
         id: build
         env:

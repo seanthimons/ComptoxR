@@ -1,0 +1,3274 @@
+{
+  "chemi_alerts_alerts": {
+    "name": "chemi_alerts_alerts",
+    "file": "R/chemi_alerts_alerts.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_alerts_groups_by_id": {
+    "name": "chemi_alerts_groups_by_id",
+    "file": "R/chemi_alerts_groups_by_id.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_alerts_groups": {
+    "name": "chemi_alerts_groups",
+    "file": "R/chemi_alerts_groups.R",
+    "status": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "schema": "chemi-alerts-prod.json",
+    "key": "GET /api/alerts/groups"
+  },
+  "chemi_alerts_groups_bulk": {
+    "name": "chemi_alerts_groups_bulk",
+    "file": "R/chemi_alerts_groups.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_alerts_operations": {
+    "name": "chemi_alerts_operations",
+    "file": "R/chemi_alerts_operations.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_alerts": {
+    "name": "chemi_alerts",
+    "file": "R/chemi_alerts.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amnb_nate": {
+    "name": "chemi_amnb_nate",
+    "file": "R/chemi_amnb_nate.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amnb_nate_bulk": {
+    "name": "chemi_amnb_nate_bulk",
+    "file": "R/chemi_amnb_nate.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_all_similarities": {
+    "name": "chemi_amos_all_similarities",
+    "file": "R/chemi_amos_all_similarities.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_analytical_qc_batch": {
+    "name": "chemi_amos_analytical_qc_batch",
+    "file": "R/chemi_amos_analytical_qc_batch.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_analytical_qc_keyset_pagination": {
+    "name": "chemi_amos_analytical_qc_keyset_pagination",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_analytical_qc_keyset_pagination_bulk": {
+    "name": "chemi_amos_analytical_qc_keyset_pagination_bulk",
+    "file": "R/chemi_amos_analytical_qc_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_batch": {
+    "name": "chemi_amos_batch",
+    "file": "R/chemi_amos_batch.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_by_text": {
+    "name": "chemi_amos_by_text",
+    "file": "R/chemi_amos_by_text.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_count_substances_in_ids": {
+    "name": "chemi_amos_count_substances_in_ids",
+    "file": "R/chemi_amos_count_substances_in_ids.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_database": {
+    "name": "chemi_amos_database",
+    "file": "R/chemi_amos_database.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/database_summary/"
+  },
+  "chemi_amos_dtxsids_from_functional_use": {
+    "name": "chemi_amos_dtxsids_from_functional_use",
+    "file": "R/chemi_amos_dtxsids_from_functional_use.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/dtxsids_from_functional_use/{functional_use}"
+  },
+  "chemi_amos_dtxsids": {
+    "name": "chemi_amos_dtxsids",
+    "file": "R/chemi_amos_dtxsids.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_entropy_similarity": {
+    "name": "chemi_amos_entropy_similarity",
+    "file": "R/chemi_amos_entropy_similarity.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_fact_sheet_keyset_pagination": {
+    "name": "chemi_amos_fact_sheet_keyset_pagination",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_fact_sheet_keyset_pagination_bulk": {
+    "name": "chemi_amos_fact_sheet_keyset_pagination_bulk",
+    "file": "R/chemi_amos_fact_sheet_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_find_dtxsids": {
+    "name": "chemi_amos_find_dtxsids",
+    "file": "R/chemi_amos_find_dtxsids.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/find_dtxsids/{internal_id}"
+  },
+  "chemi_amos_for_document_ids": {
+    "name": "chemi_amos_for_document_ids",
+    "file": "R/chemi_amos_for_document_ids.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_formula": {
+    "name": "chemi_amos_formula",
+    "file": "R/chemi_amos_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/formula_search/{formula}"
+  },
+  "chemi_amos_functional_class": {
+    "name": "chemi_amos_functional_class",
+    "file": "R/chemi_amos_functional_class.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/functional_class_search/{functional_class}"
+  },
+  "chemi_amos_functional_uses_for_dtxsid": {
+    "name": "chemi_amos_functional_uses_for_dtxsid",
+    "file": "R/chemi_amos_functional_uses_for_dtxsid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/functional_uses_for_dtxsid/{dtxsid}"
+  },
+  "chemi_amos_get_classification_for_dtxsid": {
+    "name": "chemi_amos_get_classification_for_dtxsid",
+    "file": "R/chemi_amos_get_classification_for_dtxsid.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_data_source_info": {
+    "name": "chemi_amos_get_data_source_info",
+    "file": "R/chemi_amos_get_data_source_info.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_fact_sheet_editor_info": {
+    "name": "chemi_amos_get_fact_sheet_editor_info",
+    "file": "R/chemi_amos_get_fact_sheet_editor_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_fact_sheet_editor_info/{internal_id}"
+  },
+  "chemi_amos_get_info_by_id": {
+    "name": "chemi_amos_get_info_by_id",
+    "file": "R/chemi_amos_get_info_by_id.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_ir_spectrum": {
+    "name": "chemi_amos_get_ir_spectrum",
+    "file": "R/chemi_amos_get_ir_spectrum.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_mass_spectrum": {
+    "name": "chemi_amos_get_mass_spectrum",
+    "file": "R/chemi_amos_get_mass_spectrum.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_method_editor_info": {
+    "name": "chemi_amos_get_method_editor_info",
+    "file": "R/chemi_amos_get_method_editor_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_method_editor_info/{internal_id}"
+  },
+  "chemi_amos_get_ms_ready_methods": {
+    "name": "chemi_amos_get_ms_ready_methods",
+    "file": "R/chemi_amos_get_ms_ready_methods.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_ms_ready_methods/{inchikey}"
+  },
+  "chemi_amos_get_nmr_spectrum_editor_info": {
+    "name": "chemi_amos_get_nmr_spectrum_editor_info",
+    "file": "R/chemi_amos_get_nmr_spectrum_editor_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_nmr_spectrum_editor_info/{internal_id}"
+  },
+  "chemi_amos_get_nmr_spectrum": {
+    "name": "chemi_amos_get_nmr_spectrum",
+    "file": "R/chemi_amos_get_nmr_spectrum.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_pdf": {
+    "name": "chemi_amos_get_pdf",
+    "file": "R/chemi_amos_get_pdf.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_product_declaration_editor_info": {
+    "name": "chemi_amos_get_product_declaration_editor_info",
+    "file": "R/chemi_amos_get_product_declaration_editor_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_product_declaration_editor_info/{internal_id}"
+  },
+  "chemi_amos_get_safety_data_sheet_editor_info": {
+    "name": "chemi_amos_get_safety_data_sheet_editor_info",
+    "file": "R/chemi_amos_get_safety_data_sheet_editor_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_safety_data_sheet_editor_info/{internal_id}"
+  },
+  "chemi_amos_get_similar_structures": {
+    "name": "chemi_amos_get_similar_structures",
+    "file": "R/chemi_amos_get_similar_structures.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_get_substances_for_term": {
+    "name": "chemi_amos_get_substances_for_term",
+    "file": "R/chemi_amos_get_substances_for_term.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/get_substances_for_search_term/{search_term}"
+  },
+  "chemi_amos_inchikey_first_block": {
+    "name": "chemi_amos_inchikey_first_block",
+    "file": "R/chemi_amos_inchikey_first_block.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/inchikey_first_block_search/{first_block}"
+  },
+  "chemi_amos_list_fact_sheet_types": {
+    "name": "chemi_amos_list_fact_sheet_types",
+    "file": "R/chemi_amos_list_fact_sheet_types.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/list_fact_sheet_types/"
+  },
+  "chemi_amos_list_functional_classes": {
+    "name": "chemi_amos_list_functional_classes",
+    "file": "R/chemi_amos_list_functional_classes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/list_functional_classes"
+  },
+  "chemi_amos_list_sources_by_record_type": {
+    "name": "chemi_amos_list_sources_by_record_type",
+    "file": "R/chemi_amos_list_sources_by_record_type.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_mass_range": {
+    "name": "chemi_amos_mass_range",
+    "file": "R/chemi_amos_mass_range.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_mass_spectra_for_substances": {
+    "name": "chemi_amos_mass_spectra_for_substances",
+    "file": "R/chemi_amos_mass_spectra_for_substances.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_mass_spectrum_similarity": {
+    "name": "chemi_amos_mass_spectrum_similarity",
+    "file": "R/chemi_amos_mass_spectrum_similarity.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_max_similarity": {
+    "name": "chemi_amos_max_similarity",
+    "file": "R/chemi_amos_max_similarity.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_method_keyset_pagination": {
+    "name": "chemi_amos_method_keyset_pagination",
+    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_method_keyset_pagination_bulk": {
+    "name": "chemi_amos_method_keyset_pagination_bulk",
+    "file": "R/chemi_amos_method_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_method_with_spectra": {
+    "name": "chemi_amos_method_with_spectra",
+    "file": "R/chemi_amos_method_with_spectra.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_next_level_classification": {
+    "name": "chemi_amos_next_level_classification",
+    "file": "R/chemi_amos_next_level_classification.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_product_declaration_keyset_pagination": {
+    "name": "chemi_amos_product_declaration_keyset_pagination",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_product_declaration_keyset_pagination_bulk": {
+    "name": "chemi_amos_product_declaration_keyset_pagination_bulk",
+    "file": "R/chemi_amos_product_declaration_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_record_counts": {
+    "name": "chemi_amos_record_counts",
+    "file": "R/chemi_amos_record_counts.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_record_id": {
+    "name": "chemi_amos_record_id",
+    "file": "R/chemi_amos_record_id.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/record_id_search/{internal_id}"
+  },
+  "chemi_amos_record_ids_for_substance": {
+    "name": "chemi_amos_record_ids_for_substance",
+    "file": "R/chemi_amos_record_ids_for_substance.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_record_type_count": {
+    "name": "chemi_amos_record_type_count",
+    "file": "R/chemi_amos_record_type_count.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/record_type_count/{record_type}"
+  },
+  "chemi_amos_release_notes": {
+    "name": "chemi_amos_release_notes",
+    "file": "R/chemi_amos_release_notes.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_retrieve_fact_sheets": {
+    "name": "chemi_amos_retrieve_fact_sheets",
+    "file": "R/chemi_amos_retrieve_fact_sheets.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_retrieve_product_declarations": {
+    "name": "chemi_amos_retrieve_product_declarations",
+    "file": "R/chemi_amos_retrieve_product_declarations.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_retrieve_safety_data_sheets": {
+    "name": "chemi_amos_retrieve_safety_data_sheets",
+    "file": "R/chemi_amos_retrieve_safety_data_sheets.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_safety_data_sheet_keyset_pagination": {
+    "name": "chemi_amos_safety_data_sheet_keyset_pagination",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_safety_data_sheet_keyset_pagination_bulk": {
+    "name": "chemi_amos_safety_data_sheet_keyset_pagination_bulk",
+    "file": "R/chemi_amos_safety_data_sheet_keyset_pagination.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_spectral_entropy": {
+    "name": "chemi_amos_spectral_entropy",
+    "file": "R/chemi_amos_spectral_entropy.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_spectrum_count_for_methodology": {
+    "name": "chemi_amos_spectrum_count_for_methodology",
+    "file": "R/chemi_amos_spectrum_count_for_methodology.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_substances_for_classification": {
+    "name": "chemi_amos_substances_for_classification",
+    "file": "R/chemi_amos_substances_for_classification.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_substances_for_ids": {
+    "name": "chemi_amos_substances_for_ids",
+    "file": "R/chemi_amos_substances_for_ids.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_amos_substring": {
+    "name": "chemi_amos_substring",
+    "file": "R/chemi_amos_substring.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/substring_search/{substring}"
+  },
+  "chemi_amos": {
+    "name": "chemi_amos",
+    "file": "R/chemi_amos.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-amos-prod.json",
+    "key": "GET /api/amos/search/{dtxsid}"
+  },
+  "chemi_arn_cats": {
+    "name": "chemi_arn_cats",
+    "file": "R/chemi_arn_cats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_arn_cats_bulk": {
+    "name": "chemi_arn_cats_bulk",
+    "file": "R/chemi_arn_cats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_alias": {
+    "name": "chemi_chet_chemicals_alias",
+    "file": "R/chemi_chet_chemicals_alias.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_chemset": {
+    "name": "chemi_chet_chemicals_chemset",
+    "file": "R/chemi_chet_chemicals_chemset.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_counts": {
+    "name": "chemi_chet_chemicals_counts",
+    "file": "R/chemi_chet_chemicals_counts.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_database_old": {
+    "name": "chemi_chet_chemicals_database_old",
+    "file": "R/chemi_chet_chemicals_database_old.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /chemicals/database-old"
+  },
+  "chemi_chet_chemicals_database_stats": {
+    "name": "chemi_chet_chemicals_database_stats",
+    "file": "R/chemi_chet_chemicals_database_stats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_database": {
+    "name": "chemi_chet_chemicals_database",
+    "file": "R/chemi_chet_chemicals_database.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_image": {
+    "name": "chemi_chet_chemicals_image",
+    "file": "R/chemi_chet_chemicals_image.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_maps": {
+    "name": "chemi_chet_chemicals_maps",
+    "file": "R/chemi_chet_chemicals_maps.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_singlechemical": {
+    "name": "chemi_chet_chemicals_singlechemical",
+    "file": "R/chemi_chet_chemicals_singlechemical.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_suggest": {
+    "name": "chemi_chet_chemicals_suggest",
+    "file": "R/chemi_chet_chemicals_suggest.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_chemicals_verify": {
+    "name": "chemi_chet_chemicals_verify",
+    "file": "R/chemi_chet_chemicals_verify.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /chemicals/verify/{dtxsid}"
+  },
+  "chemi_chet_reaction_batchsearch": {
+    "name": "chemi_chet_reaction_batchsearch",
+    "file": "R/chemi_chet_reaction_batchsearch.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_database_old_by_pagenum_and_searchterm": {
+    "name": "chemi_chet_reaction_database_old_by_pagenum_and_searchterm",
+    "file": "R/chemi_chet_reaction_database_old_by_pagenum_and_searchterm.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_database_old": {
+    "name": "chemi_chet_reaction_database_old",
+    "file": "R/chemi_chet_reaction_database_old.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/database_old"
+  },
+  "chemi_chet_reaction_database_stats": {
+    "name": "chemi_chet_reaction_database_stats",
+    "file": "R/chemi_chet_reaction_database_stats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_database": {
+    "name": "chemi_chet_reaction_database",
+    "file": "R/chemi_chet_reaction_database.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_dbcounts": {
+    "name": "chemi_chet_reaction_dbcounts",
+    "file": "R/chemi_chet_reaction_dbcounts.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/dbcounts"
+  },
+  "chemi_chet_reaction_details": {
+    "name": "chemi_chet_reaction_details",
+    "file": "R/chemi_chet_reaction_details.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_libraries": {
+    "name": "chemi_chet_reaction_libraries",
+    "file": "R/chemi_chet_reaction_libraries.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/libraries"
+  },
+  "chemi_chet_reaction_mapid": {
+    "name": "chemi_chet_reaction_mapid",
+    "file": "R/chemi_chet_reaction_mapid.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_mappositions": {
+    "name": "chemi_chet_reaction_mappositions",
+    "file": "R/chemi_chet_reaction_mappositions.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/mappositions/{map_id}"
+  },
+  "chemi_chet_reaction_maps": {
+    "name": "chemi_chet_reaction_maps",
+    "file": "R/chemi_chet_reaction_maps.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-chet-prod.json",
+    "key": "GET /reaction/maps"
+  },
+  "chemi_chet_reaction_react_maps": {
+    "name": "chemi_chet_reaction_react_maps",
+    "file": "R/chemi_chet_reaction_react_maps.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_reactionmap": {
+    "name": "chemi_chet_reaction_reactionmap",
+    "file": "R/chemi_chet_reaction_reactionmap.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_searchcounts": {
+    "name": "chemi_chet_reaction_searchcounts",
+    "file": "R/chemi_chet_reaction_searchcounts.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_singlereaction": {
+    "name": "chemi_chet_reaction_singlereaction",
+    "file": "R/chemi_chet_reaction_singlereaction.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction_table": {
+    "name": "chemi_chet_reaction_table",
+    "file": "R/chemi_chet_reaction_table.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_chet_reaction": {
+    "name": "chemi_chet_reaction",
+    "file": "R/chemi_chet_reaction.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_classyfire": {
+    "name": "chemi_classyfire",
+    "file": "R/chemi_classyfire.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_descriptors": {
+    "name": "chemi_descriptors",
+    "file": "R/chemi_descriptors.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_descriptors_bulk": {
+    "name": "chemi_descriptors_bulk",
+    "file": "R/chemi_descriptors.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_functional_use": {
+    "name": "chemi_functional_use",
+    "file": "R/chemi_functional_use.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_hazard": {
+    "name": "chemi_hazard",
+    "file": "R/chemi_hazard.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_hazard_bulk": {
+    "name": "chemi_hazard_bulk",
+    "file": "R/chemi_hazard.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_mordred": {
+    "name": "chemi_mordred",
+    "file": "R/chemi_mordred.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_mordred_bulk": {
+    "name": "chemi_mordred_bulk",
+    "file": "R/chemi_mordred.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_ncc_cats": {
+    "name": "chemi_ncc_cats",
+    "file": "R/chemi_ncc_cats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_ncc_cats_bulk": {
+    "name": "chemi_ncc_cats_bulk",
+    "file": "R/chemi_ncc_cats.R",
+    "status": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "schema": "chemi-ncc_cats-prod.json",
+    "key": "POST /api/ncc_cats"
+  },
+  "chemi_opera_report": {
+    "name": "chemi_opera_report",
+    "file": "R/chemi_opera_report.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_opera": {
+    "name": "chemi_opera",
+    "file": "R/chemi_opera.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_opera_bulk": {
+    "name": "chemi_opera_bulk",
+    "file": "R/chemi_opera.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_padel": {
+    "name": "chemi_padel",
+    "file": "R/chemi_padel.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_padel_bulk": {
+    "name": "chemi_padel_bulk",
+    "file": "R/chemi_padel.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_pfas_atlas": {
+    "name": "chemi_pfas_atlas",
+    "file": "R/chemi_pfas_atlas.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_pfas_atlas_bulk": {
+    "name": "chemi_pfas_atlas_bulk",
+    "file": "R/chemi_pfas_atlas.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_pfas_cats": {
+    "name": "chemi_pfas_cats",
+    "file": "R/chemi_pfas_cats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_pfas_cats_bulk": {
+    "name": "chemi_pfas_cats_bulk",
+    "file": "R/chemi_pfas_cats.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_predict": {
+    "name": "chemi_predict",
+    "file": "R/chemi_predict.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_predictor_models_predict": {
+    "name": "chemi_predictor_models_predict",
+    "file": "R/chemi_predictor_models_predict.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_predictor_models_predict_bulk": {
+    "name": "chemi_predictor_models_predict_bulk",
+    "file": "R/chemi_predictor_models_predict.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_rdkit": {
+    "name": "chemi_rdkit",
+    "file": "R/chemi_rdkit.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_rdkit_bulk": {
+    "name": "chemi_rdkit_bulk",
+    "file": "R/chemi_rdkit.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_ccte_list": {
+    "name": "chemi_resolver_ccte_list",
+    "file": "R/chemi_resolver_ccte_list.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_ccte_lists": {
+    "name": "chemi_resolver_ccte_lists",
+    "file": "R/chemi_resolver_ccte_lists.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/ccte-lists"
+  },
+  "chemi_resolver_classyfire": {
+    "name": "chemi_resolver_classyfire",
+    "file": "R/chemi_resolver_classyfire.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getallannotations": {
+    "name": "chemi_resolver_getallannotations",
+    "file": "R/chemi_resolver_getallannotations.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/getallannotations"
+  },
+  "chemi_resolver_getannotation": {
+    "name": "chemi_resolver_getannotation",
+    "file": "R/chemi_resolver_getannotation.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getannotationslist": {
+    "name": "chemi_resolver_getannotationslist",
+    "file": "R/chemi_resolver_getannotationslist.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getdatasources": {
+    "name": "chemi_resolver_getdatasources",
+    "file": "R/chemi_resolver_getdatasources.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/getdatasources"
+  },
+  "chemi_resolver_getpubchemlist": {
+    "name": "chemi_resolver_getpubchemlist",
+    "file": "R/chemi_resolver_getpubchemlist.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getsimilaritylist": {
+    "name": "chemi_resolver_getsimilaritylist",
+    "file": "R/chemi_resolver_getsimilaritylist.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getsimilaritymap": {
+    "name": "chemi_resolver_getsimilaritymap",
+    "file": "R/chemi_resolver_getsimilaritymap.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_getsubstance": {
+    "name": "chemi_resolver_getsubstance",
+    "file": "R/chemi_resolver_getsubstance.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_ghs_classes": {
+    "name": "chemi_resolver_ghs_classes",
+    "file": "R/chemi_resolver_ghs_classes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/ghs/classes"
+  },
+  "chemi_resolver_ghs_hcodes": {
+    "name": "chemi_resolver_ghs_hcodes",
+    "file": "R/chemi_resolver_ghs_hcodes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/ghs/hcodes"
+  },
+  "chemi_resolver_ghs_list_count": {
+    "name": "chemi_resolver_ghs_list_count",
+    "file": "R/chemi_resolver_ghs_list_count.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_ghs_list": {
+    "name": "chemi_resolver_ghs_list",
+    "file": "R/chemi_resolver_ghs_list.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_ghs_pcodes": {
+    "name": "chemi_resolver_ghs_pcodes",
+    "file": "R/chemi_resolver_ghs_pcodes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/ghs/pcodes"
+  },
+  "chemi_resolver_hcodes": {
+    "name": "chemi_resolver_hcodes",
+    "file": "R/chemi_resolver_hcodes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-resolver-prod.json",
+    "key": "GET /api/resolver/hcodes"
+  },
+  "chemi_resolver_links": {
+    "name": "chemi_resolver_links",
+    "file": "R/chemi_resolver_links.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_lookup": {
+    "name": "chemi_resolver_lookup",
+    "file": "R/chemi_resolver_lookup.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_lookup_bulk": {
+    "name": "chemi_resolver_lookup_bulk",
+    "file": "R/chemi_resolver_lookup.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_lookupCASRN": {
+    "name": "chemi_resolver_lookupCASRN",
+    "file": "R/chemi_resolver_lookupCASRN.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_mesh": {
+    "name": "chemi_resolver_mesh",
+    "file": "R/chemi_resolver_mesh.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_orderBySimilarity": {
+    "name": "chemi_resolver_orderBySimilarity",
+    "file": "R/chemi_resolver_orderBySimilarity.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_pubchem_section": {
+    "name": "chemi_resolver_pubchem_section",
+    "file": "R/chemi_resolver_pubchem_section.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_pubchem_section_bulk": {
+    "name": "chemi_resolver_pubchem_section_bulk",
+    "file": "R/chemi_resolver_pubchem_section.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_resolve": {
+    "name": "chemi_resolver_resolve",
+    "file": "R/chemi_resolver_resolve.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_safety_flags": {
+    "name": "chemi_resolver_safety_flags",
+    "file": "R/chemi_resolver_safety_flags.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_resolver_safety_flags_bulk": {
+    "name": "chemi_resolver_safety_flags_bulk",
+    "file": "R/chemi_resolver_safety_flags.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_safety_rqcodes": {
+    "name": "chemi_safety_rqcodes",
+    "file": "R/chemi_safety_rqcodes.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_safety_section": {
+    "name": "chemi_safety_section",
+    "file": "R/chemi_safety_sections.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_search_exact": {
+    "name": "chemi_search_exact",
+    "file": "R/chemi_search_exact.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_search_gethazard": {
+    "name": "chemi_search_gethazard",
+    "file": "R/chemi_search_gethazard.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_search_similar": {
+    "name": "chemi_search_similar",
+    "file": "R/chemi_search_similar.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_search_substructure": {
+    "name": "chemi_search_substructure",
+    "file": "R/chemi_search_substructure.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_search": {
+    "name": "chemi_search",
+    "file": "R/chemi_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_services_cim_component_info": {
+    "name": "chemi_services_cim_component_info",
+    "file": "R/chemi_services_cim_component_info.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-services-prod.json",
+    "key": "GET /api/services/cim_component_info"
+  },
+  "chemi_services_collated_report": {
+    "name": "chemi_services_collated_report",
+    "file": "R/chemi_services_collated_report.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_services_convert": {
+    "name": "chemi_services_convert",
+    "file": "R/chemi_services_convert.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_services_layout": {
+    "name": "chemi_services_layout",
+    "file": "R/chemi_services_layout.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_services_release_notes": {
+    "name": "chemi_services_release_notes",
+    "file": "R/chemi_services_release_notes.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-services-prod.json",
+    "key": "GET /api/services/release_notes"
+  },
+  "chemi_services_smirks2rxn": {
+    "name": "chemi_services_smirks2rxn",
+    "file": "R/chemi_services_smirks2rxn.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_chemicals": {
+    "name": "chemi_stdizer_chemicals",
+    "file": "R/chemi_stdizer_chemicals.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_groups_by_id": {
+    "name": "chemi_stdizer_groups_by_id",
+    "file": "R/chemi_stdizer_groups_by_id.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "GET /api/stdizer/groups/{id}"
+  },
+  "chemi_stdizer_groups_recursive": {
+    "name": "chemi_stdizer_groups_recursive",
+    "file": "R/chemi_stdizer_groups_recursive.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_groups": {
+    "name": "chemi_stdizer_groups",
+    "file": "R/chemi_stdizer_groups.R",
+    "status": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "GET /api/stdizer/groups"
+  },
+  "chemi_stdizer_groups_bulk": {
+    "name": "chemi_stdizer_groups_bulk",
+    "file": "R/chemi_stdizer_groups.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_operations": {
+    "name": "chemi_stdizer_operations",
+    "file": "R/chemi_stdizer_operations.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "GET /api/stdizer/operations"
+  },
+  "chemi_stdizer_records": {
+    "name": "chemi_stdizer_records",
+    "file": "R/chemi_stdizer_records.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_workflows": {
+    "name": "chemi_stdizer_workflows",
+    "file": "R/chemi_stdizer_workflows.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-stdizer-prod.json",
+    "key": "GET /api/stdizer/workflows"
+  },
+  "chemi_stdizer": {
+    "name": "chemi_stdizer",
+    "file": "R/chemi_stdizer.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_stdizer_bulk": {
+    "name": "chemi_stdizer_bulk",
+    "file": "R/chemi_stdizer.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprint": {
+    "name": "chemi_toxprint",
+    "file": "R/chemi_toxprint.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_assays_by_name": {
+    "name": "chemi_toxprints_assays_by_name",
+    "file": "R/chemi_toxprints_assays_by_name.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "GET /api/toxprints/assays/{name}"
+  },
+  "chemi_toxprints_assays_check": {
+    "name": "chemi_toxprints_assays_check",
+    "file": "R/chemi_toxprints_assays_check.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_assays": {
+    "name": "chemi_toxprints_assays",
+    "file": "R/chemi_toxprints_assays.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_assays_bulk": {
+    "name": "chemi_toxprints_assays_bulk",
+    "file": "R/chemi_toxprints_assays.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_calculate": {
+    "name": "chemi_toxprints_calculate",
+    "file": "R/chemi_toxprints_calculate.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_calculate_bulk": {
+    "name": "chemi_toxprints_calculate_bulk",
+    "file": "R/chemi_toxprints_calculate.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_chemicals_categories": {
+    "name": "chemi_toxprints_chemicals_categories",
+    "file": "R/chemi_toxprints_chemicals_categories.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/chemicals_categories"
+  },
+  "chemi_toxprints_enrichments": {
+    "name": "chemi_toxprints_enrichments",
+    "file": "R/chemi_toxprints_enrichments.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "GET /api/toxprints/enrichments"
+  },
+  "chemi_toxprints_global_assays": {
+    "name": "chemi_toxprints_global_assays",
+    "file": "R/chemi_toxprints_global_assays.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_global_toxprints": {
+    "name": "chemi_toxprints_global_toxprints",
+    "file": "R/chemi_toxprints_global_toxprints.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_toxprints_categories": {
+    "name": "chemi_toxprints_toxprints_categories",
+    "file": "R/chemi_toxprints_toxprints_categories.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints/toxprints_categories"
+  },
+  "chemi_toxprints_toxprints": {
+    "name": "chemi_toxprints_toxprints",
+    "file": "R/chemi_toxprints_toxprints.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints": {
+    "name": "chemi_toxprints",
+    "file": "R/chemi_toxprints.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "chemi_toxprints_bulk": {
+    "name": "chemi_toxprints_bulk",
+    "file": "R/chemi_toxprints.R",
+    "status": "retained",
+    "reason": "Inseparable grouped file contains a retained or unaccounted definition",
+    "schema": "chemi-toxprints-prod.json",
+    "key": "POST /api/toxprints"
+  },
+  "chemi_webtest_predict": {
+    "name": "chemi_webtest_predict",
+    "file": "R/chemi_webtest_predict.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_webtest_predict_bulk": {
+    "name": "chemi_webtest_predict_bulk",
+    "file": "R/chemi_webtest_predict.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_webtest": {
+    "name": "chemi_webtest",
+    "file": "R/chemi_webtest.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "chemi_webtest_bulk": {
+    "name": "chemi_webtest_bulk",
+    "file": "R/chemi_webtest.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "ct_api_key": {
+    "name": "ct_api_key",
+    "file": "R/ct_api_key.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_analyticalqc_search": {
+    "name": "ct_bioactivity_analyticalqc_search",
+    "file": "R/ct_bioactivity_analyticalqc_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_aop_search_by_entrez_gene_id": {
+    "name": "ct_bioactivity_aop_search_by_entrez_gene_id",
+    "file": "R/ct_bioactivity_aop_search_by_entrez_gene_id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_aop_search_by_event_number": {
+    "name": "ct_bioactivity_aop_search_by_event_number",
+    "file": "R/ct_bioactivity_aop_search_by_event_number.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_aop_search_by_toxcast_aeid": {
+    "name": "ct_bioactivity_aop_search_by_toxcast_aeid",
+    "file": "R/ct_bioactivity_aop_search_by_toxcast_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_chemicals_search_by_aeid": {
+    "name": "ct_bioactivity_assay_chemicals_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_chemicals_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_count": {
+    "name": "ct_bioactivity_assay_count",
+    "file": "R/ct_bioactivity_assay_count.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_search_by_aeid_bulk": {
+    "name": "ct_bioactivity_assay_search_by_aeid_bulk",
+    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_search_by_aeid": {
+    "name": "ct_bioactivity_assay_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_search_by_endpoint": {
+    "name": "ct_bioactivity_assay_search_by_endpoint",
+    "file": "R/ct_bioactivity_assay_search_by_endpoint.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_search_by_gene": {
+    "name": "ct_bioactivity_assay_search_by_gene",
+    "file": "R/ct_bioactivity_assay_search_by_gene.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay_single_conc_search_by_aeid": {
+    "name": "ct_bioactivity_assay_single_conc_search_by_aeid",
+    "file": "R/ct_bioactivity_assay_single_conc_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_assay": {
+    "name": "ct_bioactivity_assay",
+    "file": "R/ct_bioactivity_assay.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_aed_search_bulk": {
+    "name": "ct_bioactivity_data_aed_search_bulk",
+    "file": "R/ct_bioactivity_data_aed_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_aed_search": {
+    "name": "ct_bioactivity_data_aed_search",
+    "file": "R/ct_bioactivity_data_aed_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_aeid_bulk": {
+    "name": "ct_bioactivity_data_search_by_aeid_bulk",
+    "file": "R/ct_bioactivity_data_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_aeid": {
+    "name": "ct_bioactivity_data_search_by_aeid",
+    "file": "R/ct_bioactivity_data_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_dtxsid": {
+    "name": "ct_bioactivity_data_search_by_dtxsid",
+    "file": "R/ct_bioactivity_data_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_m4id_bulk": {
+    "name": "ct_bioactivity_data_search_by_m4id_bulk",
+    "file": "R/ct_bioactivity_data_search_by_m4id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_m4id": {
+    "name": "ct_bioactivity_data_search_by_m4id",
+    "file": "R/ct_bioactivity_data_search_by_m4id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_spid_bulk": {
+    "name": "ct_bioactivity_data_search_by_spid_bulk",
+    "file": "R/ct_bioactivity_data_search_by_spid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_spid": {
+    "name": "ct_bioactivity_data_search_by_spid",
+    "file": "R/ct_bioactivity_data_search_by_spid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_by_tissue": {
+    "name": "ct_bioactivity_data_search_by_tissue",
+    "file": "R/ct_bioactivity_data_search_by_tissue.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_search_bulk": {
+    "name": "ct_bioactivity_data_search_bulk",
+    "file": "R/ct_bioactivity_data_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_summary_search_by_aeid": {
+    "name": "ct_bioactivity_data_summary_search_by_aeid",
+    "file": "R/ct_bioactivity_data_summary_search_by_aeid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_data_summary_search_by_dtxsid": {
+    "name": "ct_bioactivity_data_summary_search_by_dtxsid",
+    "file": "R/ct_bioactivity_data_summary_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_models_search_by_dtxsid": {
+    "name": "ct_bioactivity_models_search_by_dtxsid",
+    "file": "R/ct_bioactivity_models_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_models_search": {
+    "name": "ct_bioactivity_models_search",
+    "file": "R/ct_bioactivity_models_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_search_contain": {
+    "name": "ct_bioactivity_search_contain",
+    "file": "R/ct_bioactivity_search_contain.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_search_equal": {
+    "name": "ct_bioactivity_search_equal",
+    "file": "R/ct_bioactivity_search_equal.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_bioactivity_search_start_with": {
+    "name": "ct_bioactivity_search_start_with",
+    "file": "R/ct_bioactivity_search_start_with.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_count_by_exact_formula": {
+    "name": "ct_chemical_count_by_exact_formula",
+    "file": "R/ct_chemical_count_by_exact_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/count/by-exact-formula/{formula}"
+  },
+  "ct_chemical_count_by_msready_formula": {
+    "name": "ct_chemical_count_by_msready_formula",
+    "file": "R/ct_chemical_count_by_msready_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/count/by-msready-formula/{formula}"
+  },
+  "ct_chemical_detail_search_by_dtxcid_bulk": {
+    "name": "ct_chemical_detail_search_by_dtxcid_bulk",
+    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_detail_search_by_dtxcid": {
+    "name": "ct_chemical_detail_search_by_dtxcid",
+    "file": "R/ct_chemical_detail_search_by_dtxcid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_detail_search_by_smiles": {
+    "name": "ct_chemical_detail_search_by_smiles",
+    "file": "R/ct_chemical_detail_search_by_smiles.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_detail_search_bulk": {
+    "name": "ct_chemical_detail_search_bulk",
+    "file": "R/ct_chemical_detail_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_detail_search": {
+    "name": "ct_chemical_detail_search",
+    "file": "R/ct_chemical_detail_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_extra_data_search_bulk": {
+    "name": "ct_chemical_extra_data_search_bulk",
+    "file": "R/ct_chemical_extra_data_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "POST /chemical/extra-data/search/by-dtxsid/"
+  },
+  "ct_chemical_extra_data_search": {
+    "name": "ct_chemical_extra_data_search",
+    "file": "R/ct_chemical_extra_data_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/extra-data/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_chemical_fate_experimental_search": {
+    "name": "ct_chemical_fate_experimental_search",
+    "file": "R/ct_chemical_fate_experimental_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_fate_predicted_search": {
+    "name": "ct_chemical_fate_predicted_search",
+    "file": "R/ct_chemical_fate_predicted_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_fate_search_by_dtxsid": {
+    "name": "ct_chemical_fate_search_by_dtxsid",
+    "file": "R/ct_chemical_fate_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_fate_search_bulk": {
+    "name": "ct_chemical_fate_search_bulk",
+    "file": "R/ct_chemical_fate_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_fate_summary_search_by_dtxsid": {
+    "name": "ct_chemical_fate_summary_search_by_dtxsid",
+    "file": "R/ct_chemical_fate_summary_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_fate_summary_search": {
+    "name": "ct_chemical_fate_summary_search",
+    "file": "R/ct_chemical_fate_summary_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_file_image_search_by_dtxcid": {
+    "name": "ct_chemical_file_image_search_by_dtxcid",
+    "file": "R/ct_chemical_file_image_search_by_dtxcid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/file/image/search/by-dtxcid/{dtxcid}"
+  },
+  "ct_chemical_file_image_search_by_gsid": {
+    "name": "ct_chemical_file_image_search_by_gsid",
+    "file": "R/ct_chemical_file_image_search_by_gsid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/file/image/search/by-gsid/{gsid}"
+  },
+  "ct_chemical_file_image_search": {
+    "name": "ct_chemical_file_image_search",
+    "file": "R/ct_chemical_file_image_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/file/image/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_chemical_file_mol_search_by_dtxcid": {
+    "name": "ct_chemical_file_mol_search_by_dtxcid",
+    "file": "R/ct_chemical_file_mol_search_by_dtxcid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/file/mol/search/by-dtxcid/{dtxcid}"
+  },
+  "ct_chemical_file_mol_search": {
+    "name": "ct_chemical_file_mol_search",
+    "file": "R/ct_chemical_file_mol_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/file/mol/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_chemical_list_all": {
+    "name": "ct_chemical_list_all",
+    "file": "R/ct_chemical_list_all.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_chemicals_search_by_listname": {
+    "name": "ct_chemical_list_chemicals_search_by_listname",
+    "file": "R/ct_chemical_list_chemicals_search_by_listname.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_chemicals_search_contain": {
+    "name": "ct_chemical_list_chemicals_search_contain",
+    "file": "R/ct_chemical_list_chemicals_search_contain.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_chemicals_search_equal": {
+    "name": "ct_chemical_list_chemicals_search_equal",
+    "file": "R/ct_chemical_list_chemicals_search_equal.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_chemicals_search_start_with": {
+    "name": "ct_chemical_list_chemicals_search_start_with",
+    "file": "R/ct_chemical_list_chemicals_search_start_with.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_search_by_name": {
+    "name": "ct_chemical_list_search_by_name",
+    "file": "R/ct_chemical_list_search_by_name.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_search_by_type": {
+    "name": "ct_chemical_list_search_by_type",
+    "file": "R/ct_chemical_list_search_by_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_search": {
+    "name": "ct_chemical_list_search",
+    "file": "R/ct_chemical_list_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_list_type": {
+    "name": "ct_chemical_list_type",
+    "file": "R/ct_chemical_list_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_msready_search_by_dtxcid_bulk": {
+    "name": "ct_chemical_msready_search_by_dtxcid_bulk",
+    "file": "R/ct_chemical_msready_search_by_dtxcid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "POST /chemical/msready/search/by-dtxcid/"
+  },
+  "ct_chemical_msready_search_by_dtxcid": {
+    "name": "ct_chemical_msready_search_by_dtxcid",
+    "file": "R/ct_chemical_msready_search_by_dtxcid.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/msready/search/by-dtxcid/{dtxcid}"
+  },
+  "ct_chemical_msready_search_by_formula": {
+    "name": "ct_chemical_msready_search_by_formula",
+    "file": "R/ct_chemical_msready_search_by_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/msready/search/by-formula/{formula}"
+  },
+  "ct_chemical_msready_search_by_mass_bulk": {
+    "name": "ct_chemical_msready_search_by_mass_bulk",
+    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_msready_search_by_mass": {
+    "name": "ct_chemical_msready_search_by_mass",
+    "file": "R/ct_chemical_msready_search_by_mass.R",
+    "status": "retained",
+    "reason": "No unique supported schema/method/path match; no route guessed",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_experimental_name": {
+    "name": "ct_chemical_property_experimental_name",
+    "file": "R/ct_chemical_property_experimental_name.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_experimental_search_by_dtxsid": {
+    "name": "ct_chemical_property_experimental_search_by_dtxsid",
+    "file": "R/ct_chemical_property_experimental_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_experimental_search_by_range": {
+    "name": "ct_chemical_property_experimental_search_by_range",
+    "file": "R/ct_chemical_property_experimental_search_by_range.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_experimental_search_bulk": {
+    "name": "ct_chemical_property_experimental_search_bulk",
+    "file": "R/ct_chemical_property_experimental_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_predicted_name": {
+    "name": "ct_chemical_property_predicted_name",
+    "file": "R/ct_chemical_property_predicted_name.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_predicted_search_by_dtxsid": {
+    "name": "ct_chemical_property_predicted_search_by_dtxsid",
+    "file": "R/ct_chemical_property_predicted_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_predicted_search_by_range": {
+    "name": "ct_chemical_property_predicted_search_by_range",
+    "file": "R/ct_chemical_property_predicted_search_by_range.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_predicted_search_bulk": {
+    "name": "ct_chemical_property_predicted_search_bulk",
+    "file": "R/ct_chemical_property_predicted_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_summary_experimental_search": {
+    "name": "ct_chemical_property_summary_experimental_search",
+    "file": "R/ct_chemical_property_summary_experimental_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_summary_predicted_search": {
+    "name": "ct_chemical_property_summary_predicted_search",
+    "file": "R/ct_chemical_property_summary_predicted_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_summary_search_by_dtxsid": {
+    "name": "ct_chemical_property_summary_search_by_dtxsid",
+    "file": "R/ct_chemical_property_summary_search_by_dtxsid.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_property_summary_search": {
+    "name": "ct_chemical_property_summary_search",
+    "file": "R/ct_chemical_property_summary_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_search_by_exact_formula": {
+    "name": "ct_chemical_search_by_exact_formula",
+    "file": "R/ct_chemical_search_by_exact_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/search/by-exact-formula/{formula}"
+  },
+  "ct_chemical_search_by_msready_formula_bulk": {
+    "name": "ct_chemical_search_by_msready_formula_bulk",
+    "file": "R/ct_chemical_search_by_msready_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "POST /chemical/search/by-msready-formula/"
+  },
+  "ct_chemical_search_by_msready_formula": {
+    "name": "ct_chemical_search_by_msready_formula",
+    "file": "R/ct_chemical_search_by_msready_formula.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/search/by-msready-formula/{formula}"
+  },
+  "ct_chemical_search_contain": {
+    "name": "ct_chemical_search_contain",
+    "file": "R/ct_chemical_search_contain.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/search/contain/{word}"
+  },
+  "ct_chemical_search_equal_bulk": {
+    "name": "ct_chemical_search_equal_bulk",
+    "file": "R/ct_chemical_search_equal.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_search_equal": {
+    "name": "ct_chemical_search_equal",
+    "file": "R/ct_chemical_search_equal.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_chemical_search_start_with": {
+    "name": "ct_chemical_search_start_with",
+    "file": "R/ct_chemical_search_start_with.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/search/start-with/{word}"
+  },
+  "ct_chemical_synonym_search_bulk": {
+    "name": "ct_chemical_synonym_search_bulk",
+    "file": "R/ct_chemical_synonym_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "POST /chemical/synonym/search/by-dtxsid/"
+  },
+  "ct_chemical_synonym_search": {
+    "name": "ct_chemical_synonym_search",
+    "file": "R/ct_chemical_synonym_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-chemical-prod.json",
+    "key": "GET /chemical/synonym/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_classify": {
+    "name": "ct_classify",
+    "file": "R/ct_classify.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_ccd_chem_weight_fractions_search": {
+    "name": "ct_exposure_ccd_chem_weight_fractions_search",
+    "file": "R/ct_exposure_ccd_chem_weight_fractions_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/chem-weight-fractions/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_ccd_functional_use_search": {
+    "name": "ct_exposure_ccd_functional_use_search",
+    "file": "R/ct_exposure_ccd_functional_use_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/functional-use/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_ccd_keywords_search": {
+    "name": "ct_exposure_ccd_keywords_search",
+    "file": "R/ct_exposure_ccd_keywords_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/keywords/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_ccd_monitoring_data_search": {
+    "name": "ct_exposure_ccd_monitoring_data_search",
+    "file": "R/ct_exposure_ccd_monitoring_data_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/monitoring-data/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_ccd_production_volume_search": {
+    "name": "ct_exposure_ccd_production_volume_search",
+    "file": "R/ct_exposure_ccd_production_volume_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/production-volume/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_ccd_puc_search": {
+    "name": "ct_exposure_ccd_puc_search",
+    "file": "R/ct_exposure_ccd_puc_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/ccd/puc/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_functional_use_category": {
+    "name": "ct_exposure_functional_use_category",
+    "file": "R/ct_exposure_functional_use_category.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_functional_use_probability_search": {
+    "name": "ct_exposure_functional_use_probability_search",
+    "file": "R/ct_exposure_functional_use_probability_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_functional_use_search_bulk": {
+    "name": "ct_exposure_functional_use_search_bulk",
+    "file": "R/ct_exposure_functional_use_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_functional_use_search": {
+    "name": "ct_exposure_functional_use_search",
+    "file": "R/ct_exposure_functional_use_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_httk_search_bulk": {
+    "name": "ct_exposure_httk_search_bulk",
+    "file": "R/ct_exposure_httk_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "POST /exposure/httk/search/by-dtxsid/"
+  },
+  "ct_exposure_httk_search": {
+    "name": "ct_exposure_httk_search",
+    "file": "R/ct_exposure_httk_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/httk/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_list_presence_search_bulk": {
+    "name": "ct_exposure_list_presence_search_bulk",
+    "file": "R/ct_exposure_list_presence_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "POST /exposure/list-presence/search/by-dtxsid/"
+  },
+  "ct_exposure_list_presence_search": {
+    "name": "ct_exposure_list_presence_search",
+    "file": "R/ct_exposure_list_presence_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/list-presence/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_list_presence_tags": {
+    "name": "ct_exposure_list_presence_tags",
+    "file": "R/ct_exposure_list_presence_tags.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/list-presence/tags"
+  },
+  "ct_exposure_mmdb_aggregate_by_medium": {
+    "name": "ct_exposure_mmdb_aggregate_by_medium",
+    "file": "R/ct_exposure_mmdb_aggregate_by_medium.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/mmdb/aggregate/by-medium"
+  },
+  "ct_exposure_mmdb_aggregate": {
+    "name": "ct_exposure_mmdb_aggregate",
+    "file": "R/ct_exposure_mmdb_aggregate.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/mmdb/aggregate/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_mmdb_mediums": {
+    "name": "ct_exposure_mmdb_mediums",
+    "file": "R/ct_exposure_mmdb_mediums.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/mmdb/mediums"
+  },
+  "ct_exposure_mmdb_single_sample_by_medium": {
+    "name": "ct_exposure_mmdb_single_sample_by_medium",
+    "file": "R/ct_exposure_mmdb_single_sample_by_medium.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/mmdb/single-sample/by-medium"
+  },
+  "ct_exposure_mmdb_single_sample": {
+    "name": "ct_exposure_mmdb_single_sample",
+    "file": "R/ct_exposure_mmdb_single_sample.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/mmdb/single-sample/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_product_data_puc": {
+    "name": "ct_exposure_product_data_puc",
+    "file": "R/ct_exposure_product_data_puc.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/product-data/puc"
+  },
+  "ct_exposure_product_data_search_bulk": {
+    "name": "ct_exposure_product_data_search_bulk",
+    "file": "R/ct_exposure_product_data_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "POST /exposure/product-data/search/by-dtxsid/"
+  },
+  "ct_exposure_product_data_search": {
+    "name": "ct_exposure_product_data_search",
+    "file": "R/ct_exposure_product_data_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/product-data/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_exposure_seem_demographic_search_bulk": {
+    "name": "ct_exposure_seem_demographic_search_bulk",
+    "file": "R/ct_exposure_seem_demographic_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_seem_demographic_search": {
+    "name": "ct_exposure_seem_demographic_search",
+    "file": "R/ct_exposure_seem_demographic_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_exposure_seem_general_search_bulk": {
+    "name": "ct_exposure_seem_general_search_bulk",
+    "file": "R/ct_exposure_seem_general_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "POST /exposure/seem/general/search/by-dtxsid/"
+  },
+  "ct_exposure_seem_general_search": {
+    "name": "ct_exposure_seem_general_search",
+    "file": "R/ct_exposure_seem_general_search.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "ctx-exposure-prod.json",
+    "key": "GET /exposure/seem/general/search/by-dtxsid/{dtxsid}"
+  },
+  "ct_hazard_adme_ivive_search": {
+    "name": "ct_hazard_adme_ivive_search",
+    "file": "R/ct_hazard_adme_ivive_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_cancer_search_bulk": {
+    "name": "ct_hazard_cancer_search_bulk",
+    "file": "R/ct_hazard_cancer_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_cancer_search": {
+    "name": "ct_hazard_cancer_search",
+    "file": "R/ct_hazard_cancer_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_genetox_details_search_bulk": {
+    "name": "ct_hazard_genetox_details_search_bulk",
+    "file": "R/ct_hazard_genetox_details_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_genetox_details_search": {
+    "name": "ct_hazard_genetox_details_search",
+    "file": "R/ct_hazard_genetox_details_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_genetox_search_bulk": {
+    "name": "ct_hazard_genetox_search_bulk",
+    "file": "R/ct_hazard_genetox_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_genetox_search": {
+    "name": "ct_hazard_genetox_search",
+    "file": "R/ct_hazard_genetox_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_hawc_search": {
+    "name": "ct_hazard_hawc_search",
+    "file": "R/ct_hazard_hawc_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_iris_search": {
+    "name": "ct_hazard_iris_search",
+    "file": "R/ct_hazard_iris_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_pprtv_search": {
+    "name": "ct_hazard_pprtv_search",
+    "file": "R/ct_hazard_pprtv_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_skin_eye_search_bulk": {
+    "name": "ct_hazard_skin_eye_search_bulk",
+    "file": "R/ct_hazard_skin_eye_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_skin_eye_search": {
+    "name": "ct_hazard_skin_eye_search",
+    "file": "R/ct_hazard_skin_eye_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_data_search_by_study_id": {
+    "name": "ct_hazard_toxref_data_search_by_study_id",
+    "file": "R/ct_hazard_toxref_data_search_by_study_id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_data_search_by_study_type": {
+    "name": "ct_hazard_toxref_data_search_by_study_type",
+    "file": "R/ct_hazard_toxref_data_search_by_study_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_data_search": {
+    "name": "ct_hazard_toxref_data_search",
+    "file": "R/ct_hazard_toxref_data_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_effects_search_by_study_id": {
+    "name": "ct_hazard_toxref_effects_search_by_study_id",
+    "file": "R/ct_hazard_toxref_effects_search_by_study_id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_effects_search_by_study_type": {
+    "name": "ct_hazard_toxref_effects_search_by_study_type",
+    "file": "R/ct_hazard_toxref_effects_search_by_study_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_effects_search": {
+    "name": "ct_hazard_toxref_effects_search",
+    "file": "R/ct_hazard_toxref_effects_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_observations_search_by_study_id": {
+    "name": "ct_hazard_toxref_observations_search_by_study_id",
+    "file": "R/ct_hazard_toxref_observations_search_by_study_id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_observations_search_by_study_type": {
+    "name": "ct_hazard_toxref_observations_search_by_study_type",
+    "file": "R/ct_hazard_toxref_observations_search_by_study_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_observations_search": {
+    "name": "ct_hazard_toxref_observations_search",
+    "file": "R/ct_hazard_toxref_observations_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_search_by_study_id": {
+    "name": "ct_hazard_toxref_search_by_study_id",
+    "file": "R/ct_hazard_toxref_search_by_study_id.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_search_by_study_type": {
+    "name": "ct_hazard_toxref_search_by_study_type",
+    "file": "R/ct_hazard_toxref_search_by_study_type.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxref_search": {
+    "name": "ct_hazard_toxref_search",
+    "file": "R/ct_hazard_toxref_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxval_search_by_category": {
+    "name": "ct_hazard_toxval_search_by_category",
+    "file": "R/ct_hazard_toxval_search_by_category.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxval_search_bulk": {
+    "name": "ct_hazard_toxval_search_bulk",
+    "file": "R/ct_hazard_toxval_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxval_search": {
+    "name": "ct_hazard_toxval_search",
+    "file": "R/ct_hazard_toxval_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_hazard_toxval_supercategory_search": {
+    "name": "ct_hazard_toxval_supercategory_search",
+    "file": "R/ct_hazard_toxval_supercategory_search.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_related": {
+    "name": "ct_related",
+    "file": "R/ct_related.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "ct_similar": {
+    "name": "ct_similar",
+    "file": "R/ct_similar.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "dss_connect": {
+    "name": "dss_connect",
+    "file": "R/dss_connection.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_disconnect": {
+    "name": "dss_disconnect",
+    "file": "R/dss_connection.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_install": {
+    "name": "dss_install",
+    "file": "R/dss_connection.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_query": {
+    "name": "dss_query",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_synonyms": {
+    "name": "dss_synonyms",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_resolve": {
+    "name": "dss_resolve",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_cas": {
+    "name": "dss_cas",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_search": {
+    "name": "dss_search",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_fuzzy": {
+    "name": "dss_fuzzy",
+    "file": "R/dss_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_install": {
+    "name": "eco_install",
+    "file": "R/eco_connection.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_tables": {
+    "name": "eco_tables",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_fields": {
+    "name": "eco_fields",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_inventory": {
+    "name": "eco_inventory",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_health": {
+    "name": "eco_health",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_species": {
+    "name": "eco_species",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_results": {
+    "name": "eco_results",
+    "file": "R/eco_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "epi_ecosar_dye": {
+    "name": "epi_ecosar_dye",
+    "file": "R/epi_ecosar_dye.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "epi_ecosar_polymer_amphoteric": {
+    "name": "epi_ecosar_polymer_amphoteric",
+    "file": "R/epi_ecosar_polymer_amphoteric.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/polymer/amphoteric"
+  },
+  "epi_ecosar_polymer_anionic": {
+    "name": "epi_ecosar_polymer_anionic",
+    "file": "R/epi_ecosar_polymer_anionic.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/polymer/anionic"
+  },
+  "epi_ecosar_polymer_nonionic": {
+    "name": "epi_ecosar_polymer_nonionic",
+    "file": "R/epi_ecosar_polymer_nonionic.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "epi_ecosar_polymer_polycationic": {
+    "name": "epi_ecosar_polymer_polycationic",
+    "file": "R/epi_ecosar_polymer_polycationic.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/polymer/polycationic"
+  },
+  "epi_ecosar_surfactant_amphoteric": {
+    "name": "epi_ecosar_surfactant_amphoteric",
+    "file": "R/epi_ecosar_surfactant_amphoteric.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/surfactant/amphoteric"
+  },
+  "epi_ecosar_surfactant_anionic": {
+    "name": "epi_ecosar_surfactant_anionic",
+    "file": "R/epi_ecosar_surfactant_anionic.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/surfactant/anionic"
+  },
+  "epi_ecosar_surfactant_cationic": {
+    "name": "epi_ecosar_surfactant_cationic",
+    "file": "R/epi_ecosar_surfactant_cationic.R",
+    "status": "candidate",
+    "reason": "",
+    "schema": "epi-suite-prod.json",
+    "key": "GET /api/ecosar/surfactant/cationic"
+  },
+  "epi_ecosar_surfactant_nonionic": {
+    "name": "epi_ecosar_surfactant_nonionic",
+    "file": "R/epi_ecosar_surfactant_nonionic.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "epi_search": {
+    "name": "epi_search",
+    "file": "R/epi_search.R",
+    "status": "retained",
+    "reason": "Already in the verified pilot",
+    "schema": null,
+    "key": null
+  },
+  "epi_submit_batch": {
+    "name": "epi_submit_batch",
+    "file": "R/epi_submit_batch.R",
+    "status": "retained",
+    "reason": "Custom implementation requires manual mapping",
+    "schema": null,
+    "key": null
+  },
+  "epi_submit": {
+    "name": "epi_submit",
+    "file": "R/epi_submit.R",
+    "status": "retained",
+    "reason": "Client hook policy requires manual review",
+    "schema": null,
+    "key": null
+  },
+  "genra_get_tox_data": {
+    "name": "genra_get_tox_data",
+    "file": "R/genra_get_tox_data.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "genra_predict": {
+    "name": "genra_predict",
+    "file": "R/genra_predict.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "genra_swa": {
+    "name": "genra_swa",
+    "file": "R/genra_swa.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "genra_uncertainty": {
+    "name": "genra_uncertainty",
+    "file": "R/genra_uncertainty.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "min2": {
+    "name": "min2",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "geometric.mean": {
+    "name": "geometric.mean",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pretty_list": {
+    "name": "pretty_list",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pretty_print": {
+    "name": "pretty_print",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pretty_rename": {
+    "name": "pretty_rename",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pretty_casewhen": {
+    "name": "pretty_casewhen",
+    "file": "R/misc_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "ComptoxR_package_sitrep": {
+    "name": "ComptoxR_package_sitrep",
+    "file": "R/package_sitrep.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pubchem_properties": {
+    "name": "pubchem_properties",
+    "file": "R/pubchem_properties.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pubchem_search": {
+    "name": "pubchem_search",
+    "file": "R/pubchem_search.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pubchem_synonyms": {
+    "name": "pubchem_synonyms",
+    "file": "R/pubchem_synonyms.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_install": {
+    "name": "toxval_install",
+    "file": "R/tox_connection.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_tables": {
+    "name": "toxval_tables",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_fields": {
+    "name": "toxval_fields",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_health": {
+    "name": "toxval_health",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_sources": {
+    "name": "toxval_sources",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_search": {
+    "name": "toxval_search",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_results": {
+    "name": "toxval_results",
+    "file": "R/tox_functions.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "is_cas": {
+    "name": "is_cas",
+    "file": "R/util_cas.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "as_cas": {
+    "name": "as_cas",
+    "file": "R/util_cas.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "util_classyfire": {
+    "name": "util_classyfire",
+    "file": "R/util_classyfire.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "util_pubchem_resolve_dtxsid": {
+    "name": "util_pubchem_resolve_dtxsid",
+    "file": "R/util_pubchem_resolve_dtxsid.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "dss_diag_freshness": {
+    "name": "dss_diag_freshness",
+    "file": "R/z_db_version.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "eco_diag_freshness": {
+    "name": "eco_diag_freshness",
+    "file": "R/z_db_version.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_diag_freshness": {
+    "name": "toxval_diag_freshness",
+    "file": "R/z_db_version.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "generic_request": {
+    "name": "generic_request",
+    "file": "R/z_generic_request.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "generic_chemi_request": {
+    "name": "generic_chemi_request",
+    "file": "R/z_generic_request.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "run_setup": {
+    "name": "run_setup",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "ctx_server": {
+    "name": "ctx_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "chemi_server": {
+    "name": "chemi_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "epi_server": {
+    "name": "epi_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Protected or incomplete lifecycle/ownership metadata",
+    "schema": null,
+    "key": null
+  },
+  "eco_server": {
+    "name": "eco_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "toxval_server": {
+    "name": "toxval_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "pubchem_server": {
+    "name": "pubchem_server",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "run_debug": {
+    "name": "run_debug",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "run_verbose": {
+    "name": "run_verbose",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "batch_limit": {
+    "name": "batch_limit",
+    "file": "R/zzz.R",
+    "status": "retained",
+    "reason": "Outside CT/Chemi/EPI schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "\"%>%\"": {
+    "name": "\"%>%\"",
+    "file": "NAMESPACE",
+    "status": "retained",
+    "reason": "Re-exported or nonstandard operator; outside schema-wrapper scope",
+    "schema": null,
+    "key": null
+  },
+  "\"%ni%\"": {
+    "name": "\"%ni%\"",
+    "file": "NAMESPACE",
+    "status": "retained",
+    "reason": "Re-exported or nonstandard operator; outside schema-wrapper scope",
+    "schema": null,
+    "key": null
+  }
+}

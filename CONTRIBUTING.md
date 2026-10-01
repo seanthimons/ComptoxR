@@ -28,6 +28,27 @@ Branch and commit names follow Conventional Branch and Conventional Commits:
 
 ## Before you open a PR
 
+The 105-operation specmill migration has a separate pinned development library.
+Use Air 0.11.0 for specmill, then run:
+
+```bash
+Rscript dev/install_specmill.R
+Rscript dev/generate_specmill.R --plan
+Rscript dev/generate_specmill.R --check
+```
+
+Apply reviewed changes with `--apply`. Keep `.specmill/manifest.json` with its
+matching output; do not reuse initial adoption hashes. See the
+[current migration report](dev/specmill-full/REPORT.md) for localhost verification,
+retained implementations, offline reproduction and rollback. The legacy
+commands below continue to maintain operations outside that slice.
+
+The **Specmill Maintenance** workflow checks this slice on every pull request,
+including changes to CI and documentation. It installs the locked source revision,
+runs the fixed contracts and client policy tests, and checks that regeneration
+leaves no changed or new files. Its Air 0.11.0 installation runs in a separate job
+from the legacy generator's Air 0.9.0 installation.
+
 Install the reviewed development toolkit before running schema commands:
 
 ```r
@@ -47,6 +68,7 @@ Rscript dev/generate_tests.R --generate
 Rscript dev/generate_stubs.R --check --rebuild=ct --rebuild=chemi --rebuild=epi
 Rscript dev/generate_tests.R --check
 Rscript dev/check_hook_config.R
+Rscript dev/check_public_api.R
 ```
 
 Generation validates isolated output before it changes owned files. Manual

@@ -1,0 +1,79 @@
+{
+  "scope": "Installed original and migrated client, localhost only; synthetic responses",
+  "baseline_commit": "4fd720b97fb2f7f2abf131925e9270b0c11b057a",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.11",
+    "source_commit": "d59014365b8b30bde2ce319b5e60d9c3f94fe48f",
+    "source_archive_sha256": "4b8c8c4dddacc457450a4b55ccb9358194544c2cd568c88b44f373b0adb3ffa0",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "exact_requests_and_objects_equal": false,
+  "passed_cases": 1474,
+  "corrected_exports": [
+    "chemi_resolver_lookup",
+    "chemi_resolver_lookupCASRN"
+  ],
+  "corrected_query_cases": [
+    "corrected-chemi_resolver_lookup-missing",
+    "corrected-chemi_resolver_lookup-null",
+    "corrected-chemi_resolver_lookup-empty",
+    "corrected-chemi_resolver_lookup-blank",
+    "corrected-chemi_resolver_lookup-na",
+    "corrected-chemi_resolver_lookup-multiple",
+    "corrected-chemi_resolver_lookupCASRN-missing",
+    "corrected-chemi_resolver_lookupCASRN-null",
+    "corrected-chemi_resolver_lookupCASRN-empty",
+    "corrected-chemi_resolver_lookupCASRN-blank",
+    "corrected-chemi_resolver_lookupCASRN-na",
+    "corrected-chemi_resolver_lookupCASRN-multiple"
+  ],
+  "corrected_options_exports": [
+    "chemi_stdizer_records",
+    "chemi_toxprints_assays_bulk"
+  ],
+  "corrected_options_cases": [
+    "corrected-options-chemi_stdizer_records-omitted",
+    "corrected-options-chemi_stdizer_records-null",
+    "corrected-options-chemi_stdizer_records-empty",
+    "corrected-options-chemi_stdizer_records-nested",
+    "corrected-options-chemi_stdizer_records-false",
+    "corrected-options-chemi_stdizer_records-zero",
+    "corrected-options-chemi_stdizer_records-http-400",
+    "corrected-options-chemi_toxprints_assays_bulk-omitted",
+    "corrected-options-chemi_toxprints_assays_bulk-null",
+    "corrected-options-chemi_toxprints_assays_bulk-empty",
+    "corrected-options-chemi_toxprints_assays_bulk-nested",
+    "corrected-options-chemi_toxprints_assays_bulk-false",
+    "corrected-options-chemi_toxprints_assays_bulk-zero",
+    "corrected-options-chemi_toxprints_assays_bulk-http-400"
+  ],
+  "corrected_chet_exports": [
+    "chemi_chet_chemicals_counts",
+    "chemi_chet_chemicals_database",
+    "chemi_chet_reaction_database"
+  ],
+  "corrected_chet_cases": [
+    "chemi_chet_chemicals_counts-minimal",
+    "chemi_chet_chemicals_counts-explicit",
+    "chemi_chet_chemicals_counts-pagination",
+    "chemi_chet_chemicals_database-minimal",
+    "chemi_chet_chemicals_database-explicit",
+    "chemi_chet_chemicals_database-pagination",
+    "chemi_chet_reaction_database-minimal",
+    "chemi_chet_reaction_database-explicit",
+    "chemi_chet_reaction_database-pagination"
+  ],
+  "baseline_snapshot_sha256": "4cb9256daa207333569386d0043d4280c8ba5cc127c1bd32bd08be3a8d7d041e",
+  "unchanged_request_fields_and_objects_equal": true,
+  "exported_signatures": 409,
+  "helper_signatures_equal": true,
+  "helper_signatures": [
+    "generic_request",
+    "generic_chemi_request",
+    "generic_search_request",
+    "generic_pubchem_request"
+  ],
+  "failures": []
+}

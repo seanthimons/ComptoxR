@@ -1,0 +1,41 @@
+{
+  "wave": "resolver-query",
+  "base_commit": "5bab21b5b1390ac6cba1cef992a1b1a8ef6e05d8",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 2,
+  "files": [
+    "R/chemi_resolver_lookup.R",
+    "R/chemi_resolver_lookupCASRN.R"
+  ],
+  "corrected_exports": [
+    "chemi_resolver_lookup",
+    "chemi_resolver_lookupCASRN"
+  ],
+  "retained_bulk": "Moved unchanged to R/chemi_resolver_lookup_bulk.R; manual coercion and validation still require review.",
+  "verification": {
+    "localhost_cases": 1172,
+    "candidate_failures": 0,
+    "corrected_invalid_query_cases": 12,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "valid_wire_and_results_equal": true,
+    "contract_and_regression_tests": "passed",
+    "legacy_generator_check": "passed",
+    "rehearsal": {
+      "removed_files": 218,
+      "byte_identical": true,
+      "checks": [
+        "apply",
+        "second apply",
+        "check"
+      ]
+    }
+  }
+}

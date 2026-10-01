@@ -1,0 +1,109 @@
+id: chemi-stdizer-prod-full
+schemas:
+  files:
+  - schema/chemi-stdizer-prod.json
+selection:
+  include:
+  - GET /api/stdizer/groups/{id}
+  - GET /api/stdizer/operations
+  - GET /api/stdizer/workflows
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/stdizer/groups/{id}:
+    name: chemi_stdizer_groups_by_id
+    file: R/chemi_stdizer_groups_by_id.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      id:
+        type: character
+        required: yes
+        description: 'Primary query parameter. Type: string'
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - id
+        endpoint:
+          value: stdizer/groups/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Groups
+      lifecycle: experimental
+      parameters:
+        id: 'Primary query parameter. Type: string'
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - id: DTXSID7020182
+  GET /api/stdizer/operations:
+    name: chemi_stdizer_operations
+    file: R/chemi_stdizer_operations.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: stdizer/operations
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Operations
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+  GET /api/stdizer/workflows:
+    name: chemi_stdizer_workflows
+    file: R/chemi_stdizer_workflows.R
+    helper: generic_request
+    implementation: generated
+    inputs: {}
+    request:
+      arguments:
+        endpoint:
+          value: stdizer/workflows
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+    docs:
+      title: Stdizer Workflows
+      lifecycle: experimental
+      parameters: {}
+      return: Returns a tibble with results
+      tags:
+        apiStage: public
+      examples:
+      - {}
+contracts_file: tests/testthat/fixtures/specmill-full-contracts.rds

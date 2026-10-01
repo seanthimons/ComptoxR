@@ -1,0 +1,737 @@
+{
+  "scope": "Installed original and migrated client, localhost only; synthetic responses",
+  "baseline_commit": "4fd720b97fb2f7f2abf131925e9270b0c11b057a",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "exact_requests_and_objects_equal": true,
+  "passed_cases": 96,
+  "corrected_exports": [
+    "chemi_resolver_lookup",
+    "chemi_resolver_lookupCASRN"
+  ],
+  "corrected_query_cases": [
+    "corrected-chemi_resolver_lookup-missing",
+    "corrected-chemi_resolver_lookup-null",
+    "corrected-chemi_resolver_lookup-empty",
+    "corrected-chemi_resolver_lookup-blank",
+    "corrected-chemi_resolver_lookup-na",
+    "corrected-chemi_resolver_lookup-multiple",
+    "corrected-chemi_resolver_lookupCASRN-missing",
+    "corrected-chemi_resolver_lookupCASRN-null",
+    "corrected-chemi_resolver_lookupCASRN-empty",
+    "corrected-chemi_resolver_lookupCASRN-blank",
+    "corrected-chemi_resolver_lookupCASRN-na",
+    "corrected-chemi_resolver_lookupCASRN-multiple"
+  ],
+  "exported_signatures": 409,
+  "helper_signatures_equal": true,
+  "helper_signatures": [
+    "generic_request",
+    "generic_chemi_request",
+    "generic_search_request",
+    "generic_pubchem_request"
+  ],
+  "failures": [],
+  "operations": {
+    "ct_bioactivity_assay_search_by_endpoint": {
+      "schema": "ctx-bioactivity-prod.json",
+      "key": "GET /bioactivity/assay/search/by-endpoint/"
+    },
+    "ct_chemical_search_equal_bulk": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "POST /chemical/search/equal/"
+    },
+    "ct_chemical_search_equal": {
+      "schema": "ctx-chemical-prod.json",
+      "key": "GET /chemical/search/equal/{word}"
+    },
+    "chemi_resolver_lookup": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/lookup"
+    },
+    "chemi_resolver_lookupCASRN": {
+      "schema": "chemi-resolver-prod.json",
+      "key": "GET /api/resolver/lookupCASRN"
+    }
+  },
+  "cases": {
+    "epi-default": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "epi-override-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "alerts-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "detail-default": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "list-transform": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "mass-body": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "mass-pagination": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-epi-query": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-missing-alert-id": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"id\" is missing, with no default"
+    },
+    "invalid-search": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_search()` failed in pre-request hook `chemi_search_pre_request()`.\nCaused by error in `match.arg()`:\n! 'arg' should be one of “exact”, “substructure”, “similar”, “mass”, “hazard”, “features”"
+    },
+    "invalid-similarity": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_search()` failed in pre-request hook `chemi_search_pre_request()`.\nCaused by error in `validate_search_inputs()`:\n! min_similarity must be a number between 0 and 1"
+    },
+    "invalid-empty-detail": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-empty-bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "missing-auth": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["purrr_error_indexed", "rlang_error", "error", "condition"],
+      "error_message": "ℹ In index: 1.\nCaused by error in `ct_api_key()`:\n✖ No CTX API key found.\nℹ Please set it using `Sys.setenv(ctx_api_key = 'YOUR_KEY_HERE')`.\nℹ You may need to restart your R session after setting it."
+    },
+    "public-without-auth": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "chemi_alerts_alerts-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_alerts_operations-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_release_notes-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_get_data_source_info-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_amos_get_ir_spectrum-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_get_ir_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"internal_id\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_ir_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_get_ir_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_get_nmr_spectrum-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_get_nmr_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"internal_id\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_nmr_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_get_nmr_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_get_mass_spectrum-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_get_mass_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"internal_id\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_mass_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_get_mass_spectrum": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_get_info_by_id-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_get_info_by_id": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"internal_id\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_info_by_id": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_get_info_by_id": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_get_classification_for_dtxsid-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_get_classification_for_dtxsid": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"dtxsid\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_get_classification_for_dtxsid": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_get_classification_for_dtxsid": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "chemi_amos_by_text-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "invalid-missing-chemi_amos_by_text": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"substr\" is missing, with no default"
+    },
+    "invalid-empty-chemi_amos_by_text": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "invalid-blank-chemi_amos_by_text": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "amos-text-encoded": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "amos-id-batches": {
+      "requests": 2,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "partial-hook-update": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "list-skip": {
+      "requests": 0,
+      "classes": "character",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "search-post-on-skip": {
+      "requests": 0,
+      "classes": "character",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "pre-hook-exception": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_pre_request_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_search()` failed in pre-request hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception"
+    },
+    "post-hook-exception": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_post_response_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`chemi_search()` failed in post-response hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception"
+    },
+    "generated-post-hook-exception": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["comptoxr_post_response_hook_error", "rlang_error", "error", "condition"],
+      "error_message": "`epi_search()` failed in post-response hook `pilot_throw()`.\nCaused by error in `hook_fn()`:\n! pilot hook exception"
+    },
+    "generic-search-body": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "generic-search-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "generic-pubchem-get": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "generic-pubchem-post": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "generic-pubchem-fault-200": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": "PubChem [NotFound]: No match",
+      "error_classes": null,
+      "error_message": null
+    },
+    "generic-pubchem-fault-404": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": "PubChem [NotFound]: No match",
+      "error_classes": null,
+      "error_message": null
+    },
+    "generic-pubchem-malformed-json": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": "Failed to parse PubChem response as JSON: lexical error: invalid char in json text.  invalid json\n(right here) ------^",
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_assay_search_by_endpoint-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_assay_search_by_endpoint-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_assay_search_by_endpoint-null": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_bioactivity_assay_search_by_endpoint-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_bioactivity_assay_search_by_endpoint": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"endpoint\" is missing, with no default"
+    },
+    "ct_chemical_search_equal_bulk-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal_bulk-default-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal_bulk-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_search_equal_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_search_equal_bulk": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_search_equal_bulk-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal_bulk-batches": {
+      "requests": 2,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-http-400": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["httr2_http_400", "httr2_http", "httr2_error", "rlang_error", "rlang_error", "error", "condition"],
+      "error_message": "HTTP 400 Bad Request."
+    },
+    "invalid-missing-ct_chemical_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"word\" is missing, with no default"
+    },
+    "invalid-empty-ct_chemical_search_equal": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["rlang_error", "error", "condition"],
+      "error_message": "Query must be a character vector."
+    },
+    "ct_chemical_search_equal-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "ct_chemical_search_equal-batches": {
+      "requests": 3,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookup-minimal": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookup-encoding": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookup-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookup-null-options": {
+      "requests": 1,
+      "classes": ["tbl_df", "tbl", "data.frame"],
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "corrected-chemi_resolver_lookup-missing": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "corrected-chemi_resolver_lookup-null": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Required input: query"
+    },
+    "corrected-chemi_resolver_lookup-empty": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    },
+    "corrected-chemi_resolver_lookup-blank": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Empty query parameter: query"
+    },
+    "corrected-chemi_resolver_lookup-na": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    },
+    "corrected-chemi_resolver_lookup-multiple": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    },
+    "chemi_resolver_lookupCASRN-minimal": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "chemi_resolver_lookupCASRN-encoding": {
+      "requests": 1,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": null,
+      "error_message": null
+    },
+    "corrected-chemi_resolver_lookupCASRN-missing": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["getvarError", "missingArgError", "error", "condition"],
+      "error_message": "argument \"query\" is missing, with no default"
+    },
+    "corrected-chemi_resolver_lookupCASRN-null": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Required input: query"
+    },
+    "corrected-chemi_resolver_lookupCASRN-empty": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    },
+    "corrected-chemi_resolver_lookupCASRN-blank": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Empty query parameter: query"
+    },
+    "corrected-chemi_resolver_lookupCASRN-na": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    },
+    "corrected-chemi_resolver_lookupCASRN-multiple": {
+      "requests": 0,
+      "classes": "list",
+      "warnings": [],
+      "error_classes": ["simpleError", "error", "condition"],
+      "error_message": "Invalid public input query: Invalid body scalar type"
+    }
+  }
+}

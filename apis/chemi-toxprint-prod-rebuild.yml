@@ -1,0 +1,58 @@
+id: chemi-toxprint-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-toxprints-prod.json
+selection:
+  include:
+  - POST /api/toxprints/calculate
+helper: generic_chemi_request
+documentation: yes
+operations:
+  POST /api/toxprints/calculate:
+    name: chemi_toxprint
+    file: R/chemi_toxprint.R
+    helper: generic_chemi_request
+    implementation: existing
+    inputs:
+      query:
+        type: character
+        required: yes
+      odds_ratio:
+        type: integer
+        default: 3
+      p_val:
+        type: numeric
+        default: 0.05
+      true_pos:
+        type: numeric
+        default: 3.0
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: toxprints/calculate
+        options:
+          object:
+            OR:
+              from:
+              - params
+              - odds_ratio
+            PV1:
+              from:
+              - params
+              - p_val
+            TP:
+              from:
+              - params
+              - true_pos
+    specialization: Retain the original lazy generic_chemi_request call. Query rejection,
+      including missing arguments, precedes option evaluation; OR/PV1/TP retain
+      NULL/FALSE/zero and defaults; helper return visibility propagates. Explicit
+      inputs/request mapping reviews the existing JSON client contract, not the
+      server's file-upload query contract. Native binary/nested diagnostics remain
+      recorded; the source schema is unchanged. Generated eager parameter capture
+      and visible return are incompatible. No hooks or lifecycle badge.
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

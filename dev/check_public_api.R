@@ -54,10 +54,10 @@ check_public_api <- function(root = '.', membership = dir.exists(file.path(root,
       if (length(missing)) {
         stop('Export has no approved production mapping: ', paste(missing, collapse = ', '))
       }
-      schemas <- list.files(file.path(root, 'schema'), '-(dev|staging)[.]json$')
-      stopifnot(!length(schemas))
     }
   }
+  schemas <- list.files(file.path(root, 'schema'), '-(dev|staging)[.]json$')
+  stopifnot(!length(schemas))
   cat(sprintf('Public boundary passed: %d text files scanned.\n', length(text_files)))
   invisible(TRUE)
 }

@@ -1,0 +1,117 @@
+{
+  "wave": "toxprint",
+  "base_commit": "cef28d1d5caeb87c521fa07713aa00dfde8df165",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 1,
+  "generated_operations": 0,
+  "retained_operations": 1,
+  "blocked_operations": 0,
+  "files": {
+    "chemi_toxprint": "R/chemi_toxprint.R"
+  },
+  "reviewed_routes": {
+    "chemi_toxprint": "chemi-toxprints-prod.json POST /api/toxprints/calculate"
+  },
+  "dispositions": {
+    "chemi_toxprint": "retained_mapped"
+  },
+  "reviewed_contract_sha256": {
+    "apis/chemi-toxprint-prod-rebuild.yml": "b01a3f20826fd1485edf777505b5049dd1ab19face05730d5a95a16868c426d6",
+    "schema/chemi-toxprints-prod.json": "f1ebc2f1bf1581c3eea75de7c4e6d5e6c7b4bd41c585f52bba14b3d2ee5d6447",
+    "R/chemi_toxprint.R": "957f17fcfcd470b83ee911a728c3bb31d3bf6f3a6175da7750f9b2746b47be24",
+    "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
+    "R/z_specmill_request.R": "ca8ddce1d9a4645fd1199f5c0b86aac153a8d64c97b2902e4dacd989cc64471e"
+  },
+  "reviewed_retained_diagnostics": [
+    {
+      "id": "chemi-toxprint-prod-rebuild POST /api/toxprints/calculate",
+      "key": "POST /api/toxprints/calculate",
+      "service": "chemi-toxprint-prod-rebuild",
+      "method": "POST",
+      "path": "/api/toxprints/calculate",
+      "source": "schema/chemi-toxprints-prod.json",
+      "source_hash": "640c24e5d375560b3404a6410e3a56d2",
+      "status": "unsupported",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "classification": "review_required",
+      "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+      "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity.",
+      "code": "binary_parameter"
+    }
+  ],
+  "native_diagnostics": [
+    {
+      "id": "chemi-toxprint-prod-rebuild POST /api/toxprints/calculate",
+      "service": "chemi-toxprint-prod-rebuild",
+      "key": "POST /api/toxprints/calculate",
+      "source": "schema/chemi-toxprints-prod.json",
+      "status": "unsupported",
+      "reason": "Binary parameter requires source contract review (#16); Unsupported nested parameter object",
+      "classification": "review_required",
+      "code": "binary_parameter",
+      "source_location": "#/paths/~1api~1toxprints~1calculate/post/parameters/0/schema",
+      "guidance": "Review the source and configuration at this location; this diagnostic does not establish schema validity."
+    }
+  ],
+  "compatibility_probe": {
+    "formals_equal": true,
+    "generated_compatible": false,
+    "original_lazy_option_error": "Either query or chemicals parameter must be provided.",
+    "generated_lazy_option_error": "option evaluated",
+    "original_visibility": false,
+    "generated_visibility": true,
+    "successful_helper_contract_variants_equal": 5
+  },
+  "schema_corrections": [],
+  "behavior_corrections": [],
+  "issue_337_entries_remaining": 5,
+  "upstream_blocked_amos_entries": 5,
+  "verification": {
+    "tests": {
+      "passed": 1839,
+      "failed": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "installed_original_focused_assertions": 99,
+    "installed_candidate_focused_assertions": 99,
+    "legacy_generator_check": true,
+    "native_generator_check": true,
+    "runtime": {
+      "results_file": "dev/specmill-rebuild/runtime-toxprint-results.json",
+      "scope": "Installed original and candidate, localhost only; synthetic responses",
+      "passed_cases": 1474,
+      "new_cases": 21,
+      "candidate_failures": 0,
+      "exported_signatures_compared": 409,
+      "helper_signatures_equal": true,
+      "prior_query_corrections_asserted": 12,
+      "prior_options_corrections_asserted": 14
+    },
+    "mirror_selection_plan_sha256": "13ba08056d6a1bc729aec0409f7bcc2771dc5c51fb1b47fcc5cf6a7eafd5277f",
+    "reviewed_diagnostic_gate_checked": true,
+    "rehearsal": {
+      "commit": "d996565e9a8ae91e499e6c0a818cdf80173d0703",
+      "removed_files": 226,
+      "removed_operations": 263,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": [],
+      "byte_identical": true
+    },
+    "generation_inputs_unchanged_since_rehearsal": true,
+    "source_documentation_hooks_pin_unchanged": true
+  },
+  "helper_adoption_review": {
+    "issue": 342,
+    "toolkit": "0.1.11",
+    "scope": "Request construction and decoding delegate to emitted native transport; retained ToxPrint synthesis, formals, visibility and response policy unchanged. Reverify with installed-client comparison."
+  }
+}

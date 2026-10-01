@@ -1,0 +1,117 @@
+id: search-pilot
+schemas:
+  files:
+  - schema/chemi-search-prod.json
+selection:
+  include:
+  - POST /api/search
+helper: generic_chemi_request
+prepare: preserve_choice_defaults
+documentation: yes
+operations:
+  POST /api/search:
+    name: chemi_search
+    file: R/chemi_search.R
+    implementation: existing
+    inputs:
+      query:
+        default: ~
+        type: character
+      search_type:
+        default:
+        - exact
+        - substructure
+        - similar
+        - mass
+        - hazard
+        - features
+        type: character
+      similarity_type:
+        default:
+        - tanimoto
+        - euclid
+        - tversky
+        type: character
+      min_similarity:
+        default: 0.85
+        type: numeric
+      hazard_name:
+        default: ~
+        type: character
+      min_toxicity:
+        default:
+        - VH
+        - H
+        - M
+        - L
+        - A
+        type: character
+      min_authority:
+        default:
+        - auth
+        - screen
+        - qsar
+        type: character
+      mass_type:
+        default:
+        - mono
+        - mw
+        - abu
+        type: character
+      min_mass:
+        default: ~
+        type: character
+      max_mass:
+        default: ~
+        type: character
+      filter_features:
+        default: no
+        type: logical
+      feature_filters:
+        default: ~
+        type: character
+      element_include:
+        default: ~
+        type: character
+      element_exclude:
+        default: ~
+        type: character
+      exclude_all_others:
+        default: no
+        type: logical
+      limit:
+        default: 50.0
+        type: numeric
+      all_pages:
+        default: no
+        type: logical
+    request:
+      arguments:
+        endpoint:
+          value: search
+        body:
+          from:
+          - hook_state
+          - request
+          - body
+        options:
+          from:
+          - hook_state
+          - request
+          - options
+        tidy:
+          value: no
+        paginate:
+          from:
+          - params
+          - all_pages
+        max_pages:
+          value: 100.0
+        pagination_strategy:
+          value: offset_limit
+    post_on_skip: yes
+    post_state: hook_state
+    specialization: Retain composed public interface, custom body construction, full
+      hook state, post-on-skip and offset pagination.
+contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
+hook_config: inst/hook_config.yml

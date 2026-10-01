@@ -1,0 +1,97 @@
+id: chemi-pfas_atlas-prod-rebuild
+schemas:
+  files:
+  - schema/chemi-pfas_atlas-prod.json
+selection:
+  include:
+  - GET /api/pfas_atlas
+  - POST /api/pfas_atlas
+helper: generic_request
+documentation: yes
+operations:
+  GET /api/pfas_atlas:
+    name: chemi_pfas_atlas
+    file: R/chemi_pfas_atlas.R
+    helper: generic_request
+    implementation: generated
+    inputs:
+      smiles:
+        type: character
+        required: yes
+        description: SMILES string of the molecule
+    request:
+      arguments:
+        endpoint:
+          value: pfas_atlas
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        server:
+          value: chemi_burl
+        auth:
+          value: no
+        tidy:
+          value: no
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+    docs:
+      title: Generate PFAS Atlas categories for one molecule
+      lifecycle: experimental
+      parameters:
+        smiles: SMILES string of the molecule
+      return: Returns a list with result object
+      examples:
+      - smiles: O=C(O)C(F)(F)C(F)(F)C(F)(F)C(F)(F)F
+      tags:
+        apiStage: public
+  POST /api/pfas_atlas:
+    name: chemi_pfas_atlas_bulk
+    file: R/chemi_pfas_atlas.R
+    helper: generic_chemi_request
+    implementation: generated
+    inputs:
+      chemicals:
+        type: character
+        default: ~
+        description: Either an array of input chemicals with optional id and required
+          smiles, or an array of SMILES strings for backward compatibility.
+      smiles:
+        type: character
+        default: ~
+        description: Array of SMILES strings, kept for backward compatibility with
+          the previous PFAS Atlas POST format.
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - chemicals
+        endpoint:
+          value: pfas_atlas
+        options:
+          compact_object:
+            smiles:
+              from:
+              - params
+              - smiles
+        tidy:
+          value: no
+    docs:
+      title: Generate PFAS Atlas categories for multiple molecules
+      lifecycle: experimental
+      parameters:
+        chemicals: Either an array of input chemicals with optional id and required
+          smiles, or an array of SMILES strings for backward compatibility.
+        smiles: Array of SMILES strings, kept for backward compatibility with the
+          previous PFAS Atlas POST format.
+      return: Returns a list with result object
+      examples:
+      - chemicals: DTXSID1024122
+      tags:
+        apiStage: public
+contracts_file: tests/testthat/fixtures/specmill-rebuild-contracts.rds

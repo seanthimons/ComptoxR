@@ -1,0 +1,12 @@
+{
+  "R/chemi_alerts_alerts.R": "01df872351e13fc734ab70c20bc8b84749f67bec093a0b19c142ceb6c4ac64e7",
+  "R/chemi_alerts_operations.R": "acfb9976c908a2ea72f54676c1261541096922e6f5959c2863da83fa07d7a3be",
+  "R/chemi_amos_release_notes.R": "bdedf4409d8910e49b29dc746a8d3fa01dde0a9b576d043807a0b1bddd2dfe10",
+  "R/chemi_amos_get_data_source_info.R": "e819392ea44afadfcfc8dc7cbc927246da594ed13dd73f5484db253f5fd12ab4",
+  "R/chemi_amos_get_ir_spectrum.R": "aeb13cc7b2d86e8878bf1b6770f5e6acadcbe1272c3b16d05d974ed1c43996b3",
+  "R/chemi_amos_get_nmr_spectrum.R": "e2c1979daaab211400f712cfcdb1c1b8f580a8e73bce94205d4b363db6bf9db8",
+  "R/chemi_amos_get_mass_spectrum.R": "1e4e123da3c5a9196e6886b80d409b35008a6930c2782e682fd20eb0462f20d1",
+  "R/chemi_amos_get_info_by_id.R": "f505e1bff64c78db5f8b272a86c30f92e50039fe627cec080c70c0065cc632e5",
+  "R/chemi_amos_get_classification_for_dtxsid.R": "eda4fdef4b817b1b5a0784b9ad123b0d2f4015ea1c4bc601c87721ae668e4ad8",
+  "R/chemi_amos_by_text.R": "84a90a0e98af811a3ca4d9d69ab296adab5a8b6d3db4c31cfff605910a1d39c1"
+}

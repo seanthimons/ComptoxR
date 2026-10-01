@@ -138,6 +138,12 @@ jobs:
       - name: Install package dependencies
         uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
 
+      - name: Check public API boundary
+        shell: Rscript {0}
+        run: |
+          source('dev/check_public_api.R')
+          check_public_api('.', membership = FALSE)
+
       - name: Build package asset
         id: build
         shell: bash

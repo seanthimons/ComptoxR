@@ -22,7 +22,7 @@ this article ties those workflows together into one flow.
 
 ## The branch model
 
-Work flows through three long-lived branches:
+Feature branches feed two long-lived branches:
 
 ```
 feature branch  ->  integration  ->  main  ->  Release (tag + GitHub release)
@@ -33,8 +33,10 @@ feature branch  ->  integration  ->  main  ->  Release (tag + GitHub release)
 - **Feature branches** (`feat/`, `fix/`, `chore/`, `docs/`, ...) are cut from
   `integration`. All day-to-day work happens here.
 - **`integration`** is light staging. Merges land here first so several
-  features can settle together. Pushing to `integration` runs only the
-  always-on checks (secret scanning), not the heavy R gate.
+  features can settle together. This is a branch role, not an API server.
+  Pushes run secret scanning and the integration package publisher. The
+  publisher requires a `.9000` development version; stable metadata stops
+  publication. It does not change the version itself.
 - **`main`** is the trunk. The full check suite runs on every pull request that
   **targets `main`**, so `main` stays release-ready at all times.
 - **Release** is a manual step run from `main`. It bumps the version, tags,
@@ -42,6 +44,46 @@ feature branch  ->  integration  ->  main  ->  Release (tag + GitHub release)
 
 Branch and commit names follow Conventional Branch / Conventional Commits
 (`type/description` and `type: description`). See `CONTRIBUTING.md`.
+
+## Endpoint and generation rules
+
+The public package ships operations from approved production schemas and the
+local ECOTOX and ToxVal Plumber APIs. Staging and development server selectors,
+fallback hooks, and operations without a production equivalent are removed.
+The approved production EPI Suite URL remains `https://episuite.dev/api`.
+
+Explicit service URLs remain supported. Resolution uses a package option,
+then the corresponding environment variable, then the default URL:
+
+```{r}
+options(ComptoxR.chemi_burl = "https://your-server.example/api")
+```
+
+A URL override changes the target of existing wrappers. It does not add
+operations that are absent from the public package. Loading the package does
+not switch endpoint settings based on the date.
+
+Install the checksum-pinned `wrapmaint` toolkit from `dev/toolkit-lock.json`
+before running development generation or validation:
+
+```{r}
+source("dev/install_toolkit.R")
+install_toolkit()
+```
+
+Use Air 0.9.0 for generation, as CI does. The toolkit is a development
+dependency; installed ComptoxR clients do not need it. Runtime hooks and
+manual wrappers stay in ComptoxR. Follow the generation and validation
+commands in
+[CONTRIBUTING.md](https://github.com/seanthimons/ComptoxR/blob/main/CONTRIBUTING.md),
+including `dev/check_public_api.R` before proposing a change.
+
+Keep development and staging schemas and generated clients outside every
+public ComptoxR checkout. For a separate local client, source
+`dev/generate_local_client.R` and call `generate_local_client()` with explicit
+input and output roots, a schema file, a base URL, and a distinct package name.
+Promote an operation by regenerating it from its approved production schema.
+Do not copy a local generated client into the public package.
 
 ## Which checks run, and when
 
@@ -51,12 +93,14 @@ close a change is to release.
 | Event | Workflows that run |
 | --- | --- |
 | Push to any branch (incl. `integration`) | Gitleaks Secret Scan |
+| Push to `integration` | Publish Integration Package; requires a `.9000` version |
 | Push to `dev-*` | Quick Tests |
-| Push to `main` / `dev` | Coverage Check (+ R-CMD-check on `main`) |
-| **PR targeting `main`** | R-CMD-check, CRAN Readiness, Pipeline Integration Tests, Quick Tests, Coverage Check, Commit Lint |
+| Push to `main` / `dev` | Test Coverage and Coverage Check (+ R-CMD-check on `main`) |
+| **PR targeting `main`** | R-CMD-check, CRAN Readiness, Pipeline Integration Tests, Quick Tests, Test Coverage, Coverage Check, Commit Lint, documentation build |
 | PR review **approved** | Rebase branches on PR approval (rebases open WIP branches) |
 
-The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` is the
+Path filters can skip code checks for documentation-only changes. The workflow
+files define the exact triggers. The heavy R gate lives on the **PR into `main`**. `CRAN Readiness` is the
 blocking one: it runs the CRAN-safe test lane (`COMPTOXR_CRAN_SAFE_TESTS=true`,
 `NOT_CRAN=false`) with no API key, no live network, and no local database, so a
 green PR means the package is CRAN-clean.
@@ -71,14 +115,35 @@ Several workflows run on a cron and open PRs or refresh data on their own:
 
 | Workflow | Schedule (UTC) | What it does |
 | --- | --- | --- |
-| Schema Update Check | Mon/Wed/Fri 09:00 | Detects EPA API schema drift; opens a PR on `automated/schema-update` with regenerated stubs/tests |
+| Schema Update Check | Mon/Wed/Fri 09:00 | Compares approved production schemas; opens a PR on `automated/schema-update` with regenerated wrappers, documentation, and tests |
 | Build & Upload DSSTox Database | Mon 08:00 | Rebuilds and uploads the DSSTox database |
-| Build & Upload ECOTOX Database | Mon 09:00 | Rebuilds and uploads the ECOTOX database |
+| Build & Upload Source-only ECOTOX Database | Mon 09:00 | Publishes native source data after checking that derived life-stage tables are absent |
 | Build & Upload ToxValDB Database | Mon 10:00 | Rebuilds and uploads the ToxValDB database |
-| API compatibility probe | Mon 12:00 | Probes EPA endpoints for cross-server API changes |
+| API compatibility probe | Mon 12:00 | Tests direct and wrapper contracts at the effective configured URLs, which default to production |
 
 Treat an `automated/schema-update` PR like any other change: review the diff,
 let the `main` gate run, then merge.
+
+Schema checks use the pinned toolkit and detect added, changed, and removed
+schemas. They update documentation and tests for every schema change and
+check the public boundary even when no schema changes occur. Failed downloads
+preserve available production snapshots; they do not select a staging host.
+
+The live API probe requires `CTX_API_KEY` and publishes a sanitized result
+matrix. Known direct upstream defects remain visible. Wrapper contract
+failures and configuration errors fail the job. The probe does not record
+cassettes or cycle through staging and development hosts.
+
+Life-stage mapping is an explicit, versioned envharmonizer step; it is not
+part of database publication. Use a harmonizer release that supports the
+database's recorded ECOTOX release. Keep local databases and mapping evidence,
+update both client and server packages, and restart local Plumber servers.
+See [ECOTOX](ecotox.html) for the upgrade steps. Do not rerun the retired
+`db-ecotox.yml` workflow or publish a legacy derived database.
+
+Before publishing a replacement that needs new harmonizer support, publish
+and verify that experimental harmonizer release first. Verify the replacement
+database and matching clients before withdrawing affected older downloads.
 
 ## Releasing
 
@@ -99,10 +164,13 @@ The workflow then, on `main`:
    `none`).
 2. **Guards** against re-releasing: if `v<version>` already exists as a tag, it
    aborts rather than overwrite.
-3. Commits `chore: bump version to <version> [skip ci]` and tags `v<version>`.
-4. Regenerates `NEWS.md` with `autonewsmd` (rendered via Quarto), commits
+3. Runs the package check and stops on warnings or errors.
+4. Commits `chore: bump version to <version> [skip ci]` and tags `v<version>` locally.
+5. Regenerates `NEWS.md` with `autonewsmd` (rendered via Quarto), commits
    `docs: update NEWS.md for v<version> [skip ci]`, and re-points the tag.
-5. Pushes the commits and tag, then runs `gh release create v<version>` with the
+6. Builds the source archive and checks both source and archive against the
+   public API boundary before publication.
+7. Pushes the commits and tag, then runs `gh release create v<version>` with the
    source tarball attached.
 
 Because `NEWS.md` is generated from commit history, the first line of each
@@ -111,17 +179,24 @@ appear.
 
 ### Other build/publish workflows
 
-These are all manual (`workflow_dispatch`) and do **not** create a stable
-release:
+These workflows do **not** create a stable release. All support manual
+dispatch; the integration publisher also runs on pushes to `integration`:
 
 - **Publish Rolling Package** — builds from `main` and moves the
   `package-latest` prerelease tag to that commit. A moving "latest dev build",
   separate from stable releases.
 - **Build Package Artifact** — builds a source tarball and uploads it as a
   workflow artifact (retained 14 days). No release, no tag.
+- **Publish Integration Package** — builds source, Windows, and macOS assets
+  for `integration-latest` when the version ends in `.9000`. Each filename
+  records the source commit. It does not publish development API clients.
 - **Record VCR Cassettes** — the only sanctioned path for live cassette
   recording; requires the `CTX_API_KEY` secret. Ordinary CI never records from
   production.
+
+The artifact and rolling package workflows check the public API boundary
+before building. A prerelease package follows the same endpoint rules as a
+stable release. Documentation builds check the rendered site as well.
 
 ## Putting it together
 

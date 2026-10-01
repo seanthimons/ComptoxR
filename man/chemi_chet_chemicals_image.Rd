@@ -12,7 +12,7 @@ chemi_chet_chemicals_image(
 )
 }
 \arguments{
-\item{chemical_id}{Primary query parameter. Type: integer}
+\item{chemical_id}{ChET chemical ID. Type: integer.}
 
 \item{width}{Optional parameter}
 
@@ -21,14 +21,14 @@ chemi_chet_chemicals_image(
 \item{format}{Optional parameter. Options: png, svg, pdf (default: png)}
 }
 \value{
-Returns image data (raw bytes or magick image object)
+A magick image for PNG or SVG, or raw bytes for PDF.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \dontrun{
-chemi_chet_chemicals_image(chemical_id = "DTXSID7020182")
+chemi_chet_chemicals_image(chemical_id = 1)
 }
 }
 \section{API stage}{

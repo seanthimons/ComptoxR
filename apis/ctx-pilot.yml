@@ -1,0 +1,100 @@
+id: ctx-pilot
+schemas:
+  files:
+  - schema/ctx-chemical-prod.json
+selection:
+  include:
+  - GET /chemical/detail/search/by-dtxsid/{dtxsid}
+  - POST /chemical/detail/search/by-dtxsid/
+  - GET /chemical/list/all
+helper: generic_request
+documentation: yes
+operations:
+  GET /chemical/detail/search/by-dtxsid/{dtxsid}:
+    name: ct_chemical_detail_search
+    file: R/ct_chemical_detail_search.R
+    implementation: existing
+    inputs:
+      dtxsid:
+        required: yes
+        type: character
+      projection:
+        default: chemicaldetailall
+        type: character
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - dtxsid
+        endpoint:
+          value: chemical/detail/search/by-dtxsid/
+        method:
+          value: GET
+        batch_limit:
+          value: 1.0
+        projection:
+          from:
+          - params
+          - projection
+    specialization: Retain stable grouped source, authentication, response shaping
+      and client-owned input normalization.
+  POST /chemical/detail/search/by-dtxsid/:
+    name: ct_chemical_detail_search_bulk
+    file: R/ct_chemical_detail_search.R
+    implementation: existing
+    inputs:
+      query:
+        required: yes
+        type: character
+      projection:
+        default: chemicaldetailall
+        type: character
+    request:
+      arguments:
+        query:
+          from:
+          - params
+          - query
+        endpoint:
+          value: chemical/detail/search/by-dtxsid/
+        method:
+          value: POST
+        batch_limit:
+          callback: detail_batch_limit
+        projection:
+          from:
+          - params
+          - projection
+    specialization: Retain stable grouped source and environment-controlled batching
+      with JSON arrays.
+  GET /chemical/list/all:
+    name: ct_chemical_list_all
+    file: R/ct_chemical_list_all.R
+    implementation: existing
+    inputs:
+      projection:
+        default: chemicallistall
+        type: character
+      return_dtxsid:
+        default: no
+        type: logical
+      coerce:
+        default: no
+        type: logical
+    request:
+      arguments:
+        endpoint:
+          value: chemical/list/all
+        method:
+          value: GET
+        batch_limit:
+          value: 0.0
+        projection:
+          from:
+          - params
+          - projection
+    specialization: Retain stable pre/post hooks, partial parameter updates and early
+      skip result.
+contracts_file: tests/testthat/fixtures/specmill-pilot-contracts.rds
+hook_config: inst/hook_config.yml

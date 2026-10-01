@@ -1,0 +1,89 @@
+{
+  "wave": "options-correction",
+  "base_commit": "e7fef06e096e8d830b2ca283f7d5d15dd1e681ed",
+  "worktree": "/home/sxthi/Documents/Projects/ComptoxR/dev/specmill-pilot/artifacts/options-correction-source/dev/specmill-pilot/artifacts/wave-options-correction",
+  "toolkit": {
+    "package": "specmill",
+    "version": "0.1.8",
+    "source_commit": "2df2657b7f3576ef7af8072c21ed6b1f6aa9ce8c",
+    "source_archive_sha256": "6085d39a0d02822fabd870916e697065294f597238592c51bccaea2fc05b8091",
+    "source_repository": "https://github.com/seanthimons/specmill",
+    "archive_format": "git archive --format=tar <source_commit>"
+  },
+  "operations": 3,
+  "files": [
+    "R/chemi_stdizer_records.R",
+    "R/chemi_toxprints_assays.R"
+  ],
+  "changed": [
+    " M .specmill/manifest.json",
+    " M R/chemi_stdizer_records.R",
+    " M R/chemi_toxprints_assays.R",
+    " M apis/chemi-toxprints-prod-rebuild.yml",
+    " M dev/specmill-rebuild/runtime-cases.rds",
+    " M specmill.yml",
+    " M tests/testthat/fixtures/specmill-rebuild-contracts.rds",
+    "?? apis/chemi-stdizer-prod-rebuild.yml",
+    "?? tests/testthat/test-contract-chemi_stdizer_records.R",
+    "?? tests/testthat/test-contract-chemi_toxprints_assays.R",
+    "?? tests/testthat/test-contract-chemi_toxprints_assays_bulk.R"
+  ],
+  "reviewed_routes": {
+    "chemi_stdizer_records": "chemi-stdizer-prod.json POST /api/stdizer/records",
+    "chemi_toxprints_assays": "chemi-toxprints-prod.json GET /api/toxprints/assays",
+    "chemi_toxprints_assays_bulk": "chemi-toxprints-prod.json POST /api/toxprints/assays"
+  },
+  "intentional_options_correction": {
+    "exports": [
+      "chemi_stdizer_records",
+      "chemi_toxprints_assays_bulk"
+    ],
+    "helper_field": "options$options",
+    "wire_field": "payload.options.options",
+    "preserved": "Existing query, helper payload layout, sibling fields, route, authentication, errors, results, signatures, badges and documentation",
+    "variants": [
+      "omitted",
+      "NULL",
+      "empty list",
+      "nested list",
+      "FALSE",
+      "zero",
+      "HTTP 400"
+    ]
+  },
+  "retired_tests": [
+    "tests/testthat/test-chemi_stdizer_records.R",
+    "tests/testthat/test-chemi_toxprints_assays.R",
+    "tests/testthat/test-chemi_toxprints_assays_bulk.R"
+  ],
+  "verification": {
+    "contract_and_regression_tests": "passed",
+    "public_options_regression_assertions": 57,
+    "legacy_generator_check": "passed",
+    "documentation_and_namespace_unchanged": true,
+    "existing_uncommitted_work_preserved": true,
+    "rehearsal": {
+      "commit": "e4afc155290048776bfaf113c467fac9373b5f3f",
+      "removed_files": 222,
+      "removed_operations": 256,
+      "byte_identical": true,
+      "differences_after_regeneration": [],
+      "differences_after_second_apply": [],
+      "differences_after_check": []
+    },
+    "runtime_results": "dev/specmill-rebuild/runtime-options-correction-results.json",
+    "runtime_scope": "Installed original and migrated client, localhost only; synthetic responses",
+    "localhost_cases": 1209,
+    "candidate_failures": 0,
+    "corrected_options_cases": 14,
+    "prior_corrected_query_cases": 12,
+    "exported_signatures": 409,
+    "helper_signatures_equal": true,
+    "unchanged_request_fields_and_objects_equal": true,
+    "commands": [
+      "bash dev/specmill-rebuild/verify-wave.sh options-correction",
+      "Rscript dev/specmill-rebuild/rehearse.R"
+    ]
+  },
+  "issue_337_entries_remaining": 19
+}
