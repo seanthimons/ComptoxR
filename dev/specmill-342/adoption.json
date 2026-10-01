@@ -15,7 +15,7 @@
   "adopted_sha256": {
     "R/z_generic_request.R": "bd1d797918eabd39f3c7bf1d07f0e35af4d3ef95f4ade94bc6f80cd8ff74f0eb",
     "R/z_specmill_request.R": "ca8ddce1d9a4645fd1199f5c0b86aac153a8d64c97b2902e4dacd989cc64471e",
-    "dev/specmill-342/compatibility.patch": "46f98f2456ce11e1f1b628a05bec56c43d5a30e2dd90f07237e56de856dcd038",
+    "dev/specmill-342/compatibility.patch": "d17ea06902eeb2f8a9be6a52d206f1f5df13ecdfe7e6e9d5a5aeff3afcf05c76",
     "dev/specmill-342/emit.R": "d80b71f5b84072ccdd5cb1a57721e51e3a2744221e630c80d061652f3bbfb3b5",
     "DESCRIPTION": "3df8e472ec2667e41102a95b3b9d792965f7d414276d954481539a19eaf5b793",
     "R/chemi_chet_chemicals_image.R": "a4280cbd047a2762902901f995735ba1d1a5ad5d513baa0e4f4b3f7c1694b1b4"
@@ -49,7 +49,8 @@
       "after": 1,
       "strategy": "chet_page"
     },
-    "chet_image": "Required magick dependency: PNG/SVG return images, PDF stays raw. Correct the broken image route to /api/chet/chemicals/{chemical_id}/image."
+    "chet_image": "Required magick dependency: PNG/SVG return images, PDF stays raw. Correct the broken image route to /api/chet/chemicals/{chemical_id}/image.",
+    "chet_pagination_routes": "Three pagination wrappers use /api/chet/chemicals/counts, /api/chet/chemicals/database and /api/chet/reaction/database."
   },
   "verification": {
     "upstream_scripts_passed": 13,
@@ -68,6 +69,12 @@
       "svg",
       "pdf"
     ],
-    "image_results_sha256": "2f212933ec253d7db552b55fde391cb0d66a85bd2fa461f15c43c60ba84ebc36"
+    "image_results_sha256": "2f212933ec253d7db552b55fde391cb0d66a85bd2fa461f15c43c60ba84ebc36",
+    "live_pagination_rows": {
+      "chemi_chet_chemicals_counts": 4420,
+      "chemi_chet_chemicals_database": 4028,
+      "chemi_chet_reaction_database": 5152
+    },
+    "pagination_results_sha256": "627e5081d4c6e8d7d5749d9bb650d4ed03166381d41a91cd9702c6121127249e"
   }
 }

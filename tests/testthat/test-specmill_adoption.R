@@ -34,7 +34,7 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
         }
         page <- as.integer(query$page)
         rows <- if (page <= 2L) list(list(id = page * 2L - 1L), list(id = page * 2L)) else list()
-        value <- if (request$PATH_INFO == "/chemicals/counts") {
+        value <- if (request$PATH_INFO == "/chet/chemicals/counts") {
           rows
         } else {
           list(data = rows, length = length(rows), totallength = 4L)
@@ -68,10 +68,17 @@ test_that("adopted decoder and paginator handle ChET responses on localhost", {
     ComptoxR.chemi_burl = paste0("http://127.0.0.1:", readRDS(ready)),
     ComptoxR.run_verbose = FALSE
   ))
-  for (wrapper in list(chemi_chet_chemicals_counts, chemi_chet_chemicals_database, chemi_chet_reaction_database)) {
+  wrappers <- list(
+    "/chet/chemicals/counts" = chemi_chet_chemicals_counts,
+    "/chet/chemicals/database" = chemi_chet_chemicals_database,
+    "/chet/reaction/database" = chemi_chet_reaction_database
+  )
+  for (path in names(wrappers)) {
+    wrapper <- wrappers[[path]]
     result <- wrapper(size = 2)
     expect_identical(vapply(result, `[[`, integer(1), "id"), 1:4)
     calls <- tail(readRDS(file.path(directory, "requests.rds")), 3L)
+    expect_identical(vapply(calls, `[[`, character(1), "path"), rep(path, 3L))
     expect_identical(vapply(calls, function(x) x$query$page, character(1)), as.character(1:3))
     manual <- wrapper(page = 2, size = 2, all_pages = FALSE)
     rows <- if (identical(wrapper, chemi_chet_chemicals_counts)) manual else manual[[1L]]$data

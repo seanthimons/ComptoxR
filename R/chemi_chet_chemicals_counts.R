@@ -18,7 +18,7 @@
 chemi_chet_chemicals_counts <- function(page = 1, size = NULL, all_pages = TRUE, max_pages = 100) {
   params <- base::list("page" = page, "size" = size, "all_pages" = all_pages, "max_pages" = max_pages)
   result <- generic_request(
-    "endpoint" = "chemicals/counts",
+    "endpoint" = "chet/chemicals/counts",
     "method" = "GET",
     "batch_limit" = 0,
     "server" = "chemi_burl",

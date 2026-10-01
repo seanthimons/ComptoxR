@@ -125,6 +125,7 @@ for (name in chet_cases) {
     )
     for (i in 1:2) {
       request <- old$requests[[i]]
+      request$path <- sub('/chemi/', '/chemi/chet/', request$path, fixed = TRUE)
       request$query <- sub(paste0('page=', i - 1L), paste0('page=', i), request$query, fixed = TRUE)
       stopifnot(identical(request, new$requests[[i]]))
     }
@@ -137,6 +138,7 @@ for (name in chet_cases) {
     grepl('No results found', new$warnings[[1L]], fixed = TRUE)
   )
   first <- old$requests[[1L]]
+  first$path <- sub('/chemi/', '/chemi/chet/', first$path, fixed = TRUE)
   if (endsWith(name, '-minimal')) {
     first$query <- sub('page=0', 'page=1', first$query, fixed = TRUE)
   }

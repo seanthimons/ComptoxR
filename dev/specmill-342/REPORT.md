@@ -80,7 +80,7 @@ The comparison reuses the saved original-client baseline from the earlier
 0.1.10 rehearsal and executes the installed adopted client against localhost.
 Its assertions and report were evaluated against both saved snapshots. Full
 results and logs remain in ignored artifacts; the report SHA256 is recorded in
-`adoption.json`. No production row-count verification is claimed. Production pagination remains tracked in #331. PR completion and merge remain
+`adoption.json`. Production row-count verification is recorded separately below. Production pagination completion is tracked in #331. PR completion and merge remain
 controlled by #325. The published runtime summary is `runtime-results-summary.json`;
 the full ignored report checksum remains in `adoption.json`.
 
@@ -129,3 +129,30 @@ Rollback restores the files in `compatibility.patch` from the recorded base,
 removes the new native helper/baseline and restores the previous ToxPrint review.
 The 0.1.11 toolkit pin can remain. No credentials, user configuration, databases
 or upstream schemas change as part of this adoption.
+
+## Production pagination verification, 1 October 2026
+
+Following closure of #342, the three paginated ChET wrappers were corrected in
+reviewed mappings to include the `/chet` service prefix under the default `/api`
+root. Generated wrappers and the fixed fixture now agree. The localhost acceptance
+check asserts each exact service path as well as page numbers and returned rows.
+The installed-client comparison verifier now explicitly accepts these corrected
+paths; the original 1,474-case summary remains historical evidence for adoption.
+
+`probe-pagination.R` called the actual wrappers against production using read-only
+GET requests with size 1,000. It checked HTTP 200 for every page, contiguous page
+numbers beginning at 1, an empty final page, the complete returned collection,
+existing NULL-to-NA formatting and unique chemical/reaction identifiers. Counts
+use the composite chemical/library identifier, since a chemical may be in multiple
+libraries. Database row totals matched each response's `totallength`.
+
+| Wrapper | Rows | Requests including empty page |
+| --- | --- | --- |
+| chemi_chet_chemicals_counts | 4,420 | 6 |
+| chemi_chet_chemicals_database | 4,028 | 6 |
+| chemi_chet_reaction_database | 5,152 | 7 |
+
+`pagination-results.json` publishes URLs, statuses, page lengths and completion
+assertions. Run `Rscript dev/specmill-342/probe-pagination.R` explicitly to repeat
+the live check. The updated compatibility patch reproduces these route corrections
+along with the adoption. PR #345 remains a draft under #325 after #331 completion.

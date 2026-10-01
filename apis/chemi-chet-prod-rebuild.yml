@@ -130,7 +130,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/counts
+          value: chet/chemicals/counts
         method:
           value: GET
         batch_limit:
@@ -217,7 +217,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: chemicals/database
+          value: chet/chemicals/database
         method:
           value: GET
         batch_limit:
@@ -517,7 +517,7 @@ operations:
     request:
       arguments:
         endpoint:
-          value: reaction/database
+          value: chet/reaction/database
         method:
           value: GET
         batch_limit:
